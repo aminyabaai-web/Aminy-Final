@@ -66,7 +66,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
@@ -106,13 +106,13 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
       </div>
 
       {/* View tabs */}
-      <div className="flex gap-1 px-3 py-2 bg-white border-b border-slate-200">
+      <div className="flex gap-1 px-3 py-2 bg-white border-b border-[#E8E4DF]">
         {views.map((v) => (
           <button
             key={v.id}
             onClick={() => setViewMode(v.id)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              viewMode === v.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-100'
+              viewMode === v.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
             }`}
           >
             {v.label}
@@ -173,7 +173,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
     return (
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-500">No sessions logged yet</p>
+        <p className="text-sm text-[#5A6B7A]">No sessions logged yet</p>
         <p className="text-xs text-slate-400 mt-1">Tap + to log your first session</p>
       </div>
     );
@@ -181,21 +181,21 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
 
   return (
     <div className="space-y-2">
-      <h2 className="text-sm font-semibold text-slate-700">Recent Sessions</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Recent Sessions</h2>
       {sorted.map((s) => (
-        <div key={s.id} className="bg-white rounded-xl p-3 border border-slate-200">
+        <div key={s.id} className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
               <User className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold text-slate-800">{s.clientName}</div>
-              <div className="text-xs text-slate-500">
+              <div className="text-sm font-semibold text-[#1B2733]">{s.clientName}</div>
+              <div className="text-xs text-[#5A6B7A]">
                 {s.date} &middot; {s.startTime}-{s.endTime} &middot; {s.sessionType}
               </div>
             </div>
             <div className="text-right">
-              <div className="text-sm font-bold text-slate-700">{s.durationMinutes}m</div>
+              <div className="text-sm font-bold text-[#3A4A57]">{s.durationMinutes}m</div>
               <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                 s.bcbaReviewStatus === 'reviewed' ? 'bg-emerald-100 text-emerald-700' :
                 s.bcbaReviewStatus === 'flagged' ? 'bg-red-100 text-red-700' :
@@ -210,7 +210,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
           {s.goalsTargeted.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
               {s.goalsTargeted.map((g, i) => (
-                <span key={i} className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                <span key={i} className="text-[10px] bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
                   {g.goalName}
                 </span>
               ))}
@@ -219,7 +219,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
 
           {/* Data collected */}
           {s.dataCollected.length > 0 && (
-            <div className="mt-2 flex gap-3 text-[10px] text-slate-500">
+            <div className="mt-2 flex gap-3 text-[10px] text-[#5A6B7A]">
               {s.dataCollected.map((d, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <BarChart3 className="w-3 h-3" />
@@ -265,8 +265,8 @@ function ReviewQueue({
           {flagged.map((s) => (
             <div key={s.id} className="bg-red-50 rounded-xl p-3 border border-red-200 mb-2">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-slate-800">{s.clientName}</span>
-                <span className="text-xs text-slate-500">{s.date}</span>
+                <span className="text-sm font-medium text-[#1B2733]">{s.clientName}</span>
+                <span className="text-xs text-[#5A6B7A]">{s.date}</span>
               </div>
               {s.bcbaFlagReason && (
                 <p className="text-xs text-red-700 mt-1">{s.bcbaFlagReason}</p>
@@ -278,22 +278,22 @@ function ReviewQueue({
 
       {/* Pending review */}
       <div>
-        <h3 className="text-sm font-semibold text-slate-700 mb-2">
+        <h3 className="text-sm font-semibold text-[#3A4A57] mb-2">
           Pending BCBA Review ({pending.length})
         </h3>
         {pending.length === 0 && (
           <div className="text-center py-8">
             <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-            <p className="text-sm text-slate-600">All caught up!</p>
+            <p className="text-sm text-[#5A6B7A]">All caught up!</p>
             <p className="text-xs text-slate-400">No sessions awaiting review</p>
           </div>
         )}
         {pending.map((s) => (
-          <div key={s.id} className="bg-white rounded-xl p-3 border border-slate-200 mb-2">
+          <div key={s.id} className="bg-white rounded-xl p-3 border border-[#E8E4DF] mb-2">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-slate-800">{s.clientName}</div>
-                <div className="text-xs text-slate-500">{s.date} &middot; {s.durationMinutes}m</div>
+                <div className="text-sm font-medium text-[#1B2733]">{s.clientName}</div>
+                <div className="text-xs text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
               </div>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
                 Pending
@@ -334,17 +334,17 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
     <div className="space-y-4">
       {/* Current month highlight */}
       <div className="bg-white rounded-xl p-4 border border-[#6B9080]/20">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3">This Month</h3>
+        <h3 className="text-sm font-semibold text-[#3A4A57] mb-3">This Month</h3>
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-[#6B9080]/10 rounded-lg">
             <div className="text-2xl font-bold text-[#6B9080]">{directHours.toFixed(1)}</div>
             <div className="text-xs text-[#6B9080]">Direct Hours</div>
           </div>
-          <div className="text-center p-3 bg-slate-50 rounded-lg">
-            <div className="text-2xl font-bold text-slate-700">
+          <div className="text-center p-3 bg-[#FAF7F2] rounded-lg">
+            <div className="text-2xl font-bold text-[#3A4A57]">
               {sessions.filter((s) => s.date.startsWith(thisMonth)).length}
             </div>
-            <div className="text-xs text-slate-500">Sessions</div>
+            <div className="text-xs text-[#5A6B7A]">Sessions</div>
           </div>
         </div>
       </div>
@@ -352,17 +352,17 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
       {/* Monthly breakdown */}
       {months.length > 0 && (
         <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-slate-700">Monthly History</h3>
+          <h3 className="text-sm font-semibold text-[#3A4A57]">Monthly History</h3>
           {months.map((month) => {
             const data = byMonth[month];
             return (
-              <div key={month} className="bg-white rounded-lg p-3 border border-slate-200 flex items-center justify-between">
+              <div key={month} className="bg-white rounded-lg p-3 border border-[#E8E4DF] flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-medium text-slate-700">{month}</div>
-                  <div className="text-xs text-slate-500">{data.sessions} sessions</div>
+                  <div className="text-sm font-medium text-[#3A4A57]">{month}</div>
+                  <div className="text-xs text-[#5A6B7A]">{data.sessions} sessions</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold text-slate-800">{(data.minutes / 60).toFixed(1)}h</div>
+                  <div className="text-sm font-bold text-[#1B2733]">{(data.minutes / 60).toFixed(1)}h</div>
                   <div className="text-[10px] text-slate-400">{data.minutes}min</div>
                 </div>
               </div>
@@ -374,7 +374,7 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
       {months.length === 0 && (
         <div className="text-center py-8">
           <Clock className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-          <p className="text-sm text-slate-500">No session history yet</p>
+          <p className="text-sm text-[#5A6B7A]">No session history yet</p>
         </div>
       )}
     </div>
@@ -475,14 +475,14 @@ function NewSessionModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-slate-800">Log Session</h3>
+          <h3 className="text-lg font-bold text-[#1B2733]">Log Session</h3>
           <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 
         <div className="space-y-3">
           {/* Client */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Client Name *</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Client Name *</label>
             <input
               type="text"
               value={clientName}
@@ -494,7 +494,7 @@ function NewSessionModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Date</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
           </div>
@@ -502,12 +502,12 @@ function NewSessionModal({
           {/* Time */}
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-xs font-medium text-slate-600 mb-1 block">Start</label>
+              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Start</label>
               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
             <div>
-              <label className="text-xs font-medium text-slate-600 mb-1 block">End</label>
+              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">End</label>
               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
@@ -519,7 +519,7 @@ function NewSessionModal({
 
           {/* Session Type */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Session Type</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Type</label>
             <div className="flex gap-2">
               {(['1:1', 'group'] as const).map((t) => (
                 <button
@@ -528,7 +528,7 @@ function NewSessionModal({
                   className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     sessionType === t
                       ? 'bg-primary text-white border-[#6B9080]'
-                      : 'bg-white text-slate-600 border-slate-300'
+                      : 'bg-white text-[#5A6B7A] border-slate-300'
                   }`}
                 >
                   {t === '1:1' ? '1:1 Individual' : 'Group'}
@@ -539,15 +539,15 @@ function NewSessionModal({
 
           {/* Goal */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Goal Targeted</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Goal Targeted</label>
             <input type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)}
               placeholder="e.g. Manding for preferred items"
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
           </div>
 
           {/* Data Collection */}
-          <div className="border border-slate-200 rounded-lg p-3 space-y-2">
-            <label className="text-xs font-semibold text-slate-600">Data Collection</label>
+          <div className="border border-[#E8E4DF] rounded-lg p-3 space-y-2">
+            <label className="text-xs font-semibold text-[#5A6B7A]">Data Collection</label>
             <select value={dataType} onChange={(e) => setDataType(e.target.value as DataCollectionEntry['type'])}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
               <option value="trial-by-trial">Trial-by-Trial</option>
@@ -568,7 +568,7 @@ function NewSessionModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Session Notes</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Notes</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
               placeholder="Session observations, client response, etc."
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm h-20 resize-none" />
@@ -579,7 +579,7 @@ function NewSessionModal({
             <input type="checkbox" checked={flagForBCBA}
               onChange={(e) => setFlagForBCBA(e.target.checked)}
               className="w-4 h-4 rounded border-slate-300 text-[#6B9080]" />
-            <span className="text-sm text-slate-700">Flag for BCBA attention</span>
+            <span className="text-sm text-[#3A4A57]">Flag for BCBA attention</span>
           </label>
 
           {flagForBCBA && (

@@ -56,7 +56,7 @@ export function WeeklyOutcomesDashboard({
 
   if (loading && !weeklySummary) {
     return (
-      <Card className="p-6 bg-gradient-to-br from-white via-teal-50/10 to-white">
+      <Card className="p-6 bg-gradient-to-br from-white via-transparent/10 to-white">
         <div className="flex items-center gap-3">
           <Loader2 className="w-5 h-5 animate-spin text-accent" />
           <p className="text-muted-foreground">Analyzing {childName}'s week...</p>
@@ -116,14 +116,14 @@ export function WeeklyOutcomesDashboard({
       case 'needs_attention':
         return <TrendingDown className="w-5 h-5 text-orange-600" />;
       default:
-        return <Minus className="w-5 h-5 text-gray-600" />;
+        return <Minus className="w-5 h-5 text-[#5A6B7A]" />;
     }
   };
 
   const getTrendBadge = () => {
     const badges = {
       improving: { bg: 'bg-green-100', text: 'text-green-700', label: 'Great progress' },
-      stable: { bg: 'bg-[#F0EDE8]', text: 'text-gray-700', label: 'Steady pace' },
+      stable: { bg: 'bg-[#F0EDE8]', text: 'text-[#3A4A57]', label: 'Steady pace' },
       needs_attention: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Let\'s reconnect' }
     };
     
@@ -136,7 +136,7 @@ export function WeeklyOutcomesDashboard({
   };
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white via-teal-50/10 to-white border-accent/10 hover:shadow-lg transition-shadow">
+    <Card className="p-6 bg-gradient-to-br from-white via-transparent/10 to-white border-accent/10 hover:shadow-lg transition-shadow">
       {/* Header */}
       <div className="flex items-start justify-between mb-4 sm:mb-6">
         <div>
@@ -163,7 +163,7 @@ export function WeeklyOutcomesDashboard({
 
       {/* AI Summary */}
       {summary.aiSummary && (
-        <div className="mb-4 sm:mb-6 p-4 bg-[#6B9080]/10 border border-teal-100 rounded-lg">
+        <div className="mb-4 sm:mb-6 p-4 bg-[#6B9080]/10 border border-[#E8E4DF] rounded-lg">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
             <p className="text-sm text-primary leading-relaxed italic">
@@ -176,7 +176,7 @@ export function WeeklyOutcomesDashboard({
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
         {/* Activities */}
-        <div className="p-4 bg-white border border-gray-100 rounded-lg">
+        <div className="p-4 bg-white border border-[#E8E4DF] rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="w-4 h-4 text-green-600" />
             <span className="text-xs text-muted-foreground">Activities</span>
@@ -190,7 +190,7 @@ export function WeeklyOutcomesDashboard({
         </div>
 
         {/* Goals Progress */}
-        <div className="p-4 bg-white border border-gray-100 rounded-lg">
+        <div className="p-4 bg-white border border-[#E8E4DF] rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-4 h-4 text-accent" />
             <span className="text-xs text-muted-foreground">Goals</span>
@@ -215,7 +215,7 @@ export function WeeklyOutcomesDashboard({
             {(summary.milestones || []).slice(0, 2).map((milestone: string, index: number) => (
               <div 
                 key={index} 
-                className="flex items-start gap-2 p-2 bg-yellow-50 border border-yellow-100 rounded"
+                className="flex items-start gap-2 p-2 bg-[#FDF9F0] border border-yellow-100 rounded"
               >
                 <span className="text-yellow-600 text-lg">🎉</span>
                 <span className="text-sm text-primary">{milestone}</span>

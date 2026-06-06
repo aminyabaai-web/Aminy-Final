@@ -173,7 +173,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                   'w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all duration-300',
                   done   ? 'text-white' : '',
                   active ? 'bg-white' : '',
-                  !done && !active ? 'bg-white border-slate-200 text-slate-400' : '',
+                  !done && !active ? 'bg-white border-[#E8E4DF] text-slate-400' : '',
                 ].join(' ')}
                 style={
                   done
@@ -198,7 +198,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
             </div>
             {idx < total - 1 && (
               <div
-                className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? '' : 'bg-slate-200'}`}
+                className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? '' : 'bg-[#E8E4DF]'}`}
                 style={done ? { backgroundColor: EMERALD } : undefined}
               />
             )}
@@ -233,7 +233,7 @@ function PrimaryButton({
       disabled={disabled}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`text-white font-semibold transition-colors disabled:bg-slate-200 disabled:text-slate-400 ${className}`}
+      className={`text-white font-semibold transition-colors disabled:bg-[#E8E4DF] disabled:text-slate-400 ${className}`}
       style={disabled ? undefined : { backgroundColor: hover ? EMERALD_HOVER : EMERALD }}
     >
       {children}
@@ -395,23 +395,23 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const canAdvanceStep3 = serviceSettings.length > 0 && sessionFrequency.length > 0;
   const canAdvanceStep4 = selectedProviderId.length > 0;
 
-  const inputCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-colors bg-white';
-  const selectCls = 'w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 bg-white transition-colors';
-  const labelCls = 'block text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wide';
+  const inputCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#1B2733] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-colors bg-white';
+  const selectCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#1B2733] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 bg-white transition-colors';
+  const labelCls = 'block text-xs font-semibold text-[#5A6B7A] mb-1 uppercase tracking-wide';
 
   return (
     <div className="min-h-screen bg-[#F8F8F6] flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-slate-100 px-4 py-4 flex items-center justify-between">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center justify-between">
         <button
           onClick={() => step > 1 ? setStep(s => s - 1) : onSkip?.()}
-          className="flex items-center gap-1 text-slate-500 hover:text-slate-700 text-sm font-medium transition-colors"
+          className="flex items-center gap-1 text-[#5A6B7A] hover:text-[#3A4A57] text-sm font-medium transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           {step > 1 ? 'Back' : 'Skip'}
         </button>
         <span className="text-xs text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
-        <button onClick={onSkip} className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+        <button onClick={onSkip} className="text-xs text-slate-400 hover:text-[#5A6B7A] transition-colors">
           Skip setup
         </button>
       </div>
@@ -424,11 +424,11 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 1 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">Let's get you matched<br />with the right provider</h1>
-              <p className="text-sm text-slate-500">Tell us about your child so we can find the best fit.</p>
+              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Let's get you matched<br />with the right provider</h1>
+              <p className="text-sm text-[#5A6B7A]">Tell us about your child so we can find the best fit.</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-4">
               <div>
                 <label className={labelCls}>Child's first name</label>
                 <input
@@ -477,20 +477,20 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 2 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">Check your coverage</h1>
-              <p className="text-sm text-slate-500">Most families use insurance for ABA therapy. Let's see what's covered.</p>
+              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Check your coverage</h1>
+              <p className="text-sm text-[#5A6B7A]">Most families use insurance for ABA therapy. Let's see what's covered.</p>
             </div>
 
             {!insuranceSkipped ? (
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
                 <div className="p-5">
                   <InsuranceEligibilityCheck />
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 text-center">
+              <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] text-center">
                 <Shield className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-                <p className="text-sm text-slate-600 font-medium">Paying out of pocket</p>
+                <p className="text-sm text-[#5A6B7A] font-medium">Paying out of pocket</p>
                 <p className="text-xs text-slate-400 mt-1">You can add insurance information later in your profile.</p>
               </div>
             )}
@@ -507,7 +507,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               {!insuranceSkipped && (
                 <button
                   onClick={() => { setInsuranceSkipped(true); setStep(3); }}
-                  className="w-full text-slate-500 hover:text-slate-700 text-sm font-medium py-2 transition-colors"
+                  className="w-full text-[#5A6B7A] hover:text-[#3A4A57] text-sm font-medium py-2 transition-colors"
                 >
                   Skip — I'll pay out of pocket
                 </button>
@@ -520,11 +520,11 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 3 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">What does {childName || 'your child'} need?</h1>
-              <p className="text-sm text-slate-500">Select all that apply — we'll match you accordingly.</p>
+              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">What does {childName || 'your child'} need?</h1>
+              <p className="text-sm text-[#5A6B7A]">Select all that apply — we'll match you accordingly.</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-5">
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-5">
               <div>
                 <label className={labelCls}>Session setting</label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
@@ -538,7 +538,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                           'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all text-left',
                           isSel
                             ? 'bg-emerald-500/10'
-                            : 'border-slate-200 text-slate-600 hover:border-slate-300',
+                            : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-slate-300',
                         ].join(' ')}
                         style={isSel ? { borderColor: EMERALD, color: EMERALD } : undefined}
                       >
@@ -563,7 +563,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                           'rounded-xl px-3 py-2.5 text-sm font-medium border-2 transition-all',
                           isSel
                             ? 'bg-emerald-500/10'
-                            : 'border-slate-200 text-slate-600 hover:border-slate-300',
+                            : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-slate-300',
                         ].join(' ')}
                         style={isSel ? { borderColor: EMERALD, color: EMERALD } : undefined}
                       >
@@ -590,8 +590,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 4 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">Your matched providers</h1>
-              <p className="text-sm text-slate-500">These providers match {childName || 'your child'}'s needs and are accepting new clients.</p>
+              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Your matched providers</h1>
+              <p className="text-sm text-[#5A6B7A]">These providers match {childName || 'your child'}'s needs and are accepting new clients.</p>
             </div>
 
             {loadingProviders && (
@@ -605,10 +605,10 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
             )}
 
             {!loadingProviders && providers.length === 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 text-center">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E4DF] text-center">
                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-sm font-medium text-slate-700">No matches just yet</p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-sm font-medium text-[#3A4A57]">No matches just yet</p>
+                <p className="text-xs text-[#5A6B7A] mt-1">
                   We're still building our provider network in your area. You can finish setup now and we'll reach out as soon as a match is available.
                 </p>
                 <PrimaryButton
@@ -647,14 +647,14 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                     'w-full bg-white rounded-2xl p-4 shadow-sm border-2 text-left transition-all',
                     isSel
                       ? 'ring-2 ring-emerald-500/20'
-                      : 'border-slate-100 hover:border-slate-200',
+                      : 'border-[#E8E4DF] hover:border-[#E8E4DF]',
                   ].join(' ')}
                   style={isSel ? { borderColor: EMERALD } : undefined}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="font-semibold text-slate-800 text-sm">{prov.name}</p>
-                      <p className="text-xs text-slate-500">{prov.credentials}</p>
+                      <p className="font-semibold text-[#1B2733] text-sm">{prov.name}</p>
+                      <p className="text-xs text-[#5A6B7A]">{prov.credentials}</p>
                     </div>
                     {prov.accepting && (
                       <span
@@ -666,7 +666,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-slate-500 mb-3">
+                  <div className="flex items-center gap-3 text-xs text-[#5A6B7A] mb-3">
                     <span>{prov.distance}</span>
                     <span>·</span>
                     <span className="flex items-center gap-0.5">
@@ -677,7 +677,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
                   <div className="flex flex-wrap gap-1.5">
                     {prov.specialties.map(s => (
-                      <span key={s} className="text-[10px] bg-slate-50 border border-slate-200 text-slate-600 rounded-full px-2 py-0.5">{s}</span>
+                      <span key={s} className="text-[10px] bg-[#FAF7F2] border border-[#E8E4DF] text-[#5A6B7A] rounded-full px-2 py-0.5">{s}</span>
                     ))}
                   </div>
 
@@ -708,7 +708,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
             <button
               onClick={() => setStep(5)}
-              className="w-full text-slate-500 hover:text-slate-700 text-sm font-medium py-2 transition-colors"
+              className="w-full text-[#5A6B7A] hover:text-[#3A4A57] text-sm font-medium py-2 transition-colors"
             >
               Skip — I'll choose later
             </button>
@@ -722,44 +722,44 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8" style={{ color: EMERALD }} />
               </div>
-              <h1 className="text-2xl font-bold text-slate-800 mb-2">You're all set!</h1>
-              <p className="text-sm text-slate-500">Here's a summary of your profile. We'll match {childName || 'your child'} with the best care team.</p>
+              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">You're all set!</h1>
+              <p className="text-sm text-[#5A6B7A]">Here's a summary of your profile. We'll match {childName || 'your child'} with the best care team.</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
-              <h2 className="text-sm font-semibold text-slate-700 border-b border-slate-100 pb-2">Your Summary</h2>
+            <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-4">
+              <h2 className="text-sm font-semibold text-[#3A4A57] border-b border-[#E8E4DF] pb-2">Your Summary</h2>
 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Child</span>
-                  <span className="font-medium text-slate-800">{childName}, age {childAge}</span>
+                  <span className="text-[#5A6B7A]">Child</span>
+                  <span className="font-medium text-[#1B2733]">{childName}, age {childAge}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Focus area</span>
-                  <span className="font-medium text-slate-800">
+                  <span className="text-[#5A6B7A]">Focus area</span>
+                  <span className="font-medium text-[#1B2733]">
                     {DIAGNOSIS_OPTIONS.find(d => d.value === diagnosis)?.label ?? diagnosis}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Insurance</span>
-                  <span className="font-medium text-slate-800">{insuranceSkipped ? 'Out of pocket' : 'Checked'}</span>
+                  <span className="text-[#5A6B7A]">Insurance</span>
+                  <span className="font-medium text-[#1B2733]">{insuranceSkipped ? 'Out of pocket' : 'Checked'}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Session setting</span>
-                  <span className="font-medium text-slate-800 text-right max-w-[55%]">
+                  <span className="text-[#5A6B7A]">Session setting</span>
+                  <span className="font-medium text-[#1B2733] text-right max-w-[55%]">
                     {serviceSettings.map(s => SERVICE_SETTINGS.find(o => o.value === s)?.label ?? s).join(', ')}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Frequency</span>
-                  <span className="font-medium text-slate-800">
+                  <span className="text-[#5A6B7A]">Frequency</span>
+                  <span className="font-medium text-[#1B2733]">
                     {FREQUENCIES.find(f => f.value === sessionFrequency)?.label ?? sessionFrequency}
                   </span>
                 </div>
                 {selectedProviderName && (
                   <div className="flex justify-between">
-                    <span className="text-slate-500">Requested provider</span>
-                    <span className="font-medium text-slate-800 text-right max-w-[55%]">{selectedProviderName}</span>
+                    <span className="text-[#5A6B7A]">Requested provider</span>
+                    <span className="font-medium text-[#1B2733] text-right max-w-[55%]">{selectedProviderName}</span>
                   </div>
                 )}
               </div>

@@ -376,11 +376,11 @@ export function SuperbillGenerator({
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] flex items-center gap-2">
             <FileText className="w-5 h-5 text-accent" />
             Generate Superbill
           </h2>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Create an HSA/FSA-eligible receipt for reimbursement
           </p>
         </div>
@@ -391,12 +391,12 @@ export function SuperbillGenerator({
       </div>
 
       {/* HSA/FSA Info Banner */}
-      <Card className="p-4 bg-blue-50 border-blue-200 mb-4 sm:mb-6">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8] mb-4 sm:mb-6">
         <div className="flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm">
             <p className="text-blue-900 font-medium">About Superbills</p>
-            <p className="text-blue-800 mt-1">
+            <p className="text-[#4A6478] mt-1">
               A superbill is an itemized receipt that includes the diagnosis codes, CPT codes,
               and provider information needed for HSA/FSA reimbursement or out-of-network insurance claims.
             </p>
@@ -408,67 +408,67 @@ export function SuperbillGenerator({
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Patient Information */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <User className="w-4 h-4 text-accent" />
               Patient Information
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Patient Name</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Patient Name</label>
                 <input
                   type="text"
                   value={formData.patientName}
                   onChange={e => setFormData(prev => ({ ...prev, patientName: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Date of Birth</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Date of Birth</label>
                 <input
                   type="date"
                   value={formData.patientDOB}
                   onChange={e => setFormData(prev => ({ ...prev, patientDOB: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div className="col-span-2">
-                <label className="block text-sm text-slate-600 mb-1">Address (optional)</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Address (optional)</label>
                 <input
                   type="text"
                   value={formData.patientAddress}
                   onChange={e => setFormData(prev => ({ ...prev, patientAddress: e.target.value }))}
                   placeholder="Street address"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">City</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">City</label>
                 <input
                   type="text"
                   value={formData.patientCity}
                   onChange={e => setFormData(prev => ({ ...prev, patientCity: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-sm text-slate-600 mb-1">State</label>
+                  <label className="block text-sm text-[#5A6B7A] mb-1">State</label>
                   <input
                     type="text"
                     value={formData.patientState}
                     onChange={e => setFormData(prev => ({ ...prev, patientState: e.target.value }))}
                     maxLength={2}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                    className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-slate-600 mb-1">ZIP</label>
+                  <label className="block text-sm text-[#5A6B7A] mb-1">ZIP</label>
                   <input
                     type="text"
                     value={formData.patientZip}
                     onChange={e => setFormData(prev => ({ ...prev, patientZip: e.target.value }))}
                     maxLength={10}
-                    className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                    className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                   />
                 </div>
               </div>
@@ -477,48 +477,48 @@ export function SuperbillGenerator({
 
           {/* Provider Information */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <Stethoscope className="w-4 h-4 text-accent" />
               Provider Information
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Provider Name</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Provider Name</label>
                 <input
                   type="text"
                   value={formData.providerName}
                   onChange={e => setFormData(prev => ({ ...prev, providerName: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Credentials</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Credentials</label>
                 <input
                   type="text"
                   value={formData.providerCredentials}
                   onChange={e => setFormData(prev => ({ ...prev, providerCredentials: e.target.value }))}
                   placeholder="e.g., BCBA, LCSW, SLP"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">NPI Number (optional)</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">NPI Number (optional)</label>
                 <input
                   type="text"
                   value={formData.providerNPI}
                   onChange={e => setFormData(prev => ({ ...prev, providerNPI: e.target.value }))}
                   placeholder="10-digit NPI"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Tax ID (optional)</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Tax ID (optional)</label>
                 <input
                   type="text"
                   value={formData.providerTaxId}
                   onChange={e => setFormData(prev => ({ ...prev, providerTaxId: e.target.value }))}
                   placeholder="XX-XXXXXXX"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
             </div>
@@ -526,37 +526,37 @@ export function SuperbillGenerator({
 
           {/* Service Date & Payment */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-accent" />
               Service & Payment
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Date of Service</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Date of Service</label>
                 <input
                   type="date"
                   value={formData.dateOfService}
                   onChange={e => setFormData(prev => ({ ...prev, dateOfService: e.target.value }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Amount Paid</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Amount Paid</label>
                 <input
                   type="number"
                   value={formData.amountPaid}
                   onChange={e => setFormData(prev => ({ ...prev, amountPaid: parseFloat(e.target.value) || 0 }))}
                   step="0.01"
                   min="0"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 />
               </div>
               <div>
-                <label className="block text-sm text-slate-600 mb-1">Payment Method</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Payment Method</label>
                 <select
                   value={formData.paymentMethod}
                   onChange={e => setFormData(prev => ({ ...prev, paymentMethod: e.target.value as 'credit_card' | 'hsa' | 'fsa' | 'cash' | 'check' }))}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                 >
                   <option value="credit_card">Credit Card</option>
                   <option value="hsa">HSA Card</option>
@@ -570,8 +570,8 @@ export function SuperbillGenerator({
 
           {/* Diagnosis Codes */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4">Diagnosis Codes (ICD-10)</h3>
-            <p className="text-xs text-slate-500 mb-3">Select all that apply to this visit</p>
+            <h3 className="font-medium text-[#1B2733] mb-4">Diagnosis Codes (ICD-10)</h3>
+            <p className="text-xs text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {COMMON_DIAGNOSIS_CODES.map(diagnosis => (
                 <label
@@ -579,7 +579,7 @@ export function SuperbillGenerator({
                   className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
                     formData.diagnosisCodes.includes(diagnosis.code)
                       ? 'bg-accent/10 border-accent'
-                      : 'bg-white border-slate-200 hover:bg-slate-50'
+                      : 'bg-white border-[#E8E4DF] hover:bg-[#FAF7F2]'
                   }`}
                 >
                   <input
@@ -598,8 +598,8 @@ export function SuperbillGenerator({
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <span className="text-xs font-mono text-slate-600">{diagnosis.code}</span>
-                    <p className="text-xs text-slate-700 truncate">{diagnosis.description}</p>
+                    <span className="text-xs font-mono text-[#5A6B7A]">{diagnosis.code}</span>
+                    <p className="text-xs text-[#3A4A57] truncate">{diagnosis.description}</p>
                   </div>
                 </label>
               ))}
@@ -608,8 +608,8 @@ export function SuperbillGenerator({
 
           {/* CPT Codes by Category */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-slate-900 mb-4">Service Codes (CPT)</h3>
-            <p className="text-xs text-slate-500 mb-3">Select the services rendered</p>
+            <h3 className="font-medium text-[#1B2733] mb-4">Service Codes (CPT)</h3>
+            <p className="text-xs text-[#5A6B7A] mb-3">Select the services rendered</p>
             <div className="space-y-2">
               {CPT_CATEGORIES.filter(cat => cat !== 'Modifier').map(category => {
                 const codes = getCPTCodesByCategory(category);
@@ -619,13 +619,13 @@ export function SuperbillGenerator({
                 ).length;
 
                 return (
-                  <div key={category} className="border border-slate-200 rounded-lg overflow-hidden">
+                  <div key={category} className="border border-[#E8E4DF] rounded-lg overflow-hidden">
                     <button
                       onClick={() => setExpandedCategory(isExpanded ? null : category)}
-                      className="w-full px-4 py-3 flex items-center justify-between bg-slate-50 hover:bg-slate-100 transition-colors"
+                      className="w-full px-4 py-3 flex items-center justify-between bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-slate-900">{category}</span>
+                        <span className="font-medium text-[#1B2733]">{category}</span>
                         {selectedCount > 0 && (
                           <Badge className="bg-accent text-white text-xs">
                             {selectedCount} selected
@@ -646,7 +646,7 @@ export function SuperbillGenerator({
                             className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-colors ${
                               formData.selectedCPTCodes.includes(cpt.code)
                                 ? 'bg-accent/10 border-accent'
-                                : 'bg-white border-slate-200 hover:bg-slate-50'
+                                : 'bg-white border-[#E8E4DF] hover:bg-[#FAF7F2]'
                             }`}
                           >
                             <input
@@ -666,12 +666,12 @@ export function SuperbillGenerator({
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
-                                <span className="text-sm font-mono text-slate-600">{cpt.code}</span>
-                                <span className="text-sm font-medium text-slate-900">
+                                <span className="text-sm font-mono text-[#5A6B7A]">{cpt.code}</span>
+                                <span className="text-sm font-medium text-[#1B2733]">
                                   ${cpt.defaultPrice}
                                 </span>
                               </div>
-                              <p className="text-xs text-slate-600">{cpt.description}</p>
+                              <p className="text-xs text-[#5A6B7A]">{cpt.description}</p>
                               <p className="text-xs text-slate-400">Requires: {cpt.requiresLicense}</p>
                             </div>
                           </label>
@@ -685,17 +685,17 @@ export function SuperbillGenerator({
           </Card>
 
           {/* Summary & Actions */}
-          <Card className="p-4 bg-slate-50">
+          <Card className="p-4 bg-[#FAF7F2]">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="font-medium text-slate-900">Summary</h3>
-                <p className="text-sm text-slate-500">
+                <h3 className="font-medium text-[#1B2733]">Summary</h3>
+                <p className="text-sm text-[#5A6B7A]">
                   {formData.selectedCPTCodes.length} service(s), {formData.diagnosisCodes.length} diagnosis code(s)
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-500">Total Billed</p>
-                <p className="text-xl sm:text-2xl font-bold text-slate-900">${calculateTotal().toFixed(2)}</p>
+                <p className="text-sm text-[#5A6B7A]">Total Billed</p>
+                <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">${calculateTotal().toFixed(2)}</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -721,30 +721,30 @@ export function SuperbillGenerator({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="text-center mb-4 sm:mb-6">
               <h3 className="text-xl font-bold">SUPERBILL</h3>
-              <p className="text-sm text-slate-500">For HSA/FSA Reimbursement</p>
+              <p className="text-sm text-[#5A6B7A]">For HSA/FSA Reimbursement</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 sm:gap-6 mb-4 sm:mb-6">
               <div>
-                <h4 className="font-medium text-slate-700 mb-2">Provider</h4>
+                <h4 className="font-medium text-[#3A4A57] mb-2">Provider</h4>
                 <p className="text-sm">{formData.providerName}, {formData.providerCredentials}</p>
-                {formData.providerNPI && <p className="text-xs text-slate-500">NPI: {formData.providerNPI}</p>}
+                {formData.providerNPI && <p className="text-xs text-[#5A6B7A]">NPI: {formData.providerNPI}</p>}
               </div>
               <div>
-                <h4 className="font-medium text-slate-700 mb-2">Patient</h4>
+                <h4 className="font-medium text-[#3A4A57] mb-2">Patient</h4>
                 <p className="text-sm">{formData.patientName}</p>
-                <p className="text-xs text-slate-500">DOB: {formData.patientDOB}</p>
+                <p className="text-xs text-[#5A6B7A]">DOB: {formData.patientDOB}</p>
               </div>
             </div>
 
             <div className="mb-4 sm:mb-6">
-              <h4 className="font-medium text-slate-700 mb-2">Date of Service</h4>
+              <h4 className="font-medium text-[#3A4A57] mb-2">Date of Service</h4>
               <p className="text-sm">{formData.dateOfService}</p>
-              <p className="text-xs text-slate-500">Place of Service: 02 (Telehealth)</p>
+              <p className="text-xs text-[#5A6B7A]">Place of Service: 02 (Telehealth)</p>
             </div>
 
             <div className="mb-4 sm:mb-6">
-              <h4 className="font-medium text-slate-700 mb-2">Diagnosis Codes</h4>
+              <h4 className="font-medium text-[#3A4A57] mb-2">Diagnosis Codes</h4>
               <div className="flex flex-wrap gap-2">
                 {formData.diagnosisCodes.map(code => {
                   const diagnosis = COMMON_DIAGNOSIS_CODES.find(d => d.code === code);
@@ -758,7 +758,7 @@ export function SuperbillGenerator({
             </div>
 
             <div className="mb-4 sm:mb-6">
-              <h4 className="font-medium text-slate-700 mb-2">Services</h4>
+              <h4 className="font-medium text-[#3A4A57] mb-2">Services</h4>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
@@ -804,7 +804,7 @@ export function SuperbillGenerator({
             </Button>
           </div>
           {/* Submit to Insurance */}
-          <Card className="p-4 bg-blue-50 border-blue-200 mt-4">
+          <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8] mt-4">
             <div className="flex items-start gap-3 mb-3">
               <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
@@ -832,8 +832,8 @@ export function SuperbillGenerator({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Superbill Downloaded!</h3>
-          <p className="text-slate-600 mb-4 sm:mb-6">
+          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Superbill Downloaded!</h3>
+          <p className="text-[#5A6B7A] mb-4 sm:mb-6">
             Your superbill has been saved. You can submit it to your HSA/FSA administrator
             or insurance provider for reimbursement.
           </p>
@@ -863,8 +863,8 @@ export function SuperbillGenerator({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Submitting Claim...</h3>
-          <p className="text-slate-600 mb-2">
+          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Submitting Claim...</h3>
+          <p className="text-[#5A6B7A] mb-2">
             Generating EDI 837P and transmitting to clearinghouse.
           </p>
           <p className="text-xs text-slate-400">This may take a moment.</p>
@@ -878,14 +878,14 @@ export function SuperbillGenerator({
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Claim Submitted!</h3>
-              <p className="text-slate-600 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Claim Submitted!</h3>
+              <p className="text-[#5A6B7A] mb-2">
                 Your claim has been accepted by the clearinghouse.
               </p>
-              <div className="bg-slate-50 rounded-lg p-3 text-left text-sm mb-4 space-y-1">
-                <p><span className="text-slate-500">Control #:</span> <span className="font-mono">{claimResponse.claimControlNumber}</span></p>
-                <p><span className="text-slate-500">Transaction ID:</span> <span className="font-mono">{claimResponse.transactionId}</span></p>
-                <p><span className="text-slate-500">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>
+              <div className="bg-[#FAF7F2] rounded-lg p-3 text-left text-sm mb-4 space-y-1">
+                <p><span className="text-[#5A6B7A]">Control #:</span> <span className="font-mono">{claimResponse.claimControlNumber}</span></p>
+                <p><span className="text-[#5A6B7A]">Transaction ID:</span> <span className="font-mono">{claimResponse.transactionId}</span></p>
+                <p><span className="text-[#5A6B7A]">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>
               </div>
               {claimResponse.warnings && claimResponse.warnings.length > 0 && (
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-xs mb-4">
@@ -904,10 +904,10 @@ export function SuperbillGenerator({
                   <Clock className="w-8 h-8 text-amber-600" />
                 )}
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
                 {claimError ? 'Submission Issue' : 'Claim Queued'}
               </h3>
-              <p className="text-slate-600 mb-2">
+              <p className="text-[#5A6B7A] mb-2">
                 {claimError || 'Your claim has been queued and will be retried automatically.'}
               </p>
               {claimResponse && claimResponse.errors && claimResponse.errors.length > 0 && (

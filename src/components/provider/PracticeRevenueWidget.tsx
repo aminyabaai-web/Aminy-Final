@@ -143,7 +143,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-gray-200 bg-white p-4 space-y-4"
+      className="rounded-2xl border border-[#E8E4DF] bg-white p-4 space-y-4"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -151,7 +151,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
           <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
             <DollarSign className="w-4 h-4 text-emerald-600" />
           </div>
-          <span className="text-sm font-bold text-gray-900">Practice Revenue</span>
+          <span className="text-sm font-bold text-[#1B2733]">Practice Revenue</span>
         </div>
         {onViewDetails && (
           <button
@@ -167,32 +167,32 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
       {/* This week */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: 'Billed', amount: data.thisWeekBilled, color: 'text-gray-900' },
+          { label: 'Billed', amount: data.thisWeekBilled, color: 'text-[#1B2733]' },
           { label: 'Paid', amount: data.thisWeekPaid, color: 'text-emerald-700' },
           { label: 'Pending', amount: data.thisWeekPending, color: 'text-amber-600' },
         ].map((item) => (
           <div key={item.label} className="rounded-xl bg-[#FAF7F2] p-2.5 text-center">
             <p className={`text-base font-bold ${item.color}`}>{fmt(item.amount)}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{item.label}</p>
+            <p className="text-xs text-[#5A6B7A] mt-0.5">{item.label}</p>
           </div>
         ))}
       </div>
 
       {/* This month / All-time */}
-      <div className="flex gap-4 border-t border-gray-100 pt-3">
+      <div className="flex gap-4 border-t border-[#E8E4DF] pt-3">
         <div>
-          <p className="text-xs text-gray-500">This month</p>
-          <p className="text-sm font-bold text-gray-900">{fmt(data.thisMonthBilled)}</p>
-          <p className="text-xs text-gray-500">{fmt(data.thisMonthPaid)} collected</p>
+          <p className="text-xs text-[#5A6B7A]">This month</p>
+          <p className="text-sm font-bold text-[#1B2733]">{fmt(data.thisMonthBilled)}</p>
+          <p className="text-xs text-[#5A6B7A]">{fmt(data.thisMonthPaid)} collected</p>
         </div>
-        <div className="border-l border-gray-100 pl-4">
-          <p className="text-xs text-gray-500">All-time</p>
-          <p className="text-sm font-bold text-gray-900">{fmt(data.allTimeBilled)}</p>
-          <p className="text-xs text-gray-500">{fmt(data.allTimePaid)} collected</p>
+        <div className="border-l border-[#E8E4DF] pl-4">
+          <p className="text-xs text-[#5A6B7A]">All-time</p>
+          <p className="text-sm font-bold text-[#1B2733]">{fmt(data.allTimeBilled)}</p>
+          <p className="text-xs text-[#5A6B7A]">{fmt(data.allTimePaid)} collected</p>
         </div>
-        <div className="border-l border-gray-100 pl-4 ml-auto">
-          <p className="text-xs text-gray-500">Avg/session</p>
-          <p className="text-sm font-bold text-gray-900">${data.avgPerSession}</p>
+        <div className="border-l border-[#E8E4DF] pl-4 ml-auto">
+          <p className="text-xs text-[#5A6B7A]">Avg/session</p>
+          <p className="text-sm font-bold text-[#1B2733]">${data.avgPerSession}</p>
         </div>
       </div>
 
@@ -214,10 +214,10 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
 
       {/* Next deposit */}
       {data.nextDepositAmount > 0 && (
-        <div className="flex items-center gap-2 rounded-xl bg-blue-50 border border-blue-100 p-3">
+        <div className="flex items-center gap-2 rounded-xl bg-[#EEF4F8] border border-blue-100 p-3">
           <Clock className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
           <div>
-            <p className="text-xs font-medium text-blue-800">Expected next deposit</p>
+            <p className="text-xs font-medium text-[#4A6478]">Expected next deposit</p>
             <p className="text-xs text-blue-700">
               {data.nextDepositDate} — {fmt(data.nextDepositAmount)} (pending clean claims)
             </p>

@@ -284,7 +284,7 @@ function StatusBadge({ status }: { status: Appointment['status'] }) {
   const styles = {
     upcoming: 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20',
     'in-progress': 'bg-green-50 text-green-700 border-green-200',
-    completed: 'bg-[#FAF7F2] text-gray-600 border-gray-200',
+    completed: 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]',
     cancelled: 'bg-red-50 text-red-600 border-red-200',
     'no-show': 'bg-amber-50 text-amber-600 border-amber-200',
   };
@@ -334,19 +334,19 @@ function AppointmentCard({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+      className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden hover:shadow-md transition-shadow"
     >
       {/* Card Header */}
       <div className="p-3 sm:p-4">
         <div className="flex items-start justify-between gap-3">
           {/* Provider Info */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#43AA8B] flex items-center justify-center text-white font-bold">
               {appointment.provider.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{appointment.provider.name}</h3>
-              <p className="text-sm text-gray-500">{appointment.provider.title}</p>
+              <h3 className="font-semibold text-[#1B2733]">{appointment.provider.name}</h3>
+              <p className="text-sm text-[#5A6B7A]">{appointment.provider.title}</p>
             </div>
           </div>
           <StatusBadge status={appointment.status} />
@@ -354,24 +354,24 @@ function AppointmentCard({
 
         {/* Session Details */}
         <div className="mt-4 space-y-2">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Calendar className="w-4 h-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+            <Calendar className="w-4 h-4 text-[#8A9BA8]" />
             <span>{formatDateTime(appointment.scheduledAt)}</span>
             <span className="text-[#6B9080] font-medium">
               ({formatRelativeTime(appointment.scheduledAt)})
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Clock className="w-4 h-4 text-gray-400" />
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+            <Clock className="w-4 h-4 text-[#8A9BA8]" />
             <span>{appointment.duration} min {appointment.sessionType}</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
             <VisitTypeIcon type={appointment.visitType} />
             <span className="capitalize">{appointment.visitType} call</span>
           </div>
           {appointment.concern && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <MessageSquare className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+              <MessageSquare className="w-4 h-4 text-[#8A9BA8]" />
               <span>Re: {appointment.concern}</span>
             </div>
           )}
@@ -380,8 +380,8 @@ function AppointmentCard({
         {/* Session Notes (for completed) */}
         {appointment.sessionNotes && appointment.status === 'completed' && (
           <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs font-medium text-gray-500 mb-1">Session Notes</p>
-            <p className="text-sm text-gray-700">{appointment.sessionNotes}</p>
+            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Session Notes</p>
+            <p className="text-sm text-[#3A4A57]">{appointment.sessionNotes}</p>
           </div>
         )}
       </div>
@@ -404,7 +404,7 @@ function AppointmentCard({
           {showReviewPrompt && (
             <button
               onClick={() => onLeaveReview?.(appointment)}
-              className="w-full flex items-center justify-between p-3 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg text-teal-800 hover:bg-[#6B9080]/10 transition-colors"
+              className="w-full flex items-center justify-between p-3 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4" />
@@ -435,7 +435,7 @@ function AppointmentCard({
             {appointment.canReschedule && (
               <button
                 onClick={() => onReschedule?.(appointment)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 border border-gray-200 rounded-lg hover:bg-[#FAF7F2] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#FAF7F2] transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reschedule
@@ -521,7 +521,7 @@ export function MyAppointments({
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header — shared chrome with back control */}
-      <div className="bg-white border-b border-slate-100">
+      <div className="bg-white border-b border-[#E8E4DF]">
         <ScreenHeader
           title="My Appointments"
           subtitle={childName ? `for ${childName}` : undefined}
@@ -546,8 +546,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'upcoming'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-[#1B2733] shadow-sm'
+                  : 'text-[#5A6B7A] hover:text-[#1B2733]'
               }`}
             >
               Upcoming ({upcomingAppointments.length})
@@ -556,8 +556,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('past')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'past'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-white text-[#1B2733] shadow-sm'
+                  : 'text-[#5A6B7A] hover:text-[#1B2733]'
               }`}
             >
               Past ({pastAppointments.length})

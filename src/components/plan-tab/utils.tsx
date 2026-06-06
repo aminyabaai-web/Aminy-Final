@@ -51,7 +51,7 @@ export function getCategoryIcon(category: GoalCategory | string): React.ReactNod
 export function getCategoryColor(category: GoalCategory | string): string {
   switch (category) {
     case 'speech':
-      return 'text-blue-600 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-900/30 dark:border-blue-800';
+      return 'text-blue-600 bg-[#EEF4F8] border-[#C8DDE8] dark:text-blue-400 dark:bg-blue-900/30 dark:border-blue-800';
     case 'social':
       return 'text-green-600 bg-green-50 border-green-200 dark:text-green-400 dark:bg-green-900/30 dark:border-green-800';
     case 'sensory':
@@ -59,7 +59,7 @@ export function getCategoryColor(category: GoalCategory | string): string {
     case 'routines':
       return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/30 dark:border-orange-800';
     default:
-      return 'text-gray-600 bg-[#FAF7F2] border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
+      return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF] dark:text-[#8A9BA8] dark:bg-gray-900/30 dark:border-gray-800';
   }
 }
 
@@ -89,7 +89,7 @@ export function getPriorityColor(priority: Priority | string): string {
     case 'low':
       return 'text-green-600 bg-green-50 border-green-200';
     default:
-      return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
+      return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
   }
 }
 

@@ -336,16 +336,16 @@ export function MilestoneShareCard({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-500" />
-            <h3 className="font-semibold text-gray-900 text-base">
+            <h3 className="font-semibold text-[#1B2733] text-base">
               Share This Milestone!
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-[#F0EDE8] transition-colors"
+            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -363,7 +363,7 @@ export function MilestoneShareCard({
 
         {/* Achievement summary */}
         <div className="px-4 pb-2 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A6B7A]">
             <span className="text-lg mr-1">{config.emoji}</span>
             <strong>{milestone.childFirstName}</strong> just hit a milestone!
           </p>
@@ -394,7 +394,7 @@ export function MilestoneShareCard({
 
           <button
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-gray-700 bg-[#F0EDE8] hover:bg-[#E8E4DF] transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-[#3A4A57] bg-[#F0EDE8] hover:bg-[#E8E4DF] transition-all active:scale-95"
             aria-label="Download image"
           >
             <Download size={18} />

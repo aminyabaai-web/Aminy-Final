@@ -253,8 +253,8 @@ Generate a personalized summary for this parent.`,
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#6B9080]" />
             </div>
             <div>
-              <p className="font-medium text-sm sm:text-base text-gray-900">Aminy</p>
-              <p className="text-xs text-gray-500">Getting to know you</p>
+              <p className="font-medium text-sm sm:text-base text-[#1B2733]">Aminy</p>
+              <p className="text-xs text-[#5A6B7A]">Getting to know you</p>
             </div>
           </div>
           <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs sm:text-sm">

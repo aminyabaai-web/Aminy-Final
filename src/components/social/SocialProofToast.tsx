@@ -152,9 +152,9 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             className="pointer-events-auto"
           >
-            <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-lg border border-[#E8E4DF] overflow-hidden">
               {/* Teal accent bar */}
-              <div className="h-0.5 bg-gradient-to-r from-teal-400 to-teal-600" />
+              <div className="h-0.5 bg-gradient-to-r from-[#6B9080] to-[#43AA8B]" />
 
               <div className="p-3 flex items-start gap-3">
                 {/* Avatar / Icon */}
@@ -168,11 +168,11 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-800 leading-snug">
+                  <p className="text-sm text-[#1B2733] leading-snug">
                     {milestoneMessage || currentMessage?.message}
                   </p>
                   {currentMessage && !milestoneMessage && (
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-[#8A9BA8] mt-0.5">
                       {currentMessage.timeAgo}
                     </p>
                   )}
@@ -181,7 +181,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
                 {/* Dismiss */}
                 <button
                   onClick={handleDismiss}
-                  className="text-gray-400 hover:text-gray-500 flex-shrink-0 p-0.5"
+                  className="text-[#8A9BA8] hover:text-[#5A6B7A] flex-shrink-0 p-0.5"
                   aria-label="Dismiss notification"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -192,7 +192,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
               <div className="px-3 pb-2">
                 <button
                   onClick={handleDontShowAgain}
-                  className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
                 >
                   Don&apos;t show again
                 </button>

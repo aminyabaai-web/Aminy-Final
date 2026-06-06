@@ -409,27 +409,27 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 py-4">
+      <header className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <nav aria-label="Provider onboarding navigation" className="max-w-2xl mx-auto flex items-center gap-3">
           {onBack && (
             <button
               type="button"
               onClick={onBack}
               aria-label="Go back"
-              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-[#F0EDE8] hover:text-gray-700"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8] hover:text-[#3A4A57]"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">Join Aminy as a Provider</h1>
-            <p className="text-sm text-gray-500">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">Join Aminy as a Provider</h1>
+            <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
           </div>
           <button
             type="button"
             onClick={currentStep === 'review' ? handleSubmit : nextStep}
             disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-cyan-700 disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#5A7A6E] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
           >
             {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
             <ArrowRight className="w-4 h-4" />
@@ -438,7 +438,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
       </header>
 
       {/* Progress Steps */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="max-w-2xl mx-auto flex items-center gap-1">
           {STEPS.map((step, idx) => {
             const isCompleted = idx < stepIndex;
@@ -453,10 +453,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   aria-label={`Open ${step.label} step`}
                   className={`flex h-11 min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isCurrent
-                      ? 'bg-cyan-600/10 text-[#6B9080]'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
                       : isCompleted
                         ? 'text-green-600 hover:bg-green-50'
-                        : 'text-gray-400'
+                        : 'text-[#8A9BA8]'
                   }`}
                 >
                   {isCompleted ? (
@@ -480,9 +480,9 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
         {currentStep === 'basics' && (
           <div className="space-y-6">
             {/* Practice mode — own independent practice vs. join under an organization */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">How do you want to practice?</h2>
-              <p className="text-sm text-gray-500 mb-5">This shapes your portal. You can change it later.</p>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-1">How do you want to practice?</h2>
+              <p className="text-sm text-[#5A6B7A] mb-5">This shapes your portal. You can change it later.</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 {([
                   {
@@ -504,80 +504,80 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     className={`text-left p-4 rounded-xl border-2 transition-all ${
                       form.practiceMode === opt.id
                         ? 'border-[#6B9080] bg-[#6B9080]/10'
-                        : 'border-gray-200 bg-[#FAF7F2] hover:border-gray-300'
+                        : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
                       {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-[#6B9080] shrink-0" />}
-                      <span className="font-semibold text-gray-900">{opt.title}</span>
+                      <span className="font-semibold text-[#1B2733]">{opt.title}</span>
                     </div>
-                    <p className="text-sm text-gray-600">{opt.description}</p>
+                    <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Basic Information</h2>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Basic Information</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor={fieldId('first-name')} className="mb-1 block text-sm font-medium text-gray-700">First Name *</label>
+                  <label htmlFor={fieldId('first-name')} className="mb-1 block text-sm font-medium text-[#3A4A57]">First Name *</label>
                   <input
                     id={fieldId('first-name')}
                     type="text"
                     value={form.firstName}
                     onChange={e => updateForm({ firstName: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('last-name')} className="mb-1 block text-sm font-medium text-gray-700">Last Name *</label>
+                  <label htmlFor={fieldId('last-name')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Last Name *</label>
                   <input
                     id={fieldId('last-name')}
                     type="text"
                     value={form.lastName}
                     onChange={e => updateForm({ lastName: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('email')} className="mb-1 block text-sm font-medium text-gray-700">Email *</label>
+                  <label htmlFor={fieldId('email')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Email *</label>
                   <input
                     id={fieldId('email')}
                     type="email"
                     value={form.email}
                     onChange={e => updateForm({ email: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('phone')} className="mb-1 block text-sm font-medium text-gray-700">Phone</label>
+                  <label htmlFor={fieldId('phone')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Phone</label>
                   <input
                     id={fieldId('phone')}
                     type="tel"
                     value={form.phone}
                     onChange={e => updateForm({ phone: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('credentials')} className="mb-1 block text-sm font-medium text-gray-700">Credentials *</label>
+                  <label htmlFor={fieldId('credentials')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Credentials *</label>
                   <input
                     id={fieldId('credentials')}
                     type="text"
                     value={form.credentials}
                     onChange={e => updateForm({ credentials: e.target.value })}
                     placeholder="e.g., BCBA, LCSW, MS CCC-SLP"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('role')} className="mb-1 block text-sm font-medium text-gray-700">Provider Role *</label>
+                  <label htmlFor={fieldId('role')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Provider Role *</label>
                   <select
                     id={fieldId('role')}
                     value={form.role}
                     onChange={e => updateForm({ role: e.target.value as ProviderRole })}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   >
                     {Object.entries(PROVIDER_ROLE_DISPLAY).map(([value, label]) => (
                       <option key={value} value={value}>{label}</option>
@@ -585,14 +585,14 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   </select>
                 </div>
                 <div className="sm:col-span-2">
-                  <label htmlFor={fieldId('bio')} className="mb-1 block text-sm font-medium text-gray-700">Bio</label>
+                  <label htmlFor={fieldId('bio')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Bio</label>
                   <textarea
                     id={fieldId('bio')}
                     value={form.bio}
                     onChange={e => updateForm({ bio: e.target.value })}
                     rows={3}
                     placeholder="Tell families about your experience and approach..."
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 resize-none"
                   />
                 </div>
               </div>
@@ -602,24 +602,24 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
         {currentStep === 'licensing' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">Licensing & Credentials</h2>
-              <p className="text-sm text-gray-500 mb-6">Select every state where you hold an active license or certification. Aminy only lists providers after verification clears and at least one supported market is live.</p>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Licensing & Credentials</h2>
+              <p className="text-sm text-[#5A6B7A] mb-6">Select every state where you hold an active license or certification. Aminy only lists providers after verification clears and at least one supported market is live.</p>
 
               <div className="grid gap-4 mb-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor={fieldId('credential-number')} className="mb-1 block text-sm font-medium text-gray-700">Primary license or certification number *</label>
+                  <label htmlFor={fieldId('credential-number')} className="mb-1 block text-sm font-medium text-[#3A4A57]">Primary license or certification number *</label>
                   <input
                     id={fieldId('credential-number')}
                     type="text"
                     value={form.primaryCredentialNumber}
                     onChange={e => updateForm({ primaryCredentialNumber: e.target.value })}
                     placeholder="Used for verification before you go live"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
                 <div>
-                  <label htmlFor={fieldId('npi-number')} className="mb-1 block text-sm font-medium text-gray-700">NPI Number</label>
+                  <label htmlFor={fieldId('npi-number')} className="mb-1 block text-sm font-medium text-[#3A4A57]">NPI Number</label>
                   <input
                     id={fieldId('npi-number')}
                     type="text"
@@ -627,33 +627,33 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     onChange={e => updateForm({ npiNumber: e.target.value })}
                     placeholder="10-digit NPI"
                     maxLength={10}
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
+                    className="w-full px-4 py-2.5 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600"
                   />
                 </div>
               </div>
 
-              <div className="mb-6 rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 px-4 py-3 text-sm text-slate-700">
-                <p className="font-medium text-slate-900">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
+              <div className="mb-6 rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 px-4 py-3 text-sm text-[#3A4A57]">
+                <p className="font-medium text-[#1B2733]">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
                 <p className="mt-1">You can add any licensed state now. Aminy keeps you off the marketplace until your credentials are validated, then turns on live booking only in supported markets where you are actually licensed.</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Licensed States *</label>
+                <label className="block text-sm font-medium text-[#3A4A57] mb-3">Licensed States *</label>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 max-h-72 overflow-y-auto">
                   {US_STATES.map(state => (
                     <label
                       key={state.code}
                       className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-sm ${
                         form.licensedStates.includes(state.code)
-                          ? 'bg-cyan-600/10 text-[#6B9080] font-medium'
-                          : 'hover:bg-[#FAF7F2] text-gray-600'
+                          ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium'
+                          : 'hover:bg-[#FAF7F2] text-[#5A6B7A]'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={form.licensedStates.includes(state.code)}
                         onChange={() => toggleState(state.code)}
-                        className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
+                        className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
                       />
                       {state.code}
                     </label>
@@ -673,9 +673,9 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           <div className="space-y-6">
 
             {/* Billing Track Selection */}
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">Choose Your Practice Track</h2>
-              <p className="text-sm text-gray-500 mb-5">This determines how you get credentialed and paid. You can change tracks later.</p>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-1">Choose Your Practice Track</h2>
+              <p className="text-sm text-[#5A6B7A] mb-5">This determines how you get credentialed and paid. You can change tracks later.</p>
               <div className="space-y-3">
                 {([
                   {
@@ -710,25 +710,25 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       form.billingTrack === track.id
                         ? 'border-[#6B9080] bg-[#6B9080]/10'
-                        : 'border-gray-200 bg-[#FAF7F2] hover:border-gray-300'
+                        : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-gray-900">{track.title}</span>
+                      <span className="font-semibold text-[#1B2733]">{track.title}</span>
                       {track.badge && (
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${track.badgeClass}`}>
                           {track.badge}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600">{track.description}</p>
+                    <p className="text-sm text-[#5A6B7A]">{track.description}</p>
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Services & Pricing</h2>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Services & Pricing</h2>
 
               <div className="space-y-4">
                 <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
@@ -737,20 +737,20 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersConsult}
                       onChange={e => updateForm({ offersConsult: e.target.checked })}
-                      className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
+                      className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
                     />
                     <div>
-                      <p className="font-medium text-gray-900">25-min Consult</p>
-                      <p className="text-sm text-gray-500">Quick guidance session for specific questions</p>
+                      <p className="font-medium text-[#1B2733]">25-min Consult</p>
+                      <p className="text-sm text-[#5A6B7A]">Quick guidance session for specific questions</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500">$</span>
+                    <span className="text-[#5A6B7A]">$</span>
                     <input
                       type="number"
                       value={form.consultPrice}
                       onChange={e => updateForm({ consultPrice: Number(e.target.value) })}
-                      className="w-20 px-3 py-1.5 border border-gray-200 rounded-lg text-right"
+                      className="w-20 px-3 py-1.5 border border-[#E8E4DF] rounded-lg text-right"
                     />
                   </div>
                 </label>
@@ -761,20 +761,20 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersDeepReview}
                       onChange={e => updateForm({ offersDeepReview: e.target.checked })}
-                      className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
+                      className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
                     />
                     <div>
-                      <p className="font-medium text-gray-900">50-min Deep Review</p>
-                      <p className="text-sm text-gray-500">Comprehensive session for complex challenges</p>
+                      <p className="font-medium text-[#1B2733]">50-min Deep Review</p>
+                      <p className="text-sm text-[#5A6B7A]">Comprehensive session for complex challenges</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-500">$</span>
+                    <span className="text-[#5A6B7A]">$</span>
                     <input
                       type="number"
                       value={form.deepReviewPrice}
                       onChange={e => updateForm({ deepReviewPrice: Number(e.target.value) })}
-                      className="w-20 px-3 py-1.5 border border-gray-200 rounded-lg text-right"
+                      className="w-20 px-3 py-1.5 border border-[#E8E4DF] rounded-lg text-right"
                     />
                   </div>
                 </label>
@@ -782,7 +782,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
               <div className="mt-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Accepted payment and insurance rails</label>
+                  <label className="block text-sm font-medium text-[#3A4A57] mb-2">Accepted payment and insurance rails</label>
                   <div className="flex flex-wrap gap-2">
                     {COMMON_PAYER_OPTIONS.map((plan) => {
                       const active = form.acceptedInsurance.includes(plan);
@@ -796,20 +796,20 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                               : [...form.acceptedInsurance, plan],
                           })}
                           aria-pressed={active}
-                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-cyan-600/10 text-[#6B9080]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
+                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-[#6B9080]/10 text-[#6B9080]' : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'}`}
                         >
                           {plan}
                         </button>
                       );
                     })}
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-[#5A6B7A] mt-2">
                     Independent providers can start with cash pay only, then add payer contracts or partner-billed lanes as they grow.
                   </p>
                 </div>
 
-                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
+                  <p className="text-sm text-[#4A6478]">
                     <strong>Practice in a box:</strong> Aminy handles family-facing discovery, booking, reminders, telehealth access, payouts, and follow-up. Cash-pay can go live immediately in your licensed states; insured lanes can be layered in as you add contracts or partner billing paths.
                   </p>
                 </div>
@@ -820,24 +820,24 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
         {currentStep === 'availability' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">Weekly Availability</h2>
-                  <p className="text-sm text-gray-500">Set your recurring weekly schedule (you can change this anytime)</p>
+                  <h2 className="text-lg font-semibold text-[#1B2733]">Weekly Availability</h2>
+                  <p className="text-sm text-[#5A6B7A]">Set your recurring weekly schedule (you can change this anytime)</p>
                 </div>
                 <button
                   type="button"
                   onClick={addAvailability}
-                  className="flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-cyan-600/90"
+                  className="flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#6B9080]/90"
                 >
                   + Add Time Block
                 </button>
               </div>
 
               {form.availability.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <Calendar className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+                <div className="text-center py-8 text-[#5A6B7A]">
+                  <Calendar className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
                   <p className="font-medium">No availability set yet</p>
                   <p className="text-sm mt-1">Add time blocks when you're available for sessions</p>
                 </div>
@@ -849,7 +849,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                         aria-label={`Day of week for time block ${idx + 1}`}
                         value={slot.dayOfWeek}
                         onChange={e => updateAvailability(idx, { dayOfWeek: Number(e.target.value) })}
-                        className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                        className="px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                       >
                         {DAYS.map((day, i) => (
                           <option key={i} value={i}>{day}</option>
@@ -860,21 +860,21 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                         type="time"
                         value={slot.startTime}
                         onChange={e => updateAvailability(idx, { startTime: e.target.value })}
-                        className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                        className="px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                       />
-                      <span className="text-gray-400">to</span>
+                      <span className="text-[#8A9BA8]">to</span>
                       <input
                         aria-label={`End time for time block ${idx + 1}`}
                         type="time"
                         value={slot.endTime}
                         onChange={e => updateAvailability(idx, { endTime: e.target.value })}
-                        className="px-3 py-2 border border-gray-200 rounded-lg text-sm"
+                        className="px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm"
                       />
                       <button
                         type="button"
                         onClick={() => removeAvailability(idx)}
                         aria-label={`Remove time block ${idx + 1}`}
-                        className="min-h-11 min-w-11 rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                        className="min-h-11 min-w-11 rounded-lg p-2 text-[#8A9BA8] transition-colors hover:bg-red-50 hover:text-red-500"
                       >
                         &times;
                       </button>
@@ -888,65 +888,65 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
         {currentStep === 'review' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">Review Your Profile</h2>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Review Your Profile</h2>
 
               <div className="space-y-4">
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Profile</h3>
-                  <p className="font-semibold text-gray-900">
+                  <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Profile</h3>
+                  <p className="font-semibold text-[#1B2733]">
                     {form.firstName} {form.lastName}, {form.credentials}
                   </p>
-                  <p className="text-sm text-gray-600">{PROVIDER_ROLE_DISPLAY[form.role]}</p>
-                  {form.bio && <p className="text-sm text-gray-500 mt-2">{form.bio}</p>}
+                  <p className="text-sm text-[#5A6B7A]">{PROVIDER_ROLE_DISPLAY[form.role]}</p>
+                  {form.bio && <p className="text-sm text-[#5A6B7A] mt-2">{form.bio}</p>}
                 </div>
 
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Licensing</h3>
+                  <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Licensing</h3>
                   <div className="flex flex-wrap gap-1">
                     {form.licensedStates.map(code => (
-                      <span key={code} className="px-2 py-0.5 bg-cyan-600/10 text-[#6B9080] text-xs font-medium rounded-full">
+                      <span key={code} className="px-2 py-0.5 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">
                         {code}
                       </span>
                     ))}
                   </div>
                   {form.npiNumber && (
-                    <p className="text-sm text-gray-500 mt-2">NPI: {form.npiNumber}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-2">NPI: {form.npiNumber}</p>
                   )}
                   {form.primaryCredentialNumber && (
-                    <p className="text-sm text-gray-500 mt-1">Credential #: {form.primaryCredentialNumber}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1">Credential #: {form.primaryCredentialNumber}</p>
                   )}
                 </div>
 
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Services</h3>
+                  <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Services</h3>
                   {form.offersConsult && (
-                    <p className="text-sm text-gray-900">25-min Consult — ${form.consultPrice}</p>
+                    <p className="text-sm text-[#1B2733]">25-min Consult — ${form.consultPrice}</p>
                   )}
                   {form.offersDeepReview && (
-                    <p className="text-sm text-gray-900">50-min Deep Review — ${form.deepReviewPrice}</p>
+                    <p className="text-sm text-[#1B2733]">50-min Deep Review — ${form.deepReviewPrice}</p>
                   )}
-                  <p className="text-sm text-gray-500 mt-2">Accepted rails: {form.acceptedInsurance.join(', ')}</p>
+                  <p className="text-sm text-[#5A6B7A] mt-2">Accepted rails: {form.acceptedInsurance.join(', ')}</p>
                 </div>
 
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">Availability</h3>
+                  <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Availability</h3>
                   {form.availability.length > 0 ? (
                     <div className="space-y-1">
                       {form.availability.map((slot, idx) => (
-                        <p key={idx} className="text-sm text-gray-900">
+                        <p key={idx} className="text-sm text-[#1B2733]">
                           {DAYS[slot.dayOfWeek]}: {slot.startTime} – {slot.endTime}
                         </p>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-500">None set — you can configure this in your portal</p>
+                    <p className="text-sm text-[#5A6B7A]">None set — you can configure this in your portal</p>
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 px-4 py-4">
-                  <h3 className="text-sm font-semibold text-slate-900">Before you go live</h3>
-                  <p className="mt-2 text-sm text-slate-700">
+                <div className="rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 px-4 py-4">
+                  <h3 className="text-sm font-semibold text-[#1B2733]">Before you go live</h3>
+                  <p className="mt-2 text-sm text-[#3A4A57]">
                     Aminy verifies your primary credential, matches your licensed states, and only turns on marketplace discovery after those checks pass. If you add states outside the live launch footprint, they stay saved on your profile and become bookable when that market is opened.
                   </p>
                 </div>
@@ -959,10 +959,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     type="checkbox"
                     checked={nonSolicitationAck}
                     onChange={(e) => setNonSolicitationAck(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
+                    className="mt-0.5 h-4 w-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
                   />
-                  <span className="text-sm text-slate-700">
-                    <span className="font-semibold text-slate-900">Non-Solicitation Agreement — </span>
+                  <span className="text-sm text-[#3A4A57]">
+                    <span className="font-semibold text-[#1B2733]">Non-Solicitation Agreement — </span>
                     I understand that families I connect with through the Aminy marketplace may not be solicited to continue or initiate services outside of the Aminy platform for a period of 12 months following our last session on Aminy. This protects both the family and the integrity of the Aminy network.
                   </span>
                 </label>
@@ -983,7 +983,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           <button
             type="button"
             onClick={stepIndex === 0 ? onBack : prevStep}
-            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-gray-600 transition-colors hover:bg-[#F0EDE8]"
+            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
           >
             <ArrowLeft className="w-4 h-4" />
             {stepIndex === 0 ? 'Cancel' : 'Back'}
@@ -994,7 +994,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting || !nonSolicitationAck}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600/90 disabled:opacity-50"
+              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#6B9080]/90 disabled:opacity-50"
             >
               {isSubmitting ? (
                 <>
@@ -1013,7 +1013,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={nextStep}
               disabled={!canAdvance()}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-cyan-600 px-6 py-2.5 font-medium text-white transition-colors hover:bg-cyan-600/90 disabled:opacity-50"
+              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#6B9080]/90 disabled:opacity-50"
             >
               Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
               <ArrowRight className="w-4 h-4" />

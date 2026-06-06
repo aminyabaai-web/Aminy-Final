@@ -302,22 +302,22 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
           <div className="max-w-4xl mx-auto px-4 py-4">
             <button
               onClick={() => setActiveView('dashboard')}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-4"
+              className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
             </button>
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-slate-900 mb-1">{selectedFamily.childName}</h1>
-                <p className="text-slate-600">Parent: {selectedFamily.parentName} • Age {selectedFamily.age}</p>
+                <h1 className="text-[#1B2733] mb-1">{selectedFamily.childName}</h1>
+                <p className="text-[#5A6B7A]">Parent: {selectedFamily.parentName} • Age {selectedFamily.age}</p>
               </div>
               <Badge className={
                 selectedFamily.status === 'active' 
                   ? 'bg-green-100 text-green-700' 
                   : selectedFamily.status === 'review'
                   ? 'bg-amber-100 text-amber-700'
-                  : 'bg-slate-100 text-slate-700'
+                  : 'bg-[#F0EDE8] text-[#3A4A57]'
               }>
                 {selectedFamily.status}
               </Badge>
@@ -330,7 +330,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
           <Card className={`p-4 border-2 ${
             aiSummary.type === 'success' ? 'border-green-200 bg-green-50' :
             aiSummary.type === 'warning' ? 'border-amber-200 bg-amber-50' :
-            'border-blue-200 bg-blue-50'
+            'border-[#C8DDE8] bg-[#EEF4F8]'
           }`}>
             <div className="flex items-start gap-3">
               <Sparkles className={`w-5 h-5 flex-shrink-0 ${
@@ -339,8 +339,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 'text-blue-600'
               }`} />
               <div>
-                <p className="text-slate-900 mb-1">AI Insight</p>
-                <p className="text-slate-700 text-sm">{aiSummary.message}</p>
+                <p className="text-[#1B2733] mb-1">AI Insight</p>
+                <p className="text-[#3A4A57] text-sm">{aiSummary.message}</p>
               </div>
             </div>
           </Card>
@@ -358,17 +358,17 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
 
             <TabsContent value="overview" className="space-y-3 sm:space-y-4">
               <Card className="p-4 sm:p-5 md:p-6">
-                <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+                <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
                   <Activity className="w-5 h-5 text-accent" />
                   Progress Overview
                 </h3>
                 <div className="space-y-3 sm:space-y-4">
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-slate-600">Overall Progress</span>
-                      <span className="text-slate-900">{selectedFamily.progress}%</span>
+                      <span className="text-[#5A6B7A]">Overall Progress</span>
+                      <span className="text-[#1B2733]">{selectedFamily.progress}%</span>
                     </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2">
+                    <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                       <div 
                         className="bg-accent h-2 rounded-full transition-all duration-300"
                         style={{ width: `${selectedFamily.progress}%` }}
@@ -377,21 +377,21 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4">
                     <div className="text-center">
-                      <div className="text-2xl text-slate-900 mb-1">{selectedFamily.activeGoals}</div>
-                      <div className="text-xs text-slate-600">Active Goals</div>
+                      <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.activeGoals}</div>
+                      <div className="text-xs text-[#5A6B7A]">Active Goals</div>
                     </div>
                     {/* Sessions/Weeks render only when the backing data provides them —
                         never fabricated for a real coach. */}
                     {typeof selectedFamily.sessionsCount === 'number' && (
                       <div className="text-center">
-                        <div className="text-2xl text-slate-900 mb-1">{selectedFamily.sessionsCount}</div>
-                        <div className="text-xs text-slate-600">Sessions</div>
+                        <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.sessionsCount}</div>
+                        <div className="text-xs text-[#5A6B7A]">Sessions</div>
                       </div>
                     )}
                     {typeof selectedFamily.weeksInProgram === 'number' && (
                       <div className="text-center">
-                        <div className="text-2xl text-slate-900 mb-1">{selectedFamily.weeksInProgram}</div>
-                        <div className="text-xs text-slate-600">Weeks</div>
+                        <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.weeksInProgram}</div>
+                        <div className="text-xs text-[#5A6B7A]">Weeks</div>
                       </div>
                     )}
                   </div>
@@ -403,35 +403,35 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
               {goals.length === 0 && (
                 <Card className="p-6 text-center">
                   <Target className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                  <p className="text-slate-600">No goals yet for this family</p>
+                  <p className="text-[#5A6B7A]">No goals yet for this family</p>
                 </Card>
               )}
               {goals.map(goal => (
                 <Card key={goal.id} className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex-1">
-                      <h4 className="text-slate-900 mb-1">{goal.title}</h4>
-                      <p className="text-sm text-slate-600 mb-2">{goal.description}</p>
+                      <h4 className="text-[#1B2733] mb-1">{goal.title}</h4>
+                      <p className="text-sm text-[#5A6B7A] mb-2">{goal.description}</p>
                       <div className="flex items-center gap-3 text-xs">
                         <Badge variant="outline">{goal.category}</Badge>
-                        <span className="text-slate-500">Baseline: {goal.baseline}</span>
-                        <span className="text-slate-500">Target: {goal.target}</span>
+                        <span className="text-[#5A6B7A]">Baseline: {goal.baseline}</span>
+                        <span className="text-[#5A6B7A]">Target: {goal.target}</span>
                       </div>
                     </div>
                     <Badge className={
                       goal.status === 'active' ? 'bg-green-100 text-green-700' :
                       goal.status === 'completed' ? 'bg-blue-100 text-blue-700' :
-                      'bg-slate-100 text-slate-700'
+                      'bg-[#F0EDE8] text-[#3A4A57]'
                     }>
                       {goal.status}
                     </Badge>
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-slate-600">Progress</span>
-                      <span className="text-slate-900">{goal.progress}%</span>
+                      <span className="text-[#5A6B7A]">Progress</span>
+                      <span className="text-[#1B2733]">{goal.progress}%</span>
                     </div>
-                    <div className="w-full bg-slate-200 rounded-full h-2">
+                    <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                       <div 
                         className="bg-accent h-2 rounded-full transition-all duration-300"
                         style={{ width: `${goal.progress}%` }}
@@ -447,8 +447,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
                 {onNavigate ? (
                   <>
-                    <p className="text-slate-900 mb-1">Clinical Reports</p>
-                    <p className="text-sm text-slate-500 mb-4">
+                    <p className="text-[#1B2733] mb-1">Clinical Reports</p>
+                    <p className="text-sm text-[#5A6B7A] mb-4">
                       Build a progress report and export a clinician-ready PDF.
                     </p>
                     <Button
@@ -461,8 +461,8 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   </>
                 ) : (
                   <>
-                    <p className="text-slate-600 mb-1">Reports coming soon</p>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-[#5A6B7A] mb-1">Reports coming soon</p>
+                    <p className="text-sm text-[#5A6B7A]">
                       Progress reports and export are on the way.
                     </p>
                   </>
@@ -472,7 +472,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
 
             <TabsContent value="notes" className="space-y-3 sm:space-y-4">
               <Card className="p-4 sm:p-5 md:p-6">
-                <h4 className="text-slate-900 mb-3">Add New Note</h4>
+                <h4 className="text-[#1B2733] mb-3">Add New Note</h4>
                 <Textarea
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
@@ -489,9 +489,9 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 <Card key={note.id} className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center gap-2 mb-2">
                     <Calendar className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm text-slate-600">{note.date}</span>
+                    <span className="text-sm text-[#5A6B7A]">{note.date}</span>
                   </div>
-                  <p className="text-slate-900">{note.content}</p>
+                  <p className="text-[#1B2733]">{note.content}</p>
                   {note.tags.length > 0 && (
                     <div className="flex gap-2 mt-3">
                       {note.tags.map(tag => (
@@ -518,13 +518,13 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
         <div className="max-w-4xl mx-auto px-4 py-4">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-4"
+            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
-          <h1 className="text-slate-900 mb-1">BCBA Coach Portal</h1>
-          <p className="text-slate-600">Welcome back, {coachName}</p>
+          <h1 className="text-[#1B2733] mb-1">BCBA Coach Portal</h1>
+          <p className="text-[#5A6B7A]">Welcome back, {coachName}</p>
         </div>
       </div>
 
@@ -545,52 +545,52 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <Card className="p-3 sm:p-4">
-            <div className="text-2xl text-slate-900 mb-1">{families.length}</div>
-            <div className="text-sm text-slate-600">Active Families</div>
+            <div className="text-2xl text-[#1B2733] mb-1">{families.length}</div>
+            <div className="text-sm text-[#5A6B7A]">Active Families</div>
           </Card>
           <Card className="p-3 sm:p-4">
-            <div className="text-2xl text-slate-900 mb-1">
+            <div className="text-2xl text-[#1B2733] mb-1">
               {families.reduce((sum, f) => sum + f.activeGoals, 0)}
             </div>
-            <div className="text-sm text-slate-600">Total Goals</div>
+            <div className="text-sm text-[#5A6B7A]">Total Goals</div>
           </Card>
           <Card className="p-3 sm:p-4">
-            <div className="text-2xl text-slate-900 mb-1">
+            <div className="text-2xl text-[#1B2733] mb-1">
               {families.length > 0
                 ? Math.round(families.reduce((sum, f) => sum + f.progress, 0) / families.length)
                 : 0}%
             </div>
-            <div className="text-sm text-slate-600">Avg Progress</div>
+            <div className="text-sm text-[#5A6B7A]">Avg Progress</div>
           </Card>
         </div>
 
         {/* Clinical Tools Quick Access */}
         {onNavigate && (
           <div className="mb-4 sm:mb-6">
-            <h3 className="text-slate-700 text-sm font-semibold mb-3">Clinical Tools</h3>
+            <h3 className="text-[#3A4A57] text-sm font-semibold mb-3">Clinical Tools</h3>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => onNavigate('data-collection')}
-                className="flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-emerald-500 hover:shadow-sm transition-all text-left"
+                className="flex items-center gap-3 p-4 rounded-xl border-2 border-[#E8E4DF] bg-white hover:border-emerald-500 hover:shadow-sm transition-all text-left"
               >
                 <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900 text-sm">Data Collection</p>
-                  <p className="text-xs text-slate-500">DTT · NET · Behavior</p>
+                  <p className="font-semibold text-[#1B2733] text-sm">Data Collection</p>
+                  <p className="text-xs text-[#5A6B7A]">DTT · NET · Behavior</p>
                 </div>
               </button>
               <button
                 onClick={() => onNavigate('treatment-plan-editor')}
-                className="flex items-center gap-3 p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-900 hover:shadow-sm transition-all text-left"
+                className="flex items-center gap-3 p-4 rounded-xl border-2 border-[#E8E4DF] bg-white hover:border-slate-900 hover:shadow-sm transition-all text-left"
               >
                 <div className="w-10 h-10 rounded-lg bg-slate-900/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                  <svg className="w-5 h-5 text-[#1B2733]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-900 text-sm">Treatment Plan</p>
-                  <p className="text-xs text-slate-500">Author · Finalize · Export</p>
+                  <p className="font-semibold text-[#1B2733] text-sm">Treatment Plan</p>
+                  <p className="text-xs text-[#5A6B7A]">Author · Finalize · Export</p>
                 </div>
               </button>
             </div>
@@ -599,14 +599,14 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
 
         {/* Families List */}
         <div className="space-y-3">
-          <h2 className="text-slate-900 mb-3">Your Families</h2>
+          <h2 className="text-[#1B2733] mb-3">Your Families</h2>
           {isLoading ? (
             <Card className="p-6 text-center">
               <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
             </Card>
           ) : filteredFamilies.length === 0 ? (
             <Card className="p-6 text-center">
-              <p className="text-slate-600">No families found</p>
+              <p className="text-[#5A6B7A]">No families found</p>
             </Card>
           ) : (
             filteredFamilies.map(family => {
@@ -622,31 +622,31 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <h3 className="text-slate-900 mb-1">{family.childName}</h3>
-                      <p className="text-sm text-slate-600">{family.parentName} • Age {family.age}</p>
+                      <h3 className="text-[#1B2733] mb-1">{family.childName}</h3>
+                      <p className="text-sm text-[#5A6B7A]">{family.parentName} • Age {family.age}</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-slate-400" />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-3 text-sm">
                     <div>
-                      <span className="text-slate-600">Goals: </span>
-                      <span className="text-slate-900">{family.activeGoals}</span>
+                      <span className="text-[#5A6B7A]">Goals: </span>
+                      <span className="text-[#1B2733]">{family.activeGoals}</span>
                     </div>
                     <div>
-                      <span className="text-slate-600">Progress: </span>
-                      <span className="text-slate-900">{family.progress}%</span>
+                      <span className="text-[#5A6B7A]">Progress: </span>
+                      <span className="text-[#1B2733]">{family.progress}%</span>
                     </div>
                     <div>
-                      <span className="text-slate-600">Last: </span>
-                      <span className="text-slate-900">{family.lastVisit}</span>
+                      <span className="text-[#5A6B7A]">Last: </span>
+                      <span className="text-[#1B2733]">{family.lastVisit}</span>
                     </div>
                   </div>
 
                   <div className={`p-3 rounded-lg border ${
                     aiSummary.type === 'success' ? 'border-green-200 bg-green-50' :
                     aiSummary.type === 'warning' ? 'border-amber-200 bg-amber-50' :
-                    'border-blue-200 bg-blue-50'
+                    'border-[#C8DDE8] bg-[#EEF4F8]'
                   }`}>
                     <div className="flex items-start gap-2">
                       <Sparkles className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
@@ -654,7 +654,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                         aiSummary.type === 'warning' ? 'text-amber-600' :
                         'text-blue-600'
                       }`} />
-                      <p className="text-sm text-slate-700">{aiSummary.message}</p>
+                      <p className="text-sm text-[#3A4A57]">{aiSummary.message}</p>
                     </div>
                   </div>
                 </Card>

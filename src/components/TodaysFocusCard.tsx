@@ -24,7 +24,7 @@ interface TodaysFocusCardProps {
 }
 
 const skillTypeColors = {
-  speech: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+  speech: { bg: 'bg-[#EEF4F8]', text: 'text-blue-700', border: 'border-[#C8DDE8]' },
   social: { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
   sensory: { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
   routines: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' }
@@ -51,7 +51,7 @@ export function TodaysFocusCard({
     return (
       <div
         key={task.id}
-        className={`${isPrimary ? '' : 'p-3 border-t border-slate-100'}`}
+        className={`${isPrimary ? '' : 'p-3 border-t border-[#E8E4DF]'}`}
       >
         <div className="flex items-start gap-3">
           <div className={`w-10 h-10 rounded-full ${colors.bg} flex items-center justify-center flex-shrink-0 mt-1`}>
@@ -88,7 +88,7 @@ export function TodaysFocusCard({
               <div className="p-2 bg-accent/5 rounded-lg border border-accent/10 mb-3">
                 <div className="flex items-start gap-2">
                   <Sparkles className="w-3 h-3 text-accent mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-slate-700">
+                  <p className="text-xs text-[#3A4A57]">
                     <span className="font-medium">Why it helps: </span>
                     {task.whyItHelps}
                   </p>
@@ -126,7 +126,7 @@ export function TodaysFocusCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Target className="w-5 h-5 text-accent" />
-            <h2 className="font-semibold text-slate-900">Today's Calm Plan</h2>
+            <h2 className="font-semibold text-[#1B2733]">Today's Calm Plan</h2>
           </div>
           
           {additionalTasks.length > 0 && (
@@ -154,7 +154,7 @@ export function TodaysFocusCard({
       </div>
 
       {isExpanded && additionalTasks.length > 0 && (
-        <div className="border-t border-slate-100">
+        <div className="border-t border-[#E8E4DF]">
           {additionalTasks.map(task => renderTask(task, false))}
         </div>
       )}

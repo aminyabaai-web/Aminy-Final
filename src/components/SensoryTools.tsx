@@ -597,15 +597,15 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-blue-50">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 px-4 py-4 sticky top-0 z-10">
+        <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4 sticky top-0 z-10">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg text-gray-900">Calm Corner</h1>
-                <p className="text-xs text-gray-500">Sensory tools for {childName}</p>
+                <h1 className="text-lg text-[#1B2733]">Calm Corner</h1>
+                <p className="text-xs text-[#5A6B7A]">Sensory tools for {childName}</p>
               </div>
             </div>
             <Button
@@ -628,14 +628,14 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               exit={{ opacity: 0, height: 0 }}
             >
               <Card className="p-4 bg-white/80 border-purple-200">
-                <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+                <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   Accessibility Settings
                 </h3>
 
                 <div className="space-y-3 sm:space-y-4">
                   <div>
-                    <Label className="text-sm text-gray-700 mb-2">Visual Intensity</Label>
+                    <Label className="text-sm text-[#3A4A57] mb-2">Visual Intensity</Label>
                     <Slider
                       value={[visualIntensity]}
                       onValueChange={([value]) => setVisualIntensity(value)}
@@ -644,11 +644,11 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                       step={10}
                       className="mt-2"
                     />
-                    <p className="text-xs text-gray-500 mt-1">{visualIntensity}%</p>
+                    <p className="text-xs text-[#5A6B7A] mt-1">{visualIntensity}%</p>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <Label className="text-sm text-gray-700">Haptic Feedback</Label>
+                    <Label className="text-sm text-[#3A4A57]">Haptic Feedback</Label>
                     <Switch
                       checked={hapticEnabled}
                       onCheckedChange={setHapticEnabled}
@@ -657,8 +657,8 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
                   {/* Ambient sounds - coming in future update
                   <div>
-                    <Label className="text-sm text-gray-700 mb-2">Ambient Sound</Label>
-                    <p className="text-xs text-gray-400">Coming soon</p>
+                    <Label className="text-sm text-[#3A4A57] mb-2">Ambient Sound</Label>
+                    <p className="text-xs text-[#8A9BA8]">Coming soon</p>
                   </div>
                   */}
                 </div>
@@ -671,10 +671,10 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
             <div className="flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm text-gray-700 mb-1">
+                <p className="text-sm text-[#3A4A57] mb-1">
                   These tools help with sensory regulation and calming
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   Each session is 90 seconds. Complete a full session to earn a star! ⭐
                 </p>
               </div>
@@ -687,7 +687,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               <button
                 key={tool.id}
                 onClick={() => handleStartTool(tool.id)}
-                className="group relative overflow-hidden rounded-2xl border-2 border-gray-200 bg-white hover:border-purple-400 transition-all hover:shadow-lg"
+                className="group relative overflow-hidden rounded-2xl border-2 border-[#E8E4DF] bg-white hover:border-purple-400 transition-all hover:shadow-lg"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
                 <div className="relative p-6">
@@ -696,8 +696,8 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                       {tool.icon}
                     </div>
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium text-gray-900 mb-1">{tool.name}</h3>
-                      <p className="text-sm text-gray-600">{tool.description}</p>
+                      <h3 className="font-medium text-[#1B2733] mb-1">{tool.name}</h3>
+                      <p className="text-sm text-[#5A6B7A]">{tool.description}</p>
                     </div>
                   </div>
                   <Badge variant="outline" className="border-purple-300 text-purple-700">
@@ -1074,12 +1074,12 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               >
                 {breathePhase}
               </motion.p>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm text-[#8A9BA8]">
                 {breathePhase === 'inhale' && 'Breathe in slowly...'}
                 {breathePhase === 'hold' && 'Hold gently...'}
                 {breathePhase === 'exhale' && 'Breathe out slowly...'}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[#5A6B7A] mt-1">
                 {getPhaseDuration()}s phase
               </p>
             </div>

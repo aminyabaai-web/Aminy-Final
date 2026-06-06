@@ -353,10 +353,10 @@ export function TherapyGoalTemplates({
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+        <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
           Therapy Goal Templates
         </h2>
-        <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">
+        <p className="text-[#5A6B7A] dark:text-neutral-400 text-sm mt-1">
           Evidence-based, IEP-aligned goal templates
           {childName && ` for ${childName}`}
         </p>
@@ -381,7 +381,7 @@ export function TherapyGoalTemplates({
             onClick={() => setSelectedDiscipline('all')}
             className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
               selectedDiscipline === 'all'
-                ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
+                ? 'bg-neutral-900 text-white dark:bg-white dark:text-[#1B2733]'
                 : 'bg-neutral-100 dark:bg-slate-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200'
             }`}
           >
@@ -421,7 +421,7 @@ export function TherapyGoalTemplates({
                 <div className={`p-1.5 rounded-lg ${info.color}`}>
                   <Icon className="w-4 h-4" />
                 </div>
-                <h3 className="font-medium text-neutral-900 dark:text-white">
+                <h3 className="font-medium text-[#1B2733] dark:text-white">
                   {info.name}: {group.category}
                 </h3>
                 <Badge variant="outline" className="ml-auto">
@@ -446,7 +446,7 @@ export function TherapyGoalTemplates({
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h4 className="font-medium text-neutral-900 dark:text-white">
+                            <h4 className="font-medium text-[#1B2733] dark:text-white">
                               {template.name}
                             </h4>
                             {template.iepAligned && (
@@ -456,7 +456,7 @@ export function TherapyGoalTemplates({
                               <Badge className="bg-green-100 text-green-700 text-xs">Evidence-Based</Badge>
                             )}
                           </div>
-                          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                          <p className="text-sm text-[#5A6B7A] dark:text-neutral-400 mt-1">
                             {template.description}
                           </p>
                         </div>
@@ -478,7 +478,7 @@ export function TherapyGoalTemplates({
                         <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-slate-800 space-y-4">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                              <p className="text-xs font-medium text-neutral-500 uppercase mb-1">
+                              <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">
                                 Target Behavior
                               </p>
                               <p className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -486,7 +486,7 @@ export function TherapyGoalTemplates({
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-neutral-500 uppercase mb-1">
+                              <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">
                                 Measurement Method
                               </p>
                               <p className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -494,7 +494,7 @@ export function TherapyGoalTemplates({
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-neutral-500 uppercase mb-1">
+                              <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">
                                 Mastery Criteria
                               </p>
                               <p className="text-sm text-neutral-700 dark:text-neutral-300">
@@ -502,7 +502,7 @@ export function TherapyGoalTemplates({
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-neutral-500 uppercase mb-1">
+                              <p className="text-xs font-medium text-[#5A6B7A] uppercase mb-1">
                                 Common Modifications
                               </p>
                               <ul className="text-sm text-neutral-700 dark:text-neutral-300 list-disc list-inside">
@@ -561,10 +561,10 @@ export function TherapyGoalTemplates({
       {filteredTemplates.length === 0 && (
         <Card className="p-12 text-center">
           <Search className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
+          <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
             No matching goals found
           </h3>
-          <p className="text-neutral-500 dark:text-neutral-400">
+          <p className="text-[#5A6B7A] dark:text-neutral-400">
             Try adjusting your search or filter criteria
           </p>
         </Card>

@@ -138,13 +138,13 @@ function StatusIcon({ status }: { status: MetricStatus }) {
   if (status === 'green') return <CheckCircle className="w-4 h-4 text-emerald-500" />;
   if (status === 'yellow') return <AlertCircle className="w-4 h-4 text-amber-500" />;
   if (status === 'red') return <XCircle className="w-4 h-4 text-red-500" />;
-  return <Minus className="w-4 h-4 text-gray-400" />;
+  return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
 }
 
 function TrendIcon({ dir }: { dir: TrendDir }) {
   if (dir === 'up') return <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />;
   if (dir === 'down') return <TrendingDown className="w-3.5 h-3.5 text-red-500" />;
-  return <Minus className="w-3.5 h-3.5 text-gray-400" />;
+  return <Minus className="w-3.5 h-3.5 text-[#8A9BA8]" />;
 }
 
 function formatValue(metric: KPIMetric): string {
@@ -170,7 +170,7 @@ function KPICard({
     green: 'border-emerald-200 bg-emerald-50/50',
     yellow: 'border-amber-200 bg-amber-50/50',
     red: 'border-red-200 bg-red-50/50',
-    info: 'border-gray-200 bg-white',
+    info: 'border-[#E8E4DF] bg-white',
   };
 
   const handleSave = () => {
@@ -185,7 +185,7 @@ function KPICard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-1">
             <StatusIcon status={status} />
-            <p className="text-xs font-medium text-gray-700 truncate">{metric.label}</p>
+            <p className="text-xs font-medium text-[#3A4A57] truncate">{metric.label}</p>
           </div>
           <div className="flex items-baseline gap-1.5">
             {editing ? (
@@ -200,24 +200,24 @@ function KPICard({
                   className="w-20 border border-[#6B9080] rounded px-1.5 py-0.5 text-sm font-semibold focus:outline-none"
                 />
                 <button onClick={handleSave} aria-label="Save value" className="text-[#6B9080] hover:text-[#6B9080]"><Save className="w-3.5 h-3.5" /></button>
-                <button onClick={() => setEditing(false)} aria-label="Cancel edit" className="text-gray-400 hover:text-gray-600"><X className="w-3.5 h-3.5" /></button>
+                <button onClick={() => setEditing(false)} aria-label="Cancel edit" className="text-[#8A9BA8] hover:text-[#5A6B7A]"><X className="w-3.5 h-3.5" /></button>
               </div>
             ) : (
               <>
-                <span className={`text-xl font-bold ${status === 'red' ? 'text-red-600' : status === 'yellow' ? 'text-amber-600' : status === 'green' ? 'text-emerald-700' : 'text-gray-400'}`}>
+                <span className={`text-xl font-bold ${status === 'red' ? 'text-red-600' : status === 'yellow' ? 'text-amber-600' : status === 'green' ? 'text-emerald-700' : 'text-[#8A9BA8]'}`}>
                   {formatValue(metric)}
                 </span>
-                <span className="text-xs text-gray-400">{metric.unit}</span>
+                <span className="text-xs text-[#8A9BA8]">{metric.unit}</span>
               </>
             )}
           </div>
-          <p className="text-[10px] text-gray-500 mt-0.5">
+          <p className="text-[10px] text-[#5A6B7A] mt-0.5">
             Target: {metric.higherIsBetter ? '≥' : '≤'}{metric.target}{metric.unit === '/5.0' ? '/5.0' : metric.unit === 'ratio' ? '' : metric.unit}
           </p>
           {metric.trendValue && (
             <div className="flex items-center gap-1 mt-1">
               <TrendIcon dir={metric.trend} />
-              <span className="text-[10px] text-gray-500">{metric.trendValue} vs last period</span>
+              <span className="text-[10px] text-[#5A6B7A]">{metric.trendValue} vs last period</span>
             </div>
           )}
         </div>
@@ -233,7 +233,7 @@ function KPICard({
         )}
       </div>
       {metric.note && (
-        <p className="mt-2 text-[10px] text-gray-400 italic border-t border-gray-100 pt-1.5">{metric.note}</p>
+        <p className="mt-2 text-[10px] text-[#8A9BA8] italic border-t border-[#E8E4DF] pt-1.5">{metric.note}</p>
       )}
     </Card>
   );
@@ -431,7 +431,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
         <div className="flex gap-3 flex-wrap">
           {[
             { label: 'BHCOE Accreditation', sublabel: 'Renewal date required', color: 'border-amber-200 bg-amber-50 text-amber-700' },
-            { label: 'CASP Membership', sublabel: 'Active status required', color: 'border-blue-200 bg-blue-50 text-blue-700' },
+            { label: 'CASP Membership', sublabel: 'Active status required', color: 'border-[#C8DDE8] bg-[#EEF4F8] text-blue-700' },
             { label: 'AACT AZ Contracts', sublabel: 'AHCCCS + 9 commercial payers', color: 'border-emerald-200 bg-emerald-50 text-emerald-700' },
           ].map(badge => (
             <div key={badge.label} className={`flex-1 min-w-[160px] border rounded-xl p-3 ${badge.color}`}>
@@ -444,7 +444,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
 
       {/* Tab Navigation */}
       <div className="max-w-5xl mx-auto px-4 mb-6">
-        <div className="flex gap-2 bg-white rounded-2xl p-1 border border-gray-200 shadow-sm">
+        <div className="flex gap-2 bg-white rounded-2xl p-1 border border-[#E8E4DF] shadow-sm">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
             const catMetrics = categories.find(c => c.id === cat.id)?.metrics || [];
@@ -456,7 +456,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   activeTab === cat.id
                     ? 'bg-slate-900 text-white shadow'
-                    : 'text-gray-600 hover:bg-[#FAF7F2]'
+                    : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -473,10 +473,10 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
       {/* Metrics Grid */}
       <div className="max-w-5xl mx-auto px-4 pb-16">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-gray-700">
+          <h2 className="text-sm font-semibold text-[#3A4A57]">
             {activeCategory.label} — {activeCategory.metrics.length} metrics
           </h2>
-          <div className="flex items-center gap-2 text-[11px] text-gray-400">
+          <div className="flex items-center gap-2 text-[11px] text-[#8A9BA8]">
             <Edit3 className="w-3 h-3" />
             <span>Tap pencil to enter values</span>
           </div>
@@ -492,12 +492,12 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
         </div>
 
         {/* Payer-Facing Flag Legend */}
-        <div className="mt-6 p-4 rounded-xl bg-white border border-gray-100">
+        <div className="mt-6 p-4 rounded-xl bg-white border border-[#E8E4DF]">
           <div className="flex items-start gap-3">
             <FileText className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-xs font-semibold text-gray-700">Payer Scorecard Export</p>
-              <p className="text-[11px] text-gray-500 mt-0.5">
+              <p className="text-xs font-semibold text-[#3A4A57]">Payer Scorecard Export</p>
+              <p className="text-[11px] text-[#5A6B7A] mt-0.5">
                 "Export Scorecard" generates a payer-facing summary of all marked metrics for use in rate letters, MCO renegotiations, and AHCCCS contract renewals.
                 {' '}Metrics flagged as payer-facing are the subset MCOs and commercial payers actively evaluate.
               </p>

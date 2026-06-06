@@ -97,11 +97,11 @@ function PHQ9Widget() {
     ? <TrendingDown className="w-4 h-4 text-green-500" />
     : trend === 'worsening'
     ? <TrendingUp className="w-4 h-4 text-red-500" />
-    : <Minus className="w-4 h-4 text-gray-400" />;
+    : <Minus className="w-4 h-4 text-[#8A9BA8]" />;
 
   const severityColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-yellow-50 border-yellow-200',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     moderately_severe: 'text-red-700 bg-red-50 border-red-200',
     severe: 'text-red-800 bg-red-100 border-red-300',
@@ -124,9 +124,9 @@ function PHQ9Widget() {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+    <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-gray-800">PHQ-9 Depression Screen</h4>
+        <h4 className="font-semibold text-[#1B2733]">PHQ-9 Depression Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-violet-600 font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
@@ -140,7 +140,7 @@ function PHQ9Widget() {
           </div>
           <div className="flex items-center gap-1 text-sm font-medium">
             {trendIcon}
-            <span className={trend === 'improving' ? 'text-green-600' : trend === 'worsening' ? 'text-red-600' : 'text-gray-500'}>
+            <span className={trend === 'improving' ? 'text-green-600' : trend === 'worsening' ? 'text-red-600' : 'text-[#5A6B7A]'}>
               {trend === 'insufficient_data' ? 'No trend yet' : trend.charAt(0).toUpperCase() + trend.slice(1)}
             </span>
           </div>
@@ -159,7 +159,7 @@ function PHQ9Widget() {
       <AnimatePresence>
         {showEntry && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex gap-2">
-            <input type="number" min={0} max={27} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–27)" className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-violet-400 focus:outline-none" />
+            <input type="number" min={0} max={27} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–27)" className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-violet-400 focus:outline-none" />
             <button onClick={logScore} disabled={!scoreInput} className="px-4 py-2 bg-violet-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Log</button>
           </motion.div>
         )}
@@ -187,7 +187,7 @@ function GAD7Widget() {
 
   const sevColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-yellow-50 border-yellow-200',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     severe: 'text-red-700 bg-red-50 border-red-200',
   };
@@ -209,9 +209,9 @@ function GAD7Widget() {
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+    <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-gray-800">GAD-7 Anxiety Screen</h4>
+        <h4 className="font-semibold text-[#1B2733]">GAD-7 Anxiety Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
@@ -224,8 +224,8 @@ function GAD7Widget() {
             <p className="text-sm font-medium capitalize">{latest.severity} anxiety</p>
           </div>
           <div className="flex items-center gap-1 text-sm font-medium">
-            {trend === 'improving' ? <TrendingDown className="w-4 h-4 text-green-500" /> : trend === 'worsening' ? <TrendingUp className="w-4 h-4 text-red-500" /> : <Minus className="w-4 h-4 text-gray-400" />}
-            <span className={trend === 'improving' ? 'text-green-600' : trend === 'worsening' ? 'text-red-600' : 'text-gray-500'}>
+            {trend === 'improving' ? <TrendingDown className="w-4 h-4 text-green-500" /> : trend === 'worsening' ? <TrendingUp className="w-4 h-4 text-red-500" /> : <Minus className="w-4 h-4 text-[#8A9BA8]" />}
+            <span className={trend === 'improving' ? 'text-green-600' : trend === 'worsening' ? 'text-red-600' : 'text-[#5A6B7A]'}>
               {trend === 'insufficient_data' ? 'No trend yet' : trend.charAt(0).toUpperCase() + trend.slice(1)}
             </span>
           </div>
@@ -243,7 +243,7 @@ function GAD7Widget() {
       <AnimatePresence>
         {showEntry && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex gap-2">
-            <input type="number" min={0} max={21} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–21)" className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
+            <input type="number" min={0} max={21} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–21)" className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
             <button onClick={logScore} disabled={!scoreInput} className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium disabled:opacity-50">Log</button>
           </motion.div>
         )}
@@ -281,7 +281,7 @@ function BRIEF2Widget() {
     const pct = total / maxScore;
     if (pct >= 0.75) return { label: 'At Risk', color: 'text-red-700 bg-red-50 border-red-200' };
     if (pct >= 0.55) return { label: 'Borderline', color: 'text-orange-700 bg-orange-50 border-orange-200' };
-    return { label: 'Elevated', color: 'text-yellow-700 bg-yellow-50 border-yellow-200' };
+    return { label: 'Elevated', color: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]' };
   };
 
   const logBRIEF = async () => {
@@ -305,10 +305,10 @@ function BRIEF2Widget() {
   const latestElevation = latest ? getElevation(latest.score) : null;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
+    <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-gray-800">BRIEF-2 Executive Function</h4>
-        <button onClick={() => setShowForm(f => !f)} className="text-sm text-indigo-600 font-medium">
+        <h4 className="font-semibold text-[#1B2733]">BRIEF-2 Executive Function</h4>
+        <button onClick={() => setShowForm(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showForm ? 'Cancel' : '+ Screen'}
         </button>
       </div>
@@ -327,14 +327,14 @@ function BRIEF2Widget() {
 
       <AnimatePresence>
         {showForm && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-3 bg-indigo-50 border border-indigo-200 rounded-xl p-4">
-            <p className="text-xs text-gray-600 font-medium">Rate each domain: 1 = Never, 2 = Sometimes, 3 = Often</p>
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-3 bg-indigo-50 border border-[#6B9080]/20 rounded-xl p-4">
+            <p className="text-xs text-[#5A6B7A] font-medium">Rate each domain: 1 = Never, 2 = Sometimes, 3 = Often</p>
             {BRIEF2_DOMAINS.map(domain => (
               <div key={domain.id}>
                 <div className="flex items-center justify-between mb-1">
                   <div>
-                    <span className="text-sm font-medium text-gray-800">{domain.label}</span>
-                    <span className="text-xs text-gray-500 ml-1">— {domain.desc}</span>
+                    <span className="text-sm font-medium text-[#1B2733]">{domain.label}</span>
+                    <span className="text-xs text-[#5A6B7A] ml-1">— {domain.desc}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -344,8 +344,8 @@ function BRIEF2Widget() {
                       onClick={() => setScores(s => ({ ...s, [domain.id]: val }))}
                       className={`flex-1 py-1.5 rounded-lg text-sm font-medium border transition-all ${
                         scores[domain.id] === val
-                          ? 'bg-indigo-600 text-white border-indigo-600'
-                          : 'bg-white border-gray-200 text-gray-700 hover:border-indigo-300'
+                          ? 'bg-[#6B9080] text-white border-indigo-600'
+                          : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:border-indigo-300'
                       }`}
                     >
                       {val === 1 ? 'Never' : val === 2 ? 'Sometimes' : 'Often'}
@@ -359,7 +359,7 @@ function BRIEF2Widget() {
                 <p className="font-medium">Score: {totalScore}/{maxScore} — {getElevation(totalScore).label}</p>
               </div>
             )}
-            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">
+            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-[#6B9080] text-white rounded-lg text-sm font-medium disabled:opacity-50">
               Save Assessment
             </button>
           </motion.div>
@@ -398,7 +398,7 @@ function SafetyLog() {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">Session-by-session safety screen log (liability record)</p>
+        <p className="text-sm text-[#5A6B7A]">Session-by-session safety screen log (liability record)</p>
         <button onClick={() => setShowForm(f => !f)} className="text-sm text-red-600 font-medium">+ Log screen</button>
       </div>
 
@@ -407,24 +407,24 @@ function SafetyLog() {
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="text-xs font-medium text-gray-600">Suicidal ideation</label>
-                <select value={form.si} onChange={e => setForm(f => ({ ...f, si: e.target.value as SafetyEntry['si'] }))} className="w-full mt-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+                <label className="text-xs font-medium text-[#5A6B7A]">Suicidal ideation</label>
+                <select value={form.si} onChange={e => setForm(f => ({ ...f, si: e.target.value as SafetyEntry['si'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="none">None</option>
                   <option value="ideation">Ideation only</option>
                   <option value="plan">Plan present</option>
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600">Homicidal ideation</label>
-                <select value={form.hi} onChange={e => setForm(f => ({ ...f, hi: e.target.value as SafetyEntry['hi'] }))} className="w-full mt-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+                <label className="text-xs font-medium text-[#5A6B7A]">Homicidal ideation</label>
+                <select value={form.hi} onChange={e => setForm(f => ({ ...f, hi: e.target.value as SafetyEntry['hi'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="none">None</option>
                   <option value="ideation">Ideation only</option>
                   <option value="plan">Plan present</option>
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-600">Risk level</label>
-                <select value={form.risk} onChange={e => setForm(f => ({ ...f, risk: e.target.value as SafetyEntry['risk'] }))} className="w-full mt-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+                <label className="text-xs font-medium text-[#5A6B7A]">Risk level</label>
+                <select value={form.risk} onChange={e => setForm(f => ({ ...f, risk: e.target.value as SafetyEntry['risk'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="low">Low</option>
                   <option value="moderate">Moderate</option>
                   <option value="high">High</option>
@@ -432,8 +432,8 @@ function SafetyLog() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-gray-600">Note</label>
-              <input value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder="No safety concerns noted." className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none" />
+              <label className="text-xs font-medium text-[#5A6B7A]">Note</label>
+              <input value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder="No safety concerns noted." className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <button onClick={addEntry} className="w-full py-2 bg-red-600 text-white rounded-lg text-sm font-medium">Save Safety Screen</button>
           </motion.div>
@@ -442,18 +442,18 @@ function SafetyLog() {
 
       <div className="space-y-2 max-h-60 overflow-y-auto">
         {log.map((entry, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 bg-white border border-gray-200 rounded-xl">
-            <Shield className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+          <div key={i} className="flex items-start gap-3 p-3 bg-white border border-[#E8E4DF] rounded-xl">
+            <Shield className="w-4 h-4 text-[#8A9BA8] mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-medium text-gray-700">{entry.date}</span>
+                <span className="text-sm font-medium text-[#3A4A57]">{entry.date}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${riskBadge(entry.risk)}`}>
                   {entry.risk.charAt(0).toUpperCase() + entry.risk.slice(1)} Risk
                 </span>
                 {entry.si !== 'none' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">SI: {entry.si}</span>}
                 {entry.hi !== 'none' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">HI: {entry.hi}</span>}
               </div>
-              {entry.note && <p className="text-xs text-gray-500 mt-1">{entry.note}</p>}
+              {entry.note && <p className="text-xs text-[#5A6B7A] mt-1">{entry.note}</p>}
             </div>
           </div>
         ))}
@@ -499,12 +499,12 @@ function MHSessionNote() {
     <div className="space-y-4">
       <div className="space-y-3">
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Presenting Concerns</label>
-          <textarea value={note.presentingConcerns ?? ''} onChange={e => setNote(n => ({ ...n, presentingConcerns: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
+          <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Presenting Concerns</label>
+          <textarea value={note.presentingConcerns ?? ''} onChange={e => setNote(n => ({ ...n, presentingConcerns: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Interventions Used</label>
+          <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Interventions Used</label>
           <div className="mt-1 flex flex-wrap gap-2">
             {INTERVENTIONS.map(name => (
               <button
@@ -513,7 +513,7 @@ function MHSessionNote() {
                 className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                   note.interventions?.includes(name)
                     ? 'bg-primary text-white border-[#6B9080]'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#6B9080]/30'
+                    : 'bg-white text-[#5A6B7A] border-[#E8E4DF] hover:border-[#6B9080]/30'
                 }`}
               >
                 {note.interventions?.includes(name) && <Check className="w-3 h-3 inline mr-1" />}
@@ -524,32 +524,32 @@ function MHSessionNote() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Child Response</label>
-          <textarea value={note.childResponse ?? ''} onChange={e => setNote(n => ({ ...n, childResponse: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
+          <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Child Response</label>
+          <textarea value={note.childResponse ?? ''} onChange={e => setNote(n => ({ ...n, childResponse: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">Safety Screening</label>
+          <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2 block">Safety Screening</label>
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <p className="text-xs text-gray-500 mb-1">SI</p>
-              <select value={note.si} onChange={e => setNote(n => ({ ...n, si: e.target.value as MHNote['si'] }))} className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+              <p className="text-xs text-[#5A6B7A] mb-1">SI</p>
+              <select value={note.si} onChange={e => setNote(n => ({ ...n, si: e.target.value as MHNote['si'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="none">None noted</option>
                 <option value="ideation">Ideation only</option>
                 <option value="plan">Plan present</option>
               </select>
             </div>
             <div>
-              <p className="text-xs text-gray-500 mb-1">HI</p>
-              <select value={note.hi} onChange={e => setNote(n => ({ ...n, hi: e.target.value as MHNote['hi'] }))} className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+              <p className="text-xs text-[#5A6B7A] mb-1">HI</p>
+              <select value={note.hi} onChange={e => setNote(n => ({ ...n, hi: e.target.value as MHNote['hi'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="none">None noted</option>
                 <option value="ideation">Ideation only</option>
                 <option value="plan">Plan present</option>
               </select>
             </div>
             <div>
-              <p className="text-xs text-gray-500 mb-1">Risk Level</p>
-              <select value={note.riskLevel} onChange={e => setNote(n => ({ ...n, riskLevel: e.target.value as MHNote['riskLevel'] }))} className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:outline-none">
+              <p className="text-xs text-[#5A6B7A] mb-1">Risk Level</p>
+              <select value={note.riskLevel} onChange={e => setNote(n => ({ ...n, riskLevel: e.target.value as MHNote['riskLevel'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="low">Low</option>
                 <option value="moderate">Moderate</option>
                 <option value="high">High</option>
@@ -565,8 +565,8 @@ function MHSessionNote() {
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Plan for Next Session</label>
-          <textarea value={note.plan ?? ''} onChange={e => setNote(n => ({ ...n, plan: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
+          <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Plan for Next Session</label>
+          <textarea value={note.plan ?? ''} onChange={e => setNote(n => ({ ...n, plan: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
       </div>
 
@@ -611,23 +611,23 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-gray-900">MH Clinical Tools</h1>
-            <p className="text-xs text-gray-500">Licensed Clinical Social Work</p>
+            <h1 className="text-lg font-bold text-[#1B2733]">MH Clinical Tools</h1>
+            <p className="text-xs text-[#5A6B7A]">Licensed Clinical Social Work</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-violet-100 text-violet-700 text-xs font-medium rounded-full">
             LCSW
           </div>
         </div>
 
-        <div className="flex gap-0 overflow-x-auto border-t border-gray-100">
+        <div className="flex gap-0 overflow-x-auto border-t border-[#E8E4DF]">
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -635,7 +635,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
               className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-violet-600 text-violet-700 bg-violet-50/50'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'
               }`}
             >
               {tab.icon}

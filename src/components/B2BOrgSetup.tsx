@@ -112,14 +112,14 @@ export function B2BOrgSetup({
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <button onClick={onBack} className="p-2 hover:bg-[#F0EDE8] rounded-lg" aria-label="Back">
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-gray-900">Set Up Your Organization</h1>
-            <p className="text-sm text-gray-500">{plan.name} Plan · {seatCount} seats</p>
+            <h1 className="font-bold text-[#1B2733]">Set Up Your Organization</h1>
+            <p className="text-sm text-[#5A6B7A]">{plan.name} Plan · {seatCount} seats</p>
           </div>
           <Crown className="w-6 h-6 text-blue-600" />
         </div>
@@ -148,40 +148,40 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Building2 className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-gray-900">Organization Details</h2>
-                <p className="text-gray-500 text-sm">Tell us about your organization</p>
+                <h2 className="text-xl font-bold text-[#1B2733]">Organization Details</h2>
+                <p className="text-[#5A6B7A] text-sm">Tell us about your organization</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Organization Name *</label>
+                <label className="block text-sm font-medium text-[#3A4A57] mb-1">Organization Name *</label>
                 <input
                   type="text"
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
                   placeholder="e.g., Sunshine ABA Clinic"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Admin Email *</label>
+                <label className="block text-sm font-medium text-[#3A4A57] mb-1">Admin Email *</label>
                 <input
                   type="email"
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
                   placeholder="admin@yourorg.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone (optional)</label>
+                <label className="block text-sm font-medium text-[#3A4A57] mb-1">Phone (optional)</label>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="(555) 123-4567"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -208,8 +208,8 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Users className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-gray-900">Invite Your Team</h2>
-                <p className="text-gray-500 text-sm">{teamMembers.length + 1}/{seatCount} seats used (including you)</p>
+                <h2 className="text-xl font-bold text-[#1B2733]">Invite Your Team</h2>
+                <p className="text-[#5A6B7A] text-sm">{teamMembers.length + 1}/{seatCount} seats used (including you)</p>
               </div>
 
               {/* Add member form */}
@@ -220,12 +220,12 @@ export function B2BOrgSetup({
                   onChange={(e) => setNewEmail(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addTeamMember()}
                   placeholder="team@yourorg.com"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
                 <select
                   value={newRole}
                   onChange={(e) => setNewRole(e.target.value as 'admin' | 'provider' | 'staff')}
-                  className="px-3 py-3 border border-gray-300 rounded-xl bg-white text-sm"
+                  className="px-3 py-3 border border-[#E8E4DF] rounded-xl bg-white text-sm"
                   aria-label="Team member role"
                 >
                   <option value="provider">Provider</option>
@@ -244,25 +244,25 @@ export function B2BOrgSetup({
               {/* Team list */}
               <div className="space-y-2">
                 {/* Admin (you) */}
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-xl border border-blue-200">
+                <div className="flex items-center gap-3 p-3 bg-[#EEF4F8] rounded-xl border border-[#C8DDE8]">
                   <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                     {(adminEmail || 'A')[0].toUpperCase()}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{adminEmail || 'You (Admin)'}</p>
+                    <p className="text-sm font-medium text-[#1B2733]">{adminEmail || 'You (Admin)'}</p>
                     <p className="text-xs text-blue-600">Organization Admin</p>
                   </div>
                   <Crown className="w-4 h-4 text-blue-600" />
                 </div>
 
                 {teamMembers.map((member) => (
-                  <div key={member.email} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200">
-                    <div className="w-8 h-8 bg-[#E8E4DF] text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">
+                  <div key={member.email} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-[#E8E4DF]">
+                    <div className="w-8 h-8 bg-[#E8E4DF] text-[#5A6B7A] rounded-full flex items-center justify-center text-sm font-bold">
                       {member.email[0].toUpperCase()}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{member.email}</p>
-                      <p className="text-xs text-gray-500 capitalize">{member.role}</p>
+                      <p className="text-sm font-medium text-[#1B2733]">{member.email}</p>
+                      <p className="text-xs text-[#5A6B7A] capitalize">{member.role}</p>
                     </div>
                     <button
                       onClick={() => removeTeamMember(member.email)}
@@ -275,7 +275,7 @@ export function B2BOrgSetup({
                 ))}
 
                 {teamMembers.length === 0 && (
-                  <p className="text-center text-gray-400 text-sm py-4">
+                  <p className="text-center text-[#8A9BA8] text-sm py-4">
                     No team members added yet. You can invite them later too.
                   </p>
                 )}
@@ -284,7 +284,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('org-info')}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
                 >
                   Back
                 </button>
@@ -309,28 +309,28 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Sparkles className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-gray-900">Review & Launch</h2>
-                <p className="text-gray-500 text-sm">Everything looks good?</p>
+                <h2 className="text-xl font-bold text-[#1B2733]">Review & Launch</h2>
+                <p className="text-[#5A6B7A] text-sm">Everything looks good?</p>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+              <div className="bg-white rounded-xl border border-[#E8E4DF] divide-y divide-gray-100">
                 <div className="p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Organization</p>
-                  <p className="font-semibold text-gray-900">{orgName}</p>
+                  <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Organization</p>
+                  <p className="font-semibold text-[#1B2733]">{orgName}</p>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Plan</p>
-                  <p className="font-semibold text-gray-900">{plan.name} · {seatCount} seats</p>
+                  <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Plan</p>
+                  <p className="font-semibold text-[#1B2733]">{plan.name} · {seatCount} seats</p>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Admin</p>
-                  <p className="font-semibold text-gray-900">{adminEmail || 'Not set'}</p>
+                  <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Admin</p>
+                  <p className="font-semibold text-[#1B2733]">{adminEmail || 'Not set'}</p>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Team Members</p>
-                  <p className="font-semibold text-gray-900">{teamMembers.length + 1} of {seatCount} seats filled</p>
+                  <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Team Members</p>
+                  <p className="font-semibold text-[#1B2733]">{teamMembers.length + 1} of {seatCount} seats filled</p>
                   {teamMembers.length > 0 && (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-[#5A6B7A] mt-1">
                       {teamMembers.map(m => m.email).join(', ')}
                     </p>
                   )}
@@ -340,7 +340,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('invite-team')}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
                 >
                   Back
                 </button>

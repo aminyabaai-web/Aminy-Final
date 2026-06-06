@@ -208,18 +208,18 @@ export default function ClinicalOutcomesDashboard() {
         <h1 className="text-[22px] font-bold text-[#0D1B2A] mb-1">
           Clinical Outcomes
         </h1>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[#5A6B7A]">
           Track progress, measure impact, demonstrate results
         </p>
       </div>
 
       {/* View Mode + Time Range */}
       <div className="flex gap-2 mb-4 flex-wrap">
-        <div className="flex rounded-lg overflow-hidden border border-gray-300">
+        <div className="flex rounded-lg overflow-hidden border border-[#E8E4DF]">
           <button
             onClick={() => setViewMode('individual')}
             className={`px-4 py-2 text-[13px] font-semibold border-none cursor-pointer ${
-              viewMode === 'individual' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-slate-500'
+              viewMode === 'individual' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-[#5A6B7A]'
             }`}
           >
             Per Child
@@ -227,7 +227,7 @@ export default function ClinicalOutcomesDashboard() {
           <button
             onClick={() => setViewMode('aggregate')}
             className={`px-4 py-2 text-[13px] font-semibold border-none cursor-pointer ${
-              viewMode === 'aggregate' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-slate-500'
+              viewMode === 'aggregate' ? 'bg-[#0D1B2A] text-white' : 'bg-white text-[#5A6B7A]'
             }`}
           >
             All Clients
@@ -241,7 +241,7 @@ export default function ClinicalOutcomesDashboard() {
               className={`px-3 py-2 text-xs font-semibold rounded-md cursor-pointer ${
                 timeRange === range
                   ? 'border-2 border-emerald-500 bg-emerald-50 text-emerald-500'
-                  : 'border border-gray-300 bg-white text-slate-500'
+                  : 'border border-[#E8E4DF] bg-white text-[#5A6B7A]'
               }`}
             >
               {range}d
@@ -358,7 +358,7 @@ function PrePostCard({ child }: { child: ChildOutcome }) {
         <h3 className="text-[15px] font-bold text-[#0D1B2A]">
           Assessment Comparison
         </h3>
-        <span className="text-[11px] text-slate-500 bg-[#F0EDE8] px-2 py-0.5 rounded">
+        <span className="text-[11px] text-[#5A6B7A] bg-[#F0EDE8] px-2 py-0.5 rounded">
           {child.assessmentType}
         </span>
       </div>
@@ -412,8 +412,8 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
         </span>
       </div>
       <div className="flex justify-between mt-0.5">
-        <span className="text-[10px] text-gray-400">Baseline: {goal.baseline} {goal.unit}</span>
-        <span className="text-[10px] text-gray-400">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
+        <span className="text-[10px] text-[#8A9BA8]">Baseline: {goal.baseline} {goal.unit}</span>
+        <span className="text-[10px] text-[#8A9BA8]">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
       </div>
     </div>
   );
@@ -431,7 +431,7 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
   const maxVal = Math.max(...trend.dataPoints.map((d) => d.value), 1);
 
   return (
-    <div className="mb-4 pb-3 border-b border-gray-100">
+    <div className="mb-4 pb-3 border-b border-[#E8E4DF]">
       <div className="flex justify-between items-center mb-2">
         <div>
           <span className="text-[13px] font-semibold text-[#0D1B2A]">{trend.behavior}</span>
@@ -462,10 +462,10 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
       </div>
 
       <div className="flex justify-between mt-1">
-        <span className="text-[10px] text-gray-400">
+        <span className="text-[10px] text-[#8A9BA8]">
           Prev 30d avg: {trend.avgPrevious30.toFixed(1)}
         </span>
-        <span className="text-[10px] text-gray-400">
+        <span className="text-[10px] text-[#8A9BA8]">
           Last 30d avg: {trend.avgLast30.toFixed(1)}
         </span>
       </div>
@@ -485,7 +485,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-2.5 mb-4">
         <MetricCard label="Active Clients" value={aggregate.totalClients.toString()} colorClass="text-[#0D1B2A]" />
-        <MetricCard label="Active Goals" value={aggregate.activeGoals.toString()} colorClass="text-slate-500" />
+        <MetricCard label="Active Goals" value={aggregate.activeGoals.toString()} colorClass="text-[#5A6B7A]" />
         <MetricCard label="Goals Met" value={aggregate.goalsCompleted.toString()} colorClass="text-emerald-500" />
         <MetricCard label="Avg Improvement" value={`${aggregate.avgImprovement.toFixed(1)}%`} colorClass="text-[#E07A5F]" />
       </div>
@@ -499,7 +499,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           <div key={i} className="mb-3">
             <div className="flex justify-between mb-1">
               <span className="text-[13px] font-semibold text-[#0D1B2A]">{cat.category}</span>
-              <span className="text-xs text-slate-500">{cat.count} goals / {cat.avgProgress}% avg</span>
+              <span className="text-xs text-[#5A6B7A]">{cat.count} goals / {cat.avgProgress}% avg</span>
             </div>
             <div className="h-2 bg-[#E8E4DF] rounded overflow-hidden">
               <div
@@ -517,16 +517,16 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           Client Outcomes Summary
         </h3>
         {children.map((child) => (
-          <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-gray-100">
+          <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-[#E8E4DF]">
             <div>
               <div className="text-[13px] font-semibold text-[#0D1B2A]">{child.childName}</div>
-              <div className="text-[11px] text-slate-500">{child.goals.length} active goals</div>
+              <div className="text-[11px] text-[#5A6B7A]">{child.goals.length} active goals</div>
             </div>
             <div className="text-right">
               <div className="text-sm font-bold text-emerald-500">
                 +{child.improvementPct.toFixed(1)}%
               </div>
-              <div className="text-[10px] text-gray-400">{child.assessmentType}</div>
+              <div className="text-[10px] text-[#8A9BA8]">{child.assessmentType}</div>
             </div>
           </div>
         ))}
@@ -542,7 +542,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
 function MetricCard({ label, value, colorClass }: { label: string; value: string; colorClass: string }) {
   return (
     <div className="bg-white rounded-xl p-3.5 shadow-sm">
-      <div className="text-[11px] text-slate-500 font-semibold mb-1">{label}</div>
+      <div className="text-[11px] text-[#5A6B7A] font-semibold mb-1">{label}</div>
       <div className={`text-2xl font-extrabold ${colorClass}`}>{value}</div>
     </div>
   );

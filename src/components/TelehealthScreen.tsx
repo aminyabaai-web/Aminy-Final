@@ -116,7 +116,7 @@ export function TelehealthScreen({
   if (!hasConsent && !showConsentModal) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
-        <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+        <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-[#E8E4DF] dark:border-slate-700">
           <div className="max-w-4xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               {onBack && (
@@ -125,8 +125,8 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-slate-900 dark:text-white">Telehealth Consent Required</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h1 className="text-[#1B2733] dark:text-white">Telehealth Consent Required</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Please review and accept before booking sessions
                 </p>
               </div>
@@ -161,7 +161,7 @@ export function TelehealthScreen({
       )}
 
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+      <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -171,8 +171,8 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-slate-900 dark:text-white">Telehealth Sessions</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h1 className="text-[#1B2733] dark:text-white">Telehealth Sessions</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Professional guidance for {childName}'s development
                 </p>
               </div>
@@ -235,7 +235,7 @@ export function TelehealthScreen({
         {/* Feature Overview */}
         <Alert className="bg-[#6B9080]/10 border-[#6B9080]/20">
           <Sparkles className="w-4 h-4 text-[#6B9080]" />
-          <AlertDescription className="text-sm text-teal-900">
+          <AlertDescription className="text-sm text-[#6B9080]">
             <strong>Professional Support:</strong> Your {userTier === 'pro' ? 'Plus' : 'Premium'} plan includes 
             monthly telehealth sessions with Board Certified Behavior Analysts (BCBAs). Session notes 
             automatically integrate into progress reports.
@@ -256,15 +256,15 @@ export function TelehealthScreen({
 
         {activeView === 'history' && (
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-slate-900 mb-2">Progress Report Integration</h3>
-            <p className="text-sm text-slate-600 mb-4">
+            <h3 className="text-lg text-[#1B2733] mb-2">Progress Report Integration</h3>
+            <p className="text-sm text-[#5A6B7A] mb-4">
               All telehealth session notes are automatically included in your AI-generated progress reports, 
               IEP documents, and BCBA notes. No need to manually transfer information.
             </p>
             
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-              <h4 className="text-sm text-slate-700 mb-2">What gets included:</h4>
-              <ul className="space-y-1 text-sm text-slate-600">
+            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
+              <h4 className="text-sm text-[#3A4A57] mb-2">What gets included:</h4>
+              <ul className="space-y-1 text-sm text-[#5A6B7A]">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   Provider observations and clinical notes

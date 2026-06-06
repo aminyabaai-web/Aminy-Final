@@ -89,7 +89,7 @@ function BigCard({
     >
       <div className="px-5 py-4 flex items-center gap-3">
         <div className="flex-shrink-0">{icon}</div>
-        <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+        <h2 className="text-xl font-bold text-[#1B2733]">{title}</h2>
       </div>
       <div className="px-5 pb-5">{children}</div>
     </motion.div>
@@ -98,14 +98,14 @@ function BigCard({
 
 function AppointmentRow({ appt }: { appt: Appointment }) {
   return (
-    <div className="flex items-start gap-3 py-3 border-t border-gray-100 first:border-0">
+    <div className="flex items-start gap-3 py-3 border-t border-[#E8E4DF] first:border-0">
       <div className="mt-0.5 flex-shrink-0 w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
         <Clock className="w-5 h-5 text-[#6B9080]" />
       </div>
       <div>
-        <p className="text-xl font-semibold text-gray-900 leading-tight">{appt.time}</p>
-        <p className="text-lg text-gray-700 mt-0.5">{appt.serviceType}</p>
-        <p className="text-base text-gray-500 mt-0.5 flex items-center gap-1">
+        <p className="text-xl font-semibold text-[#1B2733] leading-tight">{appt.time}</p>
+        <p className="text-lg text-[#3A4A57] mt-0.5">{appt.serviceType}</p>
+        <p className="text-base text-[#5A6B7A] mt-0.5 flex items-center gap-1">
           <User className="w-4 h-4" /> {appt.providerName}
         </p>
       </div>
@@ -115,12 +115,12 @@ function AppointmentRow({ appt }: { appt: Appointment }) {
 
 function DocRow({ doc }: { doc: Document }) {
   return (
-    <div className="flex items-center justify-between py-3 border-t border-gray-100 first:border-0">
+    <div className="flex items-center justify-between py-3 border-t border-[#E8E4DF] first:border-0">
       <div>
-        <p className="text-xl font-semibold text-gray-900">{doc.name}</p>
-        <p className="text-base text-gray-500 mt-0.5">{doc.date}</p>
+        <p className="text-xl font-semibold text-[#1B2733]">{doc.name}</p>
+        <p className="text-base text-[#5A6B7A] mt-0.5">{doc.date}</p>
       </div>
-      <ChevronRight className="w-5 h-5 text-gray-400 flex-shrink-0" />
+      <ChevronRight className="w-5 h-5 text-[#8A9BA8] flex-shrink-0" />
     </div>
   );
 }
@@ -178,7 +178,7 @@ export default function CaregiverSimpleMode({
           color="border-[#6B9080]/20 bg-white"
         >
           {appointments.length === 0 ? (
-            <p className="text-xl text-gray-500 py-2">No upcoming appointments.</p>
+            <p className="text-xl text-[#5A6B7A] py-2">No upcoming appointments.</p>
           ) : (
             appointments.map((appt, i) => (
               <AppointmentRow key={i} appt={appt} />
@@ -197,12 +197,12 @@ export default function CaregiverSimpleMode({
         >
           <Heart className="w-9 h-9 text-pink-500 flex-shrink-0" />
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-gray-900">Ease Activities</h2>
-            <p className="text-base text-gray-600 mt-0.5">
+            <h2 className="text-xl font-bold text-[#1B2733]">Ease Activities</h2>
+            <p className="text-base text-[#5A6B7A] mt-0.5">
               Fun therapeutic activities for {childName}
             </p>
           </div>
-          <ChevronRight className="w-6 h-6 text-gray-400 flex-shrink-0" />
+          <ChevronRight className="w-6 h-6 text-[#8A9BA8] flex-shrink-0" />
         </motion.button>
 
         {/* Documents */}
@@ -214,13 +214,13 @@ export default function CaregiverSimpleMode({
           <BigCard
             icon={<FileText className="w-8 h-8 text-blue-600" />}
             title="Documents"
-            color="border-blue-200 bg-white"
+            color="border-[#C8DDE8] bg-white"
           >
             {docs.length === 0 ? (
               <div className="py-6 text-center">
                 <FileText className="w-10 h-10 mx-auto mb-2 text-gray-300" />
-                <p className="text-lg text-gray-500">No documents yet.</p>
-                <p className="text-base text-gray-400 mt-0.5">
+                <p className="text-lg text-[#5A6B7A]">No documents yet.</p>
+                <p className="text-base text-[#8A9BA8] mt-0.5">
                   Reports and records will show up here.
                 </p>
               </div>
@@ -237,7 +237,7 @@ export default function CaregiverSimpleMode({
             )}
             <button
               onClick={onNavigateToVault}
-              className="mt-3 w-full rounded-xl bg-blue-50 py-3 text-base font-semibold text-blue-700 text-center"
+              className="mt-3 w-full rounded-xl bg-[#EEF4F8] py-3 text-base font-semibold text-blue-700 text-center"
               style={{ minHeight: 48 }}
             >
               View All Documents
@@ -286,7 +286,7 @@ export default function CaregiverSimpleMode({
               {/* Expand for more */}
               <button
                 onClick={() => setShowHelpExpanded(v => !v)}
-                className="w-full text-base text-gray-500 underline py-2 text-center"
+                className="w-full text-base text-[#5A6B7A] underline py-2 text-center"
               >
                 {showHelpExpanded ? 'Show less' : 'More help options'}
               </button>
@@ -295,22 +295,22 @@ export default function CaregiverSimpleMode({
                 <div className="space-y-2 pt-1">
                   <a
                     href="tel:18008294357"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-gray-200"
+                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
                   >
-                    <Phone className="w-6 h-6 text-gray-500 flex-shrink-0" />
+                    <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>
-                      <p className="text-lg font-semibold text-gray-800">SAMHSA Helpline</p>
-                      <p className="text-sm text-gray-500">1-800-662-4357 — Mental health & substance use</p>
+                      <p className="text-lg font-semibold text-[#1B2733]">SAMHSA Helpline</p>
+                      <p className="text-sm text-[#5A6B7A]">1-800-662-4357 — Mental health & substance use</p>
                     </div>
                   </a>
                   <a
                     href="tel:18004224453"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-gray-200"
+                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
                   >
-                    <Phone className="w-6 h-6 text-gray-500 flex-shrink-0" />
+                    <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>
-                      <p className="text-lg font-semibold text-gray-800">Autism Society Helpline</p>
-                      <p className="text-sm text-gray-500">1-800-328-8476</p>
+                      <p className="text-lg font-semibold text-[#1B2733]">Autism Society Helpline</p>
+                      <p className="text-sm text-[#5A6B7A]">1-800-328-8476</p>
                     </div>
                   </a>
                 </div>
@@ -319,7 +319,7 @@ export default function CaregiverSimpleMode({
           </BigCard>
         </motion.div>
 
-        <p className="text-center text-sm text-gray-400 pb-6">
+        <p className="text-center text-sm text-[#8A9BA8] pb-6">
           Simple Mode is on — for the full app, go to Settings.
         </p>
       </div>

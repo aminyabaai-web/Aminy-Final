@@ -77,7 +77,7 @@ export function TelehealthConsent({
       icon: Scale,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <p>
             <strong>Aminy is a technology platform</strong> that connects families with independently licensed
             behavioral health professionals. Aminy is not a healthcare provider and does not provide
@@ -113,7 +113,7 @@ export function TelehealthConsent({
       icon: Heart,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <p>
             Sessions booked through Aminy are <strong>parent coaching and wellness support services</strong>
             based on the principles of Applied Behavior Analysis (ABA).
@@ -149,7 +149,7 @@ export function TelehealthConsent({
       icon: Video,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <p>
             I consent to receive services via <strong>telehealth</strong> (audio-visual technology).
             I understand the following about telehealth:
@@ -172,8 +172,8 @@ export function TelehealthConsent({
               <span>Sessions <strong>may be recorded</strong> for quality and training (with my consent)</span>
             </li>
           </ul>
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-blue-800 text-xs">
+          <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
+            <p className="text-[#4A6478] text-xs">
               <strong>Technical requirements:</strong> Stable internet connection, device with camera/microphone,
               current web browser or the Aminy app.
             </p>
@@ -187,7 +187,7 @@ export function TelehealthConsent({
       icon: Lock,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <p>I understand that:</p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
@@ -216,7 +216,7 @@ export function TelehealthConsent({
       icon: AlertTriangle,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="font-semibold text-red-900 mb-2">
               Aminy telehealth services are NOT for emergencies
@@ -248,34 +248,34 @@ export function TelehealthConsent({
       icon: FileText,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>Sessions are <strong>cash-pay</strong> unless otherwise specified</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>Payment is collected at time of booking</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>Cancellations with <strong>24+ hours notice</strong> receive full refund</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>Late cancellations (&lt;24 hours) are charged at <strong>50% of the visit price</strong></span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>No-shows are charged the <strong>full visit amount</strong></span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>No-shows are charged in full</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-gray-900">•</span>
+              <span className="font-bold text-[#1B2733]">•</span>
               <span>Prepaid session credits never expire</span>
             </li>
           </ul>
@@ -288,7 +288,7 @@ export function TelehealthConsent({
       icon: AlertTriangle,
       required: true,
       content: (
-        <div className="space-y-3 text-sm text-gray-700">
+        <div className="space-y-3 text-sm text-[#3A4A57]">
           <p>I acknowledge the following risks and limitations:</p>
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
@@ -348,9 +348,9 @@ export function TelehealthConsent({
           <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-6 h-6 text-[#6B9080]" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Confirm Your Session</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Confirm Your Session</h2>
           {providerName && (
-            <p className="text-gray-600 mt-1">with {providerName}</p>
+            <p className="text-[#5A6B7A] mt-1">with {providerName}</p>
           )}
         </div>
 
@@ -361,7 +361,7 @@ export function TelehealthConsent({
               checked={acceptedSections.has('quick')}
               onCheckedChange={() => toggleAcceptSection('quick')}
             />
-            <Label htmlFor="confirm-consent" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
+            <Label htmlFor="confirm-consent" className="text-sm text-[#3A4A57] leading-relaxed cursor-pointer">
               I confirm I have previously read and agreed to the{' '}
               <button
                 className="text-[#6B9080] underline hover:text-[#6B9080]"
@@ -380,7 +380,7 @@ export function TelehealthConsent({
               checked={acceptedSections.has('emergency-quick')}
               onCheckedChange={() => toggleAcceptSection('emergency-quick')}
             />
-            <Label htmlFor="confirm-emergency" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
+            <Label htmlFor="confirm-emergency" className="text-sm text-[#3A4A57] leading-relaxed cursor-pointer">
               I confirm I have emergency resources available (911/988) and understand this session
               is not for crisis intervention.
             </Label>
@@ -424,14 +424,14 @@ export function TelehealthConsent({
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
+      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 rounded-xl">
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <FileText className="w-8 h-8 text-[#6B9080]" />
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
           Telehealth Informed Consent
         </h1>
-        <p className="text-gray-600">
+        <p className="text-[#5A6B7A]">
           Please review and acknowledge each section before your session
         </p>
         {providerName && (
@@ -458,10 +458,10 @@ export function TelehealthConsent({
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#F0EDE8]'}`}>
-                      <Icon className={`w-4 h-4 ${isAccepted ? 'text-green-600' : 'text-gray-600'}`} />
+                      <Icon className={`w-4 h-4 ${isAccepted ? 'text-green-600' : 'text-[#5A6B7A]'}`} />
                     </div>
                     <div className="text-left">
-                      <h3 className="font-medium text-gray-900">{section.title}</h3>
+                      <h3 className="font-medium text-[#1B2733]">{section.title}</h3>
                       {section.required && !isAccepted && (
                         <span className="text-xs text-red-500">Required</span>
                       )}
@@ -473,14 +473,14 @@ export function TelehealthConsent({
                     </div>
                   </div>
                   {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400" />
+                    <ChevronUp className="w-5 h-5 text-[#8A9BA8]" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400" />
+                    <ChevronDown className="w-5 h-5 text-[#8A9BA8]" />
                   )}
                 </button>
 
                 {isExpanded && (
-                  <div className="px-4 pb-4 border-t border-gray-100">
+                  <div className="px-4 pb-4 border-t border-[#E8E4DF]">
                     <div className="pt-4 mb-4">
                       {section.content}
                     </div>
@@ -492,7 +492,7 @@ export function TelehealthConsent({
                       />
                       <Label
                         htmlFor={`accept-${section.id}`}
-                        className="text-sm text-gray-700 cursor-pointer"
+                        className="text-sm text-[#3A4A57] cursor-pointer"
                       >
                         I have read and understand this section
                       </Label>
@@ -506,9 +506,9 @@ export function TelehealthConsent({
       </ScrollArea>
 
       {/* Progress & Submit */}
-      <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-4 sm:mt-6 pt-6 border-t border-[#E8E4DF]">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-[#5A6B7A]">
             {acceptedSections.size} of {requiredSections.length} required sections acknowledged
           </span>
           <div className="flex gap-1">
@@ -539,7 +539,7 @@ export function TelehealthConsent({
           </Button>
         </div>
 
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-[#8A9BA8] text-center mt-4">
           By clicking "I Consent & Agree", you acknowledge that you have read, understood, and agree
           to all terms and conditions. A copy will be sent to your email.
         </p>
@@ -553,7 +553,7 @@ export function TelehealthConsent({
  */
 export function TelehealthMiniDisclaimer({ className = '' }: { className?: string }) {
   return (
-    <div className={`text-xs text-gray-500 ${className}`}>
+    <div className={`text-xs text-[#5A6B7A] ${className}`}>
       <p>
         Sessions are parent coaching, not medical treatment. Providers are independent professionals,
         not Aminy employees. By booking, you agree to our{' '}

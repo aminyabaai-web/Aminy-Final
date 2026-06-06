@@ -244,7 +244,7 @@ export function StreamingAIChat({
       <div className="flex items-center justify-center h-64">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="w-6 h-6 animate-spin text-accent" />
-          <p className="text-sm text-slate-600">Loading conversation...</p>
+          <p className="text-sm text-[#5A6B7A]">Loading conversation...</p>
         </div>
       </div>
     );
@@ -336,7 +336,7 @@ export function StreamingAIChat({
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 message.role === 'user'
                   ? 'bg-accent text-white'
-                  : 'bg-slate-100 text-slate-900'
+                  : 'bg-[#F0EDE8] text-[#1B2733]'
               }`}
             >
               <div className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -344,7 +344,7 @@ export function StreamingAIChat({
               </div>
               <div
                 className={`text-xs mt-1 ${
-                  message.role === 'user' ? 'text-white/70' : 'text-slate-500'
+                  message.role === 'user' ? 'text-white/70' : 'text-[#5A6B7A]'
                 }`}
               >
                 {new Date(message.timestamp).toLocaleTimeString([], {
@@ -424,7 +424,7 @@ export function StreamingAIChat({
       )}
 
       {/* Enhanced Input area with mic/camera/upload */}
-      <div className="border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
+      <div className="border-t border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-4">
         <div className="max-w-4xl mx-auto">
           <EnhancedChatInput
             onSend={handleSend}

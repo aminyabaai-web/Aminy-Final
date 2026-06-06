@@ -131,7 +131,7 @@ export function AskAminyHomeCard({
               )} />
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-3">
+              <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 flex items-center gap-3">
                 Your AI companion
                 <Sparkles className="w-6 h-6 text-accent animate-pulse" />
               </h2>
@@ -148,18 +148,18 @@ export function AskAminyHomeCard({
         </div>
 
         <div className="mb-8">
-          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-lg text-[#5A6B7A] dark:text-slate-400 leading-relaxed">
             I'm here 24/7 to handle the heavy lifting—analyzing patterns, answering questions, and adapting your plan automatically. Like having the best developmental pediatrician, BCBA, and best friend in one.
           </p>
           
           {/* Context Intelligence Indicator */}
           {contextRichness > 30 && (
-            <div className="mt-4 flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="mt-4 flex items-center gap-2 p-3 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg border border-[#C8DDE8] dark:border-blue-800">
               <Brain className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">
                 AI-personalized based on {safeChildName}'s profile
               </span>
-              <Badge className="ml-auto bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-700">
+              <Badge className="ml-auto bg-blue-100 dark:bg-blue-900 text-[#4A6478] dark:text-blue-200 border-[#C8DDE8] dark:border-blue-700">
                 {contextRichness}% context
               </Badge>
             </div>
@@ -169,7 +169,7 @@ export function AskAminyHomeCard({
         {/* Quick action prompts */}
         <div className="space-y-3">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            <p className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">
               {contextualPrompts.length > 0 ? 'Personalized for you:' : 'Quick suggestions:'}
             </p>
             {contextualPrompts.length > 0 && (
@@ -183,8 +183,8 @@ export function AskAminyHomeCard({
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 text-sm cursor-pointer",
                   contextualPrompts.length > 0 
-                    ? "bg-blue-50/60 dark:bg-blue-900/20 border-blue-200/50 dark:border-blue-800/50 hover:bg-blue-50/80 dark:hover:bg-blue-900/30" 
-                    : "bg-white/60 dark:bg-slate-700/40 border-slate-200/50 dark:border-slate-600/50 hover:bg-white/80 dark:hover:bg-slate-700/60"
+                    ? "bg-[#EEF4F8]/60 dark:bg-blue-900/20 border-[#C8DDE8]/50 dark:border-blue-800/50 hover:bg-[#EEF4F8]/80 dark:hover:bg-blue-900/30" 
+                    : "bg-white/60 dark:bg-slate-700/40 border-[#E8E4DF]/50 dark:border-slate-600/50 hover:bg-white/80 dark:hover:bg-slate-700/60"
                 )}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -198,7 +198,7 @@ export function AskAminyHomeCard({
                 <span className={cn(
                   contextualPrompts.length > 0 
                     ? "text-blue-700 dark:text-blue-300" 
-                    : "text-slate-700 dark:text-slate-300"
+                    : "text-[#3A4A57] dark:text-slate-300"
                 )}>
                   {prompt}
                 </span>
@@ -208,7 +208,7 @@ export function AskAminyHomeCard({
         </div>
 
         {/* CTA Button */}
-        <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-slate-700/50">
+        <div className="mt-8 pt-6 border-t border-[#E8E4DF]/50 dark:border-slate-700/50">
           <Button 
             className={cn(
               "w-full bg-accent hover:bg-accent/90 text-white font-semibold py-4 rounded-xl text-base transition-all duration-200 shadow-lg hover:shadow-xl",

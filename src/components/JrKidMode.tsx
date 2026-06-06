@@ -141,7 +141,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
 
   if (showMicConsent) {
     return (
-      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-50 via-transparent to-green-50 flex items-center justify-center z-50 p-4">
         <Card className="max-w-md w-full p-8 text-center">
           <div className="text-4xl mb-4 sm:mb-6">🎤</div>
           <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">Voice Recognition</h2>
@@ -174,7 +174,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-purple-100">
         {/* Rewards Header */}
-        <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 py-4">
+        <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4">
           <div className="max-w-md mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="text-2xl" role="img" aria-hidden="true">🎁</div>
@@ -184,7 +184,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+              <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
                 <Star className="w-3 h-3 mr-1" />
                 {tokens} tokens
               </Badge>
@@ -205,7 +205,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
             {(() => {
               // Static color classes - Tailwind purges dynamic classes at build time
               const rewardColors: Record<string, { gradient: string; border: string }> = {
-                blue: { gradient: 'bg-gradient-to-br from-blue-100 to-blue-200', border: 'border-blue-200' },
+                blue: { gradient: 'bg-gradient-to-br from-blue-100 to-blue-200', border: 'border-[#C8DDE8]' },
                 green: { gradient: 'bg-gradient-to-br from-green-100 to-green-200', border: 'border-green-200' },
                 purple: { gradient: 'bg-gradient-to-br from-purple-100 to-purple-200', border: 'border-purple-200' },
                 orange: { gradient: 'bg-gradient-to-br from-orange-100 to-orange-200', border: 'border-orange-200' },
@@ -242,7 +242,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     }}
                   >
                     <div className="text-4xl mb-3" aria-hidden="true">{reward.icon}</div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{reward.name}</h3>
+                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">{reward.name}</h3>
                     <div className="flex items-center justify-center gap-2">
                       <Star className="w-4 h-4 text-yellow-500" aria-hidden="true" />
                       <span className="font-medium">{reward.cost} tokens</span>
@@ -271,9 +271,9 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-transparent to-green-50">
       {/* Kid Mode Header with Tokens and Exit */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 py-4">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-teal-400 rounded-full flex items-center justify-center text-white text-lg font-bold">
@@ -285,7 +285,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+            <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
               <Star className="w-3 h-3 mr-1" />
               {tokens}
             </Badge>
@@ -329,7 +329,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
         <div className="grid grid-cols-1 gap-3 sm:gap-6 md:grid-cols-2">
           {/* Speech Tile */}
           <Card 
-            className={`p-8 text-center bg-gradient-to-br from-blue-100 to-blue-200 border-blue-200 cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-blue-200'}`}
+            className={`p-8 text-center bg-gradient-to-br from-blue-100 to-blue-200 border-[#C8DDE8] cursor-pointer transition-all duration-200 ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:bg-blue-200'}`}
             onClick={() => startModule('speech')}
           >
             <div className="p-4 bg-blue-500 rounded-full inline-flex mb-4">
@@ -563,7 +563,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
   return (
     <div className={`min-h-screen ${colors.pageBg}`}>
       {/* Module Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 px-4 py-4">
+      <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-md mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button
@@ -595,11 +595,11 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
           <config.icon className="w-16 h-16 text-white" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        <h2 className="text-2xl font-semibold text-[#1B2733] mb-4">
           {currentActivityData.name}
         </h2>
 
-        <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+        <p className="text-lg text-[#3A4A57] mb-8 leading-relaxed">
           {currentActivityData.prompt}
         </p>
 
@@ -609,11 +609,11 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
               <div 
                 key={index}
                 className={`flex items-center gap-3 p-3 rounded-lg mb-2 ${
-                  activityComplete ? 'bg-green-100 text-green-800' : 'bg-white/80 text-gray-700'
+                  activityComplete ? 'bg-green-100 text-green-800' : 'bg-white/80 text-[#3A4A57]'
                 }`}
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold ${
-                  activityComplete ? 'bg-green-500 text-white' : 'bg-[#E8E4DF] text-gray-600'
+                  activityComplete ? 'bg-green-500 text-white' : 'bg-[#E8E4DF] text-[#5A6B7A]'
                 }`}>
                   {activityComplete ? '✓' : index + 1}
                 </div>

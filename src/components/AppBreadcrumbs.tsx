@@ -40,7 +40,7 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
       aria-label="Breadcrumb navigation"
       className={`px-4 py-2 text-sm ${className}`}
     >
-      <ol className="flex items-center gap-1.5 flex-wrap text-gray-500">
+      <ol className="flex items-center gap-1.5 flex-wrap text-[#5A6B7A]">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           const isClickable = !!item.screen && !isLast;
@@ -48,7 +48,7 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
           return (
             <li key={`${item.screen ?? 'leaf'}-${item.label}`} className="flex items-center gap-1.5">
               {index > 0 && (
-                <ChevronRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" aria-hidden="true" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#8A9BA8] flex-shrink-0" aria-hidden="true" />
               )}
 
               {/* Home icon for first item */}
@@ -66,7 +66,7 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
                 </button>
               ) : (
                 <span
-                  className={isLast ? 'text-gray-900 font-medium' : 'text-gray-500'}
+                  className={isLast ? 'text-[#1B2733] font-medium' : 'text-[#5A6B7A]'}
                   aria-current={isLast ? 'page' : undefined}
                 >
                   {item.label}

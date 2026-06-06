@@ -126,7 +126,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -137,18 +137,18 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-3">
               You're on the list!
             </h2>
 
             {position && (
-              <p className="text-gray-600 mb-4">
+              <p className="text-[#5A6B7A] mb-4">
                 You're #{position} in line. We can't wait to have you.
               </p>
             )}
 
             <div className="bg-[#6B9080]/10 rounded-xl p-4 mb-4 sm:mb-6">
-              <p className="text-sm text-teal-800">
+              <p className="text-sm text-[#6B9080]">
                 We'll email you when it's your turn. In the meantime,
                 check your inbox for a few helpful resources.
               </p>
@@ -159,7 +159,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 <Sparkles className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Early access perks</p>
-                  <p className="text-xs text-gray-600">50% off your first year</p>
+                  <p className="text-xs text-[#5A6B7A]">50% off your first year</p>
                 </div>
               </div>
 
@@ -167,7 +167,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 <MessageCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Shape the product</p>
-                  <p className="text-xs text-gray-600">Your feedback builds what we make</p>
+                  <p className="text-xs text-[#5A6B7A]">Your feedback builds what we make</p>
                 </div>
               </div>
             </div>
@@ -184,7 +184,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-50 via-white to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-white to-white">
       {/* Hero Section */}
       <section className="pt-12 pb-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
@@ -192,17 +192,17 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Badge className="bg-[#6B9080]/10 text-teal-800 mb-4 sm:mb-6">
+            <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-4 sm:mb-6">
               Coming Soon
             </Badge>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#1B2733] mb-4 sm:mb-6 leading-tight">
               Gentle guidance for
               <br />
               <span className="text-[#6B9080]">calmer parenting days</span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 max-w-xl mx-auto">
+            <p className="text-xl text-[#5A6B7A] mb-8 max-w-xl mx-auto">
               Aminy is your AI companion for navigating autism support—personalized
               strategies, insurance help, and daily wins all in one place.
             </p>
@@ -221,7 +221,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 rounded-xl border border-[#E8E4DF] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               disabled={isSubmitting}
             />
             <Button
@@ -243,7 +243,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             </Button>
           </motion.form>
 
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-sm text-[#5A6B7A] mt-4">
             Join 2,400+ families. No spam, ever.
           </p>
         </div>
@@ -252,7 +252,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
             What makes Aminy different
           </h2>
 
@@ -268,10 +268,10 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                   <div className="w-12 h-12 bg-[#6B9080]/10 rounded-xl flex items-center justify-center mb-4">
                     <benefit.icon className="w-6 h-6 text-[#6B9080]" />
                   </div>
-                  <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                  <h3 className="font-semibold text-lg text-[#1B2733] mb-2">
                     {benefit.title}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-[#5A6B7A]">
                     {benefit.description}
                   </p>
                 </Card>
@@ -284,7 +284,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Social Proof */}
       <section className="py-16 px-4 bg-[#FAF7F2]">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
             Families like yours are waiting
           </h2>
 
@@ -302,12 +302,12 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-gray-700 mb-4 italic">
+                  <p className="text-[#3A4A57] mb-4 italic">
                     "{testimonial.quote}"
                   </p>
                   <div>
-                    <p className="font-medium text-gray-900">{testimonial.author}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="font-medium text-[#1B2733]">{testimonial.author}</p>
+                    <p className="text-sm text-[#5A6B7A]">{testimonial.role}</p>
                   </div>
                 </Card>
               </motion.div>
@@ -320,19 +320,19 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       <section className="py-12 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-center gap-8">
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Shield className="w-5 h-5 text-[#6B9080]" />
               <span>HIPAA-Conscious</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Users className="w-5 h-5 text-[#6B9080]" />
               <span>BCBA Advised</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Heart className="w-5 h-5 text-[#6B9080]" />
               <span>Parent-Founded</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
+            <div className="flex items-center gap-2 text-[#5A6B7A]">
               <Zap className="w-5 h-5 text-[#6B9080]" />
               <span>HSA/FSA Eligible</span>
             </div>
@@ -357,7 +357,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-4 py-3 rounded-xl text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-white"
               disabled={isSubmitting}
             />
             <Button
@@ -372,7 +372,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 bg-gray-900 text-gray-400">
+      <footer className="py-8 px-4 bg-gray-900 text-[#8A9BA8]">
         <div className="max-w-4xl mx-auto text-center text-sm">
           <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
           <p className="mt-2">

@@ -115,10 +115,10 @@ export function MilestoneCelebration({ milestone, onDismiss }: MilestoneCelebrat
         <div className="text-6xl mb-4">
           {milestone >= 100 ? '🏆' : milestone >= 50 ? '🌟' : '⭐'}
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
           Milestone Reached!
         </h2>
-        <p className="text-lg text-gray-600 mb-6">
+        <p className="text-lg text-[#5A6B7A] mb-6">
           {messages[milestone] || `${milestone} stars! Keep going!`}
         </p>
         <button

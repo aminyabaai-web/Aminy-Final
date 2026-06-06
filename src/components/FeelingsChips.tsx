@@ -32,7 +32,7 @@ export function FeelingsChips({ onFeelingSelected }: FeelingsChipsProps) {
   };
 
   return (
-    <div className="px-4 py-3 bg-[#FAF7F2] border-t border-gray-100 contain-layout">
+    <div className="px-4 py-3 bg-[#FAF7F2] border-t border-[#E8E4DF] contain-layout">
       <p className="text-xs text-muted-foreground mb-2">How are you feeling?</p>
       <div className="flex gap-2" style={{ minHeight: '44px' }}>
         {feelings.map((feeling) => (
@@ -44,7 +44,7 @@ export function FeelingsChips({ onFeelingSelected }: FeelingsChipsProps) {
               border transition-all duration-200 min-h-[44px]
               ${selected === feeling.label
                 ? 'bg-accent/10 border-accent/30'
-                : 'bg-white border-gray-200 hover:border-accent/30'
+                : 'bg-white border-[#E8E4DF] hover:border-accent/30'
               }
             `}
           >

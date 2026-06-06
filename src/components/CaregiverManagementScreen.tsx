@@ -83,11 +83,11 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
       case 'owner':
         return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'caregiver':
-        return 'bg-blue-100 text-blue-700 border-blue-200';
+        return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'read-only':
-        return 'bg-[#F0EDE8] text-gray-700 border-gray-200';
+        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
       default:
-        return 'bg-[#F0EDE8] text-gray-700 border-gray-200';
+        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -98,14 +98,14 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
       case 'pending':
         return 'bg-amber-100 text-amber-700 border-amber-200';
       default:
-        return 'bg-[#F0EDE8] text-gray-700 border-gray-200';
+        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -147,7 +147,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-[#5A6B7A] flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-sm">Read-only</p>
                 <p className="text-xs text-muted-foreground">
@@ -179,11 +179,11 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
           <h2 className="font-semibold mb-4">Team Members</h2>
           {caregivers.length === 0 && (
             <Card className="p-8 text-center border-dashed">
-              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
-              <p className="text-sm font-medium text-slate-700 mb-1">Build your care team</p>
-              <p className="text-xs text-slate-500">Invite your partner, a grandparent, or anyone who helps care for your child. They'll get their own secure access.</p>
+              <p className="text-sm font-medium text-[#3A4A57] mb-1">Build your care team</p>
+              <p className="text-xs text-[#5A6B7A]">Invite your partner, a grandparent, or anyone who helps care for your child. They'll get their own secure access.</p>
             </Card>
           )}
           <div className="space-y-3">
@@ -232,7 +232,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
                 </div>
 
                 {caregiver.status === 'pending' && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -290,7 +290,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         </Card>
 
         {/* Privacy Notice */}
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
           <p className="text-xs text-blue-700">
             <strong>Privacy & Security:</strong> All caregivers must accept an invitation
             and verify their email before gaining access. You can revoke access at any time.

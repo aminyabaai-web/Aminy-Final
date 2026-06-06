@@ -56,7 +56,7 @@ interface TierCard {
 }
 
 function Dot() { return <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block shrink-0" />; }
-function Spark() { return <Sparkles className="w-3.5 h-3.5 text-slate-500 shrink-0" />; }
+function Spark() { return <Sparkles className="w-3.5 h-3.5 text-[#5A6B7A] shrink-0" />; }
 
 const TIERS: TierCard[] = [
   {
@@ -182,18 +182,18 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
             aria-label="Close pricing"
           >
             <X className="w-5 h-5" />
           </button>
         )}
         <div className="max-w-2xl mx-auto text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#1B2733] tracking-tight">
             {isPostOnboarding ? 'Pick the plan that fits your family' : 'Try Aminy free for 7 days'}
           </h1>
           {!isPostOnboarding && (
-            <p className="text-sm text-slate-500 mt-3 max-w-md mx-auto">
+            <p className="text-sm text-[#5A6B7A] mt-3 max-w-md mx-auto">
               Cancel anytime. All paid plans include the full Aminy AI companion + care coordination across ABA, PT, OT, ST, and mental health.
             </p>
           )}
@@ -201,14 +201,14 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
 
         {/* Insured users: soften the wall, lead with a coverage check (booking covered care isn't live yet — link only to existing coverage tools, no guarantees) */}
         {isInsured && (
-          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200">
+          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
                 <Check className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-lg font-semibold text-blue-900 mb-1">You may already be covered</h2>
-                <p className="text-sm text-blue-800 leading-relaxed mb-4">
+                <p className="text-sm text-[#4A6478] leading-relaxed mb-4">
                   Your plan may cover therapy and assessments for your child. Coverage varies by plan — check your benefits to see what applies. We can&rsquo;t guarantee coverage, but our tools help you find out.
                 </p>
                 <button
@@ -226,11 +226,11 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
 
         {/* Audience toggle */}
         <div className="flex justify-center mb-4">
-          <div className="bg-white border border-slate-200 rounded-full p-1 inline-flex">
+          <div className="bg-white border border-[#E8E4DF] rounded-full p-1 inline-flex">
             <button
               onClick={() => setAudience('personal')}
               className={`text-sm font-medium px-5 py-2 rounded-full transition-colors ${
-                audience === 'personal' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'
+                audience === 'personal' ? 'bg-slate-900 text-white' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
               }`}
             >
               Personal
@@ -238,7 +238,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setAudience('organization')}
               className={`text-sm font-medium px-5 py-2 rounded-full transition-colors ${
-                audience === 'organization' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-50'
+                audience === 'organization' ? 'bg-slate-900 text-white' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
               }`}
             >
               Organization
@@ -248,11 +248,11 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
 
         {/* Billing toggle */}
         <div className="flex justify-center mb-6">
-          <div className="bg-white border border-slate-200 rounded-full p-1 inline-flex text-xs">
+          <div className="bg-white border border-[#E8E4DF] rounded-full p-1 inline-flex text-xs">
             <button
               onClick={() => setBilling('monthly')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'monthly' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-50'
+                billing === 'monthly' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
               }`}
             >
               Monthly
@@ -260,7 +260,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setBilling('annual')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'annual' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-50'
+                billing === 'annual' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
               }`}
             >
               Annual <span className="text-[#6B9080] font-semibold">· save up to 28%</span>
@@ -286,7 +286,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {/* Need more? */}
         {audience === 'personal' && (
           <div className="text-center mt-8 px-4">
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#5A6B7A]">
               Need more capabilities for your team or clinic?{' '}
               <button
                 onClick={() => setAudience('organization')}
@@ -329,7 +329,7 @@ function TierCardView({
       className={`relative rounded-2xl p-5 sm:p-6 border bg-white flex flex-col min-h-[480px] ${
         tier.featured
           ? 'border-violet-300 shadow-lg'
-          : 'border-slate-200'
+          : 'border-[#E8E4DF]'
       }`}
       style={tier.featured ? { background: 'linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%)' } : undefined}
     >
@@ -342,8 +342,8 @@ function TierCardView({
 
       {/* Name + tagline */}
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-slate-900 mb-1">{tier.name}</h2>
-        <p className="text-xs text-slate-500 leading-snug">{tier.tagline}</p>
+        <h2 className="text-2xl font-bold text-[#1B2733] mb-1">{tier.name}</h2>
+        <p className="text-xs text-[#5A6B7A] leading-snug">{tier.tagline}</p>
       </div>
 
       {/* Price */}
@@ -351,12 +351,12 @@ function TierCardView({
         {hasPromo && tier.promoFromMonthly ? (
           <div className="flex items-baseline gap-2">
             <span className="text-3xl sm:text-4xl font-bold text-slate-300 line-through">${promoStrikePrice % 1 === 0 ? promoStrikePrice : promoStrikePrice.toFixed(2)}</span>
-            <span className="text-4xl sm:text-5xl font-bold text-slate-900">$0</span>
+            <span className="text-4xl sm:text-5xl font-bold text-[#1B2733]">$0</span>
           </div>
         ) : (
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl text-slate-900 font-medium">$</span>
-            <span className="text-4xl sm:text-5xl font-bold text-slate-900">
+            <span className="text-2xl text-[#1B2733] font-medium">$</span>
+            <span className="text-4xl sm:text-5xl font-bold text-[#1B2733]">
               {displayPrice === 0 ? '0' : displayPrice.toFixed(displayPrice % 1 === 0 ? 0 : 2)}
             </span>
           </div>
@@ -380,7 +380,7 @@ function TierCardView({
         disabled={loading || tier.ctaDisabled || tier.ctaCurrent}
         className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all mb-5 flex items-center justify-center gap-1.5 ${
           tier.ctaCurrent
-            ? 'bg-white border-2 border-slate-200 text-slate-400 cursor-default'
+            ? 'bg-white border-2 border-[#E8E4DF] text-slate-400 cursor-default'
             : tier.featured
               ? 'text-white shadow-md hover:shadow-lg'
               : 'bg-slate-900 text-white hover:bg-slate-800'
@@ -395,11 +395,11 @@ function TierCardView({
 
       {/* Features */}
       {tier.features_heading && (
-        <p className="text-xs font-semibold text-slate-800 mb-2">{tier.features_heading}</p>
+        <p className="text-xs font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
       )}
       <ul className="space-y-2 flex-1">
         {tier.features.map((f, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+          <li key={i} className="flex items-start gap-2 text-sm text-[#3A4A57]">
             <span className="mt-1">{f.icon}</span>
             <span className="leading-snug">{f.text}</span>
           </li>
@@ -408,7 +408,7 @@ function TierCardView({
 
       {/* Promo footer */}
       {tier.promoFooter && (
-        <p className="text-[11px] text-slate-500 mt-5 pt-3 border-t border-slate-100 leading-relaxed">
+        <p className="text-[11px] text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
           <span className="font-medium underline underline-offset-2">Promo terms apply.</span> {tier.promoFooter}
         </p>
       )}

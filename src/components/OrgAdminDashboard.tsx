@@ -144,7 +144,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
       <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
         {onBack && (
           <div className="px-4 pt-3 pb-2">
-            <button onClick={onBack} className="flex items-center gap-1 text-sm text-slate-600">
+            <button onClick={onBack} className="flex items-center gap-1 text-sm text-[#5A6B7A]">
               <ChevronLeft className="w-4 h-4" />Back
             </button>
           </div>
@@ -154,8 +154,8 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
               <Building2 className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-lg font-semibold text-slate-900 mb-2">No organization yet</h1>
-            <p className="text-sm text-slate-500 mb-4">Organizations are for clinics, schools, agencies, and AACT-style pilots — anyone managing 10+ caregivers under one billing account.</p>
+            <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
+            <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for clinics, schools, agencies, and AACT-style pilots — anyone managing 10+ caregivers under one billing account.</p>
             <p className="text-xs text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
         </div>
@@ -173,7 +173,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         variant="flat"
         actions={
           <>
-            <span className="text-xs bg-[#F0EDE8] text-slate-600 px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
+            <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
             <StatusBadge status={org.subscriptionStatus} />
           </>
         }
@@ -181,10 +181,10 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
       {/* Billing card */}
       {usage && (
-        <div className="mx-4 mt-4 rounded-2xl bg-white border border-slate-100 p-4">
+        <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
           <div className="flex items-center gap-2 mb-3">
             <CreditCard className="w-4 h-4 text-slate-400" />
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Billing</p>
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Billing</p>
           </div>
 
           <div className="space-y-3">
@@ -196,7 +196,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           </div>
 
           {org.subscriptionStatus === 'inactive' && (
-            <div className="mt-4 pt-4 border-t border-slate-100 flex gap-2">
+            <div className="mt-4 pt-4 border-t border-[#E8E4DF] flex gap-2">
               <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
                 Start Monthly
               </button>
@@ -217,17 +217,17 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
       {/* Seats card */}
       {usage && (
-        <div className="mx-4 mt-3 rounded-2xl bg-white border border-slate-100 p-4">
+        <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-slate-400" />
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Seats</p>
+              <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Seats</p>
             </div>
             {!seatEditMode ? (
               <button onClick={() => setSeatEditMode(true)} className="text-xs text-[#6B9080] font-semibold">Edit</button>
             ) : (
               <div className="flex gap-2">
-                <button onClick={() => { setSeatEditMode(false); setNewSeatCount(org.seatCount); }} className="text-xs text-slate-500 font-medium">Cancel</button>
+                <button onClick={() => { setSeatEditMode(false); setNewSeatCount(org.seatCount); }} className="text-xs text-[#5A6B7A] font-medium">Cancel</button>
                 <button onClick={handleSaveSeats} className="text-xs text-[#6B9080] font-semibold">Save</button>
               </div>
             )}
@@ -240,14 +240,14 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                 min={MIN_SEATS}
                 value={newSeatCount}
                 onChange={e => setNewSeatCount(parseInt(e.target.value || '0', 10))}
-                className="w-24 text-2xl font-bold border border-slate-200 rounded-lg px-3 py-1 text-center"
+                className="w-24 text-2xl font-bold border border-[#E8E4DF] rounded-lg px-3 py-1 text-center"
               />
-              <span className="text-sm text-slate-500">seats (min {MIN_SEATS})</span>
+              <span className="text-sm text-[#5A6B7A]">seats (min {MIN_SEATS})</span>
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-900">{usage.seatsUsed}</span>
-              <span className="text-sm text-slate-500">of {usage.seatsAllocated} used</span>
+              <span className="text-3xl font-bold text-[#1B2733]">{usage.seatsUsed}</span>
+              <span className="text-sm text-[#5A6B7A]">of {usage.seatsAllocated} used</span>
             </div>
           )}
 
@@ -272,9 +272,9 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
       </div>
 
       {/* Members card */}
-      <div className="mx-4 mt-3 rounded-2xl bg-white border border-slate-100">
-        <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-slate-100">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Members ({members.length})</p>
+      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF]">
+        <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF]">
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Members ({members.length})</p>
           <button
             onClick={() => setShowInvite(true)}
             disabled={!!usage && usage.seatsAvailable === 0}
@@ -286,14 +286,14 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         </div>
 
         {showInvite && (
-          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-slate-100">
+          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF]">
             <div className="flex gap-2">
               <input
                 type="email"
                 value={inviteEmail}
                 onChange={e => setInviteEmail(e.target.value)}
                 placeholder="email@example.com"
-                className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white"
+                className="flex-1 text-sm border border-[#E8E4DF] rounded-lg px-3 py-2 bg-white"
                 onKeyDown={e => e.key === 'Enter' && handleInvite()}
               />
               <button
@@ -316,13 +316,13 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
         <div className="divide-y divide-slate-100">
           {members.length === 0 ? (
-            <div className="px-4 py-8 text-center text-sm text-slate-500">No members yet. Invite someone to get started.</div>
+            <div className="px-4 py-8 text-center text-sm text-[#5A6B7A]">No members yet. Invite someone to get started.</div>
           ) : members.map(member => (
             <div key={member.id} className="px-4 py-3 flex items-center gap-3">
               <RoleIcon role={member.role} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-800 truncate">{member.email}</p>
-                <p className="text-xs text-slate-500 capitalize">{member.role} · {member.status}</p>
+                <p className="text-sm font-medium text-[#1B2733] truncate">{member.email}</p>
+                <p className="text-xs text-[#5A6B7A] capitalize">{member.role} · {member.status}</p>
               </div>
               {member.role !== 'owner' && (
                 <button onClick={() => handleRemove(member.id, member.email)} className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50">
@@ -341,10 +341,10 @@ function Row({ label, value, subtitle }: { label: string; value: string; subtitl
   return (
     <div className="flex items-baseline justify-between">
       <div>
-        <p className="text-sm text-slate-800">{label}</p>
+        <p className="text-sm text-[#1B2733]">{label}</p>
         {subtitle && <p className="text-xs text-slate-400">{subtitle}</p>}
       </div>
-      <p className="text-sm font-semibold text-slate-900">{value}</p>
+      <p className="text-sm font-semibold text-[#1B2733]">{value}</p>
     </div>
   );
 }
@@ -354,8 +354,8 @@ function StatusBadge({ status }: { status: Organization['subscriptionStatus'] })
     active: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', label: 'Active' },
     trialing: { bg: 'bg-[#7BA7BC]/10', text: 'text-[#7BA7BC]', label: 'Trial' },
     past_due: { bg: 'bg-orange-50', text: 'text-orange-700', label: 'Past due' },
-    canceled: { bg: 'bg-[#F0EDE8]', text: 'text-slate-600', label: 'Canceled' },
-    inactive: { bg: 'bg-[#F0EDE8]', text: 'text-slate-600', label: 'Not active' },
+    canceled: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Canceled' },
+    inactive: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Not active' },
     incomplete: { bg: 'bg-amber-50', text: 'text-amber-700', label: 'Incomplete' },
   };
   const s = styles[status] || styles.inactive;
@@ -366,7 +366,7 @@ function RoleIcon({ role }: { role: OrgMember['role'] }) {
   if (role === 'owner') return <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center"><Crown className="w-4 h-4 text-amber-700" /></div>;
   if (role === 'admin') return <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center"><Shield className="w-4 h-4 text-[#6B9080]" /></div>;
   if (role === 'manager') return <div className="w-9 h-9 rounded-full bg-[#7BA7BC]/10 flex items-center justify-center"><Users className="w-4 h-4 text-[#7BA7BC]" /></div>;
-  return <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center"><User className="w-4 h-4 text-slate-600" /></div>;
+  return <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center"><User className="w-4 h-4 text-[#5A6B7A]" /></div>;
 }
 
 export default OrgAdminDashboard;

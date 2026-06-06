@@ -329,10 +329,10 @@ export function CareCoordination({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
+          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
             Care Team for {patientName}
           </h2>
-          <p className="text-neutral-500 dark:text-slate-400 text-sm">
+          <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
             {careTeam.filter(m => m.status === 'active').length} active team members
           </p>
         </div>
@@ -354,8 +354,8 @@ export function CareCoordination({
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeTab === tab.id
-                ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50 dark:bg-teal-900/20'
-                : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50 dark:hover:bg-slate-800'
+                ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50 dark:bg-[#6B9080]/10'
+                : 'border-transparent text-[#5A6B7A] hover:text-neutral-700 hover:bg-neutral-50 dark:hover:bg-slate-800'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -378,7 +378,7 @@ export function CareCoordination({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-medium text-neutral-900 dark:text-white">
+                      <h4 className="font-medium text-[#1B2733] dark:text-white">
                         {member.name}
                       </h4>
                       {member.credentials && (
@@ -387,12 +387,12 @@ export function CareCoordination({
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-neutral-500 dark:text-slate-400">
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       {member.role}
                       {member.specialty && ` • ${member.specialty}`}
                     </p>
                     {member.lastActive && (
-                      <p className="text-xs text-neutral-400 dark:text-slate-500 mt-1">
+                      <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">
                         Active {formatTimeAgo(member.lastActive)}
                       </p>
                     )}
@@ -409,16 +409,16 @@ export function CareCoordination({
                   <div className="flex gap-1 ml-2">
                     {member.email && (
                       <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
-                        <Mail className="w-4 h-4 text-neutral-500" />
+                        <Mail className="w-4 h-4 text-[#5A6B7A]" />
                       </Button>
                     )}
                     {member.phone && (
                       <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
-                        <Phone className="w-4 h-4 text-neutral-500" />
+                        <Phone className="w-4 h-4 text-[#5A6B7A]" />
                       </Button>
                     )}
                     <Button variant="ghost" size="sm" className="w-8 h-8 p-0">
-                      <Video className="w-4 h-4 text-neutral-500" />
+                      <Video className="w-4 h-4 text-[#5A6B7A]" />
                     </Button>
                   </div>
                 </div>
@@ -440,7 +440,7 @@ export function CareCoordination({
                   ) : (
                     <>
                       <Lock className="w-4 h-4 text-neutral-400" />
-                      <span className="text-neutral-500">No access yet</span>
+                      <span className="text-[#5A6B7A]">No access yet</span>
                     </>
                   )}
                 </div>
@@ -468,7 +468,7 @@ export function CareCoordination({
                     className={`px-2 py-1 text-xs rounded-full transition-colors ${
                       newNoteType === type
                         ? getNoteTypeColor(type)
-                        : 'bg-neutral-100 text-neutral-500 dark:bg-slate-700 dark:text-slate-400'
+                        : 'bg-neutral-100 text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-400'
                     }`}
                   >
                     {type}
@@ -484,7 +484,7 @@ export function CareCoordination({
               className="mb-3"
             />
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm text-neutral-500">
+              <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <Share2 className="w-4 h-4" />
                 <span>Will be shared with {parentName} and care team</span>
               </div>
@@ -507,11 +507,11 @@ export function CareCoordination({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-neutral-900 dark:text-white">
+                      <span className="font-medium text-[#1B2733] dark:text-white">
                         {note.authorName}
                       </span>
-                      <span className="text-xs text-neutral-500">•</span>
-                      <span className="text-xs text-neutral-500">{note.authorRole}</span>
+                      <span className="text-xs text-[#5A6B7A]">•</span>
+                      <span className="text-xs text-[#5A6B7A]">{note.authorRole}</span>
                       <Badge className={`text-xs ${getNoteTypeColor(note.type)}`}>
                         {note.type}
                       </Badge>
@@ -547,7 +547,7 @@ export function CareCoordination({
       {activeTab === 'plan' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-sm text-neutral-500 dark:text-slate-400">
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
               {carePlan.filter(p => p.status === 'active').length} active goals
             </p>
             <Button variant="outline" size="sm">
@@ -572,7 +572,7 @@ export function CareCoordination({
                         {item.status}
                       </Badge>
                     </div>
-                    <h4 className="font-medium text-neutral-900 dark:text-white">
+                    <h4 className="font-medium text-[#1B2733] dark:text-white">
                       {item.goal}
                     </h4>
                     <div className="flex items-center gap-4 mt-2">
@@ -632,7 +632,7 @@ export function CareCoordination({
 
                     {/* Due Date & Notes */}
                     {item.dueDate && (
-                      <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-slate-400">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                         <Calendar className="w-4 h-4" />
                         Target: {new Date(item.dueDate).toLocaleDateString()}
                       </div>
@@ -669,7 +669,7 @@ export function CareCoordination({
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
                 Invite Provider
               </h3>
               <Button variant="ghost" size="sm" onClick={() => setShowAddTeamMember(false)}>
@@ -708,15 +708,15 @@ export function CareCoordination({
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
                     <input type="radio" name="access" defaultChecked className="text-[#6B9080]" />
                     <div>
-                      <p className="font-medium text-neutral-900 dark:text-white">Full Access</p>
-                      <p className="text-xs text-neutral-500">View and contribute to all care coordination</p>
+                      <p className="font-medium text-[#1B2733] dark:text-white">Full Access</p>
+                      <p className="text-xs text-[#5A6B7A]">View and contribute to all care coordination</p>
                     </div>
                   </label>
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
                     <input type="radio" name="access" className="text-[#6B9080]" />
                     <div>
-                      <p className="font-medium text-neutral-900 dark:text-white">Limited Access</p>
-                      <p className="text-xs text-neutral-500">View notes and care plan only</p>
+                      <p className="font-medium text-[#1B2733] dark:text-white">Limited Access</p>
+                      <p className="text-xs text-[#5A6B7A]">View notes and care plan only</p>
                     </div>
                   </label>
                 </div>
@@ -733,7 +733,7 @@ export function CareCoordination({
               </div>
             </div>
 
-            <p className="text-xs text-neutral-500 dark:text-slate-400 mt-4 text-center">
+            <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-4 text-center">
               {parentName} will be notified and must approve the invitation
             </p>
           </Card>

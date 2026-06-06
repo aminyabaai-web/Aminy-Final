@@ -251,7 +251,7 @@ export function RoutineAdherenceTracker({
             <TrendingUp className="w-4 h-4 text-green-600" />
             <span className="text-xl sm:text-2xl font-bold text-green-600">{weeklyStats.adherence}%</span>
           </div>
-          <p className="text-xs text-slate-500">This Week</p>
+          <p className="text-xs text-[#5A6B7A]">This Week</p>
         </Card>
 
         <Card className="p-4 text-center">
@@ -259,7 +259,7 @@ export function RoutineAdherenceTracker({
             <CheckCircle className="w-4 h-4 text-accent" />
             <span className="text-xl sm:text-2xl font-bold text-accent">{weeklyStats.completed}</span>
           </div>
-          <p className="text-xs text-slate-500">Completed</p>
+          <p className="text-xs text-[#5A6B7A]">Completed</p>
         </Card>
 
         <Card className="p-4 text-center">
@@ -267,15 +267,15 @@ export function RoutineAdherenceTracker({
             <Flame className="w-4 h-4 text-orange-500" />
             <span className="text-xl sm:text-2xl font-bold text-orange-500">{weeklyStats.streak}</span>
           </div>
-          <p className="text-xs text-slate-500">Day Streak</p>
+          <p className="text-xs text-[#5A6B7A]">Day Streak</p>
         </Card>
       </div>
 
       {/* Weekly Progress */}
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-slate-700">Weekly Progress</span>
-          <span className="text-sm text-slate-500">{weeklyStats.completed}/{weeklyStats.total} routines</span>
+          <span className="text-sm font-medium text-[#3A4A57]">Weekly Progress</span>
+          <span className="text-sm text-[#5A6B7A]">{weeklyStats.completed}/{weeklyStats.total} routines</span>
         </div>
         <Progress value={weeklyStats.adherence} className="h-2" />
         {weeklyStats.adherence >= 80 && (
@@ -289,7 +289,7 @@ export function RoutineAdherenceTracker({
       {/* Today's Routines */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900">Today's Routines</h3>
+          <h3 className="text-lg font-semibold text-[#1B2733]">Today's Routines</h3>
           {onAddRoutine && (
             <Button variant="ghost" size="sm" onClick={onAddRoutine}>
               <Plus className="w-4 h-4 mr-1" />
@@ -304,7 +304,7 @@ export function RoutineAdherenceTracker({
 
           return (
             <div key={category} className="mb-4 sm:mb-6">
-              <h4 className="text-sm font-medium text-slate-500 mb-3">{getCategoryLabel(category)}</h4>
+              <h4 className="text-sm font-medium text-[#5A6B7A] mb-3">{getCategoryLabel(category)}</h4>
               <div className="space-y-2">
                 {categoryRoutines.map((routine) => {
                   const completion = getRoutineStatus(routine.id);
@@ -317,8 +317,8 @@ export function RoutineAdherenceTracker({
                       key={routine.id}
                       className={`p-4 transition-all ${
                         isCompleted ? 'bg-green-50 border-green-200' :
-                        isPartial ? 'bg-yellow-50 border-yellow-200' :
-                        isSkipped ? 'bg-slate-50 border-slate-200' :
+                        isPartial ? 'bg-[#FDF9F0] border-[#F0EDE8]' :
+                        isSkipped ? 'bg-[#FAF7F2] border-[#E8E4DF]' :
                         'bg-white hover:shadow-md'
                       }`}
                     >
@@ -329,7 +329,7 @@ export function RoutineAdherenceTracker({
                           className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                             isCompleted ? 'bg-green-500 text-white' :
                             isPartial ? 'bg-yellow-500 text-white' :
-                            'bg-slate-100 hover:bg-accent hover:text-white'
+                            'bg-[#F0EDE8] hover:bg-accent hover:text-white'
                           }`}
                         >
                           {isCompleted || isPartial ? (
@@ -342,7 +342,7 @@ export function RoutineAdherenceTracker({
                         {/* Routine Info */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-slate-500 line-through' : 'text-slate-900'}`}>
+                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-[#5A6B7A] line-through' : 'text-[#1B2733]'}`}>
                               {routine.name}
                             </span>
                             {isCompleted && completion?.delay_minutes && completion.delay_minutes > 15 && (
@@ -351,7 +351,7 @@ export function RoutineAdherenceTracker({
                               </Badge>
                             )}
                           </div>
-                          <div className="flex items-center gap-1 text-sm text-slate-500">
+                          <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                             <Clock className="w-3 h-3" />
                             {routine.scheduledTime}
                           </div>
@@ -397,8 +397,8 @@ export function RoutineAdherenceTracker({
         {routines.length === 0 && (
           <Card className="p-8 text-center">
             <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="font-medium text-slate-700 mb-2">No routines yet</h3>
-            <p className="text-sm text-slate-500 mb-4">Add routines to start tracking progress</p>
+            <h3 className="font-medium text-[#3A4A57] mb-2">No routines yet</h3>
+            <p className="text-sm text-[#5A6B7A] mb-4">Add routines to start tracking progress</p>
             {onAddRoutine && (
               <Button onClick={onAddRoutine} className="gap-2">
                 <Plus className="w-4 h-4" />

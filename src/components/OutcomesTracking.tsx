@@ -250,8 +250,8 @@ export function OutcomesTracking({
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <BarChart3 className="w-12 h-12 text-slate-300 mb-4" />
-        <h3 className="text-lg font-semibold text-slate-700 mb-2">Aggregate Data Coming Soon</h3>
-        <p className="text-sm text-slate-500 max-w-xs">
+        <h3 className="text-lg font-semibold text-[#3A4A57] mb-2">Aggregate Data Coming Soon</h3>
+        <p className="text-sm text-[#5A6B7A] max-w-xs">
           {view === 'payer'
             ? 'Payer-level outcomes reporting requires population data across enrolled members. Available once your cohort reaches 10+ families.'
             : 'Investor metrics are populated from your Stripe and Supabase analytics pipeline. Set up the reporting cron to enable this view.'}
@@ -265,7 +265,7 @@ export function OutcomesTracking({
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-gray-600">Loading outcomes data...</p>
+          <p className="text-[#5A6B7A]">Loading outcomes data...</p>
         </div>
       </div>
     );
@@ -276,8 +276,8 @@ export function OutcomesTracking({
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
         <Target className="w-12 h-12 text-slate-300 mb-4" />
-        <h3 className="text-lg font-semibold text-slate-700 mb-2">No progress data yet</h3>
-        <p className="text-sm text-slate-500 max-w-xs">
+        <h3 className="text-lg font-semibold text-[#3A4A57] mb-2">No progress data yet</h3>
+        <p className="text-sm text-[#5A6B7A] max-w-xs">
           Complete your first session and set therapy goals to start seeing outcomes here.
         </p>
       </div>
@@ -292,14 +292,14 @@ export function OutcomesTracking({
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Progress & Outcomes</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Progress & Outcomes</h2>
               <AISparkleButton
                 prompt="Analyze our progress and outcomes — what patterns do you see and what should we focus on next?"
                 label="Analyze"
                 visual
               />
             </div>
-            <p className="text-gray-600">See how far you've come together</p>
+            <p className="text-[#5A6B7A]">See how far you've come together</p>
           </div>
           <div className="flex gap-2">
             {['week', 'month', 'quarter'].map((period) => (
@@ -319,13 +319,13 @@ export function OutcomesTracking({
         <Card className="p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
           <div className="flex items-center gap-2 mb-3">
             <Star className="w-5 h-5 text-amber-500" />
-            <h3 className="font-medium text-gray-900">Recent Wins</h3>
+            <h3 className="font-medium text-[#1B2733]">Recent Wins</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {caregiverMetrics.recentWins.map((win, idx) => (
               <div key={idx} className="flex items-start gap-2 p-2 bg-white/60 rounded-lg text-sm">
                 <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-gray-700">{win}</span>
+                <span className="text-[#3A4A57]">{win}</span>
               </div>
             ))}
           </div>
@@ -366,7 +366,7 @@ export function OutcomesTracking({
 
         {/* Improvement Areas */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-500" />
             Skill Progress
           </h3>
@@ -374,12 +374,12 @@ export function OutcomesTracking({
             {caregiverMetrics.childProgress.improvementAreas.map((area, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-900">{area.name}</span>
+                  <span className="text-sm font-medium text-[#1B2733]">{area.name}</span>
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="text-gray-400">{area.baseline}%</span>
+                    <span className="text-[#8A9BA8]">{area.baseline}%</span>
                     <ArrowUpRight className="w-3 h-3 text-green-500" />
                     <span className="text-green-600 font-medium">{area.current}%</span>
-                    <span className="text-gray-400">/ {area.target}%</span>
+                    <span className="text-[#8A9BA8]">/ {area.target}%</span>
                   </div>
                 </div>
                 <div className="relative">
@@ -396,7 +396,7 @@ export function OutcomesTracking({
 
         {/* Parent Wellbeing */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
             Your Wellbeing
           </h3>
@@ -411,7 +411,7 @@ export function OutcomesTracking({
                   {caregiverMetrics.parentWellbeing.stressLevel.charAt(0).toUpperCase() +
                    caregiverMetrics.parentWellbeing.stressLevel.slice(1)}
                 </div>
-                <div className="text-sm text-gray-600">Stress Level</div>
+                <div className="text-sm text-[#5A6B7A]">Stress Level</div>
                 {caregiverMetrics.parentWellbeing.stressTrend === 'improving' && (
                   <Badge className="mt-2 bg-green-100 text-green-700">
                     <TrendingDown className="w-3 h-3 mr-1" />
@@ -425,14 +425,14 @@ export function OutcomesTracking({
                 <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
                   {caregiverMetrics.parentWellbeing.confidenceScore}%
                 </div>
-                <div className="text-sm text-gray-600">Confidence Score</div>
+                <div className="text-sm text-[#5A6B7A]">Confidence Score</div>
               </div>
             )}
             <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
               <div className="text-xl sm:text-2xl font-bold text-violet-600">
                 {caregiverMetrics.parentWellbeing.supportSessions}
               </div>
-              <div className="text-sm text-gray-600">Support Sessions</div>
+              <div className="text-sm text-[#5A6B7A]">Support Sessions</div>
             </div>
           </div>
         </Card>
@@ -447,8 +447,8 @@ export function OutcomesTracking({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Outcomes Dashboard</h2>
-            <p className="text-gray-600">Aminy Program Performance</p>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Outcomes Dashboard</h2>
+            <p className="text-[#5A6B7A]">Aminy Program Performance</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" onClick={onExport}>
@@ -511,7 +511,7 @@ export function OutcomesTracking({
         {/* Utilization & Outcomes */}
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-4">Utilization Metrics</h3>
+            <h3 className="font-medium text-[#1B2733] mb-4">Utilization Metrics</h3>
             <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Member Engagement Rate"
@@ -537,7 +537,7 @@ export function OutcomesTracking({
           </Card>
 
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-4">Clinical Outcomes</h3>
+            <h3 className="font-medium text-[#1B2733] mb-4">Clinical Outcomes</h3>
             <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Behavior Improvement"
@@ -577,8 +577,8 @@ export function OutcomesTracking({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Investor Dashboard</h2>
-            <p className="text-gray-600">Key Performance Metrics</p>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Investor Dashboard</h2>
+            <p className="text-[#5A6B7A]">Key Performance Metrics</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" size="sm">
@@ -651,21 +651,21 @@ export function OutcomesTracking({
         <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
           {/* Retention */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-500" />
               Retention
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">D1 Retention</span>
+                <span className="text-sm text-[#5A6B7A]">D1 Retention</span>
                 <span className="font-medium">{investorMetrics.retention.day1Retention}%</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">D7 Retention</span>
+                <span className="text-sm text-[#5A6B7A]">D7 Retention</span>
                 <span className="font-medium">{investorMetrics.retention.day7Retention}%</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">D30 Retention</span>
+                <span className="text-sm text-[#5A6B7A]">D30 Retention</span>
                 <span className="font-medium">{investorMetrics.retention.day30Retention}%</span>
               </div>
             </div>
@@ -673,21 +673,21 @@ export function OutcomesTracking({
 
           {/* Engagement */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <Activity className="w-4 h-4 text-primary" />
               Engagement
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">DAU</span>
+                <span className="text-sm text-[#5A6B7A]">DAU</span>
                 <span className="font-medium">{investorMetrics.engagement.dau.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">MAU</span>
+                <span className="text-sm text-[#5A6B7A]">MAU</span>
                 <span className="font-medium">{investorMetrics.engagement.mau.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Avg Session</span>
+                <span className="text-sm text-[#5A6B7A]">Avg Session</span>
                 <span className="font-medium">{investorMetrics.engagement.avgSessionLength}m</span>
               </div>
             </div>
@@ -695,21 +695,21 @@ export function OutcomesTracking({
 
           {/* Revenue Mix */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-green-500" />
               Revenue Mix
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Subscriptions</span>
+                <span className="text-sm text-[#5A6B7A]">Subscriptions</span>
                 <span className="font-medium">${(investorMetrics.revenue.subscriptionRevenue / 1000).toFixed(0)}K</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Telehealth</span>
+                <span className="text-sm text-[#5A6B7A]">Telehealth</span>
                 <span className="font-medium">${(investorMetrics.revenue.telehealthRevenue / 1000).toFixed(0)}K</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">B2B</span>
+                <span className="text-sm text-[#5A6B7A]">B2B</span>
                 <span className="font-medium">${(investorMetrics.revenue.b2bRevenue / 1000).toFixed(0)}K</span>
               </div>
             </div>
@@ -718,7 +718,7 @@ export function OutcomesTracking({
 
         {/* Impact Metrics */}
         <Card className="p-4 bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200">
-          <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
             Impact Metrics
           </h3>
@@ -727,25 +727,25 @@ export function OutcomesTracking({
               <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.familiesHelped.toLocaleString()}
               </div>
-              <p className="text-sm text-gray-600">Families Helped</p>
+              <p className="text-sm text-[#5A6B7A]">Families Helped</p>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.goalsAchieved.toLocaleString()}
               </div>
-              <p className="text-sm text-gray-600">Goals Achieved</p>
+              <p className="text-sm text-[#5A6B7A]">Goals Achieved</p>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {investorMetrics.impact.crisisesAverted.toLocaleString()}
               </div>
-              <p className="text-sm text-gray-600">Crises Averted</p>
+              <p className="text-sm text-[#5A6B7A]">Crises Averted</p>
             </div>
             <div>
               <div className="text-xl sm:text-2xl font-bold text-pink-600">
                 {(investorMetrics.impact.parentHoursReclaimed / 1000).toFixed(1)}K
               </div>
-              <p className="text-sm text-gray-600">Parent Hours Saved</p>
+              <p className="text-sm text-[#5A6B7A]">Parent Hours Saved</p>
             </div>
           </div>
         </Card>
@@ -792,11 +792,11 @@ function MetricCard({
         <div className={`p-1.5 rounded-lg ${colorClasses[color]}`}>
           <Icon className="w-4 h-4" />
         </div>
-        <span className="text-sm text-gray-600">{label}</span>
+        <span className="text-sm text-[#5A6B7A]">{label}</span>
       </div>
       <div className="flex items-end gap-2">
-        <span className="text-xl sm:text-2xl font-bold text-gray-900">{value}</span>
-        {suffix && <span className="text-sm text-gray-500 mb-1">{suffix}</span>}
+        <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">{value}</span>
+        {suffix && <span className="text-sm text-[#5A6B7A] mb-1">{suffix}</span>}
       </div>
       {trend !== undefined && (
         <div className={`flex items-center gap-1 mt-1 text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
@@ -826,8 +826,8 @@ function MetricRow({
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm text-gray-600">{label}</span>
-        <span className="text-sm font-medium text-gray-900">{value}</span>
+        <span className="text-sm text-[#5A6B7A]">{label}</span>
+        <span className="text-sm font-medium text-[#1B2733]">{value}</span>
       </div>
       <Progress value={Math.min(progress, 100)} className="h-1.5" />
     </div>
@@ -853,7 +853,7 @@ export function OutcomesWidget({
   return (
     <Card className="p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-medium text-gray-900">Your Progress</h3>
+        <h3 className="font-medium text-[#1B2733]">Your Progress</h3>
         {onViewDetails && (
           <Button variant="ghost" size="sm" onClick={onViewDetails}>
             View All
@@ -865,19 +865,19 @@ export function OutcomesWidget({
           <div className="text-lg font-bold text-[#6B9080]">
             {goalsAchieved}/{totalGoals}
           </div>
-          <p className="text-xs text-gray-600">Goals</p>
+          <p className="text-xs text-[#5A6B7A]">Goals</p>
         </div>
         <div className="p-2 bg-violet-50 rounded-lg">
           <div className="text-lg font-bold text-violet-600">
             {streakDays}
           </div>
-          <p className="text-xs text-gray-600">Day Streak</p>
+          <p className="text-xs text-[#5A6B7A]">Day Streak</p>
         </div>
         <div className="p-2 bg-pink-50 rounded-lg">
           <div className="text-lg font-bold text-pink-600">
             {confidenceScore}%
           </div>
-          <p className="text-xs text-gray-600">Confidence</p>
+          <p className="text-xs text-[#5A6B7A]">Confidence</p>
         </div>
       </div>
     </Card>

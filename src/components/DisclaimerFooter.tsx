@@ -56,7 +56,7 @@ function SubtleDisclaimer({ className }: { className?: string }) {
     <div className={`flex justify-center ${className || ''}`}>
       <button
         onClick={() => setExpanded(v => !v)}
-        className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-600 px-2 py-1 rounded-full transition-colors"
+        className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-[#5A6B7A] px-2 py-1 rounded-full transition-colors"
         aria-label="View educational guidance disclaimer"
       >
         <Info className="w-2.5 h-2.5" />

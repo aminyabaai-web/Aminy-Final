@@ -156,8 +156,8 @@ export function LetterDraftingFlow({
   const renderTypeSelection = () => (
     <div className="space-y-3 sm:space-y-4">
       <div className="text-center mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">What type of letter do you need?</h2>
-        <p className="text-sm text-slate-600">I'll help you draft a professional letter step by step</p>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">What type of letter do you need?</h2>
+        <p className="text-sm text-[#5A6B7A]">I'll help you draft a professional letter step by step</p>
       </div>
 
       <div className="grid gap-3">
@@ -172,8 +172,8 @@ export function LetterDraftingFlow({
                 <FileText className="w-6 h-6 text-accent" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900">{lt.name}</h3>
-                <p className="text-sm text-slate-500">{lt.description}</p>
+                <h3 className="font-medium text-[#1B2733]">{lt.name}</h3>
+                <p className="text-sm text-[#5A6B7A]">{lt.description}</p>
               </div>
               <ChevronRight className="w-5 h-5 text-slate-400" />
             </div>
@@ -244,14 +244,14 @@ export function LetterDraftingFlow({
             <ArrowLeft className="w-4 h-4 mr-1" />
             Back
           </Button>
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">{typeInfo?.name}</h2>
-          <p className="text-sm text-slate-600">Fill in the details below. Leave blank anything you don't know — I'll add placeholders.</p>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">{typeInfo?.name}</h2>
+          <p className="text-sm text-[#5A6B7A]">Fill in the details below. Leave blank anything you don't know — I'll add placeholders.</p>
         </div>
 
         <div className="grid gap-3 sm:gap-4">
           {fields.map((field) => (
             <div key={field.key}>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                 {field.label}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
               </label>
@@ -265,11 +265,11 @@ export function LetterDraftingFlow({
           ))}
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1">
               Additional Context (optional)
             </label>
             <textarea
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
+              className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
               rows={3}
               placeholder="Any other details you want to include..."
               value={formData.additionalContext || ''}
@@ -291,8 +291,8 @@ export function LetterDraftingFlow({
       <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
         <Sparkles className="w-8 h-8 text-accent" />
       </div>
-      <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Drafting your letter...</h2>
-      <p className="text-sm text-slate-600 mb-4 sm:mb-6">Using AI to create a professional, personalized letter</p>
+      <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Drafting your letter...</h2>
+      <p className="text-sm text-[#5A6B7A] mb-4 sm:mb-6">Using AI to create a professional, personalized letter</p>
       <Progress value={66} className="max-w-xs mx-auto" />
     </div>
   );
@@ -304,8 +304,8 @@ export function LetterDraftingFlow({
       <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-1">Your Letter is Ready</h2>
-            <p className="text-sm text-slate-600">Review, edit, and download your letter</p>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-1">Your Letter is Ready</h2>
+            <p className="text-sm text-[#5A6B7A]">Review, edit, and download your letter</p>
           </div>
           <Badge className="bg-green-100 text-green-700">
             <Check className="w-3 h-3 mr-1" />
@@ -316,7 +316,7 @@ export function LetterDraftingFlow({
         {/* Letter Preview */}
         <Card className="p-3 sm:p-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-slate-900">{generatedLetter.subject}</h3>
+            <h3 className="font-medium text-[#1B2733]">{generatedLetter.subject}</h3>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" onClick={() => setEditMode(!editMode)}>
                 <Edit className="w-4 h-4 mr-1" />
@@ -327,13 +327,13 @@ export function LetterDraftingFlow({
 
           {editMode ? (
             <textarea
-              className="w-full h-96 px-3 py-2 border border-slate-200 rounded-lg font-mono text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
+              className="w-full h-96 px-3 py-2 border border-[#E8E4DF] rounded-lg font-mono text-sm focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
               value={editedBody}
               onChange={(e) => setEditedBody(e.target.value)}
             />
           ) : (
-            <div className="bg-slate-50 rounded-lg p-4 max-h-96 overflow-y-auto">
-              <pre className="text-sm text-slate-700 whitespace-pre-wrap font-mono">
+            <div className="bg-[#FAF7F2] rounded-lg p-4 max-h-96 overflow-y-auto">
+              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap font-mono">
                 {editedBody || generatedLetter.body}
               </pre>
             </div>
@@ -378,11 +378,11 @@ export function LetterDraftingFlow({
         <Card className="p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-5 h-5 text-accent" />
-            <h4 className="font-medium text-slate-900">After You Send</h4>
+            <h4 className="font-medium text-[#1B2733]">After You Send</h4>
           </div>
           <ol className="space-y-2">
             {generatedLetter.nextSteps.map((step, idx) => (
-              <li key={idx} className="text-sm text-slate-700 flex items-start gap-2">
+              <li key={idx} className="text-sm text-[#3A4A57] flex items-start gap-2">
                 <span className="w-5 h-5 bg-accent/10 text-accent rounded-full flex items-center justify-center text-xs font-medium flex-shrink-0">
                   {idx + 1}
                 </span>
@@ -400,8 +400,8 @@ export function LetterDraftingFlow({
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <Check className="w-8 h-8 text-green-600" />
       </div>
-      <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Letter Complete!</h2>
-      <p className="text-sm text-slate-600 mb-4 sm:mb-6">
+      <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Letter Complete!</h2>
+      <p className="text-sm text-[#5A6B7A] mb-4 sm:mb-6">
         Your letter has been saved. Remember to review it one more time before sending.
       </p>
       <div className="flex gap-3 justify-center">
@@ -424,7 +424,7 @@ export function LetterDraftingFlow({
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="px-4 py-4 max-w-2xl mx-auto">
           <div className="flex items-center gap-3">
             {onBack && currentStep === 'select-type' && (
@@ -434,7 +434,7 @@ export function LetterDraftingFlow({
               </Button>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-slate-900 flex items-center gap-2">
+              <h1 className="text-lg font-semibold text-[#1B2733] flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
                 AI Letter Drafting
               </h1>
@@ -445,7 +445,7 @@ export function LetterDraftingFlow({
 
       {/* Progress */}
       {currentStep !== 'select-type' && currentStep !== 'complete' && (
-        <div className="bg-white border-b border-gray-100 px-4 py-2">
+        <div className="bg-white border-b border-[#E8E4DF] px-4 py-2">
           <div className="max-w-2xl mx-auto">
             <Progress
               value={

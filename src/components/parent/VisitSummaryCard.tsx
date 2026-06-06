@@ -79,7 +79,7 @@ export function VisitSummaryCard({
   return (
     <Card className="overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-emerald-500 px-5 py-4 text-white">
+      <div className="bg-gradient-to-r from-[#6B9080] to-[#43AA8B] px-5 py-4 text-white">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h3 className="text-lg font-semibold">{childName}'s Visit Summary</h3>
@@ -103,7 +103,7 @@ export function VisitSummaryCard({
       <div className="p-5 space-y-5">
         {/* Summary */}
         <div>
-          <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+          <p className="text-sm text-[#3A4A57] leading-relaxed whitespace-pre-line">
             {parentSummary}
           </p>
         </div>
@@ -129,7 +129,7 @@ export function VisitSummaryCard({
         {/* Goal Progress */}
         {goals.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-2 mb-3">
+            <h4 className="text-sm font-semibold text-[#1B2733] flex items-center gap-2 mb-3">
               <TrendingUp className="w-4 h-4 text-blue-600" />
               Goal Progress
             </h4>
@@ -204,10 +204,10 @@ function GoalMeter({ title, progressPct }: { title: string; progressPct: number 
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm text-slate-700 truncate pr-2">{title}</span>
-        <span className="text-xs font-medium text-slate-900 whitespace-nowrap">{clamped}%</span>
+        <span className="text-sm text-[#3A4A57] truncate pr-2">{title}</span>
+        <span className="text-xs font-medium text-[#1B2733] whitespace-nowrap">{clamped}%</span>
       </div>
-      <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+      <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500 ${color}`}
           style={{ width: `${clamped}%` }}
@@ -222,7 +222,7 @@ function MetricPill({ label, value }: { label: string; value: number }) {
     value >= 75
       ? 'text-emerald-700 bg-emerald-50'
       : value >= 50
-      ? 'text-blue-700 bg-blue-50'
+      ? 'text-blue-700 bg-[#EEF4F8]'
       : 'text-amber-700 bg-amber-50';
 
   return (

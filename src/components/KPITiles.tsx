@@ -69,7 +69,7 @@ export function KPITiles({ userId, childId, timeframe = '7d', variant = 'dashboa
   if (!kpis) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-sm text-gray-600">No data available yet. Start tracking to see your progress!</p>
+        <p className="text-sm text-[#5A6B7A]">No data available yet. Start tracking to see your progress!</p>
       </Card>
     );
   }
@@ -162,7 +162,7 @@ function KPITile({
   const compact = variant === 'compact';
 
   return (
-    <Card className={`relative overflow-hidden bg-white border border-slate-200/60 shadow-sm ${compact ? 'p-3' : 'p-4'} hover:shadow-md transition-all duration-300 rounded-2xl`}>
+    <Card className={`relative overflow-hidden bg-white border border-[#E8E4DF]/60 shadow-sm ${compact ? 'p-3' : 'p-4'} hover:shadow-md transition-all duration-300 rounded-2xl`}>
       {/* Subtle background tint matching status at the top edge */}
       <div className={`absolute top-0 left-0 right-0 h-1 ${getStatusColor(kpi.status)} opacity-50`} />
 
@@ -171,11 +171,11 @@ function KPITile({
           <div className={`flex items-center justify-center ${compact ? 'w-6 h-6' : 'w-8 h-8'} rounded-full ${getStatusColor(kpi.status)} bg-opacity-20`}>
             <span className={compact ? 'text-xs' : 'text-sm'}>{icon}</span>
           </div>
-          <h3 className={`${compact ? 'text-xs' : 'text-sm'} font-medium text-slate-500 tracking-tight`}>{name}</h3>
+          <h3 className={`${compact ? 'text-xs' : 'text-sm'} font-medium text-[#5A6B7A] tracking-tight`}>{name}</h3>
         </div>
         <button
           onClick={onInfoClick}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
         >
           <Info className={compact ? 'w-3 h-3' : 'w-4 h-4'} />
         </button>
@@ -183,11 +183,11 @@ function KPITile({
 
       <div className="mb-2">
         <div className="flex items-baseline gap-2">
-          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-slate-900 tracking-tight`}>
+          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-[#1B2733] tracking-tight`}>
             {kpi.label}
           </span>
           {kpi.change !== 0 && (
-            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-slate-50 px-1.5 py-0.5 rounded-full`}>
+            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-[#FAF7F2] px-1.5 py-0.5 rounded-full`}>
               {getTrendIcon(kpi.trend)}
               {Math.abs(kpi.change) > 0 && `${Math.abs(kpi.change).toFixed(kpi.change % 1 === 0 ? 0 : 1)}`}
             </span>
@@ -195,7 +195,7 @@ function KPITile({
         </div>
       </div>
 
-      <p className={`${compact ? 'text-[11px]' : 'text-xs'} text-slate-500 font-medium`}>
+      <p className={`${compact ? 'text-[11px]' : 'text-xs'} text-[#5A6B7A] font-medium`}>
         {kpi.interpretation}
       </p>
 
@@ -235,15 +235,15 @@ function KPIExplainerModal({
 
         <div className="space-y-4">
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">What this measures:</h4>
-            <p className="text-sm text-gray-700">{explanation.description}</p>
+            <h4 className="text-sm font-medium text-[#1B2733] mb-2">What this measures:</h4>
+            <p className="text-sm text-[#3A4A57]">{explanation.description}</p>
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-gray-900 mb-2">How to improve:</h4>
+            <h4 className="text-sm font-medium text-[#1B2733] mb-2">How to improve:</h4>
             <ul className="space-y-1">
               {explanation.howToImprove.map((tip: string, idx: number) => (
-                <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
+                <li key={idx} className="text-sm text-[#3A4A57] flex items-start gap-2">
                   <span className="text-accent mt-0.5">•</span>
                   <span>{tip}</span>
                 </li>
@@ -251,7 +251,7 @@ function KPIExplainerModal({
             </ul>
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-3">
             <p className="text-xs text-blue-900">
               <strong>Important:</strong> {explanation.disclaimer}
             </p>
@@ -286,7 +286,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-gray-900 mb-3">Key Progress Indicators ({timeframe})</h3>
+      <h3 className="text-sm font-medium text-[#1B2733] mb-3">Key Progress Indicators ({timeframe})</h3>
 
       <div className="grid grid-cols-2 gap-3">
         <SummaryMetric
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-xs text-gray-500 mt-3 p-2 bg-[#FAF7F2] rounded">
+      <div className="text-xs text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>
@@ -358,7 +358,7 @@ export function KPITrendChart({ userId, childId, kpiName, days = 30 }: {
 
   return (
     <div className="space-y-2">
-      <h4 className="text-sm text-gray-700 capitalize">{kpiName.replace(/([A-Z])/g, ' $1')} Trend</h4>
+      <h4 className="text-sm text-[#3A4A57] capitalize">{kpiName.replace(/([A-Z])/g, ' $1')} Trend</h4>
       <div className="h-32 flex items-end gap-1">
         {data.map((point, idx) => (
           <div
@@ -369,7 +369,7 @@ export function KPITrendChart({ userId, childId, kpiName, days = 30 }: {
           />
         ))}
       </div>
-      <div className="flex justify-between text-xs text-gray-500">
+      <div className="flex justify-between text-xs text-[#5A6B7A]">
         <span>{days} days ago</span>
         <span>Today</span>
       </div>

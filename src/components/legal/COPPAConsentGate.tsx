@@ -109,17 +109,17 @@ export default function COPPAConsentGate({
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3">
         {onBack && (
           <button
             onClick={onBack}
             className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
         )}
         <Shield className="w-6 h-6 text-[#6B9080] flex-shrink-0" />
-        <h1 className="text-lg font-bold text-gray-900">Parent Permission Required</h1>
+        <h1 className="text-lg font-bold text-[#1B2733]">Parent Permission Required</h1>
       </div>
 
       {/* Body */}
@@ -139,21 +139,21 @@ export default function COPPAConsentGate({
           </div>
 
           {/* Explanation */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-base font-semibold text-gray-900 mb-3">
+          <div className="bg-white rounded-xl border border-[#E8E4DF] p-5">
+            <h2 className="text-base font-semibold text-[#1B2733] mb-3">
               What Aminy collects for {childName}
             </h2>
-            <p className="text-sm text-gray-700 leading-relaxed">
+            <p className="text-sm text-[#3A4A57] leading-relaxed">
               Aminy collects limited information about your child to personalize their therapy tools,
               track developmental progress, and coordinate care with their providers. This includes:
             </p>
-            <ul className="mt-3 space-y-1.5 text-sm text-gray-700 ml-4 list-disc">
+            <ul className="mt-3 space-y-1.5 text-sm text-[#3A4A57] ml-4 list-disc">
               <li>First name and age range</li>
               <li>Developmental diagnoses you share with us</li>
               <li>Activity participation and engagement data in Junior Mode</li>
               <li>Session progress notes from licensed providers</li>
             </ul>
-            <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+            <p className="mt-3 text-sm text-[#3A4A57] leading-relaxed">
               We do <strong>not</strong> collect your child&apos;s last name, school information,
               photos, or location without additional explicit consent. We never sell this data.
             </p>
@@ -205,7 +205,7 @@ export default function COPPAConsentGate({
 
           {/* COPPA rights reminder */}
           <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4">
-            <p className="text-xs text-teal-800 leading-relaxed">
+            <p className="text-xs text-[#6B9080] leading-relaxed">
               <strong>Your rights under COPPA:</strong> You may review, update, or request deletion of your
               child&apos;s information at any time by contacting us at{' '}
               <a href="mailto:privacy@aminy.com" className="underline">
@@ -222,14 +222,14 @@ export default function COPPAConsentGate({
       </div>
 
       {/* Footer actions */}
-      <div className="bg-white border-t border-gray-200 px-4 py-4 space-y-3">
+      <div className="bg-white border-t border-[#E8E4DF] px-4 py-4 space-y-3">
         <button
           onClick={handleGrant}
           disabled={!allChecked || loading}
           className={`w-full rounded-xl py-4 font-semibold text-base transition-all ${
             allChecked && !loading
               ? 'bg-primary text-white hover:bg-[#6B9080] active:scale-[0.98]'
-              : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
+              : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
           }`}
           style={{ minHeight: 56 }}
         >
@@ -237,7 +237,7 @@ export default function COPPAConsentGate({
         </button>
         <button
           onClick={onDecline}
-          className="w-full py-3 text-base text-gray-500 hover:text-gray-700 transition-colors"
+          className="w-full py-3 text-base text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
         >
           Not Now — Go Back
         </button>
@@ -260,7 +260,7 @@ function CheckboxItem({
   label: React.ReactNode;
 }) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer rounded-xl border-2 border-gray-200 bg-white p-4 transition-colors hover:border-[#6B9080]/30 has-[:checked]:border-[#6B9080] has-[:checked]:bg-[#6B9080]/10">
+    <label className="flex items-start gap-3 cursor-pointer rounded-xl border-2 border-[#E8E4DF] bg-white p-4 transition-colors hover:border-[#6B9080]/30 has-[:checked]:border-[#6B9080] has-[:checked]:bg-[#6B9080]/10">
       <div className="relative flex-shrink-0 mt-0.5">
         <input
           type="checkbox"
@@ -270,14 +270,14 @@ function CheckboxItem({
         />
         <div
           className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
-            checked ? 'bg-primary border-[#6B9080]' : 'border-gray-300 bg-white'
+            checked ? 'bg-primary border-[#6B9080]' : 'border-[#E8E4DF] bg-white'
           }`}
           style={{ minWidth: 24, minHeight: 24 }}
         >
           {checked && <CheckCircle className="w-4 h-4 text-white" />}
         </div>
       </div>
-      <p className="text-sm text-gray-700 leading-relaxed flex-1">{label}</p>
+      <p className="text-sm text-[#3A4A57] leading-relaxed flex-1">{label}</p>
     </label>
   );
 }

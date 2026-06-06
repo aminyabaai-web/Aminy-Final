@@ -30,7 +30,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-white to-blue-50 flex flex-col">
       {/* Header */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">
@@ -43,19 +43,19 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
             <h1 className="text-4xl font-bold text-primary mb-2">
               Aminy AI-First Experience
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-[#5A6B7A]">
               Complete Design System & Prototype
             </p>
             <div className="mt-2 flex items-center justify-center gap-2">
               <span className="text-sm font-medium text-accent">Version 1.0</span>
-              <span className="text-sm text-gray-400">•</span>
-              <span className="text-sm text-gray-500">October 2025</span>
+              <span className="text-sm text-[#8A9BA8]">•</span>
+              <span className="text-sm text-[#5A6B7A]">October 2025</span>
             </div>
           </div>
 
           {/* Trust Badges */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
               <Users className="w-4 h-4 text-blue-600" />
               <span className="text-sm font-medium text-blue-900">Parent-tested</span>
             </div>
@@ -69,12 +69,12 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
             </div>
             <div className="flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg">
               <Sparkles className="w-4 h-4 text-[#6B9080]" />
-              <span className="text-sm font-medium text-teal-900">AI-powered</span>
+              <span className="text-sm font-medium text-[#6B9080]">AI-powered</span>
             </div>
           </div>
 
           {/* Usage Instructions */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 mb-8">
+          <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-lg p-8 mb-8">
             <h2 className="text-2xl font-semibold text-primary mb-4 sm:mb-6 flex items-center gap-2">
               <Play className="w-6 h-6 text-accent" />
               Usage Instructions
@@ -85,7 +85,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">1</span>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-[#3A4A57]">
                   Click <span className="font-semibold">"Start Prototype"</span> button to begin from the Splash screen
                 </p>
               </div>
@@ -94,7 +94,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">2</span>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-[#3A4A57]">
                   Navigate using interactive hotspots and buttons throughout the experience
                 </p>
               </div>
@@ -103,7 +103,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">3</span>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-[#3A4A57]">
                   All flows are fully linked and interactive with realistic delays and animations
                 </p>
               </div>
@@ -112,7 +112,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">4</span>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-[#3A4A57]">
                   Access the <span className="font-semibold">complete design system</span> via the "View Design System" button
                 </p>
               </div>
@@ -121,7 +121,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
                 <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                   <span className="text-sm font-medium text-accent">5</span>
                 </div>
-                <p className="text-gray-700">
+                <p className="text-[#3A4A57]">
                   Use <span className="font-semibold">Shift+D</span> to toggle developer panel for quick navigation
                 </p>
               </div>
@@ -151,40 +151,40 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
             <button
               onClick={() => onNavigate('onboarding')}
-              className="bg-white border border-gray-200 rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
+              className="bg-white border border-[#E8E4DF] rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
             >
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-primary">Onboarding Flow</h3>
                 <ChevronRight className="w-5 h-5 text-accent" />
               </div>
-              <p className="text-sm text-gray-600">5-step magic setup experience</p>
+              <p className="text-sm text-[#5A6B7A]">5-step magic setup experience</p>
             </button>
 
             <button
               onClick={() => onNavigate('dashboard')}
-              className="bg-white border border-gray-200 rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
+              className="bg-white border border-[#E8E4DF] rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
             >
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-primary">Today Plan</h3>
                 <ChevronRight className="w-5 h-5 text-accent" />
               </div>
-              <p className="text-sm text-gray-600">Value-first home screen</p>
+              <p className="text-sm text-[#5A6B7A]">Value-first home screen</p>
             </button>
 
             <button
               onClick={() => onNavigate('paywall')}
-              className="bg-white border border-gray-200 rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
+              className="bg-white border border-[#E8E4DF] rounded-lg p-4 hover:border-accent hover:shadow-md transition-all text-left"
             >
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-semibold text-primary">Pricing</h3>
                 <ChevronRight className="w-5 h-5 text-accent" />
               </div>
-              <p className="text-sm text-gray-600">Subscription and paywall</p>
+              <p className="text-sm text-[#5A6B7A]">Subscription and paywall</p>
             </button>
           </div>
 
           {/* Features Grid */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+          <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 mb-8">
             <h2 className="text-lg sm:text-xl font-semibold text-primary mb-4">What's Included</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {[
@@ -197,17 +197,17 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
               ].map((feature, idx) => (
                 <div key={idx} className="flex items-center gap-2">
                   <feature.icon className={`w-5 h-5 ${feature.color}`} />
-                  <span className="text-sm text-gray-700">{feature.text}</span>
+                  <span className="text-sm text-[#3A4A57]">{feature.text}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Footer Credits */}
-          <div className="text-center text-sm text-gray-500">
+          <div className="text-center text-sm text-[#5A6B7A]">
             <p className="mb-2">Designed for viral growth and user delight</p>
             <p>Built with React, TypeScript, and Tailwind CSS</p>
-            <p className="mt-4 text-xs text-gray-400">
+            <p className="mt-4 text-xs text-[#8A9BA8]">
               © {new Date().getFullYear()} Aminy, LLC All rights reserved.
             </p>
           </div>

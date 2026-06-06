@@ -106,10 +106,10 @@ export function FeedbackCollector({
             className="py-4"
           >
             <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-xl text-slate-900 mb-2">
+              <h2 className="text-xl text-[#1B2733] mb-2">
                 How's Aminy feeling?
               </h2>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 Your honest thoughts help us build something calmer
               </p>
             </div>
@@ -117,26 +117,26 @@ export function FeedbackCollector({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               <button
                 onClick={() => handleMoodSelect('easy')}
-                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all group"
+                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-[#E8E4DF] hover:border-emerald-400 hover:bg-emerald-50 transition-all group"
               >
                 <Smile className="w-8 h-8 text-emerald-600 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-slate-700">Easy</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Easy</span>
               </button>
 
               <button
                 onClick={() => handleMoodSelect('okay')}
-                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-200 hover:border-amber-400 hover:bg-amber-50 transition-all group"
+                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-[#E8E4DF] hover:border-amber-400 hover:bg-amber-50 transition-all group"
               >
                 <Meh className="w-8 h-8 text-amber-600 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-slate-700">Okay</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Okay</span>
               </button>
 
               <button
                 onClick={() => handleMoodSelect('hard')}
-                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-slate-200 hover:border-rose-400 hover:bg-rose-50 transition-all group"
+                className="flex flex-col items-center gap-3 p-6 rounded-2xl border-2 border-[#E8E4DF] hover:border-rose-400 hover:bg-rose-50 transition-all group"
               >
                 <Frown className="w-8 h-8 text-rose-600 group-hover:scale-110 transition-transform" />
-                <span className="text-sm font-medium text-slate-700">Hard</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Hard</span>
               </button>
             </div>
           </motion.div>
@@ -150,10 +150,10 @@ export function FeedbackCollector({
             className="py-4"
           >
             <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-xl text-slate-900 mb-2">
+              <h2 className="text-xl text-[#1B2733] mb-2">
                 Tell us more
               </h2>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-[#5A6B7A]">
                 Optional, but super helpful
               </p>
             </div>
@@ -161,7 +161,7 @@ export function FeedbackCollector({
             <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               {/* What felt easiest */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                   What felt easiest?
                 </label>
                 <Textarea
@@ -175,7 +175,7 @@ export function FeedbackCollector({
 
               {/* What could be calmer */}
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[#3A4A57] mb-2">
                   What could be calmer?
                 </label>
                 <Textarea
@@ -199,7 +199,7 @@ export function FeedbackCollector({
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+                className="flex-1 bg-[#6B9080] hover:bg-[#5A7A6E]"
               >
                 {isSubmitting ? (
                   'Sending...'
@@ -235,10 +235,10 @@ export function FeedbackCollector({
               <Heart className="w-8 h-8 text-emerald-600 fill-emerald-600" />
             </motion.div>
 
-            <h2 className="text-xl text-slate-900 mb-2">
+            <h2 className="text-xl text-[#1B2733] mb-2">
               Thank you 💚
             </h2>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#5A6B7A]">
               Your feedback helps us build something truly calm
             </p>
           </motion.div>

@@ -72,7 +72,7 @@ export function StreakTracker({
           </p>
         </div>
         {isPaused && (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+          <Badge variant="outline" className="bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]">
             Paused
           </Badge>
         )}
@@ -84,7 +84,7 @@ export function StreakTracker({
           <Flame className="w-8 h-8 text-orange-600" />
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold text-slate-900">{currentStreak}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">{currentStreak}</p>
           <p className="text-sm text-muted-foreground">
             {currentStreak === 1 ? 'day' : 'days'} this week
           </p>
@@ -111,11 +111,11 @@ export function StreakTracker({
                 aspect-square rounded-lg flex flex-col items-center justify-center
                 ${isActive 
                   ? 'bg-gradient-to-br from-orange-100 to-amber-100 border border-orange-200' 
-                  : 'bg-[#F0EDE8] border border-gray-200'
+                  : 'bg-[#F0EDE8] border border-[#E8E4DF]'
                 }
               `}
             >
-              <span className={`text-xs font-medium ${isActive ? 'text-orange-700' : 'text-gray-500'}`}>
+              <span className={`text-xs font-medium ${isActive ? 'text-orange-700' : 'text-[#5A6B7A]'}`}>
                 {day}
               </span>
             </div>
@@ -131,7 +131,7 @@ export function StreakTracker({
               ? 'bg-red-50 border border-red-200'
               : streakWarning.level === 'warning'
               ? 'bg-amber-50 border border-amber-200'
-              : 'bg-blue-50 border border-blue-200'
+              : 'bg-[#EEF4F8] border border-[#C8DDE8]'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ export function StreakTracker({
 
       {/* Encouraging Message */}
       {isPaused ? (
-        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
           <p className="text-sm text-blue-700">
             Taking a breather today. I'll keep things light.
           </p>
@@ -192,8 +192,8 @@ export function StreakTracker({
           </p>
         </div>
       ) : (
-        <div className="p-3 bg-[#FAF7F2] border border-gray-200 rounded-lg">
-          <p className="text-sm text-gray-600">
+        <div className="p-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg">
+          <p className="text-sm text-[#5A6B7A]">
             Start your streak today with a quick check-in.
           </p>
         </div>

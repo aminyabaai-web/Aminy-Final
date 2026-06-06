@@ -284,7 +284,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                       aria-label="Capture photo"
                       className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
                     >
-                      <Camera className="w-7 h-7 text-gray-700" />
+                      <Camera className="w-7 h-7 text-[#3A4A57]" />
                     </button>
                   </div>
                 </div>
@@ -306,8 +306,8 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {!cameraActive && !capturedImage && (
                 <div className="bg-gradient-to-b from-violet-50 to-white rounded-xl border border-violet-100 p-8 text-center">
                   <Sparkles className="w-12 h-12 text-violet-500 mx-auto mb-3" />
-                  <h3 className="font-semibold text-gray-900 mb-1">Photo Analysis</h3>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <h3 className="font-semibold text-[#1B2733] mb-1">Photo Analysis</h3>
+                  <p className="text-sm text-[#5A6B7A] mb-6">
                     Take a photo of a document (IEP, prescription), your child's activity,
                     or anything you'd like Aminy to analyze.
                   </p>
@@ -336,7 +336,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                       value={customPrompt}
                       onChange={(e) => setCustomPrompt(e.target.value)}
                       placeholder="e.g., 'What does this IEP section mean?' or 'Is this behavior typical?'"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl text-sm focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                     />
                   )}
                   <button
@@ -364,7 +364,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     <Sparkles className="w-4 h-4 text-violet-600" />
                     <p className="font-medium text-violet-800 text-sm">AI Analysis</p>
                   </div>
-                  <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+                  <div className="text-sm text-[#3A4A57] whitespace-pre-wrap leading-relaxed">
                     {photoResult.analysis}
                   </div>
                   <div className="mt-3 flex gap-2">
@@ -384,13 +384,13 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
           {mode === 'video' && (
             <motion.div key="video" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
               {/* Privacy toggle — locked once a session is recording */}
-              <label className={`flex items-center gap-2 text-sm text-gray-600 ${isRecording ? 'opacity-60' : ''}`}>
+              <label className={`flex items-center gap-2 text-sm text-[#5A6B7A] ${isRecording ? 'opacity-60' : ''}`}>
                 <input
                   type="checkbox"
                   checked={dontStore}
                   disabled={isRecording}
                   onChange={(e) => setDontStore(e.target.checked)}
-                  className="w-4 h-4 text-violet-600 rounded border-gray-300 disabled:cursor-not-allowed"
+                  className="w-4 h-4 text-violet-600 rounded border-[#E8E4DF] disabled:cursor-not-allowed"
                 />
                 Don't store frames (process and discard immediately)
               </label>
@@ -421,10 +421,10 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                   {/* Live frame results */}
                   {frameResults.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-xs font-medium text-gray-500">Live Analysis</p>
+                      <p className="text-xs font-medium text-[#5A6B7A]">Live Analysis</p>
                       {frameResults.slice(-3).map(fr => (
-                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-xs text-gray-600">
-                          <span className="text-gray-400">Frame {(fr.frameIndex ?? 0) + 1}:</span>{' '}
+                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-xs text-[#5A6B7A]">
+                          <span className="text-[#8A9BA8]">Frame {(fr.frameIndex ?? 0) + 1}:</span>{' '}
                           {fr.analysis.length > 100 ? fr.analysis.slice(0, 100) + '...' : fr.analysis}
                         </div>
                       ))}
@@ -437,12 +437,12 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {!isRecording && !sessionSummary && !summaryLoading && (
                 <div className="bg-gradient-to-b from-violet-50 to-white rounded-xl border border-violet-100 p-8 text-center">
                   <Video className="w-12 h-12 text-violet-500 mx-auto mb-3" />
-                  <h3 className="font-semibold text-gray-900 mb-1">Video Observation</h3>
-                  <p className="text-sm text-gray-500 mb-2">
+                  <h3 className="font-semibold text-[#1B2733] mb-1">Video Observation</h3>
+                  <p className="text-sm text-[#5A6B7A] mb-2">
                     Record your child's activity for AI behavioral analysis.
                     Captures 1 frame every 3 seconds.
                   </p>
-                  <p className="text-xs text-gray-400 mb-6">
+                  <p className="text-xs text-[#8A9BA8] mb-6">
                     {tier === 'pro' ? '10 frames per session (Pro)' :
                      tier === 'pro_plus' ? '20 frames per session (Pro+)' :
                      tier === 'b2b' ? `${maxFrames} frames per session (Organization)` :
@@ -461,8 +461,8 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {summaryLoading && (
                 <div className="text-center py-8">
                   <Loader2 className="w-8 h-8 text-violet-600 animate-spin mx-auto mb-3" />
-                  <p className="font-medium text-gray-900">Generating session summary...</p>
-                  <p className="text-sm text-gray-500">Analyzing {frameResults.length} frames</p>
+                  <p className="font-medium text-[#1B2733]">Generating session summary...</p>
+                  <p className="text-sm text-[#5A6B7A]">Analyzing {frameResults.length} frames</p>
                 </div>
               )}
 
@@ -481,7 +481,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                         {frameResults.length} frames analyzed
                       </span>
                     </div>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">
+                    <div className="text-sm text-[#3A4A57] whitespace-pre-wrap leading-relaxed">
                       {sessionSummary}
                     </div>
                   </div>

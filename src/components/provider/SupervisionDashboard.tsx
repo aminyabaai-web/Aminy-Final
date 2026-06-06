@@ -66,7 +66,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
@@ -104,7 +104,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
       </div>
 
       {/* Tabs */}
-      <div className="flex overflow-x-auto gap-1 px-3 py-2 bg-white border-b border-slate-200 no-scrollbar">
+      <div className="flex overflow-x-auto gap-1 px-3 py-2 bg-white border-b border-[#E8E4DF] no-scrollbar">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -112,7 +112,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               activeTab === tab.id
                 ? 'bg-indigo-100 text-indigo-700'
-                : 'text-slate-500 hover:bg-slate-100'
+                : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
             }`}
           >
             {tab.icon}
@@ -188,7 +188,7 @@ function RosterView({
 }) {
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">RBT Roster ({profiles.length})</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">RBT Roster ({profiles.length})</h2>
       {profiles.map((rbt) => {
         const c = compliance[rbt.id];
         const statusColor = c?.status === 'compliant' ? 'bg-emerald-500' : c?.status === 'at-risk' ? 'bg-amber-500' : 'bg-red-500';
@@ -196,27 +196,27 @@ function RosterView({
           <motion.button
             key={rbt.id}
             onClick={() => onSelectRBT(rbt.id)}
-            className="w-full bg-white rounded-xl p-3 border border-slate-200 text-left"
+            className="w-full bg-white rounded-xl p-3 border border-[#E8E4DF] text-left"
             whileTap={{ scale: 0.98 }}
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-indigo-600" />
+                <User className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm text-slate-800 truncate">{rbt.name}</span>
+                  <span className="font-semibold text-sm text-[#1B2733] truncate">{rbt.name}</span>
                   <span className={`w-2 h-2 rounded-full ${statusColor}`} />
                 </div>
-                <div className="text-xs text-slate-500">{rbt.rbtNumber}</div>
+                <div className="text-xs text-[#5A6B7A]">{rbt.rbtNumber}</div>
               </div>
               <div className="text-right">
-                <div className="text-sm font-semibold text-slate-700">{c?.compliancePercent.toFixed(1)}%</div>
+                <div className="text-sm font-semibold text-[#3A4A57]">{c?.compliancePercent.toFixed(1)}%</div>
                 <div className="text-[10px] text-slate-400">supervision</div>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-2 flex gap-3 text-[10px] text-slate-500">
+            <div className="mt-2 flex gap-3 text-[10px] text-[#5A6B7A]">
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{c?.directServiceHours}h direct</span>
               <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{c?.directObservationCount} obs</span>
               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{c?.individualSessionCount}i / {c?.groupSessionCount}g</span>
@@ -241,7 +241,7 @@ function ComplianceView({
 }) {
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">Compliance Tracker — {month}</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Compliance Tracker — {month}</h2>
       {profiles.map((rbt) => {
         const c = compliance[rbt.id];
         if (!c) return null;
@@ -250,44 +250,44 @@ function ComplianceView({
         const barColor = c.compliancePercent >= 5 ? 'bg-emerald-500' : c.compliancePercent >= 3 ? 'bg-amber-500' : 'bg-red-500';
 
         return (
-          <div key={rbt.id} className="bg-white rounded-xl p-3 border border-slate-200">
+          <div key={rbt.id} className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-sm text-slate-800">{rbt.name}</span>
+              <span className="font-semibold text-sm text-[#1B2733]">{rbt.name}</span>
               <span className={`text-sm font-bold ${pctColor}`}>{c.compliancePercent.toFixed(1)}%</span>
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
+            <div className="w-full h-2 bg-[#F0EDE8] rounded-full mb-3 overflow-hidden">
               <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: `${barWidth}%` }} />
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">Direct hours</span>
-                <span className="font-medium text-slate-700">{c.directServiceHours}h</span>
+                <span className="text-[#5A6B7A]">Direct hours</span>
+                <span className="font-medium text-[#3A4A57]">{c.directServiceHours}h</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Supervision</span>
-                <span className="font-medium text-slate-700">{c.supervisionHoursReceived}h</span>
+                <span className="text-[#5A6B7A]">Supervision</span>
+                <span className="font-medium text-[#3A4A57]">{c.supervisionHoursReceived}h</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Individual</span>
+                <span className="text-[#5A6B7A]">Individual</span>
                 <span className={`font-medium ${c.individualSessionCount >= 1 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {c.individualSessionCount} {c.individualSessionCount >= 1 ? <CheckCircle2 className="w-3 h-3 inline" /> : '(need 1)'}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Group</span>
-                <span className="font-medium text-slate-700">{c.groupSessionCount}</span>
+                <span className="text-[#5A6B7A]">Group</span>
+                <span className="font-medium text-[#3A4A57]">{c.groupSessionCount}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Observation</span>
+                <span className="text-[#5A6B7A]">Observation</span>
                 <span className={`font-medium ${c.directObservationCount >= 1 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {c.directObservationCount >= 1 ? 'Yes' : 'No'}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Contacts</span>
+                <span className="text-[#5A6B7A]">Contacts</span>
                 <span className={`font-medium ${(c.individualSessionCount + c.groupSessionCount) >= 2 ? 'text-emerald-600' : 'text-red-600'}`}>
                   {c.individualSessionCount + c.groupSessionCount}/2
                 </span>
@@ -335,7 +335,7 @@ function CalendarView({
 
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">
+      <h2 className="text-sm font-semibold text-[#3A4A57]">
         {new Date(year, mo).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
       </h2>
 
@@ -356,7 +356,7 @@ function CalendarView({
             >
               {day && (
                 <>
-                  <span className={`${isToday ? 'font-bold text-indigo-700' : 'text-slate-600'}`}>{day}</span>
+                  <span className={`${isToday ? 'font-bold text-indigo-700' : 'text-[#5A6B7A]'}`}>{day}</span>
                   {daySessions && daySessions.length > 0 && (
                     <div className="flex gap-0.5 mt-0.5">
                       {daySessions.map((s, j) => (
@@ -378,26 +378,26 @@ function CalendarView({
 
       {/* Session list */}
       <div className="space-y-2 mt-4">
-        <h3 className="text-xs font-semibold text-slate-500 uppercase">Sessions This Month</h3>
+        <h3 className="text-xs font-semibold text-[#5A6B7A] uppercase">Sessions This Month</h3>
         {monthSessions.length === 0 && (
           <p className="text-xs text-slate-400 text-center py-4">No sessions logged yet</p>
         )}
         {monthSessions
           .sort((a, b) => a.date.localeCompare(b.date))
           .map((s) => (
-            <div key={s.id} className="bg-white rounded-lg p-3 border border-slate-200 flex items-center gap-3">
+            <div key={s.id} className="bg-white rounded-lg p-3 border border-[#E8E4DF] flex items-center gap-3">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                 s.type === 'individual' ? 'bg-indigo-100' : 'bg-purple-100'
               }`}>
                 {s.type === 'individual' ? (
-                  <User className="w-4 h-4 text-indigo-600" />
+                  <User className="w-4 h-4 text-[#6B9080]" />
                 ) : (
                   <Users className="w-4 h-4 text-purple-600" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-slate-800">{nameMap[s.rbtId] ?? 'Unknown'}</div>
-                <div className="text-[10px] text-slate-500">
+                <div className="text-sm font-medium text-[#1B2733]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
+                <div className="text-[10px] text-[#5A6B7A]">
                   {s.date} &middot; {s.durationMinutes}min &middot; {s.type}
                   {s.includesDirectObservation && ' + observation'}
                 </div>
@@ -406,7 +406,7 @@ function CalendarView({
                 s.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
                 s.status === 'pending-signatures' ? 'bg-amber-100 text-amber-700' :
                 s.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
-                'bg-slate-100 text-slate-500'
+                'bg-[#F0EDE8] text-[#5A6B7A]'
               }`}>
                 {s.status === 'pending-signatures' ? 'Pending Sig' : s.status}
               </span>
@@ -415,7 +415,7 @@ function CalendarView({
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 justify-center text-[10px] text-slate-500 mt-2">
+      <div className="flex gap-4 justify-center text-[10px] text-[#5A6B7A] mt-2">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" />Individual</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" />Group</span>
       </div>
@@ -451,8 +451,8 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
 
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">Competency Heatmap</h2>
-      <p className="text-xs text-slate-500">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Competency Heatmap</h2>
+      <p className="text-xs text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
 
       {/* Legend */}
       <div className="flex gap-1 text-[10px]">
@@ -469,7 +469,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
           <div className="flex gap-0.5 mb-1">
             <div className="w-28 shrink-0" />
             {profiles.map((p) => (
-              <div key={p.id} className="flex-1 text-center text-[10px] font-medium text-slate-600 truncate px-0.5">
+              <div key={p.id} className="flex-1 text-center text-[10px] font-medium text-[#5A6B7A] truncate px-0.5">
                 {p.name.split(' ')[0]}
               </div>
             ))}
@@ -478,7 +478,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
           {/* Task list rows */}
           {BACB_TASK_LIST_AREAS.map((area) => (
             <div key={area.id} className="flex gap-0.5 mb-0.5">
-              <div className="w-28 shrink-0 text-[9px] text-slate-600 truncate pr-1 leading-5" title={area.name}>
+              <div className="w-28 shrink-0 text-[9px] text-[#5A6B7A] truncate pr-1 leading-5" title={area.name}>
                 {area.id}. {area.name.length > 22 ? area.name.slice(0, 22) + '...' : area.name}
               </div>
               {profiles.map((p) => {
@@ -487,7 +487,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
                   <div
                     key={p.id}
                     className={`flex-1 text-center text-[10px] font-medium rounded leading-5 ${
-                      rating ? ratingColor(rating) : 'bg-slate-100 text-slate-400'
+                      rating ? ratingColor(rating) : 'bg-[#F0EDE8] text-slate-400'
                     }`}
                   >
                     {rating ?? '-'}
@@ -512,11 +512,11 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
 
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">Compliance Alerts</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Compliance Alerts</h2>
       {sorted.length === 0 && (
         <div className="text-center py-8">
           <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-          <p className="text-sm text-slate-600 font-medium">All clear</p>
+          <p className="text-sm text-[#5A6B7A] font-medium">All clear</p>
           <p className="text-xs text-slate-400">No compliance risks detected</p>
         </div>
       )}
@@ -538,14 +538,14 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
             }`} />
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-slate-800">{risk.rbtName}</span>
+                <span className="text-sm font-semibold text-[#1B2733]">{risk.rbtName}</span>
                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                   risk.severity === 'critical' ? 'bg-red-200 text-red-800' : 'bg-amber-200 text-amber-800'
                 }`}>
                   {risk.severity}
                 </span>
               </div>
-              <p className="text-xs text-slate-600 mt-0.5">{risk.message}</p>
+              <p className="text-xs text-[#5A6B7A] mt-0.5">{risk.message}</p>
               {risk.daysRemaining !== undefined && (
                 <p className="text-[10px] text-slate-400 mt-1">
                   {risk.daysRemaining} days remaining
@@ -622,14 +622,14 @@ function QuickLogModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-slate-800">Log Supervision Session</h3>
+          <h3 className="text-lg font-bold text-[#1B2733]">Log Supervision Session</h3>
           <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 
         <div className="space-y-3">
           {/* RBT Select */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">RBT</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">RBT</label>
             <select
               value={rbtId}
               onChange={(e) => setRbtId(e.target.value)}
@@ -643,7 +643,7 @@ function QuickLogModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Date</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input
               type="date"
               value={date}
@@ -654,7 +654,7 @@ function QuickLogModal({
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Duration (minutes)</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Duration (minutes)</label>
             <input
               type="number"
               value={duration}
@@ -667,7 +667,7 @@ function QuickLogModal({
 
           {/* Type */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Type</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Type</label>
             <div className="flex gap-2">
               {(['individual', 'group'] as const).map((t) => (
                 <button
@@ -675,8 +675,8 @@ function QuickLogModal({
                   onClick={() => setType(t)}
                   className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     type === t
-                      ? 'bg-indigo-600 text-white border-indigo-600'
-                      : 'bg-white text-slate-600 border-slate-300'
+                      ? 'bg-[#6B9080] text-white border-indigo-600'
+                      : 'bg-white text-[#5A6B7A] border-slate-300'
                   }`}
                 >
                   {t.charAt(0).toUpperCase() + t.slice(1)}
@@ -691,14 +691,14 @@ function QuickLogModal({
               type="checkbox"
               checked={observation}
               onChange={(e) => setObservation(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-300 text-indigo-600"
+              className="w-4 h-4 rounded border-slate-300 text-[#6B9080]"
             />
-            <span className="text-sm text-slate-700">Includes direct observation</span>
+            <span className="text-sm text-[#3A4A57]">Includes direct observation</span>
           </label>
 
           {/* Topics */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">Topics (comma-separated)</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Topics (comma-separated)</label>
             <input
               type="text"
               value={topics}
@@ -710,7 +710,7 @@ function QuickLogModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-slate-600 mb-1 block">BCBA Notes</label>
+            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">BCBA Notes</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -721,7 +721,7 @@ function QuickLogModal({
 
           <button
             onClick={handleSave}
-            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold text-sm mt-2"
+            className="w-full bg-[#6B9080] text-white py-3 rounded-xl font-semibold text-sm mt-2"
           >
             Log Session
           </button>

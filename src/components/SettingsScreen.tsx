@@ -598,7 +598,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
   return (
     <div className="min-h-screen min-h-[100dvh] bg-background dark:bg-slate-900" style={{ paddingBottom: 'max(96px, calc(env(safe-area-inset-bottom, 0px) + 80px))' }}>
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -637,7 +637,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 onClick={() => setActiveSection(isActive ? null : item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-[#6B9080]/10 dark:bg-teal-900/20 text-[#6B9080] dark:text-[#7BA7BC]'
+                    ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-[#7BA7BC]'
                     : 'text-foreground dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
@@ -694,7 +694,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   className={`relative flex flex-col gap-1 p-3 rounded-xl border-2 text-left transition-all ${
                     isActive
                       ? 'border-[#43AA8B] bg-[#43AA8B]/5'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                      : 'border-[#E8E4DF] dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
                   {isActive && (
@@ -710,7 +710,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             })}
           </div>
           {selectedPersonality && (
-            <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 text-center">
+            <p className="mt-3 text-xs text-[#5A6B7A] dark:text-slate-400 text-center">
               {AI_PERSONALITIES[selectedPersonality].description}
             </p>
           )}
@@ -850,7 +850,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
           {/* Manage Subscription deep-link — paying users only */}
           {subscription.tier !== 'free' && (
-            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700 flex flex-col gap-2">
+            <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-slate-700 flex flex-col gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -902,7 +902,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               View Rewards
             </button>
           </div>
-          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-slate-700">
+          <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
             <p className="text-sm text-muted-foreground">
               Refer a family and earn rewards when they join. Every family you help builds a stronger community.
             </p>
@@ -938,7 +938,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="border-t border-gray-200 dark:border-slate-700"
+                className="border-t border-[#E8E4DF] dark:border-slate-700"
               >
                 <div className="p-4 space-y-4">
                   {/* Push Notifications */}
@@ -1006,7 +1006,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   <CalendarConnectionCard />
 
                   {/* AI Check-ins Schedule */}
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden">
+                  <div className="rounded-2xl border border-[#E8E4DF] overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-3 bg-[#F5F2EC]">
                       <div className="flex items-center gap-3">
                         <div
@@ -1016,7 +1016,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           <span className="text-base">✦</span>
                         </div>
                         <div>
-                          <p className="font-medium text-slate-900 text-sm">AI Check-ins</p>
+                          <p className="font-medium text-[#1B2733] text-sm">AI Check-ins</p>
                           <p className="text-xs text-muted-foreground">Proactive insights from Aminy</p>
                         </div>
                       </div>
@@ -1038,7 +1038,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     </div>
 
                     {notifications.checkInFrequency !== 'off' && (
-                      <div className="px-4 py-3 space-y-3 border-t border-slate-100 bg-white">
+                      <div className="px-4 py-3 space-y-3 border-t border-[#E8E4DF] bg-white">
                         {/* Frequency chips */}
                         <div>
                           <p className="text-xs font-medium text-muted-foreground mb-2">Frequency</p>
@@ -1060,7 +1060,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                                   notifications.checkInFrequency === opt.id
                                     ? 'text-white shadow-sm'
-                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                                 }`}
                                 style={notifications.checkInFrequency === opt.id ? {
                                   background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)'
@@ -1209,7 +1209,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="border-t border-gray-200 dark:border-slate-700"
+                className="border-t border-[#E8E4DF] dark:border-slate-700"
               >
                 <div className="p-4 space-y-4">
                   {/* Change Password */}
@@ -1293,7 +1293,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="border-t border-gray-200 dark:border-slate-700"
+                className="border-t border-[#E8E4DF] dark:border-slate-700"
               >
                 <div className="p-4 space-y-4">
                   {!calendarConnected ? (
@@ -1426,7 +1426,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="border-t border-gray-200 dark:border-slate-700"
+                className="border-t border-[#E8E4DF] dark:border-slate-700"
               >
                 <div className="p-4 space-y-4">
                   {/* Insurance Info */}

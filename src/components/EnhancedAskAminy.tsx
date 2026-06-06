@@ -638,7 +638,7 @@ export function EnhancedAskAminy({
         "flex flex-col overflow-hidden"
       )}>
         {/* Enhanced Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF] dark:border-gray-700 bg-white dark:bg-gray-900">
           <div className="flex items-center gap-3">
             <div className={cn(
               "w-10 h-10 bg-gradient-to-br from-accent/20 to-accent/10 rounded-xl flex items-center justify-center transition-all duration-300",
@@ -648,7 +648,7 @@ export function EnhancedAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Aminy</h3>
+                <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Powered by AI
@@ -661,7 +661,7 @@ export function EnhancedAskAminy({
                 )}
               </div>
               {!isMinimized && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 aminy-ai-subtitle">
+                <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] aminy-ai-subtitle">
                   {conversationTitle || `Your AI guide for ${userData.childName}'s development and care`}
                 </p>
               )}
@@ -713,10 +713,10 @@ export function EnhancedAskAminy({
                       <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Sparkles className="w-8 h-8 text-accent" />
                       </div>
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">
                         How can I help with {userData.childName} today?
                       </h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto">
+                      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 sm:mb-6 max-w-md mx-auto">
                         Ask me anything about development, routines, behaviors, school support, or concerns you have.
                       </p>
                       
@@ -755,14 +755,14 @@ export function EnhancedAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-[#F0EDE8] dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700"
+                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#1B2733] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Enhanced Message Header */}
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={cn(
                                 "text-xs opacity-60",
-                                message.role === 'user' ? "text-white/80" : "text-gray-500 dark:text-gray-400"
+                                message.role === 'user' ? "text-white/80" : "text-[#5A6B7A] dark:text-[#8A9BA8]"
                               )}>
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
@@ -791,7 +791,7 @@ export function EnhancedAskAminy({
                                   "h-6 w-6 p-0",
                                   message.role === 'user' 
                                     ? "hover:bg-white/20 text-white/80" 
-                                    : "hover:bg-[#E8E4DF] dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
+                                    : "hover:bg-[#E8E4DF] dark:hover:bg-gray-700 text-[#5A6B7A] dark:text-[#8A9BA8]"
                                 )}
                                 title="Copy message"
                               >
@@ -833,7 +833,7 @@ export function EnhancedAskAminy({
 
                           {/* Share Button - Only for assistant messages that aren't streaming */}
                           {message.role === 'assistant' && !message.isStreaming && (
-                            <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                            <div className="mt-2 pt-2 border-t border-[#E8E4DF] dark:border-gray-700">
                               <ShareInsightInline
                                 insight={message.content}
                                 childName={userData.childName}
@@ -847,8 +847,8 @@ export function EnhancedAskAminy({
 
                           {/* Follow-up Suggestions */}
                           {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Continue the conversation:</p>
+                            <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-gray-600">
+                              <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
                               <div className="flex flex-wrap gap-2">
                                 {message.suggestions.map((suggestion, suggestionIndex) => (
                                   <Button
@@ -875,7 +875,7 @@ export function EnhancedAskAminy({
             </div>
 
             {/* Enhanced Input Area */}
-            <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+            <div className="border-t border-[#E8E4DF] dark:border-gray-700 bg-white dark:bg-gray-900">
               <div className="p-3 sm:p-4">
                 <div className="flex items-end gap-3">
                   <div className="flex-1 relative">
@@ -886,7 +886,7 @@ export function EnhancedAskAminy({
                       onKeyPress={handleKeyPress}
                       placeholder={`Ask me anything about ${userData.childName}...`}
                       aria-label={`Message Aminy about ${userData.childName}`}
-                      className="w-full resize-none rounded-xl border border-gray-200 dark:border-gray-700 bg-[#FAF7F2] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
+                      className="w-full resize-none rounded-xl border border-[#E8E4DF] dark:border-gray-700 bg-[#FAF7F2] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
                       style={{ minHeight: '48px', maxHeight: '120px' }}
                       disabled={isTyping || isStreaming || !canSendMessage}
                     />
@@ -944,7 +944,7 @@ export function EnhancedAskAminy({
                     </Button>
                   </div>
                 ) : (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center aminy-ai-helper-text">
+                  <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-2 text-center aminy-ai-helper-text">
                     Ask about routines, behaviors, communication, school, or any concerns
                     {messagesRemaining !== Infinity && messagesRemaining < 10 && (
                       <span className="ml-1 text-amber-600">

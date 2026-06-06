@@ -359,9 +359,9 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
           className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Go back"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-600" />
+          <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
         </button>
-        <h2 className="text-lg font-semibold text-gray-800">
+        <h2 className="text-lg font-semibold text-[#1B2733]">
           {childName}&apos;s Words
         </h2>
         <button
@@ -369,19 +369,19 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
           className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Settings"
         >
-          <Settings className="w-5 h-5 text-gray-600" />
+          <Settings className="w-5 h-5 text-[#5A6B7A]" />
         </button>
       </div>
 
       {/* ---- Sentence Strip ---- */}
-      <div className="bg-white border-b-2 border-gray-200 px-3 py-2 flex-shrink-0">
+      <div className="bg-white border-b-2 border-[#E8E4DF] px-3 py-2 flex-shrink-0">
         <div className="flex items-center gap-2">
           <div
             ref={sentenceStripRef}
             className="flex-1 flex items-center gap-2 overflow-x-auto py-1 min-h-[56px] aac-sentence-strip"
           >
             {sentenceStrip.length === 0 ? (
-              <p className="text-gray-400 text-sm italic pl-2">
+              <p className="text-[#8A9BA8] text-sm italic pl-2">
                 Tap symbols to build a sentence
               </p>
             ) : (
@@ -408,7 +408,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   className="w-10 h-10 rounded-full bg-[#E8E4DF] flex items-center justify-center"
                   aria-label="Remove last word"
                 >
-                  <ArrowLeft className="w-4 h-4 text-gray-600" />
+                  <ArrowLeft className="w-4 h-4 text-[#5A6B7A]" />
                 </button>
                 <button
                   onClick={handleClearSentence}
@@ -431,7 +431,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
             >
               <Volume2
                 className={`w-5 h-5 ${
-                  sentenceStrip.length > 0 ? 'text-white' : 'text-gray-400'
+                  sentenceStrip.length > 0 ? 'text-white' : 'text-[#8A9BA8]'
                 }`}
               />
             </button>
@@ -440,7 +440,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
       </div>
 
       {/* ---- Category Tabs ---- */}
-      <div className="bg-white border-b border-gray-200 flex-shrink-0">
+      <div className="bg-white border-b border-[#E8E4DF] flex-shrink-0">
         <div className="flex overflow-x-auto px-2 py-2 gap-1 aac-category-tabs">
           {/* Favorites tab */}
           <button
@@ -448,7 +448,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
             className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'favorites'
                 ? 'bg-yellow-400 text-white'
-                : 'bg-[#F0EDE8] text-gray-600'
+                : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             <Star className="w-4 h-4" />
@@ -463,7 +463,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeCategory === cat
                     ? `${meta.bgClass} text-white`
-                    : 'bg-[#F0EDE8] text-gray-600'
+                    : 'bg-[#F0EDE8] text-[#5A6B7A]'
                 }`}
               >
                 <span>{meta.emoji}</span>
@@ -476,11 +476,11 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
 
       {/* ---- Settings Panel (collapsible) ---- */}
       {showSettings && (
-        <div className="bg-white border-b border-gray-200 px-4 py-3 flex-shrink-0">
+        <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Grid3X3 className="w-4 h-4 text-gray-500" />
-              <span className="text-sm text-gray-700">Grid Size</span>
+              <Grid3X3 className="w-4 h-4 text-[#5A6B7A]" />
+              <span className="text-sm text-[#3A4A57]">Grid Size</span>
               <div className="flex gap-1">
                 {([3, 4, 5, 6] as GridSize[]).map((size) => (
                   <button
@@ -489,7 +489,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                     className={`w-8 h-8 rounded-lg text-sm font-medium ${
                       gridSize === size
                         ? 'bg-blue-500 text-white'
-                        : 'bg-[#F0EDE8] text-gray-600'
+                        : 'bg-[#F0EDE8] text-[#5A6B7A]'
                     }`}
                   >
                     {size}
@@ -514,17 +514,17 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
           <div className="flex flex-col items-center justify-center h-full text-center px-6">
             {activeCategory === 'favorites' ? (
               <>
-                <Heart className="w-12 h-12 text-gray-400 mb-3" />
-                <p className="text-gray-500 text-sm">
+                <Heart className="w-12 h-12 text-[#8A9BA8] mb-3" />
+                <p className="text-[#5A6B7A] text-sm">
                   No favorite words yet.
                 </p>
-                <p className="text-gray-400 text-xs mt-1">
+                <p className="text-[#8A9BA8] text-xs mt-1">
                   Long-press any symbol to add it to My Words
                 </p>
               </>
             ) : (
               <>
-                <p className="text-gray-500 text-sm">No symbols in this category.</p>
+                <p className="text-[#5A6B7A] text-sm">No symbols in this category.</p>
                 <button
                   onClick={() => {
                     setShowSettings(true);
@@ -577,7 +577,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       {symbol.emoji}
                     </span>
                   )}
-                  <span className="text-xs font-semibold text-gray-800 mt-1 leading-tight text-center truncate w-full">
+                  <span className="text-xs font-semibold text-[#1B2733] mt-1 leading-tight text-center truncate w-full">
                     {symbol.label}
                   </span>
                 </button>
@@ -605,7 +605,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   <div className="flex flex-col items-center mb-4">
                     <span className="text-5xl mb-2">{sym.emoji}</span>
                     <h3 className="text-lg font-semibold">{sym.label}</h3>
-                    <p className="text-sm text-gray-500">{sym.phrase}</p>
+                    <p className="text-sm text-[#5A6B7A]">{sym.phrase}</p>
                   </div>
                   <button
                     onClick={() => toggleFavorite(sym.id)}
@@ -626,7 +626,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   </button>
                   <button
                     onClick={() => setLongPressId(null)}
-                    className="w-full py-2 text-gray-500 text-sm"
+                    className="w-full py-2 text-[#5A6B7A] text-sm"
                   >
                     Cancel
                   </button>
@@ -659,7 +659,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
 
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">
                   Emoji / Icon
                 </label>
                 <input
@@ -667,12 +667,12 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   value={customEmoji}
                   onChange={(e) => setCustomEmoji(e.target.value)}
                   placeholder="Paste an emoji (e.g. 🎈)"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl text-center text-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl text-center text-2xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                   maxLength={4}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">
                   Label (shown on card)
                 </label>
                 <input
@@ -680,12 +680,12 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   value={customLabel}
                   onChange={(e) => setCustomLabel(e.target.value)}
                   placeholder="e.g. Grandma"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                   maxLength={20}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">
                   Speak Phrase
                 </label>
                 <input
@@ -693,12 +693,12 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   value={customPhrase}
                   onChange={(e) => setCustomPhrase(e.target.value)}
                   placeholder="e.g. I want to see Grandma"
-                  className="w-full px-3 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-3 py-2.5 border border-[#E8E4DF] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
                   maxLength={80}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1">
+                <label className="text-sm font-medium text-[#3A4A57] block mb-1">
                   Category
                 </label>
                 <div className="grid grid-cols-2 gap-1.5">
@@ -711,7 +711,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                         className={`px-2 py-1.5 rounded-lg text-xs font-medium ${
                           customCategory === cat
                             ? `${meta.bgClass} text-white`
-                            : 'bg-[#F0EDE8] text-gray-600'
+                            : 'bg-[#F0EDE8] text-[#5A6B7A]'
                         }`}
                       >
                         {meta.emoji} {meta.label}

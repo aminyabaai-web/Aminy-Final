@@ -59,7 +59,7 @@ function formatNumber(value: number): string {
 function getChangeColor(value: number): string {
   if (value > 0) return 'text-green-600';
   if (value < 0) return 'text-red-600';
-  return 'text-gray-500';
+  return 'text-[#5A6B7A]';
 }
 
 function getRetentionColor(value: number): string {
@@ -90,13 +90,13 @@ function MetricCard({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-500">{title}</span>
+        <span className="text-sm font-medium text-[#5A6B7A]">{title}</span>
         {icon}
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold text-gray-900">{value}</span>
+        <span className="text-3xl font-bold text-[#1B2733]">{value}</span>
         {change !== undefined && (
           <span className={`text-sm font-medium ${getChangeColor(change)}`}>
             {formatPercent(change)}
@@ -104,7 +104,7 @@ function MetricCard({
         )}
       </div>
       {(changeLabel || subtitle) && (
-        <p className="text-sm text-gray-500 mt-1">
+        <p className="text-sm text-[#5A6B7A] mt-1">
           {changeLabel || subtitle}
         </p>
       )}
@@ -116,8 +116,8 @@ function MRRChart({ data }: { data: { month: string; mrr: number }[] }) {
   const maxMRR = Math.max(...data.map(d => d.mrr), 1);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">MRR Trend</h3>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm">
+      <h3 className="text-lg font-semibold text-[#1B2733] mb-4">MRR Trend</h3>
       <div className="flex items-end gap-2 h-48">
         {data.map((d, i) => (
           <div key={d.month} className="flex-1 flex flex-col items-center">
@@ -125,7 +125,7 @@ function MRRChart({ data }: { data: { month: string; mrr: number }[] }) {
               className="w-full bg-indigo-500 rounded-t transition-all duration-300"
               style={{ height: `${(d.mrr / maxMRR) * 100}%`, minHeight: d.mrr > 0 ? 4 : 0 }}
             />
-            <span className="text-xs text-gray-500 mt-2">{d.month}</span>
+            <span className="text-xs text-[#5A6B7A] mt-2">{d.month}</span>
           </div>
         ))}
       </div>
@@ -148,22 +148,22 @@ function MRRBreakdown({
   ];
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">MRR Breakdown</h3>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm">
+      <h3 className="text-lg font-semibold text-[#1B2733] mb-4">MRR Breakdown</h3>
       <div className="space-y-3">
         {items.map(item => (
           <div key={item.label} className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className={`w-3 h-3 rounded-full ${item.color}`} />
-              <span className="text-sm text-gray-600">{item.label}</span>
+              <span className="text-sm text-[#5A6B7A]">{item.label}</span>
             </div>
-            <span className={`text-sm font-medium ${item.value >= 0 ? 'text-gray-900' : 'text-red-600'}`}>
+            <span className={`text-sm font-medium ${item.value >= 0 ? 'text-[#1B2733]' : 'text-red-600'}`}>
               {item.value >= 0 ? '+' : ''}{formatCurrency(item.value)}
             </span>
           </div>
         ))}
         <div className="border-t pt-3 flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-900">Net New MRR</span>
+          <span className="text-sm font-medium text-[#1B2733]">Net New MRR</span>
           <span className={`text-lg font-bold ${(netNewMRR || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {(netNewMRR || 0) >= 0 ? '+' : ''}{formatCurrency(netNewMRR || 0)}
           </span>
@@ -181,15 +181,15 @@ function CohortTable({ cohorts }: { cohorts: CohortData[] }) {
   const maxMonths = Math.max(...cohorts.map(c => c.retained.length));
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm overflow-x-auto">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Cohort Retention</h3>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm overflow-x-auto">
+      <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Cohort Retention</h3>
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b">
-            <th className="text-left py-2 px-2 font-medium text-gray-500">Cohort</th>
-            <th className="text-center py-2 px-2 font-medium text-gray-500">Size</th>
+            <th className="text-left py-2 px-2 font-medium text-[#5A6B7A]">Cohort</th>
+            <th className="text-center py-2 px-2 font-medium text-[#5A6B7A]">Size</th>
             {Array.from({ length: maxMonths }).map((_, i) => (
-              <th key={i} className="text-center py-2 px-2 font-medium text-gray-500">
+              <th key={i} className="text-center py-2 px-2 font-medium text-[#5A6B7A]">
                 M{i}
               </th>
             ))}
@@ -198,8 +198,8 @@ function CohortTable({ cohorts }: { cohorts: CohortData[] }) {
         <tbody>
           {cohorts.map(cohort => (
             <tr key={cohort.cohort} className="border-b last:border-b-0">
-              <td className="py-2 px-2 font-medium text-gray-900">{cohort.cohort}</td>
-              <td className="text-center py-2 px-2 text-gray-600">{cohort.size}</td>
+              <td className="py-2 px-2 font-medium text-[#1B2733]">{cohort.cohort}</td>
+              <td className="text-center py-2 px-2 text-[#5A6B7A]">{cohort.size}</td>
               {cohort.retained.map((retention, i) => (
                 <td key={i} className="text-center py-1 px-1">
                   <div
@@ -211,7 +211,7 @@ function CohortTable({ cohorts }: { cohorts: CohortData[] }) {
               ))}
               {Array.from({ length: maxMonths - cohort.retained.length }).map((_, i) => (
                 <td key={`empty-${i}`} className="text-center py-1 px-1">
-                  <span className="text-gray-400">-</span>
+                  <span className="text-[#8A9BA8]">-</span>
                 </td>
               ))}
             </tr>
@@ -236,19 +236,19 @@ function PlanBreakdown({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue by Plan</h3>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm">
+      <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Revenue by Plan</h3>
       <div className="space-y-4">
         {plans.map(([plan, data]) => (
           <div key={plan}>
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${colors[plan] || 'bg-gray-400'}`} />
-                <span className="text-sm font-medium text-gray-700 capitalize">{plan}</span>
+                <span className="text-sm font-medium text-[#3A4A57] capitalize">{plan}</span>
               </div>
               <div className="text-right">
-                <span className="text-sm font-semibold text-gray-900">{formatCurrency(data.mrr)}</span>
-                <span className="text-xs text-gray-500 ml-2">({data.count} customers)</span>
+                <span className="text-sm font-semibold text-[#1B2733]">{formatCurrency(data.mrr)}</span>
+                <span className="text-xs text-[#5A6B7A] ml-2">({data.count} customers)</span>
               </div>
             </div>
             <div className="w-full bg-[#F0EDE8] rounded-full h-2">
@@ -289,20 +289,20 @@ function RecentActivity({ events }: { events: RevenueEvent[] }) {
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 shadow-sm">
+      <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Recent Activity</h3>
       <div className="space-y-3 max-h-80 overflow-y-auto">
         {events.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">No recent activity</p>
+          <p className="text-sm text-[#5A6B7A] text-center py-4">No recent activity</p>
         ) : (
           events.slice(0, 10).map(event => (
             <div key={event.id} className="flex items-center gap-3 py-2 border-b last:border-b-0">
               <span className="text-xl">{getEventIcon(event.type)}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">
+                <p className="text-sm font-medium text-[#1B2733] truncate">
                   {formatEventType(event.type)}
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#5A6B7A]">
                   {event.createdAt.toLocaleDateString()} at{' '}
                   {event.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
@@ -348,17 +348,17 @@ function VCMetricsCard({
   ];
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-200 p-6 shadow-sm">
+    <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-[#6B9080]/20 p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <span className="text-2xl">📊</span>
-        <h3 className="text-lg font-semibold text-gray-900">VC Metrics</h3>
+        <h3 className="text-lg font-semibold text-[#1B2733]">VC Metrics</h3>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {metrics.map(metric => (
           <div key={metric.label} className="bg-white/80 rounded-lg p-3">
-            <p className="text-xs text-gray-500 mb-1">{metric.label}</p>
-            <p className="text-lg font-bold text-gray-900">{metric.value}</p>
-            <p className={`text-xs ${metric.good !== undefined ? (metric.good ? 'text-green-600' : 'text-orange-600') : 'text-gray-400'}`}>
+            <p className="text-xs text-[#5A6B7A] mb-1">{metric.label}</p>
+            <p className="text-lg font-bold text-[#1B2733]">{metric.value}</p>
+            <p className={`text-xs ${metric.good !== undefined ? (metric.good ? 'text-green-600' : 'text-orange-600') : 'text-[#8A9BA8]'}`}>
               Target: {metric.target}
             </p>
           </div>
@@ -477,14 +477,14 @@ export function MRRDashboard({
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Revenue Dashboard</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-2xl font-bold text-[#1B2733]">Revenue Dashboard</h2>
+          <p className="text-sm text-[#5A6B7A]">
             Last updated: {lastUpdated.toLocaleTimeString()}
           </p>
         </div>
         <button
           onClick={loadData}
-          className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
+          className="px-4 py-2 text-sm font-medium text-[#6B9080] bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
         >
           Refresh
         </button>

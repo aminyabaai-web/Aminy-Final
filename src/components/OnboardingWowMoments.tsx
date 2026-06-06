@@ -268,7 +268,7 @@ export function ResourcesTeaser({
       animate={{ opacity: 1, y: 0 }}
       className="mt-4"
     >
-      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-[#C8DDE8]">
         <div className="flex items-start gap-3">
           <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
             <Gift className="w-5 h-5 text-blue-600" />
@@ -329,7 +329,7 @@ export function PlanGenerationProgress({
               className="w-5 h-5 border-2 border-accent border-t-transparent rounded-full"
             />
           ) : (
-            <div className="w-5 h-5 rounded-full border-2 border-gray-200" />
+            <div className="w-5 h-5 rounded-full border-2 border-[#E8E4DF]" />
           )}
           <span className={cn(
             "text-sm",

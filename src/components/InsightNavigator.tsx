@@ -150,10 +150,10 @@ export function InsightNavigator({
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'behavior': return 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/30';
-      case 'communication': return 'text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/30';
+      case 'communication': return 'text-blue-600 bg-[#EEF4F8] dark:text-blue-400 dark:bg-blue-900/30';
       case 'social': return 'text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/30';
       case 'sensory': return 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-900/30';
-      default: return 'text-slate-600 bg-slate-50 dark:text-slate-400 dark:bg-slate-700';
+      default: return 'text-[#5A6B7A] bg-[#FAF7F2] dark:text-slate-400 dark:bg-slate-700';
     }
   };
 
@@ -161,8 +161,8 @@ export function InsightNavigator({
     switch (trend) {
       case 'up': return <TrendingUp className="w-4 h-4 text-green-600" />;
       case 'down': return <TrendingDown className="w-4 h-4 text-green-600" />;
-      case 'stable': return <Clock className="w-4 h-4 text-slate-500" />;
-      default: return <Clock className="w-4 h-4 text-slate-500" />;
+      case 'stable': return <Clock className="w-4 h-4 text-[#5A6B7A]" />;
+      default: return <Clock className="w-4 h-4 text-[#5A6B7A]" />;
     }
   };
 
@@ -232,7 +232,7 @@ export function InsightNavigator({
               size="sm"
               onClick={() => setShowUrgentHelp(true)}
               aria-label="Get urgent help"
-              className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+              className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
             >
               <Bell className="w-4 h-4" />
             </Button>
@@ -241,7 +241,7 @@ export function InsightNavigator({
               size="sm"
               onClick={() => setShowHelpCenter(true)}
               aria-label="Help center"
-              className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+              className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
             >
               <HelpCircle className="w-4 h-4" />
             </Button>
@@ -261,7 +261,7 @@ export function InsightNavigator({
         {hasInsights && (
           <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div className="flex items-center gap-2">
-              <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
+              <Badge variant="secondary" className="bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]">
                 <Sparkles className="w-3 h-3 mr-1" />
                 AI-Powered
               </Badge>
@@ -306,13 +306,13 @@ export function InsightNavigator({
         {!hasInsights && (
           <Card className="mb-4 sm:mb-6">
             <div className="p-8 sm:p-12 text-center">
-              <div className="w-14 h-14 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-14 h-14 bg-[#EEF4F8] dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Brain className="w-7 h-7 text-blue-600 dark:text-blue-400" />
               </div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
                 No insights yet
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
                 As you log behaviors, sessions, and progress for {safeChildName}, trends and
                 personalized recommendations will appear here. Keep tracking to unlock your first insights.
               </p>
@@ -357,10 +357,10 @@ export function InsightNavigator({
                       {getCategoryIcon(insight.category)}
                     </div>
                     <div>
-                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
                         {insight.title}
                       </h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400 capitalize">
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400 capitalize">
                         {insight.category}
                       </p>
                     </div>
@@ -370,7 +370,7 @@ export function InsightNavigator({
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
+                    <span className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100">
                       {insight.value}
                     </span>
                     <Badge 
@@ -385,30 +385,30 @@ export function InsightNavigator({
                     </Badge>
                   </div>
 
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                     {insight.description}
                   </p>
 
-                  <div className="pt-3 border-t border-gray-100 dark:border-slate-700">
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+                  <div className="pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
+                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">
                       Recommendations
                     </h4>
                     <ul className="space-y-1">
                       {insight.recommendations.slice(0, userTier === 'starter' ? 1 : 3).map((rec, i) => (
-                        <li key={i} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
+                        <li key={i} className="text-sm text-[#5A6B7A] dark:text-slate-400 flex items-start gap-2">
                           <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
                           {rec}
                         </li>
                       ))}
                       {userTier === 'starter' && insight.recommendations.length > 1 && (
-                        <li className="text-sm text-slate-400 dark:text-slate-500 italic">
+                        <li className="text-sm text-slate-400 dark:text-[#5A6B7A] italic">
                           +{insight.recommendations.length - 1} more recommendations available in Core/Pro
                         </li>
                       )}
                     </ul>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="flex items-center justify-between pt-3 text-xs text-[#5A6B7A] dark:text-slate-400">
                     <span>Updated {insight.lastUpdated}</span>
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export function InsightNavigator({
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                     Weekly Summary
                   </h2>
                 </div>
@@ -433,19 +433,19 @@ export function InsightNavigator({
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                   <div className="text-center">
                     <div className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">87%</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">Overall Progress</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Overall Progress</div>
                   </div>
                   <div className="text-center">
                     <div className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">23</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">Data Points</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Data Points</div>
                   </div>
                   <div className="text-center">
                     <div className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">3</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">Areas Improving</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Areas Improving</div>
                   </div>
                   <div className="text-center">
                     <div className="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400">1</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">Areas to Monitor</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Areas to Monitor</div>
                   </div>
                 </div>
               </div>
@@ -455,7 +455,7 @@ export function InsightNavigator({
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                     Recommended Next Steps
                   </h2>
                 </div>
@@ -464,22 +464,22 @@ export function InsightNavigator({
                   <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
                         Continue Sensory Schedule
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                         The current sensory break routine is showing excellent results in reducing meltdowns.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div className="flex items-start gap-3 p-3 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg">
                     <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
                         Expand Communication Practice
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                         With verbal requests increasing, now is a great time to introduce more complex language.
                       </p>
                     </div>
@@ -488,10 +488,10 @@ export function InsightNavigator({
                   <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                     <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-slate-900 dark:text-slate-100">
+                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
                         Monitor Sensory Needs
                       </h3>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                         Sensory seeking behaviors are stable but watch for any changes in preferences.
                       </p>
                     </div>

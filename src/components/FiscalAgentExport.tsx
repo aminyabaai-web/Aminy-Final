@@ -349,8 +349,8 @@ export function FiscalAgentExport({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Fiscal Agent Export</h2>
-          <p className="text-neutral-500">Generate timesheets for {config.name}</p>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Fiscal Agent Export</h2>
+          <p className="text-[#5A6B7A]">Generate timesheets for {config.name}</p>
         </div>
         <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
           <Building2 className="w-3.5 h-3.5 mr-1" />
@@ -362,28 +362,28 @@ export function FiscalAgentExport({
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-medium text-neutral-900">Participant Information</h3>
+            <h3 className="font-medium text-[#1B2733]">Participant Information</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">Participant Name</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Participant Name</label>
                 <p className="font-medium">{childName}</p>
               </div>
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">Participant ID</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Participant ID</label>
                 <Input
                   value={additionalInfo.participantId}
                   onChange={(e) => setAdditionalInfo(prev => ({ ...prev, participantId: e.target.value }))}
                 />
               </div>
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">Authorization #</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Authorization #</label>
                 <Input
                   value={additionalInfo.authorizationNumber}
                   onChange={(e) => setAdditionalInfo(prev => ({ ...prev, authorizationNumber: e.target.value }))}
                 />
               </div>
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">Service Coordinator</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Service Coordinator</label>
                 <Input
                   value={additionalInfo.serviceCoordinator}
                   onChange={(e) => setAdditionalInfo(prev => ({ ...prev, serviceCoordinator: e.target.value }))}
@@ -393,10 +393,10 @@ export function FiscalAgentExport({
           </div>
 
           <div className="space-y-3 sm:space-y-4">
-            <h3 className="font-medium text-neutral-900">Date Range</h3>
+            <h3 className="font-medium text-[#1B2733]">Date Range</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">Start Date</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Start Date</label>
                 <Input
                   type="date"
                   value={dateRange.start.toISOString().split('T')[0]}
@@ -404,7 +404,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div>
-                <label className="block text-sm text-neutral-500 mb-1">End Date</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">End Date</label>
                 <Input
                   type="date"
                   value={dateRange.end.toISOString().split('T')[0]}
@@ -419,7 +419,7 @@ export function FiscalAgentExport({
       {/* Service Entries */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-medium text-neutral-900">Service Entries</h3>
+          <h3 className="font-medium text-[#1B2733]">Service Entries</h3>
           <Button onClick={() => setShowAddEntry(true)} size="sm">
             <Plus className="w-4 h-4 mr-1" />
             Add Entry
@@ -431,7 +431,7 @@ export function FiscalAgentExport({
           <div className="mb-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Date</label>
+                <label className="block text-xs text-[#5A6B7A] mb-1">Date</label>
                 <Input
                   type="date"
                   value={newEntry.date?.toISOString().split('T')[0]}
@@ -439,7 +439,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Service Code</label>
+                <label className="block text-xs text-[#5A6B7A] mb-1">Service Code</label>
                 <select
                   value={newEntry.serviceCode}
                   onChange={(e) => setNewEntry(prev => ({ ...prev, serviceCode: e.target.value }))}
@@ -451,7 +451,7 @@ export function FiscalAgentExport({
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">Start Time</label>
+                <label className="block text-xs text-[#5A6B7A] mb-1">Start Time</label>
                 <Input
                   type="time"
                   value={newEntry.startTime}
@@ -459,7 +459,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div>
-                <label className="block text-xs text-neutral-500 mb-1">End Time</label>
+                <label className="block text-xs text-[#5A6B7A] mb-1">End Time</label>
                 <Input
                   type="time"
                   value={newEntry.endTime}
@@ -483,13 +483,13 @@ export function FiscalAgentExport({
           <table className="w-full">
             <thead>
               <tr className="border-b border-neutral-200">
-                <th className="text-left py-3 px-2 text-xs font-medium text-neutral-500">Date</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-neutral-500">Code</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-neutral-500">Service</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-neutral-500">Time</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-neutral-500">Units</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-neutral-500">Rate</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-neutral-500">Amount</th>
+                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Date</th>
+                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Code</th>
+                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Service</th>
+                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Time</th>
+                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Units</th>
+                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Rate</th>
+                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Amount</th>
                 <th className="py-3 px-2"></th>
               </tr>
             </thead>
@@ -528,7 +528,7 @@ export function FiscalAgentExport({
         </div>
 
         {entries.length === 0 && (
-          <div className="text-center py-8 text-neutral-500">
+          <div className="text-center py-8 text-[#5A6B7A]">
             <FileText className="w-12 h-12 mx-auto mb-3 text-neutral-300" />
             <p>No service entries yet</p>
             <p className="text-sm">Click "Add Entry" to log services</p>
@@ -541,15 +541,15 @@ export function FiscalAgentExport({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div className="flex gap-8">
             <div>
-              <p className="text-sm text-neutral-500">Total Units</p>
-              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{totalUnits}</p>
+              <p className="text-sm text-[#5A6B7A]">Total Units</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{totalUnits}</p>
             </div>
             <div>
-              <p className="text-sm text-neutral-500">Total Hours</p>
-              <p className="text-xl sm:text-2xl font-bold text-neutral-900">{totalHours.toFixed(2)}</p>
+              <p className="text-sm text-[#5A6B7A]">Total Hours</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{totalHours.toFixed(2)}</p>
             </div>
             <div>
-              <p className="text-sm text-neutral-500">Total Amount</p>
+              <p className="text-sm text-[#5A6B7A]">Total Amount</p>
               <p className="text-xl sm:text-2xl font-bold text-[#6B9080]">${totalAmount.toFixed(2)}</p>
             </div>
           </div>
@@ -586,7 +586,7 @@ export function FiscalAgentExport({
           onClick={() => document.getElementById('service-codes')?.classList.toggle('hidden')}
           className="flex items-center justify-between w-full text-left"
         >
-          <h3 className="font-medium text-neutral-900">Service Code Reference</h3>
+          <h3 className="font-medium text-[#1B2733]">Service Code Reference</h3>
           <ChevronDown className="w-5 h-5 text-neutral-400" />
         </button>
         <div id="service-codes" className="hidden mt-4">
@@ -598,8 +598,8 @@ export function FiscalAgentExport({
                   <p className="text-sm text-neutral-700">{service.name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium text-neutral-900">${service.rate.toFixed(2)}</p>
-                  <p className="text-xs text-neutral-500">per {service.unit}</p>
+                  <p className="font-medium text-[#1B2733]">${service.rate.toFixed(2)}</p>
+                  <p className="text-xs text-[#5A6B7A]">per {service.unit}</p>
                 </div>
               </div>
             ))}

@@ -65,7 +65,7 @@ export function AskAminyChatScreen({
       >
         <div className="text-center">
           <Sparkles className="w-8 h-8 text-[#6B9080] mx-auto mb-3 animate-pulse" />
-          <p className="text-sm text-slate-500 dark:text-slate-400">Loading your conversation...</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Loading your conversation...</p>
         </div>
       </div>
     );
@@ -94,28 +94,28 @@ export function AskAminyChatScreen({
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="p-2 -ml-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
                 aria-label="Back"
               >
-                <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" />
               </button>
             )}
             <button
               onClick={() => setShowSidebar(true)}
-              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
               aria-label="Open chat history"
               title="Chat history"
             >
-              <PanelLeftOpen className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              <PanelLeftOpen className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" />
             </button>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-base font-semibold text-slate-900 dark:text-slate-100">Aminy AI</h1>
+                <h1 className="text-base font-semibold text-[#1B2733] dark:text-slate-100">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today
                   </p>
                 )}
@@ -132,19 +132,19 @@ export function AskAminyChatScreen({
                   window.location.reload();
                 }
               }}
-              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
               aria-label="New conversation"
               title="New conversation"
             >
-              <Plus className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              <Plus className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" />
             </button>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
               aria-label="Chat settings"
               title="Memory & settings"
             >
-              <Settings className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              <Settings className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" />
             </button>
           </div>
         </div>
@@ -153,23 +153,23 @@ export function AskAminyChatScreen({
       {/* Settings panel */}
       {showSettings && (
         <div
-          className="border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800"
+          className="border-b border-[#E8E4DF] dark:border-slate-800 bg-[#FAF7F2] dark:bg-slate-800"
         >
           <div className="max-w-3xl mx-auto px-4 py-3">
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
+            <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-2">
               Aminy remembers your child's preferences, routines, and what works.
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => onNavigate?.('memory-settings')}
-                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
+                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
               >
                 <MessageSquare className="w-3 h-3 inline mr-1" />
                 Manage Memory
               </button>
               <button
                 onClick={() => onNavigate?.('vault')}
-                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
+                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
               >
                 Upload Records
               </button>

@@ -184,10 +184,10 @@ export function ProviderDirectory({
   });
 
   const getSpecialtyColor = (specialty: string) => {
-    if (specialty.includes('ABA') || specialty.includes('Behavior')) return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (specialty.includes('ABA') || specialty.includes('Behavior')) return 'bg-blue-100 text-[#4A6478] border-[#C8DDE8]';
     if (specialty.includes('Speech') || specialty.includes('Language')) return 'bg-green-100 text-green-800 border-green-200';
     if (specialty.includes('Occupational') || specialty.includes('Sensory')) return 'bg-purple-100 text-purple-800 border-purple-200';
-    return 'bg-slate-100 text-slate-800 border-slate-200';
+    return 'bg-[#F0EDE8] text-[#1B2733] border-[#E8E4DF]';
   };
 
   const toggleBookmark = (providerId: string) => {
@@ -260,28 +260,28 @@ export function ProviderDirectory({
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                 {provider.name}
               </h3>
               <div className="flex items-center gap-1">
                 <Star className="w-4 h-4 text-amber-500 fill-current" />
-                <span className="text-sm font-medium text-slate-900 dark:text-slate-100">
+                <span className="text-sm font-medium text-[#1B2733] dark:text-slate-100">
                   {provider.rating}
                 </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">
+                <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   ({provider.reviewCount})
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-2 mb-1">
-              <p className="text-slate-600 dark:text-slate-400">{provider.title}</p>
+              <p className="text-[#5A6B7A] dark:text-slate-400">{provider.title}</p>
               <VerifiedBadge status={provider.verificationStatus} />
             </div>
-            <p className="text-slate-500 dark:text-slate-500 text-sm mb-2">{provider.practice}</p>
+            <p className="text-[#5A6B7A] dark:text-[#5A6B7A] text-sm mb-2">{provider.practice}</p>
             
             <div className="flex items-center gap-2 mb-3">
-              <MapPin className="w-4 h-4 text-slate-500" />
-              <span className="text-sm text-slate-600 dark:text-slate-400">{provider.distance}</span>
+              <MapPin className="w-4 h-4 text-[#5A6B7A]" />
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">{provider.distance}</span>
               {provider.acceptingNew ? (
                 <Badge className="bg-green-100 text-green-800 border-green-200">
                   Accepting New Patients
@@ -337,24 +337,24 @@ export function ProviderDirectory({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <Clock className="w-4 h-4 text-slate-500" />
-            <span className="text-slate-600 dark:text-slate-400">{provider.availability}</span>
+            <Clock className="w-4 h-4 text-[#5A6B7A]" />
+            <span className="text-[#5A6B7A] dark:text-slate-400">{provider.availability}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <Users className="w-4 h-4 text-slate-500" />
-            <span className="text-slate-600 dark:text-slate-400">{provider.experience} experience</span>
+            <Users className="w-4 h-4 text-[#5A6B7A]" />
+            <span className="text-[#5A6B7A] dark:text-slate-400">{provider.experience} experience</span>
           </div>
         </div>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
-            <MessageSquare className="w-4 h-4 text-slate-500" />
-            <span className="text-slate-600 dark:text-slate-400">
+            <MessageSquare className="w-4 h-4 text-[#5A6B7A]" />
+            <span className="text-[#5A6B7A] dark:text-slate-400">
               {provider.languages.join(', ')}
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <DollarSign className="w-4 h-4 text-slate-500" />
-            <span className="text-slate-600 dark:text-slate-400">
+            <DollarSign className="w-4 h-4 text-[#5A6B7A]" />
+            <span className="text-[#5A6B7A] dark:text-slate-400">
               {provider.insuranceAccepted.length} insurances accepted
             </span>
           </div>
@@ -409,7 +409,7 @@ export function ProviderDirectory({
   return (
     <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -417,8 +417,8 @@ export function ProviderDirectory({
                 <Users className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">Provider Directory</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Find qualified providers for {safeChildName}</p>
+                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Provider Directory</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Find qualified providers for {safeChildName}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -426,7 +426,7 @@ export function ProviderDirectory({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowUrgentHelp(true)}
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -522,10 +522,10 @@ export function ProviderDirectory({
         {/* Results Summary */}
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
               {filteredProviders.length} Providers Found
             </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
               Verified providers in your area accepting new patients
             </p>
           </div>
@@ -551,10 +551,10 @@ export function ProviderDirectory({
         {filteredProviders.length === 0 && (
           <Card className="p-8 text-center">
             <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
               {providersLoading ? 'Loading providers…' : providers.length === 0 ? 'No providers available yet' : 'No providers found'}
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-4">
+            <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
               {providersLoading
                 ? 'Finding providers in your area.'
                 : providers.length === 0
@@ -572,7 +572,7 @@ export function ProviderDirectory({
         {/* Help Section */}
         <Card className="mt-8">
           <div className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-4">
               Need Help Finding the Right Provider?
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
@@ -580,7 +580,7 @@ export function ProviderDirectory({
                 <MessageSquare className="w-5 h-5 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Chat with Care Team</div>
-                  <div className="text-sm text-slate-500">Get personalized recommendations</div>
+                  <div className="text-sm text-[#5A6B7A]">Get personalized recommendations</div>
                 </div>
               </Button>
               
@@ -588,7 +588,7 @@ export function ProviderDirectory({
                 <Phone className="w-5 h-5 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Call Support</div>
-                  <div className="text-sm text-slate-500">Speak with a care coordinator</div>
+                  <div className="text-sm text-[#5A6B7A]">Speak with a care coordinator</div>
                 </div>
               </Button>
               
@@ -596,7 +596,7 @@ export function ProviderDirectory({
                 <Heart className="w-5 h-5 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Request Referral</div>
-                  <div className="text-sm text-slate-500">Get matched with providers</div>
+                  <div className="text-sm text-[#5A6B7A]">Get matched with providers</div>
                 </div>
               </Button>
             </div>

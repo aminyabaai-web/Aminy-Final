@@ -56,8 +56,8 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col">
       {/* Header */}
-      <div className="px-4 py-6 border-b border-gray-100">
-        <h1 className="text-2xl font-semibold text-center text-slate-900">
+      <div className="px-4 py-6 border-b border-[#E8E4DF]">
+        <h1 className="text-2xl font-semibold text-center text-[#1B2733]">
           Your 7-day gentle start
         </h1>
         <p className="text-center text-muted-foreground mt-2">
@@ -72,7 +72,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
           return (
             <div
               key={item.id}
-              className="flex items-start gap-3 sm:gap-4 p-4 border border-gray-200 rounded-lg"
+              className="flex items-start gap-3 sm:gap-4 p-4 border border-[#E8E4DF] rounded-lg"
             >
               <Switch
                 checked={item.enabled}
@@ -81,7 +81,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Icon className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-slate-900">{item.title}</h3>
+                  <h3 className="font-semibold text-[#1B2733]">{item.title}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>
@@ -91,7 +91,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
       </div>
 
       {/* Actions */}
-      <div className="px-4 py-6 border-t border-gray-100 space-y-3">
+      <div className="px-4 py-6 border-t border-[#E8E4DF] space-y-3">
         <Button
           onClick={() => onApprove(items)}
           className="w-full"
@@ -117,7 +117,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
       </div>
 
       {/* Output Note */}
-      <div className="px-4 py-3 bg-blue-50 border-t border-blue-200">
+      <div className="px-4 py-3 bg-[#EEF4F8] border-t border-[#C8DDE8]">
         <p className="text-xs text-center text-blue-700">
           Output: Diagnostic Prep Packet (not a diagnosis)
         </p>

@@ -431,11 +431,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'speech': return 'text-blue-600 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-900/30 dark:border-blue-800';
+      case 'speech': return 'text-blue-600 bg-[#EEF4F8] border-[#C8DDE8] dark:text-blue-400 dark:bg-blue-900/30 dark:border-blue-800';
       case 'social': return 'text-green-600 bg-green-50 border-green-200 dark:text-green-400 dark:bg-green-900/30 dark:border-green-800';
       case 'sensory': return 'text-purple-600 bg-purple-50 border-purple-200 dark:text-purple-400 dark:bg-purple-900/30 dark:border-purple-800';
       case 'routines': return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/30 dark:border-orange-800';
-      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
+      default: return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF] dark:text-[#8A9BA8] dark:bg-gray-900/30 dark:border-gray-800';
     }
   };
 
@@ -444,7 +444,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       case 'high': return 'text-red-600 bg-red-50 border-red-200';
       case 'medium': return 'text-amber-600 bg-amber-50 border-amber-200';
       case 'low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
+      default: return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
     }
   };
 
@@ -457,13 +457,13 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             <Sparkles className="w-6 h-6 text-white" />
           </div>
         </div>
-        <h2 className="text-2xl text-slate-900 dark:text-slate-100 mb-2">{childShort}'s Development Plan</h2>
-        <p className="text-slate-600 dark:text-slate-400">Personalized support for {childShort}'s unique journey</p>
+        <h2 className="text-2xl text-[#1B2733] dark:text-slate-100 mb-2">{childShort}'s Development Plan</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Personalized support for {childShort}'s unique journey</p>
         <div className="flex items-center justify-center gap-2 mt-4">
           <Badge variant="secondary" className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20">
             Active Plan
           </Badge>
-          <Badge variant="outline" className="text-slate-600">
+          <Badge variant="outline" className="text-[#5A6B7A]">
             Updated Today
           </Badge>
           <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">
@@ -474,22 +474,22 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </div>
 
       {/* Progress Portfolio Timeline */}
-      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] dark:from-blue-900/20 dark:to-teal-900/20 border-blue-200 dark:border-blue-800">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] dark:from-blue-900/20 dark:to-teal-900/20 border-[#C8DDE8] dark:border-blue-800">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <LineChart className="w-5 h-5 text-blue-600" />
           Progress Portfolio
         </h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-600 dark:text-slate-400">Month 1 (August):</span>
-            <span className="text-slate-900 dark:text-slate-100">Started baseline assessments, established routines</span>
+            <span className="text-[#5A6B7A] dark:text-slate-400">Month 1 (August):</span>
+            <span className="text-[#1B2733] dark:text-slate-100">Started baseline assessments, established routines</span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-600 dark:text-slate-400">Month 2 (September):</span>
-            <span className="text-slate-900 dark:text-slate-100">75% progress on speech goals, social skills emerging</span>
+            <span className="text-[#5A6B7A] dark:text-slate-400">Month 2 (September):</span>
+            <span className="text-[#1B2733] dark:text-slate-100">75% progress on speech goals, social skills emerging</span>
           </div>
           <div className="flex items-center justify-between text-sm">
-            <span className="text-slate-600 dark:text-slate-400">This Week:</span>
+            <span className="text-[#5A6B7A] dark:text-slate-400">This Week:</span>
             <span className="text-green-600 font-medium">Breakthrough in requesting help independently</span>
           </div>
         </div>
@@ -501,8 +501,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Target className="w-4 h-4 text-blue-600" />
           </div>
-          <div className="text-2xl text-slate-900 dark:text-slate-100">{enhancedGoals.length}</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">Active Goals</div>
+          <div className="text-2xl text-[#1B2733] dark:text-slate-100">{enhancedGoals.length}</div>
+          <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Goals</div>
           <div className="text-xs text-green-600 mt-1">+50% from baseline</div>
         </Card>
         
@@ -510,10 +510,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
             <CheckCircle className="w-4 h-4 text-green-600" />
           </div>
-          <div className="text-2xl text-slate-900 dark:text-slate-100">
+          <div className="text-2xl text-[#1B2733] dark:text-slate-100">
             {enhancedGoals.reduce((acc, goal) => acc + goal.milestones.filter(m => m.completed).length, 0)}
           </div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">Milestones Completed</div>
+          <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Milestones Completed</div>
           <div className="text-xs text-blue-600 mt-1">67% mastery rate</div>
         </Card>
         
@@ -521,8 +521,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Activity className="w-4 h-4 text-orange-600" />
           </div>
-          <div className="text-2xl text-slate-900 dark:text-slate-100">85%</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">Routine Completion</div>
+          <div className="text-2xl text-[#1B2733] dark:text-slate-100">85%</div>
+          <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Routine Completion</div>
           <div className="text-xs text-green-600 mt-1">+15% this month</div>
         </Card>
         
@@ -530,8 +530,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-2">
             <Heart className="w-4 h-4 text-purple-600" />
           </div>
-          <div className="text-2xl text-slate-900 dark:text-slate-100">95%</div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">Parent Participation</div>
+          <div className="text-2xl text-[#1B2733] dark:text-slate-100">95%</div>
+          <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Parent Participation</div>
           <div className="text-xs text-green-600 mt-1">Excellent consistency</div>
         </Card>
       </div>
@@ -539,7 +539,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       {/* Daily Coaching Tasks */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 flex items-center gap-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
             Today's Coaching Tasks
           </h3>
@@ -547,15 +547,15 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
         </div>
         <div className="space-y-3">
           {dailyTasks.map((task) => (
-            <div key={task.id} className={`flex items-start gap-3 p-3 rounded-lg ${task.completed ? 'bg-green-50 border border-green-200' : 'bg-slate-50 border border-slate-200'}`}>
+            <div key={task.id} className={`flex items-start gap-3 p-3 rounded-lg ${task.completed ? 'bg-green-50 border border-green-200' : 'bg-[#FAF7F2] border border-[#E8E4DF]'}`}>
               <div className={`w-5 h-5 rounded-full flex items-center justify-center mt-0.5 ${task.completed ? 'bg-green-600' : 'bg-slate-300'}`}>
                 {task.completed && <Check className="w-3 h-3 text-white" />}
               </div>
               <div className="flex-1">
-                <div className={`text-sm font-medium ${task.completed ? 'text-green-800' : 'text-slate-900'}`}>
+                <div className={`text-sm font-medium ${task.completed ? 'text-green-800' : 'text-[#1B2733]'}`}>
                   {task.title}
                 </div>
-                <div className={`text-xs ${task.completed ? 'text-green-600' : 'text-slate-600'}`}>
+                <div className={`text-xs ${task.completed ? 'text-green-600' : 'text-[#5A6B7A]'}`}>
                   {task.description} • {task.estimatedTime}
                 </div>
                 {task.feedback && (
@@ -570,20 +570,20 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </Card>
 
       {/* AI-Powered Next Steps with Pattern Recognition */}
-      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 border-[#6B9080]/20 dark:border-teal-800">
+      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-blue-50 dark:from-teal-900/20 dark:to-blue-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
             <Brain className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">AI-Powered Insights & Next Steps</h3>
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">AI-Powered Insights & Next Steps</h3>
             <div className="space-y-3">
               {aiInsights.patternRecognition.slice(0, 2).map((pattern, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <Lightbulb className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">{pattern.pattern}</p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">{pattern.recommendation}</p>
+                    <p className="text-sm text-[#3A4A57] dark:text-slate-300">{pattern.pattern}</p>
+                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">{pattern.recommendation}</p>
                     <Badge variant="outline" className="text-xs mt-1">{pattern.confidence}% confidence</Badge>
                   </div>
                 </div>
@@ -609,8 +609,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl text-slate-900 dark:text-slate-100">Development Goals</h2>
-          <p className="text-slate-600 dark:text-slate-400">Track progress from baseline to goal with caregiver feedback</p>
+          <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Development Goals</h2>
+          <p className="text-[#5A6B7A] dark:text-slate-400">Track progress from baseline to goal with caregiver feedback</p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => setShowBaseline(!showBaseline)}>
@@ -638,33 +638,33 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     {goal.priority} priority
                   </Badge>
                 </div>
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{goal.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">{goal.description}</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{goal.title}</h3>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">{goal.description}</p>
                 
                 {/* Baseline → Current → Goal progression */}
                 {showBaseline && (
-                  <Card className="p-4 mb-4 bg-blue-50 border-blue-200">
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-3">Progress Journey</h4>
+                  <Card className="p-4 mb-4 bg-[#EEF4F8] border-[#C8DDE8]">
+                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-3">Progress Journey</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                       <div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Baseline</div>
-                        <div className="text-lg font-semibold text-slate-700">{goal.baselineData.startingLevel}%</div>
-                        <div className="text-xs text-slate-500">{goal.baselineData.startingDate.toLocaleDateString()}</div>
+                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Baseline</div>
+                        <div className="text-lg font-semibold text-[#3A4A57]">{goal.baselineData.startingLevel}%</div>
+                        <div className="text-xs text-[#5A6B7A]">{goal.baselineData.startingDate.toLocaleDateString()}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Current</div>
+                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Current</div>
                         <div className="text-lg font-semibold text-[#6B9080]">{goal.progress}%</div>
                         <div className="text-xs text-green-600">+{goal.progress - goal.baselineData.startingLevel}% growth</div>
                       </div>
                       <div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Goal</div>
-                        <div className="text-lg font-semibold text-slate-700">100%</div>
-                        <div className="text-xs text-slate-500">{100 - goal.progress}% remaining</div>
+                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Goal</div>
+                        <div className="text-lg font-semibold text-[#3A4A57]">100%</div>
+                        <div className="text-xs text-[#5A6B7A]">{100 - goal.progress}% remaining</div>
                       </div>
                     </div>
                     <div className="mt-3">
-                      <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Assessment method:</div>
-                      <div className="text-xs text-slate-700">{goal.baselineData.assessmentMethod}</div>
+                      <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Assessment method:</div>
+                      <div className="text-xs text-[#3A4A57]">{goal.baselineData.assessmentMethod}</div>
                     </div>
                   </Card>
                 )}
@@ -673,9 +673,9 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 <div className="flex items-center gap-3 sm:gap-4 mb-4">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm text-slate-600 dark:text-slate-400">Progress</span>
+                      <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Progress</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-slate-900 dark:text-slate-100">{goal.progress}%</span>
+                        <span className="text-sm text-[#1B2733] dark:text-slate-100">{goal.progress}%</span>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="w-3 h-3 text-green-600" />
                           <span className="text-xs text-green-600">
@@ -690,7 +690,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 {/* Milestones with completion dates */}
                 <div className="space-y-2 mb-4">
-                  <h4 className="text-sm text-slate-900 dark:text-slate-100">Milestones:</h4>
+                  <h4 className="text-sm text-[#1B2733] dark:text-slate-100">Milestones:</h4>
                   {goal.milestones.map((milestone) => (
                     <div key={milestone.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -699,11 +699,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                         ) : (
                           <Circle className="w-4 h-4 text-slate-400" />
                         )}
-                        <span className={`text-sm ${milestone.completed ? 'text-slate-500 line-through' : 'text-slate-900 dark:text-slate-100'}`}>
+                        <span className={`text-sm ${milestone.completed ? 'text-[#5A6B7A] line-through' : 'text-[#1B2733] dark:text-slate-100'}`}>
                           {milestone.title}
                         </span>
                       </div>
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-[#5A6B7A]">
                         {milestone.completed && milestone.completedDate ? (
                           `Completed ${milestone.completedDate.toLocaleDateString()}`
                         ) : milestone.dueDate ? (
@@ -716,8 +716,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 {/* Recent Caregiver Feedback */}
                 {goal.feedback.length > 0 && (
-                  <Card className="p-3 bg-slate-50">
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Recent Feedback</h4>
+                  <Card className="p-3 bg-[#FAF7F2]">
+                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Recent Feedback</h4>
                     {goal.feedback.slice(-1).map((feedback) => (
                       <div key={feedback.id} className="space-y-2">
                         <div className="flex items-center gap-3 sm:gap-4">
@@ -732,10 +732,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                             <Star className="w-4 h-4 text-amber-400" />
                             <span className="text-sm">{feedback.effectiveness}/5</span>
                           </div>
-                          <span className="text-xs text-slate-500">{feedback.date.toLocaleDateString()}</span>
+                          <span className="text-xs text-[#5A6B7A]">{feedback.date.toLocaleDateString()}</span>
                         </div>
                         {feedback.notes && (
-                          <p className="text-sm text-slate-600 italic">"{feedback.notes}"</p>
+                          <p className="text-sm text-[#5A6B7A] italic">"{feedback.notes}"</p>
                         )}
                         {feedback.recommendedAdjustment && (
                           <p className="text-sm text-[#6B9080]">Recommendation: {feedback.recommendedAdjustment}</p>
@@ -761,11 +761,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
       {/* Caregiver Feedback Quick Survey */}
       <Card className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <MessageCircle className="w-5 h-5 text-amber-600" />
           Quick Feedback Survey
         </h3>
-        <p className="text-slate-600 dark:text-slate-400 mb-4">
+        <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
           How are {childShort}'s goals feeling this week? Your feedback helps us adjust the plan.
         </p>
         <div className="flex gap-3">
@@ -793,8 +793,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <UserCheck className="w-8 h-8 text-purple-600" />
           </div>
-          <h3 className="text-xl text-slate-900 dark:text-slate-100 mb-2">Coaching Review Log</h3>
-          <p className="text-slate-600 dark:text-slate-400 mb-4">
+          <h3 className="text-xl text-[#1B2733] dark:text-slate-100 mb-2">Coaching Review Log</h3>
+          <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
             Get personalized guidance from certified RBTs with detailed session notes and recommendations.
           </p>
           <Button className="bg-purple-600 hover:bg-purple-700">
@@ -808,8 +808,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       <div className="space-y-3 sm:space-y-4 sm:space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl text-slate-900 dark:text-slate-100">Coaching Review Log</h2>
-            <p className="text-slate-600 dark:text-slate-400">Professional guidance from certified RBTs</p>
+            <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Coaching Review Log</h2>
+            <p className="text-[#5A6B7A] dark:text-slate-400">Professional guidance from certified RBTs</p>
           </div>
           <Button variant="outline" size="sm">
             <Calendar className="w-4 h-4 mr-2" />
@@ -827,13 +827,13 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       <UserCheck className="w-3 h-3 mr-1" />
                       {session.sessionType}
                     </Badge>
-                    <span className="text-sm text-slate-600">{session.date.toLocaleDateString()}</span>
+                    <span className="text-sm text-[#5A6B7A]">{session.date.toLocaleDateString()}</span>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">Session with {session.coachName}</h3>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">Session with {session.coachName}</h3>
                   
                   <div className="space-y-3 mt-4">
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Goals Worked On:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Goals Worked On:</h4>
                       <div className="flex gap-2">
                         {session.goalsWorkedOn.map((goalId) => {
                           const goal = enhancedGoals.find(g => g.id === goalId);
@@ -847,22 +847,22 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Coach Notes:</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{session.coachNotes}</p>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Coach Notes:</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{session.coachNotes}</p>
                     </div>
 
                     {session.parentNotes && (
                       <div>
-                        <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Your Notes:</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 italic">"{session.parentNotes}"</p>
+                        <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Your Notes:</h4>
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 italic">"{session.parentNotes}"</p>
                       </div>
                     )}
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Recommended Tweaks:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Recommended Tweaks:</h4>
                       <ul className="space-y-1">
                         {session.recommendedTweaks.map((tweak, index) => (
-                          <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                          <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                             <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                             {tweak}
                           </li>
@@ -900,8 +900,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderSafetyRisk = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">Safety & Risk Management</h2>
-        <p className="text-slate-600 dark:text-slate-400">Triggers, safety plans, and crisis management</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Safety & Risk Management</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Triggers, safety plans, and crisis management</p>
       </div>
 
       <Tabs defaultValue="triggers" className="w-full">
@@ -925,15 +925,15 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       <AlertTriangle className="w-3 h-3 mr-1" />
                       {trigger.severity} severity
                     </Badge>
-                    <span className="text-sm text-slate-600">{trigger.frequency}</span>
+                    <span className="text-sm text-[#5A6B7A]">{trigger.frequency}</span>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{trigger.description}</h3>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{trigger.description}</h3>
                   
                   <div>
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Management Strategies:</h4>
+                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Management Strategies:</h4>
                     <ul className="space-y-1">
                       {trigger.strategies.map((strategy, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                           <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0" />
                           {strategy}
                         </li>
@@ -955,20 +955,20 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             <Card key={plan.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2 flex items-center gap-2">
                     <Shield className="w-5 h-5 text-green-600" />
                     {plan.title}
                   </h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
                     <strong>Trigger:</strong> {plan.trigger}
                   </p>
                   
                   <div className="space-y-3">
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Response Steps:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Response Steps:</h4>
                       <ol className="space-y-1">
                         {plan.steps.map((step, index) => (
-                          <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                          <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                             <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                               <span className="text-xs text-green-700">{index + 1}</span>
                             </div>
@@ -979,7 +979,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Emergency Contacts:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Emergency Contacts:</h4>
                       <div className="flex gap-2">
                         {plan.emergencyContacts.map((contact, index) => (
                           <Badge key={index} variant="outline" className="text-red-600 border-red-200 bg-red-50">
@@ -1009,22 +1009,22 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       <AlertTriangle className="w-3 h-3 mr-1" />
                       Crisis Event
                     </Badge>
-                    <span className="text-sm text-slate-600">{note.date.toLocaleDateString()}</span>
+                    <span className="text-sm text-[#5A6B7A]">{note.date.toLocaleDateString()}</span>
                   </div>
                   
                   <div className="space-y-3">
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Description:</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{note.description}</p>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Description:</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{note.description}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Action Taken:</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{note.actionTaken}</p>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Action Taken:</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{note.actionTaken}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Outcome:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Outcome:</h4>
                       <p className="text-sm text-green-600">{note.outcome}</p>
                     </div>
                   </div>
@@ -1044,8 +1044,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderEnhancedInsights = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">AI-Powered Insights</h2>
-        <p className="text-slate-600 dark:text-slate-400">Pattern recognition, optimization, and predictive analysis</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">AI-Powered Insights</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Pattern recognition, optimization, and predictive analysis</p>
       </div>
 
       <Tabs defaultValue="patterns" className="w-full">
@@ -1065,15 +1065,15 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50">
+                    <Badge variant="outline" className="text-blue-600 border-[#C8DDE8] bg-[#EEF4F8]">
                       {pattern.confidence}% confidence
                     </Badge>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">Pattern Detected</h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">{pattern.pattern}</p>
-                  <div className="p-3 bg-blue-50 rounded-lg">
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">Pattern Detected</h3>
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-3">{pattern.pattern}</p>
+                  <div className="p-3 bg-[#EEF4F8] rounded-lg">
                     <h4 className="text-sm font-medium text-blue-900 mb-1">AI Recommendation:</h4>
-                    <p className="text-sm text-blue-800">{pattern.recommendation}</p>
+                    <p className="text-sm text-[#4A6478]">{pattern.recommendation}</p>
                   </div>
                 </div>
               </div>
@@ -1094,8 +1094,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       +{suggestion.expectedImpact}% expected improvement
                     </Badge>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{suggestion.area}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">{suggestion.suggestion}</p>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{suggestion.area}</h3>
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-3">{suggestion.suggestion}</p>
                   <Button size="sm" variant="outline" className="border-green-200 text-green-700 hover:bg-green-50">
                     <Check className="w-4 h-4 mr-2" />
                     Apply Suggestion
@@ -1124,16 +1124,16 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     <Badge variant="outline" className={
                       alert.severity === 'high' ? 'text-red-600 border-red-200 bg-red-50' :
                       alert.severity === 'medium' ? 'text-amber-600 border-amber-200 bg-amber-50' :
-                      'text-yellow-600 border-yellow-200 bg-yellow-50'
+                      'text-yellow-600 border-[#F0EDE8] bg-[#FDF9F0]'
                     }>
                       {alert.severity} priority
                     </Badge>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{alert.type}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-3">{alert.description}</p>
-                  <div className="p-3 bg-slate-50 rounded-lg">
-                    <h4 className="text-sm font-medium text-slate-900 mb-1">Recommended Action:</h4>
-                    <p className="text-sm text-slate-700">{alert.action}</p>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{alert.type}</h3>
+                  <p className="text-[#5A6B7A] dark:text-slate-400 mb-3">{alert.description}</p>
+                  <div className="p-3 bg-[#FAF7F2] rounded-lg">
+                    <h4 className="text-sm font-medium text-[#1B2733] mb-1">Recommended Action:</h4>
+                    <p className="text-sm text-[#3A4A57]">{alert.action}</p>
                   </div>
                 </div>
               </div>
@@ -1161,8 +1161,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       {check.trend}
                     </Badge>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{check.area}</h3>
-                  <p className="text-slate-600 dark:text-slate-400">{check.recommendation}</p>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{check.area}</h3>
+                  <p className="text-[#5A6B7A] dark:text-slate-400">{check.recommendation}</p>
                 </div>
               </div>
             </Card>
@@ -1175,32 +1175,32 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderOutcomeMetrics = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">Outcome Metrics</h2>
-        <p className="text-slate-600 dark:text-slate-400">ROI and effectiveness data for insurance and care teams</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Outcome Metrics</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">ROI and effectiveness data for insurance and care teams</p>
       </div>
 
       {/* Executive Summary for Payers */}
       <Card className="p-6 bg-gradient-to-r from-green-50 to-teal-50 border-green-200">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <PieChart className="w-5 h-5 text-green-600" />
           Executive Summary
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-green-600">{outcomeMetrics.goalsPercentageMastered}%</div>
-            <div className="text-sm text-slate-600">Goals Mastered</div>
+            <div className="text-sm text-[#5A6B7A]">Goals Mastered</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-blue-600">{outcomeMetrics.routinesCompletionRate}%</div>
-            <div className="text-sm text-slate-600">Routine Adherence</div>
+            <div className="text-sm text-[#5A6B7A]">Routine Adherence</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-purple-600">{outcomeMetrics.caregiverParticipationRate}%</div>
-            <div className="text-sm text-slate-600">Caregiver Engagement</div>
+            <div className="text-sm text-[#5A6B7A]">Caregiver Engagement</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">{outcomeMetrics.roi}%</div>
-            <div className="text-sm text-slate-600">ROI</div>
+            <div className="text-sm text-[#5A6B7A]">ROI</div>
           </div>
         </div>
       </Card>
@@ -1208,48 +1208,48 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       {/* Detailed Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Clinical Outcomes</h3>
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Clinical Outcomes</h3>
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Goals Achieved</span>
-              <span className="text-sm text-slate-900 dark:text-slate-100">{outcomeMetrics.goalsPercentageMastered}%</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Goals Achieved</span>
+              <span className="text-sm text-[#1B2733] dark:text-slate-100">{outcomeMetrics.goalsPercentageMastered}%</span>
             </div>
             <Progress value={outcomeMetrics.goalsPercentageMastered} className="h-2" />
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Monthly Progress Rate</span>
-              <span className="text-sm text-slate-900 dark:text-slate-100">{outcomeMetrics.monthlyProgressRate}%</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Monthly Progress Rate</span>
+              <span className="text-sm text-[#1B2733] dark:text-slate-100">{outcomeMetrics.monthlyProgressRate}%</span>
             </div>
             <Progress value={outcomeMetrics.monthlyProgressRate} className="h-2" />
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Family Adherence</span>
-              <span className="text-sm text-slate-900 dark:text-slate-100">{outcomeMetrics.caregiverParticipationRate}%</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Family Adherence</span>
+              <span className="text-sm text-[#1B2733] dark:text-slate-100">{outcomeMetrics.caregiverParticipationRate}%</span>
             </div>
             <Progress value={outcomeMetrics.caregiverParticipationRate} className="h-2" />
           </div>
         </Card>
 
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Cost Effectiveness</h3>
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Cost Effectiveness</h3>
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Cost per Goal Achieved</span>
-              <span className="text-sm text-slate-900 dark:text-slate-100">$127</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Cost per Goal Achieved</span>
+              <span className="text-sm text-[#1B2733] dark:text-slate-100">$127</span>
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Reduction in Crisis Events</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Reduction in Crisis Events</span>
               <span className="text-sm text-green-600">-40%</span>
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">Family Satisfaction</span>
-              <span className="text-sm text-slate-900 dark:text-slate-100">4.8/5.0</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Family Satisfaction</span>
+              <span className="text-sm text-[#1B2733] dark:text-slate-100">4.8/5.0</span>
             </div>
             
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-600 dark:text-slate-400">ROI vs Traditional ABA</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">ROI vs Traditional ABA</span>
               <span className="text-sm text-green-600">+{outcomeMetrics.roi}%</span>
             </div>
           </div>
@@ -1258,34 +1258,34 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
       {/* Longitudinal Progress Chart */}
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Progress Over Time</h3>
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Progress Over Time</h3>
         <div className="space-y-3 sm:space-y-4">
           {longitudinalData.monthlyProgress.map((month, index) => (
             <div key={index} className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-900 dark:text-slate-100">{month.month}</span>
-                <span className="text-sm text-slate-600">
+                <span className="text-sm font-medium text-[#1B2733] dark:text-slate-100">{month.month}</span>
+                <span className="text-sm text-[#5A6B7A]">
                   {Math.round(Object.values(month.goalsProgress).reduce((a, b) => a + b, 0) / Object.values(month.goalsProgress).length)}% avg progress
                 </span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-xs">
                 <div>
-                  <div className="text-slate-600">Goals</div>
-                  <div className="text-slate-900">
+                  <div className="text-[#5A6B7A]">Goals</div>
+                  <div className="text-[#1B2733]">
                     {Math.round(Object.values(month.goalsProgress).reduce((a, b) => a + b, 0) / Object.values(month.goalsProgress).length)}%
                   </div>
                 </div>
                 <div>
-                  <div className="text-slate-600">Routines</div>
-                  <div className="text-slate-900">{month.routinesCompleted}%</div>
+                  <div className="text-[#5A6B7A]">Routines</div>
+                  <div className="text-[#1B2733]">{month.routinesCompleted}%</div>
                 </div>
                 <div>
-                  <div className="text-slate-600">Strategies</div>
-                  <div className="text-slate-900">{month.strategiesUsed}</div>
+                  <div className="text-[#5A6B7A]">Strategies</div>
+                  <div className="text-[#1B2733]">{month.strategiesUsed}</div>
                 </div>
                 <div>
-                  <div className="text-slate-600">Participation</div>
-                  <div className="text-slate-900">{month.parentParticipation}%</div>
+                  <div className="text-[#5A6B7A]">Participation</div>
+                  <div className="text-[#1B2733]">{month.parentParticipation}%</div>
                 </div>
               </div>
             </div>
@@ -1298,8 +1298,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderFamilySchool = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">Family & School Integration</h2>
-        <p className="text-slate-600 dark:text-slate-400">Teacher reports and whole-family consistency tracking</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Family & School Integration</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Teacher reports and whole-family consistency tracking</p>
       </div>
 
       <Tabs defaultValue="teacher" className="w-full">
@@ -1315,27 +1315,27 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50">
+                    <Badge variant="outline" className="text-blue-600 border-[#C8DDE8] bg-[#EEF4F8]">
                       <School className="w-3 h-3 mr-1" />
                       School Report
                     </Badge>
-                    <span className="text-sm text-slate-600">{report.date.toLocaleDateString()}</span>
+                    <span className="text-sm text-[#5A6B7A]">{report.date.toLocaleDateString()}</span>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">Report from {report.teacherName}</h3>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">Report from {report.teacherName}</h3>
                   
                   <div className="space-y-3 mt-4">
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Observations:</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{report.observations}</p>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Observations:</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{report.observations}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-1">Recommendations:</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">{report.recommendations}</p>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-1">Recommendations:</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{report.recommendations}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Related Goals:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Related Goals:</h4>
                       <div className="flex gap-2">
                         {report.goals.map((goalId) => {
                           const goal = enhancedGoals.find(g => g.id === goalId);
@@ -1369,11 +1369,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       Sibling Helper
                     </Badge>
                   </div>
-                  <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{sibling.name}</h3>
+                  <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{sibling.name}</h3>
                   
                   <div className="space-y-3">
                     <div>
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Activities:</h4>
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Activities:</h4>
                       <div className="flex flex-wrap gap-2">
                         {sibling.activities.map((activity, index) => (
                           <Badge key={index} variant="outline" className="text-purple-600 border-purple-200 bg-purple-50">
@@ -1385,8 +1385,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-sm text-slate-600 dark:text-slate-400">Consistency</span>
-                        <span className="text-sm text-slate-900 dark:text-slate-100">{sibling.consistency}%</span>
+                        <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Consistency</span>
+                        <span className="text-sm text-[#1B2733] dark:text-slate-100">{sibling.consistency}%</span>
                       </div>
                       <Progress value={sibling.consistency} className="h-2" />
                     </div>
@@ -1403,18 +1403,18 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
         <TabsContent value="export" className="space-y-3 sm:space-y-4">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
               <GraduationCap className="w-5 h-5 text-blue-600" />
               Teacher Communication Pack
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-4">
+            <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
               Generate a comprehensive report for {childShort}'s teachers with goals, strategies, and current progress.
             </p>
             
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">What's included:</h4>
-                <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-400">
+                <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">What's included:</h4>
+                <ul className="space-y-1 text-sm text-[#5A6B7A] dark:text-slate-400">
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-600" />
                     Current development goals and progress
@@ -1458,20 +1458,20 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderEnhancedSharing = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">Export & Share</h2>
-        <p className="text-slate-600 dark:text-slate-400">Customizable exports for different audiences</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Export & Share</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Customizable exports for different audiences</p>
       </div>
 
       {/* Export Customization */}
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <Sliders className="w-5 h-5 text-blue-600" />
           Customize Your Export
         </h3>
         
         <div className="space-y-3 sm:space-y-4">
           <div>
-            <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Select what to include:</h4>
+            <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Select what to include:</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[
                 { id: 'goals', label: 'Goals & Progress', icon: Target },
@@ -1485,7 +1485,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               ].map((option) => {
                 const IconComponent = option.icon;
                 return (
-                  <label key={option.id} className="flex items-center gap-2 p-2 rounded-lg border cursor-pointer hover:bg-slate-50">
+                  <label key={option.id} className="flex items-center gap-2 p-2 rounded-lg border cursor-pointer hover:bg-[#FAF7F2]">
                     <input
                       type="checkbox"
                       checked={selectedExportOptions.includes(option.id)}
@@ -1498,8 +1498,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       }}
                       className="rounded border-slate-300"
                     />
-                    <IconComponent className="w-4 h-4 text-slate-500" />
-                    <span className="text-sm text-slate-700">{option.label}</span>
+                    <IconComponent className="w-4 h-4 text-[#5A6B7A]" />
+                    <span className="text-sm text-[#3A4A57]">{option.label}</span>
                   </label>
                 );
               })}
@@ -1507,7 +1507,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Export format:</h4>
+            <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Export format:</h4>
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1">
                 <FileType className="w-4 h-4 mr-2" />
@@ -1529,11 +1529,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       {/* Pre-built Export Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2 flex items-center gap-2">
             <Stethoscope className="w-5 h-5 text-green-600" />
             Medical/Clinical Report
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
             Comprehensive report for healthcare providers, including baselines, progress data, and outcome metrics.
           </p>
           <Button variant="outline" className="w-full">
@@ -1543,11 +1543,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
         </Card>
 
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2 flex items-center gap-2">
             <School className="w-5 h-5 text-blue-600" />
             School Communication Pack
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
             Teacher-friendly summary with goals, strategies, and classroom recommendations.
           </p>
           <Button variant="outline" className="w-full">
@@ -1557,11 +1557,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
         </Card>
 
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2 flex items-center gap-2">
             <Heart className="w-5 h-5 text-purple-600" />
             Family Progress Album
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
             Beautiful progress portfolio for sharing with family members and celebrating milestones.
           </p>
           <Button variant="outline" className="w-full">
@@ -1571,11 +1571,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
         </Card>
 
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+          <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2 flex items-center gap-2">
             <PieChart className="w-5 h-5 text-[#6B9080]" />
             Insurance Report
           </h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
             ROI and outcome metrics report designed for insurance providers and coverage reviews.
           </p>
           <Button variant="outline" className="w-full">
@@ -1587,8 +1587,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
       {/* Sharing Options */}
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
-          <Share className="w-5 h-5 text-indigo-600" />
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
+          <Share className="w-5 h-5 text-[#6B9080]" />
           Share with Team
         </h3>
         
@@ -1609,8 +1609,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           </div>
 
           <div className="border-t pt-4">
-            <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Recent shares:</h4>
-            <div className="space-y-2 text-sm text-slate-600">
+            <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Recent shares:</h4>
+            <div className="space-y-2 text-sm text-[#5A6B7A]">
               <div className="flex items-center justify-between">
                 <span>Teacher Pack sent to Ms. Johnson</span>
                 <span className="text-xs">2 days ago</span>
@@ -1641,8 +1641,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl text-slate-900 dark:text-slate-100">Daily Routines</h2>
-          <p className="text-slate-600 dark:text-slate-400">Structure and predictability with adaptive feedback</p>
+          <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Daily Routines</h2>
+          <p className="text-[#5A6B7A] dark:text-slate-400">Structure and predictability with adaptive feedback</p>
         </div>
         <Button variant="outline" size="sm">
           <Plus className="w-4 h-4 mr-2" />
@@ -1678,29 +1678,29 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     {routine.completionRate}% success
                   </Badge>
                 </div>
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{routine.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">{routine.description}</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{routine.title}</h3>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">{routine.description}</p>
 
                 {/* Completion Rate Progress */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-slate-600 dark:text-slate-400">Completion Rate</span>
-                    <span className="text-sm text-slate-900 dark:text-slate-100">{routine.completionRate}%</span>
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Completion Rate</span>
+                    <span className="text-sm text-[#1B2733] dark:text-slate-100">{routine.completionRate}%</span>
                   </div>
                   <Progress value={routine.completionRate} className="h-2" />
                 </div>
 
                 {/* Steps with adaptive indicators */}
                 <div className="space-y-2 mb-4">
-                  <h4 className="text-sm text-slate-900 dark:text-slate-100">Steps:</h4>
+                  <h4 className="text-sm text-[#1B2733] dark:text-slate-100">Steps:</h4>
                   {routine.steps.map((step) => (
-                    <div key={step.id} className="flex items-start gap-3 p-2 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                    <div key={step.id} className="flex items-start gap-3 p-2 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
                       <div className="w-6 h-6 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-xs text-[#6B9080]">{step.order}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm text-slate-900 dark:text-slate-100 mb-1">{step.title}</div>
-                        <div className="text-xs text-slate-600 dark:text-slate-400">{step.description}</div>
+                        <div className="text-sm text-[#1B2733] dark:text-slate-100 mb-1">{step.title}</div>
+                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{step.description}</div>
                       </div>
                     </div>
                   ))}
@@ -1709,10 +1709,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 {/* Adaptations */}
                 {routine.adaptations.length > 0 && (
                   <div className="mb-4">
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Current Adaptations:</h4>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-2">Current Adaptations:</h4>
                     <div className="flex flex-wrap gap-2">
                       {routine.adaptations.map((adaptation, index) => (
-                        <Badge key={index} variant="outline" className="text-blue-600 border-blue-200 bg-blue-50">
+                        <Badge key={index} variant="outline" className="text-blue-600 border-[#C8DDE8] bg-[#EEF4F8]">
                           <Lightbulb className="w-3 h-3 mr-1" />
                           {adaptation}
                         </Badge>
@@ -1723,8 +1723,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 {/* Recent Caregiver Feedback */}
                 {routine.feedback.length > 0 && (
-                  <Card className="p-3 bg-slate-50">
-                    <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">Recent Feedback</h4>
+                  <Card className="p-3 bg-[#FAF7F2]">
+                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">Recent Feedback</h4>
                     {routine.feedback.slice(-1).map((feedback) => (
                       <div key={feedback.id} className="space-y-2">
                         <div className="flex items-center gap-3 sm:gap-4">
@@ -1741,7 +1741,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                           </div>
                         </div>
                         {feedback.notes && (
-                          <p className="text-sm text-slate-600 italic">"{feedback.notes}"</p>
+                          <p className="text-sm text-[#5A6B7A] italic">"{feedback.notes}"</p>
                         )}
                         {feedback.recommendedAdjustment && (
                           <p className="text-sm text-[#6B9080]">Recommendation: {feedback.recommendedAdjustment}</p>
@@ -1774,8 +1774,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl text-slate-900 dark:text-slate-100">Strategies & Techniques</h2>
-          <p className="text-slate-600 dark:text-slate-400">Evidence-based approaches with effectiveness tracking</p>
+          <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Strategies & Techniques</h2>
+          <p className="text-[#5A6B7A] dark:text-slate-400">Evidence-based approaches with effectiveness tracking</p>
         </div>
         <Button variant="outline" size="sm">
           <Plus className="w-4 h-4 mr-2" />
@@ -1850,15 +1850,15 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   </Badge>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-sm text-slate-600 dark:text-slate-400">{strategy.effectiveness}% effective</span>
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">{strategy.effectiveness}% effective</span>
                   </div>
-                  <Badge variant="outline" className="text-slate-600">
+                  <Badge variant="outline" className="text-[#5A6B7A]">
                     Used {strategy.usageCount} times
                   </Badge>
                 </div>
                 
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{strategy.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">{strategy.description}</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{strategy.title}</h3>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">{strategy.description}</p>
 
                 {/* Usage Analytics */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
@@ -1869,10 +1869,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </div>
                     <div className="text-lg font-semibold text-green-900">{strategy.parentRating}/5.0</div>
                   </div>
-                  <div className="p-3 bg-blue-50 rounded-lg">
+                  <div className="p-3 bg-[#EEF4F8] rounded-lg">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-blue-800">Last Used</span>
+                      <span className="text-sm font-medium text-[#4A6478]">Last Used</span>
                     </div>
                     <div className="text-sm font-semibold text-blue-900">{strategy.lastUsed.toLocaleDateString()}</div>
                   </div>
@@ -1880,20 +1880,20 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 <div className="space-y-3">
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-1">When to use:</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">{strategy.whenToUse}</p>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-1">When to use:</h4>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{strategy.whenToUse}</p>
                   </div>
                   
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-1">How to implement:</h4>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">{strategy.howToImplement}</p>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-1">How to implement:</h4>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{strategy.howToImplement}</p>
                   </div>
 
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Tips for success:</h4>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-2">Tips for success:</h4>
                     <ul className="space-y-1">
                       {strategy.tips.map((tip, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                           <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                           {tip}
                         </li>
@@ -1903,7 +1903,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                   {/* Current Adaptations */}
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Your Adaptations:</h4>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-2">Your Adaptations:</h4>
                     <div className="flex flex-wrap gap-2">
                       {strategy.adaptations.map((adaptation, index) => (
                         <Badge key={index} variant="outline" className="text-purple-600 border-purple-200 bg-purple-50">
@@ -1933,26 +1933,26 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </div>
 
       {/* Strategy Effectiveness Chart */}
-      <Card className="p-6 bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <BarChart3 className="w-5 h-5 text-blue-600" />
           Strategy Effectiveness Trends
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-blue-600">85%</div>
-            <div className="text-sm text-slate-600">Avg Effectiveness</div>
+            <div className="text-sm text-[#5A6B7A]">Avg Effectiveness</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-green-600">4.2</div>
-            <div className="text-sm text-slate-600">Parent Rating</div>
+            <div className="text-sm text-[#5A6B7A]">Parent Rating</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-purple-600">65</div>
-            <div className="text-sm text-slate-600">Times Used</div>
+            <div className="text-sm text-[#5A6B7A]">Times Used</div>
           </div>
         </div>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5A6B7A]">
           Visual supports are your most effective strategy category. Consider expanding use to new routines.
         </p>
       </Card>
@@ -1962,8 +1962,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
   const renderEnhancedTracking = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div>
-        <h2 className="text-xl text-slate-900 dark:text-slate-100">Data & Tracking</h2>
-        <p className="text-slate-600 dark:text-slate-400">Longitudinal progress monitoring and trend analysis</p>
+        <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Data & Tracking</h2>
+        <p className="text-[#5A6B7A] dark:text-slate-400">Longitudinal progress monitoring and trend analysis</p>
       </div>
 
       <Tabs defaultValue="trends" className="w-full">
@@ -1976,7 +1976,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
         <TabsContent value="trends" className="space-y-3 sm:space-y-4">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Progress by Domain</h3>
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Progress by Domain</h3>
             <div className="space-y-3 sm:space-y-4 sm:space-y-6">
               {[
                 { domain: 'Communication', data: longitudinalData.trendData.communication, color: 'blue' },
@@ -1988,10 +1988,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={`w-3 h-3 bg-${trend.color}-500 rounded-full`}></div>
-                      <span className="text-sm font-medium text-slate-900">{trend.domain}</span>
+                      <span className="text-sm font-medium text-[#1B2733]">{trend.domain}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm text-slate-600">
+                      <span className="text-sm text-[#5A6B7A]">
                         {trend.data[trend.data.length - 1]}% current
                       </span>
                       <Badge variant="outline" className={
@@ -2006,7 +2006,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   </div>
                   <div className="flex items-end gap-1 h-12">
                     {trend.data.map((value, index) => (
-                      <div key={index} className="flex-1 bg-slate-100 rounded-sm relative">
+                      <div key={index} className="flex-1 bg-[#F0EDE8] rounded-sm relative">
                         <div 
                           className={`bg-${trend.color}-500 rounded-sm transition-all duration-300`}
                           style={{ height: `${(value / 100) * 48}px` }}
@@ -2023,29 +2023,29 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
         <TabsContent value="daily" className="space-y-3 sm:space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Today's Progress</h3>
+              <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Today's Progress</h3>
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600 dark:text-slate-400">Daily Goals Met</span>
-                  <span className="text-sm text-slate-900 dark:text-slate-100">85%</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Daily Goals Met</span>
+                  <span className="text-sm text-[#1B2733] dark:text-slate-100">85%</span>
                 </div>
                 <Progress value={85} className="h-2" />
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600 dark:text-slate-400">Routines Completed</span>
-                  <span className="text-sm text-slate-900 dark:text-slate-100">2/3</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Routines Completed</span>
+                  <span className="text-sm text-[#1B2733] dark:text-slate-100">2/3</span>
                 </div>
                 <Progress value={67} className="h-2" />
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600 dark:text-slate-400">Strategies Used</span>
-                  <span className="text-sm text-slate-900 dark:text-slate-100">4</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Strategies Used</span>
+                  <span className="text-sm text-[#1B2733] dark:text-slate-100">4</span>
                 </div>
               </div>
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Activity Log</h3>
+              <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Activity Log</h3>
               <div className="space-y-3">
                 {[
                   { time: '9:15 AM', activity: 'Morning routine completed', type: 'success' },
@@ -2053,7 +2053,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   { time: '2:45 PM', activity: 'Requested help appropriately', type: 'milestone' },
                   { time: '4:00 PM', activity: 'Provided routine feedback', type: 'feedback' }
                 ].map((log, index) => (
-                  <div key={index} className="flex items-center gap-3 p-2 rounded-lg bg-slate-50">
+                  <div key={index} className="flex items-center gap-3 p-2 rounded-lg bg-[#FAF7F2]">
                     <div className={`w-2 h-2 rounded-full ${
                       log.type === 'success' ? 'bg-green-500' :
                       log.type === 'strategy' ? 'bg-blue-500' :
@@ -2061,8 +2061,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       'bg-amber-500'
                     }`}></div>
                     <div className="flex-1">
-                      <div className="text-sm text-slate-900">{log.activity}</div>
-                      <div className="text-xs text-slate-500">{log.time}</div>
+                      <div className="text-sm text-[#1B2733]">{log.activity}</div>
+                      <div className="text-xs text-[#5A6B7A]">{log.time}</div>
                     </div>
                   </div>
                 ))}
@@ -2073,28 +2073,28 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
         <TabsContent value="weekly" className="space-y-3 sm:space-y-4">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Weekly Summary</h3>
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Weekly Summary</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold text-green-600">6</div>
-                <div className="text-sm text-slate-600">Goals Progressed</div>
+                <div className="text-sm text-[#5A6B7A]">Goals Progressed</div>
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold text-blue-600">14</div>
-                <div className="text-sm text-slate-600">Routines Completed</div>
+                <div className="text-sm text-[#5A6B7A]">Routines Completed</div>
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold text-purple-600">28</div>
-                <div className="text-sm text-slate-600">Strategies Used</div>
+                <div className="text-sm text-[#5A6B7A]">Strategies Used</div>
               </div>
               <div className="text-center">
                 <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
-                <div className="text-sm text-slate-600">Consistency Rate</div>
+                <div className="text-sm text-[#5A6B7A]">Consistency Rate</div>
               </div>
             </div>
-            <div className="p-4 bg-blue-50 rounded-lg">
+            <div className="p-4 bg-[#EEF4F8] rounded-lg">
               <h4 className="text-sm font-medium text-blue-900 mb-2">This Week's Highlight:</h4>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-[#4A6478]">
                 {childShort} made breakthrough progress in verbal requests, using "help me" independently 8 times this week!
               </p>
             </div>
@@ -2103,33 +2103,33 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
         <TabsContent value="monthly" className="space-y-3 sm:space-y-4">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4">Month-over-Month Analysis</h3>
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4">Month-over-Month Analysis</h3>
             <div className="space-y-3 sm:space-y-4">
               {longitudinalData.monthlyProgress.map((month, index) => (
-                <div key={index} className="p-4 border border-slate-200 rounded-lg">
+                <div key={index} className="p-4 border border-[#E8E4DF] rounded-lg">
                   <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium text-slate-900">{month.month}</h4>
+                    <h4 className="font-medium text-[#1B2733]">{month.month}</h4>
                     <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
                       {month.parentParticipation}% participation
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-sm">
                     <div>
-                      <div className="text-slate-600">Goals Progress</div>
-                      <div className="font-medium text-slate-900">
+                      <div className="text-[#5A6B7A]">Goals Progress</div>
+                      <div className="font-medium text-[#1B2733]">
                         {Math.round(Object.values(month.goalsProgress).reduce((a, b) => a + b, 0) / Object.values(month.goalsProgress).length)}%
                       </div>
                     </div>
                     <div>
-                      <div className="text-slate-600">Routines</div>
-                      <div className="font-medium text-slate-900">{month.routinesCompleted}%</div>
+                      <div className="text-[#5A6B7A]">Routines</div>
+                      <div className="font-medium text-[#1B2733]">{month.routinesCompleted}%</div>
                     </div>
                     <div>
-                      <div className="text-slate-600">Strategies</div>
-                      <div className="font-medium text-slate-900">{month.strategiesUsed}</div>
+                      <div className="text-[#5A6B7A]">Strategies</div>
+                      <div className="font-medium text-[#1B2733]">{month.strategiesUsed}</div>
                     </div>
                     <div>
-                      <div className="text-slate-600">Growth Rate</div>
+                      <div className="text-[#5A6B7A]">Growth Rate</div>
                       <div className="font-medium text-green-600">
                         +{index === 0 ? 25 : Math.round(Object.values(month.goalsProgress).reduce((a, b) => a + b, 0) / Object.values(month.goalsProgress).length) - 
                         Math.round(Object.values(longitudinalData.monthlyProgress[index - 1]?.goalsProgress || {1: 0}).reduce((a, b) => a + b, 0))}%
@@ -2149,8 +2149,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl text-slate-900 dark:text-slate-100">Rewards & Motivation</h2>
-          <p className="text-slate-600 dark:text-slate-400">Personalized motivation system with engagement tracking</p>
+          <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Rewards & Motivation</h2>
+          <p className="text-[#5A6B7A] dark:text-slate-400">Personalized motivation system with engagement tracking</p>
         </div>
         <Button variant="outline" size="sm">
           <Plus className="w-4 h-4 mr-2" />
@@ -2160,22 +2160,22 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
       {/* Motivation Status */}
       <Card className="p-6 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-4 flex items-center gap-2">
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-4 flex items-center gap-2">
           <Flame className="w-5 h-5 text-amber-600" />
           Current Motivation Level
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-amber-600">High</div>
-            <div className="text-sm text-slate-600">Engagement Level</div>
+            <div className="text-sm text-[#5A6B7A]">Engagement Level</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-green-600">78%</div>
-            <div className="text-sm text-slate-600">Response Rate</div>
+            <div className="text-sm text-[#5A6B7A]">Response Rate</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-purple-600">3</div>
-            <div className="text-sm text-slate-600">Active Motivators</div>
+            <div className="text-sm text-[#5A6B7A]">Active Motivators</div>
           </div>
         </div>
         <div className="p-3 bg-amber-100 rounded-lg">
@@ -2188,7 +2188,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
       {/* Current Reward System */}
       <div className="space-y-3 sm:space-y-4">
-        <h3 className="text-lg text-slate-900 dark:text-slate-100">Current Reward System</h3>
+        <h3 className="text-lg text-[#1B2733] dark:text-slate-100">Current Reward System</h3>
         
         {[
           {
@@ -2257,16 +2257,16 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   </Badge>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-sm text-slate-600 dark:text-slate-400">{reward.effectiveness}% effective</span>
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">{reward.effectiveness}% effective</span>
                   </div>
                 </div>
                 
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{reward.title}</h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">{reward.description}</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{reward.title}</h3>
+                <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">{reward.description}</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
-                  <div className="p-3 bg-blue-50 rounded-lg">
-                    <div className="text-sm text-blue-800">Usage Pattern</div>
+                  <div className="p-3 bg-[#EEF4F8] rounded-lg">
+                    <div className="text-sm text-[#4A6478]">Usage Pattern</div>
                     <div className="font-medium text-blue-900">{reward.usage}</div>
                   </div>
                   <div className="p-3 bg-green-50 rounded-lg">
@@ -2277,7 +2277,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 <div className="space-y-3">
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Motivates these behaviors:</h4>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-2">Motivates these behaviors:</h4>
                     <div className="flex flex-wrap gap-2">
                       {reward.motivatedBehaviors.map((behavior, index) => (
                         <Badge key={index} variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-[#6B9080]/10">
@@ -2288,10 +2288,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   </div>
 
                   <div>
-                    <h4 className="text-sm text-slate-900 dark:text-slate-100 mb-2">Current Adaptations:</h4>
+                    <h4 className="text-sm text-[#1B2733] dark:text-slate-100 mb-2">Current Adaptations:</h4>
                     <ul className="space-y-1">
                       {reward.adaptations.map((adaptation, index) => (
-                        <li key={index} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                        <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                           <div className="w-1.5 h-1.5 bg-purple-500 rounded-full mt-2 flex-shrink-0" />
                           {adaptation}
                         </li>
@@ -2325,7 +2325,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">Motivation Alert</h3>
+              <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">Motivation Alert</h3>
               <p className="text-sm text-red-700 mb-3">
                 AI has detected declining engagement in social activities. Consider refreshing rewards or trying new motivators.
               </p>
@@ -2350,8 +2350,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl text-slate-900 dark:text-slate-100">Resource Library</h2>
-          <p className="text-slate-600 dark:text-slate-400">Personalized activities and resources for {childShort}</p>
+          <h2 className="text-xl text-[#1B2733] dark:text-slate-100">Resource Library</h2>
+          <p className="text-[#5A6B7A] dark:text-slate-400">Personalized activities and resources for {childShort}</p>
         </div>
         <Button variant="outline" size="sm">
           <Bookmark className="w-4 h-4 mr-2" />
@@ -2360,14 +2360,14 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       </div>
 
       {/* Personalized Recommendations */}
-      <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
+      <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
             <Brain className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">AI-Recommended for {childShort}</h3>
-            <p className="text-sm text-slate-600 mb-3">
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">AI-Recommended for {childShort}</h3>
+            <p className="text-sm text-[#5A6B7A] mb-3">
               Based on current goals and recent progress, these activities are perfectly suited for {childShort}'s development stage.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -2401,15 +2401,15 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </Badge>
                     <Badge variant="outline" className={
                       activity.difficulty === 'Easy' ? 'text-green-600 border-green-200 bg-green-50' :
-                      activity.difficulty === 'Just Right' ? 'text-blue-600 border-blue-200 bg-blue-50' :
+                      activity.difficulty === 'Just Right' ? 'text-blue-600 border-[#C8DDE8] bg-[#EEF4F8]' :
                       'text-amber-600 border-amber-200 bg-amber-50'
                     }>
                       {activity.difficulty}
                     </Badge>
                   </div>
-                  <h4 className="text-sm font-medium text-slate-900 mb-1">{activity.title}</h4>
-                  <p className="text-xs text-slate-600 mb-2">{activity.matchReason}</p>
-                  <div className="text-xs text-slate-500">{activity.timeNeeded}</div>
+                  <h4 className="text-sm font-medium text-[#1B2733] mb-1">{activity.title}</h4>
+                  <p className="text-xs text-[#5A6B7A] mb-2">{activity.matchReason}</p>
+                  <div className="text-xs text-[#5A6B7A]">{activity.timeNeeded}</div>
                 </div>
               ))}
             </div>
@@ -2503,32 +2503,32 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   <Badge variant="outline" className={
                     resource.difficulty === 'Beginner' ? 'text-green-600 border-green-200 bg-green-50' :
                     resource.difficulty === 'Intermediate' ? 'text-amber-600 border-amber-200 bg-amber-50' :
-                    'text-blue-600 border-blue-200 bg-blue-50'
+                    'text-blue-600 border-[#C8DDE8] bg-[#EEF4F8]'
                   }>
                     {resource.difficulty}
                   </Badge>
                 </div>
                 
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{resource.title}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">{resource.description}</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{resource.title}</h3>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">{resource.description}</p>
                 
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 text-amber-400" />
-                      <span className="text-sm text-slate-600">{resource.rating}</span>
+                      <span className="text-sm text-[#5A6B7A]">{resource.rating}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Download className="w-4 h-4 text-slate-400" />
-                      <span className="text-sm text-slate-600">{resource.downloads}</span>
+                      <span className="text-sm text-[#5A6B7A]">{resource.downloads}</span>
                     </div>
                   </div>
-                  <span className="text-sm text-slate-500">{resource.time}</span>
+                  <span className="text-sm text-[#5A6B7A]">{resource.time}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-4">
                   {resource.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs text-slate-500 border-slate-300">
+                    <Badge key={index} variant="outline" className="text-xs text-[#5A6B7A] border-slate-300">
                       {tag}
                     </Badge>
                   ))}
@@ -2590,7 +2590,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             ].map((video) => (
               <Card key={video.title} className="p-3 sm:p-4">
                 <div className="relative mb-3">
-                  <div className="w-full h-32 bg-slate-200 rounded-lg flex items-center justify-center">
+                  <div className="w-full h-32 bg-[#E8E4DF] rounded-lg flex items-center justify-center">
                     <Video className="w-8 h-8 text-slate-400" />
                   </div>
                   <Badge className="absolute top-2 right-2 bg-black/70 text-white">
@@ -2604,13 +2604,13 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   </Badge>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-sm text-slate-600">{video.rating}</span>
+                    <span className="text-sm text-[#5A6B7A]">{video.rating}</span>
                   </div>
                 </div>
                 
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{video.title}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">by {video.instructor}</p>
-                <p className="text-sm text-slate-500 mb-4">{video.views} views</p>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{video.title}</h3>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">by {video.instructor}</p>
+                <p className="text-sm text-[#5A6B7A] mb-4">{video.views} views</p>
                 
                 <Button className="w-full">
                   <Play className="w-4 h-4 mr-2" />
@@ -2632,16 +2632,16 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
               'Sensory Menu Cards'
             ].map((printable) => (
               <Card key={printable} className="p-4 hover:shadow-md transition-shadow">
-                <div className="w-full h-32 bg-slate-100 rounded-lg flex items-center justify-center mb-3">
+                <div className="w-full h-32 bg-[#F0EDE8] rounded-lg flex items-center justify-center mb-3">
                   <FileText className="w-8 h-8 text-slate-400" />
                 </div>
-                <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">{printable}</h3>
+                <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">{printable}</h3>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-amber-400" />
-                    <span className="text-sm text-slate-600">4.{Math.floor(Math.random() * 9) + 1}</span>
+                    <span className="text-sm text-[#5A6B7A]">4.{Math.floor(Math.random() * 9) + 1}</span>
                   </div>
-                  <span className="text-sm text-slate-500">PDF</span>
+                  <span className="text-sm text-[#5A6B7A]">PDF</span>
                 </div>
                 <Button size="sm" className="w-full">
                   <Download className="w-4 h-4 mr-2" />
@@ -2682,22 +2682,22 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             ].map((book) => (
               <Card key={book.title} className="p-3 sm:p-4">
                 <div className="flex gap-3 sm:gap-4">
-                  <div className="w-16 h-20 bg-slate-200 rounded flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-20 bg-[#E8E4DF] rounded flex items-center justify-center flex-shrink-0">
                     <BookOpen className="w-6 h-6 text-slate-400" />
                   </div>
                   <div className="flex-1">
-                    <Badge variant="outline" className="text-indigo-600 border-indigo-200 bg-indigo-50 mb-2">
+                    <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]/20 bg-indigo-50 mb-2">
                       {book.category}
                     </Badge>
-                    <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{book.title}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">by {book.author}</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{book.description}</p>
+                    <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{book.title}</h3>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">by {book.author}</p>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">{book.description}</p>
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-amber-400" />
-                        <span className="text-sm text-slate-600">{book.rating}</span>
+                        <span className="text-sm text-[#5A6B7A]">{book.rating}</span>
                       </div>
-                      <span className="text-sm text-slate-500">{book.pages} pages</span>
+                      <span className="text-sm text-[#5A6B7A]">{book.pages} pages</span>
                     </div>
                     <Button size="sm" variant="outline" className="w-full">
                       <ExternalLink className="w-4 h-4 mr-2" />
@@ -2743,7 +2743,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             ].map((app) => (
               <Card key={app.name} className="p-3 sm:p-4">
                 <div className="flex gap-3 sm:gap-4">
-                  <div className="w-16 h-16 bg-slate-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-[#E8E4DF] rounded-lg flex items-center justify-center flex-shrink-0">
                     <Gamepad2 className="w-8 h-8 text-slate-400" />
                   </div>
                   <div className="flex-1">
@@ -2751,20 +2751,20 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       <Badge variant="outline" className={getCategoryColor(app.category.toLowerCase())}>
                         {app.category}
                       </Badge>
-                      <Badge variant="outline" className="text-slate-600">
+                      <Badge variant="outline" className="text-[#5A6B7A]">
                         {app.platform}
                       </Badge>
                     </div>
-                    <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-1">{app.name}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{app.description}</p>
+                    <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-1">{app.name}</h3>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">{app.description}</p>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1">
                         <Star className="w-4 h-4 text-amber-400" />
-                        <span className="text-sm text-slate-600">{app.rating}</span>
+                        <span className="text-sm text-[#5A6B7A]">{app.rating}</span>
                       </div>
-                      <span className="text-sm text-slate-900 font-medium">{app.price}</span>
+                      <span className="text-sm text-[#1B2733] font-medium">{app.price}</span>
                     </div>
-                    <p className="text-xs text-slate-500 mb-3">Ages {app.ageRange}</p>
+                    <p className="text-xs text-[#5A6B7A] mb-3">Ages {app.ageRange}</p>
                     <Button size="sm" variant="outline" className="w-full">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View in App Store
@@ -2798,10 +2798,10 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
       default: 
         return (
           <div className="text-center py-12">
-            <h3 className="text-lg text-slate-900 dark:text-slate-100 mb-2">
+            <h3 className="text-lg text-[#1B2733] dark:text-slate-100 mb-2">
               {sections.find(s => s.id === activeSection)?.title || 'Section'}
             </h3>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-[#5A6B7A] dark:text-slate-400">
               This section is coming soon with enhanced features.
             </p>
           </div>
@@ -2818,8 +2818,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl text-slate-900 dark:text-slate-100">{childShort}'s Living Care Plan</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <h1 className="text-2xl text-[#1B2733] dark:text-slate-100">{childShort}'s Living Care Plan</h1>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
               Enhanced with baseline tracking, AI insights, and family integration
             </p>
           </div>
@@ -2836,7 +2836,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
                   activeSection === section.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#FAF7F2]'
                 } ${isLocked ? 'opacity-60' : ''}`}
               >
                 <IconComponent className="w-4 h-4" />

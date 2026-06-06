@@ -239,8 +239,8 @@ export function CoverageClaritySummary({
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-700 border-red-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'low': return 'bg-blue-100 text-blue-700 border-blue-200';
-      default: return 'bg-slate-100 text-slate-700 border-slate-200';
+      case 'low': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
+      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -258,7 +258,7 @@ export function CoverageClaritySummary({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6">
         <div className="max-w-4xl mx-auto">
@@ -311,12 +311,12 @@ export function CoverageClaritySummary({
         </Card>
 
         {/* Key Insights */}
-        <Card className="p-6 border-l-4 border-l-teal-500">
+        <Card className="p-6 border-l-4 border-l-[#6B9080]">
           <div className="flex items-start gap-3 mb-4">
             <Info className="w-5 h-5 text-primary mt-0.5" />
             <div>
               <h2 className="font-semibold text-lg mb-2">What We Found</h2>
-              <div className="space-y-2 text-sm text-slate-700">
+              <div className="space-y-2 text-sm text-[#3A4A57]">
                 {responses.primaryInsurance?.hasInsurance && (
                   <p>✓ You have {responses.primaryInsurance.provider} coverage</p>
                 )}
@@ -336,20 +336,20 @@ export function CoverageClaritySummary({
 
         {/* Personalized Recommendations */}
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4">Your Personalized Coverage Recommendations</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Your Personalized Coverage Recommendations</h2>
           <div className="space-y-3 sm:space-y-4">
             {recommendations.map((rec, index) => (
               <Card key={index} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg text-slate-900">{rec.title}</h3>
+                      <h3 className="font-semibold text-lg text-[#1B2733]">{rec.title}</h3>
                       <Badge className={getPriorityColor(rec.priority)}>
                         {rec.priority} priority
                       </Badge>
                       {getCoverageLikelihoodBadge(rec.coverageLikelihood)}
                     </div>
-                    <p className="text-slate-700 mb-4">{rec.description}</p>
+                    <p className="text-[#3A4A57] mb-4">{rec.description}</p>
                   </div>
                 </div>
 
@@ -363,10 +363,10 @@ export function CoverageClaritySummary({
                 )}
 
                 <div>
-                  <h4 className="font-medium text-slate-900 mb-2">Action Items:</h4>
+                  <h4 className="font-medium text-[#1B2733] mb-2">Action Items:</h4>
                   <ul className="space-y-2">
                     {rec.actionItems.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
                         <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
@@ -379,7 +379,7 @@ export function CoverageClaritySummary({
         </div>
 
         {/* Next Steps */}
-        <Card className="p-6 bg-gradient-to-br from-teal-50 to-white border-[#6B9080]/20">
+        <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-white border-[#6B9080]/20">
           <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
             Your Next Steps
@@ -390,7 +390,7 @@ export function CoverageClaritySummary({
                 <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
                   {index + 1}
                 </div>
-                <span className="text-slate-700 pt-0.5">{step}</span>
+                <span className="text-[#3A4A57] pt-0.5">{step}</span>
               </li>
             ))}
           </ol>
@@ -401,8 +401,8 @@ export function CoverageClaritySummary({
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
             <div className="flex-1">
-              <h3 className="font-semibold text-slate-900 mb-2">Important Reminders</h3>
-              <ul className="space-y-2 text-sm text-slate-700">
+              <h3 className="font-semibold text-[#1B2733] mb-2">Important Reminders</h3>
+              <ul className="space-y-2 text-sm text-[#3A4A57]">
                 <li>• Coverage details can vary — always verify with your specific plan</li>
                 <li>• Get coverage confirmations in writing (email is best)</li>
                 <li>• Prior authorization can take 2-4 weeks, so start early</li>

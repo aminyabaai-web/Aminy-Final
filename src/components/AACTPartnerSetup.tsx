@@ -149,19 +149,19 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       />
 
       {/* Invite link card */}
-      <div className="mx-4 mt-4 rounded-2xl bg-white border border-slate-200 p-4">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Your invite link</p>
-        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5">
-          <p className="text-xs text-slate-700 flex-1 truncate font-mono">{inviteUrl}</p>
+      <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your invite link</p>
+        <div className="flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-3 py-2.5">
+          <p className="text-xs text-[#3A4A57] flex-1 truncate font-mono">{inviteUrl}</p>
           <button
             onClick={copyInvite}
-            className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors"
+            className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
             aria-label="Copy invite link"
           >
-            {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-slate-500" />}
+            {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-[#5A6B7A]" />}
           </button>
         </div>
-        <p className="text-xs text-slate-500 mt-2">
+        <p className="text-xs text-[#5A6B7A] mt-2">
           Any provider who signs up via this link gets the {config.displayName} contract terms ({(1 - getRatePercent(config.payoutRail)) * 100}% provider take, {config.payers.length} insurance payers, {systemOfRecordLabel(config.systemOfRecord)} sync) automatically applied.
         </p>
       </div>
@@ -169,7 +169,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       {/* What they'll get */}
       <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B30' }}>
         <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-2">What your providers get</p>
-        <ul className="space-y-1.5 text-sm text-slate-700">
+        <ul className="space-y-1.5 text-sm text-[#3A4A57]">
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Pre-contracted with {config.payers.length} payers (no credentialing wait)</span></li>
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Sync with {systemOfRecordLabel(config.systemOfRecord)} — sessions, notes, claims auto-flow</span></li>
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>{config.evvSystem ? `${config.evvSystem.toUpperCase()} EVV compliance built-in` : 'No EVV needed'}</span></li>
@@ -178,11 +178,11 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       </div>
 
       {/* Bulk import */}
-      <div className="mx-4 mt-3 rounded-2xl bg-white border border-slate-200 p-4">
+      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bulk Import</p>
-            <p className="text-sm text-slate-700 mt-0.5">Paste your provider roster — we'll pre-create their accounts</p>
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Bulk Import</p>
+            <p className="text-sm text-[#3A4A57] mt-0.5">Paste your provider roster — we'll pre-create their accounts</p>
           </div>
           {!showCsvInput && (
             <button onClick={() => setShowCsvInput(true)} className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full">
@@ -198,7 +198,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
               onChange={e => setCsvText(e.target.value)}
               placeholder={`one email per line, OR "Name, email" per line\n\nexample@aact.com\nDr. Sarah Lee, sarah@aact.com\nrbt@aact.com`}
               rows={6}
-              className="w-full text-sm font-mono border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
+              className="w-full text-sm font-mono border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
             />
             <div className="flex gap-2">
               <button
@@ -210,7 +210,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
                 {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {isImporting ? 'Importing…' : 'Import'}
               </button>
-              <button onClick={() => { setShowCsvInput(false); setCsvText(''); }} className="text-sm text-slate-500 px-4 py-2.5 rounded-xl">
+              <button onClick={() => { setShowCsvInput(false); setCsvText(''); }} className="text-sm text-[#5A6B7A] px-4 py-2.5 rounded-xl">
                 Cancel
               </button>
             </div>
@@ -219,20 +219,20 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       </div>
 
       {/* Provider roster + status */}
-      <div className="mx-4 mt-3 rounded-2xl bg-white border border-slate-200">
-        <div className="px-4 pt-3 pb-2 border-b border-slate-100 flex items-center justify-between">
+      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF]">
+        <div className="px-4 pt-3 pb-2 border-b border-[#E8E4DF] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-slate-400" />
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Roster ({providers.length})</p>
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Roster ({providers.length})</p>
           </div>
           <button onClick={loadProviders} className="text-xs text-[#6B9080]">Refresh</button>
         </div>
 
         {/* Status pills */}
         {providers.length > 0 && (
-          <div className="px-4 py-2 flex flex-wrap gap-2 border-b border-slate-100">
+          <div className="px-4 py-2 flex flex-wrap gap-2 border-b border-[#E8E4DF]">
             {['invited', 'applied', 'approved', 'active'].map(s => (
-              <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 capitalize">
+              <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#3A4A57] capitalize">
                 {s}: {statusCounts[s] || 0}
               </span>
             ))}
@@ -244,20 +244,20 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
         ) : providers.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <AlertCircle className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-slate-500">No providers yet. Share your invite link or bulk-import above.</p>
+            <p className="text-sm text-[#5A6B7A]">No providers yet. Share your invite link or bulk-import above.</p>
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
             {providers.map((p, i) => (
               <div key={i} className="px-4 py-2.5 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-sm font-semibold text-slate-600 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center text-sm font-semibold text-[#5A6B7A] shrink-0">
                   {(p.full_name || p.email)[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  {p.full_name && <p className="text-sm font-medium text-slate-800 truncate">{p.full_name}</p>}
-                  <p className="text-xs text-slate-500 truncate">{p.email}</p>
+                  {p.full_name && <p className="text-sm font-medium text-[#1B2733] truncate">{p.full_name}</p>}
+                  <p className="text-xs text-[#5A6B7A] truncate">{p.email}</p>
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 capitalize shrink-0">{p.status || 'invited'}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A] capitalize shrink-0">{p.status || 'invited'}</span>
               </div>
             ))}
           </div>

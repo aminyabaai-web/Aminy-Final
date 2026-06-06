@@ -719,7 +719,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'pro',
       tier: 'pro',
-      color: 'bg-indigo-100 text-indigo-600',
+      color: 'bg-indigo-100 text-[#6B9080]',
       track: 'Interoception',
       voiceReady: true,
       regulationFriendly: true,
@@ -738,7 +738,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'micro',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-indigo-100 text-indigo-600',
+      color: 'bg-indigo-100 text-[#6B9080]',
       track: 'Calm',
       voiceReady: true,
       regulationFriendly: true,
@@ -1580,7 +1580,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             </motion.div>
             <div>
               <p className="text-xl font-semibold text-slate-950">Hi {childName}!</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 With {buddyVoices.find(b => b.id === selectedBuddy)?.name}
               </p>
             </div>
@@ -1599,14 +1599,14 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             {/* Offline Indicator */}
             {isOfflineMode && (
               <div className="bg-[#F0EDE8] px-2 py-1 rounded-full">
-                <WifiOff className="w-4 h-4 text-gray-600" />
+                <WifiOff className="w-4 h-4 text-[#5A6B7A]" />
               </div>
             )}
             
             <button
               type="button"
               onClick={() => setActiveView('parent-controls')}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white/90 text-slate-400 shadow-sm transition-colors hover:border-slate-300 hover:text-slate-600"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-white/90 text-slate-400 shadow-sm transition-colors hover:border-slate-300 hover:text-[#5A6B7A]"
               aria-label="Open parent controls"
             >
               <Shield className="h-4 w-4" />
@@ -1628,7 +1628,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 >
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
-                      <Badge variant="outline" className="border-[#6B9080]/20 bg-white/70 text-slate-600">
+                      <Badge variant="outline" className="border-[#6B9080]/20 bg-white/70 text-[#5A6B7A]">
                         Calm &amp; rewards
                       </Badge>
                       <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
@@ -1636,24 +1636,24 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       </h1>
                       <h2 className="sr-only">Calm Corner overview</h2>
                       <h3 className="sr-only">Rewards and transition support</h3>
-                      <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
+                      <p className="mt-3 max-w-xl text-sm leading-6 text-[#5A6B7A]">
                         This space is focused on helping {childName} regulate, work toward a reward, and move through tough transitions without turning the app into one more noisy distraction.
                       </p>
                     </div>
 
                     <div className="grid min-w-[220px] grid-cols-2 gap-3 self-stretch lg:w-[280px]">
                       <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
-                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Stars today</div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Stars today</div>
                         <div className="mt-2 flex items-center gap-2 text-2xl font-semibold text-slate-950">
                           <Star className="h-5 w-5 text-amber-500" />
                           {todayTokens}
                         </div>
-                        <div className="mt-1 text-xs text-slate-500">Earned for calm moments and progress.</div>
+                        <div className="mt-1 text-xs text-[#5A6B7A]">Earned for calm moments and progress.</div>
                       </div>
                       <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
-                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current feeling</div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Current feeling</div>
                         <div className="mt-2 text-2xl">{emotionDetected === 'calm' ? '😌' : emotionDetected === 'frustrated' ? '😤' : emotionDetected === 'anxious' ? '😰' : '🤩'}</div>
-                        <div className="mt-1 text-xs capitalize text-slate-500">{emotionDetected}</div>
+                        <div className="mt-1 text-xs capitalize text-[#5A6B7A]">{emotionDetected}</div>
                       </div>
                     </div>
                   </div>
@@ -1673,7 +1673,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <div className="text-xs font-medium uppercase tracking-[0.12em] text-amber-600">
                           {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}, {childName}!
                         </div>
-                        <div className="mt-0.5 text-sm font-semibold text-slate-900">
+                        <div className="mt-0.5 text-sm font-semibold text-[#1B2733]">
                           {weekStreak >= 5
                             ? `${weekStreak}-day streak! You're on fire 🔥`
                             : weekStreak >= 3
@@ -1733,7 +1733,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     </div>
 
                     <div className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-sm">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Quick support</div>
+                      <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Quick support</div>
                       <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950">What helps right now?</div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <Badge variant="outline" className="border-[#6B9080]/20 bg-[#6B9080]/10 text-cyan-700">Waiting room mode</Badge>
@@ -1743,7 +1743,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-slate-200 bg-white px-4 text-slate-700 hover:bg-slate-50"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2]"
                       >
                         Open today’s transition board
                         <ArrowRight className="h-4 w-4" />
@@ -1757,11 +1757,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current reward goal</div>
+                          <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Current reward goal</div>
                           <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950">
                             {motivationGoal.emoji} {motivationGoal.title}
                           </h3>
-                          <p className="mt-2 text-sm leading-6 text-slate-600">{motivationGoal.goal}</p>
+                          <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">{motivationGoal.goal}</p>
                         </div>
                         <Badge className="bg-amber-100 text-amber-700">{motivationGoal.current}/{motivationGoal.target}</Badge>
                       </div>
@@ -1778,8 +1778,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       </div>
 
                       <div className="mt-5">
-                        <Progress value={motivationProgress} className="h-3 bg-slate-100" />
-                        <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                        <Progress value={motivationProgress} className="h-3 bg-[#F0EDE8]" />
+                        <div className="mt-2 flex items-center justify-between text-xs text-[#5A6B7A]">
                           <span>{motivationGoal.current} days complete</span>
                           <span>{motivationGoal.target - motivationGoal.current} to go</span>
                         </div>
@@ -1796,7 +1796,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <Button
                           variant="outline"
                           onClick={() => setActiveView('rewards')}
-                          className="h-12 rounded-2xl border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                          className="h-12 rounded-2xl border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2]"
                         >
                           <Gift className="mr-2 h-4 w-4" />
                           Open rewards
@@ -1808,18 +1808,18 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   <Card className="overflow-hidden rounded-[28px] border-white/80 bg-[linear-gradient(180deg,_#ffffff_0%,_#f6f8fb_100%)] shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
                     <div className="p-6">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Transition support</div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Transition support</div>
                         {homeTransition.isExample && (
-                          <Badge variant="outline" className="border-slate-200 bg-slate-50 text-slate-500">
+                          <Badge variant="outline" className="border-[#E8E4DF] bg-[#FAF7F2] text-[#5A6B7A]">
                             Example
                           </Badge>
                         )}
                       </div>
                       <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Make the next step obvious</h3>
                       <div className="mt-4 space-y-3">
-                        <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                        <div className="rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3">
                           <div className="text-xs uppercase tracking-[0.18em] text-slate-400">First</div>
-                          <div className="mt-1 text-sm font-medium text-slate-900">
+                          <div className="mt-1 text-sm font-medium text-[#1B2733]">
                             {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
                           </div>
                         </div>
@@ -1834,7 +1834,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-slate-200 bg-white px-4 text-slate-700 hover:bg-slate-50"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2]"
                       >
                         Open visual schedule
                         <ArrowRight className="h-4 w-4" />
@@ -1853,7 +1853,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Gift className="h-6 w-6" />
                     </div>
                     <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Rewards</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">Spend stars, celebrate wins, and keep the goal visible.</p>
+                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">Spend stars, celebrate wins, and keep the goal visible.</p>
                   </button>
 
                   <button
@@ -1865,7 +1865,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Clock className="h-6 w-6" />
                     </div>
                     <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Transitions</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">Use first/then boards, routines, and countdowns to lower friction.</p>
+                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">Use first/then boards, routines, and countdowns to lower friction.</p>
                   </button>
                 </div>
 
@@ -1873,11 +1873,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   <div className="p-6">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Only if helpful</div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Only if helpful</div>
                         <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Optional practice</h2>
-                        <p className="mt-1 text-sm text-slate-600">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
+                        <p className="mt-1 text-sm text-[#5A6B7A]">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
                       </div>
-                      <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-slate-600 hover:bg-slate-100">
+                      <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-[#5A6B7A] hover:bg-[#F0EDE8]">
                         Change buddy voice
                       </Button>
                     </div>
@@ -1898,14 +1898,14 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             <div className="flex items-center gap-3">
                               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/70">{activity.icon}</div>
                               <div>
-                                <div className="text-sm font-semibold text-slate-900">{activity.title}</div>
-                                <div className="text-xs text-slate-600">{activity.duration}</div>
+                                <div className="text-sm font-semibold text-[#1B2733]">{activity.title}</div>
+                                <div className="text-xs text-[#5A6B7A]">{activity.duration}</div>
                               </div>
                             </div>
-                            <ChevronRight className="h-4 w-4 text-slate-500" />
+                            <ChevronRight className="h-4 w-4 text-[#5A6B7A]" />
                           </div>
                           {activity.whyToday && (
-                            <p className="mt-3 text-xs leading-5 text-slate-700">{activity.whyToday}</p>
+                            <p className="mt-3 text-xs leading-5 text-[#3A4A57]">{activity.whyToday}</p>
                           )}
                         </button>
                       ))}
@@ -1915,7 +1915,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('activity-select')}
-                        className="h-12 rounded-2xl border-slate-200 bg-white px-4 text-slate-600 hover:bg-slate-50"
+                        className="h-12 rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#5A6B7A] hover:bg-[#FAF7F2]"
                       >
                         <Gamepad2 className="mr-2 h-4 w-4" />
                         Open optional practice
@@ -2050,7 +2050,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     <div className="mb-3 flex justify-end">
                       <button
                         onClick={() => setUseTextInput(!useTextInput)}
-                        className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                        className="text-xs text-[#5A6B7A] hover:text-[#3A4A57] flex items-center gap-1"
                       >
                         {useTextInput ? <Mic className="w-3 h-3" /> : <MessageSquare className="w-3 h-3" />}
                         {useTextInput ? 'Switch to Voice' : 'Use Text Input'}
@@ -2145,7 +2145,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             if (e.key === 'Enter') handleTextInputPractice();
                           }}
                           placeholder={`Type "${currentWord}" here...`}
-                          className="flex-1 px-4 py-3 border-2 border-blue-200 rounded-xl text-lg text-center focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors"
+                          className="flex-1 px-4 py-3 border-2 border-[#C8DDE8] rounded-xl text-lg text-center focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors"
                           autoComplete="off"
                           autoCapitalize="off"
                           spellCheck={false}
@@ -2160,7 +2160,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <Check className="w-6 h-6" />
                         </motion.button>
                       </div>
-                      <p className="text-center text-xs text-gray-400 mt-2">
+                      <p className="text-center text-xs text-[#8A9BA8] mt-2">
                         Type the word above, then press Enter or tap the check button
                       </p>
                     </div>
@@ -2214,7 +2214,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       aria-label="Get a hint"
                       className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center"
                     >
-                      <HelpCircle className="w-6 h-6 text-gray-600" />
+                      <HelpCircle className="w-6 h-6 text-[#5A6B7A]" />
                     </motion.button>
 
                     {/* Break Button */}
@@ -2348,7 +2348,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap ${
                       activeTrackFilter === filter.id 
                         ? 'bg-blue-500 text-white' 
-                        : 'bg-[#F0EDE8] text-gray-600'
+                        : 'bg-[#F0EDE8] text-[#5A6B7A]'
                     }`}
                   >
                     <filter.icon className="w-4 h-4" />
@@ -2358,7 +2358,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               </div>
 
               {/* Activity count */}
-              <p className="text-xs text-gray-400 mb-3">
+              <p className="text-xs text-[#8A9BA8] mb-3">
                 {allActivities.filter(a => activeTrackFilter === 'all' || a.skillType === activeTrackFilter).length} activities
               </p>
 
@@ -2392,7 +2392,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       {/* Lock overlay for locked activities */}
                       {!activity.unlocked && (
                         <div className="absolute top-3 right-3">
-                          <Lock className="w-4 h-4 text-gray-500" />
+                          <Lock className="w-4 h-4 text-[#5A6B7A]" />
                         </div>
                       )}
 

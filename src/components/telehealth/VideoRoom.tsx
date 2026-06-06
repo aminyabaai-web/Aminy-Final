@@ -483,7 +483,7 @@ export function VideoRoom({
           <p className="text-sm text-white/60 mt-2">{callState.error}</p>
           <button
             onClick={onEnd}
-            className="mt-4 sm:mt-6 px-6 py-2 bg-white text-gray-900 rounded-lg font-medium"
+            className="mt-4 sm:mt-6 px-6 py-2 bg-white text-[#1B2733] rounded-lg font-medium"
           >
             Return to Dashboard
           </button>
@@ -566,7 +566,7 @@ export function VideoRoom({
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-8 h-8 text-gray-400" />
+                  <Users className="w-8 h-8 text-[#8A9BA8]" />
                 </div>
                 <p className="text-white font-medium">Waiting for participant...</p>
                 <p className="text-white/60 text-sm mt-1">
@@ -698,8 +698,8 @@ export function VideoRoom({
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-6 h-6 text-red-500" style={{ transform: 'rotate(135deg)' }} />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">End Session?</h3>
-              <p className="text-sm text-gray-500 mt-2">
+              <h3 className="text-lg font-semibold text-[#1B2733]">End Session?</h3>
+              <p className="text-sm text-[#5A6B7A] mt-2">
                 Are you sure you want to end this video session?
               </p>
             </div>
@@ -707,7 +707,7 @@ export function VideoRoom({
             <div className="flex gap-3 mt-4 sm:mt-6">
               <button
                 onClick={() => setShowEndConfirm(false)}
-                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
               >
                 Cancel
               </button>
@@ -728,12 +728,12 @@ export function VideoRoom({
           <div className="bg-white rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
             {/* Header with HIPAA shield */}
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-[#EEF4F8] rounded-full flex items-center justify-center flex-shrink-0">
                 <Shield className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">Recording Consent Required</h3>
-                <p className="text-xs text-gray-500">HIPAA §164.508(a) Authorization</p>
+                <h3 className="text-lg font-semibold text-[#1B2733]">Recording Consent Required</h3>
+                <p className="text-xs text-[#5A6B7A]">HIPAA §164.508(a) Authorization</p>
               </div>
             </div>
 
@@ -752,25 +752,25 @@ export function VideoRoom({
             <div className="space-y-3 mb-4">
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#3A4A57]">
                   Recordings are encrypted in transit and at rest
                 </p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#3A4A57]">
                   Retained for <span className="font-semibold">{retentionYears} years</span> per {sessionRetention?.legalBasis ?? 'HIPAA §164.530(j)'}
                 </p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#3A4A57]">
                   Accessible only to authorized providers and the patient/guardian
                 </p>
               </div>
               <div className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-[#3A4A57]">
                   Your consent is logged and auditable per HIPAA requirements
                 </p>
               </div>
@@ -782,9 +782,9 @@ export function VideoRoom({
                 type="checkbox"
                 checked={consentChecked}
                 onChange={(e) => setConsentChecked(e.target.checked)}
-                className="mt-0.5 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="mt-0.5 w-4 h-4 text-blue-600 border-[#E8E4DF] rounded focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-700 leading-snug">
+              <span className="text-sm text-[#3A4A57] leading-snug">
                 I understand and consent to this telehealth session being recorded. I acknowledge
                 the recording will be stored per the retention policy above and may be used for
                 clinical documentation purposes.
@@ -795,7 +795,7 @@ export function VideoRoom({
             <div className="flex gap-3">
               <button
                 onClick={handleRecordingDeclined}
-                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
               >
                 Decline
               </button>
@@ -805,7 +805,7 @@ export function VideoRoom({
                 className={`flex-1 py-3 px-4 rounded-xl font-medium transition-colors ${
                   consentChecked
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
+                    : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
                 }`}
               >
                 I Consent

@@ -444,7 +444,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
       </div>
 
       {/* Category tabs */}
-      <div className="bg-white border-b border-gray-100 overflow-x-auto">
+      <div className="bg-white border-b border-[#E8E4DF] overflow-x-auto">
         <div className="flex px-4 py-2 gap-2 no-scrollbar">
           {CATEGORIES.map(cat => (
             <button
@@ -453,7 +453,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
               className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 activeCategory === cat.id
                   ? 'bg-primary text-white'
-                  : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               {cat.icon}
@@ -481,7 +481,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 <button
                   key={i}
                   onClick={() => handleAIQuery(q)}
-                  className="text-xs bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-full hover:bg-[#FAF7F2] transition-colors"
+                  className="text-xs bg-white border border-[#E8E4DF] text-[#3A4A57] px-3 py-1.5 rounded-full hover:bg-[#FAF7F2] transition-colors"
                 >
                   {q}
                 </button>
@@ -489,12 +489,12 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
             </div>
 
             {/* Input */}
-            <div className="bg-white rounded-2xl border border-gray-200 p-3">
+            <div className="bg-white rounded-2xl border border-[#E8E4DF] p-3">
               <textarea
                 value={aiQuery}
                 onChange={e => setAiQuery(e.target.value)}
                 placeholder="Type your billing question here…"
-                className="w-full text-sm text-gray-800 placeholder:text-gray-500 resize-none focus:outline-none min-h-[80px]"
+                className="w-full text-sm text-[#1B2733] placeholder:text-[#5A6B7A] resize-none focus:outline-none min-h-[80px]"
               />
               <div className="flex justify-end mt-2">
                 <button
@@ -520,20 +520,20 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                     <Sparkles size={14} className="text-[#6B9080]" />
                     <span className="text-xs font-semibold text-[#6B9080]">AI Answer</span>
                   </div>
-                  <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{aiAnswer}</p>
-                  <p className="text-xs text-gray-400 mt-2">For complex situations, always verify with your payer's provider relations team.</p>
+                  <p className="text-sm text-[#3A4A57] leading-relaxed whitespace-pre-line">{aiAnswer}</p>
+                  <p className="text-xs text-[#8A9BA8] mt-2">For complex situations, always verify with your payer's provider relations team.</p>
                 </motion.div>
               )}
             </AnimatePresence>
 
             {/* CPT Quick Reference */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm overflow-hidden">
               <button
                 className="w-full flex items-center justify-between px-4 py-3"
                 onClick={() => setShowCPTRef(!showCPTRef)}
               >
-                <span className="text-sm font-semibold text-gray-800">CPT Quick Reference</span>
-                <ChevronDown size={16} className={`text-gray-400 transition-transform ${showCPTRef ? 'rotate-180' : ''}`} />
+                <span className="text-sm font-semibold text-[#1B2733]">CPT Quick Reference</span>
+                <ChevronDown size={16} className={`text-[#8A9BA8] transition-transform ${showCPTRef ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
                 {showCPTRef && (
@@ -543,8 +543,8 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                         <div key={ref.code} className="flex items-start gap-3 py-2 border-b border-gray-50">
                           <span className="text-xs font-mono font-bold text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded shrink-0">{ref.code}</span>
                           <div>
-                            <p className="text-xs font-medium text-gray-800">{ref.desc}</p>
-                            <p className="text-xs text-gray-500">{ref.unit} · {ref.payers}</p>
+                            <p className="text-xs font-medium text-[#1B2733]">{ref.desc}</p>
+                            <p className="text-xs text-[#5A6B7A]">{ref.unit} · {ref.payers}</p>
                           </div>
                         </div>
                       ))}
@@ -559,20 +559,20 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
           <div className="space-y-2">
             {filteredFAQs.length === 0 ? (
               <div className="text-center py-8">
-                <Search size={28} className="text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-gray-500">No results for "{searchQuery}"</p>
+                <Search size={28} className="text-[#8A9BA8] mx-auto mb-2" />
+                <p className="text-sm text-[#5A6B7A]">No results for "{searchQuery}"</p>
               </div>
             ) : (
               filteredFAQs.map((faq, i) => (
-                <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                <div key={i} className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm overflow-hidden">
                   <button
                     className="w-full flex items-start justify-between gap-3 px-4 py-4 text-left"
                     onClick={() => setExpandedFAQ(expandedFAQ === i ? null : i)}
                   >
-                    <p className="text-sm font-medium text-gray-800 leading-snug">{faq.q}</p>
+                    <p className="text-sm font-medium text-[#1B2733] leading-snug">{faq.q}</p>
                     <ChevronDown
                       size={16}
-                      className={`text-gray-400 shrink-0 mt-0.5 transition-transform ${expandedFAQ === i ? 'rotate-180' : ''}`}
+                      className={`text-[#8A9BA8] shrink-0 mt-0.5 transition-transform ${expandedFAQ === i ? 'rotate-180' : ''}`}
                     />
                   </button>
                   <AnimatePresence>
@@ -584,15 +584,15 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                         className="overflow-hidden"
                       >
                         <div className="px-4 pb-4 border-t border-gray-50">
-                          <p className="text-sm text-gray-600 leading-relaxed mt-3 whitespace-pre-line">{faq.a}</p>
+                          <p className="text-sm text-[#5A6B7A] leading-relaxed mt-3 whitespace-pre-line">{faq.a}</p>
                           {faq.hasVideo && (
-                            <div className="mt-3 flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl border border-gray-100">
+                            <div className="mt-3 flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
                               <div className="w-12 h-8 bg-[#E8E4DF] rounded-lg flex items-center justify-center shrink-0">
-                                <Play size={16} className="text-gray-500" />
+                                <Play size={16} className="text-[#5A6B7A]" />
                               </div>
                               <div>
-                                <p className="text-xs font-medium text-gray-800">{faq.videoTitle}</p>
-                                <p className="text-xs text-gray-400">{faq.videoDuration} explainer</p>
+                                <p className="text-xs font-medium text-[#1B2733]">{faq.videoTitle}</p>
+                                <p className="text-xs text-[#8A9BA8]">{faq.videoDuration} explainer</p>
                               </div>
                               <button className="ml-auto text-xs text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
                                 Watch
@@ -613,16 +613,16 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
         {activeCategory !== 'ai-support' && (
           <button
             onClick={() => setActiveCategory('ai-support')}
-            className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl border border-teal-100 hover:border-[#6B9080]/20 transition-colors"
+            className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 rounded-2xl border border-[#E8E4DF] hover:border-[#6B9080]/20 transition-colors"
           >
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
               <Sparkles size={18} className="text-white" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-gray-800">Can't find your answer?</p>
-              <p className="text-xs text-gray-500">Ask our AI billing assistant</p>
+              <p className="text-sm font-semibold text-[#1B2733]">Can't find your answer?</p>
+              <p className="text-xs text-[#5A6B7A]">Ask our AI billing assistant</p>
             </div>
-            <ChevronRight size={16} className="text-gray-400 ml-auto" />
+            <ChevronRight size={16} className="text-[#8A9BA8] ml-auto" />
           </button>
         )}
       </div>

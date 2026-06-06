@@ -244,7 +244,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             }}
           >
             {/* Header */}
-            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100 shrink-0">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#E8E4DF] shrink-0">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="relative">
@@ -253,13 +253,13 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <span className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-emerald-400 via-amber-400 to-violet-400 rounded-full animate-pulse" />
                     )}
                   </div>
-                  <h2 className="text-slate-900">Aminy</h2>
+                  <h2 className="text-[#1B2733]">Aminy</h2>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={onClose}
-                  className="h-8 w-8 p-0 hover:bg-slate-100"
+                  className="h-8 w-8 p-0 hover:bg-[#F0EDE8]"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -272,7 +272,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     <Badge
                       key={idx}
                       variant="secondary"
-                      className="bg-slate-50 text-slate-600 border-0 text-xs px-2 py-0.5"
+                      className="bg-[#FAF7F2] text-[#5A6B7A] border-0 text-xs px-2 py-0.5"
                     >
                       {chip}
                     </Badge>
@@ -327,7 +327,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center">
                     <Sparkles className="w-8 h-8 text-[#6B9080]" />
                   </div>
-                  <p className="text-slate-600 mb-4 sm:mb-6">
+                  <p className="text-[#5A6B7A] mb-4 sm:mb-6">
                     I'm here to help. What's on your mind?
                   </p>
 
@@ -337,7 +337,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <button
                         key={idx}
                         onClick={() => handleStarterPrompt(prompt)}
-                        className="w-full px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl text-sm text-slate-700 transition-colors text-left"
+                        className="w-full px-4 py-3 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-xl text-sm text-[#3A4A57] transition-colors text-left"
                       >
                         {prompt}
                       </button>
@@ -354,8 +354,8 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   <div
                     className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                       message.role === 'user'
-                        ? 'bg-cyan-600 text-white'
-                        : 'bg-slate-50 text-slate-900'
+                        ? 'bg-[#6B9080] text-white'
+                        : 'bg-[#FAF7F2] text-[#1B2733]'
                     }`}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -368,7 +368,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
               {/* Calm Pulse Typing Indicator */}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="px-4 py-3 bg-slate-50 rounded-2xl">
+                  <div className="px-4 py-3 bg-[#FAF7F2] rounded-2xl">
                     <div className="flex gap-1.5">
                       <motion.div
                         className="w-2 h-2 bg-cyan-400 rounded-full"
@@ -397,7 +397,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             {memories.length > 0 && (
               <button
                 onClick={() => setShowMemoryDrawer(!showMemoryDrawer)}
-                className="px-6 py-2 border-t border-slate-100 flex items-center justify-between text-sm text-slate-600 hover:bg-slate-50 transition-colors shrink-0"
+                className="px-6 py-2 border-t border-[#E8E4DF] flex items-center justify-between text-sm text-[#5A6B7A] hover:bg-[#FAF7F2] transition-colors shrink-0"
               >
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
@@ -416,11 +416,11 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-slate-100 bg-slate-50 overflow-hidden shrink-0"
+                  className="border-t border-[#E8E4DF] bg-[#FAF7F2] overflow-hidden shrink-0"
                 >
                   <div className="px-6 py-3 space-y-2 max-h-32 overflow-y-auto">
                     {memories.map((memory) => (
-                      <div key={memory.id} className="text-xs text-slate-600">
+                      <div key={memory.id} className="text-xs text-[#5A6B7A]">
                         <div className="flex items-center gap-2 mb-1">
                           {memory.category === 'calm_cue' && <Heart className="w-3 h-3 text-emerald-500" />}
                           {memory.category === 'progress' && <TrendingUp className="w-3 h-3 text-primary" />}
@@ -428,7 +428,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                             {new Date(memory.timestamp).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-slate-700 line-clamp-2">{memory.content}</p>
+                        <p className="text-[#3A4A57] line-clamp-2">{memory.content}</p>
                       </div>
                     ))}
                   </div>
@@ -437,7 +437,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             </AnimatePresence>
 
             {/* Enhanced Input with Mic/Camera/Upload */}
-            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-slate-100 shrink-0">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-[#E8E4DF] shrink-0">
               <EnhancedChatInput
                 onSend={handleSend}
                 placeholder="Ask anything... (or use mic/camera)"

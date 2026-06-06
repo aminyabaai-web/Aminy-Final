@@ -208,14 +208,14 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="border border-slate-200 rounded-xl overflow-hidden"
+      className="border border-[#E8E4DF] rounded-xl overflow-hidden"
     >
       {/* Section Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-5 py-4 bg-slate-50 hover:bg-slate-100 transition-colors text-left"
+        className="w-full flex items-center justify-between px-5 py-4 bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors text-left"
       >
-        <span className="font-semibold text-slate-800 text-sm">{section.title}</span>
+        <span className="font-semibold text-[#1B2733] text-sm">{section.title}</span>
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
         ) : (
@@ -234,7 +234,7 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
             className="overflow-hidden"
           >
             <div className="px-5 py-4">
-              <div className="text-sm text-slate-600 leading-relaxed whitespace-pre-line font-[system-ui]">
+              <div className="text-sm text-[#5A6B7A] leading-relaxed whitespace-pre-line font-[system-ui]">
                 {section.content}
               </div>
 
@@ -311,14 +311,14 @@ export default function ProviderAgreement({
   return (
     <div className="max-w-2xl mx-auto pb-8">
       {/* Header */}
-      <div className="px-5 pt-6 pb-5 border-b border-slate-200">
+      <div className="px-5 pt-6 pb-5 border-b border-[#E8E4DF]">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
             <Scale className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">Provider Services Agreement</h1>
-            <p className="text-xs text-slate-500">Aminy, Inc. — Effective Date: Upon Acceptance</p>
+            <h1 className="text-xl font-bold text-[#1B2733]">Provider Services Agreement</h1>
+            <p className="text-xs text-[#5A6B7A]">Aminy, Inc. — Effective Date: Upon Acceptance</p>
           </div>
         </div>
 
@@ -333,7 +333,7 @@ export default function ProviderAgreement({
           </span>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1 text-slate-500 hover:text-slate-700 transition-colors"
+            className="flex items-center gap-1 text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
           >
             <Printer className="w-3.5 h-3.5" />
             Print / Download
@@ -342,8 +342,8 @@ export default function ProviderAgreement({
       </div>
 
       {/* Preamble */}
-      <div className="px-5 py-4 bg-slate-50 border-b border-slate-200">
-        <p className="text-sm text-slate-600 leading-relaxed">
+      <div className="px-5 py-4 bg-[#FAF7F2] border-b border-[#E8E4DF]">
+        <p className="text-sm text-[#5A6B7A] leading-relaxed">
           This Provider Services Agreement ("Agreement") is entered into between{' '}
           <strong>Aminy, Inc.</strong>, an Arizona corporation ("Aminy"), and{' '}
           <strong>{providerName || '[Provider Name]'}</strong> ("Provider"), effective as of the
@@ -369,7 +369,7 @@ export default function ProviderAgreement({
       </div>
 
       {/* Acceptance Footer */}
-      <div className="px-5 pt-4 pb-6 border-t border-slate-200 bg-white sticky bottom-0">
+      <div className="px-5 pt-4 pb-6 border-t border-[#E8E4DF] bg-white sticky bottom-0">
         {/* Checklist status */}
         <div className="flex items-center gap-4 mb-4 text-xs">
           {(['nonSolicitation', 'payment', 'liability'] as const).map((key) => (
@@ -392,12 +392,12 @@ export default function ProviderAgreement({
         </div>
 
         {/* E-Signature notice */}
-        <div className="flex items-start gap-2 mb-4 p-3 bg-slate-50 rounded-lg text-xs text-slate-500">
+        <div className="flex items-start gap-2 mb-4 p-3 bg-[#FAF7F2] rounded-lg text-xs text-[#5A6B7A]">
           <Lock className="w-4 h-4 shrink-0 mt-0.5" />
           <span>
             By clicking "Accept Agreement," you are signing this agreement electronically.
             Your name, email, and timestamp will be recorded as your e-signature:{' '}
-            <strong className="text-slate-700">{providerName}</strong> ({providerEmail})
+            <strong className="text-[#3A4A57]">{providerName}</strong> ({providerEmail})
           </span>
         </div>
 
@@ -406,7 +406,7 @@ export default function ProviderAgreement({
           {onBack && (
             <button
               onClick={onBack}
-              className="py-3 px-5 text-sm text-slate-500 hover:text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-colors"
+              className="py-3 px-5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2] transition-colors"
             >
               Back
             </button>
@@ -417,7 +417,7 @@ export default function ProviderAgreement({
             className={`flex-1 py-3 px-6 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
               allChecked
                 ? 'bg-slate-900 text-white hover:bg-slate-800 shadow-md'
-                : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                : 'bg-[#E8E4DF] text-slate-400 cursor-not-allowed'
             }`}
           >
             <Shield className="w-4 h-4" />

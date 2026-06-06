@@ -340,7 +340,7 @@ export function PostSessionNotes({
     <div className="space-y-2">
       {items.map((item, idx) => (
         <div key={item.id} className="flex items-start gap-2">
-          <span className="text-gray-400 text-sm mt-2.5 w-4 text-right flex-shrink-0">
+          <span className="text-[#8A9BA8] text-sm mt-2.5 w-4 text-right flex-shrink-0">
             {idx + 1}.
           </span>
           <input
@@ -348,11 +348,11 @@ export function PostSessionNotes({
             value={item.text}
             onChange={e => updateBullet(setter, item.id, e.target.value)}
             placeholder={placeholder}
-            className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+            className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
           />
           <button
             onClick={() => removeBullet(setter, item.id)}
-            className="p-2 text-gray-400 hover:text-red-500 transition-colors flex-shrink-0"
+            className="p-2 text-[#8A9BA8] hover:text-red-500 transition-colors flex-shrink-0"
             aria-label="Remove item"
           >
             <Trash2 size={14} />
@@ -377,23 +377,23 @@ export function PostSessionNotes({
     <div className="fixed inset-0 bg-gray-900/50 flex items-start justify-center z-50 overflow-y-auto p-4 pt-8 pb-8">
       <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+        <div className="flex items-center justify-between p-5 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-[#EEF4F8] rounded-full flex items-center justify-center flex-shrink-0">
               <FileText className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-[#1B2733]">
                 Session Notes
               </h2>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#5A6B7A]">
                 Document this visit for the care plan
               </p>
             </div>
           </div>
           <button
             onClick={onSkip}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -402,7 +402,7 @@ export function PostSessionNotes({
 
         {/* Session metadata strip */}
         {(sessionDurationSeconds || wasRecorded) && (
-          <div className="px-5 py-3 bg-[#FAF7F2] border-b border-gray-100 flex items-center gap-4 text-xs text-gray-500">
+          <div className="px-5 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF] flex items-center gap-4 text-xs text-[#5A6B7A]">
             {sessionDurationSeconds !== undefined && (
               <span className="flex items-center gap-1">
                 <Clock size={12} />
@@ -422,7 +422,7 @@ export function PostSessionNotes({
         <div className="p-5 space-y-5 max-h-[60vh] overflow-y-auto">
           {/* Reason for visit */}
           <section>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               Reason for Visit
             </label>
             <input
@@ -430,13 +430,13 @@ export function PostSessionNotes({
               value={reason}
               onChange={e => setReason(e.target.value)}
               placeholder="e.g., Behavioral concerns, medication follow-up..."
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             />
           </section>
 
           {/* What we discussed */}
           <section>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               What We Discussed
             </label>
             {renderBulletList(
@@ -448,9 +448,9 @@ export function PostSessionNotes({
 
           {/* Plan for next 7 days */}
           <section>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               Plan for Next 7 Days
-              <span className="text-xs text-gray-400 font-normal ml-1.5">
+              <span className="text-xs text-[#8A9BA8] font-normal ml-1.5">
                 (becomes action items)
               </span>
             </label>
@@ -463,7 +463,7 @@ export function PostSessionNotes({
 
           {/* What to track */}
           <section>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               What to Track
             </label>
             {renderBulletList(
@@ -475,13 +475,13 @@ export function PostSessionNotes({
 
           {/* Follow-up recommendation */}
           <section>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               Follow-up Recommendation
             </label>
             <select
               value={followUp}
               onChange={e => setFollowUp(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             >
               {FOLLOW_UP_OPTIONS.map(opt => (
                 <option key={opt} value={opt}>
@@ -495,15 +495,15 @@ export function PostSessionNotes({
                 value={customFollowUp}
                 onChange={e => setCustomFollowUp(e.target.value)}
                 placeholder="Describe custom follow-up plan..."
-                className="w-full mt-2 px-3 py-2.5 bg-[#FAF7F2] border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full mt-2 px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             )}
           </section>
 
           {/* CPT Code Selection + Billing Compliance */}
           {suggestedCPTs.length > 0 && (
-            <section className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-              <label className="block text-sm font-semibold text-blue-800 mb-2">
+            <section className="bg-[#EEF4F8] rounded-xl p-4 border border-[#C8DDE8]">
+              <label className="block text-sm font-semibold text-[#4A6478] mb-2">
                 Recommended CPT Code
               </label>
               <p className="text-xs text-blue-600 mb-3">
@@ -520,7 +520,7 @@ export function PostSessionNotes({
                       className={`w-full text-left p-3 rounded-lg border transition-colors ${
                         isSelected
                           ? 'border-blue-400 bg-blue-100'
-                          : 'border-blue-200 bg-white hover:bg-blue-50'
+                          : 'border-[#C8DDE8] bg-white hover:bg-[#EEF4F8]'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -568,14 +568,14 @@ export function PostSessionNotes({
               <button
                 type="button"
                 onClick={() => setShowBillingChat(!showBillingChat)}
-                className="mt-3 flex items-center gap-2 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                className="mt-3 flex items-center gap-2 text-xs font-medium text-blue-600 hover:text-[#4A6478] transition-colors"
               >
                 <MessageSquare size={14} />
                 {showBillingChat ? 'Hide billing assistant' : 'Ask about billing & CPT codes'}
               </button>
 
               {showBillingChat && (
-                <div className="mt-2 bg-white rounded-lg p-3 border border-blue-200">
+                <div className="mt-2 bg-white rounded-lg p-3 border border-[#C8DDE8]">
                   <p className="text-xs text-blue-600 mb-2">
                     Ask about CPT selection, modifiers, documentation requirements, or split billing scenarios.
                   </p>
@@ -586,7 +586,7 @@ export function PostSessionNotes({
                       onChange={e => setBillingQuestion(e.target.value)}
                       onKeyDown={e => { if (e.key === 'Enter') askBillingAI(); }}
                       placeholder="e.g. Can I bill 97155 and 97156 same session?"
-                      className="flex-1 px-3 py-2 text-sm border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/30"
+                      className="flex-1 px-3 py-2 text-sm border border-[#C8DDE8] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400/30"
                     />
                     <button
                       type="button"
@@ -598,7 +598,7 @@ export function PostSessionNotes({
                     </button>
                   </div>
                   {billingAnswer && (
-                    <div className="mt-2 p-2.5 bg-blue-50 rounded-lg text-xs text-blue-800 leading-relaxed whitespace-pre-wrap">
+                    <div className="mt-2 p-2.5 bg-[#EEF4F8] rounded-lg text-xs text-[#4A6478] leading-relaxed whitespace-pre-wrap">
                       {billingAnswer}
                     </div>
                   )}
@@ -615,7 +615,7 @@ export function PostSessionNotes({
                           key={q}
                           type="button"
                           onClick={() => { setBillingQuestion(q); }}
-                          className="text-[11px] px-2 py-1 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+                          className="text-[11px] px-2 py-1 bg-[#EEF4F8] text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
                         >
                           {q}
                         </button>
@@ -631,7 +631,7 @@ export function PostSessionNotes({
           <section>
             <button
               onClick={() => setShowGoalSection(!showGoalSection)}
-              className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-[#3A4A57] hover:text-[#1B2733] transition-colors"
             >
               <Target size={14} />
               Update Care-Plan Goals
@@ -643,8 +643,8 @@ export function PostSessionNotes({
             </button>
 
             {showGoalSection && (
-              <div className="mt-3 p-3 bg-[#FAF7F2] border border-gray-200 rounded-lg">
-                <p className="text-xs text-gray-500">
+              <div className="mt-3 p-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg">
+                <p className="text-xs text-[#5A6B7A]">
                   Goal updates will be available after saving these notes.
                   You can update specific goals from the Care Plan tab.
                 </p>
@@ -662,18 +662,18 @@ export function PostSessionNotes({
         )}
 
         {/* Footer — Sign & Submit for Billing */}
-        <div className="p-5 border-t border-gray-100 space-y-3">
+        <div className="p-5 border-t border-[#E8E4DF] space-y-3">
           <div className="flex gap-3">
             <button
               onClick={onSkip}
-              className="py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-[#FAF7F2] transition-colors"
+              className="py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
             >
               Skip
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2"
+              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2"
             >
               <Save size={16} />
               {isSaving ? 'Saving...' : 'Save Draft'}
@@ -766,7 +766,7 @@ export function PostSessionNotes({
               disabled={isSaving}
               className={`flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors ${
                 isSaving
-                  ? 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
+                  ? 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
                   : 'bg-green-600 text-white hover:bg-green-700'
               }`}
             >
@@ -775,7 +775,7 @@ export function PostSessionNotes({
             </button>
           </div>
           {selectedCPT && (
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-[#5A6B7A]">
               Signing will lock notes, generate a superbill for <strong>{selectedCPT}</strong>, and queue for claim submission.
             </p>
           )}

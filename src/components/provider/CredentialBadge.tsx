@@ -142,7 +142,7 @@ const STATUS_CONFIG: Record<VerificationStatus, {
   'manual_review': {
     icon: Clock,
     color: 'text-blue-600',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+    bgColor: 'bg-[#EEF4F8] dark:bg-blue-900/20',
     label: 'Under Review',
   },
 };
@@ -243,7 +243,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
           );
         })}
         {credentials.length === 0 && (
-          <Badge variant="secondary" className="bg-neutral-100 text-neutral-500 border-0 text-xs">
+          <Badge variant="secondary" className="bg-neutral-100 text-[#5A6B7A] border-0 text-xs">
             No credentials
           </Badge>
         )}
@@ -268,7 +268,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
             <Shield className={`w-4 h-4 ${STATUS_CONFIG[overallStatus].color}`} />
           </div>
           <div>
-            <p className="font-medium text-neutral-900 dark:text-white text-sm">
+            <p className="font-medium text-[#1B2733] dark:text-white text-sm">
               Credential Verification
             </p>
             <p className={`text-xs ${STATUS_CONFIG[overallStatus].color}`}>
@@ -309,12 +309,12 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-neutral-900 dark:text-white text-sm">
+                      <p className="font-medium text-[#1B2733] dark:text-white text-sm">
                         {config?.shortLabel || cred.credential_type.toUpperCase()}
                       </p>
                       <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />
                     </div>
-                    <p className="text-xs text-neutral-500 dark:text-slate-400">
+                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
                       #{cred.credential_number}
                       {cred.state && ` • ${cred.state}`}
                     </p>

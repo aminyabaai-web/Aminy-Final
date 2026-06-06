@@ -255,7 +255,7 @@ www.aminy.ai
 
   return (
     <>
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 bg-blue-100 rounded-full">
             <Stethoscope className="w-5 h-5 text-blue-600" />
@@ -362,8 +362,8 @@ function ShareModal({
                   <User className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900">{report.childName}'s Progress Report</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-[#1B2733]">{report.childName}'s Progress Report</p>
+                  <p className="text-sm text-[#5A6B7A]">
                     {report.dateRange.start.toLocaleDateString()} - {report.dateRange.end.toLocaleDateString()}
                   </p>
                 </div>
@@ -371,14 +371,14 @@ function ShareModal({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="p-2 bg-white rounded border">
-                  <span className="text-gray-500">Stress Level</span>
-                  <p className="font-medium text-gray-900">
+                  <span className="text-[#5A6B7A]">Stress Level</span>
+                  <p className="font-medium text-[#1B2733]">
                     {report.metrics.stressLevel.current}/10
                   </p>
                 </div>
                 <div className="p-2 bg-white rounded border">
-                  <span className="text-gray-500">Routine Adherence</span>
-                  <p className="font-medium text-gray-900">
+                  <span className="text-[#5A6B7A]">Routine Adherence</span>
+                  <p className="font-medium text-[#1B2733]">
                     {report.metrics.routineAdherence.current}%
                   </p>
                 </div>
@@ -387,7 +387,7 @@ function ShareModal({
 
             {/* Share Options */}
             <div className="p-4 space-y-3">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-[#5A6B7A] mb-4">
                 Choose how you'd like to share this report:
               </p>
 
@@ -404,11 +404,11 @@ function ShareModal({
                   <Download className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">Download PDF</p>
-                  <p className="text-sm text-gray-500">Save to your device</p>
+                  <p className="font-medium text-[#1B2733]">Download PDF</p>
+                  <p className="text-sm text-[#5A6B7A]">Save to your device</p>
                 </div>
                 {generating && shareMethod === 'download' && (
-                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  <Loader2 className="w-5 h-5 animate-spin text-[#8A9BA8]" />
                 )}
               </button>
 
@@ -422,8 +422,8 @@ function ShareModal({
                     <Mail className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">Email to Provider</p>
-                    <p className="text-sm text-gray-500">Send directly via email</p>
+                    <p className="font-medium text-[#1B2733]">Email to Provider</p>
+                    <p className="text-sm text-[#5A6B7A]">Send directly via email</p>
                   </div>
                 </button>
 
@@ -467,20 +467,20 @@ function ShareModal({
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-[#1B2733]">
                     {linkCopied ? 'Link Copied!' : 'Copy Shareable Link'}
                   </p>
-                  <p className="text-sm text-gray-500">Valid for 7 days, view-only access</p>
+                  <p className="text-sm text-[#5A6B7A]">Valid for 7 days, view-only access</p>
                 </div>
                 {generating && shareMethod === 'link' && (
-                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  <Loader2 className="w-5 h-5 animate-spin text-[#8A9BA8]" />
                 )}
               </button>
             </div>
 
             {/* Privacy Note */}
             <div className="px-4 pb-4">
-              <p className="text-xs text-gray-500 text-center">
+              <p className="text-xs text-[#5A6B7A] text-center">
                 Reports are encrypted and HIPAA-conscious. You control who sees your data.
               </p>
             </div>

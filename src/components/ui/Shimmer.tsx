@@ -32,7 +32,7 @@ const ShimmerBase = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'relative overflow-hidden rounded-md bg-slate-200/80 dark:bg-slate-700/50',
+      'relative overflow-hidden rounded-md bg-[#E8E4DF]/80 dark:bg-slate-700/50',
       'before:absolute before:inset-0',
       'before:-translate-x-full before:animate-[shimmer_2s_infinite]',
       'before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent',
@@ -284,7 +284,7 @@ export function ShimmerTable({ rows = 5, cols = 4 }: { rows?: number; cols?: num
   return (
     <div className="rounded-lg border overflow-hidden animate-in fade-in duration-300">
       {/* Header */}
-      <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b">
+      <div className="bg-[#FAF7F2] dark:bg-slate-800/50 p-4 border-b">
         <div className="flex gap-3 sm:gap-4">
           {Array.from({ length: cols }).map((_, i) => (
             <ShimmerBase key={i} className="h-4 flex-1" />
@@ -316,7 +316,7 @@ export function ShimmerPulse({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'rounded-md bg-slate-200/80 dark:bg-slate-700/50 animate-pulse',
+        'rounded-md bg-[#E8E4DF]/80 dark:bg-slate-700/50 animate-pulse',
         className
       )}
     />

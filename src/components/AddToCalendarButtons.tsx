@@ -130,7 +130,7 @@ export function AddToCalendarButtons({
     return (
       <div className={`space-y-2 ${className}`}>
         {label !== null && (
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{label}</p>
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">{label}</p>
         )}
         {buttons.map(b => (
           <a
@@ -139,12 +139,12 @@ export function AddToCalendarButtons({
             target={b.provider !== 'apple' ? '_blank' : undefined}
             rel="noopener noreferrer"
             download={b.download}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-[#E8E4DF] bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors text-left"
           >
-            <span className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
+            <span className="w-9 h-9 rounded-lg bg-white border border-[#E8E4DF] flex items-center justify-center shrink-0">
               {b.icon}
             </span>
-            <span className="text-sm font-medium text-slate-800 flex-1">{b.label} Calendar</span>
+            <span className="text-sm font-medium text-[#1B2733] flex-1">{b.label} Calendar</span>
             <span className="text-xs text-[#6B9080] font-semibold shrink-0">Add →</span>
           </a>
         ))}
@@ -156,7 +156,7 @@ export function AddToCalendarButtons({
   return (
     <div className={className}>
       {label !== null && (
-        <p className="text-xs font-medium text-slate-600 mb-2">{label}</p>
+        <p className="text-xs font-medium text-[#5A6B7A] mb-2">{label}</p>
       )}
       <div className="flex items-center gap-2">
         {buttons.map(b => (
@@ -167,11 +167,11 @@ export function AddToCalendarButtons({
             rel="noopener noreferrer"
             download={b.download}
             title={`Add to ${b.label} Calendar`}
-            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors min-h-[60px] min-w-[60px]"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors min-h-[60px] min-w-[60px]"
             aria-label={`Add to ${b.label} Calendar`}
           >
             <span className="w-6 h-6 flex items-center justify-center">{b.icon}</span>
-            <span className="text-[10px] font-medium text-slate-600">{b.label}</span>
+            <span className="text-[10px] font-medium text-[#5A6B7A]">{b.label}</span>
           </a>
         ))}
       </div>

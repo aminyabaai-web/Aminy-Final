@@ -231,8 +231,8 @@ export function PaymentFailureBanner({
       urgent: true,
     },
     'cancelled': {
-      bg: 'bg-[#F0EDE8] border-gray-300',
-      icon: <AlertTriangle className="w-5 h-5 text-gray-600" />,
+      bg: 'bg-[#F0EDE8] border-[#E8E4DF]',
+      icon: <AlertTriangle className="w-5 h-5 text-[#5A6B7A]" />,
       title: 'Subscription cancelled',
       message: 'Your subscription was cancelled due to payment issues. Resubscribe to regain access to premium features.',
       urgent: true,
@@ -251,7 +251,7 @@ export function PaymentFailureBanner({
       {!config.urgent && (
         <button
           onClick={handleDismiss}
-          className="absolute right-2 top-2 p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-white/50 transition-colors"
+          className="absolute right-2 top-2 p-1 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-white/50 transition-colors"
           aria-label="Dismiss"
         >
           <X size={14} />
@@ -263,8 +263,8 @@ export function PaymentFailureBanner({
           {config.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-semibold text-gray-900">{config.title}</h4>
-          <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+          <h4 className="text-sm font-semibold text-[#1B2733]">{config.title}</h4>
+          <p className="text-xs text-[#5A6B7A] mt-0.5 leading-relaxed">
             {config.message}
           </p>
 
@@ -273,7 +273,7 @@ export function PaymentFailureBanner({
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {/* Attempt count */}
               {info.attemptCount !== undefined && info.attemptCount > 0 && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-gray-500">
+                <span className="inline-flex items-center gap-1 text-[11px] text-[#5A6B7A]">
                   <RotateCw size={10} />
                   Attempt {info.attemptCount} of {MAX_RETRY_ATTEMPTS}
                 </span>
@@ -281,7 +281,7 @@ export function PaymentFailureBanner({
 
               {/* Next retry date */}
               {info.nextRetryAt && info.status === 'retry-pending' && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-gray-500">
+                <span className="inline-flex items-center gap-1 text-[11px] text-[#5A6B7A]">
                   <CalendarClock size={10} />
                   Next retry: {formatShortDate(info.nextRetryAt)}
                 </span>
@@ -299,7 +299,7 @@ export function PaymentFailureBanner({
 
           {/* Error detail */}
           {info.lastError && (
-            <p className="text-xs text-gray-500 mt-1 italic">
+            <p className="text-xs text-[#5A6B7A] mt-1 italic">
               Reason: {info.lastError}
             </p>
           )}
@@ -311,7 +311,7 @@ export function PaymentFailureBanner({
             className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
               info.status === 'cancelled'
                 ? 'bg-primary hover:bg-[#6B9080] text-white'
-                : 'bg-white hover:bg-[#FAF7F2] text-gray-700 border border-gray-200'
+                : 'bg-white hover:bg-[#FAF7F2] text-[#3A4A57] border border-[#E8E4DF]'
             }`}
           >
             <CreditCard size={12} />

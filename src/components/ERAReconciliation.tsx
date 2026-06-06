@@ -46,8 +46,8 @@ function SummaryCard({ label, value, subLabel, color }: SummaryCardProps) {
     green: 'bg-emerald-50 border-emerald-200 text-emerald-700',
     yellow: 'bg-amber-50 border-amber-200 text-amber-700',
     red: 'bg-red-50 border-red-200 text-red-700',
-    blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    gray: 'bg-[#FAF7F2] border-gray-200 text-gray-700',
+    blue: 'bg-[#EEF4F8] border-[#C8DDE8] text-blue-700',
+    gray: 'bg-[#FAF7F2] border-[#E8E4DF] text-[#3A4A57]',
   };
 
   return (
@@ -64,15 +64,15 @@ function StatusBadge({ status }: { status: string }) {
     matched: { bg: 'bg-emerald-100', text: 'text-emerald-800', label: 'Matched' },
     partial_match: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Partial Match' },
     unmatched: { bg: 'bg-red-100', text: 'text-red-800', label: 'Unmatched' },
-    overpaid: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Overpaid' },
+    overpaid: { bg: 'bg-blue-100', text: 'text-[#4A6478]', label: 'Overpaid' },
     underpaid: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Underpaid' },
     posted: { bg: 'bg-emerald-100', text: 'text-emerald-800', label: 'Posted' },
     pending_review: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Pending Review' },
-    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-gray-800', label: 'Write Off' },
+    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-[#1B2733]', label: 'Write Off' },
     appeal: { bg: 'bg-red-100', text: 'text-red-800', label: 'Appeal' },
   };
 
-  const config = statusConfig[status] || { bg: 'bg-[#F0EDE8]', text: 'text-gray-700', label: status };
+  const config = statusConfig[status] || { bg: 'bg-[#F0EDE8]', text: 'text-[#3A4A57]', label: status };
 
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${config.bg} ${config.text}`}>
@@ -87,19 +87,19 @@ function ServiceLineRow({ line }: {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="border-b border-gray-100 last:border-0">
+    <div className="border-b border-[#E8E4DF] last:border-0">
       <button
         onClick={() => setExpanded(!expanded)}
         className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-[#FAF7F2]"
       >
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm font-semibold text-gray-900">{line.procedureCode}</span>
+          <span className="font-mono text-sm font-semibold text-[#1B2733]">{line.procedureCode}</span>
           <StatusBadge status={line.status === 'paid_in_full' ? 'matched' : line.status === 'denied' ? 'unmatched' : 'partial_match'} />
         </div>
         <div className="flex items-center gap-4 text-sm">
-          <span className="text-gray-500">Charged: ${line.originalCharge.toFixed(2)}</span>
-          <span className="font-semibold text-gray-900">Paid: ${line.paidAmount.toFixed(2)}</span>
-          <span className="text-gray-400">{expanded ? '\u25B2' : '\u25BC'}</span>
+          <span className="text-[#5A6B7A]">Charged: ${line.originalCharge.toFixed(2)}</span>
+          <span className="font-semibold text-[#1B2733]">Paid: ${line.paidAmount.toFixed(2)}</span>
+          <span className="text-[#8A9BA8]">{expanded ? '\u25B2' : '\u25BC'}</span>
         </div>
       </button>
 
@@ -113,24 +113,24 @@ function ServiceLineRow({ line }: {
           >
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
-                <span className="text-gray-500">Allowed Amount:</span>{' '}
+                <span className="text-[#5A6B7A]">Allowed Amount:</span>{' '}
                 <span className="font-medium">${line.allowedAmount.toFixed(2)}</span>
               </div>
               <div>
-                <span className="text-gray-500">Adjustment:</span>{' '}
+                <span className="text-[#5A6B7A]">Adjustment:</span>{' '}
                 <span className="font-medium">${line.adjustmentAmount.toFixed(2)}</span>
               </div>
             </div>
             {line.adjustmentReasons.length > 0 && (
               <div className="mt-2 space-y-1">
-                <p className="text-xs font-semibold text-gray-600">Adjustment Reasons:</p>
+                <p className="text-xs font-semibold text-[#5A6B7A]">Adjustment Reasons:</p>
                 {line.adjustmentReasons.map((adj, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs">
-                    <span className="inline-flex items-center rounded bg-[#E8E4DF] px-1.5 py-0.5 font-mono text-gray-700">
+                    <span className="inline-flex items-center rounded bg-[#E8E4DF] px-1.5 py-0.5 font-mono text-[#3A4A57]">
                       {adj.groupCode}-{adj.reasonCode}
                     </span>
-                    <span className="text-gray-600">{adj.description}</span>
-                    <span className="ml-auto font-medium text-gray-900">${adj.amount.toFixed(2)}</span>
+                    <span className="text-[#5A6B7A]">{adj.description}</span>
+                    <span className="ml-auto font-medium text-[#1B2733]">${adj.amount.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -147,7 +147,7 @@ function WriteOffCard({ suggestion, onAction }: {
   onAction: (action: string) => void;
 }) {
   const recConfig: Record<string, { color: string; icon: string; label: string }> = {
-    write_off: { color: 'text-gray-600', icon: '\u2718', label: 'Write Off' },
+    write_off: { color: 'text-[#5A6B7A]', icon: '\u2718', label: 'Write Off' },
     appeal: { color: 'text-red-600', icon: '\u26A0', label: 'Appeal' },
     patient_bill: { color: 'text-blue-600', icon: '\u2709', label: 'Bill Patient' },
     review: { color: 'text-amber-600', icon: '\u2753', label: 'Review' },
@@ -156,7 +156,7 @@ function WriteOffCard({ suggestion, onAction }: {
   const config = recConfig[suggestion.recommendation] || recConfig.review;
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-3">
+    <div className="rounded-lg border border-[#E8E4DF] bg-white p-3">
       <div className="flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
@@ -165,13 +165,13 @@ function WriteOffCard({ suggestion, onAction }: {
               {config.icon} {config.label}
             </span>
           </div>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-[#5A6B7A]">
             {suggestion.adjustmentGroupCode}-{suggestion.adjustmentReasonCode}: {suggestion.description}
           </p>
         </div>
-        <span className="text-sm font-bold text-gray-900">${suggestion.amount.toFixed(2)}</span>
+        <span className="text-sm font-bold text-[#1B2733]">${suggestion.amount.toFixed(2)}</span>
       </div>
-      <p className="mt-2 text-xs text-gray-600">{suggestion.rationale}</p>
+      <p className="mt-2 text-xs text-[#5A6B7A]">{suggestion.rationale}</p>
       <div className="mt-2 flex gap-2">
         <button
           onClick={() => onAction(suggestion.recommendation)}
@@ -182,7 +182,7 @@ function WriteOffCard({ suggestion, onAction }: {
         {suggestion.recommendation !== 'review' && (
           <button
             onClick={() => onAction('review')}
-            className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-[#FAF7F2]"
+            className="rounded-md border border-[#E8E4DF] px-3 py-1 text-xs font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             Review Instead
           </button>
@@ -312,7 +312,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {onNavigateBack && (
               <button
                 onClick={onNavigateBack}
-                className="rounded-lg p-1.5 text-gray-500 hover:bg-[#F0EDE8]"
+                className="rounded-lg p-1.5 text-[#5A6B7A] hover:bg-[#F0EDE8]"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -320,8 +320,8 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               </button>
             )}
             <div>
-              <h1 className="text-lg font-bold text-gray-900">Payment Reconciliation</h1>
-              <p className="text-xs text-gray-500">ERA 835 Automated Payment Posting</p>
+              <h1 className="text-lg font-bold text-[#1B2733]">Payment Reconciliation</h1>
+              <p className="text-xs text-[#5A6B7A]">ERA 835 Automated Payment Posting</p>
             </div>
           </div>
 
@@ -333,8 +333,8 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                   activeTab === tab
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'bg-white text-[#1B2733] shadow-sm'
+                    : 'text-[#5A6B7A] hover:text-[#3A4A57]'
                 }`}
               >
                 {tab === 'overview' ? 'Overview' : tab === 'reconciliation' ? 'Reconcile' : tab === 'write_offs' ? 'Write-Offs' : 'Appeals'}
@@ -348,7 +348,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
       <div className="mx-auto max-w-lg px-4 py-4">
         {loading && (
           <div className="flex items-center justify-center py-12">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#E8E4DF] border-t-gray-900" />
           </div>
         )}
 
@@ -384,12 +384,12 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Status Breakdown */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-gray-900">Posting Status Breakdown</h3>
+              <h3 className="text-sm font-semibold text-[#1B2733]">Posting Status Breakdown</h3>
               <div className="mt-3 space-y-2">
                 {Object.entries(summary.byStatus).map(([status, count]) => (
                   <div key={status} className="flex items-center justify-between">
                     <StatusBadge status={status} />
-                    <span className="text-sm font-semibold text-gray-900">{count}</span>
+                    <span className="text-sm font-semibold text-[#1B2733]">{count}</span>
                   </div>
                 ))}
               </div>
@@ -397,14 +397,14 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Payer Breakdown */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-gray-900">Payments by Payer</h3>
+              <h3 className="text-sm font-semibold text-[#1B2733]">Payments by Payer</h3>
               <div className="mt-3 space-y-2">
                 {summary.byPayer.map((payer, idx) => (
                   <div key={idx} className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">{payer.payerName}</span>
+                    <span className="text-[#5A6B7A]">{payer.payerName}</span>
                     <div className="text-right">
-                      <span className="font-semibold text-gray-900">${payer.totalPaid.toFixed(2)}</span>
-                      <span className="ml-2 text-xs text-gray-400">({payer.claimCount} claims)</span>
+                      <span className="font-semibold text-[#1B2733]">${payer.totalPaid.toFixed(2)}</span>
+                      <span className="ml-2 text-xs text-[#8A9BA8]">({payer.claimCount} claims)</span>
                     </div>
                   </div>
                 ))}
@@ -414,17 +414,17 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {/* Unreconciled Payments */}
             {unreconciledPayments.length > 0 && (
               <div className="rounded-xl bg-white p-4 shadow-sm">
-                <h3 className="text-sm font-semibold text-gray-900">
+                <h3 className="text-sm font-semibold text-[#1B2733]">
                   Unreconciled Payments ({unreconciledPayments.length})
                 </h3>
                 <div className="mt-3 space-y-2">
                   {unreconciledPayments.slice(0, 10).map((payment) => (
                     <div key={payment.id} className="flex items-center justify-between rounded-lg bg-[#FAF7F2] p-2">
                       <div>
-                        <p className="text-xs font-medium text-gray-900">
+                        <p className="text-xs font-medium text-[#1B2733]">
                           {payment.claimControlNumber} - {payment.procedureCode}
                         </p>
-                        <p className="text-xs text-gray-500">{payment.payerName}</p>
+                        <p className="text-xs text-[#5A6B7A]">{payment.payerName}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold">${(payment.paidAmount || 0).toFixed(2)}</span>
@@ -449,20 +449,20 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             <div className="rounded-xl bg-white p-4 shadow-sm">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-900">
+                  <h3 className="text-sm font-semibold text-[#1B2733]">
                     Claim {reconciliationResult.claimControlNumber}
                   </h3>
                   <StatusBadge status={reconciliationResult.status} />
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-500">Variance</p>
+                  <p className="text-xs text-[#5A6B7A]">Variance</p>
                   <p className={`text-lg font-bold ${
                     reconciliationResult.variance === 0 ? 'text-emerald-600' :
                     reconciliationResult.variance > 0 ? 'text-red-600' : 'text-blue-600'
                   }`}>
                     ${reconciliationResult.variance.toFixed(2)}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-[#8A9BA8]">
                     ({reconciliationResult.variancePercentage.toFixed(1)}%)
                   </p>
                 </div>
@@ -470,15 +470,15 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-lg bg-[#FAF7F2] p-2">
-                  <p className="text-xs text-gray-500">Charged</p>
+                  <p className="text-xs text-[#5A6B7A]">Charged</p>
                   <p className="text-sm font-bold">${reconciliationResult.originalChargedAmount.toFixed(2)}</p>
                 </div>
                 <div className="rounded-lg bg-emerald-50 p-2">
-                  <p className="text-xs text-gray-500">Paid</p>
+                  <p className="text-xs text-[#5A6B7A]">Paid</p>
                   <p className="text-sm font-bold text-emerald-700">${reconciliationResult.totalPaidAmount.toFixed(2)}</p>
                 </div>
                 <div className="rounded-lg bg-amber-50 p-2">
-                  <p className="text-xs text-gray-500">Adjusted</p>
+                  <p className="text-xs text-[#5A6B7A]">Adjusted</p>
                   <p className="text-sm font-bold text-amber-700">${reconciliationResult.totalAdjustmentAmount.toFixed(2)}</p>
                 </div>
               </div>
@@ -487,7 +487,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {/* Service Line Breakdown */}
             <div className="rounded-xl bg-white shadow-sm">
               <div className="border-b px-4 py-3">
-                <h3 className="text-sm font-semibold text-gray-900">Service Lines</h3>
+                <h3 className="text-sm font-semibold text-[#1B2733]">Service Lines</h3>
               </div>
               {reconciliationResult.serviceLineReconciliation.map((line, idx) => (
                 <ServiceLineRow key={idx} line={line} />
@@ -496,7 +496,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Timeline */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-gray-900">Reconciliation Timeline</h3>
+              <h3 className="text-sm font-semibold text-[#1B2733]">Reconciliation Timeline</h3>
               <div className="mt-3 space-y-3">
                 {reconciliationResult.timeline.map((event, idx) => (
                   <div key={idx} className="flex gap-3">
@@ -507,9 +507,9 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                       )}
                     </div>
                     <div className="pb-3">
-                      <p className="text-xs font-medium text-gray-900">{event.event.replace(/_/g, ' ')}</p>
-                      <p className="text-xs text-gray-500">{event.details}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs font-medium text-[#1B2733]">{event.event.replace(/_/g, ' ')}</p>
+                      <p className="text-xs text-[#5A6B7A]">{event.details}</p>
+                      <p className="text-xs text-[#8A9BA8]">
                         {new Date(event.timestamp).toLocaleString()}
                       </p>
                     </div>
@@ -523,10 +523,10 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
         {!loading && activeTab === 'write_offs' && reconciliationResult && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-[#1B2733]">
                 Write-Off Suggestions ({reconciliationResult.writeOffSuggestions.length})
               </h3>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-[#5A6B7A]">
                 Total: ${reconciliationResult.writeOffSuggestions.reduce((s, w) => s + w.amount, 0).toFixed(2)}
               </span>
             </div>
@@ -538,7 +538,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               />
             ))}
             {reconciliationResult.writeOffSuggestions.length === 0 && (
-              <div className="py-8 text-center text-sm text-gray-400">
+              <div className="py-8 text-center text-sm text-[#8A9BA8]">
                 No write-off suggestions for this claim.
               </div>
             )}
@@ -548,10 +548,10 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
         {!loading && activeTab === 'appeals' && reconciliationResult && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-[#1B2733]">
                 Appeal Recommendations ({reconciliationResult.appealSuggestions.length})
               </h3>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-[#5A6B7A]">
                 Recoverable: ${reconciliationResult.appealSuggestions.reduce((s, a) => s + a.amount, 0).toFixed(2)}
               </span>
             </div>
@@ -563,7 +563,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               />
             ))}
             {reconciliationResult.appealSuggestions.length === 0 && (
-              <div className="py-8 text-center text-sm text-gray-400">
+              <div className="py-8 text-center text-sm text-[#8A9BA8]">
                 No appeal recommendations for this claim.
               </div>
             )}
@@ -572,7 +572,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
         {!loading && (activeTab === 'reconciliation' || activeTab === 'write_offs' || activeTab === 'appeals') && !reconciliationResult && (
           <div className="py-12 text-center">
-            <p className="text-sm text-gray-500">Select a claim from the Overview tab to view reconciliation details.</p>
+            <p className="text-sm text-[#5A6B7A]">Select a claim from the Overview tab to view reconciliation details.</p>
             <button
               onClick={() => setActiveTab('overview')}
               className="mt-3 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"

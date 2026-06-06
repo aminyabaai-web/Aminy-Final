@@ -132,7 +132,7 @@ export function ClinicalReportExport({
     return (
       <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-[#6B9080] mb-3" />
-        <p className="text-sm text-gray-500">Loading your clinical data...</p>
+        <p className="text-sm text-[#5A6B7A]">Loading your clinical data...</p>
       </div>
     );
   }
@@ -141,8 +141,8 @@ export function ClinicalReportExport({
     return (
       <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 text-center">
         <FileText className="w-10 h-10 text-[#6B9080] mb-3" />
-        <h1 className="text-lg font-semibold text-gray-900 mb-2">No caregiver summary available yet</h1>
-        <p className="text-sm text-gray-500 mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
+        <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No caregiver summary available yet</h1>
+        <p className="text-sm text-[#5A6B7A] mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
         <button
           onClick={onBack}
           className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-[#6B9080] transition-colors"
@@ -198,7 +198,7 @@ export function ClinicalReportExport({
           {/* Info banner */}
           <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg p-3 flex items-start gap-2.5">
             <Shield className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-teal-800">
+            <p className="text-xs text-[#6B9080]">
               This generates an encrypted clinical PDF you can share with your child's
               pediatrician, BCBA, or school. All data stays on your device.
             </p>
@@ -206,7 +206,7 @@ export function ClinicalReportExport({
 
           {/* Recipient type */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">Report prepared for:</label>
+            <label className="text-sm font-medium text-[#3A4A57] mb-2 block">Report prepared for:</label>
             <div className="grid grid-cols-3 gap-2">
               {([
                 { value: 'pediatrician', label: 'Pediatrician' },
@@ -219,7 +219,7 @@ export function ClinicalReportExport({
                   className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     recipient === opt.value
                       ? 'bg-primary text-white border-[#6B9080]'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#6B9080]/30'
+                      : 'bg-white text-[#5A6B7A] border-[#E8E4DF] hover:border-[#6B9080]/30'
                   }`}
                 >
                   {opt.label}
@@ -230,23 +230,23 @@ export function ClinicalReportExport({
 
           {/* Report period */}
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-2 block">Report period:</label>
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+            <label className="text-sm font-medium text-[#3A4A57] mb-2 block">Report period:</label>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <Calendar className="w-4 h-4 text-[#6B9080]" />
                 <span>{reportData.reportPeriod.start} to {reportData.reportPeriod.end}</span>
               </div>
-              <p className="text-xs text-gray-400 mt-1">3-month reporting window</p>
+              <p className="text-xs text-[#8A9BA8] mt-1">3-month reporting window</p>
             </div>
           </div>
 
           {/* Section toggles */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">Include sections:</label>
-              <span className="text-xs text-gray-400">{enabledSectionCount} of {sectionToggles.length} selected</span>
+              <label className="text-sm font-medium text-[#3A4A57]">Include sections:</label>
+              <span className="text-xs text-[#8A9BA8]">{enabledSectionCount} of {sectionToggles.length} selected</span>
             </div>
-            <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100">
+            <div className="bg-white rounded-lg border border-[#E8E4DF] divide-y divide-gray-100">
               {sectionToggles.map(toggle => (
                 <button
                   key={toggle.key}
@@ -256,20 +256,20 @@ export function ClinicalReportExport({
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    sections[toggle.key] ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-gray-400'
+                    sections[toggle.key] ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
                   }`}>
                     {toggle.icon}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className={`text-sm font-medium ${sections[toggle.key] ? 'text-gray-900' : 'text-gray-400'}`}>
+                      <span className={`text-sm font-medium ${sections[toggle.key] ? 'text-[#1B2733]' : 'text-[#8A9BA8]'}`}>
                         {toggle.label}
                       </span>
                       {toggle.locked && (
-                        <span className="text-[10px] bg-[#F0EDE8] text-gray-500 px-1.5 py-0.5 rounded">Required</span>
+                        <span className="text-[10px] bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 truncate">{toggle.description}</p>
+                    <p className="text-xs text-[#8A9BA8] truncate">{toggle.description}</p>
                   </div>
                   <div className={`w-9 h-5 rounded-full flex items-center transition-colors ${
                     sections[toggle.key] ? 'bg-primary' : 'bg-[#E8E4DF]'
@@ -326,20 +326,20 @@ export function ClinicalReportExport({
         <div className="px-4 py-4 space-y-3 max-w-lg mx-auto">
           {/* Summary metrics */}
           <div className="grid grid-cols-2 gap-2.5">
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <p className="text-xs text-gray-400">Avg Goal Progress</p>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <p className="text-xs text-[#8A9BA8]">Avg Goal Progress</p>
               <p className="text-2xl font-bold text-[#6B9080]">{avgProgress}%</p>
             </div>
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <p className="text-xs text-gray-400">Attendance Rate</p>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <p className="text-xs text-[#8A9BA8]">Attendance Rate</p>
               <p className="text-2xl font-bold text-[#6B9080]">{reportData.sessions.attendanceRate.toFixed(0)}%</p>
             </div>
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <p className="text-xs text-gray-400">Treatment Hours</p>
-              <p className="text-2xl font-bold text-gray-800">{reportData.sessions.totalHours.toFixed(0)}</p>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <p className="text-xs text-[#8A9BA8]">Treatment Hours</p>
+              <p className="text-2xl font-bold text-[#1B2733]">{reportData.sessions.totalHours.toFixed(0)}</p>
             </div>
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <p className="text-xs text-gray-400">Behavioral Trend</p>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <p className="text-xs text-[#8A9BA8]">Behavioral Trend</p>
               <p className={`text-lg font-bold flex items-center gap-1 ${
                 reportData.behaviorData.overallTrend === 'improving' ? 'text-green-700' :
                 reportData.behaviorData.overallTrend === 'declining' ? 'text-red-700' : 'text-blue-700'
@@ -351,12 +351,12 @@ export function ClinicalReportExport({
           </div>
 
           {/* Goals snapshot */}
-          <div className="bg-white rounded-lg border border-gray-200 p-3">
-            <h3 className="text-sm font-semibold text-gray-800 mb-2">Treatment Goals ({goals.length})</h3>
+          <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+            <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Treatment Goals ({goals.length})</h3>
             {goals.map(goal => (
               <div key={goal.id} className="flex items-center gap-2 py-1.5">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-gray-700 truncate">{goal.domain}: {goal.title}</p>
+                  <p className="text-xs font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
                   <div className="w-full bg-[#F0EDE8] rounded-full h-1.5 mt-1">
                     <div
                       className={`h-1.5 rounded-full ${
@@ -366,20 +366,20 @@ export function ClinicalReportExport({
                     />
                   </div>
                 </div>
-                <span className="text-xs font-medium text-gray-500 w-10 text-right">{goal.current}%</span>
+                <span className="text-xs font-medium text-[#5A6B7A] w-10 text-right">{goal.current}%</span>
               </div>
             ))}
           </div>
 
           {/* Assessments snapshot */}
           {sections.assessments && (
-            <div className="bg-white rounded-lg border border-gray-200 p-3">
-              <h3 className="text-sm font-semibold text-gray-800 mb-2">Assessments ({reportData.assessments.length})</h3>
+            <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
+              <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Assessments ({reportData.assessments.length})</h3>
               {reportData.assessments.map(a => (
                 <div key={a.type} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                  <span className="text-xs text-gray-600">{a.name}</span>
+                  <span className="text-xs text-[#5A6B7A]">{a.name}</span>
                   <span className={`text-xs font-medium ${
-                    (a.change ?? 0) < 0 ? 'text-green-700' : (a.change ?? 0) > 0 ? 'text-orange-600' : 'text-gray-500'
+                    (a.change ?? 0) < 0 ? 'text-green-700' : (a.change ?? 0) > 0 ? 'text-orange-600' : 'text-[#5A6B7A]'
                   }`}>
                     {a.score} {a.change != null ? `(${a.change > 0 ? '+' : ''}${a.change})` : ''}
                   </span>
@@ -389,9 +389,9 @@ export function ClinicalReportExport({
           )}
 
           {/* Sections included */}
-          <div className="bg-[#FAF7F2] rounded-lg border border-gray-200 p-3">
-            <p className="text-xs text-gray-500 mb-1">Sections included: {enabledSectionCount}</p>
-            <p className="text-xs text-gray-400">
+          <div className="bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] p-3">
+            <p className="text-xs text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
+            <p className="text-xs text-[#8A9BA8]">
               {sectionToggles.filter(t => sections[t.key]).map(t => t.label).join(' · ')}
             </p>
           </div>
@@ -431,17 +431,17 @@ export function ClinicalReportExport({
       </div>
 
       <div className="px-4 py-6 flex-1 flex flex-col items-center justify-start max-w-lg mx-auto w-full">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 text-center w-full">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-6 text-center w-full">
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-1">Clinical Report Ready</h2>
-          <p className="text-sm text-gray-500 mb-4">
+          <h2 className="text-lg font-bold text-[#1B2733] mb-1">Clinical Report Ready</h2>
+          <p className="text-sm text-[#5A6B7A] mb-4">
             {reportData.child.firstName}'s clinical progress report has been downloaded to your device.
           </p>
 
           <div className="bg-[#6B9080]/10 rounded-lg p-3 text-left mb-4">
-            <p className="text-xs font-medium text-teal-800 mb-1">Sharing tips:</p>
+            <p className="text-xs font-medium text-[#6B9080] mb-1">Sharing tips:</p>
             <ul className="text-xs text-[#6B9080] space-y-1">
               <li>• Upload to your provider's patient portal</li>
               <li>• Bring a printed copy to your next appointment</li>
@@ -461,7 +461,7 @@ export function ClinicalReportExport({
         <div className="flex gap-3 w-full mt-4">
           <button
             onClick={() => setStep('configure')}
-            className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-2.5 text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
+            className="flex-1 bg-white border border-[#E8E4DF] text-[#3A4A57] rounded-lg py-2.5 text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
           >
             Generate Another
           </button>

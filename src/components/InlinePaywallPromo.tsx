@@ -66,13 +66,13 @@ export function InlinePaywallPromo({
 
   if (compact) {
     return (
-      <Card className="p-4 bg-gradient-to-br from-teal-50 to-cyan-50 border-[#6B9080]/30 shadow-sm">
+      <Card className="p-4 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 border-[#6B9080]/30 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
             <Sparkles className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-teal-900 mb-1">
+            <p className="text-sm font-medium text-[#6B9080] mb-1">
               {reason || `Ready to unlock more for ${childName}?`}
             </p>
             <p className="text-xs text-[#6B9080]">
@@ -92,7 +92,7 @@ export function InlinePaywallPromo({
   }
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white via-teal-50/30 to-white border-[#6B9080]/20 shadow-md">
+    <Card className="p-6 bg-gradient-to-br from-white via-transparent/30 to-white border-[#6B9080]/20 shadow-md">
       <div className="text-center mb-5">
         <div className="inline-flex items-center gap-2 mb-3">
           <div className={`p-2 bg-${highlighted.color === 'teal' ? 'teal' : 'gray'}-100 rounded-full`}>
@@ -122,12 +122,12 @@ export function InlinePaywallPromo({
               className={`p-3 rounded-xl border-2 transition-all ${
                 isHighlighted 
                   ? 'border-[#6B9080] bg-[#6B9080]/10 shadow-md' 
-                  : 'border-gray-200 bg-white'
+                  : 'border-[#E8E4DF] bg-white'
               }`}
             >
               <div className="flex flex-col items-center text-center">
                 <div className={`p-2 ${isHighlighted ? 'bg-[#6B9080]/10' : 'bg-[#F0EDE8]'} rounded-full mb-2`}>
-                  <TierIcon className={`w-4 h-4 ${isHighlighted ? 'text-[#6B9080]' : 'text-gray-600'}`} />
+                  <TierIcon className={`w-4 h-4 ${isHighlighted ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}`} />
                 </div>
                 <div className="font-semibold text-xs text-primary mb-0.5">{tier.name}</div>
                 <div className="font-bold text-sm text-primary">${tier.price}<span className="text-xs text-muted-foreground">/mo</span></div>

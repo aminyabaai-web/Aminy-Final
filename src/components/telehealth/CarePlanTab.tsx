@@ -132,20 +132,20 @@ export function CarePlanTabScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+      <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-gray-900">My Plan</h1>
-            <p className="text-sm text-gray-500">Goals, routines, and progress</p>
+            <h1 className="text-lg font-semibold text-[#1B2733]">My Plan</h1>
+            <p className="text-sm text-[#5A6B7A]">Goals, routines, and progress</p>
           </div>
         </div>
 
@@ -155,8 +155,8 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('goals')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'goals'
-                ? 'bg-cyan-600 text-white'
-                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                ? 'bg-[#6B9080] text-white'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <Target className="w-4 h-4" />
@@ -165,7 +165,7 @@ export function CarePlanTabScreen({
               <span className={`px-2 py-0.5 text-xs rounded-full ${
                 activeTab === 'goals'
                   ? 'bg-white/20'
-                  : 'bg-cyan-600/10 text-[#6B9080]'
+                  : 'bg-[#6B9080]/10 text-[#6B9080]'
               }`}>
                 {goals.filter(g => g.status === 'active').length}
               </span>
@@ -175,8 +175,8 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('summaries')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'summaries'
-                ? 'bg-cyan-600 text-white'
-                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                ? 'bg-[#6B9080] text-white'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -186,8 +186,8 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('actions')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'actions'
-                ? 'bg-cyan-600 text-white'
-                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                ? 'bg-[#6B9080] text-white'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <ClipboardList className="w-4 h-4" />
@@ -196,7 +196,7 @@ export function CarePlanTabScreen({
               <span className={`px-2 py-0.5 text-xs rounded-full ${
                 activeTab === 'actions'
                   ? 'bg-white/20'
-                  : 'bg-cyan-600/10 text-[#6B9080]'
+                  : 'bg-[#6B9080]/10 text-[#6B9080]'
               }`}>
                 {pendingActions.length}
               </span>
@@ -211,7 +211,7 @@ export function CarePlanTabScreen({
         {isLoading && (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
-            <span className="ml-2 text-gray-600">Loading care plan...</span>
+            <span className="ml-2 text-[#5A6B7A]">Loading care plan...</span>
           </div>
         )}
 
@@ -221,7 +221,7 @@ export function CarePlanTabScreen({
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={refresh}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-[#466379]"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#466379]"
             >
               <RefreshCw className="w-4 h-4" />
               Try Again
@@ -263,7 +263,7 @@ export function CarePlanTabScreen({
             {/* Pending Actions */}
             {pendingActions.length > 0 ? (
               <section>
-                <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+                <h3 className="text-sm font-medium text-[#5A6B7A] mb-3 flex items-center gap-2">
                   <Target className="w-4 h-4" />
                   To Do ({pendingActions.length})
                 </h3>
@@ -285,7 +285,7 @@ export function CarePlanTabScreen({
             {/* Completed Actions */}
             {completedActions.length > 0 && (
               <section>
-                <h3 className="text-sm font-medium text-gray-500 mb-3 flex items-center gap-2">
+                <h3 className="text-sm font-medium text-[#5A6B7A] mb-3 flex items-center gap-2">
                   <CheckCircle className="w-4 h-4" />
                   Completed ({completedActions.length})
                 </h3>
@@ -306,10 +306,10 @@ export function CarePlanTabScreen({
       </div>
 
       {/* Floating Book Follow-up Button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
         <button
           onClick={onBookFollowUp}
-          className="w-full py-4 bg-cyan-600 text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 bg-[#6B9080] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Book Follow-up
@@ -334,7 +334,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
   return (
     <button
       onClick={onClick}
-      className="w-full bg-white rounded-2xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-cyan-600/30 transition-all"
+      className="w-full bg-white rounded-2xl border border-[#E8E4DF] p-4 text-left hover:shadow-md hover:border-cyan-600/30 transition-all"
     >
       <div className="flex items-start gap-3">
         {/* Provider Avatar */}
@@ -355,22 +355,22 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <p className="font-medium text-gray-900 truncate">
+            <p className="font-medium text-[#1B2733] truncate">
               {provider.firstName} {provider.lastName}
             </p>
-            <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
           </div>
-          <p className="text-sm text-gray-500 flex items-center gap-1">
+          <p className="text-sm text-[#5A6B7A] flex items-center gap-1">
             <Video className="w-3 h-3" />
             Remote Visit Summary
           </p>
-          <p className="text-xs text-gray-400 mt-1">{formatDate(summary.createdAt)}</p>
+          <p className="text-xs text-[#8A9BA8] mt-1">{formatDate(summary.createdAt)}</p>
         </div>
       </div>
 
       {/* Reason Preview */}
-      <div className="mt-3 pt-3 border-t border-gray-100">
-        <p className="text-sm text-gray-600 line-clamp-2">{summary.reasonForVisit}</p>
+      <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
+        <p className="text-sm text-[#5A6B7A] line-clamp-2">{summary.reasonForVisit}</p>
         <p className="text-xs text-[#6B9080] mt-2">
           {summary.planForNext7Days.length} action items
         </p>
@@ -394,7 +394,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
 
   return (
     <div className={`bg-white rounded-xl border p-4 transition-all ${
-      item.completed ? 'border-gray-100 opacity-60' : 'border-gray-200'
+      item.completed ? 'border-[#E8E4DF] opacity-60' : 'border-[#E8E4DF]'
     }`}>
       <div className="flex items-start gap-3">
         <button
@@ -405,22 +405,22 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
           {item.completed ? (
             <CheckCircle className="w-6 h-6 text-green-500" />
           ) : (
-            <Circle className="w-6 h-6 text-gray-400 hover:text-[#6B9080] transition-colors" />
+            <Circle className="w-6 h-6 text-[#8A9BA8] hover:text-[#6B9080] transition-colors" />
           )}
         </button>
 
         <div className="flex-1 min-w-0">
-          <p className={`font-medium ${item.completed ? 'line-through text-gray-400' : 'text-gray-900'}`}>
+          <p className={`font-medium ${item.completed ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
             {item.title}
           </p>
           {item.description && (
-            <p className={`text-sm mt-1 ${item.completed ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className={`text-sm mt-1 ${item.completed ? 'text-[#8A9BA8]' : 'text-[#5A6B7A]'}`}>
               {item.description}
             </p>
           )}
           {item.dueDate && (
             <p className={`text-xs mt-2 flex items-center gap-1 ${
-              isOverdue ? 'text-red-500' : 'text-gray-400'
+              isOverdue ? 'text-red-500' : 'text-[#8A9BA8]'
             }`}>
               <Clock className="w-3 h-3" />
               {item.completed ? `Completed ${formatDate(item.completedAt!)}` : `Due ${formatDate(item.dueDate)}`}
@@ -440,15 +440,15 @@ function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
   return (
     <div className="text-center py-12">
       <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
-        <FileText className="w-8 h-8 text-gray-400" />
+        <FileText className="w-8 h-8 text-[#8A9BA8]" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">No visit summaries yet</h3>
-      <p className="text-gray-500 mb-4">
+      <h3 className="text-lg font-medium text-[#1B2733] mb-2">No visit summaries yet</h3>
+      <p className="text-[#5A6B7A] mb-4">
         After your first consultation, your visit summary will appear here.
       </p>
       <button
         onClick={onBookVisit}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-[#6B9080] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
       >
         <Video className="w-5 h-5" />
         Book Your First Visit
@@ -463,8 +463,8 @@ function NoActionItems() {
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <PartyPopper className="w-8 h-8 text-green-600" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">All caught up!</h3>
-      <p className="text-gray-600">
+      <h3 className="text-lg font-medium text-[#1B2733] mb-2">All caught up!</h3>
+      <p className="text-[#5A6B7A]">
         You've completed all your action items. Great work!
       </p>
     </div>
@@ -516,16 +516,16 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, { bg: string; text: string; border: string }> = {
-      'communication': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+      'communication': { bg: 'bg-[#EEF4F8]', text: 'text-blue-700', border: 'border-[#C8DDE8]' },
       'social': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
       'daily-routine': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
       'sensory': { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', border: 'border-[#6B9080]/20' },
       'behavior': { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
       'self-care': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
-      'academic': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
+      'academic': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-[#6B9080]/20' },
       'motor': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
     };
-    return colors[category] || { bg: 'bg-[#FAF7F2]', text: 'text-gray-700', border: 'border-gray-200' };
+    return colors[category] || { bg: 'bg-[#FAF7F2]', text: 'text-[#3A4A57]', border: 'border-[#E8E4DF]' };
   };
 
   const getCategoryLabel = (category: string) => {
@@ -559,16 +559,16 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
 
       {/* Summary banner */}
       {activeGoals.length > 0 && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-4">
+        <div className="bg-white rounded-2xl border border-[#E8E4DF] p-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
               <BarChart3 className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-[#1B2733]">
                 {activeGoals.length} Active Goal{activeGoals.length !== 1 ? 's' : ''}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-[#5A6B7A]">
                 {completedGoals.length > 0 ? `${completedGoals.length} completed · ` : ''}
                 Average progress: {activeGoals.length > 0 ? Math.round(activeGoals.reduce((sum, g) => sum + (g.targetProgress > 0 ? (g.currentProgress / g.targetProgress) * 100 : 0), 0) / activeGoals.length) : 0}%
               </p>
@@ -619,13 +619,13 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
     : 0;
 
   const progressBarColor = isCompleted ? 'bg-green-500'
-    : progressPercent >= 75 ? 'bg-cyan-600'
+    : progressPercent >= 75 ? 'bg-[#6B9080]'
     : progressPercent >= 40 ? 'bg-blue-400'
     : 'bg-gray-300';
 
   return (
     <div className={`bg-white rounded-2xl border p-4 transition-all ${
-      isCompleted ? 'border-green-100 opacity-75' : 'border-gray-100 hover:border-cyan-600/30 hover:shadow-sm'
+      isCompleted ? 'border-green-100 opacity-75' : 'border-[#E8E4DF] hover:border-cyan-600/30 hover:shadow-sm'
     }`}>
       {/* Header: drag handle + category + title */}
       <div className="flex items-start gap-2">
@@ -641,14 +641,14 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
               {categoryLabel}
             </span>
             {goal.targetFrequency && (
-              <span className="text-xs text-gray-400">{goal.targetFrequency}</span>
+              <span className="text-xs text-[#8A9BA8]">{goal.targetFrequency}</span>
             )}
           </div>
-          <h4 className={`font-medium ${isCompleted ? 'line-through text-gray-400' : 'text-gray-900'}`}>
+          <h4 className={`font-medium ${isCompleted ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
             {goal.title}
           </h4>
           {goal.description && (
-            <p className="text-sm text-gray-500 mt-1">{goal.description}</p>
+            <p className="text-sm text-[#5A6B7A] mt-1">{goal.description}</p>
           )}
         </div>
       </div>
@@ -656,10 +656,10 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
       {/* Progress bar */}
       <div className="mt-3">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-[#5A6B7A]">
             {goal.currentProgress}/{goal.targetProgress} {goal.unit || 'completed'}
           </span>
-          <span className="text-xs font-medium text-gray-700">{progressPercent}%</span>
+          <span className="text-xs font-medium text-[#3A4A57]">{progressPercent}%</span>
         </div>
         <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
           <div
@@ -674,13 +674,13 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-3 flex items-center gap-2">
           <button
             onClick={() => onProgressUpdate(Math.min(goal.currentProgress + 1, goal.targetProgress))}
-            className="flex-1 py-2 text-xs font-medium text-[#6B9080] bg-cyan-600/5 rounded-lg hover:bg-cyan-600/10 transition-colors"
+            className="flex-1 py-2 text-xs font-medium text-[#6B9080] bg-[#6B9080]/5 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             + Log Progress
           </button>
           <button
             onClick={() => setShowActions(!showActions)}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FAF7F2] rounded-lg transition-colors"
+            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#FAF7F2] rounded-lg transition-colors"
             aria-label="More actions"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -692,7 +692,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Expanded actions */}
       {showActions && !isCompleted && (
-        <div className="mt-2 pt-2 border-t border-gray-100 flex flex-wrap gap-2">
+        <div className="mt-2 pt-2 border-t border-[#E8E4DF] flex flex-wrap gap-2">
           <button
             onClick={() => { onStatusChange('completed'); setShowActions(false); }}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
@@ -702,7 +702,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </button>
           <button
             onClick={() => { onStatusChange(goal.status === 'paused' ? 'active' : 'paused'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
           >
             {goal.status === 'paused' ? (
               <><Play className="w-3.5 h-3.5" /> Resume</>
@@ -723,7 +723,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Timeline */}
       {!isCompleted && (
-        <div className="mt-2 flex items-center gap-1 text-xs text-gray-400">
+        <div className="mt-2 flex items-center gap-1 text-xs text-[#8A9BA8]">
           <Clock className="w-3 h-3" />
           Started {new Date(goal.startedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </div>
@@ -739,14 +739,14 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 function EmptyGoals() {
   return (
     <div className="text-center py-12">
-      <div className="w-16 h-16 bg-cyan-600/10 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
         <Target className="w-8 h-8 text-[#6B9080]" />
       </div>
-      <h3 className="text-lg font-medium text-gray-900 mb-2">No goals yet</h3>
-      <p className="text-gray-500 mb-2 max-w-xs mx-auto">
+      <h3 className="text-lg font-medium text-[#1B2733] mb-2">No goals yet</h3>
+      <p className="text-[#5A6B7A] mb-2 max-w-xs mx-auto">
         Goals help track progress on specific developmental milestones. Ask your provider to set up SMART goals during your next visit.
       </p>
-      <p className="text-xs text-gray-400 max-w-xs mx-auto">
+      <p className="text-xs text-[#8A9BA8] max-w-xs mx-auto">
         Goals can also be created from your Aminy AI care plan suggestions.
       </p>
     </div>

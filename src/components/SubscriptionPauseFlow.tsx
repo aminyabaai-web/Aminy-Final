@@ -135,29 +135,29 @@ export function SubscriptionPauseFlow({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center">
+      <div className="bg-white rounded-2xl border border-[#E8E4DF] p-6 text-center">
         <Loader2 className="w-6 h-6 text-primary animate-spin mx-auto mb-2" />
-        <p className="text-sm text-gray-500">Checking subscription status...</p>
+        <p className="text-sm text-[#5A6B7A]">Checking subscription status...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
       {/* Header */}
-      <div className="bg-[#FAF7F2] border-b border-gray-200 px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#FAF7F2] border-b border-[#E8E4DF] px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {pauseStatus?.isPaused ? (
             <PauseCircle className="w-4 h-4 text-amber-500" />
           ) : (
-            <PauseCircle className="w-4 h-4 text-gray-400" />
+            <PauseCircle className="w-4 h-4 text-[#8A9BA8]" />
           )}
-          <h3 className="text-sm font-semibold text-gray-800">
+          <h3 className="text-sm font-semibold text-[#1B2733]">
             {pauseStatus?.isPaused ? 'Subscription Paused' : 'Pause Subscription'}
           </h3>
         </div>
         {onClose && (
-          <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600">
+          <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A9BA8] hover:text-[#5A6B7A]">
             <X size={16} />
           </button>
         )}
@@ -174,12 +174,12 @@ export function SubscriptionPauseFlow({
         {/* Duration selector */}
         {step === 'select' && (
           <>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#5A6B7A]">
               Pausing your subscription stops billing. You will not be charged during the pause
               period, but you will lose access to premium features.
             </p>
             <div className="space-y-2">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-[#5A6B7A] uppercase tracking-wider">
                 Pause Duration
               </p>
               {DURATION_OPTIONS.map((opt) => {
@@ -192,7 +192,7 @@ export function SubscriptionPauseFlow({
                     className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${
                       selectedDuration === opt.value
                         ? 'border-[#6B9080] bg-[#6B9080]/10'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -200,7 +200,7 @@ export function SubscriptionPauseFlow({
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                           selectedDuration === opt.value
                             ? 'border-[#6B9080] bg-primary'
-                            : 'border-gray-300'
+                            : 'border-[#E8E4DF]'
                         }`}
                       >
                         {selectedDuration === opt.value && (
@@ -208,12 +208,12 @@ export function SubscriptionPauseFlow({
                         )}
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-medium text-gray-900">{opt.label}</p>
-                        <p className="text-xs text-gray-500">{opt.description}</p>
+                        <p className="text-sm font-medium text-[#1B2733]">{opt.label}</p>
+                        <p className="text-xs text-[#5A6B7A]">{opt.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-[#8A9BA8]">
                         Resumes {resumeDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
                     </div>
@@ -256,7 +256,7 @@ export function SubscriptionPauseFlow({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('select')}
-                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
               >
                 Go Back
               </button>
@@ -287,20 +287,20 @@ export function SubscriptionPauseFlow({
               </div>
               <div className="bg-white rounded-lg p-3 space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-1.5 text-gray-500">
+                  <span className="flex items-center gap-1.5 text-[#5A6B7A]">
                     <Calendar size={12} />
                     Resumes on
                   </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-[#1B2733]">
                     {formatResumeDate(pauseStatus.resumeDate)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-1.5 text-gray-500">
+                  <span className="flex items-center gap-1.5 text-[#5A6B7A]">
                     <Clock size={12} />
                     Days remaining
                   </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-[#1B2733]">
                     {daysUntilResume(pauseStatus.resumeDate)} days
                   </span>
                 </div>
@@ -333,8 +333,8 @@ export function SubscriptionPauseFlow({
               <Check className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">Subscription Resumed!</p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-sm font-semibold text-[#1B2733]">Subscription Resumed!</p>
+              <p className="text-xs text-[#5A6B7A] mt-1">
                 Your premium features are now active again.
               </p>
             </div>

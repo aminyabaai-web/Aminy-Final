@@ -193,21 +193,21 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
         role="menuitem"
         onClick={() => handleItemClick(item)}
         onKeyDown={(e) => handleKeyDown(e, item)}
-        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
+        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF] dark:border-slate-600 hover:border-[#E8E4DF] dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
         aria-label={`Open ${item.label}`}
       >
         <div className="flex items-center space-x-4">
           <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
-            <Icon className="w-5 h-5 text-gray-600 dark:text-slate-300" strokeWidth={1.5} />
+            <Icon className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" strokeWidth={1.5} />
           </div>
           
           <div className="text-left">
-            <div className="text-sm text-slate-900 dark:text-slate-100">{item.label}</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">{item.sublabel}</div>
+            <div className="text-sm text-[#1B2733] dark:text-slate-100">{item.label}</div>
+            <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{item.sublabel}</div>
           </div>
         </div>
 
-        <ChevronRight className="w-4 h-4 text-gray-400 dark:text-slate-400 group-hover:text-gray-600 dark:group-hover:text-slate-300 transition-colors" />
+        <ChevronRight className="w-4 h-4 text-[#8A9BA8] dark:text-slate-400 group-hover:text-[#5A6B7A] dark:group-hover:text-slate-300 transition-colors" />
       </button>
     );
   };
@@ -215,11 +215,11 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   return (
     <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-600">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-600">
         <div className="px-4 py-6 sm:px-6">
           <div className="max-w-2xl mx-auto">
-            <h1 className="text-xl text-slate-900 dark:text-slate-100">Settings</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Manage your account and preferences</p>
+            <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Settings</h1>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Manage your account and preferences</p>
           </div>
         </div>
       </div>
@@ -230,7 +230,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
           
           {/* Main More Items - The 5 core tabs */}
           <div>
-            <h2 className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Main Features</h2>
+            <h2 className="text-sm text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-3">Main Features</h2>
             <div className="space-y-2">
               {mainMoreItems.map((item, index) => (
                 <MenuItem key={item.id} item={item} isFirst={index === 0} />
@@ -240,7 +240,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
           {/* Additional Features */}
           <div>
-            <h2 className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Additional Features</h2>
+            <h2 className="text-sm text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-3">Additional Features</h2>
             <div className="space-y-2">
               {additionalItems.map((item) => (
                 <MenuItem key={item.id} item={item} />
@@ -250,7 +250,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
           {/* Appearance Section */}
           <div>
-            <h2 className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Appearance</h2>
+            <h2 className="text-sm text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-3">Appearance</h2>
             <div className="space-y-2">
               <ThemeToggle />
             </div>
@@ -258,7 +258,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
           {/* Support & Legal */}
           <div>
-            <h2 className="text-sm text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-3">Support & Legal</h2>
+            <h2 className="text-sm text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-3">Support & Legal</h2>
             <div className="space-y-2">
               {legalItems.map((item) => (
                 <MenuItem key={item.id} item={item} />
@@ -268,8 +268,8 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
         </div>
 
         {/* App Info */}
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-slate-600">
-          <div className="text-center text-xs text-slate-500 dark:text-slate-400 space-y-1">
+        <div className="mt-12 pt-8 border-t border-[#E8E4DF] dark:border-slate-600">
+          <div className="text-center text-xs text-[#5A6B7A] dark:text-slate-400 space-y-1">
             <p>Aminy Version 1.0.0</p>
             <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
           </div>

@@ -65,7 +65,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
   const getColor = (type: Activity['type']) => {
     switch (type) {
       case 'session':
-        return 'text-blue-600 bg-blue-50';
+        return 'text-blue-600 bg-[#EEF4F8]';
       case 'note':
         return 'text-green-600 bg-green-50';
       case 'message':
@@ -75,7 +75,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'plan':
         return 'text-[#6B9080] bg-[#6B9080]/10';
       default:
-        return 'text-gray-600 bg-[#FAF7F2]';
+        return 'text-[#5A6B7A] bg-[#FAF7F2]';
     }
   };
 
@@ -141,7 +141,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
 
         {displayedActivities.length === 0 && (
           <div className="text-center py-8">
-            <Clock className="w-12 h-12 mx-auto mb-3 text-gray-400" />
+            <Clock className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
             <p className="text-sm text-muted-foreground">No recent incidents</p>
             <p className="text-xs text-muted-foreground mt-1">
               Incidents logged during sessions and check-ins will appear here.

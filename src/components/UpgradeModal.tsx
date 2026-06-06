@@ -72,7 +72,7 @@ export function UpgradeModal({
               {/* Dismiss button */}
               <button
                 onClick={handleDismiss}
-                className="absolute top-3 right-3 p-1 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                className="absolute top-3 right-3 p-1 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
                 aria-label="Dismiss"
               >
                 <X className="w-4 h-4" />
@@ -95,12 +95,12 @@ export function UpgradeModal({
               </span>
 
               {/* Headline */}
-              <h3 className="text-base font-bold text-slate-900 mb-1 pr-4">
+              <h3 className="text-base font-bold text-[#1B2733] mb-1 pr-4">
                 {prompt.headline}
               </h3>
 
               {/* Subtext */}
-              <p className="text-sm text-slate-500 mb-3 leading-relaxed">
+              <p className="text-sm text-[#5A6B7A] mb-3 leading-relaxed">
                 {prompt.subtext}
               </p>
 
@@ -123,7 +123,7 @@ export function UpgradeModal({
               {/* Maybe later */}
               <button
                 onClick={handleDismiss}
-                className="w-full text-center text-xs text-slate-400 mt-2.5 hover:text-slate-600 transition-colors py-1"
+                className="w-full text-center text-xs text-slate-400 mt-2.5 hover:text-[#5A6B7A] transition-colors py-1"
               >
                 Maybe later
               </button>

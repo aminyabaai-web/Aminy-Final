@@ -566,7 +566,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900">
         {/* Header */}
-        <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
+        <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-10">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -579,7 +579,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   </button>
                 )}
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+                  <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
                     Messages
                   </h1>
                   <h2 className="sr-only">Message overview</h2>
@@ -594,14 +594,14 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   onClick={() => setShowSearch(!showSearch)}
                   className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
-                  <Search className="w-5 h-5 text-gray-500" />
+                  <Search className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
                 <button
                   onClick={handleFindProvider}
                   aria-label="New conversation"
                   className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
-                  <Plus className="w-5 h-5 text-gray-500" />
+                  <Plus className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
               </div>
             </div>
@@ -637,7 +637,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               <button
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
-                className="w-full p-4 border-b border-gray-100 dark:border-slate-700 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
+                className="w-full p-4 border-b border-[#E8E4DF] dark:border-slate-700 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
               >
                 {/* Avatar */}
                 <div className="relative flex-shrink-0">
@@ -655,18 +655,18 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-gray-900 dark:text-white truncate">
+                      <span className="font-medium text-[#1B2733] dark:text-white truncate">
                         {thread.provider.name}
                       </span>
                       {thread.provider.isVerified && (
                         <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                       )}
                     </div>
-                    <span className="text-xs text-gray-400 flex-shrink-0">
+                    <span className="text-xs text-[#8A9BA8] flex-shrink-0">
                       {thread.lastMessage && formatTime(thread.lastMessage.createdAt)}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                  <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] truncate mt-0.5">
                     {thread.lastMessage?.senderType === 'parent' && 'You: '}
                     {thread.lastMessage?.content || 'Start a conversation'}
                   </p>
@@ -690,7 +690,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
   return (
     <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 flex flex-col">
       {/* Thread Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <button
@@ -714,14 +714,14 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-900 dark:text-white truncate">
+                  <span className="font-medium text-[#1B2733] dark:text-white truncate">
                     {selectedThread.provider.name}
                   </span>
                   {selectedThread.provider.isVerified && (
                     <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-[#5A6B7A] truncate">
                   {selectedThread.provider.credentials} • {selectedThread.provider.specialty}
                 </p>
               </div>
@@ -733,7 +733,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 onClick={() => setShowThreadMenu(!showThreadMenu)}
                 className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
-                <MoreVertical className="w-5 h-5 text-gray-500" />
+                <MoreVertical className="w-5 h-5 text-[#5A6B7A]" />
               </button>
 
               {showThreadMenu && (
@@ -742,19 +742,19 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     className="fixed inset-0 z-10"
                     onClick={() => setShowThreadMenu(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 z-20 py-2">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-[#E8E4DF] dark:border-slate-700 z-20 py-2">
                     <button
                       onClick={toggleMute}
                       className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
                     >
                       {selectedThread.isMuted ? (
                         <>
-                          <Bell className="w-4 h-4 text-gray-500" />
+                          <Bell className="w-4 h-4 text-[#5A6B7A]" />
                           <span className="text-sm">Unmute</span>
                         </>
                       ) : (
                         <>
-                          <BellOff className="w-4 h-4 text-gray-500" />
+                          <BellOff className="w-4 h-4 text-[#5A6B7A]" />
                           <span className="text-sm">Mute</span>
                         </>
                       )}
@@ -763,7 +763,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                       onClick={archiveThread}
                       className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
                     >
-                      <Archive className="w-4 h-4 text-gray-500" />
+                      <Archive className="w-4 h-4 text-[#5A6B7A]" />
                       <span className="text-sm">Archive</span>
                     </button>
                   </div>
@@ -803,7 +803,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                       px-4 py-2.5 rounded-2xl
                       ${isOwn
                         ? 'bg-primary text-white rounded-tr-md'
-                        : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-tl-md shadow-sm'
+                        : 'bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white rounded-tl-md shadow-sm'
                       }
                     `}
                   >
@@ -812,11 +812,11 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
 
                   {/* Message Meta */}
                   <div className={`flex items-center gap-1 mt-1 ${isOwn ? 'justify-end' : ''}`}>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-[#8A9BA8]">
                       {formatTime(message.createdAt)}
                     </span>
                     {isOwn && (
-                      <span className="text-gray-400">
+                      <span className="text-[#8A9BA8]">
                         {message.status === 'sending' && <Clock className="w-3 h-3" />}
                         {message.status === 'sent' && <Check className="w-3 h-3" />}
                         {message.status === 'delivered' && <CheckCheck className="w-3 h-3" />}
@@ -835,7 +835,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
       {/* Typing Indicator */}
       {isTyping && (
         <div className="px-4 py-2 max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
             <div className="flex gap-1">
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
               <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -847,7 +847,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
       )}
 
       {/* Input Area */}
-      <div className="bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 sticky bottom-0">
+      <div className="bg-white dark:bg-slate-800 border-t border-[#E8E4DF] dark:border-slate-700 sticky bottom-0">
         <div className="max-w-2xl mx-auto px-4 py-3" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
           <div className="flex items-end gap-2">
             {/* Attachment Button */}
@@ -856,7 +856,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               aria-label="Attach a file"
               className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
             >
-              <Paperclip className="w-5 h-5 text-gray-500" />
+              <Paperclip className="w-5 h-5 text-[#5A6B7A]" />
             </button>
 
             {/* Input */}
@@ -881,7 +881,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-colors
                 ${newMessage.trim()
                   ? 'bg-primary text-white hover:bg-primary'
-                  : 'bg-[#F0EDE8] dark:bg-slate-700 text-gray-400'
+                  : 'bg-[#F0EDE8] dark:bg-slate-700 text-[#8A9BA8]'
                 }
               `}
             >

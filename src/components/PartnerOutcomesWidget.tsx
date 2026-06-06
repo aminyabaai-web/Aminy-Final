@@ -132,7 +132,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
 
   if (isLoading) {
     return (
-      <div className={`rounded-2xl bg-white border border-slate-100 p-6 flex items-center justify-center ${className}`}>
+      <div className={`rounded-2xl bg-white border border-[#E8E4DF] p-6 flex items-center justify-center ${className}`}>
         <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
       </div>
     );
@@ -141,11 +141,11 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
   const hasAnyData = summaries.some(s => s.avg != null);
 
   return (
-    <div className={`rounded-2xl bg-white border border-slate-100 overflow-hidden ${className}`}>
+    <div className={`rounded-2xl bg-white border border-[#E8E4DF] overflow-hidden ${className}`}>
       <div className="px-4 pt-4 pb-3 flex items-start justify-between gap-2">
         <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Aggregate Outcomes</p>
-          <p className="text-sm text-slate-700 mt-0.5">
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Aggregate Outcomes</p>
+          <p className="text-sm text-[#3A4A57] mt-0.5">
             {partnerOrgId ? `${familyCount} families enrolled` : 'All Aminy families'} · last 7 days vs prior week
           </p>
         </div>
@@ -155,7 +155,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
       {!hasAnyData ? (
         <div className="px-4 pb-5 flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-[#5A6B7A]">
             No outcome submissions yet. Once families start completing PHQ-9, GAD-7, or ABC-I assessments, trends will appear here.
           </p>
         </div>
@@ -200,7 +200,7 @@ function OutcomeSummaryCard({ summary }: { summary: OutcomeSummary }) {
 
   return (
     <div className="rounded-xl p-3" style={{ background: `${color}10`, border: `1px solid ${color}30` }}>
-      <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wide">{measureName}</p>
+      <p className="text-[10px] font-semibold text-[#5A6B7A] uppercase tracking-wide">{measureName}</p>
       <p className="text-2xl font-bold mt-1" style={{ color }}>{avg ?? '—'}</p>
       <div className="flex items-center gap-1 mt-1">
         <Icon className="w-3 h-3" style={{ color }} />

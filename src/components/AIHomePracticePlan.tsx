@@ -153,37 +153,37 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
       <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B18 0%, #57759018 100%)', border: '1px solid #43AA8B35' }}>
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-sm font-semibold text-slate-800">✦ 2-Week Practice Plan</p>
-            <p className="text-xs text-slate-500 mt-0.5">Target: {plan.target}</p>
+            <p className="text-sm font-semibold text-[#1B2733]">✦ 2-Week Practice Plan</p>
+            <p className="text-xs text-[#5A6B7A] mt-0.5">Target: {plan.target}</p>
           </div>
           <button onClick={copyPlan} className="p-1.5 rounded-lg hover:bg-white/60 transition-colors">
             {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-slate-400" />}
           </button>
         </div>
-        <p className="text-xs text-slate-600 mt-2 italic">"{plan.weeklyGoal}"</p>
+        <p className="text-xs text-[#5A6B7A] mt-2 italic">"{plan.weeklyGoal}"</p>
       </div>
 
       {/* Schedule */}
       <div className="space-y-2">
         {plan.schedule.map((day) => (
-          <div key={day.day} className="border border-slate-200 rounded-xl overflow-hidden">
+          <div key={day.day} className="border border-[#E8E4DF] rounded-xl overflow-hidden">
             <button
-              className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-[#FAF7F2] transition-colors"
               onClick={() => setExpandedDay(expandedDay === day.day ? null : day.day)}
             >
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">{day.label}</Badge>
-                <span className="text-xs text-slate-500">{day.activities.map(a => a.title).join(' · ')}</span>
+                <span className="text-xs text-[#5A6B7A]">{day.activities.map(a => a.title).join(' · ')}</span>
               </div>
               {expandedDay === day.day ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
             </button>
 
             {expandedDay === day.day && (
-              <div className="px-4 pb-4 pt-2 bg-slate-50 space-y-3">
+              <div className="px-4 pb-4 pt-2 bg-[#FAF7F2] space-y-3">
                 {day.activities.map((a, ai) => (
                   <div key={ai} className="bg-white rounded-xl p-3 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-slate-800">{a.title}</span>
+                      <span className="text-sm font-semibold text-[#1B2733]">{a.title}</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-xs text-slate-400">{a.time}</span>
                         <Badge variant="outline" className="text-xs">{a.durationMinutes}m</Badge>
@@ -191,7 +191,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                     </div>
                     <ol className="space-y-1">
                       {a.steps.map((step, si) => (
-                        <li key={si} className="flex gap-2 text-xs text-slate-600">
+                        <li key={si} className="flex gap-2 text-xs text-[#5A6B7A]">
                           <span className="w-4 h-4 rounded-full bg-[#6B9080]/10 text-[#6B9080] flex items-center justify-center shrink-0 font-medium text-[10px]">{si + 1}</span>
                           {step}
                         </li>
@@ -216,7 +216,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
         </div>
       )}
       {plan.fadingNote && (
-        <p className="text-xs text-slate-500 text-center italic px-2">{plan.fadingNote}</p>
+        <p className="text-xs text-[#5A6B7A] text-center italic px-2">{plan.fadingNote}</p>
       )}
 
       <Button variant="outline" size="sm" className="w-full" onClick={() => setPlan(null)}>

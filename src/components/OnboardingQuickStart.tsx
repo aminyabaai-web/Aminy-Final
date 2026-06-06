@@ -112,7 +112,7 @@ export function OnboardingQuickStart({
           <div className="text-center mt-2">
             <button
               onClick={onSkipToLogin}
-              className="text-xs text-gray-400 hover:text-gray-600"
+              className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A]"
             >
               Already have an account? Log in
             </button>
@@ -130,17 +130,17 @@ export function OnboardingQuickStart({
               <Sparkles className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl font-bold text-[#1B2733] mb-2">
               Let&apos;s meet your child
             </h1>
-            <p className="text-gray-500 text-sm mb-8">
+            <p className="text-[#5A6B7A] text-sm mb-8">
               Just two quick things to get started
             </p>
 
             <div className="space-y-6">
               {/* Child name */}
               <div>
-                <label htmlFor="child-name" className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                <label htmlFor="child-name" className="block text-sm font-medium text-[#3A4A57] mb-2 text-left">
                   Your child&apos;s first name
                 </label>
                 <input
@@ -151,18 +151,18 @@ export function OnboardingQuickStart({
                   onChange={(e) => setChildName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
                   placeholder="e.g., Alex"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6B9080] focus:ring-2 focus:ring-teal-500/20 outline-none text-lg transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-[#E8E4DF] focus:border-[#6B9080] focus:ring-2 focus:ring-teal-500/20 outline-none text-lg transition-all"
                   autoComplete="off"
                   aria-describedby="name-hint"
                 />
-                <p id="name-hint" className="text-xs text-gray-400 mt-1 text-left">
+                <p id="name-hint" className="text-xs text-[#8A9BA8] mt-1 text-left">
                   First name only — we keep everything private
                 </p>
               </div>
 
               {/* Age slider */}
               <div>
-                <label htmlFor="child-age" className="block text-sm font-medium text-gray-700 mb-2 text-left">
+                <label htmlFor="child-age" className="block text-sm font-medium text-[#3A4A57] mb-2 text-left">
                   Age: <span className="text-[#6B9080] font-bold">{childAge} years old</span>
                 </label>
                 <input
@@ -178,7 +178,7 @@ export function OnboardingQuickStart({
                   aria-valuenow={childAge}
                   aria-label={`Child's age: ${childAge} years`}
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
                   <span>2</span>
                   <span>18</span>
                 </div>
@@ -200,10 +200,10 @@ export function OnboardingQuickStart({
         {/* STEP 2: Primary concern */}
         {step === 2 && (
           <div className="w-full max-w-sm text-center animate-in fade-in slide-in-from-right duration-500">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
               What&apos;s on your mind most?
             </h2>
-            <p className="text-gray-500 text-sm mb-8">
+            <p className="text-[#5A6B7A] text-sm mb-8">
               About {childName} — pick the biggest one
             </p>
 
@@ -212,13 +212,13 @@ export function OnboardingQuickStart({
                 <button
                   key={c.id}
                   onClick={() => handleConcernSelect(c.id)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/50 transition-all active:scale-[0.98] text-left group"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl border border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/50 transition-all active:scale-[0.98] text-left group"
                 >
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform`}>
                     <c.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-medium text-gray-800">{c.label}</span>
-                  <ArrowRight size={16} className="ml-auto text-gray-400 group-hover:text-primary transition-colors" />
+                  <span className="font-medium text-[#1B2733]">{c.label}</span>
+                  <ArrowRight size={16} className="ml-auto text-[#8A9BA8] group-hover:text-primary transition-colors" />
                 </button>
               ))}
             </div>
@@ -226,7 +226,7 @@ export function OnboardingQuickStart({
             {/* Back button */}
             <button
               onClick={() => setStep(1)}
-              className="mt-6 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+              className="mt-6 text-sm text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
             >
               ← Back
             </button>
@@ -240,10 +240,10 @@ export function OnboardingQuickStart({
               <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-7 h-7 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
                 Perfect. Let&apos;s start helping {childName}.
               </h2>
-              <p className="text-gray-500 text-sm">
+              <p className="text-[#5A6B7A] text-sm">
                 Pick how you&apos;d like to begin
               </p>
             </div>
@@ -271,13 +271,13 @@ export function OnboardingQuickStart({
               {/* Option 2: Talk to Aminy */}
               <button
                 onClick={() => handleDestination('chat')}
-                className="w-full p-5 rounded-2xl bg-white border-2 border-gray-200 text-left hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-all active:scale-[0.98]"
+                className="w-full p-5 rounded-2xl bg-white border-2 border-[#E8E4DF] text-left hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-all active:scale-[0.98]"
               >
                 <div className="flex items-start gap-3">
                   <MessageCircle className="w-6 h-6 text-[#6B9080] flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-semibold text-gray-900 text-base">Talk to Aminy AI</div>
-                    <div className="text-sm text-gray-500 mt-0.5">
+                    <div className="font-semibold text-[#1B2733] text-base">Talk to Aminy AI</div>
+                    <div className="text-sm text-[#5A6B7A] mt-0.5">
                       Get personalized guidance about {concern === 'speech' ? 'speech' : concern === 'behavior' ? 'behavior' : concern === 'social' ? 'social skills' : 'routines'}
                     </div>
                   </div>
@@ -286,7 +286,7 @@ export function OnboardingQuickStart({
             </div>
 
             {/* Privacy note */}
-            <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-gray-400">
+            <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#8A9BA8]">
               <Shield size={12} />
               <span>HIPAA-conscious • No data shared without consent</span>
             </div>
@@ -294,7 +294,7 @@ export function OnboardingQuickStart({
             {/* Back button */}
             <button
               onClick={() => setStep(2)}
-              className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+              className="mt-4 text-sm text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
             >
               ← Back
             </button>

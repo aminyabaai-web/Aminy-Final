@@ -51,14 +51,14 @@ function getStatusColor(status: string): string {
     case 'active':
       return 'bg-green-100 text-green-800';
     case 'pending':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-yellow-100 text-[#3A4A57]';
     case 'inactive':
     case 'suspended':
       return 'bg-red-100 text-red-800';
     case 'waitlist':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-blue-100 text-[#4A6478]';
     default:
-      return 'bg-[#F0EDE8] text-gray-800';
+      return 'bg-[#F0EDE8] text-[#1B2733]';
   }
 }
 
@@ -95,13 +95,13 @@ function StatCard({
   trendUp?: boolean;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+    <div className="bg-white rounded-xl border border-[#E8E4DF] p-5 shadow-sm">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-medium text-gray-500">{label}</span>
-        <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">{icon}</div>
+        <span className="text-sm font-medium text-[#5A6B7A]">{label}</span>
+        <div className="p-2 bg-indigo-50 rounded-lg text-[#6B9080]">{icon}</div>
       </div>
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
-      {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+      <div className="text-2xl font-bold text-[#1B2733]">{value}</div>
+      {subtitle && <p className="text-sm text-[#5A6B7A] mt-1">{subtitle}</p>}
       {trend && (
         <p className={`text-xs mt-2 ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
           {trendUp ? '↑' : '↓'} {trend}
@@ -128,8 +128,8 @@ function UtilizationBar({
   return (
     <div className="mb-4">
       <div className="flex items-center justify-between mb-1">
-        <span className="text-sm font-medium text-gray-700">{label}</span>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm font-medium text-[#3A4A57]">{label}</span>
+        <span className="text-sm text-[#5A6B7A]">
           {used.toFixed(1)} / {total.toFixed(1)} hrs ({percentage.toFixed(0)}%)
         </span>
       </div>
@@ -155,26 +155,26 @@ function ProviderCard({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
+      className="bg-white rounded-xl border border-[#E8E4DF] p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
     >
       <div className="flex items-start gap-4">
-        <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-semibold">
+        <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-[#6B9080] font-semibold">
           {provider.firstName[0]}{provider.lastName[0]}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-gray-900 truncate">
+            <h3 className="font-semibold text-[#1B2733] truncate">
               {provider.firstName} {provider.lastName}
             </h3>
             <span className={`px-2 py-0.5 text-xs font-medium rounded ${getStatusColor(provider.status)}`}>
               {provider.status}
             </span>
           </div>
-          <p className="text-sm text-gray-500">{getRoleLabel(provider.role)}</p>
+          <p className="text-sm text-[#5A6B7A]">{getRoleLabel(provider.role)}</p>
           {provider.specialties.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {provider.specialties.slice(0, 3).map(s => (
-                <span key={s} className="px-2 py-0.5 text-xs bg-[#F0EDE8] text-gray-600 rounded">
+                <span key={s} className="px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded">
                   {s}
                 </span>
               ))}
@@ -186,12 +186,12 @@ function ProviderCard({
       {stats && (
         <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t">
           <div className="text-center">
-            <div className="text-lg font-semibold text-gray-900">{stats.activeClients}</div>
-            <div className="text-xs text-gray-500">Clients</div>
+            <div className="text-lg font-semibold text-[#1B2733]">{stats.activeClients}</div>
+            <div className="text-xs text-[#5A6B7A]">Clients</div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-semibold text-gray-900">{formatPercent(stats.utilizationRate)}</div>
-            <div className="text-xs text-gray-500">Utilization</div>
+            <div className="text-lg font-semibold text-[#1B2733]">{formatPercent(stats.utilizationRate)}</div>
+            <div className="text-xs text-[#5A6B7A]">Utilization</div>
           </div>
           <div className="text-center">
             <div className={`text-lg font-semibold ${
@@ -200,7 +200,7 @@ function ProviderCard({
             }`}>
               {stats.credentialsStatus === 'current' ? '✓' : stats.credentialsStatus === 'expiring_soon' ? '!' : '✗'}
             </div>
-            <div className="text-xs text-gray-500">Credentials</div>
+            <div className="text-xs text-[#5A6B7A]">Credentials</div>
           </div>
         </div>
       )}
@@ -227,12 +227,12 @@ function ClientCard({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
+      className="bg-white rounded-xl border border-[#E8E4DF] p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
     >
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h3 className="font-semibold text-gray-900">Client #{client.id.slice(0, 8)}</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="font-semibold text-[#1B2733]">Client #{client.id.slice(0, 8)}</h3>
+          <p className="text-sm text-[#5A6B7A]">
             {client.assignedProviders.length} provider{client.assignedProviders.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -243,8 +243,8 @@ function ClientCard({
 
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">Hours Utilized</span>
-          <span className={`font-medium ${utilizationPercent > 80 ? 'text-orange-600' : 'text-gray-900'}`}>
+          <span className="text-[#5A6B7A]">Hours Utilized</span>
+          <span className={`font-medium ${utilizationPercent > 80 ? 'text-orange-600' : 'text-[#1B2733]'}`}>
             {totalUsed.toFixed(1)} / {totalAuthorized.toFixed(1)}
           </span>
         </div>
@@ -257,7 +257,7 @@ function ClientCard({
       </div>
 
       {auth && auth.periodEnd && (
-        <p className="text-xs text-gray-400 mt-3">
+        <p className="text-xs text-[#8A9BA8] mt-3">
           Auth expires: {new Date(auth.periodEnd).toLocaleDateString()}
         </p>
       )}
@@ -275,27 +275,27 @@ function LocationCard({
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-gray-200 p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
+      className="bg-white rounded-xl border border-[#E8E4DF] p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
     >
       <div className="flex items-start justify-between mb-2">
         <div>
-          <h3 className="font-semibold text-gray-900">{location.name}</h3>
+          <h3 className="font-semibold text-[#1B2733]">{location.name}</h3>
           {location.isPrimary && (
-            <span className="text-xs text-indigo-600 font-medium">Primary Location</span>
+            <span className="text-xs text-[#6B9080] font-medium">Primary Location</span>
           )}
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-gray-800'}`}>
+        <span className={`px-2 py-1 text-xs font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-[#1B2733]'}`}>
           {location.isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
 
-      <p className="text-sm text-gray-600 mt-2">
+      <p className="text-sm text-[#5A6B7A] mt-2">
         {location.address.street}<br />
         {location.address.city}, {location.address.state} {location.address.zip}
       </p>
 
       {location.phone && (
-        <p className="text-sm text-gray-500 mt-2">{location.phone}</p>
+        <p className="text-sm text-[#5A6B7A] mt-2">{location.phone}</p>
       )}
     </div>
   );
@@ -375,7 +375,7 @@ export function ClinicDashboard({
   if (!clinic) {
     return (
       <div className={`text-center py-12 ${className}`}>
-        <p className="text-gray-500">Clinic not found</p>
+        <p className="text-[#5A6B7A]">Clinic not found</p>
       </div>
     );
   }
@@ -397,8 +397,8 @@ export function ClinicDashboard({
             <img src={clinic.logo} alt={clinic.name} className="w-12 h-12 rounded-lg object-cover" />
           )}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{clinic.name}</h1>
-            <p className="text-sm text-gray-500">{clinic.tier.charAt(0).toUpperCase() + clinic.tier.slice(1)} Plan</p>
+            <h1 className="text-2xl font-bold text-[#1B2733]">{clinic.name}</h1>
+            <p className="text-sm text-[#5A6B7A]">{clinic.tier.charAt(0).toUpperCase() + clinic.tier.slice(1)} Plan</p>
           </div>
           <span className={`ml-auto px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(clinic.status)}`}>
             {clinic.status}
@@ -407,7 +407,7 @@ export function ClinicDashboard({
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200 mb-6">
+      <div className="border-b border-[#E8E4DF] mb-6">
         <nav className="flex gap-1 overflow-x-auto">
           {tabs.map(tab => (
             <button
@@ -415,14 +415,14 @@ export function ClinicDashboard({
               onClick={() => setActiveTab(tab.id as ActiveTab)}
               className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                 activeTab === tab.id
-                  ? 'border-indigo-500 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'border-indigo-500 text-[#6B9080]'
+                  : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'
               }`}
             >
               <span>{tab.icon}</span>
               {tab.label}
               {tab.count !== undefined && (
-                <span className="ml-1 px-2 py-0.5 text-xs bg-[#F0EDE8] text-gray-600 rounded-full">
+                <span className="ml-1 px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded-full">
                   {tab.count}
                 </span>
               )}
@@ -467,8 +467,8 @@ export function ClinicDashboard({
 
           {/* Utilization Details */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Provider Utilization</h3>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Provider Utilization</h3>
               {providers.slice(0, 5).map(provider => {
                 const pStats = providerStats[provider.id];
                 return (
@@ -483,8 +483,8 @@ export function ClinicDashboard({
               })}
             </div>
 
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Expirations</h3>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+              <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Upcoming Expirations</h3>
               <div className="space-y-3">
                 {providers
                   .filter(p => providerStats[p.id]?.credentialsStatus !== 'current')
@@ -494,20 +494,20 @@ export function ClinicDashboard({
                     return (
                       <div
                         key={provider.id}
-                        className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg"
+                        className="flex items-center justify-between p-3 bg-[#FDF9F0] rounded-lg"
                       >
                         <div>
-                          <p className="font-medium text-gray-900">
+                          <p className="font-medium text-[#1B2733]">
                             {provider.firstName} {provider.lastName}
                           </p>
-                          <p className="text-sm text-gray-500">{getRoleLabel(provider.role)}</p>
+                          <p className="text-sm text-[#5A6B7A]">{getRoleLabel(provider.role)}</p>
                         </div>
                         <div className="text-right">
                           <span className="text-yellow-600 font-medium">
                             {pStats?.credentialsStatus === 'expiring_soon' ? 'Expiring Soon' : 'Expired'}
                           </span>
                           {pStats?.upcomingExpiration && (
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-[#5A6B7A]">
                               {pStats.upcomingExpiration.toLocaleDateString()}
                             </p>
                           )}
@@ -516,7 +516,7 @@ export function ClinicDashboard({
                     );
                   })}
                 {providers.filter(p => providerStats[p.id]?.credentialsStatus !== 'current').length === 0 && (
-                  <p className="text-sm text-gray-500 text-center py-4">
+                  <p className="text-sm text-[#5A6B7A] text-center py-4">
                     All credentials are current
                   </p>
                 )}
@@ -525,24 +525,24 @@ export function ClinicDashboard({
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+              <button className="flex flex-col items-center gap-2 p-4 border border-[#E8E4DF] rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
                 <span className="text-2xl">➕</span>
-                <span className="text-sm font-medium text-gray-700">Add Client</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Add Client</span>
               </button>
-              <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+              <button className="flex flex-col items-center gap-2 p-4 border border-[#E8E4DF] rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
                 <span className="text-2xl">👤</span>
-                <span className="text-sm font-medium text-gray-700">Add Provider</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Add Provider</span>
               </button>
-              <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+              <button className="flex flex-col items-center gap-2 p-4 border border-[#E8E4DF] rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
                 <span className="text-2xl">📄</span>
-                <span className="text-sm font-medium text-gray-700">Generate Report</span>
+                <span className="text-sm font-medium text-[#3A4A57]">Generate Report</span>
               </button>
-              <button className="flex flex-col items-center gap-2 p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
+              <button className="flex flex-col items-center gap-2 p-4 border border-[#E8E4DF] rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
                 <span className="text-2xl">📊</span>
-                <span className="text-sm font-medium text-gray-700">View Analytics</span>
+                <span className="text-sm font-medium text-[#3A4A57]">View Analytics</span>
               </button>
             </div>
           </div>
@@ -554,10 +554,10 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Providers</h2>
-              <p className="text-sm text-gray-500">{providers.length} total providers</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Providers</h2>
+              <p className="text-sm text-[#5A6B7A]">{providers.length} total providers</p>
             </div>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
               Add Provider
             </button>
           </div>
@@ -580,13 +580,13 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Clients</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-lg font-semibold text-[#1B2733]">Clients</h2>
+              <p className="text-sm text-[#5A6B7A]">
                 {clients.filter(c => c.status === 'active').length} active,{' '}
                 {clients.filter(c => c.status === 'waitlist').length} on waitlist
               </p>
             </div>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
               Add Client
             </button>
           </div>
@@ -608,10 +608,10 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Locations</h2>
-              <p className="text-sm text-gray-500">{locations.length} locations</p>
+              <h2 className="text-lg font-semibold text-[#1B2733]">Locations</h2>
+              <p className="text-sm text-[#5A6B7A]">{locations.length} locations</p>
             </div>
-            <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
               Add Location
             </button>
           </div>
@@ -631,13 +631,13 @@ export function ClinicDashboard({
       {/* Settings Tab */}
       {activeTab === 'settings' && clinic && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Clinic Settings</h3>
+          <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Clinic Settings</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-gray-900">Provider Self-Onboarding</p>
-                  <p className="text-sm text-gray-500">Allow providers to complete onboarding themselves</p>
+                  <p className="font-medium text-[#1B2733]">Provider Self-Onboarding</p>
+                  <p className="text-sm text-[#5A6B7A]">Allow providers to complete onboarding themselves</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -646,14 +646,14 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#E8E4DF] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#6B9080]" />
                 </label>
               </div>
 
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-gray-900">Session Approval Required</p>
-                  <p className="text-sm text-gray-500">Require supervisor approval for session notes</p>
+                  <p className="font-medium text-[#1B2733]">Session Approval Required</p>
+                  <p className="text-sm text-[#5A6B7A]">Require supervisor approval for session notes</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -662,14 +662,14 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#E8E4DF] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#6B9080]" />
                 </label>
               </div>
 
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-gray-900">Electronic Visit Verification (EVV)</p>
-                  <p className="text-sm text-gray-500">Enable GPS-based session verification</p>
+                  <p className="font-medium text-[#1B2733]">Electronic Visit Verification (EVV)</p>
+                  <p className="text-sm text-[#5A6B7A]">Enable GPS-based session verification</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
@@ -678,19 +678,19 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#E8E4DF] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#6B9080]" />
                 </label>
               </div>
 
               <div className="flex items-center justify-between py-3">
                 <div>
-                  <p className="font-medium text-gray-900">Auto-Generate Reports</p>
-                  <p className="text-sm text-gray-500">Automatically generate progress reports</p>
+                  <p className="font-medium text-[#1B2733]">Auto-Generate Reports</p>
+                  <p className="text-sm text-[#5A6B7A]">Automatically generate progress reports</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <select
                     value={clinic.settings.reportFrequency}
-                    className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
+                    className="px-3 py-1.5 border border-[#E8E4DF] rounded-lg text-sm"
                     disabled
                   >
                     <option value="daily">Daily</option>
@@ -704,22 +704,22 @@ export function ClinicDashboard({
                       className="sr-only peer"
                       readOnly
                     />
-                    <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                    <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[#E8E4DF] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#6B9080]" />
                   </label>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Insurance Credentials</h3>
+          <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
+            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Insurance Credentials</h3>
             {clinic.settings.insuranceCredentials.length > 0 ? (
               <div className="space-y-3">
                 {clinic.settings.insuranceCredentials.map((cred, i) => (
                   <div key={i} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
                     <div>
-                      <p className="font-medium text-gray-900">{cred.insurerName}</p>
-                      <p className="text-sm text-gray-500">Contract: {cred.contractNumber || 'N/A'}</p>
+                      <p className="font-medium text-[#1B2733]">{cred.insurerName}</p>
+                      <p className="text-sm text-[#5A6B7A]">Contract: {cred.contractNumber || 'N/A'}</p>
                     </div>
                     <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(cred.status)}`}>
                       {cred.status}
@@ -728,11 +728,11 @@ export function ClinicDashboard({
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-gray-500 text-center py-4">
+              <p className="text-sm text-[#5A6B7A] text-center py-4">
                 No insurance credentials configured
               </p>
             )}
-            <button className="mt-4 w-full py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors">
+            <button className="mt-4 w-full py-2 border border-[#E8E4DF] rounded-lg text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors">
               Add Insurance Credential
             </button>
           </div>

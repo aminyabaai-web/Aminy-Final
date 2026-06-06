@@ -168,25 +168,25 @@ export function SessionPayoutTrigger({
             <div className="p-5 space-y-4">
               {/* Session info */}
               <div className="rounded-xl bg-[#FAF7F2] p-4 space-y-2">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <User className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="font-medium text-gray-800">{providerName}</span>
+                <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+                  <User className="w-3.5 h-3.5 text-[#8A9BA8]" />
+                  <span className="font-medium text-[#1B2733]">{providerName}</span>
                 </div>
                 {sessionDescription && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Shield className="w-3.5 h-3.5 text-gray-400" />
+                  <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+                    <Shield className="w-3.5 h-3.5 text-[#8A9BA8]" />
                     <span>{sessionDescription}</span>
                   </div>
                 )}
                 {dateLabel && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                  <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+                    <Calendar className="w-3.5 h-3.5 text-[#8A9BA8]" />
                     <span>{dateLabel}</span>
                   </div>
                 )}
                 {durationMinutes && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="w-3.5 h-3.5 text-gray-400" />
+                  <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
+                    <Clock className="w-3.5 h-3.5 text-[#8A9BA8]" />
                     <span>{durationMinutes} minutes</span>
                   </div>
                 )}
@@ -194,22 +194,22 @@ export function SessionPayoutTrigger({
 
               {/* Fee breakdown */}
               <div className="space-y-2">
-                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Payment Breakdown</h3>
+                <h3 className="text-xs font-semibold text-[#8A9BA8] uppercase tracking-wide">Payment Breakdown</h3>
 
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500">Session total</span>
-                  <span className="font-medium text-gray-700">{formatCents(sessionAmountCents)}</span>
+                  <span className="text-[#5A6B7A]">Session total</span>
+                  <span className="font-medium text-[#3A4A57]">{formatCents(sessionAmountCents)}</span>
                 </div>
 
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500">Platform fee ({feePct}%)</span>
+                  <span className="text-[#5A6B7A]">Platform fee ({feePct}%)</span>
                   <span className="font-medium text-red-500">−{formatCents(platformFeeCents)}</span>
                 </div>
 
                 <div className="h-px bg-[#F0EDE8] my-1" />
 
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-semibold text-gray-700">Provider receives</span>
+                  <span className="text-sm font-semibold text-[#3A4A57]">Provider receives</span>
                   <span className="text-lg font-bold text-[#6B9080]">{formatCents(providerCents)}</span>
                 </div>
               </div>
@@ -227,7 +227,7 @@ export function SessionPayoutTrigger({
               {onCancel && (
                 <button
                   onClick={onCancel}
-                  className="w-full text-center text-sm text-gray-400 hover:text-gray-600 transition-colors py-1"
+                  className="w-full text-center text-sm text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors py-1"
                 >
                   Cancel
                 </button>
@@ -248,8 +248,8 @@ export function SessionPayoutTrigger({
         >
           <Card className="rounded-2xl border-0 shadow-sm bg-white p-8 flex flex-col items-center gap-3">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
-            <p className="text-sm font-medium text-gray-700">Processing payout…</p>
-            <p className="text-xs text-gray-400 text-center">Transferring {formatCents(providerCents)} to {providerName}</p>
+            <p className="text-sm font-medium text-[#3A4A57]">Processing payout…</p>
+            <p className="text-xs text-[#8A9BA8] text-center">Transferring {formatCents(providerCents)} to {providerName}</p>
           </Card>
         </motion.div>
       )}
@@ -268,11 +268,11 @@ export function SessionPayoutTrigger({
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-800 text-base">Payment Released</h3>
+              <h3 className="font-bold text-[#1B2733] text-base">Payment Released</h3>
               <p className="text-[#6B9080] font-semibold text-xl mt-1">{formatCents(payoutRecord.providerAmountCents)}</p>
-              <p className="text-xs text-gray-400 mt-1">Transfer ID: {payoutRecord.transferId}</p>
+              <p className="text-xs text-[#8A9BA8] mt-1">Transfer ID: {payoutRecord.transferId}</p>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#5A6B7A]">
               {providerName} will receive this payment within 2 business days via Stripe.
             </p>
             {onCancel && (
@@ -302,7 +302,7 @@ export function SessionPayoutTrigger({
               <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-800 text-base">Payout Failed</h3>
+              <h3 className="font-bold text-[#1B2733] text-base">Payout Failed</h3>
               {errorMessage && (
                 <p className="text-sm text-red-500 mt-1 max-w-xs">{errorMessage}</p>
               )}

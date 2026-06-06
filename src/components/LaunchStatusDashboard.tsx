@@ -159,7 +159,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
       case 'in-progress':
         return <Badge className="bg-amber-100 text-amber-700">In Progress</Badge>;
       default:
-        return <Badge className="bg-slate-100 text-slate-700">Pending</Badge>;
+        return <Badge className="bg-[#F0EDE8] text-[#3A4A57]">Pending</Badge>;
     }
   };
 
@@ -170,19 +170,19 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors mb-4"
+            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-slate-900 mb-2">Phase 2 Complete - Launch Status</h1>
-              <p className="text-slate-600">Aminy Beta Readiness Dashboard</p>
+              <h1 className="text-[#1B2733] mb-2">Phase 2 Complete - Launch Status</h1>
+              <p className="text-[#5A6B7A]">Aminy Beta Readiness Dashboard</p>
             </div>
             <div className="text-right">
-              <div className="text-3xl text-slate-900 mb-1">{overallCompletion}%</div>
-              <div className="text-sm text-slate-600">Ready</div>
+              <div className="text-3xl text-[#1B2733] mb-1">{overallCompletion}%</div>
+              <div className="text-sm text-[#5A6B7A]">Ready</div>
             </div>
           </div>
         </div>
@@ -193,66 +193,66 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/20">
           <div className="flex items-center gap-3 mb-4">
             <Sparkles className="w-6 h-6 text-accent" />
-            <h2 className="text-slate-900">Overall Launch Readiness</h2>
+            <h2 className="text-[#1B2733]">Overall Launch Readiness</h2>
           </div>
           <Progress value={overallCompletion} className="h-3 mb-4" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
-              <div className="text-2xl text-slate-900 mb-1">{completedModules}</div>
-              <div className="text-sm text-slate-600">Completed</div>
+              <div className="text-2xl text-[#1B2733] mb-1">{completedModules}</div>
+              <div className="text-sm text-[#5A6B7A]">Completed</div>
             </div>
             <div>
-              <div className="text-2xl text-slate-900 mb-1">{inProgressModules}</div>
-              <div className="text-sm text-slate-600">In Progress</div>
+              <div className="text-2xl text-[#1B2733] mb-1">{inProgressModules}</div>
+              <div className="text-sm text-[#5A6B7A]">In Progress</div>
             </div>
             <div>
-              <div className="text-2xl text-slate-900 mb-1">{statusData.length}</div>
-              <div className="text-sm text-slate-600">Total Modules</div>
+              <div className="text-2xl text-[#1B2733] mb-1">{statusData.length}</div>
+              <div className="text-sm text-[#5A6B7A]">Total Modules</div>
             </div>
           </div>
         </Card>
 
         {/* Key Achievements */}
         <Card className="p-6 mb-4 sm:mb-6 bg-green-50 border-green-200">
-          <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+          <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
             Phase 2 Achievements
           </h3>
           <div className="grid gap-3 text-sm">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">100% of core modules implemented</span>
+              <span className="text-[#3A4A57]">100% of core modules implemented</span>
             </div>
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">AI conversation engine with Claude 3.5 Sonnet</span>
+              <span className="text-[#3A4A57]">AI conversation engine with Claude 3.5 Sonnet</span>
             </div>
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">BCBA Coach Portal with family management</span>
+              <span className="text-[#3A4A57]">BCBA Coach Portal with family management</span>
             </div>
             <div className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">CLS performance optimizations (&lt; 0.25ms)</span>
+              <span className="text-[#3A4A57]">CLS performance optimizations (&lt; 0.25ms)</span>
             </div>
             <div className="flex items-center gap-2">
               <Globe className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">Mobile-responsive with Apple-clean design</span>
+              <span className="text-[#3A4A57]">Mobile-responsive with Apple-clean design</span>
             </div>
           </div>
         </Card>
 
         {/* Detailed Status */}
         <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-          <h2 className="text-slate-900">Module Status</h2>
+          <h2 className="text-[#1B2733]">Module Status</h2>
           {statusData.map(item => (
             <Card key={item.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-3">
                   {getStatusIcon(item.status)}
                   <div>
-                    <div className="text-xs text-slate-500 mb-1">{item.category}</div>
-                    <h3 className="text-slate-900 mb-2">{item.title}</h3>
+                    <div className="text-xs text-[#5A6B7A] mb-1">{item.category}</div>
+                    <h3 className="text-[#1B2733] mb-2">{item.title}</h3>
                     <Progress value={item.completion} className="h-2 w-48" />
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
                     ) : (
                       <Circle className="w-4 h-4 text-slate-400" />
                     )}
-                    <span className={subItem.done ? 'text-slate-700' : 'text-slate-400'}>
+                    <span className={subItem.done ? 'text-[#3A4A57]' : 'text-slate-400'}>
                       {subItem.name}
                     </span>
                   </div>
@@ -277,23 +277,23 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         </div>
 
         {/* Next Steps */}
-        <Card className="p-6 bg-blue-50 border-blue-200">
-          <h3 className="text-slate-900 mb-4 flex items-center gap-2">
+        <Card className="p-6 bg-[#EEF4F8] border-[#C8DDE8]">
+          <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue-600" />
             Remaining for Beta Launch
           </h3>
           <div className="space-y-2 text-sm mb-4">
             <div className="flex items-center gap-2">
               <Circle className="w-4 h-4 text-blue-600" />
-              <span className="text-slate-700">Complete HIPAA compliance documentation</span>
+              <span className="text-[#3A4A57]">Complete HIPAA compliance documentation</span>
             </div>
             <div className="flex items-center gap-2">
               <Circle className="w-4 h-4 text-blue-600" />
-              <span className="text-slate-700">Generate App Store assets (5 screens + storyboard)</span>
+              <span className="text-[#3A4A57]">Generate App Store assets (5 screens + storyboard)</span>
             </div>
             <div className="flex items-center gap-2">
               <Circle className="w-4 h-4 text-blue-600" />
-              <span className="text-slate-700">Final QA testing across devices</span>
+              <span className="text-[#3A4A57]">Final QA testing across devices</span>
             </div>
           </div>
         </Card>

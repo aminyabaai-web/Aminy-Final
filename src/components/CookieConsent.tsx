@@ -121,7 +121,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
             <div key={item.label} className="flex items-center justify-between">
               <div>
                 <p className="text-[11px] font-medium text-slate-200">{item.label}</p>
-                <p className="text-[10px] text-slate-500">{item.desc}</p>
+                <p className="text-[10px] text-[#5A6B7A]">{item.desc}</p>
               </div>
               {item.locked
                 ? <span className="text-[10px] font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>

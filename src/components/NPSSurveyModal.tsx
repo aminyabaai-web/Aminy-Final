@@ -134,8 +134,8 @@ export function NPSSurveyModal({
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-gray-900 dark:text-white">Quick Feedback</h2>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">Help us improve Aminy</p>
+                  <h2 className="font-semibold text-[#1B2733] dark:text-white">Quick Feedback</h2>
+                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Help us improve Aminy</p>
                 </div>
               </div>
               <button
@@ -143,14 +143,14 @@ export function NPSSurveyModal({
                 aria-label="Close survey"
                 className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-gray-400" />
+                <X className="w-5 h-5 text-[#8A9BA8]" />
               </button>
             </div>
 
             {/* Step 1: Score Selection */}
             {step === 'score' && (
               <div className="space-y-3 sm:space-y-4">
-                <p className="text-center text-gray-700 dark:text-slate-300">
+                <p className="text-center text-[#3A4A57] dark:text-slate-300">
                   How likely are you to recommend Aminy to a friend with a child like {childName}?
                 </p>
 
@@ -163,7 +163,7 @@ export function NPSSurveyModal({
                       className={`w-10 h-10 rounded-full font-semibold transition-all ${
                         score === value
                           ? getScoreColor(value) + ' text-white scale-110'
-                          : 'bg-[#F0EDE8] dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
+                          : 'bg-[#F0EDE8] dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
                       }`}
                     >
                       {value}
@@ -172,7 +172,7 @@ export function NPSSurveyModal({
                 </div>
 
                 {/* Scale labels */}
-                <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 px-2">
+                <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400 px-2">
                   <span>Not likely</span>
                   <span>Very likely</span>
                 </div>
@@ -209,7 +209,7 @@ export function NPSSurveyModal({
                   </span>
                 </div>
 
-                <p className="text-center text-gray-700 dark:text-slate-300">
+                <p className="text-center text-[#3A4A57] dark:text-slate-300">
                   {score !== null && score <= 6
                     ? "What could we do better to help your family?"
                     : score !== null && score <= 8
@@ -263,10 +263,10 @@ export function NPSSurveyModal({
                 <div className="w-16 h-16 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
                   Thank you!
                 </h3>
-                <p className="text-gray-600 dark:text-slate-400">
+                <p className="text-[#5A6B7A] dark:text-slate-400">
                   Your feedback helps us support families like yours better.
                 </p>
               </motion.div>

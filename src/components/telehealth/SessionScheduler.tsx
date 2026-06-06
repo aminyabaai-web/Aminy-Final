@@ -258,18 +258,18 @@ export function SessionScheduler({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Session Booked!</h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Session Booked!</h2>
+          <p className="text-sm text-[#5A6B7A] mb-4">
             Your {VISIT_TYPE_LABELS[bookedSession.visitType]} with {providerName} is confirmed.
           </p>
           <div className="bg-[#FAF7F2] rounded-xl p-4 mb-6 text-left space-y-2">
             <div className="flex items-center gap-2 text-sm">
-              <Calendar size={14} className="text-gray-400" />
-              <span className="text-gray-700">{formatDate(new Date(bookedSession.dateTime))}</span>
+              <Calendar size={14} className="text-[#8A9BA8]" />
+              <span className="text-[#3A4A57]">{formatDate(new Date(bookedSession.dateTime))}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
-              <Clock size={14} className="text-gray-400" />
-              <span className="text-gray-700">
+              <Clock size={14} className="text-[#8A9BA8]" />
+              <span className="text-[#3A4A57]">
                 {formatTime(bookedSession.dateTime)} &middot; {bookedSession.duration} min
               </span>
             </div>
@@ -292,25 +292,25 @@ export function SessionScheduler({
     <div className="fixed inset-0 bg-gray-900/50 flex items-start justify-center z-50 overflow-y-auto p-4 pt-6 pb-6">
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-3">
             {step !== 'visit-type' && (
               <button
                 onClick={goBack}
-                className="p-1.5 text-gray-400 hover:text-gray-600 rounded-full hover:bg-[#F0EDE8] transition-colors"
+                className="p-1.5 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
               >
                 <ChevronLeft size={18} />
               </button>
             )}
             <div>
-              <h2 className="text-base font-semibold text-gray-900">Schedule Session</h2>
-              <p className="text-xs text-gray-500">with {providerName}</p>
+              <h2 className="text-base font-semibold text-[#1B2733]">Schedule Session</h2>
+              <p className="text-xs text-[#5A6B7A]">with {providerName}</p>
             </div>
           </div>
           {onCancel && (
             <button
               onClick={onCancel}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
             >
               <X size={18} />
             </button>
@@ -335,7 +335,7 @@ export function SessionScheduler({
           {/* ===== Step 1: Visit Type ===== */}
           {step === 'visit-type' && (
             <div className="space-y-3">
-              <p className="text-sm text-gray-600 mb-3">What type of visit do you need?</p>
+              <p className="text-sm text-[#5A6B7A] mb-3">What type of visit do you need?</p>
               {VISIT_TYPES.map(vt => {
                 const durations = VISIT_TYPE_DURATIONS[vt];
                 return (
@@ -349,19 +349,19 @@ export function SessionScheduler({
                     className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
                       visitType === vt
                         ? 'border-[#6B9080]/30 bg-[#6B9080]/10'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF] hover:bg-[#FAF7F2]'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center text-gray-500 flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] flex-shrink-0">
                       {VISIT_TYPE_ICONS[vt]}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">{VISIT_TYPE_LABELS[vt]}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-sm font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[vt]}</p>
+                      <p className="text-xs text-[#8A9BA8]">
                         {durations.join(' or ')} min
                       </p>
                     </div>
-                    <ChevronRight size={16} className="text-gray-400" />
+                    <ChevronRight size={16} className="text-[#8A9BA8]" />
                   </button>
                 );
               })}
@@ -371,7 +371,7 @@ export function SessionScheduler({
           {/* ===== Step 2: Date ===== */}
           {step === 'date' && (
             <div className="space-y-4">
-              <p className="text-sm text-gray-600">Select a date</p>
+              <p className="text-sm text-[#5A6B7A]">Select a date</p>
 
               {/* Duration selector (if visit type has multiple options) */}
               {visitType && VISIT_TYPE_DURATIONS[visitType].length > 1 && (
@@ -383,7 +383,7 @@ export function SessionScheduler({
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                         duration === d
                           ? 'bg-primary text-white'
-                          : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                          : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                       }`}
                     >
                       {d} min
@@ -396,16 +396,16 @@ export function SessionScheduler({
               <div className="flex items-center justify-between">
                 <button
                   onClick={prevWeek}
-                  className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-[#F0EDE8] transition-colors"
+                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
                 >
                   <ChevronLeft size={18} />
                 </button>
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-medium text-[#3A4A57]">
                   {formatShortDate(weekDays[0])} - {formatShortDate(weekDays[6])}
                 </span>
                 <button
                   onClick={nextWeek}
-                  className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-[#F0EDE8] transition-colors"
+                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -435,7 +435,7 @@ export function SessionScheduler({
                             ? 'bg-primary text-white'
                             : isToday
                               ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
-                              : 'hover:bg-[#FAF7F2] text-gray-700'
+                              : 'hover:bg-[#FAF7F2] text-[#3A4A57]'
                       }`}
                     >
                       <span className="text-[10px] uppercase opacity-60">
@@ -455,7 +455,7 @@ export function SessionScheduler({
           {step === 'time' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#5A6B7A]">
                   Available times on {selectedDate && formatShortDate(selectedDate)}
                 </p>
                 {loadingSlots && <Loader2 size={16} className="text-primary animate-spin" />}
@@ -463,8 +463,8 @@ export function SessionScheduler({
 
               {!loadingSlots && availableSlots.length === 0 && (
                 <div className="text-center py-8">
-                  <Clock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-500">No available slots on this date.</p>
+                  <Clock className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
+                  <p className="text-sm text-[#5A6B7A]">No available slots on this date.</p>
                   <button
                     onClick={goBack}
                     className="mt-3 text-sm text-[#6B9080] hover:text-[#6B9080] font-medium"
@@ -487,7 +487,7 @@ export function SessionScheduler({
                       className={`py-2.5 px-2 rounded-lg text-sm font-medium transition-all ${
                         selected
                           ? 'bg-primary text-white'
-                          : 'bg-[#FAF7F2] text-gray-700 hover:bg-[#6B9080]/10 hover:text-[#6B9080] border border-gray-200'
+                          : 'bg-[#FAF7F2] text-[#3A4A57] hover:bg-[#6B9080]/10 hover:text-[#6B9080] border border-[#E8E4DF]'
                       }`}
                     >
                       {formatTime(slot.startTime)}
@@ -501,7 +501,7 @@ export function SessionScheduler({
           {/* ===== Step 4: Confirm ===== */}
           {step === 'confirm' && visitType && selectedDate && selectedSlot && (
             <div className="space-y-4">
-              <p className="text-sm text-gray-600">Confirm your appointment</p>
+              <p className="text-sm text-[#5A6B7A]">Confirm your appointment</p>
 
               {/* Provider card */}
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
@@ -517,9 +517,9 @@ export function SessionScheduler({
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">{providerName}</p>
+                  <p className="text-sm font-semibold text-[#1B2733]">{providerName}</p>
                   {providerTitle && (
-                    <p className="text-xs text-gray-500">{providerTitle}</p>
+                    <p className="text-xs text-[#5A6B7A]">{providerTitle}</p>
                   )}
                 </div>
               </div>
@@ -527,12 +527,12 @@ export function SessionScheduler({
               {/* Details */}
               <div className="space-y-2.5 text-sm">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#EEF4F8] flex items-center justify-center flex-shrink-0">
                     <Stethoscope size={14} className="text-blue-600" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-xs">Visit Type</span>
-                    <p className="font-medium text-gray-900">{VISIT_TYPE_LABELS[visitType]}</p>
+                    <span className="text-[#8A9BA8] text-xs">Visit Type</span>
+                    <p className="font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[visitType]}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -540,8 +540,8 @@ export function SessionScheduler({
                     <Calendar size={14} className="text-green-600" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-xs">Date</span>
-                    <p className="font-medium text-gray-900">{formatDate(selectedDate)}</p>
+                    <span className="text-[#8A9BA8] text-xs">Date</span>
+                    <p className="font-medium text-[#1B2733]">{formatDate(selectedDate)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -549,8 +549,8 @@ export function SessionScheduler({
                     <Clock size={14} className="text-purple-600" />
                   </div>
                   <div>
-                    <span className="text-gray-400 text-xs">Time</span>
-                    <p className="font-medium text-gray-900">
+                    <span className="text-[#8A9BA8] text-xs">Time</span>
+                    <p className="font-medium text-[#1B2733]">
                       {formatTime(selectedSlot.startTime)} &middot; {duration} min
                     </p>
                   </div>
@@ -561,8 +561,8 @@ export function SessionScheduler({
                       <User size={14} className="text-amber-600" />
                     </div>
                     <div>
-                      <span className="text-gray-400 text-xs">Child</span>
-                      <p className="font-medium text-gray-900">{childName}</p>
+                      <span className="text-[#8A9BA8] text-xs">Child</span>
+                      <p className="font-medium text-[#1B2733]">{childName}</p>
                     </div>
                   </div>
                 )}
@@ -581,10 +581,10 @@ export function SessionScheduler({
 
         {/* Footer */}
         {step === 'confirm' && (
-          <div className="p-4 border-t border-gray-100 flex gap-3">
+          <div className="p-4 border-t border-[#E8E4DF] flex gap-3">
             <button
               onClick={goBack}
-              className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-sm text-gray-700 hover:bg-[#FAF7F2] transition-colors"
+              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
             >
               Back
             </button>
@@ -593,7 +593,7 @@ export function SessionScheduler({
               disabled={booking}
               className={`flex-1 py-3 px-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors ${
                 booking
-                  ? 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
+                  ? 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
                   : 'bg-primary text-white hover:bg-[#6B9080]'
               }`}
             >

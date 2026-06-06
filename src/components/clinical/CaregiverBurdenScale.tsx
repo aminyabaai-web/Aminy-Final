@@ -257,7 +257,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
         {/* Introduction */}
         {currentQuestion === 0 && (
           <div className="mb-6 p-4 bg-[#6B9080]/10 rounded-xl">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#3A4A57]">
               {userName ? `${userName}, ` : ''}Caring for your child is important, but so are you.
               This check-in helps us understand how you're doing so we can support you better.
             </p>
@@ -274,7 +274,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
           >
             {/* Question */}
             <div className="mb-6">
-              <p className="text-lg text-gray-900 font-medium leading-relaxed">
+              <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
                 {question.text}
               </p>
             </div>
@@ -288,10 +288,10 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
                   className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                     responses[currentQuestion] === option.value
                       ? 'border-[#6B9080] bg-[#6B9080]/10'
-                      : 'border-gray-200 hover:border-[#6B9080]/30 hover:bg-[#FAF7F2]'
+                      : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#FAF7F2]'
                   }`}
                 >
-                  <span className="font-medium text-gray-900">{option.label}</span>
+                  <span className="font-medium text-[#1B2733]">{option.label}</span>
                 </button>
               ))}
             </div>
@@ -305,7 +305,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
           variant="ghost"
           onClick={goBack}
           disabled={currentQuestion === 0}
-          className="text-gray-500"
+          className="text-[#5A6B7A]"
         >
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back
@@ -335,7 +335,7 @@ interface CaregiverBurdenResultsProps {
 export function CaregiverBurdenResults({ result, onClose, onGetSupport }: CaregiverBurdenResultsProps) {
   const severityColors: Record<string, string> = {
     low: 'bg-green-100 text-green-700 border-green-200',
-    mild: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    mild: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
     moderate: 'bg-orange-100 text-orange-700 border-orange-200',
     high: 'bg-red-100 text-red-700 border-red-200',
   };
@@ -346,8 +346,8 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <Heart className="w-8 h-8 text-[#6B9080]" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Your Wellness Results</h2>
-        <p className="text-gray-600">Thank you for taking time for yourself</p>
+        <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Your Wellness Results</h2>
+        <p className="text-[#5A6B7A]">Thank you for taking time for yourself</p>
       </div>
 
       {/* Score Display */}
@@ -385,12 +385,12 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
 
       {/* Recommendations */}
       <div className="mb-6">
-        <h3 className="font-medium text-gray-900 mb-3">Personalized Suggestions</h3>
+        <h3 className="font-medium text-[#1B2733] mb-3">Personalized Suggestions</h3>
         <div className="space-y-2">
           {result.recommendations.map((rec, i) => (
             <div key={i} className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-gray-600">{rec}</p>
+              <p className="text-sm text-[#5A6B7A]">{rec}</p>
             </div>
           ))}
         </div>
@@ -429,7 +429,7 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
         )}
       </div>
 
-      <p className="text-xs text-gray-400 text-center mt-4">
+      <p className="text-xs text-[#8A9BA8] text-center mt-4">
         Based on the Zarit Burden Interview short form. This is a screening tool, not a diagnosis.
       </p>
     </Card>

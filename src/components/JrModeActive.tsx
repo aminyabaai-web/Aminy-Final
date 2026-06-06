@@ -162,11 +162,11 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
 
   const getSkillColor = (skill: string) => {
     switch (skill) {
-      case 'speech': return 'text-blue-600 bg-blue-50 border-blue-200';
+      case 'speech': return 'text-blue-600 bg-[#EEF4F8] border-[#C8DDE8]';
       case 'social': return 'text-green-600 bg-green-50 border-green-200';
       case 'sensory': return 'text-purple-600 bg-purple-50 border-purple-200';
       case 'routines': return 'text-orange-600 bg-orange-50 border-orange-200';
-      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
+      default: return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
     }
   };
 
@@ -324,11 +324,11 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
 
   // Calm Break Card Component
   const CalmBreakCard = () => (
-    <Card className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200">
+    <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
       <div className="text-center">
         <div className="mb-4">
           <Wind className="w-12 h-12 text-blue-500 mx-auto mb-2" />
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">Time for a Calm Break</h3>
+          <h3 className="text-lg font-semibold text-[#4A6478] mb-2">Time for a Calm Break</h3>
           <p className="text-sm text-blue-600">
             Let's take a moment to breathe and relax together.
           </p>
@@ -651,7 +651,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <div className="text-xs text-muted-foreground">
             {fatigueEvents.length} attention event{fatigueEvents.length !== 1 ? 's' : ''} recorded
             {fatigueEvents.length >= 2 && (
-              <div className="mt-1 p-2 bg-blue-50 rounded text-blue-600">
+              <div className="mt-1 p-2 bg-[#EEF4F8] rounded text-blue-600">
                 Consider a calm break if needed
               </div>
             )}

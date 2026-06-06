@@ -264,10 +264,10 @@ function DataTypeRow({
 
   return (
     <div className="flex items-center gap-3 py-2">
-      <Icon size={16} className="text-gray-400 flex-shrink-0" />
+      <Icon size={16} className="text-[#8A9BA8] flex-shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-gray-800">{display.label}</p>
-        <p className="text-xs text-gray-400">
+        <p className="text-sm text-[#1B2733]">{display.label}</p>
+        <p className="text-xs text-[#8A9BA8]">
           {record?.lastSyncAt
             ? timeAgoFriendly(record.lastSyncAt)
             : 'Not synced yet'}
@@ -330,8 +330,8 @@ export function CRSyncStatus({
   if (loading) {
     return (
       <div className="flex items-center gap-2 p-3">
-        <Loader2 size={14} className="text-gray-400 animate-spin" />
-        <span className="text-xs text-gray-400">Checking sync status...</span>
+        <Loader2 size={14} className="text-[#8A9BA8] animate-spin" />
+        <span className="text-xs text-[#8A9BA8]">Checking sync status...</span>
       </div>
     );
   }
@@ -355,13 +355,13 @@ export function CRSyncStatus({
     return (
       <div className="flex items-center gap-2">
         <FreshnessDot level={overallFreshness} />
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-[#5A6B7A]">
           {mostRecentSync ? timeAgoFriendly(mostRecentSync) : 'Not synced'}
         </span>
         <button
           onClick={handleSyncNow}
           disabled={syncing}
-          className="p-1 rounded-md hover:bg-[#F0EDE8] text-gray-400 disabled:opacity-50 transition-colors"
+          className="p-1 rounded-md hover:bg-[#F0EDE8] text-[#8A9BA8] disabled:opacity-50 transition-colors"
           title="Sync now"
         >
           {syncing ? (
@@ -387,14 +387,14 @@ export function CRSyncStatus({
         <div className="flex items-center gap-3">
           <FreshnessIcon className={`w-6 h-6 ${freshCfg.color}`} />
           <div className="flex-1">
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm font-semibold text-[#1B2733]">
               {overallFreshness === 'fresh'
                 ? `Connected with ${providerLabel}`
                 : overallFreshness === 'aging'
                   ? `Last synced with ${providerLabel}`
                   : `Not recently synced with ${providerLabel}`}
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-[#5A6B7A] mt-0.5">
               {mostRecentSync
                 ? `Last synced: ${timeAgoFriendly(mostRecentSync)}`
                 : 'No data has been synced yet'}
@@ -406,7 +406,7 @@ export function CRSyncStatus({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
               overallFreshness === 'stale'
                 ? 'bg-red-600 hover:bg-red-700 text-white'
-                : 'bg-white hover:bg-[#FAF7F2] text-gray-700 border border-gray-200'
+                : 'bg-white hover:bg-[#FAF7F2] text-[#3A4A57] border border-[#E8E4DF]'
             }`}
           >
             {syncing ? (
@@ -424,13 +424,13 @@ export function CRSyncStatus({
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between px-1 py-1 text-left"
       >
-        <span className="text-xs font-medium text-gray-500">
+        <span className="text-xs font-medium text-[#5A6B7A]">
           What data is synced?
         </span>
         {expanded ? (
-          <ChevronDown size={14} className="text-gray-400" />
+          <ChevronDown size={14} className="text-[#8A9BA8]" />
         ) : (
-          <ChevronRight size={14} className="text-gray-400" />
+          <ChevronRight size={14} className="text-[#8A9BA8]" />
         )}
       </button>
 
@@ -438,10 +438,10 @@ export function CRSyncStatus({
         <div className="space-y-4">
           {/* Received from Provider */}
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1 px-1">
               Received from your provider
             </p>
-            <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100 px-3">
+            <div className="bg-white rounded-lg border border-[#E8E4DF] divide-y divide-gray-100 px-3">
               {receivedTypes.map((display) => {
                 const record = records.find(
                   (r) =>
@@ -461,10 +461,10 @@ export function CRSyncStatus({
 
           {/* Sent to Provider */}
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1 px-1">
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1 px-1">
               Shared with your provider
             </p>
-            <div className="bg-white rounded-lg border border-gray-200 divide-y divide-gray-100 px-3">
+            <div className="bg-white rounded-lg border border-[#E8E4DF] divide-y divide-gray-100 px-3">
               {sentTypes.map((display) => {
                 const record = records.find(
                   (r) =>
@@ -483,8 +483,8 @@ export function CRSyncStatus({
           </div>
 
           {/* Privacy Note */}
-          <div className="bg-[#FAF7F2] rounded-lg p-3 border border-gray-100">
-            <p className="text-xs text-gray-500 leading-relaxed">
+          <div className="bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF]">
+            <p className="text-xs text-[#5A6B7A] leading-relaxed">
               Your data is encrypted and only shared with your authorized care
               team. You can control what data is shared in Settings.
             </p>

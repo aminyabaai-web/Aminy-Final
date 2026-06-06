@@ -199,7 +199,7 @@ export default function BubbleWrap({ onBack, onComplete }: FidgetProps) {
         >
           <p className="text-3xl mb-1">🎉</p>
           <p className="text-xl font-black" style={{ color: '#22c55e' }}>All popped!</p>
-          <p className="text-sm text-gray-500">Tap reset for another round</p>
+          <p className="text-sm text-[#5A6B7A]">Tap reset for another round</p>
         </motion.div>
       )}
     </div>

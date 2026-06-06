@@ -196,7 +196,7 @@ export function CoverageCoach({
       case 'not_covered': return <XCircle className="w-5 h-5 text-red-600" />;
       case 'unsure': return <HelpCircle className="w-5 h-5 text-amber-600" />;
       case 'pending': return <Clock className="w-5 h-5 text-blue-600" />;
-      default: return <HelpCircle className="w-5 h-5 text-slate-500" />;
+      default: return <HelpCircle className="w-5 h-5 text-[#5A6B7A]" />;
     }
   };
 
@@ -205,8 +205,8 @@ export function CoverageCoach({
       case 'covered': return 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400';
       case 'not_covered': return 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400';
       case 'unsure': return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400';
-      case 'pending': return 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400';
-      default: return 'bg-slate-50 text-slate-700 border-slate-200 dark:bg-slate-900/30 dark:text-slate-400';
+      case 'pending': return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8] dark:bg-blue-900/30 dark:text-blue-400';
+      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF] dark:bg-slate-900/30 dark:text-slate-400';
     }
   };
 
@@ -345,7 +345,7 @@ export function CoverageCoach({
   return (
     <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -353,8 +353,8 @@ export function CoverageCoach({
                 <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">Coverage Coach</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Navigate insurance benefits for {safeChildName}</p>
+                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Coverage Coach</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Navigate insurance benefits for {safeChildName}</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -362,7 +362,7 @@ export function CoverageCoach({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowUrgentHelp(true)}
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -380,14 +380,14 @@ export function CoverageCoach({
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
         {/* AI-Powered Coverage Chat CTA */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-teal-50 to-white border-2 border-[#6B9080]/20">
+        <Card className="mb-8 p-6 bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#6B9080]/20">
           <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Get Your Coverage Clarity Summary</h2>
-              <p className="text-slate-700 mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Get Your Coverage Clarity Summary</h2>
+              <p className="text-[#3A4A57] mb-4">
                 Answer a few quick questions and I'll create a personalized report showing exactly what's covered, 
                 estimated costs, and your next steps — all in plain language.
               </p>
@@ -415,10 +415,10 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-slate-900 dark:text-slate-100">Coverage Rate</span>
+              <span className="font-medium text-[#1B2733] dark:text-slate-100">Coverage Rate</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">{coveragePercentage}%</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
               {coveredBenefits} of {totalBenefits} benefits covered
             </div>
             <Progress value={coveragePercentage} className="mt-3" />
@@ -427,10 +427,10 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <DollarSign className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-slate-900 dark:text-slate-100">Est. Monthly Cost</span>
+              <span className="font-medium text-[#1B2733] dark:text-slate-100">Est. Monthly Cost</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">$340</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
               Based on current coverage
             </div>
           </Card>
@@ -438,10 +438,10 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-purple-600" />
-              <span className="font-medium text-slate-900 dark:text-slate-100">Next Review</span>
+              <span className="font-medium text-[#1B2733] dark:text-slate-100">Next Review</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-1">30</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">
+            <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
               Days until open enrollment
             </div>
           </Card>
@@ -452,7 +452,7 @@ export function CoverageCoach({
           <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <Building className="w-5 h-5 text-blue-600" />
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                 Insurance Information
               </h2>
             </div>
@@ -460,20 +460,20 @@ export function CoverageCoach({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
               <div className="space-y-3 sm:space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Provider</label>
-                  <div className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                  <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Provider</label>
+                  <div className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                     {insuranceProvider.name}
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Member ID</label>
-                  <div className="font-mono text-slate-900 dark:text-slate-100">
+                  <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Member ID</label>
+                  <div className="font-mono text-[#1B2733] dark:text-slate-100">
                     {insuranceProvider.memberId}
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Group Number</label>
-                  <div className="font-mono text-slate-900 dark:text-slate-100">
+                  <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Group Number</label>
+                  <div className="font-mono text-[#1B2733] dark:text-slate-100">
                     {insuranceProvider.groupNumber}
                   </div>
                 </div>
@@ -521,7 +521,7 @@ export function CoverageCoach({
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
                   Benefits Status
                 </h2>
               </div>
@@ -549,14 +549,14 @@ export function CoverageCoach({
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="p-2 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                      <div className="p-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg">
                         {getCategoryIcon(benefit.category)}
                       </div>
                       <div className="flex-1">
-                        <h3 className="benefits-card-title font-medium text-slate-900 dark:text-slate-100">
+                        <h3 className="benefits-card-title font-medium text-[#1B2733] dark:text-slate-100">
                           {benefit.title}
                         </h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                           {benefit.description}
                         </p>
                       </div>
@@ -572,7 +572,7 @@ export function CoverageCoach({
 
                   {benefit.copay && (
                     <div className="mb-3">
-                      <span className="inline-flex items-center gap-1 text-sm text-slate-600 dark:text-slate-400">
+                      <span className="inline-flex items-center gap-1 text-sm text-[#5A6B7A] dark:text-slate-400">
                         <CreditCard className="w-3 h-3" />
                         Copay: <span className="font-medium">{benefit.copay}</span>
                       </span>
@@ -580,8 +580,8 @@ export function CoverageCoach({
                   )}
 
                   {benefit.notes && (
-                    <div className="mb-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-md">
-                      <p className="text-sm text-slate-700 dark:text-slate-300">
+                    <div className="mb-3 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-md">
+                      <p className="text-sm text-[#3A4A57] dark:text-slate-300">
                         {benefit.notes}
                       </p>
                     </div>
@@ -589,12 +589,12 @@ export function CoverageCoach({
 
                   {benefit.nextSteps && benefit.nextSteps.length > 0 && (
                     <div className="mt-3">
-                      <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2">
+                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">
                         Next Steps:
                       </h4>
                       <ul className="space-y-1">
                         {benefit.nextSteps.map((step, index) => (
-                          <li key={index} className="text-sm text-slate-600 dark:text-slate-400 flex items-start gap-2">
+                          <li key={index} className="text-sm text-[#5A6B7A] dark:text-slate-400 flex items-start gap-2">
                             <ArrowRight className="w-3 h-3 mt-0.5 flex-shrink-0" />
                             {step}
                           </li>
@@ -604,7 +604,7 @@ export function CoverageCoach({
                   )}
 
                   <div className="flex items-center justify-between mt-4">
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="text-xs text-[#5A6B7A] dark:text-slate-400">
                       Updated {benefit.lastUpdated}
                     </span>
                     
@@ -668,7 +668,7 @@ export function CoverageCoach({
         {/* Quick Actions */}
         <Card>
           <div className="p-4 sm:p-5 md:p-6">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-4">
               Quick Actions
             </h2>
             
@@ -677,7 +677,7 @@ export function CoverageCoach({
                 <Upload className="w-4 h-4 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Upload Documents</div>
-                  <div className="text-sm text-slate-500">Add insurance cards or EOBs</div>
+                  <div className="text-sm text-[#5A6B7A]">Add insurance cards or EOBs</div>
                 </div>
               </Button>
               
@@ -685,7 +685,7 @@ export function CoverageCoach({
                 <Mail className="w-4 h-4 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Email Summary</div>
-                  <div className="text-sm text-slate-500">Send to care team or provider</div>
+                  <div className="text-sm text-[#5A6B7A]">Send to care team or provider</div>
                 </div>
               </Button>
               
@@ -693,7 +693,7 @@ export function CoverageCoach({
                 <Calendar className="w-4 h-4 mr-3" />
                 <div className="text-left">
                   <div className="font-medium">Set Reminders</div>
-                  <div className="text-sm text-slate-500">Authorization deadlines</div>
+                  <div className="text-sm text-[#5A6B7A]">Authorization deadlines</div>
                 </div>
               </Button>
             </div>

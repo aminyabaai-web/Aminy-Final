@@ -108,8 +108,8 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
       <div className="h-full flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <Calendar className="mx-auto h-12 w-12 text-slate-400 mb-4" />
-          <h3 className="text-lg font-semibold text-slate-900 mb-2">Upgrade for Scheduling</h3>
-          <p className="text-slate-600 mb-4">Access appointment scheduling with Core and Pro plans.</p>
+          <h3 className="text-lg font-semibold text-[#1B2733] mb-2">Upgrade for Scheduling</h3>
+          <p className="text-[#5A6B7A] mb-4">Access appointment scheduling with Core and Pro plans.</p>
           <Button onClick={onPaywallTrigger} className="bg-primary hover:bg-[#6B9080] text-white">
             View Plans
           </Button>
@@ -121,8 +121,8 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
   return (
     <div className="h-full p-6">
       <div className="mb-4 sm:mb-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">Schedule</h2>
-        <p className="text-slate-600">Manage your appointments and session bookings</p>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Schedule</h2>
+        <p className="text-[#5A6B7A]">Manage your appointments and session bookings</p>
       </div>
 
       {/* Insurance Status Banner */}
@@ -140,11 +140,11 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
         ))}
         
         {/* Schedule New Session Card */}
-        <Card className="p-6 border-dashed border-slate-300 bg-slate-50">
+        <Card className="p-6 border-dashed border-slate-300 bg-[#FAF7F2]">
           <div className="text-center">
             <Calendar className="mx-auto h-8 w-8 text-slate-400 mb-3" />
-            <h3 className="font-medium text-slate-900 mb-2">Schedule New Session</h3>
-            <p className="text-sm text-slate-600 mb-4">
+            <h3 className="font-medium text-[#1B2733] mb-2">Schedule New Session</h3>
+            <p className="text-sm text-[#5A6B7A] mb-4">
               Book your next session with Sarah Miller
             </p>
             <Button className="bg-primary hover:bg-[#6B9080] text-white">
@@ -172,13 +172,13 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-[#5A6B7A]">
               Current appointment: Thursday, Dec 18 at 2:00 PM
             </p>
             
             {/* Available reschedule times */}
             <div className="space-y-2">
-              <p className="font-medium text-slate-900">Available Times</p>
+              <p className="font-medium text-[#1B2733]">Available Times</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {['Dec 19, 10:00 AM', 'Dec 19, 2:00 PM', 'Dec 20, 9:00 AM', 'Dec 20, 3:00 PM'].map((time) => (
                   <Button

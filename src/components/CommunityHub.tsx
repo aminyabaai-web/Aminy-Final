@@ -704,16 +704,16 @@ export function CommunityHub({
       {/* Post Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center">
             {post.isAnonymous ? (
               <EyeOff className="w-5 h-5 text-slate-400" />
             ) : (
-              <span className="font-medium text-slate-600">{post.authorName.charAt(0)}</span>
+              <span className="font-medium text-[#5A6B7A]">{post.authorName.charAt(0)}</span>
             )}
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-medium text-slate-900 dark:text-white">
+              <span className="font-medium text-[#1B2733] dark:text-white">
                 {post.authorName}
               </span>
               {post.isBCBA && (
@@ -723,7 +723,7 @@ export function CommunityHub({
                 </Badge>
               )}
             </div>
-            <span className="text-xs text-slate-500">{formatRelativeTime(post.createdAt)}</span>
+            <span className="text-xs text-[#5A6B7A]">{formatRelativeTime(post.createdAt)}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -737,10 +737,10 @@ export function CommunityHub({
       </div>
 
       {/* Post Content */}
-      <h3 className="font-semibold text-slate-900 dark:text-white mb-2">{post.title}</h3>
+      <h3 className="font-semibold text-[#1B2733] dark:text-white mb-2">{post.title}</h3>
       {/* line-clamp-3 is not in the precompiled Tailwind build, so clamp via inline style */}
       <p
-        className="text-slate-600 dark:text-slate-300 text-sm mb-4"
+        className="text-[#5A6B7A] dark:text-slate-300 text-sm mb-4"
         style={{
           display: '-webkit-box',
           WebkitLineClamp: 3,
@@ -755,7 +755,7 @@ export function CommunityHub({
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-xs text-slate-500 hover:text-[#6B9080] cursor-pointer">
+            <span key={tag} className="text-xs text-[#5A6B7A] hover:text-[#6B9080] cursor-pointer">
               #{tag}
             </span>
           ))}
@@ -763,12 +763,12 @@ export function CommunityHub({
       )}
 
       {/* Post Actions */}
-      <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-700">
+      <div className="flex items-center justify-between pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
         <div className="flex items-center gap-4">
           <button
             onClick={() => handleLike(post.id)}
             className={`flex items-center gap-1.5 text-sm ${
-              post.isLiked ? 'text-red-500' : 'text-slate-500 hover:text-red-500'
+              post.isLiked ? 'text-red-500' : 'text-[#5A6B7A] hover:text-red-500'
             }`}
           >
             <Heart className={`w-4 h-4 ${post.isLiked ? 'fill-current' : ''}`} />
@@ -776,7 +776,7 @@ export function CommunityHub({
           </button>
           <button
             onClick={() => handleOpenThread(post)}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#6B9080]"
+            className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#6B9080]"
             aria-label={`View ${post.comments} comments`}
           >
             <MessageSquare className="w-4 h-4" />
@@ -784,7 +784,7 @@ export function CommunityHub({
           </button>
           <button
             onClick={() => handleShare(post)}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#6B9080]"
+            className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#6B9080]"
             aria-label="Share post"
           >
             <Share2 className="w-4 h-4" />
@@ -798,7 +798,7 @@ export function CommunityHub({
           </span>
           <button
             onClick={() => handleBookmark(post.id)}
-            className={`p-1.5 rounded-full hover:bg-slate-100 ${
+            className={`p-1.5 rounded-full hover:bg-[#F0EDE8] ${
               post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
           >
@@ -810,9 +810,9 @@ export function CommunityHub({
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-40">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -822,8 +822,8 @@ export function CommunityHub({
                 </Button>
               )}
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">Community</h1>
-                <p className="text-sm text-slate-500">Connect with other parents</p>
+                <h1 className="text-xl font-bold text-[#1B2733] dark:text-white">Community</h1>
+                <p className="text-sm text-[#5A6B7A]">Connect with other parents</p>
               </div>
             </div>
             <Button onClick={() => setShowNewPost(true)} className="flex items-center gap-2">
@@ -901,7 +901,7 @@ export function CommunityHub({
                 <Card className="p-12 text-center">
                   <MessageCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">No posts found</h3>
-                  <p className="text-slate-500 mb-4">Be the first to start a conversation!</p>
+                  <p className="text-[#5A6B7A] mb-4">Be the first to start a conversation!</p>
                   <Button onClick={() => setShowNewPost(true)}>Create Post</Button>
                 </Card>
               ) : (
@@ -914,14 +914,14 @@ export function CommunityHub({
         {/* Groups View */}
         {view === 'groups' && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
               Your Groups
             </h2>
             {groups.length === 0 ? (
               <Card className="p-12 text-center">
                 <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No groups yet</h3>
-                <p className="text-slate-500">Parent groups will appear here as communities form. Check back soon.</p>
+                <p className="text-[#5A6B7A]">Parent groups will appear here as communities form. Check back soon.</p>
               </Card>
             ) : (
               groups.map((group) => (
@@ -933,15 +933,15 @@ export function CommunityHub({
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-slate-900 dark:text-white">{group.name}</h3>
+                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{group.name}</h3>
                         {group.isPrivate && (
-                          <Badge className="bg-slate-100 text-slate-600 text-xs">
+                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">
                             <Shield className="w-3 h-3 mr-1" />
                             Private
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-slate-500 mt-1">{group.description}</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">{group.description}</p>
                       <div className="flex items-center gap-4 mt-2 text-xs text-slate-400">
                         <span className="flex items-center gap-1">
                           <Users className="w-3 h-3" />
@@ -968,14 +968,14 @@ export function CommunityHub({
         {/* Events View */}
         {view === 'events' && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
               Upcoming Events
             </h2>
             {events.length === 0 ? (
               <Card className="p-12 text-center">
                 <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">No upcoming events</h3>
-                <p className="text-slate-500">Local meetups and virtual support circles will show up here when they're scheduled.</p>
+                <p className="text-[#5A6B7A]">Local meetups and virtual support circles will show up here when they're scheduled.</p>
               </Card>
             ) : (
               events.map((event) => (
@@ -983,13 +983,13 @@ export function CommunityHub({
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-slate-900 dark:text-white">{event.title}</h3>
+                      <h3 className="font-semibold text-[#1B2733] dark:text-white">{event.title}</h3>
                       {event.isVirtual && (
                         <Badge className="bg-blue-100 text-blue-700 text-xs">Virtual</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-slate-500 mb-3">{event.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-slate-600">
+                    <p className="text-sm text-[#5A6B7A] mb-3">{event.description}</p>
+                    <div className="flex items-center gap-4 text-sm text-[#5A6B7A]">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {event.date.toLocaleDateString()}
@@ -1021,12 +1021,12 @@ export function CommunityHub({
         {/* BCBA Q&A View */}
         {view === 'bcba-qa' && (
           <div className="space-y-4">
-            <Card className="p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 border-[#6B9080]/20">
+            <Card className="p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border-[#6B9080]/20">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
                   <Award className="w-6 h-6 text-[#6B9080] shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-teal-900 dark:text-teal-100">
+                    <h3 className="font-semibold text-[#6B9080] dark:text-teal-100">
                       Ask a BCBA
                     </h3>
                     <p className="text-sm text-[#6B9080] dark:text-teal-200 mt-1">
@@ -1072,7 +1072,7 @@ export function CommunityHub({
               className="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div className="p-4 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Create Post</h2>
                 <button onClick={() => setShowNewPost(false)}>
                   <X className="w-5 h-5 text-slate-400" />
@@ -1124,7 +1124,7 @@ export function CommunityHub({
                   </span>
                 </label>
               </div>
-              <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex justify-end gap-2">
+              <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex justify-end gap-2">
                 <Button variant="outline" onClick={() => setShowNewPost(false)}>
                   Cancel
                 </Button>
@@ -1155,16 +1155,16 @@ export function CommunityHub({
               className="bg-white dark:bg-slate-800 rounded-xl max-w-lg w-full max-h-[90vh] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+              <div className="p-4 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between">
                 <h2 className="text-lg font-semibold truncate pr-2">{activeThread.title}</h2>
                 <button onClick={() => setActiveThread(null)} aria-label="Close comments">
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
               </div>
               <div className="p-4 overflow-y-auto flex-1 space-y-4">
-                <p className="text-sm text-slate-600 dark:text-slate-300">{activeThread.content}</p>
-                <div className="border-t border-slate-100 dark:border-slate-700 pt-4">
-                  <h3 className="text-sm font-medium text-slate-700 dark:text-slate-200 mb-3">
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-300">{activeThread.content}</p>
+                <div className="border-t border-[#E8E4DF] dark:border-slate-700 pt-4">
+                  <h3 className="text-sm font-medium text-[#3A4A57] dark:text-slate-200 mb-3">
                     Comments {threadComments.length > 0 && `(${threadComments.length})`}
                   </h3>
                   {threadLoading ? (
@@ -1177,15 +1177,15 @@ export function CommunityHub({
                     <div className="space-y-3">
                       {threadComments.map((c) => (
                         <div key={c.id} className="flex items-start gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
-                            <span className="text-xs font-medium text-slate-600">{c.displayName.charAt(0)}</span>
+                          <div className="w-8 h-8 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center shrink-0">
+                            <span className="text-xs font-medium text-[#5A6B7A]">{c.displayName.charAt(0)}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-slate-900 dark:text-white">{c.displayName}</span>
+                              <span className="text-sm font-medium text-[#1B2733] dark:text-white">{c.displayName}</span>
                               <span className="text-xs text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
                             </div>
-                            <p className="text-sm text-slate-600 dark:text-slate-300 break-words">{c.body}</p>
+                            <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>
                           </div>
                         </div>
                       ))}
@@ -1193,7 +1193,7 @@ export function CommunityHub({
                   )}
                 </div>
               </div>
-              <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex items-center gap-2">
+              <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex items-center gap-2">
                 <Input
                   placeholder="Add a comment…"
                   value={newComment}

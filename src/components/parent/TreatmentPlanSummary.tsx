@@ -43,9 +43,9 @@ interface TreatmentPlanSummaryProps {
 
 // Domain colors
 const DOMAIN_COLORS: Record<string, { bg: string; text: string; ring: string }> = {
-  'communication': { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', ring: 'ring-teal-200' },
+  'communication': { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', ring: 'ring-[#6B9080]/20' },
   'social-skills': { bg: 'bg-violet-50', text: 'text-violet-700', ring: 'ring-violet-200' },
-  'daily-living': { bg: 'bg-blue-50', text: 'text-blue-700', ring: 'ring-blue-200' },
+  'daily-living': { bg: 'bg-[#EEF4F8]', text: 'text-blue-700', ring: 'ring-blue-200' },
   'behavior-reduction': { bg: 'bg-orange-50', text: 'text-orange-700', ring: 'ring-orange-200' },
   'academic': { bg: 'bg-amber-50', text: 'text-amber-700', ring: 'ring-amber-200' },
   'motor': { bg: 'bg-pink-50', text: 'text-pink-700', ring: 'ring-pink-200' },
@@ -129,18 +129,18 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
   const sparkline = [10, 18, 25, 30, goal.currentProgressPercent - 10, goal.currentProgressPercent];
 
   return (
-    <Card className="overflow-hidden border border-slate-200 bg-white">
+    <Card className="overflow-hidden border border-[#E8E4DF] bg-white">
       {/* Card header - always visible */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left p-4 hover:bg-slate-50 transition-colors"
+        className="w-full text-left p-4 hover:bg-[#FAF7F2] transition-colors"
       >
         <div className="flex items-start gap-3">
           <ProgressRing percent={goal.currentProgressPercent} />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="font-semibold text-slate-900 text-sm leading-snug">{goal.plainEnglishTitle}</h3>
+              <h3 className="font-semibold text-[#1B2733] text-sm leading-snug">{goal.plainEnglishTitle}</h3>
               {expanded ? <ChevronUp className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />}
             </div>
             <div className="flex items-center gap-2">
@@ -163,23 +163,23 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
             transition={{ duration: 0.25 }}
             style={{ overflow: 'hidden' }}
           >
-            <div className="px-4 pb-4 border-t border-slate-100 pt-3 space-y-4">
+            <div className="px-4 pb-4 border-t border-[#E8E4DF] pt-3 space-y-4">
 
               {/* What it looks like */}
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">What this looks like</p>
-                <p className="text-sm text-slate-600 leading-relaxed">{goal.whatItLooksLike}</p>
+                <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1.5">What this looks like</p>
+                <p className="text-sm text-[#5A6B7A] leading-relaxed">{goal.whatItLooksLike}</p>
               </div>
 
               {/* Why it matters */}
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Why it matters</p>
-                <p className="text-sm text-slate-600 leading-relaxed">{goal.whyItMatters}</p>
+                <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1.5">Why it matters</p>
+                <p className="text-sm text-[#5A6B7A] leading-relaxed">{goal.whyItMatters}</p>
               </div>
 
               {/* Progress chart */}
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Progress over time</p>
+                <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-2">Progress over time</p>
                 <ProgressMiniChart data={sparkline} />
                 <div className="flex justify-between mt-1">
                   <span className="text-xs text-slate-400">8 weeks ago</span>
@@ -195,7 +195,7 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
                 </div>
                 <ul className="space-y-1.5">
                   {goal.howToHelpAtHome.map((tip, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-teal-800">
+                    <li key={i} className="flex items-start gap-2 text-sm text-[#6B9080]">
                       <span className="w-1.5 h-1.5 bg-teal-400 rounded-full mt-1.5 flex-shrink-0" />
                       {tip}
                     </li>
@@ -205,8 +205,8 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
 
               {/* Measurement */}
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">How we measure it</p>
-                <p className="text-sm text-slate-600 leading-relaxed">{goal.howWeMeasureIt}</p>
+                <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1.5">How we measure it</p>
+                <p className="text-sm text-[#5A6B7A] leading-relaxed">{goal.howWeMeasureIt}</p>
               </div>
 
               {/* Provider */}
@@ -254,26 +254,26 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
 
   if (!plan) {
     return (
-      <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
           <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-slate-900">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
               <p className="text-xs text-slate-400">Treatment plan summary</p>
             </div>
           </div>
         </div>
         <div className="max-w-lg mx-auto px-4 py-16 flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#F0EDE8] flex items-center justify-center mb-4">
             <FileText className="w-7 h-7 text-slate-400" />
           </div>
-          <h2 className="text-base font-semibold text-slate-700 mb-1">No treatment plan yet</h2>
-          <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+          <h2 className="text-base font-semibold text-[#3A4A57] mb-1">No treatment plan yet</h2>
+          <p className="text-sm text-[#5A6B7A] leading-relaxed max-w-xs">
             When your provider publishes a plan, you&apos;ll see {childName}&apos;s goals and progress here in plain English.
           </p>
         </div>
@@ -282,25 +282,25 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
   }
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+    <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors">
-                <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+                <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-slate-900">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
               <p className="text-xs text-slate-400">{plan.periodLabel}</p>
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
-            className="text-xs border-slate-200"
+            className="text-xs border-[#E8E4DF]"
             onClick={() => toast.success('Generating PDF for school sharing...')}
           >
             <Share2 className="w-3.5 h-3.5 mr-1.5" />
@@ -339,14 +339,14 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
 
         {/* Next session */}
         {plan.nextSessionDate && (
-          <Card className="p-3 bg-white border-slate-200">
+          <Card className="p-3 bg-white border-[#E8E4DF]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Calendar className="w-5 h-5 text-[#6B9080]" style={{ width: 18, height: 18 }} />
               </div>
               <div>
                 <p className="text-xs text-slate-400">Next session</p>
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-[#1B2733]">
                   {new Date(plan.nextSessionDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
               </div>
@@ -356,7 +356,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
 
         {/* Goals section */}
         <div>
-          <h2 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#3A4A57] mb-3 flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-primary" />
             Active Goals ({plan.goals.length})
           </h2>
@@ -377,17 +377,17 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         {/* Provider update log */}
         {plan.recentUpdates.length > 0 && (
           <div>
-            <h2 className="text-sm font-semibold text-slate-700 mb-3">Recent Updates</h2>
+            <h2 className="text-sm font-semibold text-[#3A4A57] mb-3">Recent Updates</h2>
             <div className="space-y-2">
               {plan.recentUpdates.map((update, i) => (
-                <Card key={i} className="p-3 bg-white border-slate-200">
+                <Card key={i} className="p-3 bg-white border-[#E8E4DF]">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-teal-400 rounded-full mt-1.5 flex-shrink-0" />
                     <div className="min-w-0">
                       <p className="text-xs text-slate-400 mb-0.5">
                         {update.provider} · {new Date(update.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
-                      <p className="text-sm text-slate-700 leading-relaxed">{update.note}</p>
+                      <p className="text-sm text-[#3A4A57] leading-relaxed">{update.note}</p>
                     </div>
                   </div>
                 </Card>

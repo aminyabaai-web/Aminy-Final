@@ -59,7 +59,7 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
   if (dismissed || !currentAffirmation) return null;
 
   return (
-    <Card className="relative overflow-hidden border-teal-100 bg-gradient-to-r from-teal-50/50 to-white">
+    <Card className="relative overflow-hidden border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2]/50 to-white">
       <div className="p-3 sm:p-4">
         <button
           onClick={() => setDismissed(true)}
@@ -75,7 +75,7 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
           </div>
           
           <div className="flex-1 min-w-0 pt-0.5">
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <p className="text-sm text-[#3A4A57] leading-relaxed">
               {currentAffirmation}
             </p>
           </div>

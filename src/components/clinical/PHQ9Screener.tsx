@@ -253,9 +253,9 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                 <div className="p-2 bg-red-100 rounded-full">
                   <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
-                <h3 className="font-semibold text-gray-900">We're Here for You</h3>
+                <h3 className="font-semibold text-[#1B2733]">We're Here for You</h3>
               </div>
-              <p className="text-gray-600 mb-4">
+              <p className="text-[#5A6B7A] mb-4">
                 We noticed you're having some difficult thoughts. You're not alone, and help is available right now.
               </p>
               <div className="space-y-2 mb-4">
@@ -271,7 +271,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                 </a>
                 <a
                   href="sms:741741&body=HOME"
-                  className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+                  className="flex items-center gap-3 p-3 bg-[#EEF4F8] rounded-lg hover:bg-blue-100 transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-blue-600" />
                   <div>
@@ -297,7 +297,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
         {/* Introduction */}
         {currentQuestion === 0 && answeredCount === 0 && (
           <div className="mb-6 p-4 bg-violet-50 rounded-xl">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#3A4A57]">
               {userName ? `${userName}, t` : 'T'}his quick check-in helps us understand how you've been feeling over the past 2 weeks.
               Your responses are private and help us support you better.
             </p>
@@ -318,11 +318,11 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                 <p className="text-sm text-violet-600 font-medium mb-2">
                   Over the past 2 weeks, how often have you been bothered by:
                 </p>
-                <p className="text-lg text-gray-900 font-medium leading-relaxed">
+                <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
                   {question.text}
                 </p>
                 {question.isCritical && (
-                  <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                  <p className="text-xs text-[#5A6B7A] mt-2 flex items-center gap-1">
                     <Info className="w-3 h-3" />
                     This is an important question - please answer honestly
                   </p>
@@ -338,10 +338,10 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       responses[currentQuestion] === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-gray-200 hover:border-violet-300 hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[#1B2733]">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -354,7 +354,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
               exit={{ opacity: 0, x: -20 }}
             >
               <div className="mb-6">
-                <p className="text-lg text-gray-900 font-medium leading-relaxed">
+                <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
                   If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?
                 </p>
               </div>
@@ -367,10 +367,10 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       difficulty === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-gray-200 hover:border-violet-300 hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
-                    <span className="font-medium text-gray-900">{option.label}</span>
+                    <span className="font-medium text-[#1B2733]">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -385,7 +385,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
           variant="ghost"
           onClick={goBack}
           disabled={currentQuestion === 0}
-          className="text-gray-500"
+          className="text-[#5A6B7A]"
         >
           <ArrowLeft className="w-4 h-4 mr-1" />
           Back
@@ -415,7 +415,7 @@ interface PHQ9ResultsProps {
 export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsProps) {
   const severityColors: Record<string, string> = {
     minimal: 'bg-green-100 text-green-700 border-green-200',
-    mild: 'bg-yellow-100 text-yellow-700 border-yellow-200',
+    mild: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
     moderate: 'bg-orange-100 text-orange-700 border-orange-200',
     moderately_severe: 'bg-red-100 text-red-700 border-red-200',
     severe: 'bg-red-100 text-red-700 border-red-200',
@@ -427,8 +427,8 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
         <div className="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Heart className="w-8 h-8 text-violet-600" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Your Results</h2>
-        <p className="text-gray-600">Thank you for completing this check-in</p>
+        <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Your Results</h2>
+        <p className="text-[#5A6B7A]">Thank you for completing this check-in</p>
       </div>
 
       {/* Score Display */}
@@ -464,12 +464,12 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
 
       {/* Recommendations */}
       <div className="mb-6">
-        <h3 className="font-medium text-gray-900 mb-3">Recommendations</h3>
+        <h3 className="font-medium text-[#1B2733] mb-3">Recommendations</h3>
         <div className="space-y-2">
           {result.recommendations.map((rec, i) => (
             <div key={i} className="flex items-start gap-2">
               <CheckCircle className="w-4 h-4 text-violet-600 mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-gray-600">{rec}</p>
+              <p className="text-sm text-[#5A6B7A]">{rec}</p>
             </div>
           ))}
         </div>
@@ -492,7 +492,7 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
         )}
       </div>
 
-      <p className="text-xs text-gray-400 text-center mt-4">
+      <p className="text-xs text-[#8A9BA8] text-center mt-4">
         This screening tool is not a diagnosis. Please consult a healthcare provider for professional advice.
       </p>
     </Card>

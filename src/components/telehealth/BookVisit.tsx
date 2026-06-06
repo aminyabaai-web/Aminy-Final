@@ -357,8 +357,8 @@ export function BookVisitScreen({
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)] flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
-          <p className="text-gray-600 font-medium">Finding providers in your area...</p>
-          <p className="text-sm text-gray-400 mt-1">This only takes a moment</p>
+          <p className="text-[#5A6B7A] font-medium">Finding providers in your area...</p>
+          <p className="text-sm text-[#8A9BA8] mt-1">This only takes a moment</p>
         </div>
       </div>
     );
@@ -367,18 +367,18 @@ export function BookVisitScreen({
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
       {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
+      <header className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-700" />
+            <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-              <h1 className="text-lg font-semibold text-slate-900">Choose a visit</h1>
-              <p className="max-w-[320px] truncate text-sm text-slate-500">{intake.visitReason}</p>
+              <h1 className="text-lg font-semibold text-[#1B2733]">Choose a visit</h1>
+              <p className="max-w-[320px] truncate text-sm text-[#5A6B7A]">{intake.visitReason}</p>
           </div>
         </div>
         {/* Progress Breadcrumbs */}
@@ -389,21 +389,21 @@ export function BookVisitScreen({
             </span>
             <span className="text-xs font-medium text-green-600">Tell us more</span>
           </div>
-          <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
+          <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
             <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">2</span>
             <span className="text-xs font-medium text-[#6B9080]">Choose provider</span>
           </div>
-          <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
+          <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
-            <span className="w-5 h-5 bg-[#E8E4DF] rounded-full flex items-center justify-center text-gray-500 text-xs font-bold">3</span>
-            <span className="text-xs text-gray-400">Confirm</span>
+            <span className="w-5 h-5 bg-[#E8E4DF] rounded-full flex items-center justify-center text-[#5A6B7A] text-xs font-bold">3</span>
+            <span className="text-xs text-[#8A9BA8]">Confirm</span>
           </div>
         </nav>
       </header>
 
       {/* Filters */}
-      <div className="border-b border-teal-100/80 bg-white/82 px-4 py-3 space-y-3 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+      <div className="border-b border-[#E8E4DF]/80 bg-white/82 px-4 py-3 space-y-3 backdrop-blur supports-[backdrop-filter]:bg-white/70">
         {/* Visit Format Toggle */}
         <div className="flex gap-2">
           <button
@@ -411,7 +411,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitFormat === 'remote'
                 ? 'bg-primary text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-[#6B9080]/10'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#6B9080]/10'
             }`}
           >
             <Video className="w-4 h-4" />
@@ -419,11 +419,11 @@ export function BookVisitScreen({
           </button>
           <button
             disabled
-            className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-400 cursor-not-allowed"
+            className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white px-4 py-2 text-sm font-medium text-slate-400 cursor-not-allowed"
           >
             <Building2 className="w-4 h-4" />
             In Office
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-slate-500">Soon</span>
+            <span className="rounded-full bg-[#F0EDE8] px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-[#5A6B7A]">Soon</span>
           </button>
         </div>
 
@@ -434,7 +434,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'consult'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
-                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-[#6B9080]/10'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -445,7 +445,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'deep-review'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
-                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-[#6B9080]/10'
+                : 'bg-[#F0EDE8] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -455,7 +455,7 @@ export function BookVisitScreen({
 
         {/* Date Selector */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
-          <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+          <Calendar className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
           {dateOptions.map((date) => {
             const isSelected = date.toDateString() === selectedDate.toDateString();
             const isToday = date.toDateString() === new Date().toDateString();
@@ -469,7 +469,7 @@ export function BookVisitScreen({
                     ? 'bg-primary text-white'
                     : isToday
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
-                    : 'bg-slate-100 text-slate-600 hover:bg-[#6B9080]/10'
+                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#6B9080]/10'
                 }`}
               >
                 {formatDate(date)}
@@ -477,7 +477,7 @@ export function BookVisitScreen({
             );
           })}
         </div>
-        <p className="text-xs leading-5 text-slate-500">
+        <p className="text-xs leading-5 text-[#5A6B7A]">
           Choose a time and Aminy keeps the rest simple: payment, reminders, secure room access, and any superbill follow-up stay attached to the same appointment.
         </p>
       </div>
@@ -485,15 +485,15 @@ export function BookVisitScreen({
       {/* Provider List */}
       <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-4">
         {/* Pricing Info Banner */}
-        <div className="flex items-center gap-3 rounded-2xl border border-teal-100 bg-white/92 p-4 shadow-sm">
+        <div className="flex items-center gap-3 rounded-2xl border border-[#E8E4DF] bg-white/92 p-4 shadow-sm">
           <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
             <span className="text-lg">💳</span>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-slate-800">
+            <p className="text-sm font-medium text-[#1B2733]">
               Cash-pay stays simple here
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#5A6B7A]">
               Choose a licensed provider, book a time, and keep reminders, room access, and your superbill in one place.
             </p>
           </div>
@@ -582,7 +582,7 @@ function ProviderCard({
   const hasSlots = slots.length > 0;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-sm">
+    <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 overflow-hidden shadow-sm">
       {/* Provider Info */}
       <div className="p-4 flex gap-3 sm:gap-4">
         {/* Avatar */}
@@ -611,13 +611,13 @@ function ProviderCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="font-semibold text-gray-900">
+              <h3 className="font-semibold text-[#1B2733]">
                 {provider.firstName} {provider.lastName}, {provider.credentials}
               </h3>
-              <p className="text-sm text-gray-500">{provider.roleDisplayName}</p>
+              <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
             </div>
             <div className="text-right">
-              <span className="text-lg font-bold text-gray-900">${price}</span>
+              <span className="text-lg font-bold text-[#1B2733]">${price}</span>
               <p className="text-xs text-green-600 font-medium">HSA/FSA eligible</p>
             </div>
           </div>
@@ -627,16 +627,16 @@ function ProviderCard({
             {provider.rating && (
               <div className="flex items-center gap-1 text-sm">
                 <Star className="w-4 h-4 text-amber-400 fill-current" />
-                <span className="text-gray-700">{provider.rating}</span>
-                <span className="text-gray-400">({provider.reviewCount})</span>
+                <span className="text-[#3A4A57]">{provider.rating}</span>
+                <span className="text-[#8A9BA8]">({provider.reviewCount})</span>
               </div>
             )}
-              <div className="flex items-center gap-1 text-sm text-slate-500">
+              <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                 <Video className="w-4 h-4" />
                 Secure Aminy video room
               </div>
             </div>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
+            <p className="mt-3 text-sm leading-6 text-[#5A6B7A]">
               {provider.bio || 'Calm, practical support with clear next steps and follow-up you can come back to later.'}
             </p>
           </div>
@@ -646,7 +646,7 @@ function ProviderCard({
       <div className="px-4 pb-4">
         {hasSlots ? (
           <div>
-            <p className="mb-2 text-sm text-slate-600">
+            <p className="mb-2 text-sm text-[#5A6B7A]">
               {slots.length} appointment{slots.length !== 1 ? 's' : ''} available
             </p>
             <div className="flex flex-wrap gap-2">
@@ -654,7 +654,7 @@ function ProviderCard({
               <button
                 key={slot.id}
                 onClick={() => onSelectSlot(slot)}
-                className="rounded-full border border-[#6B9080]/20 bg-[#6B9080]/10 px-4 py-2 text-sm font-medium text-teal-800 transition-all hover:bg-[#6B9080]/10 hover:shadow-sm active:scale-95"
+                className="rounded-full border border-[#6B9080]/20 bg-[#6B9080]/10 px-4 py-2 text-sm font-medium text-[#6B9080] transition-all hover:bg-[#6B9080]/10 hover:shadow-sm active:scale-95"
               >
                 {formatTime(slot.startTime)}
               </button>
@@ -663,7 +663,7 @@ function ProviderCard({
           </div>
         ) : (
           <div className="text-center py-3">
-            <p className="text-sm text-gray-500 mb-2">No appointments available today</p>
+            <p className="text-sm text-[#5A6B7A] mb-2">No appointments available today</p>
             <button
               onClick={onJoinWaitlist}
               className="inline-flex items-center gap-2 rounded-full border-2 border-[#6B9080] px-4 py-2 text-sm font-medium text-[#6B9080] transition-all hover:bg-[#6B9080]/10"
@@ -677,8 +677,8 @@ function ProviderCard({
 
       {/* Organization Badge */}
       {provider.organization !== 'independent' && (
-        <div className="px-4 py-2 bg-[#FAF7F2] border-t border-gray-100">
-          <span className="text-xs text-gray-500 uppercase tracking-wide">
+        <div className="px-4 py-2 bg-[#FAF7F2] border-t border-[#E8E4DF]">
+          <span className="text-xs text-[#5A6B7A] uppercase tracking-wide">
             {provider.organization === 'aact' && 'AACT Partner'}
             {provider.organization === 'rise' && 'Rise Partner'}
           </span>
@@ -719,15 +719,15 @@ function NoProvidersCard({
   const showLocalCareOptions = availabilityCheck?.shouldShowLocalCare ?? true;
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm">
+    <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-6 shadow-sm">
       <div className="text-center">
         <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-amber-600" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
           No telehealth available within 72 hours
         </h3>
-        <p className="text-gray-600 mb-2">
+        <p className="text-[#5A6B7A] mb-2">
           We don't currently have providers licensed in {userState} with availability in the next 72 hours.
         </p>
         {/* Reassurance copy per requirement */}
@@ -752,7 +752,7 @@ function NoProvidersCard({
               {onRequestLocalCare && (
                 <button
                   onClick={onRequestLocalCare}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-[#6B9080]/10 py-3 font-medium text-teal-800 transition-colors hover:bg-[#6B9080]/10"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-[#6B9080]/10 py-3 font-medium text-[#6B9080] transition-colors hover:bg-[#6B9080]/10"
                 >
                   <MapPin className="w-4 h-4" />
                   Request Local Care Support
@@ -763,7 +763,7 @@ function NoProvidersCard({
               {onExportReferralPacket && (
                 <button
                   onClick={onExportReferralPacket}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 py-3 font-medium text-slate-700 transition-colors hover:bg-slate-50"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8E4DF] py-3 font-medium text-[#3A4A57] transition-colors hover:bg-[#FAF7F2]"
                 >
                   <FileText className="w-4 h-4" />
                   Download Referral Packet (PDF)
@@ -783,21 +783,21 @@ function NoProvidersCard({
             </button>
           )}
 
-          <div className="pt-4 border-t border-gray-100">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">While you wait:</h4>
+          <div className="pt-4 border-t border-[#E8E4DF]">
+            <h4 className="text-sm font-medium text-[#3A4A57] mb-2">While you wait:</h4>
             <div className="space-y-2 text-left">
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">🎥</span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Monthly Q&A Sessions</p>
-                  <p className="text-xs text-gray-500">Live sessions with providers (included)</p>
+                  <p className="text-sm font-medium text-[#1B2733]">Monthly Q&A Sessions</p>
+                  <p className="text-xs text-[#5A6B7A]">Live sessions with providers (included)</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">📚</span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">Evidence-Based Resources</p>
-                  <p className="text-xs text-gray-500">Guides and strategies library</p>
+                  <p className="text-sm font-medium text-[#1B2733]">Evidence-Based Resources</p>
+                  <p className="text-xs text-[#5A6B7A]">Guides and strategies library</p>
                 </div>
               </div>
               {/* ONLY show Find Local Care option when 72-hour rule permits */}
@@ -808,8 +808,8 @@ function NoProvidersCard({
                 >
                   <span className="text-lg">🔍</span>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Find Local Care</p>
-                    <p className="text-xs text-gray-500">Provider directory & referrals</p>
+                    <p className="text-sm font-medium text-[#1B2733]">Find Local Care</p>
+                    <p className="text-xs text-[#5A6B7A]">Provider directory & referrals</p>
                   </div>
                 </button>
               )}

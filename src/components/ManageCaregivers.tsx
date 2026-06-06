@@ -72,8 +72,8 @@ const roleLabels: Record<CaregiverRole, string> = {
 
 const roleColors: Record<CaregiverRole, string> = {
   owner: 'bg-purple-100 text-purple-700 border-purple-200',
-  caregiver: 'bg-blue-100 text-blue-700 border-blue-200',
-  'read-only': 'bg-[#F0EDE8] text-gray-700 border-gray-200'
+  caregiver: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
+  'read-only': 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]'
 };
 
 const statusColors: Record<CaregiverStatus, string> = {
@@ -280,13 +280,13 @@ export function ManageCaregivers({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#E8E4DF] flex items-center justify-center">
-                  <span className="font-medium text-gray-600">
+                  <span className="font-medium text-[#5A6B7A]">
                     {caregiver.name[0]?.toUpperCase()}
                   </span>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-slate-900">{caregiver.name}</p>
+                    <p className="font-medium text-[#1B2733]">{caregiver.name}</p>
                     {caregiver.role === 'owner' && (
                       <Crown className="w-4 h-4 text-purple-600" />
                     )}
@@ -360,7 +360,7 @@ export function ManageCaregivers({
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="caregiver@example.com"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
                 />
               </div>
 
@@ -373,7 +373,7 @@ export function ManageCaregivers({
                       className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                         inviteRole === role
                           ? 'border-accent bg-accent/5'
-                          : 'border-gray-200 hover:border-gray-300'
+                          : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                       }`}
                     >
                       <input

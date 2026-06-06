@@ -139,7 +139,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <div className="w-6 h-6 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-[#E8E4DF] border-t-gray-600 rounded-full animate-spin" />
       </div>
     );
   }

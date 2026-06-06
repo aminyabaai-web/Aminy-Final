@@ -379,7 +379,7 @@ export function ShareableMilestoneCard({
                       className="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="w-10 h-10 bg-[#E8E4DF] rounded-full flex items-center justify-center">
-                        <Copy className="w-5 h-5 text-gray-600" />
+                        <Copy className="w-5 h-5 text-[#5A6B7A]" />
                       </div>
                       <span className="text-xs text-muted-foreground">Copy</span>
                     </button>

@@ -540,7 +540,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
   if (isLoading) {
     return (
       <Card className="p-6">
-        <div className="flex items-center justify-center gap-2 text-gray-500">
+        <div className="flex items-center justify-center gap-2 text-[#5A6B7A]">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span>Loading action items...</span>
         </div>
@@ -552,11 +552,11 @@ You're starting this check-in now. Begin with a warm greeting and your first que
     <>
       {/* Action Items List */}
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
+        <div className="p-4 border-b border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2] to-cyan-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ClipboardList className="w-5 h-5 text-[#6B9080]" />
-              <h3 className="font-semibold text-gray-900">Action Items</h3>
+              <h3 className="font-semibold text-[#1B2733]">Action Items</h3>
             </div>
             {incompleteCount > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
@@ -564,7 +564,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Quick check-ins help me give you better advice
           </p>
         </div>
@@ -594,20 +594,20 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     <Check className="w-5 h-5 text-green-600" />
                   ) : (
                     <Icon className={`w-5 h-5 ${
-                      item.priority === 'high' ? 'text-amber-600' : 'text-gray-600'
+                      item.priority === 'high' ? 'text-amber-600' : 'text-[#5A6B7A]'
                     }`} />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`font-medium ${item.completed ? 'text-gray-400' : 'text-gray-900'}`}>
+                  <p className={`font-medium ${item.completed ? 'text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
                     {item.title}
                   </p>
-                  <p className={`text-sm ${item.completed ? 'text-gray-400' : 'text-gray-500'}`}>
+                  <p className={`text-sm ${item.completed ? 'text-[#8A9BA8]' : 'text-[#5A6B7A]'}`}>
                     {item.completed ? 'Completed' : item.description}
                   </p>
                 </div>
                 {!item.completed && (
-                  <div className="flex items-center gap-1 text-gray-400">
+                  <div className="flex items-center gap-1 text-[#8A9BA8]">
                     <Clock className="w-4 h-4" />
                     <span className="text-xs">{item.estimatedMinutes}m</span>
                     <ChevronRight className="w-4 h-4 ml-1" />
@@ -619,7 +619,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
         </div>
 
         {items.length > 4 && (
-          <div className="p-3 border-t border-gray-100 text-center">
+          <div className="p-3 border-t border-[#E8E4DF] text-center">
             <button className="text-sm text-[#6B9080] hover:text-[#6B9080] font-medium">
               View all {items.length} items
             </button>
@@ -644,21 +644,21 @@ You're starting this check-in now. Begin with a warm greeting and your first que
               className="w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col"
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-100">
+              <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-[#6B9080]/10 flex items-center justify-center">
                     {React.createElement(activeItem.icon, { className: 'w-5 h-5 text-[#6B9080]' })}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{activeItem.title}</h3>
-                    <p className="text-xs text-gray-500">~{activeItem.estimatedMinutes} min</p>
+                    <h3 className="font-semibold text-[#1B2733]">{activeItem.title}</h3>
+                    <p className="text-xs text-[#5A6B7A]">~{activeItem.estimatedMinutes} min</p>
                   </div>
                 </div>
                 <button
                   onClick={handleCloseItem}
                   className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-500" />
+                  <X className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
               </div>
 
@@ -678,13 +678,13 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                       className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                         msg.role === 'user'
                           ? 'bg-primary text-white'
-                          : 'bg-[#F0EDE8] text-gray-800'
+                          : 'bg-[#F0EDE8] text-[#1B2733]'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                       {/* Share button for assistant messages */}
                       {msg.role === 'assistant' && (
-                        <div className="mt-2 pt-2 border-t border-gray-200">
+                        <div className="mt-2 pt-2 border-t border-[#E8E4DF]">
                           <ShareInsightInline
                             insight={msg.content}
                             childName={childName}
@@ -715,7 +715,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
               </div>
 
               {/* Input */}
-              <div className="p-4 border-t border-gray-100">
+              <div className="p-4 border-t border-[#E8E4DF]">
                 <div className="flex gap-2">
                   <textarea
                     ref={inputRef}
@@ -728,7 +728,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                       }
                     }}
                     placeholder="Type your response..."
-                    className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm"
+                    className="flex-1 px-4 py-2.5 rounded-xl border border-[#E8E4DF] focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm"
                     rows={1}
                   />
                   <Button

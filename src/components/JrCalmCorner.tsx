@@ -77,7 +77,7 @@ const EMOTIONS: { id: Emotion; emoji: string; label: string; color: string }[] =
 const CALM_ACTIVITIES: { id: CalmActivity; emoji: string; label: string; desc: string; color: string }[] = [
   { id: 'breathing', emoji: '🌬️', label: 'Breathing', desc: 'Follow the circle', color: 'from-blue-100 to-cyan-100' },
   { id: 'body-scan', emoji: '🧘', label: 'Body Scan', desc: 'Relax each part', color: 'from-purple-100 to-pink-100' },
-  { id: 'sounds', emoji: '🎵', label: 'Calm Sounds', desc: 'Listen & relax', color: 'from-green-100 to-teal-100' },
+  { id: 'sounds', emoji: '🎵', label: 'Calm Sounds', desc: 'Listen & relax', color: 'from-green-100 to-[#F0EDE8]' },
   { id: 'grounding', emoji: '🌳', label: 'Grounding', desc: '5-4-3-2-1', color: 'from-emerald-100 to-lime-100' },
   { id: 'bubble-pop', emoji: '🫧', label: 'Bubbles', desc: 'Pop to relax', color: 'from-sky-100 to-indigo-100' },
 ];
@@ -308,7 +308,7 @@ export function JrCalmCorner({
           onClick={onBack}
           className="w-10 h-10 bg-white/60 backdrop-blur rounded-full flex items-center justify-center"
         >
-          <ArrowLeft className="w-5 h-5 text-indigo-600" />
+          <ArrowLeft className="w-5 h-5 text-[#6B9080]" />
         </motion.button>
         <div>
           <h1 className="text-lg font-bold text-indigo-800">🫧 Calm Corner</h1>
@@ -337,7 +337,7 @@ export function JrCalmCorner({
                 💭
               </motion.div>
               <h2 className="text-2xl font-bold text-indigo-800 mb-2">How are you feeling?</h2>
-              <p className="text-indigo-600 mb-8 text-sm">It's okay to feel any way. Tap how you feel right now.</p>
+              <p className="text-[#6B9080] mb-8 text-sm">It's okay to feel any way. Tap how you feel right now.</p>
 
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-md mx-auto">
                 {EMOTIONS.map(emotion => (
@@ -349,7 +349,7 @@ export function JrCalmCorner({
                     className={`${emotion.color} border-2 rounded-2xl p-3 flex flex-col items-center gap-1 transition-shadow hover:shadow-md`}
                   >
                     <span className="text-3xl">{emotion.emoji}</span>
-                    <span className="text-xs font-medium text-gray-700">{emotion.label}</span>
+                    <span className="text-xs font-medium text-[#3A4A57]">{emotion.label}</span>
                   </motion.button>
                 ))}
               </div>
@@ -366,7 +366,7 @@ export function JrCalmCorner({
               className="text-center pt-6"
             >
               <h2 className="text-xl font-bold text-indigo-800 mb-2">What would help?</h2>
-              <p className="text-indigo-600 mb-6 text-sm">Pick something that feels right</p>
+              <p className="text-[#6B9080] mb-6 text-sm">Pick something that feels right</p>
 
               <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
                 {CALM_ACTIVITIES.map(activity => (
@@ -378,8 +378,8 @@ export function JrCalmCorner({
                     className={`bg-gradient-to-br ${activity.color} rounded-2xl p-4 text-left border border-white/50 shadow-sm`}
                   >
                     <span className="text-3xl block mb-2">{activity.emoji}</span>
-                    <p className="font-semibold text-gray-800 text-sm">{activity.label}</p>
-                    <p className="text-xs text-gray-600">{activity.desc}</p>
+                    <p className="font-semibold text-[#1B2733] text-sm">{activity.label}</p>
+                    <p className="text-xs text-[#5A6B7A]">{activity.desc}</p>
                   </motion.button>
                 ))}
               </div>
@@ -510,7 +510,7 @@ export function JrCalmCorner({
               >
                 🎶
               </motion.div>
-              <h3 className="text-xl font-bold text-teal-800 mb-2">Pick a sound</h3>
+              <h3 className="text-xl font-bold text-[#6B9080] mb-2">Pick a sound</h3>
               <p className="text-[#6B9080] text-sm mb-6">Close your eyes and listen</p>
 
               <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto mb-8">
@@ -528,7 +528,7 @@ export function JrCalmCorner({
                       }`}
                     >
                       <span className="text-3xl">{sound.emoji}</span>
-                      <span className="text-sm font-medium text-gray-700">{sound.label}</span>
+                      <span className="text-sm font-medium text-[#3A4A57]">{sound.label}</span>
                       {isActive && (
                         <motion.div
                           animate={{ opacity: [0.5, 1, 0.5] }}
@@ -685,7 +685,7 @@ export function JrCalmCorner({
                 ⭐
               </motion.div>
               <h2 className="text-2xl font-bold text-indigo-800 mb-2">Great job!</h2>
-              <p className="text-indigo-600 mb-6 text-sm">How do you feel now?</p>
+              <p className="text-[#6B9080] mb-6 text-sm">How do you feel now?</p>
 
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 max-w-md mx-auto">
                 {EMOTIONS.map(emotion => (
@@ -697,7 +697,7 @@ export function JrCalmCorner({
                     className={`${emotion.color} border-2 rounded-2xl p-3 flex flex-col items-center gap-1 transition-shadow hover:shadow-md`}
                   >
                     <span className="text-3xl">{emotion.emoji}</span>
-                    <span className="text-xs font-medium text-gray-700">{emotion.label}</span>
+                    <span className="text-xs font-medium text-[#3A4A57]">{emotion.label}</span>
                   </motion.button>
                 ))}
               </div>

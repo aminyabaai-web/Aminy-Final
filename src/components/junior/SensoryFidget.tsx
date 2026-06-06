@@ -477,7 +477,7 @@ function CalmSpinner() {
         </motion.svg>
       </div>
 
-      <p className="text-slate-500 text-xs text-center">Let go and watch it coast...</p>
+      <p className="text-[#5A6B7A] text-xs text-center">Let go and watch it coast...</p>
     </div>
   );
 }

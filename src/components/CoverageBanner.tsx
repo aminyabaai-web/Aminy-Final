@@ -89,7 +89,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
 
   if (isLoading) {
     return (
-      <div className={`rounded-2xl bg-white border border-slate-100 p-3 flex items-center justify-center ${className}`}>
+      <div className={`rounded-2xl bg-white border border-[#E8E4DF] p-3 flex items-center justify-center ${className}`}>
         <Loader2 className="w-4 h-4 text-slate-400 animate-spin" />
       </div>
     );
@@ -137,7 +137,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
 
       <div className="space-y-1.5">
         {relevantServices.length === 0 ? (
-          <p className="text-xs text-slate-600">No coverage details available yet — verify again to refresh.</p>
+          <p className="text-xs text-[#5A6B7A]">No coverage details available yet — verify again to refresh.</p>
         ) : relevantServices.map((s, i) => (
           <div key={i} className="flex items-center gap-2 text-xs">
             {s.status === 'covered' && <Check className="w-3.5 h-3.5 text-[#6B9080] shrink-0" />}
@@ -145,13 +145,13 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
             {s.status === 'not_covered' && <X className="w-3.5 h-3.5 text-red-500 shrink-0" />}
             {s.status === 'unknown' && <span className="w-3.5 h-3.5 text-center text-slate-400">?</span>}
 
-            <span className="font-medium text-slate-800">{s.service}</span>
-            <span className="text-slate-500">·</span>
+            <span className="font-medium text-[#1B2733]">{s.service}</span>
+            <span className="text-[#5A6B7A]">·</span>
             <span className={
               s.status === 'covered' ? 'text-[#6B9080]' :
               s.status === 'prior_auth_required' ? 'text-amber-700' :
               s.status === 'not_covered' ? 'text-red-600' :
-              'text-slate-500'
+              'text-[#5A6B7A]'
             }>
               {s.status === 'covered' && (s.copay != null ? `$${(s.copay / 100).toFixed(0)} copay` : 'Covered')}
               {s.status === 'prior_auth_required' && 'Prior auth required'}
@@ -167,8 +167,8 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
 
       {coverage.outOfPocketRemaining != null && (
         <div className="mt-3 pt-3 border-t border-[#6B9080]/20 flex items-center justify-between text-xs">
-          <span className="text-slate-600">Out-of-pocket remaining this year:</span>
-          <span className="font-semibold text-slate-900">
+          <span className="text-[#5A6B7A]">Out-of-pocket remaining this year:</span>
+          <span className="font-semibold text-[#1B2733]">
             ${(coverage.outOfPocketRemaining / 100).toFixed(0)}
           </span>
         </div>

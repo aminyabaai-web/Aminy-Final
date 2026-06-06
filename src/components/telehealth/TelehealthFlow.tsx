@@ -103,14 +103,14 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
   return (
     <div className="max-w-md mx-auto p-6 space-y-6">
       <h2 className="text-xl font-bold text-center">Pre-Call Check</h2>
-      <p className="text-center text-gray-600">Let's make sure everything is ready for your visit</p>
+      <p className="text-center text-[#5A6B7A]">Let's make sure everything is ready for your visit</p>
 
       <div className="space-y-4">
         <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
           <span className="text-2xl">{checking ? '\u23F3' : cameraReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Camera</p>
-            <p className="text-sm text-gray-500">{checking ? 'Checking...' : cameraReady ? 'Ready' : 'Not available - check permissions'}</p>
+            <p className="text-sm text-[#5A6B7A]">{checking ? 'Checking...' : cameraReady ? 'Ready' : 'Not available - check permissions'}</p>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           <span className="text-2xl">{checking ? '\u23F3' : micReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Microphone</p>
-            <p className="text-sm text-gray-500">{checking ? 'Checking...' : micReady ? 'Ready' : 'Not available - check permissions'}</p>
+            <p className="text-sm text-[#5A6B7A]">{checking ? 'Checking...' : micReady ? 'Ready' : 'Not available - check permissions'}</p>
           </div>
         </div>
 
@@ -126,13 +126,13 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           <span className="text-2xl">{'connection' in navigator ? '\u2705' : '\u26A0\uFE0F'}</span>
           <div>
             <p className="font-medium">Internet Connection</p>
-            <p className="text-sm text-gray-500">{navigator.onLine ? 'Connected' : 'No connection detected'}</p>
+            <p className="text-sm text-[#5A6B7A]">{navigator.onLine ? 'Connected' : 'No connection detected'}</p>
           </div>
         </div>
       </div>
 
       <div className="flex gap-3 pt-4">
-        <button onClick={onBack} className="flex-1 py-3 px-4 rounded-lg border border-gray-300 font-medium">
+        <button onClick={onBack} className="flex-1 py-3 px-4 rounded-lg border border-[#E8E4DF] font-medium">
           Back
         </button>
         <button
@@ -360,85 +360,85 @@ export function TelehealthFlow({
   switch (currentStep) {
     case 'choose-path':
       return (
-        <div className="min-h-screen bg-[#F5F5F5]">
-          <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+        <div className="min-h-screen bg-[#FAF7F2]">
+          <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
               <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
-                <ArrowLeft className="w-5 h-5 text-gray-700" />
+                <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
               </button>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">Get Care</h1>
-                <p className="text-xs text-gray-500">Choose how you'd like to get started</p>
+                <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
+                <p className="text-xs text-[#5A6B7A]">Choose how you'd like to get started</p>
               </div>
             </div>
           </header>
           <div className="p-4 space-y-4 max-w-lg mx-auto">
             {/* Quick Consult Card */}
             <button onClick={handleChooseQuickConsult} className="w-full text-left">
-              <div className="bg-white rounded-2xl border-2 border-gray-100 p-5 hover:border-blue-200 hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl border-2 border-[#E8E4DF] p-5 hover:border-[#C8DDE8] hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#EEF4F8] flex items-center justify-center flex-shrink-0">
                     <Zap className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-gray-900">Quick Consult</h3>
-                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-50 text-blue-700">Cash Pay</span>
+                      <h3 className="text-base font-semibold text-[#1B2733]">Quick Consult</h3>
+                      <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#EEF4F8] text-blue-700">Cash Pay</span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-[#5A6B7A] mb-3">
                       Book a session right away — no insurance needed. Perfect for one-time questions or ongoing self-pay.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <Clock className="w-3.5 h-3.5" />
                         <span>Book as soon as today</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>{publicCashPayRange} across {cashPayMenuSummary}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Verified experts in supported telehealth states</span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-[#8A9BA8] mt-1 flex-shrink-0" />
                 </div>
               </div>
             </button>
 
             {/* Start Services Card */}
             <button onClick={handleChooseStartServices} className="w-full text-left">
-              <div className="bg-white rounded-2xl border-2 border-gray-100 p-5 hover:border-emerald-200 hover:shadow-md transition-all">
+              <div className="bg-white rounded-2xl border-2 border-[#E8E4DF] p-5 hover:border-emerald-200 hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
                     <Heart className="w-6 h-6 text-emerald-600" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-gray-900">Start Services</h3>
+                      <h3 className="text-base font-semibold text-[#1B2733]">Start Services</h3>
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Insurance</span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">
+                    <p className="text-sm text-[#5A6B7A] mb-3">
                       Use your insurance where Aminy has a supported lane. We'll verify coverage, explain any authorization steps, and route you to the right next step.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <Shield className="w-3.5 h-3.5" />
                         <span>Insurance eligibility verified before booking</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Matched to supported in-network or partner-billed lanes</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>Intake and claim-ready context built from your Aminy profile</span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-400 mt-1 flex-shrink-0" />
+                  <ChevronRight className="w-5 h-5 text-[#8A9BA8] mt-1 flex-shrink-0" />
                 </div>
               </div>
             </button>
@@ -475,15 +475,15 @@ export function TelehealthFlow({
 
     case 'verify-insurance':
       return (
-        <div className="min-h-screen bg-[#F5F5F5]">
-          <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
+        <div className="min-h-screen bg-[#FAF7F2]">
+          <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
               <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
-                <ArrowLeft className="w-5 h-5 text-gray-700" />
+                <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
               </button>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">Verify Insurance</h1>
-                <p className="text-xs text-gray-500">We'll check your coverage before matching providers</p>
+                <h1 className="text-lg font-semibold text-[#1B2733]">Verify Insurance</h1>
+                <p className="text-xs text-[#5A6B7A]">We'll check your coverage before matching providers</p>
               </div>
             </div>
           </header>
@@ -494,16 +494,16 @@ export function TelehealthFlow({
                   <Shield className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Insurance Eligibility Check</h3>
-                  <p className="text-xs text-gray-500">Takes about 30 seconds</p>
+                  <h3 className="font-semibold text-[#1B2733]">Insurance Eligibility Check</h3>
+                  <p className="text-xs text-[#5A6B7A]">Takes about 30 seconds</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 We'll verify your insurance covers the services you need and find in-network providers. Your intake paperwork will be auto-generated from your Aminy profile.
               </p>
               <div className="space-y-2">
                 {['Coverage verified in real-time', 'In-network providers highlighted', 'Prior authorization tracked', 'Intake auto-populated'].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-gray-700">
+                  <div key={item} className="flex items-center gap-2 text-sm text-[#3A4A57]">
                     <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <span>{item}</span>
                   </div>
@@ -521,7 +521,7 @@ export function TelehealthFlow({
                   trackEvent('switched_to_cash_pay', { fromStep: 'verify-insurance' });
                   setCurrentStep('book-visit');
                 }}
-                className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                className="w-full py-2 text-sm text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
               >
                 Skip — I'll pay out of pocket
               </button>

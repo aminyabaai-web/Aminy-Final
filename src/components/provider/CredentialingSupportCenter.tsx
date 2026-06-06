@@ -977,9 +977,9 @@ function statusBadge(status: string) {
     denied: 'bg-red-100 text-red-700',
     fail: 'bg-red-100 text-red-700',
     rejected: 'bg-red-100 text-red-700',
-    missing: 'bg-slate-100 text-slate-500',
+    missing: 'bg-[#F0EDE8] text-[#5A6B7A]',
     pending: 'bg-blue-100 text-blue-700',
-    application: 'bg-slate-100 text-slate-600',
+    application: 'bg-[#F0EDE8] text-[#5A6B7A]',
     processing: 'bg-blue-100 text-blue-700',
     credentialing: 'bg-violet-100 text-violet-700',
     new: 'bg-blue-100 text-blue-700',
@@ -987,7 +987,7 @@ function statusBadge(status: string) {
     won: 'bg-emerald-100 text-emerald-700',
     lost: 'bg-red-100 text-red-700',
   };
-  const cls = colors[status] || 'bg-slate-100 text-slate-500';
+  const cls = colors[status] || 'bg-[#F0EDE8] text-[#5A6B7A]';
   const label = status.replace(/-/g, ' ');
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
@@ -1015,8 +1015,8 @@ function CAQHTab() {
     return (
       <Card className="p-6 text-center">
         <Shield className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-        <p className="text-sm font-medium text-slate-700">No CAQH documents yet</p>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-sm font-medium text-[#3A4A57]">No CAQH documents yet</p>
+        <p className="text-xs text-[#5A6B7A] mt-1">
           Connect your CAQH ProView profile to track documents, expirations, and re-attestation here.
         </p>
       </Card>
@@ -1028,11 +1028,11 @@ function CAQHTab() {
       {/* Profile Completion */}
       <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-slate-800">CAQH Profile Completion</h3>
-          <span className="text-sm font-bold text-slate-700">{completionPct}%</span>
+          <h3 className="text-sm font-semibold text-[#1B2733]">CAQH Profile Completion</h3>
+          <span className="text-sm font-bold text-[#3A4A57]">{completionPct}%</span>
         </div>
         <Progress value={completionPct} className="h-2 mb-3" />
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-[#5A6B7A]">
           {uploadedRequired} of {requiredDocs.length} required documents uploaded.
           {completionPct === 100
             ? ' Your profile is complete.'
@@ -1052,10 +1052,10 @@ function CAQHTab() {
               {statusIcon(item.status)}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-xs font-medium text-slate-700">{item.label}</p>
+                  <p className="text-xs font-medium text-[#3A4A57]">{item.label}</p>
                   {statusBadge(item.status)}
                 </div>
-                <p className="text-xs text-slate-500 mt-0.5">{item.detail}</p>
+                <p className="text-xs text-[#5A6B7A] mt-0.5">{item.detail}</p>
                 {item.actionRequired && (
                   <p className="text-xs text-violet-600 font-medium mt-0.5">Action: {item.actionRequired}</p>
                 )}
@@ -1103,17 +1103,17 @@ function CAQHTab() {
 
       {/* Document Checklist */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-slate-800 mb-3">Document Checklist</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Document Checklist</h3>
         <div className="space-y-2">
           {docs.map((doc) => (
             <div
               key={doc.id}
-              className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0"
+              className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0"
             >
               <div className="flex items-center gap-2">
                 {statusIcon(doc.status)}
                 <div>
-                  <p className="text-sm text-slate-700">{doc.name}</p>
+                  <p className="text-sm text-[#3A4A57]">{doc.name}</p>
                   {doc.expiresAt && (
                     <p className="text-xs text-slate-400">Expires: {doc.expiresAt}</p>
                   )}
@@ -1131,11 +1131,11 @@ function CAQHTab() {
       </Card>
 
       {/* Re-attestation Reminder */}
-      <Card className="p-4 bg-blue-50 border-blue-200">
+      <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
         <div className="flex items-start gap-3">
           <Calendar className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h3 className="text-sm font-semibold text-blue-800">CAQH Re-Attestation</h3>
+            <h3 className="text-sm font-semibold text-[#4A6478]">CAQH Re-Attestation</h3>
             <p className="text-xs text-blue-600 mt-1">
               CAQH requires re-attestation every 120 days. Your next attestation is due
               around <span className="font-semibold">June 15, 2026</span>. Aminy will remind
@@ -1173,7 +1173,7 @@ function EnrollmentTab() {
           variant="ghost"
           size="sm"
           onClick={() => setWizardPayer(null)}
-          className="text-xs text-slate-500"
+          className="text-xs text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Enrollment
         </Button>
@@ -1181,32 +1181,32 @@ function EnrollmentTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-1">
             <Sparkles className="w-5 h-5 text-blue-500" />
-            <h3 className="text-sm font-semibold text-slate-800">{activeWorkflow.payerName} Enrollment</h3>
+            <h3 className="text-sm font-semibold text-[#1B2733]">{activeWorkflow.payerName} Enrollment</h3>
           </div>
-          <p className="text-xs text-slate-500 mb-4">
+          <p className="text-xs text-[#5A6B7A] mb-4">
             Estimated timeline: {activeWorkflow.totalEstimatedDays} days total
           </p>
 
           <div className="space-y-4">
             {activeWorkflow.steps.map((step, i) => (
-              <div key={step.id} className="border border-slate-200 rounded-lg p-3">
+              <div key={step.id} className="border border-[#E8E4DF] rounded-lg p-3">
                 <div className="flex items-start gap-3">
                   <div className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
                     {i + 1}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-slate-800">{step.title}</p>
+                      <p className="text-sm font-semibold text-[#1B2733]">{step.title}</p>
                       <span className="text-xs text-slate-400">~{step.estimatedDays}d</span>
                     </div>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">{step.description}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-1 leading-relaxed">{step.description}</p>
 
                     {step.requiredDocs.length > 0 && (
                       <div className="mt-2">
-                        <p className="text-xs font-medium text-slate-500 mb-1">Required Documents:</p>
+                        <p className="text-xs font-medium text-[#5A6B7A] mb-1">Required Documents:</p>
                         <div className="flex flex-wrap gap-1">
                           {step.requiredDocs.map((doc, di) => (
-                            <span key={di} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-blue-50 text-blue-700">
+                            <span key={di} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-[#EEF4F8] text-blue-700">
                               <FileCheck className="w-3 h-3 mr-1" />{doc}
                             </span>
                           ))}
@@ -1245,15 +1245,15 @@ function EnrollmentTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-800">Payer Enrollment Pipeline</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733]">Payer Enrollment Pipeline</h3>
         <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Start New Enrollment
         </Button>
       </div>
 
       {/* AI Enrollment Wizard Links */}
-      <Card className="p-3 bg-blue-50 border-blue-200">
-        <p className="text-xs font-semibold text-blue-800 mb-2">AI-Guided Enrollment Wizards</p>
+      <Card className="p-3 bg-[#EEF4F8] border-[#C8DDE8]">
+        <p className="text-xs font-semibold text-[#4A6478] mb-2">AI-Guided Enrollment Wizards</p>
         <div className="flex flex-wrap gap-2">
           {PAYER_WORKFLOWS.map((wf) => (
             <Button
@@ -1272,8 +1272,8 @@ function EnrollmentTab() {
       {enrollments.length === 0 && (
         <Card className="p-6 text-center">
           <Building2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-          <p className="text-sm font-medium text-slate-700">No active enrollments</p>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-sm font-medium text-[#3A4A57]">No active enrollments</p>
+          <p className="text-xs text-[#5A6B7A] mt-1">
             Start a payer application above and Aminy will track it through completion here.
           </p>
         </Card>
@@ -1287,8 +1287,8 @@ function EnrollmentTab() {
           <Card key={enrollment.id} className={`p-4 ${isDenied ? 'border-red-200 bg-red-50' : ''}`}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-slate-500" />
-                <span className="text-sm font-semibold text-slate-800">{enrollment.payerName}</span>
+                <Building2 className="w-4 h-4 text-[#5A6B7A]" />
+                <span className="text-sm font-semibold text-[#1B2733]">{enrollment.payerName}</span>
               </div>
               {statusBadge(enrollment.stage)}
             </div>
@@ -1304,7 +1304,7 @@ function EnrollmentTab() {
                         className={`flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold
                           ${isComplete
                             ? 'bg-emerald-500 text-white'
-                            : 'bg-slate-200 text-slate-500'
+                            : 'bg-[#E8E4DF] text-[#5A6B7A]'
                           }
                           ${isCurrent ? 'ring-2 ring-emerald-300' : ''}`}
                       >
@@ -1313,7 +1313,7 @@ function EnrollmentTab() {
                       {i < ENROLLMENT_STAGES.length - 1 && (
                         <div
                           className={`flex-1 h-1 rounded ${
-                            i < currentStage ? 'bg-emerald-400' : 'bg-slate-200'
+                            i < currentStage ? 'bg-emerald-400' : 'bg-[#E8E4DF]'
                           }`}
                         />
                       )}
@@ -1324,7 +1324,7 @@ function EnrollmentTab() {
             )}
 
             {!isDenied && (
-              <div className="flex items-center justify-between text-xs text-slate-500">
+              <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
                 <div className="flex gap-4">
                   {ENROLLMENT_STAGES.map((stage) => (
                     <span key={stage} className="capitalize">{stage}</span>
@@ -1333,14 +1333,14 @@ function EnrollmentTab() {
               </div>
             )}
 
-            <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
+            <div className="flex items-center justify-between mt-2 text-xs text-[#5A6B7A]">
               <span>Submitted: {enrollment.submittedAt}</span>
               {enrollment.estimatedCompletion && (
                 <span>Est. completion: {enrollment.estimatedCompletion}</span>
               )}
             </div>
             {enrollment.notes && (
-              <p className="text-xs text-slate-500 mt-1 italic">{enrollment.notes}</p>
+              <p className="text-xs text-[#5A6B7A] mt-1 italic">{enrollment.notes}</p>
             )}
             {isDenied && (
               <Button
@@ -1375,7 +1375,7 @@ function RosterTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-800">Active Payer Roster</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733]">Active Payer Roster</h3>
         <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Add Payer
         </Button>
@@ -1385,28 +1385,28 @@ function RosterTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="text-left py-2 px-3 font-semibold text-slate-600">Payer</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-600">Type</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-600">Effective</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-600">Re-Cred</th>
-                <th className="text-left py-2 px-3 font-semibold text-slate-600">Status</th>
+              <tr className="border-b border-[#E8E4DF] bg-[#FAF7F2]">
+                <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Payer</th>
+                <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Type</th>
+                <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Effective</th>
+                <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Re-Cred</th>
+                <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Status</th>
               </tr>
             </thead>
             <tbody>
               {roster.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="py-6 px-3 text-center text-slate-500">
+                  <td colSpan={5} className="py-6 px-3 text-center text-[#5A6B7A]">
                     No active payer contracts yet. Add a payer to build your roster.
                   </td>
                 </tr>
               ) : (
                 roster.map((entry) => (
-                  <tr key={entry.id} className="border-b border-slate-100 last:border-0">
-                    <td className="py-2.5 px-3 font-medium text-slate-700">{entry.payerName}</td>
-                    <td className="py-2.5 px-3 text-slate-500">{entry.contractType}</td>
-                    <td className="py-2.5 px-3 text-slate-500">{entry.effectiveDate}</td>
-                    <td className="py-2.5 px-3 text-slate-500">{entry.recredentialingDate}</td>
+                  <tr key={entry.id} className="border-b border-[#E8E4DF] last:border-0">
+                    <td className="py-2.5 px-3 font-medium text-[#3A4A57]">{entry.payerName}</td>
+                    <td className="py-2.5 px-3 text-[#5A6B7A]">{entry.contractType}</td>
+                    <td className="py-2.5 px-3 text-[#5A6B7A]">{entry.effectiveDate}</td>
+                    <td className="py-2.5 px-3 text-[#5A6B7A]">{entry.recredentialingDate}</td>
                     <td className="py-2.5 px-3">{statusBadge(entry.status)}</td>
                   </tr>
                 ))
@@ -1418,7 +1418,7 @@ function RosterTab() {
 
       {/* Re-credentialing schedule */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-violet-500" />
           Upcoming Re-Credentialing
         </h3>
@@ -1443,7 +1443,7 @@ function RosterTab() {
               </div>
             ))}
           {roster.filter((e) => e.status === 'expiring').length === 0 && (
-            <p className="text-xs text-slate-500">No upcoming re-credentialing deadlines.</p>
+            <p className="text-xs text-[#5A6B7A]">No upcoming re-credentialing deadlines.</p>
           )}
         </div>
       </Card>
@@ -1544,7 +1544,7 @@ function AIPlaybooksTab() {
             setActivePlaybook(null);
             setCurrentNode('start');
           }}
-          className="text-xs text-slate-500"
+          className="text-xs text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
@@ -1552,7 +1552,7 @@ function AIPlaybooksTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Bot className="w-5 h-5 text-violet-500" />
-            <h3 className="text-sm font-semibold text-slate-800">Denial Resolution Guide</h3>
+            <h3 className="text-sm font-semibold text-[#1B2733]">Denial Resolution Guide</h3>
           </div>
 
           <motion.div
@@ -1561,7 +1561,7 @@ function AIPlaybooksTab() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <p className="text-sm text-slate-700 mb-4">{node.text}</p>
+            <p className="text-sm text-[#3A4A57] mb-4">{node.text}</p>
 
             {node.options && (
               <div className="space-y-2">
@@ -1569,7 +1569,7 @@ function AIPlaybooksTab() {
                   <button
                     key={opt.nextId}
                     onClick={() => setCurrentNode(opt.nextId)}
-                    className="w-full text-left px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-700 hover:bg-violet-50 hover:border-violet-300 transition-colors flex items-center justify-between"
+                    className="w-full text-left px-3 py-2.5 rounded-lg border border-[#E8E4DF] text-sm text-[#3A4A57] hover:bg-violet-50 hover:border-violet-300 transition-colors flex items-center justify-between"
                   >
                     {opt.label}
                     <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -1648,14 +1648,14 @@ function AIPlaybooksTab() {
           variant="ghost"
           size="sm"
           onClick={() => setActivePlaybook(null)}
-          className="text-xs text-slate-500"
+          className="text-xs text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-blue-500" />
-            <h3 className="text-sm font-semibold text-slate-800">New Payer Enrollment Wizard</h3>
+            <h3 className="text-sm font-semibold text-[#1B2733]">New Payer Enrollment Wizard</h3>
           </div>
           <div className="space-y-3">
             {['Verify CAQH profile is current', 'Check payer network availability in your state', 'Gather required documents (license, DEA, malpractice)', 'Complete payer-specific application', 'Submit via payer portal or clearinghouse', 'Track application status in Enrollment tab'].map((step, i) => (
@@ -1663,7 +1663,7 @@ function AIPlaybooksTab() {
                 <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold shrink-0">
                   {i + 1}
                 </div>
-                <p className="text-sm text-slate-700 pt-0.5">{step}</p>
+                <p className="text-sm text-[#3A4A57] pt-0.5">{step}</p>
               </div>
             ))}
           </div>
@@ -1691,14 +1691,14 @@ function AIPlaybooksTab() {
           variant="ghost"
           size="sm"
           onClick={() => setActivePlaybook(null)}
-          className="text-xs text-slate-500"
+          className="text-xs text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-5 h-5 text-amber-500" />
-            <h3 className="text-sm font-semibold text-slate-800">Credential Renewal Checklist</h3>
+            <h3 className="text-sm font-semibold text-[#1B2733]">Credential Renewal Checklist</h3>
           </div>
           <div className="space-y-2">
             {[
@@ -1710,10 +1710,10 @@ function AIPlaybooksTab() {
               { task: 'Upload renewed documents to Aminy', timeline: 'Upon receipt' },
               { task: 'Notify payers of updated credentials', timeline: 'Within 30 days' },
             ].map((item, i) => (
-              <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+              <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 rounded border-2 border-slate-300" />
-                  <span className="text-sm text-slate-700">{item.task}</span>
+                  <span className="text-sm text-[#3A4A57]">{item.task}</span>
                 </div>
                 <span className="text-xs text-slate-400 whitespace-nowrap ml-2">{item.timeline}</span>
               </div>
@@ -1729,9 +1729,9 @@ function AIPlaybooksTab() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-1">
         <Bot className="w-5 h-5 text-violet-500" />
-        <h3 className="text-sm font-semibold text-slate-800">AI-Guided Playbooks</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733]">AI-Guided Playbooks</h3>
       </div>
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-[#5A6B7A]">
         Interactive decision trees to help you navigate common credentialing and billing scenarios.
       </p>
       <div className="space-y-3">
@@ -1748,8 +1748,8 @@ function AIPlaybooksTab() {
               <div className="flex items-center gap-3">
                 {pb.icon}
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-slate-800">{pb.title}</p>
-                  <p className="text-xs text-slate-500">{pb.description}</p>
+                  <p className="text-sm font-semibold text-[#1B2733]">{pb.title}</p>
+                  <p className="text-xs text-[#5A6B7A]">{pb.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400" />
               </div>
@@ -1792,22 +1792,22 @@ function ClaimQueueTab() {
       <div className="grid grid-cols-3 gap-2">
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-emerald-600">{readyCount}</p>
-          <p className="text-xs text-slate-500">Ready</p>
+          <p className="text-xs text-[#5A6B7A]">Ready</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-amber-600">{warningCount}</p>
-          <p className="text-xs text-slate-500">Warnings</p>
+          <p className="text-xs text-[#5A6B7A]">Warnings</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-red-600">{errorCount}</p>
-          <p className="text-xs text-slate-500">Errors</p>
+          <p className="text-xs text-[#5A6B7A]">Errors</p>
         </Card>
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-slate-500">
-            Total pending: <span className="font-semibold text-slate-700">${totalAmount.toLocaleString()}</span>
+          <p className="text-xs text-[#5A6B7A]">
+            Total pending: <span className="font-semibold text-[#3A4A57]">${totalAmount.toLocaleString()}</span>
           </p>
         </div>
         <div className="flex gap-2">
@@ -1830,8 +1830,8 @@ function ClaimQueueTab() {
         {claims.length === 0 && (
           <Card className="p-6 text-center">
             <Receipt className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm font-medium text-slate-700">No claims in the queue</p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-sm font-medium text-[#3A4A57]">No claims in the queue</p>
+            <p className="text-xs text-[#5A6B7A] mt-1">
               Completed sessions ready for billing will appear here for validation and submission.
             </p>
           </Card>
@@ -1854,14 +1854,14 @@ function ClaimQueueTab() {
               <div className="flex items-center gap-2">
                 {statusIcon(claim.validationStatus)}
                 <div>
-                  <p className="text-sm font-medium text-slate-700">{claim.patientName}</p>
+                  <p className="text-sm font-medium text-[#3A4A57]">{claim.patientName}</p>
                   <p className="text-xs text-slate-400">
                     {claim.dateOfService} &middot; {claim.cptCode} &middot; {claim.payer}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-slate-700">${claim.amount}</p>
+                <p className="text-sm font-semibold text-[#3A4A57]">${claim.amount}</p>
                 {claim.validationMessage && (
                   <p className={`text-xs ${claim.validationStatus === 'error' ? 'text-red-500' : 'text-amber-500'}`}>
                     {claim.validationMessage}
@@ -1918,8 +1918,8 @@ function DenialOpsTab() {
     return (
       <Card className="p-6 text-center">
         <BarChart3 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-        <p className="text-sm font-medium text-slate-700">No denials to work</p>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-sm font-medium text-[#3A4A57]">No denials to work</p>
+        <p className="text-xs text-[#5A6B7A] mt-1">
           When a claim is denied, Aminy categorizes it here and helps you appeal before the deadline.
         </p>
       </Card>
@@ -1932,22 +1932,22 @@ function DenialOpsTab() {
       <div className="grid grid-cols-3 gap-2">
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-red-600">${totalDenied.toLocaleString()}</p>
-          <p className="text-xs text-slate-500">Total Denied</p>
+          <p className="text-xs text-[#5A6B7A]">Total Denied</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-violet-600">${recoverableAmount.toLocaleString()}</p>
-          <p className="text-xs text-slate-500">Recoverable</p>
+          <p className="text-xs text-[#5A6B7A]">Recoverable</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-amber-600">{urgentAppeals.length}</p>
-          <p className="text-xs text-slate-500">Urgent Appeals</p>
+          <p className="text-xs text-[#5A6B7A]">Urgent Appeals</p>
         </Card>
       </div>
 
       {/* Category Breakdown */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
-          <BarChart3 className="w-4 h-4 text-slate-500" />
+        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-[#5A6B7A]" />
           Denial Categories
         </h3>
         <div className="space-y-2">
@@ -1960,11 +1960,11 @@ function DenialOpsTab() {
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: CATEGORY_DOT_HEX[meta.color] || '#64748b' }}
                   />
-                  <span className="text-xs text-slate-700">{meta.label}</span>
+                  <span className="text-xs text-[#3A4A57]">{meta.label}</span>
                   <span className="text-xs text-slate-400">({data.count})</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-slate-700">${data.amount}</span>
+                  <span className="text-xs font-medium text-[#3A4A57]">${data.amount}</span>
                   <span className="text-xs text-emerald-600">{meta.avgSuccessRate}% win rate</span>
                 </div>
               </div>
@@ -1975,7 +1975,7 @@ function DenialOpsTab() {
 
       {/* Individual Denials */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-slate-800">Active Denials</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733]">Active Denials</h3>
         {denials.map((denial) => {
           const meta = DENIAL_CATEGORY_META[denial.denialCategory] || DENIAL_CATEGORY_META['other'];
           const isExpanded = expandedDenial === denial.id;
@@ -1995,7 +1995,7 @@ function DenialOpsTab() {
                     {statusIcon(denial.status)}
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-slate-700">{denial.patientName}</p>
+                        <p className="text-sm font-medium text-[#3A4A57]">{denial.patientName}</p>
                         {statusBadge(denial.status)}
                       </div>
                       <p className="text-xs text-slate-400">
@@ -2005,7 +2005,7 @@ function DenialOpsTab() {
                   </div>
                   <div className="text-right flex items-center gap-2">
                     <div>
-                      <p className="text-sm font-semibold text-slate-700">${denial.amount}</p>
+                      <p className="text-sm font-semibold text-[#3A4A57]">${denial.amount}</p>
                       <p className={`text-xs ${isUrgent ? 'text-amber-600 font-medium' : 'text-slate-400'}`}>
                         {denial.daysUntilDeadline}d to appeal
                       </p>
@@ -2028,31 +2028,31 @@ function DenialOpsTab() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-3 pb-3 border-t border-slate-100 pt-3 space-y-3">
+                    <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-3 space-y-3">
                       {/* Details */}
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div>
                           <p className="text-slate-400">Claim ID</p>
-                          <p className="text-slate-700 font-medium">{denial.claimId}</p>
+                          <p className="text-[#3A4A57] font-medium">{denial.claimId}</p>
                         </div>
                         <div>
                           <p className="text-slate-400">Date of Service</p>
-                          <p className="text-slate-700 font-medium">{denial.dateOfService}</p>
+                          <p className="text-[#3A4A57] font-medium">{denial.dateOfService}</p>
                         </div>
                         <div>
                           <p className="text-slate-400">Denied On</p>
-                          <p className="text-slate-700 font-medium">{denial.deniedAt}</p>
+                          <p className="text-[#3A4A57] font-medium">{denial.deniedAt}</p>
                         </div>
                         <div>
                           <p className="text-slate-400">Appeal Deadline</p>
-                          <p className={`font-medium ${isUrgent ? 'text-amber-700' : 'text-slate-700'}`}>{denial.appealDeadline}</p>
+                          <p className={`font-medium ${isUrgent ? 'text-amber-700' : 'text-[#3A4A57]'}`}>{denial.appealDeadline}</p>
                         </div>
                       </div>
 
                       {/* Success Probability */}
-                      <div className="p-2 rounded bg-slate-50">
+                      <div className="p-2 rounded bg-[#FAF7F2]">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-slate-500">AI Appeal Success Estimate</span>
+                          <span className="text-xs text-[#5A6B7A]">AI Appeal Success Estimate</span>
                           <span className={`text-xs font-bold ${
                             denial.successProbability >= 70 ? 'text-emerald-600' :
                             denial.successProbability >= 40 ? 'text-amber-600' : 'text-red-600'
@@ -2144,19 +2144,19 @@ function StatusDashboardTab() {
       <div className="grid grid-cols-4 gap-2">
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-emerald-600">{approved}</p>
-          <p className="text-xs text-slate-500">Active</p>
+          <p className="text-xs text-[#5A6B7A]">Active</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-blue-600">{pending}</p>
-          <p className="text-xs text-slate-500">Pending</p>
+          <p className="text-xs text-[#5A6B7A]">Pending</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-red-600">{rejected}</p>
-          <p className="text-xs text-slate-500">Rejected</p>
+          <p className="text-xs text-[#5A6B7A]">Rejected</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-amber-600">{reCredDue}</p>
-          <p className="text-xs text-slate-500">Re-Cred</p>
+          <p className="text-xs text-[#5A6B7A]">Re-Cred</p>
         </Card>
       </div>
 
@@ -2184,12 +2184,12 @@ function StatusDashboardTab() {
 
       {/* Per-Payer Status */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-slate-800">Enrollment Status by Payer</h3>
+        <h3 className="text-sm font-semibold text-[#1B2733]">Enrollment Status by Payer</h3>
         {entries.length === 0 && (
           <Card className="p-6 text-center">
             <Gauge className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm font-medium text-slate-700">No enrollments to track yet</p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-sm font-medium text-[#3A4A57]">No enrollments to track yet</p>
+            <p className="text-xs text-[#5A6B7A] mt-1">
               Once you submit payer applications, their status and re-credentialing dates show up here.
             </p>
           </Card>
@@ -2199,7 +2199,7 @@ function StatusDashboardTab() {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 {statusIcon(entry.enrollmentStatus)}
-                <span className="text-sm font-medium text-slate-700">{entry.payerName}</span>
+                <span className="text-sm font-medium text-[#3A4A57]">{entry.payerName}</span>
               </div>
               {statusBadge(entry.enrollmentStatus)}
             </div>
@@ -2207,16 +2207,16 @@ function StatusDashboardTab() {
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-400">Days since submission:</span>
-                <span className="text-slate-700 font-medium">{entry.daysSinceSubmission}d</span>
+                <span className="text-[#3A4A57] font-medium">{entry.daysSinceSubmission}d</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Last updated:</span>
-                <span className="text-slate-700 font-medium">{entry.lastUpdated}</span>
+                <span className="text-[#3A4A57] font-medium">{entry.lastUpdated}</span>
               </div>
               {entry.reCredentialingDate && (
                 <div className="flex justify-between col-span-2">
                   <span className="text-slate-400">Re-credentialing due:</span>
-                  <span className={`font-medium ${entry.enrollmentStatus === 're-credentialing-due' ? 'text-amber-700' : 'text-slate-700'}`}>
+                  <span className={`font-medium ${entry.enrollmentStatus === 're-credentialing-due' ? 'text-amber-700' : 'text-[#3A4A57]'}`}>
                     {entry.reCredentialingDate}
                   </span>
                 </div>
@@ -2224,7 +2224,7 @@ function StatusDashboardTab() {
             </div>
 
             {entry.nextAction && (
-              <div className="mt-2 p-2 rounded bg-slate-50 text-xs text-slate-600">
+              <div className="mt-2 p-2 rounded bg-[#FAF7F2] text-xs text-[#5A6B7A]">
                 <span className="font-medium">Next action:</span> {entry.nextAction}
               </div>
             )}
@@ -2234,11 +2234,11 @@ function StatusDashboardTab() {
 
       {/* Re-Credentialing Calendar */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-slate-800 mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-violet-500" />
           Re-Credentialing Calendar
         </h3>
-        <p className="text-xs text-slate-500 mb-3">
+        <p className="text-xs text-[#5A6B7A] mb-3">
           Most payers require re-credentialing every 3 years. Start the process 90 days before the due date.
         </p>
         <div className="space-y-2">
@@ -2251,7 +2251,7 @@ function StatusDashboardTab() {
                 className={`flex items-center justify-between py-2 px-3 rounded-lg border ${
                   entry.enrollmentStatus === 're-credentialing-due'
                     ? 'bg-amber-50 border-amber-200'
-                    : 'bg-slate-50 border-slate-200'
+                    : 'bg-[#FAF7F2] border-[#E8E4DF]'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -2261,8 +2261,8 @@ function StatusDashboardTab() {
                     <Calendar className="w-4 h-4 text-slate-400" />
                   )}
                   <div>
-                    <p className="text-sm font-medium text-slate-700">{entry.payerName}</p>
-                    <p className="text-xs text-slate-500">Due: {entry.reCredentialingDate}</p>
+                    <p className="text-sm font-medium text-[#3A4A57]">{entry.payerName}</p>
+                    <p className="text-xs text-[#5A6B7A]">Due: {entry.reCredentialingDate}</p>
                   </div>
                 </div>
                 {entry.enrollmentStatus === 're-credentialing-due' && (
@@ -2311,7 +2311,7 @@ function HelpTab() {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-violet-500" />
-          <h3 className="text-sm font-semibold text-slate-800">AI Credentialing Assistant</h3>
+          <h3 className="text-sm font-semibold text-[#1B2733]">AI Credentialing Assistant</h3>
         </div>
         <div className="flex gap-2">
           <Input
@@ -2335,7 +2335,7 @@ function HelpTab() {
       {/* FAQ */}
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2 px-1">
-          <h3 className="text-sm font-semibold text-slate-800">Frequently Asked Questions</h3>
+          <h3 className="text-sm font-semibold text-[#1B2733]">Frequently Asked Questions</h3>
         </div>
         <div className="relative">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -2352,7 +2352,7 @@ function HelpTab() {
               onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
               className="w-full text-left p-3 flex items-center justify-between"
             >
-              <span className="text-sm text-slate-700 pr-4">{faq.question}</span>
+              <span className="text-sm text-[#3A4A57] pr-4">{faq.question}</span>
               {expandedFaq === i ? (
                 <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
               ) : (
@@ -2368,7 +2368,7 @@ function HelpTab() {
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-3 pb-3 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                  <div className="px-3 pb-3 text-xs text-[#5A6B7A] leading-relaxed border-t border-[#E8E4DF] pt-2">
                     {faq.answer}
                   </div>
                 </motion.div>
@@ -2396,8 +2396,8 @@ function HelpTab() {
       </div>
 
       {/* Contact Support */}
-      <Card className="p-4 bg-slate-50">
-        <h3 className="text-sm font-semibold text-slate-800 mb-2">Need More Help?</h3>
+      <Card className="p-4 bg-[#FAF7F2]">
+        <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Need More Help?</h3>
         <div className="space-y-2">
           <Button
             variant="outline"
@@ -2475,7 +2475,7 @@ export default function CredentialingSupportCenter({
   void providerName;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20">
+    <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
       <ScreenHeader
         title="Credentialing Center"
@@ -2485,7 +2485,7 @@ export default function CredentialingSupportCenter({
       />
 
       {/* Tab Bar */}
-      <div className="bg-white border-b border-slate-200 px-4 pb-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 pb-3">
         <div className="flex overflow-x-auto gap-1 -mx-1 px-1 pb-1 scrollbar-hide">
           {TABS.map((tab) => {
             const badge = tabBadges[tab.id];
@@ -2497,7 +2497,7 @@ export default function CredentialingSupportCenter({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-slate-900 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                 }`}
               >
                 {tab.icon}
@@ -2505,7 +2505,7 @@ export default function CredentialingSupportCenter({
                 {badge != null && badge > 0 && (
                   <span
                     className={`ml-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center ${
-                      isActive ? 'bg-white text-slate-900' : 'bg-red-500 text-white'
+                      isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
                     }`}
                   >
                     {badge}

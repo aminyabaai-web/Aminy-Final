@@ -144,19 +144,19 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
       style={{ overflowX: 'hidden', overflowY: 'auto' }}
     >
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors"
             >
-              <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-[#6B9080]" />
-            <span className="text-base font-bold text-slate-900">
+            <span className="text-base font-bold text-[#1B2733]">
               Aminy for Payers
             </span>
           </div>
@@ -179,10 +179,10 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           <Badge className="bg-slate-900 text-white border-transparent mb-4 text-xs px-3 py-1">
             Behavioral Health Network
           </Badge>
-          <h1 className="text-2xl font-bold text-slate-900 mb-3 leading-tight">
+          <h1 className="text-2xl font-bold text-[#1B2733] mb-3 leading-tight">
             Partner with Aminy — Reduce Behavioral Health Costs Through Early Intervention
           </h1>
-          <p className="text-slate-500 text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="text-[#5A6B7A] text-sm leading-relaxed max-w-lg mx-auto">
             Aminy connects families to credentialed behavioral health providers — ABA, mental health, and speech — with built-in EVV, prior auth coordination, and real-time outcomes tracking. Built for payers who want to show cost-offset data, not just clinical noise.
           </p>
           <div className="flex gap-3 justify-center mt-6">
@@ -194,7 +194,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-1.5 border border-slate-200 text-slate-700 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-slate-50 transition-colors"
+              className="inline-flex items-center gap-1.5 border border-[#E8E4DF] text-[#3A4A57] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#FAF7F2] transition-colors"
             >
               See Features
             </a>
@@ -209,9 +209,9 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           className="grid grid-cols-3 gap-3 mb-10"
         >
           {STATS.map((stat) => (
-            <Card key={stat.label} className="p-4 text-center border border-slate-100">
+            <Card key={stat.label} className="p-4 text-center border border-[#E8E4DF]">
               <p className="text-2xl font-bold text-[#6B9080] mb-0.5">{stat.value}</p>
-              <p className="text-xs text-slate-600 font-medium mb-1">{stat.label}</p>
+              <p className="text-xs text-[#5A6B7A] font-medium mb-1">{stat.label}</p>
               <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
                 {stat.note}
               </Badge>
@@ -226,16 +226,16 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           transition={{ duration: 0.45, delay: 0.15 }}
           className="space-y-4 mb-10"
         >
-          <h2 className="text-lg font-bold text-slate-900">Why Aminy for Your Network</h2>
+          <h2 className="text-lg font-bold text-[#1B2733]">Why Aminy for Your Network</h2>
           {VALUE_PROPS.map((vp) => (
-            <Card key={vp.headline} className="p-4 border border-slate-100">
+            <Card key={vp.headline} className="p-4 border border-[#E8E4DF]">
               <div className="flex gap-3">
                 <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center">
                   <vp.icon className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900 mb-1">{vp.headline}</p>
-                  <p className="text-xs text-slate-500 leading-relaxed">{vp.body}</p>
+                  <p className="text-sm font-bold text-[#1B2733] mb-1">{vp.headline}</p>
+                  <p className="text-xs text-[#5A6B7A] leading-relaxed">{vp.body}</p>
                 </div>
               </div>
             </Card>
@@ -250,14 +250,14 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           transition={{ duration: 0.45, delay: 0.2 }}
           className="mb-10"
         >
-          <h2 className="text-lg font-bold text-slate-900 mb-4">For Payers</h2>
+          <h2 className="text-lg font-bold text-[#1B2733] mb-4">For Payers</h2>
           <div className="space-y-2.5">
             {FEATURES.map((f) => (
               <div key={f.text} className="flex items-start gap-3">
                 <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
                   <CheckCircle className="w-3 h-3 text-[#6B9080]" />
                 </div>
-                <p className="text-sm text-slate-700">{f.text}</p>
+                <p className="text-sm text-[#3A4A57]">{f.text}</p>
               </div>
             ))}
           </div>
@@ -270,14 +270,14 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25 }}
         >
-          <Card className="p-5 border border-teal-100 bg-[#6B9080]/10">
+          <Card className="p-5 border border-[#E8E4DF] bg-[#6B9080]/10">
             {submitted ? (
               <div className="text-center py-6">
                 <CheckCircle className="w-10 h-10 text-[#6B9080] mx-auto mb-3" />
-                <h3 className="text-base font-bold text-slate-900 mb-1">
+                <h3 className="text-base font-bold text-[#1B2733] mb-1">
                   Request received!
                 </h3>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-[#5A6B7A]">
                   Our partnerships team will reach out within 1 business day.
                   <br />
                   Questions? Email{' '}
@@ -290,7 +290,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
               <>
                 <div className="flex items-center gap-2 mb-4">
                   <Phone className="w-4 h-4 text-[#6B9080]" />
-                  <h3 className="text-base font-bold text-slate-900">
+                  <h3 className="text-base font-bold text-[#1B2733]">
                     Schedule a Payer Partnership Call
                   </h3>
                 </div>
@@ -298,7 +298,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                         Name <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -308,11 +308,11 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="Jane Smith"
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                         Organization <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -325,13 +325,13 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           }))
                         }
                         placeholder="Acme Health Plan"
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                       Payer type
                     </label>
                     <div className="grid grid-cols-4 gap-1.5">
@@ -352,7 +352,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                             form.payerType === opt.id
                               ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-[#6B9080]/20'
+                              : 'border-[#E8E4DF] bg-white text-[#5A6B7A] hover:border-[#6B9080]/20'
                           }`}
                         >
                           {opt.label}
@@ -363,7 +363,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                         Email <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -373,11 +373,11 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, email: e.target.value }))
                         }
                         placeholder="jane@example.com"
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-slate-700 mb-1">
+                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                         Phone
                       </label>
                       <input
@@ -387,13 +387,13 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, phone: e.target.value }))
                         }
                         placeholder="(602) 555-0100"
-                        className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                    <label className="block text-xs font-medium text-[#3A4A57] mb-1">
                       Notes (optional)
                     </label>
                     <textarea
@@ -403,7 +403,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                       }
                       placeholder="Tell us about your network, member population, or specific use case..."
                       rows={3}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent resize-none"
                     />
                   </div>
 

@@ -97,21 +97,21 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-900">BCBA/RBT Session Notes</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">BCBA/RBT Session Notes</h3>
         <Badge variant="outline" className="text-xs">
           Auto-saved to Vault
         </Badge>
       </div>
 
       {/* Client Info */}
-      <Card className="p-4 bg-[#FAF7F2] border-gray-200">
+      <Card className="p-4 bg-[#FAF7F2] border-[#E8E4DF]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div>
-            <Label className="text-xs text-gray-600">Client Name</Label>
+            <Label className="text-xs text-[#5A6B7A]">Client Name</Label>
             <Input value={childName} readOnly className="bg-white" />
           </div>
           <div>
-            <Label className="text-xs text-gray-600">Date & Time</Label>
+            <Label className="text-xs text-[#5A6B7A]">Date & Time</Label>
             <Input type="datetime-local" className="bg-white" />
           </div>
         </div>
@@ -119,7 +119,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
 
       {/* Quick Taps */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-gray-900">Session Status</Label>
+        <Label className="text-sm font-semibold text-[#1B2733]">Session Status</Label>
         <div className="flex gap-2 flex-wrap">
           {quickTaps.map((tap) => (
             <Button
@@ -139,7 +139,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Reason Chips (shown if "Couldn't do" is selected) */}
       {selectedQuickTap === 'couldnt-do' && (
         <div className="space-y-3">
-          <Label className="text-sm font-semibold text-gray-900">Reason</Label>
+          <Label className="text-sm font-semibold text-[#1B2733]">Reason</Label>
           <div className="flex gap-2 flex-wrap">
             {reasonChips.map((reason) => (
               <Badge
@@ -162,7 +162,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Session Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <Label htmlFor="goal" className="text-sm font-semibold text-gray-900">Goal</Label>
+          <Label htmlFor="goal" className="text-sm font-semibold text-[#1B2733]">Goal</Label>
           <Textarea
             id="goal"
             rows={3}
@@ -174,7 +174,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="prompting" className="text-sm font-semibold text-gray-900">Prompting level</Label>
+          <Label htmlFor="prompting" className="text-sm font-semibold text-[#1B2733]">Prompting level</Label>
           <Textarea
             id="prompting"
             rows={3}
@@ -186,7 +186,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="mastery" className="text-sm font-semibold text-gray-900">Mastery criteria</Label>
+          <Label htmlFor="mastery" className="text-sm font-semibold text-[#1B2733]">Mastery criteria</Label>
           <Textarea
             id="mastery"
             rows={3}
@@ -198,7 +198,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="trials" className="text-sm font-semibold text-gray-900">Trials</Label>
+          <Label htmlFor="trials" className="text-sm font-semibold text-[#1B2733]">Trials</Label>
           <Textarea
             id="trials"
             rows={3}
@@ -213,7 +213,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Full Width Fields */}
       <div className="space-y-3 sm:space-y-4">
         <div>
-          <Label htmlFor="abc" className="text-sm font-semibold text-gray-900">ABC events</Label>
+          <Label htmlFor="abc" className="text-sm font-semibold text-[#1B2733]">ABC events</Label>
           <Textarea
             id="abc"
             rows={4}
@@ -225,7 +225,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="dosage" className="text-sm font-semibold text-gray-900">Dosage</Label>
+          <Label htmlFor="dosage" className="text-sm font-semibold text-[#1B2733]">Dosage</Label>
           <Textarea
             id="dosage"
             rows={2}
@@ -266,7 +266,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       )}
 
       {/* Storage Note */}
-      <Card className="p-3 bg-blue-50 border-blue-200">
+      <Card className="p-3 bg-[#EEF4F8] border-[#C8DDE8]">
         <div className="flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
           <p className="text-xs text-blue-700">

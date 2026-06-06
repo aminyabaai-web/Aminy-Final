@@ -105,7 +105,7 @@ export function DevicePairingFlow({
       case 'active': return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'inactive': return <XCircle className="w-4 h-4 text-red-600" />;
       case 'pending': return <Clock className="w-4 h-4 text-amber-600" />;
-      default: return <Clock className="w-4 h-4 text-slate-500" />;
+      default: return <Clock className="w-4 h-4 text-[#5A6B7A]" />;
     }
   };
 
@@ -114,7 +114,7 @@ export function DevicePairingFlow({
       case 'active': return 'bg-green-50 text-green-700 border-green-200';
       case 'inactive': return 'bg-red-50 text-red-700 border-red-200';
       case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
-      default: return 'bg-slate-50 text-slate-700 border-slate-200';
+      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -218,10 +218,10 @@ export function DevicePairingFlow({
         <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Wifi className="w-8 h-8 text-blue-600 dark:text-blue-400" />
         </div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
           Connect {safeChildName}'s Device
         </h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+        <p className="text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
           Pair your child's device to open Aminy Ease for calm tools, rewards, and transitions.
         </p>
       </div>
@@ -234,8 +234,8 @@ export function DevicePairingFlow({
               <QrCode className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">Scan QR Code</h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <h3 className="font-semibold text-[#1B2733] dark:text-slate-100">Scan QR Code</h3>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Fastest way to connect
               </p>
             </div>
@@ -257,8 +257,8 @@ export function DevicePairingFlow({
               <Settings className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">Enter Pairing Code</h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <h3 className="font-semibold text-[#1B2733] dark:text-slate-100">Enter Pairing Code</h3>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Manual setup option
               </p>
             </div>
@@ -270,18 +270,18 @@ export function DevicePairingFlow({
       {/* Current Devices */}
       {pairedDevices.length > 0 && (
         <div className="max-w-2xl mx-auto">
-          <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Connected Devices</h3>
+          <h3 className="font-semibold text-[#1B2733] dark:text-slate-100 mb-4">Connected Devices</h3>
           <div className="space-y-3">
             {pairedDevices.map((device) => (
               <Card key={device.id} className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
                       {getDeviceIcon(device.type)}
                     </div>
                     <div>
-                      <h4 className="font-medium text-slate-900 dark:text-slate-100">{device.name}</h4>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Last seen: {device.lastSeen}</p>
+                      <h4 className="font-medium text-[#1B2733] dark:text-slate-100">{device.name}</h4>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Last seen: {device.lastSeen}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
@@ -310,13 +310,13 @@ export function DevicePairingFlow({
       {/* Benefits */}
       <Card className="max-w-2xl mx-auto">
         <div className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">Benefits of Device Pairing</h3>
+          <h3 className="font-semibold text-[#1B2733] dark:text-slate-100 mb-4">Benefits of Device Pairing</h3>
           <div className="grid gap-3 sm:gap-4">
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
-                <h4 className="font-medium text-slate-900 dark:text-slate-100">Safe & Secure</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h4 className="font-medium text-[#1B2733] dark:text-slate-100">Safe & Secure</h4>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Kid-friendly interface with parental controls and privacy protection
                 </p>
               </div>
@@ -324,8 +324,8 @@ export function DevicePairingFlow({
             <div className="flex items-start gap-3">
               <Zap className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <h4 className="font-medium text-slate-900 dark:text-slate-100">Progress Tracking</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h4 className="font-medium text-[#1B2733] dark:text-slate-100">Progress Tracking</h4>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Automatic activity completion and skill development insights
                 </p>
               </div>
@@ -333,8 +333,8 @@ export function DevicePairingFlow({
             <div className="flex items-start gap-3">
               <Users className="w-5 h-5 text-purple-600 mt-0.5" />
               <div>
-                <h4 className="font-medium text-slate-900 dark:text-slate-100">Family Connection</h4>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <h4 className="font-medium text-[#1B2733] dark:text-slate-100">Family Connection</h4>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Share achievements and milestones with your care team
                 </p>
               </div>
@@ -356,19 +356,19 @@ export function DevicePairingFlow({
       </div>
       
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
           Scanning for Device
         </h2>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-[#5A6B7A] dark:text-slate-400">
           Hold your camera steady and point it at the QR code displayed on {safeChildName}'s device.
         </p>
       </div>
 
-      <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-4">
+      <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg p-4">
         <div className="w-24 h-24 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg mx-auto flex items-center justify-center">
-          <Search className="w-8 h-8 text-slate-400 dark:text-slate-500" />
+          <Search className="w-8 h-8 text-slate-400 dark:text-[#5A6B7A]" />
         </div>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Looking for QR code...</p>
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-2">Looking for QR code...</p>
       </div>
 
       <div className="flex gap-3">
@@ -397,10 +397,10 @@ export function DevicePairingFlow({
         <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Settings className="w-8 h-8 text-purple-600 dark:text-purple-400" />
         </div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
           Enter Pairing Code
         </h2>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-[#5A6B7A] dark:text-slate-400">
           Find the 6-character code on {safeChildName}'s device and enter it below.
         </p>
       </div>
@@ -408,7 +408,7 @@ export function DevicePairingFlow({
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3 sm:space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-2">
               Pairing Code
             </label>
             <div className="relative">
@@ -436,13 +436,13 @@ export function DevicePairingFlow({
             </div>
           </div>
 
-          <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <Card className="bg-[#EEF4F8] dark:bg-blue-900/20 border-[#C8DDE8] dark:border-blue-800">
             <div className="p-3 sm:p-4">
               <div className="flex items-start gap-3">
                 <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                 <div>
                   <h4 className="font-medium text-blue-900 dark:text-blue-100">Where to find the code</h4>
-                  <ol className="text-sm text-blue-800 dark:text-blue-200 mt-2 space-y-1">
+                  <ol className="text-sm text-[#4A6478] dark:text-blue-200 mt-2 space-y-1">
                     <li>1. Open Aminy Jr app on the device</li>
                     <li>2. Go to Settings → Connect to Parent</li>
                     <li>3. The code appears on screen</li>
@@ -482,16 +482,16 @@ export function DevicePairingFlow({
       </div>
       
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
           Pairing Device
         </h2>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-[#5A6B7A] dark:text-slate-400">
           Establishing secure connection with {safeChildName}'s device...
         </p>
       </div>
 
       <Progress value={75} className="w-full" />
-      <p className="text-sm text-slate-500 dark:text-slate-400">This may take a few moments</p>
+      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">This may take a few moments</p>
     </div>
   );
 
@@ -502,10 +502,10 @@ export function DevicePairingFlow({
       </div>
       
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
           Device Connected!
         </h2>
-        <p className="text-slate-600 dark:text-slate-400">
+        <p className="text-[#5A6B7A] dark:text-slate-400">
           {safeChildName}'s device is now paired and ready to use with Aminy Ease.
         </p>
       </div>
@@ -543,7 +543,7 @@ export function DevicePairingFlow({
   return (
     <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -551,8 +551,8 @@ export function DevicePairingFlow({
                 <Wifi className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h1 className="text-xl text-slate-900 dark:text-slate-100">Device Pairing</h1>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Connect {safeChildName}'s device</p>
+                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Device Pairing</h1>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Connect {safeChildName}'s device</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -560,7 +560,7 @@ export function DevicePairingFlow({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowUrgentHelp(true)}
-                className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <Bell className="w-4 h-4" />
               </Button>

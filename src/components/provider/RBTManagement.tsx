@@ -182,8 +182,8 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             onClick={() => setActiveView(tab.id)}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
               activeView === tab.id
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-500 hover:text-gray-700'
+                ? 'bg-white text-[#1B2733] shadow-sm'
+                : 'text-[#5A6B7A] hover:text-[#3A4A57]'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -194,13 +194,13 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
       {/* Stats Summary */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-          <p className="text-2xl font-bold text-gray-900">{totalRBTs}</p>
-          <p className="text-xs text-gray-500">Active RBTs</p>
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
+          <p className="text-2xl font-bold text-[#1B2733]">{totalRBTs}</p>
+          <p className="text-xs text-[#5A6B7A]">Active RBTs</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-          <p className="text-2xl font-bold text-gray-900">{totalPending}</p>
-          <p className="text-xs text-gray-500">Pending</p>
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
+          <p className="text-2xl font-bold text-[#1B2733]">{totalPending}</p>
+          <p className="text-xs text-[#5A6B7A]">Pending</p>
         </div>
         <div className={`rounded-xl border p-4 text-center ${
           nonCompliantCount > 0 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
@@ -208,7 +208,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           <p className={`text-2xl font-bold ${nonCompliantCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
             {nonCompliantCount}
           </p>
-          <p className="text-xs text-gray-500">Non-Compliant</p>
+          <p className="text-xs text-[#5A6B7A]">Non-Compliant</p>
         </div>
       </div>
 
@@ -216,10 +216,10 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'roster' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">RBT Roster</h3>
+            <h3 className="font-semibold text-[#1B2733]">RBT Roster</h3>
             <button
               onClick={() => setShowInviteForm(!showInviteForm)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+              className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
             >
               <UserPlus className="w-4 h-4" /> Invite RBT
             </button>
@@ -234,28 +234,28 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="Full Name"
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
                 />
                 <input
                   type="email"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="Email"
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
                 />
                 <input
                   type="text"
                   value={inviteCert}
                   onChange={(e) => setInviteCert(e.target.value)}
                   placeholder="RBT Cert #"
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={inviteRBT} className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700">
+                <button onClick={inviteRBT} className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
                   Send Invite
                 </button>
-                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -264,10 +264,10 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
           {/* RBT List */}
           {data.rbts.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
-              <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="font-medium text-gray-600">No RBTs yet</p>
-              <p className="text-sm text-gray-400 mt-1">Invite RBTs to manage your practice roster</p>
+            <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
+              <Users className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
+              <p className="font-medium text-[#5A6B7A]">No RBTs yet</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">Invite RBTs to manage your practice roster</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -276,19 +276,19 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 const isExpanded = expandedRbt === rbt.id;
 
                 return (
-                  <div key={rbt.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                  <div key={rbt.id} className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
                     <button
                       onClick={() => setExpandedRbt(isExpanded ? null : rbt.id)}
                       className="w-full p-4 flex items-center gap-3 text-left"
                     >
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold ${
-                        rbt.status === 'active' ? 'bg-cyan-600' : 'bg-gray-400'
+                        rbt.status === 'active' ? 'bg-[#6B9080]' : 'bg-gray-400'
                       }`}>
                         {rbt.name[0]}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 truncate">{rbt.name}</p>
-                        <p className="text-xs text-gray-500">{rbt.email}</p>
+                        <p className="font-medium text-[#1B2733] truncate">{rbt.name}</p>
+                        <p className="text-xs text-[#5A6B7A]">{rbt.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {rbt.status === 'pending' && (
@@ -301,27 +301,27 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                             <AlertTriangle className="w-4 h-4 text-red-500" />
                           )
                         )}
-                        {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
+                        {isExpanded ? <ChevronDown className="w-4 h-4 text-[#8A9BA8]" /> : <ChevronRight className="w-4 h-4 text-[#8A9BA8]" />}
                       </div>
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t border-gray-100 p-4 bg-[#FAF7F2] space-y-3">
+                      <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div>
-                            <p className="text-gray-500">Cert #</p>
+                            <p className="text-[#5A6B7A]">Cert #</p>
                             <p className="font-medium">{rbt.certificationNumber || 'Not set'}</p>
                           </div>
                           <div>
-                            <p className="text-gray-500">Direct Hours</p>
+                            <p className="text-[#5A6B7A]">Direct Hours</p>
                             <p className="font-medium">{rbt.totalDirectHours.toFixed(1)} hrs</p>
                           </div>
                           <div>
-                            <p className="text-gray-500">Supervision Hours</p>
+                            <p className="text-[#5A6B7A]">Supervision Hours</p>
                             <p className="font-medium">{rbt.totalSupervisionHours.toFixed(1)} hrs</p>
                           </div>
                           <div>
-                            <p className="text-gray-500">Supervision Rate</p>
+                            <p className="text-[#5A6B7A]">Supervision Rate</p>
                             <p className={`font-medium ${compliance.isCompliant ? 'text-green-600' : 'text-red-600'}`}>
                               {(compliance.ratio * 100).toFixed(1)}% (min 5%)
                             </p>
@@ -369,20 +369,20 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'supervision' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">Supervision Tracking</h3>
+            <h3 className="font-semibold text-[#1B2733]">Supervision Tracking</h3>
             <button
               onClick={() => setShowLogForm(!showLogForm)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+              className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
             >
               <Plus className="w-4 h-4" /> Log Hours
             </button>
           </div>
 
           {/* BACB Compliance Banner */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
+          <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl p-4 flex gap-3">
             <Target className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-blue-800">BACB Supervision Requirement</p>
+              <p className="font-medium text-[#4A6478]">BACB Supervision Requirement</p>
               <p className="text-sm text-blue-600">
                 BCBAs must provide supervision for at least 5% of each RBT's total direct service hours
                 within each certification cycle. Track supervision here to stay compliant.
@@ -392,13 +392,13 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
           {/* Log Form */}
           {showLogForm && (
-            <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
-              <p className="font-medium text-gray-900 text-sm">Log Supervision Session</p>
+            <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 space-y-3">
+              <p className="font-medium text-[#1B2733] text-sm">Log Supervision Session</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <select
                   value={logForm.rbtId}
                   onChange={(e) => setLogForm(prev => ({ ...prev, rbtId: e.target.value }))}
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                 >
                   <option value="">Select RBT...</option>
                   {data.rbts.map(r => (
@@ -409,7 +409,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   type="date"
                   value={logForm.date}
                   onChange={(e) => setLogForm(prev => ({ ...prev, date: e.target.value }))}
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                 />
                 <div className="flex gap-2">
                   <input
@@ -419,12 +419,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     step="0.25"
                     min="0.25"
                     max="8"
-                    className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg text-sm"
+                    className="flex-1 px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                   />
                   <select
                     value={logForm.type}
                     onChange={(e) => setLogForm(prev => ({ ...prev, type: e.target.value as 'direct' | 'indirect' | 'group' }))}
-                    className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm"
+                    className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                   >
                     <option value="direct">Direct</option>
                     <option value="indirect">Indirect</option>
@@ -436,14 +436,14 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   onChange={(e) => setLogForm(prev => ({ ...prev, notes: e.target.value }))}
                   placeholder="Session notes..."
                   rows={2}
-                  className="px-3 py-2.5 border border-gray-300 rounded-lg text-sm resize-none sm:col-span-2"
+                  className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm resize-none sm:col-span-2"
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={addSupervisionLog} className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700">
+                <button onClick={addSupervisionLog} className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
                   Save Log
                 </button>
-                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -452,8 +452,8 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
           {/* RBT Compliance Cards */}
           {data.rbts.length === 0 ? (
-            <div className="text-center py-8 text-gray-400">
-              <Clock className="w-10 h-10 mx-auto mb-2 text-gray-400" />
+            <div className="text-center py-8 text-[#8A9BA8]">
+              <Clock className="w-10 h-10 mx-auto mb-2 text-[#8A9BA8]" />
               <p className="text-sm">Add RBTs to track supervision</p>
             </div>
           ) : (
@@ -463,9 +463,9 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 const pct = rbt.totalDirectHours > 0 ? Math.min(100, (c.ratio / BACB_SUPERVISION_RATIO) * 100) : 0;
 
                 return (
-                  <div key={rbt.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div key={rbt.id} className="bg-white rounded-xl border border-[#E8E4DF] p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="font-medium text-gray-900">{rbt.name}</p>
+                      <p className="font-medium text-[#1B2733]">{rbt.name}</p>
                       {c.isCompliant || rbt.totalDirectHours === 0 ? (
                         <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">Compliant</span>
                       ) : (
@@ -474,14 +474,14 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                         </span>
                       )}
                     </div>
-                    <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mb-2">
+                    <div className="grid grid-cols-3 gap-2 text-xs text-[#5A6B7A] mb-2">
                       <div>
                         <p>Direct</p>
-                        <p className="font-semibold text-gray-900">{rbt.totalDirectHours.toFixed(1)}h</p>
+                        <p className="font-semibold text-[#1B2733]">{rbt.totalDirectHours.toFixed(1)}h</p>
                       </div>
                       <div>
                         <p>Supervision</p>
-                        <p className="font-semibold text-gray-900">{rbt.totalSupervisionHours.toFixed(1)}h</p>
+                        <p className="font-semibold text-[#1B2733]">{rbt.totalSupervisionHours.toFixed(1)}h</p>
                       </div>
                       <div>
                         <p>Rate</p>
@@ -505,17 +505,17 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           {/* Recent Logs */}
           {data.logs.length > 0 && (
             <div>
-              <h4 className="font-medium text-gray-700 text-sm mb-2">Recent Logs</h4>
+              <h4 className="font-medium text-[#3A4A57] text-sm mb-2">Recent Logs</h4>
               <div className="space-y-2">
                 {data.logs.slice(-5).reverse().map(log => {
                   const rbt = data.rbts.find(r => r.id === log.rbtId);
                   return (
                     <div key={log.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg text-sm">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span className="text-gray-500">{new Date(log.date).toLocaleDateString()}</span>
-                      <span className="font-medium text-gray-900">{rbt?.name || 'Unknown'}</span>
-                      <span className="text-gray-500">{log.hours}h {log.type}</span>
-                      {log.notes && <span className="text-gray-400 truncate flex-1">{log.notes}</span>}
+                      <Calendar className="w-4 h-4 text-[#8A9BA8]" />
+                      <span className="text-[#5A6B7A]">{new Date(log.date).toLocaleDateString()}</span>
+                      <span className="font-medium text-[#1B2733]">{rbt?.name || 'Unknown'}</span>
+                      <span className="text-[#5A6B7A]">{log.hours}h {log.type}</span>
+                      {log.notes && <span className="text-[#8A9BA8] truncate flex-1">{log.notes}</span>}
                     </div>
                   );
                 })}
@@ -529,19 +529,19 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'billing' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-900">Client Billing</h3>
-            <button className="flex items-center gap-1.5 px-3 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700">
+            <h3 className="font-semibold text-[#1B2733]">Client Billing</h3>
+            <button className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
               <Plus className="w-4 h-4" /> New Invoice
             </button>
           </div>
 
           {data.invoices.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
-              <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="font-medium text-gray-600">No invoices yet</p>
-              <p className="text-sm text-gray-400 mt-1">Create invoices for your clients</p>
-              <div className="mt-4 space-y-2 text-sm text-gray-500 max-w-sm mx-auto text-left">
-                <p className="font-medium text-gray-700">Coming soon:</p>
+            <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
+              <FileText className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
+              <p className="font-medium text-[#5A6B7A]">No invoices yet</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">Create invoices for your clients</p>
+              <div className="mt-4 space-y-2 text-sm text-[#5A6B7A] max-w-sm mx-auto text-left">
+                <p className="font-medium text-[#3A4A57]">Coming soon:</p>
                 <ul className="list-disc list-inside space-y-1">
                   <li>Auto-generate invoices from session data</li>
                   <li>Insurance claim tracking (submitted/pending/paid/denied)</li>
@@ -554,17 +554,17 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           ) : (
             <div className="space-y-2">
               {data.invoices.map(inv => (
-                <div key={inv.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200">
+                <div key={inv.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#E8E4DF]">
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{inv.familyName}</p>
-                    <p className="text-sm text-gray-500">{inv.services}</p>
+                    <p className="font-medium text-[#1B2733]">{inv.familyName}</p>
+                    <p className="text-sm text-[#5A6B7A]">{inv.services}</p>
                   </div>
-                  <p className="font-semibold text-gray-900">${inv.amount.toFixed(2)}</p>
+                  <p className="font-semibold text-[#1B2733]">${inv.amount.toFixed(2)}</p>
                   <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                     inv.status === 'paid' ? 'bg-green-100 text-green-700' :
                     inv.status === 'overdue' ? 'bg-red-100 text-red-700' :
                     inv.status === 'sent' ? 'bg-blue-100 text-blue-700' :
-                    'bg-[#F0EDE8] text-gray-600'
+                    'bg-[#F0EDE8] text-[#5A6B7A]'
                   }`}>
                     {inv.status}
                   </span>

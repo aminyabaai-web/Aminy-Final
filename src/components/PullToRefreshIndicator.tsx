@@ -83,7 +83,7 @@ export function PullToRefreshIndicator({
           // Arrow that flips when threshold is reached
           <svg
             className={`h-6 w-6 transition-colors duration-150 ${
-              canRefresh ? 'text-[#6B9080]' : 'text-gray-400'
+              canRefresh ? 'text-[#6B9080]' : 'text-[#8A9BA8]'
             }`}
             viewBox="0 0 24 24"
             fill="none"

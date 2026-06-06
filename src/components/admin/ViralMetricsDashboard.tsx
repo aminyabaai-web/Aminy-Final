@@ -61,7 +61,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       <Card className={`p-6 ${className}`}>
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
-          <span className="ml-2 text-gray-600 dark:text-slate-400">Loading viral metrics...</span>
+          <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">Loading viral metrics...</span>
         </div>
       </Card>
     );
@@ -82,7 +82,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
   const getTrendIcon = () => {
     if (metrics.kFactorTrend === 'up') return <TrendingUp className="w-4 h-4 text-green-500" />;
     if (metrics.kFactorTrend === 'down') return <TrendingDown className="w-4 h-4 text-red-500" />;
-    return <Minus className="w-4 h-4 text-gray-400" />;
+    return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
   };
 
   // Funnel conversion rates
@@ -101,7 +101,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <span className="text-amber-700/70 text-xs">Sample viral metrics. Connect referral backend for real data.</span>
       </div>
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+        <h3 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
           <Zap className="w-5 h-5 text-yellow-500" />
           Viral Growth Metrics
         </h3>
@@ -121,14 +121,14 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       {/* K-Factor Hero */}
       <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl p-6 mb-4 sm:mb-6">
         <div className="text-center">
-          <p className="text-sm text-gray-500 dark:text-slate-400 mb-1">Viral Coefficient (K-Factor)</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">Viral Coefficient (K-Factor)</p>
           <div className="flex items-center justify-center gap-3">
             <span className={`text-5xl font-bold ${kInterpretation.color}`}>
               {metrics.kFactor.toFixed(2)}
             </span>
             {getTrendIcon()}
           </div>
-          <p className="text-sm text-gray-600 dark:text-slate-300 mt-2 max-w-xs mx-auto">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-2 max-w-xs mx-auto">
             {kInterpretation.message}
           </p>
           {metrics.weekOverWeekGrowth !== 0 && (
@@ -141,21 +141,21 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
       {/* K-Factor Components */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
-        <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4">
+        <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Share2 className="w-4 h-4 text-blue-500" />
-            <span className="text-xs text-gray-500 dark:text-slate-400">Avg Invites/User</span>
+            <span className="text-xs text-[#5A6B7A] dark:text-slate-400">Avg Invites/User</span>
           </div>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
             {metrics.avgInvitesSent.toFixed(2)}
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4">
+        <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Target className="w-4 h-4 text-green-500" />
-            <span className="text-xs text-gray-500 dark:text-slate-400">Conversion Rate</span>
+            <span className="text-xs text-[#5A6B7A] dark:text-slate-400">Conversion Rate</span>
           </div>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
             {metrics.conversionRate.toFixed(1)}%
           </p>
         </div>
@@ -163,37 +163,37 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
       {/* Referral Funnel */}
       <div className="mb-4 sm:mb-6">
-        <h4 className="text-sm font-medium text-gray-700 dark:text-slate-300 mb-3">Referral Funnel</h4>
+        <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Referral Funnel</h4>
         <div className="flex items-center justify-between gap-2">
           {/* Invites Sent */}
           <div className="flex-1 text-center">
             <div className="w-12 h-12 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mb-1">
               <Share2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{metrics.totalInvitesSent}</p>
-            <p className="text-xs text-gray-500 dark:text-slate-400">Sent</p>
+            <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesSent}</p>
+            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Sent</p>
           </div>
 
-          <ArrowRight className="w-4 h-4 text-gray-400" />
+          <ArrowRight className="w-4 h-4 text-[#8A9BA8]" />
 
           {/* Clicked */}
           <div className="flex-1 text-center">
             <div className="w-12 h-12 mx-auto bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center mb-1">
               <MousePointerClick className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
             </div>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{metrics.totalInvitesClicked}</p>
-            <p className="text-xs text-gray-500 dark:text-slate-400">Clicked ({clickRate}%)</p>
+            <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesClicked}</p>
+            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Clicked ({clickRate}%)</p>
           </div>
 
-          <ArrowRight className="w-4 h-4 text-gray-400" />
+          <ArrowRight className="w-4 h-4 text-[#8A9BA8]" />
 
           {/* Converted */}
           <div className="flex-1 text-center">
             <div className="w-12 h-12 mx-auto bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-1">
               <UserPlus className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{metrics.totalInvitesConverted}</p>
-            <p className="text-xs text-gray-500 dark:text-slate-400">Converted ({signupRate}%)</p>
+            <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesConverted}</p>
+            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Converted ({signupRate}%)</p>
           </div>
         </div>
       </div>
@@ -201,50 +201,50 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       {/* Additional Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-          <Users className="w-4 h-4 text-gray-400" />
+          <Users className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-gray-500 dark:text-slate-400 text-xs">Users Who Invited</p>
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Users Who Invited</p>
+            <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.usersWhoInvited} / {metrics.totalUsers}
-              <span className="text-gray-400 ml-1">
+              <span className="text-[#8A9BA8] ml-1">
                 ({metrics.totalUsers > 0 ? Math.round((metrics.usersWhoInvited / metrics.totalUsers) * 100) : 0}%)
               </span>
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-          <Clock className="w-4 h-4 text-gray-400" />
+          <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-gray-500 dark:text-slate-400 text-xs">Avg Time to First Invite</p>
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Avg Time to First Invite</p>
+            <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.avgTimeToFirstInvite.toFixed(1)} days
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-          <Clock className="w-4 h-4 text-gray-400" />
+          <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-gray-500 dark:text-slate-400 text-xs">Avg Time to Conversion</p>
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Avg Time to Conversion</p>
+            <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.avgTimeToConversion.toFixed(1)} days
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-          <TrendingUp className="w-4 h-4 text-gray-400" />
+          <TrendingUp className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-gray-500 dark:text-slate-400 text-xs">Total Users</p>
-            <p className="font-medium text-gray-900 dark:text-white">{metrics.totalUsers}</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Total Users</p>
+            <p className="font-medium text-[#1B2733] dark:text-white">{metrics.totalUsers}</p>
           </div>
         </div>
       </div>
 
       {/* K-Factor Target */}
-      <div className="mt-4 sm:mt-6 p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 border border-[#6B9080]/20 dark:border-teal-800 rounded-lg">
+      <div className="mt-4 sm:mt-6 p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border border-[#6B9080]/20 dark:border-[#6B9080]/30 rounded-lg">
         <div className="flex items-start gap-3">
           <Target className="w-5 h-5 text-[#6B9080] dark:text-primary mt-0.5" />
           <div>
-            <p className="font-medium text-teal-800 dark:text-[#7BA7BC]">Target: K &gt; 1.0</p>
+            <p className="font-medium text-[#6B9080] dark:text-[#7BA7BC]">Target: K &gt; 1.0</p>
             <p className="text-sm text-[#6B9080] dark:text-primary">
               {metrics.kFactor >= 1
                 ? "You've achieved viral growth! Each user brings more than one new user."

@@ -330,7 +330,7 @@ export function NotificationPermissionRequest({
   }
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-blue-200">
+    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
       <div className="flex items-start gap-3">
         <div className="p-2 bg-blue-100 rounded-full">
           <Bell className="w-5 h-5 text-blue-600" />

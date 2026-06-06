@@ -170,7 +170,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
               {currentFeeling === 4 && '🙂'}
               {currentFeeling === 5 && '😊'}
             </div>
-            <p className="text-lg font-semibold text-slate-900">
+            <p className="text-lg font-semibold text-[#1B2733]">
               {FEELING_LABELS[currentFeeling - 1]}
             </p>
           </div>
@@ -184,7 +184,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
             className="w-full"
           />
 
-          <div className="flex justify-between text-xs text-slate-600">
+          <div className="flex justify-between text-xs text-[#5A6B7A]">
             <span>Feeling a lot</span>
             <span>Feeling strong</span>
           </div>
@@ -218,7 +218,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
             ))}
           </div>
 
-          <div className="flex items-center justify-between mt-4 text-xs text-slate-600">
+          <div className="flex items-center justify-between mt-4 text-xs text-[#5A6B7A]">
             <span>12 weeks ago</span>
             <span>This week</span>
           </div>
@@ -244,14 +244,14 @@ export function EmotionTracker({ userId }: { userId: string }) {
                 className="p-4 bg-accent/5 border border-accent/20 rounded-lg"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-slate-900">{insight.week}</span>
+                  <span className="font-semibold text-[#1B2733]">{insight.week}</span>
                   <span className="text-sm text-accent">
                     {FEELING_LABELS[insight.feeling - 1]}
                   </span>
                 </div>
                 
                 {insight.improvement && (
-                  <div className="flex items-start gap-2 text-sm text-slate-700">
+                  <div className="flex items-start gap-2 text-sm text-[#3A4A57]">
                     <Activity className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
                     <p>{insight.improvement}</p>
                   </div>

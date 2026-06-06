@@ -64,7 +64,7 @@ const CATEGORY_INFO = {
   safety: {
     label: 'Safety Planning',
     icon: Shield,
-    color: 'bg-blue-500',
+    color: 'bg-[#7BA7BC]',
     description: 'Prepare for and manage challenging situations',
   },
   'self-care': {
@@ -95,20 +95,20 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
   const emergencyResources = getEmergencyResources();
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+      <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 px-4 py-3">
         <div className="flex items-center gap-3 mb-3">
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 -ml-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              className="p-2 -ml-2 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-slate-900 dark:text-white flex-1">
+          <h1 className="text-xl font-bold text-[#1B2733] dark:text-white flex-1">
             Crisis Resources
           </h1>
           <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
@@ -142,10 +142,10 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
               Need help right now?
             </p>
-            <h2 className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+            <h2 className="mt-1 text-lg font-semibold text-[#1B2733] dark:text-white">
               Call or text 988 for immediate crisis support
             </h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+            <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-300">
               If there is immediate danger, call 911. Otherwise, 988 is the fastest next step for urgent mental-health support.
             </p>
           </div>
@@ -172,7 +172,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 <Phone className="w-5 h-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <p className="font-semibold text-slate-900 dark:text-white text-sm">
+                <p className="font-semibold text-[#1B2733] dark:text-white text-sm">
                   {resource.title}
                 </p>
                 <p className="text-red-600 dark:text-red-400 font-bold">
@@ -185,14 +185,14 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
       </div>
 
       {/* Category Tabs */}
-      <div className="overflow-x-auto border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+      <div className="overflow-x-auto border-b border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800">
         <div className="flex gap-1 p-2 min-w-max">
           <button
             onClick={() => setActiveCategory('all')}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeCategory === 'all'
-                ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-primary'
-                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
+                : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
             }`}
           >
             All
@@ -205,8 +205,8 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 onClick={() => setActiveCategory(category)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === category
-                    ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-primary'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
+                    : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
                 <info.icon className="w-4 h-4" />
@@ -221,15 +221,15 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
       <div className="p-4 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">All crisis supports</h2>
-            <p className="text-sm text-slate-600 dark:text-slate-300">
+            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">All crisis supports</h2>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
               Browse hotlines, calming supports, safety planning, and parent self-care resources.
             </p>
           </div>
         </div>
         {filteredResources.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-slate-500 dark:text-slate-400">
+            <p className="text-[#5A6B7A] dark:text-slate-400">
               No resources found for "{searchQuery}"
             </p>
           </div>
@@ -280,10 +280,10 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-slate-900 dark:text-white">
+          <h3 className="font-semibold text-[#1B2733] dark:text-white">
             {resource.title}
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
             {resource.description}
           </p>
         </div>
@@ -303,13 +303,13 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 pt-0 border-t border-slate-100 dark:border-slate-700">
+            <div className="px-4 pb-4 pt-0 border-t border-[#E8E4DF] dark:border-slate-700">
               <div className="pt-4 prose prose-sm dark:prose-invert max-w-none">
                 {resource.content.split('\n').map((paragraph, i) => {
                   // Handle markdown-style headers
                   if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
                     return (
-                      <h4 key={i} className="font-bold text-slate-900 dark:text-white mt-4 mb-2">
+                      <h4 key={i} className="font-bold text-[#1B2733] dark:text-white mt-4 mb-2">
                         {paragraph.replace(/\*\*/g, '')}
                       </h4>
                     );
@@ -317,7 +317,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                   // Handle list items
                   if (paragraph.startsWith('- ')) {
                     return (
-                      <li key={i} className="text-slate-600 dark:text-slate-300">
+                      <li key={i} className="text-[#5A6B7A] dark:text-slate-300">
                         {paragraph.substring(2)}
                       </li>
                     );
@@ -325,7 +325,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                   // Handle numbered items
                   if (/^\d+\.\s/.test(paragraph)) {
                     return (
-                      <li key={i} className="text-slate-600 dark:text-slate-300 list-decimal ml-4">
+                      <li key={i} className="text-[#5A6B7A] dark:text-slate-300 list-decimal ml-4">
                         {paragraph.replace(/^\d+\.\s/, '')}
                       </li>
                     );
@@ -333,7 +333,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                   // Regular paragraph
                   if (paragraph.trim()) {
                     return (
-                      <p key={i} className="text-slate-600 dark:text-slate-300 mb-2">
+                      <p key={i} className="text-[#5A6B7A] dark:text-slate-300 mb-2">
                         {paragraph}
                       </p>
                     );
@@ -356,7 +356,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                 {resource.phoneNumber && resource.category === 'hotline' && (
                   <a
                     href={`sms:${resource.phoneNumber}${resource.phoneNumber === '741741' ? '?body=HOME' : ''}`}
-                    className="inline-flex items-center justify-center gap-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg font-medium transition-colors"
+                    className="inline-flex items-center justify-center gap-2 bg-[#E8E4DF] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:hover:bg-slate-600 text-[#3A4A57] dark:text-slate-200 px-4 py-2.5 rounded-lg font-medium transition-colors"
                   >
                     <MessageSquare className="w-4 h-4" />
                     Text
@@ -367,7 +367,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-lg font-medium transition-colors"
+                    className="inline-flex items-center justify-center gap-2 bg-[#E8E4DF] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:hover:bg-slate-600 text-[#3A4A57] dark:text-slate-200 px-4 py-2.5 rounded-lg font-medium transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
                     Learn More

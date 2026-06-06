@@ -97,7 +97,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
   if (!summary) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-sm text-gray-600">Not enough data yet. Keep tracking for {days} days to see your before/after comparison!</p>
+        <p className="text-sm text-[#5A6B7A]">Not enough data yet. Keep tracking for {days} days to see your before/after comparison!</p>
       </Card>
     );
   }
@@ -105,12 +105,12 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
   return (
     <div className="space-y-4">
       {/* Hero Section */}
-      <Card className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200">
+      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-2 border-[#C8DDE8]">
         <div className="text-center mb-4">
-          <h2 className="text-2xl text-gray-900 mb-2">
+          <h2 className="text-2xl text-[#1B2733] mb-2">
             {childName}'s Progress Story
           </h2>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-[#5A6B7A]">
             {summary.timeframe} of growth and learning
           </p>
         </div>
@@ -190,7 +190,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
       )}
 
       {/* Disclaimer */}
-      <Card className="p-4 bg-yellow-50 border-yellow-200">
+      <Card className="p-4 bg-[#FDF9F0] border-[#F0EDE8]">
         <p className="text-xs text-yellow-900">
           <strong>Important:</strong> This report shows wellness coaching and support progress, not medical treatment outcomes. This is educational guidance only. Parents remain the decision authority for all care decisions. For clinical questions, consult your child's healthcare providers.
         </p>
@@ -225,12 +225,12 @@ function MetricCard({
 
   return (
     <Card className="p-3 bg-white">
-      <div className="text-xs text-gray-600 mb-2">{title}</div>
+      <div className="text-xs text-[#5A6B7A] mb-2">{title}</div>
       
       <div className="flex items-center justify-between mb-1">
         <div>
-          <div className="text-xs text-gray-500">Before</div>
-          <div className="text-lg font-semibold text-gray-400">
+          <div className="text-xs text-[#5A6B7A]">Before</div>
+          <div className="text-lg font-semibold text-[#8A9BA8]">
             {before}{unit}
           </div>
         </div>
@@ -240,8 +240,8 @@ function MetricCard({
       </div>
 
       <div className="mb-2">
-        <div className="text-xs text-gray-500">Now</div>
-        <div className="text-2xl font-bold text-gray-900">
+        <div className="text-xs text-[#5A6B7A]">Now</div>
+        <div className="text-2xl font-bold text-[#1B2733]">
           {after}{unit}
         </div>
       </div>
@@ -279,18 +279,18 @@ function DetailedReport({
     >
       <Card className="p-6 space-y-6">
         <div>
-          <h3 className="text-lg text-gray-900 mb-2">Your Progress Story</h3>
-          <p className="text-sm text-gray-700">
+          <h3 className="text-lg text-[#1B2733] mb-2">Your Progress Story</h3>
+          <p className="text-sm text-[#3A4A57]">
             {parentName}, here's what we've seen over the past {summary.timeframe}:
           </p>
         </div>
 
         {/* Parent Wellbeing */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
             💙 Your Wellbeing
           </h4>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-[#3A4A57] mb-2">
             {summary.overwhelm.improved ? (
               <>
                 Your stress level decreased from <strong>{summary.overwhelm.before}/10</strong> to <strong>{summary.overwhelm.after}/10</strong>. 
@@ -307,10 +307,10 @@ function DetailedReport({
 
         {/* Routine Consistency */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
             ✅ Daily Routines
           </h4>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-[#3A4A57] mb-2">
             {summary.routineAdherence.improved ? (
               <>
                 Routine completion improved from <strong>{summary.routineAdherence.before}%</strong> to <strong>{summary.routineAdherence.after}%</strong>. 
@@ -327,10 +327,10 @@ function DetailedReport({
 
         {/* Challenging Moments */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
             🤝 Tough Moments
           </h4>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-[#3A4A57] mb-2">
             {summary.toughMoments.improved ? (
               <>
                 Tough moments decreased from <strong>{summary.toughMoments.before}/week</strong> to <strong>{summary.toughMoments.after}/week</strong>. 
@@ -347,10 +347,10 @@ function DetailedReport({
 
         {/* Goal Achievement */}
         <div>
-          <h4 className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
             🎯 Goals & Skills
           </h4>
-          <p className="text-sm text-gray-700 mb-2">
+          <p className="text-sm text-[#3A4A57] mb-2">
             {summary.goalProgress.improved ? (
               <>
                 {childName}'s goal progress improved by <strong>+{summary.goalProgress.change} levels</strong> on average. 
@@ -370,9 +370,9 @@ function DetailedReport({
         </div>
 
         {/* Next Steps */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-gray-900 mb-2">What's Next?</h4>
-          <ul className="space-y-1 text-sm text-gray-700">
+        <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-4">
+          <h4 className="text-sm font-medium text-[#1B2733] mb-2">What's Next?</h4>
+          <ul className="space-y-1 text-sm text-[#3A4A57]">
             <li className="flex items-start gap-2">
               <span className="text-blue-600 mt-0.5">•</span>
               <span>Keep building on what's working</span>
@@ -424,52 +424,52 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
       <h2 className="text-lg font-semibold mb-4">30-Day Progress Summary</h2>
       
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="border border-gray-200 rounded p-3">
-          <div className="text-sm text-gray-600 mb-1">Your Stress Level</div>
+        <div className="border border-[#E8E4DF] rounded p-3">
+          <div className="text-sm text-[#5A6B7A] mb-1">Your Stress Level</div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">{summary.overwhelm.after}/10</span>
             <span className={`text-sm ${summary.overwhelm.improved ? 'text-green-600' : 'text-orange-600'}`}>
               {summary.overwhelm.improved ? `↓ ${summary.overwhelm.change}` : `↑ ${Math.abs(summary.overwhelm.change)}`}
             </span>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Was {summary.overwhelm.before}/10</div>
+          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.overwhelm.before}/10</div>
         </div>
 
-        <div className="border border-gray-200 rounded p-3">
-          <div className="text-sm text-gray-600 mb-1">Routine Adherence</div>
+        <div className="border border-[#E8E4DF] rounded p-3">
+          <div className="text-sm text-[#5A6B7A] mb-1">Routine Adherence</div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">{summary.routineAdherence.after}%</span>
             <span className={`text-sm ${summary.routineAdherence.improved ? 'text-green-600' : 'text-orange-600'}`}>
               {summary.routineAdherence.improved ? `+${summary.routineAdherence.change}%` : `${summary.routineAdherence.change}%`}
             </span>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Was {summary.routineAdherence.before}%</div>
+          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.routineAdherence.before}%</div>
         </div>
 
-        <div className="border border-gray-200 rounded p-3">
-          <div className="text-sm text-gray-600 mb-1">Tough Moments</div>
+        <div className="border border-[#E8E4DF] rounded p-3">
+          <div className="text-sm text-[#5A6B7A] mb-1">Tough Moments</div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">{summary.toughMoments.after}/wk</span>
             <span className={`text-sm ${summary.toughMoments.improved ? 'text-green-600' : 'text-orange-600'}`}>
               {summary.toughMoments.improved ? `-${summary.toughMoments.change}` : `+${Math.abs(summary.toughMoments.change)}`}
             </span>
           </div>
-          <div className="text-xs text-gray-500 mt-1">Was {summary.toughMoments.before}/wk</div>
+          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.toughMoments.before}/wk</div>
         </div>
 
-        <div className="border border-gray-200 rounded p-3">
-          <div className="text-sm text-gray-600 mb-1">Goal Progress</div>
+        <div className="border border-[#E8E4DF] rounded p-3">
+          <div className="text-sm text-[#5A6B7A] mb-1">Goal Progress</div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-bold">+{summary.goalProgress.after.toFixed(1)}</span>
             <span className={`text-sm ${summary.goalProgress.improved ? 'text-green-600' : 'text-orange-600'}`}>
               {summary.goalProgress.improved ? `↑` : `→`}
             </span>
           </div>
-          <div className="text-xs text-gray-500 mt-1">GAS levels</div>
+          <div className="text-xs text-[#5A6B7A] mt-1">GAS levels</div>
         </div>
       </div>
 
-      <div className="text-xs text-gray-500 p-3 bg-[#FAF7F2] rounded border">
+      <div className="text-xs text-[#5A6B7A] p-3 bg-[#FAF7F2] rounded border">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress. This is educational guidance only. Parents remain decision authority. Consult healthcare providers for clinical questions.
       </div>
     </div>

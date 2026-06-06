@@ -114,10 +114,10 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-[#1B2733] dark:text-white">
             Financial Analytics
           </h1>
-          <p className="text-neutral-500 dark:text-slate-400">
+          <p className="text-[#5A6B7A] dark:text-slate-400">
             MRR, ARR, and revenue forecasting
           </p>
         </div>
@@ -129,8 +129,8 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                 onClick={() => setTimeframe(t)}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   timeframe === t
-                    ? 'bg-white dark:bg-slate-700 text-neutral-900 dark:text-white shadow-sm'
-                    : 'text-neutral-600 dark:text-slate-400 hover:text-neutral-900 dark:hover:text-white'
+                    ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-white shadow-sm'
+                    : 'text-neutral-600 dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-white'
                 }`}
               >
                 {t === 'all' ? 'All' : t.toUpperCase()}
@@ -221,7 +221,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
       {!isLoading && !error && (
       <>
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white">
+        <h2 className="text-lg font-semibold mb-4 text-[#1B2733] dark:text-white">
           MRR Movement
         </h2>
         <div className="grid grid-cols-4 gap-4 mb-6">
@@ -234,7 +234,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
               +{formatCurrency(latestMRR?.newMRR || 0)}
             </p>
           </div>
-          <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+          <div className="text-center p-4 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-blue-600 dark:text-blue-400 mb-1">
               <Zap className="w-4 h-4" />
               <span className="text-xs font-medium">Expansion</span>
@@ -273,8 +273,8 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                 <th className="text-right py-3 px-4 font-medium text-blue-600">Expansion</th>
                 <th className="text-right py-3 px-4 font-medium text-amber-600">Contraction</th>
                 <th className="text-right py-3 px-4 font-medium text-rose-600">Churn</th>
-                <th className="text-right py-3 px-4 font-medium text-neutral-900 dark:text-white">Net New</th>
-                <th className="text-right py-3 px-4 font-medium text-neutral-900 dark:text-white">Total MRR</th>
+                <th className="text-right py-3 px-4 font-medium text-[#1B2733] dark:text-white">Net New</th>
+                <th className="text-right py-3 px-4 font-medium text-[#1B2733] dark:text-white">Total MRR</th>
               </tr>
             </thead>
             <tbody>
@@ -285,15 +285,15 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                     idx === mrrHistory.length - 1 ? 'bg-neutral-50 dark:bg-slate-800/50 font-medium' : ''
                   }`}
                 >
-                  <td className="py-3 px-4 text-neutral-900 dark:text-white">{row.month}</td>
+                  <td className="py-3 px-4 text-[#1B2733] dark:text-white">{row.month}</td>
                   <td className="py-3 px-4 text-right text-emerald-600">+{formatCurrency(row.newMRR)}</td>
                   <td className="py-3 px-4 text-right text-blue-600">+{formatCurrency(row.expansionMRR)}</td>
                   <td className="py-3 px-4 text-right text-amber-600">-{formatCurrency(row.contractionMRR)}</td>
                   <td className="py-3 px-4 text-right text-rose-600">-{formatCurrency(row.churnMRR)}</td>
-                  <td className="py-3 px-4 text-right text-neutral-900 dark:text-white font-medium">
+                  <td className="py-3 px-4 text-right text-[#1B2733] dark:text-white font-medium">
                     +{formatCurrency(row.netNewMRR)}
                   </td>
-                  <td className="py-3 px-4 text-right text-neutral-900 dark:text-white font-bold">
+                  <td className="py-3 px-4 text-right text-[#1B2733] dark:text-white font-bold">
                     {formatCurrency(row.totalMRR)}
                   </td>
                 </tr>
@@ -307,7 +307,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
       <div className="grid md:grid-cols-2 gap-6">
         {/* Revenue by Tier */}
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white">
+          <h2 className="text-lg font-semibold mb-4 text-[#1B2733] dark:text-white">
             Revenue by Tier
           </h2>
           <div className="space-y-4">
@@ -319,13 +319,13 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: tier.color }}
                     />
-                    <span className="font-medium text-neutral-900 dark:text-white">{tier.tier}</span>
+                    <span className="font-medium text-[#1B2733] dark:text-white">{tier.tier}</span>
                     <Badge variant="secondary" className="text-xs">
                       {tier.subscribers.toLocaleString()} subs
                     </Badge>
                   </div>
                   <div className="text-right">
-                    <span className="font-bold text-neutral-900 dark:text-white">
+                    <span className="font-bold text-[#1B2733] dark:text-white">
                       {formatCurrency(tier.mrr)}
                     </span>
                     <span className="text-xs text-emerald-600 ml-2">+{tier.growth}%</span>
@@ -340,7 +340,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-xs text-neutral-500 dark:text-slate-400">
+                <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400">
                   <span>ARPU: ${tier.arpu.toFixed(2)}</span>
                   <span>{tier.percentOfTotal}% of MRR</span>
                 </div>
@@ -351,7 +351,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
 
         {/* Revenue Forecast */}
         <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white">
+          <h2 className="text-lg font-semibold mb-4 text-[#1B2733] dark:text-white">
             Revenue Forecast
           </h2>
           <div className="space-y-4">
@@ -364,12 +364,12 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                   key={item.month}
                   className={`p-4 rounded-lg border ${
                     idx === 0
-                      ? 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20'
+                      ? 'border-[#C8DDE8] bg-[#EEF4F8] dark:border-blue-800 dark:bg-blue-900/20'
                       : 'border-neutral-200 dark:border-slate-700'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-neutral-900 dark:text-white">
+                    <span className="font-medium text-[#1B2733] dark:text-white">
                       {item.month}
                     </span>
                     <Badge
@@ -381,10 +381,10 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                   </div>
                   <div className="flex items-baseline gap-4">
                     <div>
-                      <p className="text-2xl font-bold text-neutral-900 dark:text-white">
+                      <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                         {formatCurrency(item.projected)}
                       </p>
-                      <p className="text-xs text-neutral-500 dark:text-slate-400">Projected</p>
+                      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Projected</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-neutral-600 dark:text-slate-300">
@@ -392,7 +392,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                         {' - '}
                         <span className="text-emerald-600">{formatCurrency(item.optimistic)}</span>
                       </p>
-                      <p className="text-xs text-neutral-500 dark:text-slate-400">Range</p>
+                      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Range</p>
                     </div>
                   </div>
                 </div>
@@ -410,7 +410,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
 
       {/* Health Indicators */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4 text-neutral-900 dark:text-white">
+        <h2 className="text-lg font-semibold mb-4 text-[#1B2733] dark:text-white">
           Financial Health Indicators
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -465,7 +465,7 @@ function MetricCard({
 }) {
   const colorClasses = {
     emerald: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400',
-    blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
+    blue: 'bg-[#EEF4F8] dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
     violet: 'bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400',
     amber: 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400',
     rose: 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400',
@@ -482,9 +482,9 @@ function MetricCard({
           <span>{Math.abs(change)}%</span>
         </div>
       </div>
-      <p className="text-2xl font-bold text-neutral-900 dark:text-white mb-1">{value}</p>
-      <p className="text-xs text-neutral-500 dark:text-slate-400">{title}</p>
-      <p className="text-xs text-neutral-400 dark:text-slate-500 mt-1">{subtitle}</p>
+      <p className="text-2xl font-bold text-[#1B2733] dark:text-white mb-1">{value}</p>
+      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">{title}</p>
+      <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">{subtitle}</p>
     </Card>
   );
 }
@@ -529,10 +529,10 @@ function HealthIndicator({
         <span className="text-sm font-medium text-neutral-700 dark:text-slate-300">{label}</span>
         {config.icon}
       </div>
-      <p className="text-2xl font-bold text-neutral-900 dark:text-white">{value}</p>
-      <p className="text-xs text-neutral-500 dark:text-slate-400 mt-1">Target: {target}</p>
+      <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{value}</p>
+      <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">Target: {target}</p>
       {description && (
-        <p className="text-xs text-neutral-400 dark:text-slate-500 mt-1">{description}</p>
+        <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">{description}</p>
       )}
     </div>
   );

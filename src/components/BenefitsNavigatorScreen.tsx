@@ -165,7 +165,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+      <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3 mb-4">
             {onBack && (
@@ -306,7 +306,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                     </Badge>
                     <h3 className="font-medium text-sm">{prog.name}</h3>
                   </div>
-                  <p className="text-xs text-slate-600 mb-2">{prog.summary}</p>
+                  <p className="text-xs text-[#5A6B7A] mb-2">{prog.summary}</p>
                   {prog.waitlistWarning && (
                     <p className="text-xs text-amber-700 flex items-center gap-1 mb-2">
                       <Clock className="w-3 h-3" /> {prog.waitlistWarning}
@@ -314,7 +314,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                   )}
                   <div className="space-y-1">
                     {prog.nextSteps.slice(0, 3).map((step, j) => (
-                      <p key={j} className="text-xs text-slate-500 flex items-start gap-1">
+                      <p key={j} className="text-xs text-[#5A6B7A] flex items-start gap-1">
                         <span className="text-green-500 mt-0.5">→</span> {step}
                       </p>
                     ))}
@@ -327,7 +327,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
             {eligibility.contactInfo && (
               <div className="mt-3 p-3 bg-white rounded-lg border border-green-100">
                 <p className="text-xs font-medium mb-1">{eligibility.contactInfo.agency}</p>
-                <p className="text-xs text-slate-600">Phone: {eligibility.contactInfo.phone}</p>
+                <p className="text-xs text-[#5A6B7A]">Phone: {eligibility.contactInfo.phone}</p>
                 <a
                   href={eligibility.contactInfo.website}
                   target="_blank"
@@ -386,7 +386,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                 {services.map((service) => (
                   <div
                     key={service.id}
-                    className="flex items-center justify-between p-3 border border-gray-100 rounded-lg"
+                    className="flex items-center justify-between p-3 border border-[#E8E4DF] rounded-lg"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <div
@@ -449,7 +449,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                       <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-medium flex-shrink-0">
                         {i + 1}
                       </span>
-                      <p className="text-sm text-slate-700">{step}</p>
+                      <p className="text-sm text-[#3A4A57]">{step}</p>
                     </div>
                   ))}
                 </div>
@@ -457,7 +457,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
             )}
 
             {/* AI Assistant Note */}
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                 <div>
@@ -494,7 +494,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
 
             {trackedRequests.length === 0 && (
               <div className="text-center py-6 mt-4 border-t border-[#E8E4DF]">
-                <Clock className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+                <Clock className="w-10 h-10 text-[#8A9BA8] mx-auto mb-3" />
                 <p className="text-sm text-muted-foreground mb-3">No application requests tracked yet</p>
                 <div className="flex flex-col gap-2 items-center">
                   <Button size="sm" onClick={() => setActiveView('letters')}>
@@ -514,14 +514,14 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                 <div key={i} className={`border rounded-lg p-4 ${
                   req.status === 'approved' ? 'border-green-200' :
                   req.status === 'pending' ? 'border-amber-200 bg-amber-50' :
-                  'border-gray-200'
+                  'border-[#E8E4DF]'
                 }`}>
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="font-medium">{req.title}</h3>
                     <Badge className={
                       req.status === 'approved' ? 'bg-green-100 text-green-700 border-green-200' :
                       req.status === 'pending' ? 'bg-amber-100 text-amber-700 border-amber-200' :
-                      'bg-blue-100 text-blue-700 border-blue-200'
+                      'bg-blue-100 text-blue-700 border-[#C8DDE8]'
                     }>
                       {req.status === 'approved' ? 'Approved' :
                        req.status === 'pending' ? 'In Review' : 'Submitted'}

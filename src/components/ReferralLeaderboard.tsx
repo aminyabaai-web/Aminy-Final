@@ -73,7 +73,7 @@ function getTierBadge(tier: ReferralTier | null): {
   label: string;
 } {
   if (!tier) {
-    return { icon: Star, color: 'text-gray-400', label: 'Starter' };
+    return { icon: Star, color: 'text-[#8A9BA8]', label: 'Starter' };
   }
   switch (tier.name) {
     case 'Ambassador':
@@ -91,11 +91,11 @@ function getRankStyle(rank: number): string {
     case 1:
       return 'bg-amber-50 border-amber-200';
     case 2:
-      return 'bg-[#FAF7F2] border-gray-200';
+      return 'bg-[#FAF7F2] border-[#E8E4DF]';
     case 3:
       return 'bg-orange-50 border-orange-200';
     default:
-      return 'bg-white border-gray-100';
+      return 'bg-white border-[#E8E4DF]';
   }
 }
 
@@ -272,7 +272,7 @@ export function ReferralLeaderboard({
     : null;
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden max-w-md w-full">
+    <div className="bg-white rounded-2xl shadow-lg border border-[#E8E4DF] overflow-hidden max-w-md w-full">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] p-4 text-white">
         <div className="flex items-center justify-between">
@@ -316,9 +316,9 @@ export function ReferralLeaderboard({
 
       {/* Current user progress to next tier */}
       {nextTierInfo && data.currentUserEntry && (
-        <div className="mx-4 mt-3 p-3 rounded-xl bg-[#6B9080]/10 border border-teal-100">
+        <div className="mx-4 mt-3 p-3 rounded-xl bg-[#6B9080]/10 border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-teal-800">
+            <span className="text-xs font-medium text-[#6B9080]">
               Next tier: {nextTierInfo.nextTier.badgeIcon}{' '}
               {nextTierInfo.nextTier.name}
             </span>
@@ -343,13 +343,13 @@ export function ReferralLeaderboard({
             <div className="w-6 h-6 border-2 border-[#6B9080]/20 border-t-teal-500 rounded-full animate-spin" />
           </div>
         ) : data.error ? (
-          <p className="text-center text-sm text-gray-500 py-8">
+          <p className="text-center text-sm text-[#5A6B7A] py-8">
             {data.error}
           </p>
         ) : data.entries.length === 0 ? (
           <div className="text-center py-8">
-            <Flame className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">
+            <Flame className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
+            <p className="text-sm text-[#5A6B7A]">
               No referrals yet. Be the first!
             </p>
           </div>
@@ -373,7 +373,7 @@ export function ReferralLeaderboard({
                     {entry.rank <= 3 ? (
                       <span className="text-lg">{getRankBadge(entry.rank)}</span>
                     ) : (
-                      <span className="text-gray-500">
+                      <span className="text-[#5A6B7A]">
                         {getRankBadge(entry.rank)}
                       </span>
                     )}
@@ -385,8 +385,8 @@ export function ReferralLeaderboard({
                       <span
                         className={`font-medium text-sm truncate ${
                           entry.isCurrentUser
-                            ? 'text-teal-800'
-                            : 'text-gray-900'
+                            ? 'text-[#6B9080]'
+                            : 'text-[#1B2733]'
                         }`}
                       >
                         {entry.isCurrentUser
@@ -399,7 +399,7 @@ export function ReferralLeaderboard({
                       />
                     </div>
                     {entry.tier && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-[#5A6B7A]">
                         {entry.tier.badgeIcon} {entry.tier.name}
                       </span>
                     )}
@@ -407,10 +407,10 @@ export function ReferralLeaderboard({
 
                   {/* Referral count */}
                   <div className="text-right">
-                    <span className="font-bold text-sm text-gray-900">
+                    <span className="font-bold text-sm text-[#1B2733]">
                       {entry.referralCount}
                     </span>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[#8A9BA8]">
                       referral{entry.referralCount !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -423,24 +423,24 @@ export function ReferralLeaderboard({
               !data.entries.slice(0, 20).some((e) => e.isCurrentUser) && (
                 <>
                   <div className="flex items-center gap-2 py-1 px-3">
-                    <div className="flex-1 border-t border-dashed border-gray-200" />
-                    <ChevronUp size={14} className="text-gray-400" />
-                    <div className="flex-1 border-t border-dashed border-gray-200" />
+                    <div className="flex-1 border-t border-dashed border-[#E8E4DF]" />
+                    <ChevronUp size={14} className="text-[#8A9BA8]" />
+                    <div className="flex-1 border-t border-dashed border-[#E8E4DF]" />
                   </div>
                   <div className="flex items-center gap-3 p-3 rounded-xl border bg-[#6B9080]/10 border-[#6B9080]/20 ring-1 ring-teal-300">
-                    <div className="w-8 text-center font-bold text-sm text-gray-500">
+                    <div className="w-8 text-center font-bold text-sm text-[#5A6B7A]">
                       #{data.currentUserEntry.rank}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="font-medium text-sm text-teal-800">
+                      <span className="font-medium text-sm text-[#6B9080]">
                         You
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-sm text-gray-900">
+                      <span className="font-bold text-sm text-[#1B2733]">
                         {data.currentUserEntry.referralCount}
                       </span>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-[#8A9BA8]">
                         referral
                         {data.currentUserEntry.referralCount !== 1 ? 's' : ''}
                       </p>

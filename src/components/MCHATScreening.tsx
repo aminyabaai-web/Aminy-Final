@@ -120,13 +120,13 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
         return (
             <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
                 {/* Header */}
-                <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+                <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                     <div className="max-w-2xl mx-auto px-4 py-4">
                         <div className="flex items-center gap-3">
                             <Button variant="ghost" size="sm" onClick={onBack}>
                                 <ChevronLeft className="w-4 h-4" />
                             </Button>
-                            <h1 className="text-lg font-semibold text-gray-900">M-CHAT-R™ Screening</h1>
+                            <h1 className="text-lg font-semibold text-[#1B2733]">M-CHAT-R™ Screening</h1>
                         </div>
                     </div>
                 </div>
@@ -138,21 +138,21 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         </div>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-center text-gray-900 mb-4">
+                    <h2 className="text-2xl font-bold text-center text-[#1B2733] mb-4">
                         Check {childName}'s Development
                     </h2>
 
-                    <p className="text-gray-600 text-center mb-8 max-w-lg mx-auto">
+                    <p className="text-[#5A6B7A] text-center mb-8 max-w-lg mx-auto">
                         The Modified Checklist for Autism in Toddlers (M-CHAT-R) is a scientifically validated tool used to assess risk for Autism Spectrum Disorder (ASD).
                         It takes just 2 minutes to complete.
                     </p>
 
-                    <Card className="p-5 bg-[#FAF7F2] border border-gray-100 mb-8">
-                        <h3 className="font-semibold text-gray-900 mb-2 flex items-center">
+                    <Card className="p-5 bg-[#FAF7F2] border border-[#E8E4DF] mb-8">
+                        <h3 className="font-semibold text-[#1B2733] mb-2 flex items-center">
                             <Info className="w-4 h-4 text-blue-500 mr-2" />
                             Before you begin
                         </h3>
-                        <ul className="text-sm text-gray-600 space-y-2">
+                        <ul className="text-sm text-[#5A6B7A] space-y-2">
                             <li>• Answer based on how {childName} <strong>usually</strong> behaves.</li>
                             <li>• Try every question. If the behavior is rare, answer "No".</li>
                             <li>• This is a screener, not a diagnostic tool. Your results will help guide our next steps together.</li>
@@ -174,9 +174,9 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
         const { score, riskLevel, riskColor, riskBg, recommendation } = getScoreInfo();
         return (
             <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
-                <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+                <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                     <div className="max-w-2xl mx-auto px-4 py-4">
-                        <h1 className="text-lg font-semibold text-gray-900">Screening Complete</h1>
+                        <h1 className="text-lg font-semibold text-[#1B2733]">Screening Complete</h1>
                     </div>
                 </div>
 
@@ -187,20 +187,20 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         ) : (
                             <AlertCircle className={`w-12 h-12 ${riskColor} mb-4`} />
                         )}
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
                             {riskLevel} Risk Profile
                         </h2>
-                        <p className="text-gray-700 text-lg">
+                        <p className="text-[#3A4A57] text-lg">
                             Score: {score} out of 20
                         </p>
                     </div>
 
-                    <Card className="p-6 mb-8 border-gray-200">
-                        <h3 className="font-semibold text-gray-900 mb-3 text-lg">What does this mean?</h3>
-                        <p className="text-gray-600 mb-4 whitespace-pre-line leading-relaxed">
+                    <Card className="p-6 mb-8 border-[#E8E4DF]">
+                        <h3 className="font-semibold text-[#1B2733] mb-3 text-lg">What does this mean?</h3>
+                        <p className="text-[#5A6B7A] mb-4 whitespace-pre-line leading-relaxed">
                             {recommendation}
                         </p>
-                        <div className="p-4 bg-blue-50 text-blue-800 rounded-lg text-sm border border-blue-100 mt-4">
+                        <div className="p-4 bg-[#EEF4F8] text-[#4A6478] rounded-lg text-sm border border-blue-100 mt-4">
                             <strong>Note:</strong> Aminy will safely store this screening result. This can be directly forwarded to a clinician or provider to save time during your initial intake.
                         </div>
                     </Card>
@@ -224,13 +224,13 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
     return (
         <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
             {/* Header with Progress */}
-            <div className="sticky top-0 z-10 bg-white border-b border-gray-200">
+            <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                 <div className="max-w-2xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-3 mb-4">
                         <Button variant="ghost" size="sm" onClick={() => currentStep === 0 ? setCurrentStep(-1) : setCurrentStep(prev => prev - 1)}>
                             <ChevronLeft className="w-4 h-4" />
                         </Button>
-                        <h1 className="text-lg font-semibold text-gray-900 text-center flex-1">
+                        <h1 className="text-lg font-semibold text-[#1B2733] text-center flex-1">
                             Question {currentStep + 1} of {MCH_QUESTIONS.length}
                         </h1>
                         <div className="w-8" /> {/* Spacer */}
@@ -240,12 +240,12 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
             </div>
 
             <div className="max-w-xl mx-auto px-4 py-12">
-                <h2 className="text-xl font-bold text-gray-900 mb-6 leading-tight">
+                <h2 className="text-xl font-bold text-[#1B2733] mb-6 leading-tight">
                     {question.text}
                 </h2>
 
                 {question.example && (
-                    <p className="text-gray-600 text-lg mb-8 italic">
+                    <p className="text-[#5A6B7A] text-lg mb-8 italic">
                         {question.example}
                     </p>
                 )}
@@ -273,12 +273,12 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         animate={{ opacity: 1, y: 0 }}
                         className="mt-8"
                     >
-                        <div className="bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-100 p-6 rounded-2xl shadow-sm mb-6">
+                        <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border border-[#E8E4DF] p-6 rounded-2xl shadow-sm mb-6">
                             <div className="flex gap-3">
                                 <Activity className="w-6 h-6 text-[#6B9080] shrink-0 mt-1" />
                                 <div>
-                                    <h3 className="text-teal-900 font-semibold text-lg mb-2">How Aminy Can Help</h3>
-                                    <p className="text-teal-800 leading-relaxed text-[15px]">
+                                    <h3 className="text-[#6B9080] font-semibold text-lg mb-2">How Aminy Can Help</h3>
+                                    <p className="text-[#6B9080] leading-relaxed text-[15px]">
                                         {question.insight}
                                     </p>
                                 </div>

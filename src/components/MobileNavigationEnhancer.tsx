@@ -139,7 +139,7 @@ export const MobileNavigationEnhancer: React.FC<MobileNavigationEnhancerProps> =
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className={`
             fixed bottom-0 left-0 right-0 z-50 
-            bg-white/95 backdrop-blur-md border-t border-gray-200/80
+            bg-white/95 backdrop-blur-md border-t border-[#E8E4DF]/80
             ${className}
           `}
           style={{
@@ -159,7 +159,7 @@ export const MobileNavigationEnhancer: React.FC<MobileNavigationEnhancerProps> =
                     rounded-xl transition-all duration-200 ease-out
                     ${isActive 
                       ? 'text-accent bg-accent/10' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-[#FAF7F2]'
+                      : 'text-[#5A6B7A] hover:text-[#1B2733] hover:bg-[#FAF7F2]'
                     }
                   `}
                   whileTap={{ scale: 0.95 }}

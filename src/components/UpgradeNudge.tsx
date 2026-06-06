@@ -75,8 +75,8 @@ export function UpgradeNudge({
       <div className={`
         rounded-lg p-4 border
         ${urgency === 'high' ? 'bg-amber-50 border-amber-200' :
-          urgency === 'medium' ? 'bg-blue-50 border-blue-200' :
-          'bg-[#FAF7F2] border-gray-200'}
+          urgency === 'medium' ? 'bg-[#EEF4F8] border-[#C8DDE8]' :
+          'bg-[#FAF7F2] border-[#E8E4DF]'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -86,12 +86,12 @@ export function UpgradeNudge({
             <MessageSquare className={`w-5 h-5 ${urgency === 'high' ? 'text-amber-600' : 'text-blue-600'}`} />
           </div>
           <div className="flex-1">
-            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-gray-900'}`}>
+            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-[#1B2733]'}`}>
               {remaining <= 0
                 ? "You've reached your daily message limit"
                 : `${remaining} message${remaining !== 1 ? 's' : ''} left today`}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               {remaining <= 0
                 ? "Upgrade to keep the conversation going - your family's progress matters!"
                 : "Upgrade for unlimited conversations with Aminy. We're here whenever you need support."}
@@ -122,12 +122,12 @@ export function UpgradeNudge({
             <FileText className="w-5 h-5 text-purple-600" />
           </div>
           <div className="flex-1">
-            <p className="font-medium text-gray-900">
+            <p className="font-medium text-[#1B2733]">
               {documentsUsed >= documentsLimit
                 ? "Document vault is full"
                 : `${documentsLimit - documentsUsed} document slots remaining`}
             </p>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               Upgrade to store more documents. Aminy learns from each one to give you better, more personalized guidance.
             </p>
             <div className="flex items-center gap-2 mt-3">
@@ -151,10 +151,10 @@ export function UpgradeNudge({
             <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <Lock className="w-6 h-6 text-accent" />
             </div>
-            <h3 className="font-semibold text-gray-900 mb-1">
+            <h3 className="font-semibold text-[#1B2733] mb-1">
               {lockedFeature || 'Premium Feature'}
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-[#5A6B7A] mb-4">
               Available on Core and Pro plans
             </p>
             <Button onClick={onUpgrade} className="bg-accent hover:bg-accent/90">
@@ -170,7 +170,7 @@ export function UpgradeNudge({
   // Memory preview - show what AI would remember on higher tier
   if (triggerType === 'memory-preview') {
     return (
-      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-teal-50 to-cyan-50">
+      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-[#6B9080]/10">
@@ -178,13 +178,13 @@ export function UpgradeNudge({
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-medium text-gray-900">AI Memory Preview</p>
+                <p className="font-medium text-[#1B2733]">AI Memory Preview</p>
                 <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Pro Feature</Badge>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 With Pro, Aminy remembers everything about your family - triggers, strategies that work, progress milestones, and more.
               </p>
-              <div className="mt-3 p-3 bg-white/60 rounded-lg border border-teal-100">
+              <div className="mt-3 p-3 bg-white/60 rounded-lg border border-[#E8E4DF]">
                 <p className="text-xs text-[#6B9080] italic">
                   "I remember that Alex responds well to visual schedules and needs extra time for transitions.
                   Last week, the morning routine went smoothly when you used the timer.
@@ -216,7 +216,7 @@ export function UpgradeNudge({
             <Shield className="w-5 h-5 text-accent" />
           </div>
           <div className="flex-1">
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-[#3A4A57]">
               <span className="font-medium">You're doing amazing!</span> Upgrade for unlimited support,
               AI memory that never forgets, and direct access to BCBAs.
             </p>
@@ -279,11 +279,11 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
               Most Popular
             </Badge>
           )}
-          <h3 className="font-semibold text-lg text-gray-900">{tier.name}</h3>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-2">{tier.price}</p>
+          <h3 className="font-semibold text-lg text-[#1B2733]">{tier.name}</h3>
+          <p className="text-xl sm:text-2xl font-bold text-[#1B2733] mt-2">{tier.price}</p>
           <ul className="mt-4 space-y-2">
             {tier.features.map((feature, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
+              <li key={i} className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <Sparkles className="w-4 h-4 text-accent" />
                 {feature}
               </li>

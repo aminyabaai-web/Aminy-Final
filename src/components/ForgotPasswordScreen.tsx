@@ -55,7 +55,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
         {/* Header with Back Button */}
-        <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-gray-100">
+        <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-[#E8E4DF]">
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-lg px-2 py-1"
@@ -100,9 +100,9 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
             </p>
 
             {/* Instructions */}
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-8 text-left">
+            <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl p-4 mb-8 text-left">
               <h3 className="font-semibold text-blue-900 mb-2">Next steps:</h3>
-              <ul className="text-blue-800 text-sm space-y-1">
+              <ul className="text-[#4A6478] text-sm space-y-1">
                 <li>• Check your email inbox (and spam folder)</li>
                 <li>• Click the reset link in the email</li>
                 <li>• Create a new password</li>
@@ -144,7 +144,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col relative overflow-hidden">
       {/* Header with Back Button */}
-      <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-gray-100">
+      <nav aria-label="Password reset navigation" className="flex items-center justify-between p-6 border-b border-[#E8E4DF]">
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 rounded-lg px-2 py-1"

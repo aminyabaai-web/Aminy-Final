@@ -61,9 +61,9 @@ export const SessionPrepModal = ({
 
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Progress indicator */}
-          <Card className="p-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-[#6B9080]/20">
+          <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-medium text-teal-900">Preparation Progress</span>
+              <span className="font-medium text-[#6B9080]">Preparation Progress</span>
               <span className="text-sm text-[#6B9080]">{completionRate}% Complete</span>
             </div>
             <div className="w-full bg-[#6B9080]/20 rounded-full h-2 mb-2">
@@ -79,16 +79,16 @@ export const SessionPrepModal = ({
 
           {/* Checklist */}
           <div className="space-y-3">
-            <h4 className="font-medium text-slate-900">Preparation Checklist</h4>
+            <h4 className="font-medium text-[#1B2733]">Preparation Checklist</h4>
             {prepItems.map((item) => (
-              <label key={item.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-slate-50">
+              <label key={item.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-[#FAF7F2]">
                 <Checkbox
                   checked={item.completed}
                   onCheckedChange={() => handleToggle(item.id)}
                   className="mt-1"
                 />
                 <div className="flex-1">
-                  <span className={`${item.completed ? 'line-through text-slate-500' : 'text-slate-900'} ${item.required ? 'font-medium' : ''}`}>
+                  <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
                     {item.text}
                   </span>
                   {item.required && (
@@ -135,14 +135,14 @@ export const ProviderInfoCard = ({
   onSchedule?: () => void;
   onStartCall?: () => void;
 }) => (
-  <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-[#6B9080]/20">
+  <Card className="p-4 mb-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
     <div className="flex items-start justify-between">
       <div className="flex items-start gap-3">
         <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
           <User className="h-6 w-6 text-[#6B9080]" />
         </div>
         <div>
-          <h3 className="font-semibold text-teal-900">{provider.name}</h3>
+          <h3 className="font-semibold text-[#6B9080]">{provider.name}</h3>
           <div className="flex items-center gap-2 mb-1">
             {provider.credentials.map((credential: string) => (
               <Badge key={credential} variant="secondary" className="text-xs">
@@ -190,16 +190,16 @@ export const AppointmentCard = ({
   <Card className={`p-4 transition-all hover:shadow-md ${
     appointment.status === 'pending_insurance' ? 'border-amber-200 bg-amber-50' : 
     appointment.status === 'confirmed' ? 'border-emerald-200 bg-emerald-50' : 
-    'border-slate-200 bg-white'
+    'border-[#E8E4DF] bg-white'
   }`}>
     <div className="flex items-start justify-between mb-3">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-semibold text-slate-900">{appointment.title}</h3>
+          <h3 className="font-semibold text-[#1B2733]">{appointment.title}</h3>
           <Badge className={`${
             appointment.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' :
             appointment.status === 'pending_insurance' ? 'bg-amber-100 text-amber-700' :
-            'bg-slate-100 text-slate-700'
+            'bg-[#F0EDE8] text-[#3A4A57]'
           }`}>
             {appointment.status === 'confirmed' ? '✓ Confirmed' : 
              appointment.status === 'pending_insurance' ? '⏳ Pending Insurance' : 
@@ -207,7 +207,7 @@ export const AppointmentCard = ({
           </Badge>
         </div>
         
-        <div className="flex items-center gap-3 sm:gap-4 mt-1 text-sm text-slate-600">
+        <div className="flex items-center gap-3 sm:gap-4 mt-1 text-sm text-[#5A6B7A]">
           <span className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             {new Date(appointment.date).toLocaleDateString('en-US', { 
@@ -229,14 +229,14 @@ export const AppointmentCard = ({
         {appointment.copay !== undefined && (
           <div className="mt-2 flex items-center gap-1 text-sm">
             <Shield className="h-4 w-4 text-emerald-600" />
-            <span className="text-slate-600">Copay:</span>
-            <span className="font-medium text-slate-900">
+            <span className="text-[#5A6B7A]">Copay:</span>
+            <span className="font-medium text-[#1B2733]">
               {appointment.copay === 0 ? 'Fully Covered' : `$${appointment.copay}`}
             </span>
           </div>
         )}
         
-        <p className="text-sm text-slate-600 mt-2">{appointment.notes}</p>
+        <p className="text-sm text-[#5A6B7A] mt-2">{appointment.notes}</p>
       </div>
     </div>
     
@@ -322,7 +322,7 @@ export const PostSessionModal = ({
                   className={`p-2 rounded-lg transition-colors ${
                     rating >= starRating
                       ? 'bg-amber-100 text-amber-600'
-                      : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+                      : 'bg-[#F0EDE8] text-slate-400 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <Star className={`h-5 w-5 ${rating >= starRating ? 'fill-current' : ''}`} />
@@ -356,20 +356,20 @@ export const PostSessionModal = ({
               />
               <label htmlFor="session-file-upload" className="cursor-pointer">
                 <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
-                <p className="text-sm text-slate-600 mb-1">Upload photos, videos, or documents</p>
-                <p className="text-xs text-slate-500">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Upload photos, videos, or documents</p>
+                <p className="text-xs text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
               </label>
             </div>
             
             {uploadedFiles.length > 0 && (
               <div className="mt-3 space-y-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-slate-50 rounded">
-                    <FileText className="h-4 w-4 text-slate-500" />
-                    <span className="text-sm text-slate-700 flex-1">{file.name}</span>
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
+                    <FileText className="h-4 w-4 text-[#5A6B7A]" />
+                    <span className="text-sm text-[#3A4A57] flex-1">{file.name}</span>
                     <button
                       onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
-                      className="text-slate-400 hover:text-slate-600"
+                      className="text-slate-400 hover:text-[#5A6B7A]"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

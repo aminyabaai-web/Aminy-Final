@@ -50,10 +50,10 @@ export function TodayStrip({ items = defaultTodayItems }: TodayStripProps) {
   const displayItems = items.slice(0, 4);
 
   return (
-    <div className="bg-white border-b border-gray-100 px-4 py-3">
+    <div className="bg-white border-b border-[#E8E4DF] px-4 py-3">
       <div className="flex items-center gap-2 mb-2">
         <Calendar className="w-4 h-4 text-accent" />
-        <h3 className="text-sm font-semibold text-slate-700">Today</h3>
+        <h3 className="text-sm font-semibold text-[#3A4A57]">Today</h3>
       </div>
       
       <div className="flex gap-2 overflow-x-auto scrollbar-hide">
@@ -70,14 +70,14 @@ export function TodayStrip({ items = defaultTodayItems }: TodayStripProps) {
                   ? 'bg-green-50 border-green-200 opacity-60' 
                   : item.status === 'current'
                   ? 'bg-accent/10 border-accent/30'
-                  : 'bg-white border-gray-200 hover:border-accent/30'
+                  : 'bg-white border-[#E8E4DF] hover:border-accent/30'
                 }
                 min-h-[44px]
               `}
             >
               <Icon className="w-4 h-4 text-accent" />
               <div className="text-left">
-                <p className="text-xs font-medium text-slate-700">{item.title}</p>
+                <p className="text-xs font-medium text-[#3A4A57]">{item.title}</p>
                 <p className="text-xs text-muted-foreground">
                   {item.subtitle} · {item.duration}
                 </p>

@@ -100,9 +100,9 @@ const STATUS_CONFIG: Record<BAAConfirmation, {
   },
   'not-applicable': {
     label: 'Not Required',
-    color: 'text-gray-600',
-    bg: 'bg-[#FAF7F2] border-gray-200',
-    icon: <Shield className="w-5 h-5 text-gray-400" />,
+    color: 'text-[#5A6B7A]',
+    bg: 'bg-[#FAF7F2] border-[#E8E4DF]',
+    icon: <Shield className="w-5 h-5 text-[#8A9BA8]" />,
   },
 };
 
@@ -123,10 +123,10 @@ function VendorRow({ vendor, index }: { vendor: VendorBAA; index: number }) {
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-gray-900">{vendor.name}</h3>
-            <span className="text-xs text-gray-500">· {vendor.role}</span>
+            <h3 className="font-bold text-[#1B2733]">{vendor.name}</h3>
+            <span className="text-xs text-[#5A6B7A]">· {vendor.role}</span>
           </div>
-          <p className="text-sm text-gray-600 mt-0.5">{vendor.plan}</p>
+          <p className="text-sm text-[#5A6B7A] mt-0.5">{vendor.plan}</p>
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {cfg.icon}
@@ -134,14 +134,14 @@ function VendorRow({ vendor, index }: { vendor: VendorBAA; index: number }) {
         </div>
       </div>
 
-      <p className="text-sm text-gray-700 leading-relaxed">{vendor.notes}</p>
+      <p className="text-sm text-[#3A4A57] leading-relaxed">{vendor.notes}</p>
 
       {vendor.baaLink && (
         <a
           href={vendor.baaLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#6B9080] hover:text-teal-800 transition-colors"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#6B9080] hover:text-[#6B9080] transition-colors"
         >
           {vendor.baaStatus === 'unconfirmed' ? 'Confirm BAA' : 'View Security Docs'}
           <ExternalLink className="w-3.5 h-3.5" />
@@ -163,24 +163,24 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
   const unconfirmedCount = VENDORS.filter(v => v.baaStatus === 'unconfirmed').length;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           {onBack && (
             <button
               onClick={onBack}
               className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-600" />
+              <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-[#6B9080]" />
-              <h1 className="text-xl font-bold text-gray-900">BAA Status</h1>
+              <h1 className="text-xl font-bold text-[#1B2733]">BAA Status</h1>
             </div>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <p className="text-sm text-[#5A6B7A] mt-0.5">
               Business Associate Agreement tracker — HIPAA compliance
             </p>
           </div>
@@ -214,7 +214,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
             className="flex gap-3 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4"
           >
             <CheckCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0 mt-0.5" />
-            <p className="font-semibold text-teal-800">All required BAAs confirmed</p>
+            <p className="font-semibold text-[#6B9080]">All required BAAs confirmed</p>
           </motion.div>
         )}
 
@@ -223,8 +223,8 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           <VendorRow key={vendor.name} vendor={vendor} index={i} />
         ))}
 
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-xs text-gray-500 leading-relaxed">
+        <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
+          <p className="text-xs text-[#5A6B7A] leading-relaxed">
             <strong>What is a BAA?</strong> A Business Associate Agreement (BAA) is a legally required
             contract between a HIPAA-covered entity (or business associate) and a vendor that will handle
             Protected Health Information (PHI). Under HIPAA, all vendors who process, store, or transmit
@@ -233,7 +233,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           </p>
         </div>
 
-        <p className="text-center text-xs text-gray-400 pb-4">
+        <p className="text-center text-xs text-[#8A9BA8] pb-4">
           Last updated: April 3, 2026 · Aminy Compliance Team
         </p>
       </div>

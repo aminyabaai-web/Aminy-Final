@@ -204,14 +204,14 @@ function WorryInput({ onAdd }: { onAdd: (text: string) => void }) {
           onChange={e => setText(e.target.value)}
           placeholder="What are you worried about?"
           rows={2}
-          className="flex-1 resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
+          className="flex-1 resize-none rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
         />
         <div className="flex flex-col gap-2">
           <button
             type="button"
             onClick={handleVoice}
             className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm active:scale-95 ${
-              recording ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-100 text-slate-500'
+              recording ? 'bg-red-500 text-white animate-pulse' : 'bg-[#F0EDE8] text-[#5A6B7A]'
             }`}
           >
             <Mic className="h-5 w-5" />
@@ -352,13 +352,13 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-50 to-white">
       {/* Header */}
-      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-slate-100">
+      <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">
-          <button type="button" onClick={() => { playTap(); onBack(); }} className="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <button type="button" onClick={() => { playTap(); onBack(); }} className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A]">
             <ArrowLeft className="h-5 w-5" />
             Back
           </button>
-          <div className="text-sm font-semibold text-slate-800">Worry Jar</div>
+          <div className="text-sm font-semibold text-[#1B2733]">Worry Jar</div>
           <div className="flex items-center gap-1 text-sm font-medium text-violet-600">
             <Sparkles className="h-4 w-4" />
             {releasedCount} let go
@@ -371,7 +371,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
         <div className="relative mx-auto flex flex-col items-center">
           <div className="text-center mb-3">
             <div className="text-2xl mb-1">🫙</div>
-            <p className="text-sm text-slate-500">Tap a worry stone to explore it</p>
+            <p className="text-sm text-[#5A6B7A]">Tap a worry stone to explore it</p>
           </div>
 
           {/* Jar body */}
@@ -444,12 +444,12 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="rounded-[20px] border border-slate-200 bg-white p-4 shadow-sm space-y-3"
+                className="rounded-[20px] border border-[#E8E4DF] bg-white p-4 shadow-sm space-y-3"
               >
-                <div className="text-sm font-medium text-slate-800">"{worry.text}"</div>
+                <div className="text-sm font-medium text-[#1B2733]">"{worry.text}"</div>
                 {/* Rating */}
                 <div>
-                  <div className="text-xs text-slate-500 mb-1">How big does it feel? (1-5)</div>
+                  <div className="text-xs text-[#5A6B7A] mb-1">How big does it feel? (1-5)</div>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map(n => (
                       <button
@@ -457,7 +457,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                         type="button"
                         onClick={() => rateWorry(worry.id, n)}
                         className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors ${
-                          worry.rating >= n ? 'bg-violet-500 text-white' : 'bg-slate-100 text-slate-400'
+                          worry.rating >= n ? 'bg-violet-500 text-white' : 'bg-[#F0EDE8] text-slate-400'
                         }`}
                       >
                         {n}
@@ -491,7 +491,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                   <div className="space-y-1">
                     <div className="text-xs text-slate-400">Your reframes:</div>
                     {worry.reframes.map((r, i) => (
-                      <div key={i} className="text-xs text-slate-600 bg-slate-50 rounded-lg px-3 py-2">
+                      <div key={i} className="text-xs text-[#5A6B7A] bg-[#FAF7F2] rounded-lg px-3 py-2">
                         "{r}"
                       </div>
                     ))}
@@ -520,8 +520,8 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
 
         {/* Stats */}
         {worries.length > 0 && (
-          <div className="rounded-[20px] border border-slate-100 bg-slate-50 p-4">
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Worry stats</div>
+          <div className="rounded-[20px] border border-[#E8E4DF] bg-[#FAF7F2] p-4">
+            <div className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Worry stats</div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
                 <div className="text-lg font-bold text-violet-600">{activeWorries.length}</div>

@@ -66,7 +66,7 @@ function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) 
 
   return (
     <div className="mb-4">
-      <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-2">
+      <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A] mb-2">
         <TimeIcon className="w-3 h-3" />
         <span>{config.label} suggestions</span>
       </div>
@@ -74,7 +74,7 @@ function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) 
         {config.prompts.map((promptFn, index) => (
           <button
             key={index}
-            className="text-left p-2.5 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-lg text-sm transition-colors border border-transparent hover:border-gray-200"
+            className="text-left p-2.5 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-lg text-sm transition-colors border border-transparent hover:border-[#E8E4DF]"
             onClick={(e) => {
               e.stopPropagation();
               onAskAminyClick();
@@ -339,7 +339,7 @@ export function EnhancedAskAminyHomeCard({
 
   return (
     <div className={cn(
-      "aminy-ai-card relative bg-white border border-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer",
+      "aminy-ai-card relative bg-white border border-[#E8E4DF] rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer",
       className
     )} onClick={onAskAminyClick}>
       
@@ -350,7 +350,7 @@ export function EnhancedAskAminyHomeCard({
             <Sparkles className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Talk to Aminy</h3>
+            <h3 className="text-lg font-semibold text-[#1B2733]">Talk to Aminy</h3>
             {userTier !== 'starter' ? (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 <Zap className="w-3 h-3 mr-1" />
@@ -365,7 +365,7 @@ export function EnhancedAskAminyHomeCard({
         </div>
         
         {contextScore > 50 && (
-          <div className="flex items-center gap-1 px-2 py-1 bg-blue-50 rounded-lg">
+          <div className="flex items-center gap-1 px-2 py-1 bg-[#EEF4F8] rounded-lg">
             <Brain className="w-4 h-4 text-blue-600" />
             <span className="text-xs font-medium text-blue-700">{contextScore}% personalized</span>
           </div>
@@ -373,17 +373,17 @@ export function EnhancedAskAminyHomeCard({
       </div>
 
       {/* Description */}
-      <p className="text-gray-600 mb-4">
+      <p className="text-[#5A6B7A] mb-4">
         Get personalized, evidence-based guidance for {userData.childName}'s development. 
         Ask about routines, behaviors, milestones, or any concerns.
       </p>
 
       {/* Context Insights */}
       {recentActivity.length > 0 && (
-        <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+        <div className="mb-4 p-3 bg-[#EEF4F8] rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <Brain className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-800">AI understands:</span>
+            <span className="text-sm font-medium text-[#4A6478]">AI understands:</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {recentActivity.map((activity, index) => (

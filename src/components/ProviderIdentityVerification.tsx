@@ -238,20 +238,20 @@ export function ProviderIdentityVerification({
   const StepIcon = ({ step }: { step: VerificationStep }) => {
     if (step.status === 'complete') return <CheckCircle2 className="w-5 h-5 text-green-500" />;
     if (step.status === 'failed') return <XCircle className="w-5 h-5 text-red-500" />;
-    return <div className="w-5 h-5 rounded-full border-2 border-gray-300" />;
+    return <div className="w-5 h-5 rounded-full border-2 border-[#E8E4DF]" />;
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-4">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
           <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#F0EDE8] rounded-lg">
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-gray-900">Identity Verification</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="font-bold text-[#1B2733]">Identity Verification</h1>
+            <p className="text-sm text-[#5A6B7A]">
               {completedSteps}/{state.steps.length} steps complete
             </p>
           </div>
@@ -262,7 +262,7 @@ export function ProviderIdentityVerification({
         <div className="max-w-2xl mx-auto mt-3">
           <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
             <div
-              className="h-full bg-cyan-600 rounded-full transition-all duration-500"
+              className="h-full bg-[#6B9080] rounded-full transition-all duration-500"
               style={{ width: `${(completedSteps / state.steps.length) * 100}%` }}
             />
           </div>
@@ -287,13 +287,13 @@ export function ProviderIdentityVerification({
               {state.status === 'processing' && <Loader2 className="w-6 h-6 text-amber-600 animate-spin" />}
               {state.status === 'manual_review' && <AlertTriangle className="w-6 h-6 text-amber-600" />}
               <div>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-[#1B2733]">
                   {state.status === 'approved' && 'Verification Approved'}
                   {state.status === 'denied' && 'Verification Not Approved'}
                   {state.status === 'processing' && 'Verification Processing'}
                   {state.status === 'manual_review' && 'Under Manual Review'}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#5A6B7A]">
                   {state.status === 'approved' && 'You are cleared to accept clients on Aminy.'}
                   {state.status === 'denied' && (state.denialReason || 'Contact support@aminy.ai for details.')}
                   {state.status === 'processing' && 'Typically takes 1-3 business days. We\'ll notify you.'}
@@ -363,9 +363,9 @@ export function ProviderIdentityVerification({
                   className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform"
                 >
                   {captureLoading ? (
-                    <Loader2 className="w-8 h-8 text-gray-700 animate-spin" />
+                    <Loader2 className="w-8 h-8 text-[#3A4A57] animate-spin" />
                   ) : (
-                    <Camera className="w-8 h-8 text-gray-700" />
+                    <Camera className="w-8 h-8 text-[#3A4A57]" />
                   )}
                 </button>
               </div>
@@ -389,7 +389,7 @@ export function ProviderIdentityVerification({
               <div
                 key={step.id}
                 className={`bg-white rounded-xl border p-4 ${
-                  step.status === 'complete' ? 'border-green-200' : 'border-gray-200'
+                  step.status === 'complete' ? 'border-green-200' : 'border-[#E8E4DF]'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -397,8 +397,8 @@ export function ProviderIdentityVerification({
                     <StepIcon step={step} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">{step.label}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">{step.description}</p>
+                    <p className="font-medium text-[#1B2733]">{step.label}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">{step.description}</p>
 
                     {/* ID Front capture button */}
                     {step.id === 'id_front' && step.status !== 'complete' && (
@@ -410,7 +410,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('id_front')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
                         </button>
@@ -438,7 +438,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('id_back')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
                         </button>
@@ -466,7 +466,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('selfie')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Selfie' : 'Take Selfie'}
                         </button>
@@ -499,12 +499,12 @@ export function ProviderIdentityVerification({
                             maxLength={4}
                             aria-label="Last 4 digits of SSN"
                             style={{ letterSpacing: '0.25em' }}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-lg font-mono focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-center text-lg font-mono focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                           />
                           <button
                             onClick={() => setShowSsn(!showSsn)}
                             aria-label={showSsn ? 'Hide SSN digits' : 'Show SSN digits'}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#8A9BA8]"
                           >
                             {showSsn ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
@@ -512,7 +512,7 @@ export function ProviderIdentityVerification({
                         <button
                           onClick={handleSsnSubmit}
                           disabled={ssnInput.length !== 4}
-                          className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 disabled:opacity-40"
+                          className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E] disabled:opacity-40"
                         >
                           Save
                         </button>
@@ -527,7 +527,7 @@ export function ProviderIdentityVerification({
                     {/* Consent form */}
                     {step.id === 'consent' && step.status !== 'complete' && (
                       <div className="mt-3 space-y-3">
-                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-xs text-gray-600 max-h-32 overflow-y-auto">
+                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-xs text-[#5A6B7A] max-h-32 overflow-y-auto">
                           <p className="font-semibold mb-1">Background Check Authorization</p>
                           <p>I hereby authorize Aminy and its designated background check provider
                           to conduct a background check, which may include criminal history,
@@ -543,16 +543,16 @@ export function ProviderIdentityVerification({
                             type="checkbox"
                             checked={consentChecked}
                             onChange={(e) => setConsentChecked(e.target.checked)}
-                            className="mt-0.5 w-4 h-4 text-[#6B9080] rounded border-gray-300 focus:ring-cyan-500"
+                            className="mt-0.5 w-4 h-4 text-[#6B9080] rounded border-[#E8E4DF] focus:ring-cyan-500"
                           />
-                          <span className="text-sm text-gray-700">
+                          <span className="text-sm text-[#3A4A57]">
                             I have read and agree to the background check authorization above
                           </span>
                         </label>
                         <button
                           onClick={handleConsent}
                           disabled={!consentChecked}
-                          className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 disabled:opacity-40"
+                          className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E] disabled:opacity-40"
                         >
                           Sign & Consent
                         </button>
@@ -573,9 +573,9 @@ export function ProviderIdentityVerification({
 
         {/* Security notice */}
         {!isProcessingOrDone && (
-          <div className="flex items-start gap-2 px-3 py-2 bg-slate-100 rounded-lg">
-            <Lock className="w-4 h-4 text-slate-500 mt-0.5 shrink-0" />
-            <p className="text-xs text-slate-500">
+          <div className="flex items-start gap-2 px-3 py-2 bg-[#F0EDE8] rounded-lg">
+            <Lock className="w-4 h-4 text-[#5A6B7A] mt-0.5 shrink-0" />
+            <p className="text-xs text-[#5A6B7A]">
               All data is encrypted and stored securely. Photos are used only for identity
               verification and deleted after review. SSN is encrypted — we never store the full number.
             </p>
@@ -587,7 +587,7 @@ export function ProviderIdentityVerification({
           <button
             onClick={handleSubmit}
             disabled={!allComplete || isSubmitting}
-            className="w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl hover:bg-cyan-700 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+            className="w-full py-3 bg-[#6B9080] text-white font-semibold rounded-xl hover:bg-[#5A7A6E] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
           >
             {isSubmitting ? (
               <>

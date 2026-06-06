@@ -180,7 +180,7 @@ const SimpleBarChart: React.FC<{
         const barHeight = (d.count / maxValue) * 100;
         return (
           <div key={i} className="flex flex-col items-center gap-2" style={{ width: `${barWidth}%` }}>
-            <span className="text-xs font-medium text-gray-600">{d.count}</span>
+            <span className="text-xs font-medium text-[#5A6B7A]">{d.count}</span>
             <motion.div
               initial={{ height: 0 }}
               animate={{ height: `${barHeight}%` }}
@@ -188,7 +188,7 @@ const SimpleBarChart: React.FC<{
               className="w-8 rounded-t-lg"
               style={{ backgroundColor: d.color, maxHeight: height - 40 }}
             />
-            <span className="text-xs text-gray-500 truncate max-w-full">{d.category}</span>
+            <span className="text-xs text-[#5A6B7A] truncate max-w-full">{d.category}</span>
           </div>
         );
       })}
@@ -247,8 +247,8 @@ const SimplePieChart: React.FC<{
         {data.map((d, i) => (
           <div key={i} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color }} />
-            <span className="text-sm text-gray-600">{d.mood}</span>
-            <span className="text-sm font-medium text-gray-900">{d.percentage}%</span>
+            <span className="text-sm text-[#5A6B7A]">{d.mood}</span>
+            <span className="text-sm font-medium text-[#1B2733]">{d.percentage}%</span>
           </div>
         ))}
       </div>
@@ -387,7 +387,7 @@ export function AnalyticsCharts({
       case 'down':
         return <TrendingDown className="w-4 h-4 text-red-500" />;
       default:
-        return <Minus className="w-4 h-4 text-gray-400" />;
+        return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
     }
   };
 
@@ -410,8 +410,8 @@ export function AnalyticsCharts({
         <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
           <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
         </div>
-        <h3 className="text-base font-semibold text-slate-800 dark:text-white">No analytics yet</h3>
-        <p className="mt-1.5 text-sm text-slate-500 max-w-xs">
+        <h3 className="text-base font-semibold text-[#1B2733] dark:text-white">No analytics yet</h3>
+        <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
           As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
         </p>
       </Card>
@@ -494,13 +494,13 @@ export function AnalyticsCharts({
         </h3>
         <div className="flex items-center gap-2 mb-2">
           <Sun className="w-4 h-4 text-amber-500" />
-          <span className="text-sm text-gray-500 flex-1">Morning</span>
-          <span className="text-sm text-gray-500 flex-1 text-center">Afternoon</span>
-          <span className="text-sm text-gray-500 flex-1 text-right">Evening</span>
+          <span className="text-sm text-[#5A6B7A] flex-1">Morning</span>
+          <span className="text-sm text-[#5A6B7A] flex-1 text-center">Afternoon</span>
+          <span className="text-sm text-[#5A6B7A] flex-1 text-right">Evening</span>
           <Moon className="w-4 h-4 text-indigo-500" />
         </div>
         <ActivityHeatmap data={chartData.timeOfDayActivity} />
-        <div className="flex justify-between mt-2 text-xs text-gray-400">
+        <div className="flex justify-between mt-2 text-xs text-[#8A9BA8]">
           {chartData.timeOfDayActivity.map((d, i) => (
             <span key={i}>{d.hour}</span>
           ))}
@@ -544,7 +544,7 @@ export function AnalyticsCharts({
       {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real
           users are never shown fabricated clinical progress about their child. */}
       {demoMode && (
-        <Card className="p-6 bg-gradient-to-r from-teal-50 to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-teal-800">
+        <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
           <h3 className="font-semibold mb-3 flex items-center gap-2 text-[#6B9080] dark:text-primary">
             <Zap className="w-5 h-5" />
             Pattern Insights

@@ -182,10 +182,10 @@ export function ColorMatchGame({ onBack, onComplete, difficulty = 'easy' }: Game
           <ArrowLeft size={20} />
         </button>
         <div className="text-center">
-          <div className="text-sm font-medium text-gray-600">Round {round + 1}/{maxRounds}</div>
+          <div className="text-sm font-medium text-[#5A6B7A]">Round {round + 1}/{maxRounds}</div>
           <div className="flex items-center gap-1">
             <Star size={14} className="text-amber-500" />
-            <span className="font-bold text-gray-900">{score}</span>
+            <span className="font-bold text-[#1B2733]">{score}</span>
           </div>
         </div>
         <div className="w-10" />
@@ -197,7 +197,7 @@ export function ColorMatchGame({ onBack, onComplete, difficulty = 'easy' }: Game
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-6">
-        <p className="text-lg font-medium text-gray-700 mb-4">Tap the color:</p>
+        <p className="text-lg font-medium text-[#3A4A57] mb-4">Tap the color:</p>
         <motion.div
           key={round}
           initial={{ scale: 0.8, opacity: 0 }}
@@ -486,8 +486,8 @@ export function SpeedTapGame({ onBack, onComplete, difficulty = 'easy' }: GamePr
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <div className="text-6xl font-bold text-gray-900 mb-2">{taps}</div>
-        <div className="text-sm text-gray-500 mb-8">{tapsPerSecond} taps/sec</div>
+        <div className="text-6xl font-bold text-[#1B2733] mb-2">{taps}</div>
+        <div className="text-sm text-[#5A6B7A] mb-8">{tapsPerSecond} taps/sec</div>
 
         <motion.button
           whileTap={{ scale: 0.95 }}
@@ -499,12 +499,12 @@ export function SpeedTapGame({ onBack, onComplete, difficulty = 'easy' }: GamePr
         </motion.button>
 
         {!isRunning && taps === 0 && (
-          <p className="text-gray-500 mt-6 text-sm">Tap to start!</p>
+          <p className="text-[#5A6B7A] mt-6 text-sm">Tap to start!</p>
         )}
 
         {!isRunning && taps > 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 text-center">
-            <p className="text-2xl font-bold text-gray-900">Final: {taps} taps!</p>
+            <p className="text-2xl font-bold text-[#1B2733]">Final: {taps} taps!</p>
             <button
               onClick={() => { setTaps(0); setTimeLeft(difficulty === 'easy' ? 10 : 15); setBestTap(Infinity); }}
               className="mt-3 bg-orange-500 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2 mx-auto"
@@ -628,8 +628,8 @@ export function EmotionMatchGame({ onBack, onComplete, difficulty = 'easy' }: Ga
           <ArrowLeft size={20} />
         </button>
         <div className="text-center">
-          <div className="text-sm text-gray-600">Matches: {matches}/{pairs.length}</div>
-          <div className="text-xs text-gray-400">Moves: {moves}</div>
+          <div className="text-sm text-[#5A6B7A]">Matches: {matches}/{pairs.length}</div>
+          <div className="text-xs text-[#8A9BA8]">Moves: {moves}</div>
         </div>
         <div className="w-10" />
       </div>
@@ -661,8 +661,8 @@ export function EmotionMatchGame({ onBack, onComplete, difficulty = 'easy' }: Ga
           animate={{ opacity: 1, y: 0 }}
           className="p-6 text-center"
         >
-          <p className="text-2xl font-bold text-gray-900 mb-1">All Matched!</p>
-          <p className="text-gray-500 text-sm">Completed in {moves} moves</p>
+          <p className="text-2xl font-bold text-[#1B2733] mb-1">All Matched!</p>
+          <p className="text-[#5A6B7A] text-sm">Completed in {moves} moves</p>
         </motion.div>
       )}
     </div>

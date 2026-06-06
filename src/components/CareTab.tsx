@@ -407,8 +407,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             isBCBA 
               ? 'bg-purple-50 text-purple-700 border-purple-200' 
               : isRBT 
-                ? 'bg-blue-50 text-blue-700 border-blue-200'
-                : 'bg-[#FAF7F2] text-gray-700 border-gray-200'
+                ? 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]'
+                : 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]'
           }`}
         >
           {cred}
@@ -420,7 +420,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   const renderMessages = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Coach Office Hours */}
-      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+      <div className="p-4 bg-[#EEF4F8] rounded-lg border border-[#C8DDE8]">
         <div className="flex items-center gap-2 mb-2">
           <Clock className="w-4 h-4 text-blue-600" />
           <span className="font-medium text-blue-900">Coach Office Hours</span>
@@ -434,9 +434,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       <div className="space-y-3 sm:space-y-4 max-h-80 overflow-y-auto">
         {messages.length === 0 && (
           <div className="text-center py-8">
-            <MessageCircle className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-600">No messages yet</p>
-            <p className="text-sm text-gray-500">
+            <MessageCircle className="w-10 h-10 text-[#8A9BA8] mx-auto mb-3" />
+            <p className="text-[#5A6B7A]">No messages yet</p>
+            <p className="text-sm text-[#5A6B7A]">
               Send a note below and your coach will reply during office hours.
             </p>
           </div>
@@ -454,7 +454,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-gray-900">
+                      <span className="font-medium text-sm text-[#1B2733]">
                         {message.coachName}
                       </span>
                       {message.coachCredentials && (
@@ -463,7 +463,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-[#5A6B7A]">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -473,7 +473,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className={`rounded-lg px-4 py-3 ${
                 message.from === 'parent'
                   ? 'bg-accent text-white'
-                  : 'bg-[#FAF7F2] border border-gray-200'
+                  : 'bg-[#FAF7F2] border border-[#E8E4DF]'
               }`}>
                 <p className="text-sm">{message.content}</p>
                 
@@ -498,7 +498,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               
               {message.from === 'parent' && (
                 <div className="text-right mt-1">
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-[#5A6B7A]">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -574,20 +574,20 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Duration Selection */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">Session Duration</h3>
+        <h3 className="font-semibold text-[#1B2733] mb-3">Session Duration</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setSelectedDuration('25min')}
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedDuration === '25min'
                 ? 'border-accent bg-accent/5'
-                : 'border-gray-200 hover:border-gray-300'
+                : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
             }`}
           >
             <div className="text-center">
               <div className="font-semibold text-lg">25 min</div>
-              <div className="text-sm text-gray-600">Quick check-in</div>
-              <div className="text-xs text-gray-500 mt-1">Focus session</div>
+              <div className="text-sm text-[#5A6B7A]">Quick check-in</div>
+              <div className="text-xs text-[#5A6B7A] mt-1">Focus session</div>
             </div>
           </button>
           <button
@@ -595,13 +595,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             className={`p-4 rounded-lg border-2 transition-all ${
               selectedDuration === '50min'
                 ? 'border-accent bg-accent/5'
-                : 'border-gray-200 hover:border-gray-300'
+                : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
             }`}
           >
             <div className="text-center">
               <div className="font-semibold text-lg">50 min</div>
-              <div className="text-sm text-gray-600">Deep dive</div>
-              <div className="text-xs text-gray-500 mt-1">Strategy session</div>
+              <div className="text-sm text-[#5A6B7A]">Deep dive</div>
+              <div className="text-xs text-[#5A6B7A] mt-1">Strategy session</div>
             </div>
           </button>
         </div>
@@ -609,11 +609,11 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {/* Calendar Placeholder */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">Available Times</h3>
-        <div className="p-8 bg-[#FAF7F2] rounded-lg border-2 border-dashed border-gray-300 text-center">
-          <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-gray-600 mb-4">Calendar integration coming soon</p>
-          <p className="text-sm text-gray-500">
+        <h3 className="font-semibold text-[#1B2733] mb-3">Available Times</h3>
+        <div className="p-8 bg-[#FAF7F2] rounded-lg border-2 border-dashed border-[#E8E4DF] text-center">
+          <Calendar className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
+          <p className="text-[#5A6B7A] mb-4">Calendar integration coming soon</p>
+          <p className="text-sm text-[#5A6B7A]">
             For now, your coach will reach out to schedule based on your availability
           </p>
         </div>
@@ -622,10 +622,10 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Upcoming Sessions */}
       {upcomingSessions.length > 0 && (
         <div>
-          <h3 className="font-semibold text-gray-900 mb-3">Upcoming Sessions</h3>
+          <h3 className="font-semibold text-[#1B2733] mb-3">Upcoming Sessions</h3>
           <div className="space-y-3">
             {upcomingSessions.map((session) => (
-              <div key={session.id} className="p-4 bg-white rounded-lg border border-gray-200">
+              <div key={session.id} className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
@@ -640,7 +640,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   </div>
                   <Badge variant="outline">{session.duration} min</Badge>
                 </div>
-                <div className="text-sm text-gray-600 mb-3">
+                <div className="text-sm text-[#5A6B7A] mb-3">
                   {session.date.toLocaleDateString()} at {session.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
                 <AddToCalendarButtons
@@ -713,25 +713,25 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Minutes Wallet */}
       <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
-        <h3 className="font-semibold text-gray-900 mb-4">Your Minutes Wallet</h3>
+        <h3 className="font-semibold text-[#1B2733] mb-4">Your Minutes Wallet</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-purple-600">
               {minutesWallet.includedThisMonth}
             </div>
-            <div className="text-sm text-gray-600">Included this month</div>
+            <div className="text-sm text-[#5A6B7A]">Included this month</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-green-600">
               {remainingMinutes}
             </div>
-            <div className="text-sm text-gray-600">Remaining</div>
+            <div className="text-sm text-[#5A6B7A]">Remaining</div>
           </div>
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {minutesWallet.purchased}
             </div>
-            <div className="text-sm text-gray-600">Purchased</div>
+            <div className="text-sm text-[#5A6B7A]">Purchased</div>
           </div>
         </div>
       </div>
@@ -741,13 +741,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           Purchase buttons. */}
       {demo && (
         <div>
-          <h3 className="font-semibold text-gray-900 mb-3">Buy Additional Minutes</h3>
+          <h3 className="font-semibold text-[#1B2733] mb-3">Buy Additional Minutes</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <div className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">25 min</div>
                 <div className="text-lg font-semibold text-accent">$49</div>
-                <div className="text-xs text-gray-500">$1.96 per minute</div>
+                <div className="text-xs text-[#5A6B7A]">$1.96 per minute</div>
               </div>
               <Button
                 onClick={() => handleBuyMinutes('25')}
@@ -758,11 +758,11 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 Purchase
               </Button>
             </div>
-            <div className="p-4 bg-white rounded-lg border border-gray-200">
+            <div className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">50 min</div>
                 <div className="text-lg font-semibold text-accent">$89</div>
-                <div className="text-xs text-gray-500">$1.78 per minute</div>
+                <div className="text-xs text-[#5A6B7A]">$1.78 per minute</div>
                 <Badge className="text-xs mt-1">Best Value</Badge>
               </div>
               <Button
@@ -780,19 +780,19 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {/* Usage History */}
       <div>
-        <h3 className="font-semibold text-gray-900 mb-3">Recent Usage</h3>
+        <h3 className="font-semibold text-[#1B2733] mb-3">Recent Usage</h3>
         <div className="space-y-3">
           {minutesUsage.map((usage) => (
-            <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
+            <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E8E4DF]">
               <div>
                 <div className="font-medium text-sm">{usage.activity}</div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-[#5A6B7A]">
                   {usage.date.toLocaleDateString()}
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-semibold text-sm">-{usage.minutesUsed} min</div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-[#5A6B7A]">
                   {usage.type === 'session' ? 'Coaching Session' : 'Consultation'}
                 </div>
               </div>
@@ -800,9 +800,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           ))}
           {minutesUsage.length === 0 && (
             <div className="text-center py-6">
-              <Clock className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-600">No usage yet</p>
-              <p className="text-sm text-gray-500">Your coaching minutes activity will appear here.</p>
+              <Clock className="w-10 h-10 text-[#8A9BA8] mx-auto mb-3" />
+              <p className="text-[#5A6B7A]">No usage yet</p>
+              <p className="text-sm text-[#5A6B7A]">Your coaching minutes activity will appear here.</p>
             </div>
           )}
         </div>
@@ -817,7 +817,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           {/* Session Header */}
           <button
             onClick={() => setSelectedSession(selectedSession?.id === session.id ? null : session)}
-            className="w-full p-4 bg-white rounded-lg border border-gray-200 hover:border-gray-300 transition-colors text-left"
+            className="w-full p-4 bg-white rounded-lg border border-[#E8E4DF] hover:border-[#E8E4DF] transition-colors text-left"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -835,7 +835,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="text-sm font-medium">
                   {session.date.toLocaleDateString()}
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-[#5A6B7A]">
                   {session.duration} minutes
                 </div>
               </div>
@@ -845,13 +845,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 className={`${
                   session.status === 'completed' 
                     ? 'bg-green-100 text-green-800' 
-                    : 'bg-[#F0EDE8] text-gray-800'
+                    : 'bg-[#F0EDE8] text-[#1B2733]'
                 }`}
               >
                 {session.status}
               </Badge>
               <ChevronRight 
-                className={`w-4 h-4 text-gray-400 transition-transform ${
+                className={`w-4 h-4 text-[#8A9BA8] transition-transform ${
                   selectedSession?.id === session.id ? 'rotate-90' : ''
                 }`} 
               />
@@ -860,15 +860,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
           {/* Session Summary */}
           {selectedSession?.id === session.id && session.summary && (
-            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-gray-200 space-y-3 sm:space-y-4">
+            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] space-y-3 sm:space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
                   <Target className="w-4 h-4 text-blue-600" />
                   What We Practiced
                 </h4>
                 <ul className="space-y-1">
                   {session.summary.whatWePracticed.map((item, index) => (
-                    <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                    <li key={index} className="text-sm text-[#3A4A57] flex items-start gap-2">
                       <CheckCircle className="w-3 h-3 text-green-600 mt-0.5 flex-shrink-0" />
                       {item}
                     </li>
@@ -877,13 +877,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-purple-600" />
                   Your Next Steps
                 </h4>
                 <ul className="space-y-1">
                   {session.summary.nextSteps.map((step, index) => (
-                    <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                    <li key={index} className="text-sm text-[#3A4A57] flex items-start gap-2">
                       <ArrowLeft className="w-3 h-3 text-purple-600 mt-0.5 flex-shrink-0 rotate-180" />
                       {step}
                     </li>
@@ -892,23 +892,23 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
                   <Brain className="w-4 h-4 text-orange-600" />
                   Key Insights
                 </h4>
-                <p className="text-sm text-gray-700 bg-white p-3 rounded border">
+                <p className="text-sm text-[#3A4A57] bg-white p-3 rounded border">
                   {session.summary.keyInsights}
                 </p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-green-600" />
                   Recommended Activities
                 </h4>
                 <ul className="space-y-1">
                   {session.summary.recommendedActivities.map((activity, index) => (
-                    <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
+                    <li key={index} className="text-sm text-[#3A4A57] flex items-start gap-2">
                       <Play className="w-3 h-3 text-green-600 mt-0.5 flex-shrink-0" />
                       {activity}
                     </li>
@@ -942,9 +942,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {pastSessions.length === 0 && (
         <div className="text-center py-8">
-          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <p className="text-gray-600">No completed sessions yet</p>
-          <p className="text-sm text-gray-500">Your session summaries will appear here</p>
+          <Calendar className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
+          <p className="text-[#5A6B7A]">No completed sessions yet</p>
+          <p className="text-sm text-[#5A6B7A]">Your session summaries will appear here</p>
         </div>
       )}
     </div>
@@ -971,7 +971,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         ) : undefined}
       />
       {/* Compliance disclaimer — subtle inline (full text on tap) */}
-      <div className="bg-white border-b border-gray-100 px-4 pb-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 pb-3">
         <div className="max-w-md mx-auto">
           <DisclaimerFooter variant="subtle" />
         </div>
@@ -990,14 +990,14 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="p-5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-5 h-5 text-purple-600" />
-                <h2 className="text-lg font-semibold text-gray-900">Your Care Plan</h2>
+                <h2 className="text-lg font-semibold text-[#1B2733]">Your Care Plan</h2>
                 {demo && (
-                  <Badge variant="outline" className="text-xs bg-white/60 text-gray-600 border-gray-300">
+                  <Badge variant="outline" className="text-xs bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
                     Sample
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#5A6B7A]">
                 {childName ? `${childName}'s` : 'Your'} goals, daily routines, and progress — all in one place.
               </p>
 
@@ -1005,19 +1005,19 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="grid grid-cols-3 gap-2 mt-4">
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-purple-600">3</div>
-                    <div className="text-xs text-gray-600">Active goals</div>
+                    <div className="text-xs text-[#5A6B7A]">Active goals</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-blue-600">5</div>
-                    <div className="text-xs text-gray-600">Daily routines</div>
+                    <div className="text-xs text-[#5A6B7A]">Daily routines</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-green-600">68%</div>
-                    <div className="text-xs text-gray-600">On track</div>
+                    <div className="text-xs text-[#5A6B7A]">On track</div>
                   </div>
                 </div>
               ) : (
-                <ul className="text-sm text-gray-700 space-y-2 mt-4">
+                <ul className="text-sm text-[#3A4A57] space-y-2 mt-4">
                   <li className="flex items-start gap-2">
                     <Target className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
                     Goals tailored to {childName || 'your child'} from your screening and check-ins
@@ -1048,8 +1048,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             {/* Coaching add-on (Pro) */}
             <div className="p-4 bg-purple-50 rounded-lg border border-purple-200 text-center">
               <Stethoscope className="w-10 h-10 text-purple-400 mx-auto mb-3" />
-              <h3 className="font-semibold text-gray-900 mb-1">Add 1-on-1 coaching</h3>
-              <p className="text-sm text-gray-600 mb-4 max-w-xs mx-auto">
+              <h3 className="font-semibold text-[#1B2733] mb-1">Add 1-on-1 coaching</h3>
+              <p className="text-sm text-[#5A6B7A] mb-4 max-w-xs mx-auto">
                 Work directly with certified developmental specialists on {childName || 'your child'}'s plan
               </p>
               <ul className="text-sm text-purple-700 space-y-1 text-left mb-4">
@@ -1083,7 +1083,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                       className={`flex-1 flex items-center justify-center gap-1 py-3 px-2 rounded-md text-sm font-medium transition-all ${
                         activeView === tab.id
                           ? 'bg-white text-accent shadow-sm'
-                          : 'text-gray-600 hover:text-gray-900'
+                          : 'text-[#5A6B7A] hover:text-[#1B2733]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />

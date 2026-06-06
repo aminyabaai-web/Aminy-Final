@@ -54,7 +54,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
@@ -74,19 +74,19 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
           className="w-full bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg px-3 py-2 text-sm mt-2"
         >
           {profiles.map((p) => (
-            <option key={p.id} value={p.id} className="text-slate-800">{p.name} — {p.rbtNumber}</option>
+            <option key={p.id} value={p.id} className="text-[#1B2733]">{p.name} — {p.rbtNumber}</option>
           ))}
         </select>
       </div>
 
       {/* View tabs */}
-      <div className="flex gap-1 px-3 py-2 bg-white border-b border-slate-200">
+      <div className="flex gap-1 px-3 py-2 bg-white border-b border-[#E8E4DF]">
         {views.map((v) => (
           <button
             key={v.id}
             onClick={() => setViewMode(v.id)}
             className={`flex-1 py-1.5 rounded-full text-xs font-medium text-center transition-colors ${
-              viewMode === v.id ? 'bg-violet-100 text-violet-700' : 'text-slate-500 hover:bg-slate-100'
+              viewMode === v.id ? 'bg-violet-100 text-violet-700' : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
             }`}
           >
             {v.label}
@@ -204,10 +204,10 @@ function AssessmentForm({
   return (
     <div className="space-y-4">
       {/* Summary */}
-      <div className="bg-white rounded-xl p-3 border border-slate-200 flex items-center justify-between">
+      <div className="bg-white rounded-xl p-3 border border-[#E8E4DF] flex items-center justify-between">
         <div>
-          <div className="text-sm font-semibold text-slate-800">Assessing: {rbtName}</div>
-          <div className="text-xs text-slate-500">{today}</div>
+          <div className="text-sm font-semibold text-[#1B2733]">Assessing: {rbtName}</div>
+          <div className="text-xs text-[#5A6B7A]">{today}</div>
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-violet-700">{avgRating.toFixed(1)}</div>
@@ -218,7 +218,7 @@ function AssessmentForm({
       {/* Competency areas by category */}
       {Object.entries(categories).map(([category, areas]) => (
         <div key={category}>
-          <h3 className="text-xs font-semibold text-slate-500 uppercase mb-2">{category}</h3>
+          <h3 className="text-xs font-semibold text-[#5A6B7A] uppercase mb-2">{category}</h3>
           <div className="space-y-1">
             {areas.map((area) => {
               const isExpanded = expandedArea === area.id;
@@ -229,13 +229,13 @@ function AssessmentForm({
                 'text-red-600';
 
               return (
-                <div key={area.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div key={area.id} className="bg-white rounded-lg border border-[#E8E4DF] overflow-hidden">
                   <button
                     onClick={() => setExpandedArea(isExpanded ? null : area.id)}
                     className="w-full px-3 py-2.5 flex items-center gap-2 text-left"
                   >
                     <span className="text-xs text-slate-400 w-5">{area.id}.</span>
-                    <span className="flex-1 text-sm text-slate-700 truncate">{area.name}</span>
+                    <span className="flex-1 text-sm text-[#3A4A57] truncate">{area.name}</span>
                     <span className={`text-sm font-bold ${ratingColor} w-6 text-center`}>{r.rating}</span>
                     {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
                   </button>
@@ -248,7 +248,7 @@ function AssessmentForm({
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-3 pb-3 pt-1 space-y-2 border-t border-slate-100">
+                        <div className="px-3 pb-3 pt-1 space-y-2 border-t border-[#E8E4DF]">
                           {/* Rating selector */}
                           <div className="flex gap-1">
                             {[1, 2, 3, 4, 5].map((val) => (
@@ -260,7 +260,7 @@ function AssessmentForm({
                                     ? val >= 4 ? 'bg-emerald-600 text-white'
                                     : val >= 3 ? 'bg-amber-500 text-white'
                                     : 'bg-red-500 text-white'
-                                    : 'bg-slate-100 text-slate-600'
+                                    : 'bg-[#F0EDE8] text-[#5A6B7A]'
                                 }`}
                               >
                                 {val}
@@ -275,7 +275,7 @@ function AssessmentForm({
                             value={r.notes}
                             onChange={(e) => updateNotes(area.id, e.target.value)}
                             placeholder="Notes for this competency..."
-                            className="w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs h-16 resize-none"
+                            className="w-full border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-xs h-16 resize-none"
                           />
                         </div>
                       </motion.div>
@@ -290,7 +290,7 @@ function AssessmentForm({
 
       {/* Overall notes */}
       <div>
-        <label className="text-xs font-semibold text-slate-600 mb-1 block">Overall Notes</label>
+        <label className="text-xs font-semibold text-[#5A6B7A] mb-1 block">Overall Notes</label>
         <textarea
           value={overallNotes}
           onChange={(e) => setOverallNotes(e.target.value)}
@@ -345,7 +345,7 @@ function HistoryView({
     return (
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-500">No assessments yet for {rbtName}</p>
+        <p className="text-sm text-[#5A6B7A]">No assessments yet for {rbtName}</p>
         <p className="text-xs text-slate-400 mt-1">Create a new assessment to start tracking</p>
       </div>
     );
@@ -353,12 +353,12 @@ function HistoryView({
 
   return (
     <div className="space-y-3">
-      <h2 className="text-sm font-semibold text-slate-700">Assessment History &mdash; {rbtName}</h2>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Assessment History &mdash; {rbtName}</h2>
 
       {/* Progress chart */}
       {assessments.length >= 2 && (
-        <div className="bg-white rounded-xl p-3 border border-slate-200">
-          <div className="flex items-center gap-1 text-xs font-semibold text-slate-600 mb-2">
+        <div className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
+          <div className="flex items-center gap-1 text-xs font-semibold text-[#5A6B7A] mb-2">
             <TrendingUp className="w-3.5 h-3.5" />
             Progress Over Time
           </div>
@@ -368,7 +368,7 @@ function HistoryView({
               const height = (avg / 5) * 100;
               return (
                 <div key={a.id} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="text-[10px] font-medium text-slate-600">{avg.toFixed(1)}</div>
+                  <div className="text-[10px] font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
                   <div className="w-full bg-violet-100 rounded-t-sm overflow-hidden" style={{ height: '100%' }}>
                     <div
                       className="w-full bg-violet-500 rounded-t-sm mt-auto"
@@ -391,7 +391,7 @@ function HistoryView({
         const isExpanded = expandedId === a.id;
 
         return (
-          <div key={a.id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <div key={a.id} className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
             <button
               onClick={() => setExpandedId(isExpanded ? null : a.id)}
               className="w-full p-3 flex items-center gap-3 text-left"
@@ -400,8 +400,8 @@ function HistoryView({
                 <Star className="w-5 h-5 text-violet-600" />
               </div>
               <div className="flex-1">
-                <div className="text-sm font-semibold text-slate-800">{a.date}</div>
-                <div className="text-xs text-slate-500">
+                <div className="text-sm font-semibold text-[#1B2733]">{a.date}</div>
+                <div className="text-xs text-[#5A6B7A]">
                   Avg: {avg.toFixed(1)} &middot; {highCount} strong &middot; {lowCount} needs work
                 </div>
               </div>
@@ -416,7 +416,7 @@ function HistoryView({
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-3 pb-3 border-t border-slate-100 pt-2 space-y-1">
+                  <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-2 space-y-1">
                     {a.ratings.map((r) => {
                       const color =
                         r.rating >= 4 ? 'bg-emerald-100 text-emerald-700' :
@@ -425,7 +425,7 @@ function HistoryView({
                       return (
                         <div key={r.areaId} className="flex items-center gap-2">
                           <span className="text-[10px] text-slate-400 w-4">{r.areaId}</span>
-                          <span className="flex-1 text-xs text-slate-600 truncate">{r.areaName}</span>
+                          <span className="flex-1 text-xs text-[#5A6B7A] truncate">{r.areaName}</span>
                           <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${color}`}>
                             {r.rating}/5
                           </span>
@@ -433,8 +433,8 @@ function HistoryView({
                       );
                     })}
                     {a.overallNotes && (
-                      <div className="mt-2 p-2 bg-slate-50 rounded-lg">
-                        <p className="text-xs text-slate-600">{a.overallNotes}</p>
+                      <div className="mt-2 p-2 bg-[#FAF7F2] rounded-lg">
+                        <p className="text-xs text-[#5A6B7A]">{a.overallNotes}</p>
                       </div>
                     )}
                   </div>
@@ -461,7 +461,7 @@ function DevelopmentPlanView({
     return (
       <div className="text-center py-12">
         <BarChart3 className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-500">No assessments available</p>
+        <p className="text-sm text-[#5A6B7A]">No assessments available</p>
         <p className="text-xs text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
       </div>
     );
@@ -474,8 +474,8 @@ function DevelopmentPlanView({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-sm font-semibold text-slate-700">Development Plan &mdash; {rbtName}</h2>
-      <p className="text-xs text-slate-500">Based on assessment from {latest.date}</p>
+      <h2 className="text-sm font-semibold text-[#3A4A57]">Development Plan &mdash; {rbtName}</h2>
+      <p className="text-xs text-[#5A6B7A]">Based on assessment from {latest.date}</p>
 
       {/* Priority: Low areas */}
       {lowAreas.length > 0 && (
@@ -488,13 +488,13 @@ function DevelopmentPlanView({
             {lowAreas.map((r) => (
               <div key={r.areaId} className="bg-white rounded-lg p-2 border border-red-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-slate-800">{r.areaName}</span>
+                  <span className="text-sm font-medium text-[#1B2733]">{r.areaName}</span>
                   <span className="text-xs font-bold text-red-600">{r.rating}/5</span>
                 </div>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#5A6B7A] mt-1">
                   {RATING_LABELS[r.rating]} &mdash; Schedule targeted supervision sessions focusing on this area.
                 </p>
-                {r.notes && <p className="text-xs text-slate-600 mt-1 italic">Note: {r.notes}</p>}
+                {r.notes && <p className="text-xs text-[#5A6B7A] mt-1 italic">Note: {r.notes}</p>}
               </div>
             ))}
           </div>
@@ -511,7 +511,7 @@ function DevelopmentPlanView({
           <div className="space-y-1">
             {midAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-slate-700">{r.areaName}</span>
+                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
                 <span className="text-xs font-medium text-amber-600">{r.rating}/5</span>
               </div>
             ))}
@@ -529,7 +529,7 @@ function DevelopmentPlanView({
           <div className="space-y-1">
             {strongAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-slate-700">{r.areaName}</span>
+                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
                 <span className="text-xs font-medium text-emerald-600">{r.rating}/5</span>
               </div>
             ))}
@@ -550,7 +550,7 @@ function DevelopmentPlanView({
                 <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-xs text-slate-700">{item}</p>
+                <p className="text-xs text-[#3A4A57]">{item}</p>
               </div>
             ))}
           </div>
@@ -560,7 +560,7 @@ function DevelopmentPlanView({
       {lowAreas.length === 0 && (
         <div className="text-center py-4">
           <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
-          <p className="text-sm text-slate-600 font-medium">No critical development areas</p>
+          <p className="text-sm text-[#5A6B7A] font-medium">No critical development areas</p>
           <p className="text-xs text-slate-400">All competencies rated 3 or above</p>
         </div>
       )}

@@ -49,21 +49,21 @@ export function ProviderInviteShare(): React.JSX.Element {
   }, [inviteUrl]);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-5 shadow-sm">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-1">
         <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
           <Mail className="w-4 h-4 text-emerald-500" />
         </div>
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+        <h3 className="text-sm font-semibold text-[#1B2733] dark:text-white">
           Invite Providers
         </h3>
       </div>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 ml-10">
+      <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 ml-10">
         Share this link to onboard new providers directly into the Aminy platform.
       </p>
 
       {/* URL preview */}
-      <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg px-3 py-2 mb-3 font-mono text-xs text-gray-600 dark:text-gray-300 truncate select-all">
+      <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg px-3 py-2 mb-3 font-mono text-xs text-[#5A6B7A] dark:text-gray-300 truncate select-all">
         {inviteUrl}
       </div>
 
@@ -88,7 +88,7 @@ export function ProviderInviteShare(): React.JSX.Element {
 
         <button
           onClick={handleEmail}
-          className="flex items-center gap-2 flex-1 justify-center bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 flex-1 justify-center bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#3A4A57] dark:text-gray-200 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
         >
           <Mail className="w-4 h-4" />
           Share via Email

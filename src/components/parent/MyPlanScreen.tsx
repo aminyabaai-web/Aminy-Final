@@ -41,14 +41,14 @@ interface MyPlanScreenProps {
 }
 
 const DOMAIN_COLORS: Record<string, { bg: string; text: string; border: string; icon: string }> = {
-  speech: { bg: 'bg-blue-50', text: 'text-blue-800', border: 'border-blue-200', icon: '🗣️' },
+  speech: { bg: 'bg-[#EEF4F8]', text: 'text-[#4A6478]', border: 'border-[#C8DDE8]', icon: '🗣️' },
   social: { bg: 'bg-green-50', text: 'text-green-800', border: 'border-green-200', icon: '🤝' },
   sensory: { bg: 'bg-purple-50', text: 'text-purple-800', border: 'border-purple-200', icon: '🌈' },
-  executive: { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-indigo-200', icon: '🧩' },
+  executive: { bg: 'bg-indigo-50', text: 'text-indigo-800', border: 'border-[#6B9080]/20', icon: '🧩' },
   routines: { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200', icon: '📋' },
   motor: { bg: 'bg-pink-50', text: 'text-pink-800', border: 'border-pink-200', icon: '✋' },
   emotional: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', icon: '💛' },
-  behavioral: { bg: 'bg-yellow-50', text: 'text-yellow-800', border: 'border-yellow-200', icon: '⭐' },
+  behavioral: { bg: 'bg-[#FDF9F0]', text: 'text-[#3A4A57]', border: 'border-[#F0EDE8]', icon: '⭐' },
 };
 
 function getDomainStyle(domain: string) {
@@ -70,7 +70,7 @@ function PriorityBadge({ priority }: { priority: 'high' | 'medium' | 'low' }) {
   const styles = {
     high: 'bg-red-100 text-red-700',
     medium: 'bg-amber-100 text-amber-700',
-    low: 'bg-[#F0EDE8] text-gray-600',
+    low: 'bg-[#F0EDE8] text-[#5A6B7A]',
   };
   return (
     <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${styles[priority]}`}>
@@ -136,10 +136,10 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {/* Weekly Focus Cards */}
         <section className="-mt-3">
           <div className="flex items-center justify-between px-1 pb-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
               This Week's Focus
             </h2>
-            <Target className="h-4 w-4 text-gray-400" />
+            <Target className="h-4 w-4 text-[#8A9BA8]" />
           </div>
           <div className="space-y-3">
             <AnimatePresence>
@@ -157,14 +157,14 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       <div className="mt-0.5 text-2xl">{style.icon}</div>
                       <div className="flex-1">
                         <h3 className={`text-sm font-bold ${style.text}`}>{focus.title}</h3>
-                        <p className="mt-1 text-xs leading-relaxed text-gray-600">
+                        <p className="mt-1 text-xs leading-relaxed text-[#5A6B7A]">
                           {focus.description}
                         </p>
                         <div className="mt-3 flex flex-wrap gap-1.5">
                           {focus.easeActivities.map((act) => (
                             <span
                               key={act}
-                              className="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-gray-700 shadow-sm"
+                              className="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-[#3A4A57] shadow-sm"
                             >
                               {act}
                             </span>
@@ -172,7 +172,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                         </div>
                         <div className="mt-3 flex items-center gap-2 rounded-xl bg-white/60 px-3 py-2">
                           <Heart className="h-3.5 w-3.5 text-pink-400 flex-shrink-0" />
-                          <span className="text-xs text-gray-700">
+                          <span className="text-xs text-[#3A4A57]">
                             <span className="font-medium">Home task:</span> {focus.homeTask}
                           </span>
                         </div>
@@ -189,10 +189,10 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {plan.providerUpdates.length > 0 && (
           <section className="mt-8">
             <div className="flex items-center justify-between px-1 pb-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
                 Provider Updates
               </h2>
-              <MessageSquare className="h-4 w-4 text-gray-400" />
+              <MessageSquare className="h-4 w-4 text-[#8A9BA8]" />
             </div>
             <div className="space-y-3">
               {plan.providerUpdates.map((update, i) => (
@@ -201,22 +201,22 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-[#E8E4DF] bg-white p-4 shadow-sm"
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">{update.provider}</p>
-                      <p className="text-xs text-gray-500">{formatDate(update.date)}</p>
+                      <p className="text-sm font-semibold text-[#1B2733]">{update.provider}</p>
+                      <p className="text-xs text-[#5A6B7A]">{formatDate(update.date)}</p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-gray-400" />
+                    <ChevronRight className="h-4 w-4 text-[#8A9BA8]" />
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-gray-600">{update.summary}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-[#5A6B7A]">{update.summary}</p>
                   {update.wins.length > 0 && (
                     <div className="mt-3 space-y-1.5">
                       {update.wins.map((win, j) => (
                         <div key={j} className="flex items-start gap-2">
                           <Star className="mt-0.5 h-3 w-3 flex-shrink-0 text-amber-400" />
-                          <span className="text-xs text-gray-700">{win}</span>
+                          <span className="text-xs text-[#3A4A57]">{win}</span>
                         </div>
                       ))}
                     </div>
@@ -226,7 +226,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       {update.focusAreas.map((area, j) => (
                         <div key={j} className="flex items-start gap-2">
                           <Target className="mt-0.5 h-3 w-3 flex-shrink-0 text-primary" />
-                          <span className="text-xs text-gray-700">{area}</span>
+                          <span className="text-xs text-[#3A4A57]">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -241,10 +241,10 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {plan.goalProgress.length > 0 && (
           <section className="mt-8">
             <div className="flex items-center justify-between px-1 pb-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
                 Goal Progress
               </h2>
-              <TrendingUp className="h-4 w-4 text-gray-400" />
+              <TrendingUp className="h-4 w-4 text-[#8A9BA8]" />
             </div>
             <div className="space-y-3">
               {plan.goalProgress.map((goal, i) => (
@@ -253,17 +253,17 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-[#E8E4DF] bg-white p-4 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-gray-900">{goal.title}</p>
+                    <p className="text-sm font-semibold text-[#1B2733]">{goal.title}</p>
                     <div className="flex items-center gap-1">
                       {goal.change > 0 ? (
                         <TrendingUp className="h-4 w-4 text-green-500" />
                       ) : goal.change < 0 ? (
                         <TrendingDown className="h-4 w-4 text-red-500" />
                       ) : (
-                        <Minus className="h-4 w-4 text-gray-400" />
+                        <Minus className="h-4 w-4 text-[#8A9BA8]" />
                       )}
                       <span
                         className={`text-xs font-semibold ${
@@ -271,7 +271,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                             ? 'text-green-600'
                             : goal.change < 0
                               ? 'text-red-600'
-                              : 'text-gray-500'
+                              : 'text-[#5A6B7A]'
                         }`}
                       >
                         {goal.change > 0 ? '+' : ''}{goal.change}%
@@ -279,7 +279,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                     </div>
                   </div>
                   <div className="mt-3">
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
                       <span>{goal.currentPct}%</span>
                       <span>Target: 100%</span>
                     </div>
@@ -298,7 +298,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       />
                     </div>
                   </div>
-                  <p className="mt-2.5 text-xs leading-relaxed text-gray-600">
+                  <p className="mt-2.5 text-xs leading-relaxed text-[#5A6B7A]">
                     {goal.recommendation}
                   </p>
                 </motion.div>
@@ -311,7 +311,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {plan.coverageAlerts.length > 0 && (
           <section className="mt-8">
             <div className="flex items-center justify-between px-1 pb-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
                 Coverage Alerts
               </h2>
               <AlertTriangle className="h-4 w-4 text-amber-500" />
@@ -339,7 +339,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {plan.aiRecommendations.length > 0 && (
           <section className="mt-8">
             <div className="flex items-center justify-between px-1 pb-3">
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
                 AI Recommendations
               </h2>
               <Sparkles className="h-4 w-4 text-primary" />
@@ -351,11 +351,11 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
-                  className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-teal-50 to-cyan-50 p-4"
+                  className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 p-4"
                 >
                   <div className="flex items-start gap-3">
                     <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                    <p className="text-xs leading-relaxed text-teal-800">{rec}</p>
+                    <p className="text-xs leading-relaxed text-[#6B9080]">{rec}</p>
                   </div>
                 </motion.div>
               ))}
@@ -366,17 +366,17 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         {/* Next Actions Checklist */}
         <section className="mt-8">
           <div className="flex items-center justify-between px-1 pb-3">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[#5A6B7A]">
               Next Actions
             </h2>
-            <CheckCircle className="h-4 w-4 text-gray-400" />
+            <CheckCircle className="h-4 w-4 text-[#8A9BA8]" />
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-white shadow-sm">
             {plan.nextActions.map((action, i) => (
               <button
                 key={i}
                 onClick={() => toggleAction(i)}
-                className={`flex w-full items-start gap-3 border-b border-gray-100 p-4 text-left last:border-b-0 transition-colors ${
+                className={`flex w-full items-start gap-3 border-b border-[#E8E4DF] p-4 text-left last:border-b-0 transition-colors ${
                   checkedActions.has(i) ? 'bg-[#FAF7F2]' : ''
                 }`}
               >
@@ -384,7 +384,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
                     checkedActions.has(i)
                       ? 'border-[#6B9080] bg-primary'
-                      : 'border-gray-300'
+                      : 'border-[#E8E4DF]'
                   }`}
                 >
                   {checkedActions.has(i) && (
@@ -395,16 +395,16 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   <p
                     className={`text-sm ${
                       checkedActions.has(i)
-                        ? 'text-gray-400 line-through'
-                        : 'text-gray-900'
+                        ? 'text-[#8A9BA8] line-through'
+                        : 'text-[#1B2733]'
                     }`}
                   >
                     {action.action}
                   </p>
                   {action.dueDate && (
                     <div className="mt-1 flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-gray-400" />
-                      <span className="text-[10px] text-gray-500">
+                      <Calendar className="h-3 w-3 text-[#8A9BA8]" />
+                      <span className="text-[10px] text-[#5A6B7A]">
                         Due {formatDate(action.dueDate)}
                       </span>
                     </div>
@@ -430,7 +430,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
             <Sparkles className="h-5 w-5" />
             Ask Aminy AI about this plan
           </button>
-          <p className="mt-2 text-center text-[11px] text-gray-400">
+          <p className="mt-2 text-center text-[11px] text-[#8A9BA8]">
             Get personalized answers about your child's care plan
           </p>
         </motion.div>

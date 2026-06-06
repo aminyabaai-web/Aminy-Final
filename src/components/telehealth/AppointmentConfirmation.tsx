@@ -318,19 +318,19 @@ export function AppointmentConfirmationScreen({
         </span>
         <span className="text-xs font-medium text-green-600 hidden sm:inline">Tell us more</span>
       </div>
-      <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
+      <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
       <div className="flex items-center gap-1.5">
         <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </span>
         <span className="text-xs font-medium text-green-600 hidden sm:inline">Choose provider</span>
       </div>
-      <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
+      <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
       <div className="flex items-center gap-1.5">
         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
           currentPhase === 'success'
             ? 'bg-green-500 text-white'
-            : 'bg-cyan-600 text-white'
+            : 'bg-[#6B9080] text-white'
         }`}>
           {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
         </span>
@@ -350,18 +350,18 @@ export function AppointmentConfirmationScreen({
     return (
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
         {/* Header */}
-        <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
+        <header className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
               className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Go back"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">Confirm your visit</h1>
-              <p className="text-sm text-gray-500">Take one last quiet look before checkout</p>
+              <h1 className="text-lg font-semibold text-[#1B2733]">Confirm your visit</h1>
+              <p className="text-sm text-[#5A6B7A]">Take one last quiet look before checkout</p>
             </div>
           </div>
           <ProgressBreadcrumbs currentPhase="confirm" />
@@ -370,7 +370,7 @@ export function AppointmentConfirmationScreen({
         {/* Content */}
         <div className="px-4 py-6 pb-32 space-y-3 sm:space-y-4">
           {/* Provider Card */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-4 shadow-sm">
+          <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 shadow-sm">
             <div className="flex gap-3 sm:gap-4">
               {/* Avatar */}
               <div className="w-14 h-14 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
@@ -388,69 +388,69 @@ export function AppointmentConfirmationScreen({
               </div>
 
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-[#1B2733]">
                   {provider.firstName} {provider.lastName}, {provider.credentials}
                 </h3>
-                <p className="text-sm text-gray-500">{provider.roleDisplayName}</p>
+                <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
               </div>
             </div>
           </div>
 
           <div className="rounded-2xl border border-[#6B9080]/20 bg-[#6B9080]/10/70 p-4">
             <p className="text-xs uppercase tracking-[0.18em] text-[#6B9080]">Booking rail</p>
-            <h4 className="mt-1 text-sm font-semibold text-teal-900">
+            <h4 className="mt-1 text-sm font-semibold text-[#6B9080]">
               {provider.organization === 'aact' ? 'AACT Telehealth powered by Aminy' : 'Aminy Provider Network cash-pay visit'}
             </h4>
-            <p className="mt-2 text-sm text-teal-800">
+            <p className="mt-2 text-sm text-[#6B9080]">
               Aminy handles the booking, payment, reminders, and secure room. Your provider remains responsible for the care they deliver and the documentation that supports it.
             </p>
           </div>
 
           {/* Appointment Details */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
-            <h4 className="font-medium text-gray-900">Appointment Details</h4>
+          <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
+            <h4 className="font-medium text-[#1B2733]">Appointment Details</h4>
 
             <div className="space-y-3">
               {/* Date & Time */}
               <div className="flex items-start gap-3">
-                <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
+                <Calendar className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-gray-900">{formatDate(slot.startTime)}</p>
-                  <p className="text-sm text-gray-500">{formatTime(slot.startTime)}</p>
+                  <p className="text-[#1B2733]">{formatDate(slot.startTime)}</p>
+                  <p className="text-sm text-[#5A6B7A]">{formatTime(slot.startTime)}</p>
                 </div>
               </div>
 
               {/* Duration */}
               <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-gray-400 mt-0.5" />
+                <Clock className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-gray-900">{visitConfig.displayName}</p>
-                  <p className="text-sm text-gray-500">{visitConfig.duration} minutes</p>
+                  <p className="text-[#1B2733]">{visitConfig.displayName}</p>
+                  <p className="text-sm text-[#5A6B7A]">{visitConfig.duration} minutes</p>
                 </div>
               </div>
 
               {/* Visit Type */}
               <div className="flex items-start gap-3">
-                <Video className="w-5 h-5 text-gray-400 mt-0.5" />
+                <Video className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-gray-900">Remote Visit</p>
-                  <p className="text-sm text-gray-500">Secure Aminy video room, reminders, and a join link that stays easy to find later</p>
+                  <p className="text-[#1B2733]">Remote Visit</p>
+                  <p className="text-sm text-[#5A6B7A]">Secure Aminy video room, reminders, and a join link that stays easy to find later</p>
                 </div>
               </div>
             </div>
 
             {/* Visit Reason */}
-            <div className="pt-3 border-t border-gray-100">
-              <p className="text-sm text-gray-500 mb-1">Reason for visit</p>
-              <p className="text-gray-900">{intake.visitReason}</p>
+            <div className="pt-3 border-t border-[#E8E4DF]">
+              <p className="text-sm text-[#5A6B7A] mb-1">Reason for visit</p>
+              <p className="text-[#1B2733]">{intake.visitReason}</p>
             </div>
           </div>
 
           {/* Pricing */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-4 shadow-sm">
+          <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-gray-700">{visitConfig.displayName}</span>
-              <span className="text-gray-900">{formatPrice(pricing.subtotalCents)}</span>
+              <span className="text-[#3A4A57]">{visitConfig.displayName}</span>
+              <span className="text-[#1B2733]">{formatPrice(pricing.subtotalCents)}</span>
             </div>
 
             {/* Show discounts */}
@@ -468,19 +468,19 @@ export function AppointmentConfirmationScreen({
             )}
 
             {/* Promo Code Input */}
-            <div className="mt-3 pt-3 border-t border-gray-100">
+            <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                   placeholder="Promo code"
-                  className="flex-1 px-3 py-2 text-sm bg-[#FAF7F2] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                  className="flex-1 px-3 py-2 text-sm bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                 />
                 <button
                   onClick={handleApplyPromo}
                   disabled={!promoCode.trim()}
-                  className="px-4 py-2 text-sm font-medium text-[#6B9080] bg-cyan-600/10 rounded-lg hover:bg-cyan-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-[#6B9080] bg-[#6B9080]/10 rounded-lg hover:bg-[#6B9080]/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Apply
                 </button>
@@ -493,24 +493,24 @@ export function AppointmentConfirmationScreen({
               )}
             </div>
 
-            <div className="pt-3 mt-3 border-t border-gray-100 flex items-center justify-between">
-              <span className="font-medium text-gray-900">Total</span>
+            <div className="pt-3 mt-3 border-t border-[#E8E4DF] flex items-center justify-between">
+              <span className="font-medium text-[#1B2733]">Total</span>
               <div className="text-right">
                 {(pricing.memberDiscountCents > 0 || promoDiscountCents > 0) && (
-                  <span className="text-sm text-gray-400 line-through mr-2">
+                  <span className="text-sm text-[#8A9BA8] line-through mr-2">
                     {formatPrice(pricing.subtotalCents)}
                   </span>
                 )}
-                <span className="text-xl font-bold text-gray-900">{formatPrice(pricing.totalCents)}</span>
+                <span className="text-xl font-bold text-[#1B2733]">{formatPrice(pricing.totalCents)}</span>
               </div>
             </div>
             {/* HSA/FSA and Superbill Info */}
-            <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+            <div className="mt-3 pt-3 border-t border-[#E8E4DF] space-y-2">
               <div className="flex items-center gap-2 text-sm text-green-700">
                 <span className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs">✓</span>
                 <span className="font-medium">HSA/FSA eligible</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <span className="w-5 h-5 bg-[#F0EDE8] rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
                 <span>Superbill provided for insurance reimbursement</span>
               </div>
@@ -518,27 +518,27 @@ export function AppointmentConfirmationScreen({
           </div>
 
           {/* Cancellation Policy */}
-          <div className="rounded-2xl border border-slate-200 bg-white/88 p-4 shadow-sm">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-white/88 p-4 shadow-sm">
             <div className="flex items-start gap-3">
-              <Info className="w-5 h-5 text-gray-400 mt-0.5" />
+              <Info className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-gray-700">Reschedule and cancellation</p>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm font-medium text-[#3A4A57]">Reschedule and cancellation</p>
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   Cancel or reschedule free up to 24 hours before your visit. Late cancellations are charged 50% of the visit price, and no-shows are charged the full visit amount. If life changes suddenly, the same appointment record keeps your reminders, payment details, and next steps together.
                 </p>
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-[#5A6B7A]">
                   After booking, you can make changes from appointment details without losing your reminder history or secure room link.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 p-4">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 p-4">
             <div className="flex items-start gap-3">
               <Check className="mt-0.5 h-5 w-5 text-[#6B9080]" />
               <div>
-                <p className="text-sm font-medium text-teal-900">What happens next</p>
-                <p className="mt-1 text-sm text-teal-800">
+                <p className="text-sm font-medium text-[#6B9080]">What happens next</p>
+                <p className="mt-1 text-sm text-[#6B9080]">
                   After checkout, Aminy confirms the visit, sends your reminders, and keeps the video room link ready in the app and email. If you need reimbursement, your superbill is prepared after the session.
                 </p>
                 <p className="mt-2 text-xs text-[#6B9080]">
@@ -550,15 +550,15 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Telehealth Consent + Footer CTA */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
           <label className="flex items-start gap-3 mb-3 cursor-pointer">
             <input
               type="checkbox"
               checked={telehealthConsent}
               onChange={e => setTelehealthConsent(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
+              className="mt-1 h-4 w-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
             />
-            <span className="text-xs text-gray-600 leading-5">
+            <span className="text-xs text-[#5A6B7A] leading-5">
               I consent to receive care via telehealth. I understand this session uses secure video, is not a substitute for emergency care, and that I should call 911 for emergencies. I have reviewed the{' '}
               <a href="/?screen=privacy-policy" className="text-[#6B9080] underline">Privacy Policy</a> and{' '}
               <a href="/?screen=terms-of-service" className="text-[#6B9080] underline">Terms of Service</a>.
@@ -570,7 +570,7 @@ export function AppointmentConfirmationScreen({
             className={`w-full rounded-2xl py-4 text-lg font-semibold transition-all active:scale-[0.98] ${
               telehealthConsent
                 ? 'bg-primary text-white hover:bg-[#6B9080]'
-                : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
+                : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
             }`}
           >
             Continue to secure checkout
@@ -587,18 +587,18 @@ export function AppointmentConfirmationScreen({
     return (
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)]">
         {/* Header */}
-        <header className="sticky top-0 z-10 border-b border-teal-100/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
+        <header className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-white/78">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentStep('confirm')}
               className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Go back"
             >
-              <ArrowLeft className="w-5 h-5 text-gray-700" />
+              <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900">Secure checkout</h1>
-              <p className="text-sm text-gray-500">Finish booking in one calm step</p>
+              <h1 className="text-lg font-semibold text-[#1B2733]">Secure checkout</h1>
+              <p className="text-sm text-[#5A6B7A]">Finish booking in one calm step</p>
             </div>
           </div>
           <ProgressBreadcrumbs currentPhase="payment" />
@@ -607,24 +607,24 @@ export function AppointmentConfirmationScreen({
         {/* Content */}
         <div className="px-4 py-6 pb-32 space-y-3 sm:space-y-4">
           {/* Amount */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-4 text-center shadow-sm">
-            <p className="text-gray-500 mb-1">Amount due</p>
-            <p className="text-4xl font-bold text-gray-900">{formatPrice(pricing.totalCents)}</p>
+          <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 text-center shadow-sm">
+            <p className="text-[#5A6B7A] mb-1">Amount due</p>
+            <p className="text-4xl font-bold text-[#1B2733]">{formatPrice(pricing.totalCents)}</p>
           </div>
 
           {/* Stripe Checkout Info */}
-          <div className="bg-white rounded-3xl border border-slate-200/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
-            <h4 className="font-medium text-gray-900 flex items-center gap-2">
+          <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
+            <h4 className="font-medium text-[#1B2733] flex items-center gap-2">
               <CreditCard className="w-5 h-5" />
               Secure Payment
             </h4>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#5A6B7A]">
               You'll be redirected to Stripe's secure checkout to complete payment.
               Aminy brings you back with the confirmed appointment, reminders, and the secure room link already attached.
             </p>
 
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
               <div className="flex -space-x-1">
                 <div className="w-8 h-5 bg-blue-600 rounded text-white text-[10px] flex items-center justify-center font-bold">VISA</div>
                 <div className="w-8 h-5 bg-red-500 rounded text-white text-[10px] flex items-center justify-center font-bold">MC</div>
@@ -647,13 +647,13 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Footer CTA */}
-        <div className="fixed bottom-0 left-0 right-0 border-t border-teal-100/80 bg-white/92 p-4 safe-area-bottom backdrop-blur supports-[backdrop-filter]:bg-white/84">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-[#E8E4DF]/80 bg-white/92 p-4 safe-area-bottom backdrop-blur supports-[backdrop-filter]:bg-white/84">
           <button
             onClick={handlePayment}
             disabled={isProcessing}
             className={`w-full py-4 font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2 ${
               isProcessing
-                ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                ? 'bg-slate-300 text-[#5A6B7A] cursor-not-allowed'
                 : 'bg-primary text-white hover:bg-[#6B9080] active:scale-[0.98]'
             }`}
           >
@@ -686,15 +686,15 @@ export function AppointmentConfirmationScreen({
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-in">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Your visit is confirmed</h1>
-          <p className="text-gray-600">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">Your visit is confirmed</h1>
+          <p className="text-[#5A6B7A]">
             Confirmation and reminders are on the way to your email and inside Aminy.
           </p>
         </div>
 
         {/* Appointment Summary */}
-        <div className="mb-4 bg-white rounded-3xl border border-slate-200/80 p-4 shadow-sm">
-          <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
+        <div className="mb-4 bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 shadow-sm">
+          <div className="flex items-center gap-3 mb-4 pb-4 border-b border-[#E8E4DF]">
             <div className="w-12 h-12 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
               {provider.avatarUrl ? (
                 <img
@@ -709,35 +709,35 @@ export function AppointmentConfirmationScreen({
               )}
             </div>
             <div>
-              <p className="font-semibold text-gray-900">
+              <p className="font-semibold text-[#1B2733]">
                 {provider.firstName} {provider.lastName}, {provider.credentials}
               </p>
-              <p className="text-sm text-gray-500">{visitConfig.displayName}</p>
+              <p className="text-sm text-[#5A6B7A]">{visitConfig.displayName}</p>
             </div>
           </div>
 
           <div className="space-y-2 text-sm">
-            <div className="flex items-center gap-2 text-gray-700">
-              <Calendar className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-2 text-[#3A4A57]">
+              <Calendar className="w-4 h-4 text-[#8A9BA8]" />
               {formatDate(slot.startTime)}
             </div>
-            <div className="flex items-center gap-2 text-gray-700">
-              <Clock className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-2 text-[#3A4A57]">
+              <Clock className="w-4 h-4 text-[#8A9BA8]" />
               {formatTime(slot.startTime)}
             </div>
-            <div className="flex items-center gap-2 text-gray-700">
-              <Video className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center gap-2 text-[#3A4A57]">
+              <Video className="w-4 h-4 text-[#8A9BA8]" />
               Secure Aminy video room
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 p-4">
+        <div className="rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 p-4">
             <div className="flex items-start gap-3">
               <Video className="mt-0.5 h-5 w-5 text-[#6B9080]" />
               <div>
-                <p className="text-sm font-medium text-teal-900">Joining is simple</p>
-                <p className="mt-1 text-sm text-teal-800">
+                <p className="text-sm font-medium text-[#6B9080]">Joining is simple</p>
+                <p className="mt-1 text-sm text-[#6B9080]">
                   Aminy keeps the room link attached to this appointment and includes it in your reminder messages. The join button appears 15 minutes before start so you never need to hunt for it.
                 </p>
                 <p className="mt-2 text-xs text-[#6B9080]">
@@ -752,7 +752,7 @@ export function AppointmentConfirmationScreen({
           <div className="relative">
             <button
               onClick={() => setShowCalendarOptions(!showCalendarOptions)}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-white py-3 font-medium text-teal-800 transition-colors hover:bg-[#6B9080]/10"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-white py-3 font-medium text-[#6B9080] transition-colors hover:bg-[#6B9080]/10"
             >
               <CalendarPlus className="w-5 h-5" />
               Add to Calendar
@@ -761,7 +761,7 @@ export function AppointmentConfirmationScreen({
 
             {/* Calendar Options Dropdown */}
             {showCalendarOptions && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden z-10">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl border border-[#E8E4DF] shadow-lg overflow-hidden z-10">
                 {CALENDAR_OPTIONS.map((option) => (
                   <button
                     key={option.type}
@@ -769,29 +769,29 @@ export function AppointmentConfirmationScreen({
                     className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3"
                   >
                     <span className="text-lg">{option.icon}</span>
-                    <span className="text-gray-900">{option.name}</span>
+                    <span className="text-[#1B2733]">{option.name}</span>
                   </button>
                 ))}
                 <button
                   onClick={() => handleAddToCalendar('download')}
-                  className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3 border-t border-gray-100"
+                  className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3 border-t border-[#E8E4DF]"
                 >
                   <span className="text-lg">📥</span>
-                  <span className="text-gray-900">Download .ics file</span>
+                  <span className="text-[#1B2733]">Download .ics file</span>
                 </button>
               </div>
             )}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 text-left shadow-sm">
             <div className="flex items-start gap-3">
-              <MessageCircle className="mt-0.5 h-5 w-5 text-slate-500" />
+              <MessageCircle className="mt-0.5 h-5 w-5 text-[#5A6B7A]" />
               <div>
-                <p className="text-sm font-medium text-slate-900">Need to change something?</p>
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="text-sm font-medium text-[#1B2733]">Need to change something?</p>
+                <p className="mt-1 text-sm text-[#5A6B7A]">
                   Reschedule or cancel free up to 24 hours before the visit. Late cancellations are charged 50% and no-shows are charged the full visit amount.
                 </p>
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-[#5A6B7A]">
                   Payment context, policy details, refund status, and the next room link stay tied to the same appointment record.
                 </p>
               </div>
@@ -800,9 +800,9 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Quick Intake Prompt */}
-        <div className="mt-4 sm:mt-6 p-4 bg-cyan-600/10 rounded-xl">
+        <div className="mt-4 sm:mt-6 p-4 bg-[#6B9080]/10 rounded-xl">
           <h4 className="font-medium text-[#6B9080] mb-1">Complete Quick Intake</h4>
-          <p className="text-sm text-gray-600 mb-3">
+          <p className="text-sm text-[#5A6B7A] mb-3">
             Help your provider prepare by answering a few questions (2 minutes).
           </p>
           <button className="text-sm font-medium text-[#6B9080] hover:underline flex items-center gap-1">
@@ -812,8 +812,8 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Reminder Info */}
-        <div className="mt-4 sm:mt-6 p-4 bg-[#FAF7F2] rounded-xl text-sm text-gray-600">
-          <p className="font-medium text-gray-700 mb-2">We'll remind you:</p>
+        <div className="mt-4 sm:mt-6 p-4 bg-[#FAF7F2] rounded-xl text-sm text-[#5A6B7A]">
+          <p className="font-medium text-[#3A4A57] mb-2">We'll remind you:</p>
           <ul className="space-y-1">
             <li>• 24 hours before your visit</li>
             <li>• 1 hour before your visit</li>
@@ -823,10 +823,10 @@ export function AppointmentConfirmationScreen({
       </div>
 
       {/* Footer CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
           <button
             onClick={handleDone}
-            className="w-full py-4 bg-cyan-600 text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
+            className="w-full py-4 bg-[#6B9080] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
           >
             Open appointment details &amp; join info
           </button>

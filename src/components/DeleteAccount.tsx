@@ -145,7 +145,7 @@ export function DeleteAccount({
   return (
     <div className={cn('min-h-screen bg-white dark:bg-slate-900', className)}>
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
+      <div className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-[#E8E4DF] dark:border-slate-700">
         <div className="flex items-center gap-3 px-4 py-3">
           <Button
             variant="ghost"
@@ -155,7 +155,7 @@ export function DeleteAccount({
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h1 className="text-lg font-semibold text-[#1B2733] dark:text-white">
             Delete Account
           </h1>
         </div>
@@ -249,7 +249,7 @@ export function DeleteAccount({
         </h2>
 
         {/* Description */}
-        <div className="space-y-3 sm:space-y-4 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+        <div className="space-y-3 sm:space-y-4 text-[#5A6B7A] dark:text-gray-300 text-sm leading-relaxed">
           <p>
             If you wish to delete your account, please contact our Member Technical Support team
             (select 'Tech Support' in secure messaging recipient list, or email{' '}
@@ -285,10 +285,10 @@ export function DeleteAccount({
 
           {/* What gets deleted */}
           <div className="space-y-2">
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="font-medium text-[#1B2733] dark:text-white">
               What will be deleted:
             </p>
-            <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+            <ul className="list-disc list-inside space-y-1 text-[#5A6B7A] dark:text-[#8A9BA8]">
               <li>Your account login credentials</li>
               <li>Chat conversation history with Aminy AI</li>
               <li>Community posts and comments</li>
@@ -298,10 +298,10 @@ export function DeleteAccount({
           </div>
 
           <div className="space-y-2">
-            <p className="font-medium text-gray-900 dark:text-white">
+            <p className="font-medium text-[#1B2733] dark:text-white">
               What will be retained (per legal requirements):
             </p>
-            <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+            <ul className="list-disc list-inside space-y-1 text-[#5A6B7A] dark:text-[#8A9BA8]">
               <li>Care plan documentation</li>
               <li>Clinical session notes</li>
               <li>Treatment records</li>
@@ -311,11 +311,11 @@ export function DeleteAccount({
         </div>
 
         {/* Data Export */}
-        <Card className="p-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <Card className="p-4 bg-[#EEF4F8] dark:bg-blue-900/20 border-[#C8DDE8] dark:border-blue-800">
           <div className="flex gap-3">
             <Download className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="font-medium text-blue-800 dark:text-blue-300 mb-1">
+              <p className="font-medium text-[#4A6478] dark:text-blue-300 mb-1">
                 Download Your Data First
               </p>
               <p className="text-blue-700 dark:text-blue-400 text-sm mb-3">
@@ -395,7 +395,7 @@ export function DeleteAccount({
 
           <Button
             variant="ghost"
-            className="w-full text-gray-500"
+            className="w-full text-[#5A6B7A]"
             onClick={onBack}
           >
             Go Back
@@ -403,7 +403,7 @@ export function DeleteAccount({
         </div>
 
         {/* Footer note */}
-        <p className="text-xs text-gray-400 dark:text-gray-500 text-center mt-6">
+        <p className="text-xs text-[#8A9BA8] dark:text-[#5A6B7A] text-center mt-6">
           Account deletion requests are processed within 30 days per our privacy policy.
           Clinical records are retained as required by law.
         </p>

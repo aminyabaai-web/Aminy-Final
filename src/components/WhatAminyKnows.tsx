@@ -88,7 +88,7 @@ const categories: Record<string, CategoryInfo> = {
     label: 'Strengths',
     description: 'What they excel at',
     color: 'text-yellow-600',
-    bgColor: 'bg-yellow-50',
+    bgColor: 'bg-[#FDF9F0]',
   },
   challenge: {
     icon: Target,
@@ -109,7 +109,7 @@ const categories: Record<string, CategoryInfo> = {
     label: 'What Works',
     description: 'Effective strategies',
     color: 'text-blue-600',
-    bgColor: 'bg-blue-50',
+    bgColor: 'bg-[#EEF4F8]',
   },
   medical: {
     icon: Shield,
@@ -122,7 +122,7 @@ const categories: Record<string, CategoryInfo> = {
     icon: FileText,
     label: 'Educational',
     description: 'School and learning',
-    color: 'text-indigo-600',
+    color: 'text-[#6B9080]',
     bgColor: 'bg-indigo-50',
   },
 };
@@ -537,7 +537,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                         "flex items-center gap-2 p-3 rounded-lg border transition-all text-left",
                         newFact.category === key
                           ? "border-accent bg-accent/5"
-                          : "border-gray-200 hover:border-gray-300"
+                          : "border-[#E8E4DF] hover:border-[#E8E4DF]"
                       )}
                     >
                       <Icon className={cn("w-4 h-4", cat.color)} />

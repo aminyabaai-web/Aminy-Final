@@ -824,11 +824,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="shrink-0 px-3 py-2.5 flex items-center gap-2 border-b border-slate-100">
+            <div className="shrink-0 px-3 py-2.5 flex items-center gap-2 border-b border-[#E8E4DF]">
               {/* Hamburger — opens history */}
               <button
                 onClick={() => setShowHistory(v => !v)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors shrink-0"
                 aria-label="Chat history"
               >
                 <Menu className="w-4 h-4" />
@@ -843,8 +843,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   ✦
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-slate-900 leading-tight truncate">Aminy AI</p>
-                  <p className="text-xs text-slate-500 leading-tight flex items-center gap-1 truncate">
+                  <p className="text-sm font-semibold text-[#1B2733] leading-tight truncate">Aminy AI</p>
+                  <p className="text-xs text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
                     <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
                   </p>
@@ -854,7 +854,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {/* Settings */}
               <button
                 onClick={() => { setShowSettings(v => !v); setShowHistory(false); }}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors shrink-0"
                 aria-label="Chat settings"
               >
                 <Settings className="w-4 h-4" />
@@ -863,9 +863,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {/* Close */}
               <button
                 onClick={handleClose}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors shrink-0"
+                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors shrink-0"
               >
-                <X className="w-4 h-4 text-slate-600" />
+                <X className="w-4 h-4 text-[#5A6B7A]" />
               </button>
             </div>
 
@@ -883,8 +883,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     className="absolute inset-0 z-10 bg-white flex flex-col"
                   >
                     {/* Drawer header */}
-                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-slate-100 shrink-0">
-                      <p className="text-sm font-semibold text-slate-900">Chat History</p>
+                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] shrink-0">
+                      <p className="text-sm font-semibold text-[#1B2733]">Chat History</p>
                       <button
                         onClick={startNewChat}
                         className="flex items-center gap-1.5 text-xs text-[#6B9080] font-medium px-3 py-1.5 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
@@ -898,10 +898,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-3">
-                          <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center">
                             <MessageSquare className="w-5 h-5 text-slate-400" />
                           </div>
-                          <p className="text-sm text-slate-500">No previous chats yet.</p>
+                          <p className="text-sm text-[#5A6B7A]">No previous chats yet.</p>
                           <p className="text-xs text-slate-400">Your conversations will appear here after you close the chat.</p>
                         </div>
                       ) : (
@@ -910,7 +910,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             <button
                               key={session.id}
                               onClick={() => loadHistorySession(session)}
-                              className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-slate-50 transition-colors text-left"
+                              className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-[#FAF7F2] transition-colors text-left"
                             >
                               <div
                                 className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5"
@@ -919,7 +919,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 ✦
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-slate-800 leading-snug line-clamp-2">{session.preview}</p>
+                                <p className="text-sm text-[#1B2733] leading-snug line-clamp-2">{session.preview}</p>
                                 <p className="text-xs text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
                               </div>
                               <button
@@ -948,11 +948,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     className="absolute inset-0 z-10 bg-white flex flex-col"
                   >
                     {/* Panel header */}
-                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-slate-100 shrink-0">
-                      <p className="text-sm font-semibold text-slate-900">Aminy Settings</p>
+                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] shrink-0">
+                      <p className="text-sm font-semibold text-[#1B2733]">Aminy Settings</p>
                       <button
                         onClick={() => setShowSettings(false)}
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors"
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8] transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -971,11 +971,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {(userContext?.childName || propChildName || '?')[0].toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-slate-900 leading-tight">
+                            <p className="text-sm font-semibold text-[#1B2733] leading-tight">
                               {userContext?.childName || propChildName || 'Your child'}
                             </p>
                             {userContext?.childAge && (
-                              <p className="text-xs text-slate-500">{userContext.childAge}</p>
+                              <p className="text-xs text-[#5A6B7A]">{userContext.childAge}</p>
                             )}
                             {userContext?.diagnosis && (
                               <p className="text-xs text-[#6B9080] font-medium mt-0.5">{userContext.diagnosis}</p>
@@ -993,15 +993,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         {(userContext?.progressThisWeek?.sessionsCompleted ?? 0) > 0 && (
                           <div className="flex gap-3 mt-3 pt-3 border-t border-[#6B9080]/20">
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-slate-800">{userContext?.progressThisWeek?.sessionsCompleted}</p>
+                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.sessionsCompleted}</p>
                               <p className="text-[10px] text-slate-400 uppercase tracking-wide">Sessions</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-slate-800">{userContext?.progressThisWeek?.calmMoments}</p>
+                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.calmMoments}</p>
                               <p className="text-[10px] text-slate-400 uppercase tracking-wide">Calm moments</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-slate-800">{userContext?.progressThisWeek?.newStrategies}</p>
+                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.newStrategies}</p>
                               <p className="text-[10px] text-slate-400 uppercase tracking-wide">Strategies</p>
                             </div>
                           </div>
@@ -1010,7 +1010,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
                       {/* ── Personality ── */}
                       <div className="px-4 mt-5">
-                        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Communication Style</p>
+                        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Communication Style</p>
                         <div className="grid grid-cols-2 gap-2">
                           {(Object.values(AI_PERSONALITIES) as typeof AI_PERSONALITIES[keyof typeof AI_PERSONALITIES][]).map(p => (
                             <button
@@ -1031,10 +1031,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-xs font-semibold text-slate-800">{p.name}</p>
+                                  <p className="text-xs font-semibold text-[#1B2733]">{p.name}</p>
                                   {personality === p.id && <Check className="w-3 h-3 text-[#6B9080] shrink-0" />}
                                 </div>
-                                <p className="text-[10px] text-slate-500 leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
+                                <p className="text-[10px] text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
                               </div>
                             </button>
                           ))}
@@ -1044,7 +1044,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       {/* ── Custom Instructions ── */}
                       <div className="px-4 mt-5">
                         <div className="flex items-center justify-between mb-2">
-                          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Custom Instructions</p>
+                          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Custom Instructions</p>
                           {instructionsDirty && (
                             <button
                               onClick={() => {
@@ -1061,7 +1061,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
                         <div className="space-y-3">
                           <div>
-                            <label className="text-xs text-slate-500 mb-1.5 block">What Aminy should know about you and your family</label>
+                            <label className="text-xs text-[#5A6B7A] mb-1.5 block">What Aminy should know about you and your family</label>
                             <textarea
                               value={customInstructions.aboutMe}
                               onChange={e => {
@@ -1076,13 +1076,13 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#1B2733] placeholder-slate-400 border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={4}
                             />
                           </div>
 
                           <div>
-                            <label className="text-xs text-slate-500 mb-1.5 block">How Aminy should communicate with you</label>
+                            <label className="text-xs text-[#5A6B7A] mb-1.5 block">How Aminy should communicate with you</label>
                             <textarea
                               value={customInstructions.responseStyle}
                               onChange={e => {
@@ -1097,7 +1097,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#1B2733] placeholder-slate-400 border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={3}
                             />
                           </div>
@@ -1109,9 +1109,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         <div className="px-4 mt-5">
                           <div className="flex items-center gap-1.5 mb-2">
                             <Brain className="w-3.5 h-3.5 text-slate-400" />
-                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">What Aminy Knows</p>
+                            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">What Aminy Knows</p>
                           </div>
-                          <div className="rounded-xl border border-slate-100 divide-y divide-slate-100 overflow-hidden">
+                          <div className="rounded-xl border border-[#E8E4DF] divide-y divide-slate-100 overflow-hidden">
                             {userContext.strugglingWith && userContext.strugglingWith.length > 0 && (
                               <div className="px-3 py-2.5">
                                 <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Working on</p>
@@ -1135,12 +1135,12 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {userContext.lastCalmCue && (
                               <div className="px-3 py-2.5 flex items-center gap-2">
                                 <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-                                <p className="text-xs text-slate-600">Last calm cue: <span className="font-medium text-slate-800">{userContext.lastCalmCue}</span></p>
+                                <p className="text-xs text-[#5A6B7A]">Last calm cue: <span className="font-medium text-[#1B2733]">{userContext.lastCalmCue}</span></p>
                               </div>
                             )}
                             {userContext.bestTimeOfDay && (
                               <div className="px-3 py-2.5">
-                                <p className="text-xs text-slate-600">Best time of day: <span className="font-medium text-slate-800 capitalize">{userContext.bestTimeOfDay}</span></p>
+                                <p className="text-xs text-[#5A6B7A]">Best time of day: <span className="font-medium text-[#1B2733] capitalize">{userContext.bestTimeOfDay}</span></p>
                               </div>
                             )}
                             {!userContext.strugglingWith?.length && !userContext.celebratingWins?.length && !userContext.lastCalmCue && !userContext.bestTimeOfDay && (
@@ -1156,7 +1156,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <div className="px-4 mt-5 mb-6 space-y-2">
                         <button
                           onClick={() => { startNewChat(); setShowSettings(false); }}
-                          className="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-700 hover:bg-slate-50 transition-colors text-left"
+                          className="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors text-left"
                         >
                           <RotateCcw className="w-4 h-4 text-slate-400" />
                           Start new conversation
@@ -1172,9 +1172,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               <div className="absolute inset-0 overflow-y-auto px-4 pt-2 pb-2 space-y-4">
                 {isProactiveLoading && messages.length === 0 && (
                   <div className="flex flex-col gap-2 pt-4">
-                    <div className="h-4 w-3/4 bg-slate-100 rounded-full animate-pulse" />
-                    <div className="h-4 w-full bg-slate-100 rounded-full animate-pulse" />
-                    <div className="h-4 w-2/3 bg-slate-100 rounded-full animate-pulse" />
+                    <div className="h-4 w-3/4 bg-[#F0EDE8] rounded-full animate-pulse" />
+                    <div className="h-4 w-full bg-[#F0EDE8] rounded-full animate-pulse" />
+                    <div className="h-4 w-2/3 bg-[#F0EDE8] rounded-full animate-pulse" />
                   </div>
                 )}
 
@@ -1193,7 +1193,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         className={`max-w-[78%] rounded-2xl text-sm leading-relaxed overflow-hidden ${
                           msg.role === 'user'
                             ? 'bg-slate-900 text-white rounded-br-md'
-                            : 'bg-slate-50 text-slate-900 rounded-bl-md border border-slate-100'
+                            : 'bg-[#FAF7F2] text-[#1B2733] rounded-bl-md border border-[#E8E4DF]'
                         }`}
                       >
                         {/* Attached image */}
@@ -1228,7 +1228,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <button
                             key={i}
                             onClick={() => sendMessage(chip)}
-                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-left text-sm text-slate-700 hover:border-slate-400 hover:bg-slate-50 active:bg-slate-100 transition-all"
+                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-[#E8E4DF] rounded-xl text-left text-sm text-[#3A4A57] hover:border-slate-400 hover:bg-[#FAF7F2] active:bg-[#F0EDE8] transition-all"
                             style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                           >
                             <span className="leading-snug">{chip}</span>
@@ -1248,7 +1248,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     >
                       ✦
                     </div>
-                    <div className="px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl rounded-bl-md">
+                    <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
                       <div className="flex gap-1.5 items-center">
                         {[0, 0.15, 0.3].map((delay, i) => (
                           <motion.div
@@ -1269,7 +1269,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
             {/* Input area */}
             <div
-              className="shrink-0 px-4 pt-3 pb-4 bg-white border-t border-slate-100"
+              className="shrink-0 px-4 pt-3 pb-4 bg-white border-t border-[#E8E4DF]"
               style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
             >
               {/* Image preview strip */}
@@ -1279,7 +1279,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <img
                       src={attachedImage.dataUrl}
                       alt="Attachment preview"
-                      className="w-14 h-14 rounded-xl object-cover border border-slate-200"
+                      className="w-14 h-14 rounded-xl object-cover border border-[#E8E4DF]"
                     />
                     <button
                       onClick={() => setAttachedImage(null)}
@@ -1288,7 +1288,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <X className="w-3 h-3" />
                     </button>
                   </div>
-                  <p className="text-xs text-slate-500 truncate">{attachedImage.name}</p>
+                  <p className="text-xs text-[#5A6B7A] truncate">{attachedImage.name}</p>
                 </div>
               )}
 
@@ -1296,7 +1296,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 {/* Attachment button */}
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors shrink-0 mb-0.5"
+                  className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] hover:bg-[#E8E4DF] transition-colors shrink-0 mb-0.5"
                   aria-label="Attach image"
                 >
                   <Plus className="w-5 h-5" />
@@ -1317,7 +1317,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask Aminy anything…"
-                    className="w-full px-4 py-3 pr-24 bg-slate-50 border border-slate-200 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm placeholder:text-slate-400"
+                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm placeholder:text-slate-400"
                     style={{ minHeight: '48px', maxHeight: '120px' }}
                     rows={1}
                   />

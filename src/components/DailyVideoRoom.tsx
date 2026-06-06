@@ -39,7 +39,7 @@ const DailyParticipant = ({ sessionId, isLocal }: { sessionId: string, isLocal?:
     if (!videoState?.track) {
         return (
             <div className="w-full h-full flex items-center justify-center bg-slate-800 rounded-2xl">
-                <Users className="w-12 h-12 text-slate-600" />
+                <Users className="w-12 h-12 text-[#5A6B7A]" />
             </div>
         );
     }
@@ -103,7 +103,7 @@ const DailyGrid = ({ roomUrl }: { roomUrl: string }) => {
             {mainRemoteId ? (
                 <DailyParticipant sessionId={mainRemoteId} />
             ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-slate-500">
+                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-[#5A6B7A]">
                     <Users className="w-16 h-16 mb-4 opacity-50" />
                     <p className="font-medium">Waiting for others to join...</p>
                 </div>
@@ -137,7 +137,7 @@ export const DailyVideoRoom = ({
                 the join effect silently no-op into a perpetual "Waiting..." */}
             {!roomUrl ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-                    <Users className="w-12 h-12 text-slate-600 mb-4" />
+                    <Users className="w-12 h-12 text-[#5A6B7A] mb-4" />
                     <p className="text-slate-100 font-semibold">No room link provided</p>
                     <p className="mt-2 text-sm text-slate-400 max-w-sm">
                         Start or open a telehealth session to generate a secure room link.

@@ -175,7 +175,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
           <RadioGroupItem value="this-device" id="this-device" />
           <Label htmlFor="this-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
-              <Smartphone className="w-5 h-5 text-gray-600" />
+              <Smartphone className="w-5 h-5 text-[#5A6B7A]" />
               <div>
                 <div className="font-medium">This device</div>
                 <div className="text-sm text-muted-foreground">Set up Ease on this device</div>
@@ -188,7 +188,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
           <RadioGroupItem value="another-device" id="another-device" />
           <Label htmlFor="another-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
-              <QrCode className="w-5 h-5 text-gray-600" />
+              <QrCode className="w-5 h-5 text-[#5A6B7A]" />
               <div>
                 <div className="font-medium">Another device</div>
                 <div className="text-sm text-muted-foreground">Pair with QR code or pairing code</div>
@@ -339,8 +339,8 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
 
           <Card className="p-6 text-center bg-[#FAF7F2]">
             {/* Mock QR Code */}
-            <div className="w-32 h-32 bg-white border-2 border-gray-300 rounded-lg mx-auto mb-4 flex items-center justify-center">
-              <QrCode className="w-16 h-16 text-gray-400" />
+            <div className="w-32 h-32 bg-white border-2 border-[#E8E4DF] rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <QrCode className="w-16 h-16 text-[#8A9BA8]" />
             </div>
             
             <div className="text-lg font-mono font-bold text-primary mb-2">
@@ -383,7 +383,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         </div>
 
         {!isCalibrating ? (
-          <Card className="p-6 text-center bg-gradient-to-br from-blue-50 to-purple-50">
+          <Card className="p-6 text-center bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8]">
             <Sparkles className="w-12 h-12 text-purple-600 mx-auto mb-4" />
             <h4 className="font-semibold text-primary mb-2">Ready to Start!</h4>
             <p className="text-sm text-muted-foreground mb-4">
@@ -419,7 +419,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Progress Header */}
-      <div className="bg-white border-b border-gray-100 px-4 py-6">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-6">
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-medium text-muted-foreground">Jr Setup</span>

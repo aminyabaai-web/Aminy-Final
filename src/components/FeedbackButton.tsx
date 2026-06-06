@@ -60,7 +60,7 @@ export function FeedbackButton() {
       {/* Floating button - fixed position, always visible */}
       <button
         onClick={() => setIsOpen(true)}
-        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-slate-700 shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-50"
+        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-[#3A4A57] shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FAF7F2]"
         aria-label="Send feedback"
         title="Send feedback"
       >
@@ -79,13 +79,13 @@ export function FeedbackButton() {
           <div className="bg-white rounded-t-2xl sm:rounded-2xl p-6 w-full sm:max-w-md mx-0 sm:mx-4 shadow-2xl animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 duration-300">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Share Feedback</h3>
+              <h3 className="text-lg font-semibold text-[#1B2733]">Share Feedback</h3>
               <button
                 onClick={handleClose}
                 aria-label="Close feedback"
                 className="h-11 w-11 hover:bg-[#F0EDE8] rounded-full transition-colors flex items-center justify-center"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             </div>
 
@@ -98,7 +98,7 @@ export function FeedbackButton() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedType === type
                       ? 'bg-gray-900 text-white'
-                      : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <span className={selectedType === type ? 'text-white' : color}>
@@ -128,7 +128,7 @@ export function FeedbackButton() {
             />
 
             {/* Context info */}
-            <p className="text-xs text-gray-400 mb-4">
+            <p className="text-xs text-[#8A9BA8] mb-4">
               Your current page will be included to help us understand the context.
             </p>
 
@@ -143,7 +143,7 @@ export function FeedbackButton() {
             </Button>
 
             {/* Warm footer message */}
-            <p className="mt-3 text-center text-xs text-gray-400">
+            <p className="mt-3 text-center text-xs text-[#8A9BA8]">
               We read every message. Thank you for helping us keep Aminy calmer and clearer.
             </p>
           </div>

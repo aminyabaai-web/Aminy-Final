@@ -344,12 +344,12 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
         </div>
 
         {/* Phase 2 Features Section */}
-        <div className="mt-4 pt-4 border-t border-slate-200">
+        <div className="mt-4 pt-4 border-t border-[#E8E4DF]">
           <div className="flex items-center gap-2 mb-3">
             <Badge variant="default" className="bg-purple-600 hover:bg-purple-700">
               Phase 2
             </Badge>
-            <span className="text-xs text-slate-500">BCBA Coach Portal & Analytics</span>
+            <span className="text-xs text-[#5A6B7A]">BCBA Coach Portal & Analytics</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Button 
@@ -691,7 +691,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
       {/* Feature Flags */}
       <Card className="p-3 sm:p-4">
         <h3 className="font-semibold mb-4 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-indigo-600" />
+          <FileText className="w-4 h-4 text-[#6B9080]" />
           Feature Flags
         </h3>
         <div className="space-y-3">
@@ -713,7 +713,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           </div>
           <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Multi-Child Support</span>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Beta</Badge>
+            <Badge variant="outline" className="bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]">Beta</Badge>
           </div>
           <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">Connector Hub</span>
@@ -721,7 +721,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           </div>
           <div className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded">
             <span className="text-sm">B2B2C Portal</span>
-            <Badge variant="outline" className="bg-[#F0EDE8] text-gray-600 border-gray-300">Coming Soon</Badge>
+            <Badge variant="outline" className="bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]">Coming Soon</Badge>
           </div>
         </div>
       </Card>

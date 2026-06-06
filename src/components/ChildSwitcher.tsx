@@ -57,7 +57,7 @@ export function ChildSwitcher({
   // Empty state when no children exist
   if (children.length === 0) {
     return (
-      <div className="p-6 text-center border border-gray-200 rounded-lg bg-[#FAF7F2]">
+      <div className="p-6 text-center border border-[#E8E4DF] rounded-lg bg-[#FAF7F2]">
         <p className="text-sm text-muted-foreground mb-4">
           Add a child to get a plan tailored to them.
         </p>
@@ -79,7 +79,7 @@ export function ChildSwitcher({
     <div className="relative">
       {/* Label above switcher */}
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-semibold text-gray-900">
+        <label className="text-sm font-semibold text-[#1B2733]">
           Your children
         </label>
         {!isUnlimited && (
@@ -116,7 +116,7 @@ export function ChildSwitcher({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute top-full mt-2 w-72 bg-white rounded-lg shadow-lg border border-[#E8E4DF] z-50">
           <div className="max-h-64 overflow-y-auto">
             {children.map((child) => (
               <button

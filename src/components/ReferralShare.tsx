@@ -152,8 +152,8 @@ export function ReferralShare({
             <Gift className="w-5 h-5 text-accent" />
           </div>
           <div className="flex-1">
-            <p className="font-medium text-gray-900">Share the love</p>
-            <p className="text-xs text-gray-600">
+            <p className="font-medium text-[#1B2733]">Share the love</p>
+            <p className="text-xs text-[#5A6B7A]">
               Earn $10 credit for each friend who joins
             </p>
           </div>
@@ -186,10 +186,10 @@ export function ReferralShare({
             <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Heart className="w-8 h-8 text-accent" />
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
               Help Other Families
             </h2>
-            <p className="text-gray-600">
+            <p className="text-[#5A6B7A]">
               Know someone who could use support? Share Aminy and earn $10 credit for each friend who joins.
             </p>
           </div>
@@ -237,14 +237,14 @@ export function ReferralShare({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-center gap-3 sm:gap-4 sm:gap-6 pt-4 border-t border-gray-200">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 sm:gap-6 pt-4 border-t border-[#E8E4DF]">
             <div className="text-center">
               <p className="text-xl sm:text-2xl font-bold text-accent">{referralsCount}</p>
-              <p className="text-xs text-gray-500">Friends joined</p>
+              <p className="text-xs text-[#5A6B7A]">Friends joined</p>
             </div>
             <div className="text-center">
               <p className="text-xl sm:text-2xl font-bold text-green-600">${referralCredits}</p>
-              <p className="text-xs text-gray-500">Credits earned</p>
+              <p className="text-xs text-[#5A6B7A]">Credits earned</p>
             </div>
           </div>
         </Card>
@@ -261,10 +261,10 @@ export function ReferralShare({
           <Heart className="w-8 h-8 text-accent" />
         </div>
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-1">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-1">
             Help Other Families Find Support
           </h2>
-          <p className="text-gray-600">
+          <p className="text-[#5A6B7A]">
             You know how hard this journey can be. Share Aminy with friends who need a village too.
           </p>
         </div>
@@ -327,7 +327,7 @@ export function ReferralShare({
 
       {/* Copy link section */}
       <div className="p-4 bg-[#FAF7F2] rounded-lg mb-4 sm:mb-6">
-        <p className="text-sm font-medium text-gray-700 mb-2">Or copy your referral link:</p>
+        <p className="text-sm font-medium text-[#3A4A57] mb-2">Or copy your referral link:</p>
         <div className="flex gap-2">
           <Input
             value={referralLink}
@@ -352,7 +352,7 @@ export function ReferralShare({
 
       {/* Direct email invite */}
       {showEmailInput ? (
-        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="p-4 bg-[#EEF4F8] rounded-lg border border-[#C8DDE8]">
           <p className="text-sm font-medium text-blue-900 mb-2">Send a direct invite:</p>
           <div className="flex gap-2">
             <Input
@@ -388,20 +388,20 @@ export function ReferralShare({
       )}
 
       {/* Referral stats */}
-      <div className="mt-4 sm:mt-6 pt-6 border-t border-gray-200">
+      <div className="mt-4 sm:mt-6 pt-6 border-t border-[#E8E4DF]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-gray-400" />
-            <span className="text-sm text-gray-600">Your referral impact</span>
+            <Users className="w-5 h-5 text-[#8A9BA8]" />
+            <span className="text-sm text-[#5A6B7A]">Your referral impact</span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="text-center">
               <p className="text-xl font-bold text-accent">{referralsCount}</p>
-              <p className="text-xs text-gray-500">Friends joined</p>
+              <p className="text-xs text-[#5A6B7A]">Friends joined</p>
             </div>
             <div className="text-center">
               <p className="text-xl font-bold text-green-600">${referralCredits}</p>
-              <p className="text-xs text-gray-500">Credits earned</p>
+              <p className="text-xs text-[#5A6B7A]">Credits earned</p>
             </div>
           </div>
         </div>

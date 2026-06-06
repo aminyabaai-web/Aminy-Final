@@ -180,7 +180,7 @@ const providerIcons: Record<ProviderType, React.ElementType> = {
 // Color classes for provider types
 const providerColorClasses: Record<string, { bg: string; text: string; border: string }> = {
   teal: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', border: 'border-[#6B9080]/20' },
-  blue: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' },
+  blue: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-[#C8DDE8]' },
   violet: { bg: 'bg-violet-100', text: 'text-violet-700', border: 'border-violet-200' },
   pink: { bg: 'bg-pink-100', text: 'text-pink-700', border: 'border-pink-200' },
   green: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' },
@@ -592,14 +592,14 @@ export function ProviderMarketplace({
             <div className="flex items-start justify-between mb-1">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-[#6B9080] transition-colors">
+                  <h3 className="font-semibold text-[#1B2733] group-hover:text-[#6B9080] transition-colors">
                     {provider.name}, {provider.credentials}
                   </h3>
                   {provider.verificationStatus && (
                     <VerifiedBadge status={provider.verificationStatus} />
                   )}
                 </div>
-                <p className="text-sm text-gray-500">{typeInfo.fullTitle}</p>
+                <p className="text-sm text-[#5A6B7A]">{typeInfo.fullTitle}</p>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); onViewProvider?.(provider.id); }}
@@ -607,7 +607,7 @@ export function ProviderMarketplace({
               >
                 <Star className="w-4 h-4 text-amber-400 fill-current" />
                 <span className="font-medium">{provider.rating}</span>
-                <span className="text-gray-400">({provider.reviewCount})</span>
+                <span className="text-[#8A9BA8]">({provider.reviewCount})</span>
               </button>
             </div>
 
@@ -634,7 +634,7 @@ export function ProviderMarketplace({
                   </span>
                 ))}
                 {(provider.insuranceAccepted?.length || 0) > 3 && (
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-[#5A6B7A]">
                     +{provider.insuranceAccepted.length - 3} more
                   </span>
                 )}
@@ -642,7 +642,7 @@ export function ProviderMarketplace({
             )}
 
             {/* Quick info */}
-            <div className="flex items-center gap-3 sm:gap-4 text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-3 sm:gap-4 text-sm text-[#5A6B7A] mb-3">
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5" />
                 {provider.yearsExperience}+ years
@@ -677,7 +677,7 @@ export function ProviderMarketplace({
 
         {/* Badges */}
         {provider.badges.length > 0 && (
-          <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100">
+          <div className="flex gap-2 mt-4 pt-4 border-t border-[#E8E4DF]">
             {provider.badges.map((badge, idx) => (
               <Badge key={idx} className={`${colorClasses.bg} ${colorClasses.text} ${colorClasses.border}`}>
                 {badge}
@@ -721,19 +721,19 @@ export function ProviderMarketplace({
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, specialty, or condition..."
-              className="pl-12 h-12 bg-white text-gray-900 border-0 shadow-lg"
+              className="pl-12 h-12 bg-white text-[#1B2733] border-0 shadow-lg"
             />
           </div>
         </div>
       </div>
 
       {/* Category Tabs */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex gap-1 py-2 overflow-x-auto">
             {[
@@ -748,7 +748,7 @@ export function ProviderMarketplace({
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
-                    : 'text-gray-600 hover:bg-[#F0EDE8]'
+                    : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
                 }`}
               >
                 <cat.icon className="w-4 h-4" />
@@ -791,8 +791,8 @@ export function ProviderMarketplace({
                 <Sparkles className="w-5 h-5 text-violet-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">Recommended for {childName}</h3>
-                <p className="text-sm text-gray-600">
+                <h3 className="font-medium text-[#1B2733]">Recommended for {childName}</h3>
+                <p className="text-sm text-[#5A6B7A]">
                   Based on {childConditions.join(', ')}, we suggest starting with a BCBA consultation
                 </p>
               </div>
@@ -819,7 +819,7 @@ export function ProviderMarketplace({
         )}
 
         <div className="flex items-center justify-between mb-4">
-          <p className="text-gray-600">
+          <p className="text-[#5A6B7A]">
             {filteredProviders.length > 0
               ? `${filteredProviders.length} verified provider${filteredProviders.length !== 1 ? 's' : ''} available`
               : 'Verified availability updates when Aminy has live coverage in your area.'}
@@ -847,14 +847,14 @@ export function ProviderMarketplace({
 
         {/* Advanced Filter Panel */}
         {showFilters && (
-          <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-teal-50/50 to-cyan-50/50">
+          <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2]/50 to-cyan-50/50">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+              <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
                 <Filter className="w-4 h-4 text-[#6B9080]" />
                 Filter Providers
               </h3>
               {activeFilterCount > 0 && (
-                <Button variant="ghost" size="sm" onClick={resetFilters} className="text-gray-500 hover:text-gray-700">
+                <Button variant="ghost" size="sm" onClick={resetFilters} className="text-[#5A6B7A] hover:text-[#3A4A57]">
                   <X className="w-4 h-4 mr-1" />
                   Clear All
                 </Button>
@@ -864,14 +864,14 @@ export function ProviderMarketplace({
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* State Filter */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                <label className="text-sm font-medium text-[#3A4A57] mb-1 block flex items-center gap-1">
                   <MapPin className="w-3.5 h-3.5" />
                   Licensed State
                 </label>
                 <select
                   value={filters.state}
                   onChange={(e) => setFilters(prev => ({ ...prev, state: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 >
                   <option value="">All States</option>
                   {US_STATES.map(state => (
@@ -882,14 +882,14 @@ export function ProviderMarketplace({
 
               {/* Min Rating Filter */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                <label className="text-sm font-medium text-[#3A4A57] mb-1 block flex items-center gap-1">
                   <Star className="w-3.5 h-3.5" />
                   Minimum Rating
                 </label>
                 <select
                   value={filters.minRating}
                   onChange={(e) => setFilters(prev => ({ ...prev, minRating: Number(e.target.value) }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
+                  className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg text-sm focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 >
                   <option value={0}>Any Rating</option>
                   <option value={4.5}>4.5+ Stars</option>
@@ -900,7 +900,7 @@ export function ProviderMarketplace({
 
               {/* Availability Filter */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                <label className="text-sm font-medium text-[#3A4A57] mb-1 block flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5" />
                   Availability
                 </label>
@@ -910,7 +910,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
                       filters.availableThisWeek
                         ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080]'
-                        : 'bg-white border-gray-300 text-gray-700 hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]'
                     }`}
                   >
                     <Check className={`w-3.5 h-3.5 inline mr-1 ${filters.availableThisWeek ? 'opacity-100' : 'opacity-0'}`} />
@@ -921,7 +921,7 @@ export function ProviderMarketplace({
 
               {/* Max Price Filter */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1 block flex items-center gap-1">
+                <label className="text-sm font-medium text-[#3A4A57] mb-1 block flex items-center gap-1">
                   <DollarSign className="w-3.5 h-3.5" />
                   Max Price: {filters.maxPrice >= 500 ? 'Any' : `$${filters.maxPrice}`}
                 </label>
@@ -934,7 +934,7 @@ export function ProviderMarketplace({
                   onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}
                   className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-teal-600"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
                   <span>$25</span>
                   <span>$500+</span>
                 </div>
@@ -943,7 +943,7 @@ export function ProviderMarketplace({
 
             {/* Languages */}
             <div className="mt-4">
-              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+              <label className="text-sm font-medium text-[#3A4A57] mb-2 block flex items-center gap-1">
                 <Globe className="w-3.5 h-3.5" />
                 Languages
               </label>
@@ -955,7 +955,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.languages.includes(lang)
                         ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080] border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {lang}
@@ -966,7 +966,7 @@ export function ProviderMarketplace({
 
             {/* Conditions */}
             <div className="mt-4">
-              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+              <label className="text-sm font-medium text-[#3A4A57] mb-2 block flex items-center gap-1">
                 <Brain className="w-3.5 h-3.5" />
                 Experience With
               </label>
@@ -978,7 +978,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.conditions.includes(cond)
                         ? 'bg-violet-100 border-violet-300 text-violet-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {cond}
@@ -989,7 +989,7 @@ export function ProviderMarketplace({
 
             {/* Specialties */}
             <div className="mt-4">
-              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+              <label className="text-sm font-medium text-[#3A4A57] mb-2 block flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5" />
                 Specialties
               </label>
@@ -1001,7 +1001,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.specialties.includes(spec)
                         ? 'bg-[#6B9080]/10 border-cyan-300 text-cyan-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {spec}
@@ -1012,7 +1012,7 @@ export function ProviderMarketplace({
 
             {/* Insurance */}
             <div className="mt-4">
-              <label className="text-sm font-medium text-gray-700 mb-2 block flex items-center gap-1">
+              <label className="text-sm font-medium text-[#3A4A57] mb-2 block flex items-center gap-1">
                 <CreditCard className="w-3.5 h-3.5" />
                 Insurance Accepted
               </label>
@@ -1024,7 +1024,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.insurances.includes(ins)
                         ? 'bg-green-100 border-green-300 text-green-700 border'
-                        : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
                     }`}
                   >
                     {ins}
@@ -1039,7 +1039,7 @@ export function ProviderMarketplace({
                 <div className="flex items-center gap-2 text-sm text-[#6B9080]">
                   <Check className="w-4 h-4" />
                   <span>{activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} applied</span>
-                  <span className="text-gray-400">·</span>
+                  <span className="text-[#8A9BA8]">·</span>
                   <span>{filteredProviders.length} matching provider{filteredProviders.length !== 1 ? 's' : ''}</span>
                 </div>
               </div>
@@ -1085,49 +1085,49 @@ export function ProviderMarketplace({
       <div className="max-w-4xl mx-auto px-4 pb-8">
         <Card className="p-5 sm:p-6 bg-gradient-to-br from-white to-gray-50">
           <div className="text-center mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
               Expert Support for Your Family
             </h3>
-            <p className="text-sm text-gray-600 max-w-xl mx-auto">
+            <p className="text-sm text-[#5A6B7A] max-w-xl mx-auto">
               Every session includes a video call, written summary, personalized recommendations, and follow-up support.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Behavioral Support */}
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
+            <div className="bg-white rounded-xl p-4 border border-[#E8E4DF]">
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-[#6B9080]/10 rounded-lg">
                   <Brain className="w-4 h-4 text-[#6B9080]" />
                 </div>
-                <h4 className="font-medium text-gray-900">Behavioral Support</h4>
+                <h4 className="font-medium text-[#1B2733]">Behavioral Support</h4>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">ABA Specialist Consultation</p>
-                    <p className="text-xs text-gray-500">Up to 60 min with a BCBA</p>
+                    <p className="font-medium text-[#1B2733] text-sm">ABA Specialist Consultation</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 60 min with a BCBA</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">ABA Assessment</p>
-                    <p className="text-xs text-gray-500">Up to 90 min comprehensive review</p>
+                    <p className="font-medium text-[#1B2733] text-sm">ABA Assessment</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 90 min comprehensive review</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$269</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">ABA Coaching Session</p>
-                    <p className="text-xs text-gray-500">Up to 30 min skill-building</p>
+                    <p className="font-medium text-[#1B2733] text-sm">ABA Coaching Session</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 30 min skill-building</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$49</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">ABA Extended Coaching</p>
-                    <p className="text-xs text-gray-500">Up to 60 min deeper practice</p>
+                    <p className="font-medium text-[#1B2733] text-sm">ABA Extended Coaching</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 60 min deeper practice</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$89</span>
                 </div>
@@ -1135,39 +1135,39 @@ export function ProviderMarketplace({
             </div>
 
             {/* Therapy & Wellness */}
-            <div className="bg-white rounded-xl p-4 border border-gray-100">
+            <div className="bg-white rounded-xl p-4 border border-[#E8E4DF]">
               <div className="flex items-center gap-2 mb-4">
                 <div className="p-2 bg-violet-100 rounded-lg">
                   <Heart className="w-4 h-4 text-violet-600" />
                 </div>
-                <h4 className="font-medium text-gray-900">Therapy & Wellness</h4>
+                <h4 className="font-medium text-[#1B2733]">Therapy & Wellness</h4>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">Family Therapy</p>
-                    <p className="text-xs text-gray-500">Up to 45 min with licensed therapist</p>
+                    <p className="font-medium text-[#1B2733] text-sm">Family Therapy</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
                   </div>
                   <span className="font-semibold text-violet-600">$129</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">Extended Therapy Session</p>
-                    <p className="text-xs text-gray-500">Up to 60 min for complex needs</p>
+                    <p className="font-medium text-[#1B2733] text-sm">Extended Therapy Session</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 60 min for complex needs</p>
                   </div>
                   <span className="font-semibold text-violet-600">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">Speech Therapy</p>
-                    <p className="text-xs text-gray-500">Up to 45 min communication support</p>
+                    <p className="font-medium text-[#1B2733] text-sm">Speech Therapy</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 45 min communication support</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">Occupational Therapy</p>
-                    <p className="text-xs text-gray-500">Up to 45 min sensory & motor skills</p>
+                    <p className="font-medium text-[#1B2733] text-sm">Occupational Therapy</p>
+                    <p className="text-xs text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
@@ -1182,32 +1182,32 @@ export function ProviderMarketplace({
                 <Sparkles className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <h4 className="font-medium text-gray-900">Diagnostic Evaluations</h4>
-                <p className="text-xs text-gray-600">Skip the 12-month waitlist. Get answers in days.</p>
+                <h4 className="font-medium text-[#1B2733]">Diagnostic Evaluations</h4>
+                <p className="text-xs text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-gray-800 text-sm">ADHD Evaluation</p>
-                <p className="text-xs text-gray-500 mb-1">Up to 60 min</p>
+                <p className="font-medium text-[#1B2733] text-sm">ADHD Evaluation</p>
+                <p className="text-xs text-[#5A6B7A] mb-1">Up to 60 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$299</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-gray-800 text-sm">Autism Evaluation</p>
-                <p className="text-xs text-gray-500 mb-1">Up to 90 min</p>
+                <p className="font-medium text-[#1B2733] text-sm">Autism Evaluation</p>
+                <p className="text-xs text-[#5A6B7A] mb-1">Up to 90 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$799</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-gray-800 text-sm">Combined Evaluation</p>
-                <p className="text-xs text-gray-500 mb-1">Up to 120 min</p>
+                <p className="font-medium text-[#1B2733] text-sm">Combined Evaluation</p>
+                <p className="text-xs text-[#5A6B7A] mb-1">Up to 120 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$999</span>
               </div>
             </div>
           </div>
 
           {/* What's Included */}
-          <div className="mt-5 pt-5 border-t border-gray-100">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+          <div className="mt-5 pt-5 border-t border-[#E8E4DF]">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#5A6B7A]">
               <span className="flex items-center gap-1">
                 <Check className="w-3.5 h-3.5 text-green-500" />
                 Video session from home
@@ -1230,9 +1230,9 @@ export function ProviderMarketplace({
       </div>
 
       {/* Trust Footer */}
-      <div className="bg-white border-t border-gray-200 py-6">
+      <div className="bg-white border-t border-[#E8E4DF] py-6">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 sm:gap-6 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 sm:gap-6 text-sm text-[#5A6B7A]">
             <span className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-green-500" />
               HIPAA-conscious
@@ -1262,16 +1262,16 @@ export function ProviderMarketplace({
 export function ProviderTeamExplainer() {
   return (
     <Card className="p-4 sm:p-5 md:p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Understanding Your Care Team</h3>
-      <p className="text-gray-600 mb-4 sm:mb-6">
+      <h3 className="font-semibold text-[#1B2733] mb-4">Understanding Your Care Team</h3>
+      <p className="text-[#5A6B7A] mb-4 sm:mb-6">
         Think of your child's care team like building a house:
       </p>
       <div className="space-y-3 sm:space-y-4">
         <div className="flex items-start gap-3 p-4 bg-[#6B9080]/10 rounded-xl">
           <GraduationCap className="w-6 h-6 text-[#6B9080] mt-1" />
           <div>
-            <h4 className="font-medium text-gray-900">BCBA & RBT - The Architect & Builder</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-[#1B2733]">BCBA & RBT - The Architect & Builder</h4>
+            <p className="text-sm text-[#5A6B7A]">
               The BCBA designs the blueprint for behavior support. The RBT helps implement strategies day-to-day.
             </p>
           </div>
@@ -1279,8 +1279,8 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-violet-50 rounded-xl">
           <Heart className="w-6 h-6 text-violet-600 mt-1" />
           <div>
-            <h4 className="font-medium text-gray-900">LPC/LCSW - The Climate Specialist</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-[#1B2733]">LPC/LCSW - The Climate Specialist</h4>
+            <p className="text-sm text-[#5A6B7A]">
               They ensure the emotional "atmosphere" is comfortable and healthy, especially during anxiety or ADHD storms.
             </p>
           </div>
@@ -1288,8 +1288,8 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl">
           <MessageSquare className="w-6 h-6 text-green-600 mt-1" />
           <div>
-            <h4 className="font-medium text-gray-900">SLP & OT - The Specialists</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-[#1B2733]">SLP & OT - The Specialists</h4>
+            <p className="text-sm text-[#5A6B7A]">
               Communication bridge-builders and sensory experts who help with specific skill areas.
             </p>
           </div>
@@ -1297,8 +1297,8 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-red-50 rounded-xl">
           <Stethoscope className="w-6 h-6 text-red-600 mt-1" />
           <div>
-            <h4 className="font-medium text-gray-900">Psychiatrist & Dev Ped - The Medical Captains</h4>
-            <p className="text-sm text-gray-600">
+            <h4 className="font-medium text-[#1B2733]">Psychiatrist & Dev Ped - The Medical Captains</h4>
+            <p className="text-sm text-[#5A6B7A]">
               When medication or comprehensive evaluations are needed, they guide the medical aspects.
             </p>
           </div>

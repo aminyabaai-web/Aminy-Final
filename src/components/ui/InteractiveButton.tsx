@@ -52,16 +52,16 @@ const variantStyles: Record<ButtonVariant, string> = {
     dark:from-teal-600 dark:to-teal-700
   `,
   secondary: `
-    bg-slate-100 text-slate-700
-    hover:bg-slate-200
+    bg-[#F0EDE8] text-[#3A4A57]
+    hover:bg-[#E8E4DF]
     active:bg-slate-300
     dark:bg-slate-700 dark:text-slate-200
     dark:hover:bg-slate-600
   `,
   ghost: `
-    bg-transparent text-slate-600
-    hover:bg-slate-100
-    active:bg-slate-200
+    bg-transparent text-[#5A6B7A]
+    hover:bg-[#F0EDE8]
+    active:bg-[#E8E4DF]
     dark:text-slate-300 dark:hover:bg-slate-800
   `,
   outline: `
@@ -354,9 +354,9 @@ export function IconButton({
   };
 
   const variantClasses = {
-    ghost: 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800',
-    outline: 'border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800',
-    filled: 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700'
+    ghost: 'bg-transparent hover:bg-[#F0EDE8] dark:hover:bg-slate-800',
+    outline: 'border border-[#E8E4DF] dark:border-slate-700 hover:bg-[#FAF7F2] dark:hover:bg-slate-800',
+    filled: 'bg-[#F0EDE8] dark:bg-slate-800 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
   };
 
   return (
@@ -364,7 +364,7 @@ export function IconButton({
       title={tooltip}
       className={cn(
         'inline-flex items-center justify-center rounded-lg',
-        'text-slate-600 dark:text-slate-300',
+        'text-[#5A6B7A] dark:text-slate-300',
         'transition-all duration-150',
         'active:scale-90',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500',
@@ -415,7 +415,7 @@ export function ToggleButton({
         'disabled:opacity-50 disabled:cursor-not-allowed',
         isOn
           ? 'bg-primary'
-          : 'bg-slate-200 dark:bg-slate-700',
+          : 'bg-[#E8E4DF] dark:bg-slate-700',
         sizes.track,
         className
       )}

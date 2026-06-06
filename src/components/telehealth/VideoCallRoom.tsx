@@ -562,23 +562,23 @@ export function VideoCall({
           <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-8 h-8 text-[#6B9080]" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
             Ready to Join?
           </h2>
-          <p className="text-slate-600 mb-4 sm:mb-6">
+          <p className="text-[#5A6B7A] mb-4 sm:mb-6">
             {isProvider
               ? `Session with ${childName}'s family`
               : `Session with ${providerName || 'your provider'}`}
           </p>
 
-          <div className="bg-slate-50 rounded-lg p-4 mb-4 sm:mb-6">
-            <div className="flex items-center justify-center gap-2 text-sm text-slate-600">
+          <div className="bg-[#FAF7F2] rounded-lg p-4 mb-4 sm:mb-6">
+            <div className="flex items-center justify-center gap-2 text-sm text-[#5A6B7A]">
               <Clock className="w-4 h-4" />
               <span>{sessionType === '50min' ? '50 minute' : '25 minute'} session</span>
             </div>
           </div>
 
-          <Alert className="mb-4 sm:mb-6 bg-blue-50 border-blue-200">
+          <Alert className="mb-4 sm:mb-6 bg-[#EEF4F8] border-[#C8DDE8]">
             <AlertCircle className="w-4 h-4 text-blue-600" />
             <AlertDescription className="text-sm text-blue-900">
               Make sure your camera and microphone are working before joining.
@@ -620,10 +620,10 @@ export function VideoCall({
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
             Connection Error
           </h2>
-          <p className="text-slate-600 mb-4 sm:mb-6">
+          <p className="text-[#5A6B7A] mb-4 sm:mb-6">
             {error || 'Unable to connect to the video call.'}
           </p>
           <div className="flex gap-3">
@@ -720,7 +720,7 @@ export function VideoCall({
             />
             {!videoEnabled && (
               <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
-                <VideoOff className="w-8 h-8 text-slate-500" />
+                <VideoOff className="w-8 h-8 text-[#5A6B7A]" />
               </div>
             )}
           </div>
@@ -766,7 +766,7 @@ export function VideoCall({
             {/* Chat messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {chatMessages.length === 0 ? (
-                <p className="text-center text-slate-500 text-sm">
+                <p className="text-center text-[#5A6B7A] text-sm">
                   No messages yet. Start the conversation!
                 </p>
               ) : (
@@ -786,7 +786,7 @@ export function VideoCall({
                       )}
                       <p className="text-sm">{msg.text}</p>
                     </div>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="text-xs text-[#5A6B7A] mt-1">
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
@@ -844,7 +844,7 @@ export function VideoCall({
                 placeholder="Type session notes here..."
                 className="w-full h-32 p-2 border rounded-lg text-sm resize-none"
               />
-              <p className="mt-2 text-xs text-slate-500">
+              <p className="mt-2 text-xs text-[#5A6B7A]">
                 Notes stay with this session and are saved when the call ends.
               </p>
               <button

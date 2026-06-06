@@ -151,7 +151,7 @@ function ServiceCard({ service }: { service: ServiceCode }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+    <div className="bg-white border border-[#E8E4DF] rounded-2xl overflow-hidden">
       <button
         onClick={() => setExpanded(e => !e)}
         className="w-full text-left p-4 flex items-start gap-3"
@@ -162,29 +162,29 @@ function ServiceCard({ service }: { service: ServiceCode }) {
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-gray-900 text-sm leading-snug">{service.name}</p>
+              <p className="font-semibold text-[#1B2733] text-sm leading-snug">{service.name}</p>
               <span className={`text-xs px-2 py-0.5 rounded-full mt-1 inline-block ${CATEGORY_COLORS[service.category]}`}>
                 {CATEGORY_LABELS[service.category]}
               </span>
             </div>
-            {expanded ? <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />}
+            {expanded ? <ChevronUp className="w-5 h-5 text-[#8A9BA8] flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-5 h-5 text-[#8A9BA8] flex-shrink-0 mt-0.5" />}
           </div>
           <div className="flex items-center gap-4 mt-2">
-            <div className="flex items-center gap-1 text-xs text-gray-500">
+            <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
               <DollarSign className="w-3.5 h-3.5" />
-              <span className="font-medium text-gray-700">{service.rateRangeAZ}</span>
+              <span className="font-medium text-[#3A4A57]">{service.rateRangeAZ}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-gray-500">
+            <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
               <Clock className="w-3.5 h-3.5" />
               <span>{service.typicalDuration}</span>
             </div>
           </div>
           <div className="flex gap-2 mt-2">
-            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.evvRequired ? 'bg-red-50 text-red-700' : 'bg-[#F0EDE8] text-gray-500'}`}>
+            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.evvRequired ? 'bg-red-50 text-red-700' : 'bg-[#F0EDE8] text-[#5A6B7A]'}`}>
               {service.evvRequired ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
               EVV {service.evvRequired ? 'required' : 'not required'}
             </div>
-            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.priorAuthRequired ? 'bg-orange-50 text-orange-700' : 'bg-[#F0EDE8] text-gray-500'}`}>
+            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.priorAuthRequired ? 'bg-orange-50 text-orange-700' : 'bg-[#F0EDE8] text-[#5A6B7A]'}`}>
               {service.priorAuthRequired ? <AlertCircle className="w-3 h-3" /> : <CheckCircle className="w-3 h-3" />}
               {service.priorAuthRequired ? 'Prior auth required' : 'No prior auth'}
             </div>
@@ -201,15 +201,15 @@ function ServiceCard({ service }: { service: ServiceCode }) {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 border-t border-gray-100 pt-3 space-y-3">
-              <p className="text-sm text-gray-600">{service.description}</p>
+            <div className="px-4 pb-4 border-t border-[#E8E4DF] pt-3 space-y-3">
+              <p className="text-sm text-[#5A6B7A]">{service.description}</p>
               <div>
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2 flex items-center gap-1">
                   <FileText className="w-3.5 h-3.5" /> Documentation Requirements
                 </p>
                 <ul className="space-y-1">
                   {service.docRequirements.map((req, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                    <li key={i} className="flex items-start gap-2 text-sm text-[#3A4A57]">
                       <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
                       {req}
                     </li>
@@ -245,27 +245,27 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3">
+      <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10 px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-gray-900">Medicaid Service Catalog</h1>
-            <p className="text-xs text-gray-500">HCBS / DDD Waiver — Arizona (Acumen/DCI compatible)</p>
+            <h1 className="text-lg font-bold text-[#1B2733]">Medicaid Service Catalog</h1>
+            <p className="text-xs text-[#5A6B7A]">HCBS / DDD Waiver — Arizona (Acumen/DCI compatible)</p>
           </div>
         </div>
 
         {/* Search */}
         <div className="mt-3 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A9BA8]" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by code or name..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:border-[#6B9080] focus:outline-none"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#E8E4DF] text-sm focus:border-[#6B9080] focus:outline-none"
           />
         </div>
 
@@ -278,7 +278,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
               className={`text-xs px-3 py-1.5 rounded-full whitespace-nowrap font-medium transition-colors ${
                 filterCategory === cat
                   ? 'bg-primary text-white'
-                  : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
+                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               {cat === 'all' ? 'All' : CATEGORY_LABELS[cat]}
@@ -288,7 +288,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
       </div>
 
       {/* Summary bar */}
-      <div className="mx-4 mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
+      <div className="mx-4 mt-4 p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl">
         <p className="text-xs text-blue-700">
           <strong>{filtered.length} service codes</strong> — rates are AZ DDD estimates (FY2025-26).
           Verify with your AHCCCS provider agreement. EVV via DCI, Acumen, or Therap.
@@ -301,7 +301,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
           <ServiceCard key={service.code} service={service} />
         ))}
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-[#8A9BA8]">
             <FileText className="w-10 h-10 mx-auto mb-2 opacity-50" />
             <p className="text-sm">No services match your search</p>
           </div>

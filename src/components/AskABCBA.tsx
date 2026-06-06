@@ -158,10 +158,10 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
 
       {/* Compose form */}
       {showAsk && (
-        <div className="mx-4 mt-4 rounded-2xl bg-white border border-slate-200 p-4 space-y-3">
+        <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-slate-800">Ask anything</p>
-            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100">
+            <p className="text-sm font-semibold text-[#1B2733]">Ask anything</p>
+            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -174,11 +174,11 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
               : "What's on your mind? Be specific — when, where, what triggers it…"
             }
             rows={5}
-            className="w-full text-sm border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
+            className="w-full text-sm border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
           />
 
           <div>
-            <p className="text-xs text-slate-500 mb-2">Category (helps the BCBA route)</p>
+            <p className="text-xs text-[#5A6B7A] mb-2">Category (helps the BCBA route)</p>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map(c => (
                 <button
@@ -211,14 +211,14 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
 
       {/* Thread list */}
       <div className="px-4 mt-5">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Your questions</p>
+        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your questions</p>
 
         {isLoading ? (
           <div className="text-center py-6"><Loader2 className="w-5 h-5 text-slate-400 animate-spin mx-auto" /></div>
         ) : threads.length === 0 ? (
-          <div className="rounded-2xl bg-white border border-dashed border-slate-200 p-6 text-center">
+          <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
             <MessageCircle className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-slate-500">No questions yet. Ask anything — instant AI draft, BCBA review typically within 24 hours.</p>
+            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA review typically within 24 hours.</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -226,10 +226,10 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
               <button
                 key={t.id}
                 onClick={() => setActiveThread(t)}
-                className="w-full text-left bg-white border border-slate-100 rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
+                className="w-full text-left bg-white border border-[#E8E4DF] rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <p className="text-sm text-slate-800 line-clamp-2 flex-1">{t.question}</p>
+                  <p className="text-sm text-[#1B2733] line-clamp-2 flex-1">{t.question}</p>
                   <StatusPill status={t.status} />
                 </div>
                 <div className="flex items-center gap-3 text-xs text-slate-400">
@@ -291,18 +291,18 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         backLabel="Back to all questions"
         variant="flat"
       />
-      <div className="px-4 pt-3 pb-4 bg-white border-b border-slate-100">
+      <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2 mb-1">
-          {thread.category && <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
+          {thread.category && <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
           <StatusPill status={thread.status} />
         </div>
-        <p className="text-sm text-slate-500">{relativeTime(thread.created_at)}</p>
+        <p className="text-sm text-[#5A6B7A]">{relativeTime(thread.created_at)}</p>
       </div>
 
       {/* Question */}
-      <div className="mx-4 mt-4 rounded-2xl bg-white border border-slate-200 p-4">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Your question</p>
-        <p className="text-sm text-slate-800 whitespace-pre-wrap">{thread.question}</p>
+      <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your question</p>
+        <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.question}</p>
       </div>
 
       {/* AI draft — show the live draft, or a drafting indicator while it's being generated */}
@@ -312,7 +312,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
           </div>
-          <p className="text-sm text-slate-800 whitespace-pre-wrap">{thread.ai_draft}</p>
+          <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.ai_draft}</p>
         </div>
       ) : aiDrafting ? (
         <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B30' }}>
@@ -320,7 +320,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <Loader2 className="w-4 h-4 text-[#6B9080] animate-spin" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
           </div>
-          <p className="text-sm text-slate-700">Aminy is drafting an instant response…</p>
+          <p className="text-sm text-[#3A4A57]">Aminy is drafting an instant response…</p>
         </div>
       ) : null}
 
@@ -331,21 +331,21 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">BCBA Reviewed & Signed</p>
           </div>
-          <p className="text-sm text-slate-800 whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
+          <p className="text-sm text-[#1B2733] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (
-            <p className="text-xs text-slate-500">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
+            <p className="text-xs text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
           )}
           {thread.bcba_responded_at && (
             <p className="text-xs text-slate-400 mt-1">{new Date(thread.bcba_responded_at).toLocaleString()}</p>
           )}
         </div>
       ) : (
-        <div className="mx-4 mt-3 rounded-2xl bg-white border border-slate-200 p-4 flex items-center gap-3">
+        <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-slate-800">Awaiting BCBA review</p>
+            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA review</p>
             {thread.target_response_at && (
-              <p className="text-xs text-slate-500">By {new Date(thread.target_response_at).toLocaleString()}</p>
+              <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
           </div>
         </div>
@@ -360,7 +360,7 @@ function StatusPill({ status }: { status: Thread['status'] }) {
     ai_drafted:    { bg: 'bg-[#6B9080]/10',   text: 'text-[#6B9080]',   label: 'AI ready',   icon: <Sparkles className="w-3 h-3" /> },
     awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'BCBA queue', icon: <Clock className="w-3 h-3" /> },
     completed:     { bg: 'bg-emerald-50',text: 'text-emerald-700',label: 'Reviewed',   icon: <Check className="w-3 h-3" /> },
-    closed:        { bg: 'bg-slate-100', text: 'text-slate-600',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
+    closed:        { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
   };
   const s = styles[status];
   return (

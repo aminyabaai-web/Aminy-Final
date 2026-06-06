@@ -126,14 +126,14 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
   // Full-screen mode: render as a page with a close button, not a dialog overlay
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-purple-50 flex flex-col">
+      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] flex flex-col">
         <div className="flex justify-end p-4">
           <button
             onClick={onClose}
             className="p-2 rounded-full hover:bg-white/50 transition-colors"
             aria-label="Close calm mode"
           >
-            <X className="w-5 h-5 text-gray-600" />
+            <X className="w-5 h-5 text-[#5A6B7A]" />
           </button>
         </div>
         <div className="flex-1 flex items-center justify-center">
@@ -147,7 +147,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-gradient-to-b from-blue-50 to-purple-50 border-none">
+      <DialogContent className="max-w-md bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] border-none">
         {stepContent}
       </DialogContent>
     </Dialog>
@@ -204,15 +204,15 @@ function BreathStep({
     return (
       <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
         <Cloud className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-        <h2 className="text-2xl text-gray-900 mb-4">
+        <h2 className="text-2xl text-[#1B2733] mb-4">
           Let's breathe, {parentName}
         </h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-sm text-[#5A6B7A] mb-6">
           Before we start, how overwhelmed do you feel right now?
         </p>
 
         <div className="mb-6">
-          <div className="flex justify-between text-xs text-gray-500 mb-2">
+          <div className="flex justify-between text-xs text-[#5A6B7A] mb-2">
             <span>Calm</span>
             <span>Very overwhelmed</span>
           </div>
@@ -221,7 +221,7 @@ function BreathStep({
               <button
                 key={num}
                 onClick={() => startBreathing(num)}
-                className="flex-1 h-12 rounded bg-blue-100 hover:bg-blue-200 transition-colors flex items-center justify-center text-gray-700 font-medium"
+                className="flex-1 h-12 rounded bg-blue-100 hover:bg-blue-200 transition-colors flex items-center justify-center text-[#3A4A57] font-medium"
               >
                 {num}
               </button>
@@ -242,7 +242,7 @@ function BreathStep({
         >
           <Heart className="w-16 h-16 text-green-500 mx-auto mb-4" />
         </motion.div>
-        <p className="text-lg text-gray-900">Nice work</p>
+        <p className="text-lg text-[#1B2733]">Nice work</p>
       </motion.div>
     );
   }
@@ -252,7 +252,7 @@ function BreathStep({
       <BreathingCircle phase={breathPhase as 'inhale' | 'hold' | 'exhale'} />
 
       <div className="mt-8">
-        <p className="text-xs text-gray-500 mb-2">Cycle {cycles + 1} of 3</p>
+        <p className="text-xs text-[#5A6B7A] mb-2">Cycle {cycles + 1} of 3</p>
       </div>
     </motion.div>
   );
@@ -305,7 +305,7 @@ function GroundStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
-      <h3 className="text-xl text-gray-900 mb-6">
+      <h3 className="text-xl text-[#1B2733] mb-6">
         Ground yourself, {parentName}
       </h3>
 
@@ -334,10 +334,10 @@ function GroundingPrompt({ delay, text }: { delay: number; text: string }) {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200"
+      className="flex items-center gap-3 p-3 bg-white rounded-lg border border-[#E8E4DF]"
     >
-      <div className="w-2 h-2 rounded-full bg-blue-500" />
-      <p className="text-sm text-gray-700">{text}</p>
+      <div className="w-2 h-2 rounded-full bg-[#7BA7BC]" />
+      <p className="text-sm text-[#3A4A57]">{text}</p>
     </motion.div>
   );
 }
@@ -364,10 +364,10 @@ function IdentifyStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-gray-900 mb-2 text-center">
+      <h3 className="text-xl text-[#1B2733] mb-2 text-center">
         What's hardest right now?
       </h3>
-      <p className="text-sm text-gray-600 mb-6 text-center">
+      <p className="text-sm text-[#5A6B7A] mb-6 text-center">
         So I can help, {parentName}
       </p>
 
@@ -376,10 +376,10 @@ function IdentifyStep({
           <button
             key={challenge.id}
             onClick={() => onComplete(challenge.label)}
-            className="p-4 bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
+            className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-blue-500 hover:bg-[#EEF4F8] transition-all text-left"
           >
             <div className="text-2xl mb-2">{challenge.emoji}</div>
-            <div className="text-sm text-gray-900">{challenge.label}</div>
+            <div className="text-sm text-[#1B2733]">{challenge.label}</div>
           </button>
         ))}
       </div>
@@ -415,12 +415,12 @@ function NextStepsStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-gray-900 mb-4 text-center">
+      <h3 className="text-xl text-[#1B2733] mb-4 text-center">
         How do you feel now?
       </h3>
 
       <div className="mb-6">
-        <div className="flex justify-between text-xs text-gray-500 mb-2">
+        <div className="flex justify-between text-xs text-[#5A6B7A] mb-2">
           <span>Much better</span>
           <span>Still overwhelmed</span>
         </div>
@@ -429,7 +429,7 @@ function NextStepsStep({
             <button
               key={num}
               onClick={() => setOverwhelm(num)}
-              className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-gray-700 font-medium ${overwhelm === num
+              className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
                 ? 'bg-green-500 text-white'
                 : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
                 }`}
@@ -524,10 +524,10 @@ export function CalmModeButton({
           setIsOpen(true);
         }}
         variant="outline"
-        className="w-full bg-white border border-slate-200 shadow-sm hover:shadow-md hover:bg-slate-50 text-slate-700 font-medium transition-all duration-200 rounded-xl py-6"
+        className="w-full bg-white border border-[#E8E4DF] shadow-sm hover:shadow-md hover:bg-[#FAF7F2] text-[#3A4A57] font-medium transition-all duration-200 rounded-xl py-6"
       >
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+          <div className="p-2 bg-indigo-50 text-[#6B9080] rounded-lg">
             <Cloud className="w-5 h-5" />
           </div>
           <span className="text-base tracking-tight">I need calm now</span>

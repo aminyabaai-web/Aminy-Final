@@ -181,12 +181,12 @@ export function DocumentUploader({
     <div className="space-y-3 sm:space-y-4">
       {/* Upload Area */}
       <div
-        className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-accent transition-colors"
+        className="border-2 border-dashed border-[#E8E4DF] rounded-lg p-8 text-center cursor-pointer hover:border-accent transition-colors"
         onClick={() => fileInputRef.current?.click()}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+        <Upload className="w-12 h-12 mx-auto mb-4 text-[#8A9BA8]" />
         <p className="text-sm font-medium mb-1">Click to upload or drag and drop</p>
         <p className="text-xs text-muted-foreground">
           {acceptedTypes.join(', ')} (max {maxSize}MB)
@@ -215,7 +215,7 @@ export function DocumentUploader({
           {files.map((file, index) => (
             <div key={index} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
               <div className="flex items-center gap-3 flex-1">
-                <File className="w-4 h-4 text-gray-500" />
+                <File className="w-4 h-4 text-[#5A6B7A]" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{file.name}</p>
                   <p className="text-xs text-muted-foreground">

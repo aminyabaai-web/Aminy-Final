@@ -83,7 +83,7 @@ export function TrialCountdown({
   const bgColors = {
     critical: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800',
     high: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800',
-    medium: 'bg-[#6B9080]/10 dark:bg-teal-950/30 border-[#6B9080]/20 dark:border-teal-800',
+    medium: 'bg-[#6B9080]/10 dark:bg-teal-950/30 border-[#6B9080]/20 dark:border-[#6B9080]/30',
     low: 'bg-violet-50 dark:bg-violet-950/30 border-violet-200 dark:border-violet-800',
   };
 
@@ -137,7 +137,7 @@ export function TrialCountdown({
               )}
             </div>
             <div>
-              <p className="font-semibold text-neutral-900 dark:text-white">
+              <p className="font-semibold text-[#1B2733] dark:text-white">
                 {daysRemaining === 0
                   ? `${hoursRemaining} hours left in your trial`
                   : daysRemaining === 1
@@ -171,7 +171,7 @@ export function TrialCountdown({
 
         {/* Progress bar showing trial progress */}
         <div className="mt-4">
-          <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+          <div className="flex items-center justify-between text-xs text-[#5A6B7A] dark:text-neutral-400 mb-1">
             <span>Trial started</span>
             <span>Trial ends</span>
           </div>

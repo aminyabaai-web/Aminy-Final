@@ -320,10 +320,10 @@ export function SessionNotes({
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-semibold text-neutral-900">Session Notes</h2>
+                <h2 className="text-lg font-semibold text-[#1B2733]">Session Notes</h2>
                 <AISparkleButton prompt={`Based on this session with ${patientName} (${sessionType}), what are the most important things for the family to follow up on at home?`} label="Summarize for family" />
               </div>
-              <p className="text-sm text-neutral-500 mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 <User className="w-3.5 h-3.5 inline mr-1" />
                 {patientName} • {sessionType}
                 <Clock className="w-3.5 h-3.5 inline ml-3 mr-1" />
@@ -338,7 +338,7 @@ export function SessionNotes({
                 </Badge>
               )}
               <button onClick={onClose} className="p-2 hover:bg-neutral-100 rounded-lg">
-                <X className="w-5 h-5 text-neutral-500" />
+                <X className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             </div>
           </div>
@@ -376,8 +376,8 @@ export function SessionNotes({
                       : 'bg-white border-neutral-200 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/50'
                   }`}
                 >
-                  <p className="font-medium text-neutral-900 text-sm">{template.name}</p>
-                  <p className="text-xs text-neutral-500 mt-0.5">{template.description}</p>
+                  <p className="font-medium text-[#1B2733] text-sm">{template.name}</p>
+                  <p className="text-xs text-[#5A6B7A] mt-0.5">{template.description}</p>
                 </button>
               ))}
             </div>
@@ -452,7 +452,7 @@ export function SessionNotes({
 
           {/* Home Recommendations (for parent sharing) */}
           <div className="p-4 bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20">
-            <label className="flex items-center gap-2 text-sm font-medium text-teal-800 mb-2">
+            <label className="flex items-center gap-2 text-sm font-medium text-[#6B9080] mb-2">
               <Target className="w-4 h-4" />
               Home Practice Recommendations
               <span className="text-xs font-normal text-[#6B9080]">- Will be shared with parent if enabled</span>

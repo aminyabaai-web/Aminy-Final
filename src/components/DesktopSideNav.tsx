@@ -71,7 +71,7 @@ function NavGroup({
 }) {
   return (
     <div className="space-y-2.5">
-      <div className="px-1 text-[12px] font-medium tracking-[0.01em] text-slate-500">
+      <div className="px-1 text-[12px] font-medium tracking-[0.01em] text-[#5A6B7A]">
         {title}
       </div>
       <div className="space-y-2">
@@ -87,8 +87,8 @@ function NavGroup({
               className={[
                 'group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200',
                 active
-                  ? 'bg-[#6B9080]/10 text-slate-900 shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-teal-200/80'
-                  : 'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
+                  ? 'bg-[#6B9080]/10 text-[#1B2733] shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-[#6B9080]/20/80'
+                  : 'bg-transparent text-[#3A4A57] hover:bg-white/85 hover:text-slate-950',
               ].join(' ')}
             >
               <div
@@ -96,7 +96,7 @@ function NavGroup({
                   'flex h-10 w-10 items-center justify-center rounded-2xl transition-colors',
                   active
                     ? 'bg-primary text-white'
-                    : 'bg-white text-slate-500 shadow-sm group-hover:bg-[#6B9080]/10 group-hover:text-[#6B9080]',
+                    : 'bg-white text-[#5A6B7A] shadow-sm group-hover:bg-[#6B9080]/10 group-hover:text-[#6B9080]',
                 ].join(' ')}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.1 : 1.9} />
@@ -104,13 +104,13 @@ function NavGroup({
 
               <div className="min-w-0 flex-1">
                 <div className="truncate text-[14px] font-semibold tracking-[-0.01em]">{item.label}</div>
-                <div className="truncate text-[12px] text-slate-500 group-hover:text-slate-600">{item.helper}</div>
+                <div className="truncate text-[12px] text-[#5A6B7A] group-hover:text-[#5A6B7A]">{item.helper}</div>
               </div>
 
               <ChevronRight
                 className={[
                   'h-4 w-4 transition-all',
-                  active ? 'translate-x-0 text-primary' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-slate-600',
+                  active ? 'translate-x-0 text-primary' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-[#5A6B7A]',
                 ].join(' ')}
               />
             </button>
@@ -124,7 +124,7 @@ function NavGroup({
 export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopSideNavProps) {
   return (
     <nav
-      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-slate-200/50 px-5 pb-5 pt-6 text-slate-900 md:flex"
+      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-[#E8E4DF]/50 px-5 pb-5 pt-6 text-[#1B2733] md:flex"
       style={{
         background:
           'radial-gradient(circle at top left, rgba(45, 212, 191, 0.16), transparent 24%), linear-gradient(180deg, #f8fbfb 0%, #f1f7f8 46%, #eef4f8 100%)',
@@ -146,10 +146,10 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
               </div>
               <div className="min-w-0">
                 <div className="text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950">Aminy</div>
-                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">
+                <div className="text-xs uppercase tracking-[0.16em] text-[#5A6B7A]">
                   Gentle guidance. Meaningful progress.
                 </div>
-                <div className="mt-1 text-[13px] leading-5 text-slate-600">
+                <div className="mt-1 text-[13px] leading-5 text-[#5A6B7A]">
                   Calm guidance, care access, and progress your family can actually use.
                 </div>
               </div>
@@ -158,17 +158,17 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
 
           <div className="mt-4 grid grid-cols-2 gap-2.5">
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-xs font-medium text-slate-500">Access</div>
-              <div className="mt-1 text-[14px] font-semibold text-slate-900">AZ · MT · TX</div>
-              <div className="text-[12px] text-slate-600">Supported telehealth states</div>
+              <div className="text-xs font-medium text-[#5A6B7A]">Access</div>
+              <div className="mt-1 text-[14px] font-semibold text-[#1B2733]">AZ · MT · TX</div>
+              <div className="text-[12px] text-[#5A6B7A]">Supported telehealth states</div>
             </div>
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-xs font-medium text-slate-500">Focus</div>
-              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-slate-900">
+              <div className="text-xs font-medium text-[#5A6B7A]">Focus</div>
+              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-[#1B2733]">
                 <Activity className="h-3.5 w-3.5 text-[#6B9080]" />
                 Live workflow
               </div>
-              <div className="text-[12px] text-slate-600">Guidance, care access, records</div>
+              <div className="text-[12px] text-[#5A6B7A]">Guidance, care access, records</div>
             </div>
           </div>
         </div>
@@ -188,9 +188,9 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
           className="rounded-[24px] border border-white/90 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)]"
           style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.84))' }}
         >
-          <div className="text-xs font-medium text-slate-500">Signed in</div>
+          <div className="text-xs font-medium text-[#5A6B7A]">Signed in</div>
           <div className="mt-2 text-[15px] font-semibold text-slate-950">{userName || 'Your household'}</div>
-          <div className="mt-1 text-[12px] leading-5 text-slate-600">
+          <div className="mt-1 text-[12px] leading-5 text-[#5A6B7A]">
             Guidance, telehealth, and records stay in one calmer place.
           </div>
         </div>

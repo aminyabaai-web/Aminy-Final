@@ -204,7 +204,7 @@ export function OutcomesDashboardWidget({
       : 'Complete screenings or set goals to start';
 
     return (
-      <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-[#6B9080]/10 rounded-full">
@@ -213,7 +213,7 @@ export function OutcomesDashboardWidget({
                 : <Activity className="w-5 h-5 text-[#6B9080]" />}
             </div>
             <div>
-              <p className="font-medium text-teal-900">{summaryText}</p>
+              <p className="font-medium text-[#6B9080]">{summaryText}</p>
               <p className="text-sm text-[#6B9080]">{subText}</p>
             </div>
           </div>
@@ -230,12 +230,12 @@ export function OutcomesDashboardWidget({
       <Card className="border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(244,249,250,0.98)_100%)] shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="rounded-2xl bg-slate-100/90 p-2.5 text-slate-500">
+            <div className="rounded-2xl bg-[#F0EDE8]/90 p-2.5 text-[#5A6B7A]">
               <Activity className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-semibold text-slate-900">Progress will feel clearer soon</h3>
-              <p className="mt-1 text-sm leading-6 text-slate-600">
+              <h3 className="text-sm font-semibold text-[#1B2733]">Progress will feel clearer soon</h3>
+              <p className="mt-1 text-sm leading-6 text-[#5A6B7A]">
                 Once you log a few moments, complete a screening, or start a goal, Aminy will turn
                 those patterns into a calmer weekly view instead of pushing noisy charts too early.
               </p>
@@ -282,14 +282,14 @@ export function OutcomesDashboardWidget({
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Icon className={`w-4 h-4 ${metric.color}`} />
-                  <span className="text-sm text-gray-600">{metric.label}</span>
+                  <span className="text-sm text-[#5A6B7A]">{metric.label}</span>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl sm:text-2xl font-bold text-gray-900">
+                  <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                     {metric.value}
                   </span>
-                  <span className="text-sm text-gray-500">{metric.unit}</span>
+                  <span className="text-sm text-[#5A6B7A]">{metric.unit}</span>
                   {getTrendIcon(metric)}
                 </div>
 

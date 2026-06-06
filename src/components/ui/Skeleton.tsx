@@ -106,7 +106,7 @@ export function SkeletonHeading({
 
 export function SkeletonCard({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6 ${className}`}>
       <div className="flex items-start gap-4 mb-4">
         <Skeleton width={48} height={48} rounded="full" />
         <div className="flex-1">
@@ -121,7 +121,7 @@ export function SkeletonCard({ className = '' }: { className?: string }) {
 
 export function SkeletonMetricCard({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-4 ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-4 ${className}`}>
       <div className="flex items-center justify-between mb-3">
         <Skeleton height={14} width={80} />
         <Skeleton width={32} height={32} rounded="lg" />
@@ -152,7 +152,7 @@ export function SkeletonList({
       {Array.from({ length: items }).map((_, i) => (
         <div
           key={i}
-          className={`flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 ${itemClassName}`}
+          className={`flex items-center gap-3 p-3 bg-white dark:bg-slate-900 rounded-lg border border-[#E8E4DF] dark:border-slate-700 ${itemClassName}`}
         >
           <Skeleton width={40} height={40} rounded="lg" />
           <div className="flex-1">
@@ -196,9 +196,9 @@ export function SkeletonTable({
   showHeader = true,
 }: SkeletonTableProps) {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 overflow-hidden ${className}`}>
       {showHeader && (
-        <div className="flex gap-4 p-4 border-b border-gray-200 dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-800">
+        <div className="flex gap-4 p-4 border-b border-[#E8E4DF] dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-800">
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton key={i} height={14} width={`${100 / columns - 2}%`} />
           ))}
@@ -288,7 +288,7 @@ export function SkeletonImage({
 
 export function SkeletonChart({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6 ${className}`}>
       <div className="flex items-center justify-between mb-6">
         <Skeleton height={24} width={150} />
         <div className="flex gap-2">
@@ -402,7 +402,7 @@ export function SkeletonChat({ messages = 5, className = '' }: { messages?: numb
 
 export function SkeletonProfile({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 p-6 ${className}`}>
+    <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6 ${className}`}>
       <div className="flex items-center gap-4 mb-6">
         <SkeletonAvatar size="xl" />
         <div className="flex-1">

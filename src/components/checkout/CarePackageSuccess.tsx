@@ -184,7 +184,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
     : 'Care Package';
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center">
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center">
       {/* Hero section */}
       <div className="relative w-full bg-gradient-to-b from-teal-600 to-teal-700 flex flex-col items-center pt-16 pb-12 overflow-hidden">
         <ConfettiDots />
@@ -205,12 +205,12 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
 
       {/* What happens next */}
       <div className="w-full max-w-lg px-4 py-6 space-y-4">
-        <h2 className="text-slate-700 font-semibold text-base">What happens next</h2>
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm divide-y divide-slate-100">
+        <h2 className="text-[#3A4A57] font-semibold text-base">What happens next</h2>
+        <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm divide-y divide-slate-100">
           {nextSteps.map((step, i) => (
             <div key={i} className="flex items-start gap-3 px-5 py-4">
               <div className="mt-0.5 shrink-0">{step.icon}</div>
-              <p className="text-sm text-slate-600 leading-relaxed">{step.text}</p>
+              <p className="text-sm text-[#5A6B7A] leading-relaxed">{step.text}</p>
             </div>
           ))}
         </div>

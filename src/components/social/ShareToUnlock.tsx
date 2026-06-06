@@ -365,18 +365,18 @@ export function ShareToUnlock({
                       {isShared ? (
                         <Unlock className="w-5 h-5 text-[#6B9080]" />
                       ) : (
-                        <Lock className="w-5 h-5 text-gray-400" />
+                        <Lock className="w-5 h-5 text-[#8A9BA8]" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-[#1B2733]">
                         {achievement.unlockLabel}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[#5A6B7A]">
                         Share this achievement to unlock
                       </p>
                     </div>
-                    <UnlockIcon className="w-5 h-5 text-gray-400" />
+                    <UnlockIcon className="w-5 h-5 text-[#8A9BA8]" />
                   </div>
 
                   {/* Share Buttons */}
@@ -397,28 +397,28 @@ export function ShareToUnlock({
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-green-600 mb-1" />
-                        <span className="text-xs text-gray-600">Text</span>
+                        <span className="text-xs text-[#5A6B7A]">Text</span>
                       </button>
                       <button
                         onClick={() => handleShare('email')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <Mail className="w-5 h-5 text-blue-600 mb-1" />
-                        <span className="text-xs text-gray-600">Email</span>
+                        <span className="text-xs text-[#5A6B7A]">Email</span>
                       </button>
                       <button
                         onClick={() => handleShare('whatsapp')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-emerald-600 mb-1" />
-                        <span className="text-xs text-gray-600">WhatsApp</span>
+                        <span className="text-xs text-[#5A6B7A]">WhatsApp</span>
                       </button>
                       <button
                         onClick={() => handleShare('copy')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
-                        <Copy className="w-5 h-5 text-gray-600 mb-1" />
-                        <span className="text-xs text-gray-600">Copy</span>
+                        <Copy className="w-5 h-5 text-[#5A6B7A] mb-1" />
+                        <span className="text-xs text-[#5A6B7A]">Copy</span>
                       </button>
                     </div>
                   </div>
@@ -439,8 +439,8 @@ export function ShareToUnlock({
                   >
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </motion.div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Unlocked!</h3>
-                  <p className="text-sm text-gray-600 mb-3">{achievement.unlockLabel}</p>
+                  <h3 className="text-lg font-bold text-[#1B2733] mb-1">Unlocked!</h3>
+                  <p className="text-sm text-[#5A6B7A] mb-3">{achievement.unlockLabel}</p>
                   <Badge className="bg-green-100 text-green-700 border-green-200">
                     <Gift className="w-3 h-3 mr-1" />
                     Added to your account

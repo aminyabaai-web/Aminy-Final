@@ -85,9 +85,9 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
-      <div className="px-4 pt-3 pb-4 bg-white border-b border-slate-100">
+      <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
         {onBack && (
-          <button onClick={onBack} className="flex items-center gap-1 text-sm text-slate-600 mb-3">
+          <button onClick={onBack} className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-3">
             <ChevronLeft className="w-4 h-4" />Back
           </button>
         )}
@@ -96,14 +96,14 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             <Brain className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-slate-900">What Aminy knows</h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <h1 className="text-lg font-bold text-[#1B2733]">What Aminy knows</h1>
+            <p className="text-xs text-[#5A6B7A] mt-0.5">
               {childName ? `Everything Aminy remembers about ${childName}` : 'Your family memory'}
             </p>
           </div>
           <button
             onClick={refresh}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
             aria-label="Refresh memory"
           >
             <RefreshCw className="w-4 h-4" />
@@ -115,10 +115,10 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
       <div className="px-4 mt-4">
         <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B25' }}>
           <div className="flex items-baseline gap-2">
-            <p className="text-3xl font-bold text-slate-900">{facts.length}</p>
-            <p className="text-sm text-slate-600">things remembered</p>
+            <p className="text-3xl font-bold text-[#1B2733]">{facts.length}</p>
+            <p className="text-sm text-[#5A6B7A]">things remembered</p>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#5A6B7A] mt-1">
             Aminy builds memory from your conversations, the documents you've shared, and what you've explicitly told her to remember.
           </p>
         </div>
@@ -145,12 +145,12 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
       {/* Memory list */}
       <div className="px-4 mt-3">
         {filtered.length === 0 ? (
-          <div className="rounded-2xl bg-white border border-dashed border-slate-200 p-8 text-center">
+          <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-8 text-center">
             <Brain className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-            <p className="text-sm font-medium text-slate-700 mb-1">
+            <p className="text-sm font-medium text-[#3A4A57] mb-1">
               {facts.length === 0 ? 'No memories yet' : 'No memories in this category'}
             </p>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#5A6B7A]">
               {facts.length === 0
                 ? 'Chat with Aminy and she\'ll start remembering what matters to your family.'
                 : 'Switch categories above or chat with Aminy to add more.'}
@@ -162,7 +162,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
               const meta = CATEGORY_META[fact.category];
               const Icon = meta.icon;
               return (
-                <div key={fact.id} className="rounded-2xl bg-white border border-slate-100 p-3 flex items-start gap-3">
+                <div key={fact.id} className="rounded-2xl bg-white border border-[#E8E4DF] p-3 flex items-start gap-3">
                   <div
                     className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
                     style={{ background: `${meta.color}15` }}
@@ -170,7 +170,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-800 leading-snug">{fact.content}</p>
+                    <p className="text-sm text-[#1B2733] leading-snug">{fact.content}</p>
                     <div className="flex items-center gap-2 mt-1.5">
                       <span className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: meta.color }}>
                         {meta.label}
@@ -200,7 +200,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
       {/* Danger zone */}
       {facts.length > 0 && (
         <div className="px-4 mt-6">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Privacy controls</p>
+          <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Privacy controls</p>
           <button
             onClick={handleWipe}
             disabled={isWiping}

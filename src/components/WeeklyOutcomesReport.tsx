@@ -341,7 +341,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
   if (!reportData) {
     return (
       <Card className="p-8 text-center">
-        <p className="text-slate-500">No data available for this week</p>
+        <p className="text-[#5A6B7A]">No data available for this week</p>
       </Card>
     );
   }
@@ -359,8 +359,8 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
         </Button>
 
         <div className="text-center">
-          <h2 className="text-lg font-semibold text-slate-900">Weekly Outcomes Report</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-lg font-semibold text-[#1B2733]">Weekly Outcomes Report</h2>
+          <p className="text-sm text-[#5A6B7A]">
             {formatDateRange(reportData.weekStart, reportData.weekEnd)}
           </p>
         </div>
@@ -379,15 +379,15 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Heart className="w-5 h-5 text-pink-500" />
-          <h3 className="font-semibold text-slate-900">Stress & Wellness</h3>
+          <h3 className="font-semibold text-[#1B2733]">Stress & Wellness</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
           <div>
-            <p className="text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
               {reportData.stressMetrics.currentAvg.toFixed(1)}
             </p>
-            <p className="text-sm text-slate-500">Average this week</p>
+            <p className="text-sm text-[#5A6B7A]">Average this week</p>
           </div>
           <div className="text-right">
             {reportData.stressMetrics.trend === 'improving' && (
@@ -403,16 +403,16 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
               </div>
             )}
             {reportData.stressMetrics.trend === 'stable' && (
-              <div className="flex items-center justify-end gap-1 text-slate-500">
+              <div className="flex items-center justify-end gap-1 text-[#5A6B7A]">
                 <Minus className="w-5 h-5" />
                 <span className="text-lg font-semibold">Stable</span>
               </div>
             )}
-            <p className="text-sm text-slate-500">vs last week</p>
+            <p className="text-sm text-[#5A6B7A]">vs last week</p>
           </div>
         </div>
 
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5A6B7A]">
           {reportData.stressMetrics.checkInsCount} check-ins this week
         </p>
       </Card>
@@ -421,12 +421,12 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <CheckCircle className="w-5 h-5 text-green-500" />
-          <h3 className="font-semibold text-slate-900">Routine Adherence</h3>
+          <h3 className="font-semibold text-[#1B2733]">Routine Adherence</h3>
         </div>
 
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl sm:text-3xl font-bold text-slate-900">
+            <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
               {reportData.routineMetrics.adherencePercent}%
             </span>
             <div className="flex items-center gap-1">
@@ -439,7 +439,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
           <Progress value={reportData.routineMetrics.adherencePercent} className="h-3" />
         </div>
 
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5A6B7A]">
           {reportData.routineMetrics.completed} of {reportData.routineMetrics.total} routines completed
         </p>
       </Card>
@@ -448,26 +448,26 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Target className="w-5 h-5 text-purple-500" />
-          <h3 className="font-semibold text-slate-900">Goals Progress</h3>
+          <h3 className="font-semibold text-[#1B2733]">Goals Progress</h3>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Award className="w-8 h-8 text-yellow-500" />
             <div>
-              <p className="text-xl sm:text-2xl font-bold text-slate-900">{reportData.goalsMetrics.achieved}</p>
-              <p className="text-sm text-slate-500">Achieved</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{reportData.goalsMetrics.achieved}</p>
+              <p className="text-sm text-[#5A6B7A]">Achieved</p>
             </div>
           </div>
-          <div className="h-12 w-px bg-slate-200"></div>
+          <div className="h-12 w-px bg-[#E8E4DF]"></div>
           <div>
-            <p className="text-xl sm:text-2xl font-bold text-slate-900">{reportData.goalsMetrics.total}</p>
-            <p className="text-sm text-slate-500">Active Goals</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{reportData.goalsMetrics.total}</p>
+            <p className="text-sm text-[#5A6B7A]">Active Goals</p>
           </div>
-          <div className="h-12 w-px bg-slate-200"></div>
+          <div className="h-12 w-px bg-[#E8E4DF]"></div>
           <div>
-            <p className="text-xl sm:text-2xl font-bold text-slate-900">+{reportData.goalsMetrics.newGoals}</p>
-            <p className="text-sm text-slate-500">New This Week</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">+{reportData.goalsMetrics.newGoals}</p>
+            <p className="text-sm text-[#5A6B7A]">New This Week</p>
           </div>
         </div>
       </Card>
@@ -475,10 +475,10 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       {/* Highlights */}
       {reportData.highlights.length > 0 && (
         <Card className="p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
-          <h3 className="font-semibold text-slate-900 mb-3">This Week's Wins</h3>
+          <h3 className="font-semibold text-[#1B2733] mb-3">This Week's Wins</h3>
           <ul className="space-y-2">
             {reportData.highlights.map((highlight, idx) => (
-              <li key={idx} className="flex items-start gap-2 text-sm text-slate-700">
+              <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
                 <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                 {highlight}
               </li>
@@ -494,8 +494,8 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900 mb-2">Aminy's Insight</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+            <h3 className="font-semibold text-[#1B2733] mb-2">Aminy's Insight</h3>
+            <p className="text-sm text-[#3A4A57] leading-relaxed">
               {reportData.aiInsight}
             </p>
           </div>

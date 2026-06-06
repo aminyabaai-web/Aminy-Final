@@ -81,8 +81,8 @@ export function FromAminySection() {
                 <Icon className={`w-5 h-5 ${card.iconColor}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-gray-900 mb-1">{card.headline}</h4>
-                <p className="text-sm text-gray-600 mb-3">{card.subtext}</p>
+                <h4 className="font-semibold text-[#1B2733] mb-1">{card.headline}</h4>
+                <p className="text-sm text-[#5A6B7A] mb-3">{card.subtext}</p>
                 <Button 
                   size="sm" 
                   variant="ghost" 

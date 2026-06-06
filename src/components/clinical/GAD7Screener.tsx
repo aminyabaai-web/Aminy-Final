@@ -115,7 +115,7 @@ const getSeverityInfo = (severity: string) => {
         label: 'Mild Anxiety',
         color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
         bgColor: 'from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20',
-        borderColor: 'border-yellow-200 dark:border-yellow-800',
+        borderColor: 'border-[#F0EDE8] dark:border-yellow-800',
         description: 'Scores in this range suggest mild anxiety that may benefit from monitoring.',
         recommendation: 'Consider stress management techniques and monitor symptoms. Discuss with your healthcare provider if symptoms persist.'
       };
@@ -140,9 +140,9 @@ const getSeverityInfo = (severity: string) => {
     default:
       return {
         label: 'Unknown',
-        color: 'bg-[#F0EDE8] text-gray-700',
+        color: 'bg-[#F0EDE8] text-[#3A4A57]',
         bgColor: 'from-gray-50 to-gray-100',
-        borderColor: 'border-gray-200',
+        borderColor: 'border-[#E8E4DF]',
         description: '',
         recommendation: ''
       };
@@ -283,7 +283,7 @@ export function GAD7Screener({
     return (
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
             <History className="w-5 h-5 text-[#6B9080]" />
             Assessment History
           </h2>
@@ -298,8 +298,8 @@ export function GAD7Screener({
           </div>
         ) : history.length === 0 ? (
           <div className="text-center py-12">
-            <Heart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 dark:text-slate-400">No previous assessments</p>
+            <Heart className="w-12 h-12 text-[#8A9BA8] mx-auto mb-4" />
+            <p className="text-[#5A6B7A] dark:text-slate-400">No previous assessments</p>
             <Button className="mt-4" onClick={() => setShowHistoryView(false)}>
               Take Assessment
             </Button>
@@ -309,7 +309,7 @@ export function GAD7Screener({
             {/* Trend Summary */}
             {history.length >= 2 && (
               <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
-                <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">Score Trend</p>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">Score Trend</p>
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="flex items-end gap-1 h-16">
                     {history.slice(0, 5).reverse().map((h, i) => (
@@ -334,8 +334,8 @@ export function GAD7Screener({
                       </>
                     ) : (
                       <>
-                        <Minus className="w-5 h-5 text-gray-400" />
-                        <span className="text-gray-600 font-medium">Stable</span>
+                        <Minus className="w-5 h-5 text-[#8A9BA8]" />
+                        <span className="text-[#5A6B7A] font-medium">Stable</span>
                       </>
                     )}
                   </div>
@@ -353,15 +353,15 @@ export function GAD7Screener({
                 >
                   <div className="flex items-center justify-between mb-2">
                     <Badge className={info.color}>{info.label}</Badge>
-                    <span className="text-sm text-gray-500 dark:text-slate-400">
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       {new Date(h.assessmentDate).toLocaleDateString()}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                    <span className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
                       {h.totalScore}/21
                     </span>
-                    <span className="text-sm text-gray-500 dark:text-slate-400">
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       {h.respondentType === 'self' ? 'Self-reported' : 'Caregiver-reported'}
                     </span>
                   </div>
@@ -383,12 +383,12 @@ export function GAD7Screener({
         <div className={`p-6 rounded-xl bg-gradient-to-br ${info.bgColor} border ${info.borderColor} mb-4 sm:mb-6`}>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-sm text-gray-600 dark:text-slate-400 mb-1">GAD-7 Score</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">GAD-7 Score</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-gray-900 dark:text-white">
+                <span className="text-4xl font-bold text-[#1B2733] dark:text-white">
                   {result.totalScore}
                 </span>
-                <span className="text-lg text-gray-500 dark:text-slate-400">/21</span>
+                <span className="text-lg text-[#5A6B7A] dark:text-slate-400">/21</span>
               </div>
             </div>
             <Badge className={`text-lg px-4 py-2 ${info.color}`}>
@@ -409,7 +409,7 @@ export function GAD7Screener({
                 style={{ width: `${(result.totalScore / 21) * 100}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-gray-500 dark:text-slate-400 mt-1">
+            <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
               <span>Minimal (0-4)</span>
               <span>Mild (5-9)</span>
               <span>Moderate (10-14)</span>
@@ -417,17 +417,17 @@ export function GAD7Screener({
             </div>
           </div>
 
-          <p className="text-gray-600 dark:text-slate-400 text-sm mb-2">
+          <p className="text-[#5A6B7A] dark:text-slate-400 text-sm mb-2">
             {info.description}
           </p>
         </div>
 
         {/* Recommendation */}
-        <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg mb-4 sm:mb-6">
+        <div className="p-4 bg-[#EEF4F8] dark:bg-blue-900/20 border border-[#C8DDE8] dark:border-blue-800 rounded-lg mb-4 sm:mb-6">
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-medium text-blue-800 dark:text-blue-300 mb-1">Recommendation</p>
+              <p className="font-medium text-[#4A6478] dark:text-blue-300 mb-1">Recommendation</p>
               <p className="text-sm text-blue-700 dark:text-blue-400">
                 {info.recommendation}
               </p>
@@ -437,11 +437,11 @@ export function GAD7Screener({
 
         {/* Question breakdown */}
         <div className="mb-4 sm:mb-6">
-          <h3 className="font-medium text-gray-900 dark:text-white mb-3">Response Summary</h3>
+          <h3 className="font-medium text-[#1B2733] dark:text-white mb-3">Response Summary</h3>
           <div className="space-y-2">
             {GAD7_QUESTIONS.map((q, i) => (
-              <div key={q.id} className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-800">
-                <span className="text-sm text-gray-600 dark:text-slate-400 flex-1 pr-4">
+              <div key={q.id} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] dark:border-slate-800">
+                <span className="text-sm text-[#5A6B7A] dark:text-slate-400 flex-1 pr-4">
                   {q.text}
                 </span>
                 <Badge className={
@@ -471,7 +471,7 @@ export function GAD7Screener({
         </div>
 
         {/* Disclaimer */}
-        <p className="text-xs text-gray-500 dark:text-slate-400 mt-4 sm:mt-6 text-center">
+        <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-4 sm:mt-6 text-center">
           The GAD-7 is a screening tool, not a diagnostic instrument. Please consult with a qualified
           healthcare provider for proper diagnosis and treatment recommendations.
         </p>
@@ -485,7 +485,7 @@ export function GAD7Screener({
       {/* Header */}
       <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
             <Heart className="w-5 h-5 text-[#6B9080]" />
             GAD-7 Anxiety Screening
           </h2>
@@ -496,7 +496,7 @@ export function GAD7Screener({
             </Button>
           )}
         </div>
-        <p className="text-sm text-gray-600 dark:text-slate-400">
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
           {isForSelf
             ? 'Over the last 2 weeks, how often have you been bothered by the following problems?'
             : `Over the last 2 weeks, how often has ${childName} been bothered by the following problems?`
@@ -506,7 +506,7 @@ export function GAD7Screener({
 
       {/* Progress */}
       <div className="mb-4 sm:mb-6">
-        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-slate-400 mb-2">
+        <div className="flex items-center justify-between text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">
           <span>Question {currentQuestion + 1} of 7</span>
           <span>{Math.round(progress)}% complete</span>
         </div>
@@ -520,7 +520,7 @@ export function GAD7Screener({
 
       {/* Question */}
       <div className="mb-8">
-        <p className="text-xl font-medium text-gray-900 dark:text-white mb-4 sm:mb-6">
+        <p className="text-xl font-medium text-[#1B2733] dark:text-white mb-4 sm:mb-6">
           {GAD7_QUESTIONS[currentQuestion].text}
         </p>
 
@@ -531,14 +531,14 @@ export function GAD7Screener({
               onClick={() => handleAnswer(option.value)}
               className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                 answers[currentQuestion] === option.value
-                  ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-teal-900/30'
-                  : 'border-gray-200 dark:border-slate-700 hover:border-[#6B9080]/30 hover:bg-[#FAF7F2] dark:hover:bg-slate-800'
+                  ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-[#6B9080]/15'
+                  : 'border-[#E8E4DF] dark:border-slate-700 hover:border-[#6B9080]/30 hover:bg-[#FAF7F2] dark:hover:bg-slate-800'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-medium text-gray-900 dark:text-white">{option.label}</span>
-                  <span className="text-sm text-gray-500 dark:text-slate-400 ml-2">({option.days})</span>
+                  <span className="font-medium text-[#1B2733] dark:text-white">{option.label}</span>
+                  <span className="text-sm text-[#5A6B7A] dark:text-slate-400 ml-2">({option.days})</span>
                 </div>
                 {answers[currentQuestion] === option.value && (
                   <CheckCircle className="w-5 h-5 text-[#6B9080]" />
@@ -589,9 +589,9 @@ export function GAD7Screener({
       {/* Info */}
       <div className="mt-8 p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-gray-400 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
           <div>
-            <p className="text-sm text-gray-600 dark:text-slate-400">
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
               The GAD-7 is a validated screening tool developed by Drs. Spitzer, Kroenke, Williams, and Löwe.
               It takes approximately 2-3 minutes to complete.
             </p>

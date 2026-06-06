@@ -122,7 +122,7 @@ function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
       </div>
 
       {/* Supportive microcopy at bottom */}
-      <div className="pt-4 border-t border-gray-100">
+      <div className="pt-4 border-t border-[#E8E4DF]">
         <p className="text-xs text-center text-muted-foreground leading-relaxed">
           These preferences help Aminy personalize your experience and suggest activities when they'll be most helpful.
         </p>

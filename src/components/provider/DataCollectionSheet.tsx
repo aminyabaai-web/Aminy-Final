@@ -102,7 +102,7 @@ export interface DataCollectionSheetProps {
 const RESPONSE_CONFIG: Record<ResponseType, { label: string; shortLabel: string; color: string; bgColor: string }> = {
   correct: { label: 'Correct', shortLabel: '✓', color: 'text-green-700', bgColor: 'bg-green-100 border-green-400 active:bg-green-200' },
   incorrect: { label: 'Incorrect', shortLabel: '✗', color: 'text-red-700', bgColor: 'bg-red-100 border-red-400 active:bg-red-200' },
-  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-slate-600', bgColor: 'bg-slate-100 border-slate-400 active:bg-slate-200' },
+  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-[#5A6B7A]', bgColor: 'bg-[#F0EDE8] border-slate-400 active:bg-[#E8E4DF]' },
   prompted: { label: 'Prompted', shortLabel: 'P', color: 'text-amber-700', bgColor: 'bg-amber-100 border-amber-400 active:bg-amber-200' },
   self_corrected: { label: 'Self-Corrected', shortLabel: 'SC', color: 'text-blue-700', bgColor: 'bg-blue-100 border-blue-400 active:bg-blue-200' },
 };
@@ -164,13 +164,13 @@ function ResponseButton({
 function TrialRow({ trial, index }: { trial: Trial; index: number }) {
   const cfg = RESPONSE_CONFIG[trial.response];
   return (
-    <div className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0">
+    <div className="flex items-center gap-3 py-2 border-b border-[#E8E4DF] last:border-0">
       <span className="text-xs text-slate-400 w-6 text-right">{index + 1}</span>
       <span className={`font-bold text-sm px-2 py-0.5 rounded ${cfg.bgColor} ${cfg.color}`}>
         {cfg.shortLabel}
       </span>
       {trial.promptLevel && (
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-[#5A6B7A]">
           {PROMPT_LEVELS.find(p => p.value === trial.promptLevel)?.label?.split(' ')[0]}
         </span>
       )}
@@ -213,25 +213,25 @@ function DTTMode({
   return (
     <div className="space-y-4">
       {/* Program info */}
-      <div className="bg-slate-50 rounded-xl p-4">
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-slate-900">{programName || 'Untitled Program'}</p>
-        {goalDescription && <p className="text-sm text-slate-600 mt-1">{goalDescription}</p>}
+      <div className="bg-[#FAF7F2] rounded-xl p-4">
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
+        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
       {/* Running summary */}
       <div className="grid grid-cols-3 gap-3">
-        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-slate-900">{trials.length}</p>
-          <p className="text-xs text-slate-500">Trials</p>
+        <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-[#1B2733]">{trials.length}</p>
+          <p className="text-xs text-[#5A6B7A]">Trials</p>
         </div>
-        <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-slate-200'}`}>
-          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-slate-900'}`}>{pct}%</p>
-          <p className="text-xs text-slate-500">% Correct</p>
+        <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-[#E8E4DF]'}`}>
+          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#1B2733]'}`}>{pct}%</p>
+          <p className="text-xs text-[#5A6B7A]">% Correct</p>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-slate-900">{trials.filter(t => t.response === 'correct').length}</p>
-          <p className="text-xs text-slate-500">Correct</p>
+        <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
+          <p className="text-2xl font-bold text-[#1B2733]">{trials.filter(t => t.response === 'correct').length}</p>
+          <p className="text-xs text-[#5A6B7A]">Correct</p>
         </div>
       </div>
 
@@ -246,7 +246,7 @@ function DTTMode({
 
       {/* Prompt level */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Prompt Level</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Prompt Level</p>
         <div className="flex flex-wrap gap-2">
           {PROMPT_LEVELS.map(pl => (
             <button
@@ -255,7 +255,7 @@ function DTTMode({
               className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
-                  : 'bg-white text-slate-700 border-slate-300'
+                  : 'bg-white text-[#3A4A57] border-slate-300'
               }`}
             >
               {pl.label.split(' ').pop()?.replace('(', '').replace(')', '')}
@@ -266,7 +266,7 @@ function DTTMode({
 
       {/* Optional context */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">SD / Context (optional)</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">SD / Context (optional)</p>
         <input
           type="text"
           value={contextNote}
@@ -278,7 +278,7 @@ function DTTMode({
 
       {/* Response buttons */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Record Response</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Record Response</p>
         <div className="flex gap-2">
           {(['correct', 'incorrect', 'no_response', 'prompted', 'self_corrected'] as ResponseType[]).map(r => (
             <ResponseButton key={r} type={r} onPress={onAddTrial} />
@@ -289,8 +289,8 @@ function DTTMode({
       {/* Trial log */}
       {trials.length > 0 && (
         <div>
-          <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Trial Log</p>
-          <div className="bg-white border border-slate-200 rounded-xl px-4 py-2 max-h-48 overflow-y-auto">
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Trial Log</p>
+          <div className="bg-white border border-[#E8E4DF] rounded-xl px-4 py-2 max-h-48 overflow-y-auto">
             {[...trials].reverse().map((t, i) => (
               <TrialRow key={t.id} trial={t} index={trials.length - 1 - i} />
             ))}
@@ -329,10 +329,10 @@ function NETMode({
 
   return (
     <div className="space-y-4">
-      <div className="bg-slate-50 rounded-xl p-4">
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-slate-900">{programName || 'Untitled Program'}</p>
-        {goalDescription && <p className="text-sm text-slate-600 mt-1">{goalDescription}</p>}
+      <div className="bg-[#FAF7F2] rounded-xl p-4">
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
+        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
       {/* Running tally — always visible */}
@@ -355,7 +355,7 @@ function NETMode({
 
       {/* Context */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Setting / Context (optional)</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Setting / Context (optional)</p>
         <input
           type="text"
           value={contextNote}
@@ -367,7 +367,7 @@ function NETMode({
 
       {/* Prompt level */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Prompt Level</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Prompt Level</p>
         <div className="flex flex-wrap gap-2">
           {PROMPT_LEVELS.map(pl => (
             <button
@@ -376,7 +376,7 @@ function NETMode({
               className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
-                  : 'bg-white text-slate-700 border-slate-300'
+                  : 'bg-white text-[#3A4A57] border-slate-300'
               }`}
             >
               {pl.label.split(' ').pop()?.replace('(', '').replace(')', '')}
@@ -387,7 +387,7 @@ function NETMode({
 
       {/* Response buttons */}
       <div>
-        <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Log Opportunity</p>
+        <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Log Opportunity</p>
         <div className="flex gap-2">
           {(['correct', 'incorrect', 'no_response', 'prompted', 'self_corrected'] as ResponseType[]).map(r => (
             <ResponseButton key={r} type={r} onPress={onAddTrial} />
@@ -397,8 +397,8 @@ function NETMode({
 
       {trials.length > 0 && (
         <div>
-          <p className="text-xs text-slate-500 uppercase tracking-wide mb-2">Recent Opportunities</p>
-          <div className="bg-white border border-slate-200 rounded-xl px-4 py-2 max-h-48 overflow-y-auto">
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-2">Recent Opportunities</p>
+          <div className="bg-white border border-[#E8E4DF] rounded-xl px-4 py-2 max-h-48 overflow-y-auto">
             {[...trials].reverse().slice(0, 20).map((t, i) => (
               <TrialRow key={t.id} trial={t} index={trials.length - 1 - i} />
             ))}
@@ -461,7 +461,7 @@ function BehaviorMode({
   return (
     <div className="space-y-4">
       {/* Mode selector */}
-      <div className="flex gap-2 bg-slate-100 rounded-xl p-1">
+      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
         {(['frequency', 'duration', 'interval'] as BehaviorRecordingType[]).map(t => (
           <button
             key={t}
@@ -469,7 +469,7 @@ function BehaviorMode({
             className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all capitalize ${
               recordingType === t
                 ? 'bg-slate-900 text-white'
-                : 'text-slate-600'
+                : 'text-[#5A6B7A]'
             }`}
           >
             {t}
@@ -480,7 +480,7 @@ function BehaviorMode({
       {/* ABC Incidents (always visible) */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs text-slate-500 uppercase tracking-wide">ABC Data</p>
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide">ABC Data</p>
           <button
             onClick={onAddIncident}
             className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
@@ -491,15 +491,15 @@ function BehaviorMode({
         </div>
 
         {incidents.length === 0 ? (
-          <div className="bg-slate-50 rounded-xl p-4 text-center">
+          <div className="bg-[#FAF7F2] rounded-xl p-4 text-center">
             <p className="text-sm text-slate-400">Tap "Add Incident" to log antecedent, behavior, consequence</p>
           </div>
         ) : (
           <div className="space-y-3">
             {incidents.map((incident, idx) => (
-              <div key={incident.id} className="bg-white border border-slate-200 rounded-xl p-3 space-y-2">
+              <div key={incident.id} className="bg-white border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500">Incident {idx + 1}</span>
+                  <span className="text-xs font-semibold text-[#5A6B7A]">Incident {idx + 1}</span>
                   <span className="text-xs text-slate-400">
                     {new Date(incident.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
@@ -511,7 +511,7 @@ function BehaviorMode({
                     value={incident.antecedent}
                     onChange={e => onUpdateIncident(incident.id, 'antecedent', e.target.value)}
                     placeholder="What happened before..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
+                    className="w-full mt-1 border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -521,7 +521,7 @@ function BehaviorMode({
                     value={incident.behavior}
                     onChange={e => onUpdateIncident(incident.id, 'behavior', e.target.value)}
                     placeholder="Describe the behavior..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
+                    className="w-full mt-1 border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
                 <div>
@@ -531,7 +531,7 @@ function BehaviorMode({
                     value={incident.consequence}
                     onChange={e => onUpdateIncident(incident.id, 'consequence', e.target.value)}
                     placeholder="What happened after..."
-                    className="w-full mt-1 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
+                    className="w-full mt-1 border border-[#E8E4DF] rounded-lg px-3 py-2 text-sm outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -542,13 +542,13 @@ function BehaviorMode({
 
       {/* Frequency */}
       {recordingType === 'frequency' && (
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center">
-          <p className="text-xs text-slate-500 uppercase tracking-wide mb-4">Frequency Count</p>
-          <p className="text-7xl font-bold text-slate-900 mb-6">{frequencyCount}</p>
+        <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Frequency Count</p>
+          <p className="text-7xl font-bold text-[#1B2733] mb-6">{frequencyCount}</p>
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={onDecrementFrequency}
-              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-slate-600 active:bg-slate-100"
+              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-[#5A6B7A] active:bg-[#F0EDE8]"
             >
               <Minus className="w-6 h-6" />
             </button>
@@ -564,9 +564,9 @@ function BehaviorMode({
 
       {/* Duration */}
       {recordingType === 'duration' && (
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center">
-          <p className="text-xs text-slate-500 uppercase tracking-wide mb-4">Duration Recording</p>
-          <p className="text-6xl font-mono font-bold text-slate-900 mb-2">
+        <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Duration Recording</p>
+          <p className="text-6xl font-mono font-bold text-[#1B2733] mb-2">
             {formatSeconds(isDurationRunning ? durationElapsed : 0)}
           </p>
           {isDurationRunning && (
@@ -589,15 +589,15 @@ function BehaviorMode({
           </div>
           {durationRecords.length > 0 && (
             <div className="mt-4 text-left">
-              <p className="text-xs text-slate-500 mb-2">Recorded Episodes</p>
+              <p className="text-xs text-[#5A6B7A] mb-2">Recorded Episodes</p>
               <div className="space-y-1">
                 {durationRecords.map((d, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
-                    <span className="text-slate-600">Episode {i + 1}</span>
-                    <span className="font-medium text-slate-900">{formatSeconds(d)}</span>
+                    <span className="text-[#5A6B7A]">Episode {i + 1}</span>
+                    <span className="font-medium text-[#1B2733]">{formatSeconds(d)}</span>
                   </div>
                 ))}
-                <div className="border-t border-slate-200 pt-1 flex items-center justify-between text-sm font-semibold">
+                <div className="border-t border-[#E8E4DF] pt-1 flex items-center justify-between text-sm font-semibold">
                   <span>Total</span>
                   <span>{formatSeconds(durationRecords.reduce((a, b) => a + b, 0))}</span>
                 </div>
@@ -609,8 +609,8 @@ function BehaviorMode({
 
       {/* Interval */}
       {recordingType === 'interval' && (
-        <div className="bg-white border border-slate-200 rounded-2xl p-4">
-          <p className="text-xs text-slate-500 uppercase tracking-wide mb-3">Interval Recording</p>
+        <div className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
+          <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-3">Interval Recording</p>
 
           {/* Interval size selector */}
           <div className="flex gap-2 mb-4">
@@ -622,7 +622,7 @@ function BehaviorMode({
                 className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
                   intervalSize === s
                     ? 'bg-slate-900 text-white border-slate-900'
-                    : 'text-slate-600 border-slate-300'
+                    : 'text-[#5A6B7A] border-slate-300'
                 } disabled:opacity-50`}
               >
                 {s}s
@@ -633,8 +633,8 @@ function BehaviorMode({
           {/* Timer display */}
           {isIntervalRunning && (
             <div className="text-center mb-4">
-              <p className="text-3xl font-mono font-bold text-slate-900">{intervalTimeLeft}s</p>
-              <p className="text-xs text-slate-500">Interval {currentIntervalIndex + 1} — tap to mark</p>
+              <p className="text-3xl font-mono font-bold text-[#1B2733]">{intervalTimeLeft}s</p>
+              <p className="text-xs text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
 
@@ -646,7 +646,7 @@ function BehaviorMode({
                   key={cell.intervalIndex}
                   className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold border-2 ${
                     cell.occurred === null
-                      ? 'bg-slate-100 border-slate-200 text-slate-400'
+                      ? 'bg-[#F0EDE8] border-[#E8E4DF] text-slate-400'
                       : cell.occurred
                       ? 'bg-green-100 border-green-400 text-green-700'
                       : 'bg-red-100 border-red-400 text-red-700'
@@ -997,7 +997,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-slate-900 sticky top-0 z-20">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -1035,12 +1035,12 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
       <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
         {/* Setup card */}
         {!sessionStarted ? (
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
-            <h2 className="text-slate-900 font-bold text-lg">Session Setup</h2>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-4">
+            <h2 className="text-[#1B2733] font-bold text-lg">Session Setup</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide">Client Name</label>
+                <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Client Name</label>
                 <input
                   type="text"
                   value={clientName}
@@ -1050,7 +1050,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-500 uppercase tracking-wide">Staff Name</label>
+                <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Staff Name</label>
                 <input
                   type="text"
                   value={staffName}
@@ -1062,7 +1062,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             </div>
 
             <div>
-              <label className="text-xs text-slate-500 uppercase tracking-wide">Program / Skill Name</label>
+              <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Program / Skill Name</label>
               <input
                 type="text"
                 value={programName}
@@ -1073,7 +1073,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             </div>
 
             <div>
-              <label className="text-xs text-slate-500 uppercase tracking-wide">Goal Description</label>
+              <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Goal Description</label>
               <textarea
                 value={goalDescription}
                 onChange={e => setGoalDescription(e.target.value)}
@@ -1085,7 +1085,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
 
             {/* Mode selection */}
             <div>
-              <label className="text-xs text-slate-500 uppercase tracking-wide">Data Collection Mode</label>
+              <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Data Collection Mode</label>
               <div className="flex gap-2 mt-2">
                 {(['dtt', 'net', 'behavior'] as DataMode[]).map(m => (
                   <button
@@ -1094,7 +1094,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                     className={`flex-1 py-3 rounded-xl font-medium text-sm border-2 transition-all uppercase tracking-wide ${
                       mode === m
                         ? 'bg-slate-900 text-white border-slate-900'
-                        : 'text-slate-600 border-slate-200 bg-white'
+                        : 'text-[#5A6B7A] border-[#E8E4DF] bg-white'
                     }`}
                   >
                     {m}
@@ -1119,13 +1119,13 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 <span className="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   {mode}
                 </span>
-                <span className="text-sm text-slate-500">
+                <span className="text-sm text-[#5A6B7A]">
                   {clientName && `${clientName} · `}{staffName}
                 </span>
               </div>
               <button
                 onClick={handleExport}
-                className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 px-2 py-1 rounded-lg border border-slate-200"
+                className="flex items-center gap-1 text-xs text-[#5A6B7A] hover:text-[#3A4A57] px-2 py-1 rounded-lg border border-[#E8E4DF]"
               >
                 <Download className="w-3.5 h-3.5" />
                 Export
@@ -1226,14 +1226,14 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             )}
 
             {/* Session notes */}
-            <div className="bg-white rounded-2xl p-4 border border-slate-200">
-              <label className="text-xs text-slate-500 uppercase tracking-wide">Session Notes</label>
+            <div className="bg-white rounded-2xl p-4 border border-[#E8E4DF]">
+              <label className="text-xs text-[#5A6B7A] uppercase tracking-wide">Session Notes</label>
               <textarea
                 value={sessionNotes}
                 onChange={e => setSessionNotes(e.target.value)}
                 placeholder="Clinical observations, next steps, parent communication..."
                 rows={3}
-                className="w-full mt-2 border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 resize-none"
+                className="w-full mt-2 border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm outline-none focus:border-emerald-500 resize-none"
               />
             </div>
 
@@ -1249,7 +1249,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               </button>
               <button
                 onClick={handleExport}
-                className="px-5 py-4 rounded-xl border-2 border-slate-300 text-slate-600 flex items-center justify-center"
+                className="px-5 py-4 rounded-xl border-2 border-slate-300 text-[#5A6B7A] flex items-center justify-center"
               >
                 <Download className="w-5 h-5" />
               </button>

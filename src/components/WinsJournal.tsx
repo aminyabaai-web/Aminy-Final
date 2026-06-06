@@ -312,18 +312,18 @@ export function WinsJournal({ userId }: { userId: string }) {
             </div>
           </CardHeader>
           <CardContent className="space-y-3 sm:space-y-4">
-            <div className="p-4 bg-slate-50 rounded-lg">
-              <p className="text-sm text-slate-700 leading-relaxed">
+            <div className="p-4 bg-[#FAF7F2] rounded-lg">
+              <p className="text-sm text-[#3A4A57] leading-relaxed">
                 {weeklySummary.generatedSummary}
               </p>
             </div>
 
             {weeklySummary.highlights.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 mb-2">Key Highlights:</h4>
+                <h4 className="text-sm font-semibold text-[#1B2733] mb-2">Key Highlights:</h4>
                 <ul className="space-y-1">
                   {weeklySummary.highlights.map((highlight, index) => (
-                    <li key={index} className="text-sm text-slate-700 flex items-start gap-2">
+                    <li key={index} className="text-sm text-[#3A4A57] flex items-start gap-2">
                       <span className="text-accent mt-1">•</span>
                       <span>{highlight}</span>
                     </li>
@@ -369,7 +369,7 @@ export function WinsJournal({ userId }: { userId: string }) {
         </CardHeader>
         <CardContent>
           {moments.length === 0 ? (
-            <div className="text-center py-8 text-slate-600">
+            <div className="text-center py-8 text-[#5A6B7A]">
               <p>No moments saved yet.</p>
               <p className="text-sm mt-1">Start capturing your journey! 💙</p>
             </div>
@@ -378,13 +378,13 @@ export function WinsJournal({ userId }: { userId: string }) {
               {moments.slice(0, 10).map((moment) => (
                 <div
                   key={moment.id}
-                  className="p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
+                  className="p-4 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
                 >
-                  <p className="text-sm text-slate-700 leading-relaxed mb-2">
+                  <p className="text-sm text-[#3A4A57] leading-relaxed mb-2">
                     {moment.content}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-[#5A6B7A]">
                       {getRelativeTime(moment.timestamp)}
                     </span>
                     {moment.tags && moment.tags.length > 0 && (

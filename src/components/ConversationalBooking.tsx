@@ -243,7 +243,7 @@ function ChatMessage({
       <div
         className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           isAI
-            ? 'border border-teal-100 bg-white/95 text-slate-800 shadow-sm'
+            ? 'border border-[#E8E4DF] bg-white/95 text-[#1B2733] shadow-sm'
             : 'bg-primary text-white shadow-sm'
         }`}
       >
@@ -273,7 +273,7 @@ function OptionChip({
       className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all shadow-sm ${
         selected
           ? 'border-2 border-[#6B9080] bg-primary text-white'
-          : 'border border-slate-200 bg-white/95 text-slate-700 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
+          : 'border border-[#E8E4DF] bg-white/95 text-[#3A4A57] hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
       }`}
     >
       {icon && <span className={selected ? 'text-white' : 'text-[#6B9080]'}>{icon}</span>}
@@ -301,25 +301,25 @@ function ProviderCardMini({
       className={`w-full flex items-center gap-3 p-4 rounded-2xl text-left transition-all shadow-sm ${
         selected
           ? 'border-2 border-[#6B9080] bg-[#6B9080]/10'
-          : 'border border-slate-200 bg-white/95 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
+          : 'border border-[#E8E4DF] bg-white/95 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
       }`}
     >
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-lg">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#43AA8B] flex items-center justify-center text-white font-bold text-lg">
         {provider.name.split(' ').map(n => n[0]).join('')}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="font-semibold text-gray-900 truncate">{provider.name}</p>
+          <p className="font-semibold text-[#1B2733] truncate">{provider.name}</p>
           {provider.isAssigned && (
             <span className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full">
               Your Provider
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-500">{provider.title} · {provider.specialty}</p>
+        <p className="text-sm text-[#5A6B7A]">{provider.title} · {provider.specialty}</p>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-sm text-amber-600">★ {provider.rating}</span>
-          <span className="text-xs text-gray-400">({provider.reviewCount} reviews)</span>
+          <span className="text-xs text-[#8A9BA8]">({provider.reviewCount} reviews)</span>
           <span className="text-xs text-[#6B9080] ml-auto">Next: {provider.nextAvailable}</span>
         </div>
       </div>
@@ -652,24 +652,24 @@ export function ConversationalBooking({
       }}
     >
       {/* Header */}
-      <div className="border-b border-teal-100/80 bg-white/90 px-4 py-4 backdrop-blur">
+      <div className="border-b border-[#E8E4DF]/80 bg-white/90 px-4 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-5xl items-start gap-3">
           <button
             onClick={goBack}
-            className="rounded-2xl border border-slate-200 bg-white p-2.5 transition-colors hover:bg-slate-50"
+            className="rounded-2xl border border-[#E8E4DF] bg-white p-2.5 transition-colors hover:bg-[#FAF7F2]"
           >
-            <ArrowLeft className="h-5 w-5 text-slate-600" />
+            <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6B9080]">Guided booking</p>
-                <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">Book calm, supportive care</h2>
-                <p className="mt-1 text-sm text-slate-600">
+                <h2 className="text-lg font-semibold text-[#1B2733] sm:text-xl">Book calm, supportive care</h2>
+                <p className="mt-1 text-sm text-[#5A6B7A]">
                   We will keep this simple for {childName} and only show providers available in supported states.
                 </p>
               </div>
-              <div className="ml-auto rounded-2xl border border-teal-100 bg-[#6B9080]/10/80 px-3 py-2 text-xs text-[#6B9080]">
+              <div className="ml-auto rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/80 px-3 py-2 text-xs text-[#6B9080]">
                 AZ, MT, and TX cash-pay telehealth are available now.
               </div>
             </div>
@@ -678,7 +678,7 @@ export function ConversationalBooking({
                 <div
                   key={step}
                   className={`h-2 flex-1 rounded-full transition-colors ${
-                    currentStepIndex >= i ? 'bg-primary' : 'bg-slate-200'
+                    currentStepIndex >= i ? 'bg-primary' : 'bg-[#E8E4DF]'
                   }`}
                 />
               ))}
@@ -693,7 +693,7 @@ export function ConversationalBooking({
         {/* Step 1: Concern Selection */}
         <ChatMessage isAI>
           <p className="font-medium">Let&apos;s match today&apos;s concern to the right kind of support.</p>
-          <p className="mt-1 text-slate-600">Choose what feels most urgent right now. You can still change it in the next step.</p>
+          <p className="mt-1 text-[#5A6B7A]">Choose what feels most urgent right now. You can still change it in the next step.</p>
         </ChatMessage>
 
         <div className="grid gap-2 ml-11">
@@ -734,7 +734,7 @@ export function ConversationalBooking({
 
                 {childGoals.length > 0 && (
                   <>
-                    <p className="text-sm text-gray-500 ml-1">Or select a current goal:</p>
+                    <p className="text-sm text-[#5A6B7A] ml-1">Or select a current goal:</p>
                     {childGoals.filter(g => g.status === 'active').map((goal) => (
                       <OptionChip
                         key={goal.id}
@@ -798,7 +798,7 @@ export function ConversationalBooking({
                   className={`w-full rounded-2xl p-4 text-center transition-all shadow-sm ${
                     state.providerPreference === 'any-available'
                       ? 'border-2 border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
-                      : 'border border-slate-200 bg-white/95 text-slate-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
+                      : 'border border-[#E8E4DF] bg-white/95 text-[#5A6B7A] hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
                   }`}
                 >
                   Show me all available providers
@@ -835,7 +835,7 @@ export function ConversationalBooking({
                   <p className="font-medium">Coverage Coach check</p>
                 </div>
                 {insuranceLoading ? (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-[#5A6B7A]">
                     <Loader2 className="w-4 h-4 animate-spin" />
                     <span className="text-sm">Checking whether insurance changes today&apos;s best route...</span>
                   </div>
@@ -856,12 +856,12 @@ export function ConversationalBooking({
                         </p>
                       )}
                     </div>
-                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                    <label className="flex items-center gap-2 text-sm text-[#5A6B7A] cursor-pointer">
                       <input
                         type="checkbox"
                         checked={generateSuperbill}
                         onChange={(e) => setGenerateSuperbill(e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
+                        className="w-4 h-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
                       Prepare a superbill after the visit for reimbursement support
@@ -873,12 +873,12 @@ export function ConversationalBooking({
                       <p className="text-sm text-amber-800">We could not verify coverage cleanly, so the safest route today is self-pay.</p>
                       <p className="mt-1 text-xs text-amber-700">You can still book now and keep a reimbursement packet for later.</p>
                     </div>
-                    <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                    <label className="flex items-center gap-2 text-sm text-[#5A6B7A] cursor-pointer">
                       <input
                         type="checkbox"
                         checked={generateSuperbill}
                         onChange={(e) => setGenerateSuperbill(e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
+                        className="w-4 h-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
                       Prepare a superbill for you to submit later
@@ -969,17 +969,17 @@ export function ConversationalBooking({
 
               <ChatMessage isAI>
                 <p className="font-medium">Here is your booking summary.</p>
-                <div className="mt-3 space-y-2 rounded-2xl border border-slate-200 bg-slate-50/90 p-4">
+                <div className="mt-3 space-y-2 rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/90 p-4">
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
+                    <User className="w-4 h-4 text-[#8A9BA8]" />
                     <span className="text-sm">{state.selectedProvider?.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Target className="w-4 h-4 text-gray-400" />
+                    <Target className="w-4 h-4 text-[#8A9BA8]" />
                     <span className="text-sm">{state.concern?.label}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <Calendar className="w-4 h-4 text-[#8A9BA8]" />
                     <span className="text-sm">
                       {state.selectedSlot && new Intl.DateTimeFormat('en-US', {
                         weekday: 'short',
@@ -992,14 +992,14 @@ export function ConversationalBooking({
                   </div>
                   <div className="flex items-center gap-2">
                     {state.visitType === 'video' ? (
-                      <Video className="w-4 h-4 text-gray-400" />
+                      <Video className="w-4 h-4 text-[#8A9BA8]" />
                     ) : (
-                      <Phone className="w-4 h-4 text-gray-400" />
+                      <Phone className="w-4 h-4 text-[#8A9BA8]" />
                     )}
                     <span className="text-sm capitalize">{state.visitType} call</span>
                   </div>
-                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200 mt-2">
-                    <DollarSign className="w-4 h-4 text-gray-400" />
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#E8E4DF] mt-2">
+                    <DollarSign className="w-4 h-4 text-[#8A9BA8]" />
                     <span className="text-sm font-medium">
                       ${getSessionPrice(state.selectedProvider?.title || '', 60).price}
                     </span>
@@ -1015,7 +1015,7 @@ export function ConversationalBooking({
                       <span className="text-xs text-[#6B9080]">Superbill will be prepared after the session</span>
                     </div>
                   )}
-                  <div className="rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs text-slate-600">
+                  <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-xs text-[#5A6B7A]">
                     Free changes at least 24 hours ahead. Late changes and no-shows can reduce the refund amount.
                   </div>
                 </div>
@@ -1032,7 +1032,7 @@ export function ConversationalBooking({
                   Confirm Booking
                 </motion.button>
 
-                <p className="mt-3 text-center text-xs text-slate-500">
+                <p className="mt-3 text-center text-xs text-[#5A6B7A]">
                   You will receive a confirmation email, reminder, and secure video-room link.
                 </p>
               </div>

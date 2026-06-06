@@ -253,7 +253,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-white rounded-2xl p-8 text-center">
           <div className="w-8 h-8 border-2 border-[#6B9080] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-sm text-gray-500 mt-3">Preparing your invite...</p>
+          <p className="text-sm text-[#5A6B7A] mt-3">Preparing your invite...</p>
         </div>
       </div>
     );
@@ -263,19 +263,19 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50">
       <div className="w-full max-w-md bg-white rounded-t-2xl sm:rounded-2xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom duration-300">
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between rounded-t-2xl z-10">
+        <div className="sticky top-0 bg-white border-b border-[#E8E4DF] px-5 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
               <UserPlus className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-gray-900">Invite Friends</h2>
-              <p className="text-xs text-gray-500">Give $25, get 1 free month</p>
+              <h2 className="text-base font-bold text-[#1B2733]">Invite Friends</h2>
+              <p className="text-xs text-[#5A6B7A]">Give $25, get 1 free month</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-gray-400 hover:text-gray-600 hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
             aria-label="Close"
           >
             <X size={20} />
@@ -284,11 +284,11 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
 
         <div className="p-5 space-y-5">
           {/* Reward callout */}
-          <div className="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-xl p-4 border border-teal-100">
+          <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 rounded-xl p-4 border border-[#E8E4DF]">
             <div className="flex items-start gap-3">
               <Gift className="w-5 h-5 text-[#6B9080] mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-sm font-semibold text-teal-900">
+                <p className="text-sm font-semibold text-[#6B9080]">
                   You both win
                 </p>
                 <p className="text-xs text-[#6B9080] mt-0.5 leading-relaxed">
@@ -301,14 +301,14 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
 
           {/* Referral code display */}
           <div className="text-center">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1.5">Your referral code</p>
-            <div className="inline-flex items-center gap-2 bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5">
-              <code className="text-base font-bold text-gray-900 tracking-wide">
+            <p className="text-xs text-[#5A6B7A] uppercase tracking-wider mb-1.5">Your referral code</p>
+            <div className="inline-flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
+              <code className="text-base font-bold text-[#1B2733] tracking-wide">
                 {referralCode}
               </code>
               <button
                 onClick={handleCopyLink}
-                className="p-1 text-gray-400 hover:text-[#6B9080] transition-colors"
+                className="p-1 text-[#8A9BA8] hover:text-[#6B9080] transition-colors"
                 aria-label="Copy link"
               >
                 {copied ? <Check size={16} className="text-[#6B9080]" /> : <Copy size={16} />}
@@ -323,7 +323,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
 
           {/* Primary share channels */}
           <div className="space-y-2.5">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <p className="text-xs font-medium text-[#5A6B7A] uppercase tracking-wider">
               Share via
             </p>
 
@@ -331,32 +331,32 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
             <button
               onClick={() => handleSMS()}
               disabled={sendingChannel === 'sms'}
-              className="w-full flex items-center gap-3 p-3.5 bg-white border border-gray-200 rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
+              className="w-full flex items-center gap-3 p-3.5 bg-white border border-[#E8E4DF] rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
             >
               <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
                 <MessageCircle className="w-5 h-5 text-green-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-gray-900">Text Message</p>
-                <p className="text-xs text-gray-500">Send a pre-filled SMS invite</p>
+                <p className="text-sm font-medium text-[#1B2733]">Text Message</p>
+                <p className="text-xs text-[#5A6B7A]">Send a pre-filled SMS invite</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+              <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
             </button>
 
             {/* Email */}
             <button
               onClick={() => handleEmail()}
               disabled={sendingChannel === 'email'}
-              className="w-full flex items-center gap-3 p-3.5 bg-white border border-gray-200 rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
+              className="w-full flex items-center gap-3 p-3.5 bg-white border border-[#E8E4DF] rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
             >
-              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EEF4F8] flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                 <Mail className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-gray-900">Email</p>
-                <p className="text-xs text-gray-500">Share via your email app</p>
+                <p className="text-sm font-medium text-[#1B2733]">Email</p>
+                <p className="text-xs text-[#5A6B7A]">Share via your email app</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+              <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
             </button>
 
             {/* Native share (mobile) */}
@@ -364,16 +364,16 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               <button
                 onClick={handleNativeShare}
                 disabled={sendingChannel === 'native'}
-                className="w-full flex items-center gap-3 p-3.5 bg-white border border-gray-200 rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
+                className="w-full flex items-center gap-3 p-3.5 bg-white border border-[#E8E4DF] rounded-xl hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-colors group"
               >
                 <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
                   <Share2 className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-gray-900">More Options</p>
-                  <p className="text-xs text-gray-500">WhatsApp, Messenger, and more</p>
+                  <p className="text-sm font-medium text-[#1B2733]">More Options</p>
+                  <p className="text-xs text-[#5A6B7A]">WhatsApp, Messenger, and more</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
               </button>
             )}
 
@@ -381,16 +381,16 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
             {supportsContactPicker() && selectedContacts.length === 0 && (
               <button
                 onClick={handlePickContacts}
-                className="w-full flex items-center gap-3 p-3.5 bg-white border border-dashed border-gray-300 rounded-xl hover:border-[#6B9080] hover:bg-[#6B9080]/10/30 transition-colors group"
+                className="w-full flex items-center gap-3 p-3.5 bg-white border border-dashed border-[#E8E4DF] rounded-xl hover:border-[#6B9080] hover:bg-[#6B9080]/10/30 transition-colors group"
               >
                 <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center group-hover:bg-[#6B9080]/10 transition-colors">
                   <Users className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-gray-900">Choose from Contacts</p>
-                  <p className="text-xs text-gray-500">Pick friends directly from your address book</p>
+                  <p className="text-sm font-medium text-[#1B2733]">Choose from Contacts</p>
+                  <p className="text-xs text-[#5A6B7A]">Pick friends directly from your address book</p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
+                <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
               </button>
             )}
           </div>
@@ -398,7 +398,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           {/* Selected contacts */}
           {selectedContacts.length > 0 && (
             <div className="space-y-2">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-[#5A6B7A] uppercase tracking-wider">
                 Send to {selectedContacts.length} contact{selectedContacts.length > 1 ? 's' : ''}
               </p>
               <div className="max-h-32 overflow-y-auto space-y-1.5">
@@ -407,10 +407,10 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                     key={i}
                     className="flex items-center justify-between bg-[#FAF7F2] rounded-lg px-3 py-2"
                   >
-                    <span className="text-sm text-gray-700 truncate">
+                    <span className="text-sm text-[#3A4A57] truncate">
                       {contact.name}
                       {contact.email && (
-                        <span className="text-gray-400 text-xs ml-1">({contact.email})</span>
+                        <span className="text-[#8A9BA8] text-xs ml-1">({contact.email})</span>
                       )}
                     </span>
                     <button
@@ -443,7 +443,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           {/* Manual phone/email entry */}
           {showManualInput && (
             <div className="space-y-2">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-[#5A6B7A] uppercase tracking-wider">
                 Enter a phone number or email
               </p>
               <div className="flex gap-2">
@@ -453,7 +453,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   onChange={(e) => setManualInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleManualSubmit()}
                   placeholder="Phone or email..."
-                  className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080]"
+                  className="flex-1 px-4 py-2.5 border border-[#E8E4DF] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080]"
                   autoFocus
                 />
                 <button
@@ -481,7 +481,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
             <div className="text-center bg-[#6B9080]/10 rounded-xl py-3 animate-in fade-in">
               <div className="flex items-center justify-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-[#6B9080]" />
-                <span className="text-sm font-medium text-teal-800">
+                <span className="text-sm font-medium text-[#6B9080]">
                   {invitesSentThisSession} invite{invitesSentThisSession > 1 ? 's' : ''} sent this session
                 </span>
               </div>

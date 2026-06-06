@@ -361,7 +361,7 @@ export function ParentWellnessCheck({
                           "w-full p-4 rounded-xl border-2 text-left transition-all",
                           responses[currentQ.id] === option.value
                             ? "border-rose-400 bg-rose-50"
-                            : "border-gray-200 hover:border-rose-200 hover:bg-rose-50/50"
+                            : "border-[#E8E4DF] hover:border-rose-200 hover:bg-rose-50/50"
                         )}
                       >
                         <div className="flex items-center justify-between">
@@ -656,7 +656,7 @@ export function WellnessCheckWidget({
         )}>
           <HandHeart className={cn(
             "w-6 h-6",
-            shouldPrompt ? "text-rose-500" : "text-gray-500"
+            shouldPrompt ? "text-rose-500" : "text-[#5A6B7A]"
           )} />
         </div>
         <div className="flex-1">

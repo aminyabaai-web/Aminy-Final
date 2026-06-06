@@ -395,7 +395,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
           <p className="mt-4 text-neutral-600 dark:text-neutral-300 font-medium">
             Generating AI summary for {patient.childName}...
           </p>
-          <p className="text-sm text-neutral-500">Analyzing conversation history, routines, and incident logs</p>
+          <p className="text-sm text-[#5A6B7A]">Analyzing conversation history, routines, and incident logs</p>
         </div>
       </div>
     );
@@ -411,10 +411,10 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
               <Brain className="w-6 h-6 text-violet-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">
                 AI Summary: {patient.childName}
               </h2>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
                 {patient.age} years old • {patient.conditions.join(', ')}
               </p>
             </div>
@@ -441,7 +441,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeSection === tab.id
                 ? 'border-violet-600 text-violet-600 bg-violet-50/50 dark:bg-violet-900/20'
-                : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50 dark:hover:bg-slate-700'
+                : 'border-transparent text-[#5A6B7A] hover:text-neutral-700 hover:bg-neutral-50 dark:hover:bg-slate-700'
             }`}
           >
             <tab.icon className="w-4 h-4" />
@@ -465,12 +465,12 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                   <Badge variant="secondary" className="text-xs">
                     {insight.category}
                   </Badge>
-                  <span className="text-xs text-neutral-500">
+                  <span className="text-xs text-[#5A6B7A]">
                     {Math.round(insight.confidence * 100)}% confidence
                   </span>
                 </div>
                 <p className="text-neutral-800 dark:text-neutral-200 mb-2">{insight.insight}</p>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
+                <p className="text-xs text-[#5A6B7A] dark:text-neutral-400 flex items-center gap-1">
                   <FileText className="w-3 h-3" />
                   {insight.source}
                 </p>
@@ -484,7 +484,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             {patterns.map((pattern, i) => (
               <div key={i} className="bg-neutral-50 dark:bg-slate-700 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-neutral-900 dark:text-white">{pattern.behavior}</h4>
+                  <h4 className="font-medium text-[#1B2733] dark:text-white">{pattern.behavior}</h4>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getFrequencyColor(pattern.frequency)}`}>
                     {pattern.frequency}
                   </span>
@@ -492,7 +492,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-medium text-neutral-500 mb-2 flex items-center gap-1">
+                    <p className="text-xs font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3 text-amber-500" />
                       Known Triggers
                     </p>
@@ -506,7 +506,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-neutral-500 mb-2 flex items-center gap-1">
+                    <p className="text-xs font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       Successful Strategies
                     </p>
@@ -532,11 +532,11 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {getTrendIcon(item.trend)}
-                    <h4 className="font-medium text-neutral-900 dark:text-white">{item.area}</h4>
+                    <h4 className="font-medium text-[#1B2733] dark:text-white">{item.area}</h4>
                   </div>
                   <span className={`text-sm font-medium ${
                     item.trend === 'positive' ? 'text-green-600' :
-                    item.trend === 'negative' ? 'text-rose-600' : 'text-neutral-500'
+                    item.trend === 'negative' ? 'text-rose-600' : 'text-[#5A6B7A]'
                   }`}>
                     {item.change}
                   </span>
@@ -558,14 +558,14 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             {/* Add new suggestion */}
             {isAddingSuggestion ? (
               <div className="bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-lg p-4">
-                <h4 className="font-medium text-neutral-900 dark:text-white mb-3">Add Care Plan Suggestion</h4>
+                <h4 className="font-medium text-[#1B2733] dark:text-white mb-3">Add Care Plan Suggestion</h4>
                 <div className="space-y-3">
                   <input
                     type="text"
                     placeholder="Title (e.g., 'Implement token economy system')"
                     value={newSuggestion.title}
                     onChange={e => setNewSuggestion({ ...newSuggestion, title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-neutral-900 dark:text-white"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-[#1B2733] dark:text-white"
                   />
                   <Textarea
                     placeholder="Description - What should the parent do?"
@@ -603,7 +603,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
 
             {/* Existing suggestions */}
             <div className="space-y-3">
-              <h4 className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+              <h4 className="text-sm font-medium text-[#5A6B7A] dark:text-neutral-400">
                 Care Plan Suggestions ({suggestions.length})
               </h4>
 
@@ -626,7 +626,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                       <Badge variant={suggestion.status === 'approved' ? 'default' : 'secondary'} className="text-xs">
                         {suggestion.type}
                       </Badge>
-                      <h5 className="font-medium text-neutral-900 dark:text-white">{suggestion.title}</h5>
+                      <h5 className="font-medium text-[#1B2733] dark:text-white">{suggestion.title}</h5>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`text-xs px-2 py-1 rounded-full ${
@@ -647,7 +647,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                   {expandedSuggestion === suggestion.id && (
                     <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-slate-600 space-y-2">
                       <p className="text-sm text-neutral-700 dark:text-neutral-300">{suggestion.description}</p>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                      <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">
                         <strong>Rationale:</strong> {suggestion.rationale}
                       </p>
                       {suggestion.parentResponse && (

@@ -76,7 +76,7 @@ interface DragHandleProps {
 function DragHandle({ listeners, attributes }: DragHandleProps) {
   return (
     <button
-      className="touch-none p-1.5 -ml-1 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-[#FAF7F2] transition-colors cursor-grab active:cursor-grabbing"
+      className="touch-none p-1.5 -ml-1 rounded-lg text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#FAF7F2] transition-colors cursor-grab active:cursor-grabbing"
       aria-label="Drag to reorder"
       {...attributes}
       {...listeners}
@@ -158,7 +158,7 @@ export function SortableGoalList({ goals, onReorder, renderGoalCard }: SortableG
         label: 'Active Goals',
         icon: <TrendingUp className="w-4 h-4" />,
         goals: active,
-        headerClass: 'text-gray-500',
+        headerClass: 'text-[#5A6B7A]',
       });
     }
 
@@ -168,7 +168,7 @@ export function SortableGoalList({ goals, onReorder, renderGoalCard }: SortableG
         label: `Paused (${paused.length})`,
         icon: <Pause className="w-4 h-4" />,
         goals: paused,
-        headerClass: 'text-gray-400',
+        headerClass: 'text-[#8A9BA8]',
       });
     }
 
@@ -178,7 +178,7 @@ export function SortableGoalList({ goals, onReorder, renderGoalCard }: SortableG
         label: `Completed (${completed.length})`,
         icon: <Award className="w-4 h-4" />,
         goals: completed,
-        headerClass: 'text-gray-400',
+        headerClass: 'text-[#8A9BA8]',
       });
     }
 

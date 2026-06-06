@@ -769,8 +769,8 @@ export function ProviderAnalytics({
           {Math.abs(metric.change)}%
         </div>
       </div>
-      <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{metric.value}</h3>
-      <p className="text-sm text-slate-500 mt-1">{metric.title}</p>
+      <h3 className="text-2xl font-bold text-[#1B2733] dark:text-white">{metric.value}</h3>
+      <p className="text-sm text-[#5A6B7A] mt-1">{metric.title}</p>
       <p className="text-xs text-slate-400 mt-0.5">{metric.changeLabel}</p>
     </Card>
   );
@@ -789,14 +789,14 @@ export function ProviderAnalytics({
       : 0;
 
     return (
-      <div key={patient.id} className="flex items-center justify-between py-3 border-b border-slate-100 dark:border-slate-700 last:border-0">
+      <div key={patient.id} className="flex items-center justify-between py-3 border-b border-[#E8E4DF] dark:border-slate-700 last:border-0">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-            <span className="font-medium text-slate-600">{patient.name.charAt(0)}</span>
+          <div className="w-10 h-10 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center">
+            <span className="font-medium text-[#5A6B7A]">{patient.name.charAt(0)}</span>
           </div>
           <div>
-            <p className="font-medium text-slate-900 dark:text-white">{patient.name}</p>
-            <p className="text-xs text-slate-500">
+            <p className="font-medium text-[#1B2733] dark:text-white">{patient.name}</p>
+            <p className="text-xs text-[#5A6B7A]">
               Last session: {patient.lastSession.toLocaleDateString()}
             </p>
           </div>
@@ -804,7 +804,7 @@ export function ProviderAnalytics({
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-sm font-medium">{patient.sessionsCompleted}/{patient.totalSessions}</p>
-            <p className="text-xs text-slate-500">sessions</p>
+            <p className="text-xs text-[#5A6B7A]">sessions</p>
           </div>
           <div className="w-24">
             <div className="flex items-center justify-between text-xs mb-1">
@@ -831,7 +831,7 @@ export function ProviderAnalytics({
         {onBack && (
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
+            className="flex items-center gap-2 text-sm text-[#5A6B7A] dark:text-slate-300"
             aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -841,7 +841,7 @@ export function ProviderAnalytics({
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-3" />
-            <p className="text-slate-500 text-sm">Loading analytics...</p>
+            <p className="text-[#5A6B7A] text-sm">Loading analytics...</p>
           </div>
         </div>
       </div>
@@ -875,15 +875,15 @@ export function ProviderAnalytics({
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 transition-colors"
+              className="p-2 rounded-lg text-[#5A6B7A] dark:text-slate-300 hover:bg-[#F0EDE8] transition-colors"
               aria-label="Back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Analytics Dashboard</h2>
-            <p className="text-slate-500">Performance overview for {resolvedProviderName}</p>
+            <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white">Analytics Dashboard</h2>
+            <p className="text-[#5A6B7A]">Performance overview for {resolvedProviderName}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -910,17 +910,17 @@ export function ProviderAnalytics({
                 />
                 <div
                   role="menu"
-                  className="absolute right-0 mt-2 w-48 z-40 bg-white dark:bg-slate-800 border border-slate-200 rounded-lg shadow-lg overflow-hidden"
+                  className="absolute right-0 mt-2 w-48 z-40 bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-lg shadow-lg overflow-hidden"
                 >
                   {(['week', 'month', 'quarter', 'year'] as const).map((range) => (
                     <button
                       key={range}
                       role="menuitem"
                       onClick={() => handleRangeChange(range)}
-                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${
+                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-colors ${
                         selectedRange === range
                           ? 'text-[#6B9080] font-medium'
-                          : 'text-slate-700 dark:text-slate-200'
+                          : 'text-[#3A4A57] dark:text-slate-200'
                       }`}
                     >
                       {range.charAt(0).toUpperCase() + range.slice(1)}
@@ -952,8 +952,8 @@ export function ProviderAnalytics({
         {/* Session Distribution Chart */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Session Distribution</h3>
-            <Badge className="bg-slate-100 text-slate-600">This Week</Badge>
+            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Session Distribution</h3>
+            <Badge className="bg-[#F0EDE8] text-[#5A6B7A]">This Week</Badge>
           </div>
           <div className="space-y-4">
             {sessionData.map((day) => {
@@ -964,8 +964,8 @@ export function ProviderAnalytics({
 
               return (
                 <div key={day.date} className="flex items-center gap-4">
-                  <span className="text-sm text-slate-500 w-8">{day.date}</span>
-                  <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700">
+                  <span className="text-sm text-[#5A6B7A] w-8">{day.date}</span>
+                  <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-[#F0EDE8] dark:bg-slate-700">
                     <div
                       className="bg-primary transition-all"
                       style={{ width: `${completedWidth}%` }}
@@ -987,18 +987,18 @@ export function ProviderAnalytics({
               );
             })}
           </div>
-          <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-slate-100 dark:border-slate-700">
+          <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-[#E8E4DF] dark:border-slate-700">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary" />
-              <span className="text-xs text-slate-500">Completed</span>
+              <span className="text-xs text-[#5A6B7A]">Completed</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <span className="text-xs text-slate-500">Cancelled</span>
+              <span className="text-xs text-[#5A6B7A]">Cancelled</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500" />
-              <span className="text-xs text-slate-500">No-show</span>
+              <span className="text-xs text-[#5A6B7A]">No-show</span>
             </div>
           </div>
         </Card>
@@ -1006,7 +1006,7 @@ export function ProviderAnalytics({
         {/* Patient Status Overview */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Patient Status</h3>
+            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Status</h3>
             <Button variant="ghost" size="sm" disabled title="Coming soon">View All</Button>
           </div>
 
@@ -1016,7 +1016,7 @@ export function ProviderAnalytics({
               <p className="text-2xl font-bold text-green-600">{patientStatusCounts.onTrack}</p>
               <p className="text-xs text-green-600">On Track</p>
             </div>
-            <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+            <div className="text-center p-4 bg-[#FDF9F0] dark:bg-yellow-900/20 rounded-lg">
               <p className="text-2xl font-bold text-yellow-600">{patientStatusCounts.atRisk}</p>
               <p className="text-xs text-yellow-600">At Risk</p>
             </div>
@@ -1066,7 +1066,7 @@ export function ProviderAnalytics({
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <p className="text-2xl font-bold">{patients.length}</p>
-                  <p className="text-xs text-slate-500">Clients</p>
+                  <p className="text-xs text-[#5A6B7A]">Clients</p>
                 </div>
               </div>
             </div>
@@ -1077,7 +1077,7 @@ export function ProviderAnalytics({
       {/* Patient List */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Patient Overview</h3>
+          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Overview</h3>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -1094,10 +1094,10 @@ export function ProviderAnalytics({
         <div>
           {patients.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center mb-3">
+              <div className="w-14 h-14 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-3">
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
-              <p className="text-sm font-medium text-slate-600">No clients yet</p>
+              <p className="text-sm font-medium text-[#5A6B7A]">No clients yet</p>
               <p className="text-xs text-slate-400 mt-1 max-w-xs">
                 Your caseload metrics will appear here once clients are assigned and sessions are logged.
               </p>
@@ -1111,41 +1111,41 @@ export function ProviderAnalytics({
       {/* Documentation Compliance */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Documentation Compliance</h3>
+          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Documentation Compliance</h3>
           <Badge className="bg-green-100 text-green-700">{docCompliance.overallCompliance}% Complete</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-slate-500" />
+              <FileText className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Session Notes</span>
             </div>
             <p className="text-2xl font-bold text-green-600">{docCompliance.sessionNotes}%</p>
-            <p className="text-xs text-slate-500">Completed within 24h</p>
+            <p className="text-xs text-[#5A6B7A]">Completed within 24h</p>
           </div>
-          <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-slate-500" />
+              <Target className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Goal Updates</span>
             </div>
             <p className="text-2xl font-bold text-[#6B9080]">{docCompliance.goalUpdates}%</p>
-            <p className="text-xs text-slate-500">Updated this month</p>
+            <p className="text-xs text-[#5A6B7A]">Updated this month</p>
           </div>
-          <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-4 h-4 text-slate-500" />
+              <Activity className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Progress Reports</span>
             </div>
             <p className="text-2xl font-bold text-blue-600">{docCompliance.progressReports}%</p>
-            <p className="text-xs text-slate-500">On schedule</p>
+            <p className="text-xs text-[#5A6B7A]">On schedule</p>
           </div>
-          <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
-              <Award className="w-4 h-4 text-slate-500" />
+              <Award className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">BIP Reviews</span>
             </div>
             <p className="text-2xl font-bold text-violet-600">{docCompliance.bipReviews}%</p>
-            <p className="text-xs text-slate-500">Current quarter</p>
+            <p className="text-xs text-[#5A6B7A]">Current quarter</p>
           </div>
         </div>
       </Card>

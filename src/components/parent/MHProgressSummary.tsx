@@ -34,7 +34,7 @@ interface MHProgressSummaryProps {
 
 function phqTrend(history: ScreenerResult[]): { label: string; detail: string; icon: React.ReactNode; color: string } {
   if (history.length < 2) {
-    return { label: 'Building baseline', detail: 'We\'ll show your trend after the second check-in.', icon: <Minus className="w-5 h-5 text-gray-400" />, color: 'text-gray-600' };
+    return { label: 'Building baseline', detail: 'We\'ll show your trend after the second check-in.', icon: <Minus className="w-5 h-5 text-[#8A9BA8]" />, color: 'text-[#5A6B7A]' };
   }
   const delta = history[0].score - history[1].score;
   const latestSev = String(history[0].severity).replace('_', ' ');
@@ -64,7 +64,7 @@ function phqTrend(history: ScreenerResult[]): { label: string; detail: string; i
 
 function gadTrend(history: ScreenerResult[]): { label: string; detail: string; icon: React.ReactNode; color: string } {
   if (history.length < 2) {
-    return { label: 'Building baseline', detail: 'Anxiety trend will appear after the second check-in.', icon: <Minus className="w-5 h-5 text-gray-400" />, color: 'text-gray-600' };
+    return { label: 'Building baseline', detail: 'Anxiety trend will appear after the second check-in.', icon: <Minus className="w-5 h-5 text-[#8A9BA8]" />, color: 'text-[#5A6B7A]' };
   }
   const delta = history[0].score - history[1].score;
   const latestSev = String(history[0].severity);
@@ -159,15 +159,15 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+      <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
             <ArrowLeft className="w-5 h-5" />
           </button>
         )}
         <div>
-          <h1 className="text-lg font-bold text-gray-900">Mental Health Progress</h1>
-          <p className="text-xs text-gray-500">{childName} — plain-language summary</p>
+          <h1 className="text-lg font-bold text-[#1B2733]">Mental Health Progress</h1>
+          <p className="text-xs text-[#5A6B7A]">{childName} — plain-language summary</p>
         </div>
         <Heart className="w-5 h-5 text-pink-400 ml-auto" />
       </div>
@@ -175,16 +175,16 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
       <div className="px-4 pt-4 space-y-4">
         {/* Mood trend */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-          className="bg-white border border-gray-200 rounded-2xl p-4">
+          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{phqHistory[0]?.score !== undefined && phqHistory[0].score < 5 ? '😊' : phqHistory[0]?.score !== undefined && phqHistory[0].score < 10 ? '😐' : '😔'}</span>
-            <h2 className="font-semibold text-gray-900">Mood Check-In</h2>
+            <h2 className="font-semibold text-[#1B2733]">Mood Check-In</h2>
           </div>
           <div className="flex items-start gap-2">
             {phqInfo.icon}
             <div>
               <p className={`font-medium ${phqInfo.color}`}>{phqInfo.label}</p>
-              <p className="text-sm text-gray-600 mt-0.5">{phqInfo.detail}</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">{phqInfo.detail}</p>
             </div>
           </div>
           {phqHistory.length > 1 && (
@@ -198,16 +198,16 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
 
         {/* Anxiety trend */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="bg-white border border-gray-200 rounded-2xl p-4">
+          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{gadHistory[0]?.score !== undefined && gadHistory[0].score < 5 ? '😌' : gadHistory[0]?.score !== undefined && gadHistory[0].score < 10 ? '😬' : '😰'}</span>
-            <h2 className="font-semibold text-gray-900">Anxiety Check-In</h2>
+            <h2 className="font-semibold text-[#1B2733]">Anxiety Check-In</h2>
           </div>
           <div className="flex items-start gap-2">
             {gadInfo.icon}
             <div>
               <p className={`font-medium ${gadInfo.color}`}>{gadInfo.label}</p>
-              <p className="text-sm text-gray-600 mt-0.5">{gadInfo.detail}</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">{gadInfo.detail}</p>
             </div>
           </div>
           {gadHistory.length > 1 && (
@@ -221,16 +221,16 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
 
         {/* Skills practiced this month */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-          className="bg-white border border-gray-200 rounded-2xl p-4">
+          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <Star className="w-5 h-5 text-amber-400" />
-            <h2 className="font-semibold text-gray-900">What we worked on this month</h2>
+            <h2 className="font-semibold text-[#1B2733]">What we worked on this month</h2>
           </div>
           <div className="space-y-2">
             {skillsPracticed.map(skill => (
               <div key={skill} className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
-                <span className="text-sm text-gray-700">{skill}</span>
+                <span className="text-sm text-[#3A4A57]">{skill}</span>
               </div>
             ))}
           </div>
@@ -241,7 +241,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <Lightbulb className="w-5 h-5 text-[#6B9080]" />
-            <h2 className="font-semibold text-teal-800">How you can help at home</h2>
+            <h2 className="font-semibold text-[#6B9080]">How you can help at home</h2>
           </div>
           <div className="space-y-3">
             {(tips.length > 0 ? tips : defaultTips).map((tip, i) => (

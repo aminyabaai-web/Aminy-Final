@@ -207,7 +207,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
         </Card>
       ) : reports.length === 0 ? (
         <Card className="p-12 text-center">
-          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+          <FileText className="w-12 h-12 text-[#8A9BA8] mx-auto mb-4" />
           <h3 className="text-lg text-primary mb-2">No reports yet</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Generate your first report to see {childName}'s progress over time
@@ -331,13 +331,13 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                         reportType === type
                           ? 'border-accent bg-accent/5'
                           : isLocked
-                          ? 'border-gray-200 bg-[#FAF7F2] opacity-50 cursor-not-allowed'
-                          : 'border-gray-200 hover:border-accent/50'
+                          ? 'border-[#E8E4DF] bg-[#FAF7F2] opacity-50 cursor-not-allowed'
+                          : 'border-[#E8E4DF] hover:border-accent/50'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xl">{info.icon}</span>
-                        {isLocked && <Sparkles className="w-3 h-3 text-gray-400" />}
+                        {isLocked && <Sparkles className="w-3 h-3 text-[#8A9BA8]" />}
                       </div>
                       <div className="font-medium text-sm text-primary">{info.name}</div>
                       <div className="text-xs text-muted-foreground mt-1">{info.description}</div>
