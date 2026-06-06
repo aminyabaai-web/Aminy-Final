@@ -380,6 +380,11 @@ const PrivacyPolicy = lazy(() =>
     default: m.PrivacyPolicy,
   })),
 );
+const JustDiagnosedFlow = lazy(() =>
+  import("./components/JustDiagnosedFlow").then((m) => ({
+    default: m.default,
+  })),
+);
 const TermsOfService = lazy(() =>
   import("./components/TermsOfService").then((m) => ({
     default: m.TermsOfService,
@@ -1047,7 +1052,8 @@ type AppScreen =
   | "org-admin" // B2B org admin dashboard (seats, billing, members)
   | "ask-bcba" // Ask a BCBA — async messaging with AI draft + BCBA review (vs Answers Now)
   | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
-  | "care-coordination"; // Unified view across ABA/PT/OT/ST/MH + auth + site of care
+  | "care-coordination" // Unified view across ABA/PT/OT/ST/MH + auth + site of care
+  | "just-diagnosed"; // Post-diagnosis onboarding flow — state-aware First 30 Days plan
 
 const AUTH_REDIRECT_SCREENS: AppScreen[] = [
   "splash",
@@ -1065,6 +1071,7 @@ const PUBLIC_NO_REDIRECT_SCREENS: AppScreen[] = [
   "provider-apply",
   "privacy-policy",
   "terms-of-service",
+  "just-diagnosed",
 ];
 
 function getAuthenticatedLandingScreen(): AppScreen {
@@ -2421,6 +2428,7 @@ export default function App() {
                 onForProviders={() => navigateToScreen("provider-landing")}
                 onFreeScreening={() => navigateToScreen("free-screening")}
                 onPreDiagnosis={() => navigateToScreen("pre-diagnosis")}
+                onJustDiagnosed={() => navigateToScreen("just-diagnosed")}
               />
             </Suspense>
           );
@@ -2496,6 +2504,17 @@ export default function App() {
                   // Screening routing handled by useOnboardingData hook — navigate directly
                   navigateToScreen("marketplace");
                 }}
+              />
+            </Suspense>
+          );
+
+        case "just-diagnosed":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <JustDiagnosedFlow
+                onBack={() => navigateToScreen("splash")}
+                onSignUp={() => navigateToScreen("create-account")}
+                onOpenAI={() => navigateToScreen("ask-aminy")}
               />
             </Suspense>
           );

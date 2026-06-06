@@ -21,6 +21,7 @@ interface SplashPageProps {
   onForProviders?: () => void;
   onFreeScreening?: () => void;
   onPreDiagnosis?: () => void;
+  onJustDiagnosed?: () => void;
 }
 
 const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
@@ -37,6 +38,7 @@ export function SplashPage({
   onForProviders,
   onFreeScreening,
   onPreDiagnosis,
+  onJustDiagnosed,
 }: SplashPageProps) {
 
   useEffect(() => {
@@ -345,6 +347,49 @@ export function SplashPage({
                 }}
               >
                 Concerned about your child? Free screening →
+              </button>
+            </motion.div>
+          )}
+
+          {/* Just diagnosed CTA */}
+          {onJustDiagnosed && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.85 }}
+              style={{
+                textAlign: 'center',
+                marginBottom: '16px',
+              }}
+            >
+              <button
+                onClick={onJustDiagnosed}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'transparent',
+                  border: '1.5px solid rgba(107, 144, 128, 0.25)',
+                  borderRadius: '100px',
+                  color: '#6B9080',
+                  fontFamily: fontStack,
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  padding: '9px 18px',
+                  transition: 'all 0.2s ease',
+                  ...fontSmoothing,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(107, 144, 128, 0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(107, 144, 128, 0.45)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.borderColor = 'rgba(107, 144, 128, 0.25)';
+                }}
+              >
+                Just got a diagnosis? Get your First 30 Days plan →
               </button>
             </motion.div>
           )}
