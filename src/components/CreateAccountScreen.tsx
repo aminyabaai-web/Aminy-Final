@@ -208,13 +208,13 @@ export function CreateAccountScreen({
   const inputStyles: React.CSSProperties = {
     width: '100%',
     height: '44px',
-    backgroundColor: '#FFFFFF',
-    border: '1px solid rgba(17, 24, 39, 0.1)',
+    backgroundColor: 'var(--color-surface)',
+    border: '1px solid var(--color-input-border)',
     borderRadius: '12px',
     padding: '0 16px',
     fontSize: '15px',
     fontFamily: fontStack,
-    color: 'rgba(17, 24, 39, 0.88)',
+    color: 'var(--color-text-deep)',
     outline: 'none',
     transition: 'border-color 0.2s ease',
     ...fontSmoothing,
@@ -223,7 +223,7 @@ export function CreateAccountScreen({
   const labelStyles: React.CSSProperties = {
     display: 'block',
     marginBottom: '6px',
-    color: 'rgba(17, 24, 39, 0.5)',
+    color: 'var(--color-text-muted)',
     fontFamily: fontStack,
     fontSize: '13px',
     fontWeight: 400,
@@ -258,7 +258,7 @@ export function CreateAccountScreen({
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              color: 'rgba(17, 24, 39, 0.45)',
+              color: 'var(--color-text-muted)',
               fontFamily: fontStack,
               fontSize: '14px',
               fontWeight: 400,
@@ -325,7 +325,7 @@ export function CreateAccountScreen({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             style={{
-              color: 'rgba(17, 24, 39, 0.9)',
+              color: 'var(--color-text-deep)',
               fontFamily: fontStack,
               fontWeight: 600,
               fontSize: '22px',
@@ -345,7 +345,7 @@ export function CreateAccountScreen({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
             style={{
-              color: 'rgba(17, 24, 39, 0.44)',
+              color: 'var(--color-text-muted)',
               fontFamily: fontStack,
               fontWeight: 400,
               fontSize: '13px',
@@ -410,13 +410,13 @@ export function CreateAccountScreen({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: '#FFFFFF',
-                color: 'rgba(17, 24, 39, 0.8)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '13px',
                 borderRadius: '10px',
-                border: '1px solid rgba(17, 24, 39, 0.12)',
+                border: '1px solid var(--color-border-light)',
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'google' ? 0.5 : 1,
                 transition: 'opacity 0.2s ease',
@@ -472,9 +472,9 @@ export function CreateAccountScreen({
 
           {/* Divider */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.08)' }} />
-            <span style={{ color: 'rgba(17, 24, 39, 0.35)', fontSize: '12px', fontFamily: fontStack }}>or</span>
-            <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.08)' }} />
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
+            <span style={{ color: 'var(--color-text-muted)', fontSize: '12px', fontFamily: fontStack }}>or</span>
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
           </div>
 
           {/* Error Display */}
@@ -873,7 +873,7 @@ export function CreateAccountScreen({
               style={{
                 background: 'none',
                 border: 'none',
-                color: 'rgba(17, 24, 39, 0.45)',
+                color: 'var(--color-text-muted)',
                 fontFamily: fontStack,
                 fontSize: '13px',
                 fontWeight: 400,
