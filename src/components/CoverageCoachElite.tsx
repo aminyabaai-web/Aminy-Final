@@ -792,15 +792,15 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
           >
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Quick Tools</p>
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => setStep('lookup')} className="p-3 bg-white border border-[#E8E4DF] rounded-xl hover:border-[#6B9080]/30 transition-all text-left">
+              <button onClick={() => setStep('lookup')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-[#6B9080]/30 transition-all text-left">
                 <HelpCircle className="w-5 h-5 text-primary mb-1.5" />
-                <p className="text-xs font-semibold text-[#1B2733]">Is This Covered?</p>
-                <p className="text-xs text-slate-400">Service lookup</p>
+                <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">Is This Covered?</p>
+                <p className="text-xs text-slate-400 dark:text-slate-400">Service lookup</p>
               </button>
-              <button onClick={() => setStep('waiver')} className="p-3 bg-white border border-[#E8E4DF] rounded-xl hover:border-violet-300 transition-all text-left">
+              <button onClick={() => setStep('waiver')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-violet-300 transition-all text-left">
                 <Shield className="w-5 h-5 text-violet-500 mb-1.5" />
-                <p className="text-xs font-semibold text-[#1B2733]">Medicaid Waivers</p>
-                <p className="text-xs text-slate-400">AZ programs</p>
+                <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">Medicaid Waivers</p>
+                <p className="text-xs text-slate-400 dark:text-slate-400">AZ programs</p>
               </button>
             </div>
           </motion.div>
