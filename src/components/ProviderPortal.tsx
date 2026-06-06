@@ -340,6 +340,31 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     setIsRefreshing(true);
     if (import.meta.env.DEV) console.log('[ProviderPortal] Loading data for provider:', providerId);
 
+    // Dev-mode fast-fail: if the provider ID is a synthetic dev ID, skip DB and
+    // render immediately so audit/E2E tests don't hang on network timeouts.
+    if (import.meta.env.DEV && providerId.startsWith('dev-')) {
+      setProvider({
+        id: providerId,
+        name: 'Dev Provider',
+        credentials: 'BCBA-D',
+        type: 'bcba',
+        specialties: ['ABA Therapy', 'Behavior Analysis'],
+        rating: 4.9,
+        reviewCount: 12,
+        totalPatients: 3,
+        sessionsThisMonth: 5,
+        earningsThisMonth: 2400,
+        organization: 'Independent Provider',
+        licensedStates: ['AZ'],
+        acceptedInsurance: ['AHCCCS', 'BCBS', 'Cash Pay'],
+        acceptsInsurance: true,
+        verificationStatus: 'verified',
+      });
+      setIsLoading(false);
+      setIsRefreshing(false);
+      return;
+    }
+
     try {
       // Fetch provider profile
       const { data: providerData, error: providerError } = await supabase
@@ -570,6 +595,25 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
     } catch (error) {
       console.error('[ProviderPortal] Error loading data:', error);
+      // Ensure provider is set so the loading gate doesn't block the UI on network errors
+      setProvider(prev => prev || {
+        id: providerId,
+        name: 'Provider',
+        credentials: '',
+        type: 'bcba',
+        specialties: [],
+        rating: 0,
+        reviewCount: 0,
+        totalPatients: 0,
+        sessionsThisMonth: 0,
+        earningsThisMonth: 0,
+        organization: 'Independent Provider',
+        licensedStates: [],
+        acceptedInsurance: ['Cash Pay'],
+        acceptsInsurance: false,
+        verificationStatus: 'pending',
+        needsSetup: true,
+      });
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
