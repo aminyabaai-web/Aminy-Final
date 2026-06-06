@@ -1342,6 +1342,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <button
                       onClick={() => sendMessage(input)}
                       disabled={(!input.trim() && !attachedImage) || isLoading}
+                      aria-label="Send message"
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
                         background: (input.trim() || attachedImage)
