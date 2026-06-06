@@ -17,6 +17,7 @@ import {
   type CurrentContext
 } from '../ai/contextLayer';
 import { buildScreenStateBlock } from '../ai/screenStateRegistry';
+import { getStateAIContext } from '../lib/state-configs';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import {
   loadAISettings,
@@ -454,6 +455,19 @@ ${ci.responseStyle ? `How to communicate: ${ci.responseStyle}` : ''}` : '';
 LIVE SCREEN AWARENESS (reference this naturally in your response):
 ${screenBlock}` : '';
 
+    // State-specific context — injected so AI uses correct program names for the user's state
+    const userStateAbbr = (() => {
+      try {
+        const simple = localStorage.getItem('aminy_user_state');
+        if (simple) return simple;
+        const jd = localStorage.getItem('aminy_just_diagnosed');
+        if (jd) { const parsed = JSON.parse(jd); if (parsed?.state) return parsed.state; }
+      } catch { /* ignore */ }
+      return null;
+    })();
+    const stateCtx = userStateAbbr ? getStateAIContext(userStateAbbr) : '';
+    const stateBlock = stateCtx ? `\n\n${stateCtx}` : '';
+
     return `You are Aminy — a board-certified behavioral analyst (BCBA) and developmental pediatrician combined into one deeply expert AI guide for families of neurodivergent children. You have 15+ years of clinical experience and you speak warmly, specifically, and practically.
 
 FAMILY CONTEXT:
@@ -518,7 +532,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${customBlock}${liveScreenContext}`;
+${stateBlock}${customBlock}${liveScreenContext}`;
   };
 
   const sendMessageWithContext = async (

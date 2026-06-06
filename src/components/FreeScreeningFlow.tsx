@@ -68,6 +68,7 @@ interface FreeScreeningFlowProps {
   onBack: () => void;
   onSignUp: () => void;
   onBookEvaluation?: () => void;
+  onJustDiagnosed?: () => void;
   initialConcern?: string;
 }
 
@@ -221,7 +222,7 @@ const S = {
 // COMPONENT
 // ============================================
 
-export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialConcern }: FreeScreeningFlowProps) {
+export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDiagnosed, initialConcern }: FreeScreeningFlowProps) {
   const [phase, setPhase] = useState<FlowPhase>(initialConcern ? 'child-info' : 'concern');
   const [selectedConcern, setSelectedConcern] = useState<string | null>(initialConcern || null);
   const [childInfo, setChildInfo] = useState<ChildInfo>({ name: '', ageMonths: 0 });
@@ -501,6 +502,35 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, initialC
                   <span key={i} style={S.providerTag}>{p}</span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Just Diagnosed bridge — for moderate/high risk families who have a diagnosis */}
+          {result.riskLevel !== 'low' && onJustDiagnosed && (
+            <div style={{
+              padding: 16, borderRadius: 12, marginBottom: 16,
+              background: 'linear-gradient(135deg, rgba(107,144,128,0.10), rgba(123,167,188,0.10))',
+              border: '1.5px solid rgba(107,144,128,0.25)',
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#6B9080', letterSpacing: '0.04em', marginBottom: 6 }}>
+                IF YOUR CHILD ALREADY HAS A DIAGNOSIS
+              </div>
+              <p style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55, margin: '0 0 12px' }}>
+                Get your personalized First 30 Days plan — state-specific steps for DD agencies,
+                Medicaid waivers, IEP requests, and therapy access.
+              </p>
+              <button
+                onClick={onJustDiagnosed}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                  color: '#fff', border: 'none', borderRadius: 10,
+                  padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  boxShadow: '0 3px 12px rgba(107,144,128,0.25)',
+                }}
+              >
+                Get my First 30 Days plan →
+              </button>
             </div>
           )}
 

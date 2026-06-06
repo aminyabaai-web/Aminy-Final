@@ -17399,3 +17399,18 @@ tr:hover td, .hover-row:hover {
 .to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }
 
 /* ── END Aminy Premium Global Design System ─────────────────────────── */
+
+/* ── Bottom nav spring animations ───────────────────────────────────── */
+@keyframes navIndicatorIn {
+  0%   { transform: translateX(-50%) scaleX(0); opacity: 0; }
+  100% { transform: translateX(-50%) scaleX(1); opacity: 1; }
+}
+@keyframes navIconPop {
+  0%   { transform: scale(0.85); }
+  60%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ── Dark mode: remaining teal/cyan → brand ─────────────────────────── */
+.dark .dark\:bg-teal-400 { background-color: #7BA7BC !important; }
+.dark .dark\:text-teal-400 { color: #7BA7BC !important; }

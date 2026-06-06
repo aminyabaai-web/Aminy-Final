@@ -2504,6 +2504,7 @@ export default function App() {
                   // Screening routing handled by useOnboardingData hook — navigate directly
                   navigateToScreen("marketplace");
                 }}
+                onJustDiagnosed={() => navigateToScreen("just-diagnosed")}
               />
             </Suspense>
           );

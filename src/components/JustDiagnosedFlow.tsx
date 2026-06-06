@@ -208,11 +208,21 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, [phase]);
 
-  const goTo = useCallback((next: FlowPhase) => setPhase(next), []);
+  const goTo = useCallback((next: FlowPhase) => {
+    setPhase(next);
+    // Track funnel completion per step for analytics
+    try {
+      const key = 'aminy_jd_funnel';
+      const prev = JSON.parse(localStorage.getItem(key) || '{}');
+      localStorage.setItem(key, JSON.stringify({ ...prev, [next]: Date.now() }));
+    } catch { /* ignore */ }
+  }, []);
 
   const handleStateSelect = useCallback((abbr: string) => {
     setSelectedState(abbr);
     setStateSearch('');
+    // Persist state immediately so AI chat picks it up in same session
+    try { localStorage.setItem('aminy_user_state', abbr); } catch { /* ignore */ }
   }, []);
 
   const toggleOverwhelm = useCallback((id: string) => {

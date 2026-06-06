@@ -304,9 +304,18 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 role="tab"
                 disabled={isDisabled}
               >
-                {/* Active indicator — One Medical style top bar */}
+                {/* Active indicator — top bar with spring entrance */}
                 {isActive && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-[#6B9080] dark:bg-teal-400 rounded-full" />
+                  <div
+                    className="absolute top-0 left-1/2 rounded-full"
+                    style={{
+                      width: 28,
+                      height: 3,
+                      background: 'linear-gradient(90deg, #6B9080, #7BA7BC)',
+                      transform: 'translateX(-50%)',
+                      animation: 'navIndicatorIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards',
+                    }}
+                  />
                 )}
 
                 {/* Disabled lock icon */}
@@ -320,6 +329,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 <Icon
                   className={`w-5 h-5 ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
                   strokeWidth={isActive ? 2 : 1.5}
+                  style={isActive ? { animation: 'navIconPop 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards' } : undefined}
                 />
 
                 {/* Label */}

@@ -666,6 +666,19 @@ export function generateFirst30DaysActionPlan(
     stateSpecific: true,
   });
 
+  // Paid parent caregiving — one of the least-known but highest-impact options
+  // Available in most states with self-directed waivers
+  if (state.waiver.selfDirected) {
+    steps.push({
+      priority: 1,
+      category: 'financial',
+      title: `Did you know? You may be able to get paid to care for your child`,
+      description: `In ${state.name}, parents can sometimes become paid care providers through the ${state.waiver.selfDirected} self-directed waiver option. This means ${state.medicaid.name} pays YOU as an attendant. ${state.waiver.selfDirectedFI ? `Ask your ${state.ddAgency.abbreviation} support coordinator about enrolling through ${state.waiver.selfDirectedFI}.` : `Ask your ${state.ddAgency.abbreviation} support coordinator if you qualify.`} This is NOT widely known — many families miss it.`,
+      url: state.waiver.url,
+      stateSpecific: true,
+    });
+  }
+
   // Insurance / Medicaid
   if (overwhelms.includes('insurance') || overwhelms.includes('paying')) {
     steps.push({

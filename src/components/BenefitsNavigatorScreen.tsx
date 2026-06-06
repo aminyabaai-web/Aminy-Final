@@ -487,12 +487,15 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
 
         {activeView === 'tracking' && (
           <Card className="p-4 sm:p-5 md:p-6">
-            <h2 className="font-semibold mb-4">Track Requests</h2>
+            <h2 className="font-semibold mb-4">Benefits Tracker</h2>
+
+            {/* State-aware benefits tracker — shows state-specific program names */}
+            <BenefitsStatusPanel stateAbbr={userState || undefined} />
 
             {trackedRequests.length === 0 && (
-              <div className="text-center py-8">
+              <div className="text-center py-6 mt-4 border-t border-[#E8E4DF]">
                 <Clock className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-3">No requests tracked yet</p>
+                <p className="text-sm text-muted-foreground mb-3">No application requests tracked yet</p>
                 <div className="flex flex-col gap-2 items-center">
                   <Button size="sm" onClick={() => setActiveView('letters')}>
                     <FileText className="w-4 h-4 mr-2" />
