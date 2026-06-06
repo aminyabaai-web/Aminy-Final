@@ -3,8 +3,8 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React from 'react';
-import { Clock, User, FileText, MessageSquare, Calendar, Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock, User, FileText, MessageSquare, Calendar, Check, Plus, X } from 'lucide-react';
 import { Card } from './ui/card';
 import { ScreenHeader } from './ui/ScreenHeader';
 import { isDemoMode } from '../lib/demo-seed';
@@ -38,12 +38,31 @@ function demoActivities(): Activity[] {
 }
 
 export function ActivityLog({ activities = [], maxItems = 10, onBack }: ActivityLogProps) {
+  const [showLogForm, setShowLogForm] = useState(false);
+  const [logText, setLogText] = useState('');
+  const [localLogs, setLocalLogs] = useState<Activity[]>([]);
+
+  const handleAddLog = () => {
+    if (!logText.trim()) return;
+    const newEntry: Activity = {
+      id: `local-${Date.now()}`,
+      type: 'note',
+      title: 'Behavior noted',
+      description: logText.trim(),
+      timestamp: new Date(),
+      user: 'You',
+    };
+    setLocalLogs(prev => [newEntry, ...prev]);
+    setLogText('');
+    setShowLogForm(false);
+  };
+
   // Real data via props takes precedence. With no data source wired, fall back
   // to in-memory sample data in demo mode so the screen isn't permanently empty
   // for investor walk-throughs; real users still get the honest empty state.
-  const sourceActivities = activities.length > 0 ? activities : (isDemoMode() ? demoActivities() : []);
+  const sourceActivities = [...localLogs, ...(activities.length > 0 ? activities : (isDemoMode() ? demoActivities() : []))];
   const displayedActivities = sourceActivities.slice(0, maxItems);
-  const showSampleBanner = activities.length === 0 && isDemoMode();
+  const showSampleBanner = activities.length === 0 && localLogs.length === 0 && isDemoMode();
 
   const getIcon = (type: Activity['type']) => {
     switch (type) {
@@ -103,15 +122,49 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
     <Card className="p-3 sm:p-4 m-4">
       <div className="flex items-center justify-between mb-4 gap-2">
         <h3 className="font-semibold">Recent Incidents</h3>
-        {showSampleBanner && (
-          <span
-            className="flex-shrink-0 inline-flex items-center rounded-full bg-amber-50 text-amber-700 font-medium"
-            style={{ fontSize: '10px', paddingTop: '2px', paddingBottom: '2px', paddingLeft: '8px', paddingRight: '8px' }}
+        <div className="flex items-center gap-2">
+          {showSampleBanner && (
+            <span
+              className="flex-shrink-0 inline-flex items-center rounded-full bg-amber-50 text-amber-700 font-medium"
+              style={{ fontSize: '10px', paddingTop: '2px', paddingBottom: '2px', paddingLeft: '8px', paddingRight: '8px' }}
+            >
+              Sample data
+            </span>
+          )}
+          <button
+            onClick={() => setShowLogForm(v => !v)}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#6B9080] text-white text-xs font-semibold hover:bg-[#5a7d6e] transition-colors"
           >
-            Sample data
-          </span>
-        )}
+            <Plus className="w-3.5 h-3.5" />
+            Log behavior
+          </button>
+        </div>
       </div>
+
+      {showLogForm && (
+        <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-800 space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-200">Describe the behavior</p>
+            <button onClick={() => { setShowLogForm(false); setLogText(''); }} className="text-slate-400 hover:text-slate-600">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <textarea
+            value={logText}
+            onChange={e => setLogText(e.target.value)}
+            placeholder="What happened? When, where, what triggered it…"
+            className="w-full text-sm rounded-lg border border-[#E8E4DF] dark:border-slate-600 p-2 bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 resize-none"
+            rows={3}
+          />
+          <button
+            onClick={handleAddLog}
+            disabled={!logText.trim()}
+            className="w-full py-2 rounded-lg bg-[#6B9080] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#5a7d6e]"
+          >
+            Save
+          </button>
+        </div>
+      )}
       <div className="space-y-3 sm:space-y-4">
         {displayedActivities.map((activity) => {
           const Icon = getIcon(activity.type);
@@ -142,9 +195,9 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
         {displayedActivities.length === 0 && (
           <div className="text-center py-8">
             <Clock className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
-            <p className="text-sm text-muted-foreground">No recent incidents</p>
+            <p className="text-sm text-muted-foreground">No incidents logged yet</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Incidents logged during sessions and check-ins will appear here.
+              Tap "Log behavior" to record an incident.
             </p>
           </div>
         )}

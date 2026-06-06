@@ -1229,7 +1229,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <button
                             key={i}
                             onClick={() => sendMessage(chip)}
-                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-[#E8E4DF] rounded-xl text-left text-sm text-[#3A4A57] hover:border-slate-400 hover:bg-[#FAF7F2] active:bg-[#F0EDE8] transition-all"
+                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left text-sm text-[#3A4A57] dark:text-slate-200 hover:border-slate-400 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 active:bg-[#F0EDE8] transition-all"
                             style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                           >
                             <span className="leading-snug">{chip}</span>
@@ -1342,6 +1342,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <button
                       onClick={() => sendMessage(input)}
                       disabled={(!input.trim() && !attachedImage) || isLoading}
+                      aria-label="Send message"
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
                         background: (input.trim() || attachedImage)

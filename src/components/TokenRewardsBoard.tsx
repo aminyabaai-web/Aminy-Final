@@ -308,8 +308,9 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => setSelectedReward(reward)}
+                                className="bg-white dark:bg-slate-800"
                                 style={{
-                                    backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px',
+                                    borderRadius: '24px', padding: '20px',
                                     border: '2px solid ' + (selectedReward?.id === reward.id ? '#3B82F6' : 'transparent'),
                                     boxShadow: '0 4px 12px rgba(0,0,0,0.03)', cursor: 'pointer',
                                     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px',
@@ -329,7 +330,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                                     </div>
                                 )}
                                 <div style={{ textAlign: 'center' }}>
-                                    <p style={{ fontSize: '14px', fontWeight: 600, color: '#111827', marginBottom: '4px' }}>{reward.name}</p>
+                                    <p className="text-[#111827] dark:text-slate-100" style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{reward.name}</p>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
                                         <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#059669' : '#DC2626' }}>{reward.cost}</span>
                                         <Star size={12} fill={canAfford ? '#10B981' : '#EF4444'} color={canAfford ? '#10B981' : '#EF4444'} />

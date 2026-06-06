@@ -1146,38 +1146,38 @@ const SurfaceLaunchNotice = React.memo(function SurfaceLaunchNotice({
   }
 
   return (
-    <div className="border-b border-violet-200 bg-violet-50/80 px-4 py-3">
+    <div className="border-b border-violet-200 dark:border-violet-900 bg-violet-50/80 dark:bg-slate-900 px-4 py-3">
       <div className="mx-auto max-w-7xl space-y-2">
         <div className="flex flex-wrap items-center gap-2">
           <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
           {launchConfig.programLabel ? (
-            <span className="rounded-full border border-violet-200 bg-white px-3 py-1 text-xs font-medium text-violet-700">
+            <span className="rounded-full border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-violet-700 dark:text-violet-300">
               {launchConfig.programLabel}
             </span>
           ) : null}
           {launchConfig.pathwayLabel ? (
-            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">
+            <span className="rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-700 dark:text-slate-300">
               {launchConfig.pathwayLabel}
             </span>
           ) : null}
           {launchConfig.payerLabel ? (
-            <span className="rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-medium text-sky-700">
+            <span className="rounded-full border border-sky-200 dark:border-sky-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-sky-700 dark:text-sky-300">
               {launchConfig.payerLabel}
             </span>
           ) : null}
           {launchConfig.evvSystem ? (
-            <span className="rounded-full border border-amber-200 bg-white px-3 py-1 text-xs font-medium text-amber-700">
+            <span className="rounded-full border border-amber-200 dark:border-amber-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
               {EVV_SYSTEM_LABELS[launchConfig.evvSystem]}
             </span>
           ) : null}
           {launchConfig.systemOfRecord ? (
-            <span className="rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-medium text-emerald-700">
+            <span className="rounded-full border border-emerald-200 dark:border-emerald-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
               {SYSTEM_OF_RECORD_LABELS[launchConfig.systemOfRecord]}
             </span>
           ) : null}
         </div>
         {launchConfig.message ? (
-          <p className="max-w-4xl text-sm text-violet-900/90">{launchConfig.message}</p>
+          <p className="max-w-4xl text-sm text-violet-900/90 dark:text-violet-200">{launchConfig.message}</p>
         ) : null}
       </div>
     </div>
@@ -1701,6 +1701,28 @@ export default function App() {
     window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
     window.__openBevelChat = () => setBevelChatOpen(true);
     window.__closeBevelChat = () => setBevelChatOpen(false);
+    // Impersonate any user type for dev auditing — sets userData + bypasses session guard
+    window.__setDevUser = (overrides: Partial<UserData>) => {
+      localStorage.setItem('__e2e_auth', 'bypass');
+      setUserData(prev => ({
+        ...prev,
+        id: 'dev-audit-001',
+        hasCompletedOnboarding: true,
+        tier: 'pro' as TierType,
+        role: 'parent' as const,
+        parentName: 'Test Parent',
+        childName: 'Alex',
+        childAge: 5,
+        relationship: 'parent',
+        state: 'AZ',
+        email: 'test@aminy.ai',
+        ...overrides,
+      }));
+    };
+    window.__clearDevUser = () => {
+      localStorage.removeItem('__e2e_auth');
+      setUserData(getInitialUserData());
+    };
   }
 
   // Mark as initialized immediately - session is checked synchronously on mount
