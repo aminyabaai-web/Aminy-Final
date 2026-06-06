@@ -178,11 +178,11 @@ export function UpgradeNudge({
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-medium text-[#1B2733]">AI Memory Preview</p>
-                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Pro Feature</Badge>
+                <p className="font-medium text-[#1B2733]">AI Memory</p>
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Core+</Badge>
               </div>
               <p className="text-sm text-[#5A6B7A]">
-                With Pro, Aminy remembers everything about your family - triggers, strategies that work, progress milestones, and more.
+                Upgrade and Aminy stores up to 5,000 facts about your family — triggers, what strategies work, milestones, and more. Pro stores 15,000; Pro+ Family stores everything, forever.
               </p>
               <div className="mt-3 p-3 bg-white/60 rounded-lg border border-[#E8E4DF]">
                 <p className="text-xs text-[#6B9080] italic">
@@ -244,26 +244,26 @@ interface TierComparisonProps {
 export function TierComparisonNudge({ currentTier, onSelectTier }: TierComparisonProps) {
   const tiers = [
     {
-      id: 'starter' as TierType,
-      name: 'Starter',
-      price: `$${tierPricing.starter.monthly}/mo`,
-      features: ['50 messages/day', '30-day memory', '5 vault documents', 'Basic AI coaching'],
-      highlight: currentTier === 'free'
-    },
-    {
       id: 'core' as TierType,
       name: 'Core',
       price: `$${tierPricing.core.monthly}/mo`,
-      features: ['200 messages/day', '90-day memory', '25 vault documents', 'Advanced AI coaching', 'Progress reports'],
-      highlight: currentTier === 'starter',
+      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP & document scanning', 'Full calm toolkit', '2 children'],
+      highlight: currentTier === 'free',
       popular: true
     },
     {
       id: 'pro' as TierType,
       name: 'Pro',
       price: `$${tierPricing.pro.monthly}/mo`,
-      features: ['Unlimited messages', 'Unlimited memory', 'Unlimited vault', 'BCBA sessions included', 'Priority support'],
-      highlight: currentTier === 'core'
+      features: ['AI memory: 15,000 facts', 'IEP-ready progress reports', 'Provider sharing portal', '3 children', '20% off sessions'],
+      highlight: currentTier === 'core' || currentTier === 'starter'
+    },
+    {
+      id: 'proplus' as TierType,
+      name: 'Pro+ Family',
+      price: `$${tierPricing.proplus.monthly}/mo`,
+      features: ['AI memory: unlimited', 'Ask a BCBA included', 'Unlimited children', 'Care coordinator', 'Priority support'],
+      highlight: currentTier === 'pro'
     }
   ];
 
