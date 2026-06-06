@@ -215,8 +215,8 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             </button>
           )}
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-teal-100 rounded-lg flex items-center justify-center">
-              <Shield className="w-4 h-4 text-teal-600" />
+            <div className="w-7 h-7 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
+              <Shield className="w-4 h-4 text-[#6B9080]" />
             </div>
             <h1 className="text-base font-semibold text-slate-900">Coverage Coach</h1>
           </div>
@@ -234,8 +234,8 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
           >
             {/* Big question */}
             <div className="text-center mb-8 pt-4">
-              <div className="w-14 h-14 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-7 h-7 text-teal-600" />
+              <div className="w-14 h-14 bg-[#6B9080]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-7 h-7 text-[#6B9080]" />
               </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-3">
                 Does your insurance cover ABA therapy?
@@ -251,7 +251,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 onClick={() => handleCoverageAnswer('yes')}
                 className="w-full text-left"
               >
-                <div className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl hover:border-teal-300 hover:shadow-md transition-all group">
+                <div className="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl hover:border-[#6B9080]/30 hover:shadow-md transition-all group">
                   <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-green-100 transition-colors">
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   </div>
@@ -259,7 +259,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <div className="font-semibold text-slate-900 text-sm">Yes, I believe so</div>
                     <div className="text-xs text-slate-400 mt-0.5">Let's maximize your benefits</div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-teal-400 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-primary transition-colors" />
                 </div>
               </button>
 
@@ -381,9 +381,9 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               </Card>
 
               {/* HSA/FSA */}
-              <Card className="p-4 bg-teal-50 border-teal-100 mb-6">
+              <Card className="p-4 bg-[#6B9080]/10 border-teal-100 mb-6">
                 <div className="flex items-center gap-3">
-                  <CreditCard className="w-5 h-5 text-teal-600 flex-shrink-0" />
+                  <CreditCard className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                   <p className="text-sm text-teal-800">
                     <strong>Therapy is HSA/FSA eligible.</strong> You can use those funds here — it's pre-tax money that stretches further.
                   </p>
@@ -394,7 +394,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               <div className="mb-6">
                 <button
                   onClick={() => setShowCalc(!showCalc)}
-                  className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3 hover:text-teal-600 transition-colors"
+                  className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3 hover:text-[#6B9080] transition-colors"
                 >
                   <Calculator className="w-4 h-4" />
                   What's my out-of-pocket cost per session?
@@ -440,7 +440,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             />
                           </div>
                         </div>
-                        <Button size="sm" className="w-full bg-teal-600 hover:bg-teal-700 text-white" onClick={calcOOP}>
+                        <Button size="sm" className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={calcOOP}>
                           <Calculator className="w-3.5 h-3.5 mr-1.5" />
                           Calculate
                         </Button>
@@ -448,11 +448,11 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                           <motion.div
                             initial={{ opacity: 0, y: 6 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-3 p-3 bg-teal-50 rounded-lg text-center"
+                            className="mt-3 p-3 bg-[#6B9080]/10 rounded-lg text-center"
                           >
-                            <p className="text-xs text-teal-600 mb-1">Estimated monthly out-of-pocket</p>
-                            <p className="text-2xl font-bold text-teal-700">${calcResult.toFixed(2)}</p>
-                            <p className="text-xs text-teal-500 mt-1">Based on your inputs. Actual costs may vary.</p>
+                            <p className="text-xs text-[#6B9080] mb-1">Estimated monthly out-of-pocket</p>
+                            <p className="text-2xl font-bold text-[#6B9080]">${calcResult.toFixed(2)}</p>
+                            <p className="text-xs text-primary mt-1">Based on your inputs. Actual costs may vary.</p>
                           </motion.div>
                         )}
                       </Card>
@@ -463,7 +463,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               {/* Action buttons */}
               <div className="space-y-2">
-                <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white" onClick={() => onNavigate?.('benefits')}>
+                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('benefits')}>
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>
@@ -499,8 +499,8 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               <div className="space-y-3 mb-6">
                 {[
                   {
-                    icon: <DollarSign className="w-5 h-5 text-teal-600" />,
-                    bg: 'bg-teal-50',
+                    icon: <DollarSign className="w-5 h-5 text-[#6B9080]" />,
+                    bg: 'bg-[#6B9080]/10',
                     title: 'Cash-pay packages',
                     desc: 'Aminy-partner providers offer discounted rates for self-pay families — typically 20–40% below standard rates.',
                   },
@@ -538,7 +538,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               </div>
 
               <div className="space-y-2">
-                <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white" onClick={() => onNavigate?.('marketplace')}>
+                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('marketplace')}>
                   See Cash-Pay Options
                 </Button>
                 <Button variant="outline" className="w-full border-slate-200" onClick={() => toast.info('Checking your state waiver eligibility...')}>
@@ -613,14 +613,14 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     navigator.clipboard.writeText("Hi, I'm calling to ask about behavioral health benefits for my child. Do you cover Applied Behavior Analysis (ABA) therapy? What CPT codes are approved, and is prior authorization required?");
                     toast.success('Script copied to clipboard!');
                   }}
-                  className="mt-3 text-xs text-teal-400 hover:text-teal-300 transition-colors"
+                  className="mt-3 text-xs text-primary hover:text-[#7BA7BC] transition-colors"
                 >
                   Copy script →
                 </button>
               </Card>
 
               <div className="space-y-2">
-                <Button className="w-full bg-teal-600 hover:bg-teal-700 text-white" onClick={() => onNavigate?.('benefits')}>
+                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('benefits')}>
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>
@@ -725,7 +725,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             </button>
 
             <div className="flex items-center gap-2 mb-2">
-              <HelpCircle className="w-6 h-6 text-teal-500" />
+              <HelpCircle className="w-6 h-6 text-primary" />
               <h2 className="text-xl font-bold text-slate-900">Is This Covered?</h2>
             </div>
             <p className="text-slate-500 text-sm mb-4">Quick lookup for common therapy services and their typical coverage status.</p>
@@ -792,8 +792,8 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
           >
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Quick Tools</p>
             <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => setStep('lookup')} className="p-3 bg-white border border-slate-200 rounded-xl hover:border-teal-300 transition-all text-left">
-                <HelpCircle className="w-5 h-5 text-teal-500 mb-1.5" />
+              <button onClick={() => setStep('lookup')} className="p-3 bg-white border border-slate-200 rounded-xl hover:border-[#6B9080]/30 transition-all text-left">
+                <HelpCircle className="w-5 h-5 text-primary mb-1.5" />
                 <p className="text-xs font-semibold text-slate-900">Is This Covered?</p>
                 <p className="text-xs text-slate-400">Service lookup</p>
               </button>

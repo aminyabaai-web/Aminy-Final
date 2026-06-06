@@ -208,7 +208,7 @@ export function TelehealthHome({
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-teal-50 transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#6B9080]/10 transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -228,7 +228,7 @@ export function TelehealthHome({
           className="rounded-2xl border border-white/80 p-5 shadow-md"
           style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,249,249,0.95), rgba(235,246,250,0.96))' }}
         >
-          <div className="inline-flex rounded-full bg-teal-50 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-teal-700">
+          <div className="inline-flex rounded-full bg-[#6B9080]/10 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-[#6B9080]">
             Supported in {userState.toUpperCase()}
           </div>
           <h2 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-slate-950 sm:text-xl">Hi {userName}!</h2>
@@ -394,7 +394,7 @@ export function TelehealthHome({
                   className="w-full bg-white rounded-xl border border-gray-100 p-4 text-left hover:shadow-md hover:border-[#6B9080]/30 transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
                       {provider.avatarUrl ? (
                         <img
                           src={provider.avatarUrl}
@@ -436,7 +436,7 @@ export function TelehealthHome({
         {/* Find Local Care */}
         <section className="bg-white rounded-2xl border border-gray-100 p-4">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center flex-shrink-0">
               <Search className="w-5 h-5 text-gray-600" />
             </div>
             <div className="flex-1">

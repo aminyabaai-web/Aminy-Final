@@ -55,7 +55,7 @@ const CONSENT_CONTENT: Record<ConsentType, {
 }> = {
   telehealth: {
     title: 'Telehealth Informed Consent',
-    icon: <Video className="h-6 w-6 text-teal-600" />,
+    icon: <Video className="h-6 w-6 text-[#6B9080]" />,
     version: '2.0',
     sections: [
       {
@@ -268,7 +268,7 @@ export function ConsentFlow({
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -303,7 +303,7 @@ export function ConsentFlow({
 
         {/* Patient/child info */}
         {(patientName || childName) && (
-          <div className="mb-4 rounded-lg bg-gray-50 p-3 text-sm">
+          <div className="mb-4 rounded-lg bg-[#FAF7F2] p-3 text-sm">
             {patientName && <p><strong>Patient:</strong> {patientName}</p>}
             {childName && <p><strong>Child:</strong> {childName}</p>}
           </div>
@@ -326,7 +326,7 @@ export function ConsentFlow({
               type="checkbox"
               checked={hasRead}
               onChange={e => setHasRead(e.target.checked)}
-              className="mt-0.5 h-5 w-5 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              className="mt-0.5 h-5 w-5 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
             />
             <span className="text-sm text-gray-700">
               I have read and understand the above information. I voluntarily consent to the terms described.
@@ -345,7 +345,7 @@ export function ConsentFlow({
               value={signatureName}
               onChange={e => setSignatureName(e.target.value)}
               placeholder="Type your full legal name"
-              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+              className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none focus:ring-1 focus:ring-teal-500"
             />
           </div>
 
@@ -357,7 +357,7 @@ export function ConsentFlow({
               <select
                 value={relationship}
                 onChange={e => setRelationship(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none focus:ring-1 focus:ring-teal-500"
               >
                 <option value="">Select relationship</option>
                 <option value="Parent">Parent</option>
@@ -379,13 +379,13 @@ export function ConsentFlow({
           <button
             onClick={handleSign}
             disabled={!canSign}
-            className="flex-1 rounded-lg bg-teal-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="flex-1 rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#6B9080] disabled:cursor-not-allowed disabled:opacity-40"
           >
             I Consent
           </button>
           <button
             onClick={() => setShowDeclineConfirm(true)}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-sm font-semibold text-gray-700 transition-colors hover:bg-[#FAF7F2]"
           >
             Decline
           </button>
@@ -450,7 +450,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -490,7 +490,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
             <h2 className="mb-3 text-sm font-semibold text-gray-500 uppercase tracking-wide">Withdrawn</h2>
             <div className="space-y-2">
               {withdrawnConsents.map(c => (
-                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3">
+                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-gray-200 bg-[#FAF7F2] p-3">
                   <div>
                     <p className="text-sm font-semibold text-gray-600">{labelMap[c.consentType]}</p>
                     <p className="text-xs text-gray-500">
@@ -544,7 +544,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
                     </button>
                     <button
                       onClick={() => setWithdrawTarget(null)}
-                      className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                      className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-[#FAF7F2]"
                     >
                       Cancel
                     </button>

@@ -318,7 +318,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <p className="text-neutral-600 dark:text-slate-400 mb-6">
                   Welcome to Aminy! Your provider account is active and you're now listed in our marketplace.
                 </p>
-                <Button className="bg-teal-600 hover:bg-teal-700" onClick={onBack}>
+                <Button className="bg-primary hover:bg-[#6B9080]" onClick={onBack}>
                   Go to Provider Dashboard
                 </Button>
               </>
@@ -405,7 +405,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
         <main className="max-w-2xl mx-auto px-4 py-12">
           <Card className="p-8 text-center">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-10 h-10 text-teal-600" />
+              <CheckCircle className="w-10 h-10 text-[#6B9080]" />
             </div>
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
               Application Submitted!
@@ -462,7 +462,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
                   step >= s
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-neutral-200 dark:bg-slate-700 text-neutral-500 dark:text-slate-400'
                 }`}
               >
@@ -471,7 +471,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               {s < 4 && (
                 <div
                   className={`w-12 sm:w-20 h-1 mx-1 rounded transition-colors ${
-                    step > s ? 'bg-teal-600' : 'bg-neutral-200 dark:bg-slate-700'
+                    step > s ? 'bg-primary' : 'bg-neutral-200 dark:bg-slate-700'
                   }`}
                 />
               )}
@@ -550,7 +550,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div className="flex justify-end">
                 <Button
                   onClick={() => { if (validateStep(1)) setStep(2); }}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-primary hover:bg-[#6B9080]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -581,7 +581,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         onClick={() => updateField('provider_type', type.value)}
                         className={`p-3 rounded-lg border-2 text-left transition-colors ${
                           formData.provider_type === type.value
-                            ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-teal-900/20'
                             : 'border-neutral-200 dark:border-slate-700 hover:border-neutral-300'
                         }`}
                       >
@@ -727,7 +727,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {verificationResult?.license_valid ? (
                   <Button
                     onClick={() => setStep(3)}
-                    className="bg-teal-600 hover:bg-teal-700"
+                    className="bg-primary hover:bg-[#6B9080]"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -778,7 +778,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         onClick={() => toggleSpecialty(specialty)}
                         className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
                           formData.specialties.includes(specialty)
-                            ? 'bg-teal-600 text-white'
+                            ? 'bg-primary text-white'
                             : 'bg-neutral-100 dark:bg-slate-700 text-neutral-700 dark:text-slate-300 hover:bg-neutral-200 dark:hover:bg-slate-600'
                         }`}
                       >
@@ -837,7 +837,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </Button>
                 <Button
                   onClick={() => { if (validateStep(3)) setStep(4); }}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-primary hover:bg-[#6B9080]"
                 >
                   Review Application
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -860,7 +860,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {/* Personal Info Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <User className="w-4 h-4 text-teal-600" />
+                    <User className="w-4 h-4 text-[#6B9080]" />
                     Personal Information
                   </h3>
                   <div className="grid grid-cols-2 gap-3 text-sm">
@@ -882,7 +882,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {/* Credentials Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Award className="w-4 h-4 text-teal-600" />
+                    <Award className="w-4 h-4 text-[#6B9080]" />
                     Credentials
                     {verificationResult?.license_valid && (
                       <Badge className="bg-green-100 text-green-700">
@@ -920,12 +920,12 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {/* Specialties Summary */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Heart className="w-4 h-4 text-teal-600" />
+                    <Heart className="w-4 h-4 text-[#6B9080]" />
                     Specialties
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {formData.specialties.map((s) => (
-                      <Badge key={s} className="bg-teal-100 text-teal-700">{s}</Badge>
+                      <Badge key={s} className="bg-[#6B9080]/10 text-[#6B9080]">{s}</Badge>
                     ))}
                   </div>
                   <p className="text-sm text-neutral-600 dark:text-slate-400 mt-3">
@@ -936,7 +936,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {/* Rates & Payment Setup */}
                 <div className="p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <h3 className="font-medium text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Briefcase className="w-4 h-4 text-teal-600" />
+                    <Briefcase className="w-4 h-4 text-[#6B9080]" />
                     Rates & Payment
                   </h3>
                   <div className="space-y-4">
@@ -992,15 +992,15 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </div>
 
                 {/* Terms Agreement */}
-                <div className="p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+                <div className="p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 rounded-lg border border-[#6B9080]/20 dark:border-teal-800">
                   <label className="flex items-start gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={formData.accepts_terms}
                       onChange={(e) => updateField('accepts_terms', e.target.checked)}
-                      className="mt-1 w-5 h-5 rounded border-teal-300 text-teal-600 focus:ring-teal-500"
+                      className="mt-1 w-5 h-5 rounded border-[#6B9080]/30 text-[#6B9080] focus:ring-teal-500"
                     />
-                    <span className="text-sm text-teal-800 dark:text-teal-300">
+                    <span className="text-sm text-teal-800 dark:text-[#7BA7BC]">
                       I confirm that all information provided is accurate and I consent to Aminy verifying my credentials.
                       I agree to the{' '}
                       <a href="/?screen=terms-of-service" target="_blank" rel="noopener noreferrer" className="underline font-medium">Provider Terms of Service</a>,{' '}
@@ -1041,7 +1041,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !formData.accepts_terms}
-                  className="bg-teal-600 hover:bg-teal-700 disabled:opacity-50"
+                  className="bg-primary hover:bg-[#6B9080] disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>
@@ -1069,7 +1069,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               { icon: Shield, title: 'HIPAA-Conscious', desc: 'Encrypted, secure platform for telehealth' },
             ].map(({ icon: Icon, title, desc }) => (
               <Card key={title} className="p-4 text-center">
-                <Icon className="w-8 h-8 text-teal-600 mx-auto mb-2" />
+                <Icon className="w-8 h-8 text-[#6B9080] mx-auto mb-2" />
                 <h4 className="font-medium text-neutral-900 dark:text-white">{title}</h4>
                 <p className="text-sm text-neutral-500 dark:text-slate-400">{desc}</p>
               </Card>

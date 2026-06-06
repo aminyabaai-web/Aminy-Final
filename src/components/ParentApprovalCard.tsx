@@ -94,7 +94,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
     prompt_script: 'bg-green-100 text-green-700 border-green-200',
     reinforcement: 'bg-yellow-100 text-yellow-700 border-yellow-200',
     environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
-    coverage_note: 'bg-gray-100 text-gray-700 border-gray-200'
+    coverage_note: 'bg-[#F0EDE8] text-gray-700 border-gray-200'
   };
 
   // When rendered as a standalone screen, wrap content in a full-screen page

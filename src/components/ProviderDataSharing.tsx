@@ -210,7 +210,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('share')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'share'
-              ? 'text-teal-600 border-b-2 border-teal-600'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -221,7 +221,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('links')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'links'
-              ? 'text-teal-600 border-b-2 border-teal-600'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -232,7 +232,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
           onClick={() => setActiveTab('export')}
           className={`flex-1 py-3 text-sm font-medium transition-colors ${
             activeTab === 'export'
-              ? 'text-teal-600 border-b-2 border-teal-600'
+              ? 'text-[#6B9080] border-b-2 border-[#6B9080]'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -287,7 +287,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                     key={level}
                     className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                       accessLevel === level
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -331,7 +331,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                           [key]: e.target.checked,
                         }))
                       }
-                      className="rounded text-teal-600"
+                      className="rounded text-[#6B9080]"
                     />
                     <div>
                       <span className="font-medium">{label}</span>
@@ -385,7 +385,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   type="checkbox"
                   checked={useAccessCode}
                   onChange={(e) => setUseAccessCode(e.target.checked)}
-                  className="rounded text-teal-600"
+                  className="rounded text-[#6B9080]"
                 />
                 <span className="font-medium">Add PIN protection</span>
               </label>
@@ -422,7 +422,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             <button
               onClick={handleCreateLink}
               disabled={useAccessCode && accessCode.length < 4}
-              className="w-full py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-[#6B9080] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <Link className="w-5 h-5" />
               Create Share Link
@@ -439,7 +439,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                 <p>No active share links</p>
                 <button
                   onClick={() => setActiveTab('share')}
-                  className="mt-2 text-teal-600 hover:underline"
+                  className="mt-2 text-[#6B9080] hover:underline"
                 >
                   Create your first link
                 </button>
@@ -470,7 +470,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => copyToClipboard(getShareUrl(link.id))}
-                          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          className="p-2 text-gray-500 hover:text-gray-700 hover:bg-[#F0EDE8] rounded-lg transition-colors"
                           title="Copy link"
                         >
                           <Copy className="w-4 h-4" />
@@ -521,11 +521,11 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   onClick={() => setExportFormat('fhir')}
                   className={`p-4 border rounded-xl text-left transition-colors ${
                     exportFormat === 'fhir'
-                      ? 'border-teal-500 bg-teal-50'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <FileJson className="w-6 h-6 text-teal-600 mb-2" />
+                  <FileJson className="w-6 h-6 text-[#6B9080] mb-2" />
                   <p className="font-medium">FHIR R4 Bundle</p>
                   <p className="text-sm text-gray-500">Healthcare interoperability standard</p>
                 </button>
@@ -533,11 +533,11 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   onClick={() => setExportFormat('summary')}
                   className={`p-4 border rounded-xl text-left transition-colors ${
                     exportFormat === 'summary'
-                      ? 'border-teal-500 bg-teal-50'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <Users className="w-6 h-6 text-teal-600 mb-2" />
+                  <Users className="w-6 h-6 text-[#6B9080] mb-2" />
                   <p className="font-medium">Provider Summary</p>
                   <p className="text-sm text-gray-500">Human-readable quick start guide</p>
                 </button>
@@ -566,7 +566,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                           [key]: e.target.checked,
                         }))
                       }
-                      className="rounded text-teal-600"
+                      className="rounded text-[#6B9080]"
                     />
                     <span>{label}</span>
                   </label>
@@ -577,7 +577,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
             {/* Generate Button */}
             <button
               onClick={handleExport}
-              className="w-full py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-[#6B9080] transition-colors flex items-center justify-center gap-2"
             >
               <FileJson className="w-5 h-5" />
               Generate Export
@@ -590,13 +590,13 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                   <h4 className="font-medium text-gray-700">Export Preview</h4>
                   <button
                     onClick={downloadExport}
-                    className="flex items-center gap-1 text-sm text-teal-600 hover:text-teal-700"
+                    className="flex items-center gap-1 text-sm text-[#6B9080] hover:text-[#6B9080]"
                   >
                     <Download className="w-4 h-4" />
                     Download
                   </button>
                 </div>
-                <pre className="bg-gray-50 border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
+                <pre className="bg-[#FAF7F2] border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
                   {exportPreview.slice(0, 2000)}
                   {exportPreview.length > 2000 && '\n\n... (truncated for preview)'}
                 </pre>
@@ -620,7 +620,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-gray-50">
+      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-[#FAF7F2]">
         <div className="flex items-center gap-2 text-xs text-gray-500">
           <Shield className="w-4 h-4" />
           <span>

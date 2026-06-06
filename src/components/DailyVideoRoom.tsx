@@ -80,7 +80,7 @@ const DailyGrid = ({ roomUrl }: { roomUrl: string }) => {
     if (callState === 'joining-meeting') {
         return (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 border border-slate-800 rounded-2xl">
-                <Loader2 className="w-8 h-8 text-teal-500 animate-spin mb-4" />
+                <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
                 <p className="text-slate-400 font-medium">Connecting to secure room...</p>
             </div>
         );
@@ -145,7 +145,7 @@ export const DailyVideoRoom = ({
                     {onBack && (
                         <button
                             onClick={onBack}
-                            className="mt-5 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+                            className="mt-5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
                         >
                             Back
                         </button>

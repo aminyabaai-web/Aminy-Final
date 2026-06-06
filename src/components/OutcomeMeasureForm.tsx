@@ -188,7 +188,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
 
           <div className="rounded-2xl p-4 mb-4" style={{ background: '#43AA8B10' }}>
             <p className="text-xs text-slate-700 leading-relaxed">
-              <strong className="text-teal-700">Re-take in {measure.cadenceWeeks} weeks</strong> to track changes. Aminy will remind you. Your provider can see your trend in the clinical portal.
+              <strong className="text-[#6B9080]">Re-take in {measure.cadenceWeeks} weeks</strong> to track changes. Aminy will remind you. Your provider can see your trend in the clinical portal.
             </p>
           </div>
 
@@ -245,12 +245,12 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
                 key={value}
                 onClick={() => selectAnswer(value)}
                 className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl border-2 text-left transition-all min-h-[60px] ${
-                  selected ? 'border-teal-500 bg-teal-50' : 'border-slate-200 bg-white hover:border-slate-300'
+                  selected ? 'border-[#6B9080] bg-[#6B9080]/10' : 'border-slate-200 bg-white hover:border-slate-300'
                 }`}
               >
                 <span
                   className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
-                    selected ? 'bg-teal-500' : 'border-2 border-slate-300'
+                    selected ? 'bg-primary' : 'border-2 border-slate-300'
                   }`}
                 >
                   {selected && <Check className="w-3.5 h-3.5 text-white" />}

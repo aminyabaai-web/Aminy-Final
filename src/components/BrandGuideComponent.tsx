@@ -255,11 +255,11 @@ export function BrandGuideComponent() {
                       <div className="h-24 rounded-lg bg-cyan-600 border-2 border-slate-200"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-slate-900">Teal Accent</p>
-                        <p className="text-slate-500 font-mono text-xs">#0891b2</p>
+                        <p className="text-slate-500 font-mono text-xs">#6B9080</p>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("#0891b2", "Accent color")}
+                          onClick={() => copyToClipboard("#6B9080", "Accent color")}
                           className="h-6 px-2 mt-1"
                         >
                           <Copy className="w-3 h-3" />
@@ -301,7 +301,7 @@ export function BrandGuideComponent() {
                       <div className="h-16 rounded-lg bg-cyan-600 border-2 border-slate-200"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-slate-900">Core Teal</p>
-                        <p className="text-slate-500 font-mono text-xs">#0891b2</p>
+                        <p className="text-slate-500 font-mono text-xs">#6B9080</p>
                       </div>
                     </div>
 

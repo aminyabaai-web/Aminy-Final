@@ -180,23 +180,23 @@ export function AIPaywallMessage({
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <span className="text-sm font-medium text-primary">Aminy</span>
-          <Badge className="bg-teal-100 text-teal-700 border-teal-200 text-xs">
+          <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20 text-xs">
             Upgrade suggestion
           </Badge>
         </div>
 
         {/* Message Card */}
-        <Card className="p-4 bg-gradient-to-br from-teal-50 via-white to-cyan-50 border-teal-200 shadow-md">
+        <Card className="p-4 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FAF7F2] border-[#6B9080]/20 shadow-md">
           {/* AI Message */}
           <p className="text-sm text-primary leading-relaxed mb-4">
             {content.message}
           </p>
 
           {/* Feature Highlight */}
-          <div className="bg-white/80 rounded-lg p-3 mb-4 border border-teal-200">
+          <div className="bg-white/80 rounded-lg p-3 mb-4 border border-[#6B9080]/20">
             <div className="flex items-start gap-2">
-              <div className="p-1.5 bg-teal-100 rounded-full flex-shrink-0 mt-0.5">
-                <IconComponent className="w-4 h-4 text-teal-600" />
+              <div className="p-1.5 bg-[#6B9080]/10 rounded-full flex-shrink-0 mt-0.5">
+                <IconComponent className="w-4 h-4 text-[#6B9080]" />
               </div>
               <div className="flex-1">
                 <div className="text-xs font-semibold text-teal-900 mb-1">{content.tier}</div>
@@ -221,7 +221,7 @@ export function AIPaywallMessage({
           <div className="flex gap-2">
             <Button 
               onClick={onViewPlans}
-              className="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm"
+              className="flex-1 bg-primary hover:bg-[#6B9080] text-white font-semibold text-sm"
               size="sm"
             >
               View Plans

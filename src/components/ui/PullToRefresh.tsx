@@ -119,7 +119,7 @@ export function PullToRefresh({
   maxPull = 120,
   disabled = false,
   indicatorColor = 'text-indigo-600',
-  backgroundColor = 'bg-gray-50 dark:bg-slate-900',
+  backgroundColor = 'bg-[#FAF7F2] dark:bg-slate-900',
 }: PullToRefreshProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 

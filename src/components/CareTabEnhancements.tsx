@@ -51,7 +51,7 @@ export const SessionPrepModal = ({
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-teal-600" />
+            <CheckCircle2 className="h-5 w-5 text-[#6B9080]" />
             Session Preparation
           </DialogTitle>
           <DialogDescription>
@@ -61,18 +61,18 @@ export const SessionPrepModal = ({
 
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Progress indicator */}
-          <Card className="p-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200">
+          <Card className="p-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-[#6B9080]/20">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium text-teal-900">Preparation Progress</span>
-              <span className="text-sm text-teal-700">{completionRate}% Complete</span>
+              <span className="text-sm text-[#6B9080]">{completionRate}% Complete</span>
             </div>
-            <div className="w-full bg-teal-200 rounded-full h-2 mb-2">
+            <div className="w-full bg-[#6B9080]/20 rounded-full h-2 mb-2">
               <div 
-                className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${completionRate}%` }}
               />
             </div>
-            <p className="text-sm text-teal-700">
+            <p className="text-sm text-[#6B9080]">
               {requiredCompleted}/{requiredTotal} required items completed
             </p>
           </Card>
@@ -109,7 +109,7 @@ export const SessionPrepModal = ({
                 toast.success('Ready for session!');
               }}
               disabled={requiredCompleted < requiredTotal}
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-primary hover:bg-[#6B9080]"
             >
               Mark as Ready
             </Button>
@@ -135,11 +135,11 @@ export const ProviderInfoCard = ({
   onSchedule?: () => void;
   onStartCall?: () => void;
 }) => (
-  <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200">
+  <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-[#6B9080]/20">
     <div className="flex items-start justify-between">
       <div className="flex items-start gap-3">
-        <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-          <User className="h-6 w-6 text-teal-600" />
+        <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+          <User className="h-6 w-6 text-[#6B9080]" />
         </div>
         <div>
           <h3 className="font-semibold text-teal-900">{provider.name}</h3>
@@ -150,8 +150,8 @@ export const ProviderInfoCard = ({
               </Badge>
             ))}
           </div>
-          <p className="text-sm text-teal-700">{provider.specialty}</p>
-          <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-teal-600">
+          <p className="text-sm text-[#6B9080]">{provider.specialty}</p>
+          <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-[#6B9080]">
             <span className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
               {provider.availability}
@@ -243,7 +243,7 @@ export const AppointmentCard = ({
     <div className="flex items-center gap-2 flex-wrap">
       {appointment.status === 'confirmed' && (
         <>
-          <Button size="sm" className="bg-teal-600 hover:bg-teal-700" onClick={onJoinSession}>
+          <Button size="sm" className="bg-primary hover:bg-[#6B9080]" onClick={onJoinSession}>
             <Video className="h-3 w-3 mr-1" />
             Join Session
           </Button>
@@ -383,7 +383,7 @@ export const PostSessionModal = ({
             <Button variant="outline" onClick={onClose}>
               Skip for Now
             </Button>
-            <Button onClick={handleSubmit} className="bg-teal-600 hover:bg-teal-700">
+            <Button onClick={handleSubmit} className="bg-primary hover:bg-[#6B9080]">
               Complete Session
             </Button>
           </div>

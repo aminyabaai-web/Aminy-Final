@@ -356,7 +356,7 @@ export function ParentCoPlay({
                       : trial.response === 'correct'
                         ? 'bg-blue-100 text-blue-700'
                         : trial.response === 'no_response'
-                          ? 'bg-gray-100 text-gray-500'
+                          ? 'bg-[#F0EDE8] text-gray-500'
                           : 'bg-red-100 text-red-700'
                   }`}
                   title={`Trial ${trial.trialNumber}: ${trial.response} (${trial.promptLevel})`}
@@ -393,7 +393,7 @@ export function ParentCoPlay({
             </button>
             <button
               onClick={onExit}
-              className="px-4 py-3 bg-gray-100 text-slate-500 rounded-xl font-medium text-sm active:scale-95 transition-transform"
+              className="px-4 py-3 bg-[#F0EDE8] text-slate-500 rounded-xl font-medium text-sm active:scale-95 transition-transform"
             >
               Discard
             </button>
@@ -433,7 +433,7 @@ export function ParentCoPlay({
 
         <button
           onClick={() => setIsPaused(!isPaused)}
-          className="p-1.5 rounded-lg bg-gray-100 active:scale-95 transition-transform"
+          className="p-1.5 rounded-lg bg-[#F0EDE8] active:scale-95 transition-transform"
         >
           {isPaused ? <Play className="w-4 h-4 text-[#43AA8B]" /> : <Pause className="w-4 h-4 text-slate-500" />}
         </button>
@@ -468,7 +468,7 @@ export function ParentCoPlay({
       {/* ================================================================ */}
       <div className="px-4 py-2 bg-white">
         <div className="flex items-center gap-2">
-          <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-[#43AA8B] rounded-full"
               initial={false}
@@ -553,7 +553,7 @@ export function ParentCoPlay({
                 className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-xl text-xs transition-all active:scale-95 ${
                   selectedPromptLevel === level
                     ? 'bg-[#43AA8B] text-white shadow-sm'
-                    : 'bg-gray-50 text-slate-500'
+                    : 'bg-[#FAF7F2] text-slate-500'
                 }`}
               >
                 {icon}
@@ -571,7 +571,7 @@ export function ParentCoPlay({
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mt-2 p-3 bg-gray-50 rounded-xl">
+                <div className="mt-2 p-3 bg-[#FAF7F2] rounded-xl">
                   {PROMPT_LEVELS.map(({ level, label, description, icon }) => (
                     <div
                       key={level}
@@ -612,7 +612,7 @@ export function ParentCoPlay({
             </button>
             <button
               onClick={() => recordTrial('no_response')}
-              className="flex flex-col items-center gap-1.5 py-3 bg-gray-50 rounded-xl text-gray-500 active:scale-95 active:bg-gray-100 transition-all"
+              className="flex flex-col items-center gap-1.5 py-3 bg-[#FAF7F2] rounded-xl text-gray-500 active:scale-95 active:bg-[#F0EDE8] transition-all"
             >
               <Clock className="w-6 h-6" />
               <span className="text-xs font-semibold">No Response</span>

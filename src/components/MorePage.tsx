@@ -193,11 +193,11 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
         role="menuitem"
         onClick={() => handleItemClick(item)}
         onKeyDown={(e) => handleKeyDown(e, item)}
-        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
+        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
         aria-label={`Open ${item.label}`}
       >
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
             <Icon className="w-5 h-5 text-gray-600 dark:text-slate-300" strokeWidth={1.5} />
           </div>
           
@@ -213,7 +213,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-600">
         <div className="px-4 py-6 sm:px-6">

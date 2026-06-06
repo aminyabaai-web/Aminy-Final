@@ -212,7 +212,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   const hasRealData = !!(retentionData && retentionData.cohorts.length > 0);
   if (!isDemoMode() && !hasRealData) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -241,7 +241,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Demo Data Banner — only when showing sample (non-real) metrics */}
       {!hasRealData && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
@@ -348,7 +348,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               <div key={tier.tier} className="flex items-center gap-3 sm:gap-4">
                 <div className="w-20 text-sm font-medium text-gray-700">{tier.tier}</div>
                 <div className="flex-1">
-                  <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
+                  <div className="h-8 bg-[#F0EDE8] rounded-lg overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(tier.revenue / totalRevenue) * 100}%` }}
@@ -420,7 +420,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 {cohortData.map((cohort) => (
                   <tr
                     key={cohort.month}
-                    className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+                    className="border-b border-gray-100 hover:bg-[#FAF7F2] cursor-pointer"
                     onClick={() => setSelectedCohort(selectedCohort === cohort.month ? null : cohort.month)}
                   >
                     <td className="py-3 px-2 font-medium text-gray-900">{cohort.month}</td>

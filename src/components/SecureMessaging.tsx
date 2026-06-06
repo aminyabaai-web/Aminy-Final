@@ -409,7 +409,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
       </div>
     );
   }
@@ -438,8 +438,8 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         </div>
 
         {/* HIPAA Notice */}
-        <div className="px-4 py-2 bg-teal-50 border-b border-teal-100">
-          <div className="flex items-center gap-2 text-xs text-teal-700">
+        <div className="px-4 py-2 bg-[#6B9080]/10 border-b border-teal-100">
+          <div className="flex items-center gap-2 text-xs text-[#6B9080]">
             <Shield className="w-3.5 h-3.5" />
             <span>Encrypted, private messaging</span>
           </div>
@@ -458,11 +458,11 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
                 className={`w-full p-4 text-left hover:bg-neutral-50 transition-colors border-b border-neutral-100 ${
-                  selectedThread?.id === thread.id ? 'bg-teal-50' : ''
+                  selectedThread?.id === thread.id ? 'bg-[#6B9080]/10' : ''
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center flex-shrink-0">
                     {thread.providerPhoto ? (
                       <img
                         src={thread.providerPhoto}
@@ -470,7 +470,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                         className="w-10 h-10 rounded-full object-cover"
                       />
                     ) : (
-                      <User className="w-5 h-5 text-teal-600" />
+                      <User className="w-5 h-5 text-[#6B9080]" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -491,7 +491,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                           : `Re: ${thread.childName}`}
                       </p>
                       {thread.unreadCount > 0 && (
-                        <Badge className="bg-teal-500 text-white text-xs px-1.5 py-0.5 min-w-[20px] text-center">
+                        <Badge className="bg-primary text-white text-xs px-1.5 py-0.5 min-w-[20px] text-center">
                           {thread.unreadCount}
                         </Badge>
                       )}
@@ -518,8 +518,8 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
-              <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                <User className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
                 <h3 className="font-semibold text-neutral-900">
@@ -569,7 +569,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                     <div
                       className={`rounded-2xl px-4 py-2 ${
                         isOwn
-                          ? 'bg-teal-600 text-white rounded-br-md'
+                          ? 'bg-primary text-white rounded-br-md'
                           : 'bg-white text-neutral-900 border border-neutral-200 rounded-bl-md'
                       }`}
                     >
@@ -609,7 +609,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                       <span>{formatTime(message.createdAt)}</span>
                       {isOwn && (
                         message.readAt ? (
-                          <CheckCheck className="w-3.5 h-3.5 text-teal-500" />
+                          <CheckCheck className="w-3.5 h-3.5 text-primary" />
                         ) : (
                           <Check className="w-3.5 h-3.5" />
                         )
@@ -728,7 +728,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
               <Button
                 onClick={sendMessage}
                 disabled={(!newMessage.trim() && attachments.length === 0) || isSending}
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-primary hover:bg-[#6B9080]"
               >
                 {isSending ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

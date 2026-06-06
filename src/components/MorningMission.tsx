@@ -222,7 +222,7 @@ export function MorningMission({
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="mb-4 inline-flex rounded-full bg-teal-100 p-4 text-teal-700"
+              className="mb-4 inline-flex rounded-full bg-[#6B9080]/10 p-4 text-[#6B9080]"
             >
               <CheckCircle2 className="w-10 h-10" />
             </motion.div>
@@ -231,7 +231,7 @@ export function MorningMission({
               You're set for a great day with {childName}
             </p>
             {streakDays > 0 && (
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal-200 bg-white px-3 py-1.5 text-teal-700">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-[#6B9080]/20 bg-white px-3 py-1.5 text-[#6B9080]">
                 <Star className="w-4 h-4" />
                 <span className="text-sm font-medium">{streakDays} day streak!</span>
               </div>

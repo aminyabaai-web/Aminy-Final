@@ -201,7 +201,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                 <button
                   key={row.service}
                   onClick={() => onNavigate?.('marketplace')}
-                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-dashed border-slate-200 hover:border-teal-300 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 rounded-2xl bg-white border border-dashed border-slate-200 hover:border-[#6B9080]/30 transition-colors text-left"
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${meta.color}15` }}>
                     <Icon className="w-5 h-5" />
@@ -270,7 +270,7 @@ function AuthBadge({ status, expiresAt }: { status: AuthStatus; expiresAt?: stri
   const styles: Record<AuthStatus, { bg: string; text: string; label: string; icon: React.ReactNode }> = {
     none:         { bg: 'bg-slate-100',   text: 'text-slate-600',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
     pending:      { bg: 'bg-amber-50',    text: 'text-amber-700',   label: 'Pending',          icon: <Clock className="w-3 h-3" /> },
-    approved:     { bg: 'bg-teal-50',     text: 'text-teal-700',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
+    approved:     { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
     expiring:     { bg: 'bg-orange-50',   text: 'text-orange-700',  label: 'Expiring soon',    icon: <AlertTriangle className="w-3 h-3" /> },
     denied:       { bg: 'bg-red-50',      text: 'text-red-700',     label: 'Denied — appeal',  icon: <AlertTriangle className="w-3 h-3" /> },
     not_required: { bg: 'bg-slate-50',    text: 'text-slate-500',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },

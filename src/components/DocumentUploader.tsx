@@ -213,7 +213,7 @@ export function DocumentUploader({
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map((file, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div key={index} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
               <div className="flex items-center gap-3 flex-1">
                 <File className="w-4 h-4 text-gray-500" />
                 <div className="flex-1 min-w-0">

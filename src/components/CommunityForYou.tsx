@@ -533,8 +533,8 @@ export function CommunityForYou({
           onClick={() => setActiveTab(id as typeof activeTab)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
             activeTab === id
-              ? 'bg-teal-500 text-white shadow-md'
-              : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+              ? 'bg-primary text-white shadow-md'
+              : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -561,7 +561,7 @@ export function CommunityForYou({
         resolvedPosts.map((post) => (
           <Card key={post.id} className="p-4 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-3 mb-3">
-              <div className="p-2 bg-teal-100 dark:bg-teal-900/30 rounded-lg">
+              <div className="p-2 bg-[#6B9080]/10 dark:bg-teal-900/30 rounded-lg">
                 {getCategoryIcon(post.category)}
               </div>
               <div className="flex-1">
@@ -578,7 +578,7 @@ export function CommunityForYou({
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{post.summary}</p>
                 <div className="flex items-center gap-3 text-xs">
-                  <span className="text-teal-600 dark:text-teal-400 italic">
+                  <span className="text-[#6B9080] dark:text-primary italic">
                     Why this for you: {post.whyForYou}
                   </span>
                 </div>
@@ -675,7 +675,7 @@ export function CommunityForYou({
                 ))}
               </div>
               {group.nextMeeting && (
-                <div className="flex items-center gap-2 text-sm text-teal-600 dark:text-teal-400">
+                <div className="flex items-center gap-2 text-sm text-[#6B9080] dark:text-primary">
                   <Calendar className="w-4 h-4" />
                   Next meeting: {formatDate(group.nextMeeting)}
                 </div>
@@ -708,7 +708,7 @@ export function CommunityForYou({
           <p className="text-sm font-medium">No events scheduled yet</p>
           <p className="text-xs mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
           <button
-            className="mt-3 text-xs text-teal-600 font-semibold underline"
+            className="mt-3 text-xs text-[#6B9080] font-semibold underline"
             onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
           >
             Notify me when events launch →
@@ -728,7 +728,7 @@ export function CommunityForYou({
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                 Hosted by <span className="font-medium">{event.host}</span>
                 {event.hostCredentials && (
-                  <span className="text-teal-600 dark:text-teal-400">
+                  <span className="text-[#6B9080] dark:text-primary">
                     {' '}• {event.hostCredentials}
                   </span>
                 )}
@@ -944,7 +944,7 @@ export function CommunityForYou({
       ))}
 
       {/* Past Q&A Archive */}
-      <Card className="p-4 bg-gray-50 dark:bg-slate-800/50">
+      <Card className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="font-medium text-gray-900 dark:text-white">
@@ -964,7 +964,7 @@ export function CommunityForYou({
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 pb-24">
       {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
@@ -980,7 +980,7 @@ export function CommunityForYou({
               <button
                 onClick={onBack}
                 aria-label="Back"
-                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </button>

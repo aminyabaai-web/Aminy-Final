@@ -79,7 +79,7 @@ function getTierBadge(tier: ReferralTier | null): {
     case 'Ambassador':
       return { icon: Crown, color: 'text-amber-500', label: 'Ambassador' };
     case 'Champion':
-      return { icon: Trophy, color: 'text-teal-500', label: 'Champion' };
+      return { icon: Trophy, color: 'text-primary', label: 'Champion' };
     case 'Supporter':
     default:
       return { icon: Medal, color: 'text-blue-500', label: 'Supporter' };
@@ -91,7 +91,7 @@ function getRankStyle(rank: number): string {
     case 1:
       return 'bg-amber-50 border-amber-200';
     case 2:
-      return 'bg-gray-50 border-gray-200';
+      return 'bg-[#FAF7F2] border-gray-200';
     case 3:
       return 'bg-orange-50 border-orange-200';
     default:
@@ -274,7 +274,7 @@ export function ReferralLeaderboard({
   return (
     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden max-w-md w-full">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-4 text-white">
+      <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] p-4 text-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Trophy className="w-5 h-5" />
@@ -304,7 +304,7 @@ export function ReferralLeaderboard({
               onClick={() => setRange(key)}
               className={`flex-1 py-1.5 px-2 text-xs font-medium rounded-md transition-all ${
                 range === key
-                  ? 'bg-white text-teal-700 shadow-sm'
+                  ? 'bg-white text-[#6B9080] shadow-sm'
                   : 'text-white/80 hover:text-white'
               }`}
             >
@@ -316,20 +316,20 @@ export function ReferralLeaderboard({
 
       {/* Current user progress to next tier */}
       {nextTierInfo && data.currentUserEntry && (
-        <div className="mx-4 mt-3 p-3 rounded-xl bg-teal-50 border border-teal-100">
+        <div className="mx-4 mt-3 p-3 rounded-xl bg-[#6B9080]/10 border border-teal-100">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs font-medium text-teal-800">
               Next tier: {nextTierInfo.nextTier.badgeIcon}{' '}
               {nextTierInfo.nextTier.name}
             </span>
-            <span className="text-xs text-teal-600">
+            <span className="text-xs text-[#6B9080]">
               {nextTierInfo.needed} more referral
               {nextTierInfo.needed !== 1 ? 's' : ''}
             </span>
           </div>
-          <div className="w-full h-2 bg-teal-100 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-[#6B9080]/10 rounded-full overflow-hidden">
             <div
-              className="h-full bg-teal-500 rounded-full transition-all duration-500"
+              className="h-full bg-primary rounded-full transition-all duration-500"
               style={{ width: `${nextTierInfo.progress}%` }}
             />
           </div>
@@ -340,7 +340,7 @@ export function ReferralLeaderboard({
       <div className="p-4">
         {data.loading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="w-6 h-6 border-2 border-teal-200 border-t-teal-500 rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-[#6B9080]/20 border-t-teal-500 rounded-full animate-spin" />
           </div>
         ) : data.error ? (
           <p className="text-center text-sm text-gray-500 py-8">
@@ -364,7 +364,7 @@ export function ReferralLeaderboard({
                   key={entry.userId}
                   className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
                     entry.isCurrentUser
-                      ? 'bg-teal-50 border-teal-200 ring-1 ring-teal-300'
+                      ? 'bg-[#6B9080]/10 border-[#6B9080]/20 ring-1 ring-teal-300'
                       : getRankStyle(entry.rank)
                   }`}
                 >
@@ -427,7 +427,7 @@ export function ReferralLeaderboard({
                     <ChevronUp size={14} className="text-gray-400" />
                     <div className="flex-1 border-t border-dashed border-gray-200" />
                   </div>
-                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-teal-50 border-teal-200 ring-1 ring-teal-300">
+                  <div className="flex items-center gap-3 p-3 rounded-xl border bg-[#6B9080]/10 border-[#6B9080]/20 ring-1 ring-teal-300">
                     <div className="w-8 text-center font-bold text-sm text-gray-500">
                       #{data.currentUserEntry.rank}
                     </div>

@@ -143,7 +143,7 @@ export function AttachmentPicker({
           {/* Take a Photo */}
           <button
             onClick={handleTakePhoto}
-            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-[#FAF7F2] dark:bg-slate-800 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
               <Camera className="w-6 h-6 text-accent" />
@@ -159,7 +159,7 @@ export function AttachmentPicker({
           {/* Select from Library */}
           <button
             onClick={handleSelectFromLibrary}
-            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-[#FAF7F2] dark:bg-slate-800 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
               <Image className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -175,7 +175,7 @@ export function AttachmentPicker({
           {/* Attach a PDF */}
           <button
             onClick={handleAttachPdf}
-            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+            className="w-full flex items-center gap-3 sm:gap-4 p-4 rounded-xl bg-[#FAF7F2] dark:bg-slate-800 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
               <FileText className="w-6 h-6 text-red-600 dark:text-red-400" />

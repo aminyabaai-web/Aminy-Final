@@ -56,7 +56,7 @@ export function PaymentConfirmation({
           </p>
           <Button
             onClick={onContinue}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+            className="w-full bg-primary hover:bg-[#6B9080] text-white"
           >
             Continue to Dashboard
           </Button>
@@ -102,7 +102,7 @@ export function PaymentConfirmation({
             </Button>
             <Button
               onClick={onContinue}
-              className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
+              className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
             >
               Continue Anyway
             </Button>
@@ -122,8 +122,8 @@ export function PaymentConfirmation({
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <Card className="max-w-md w-full p-8 text-center">
-        <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
+        <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin" />
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           Confirming Your Payment

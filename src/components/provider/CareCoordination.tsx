@@ -317,7 +317,7 @@ export function CareCoordination({
     return (
       <div className="flex items-center justify-center p-12">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-[#6B9080]/20 border-t-teal-600 rounded-full animate-spin mx-auto mb-3" />
           <p className="text-neutral-600 dark:text-slate-400">Loading care coordination...</p>
         </div>
       </div>
@@ -354,7 +354,7 @@ export function CareCoordination({
             onClick={() => setActiveTab(tab.id as typeof activeTab)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeTab === tab.id
-                ? 'border-teal-600 text-teal-600 bg-teal-50/50 dark:bg-teal-900/20'
+                ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50 dark:bg-teal-900/20'
                 : 'border-transparent text-neutral-500 hover:text-neutral-700 hover:bg-neutral-50 dark:hover:bg-slate-800'
             }`}
           >
@@ -372,7 +372,7 @@ export function CareCoordination({
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center">
-                    <span className="text-lg font-semibold text-teal-700 dark:text-teal-400">
+                    <span className="text-lg font-semibold text-[#6B9080] dark:text-primary">
                       {member.name.split(' ').map(n => n[0]).join('')}
                     </span>
                   </div>
@@ -578,7 +578,7 @@ export function CareCoordination({
                     <div className="flex items-center gap-4 mt-2">
                       <div className="flex-1 h-2 bg-neutral-200 dark:bg-slate-700 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-teal-500 rounded-full transition-all"
+                          className="h-full bg-primary rounded-full transition-all"
                           style={{ width: `${item.progress}%` }}
                         />
                       </div>
@@ -606,7 +606,7 @@ export function CareCoordination({
                       <ul className="space-y-2">
                         {item.interventions.map((intervention, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm text-neutral-600 dark:text-slate-400">
-                            <CheckCircle className="w-4 h-4 text-teal-500 flex-shrink-0 mt-0.5" />
+                            <CheckCircle className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                             {intervention}
                           </li>
                         ))}
@@ -706,14 +706,14 @@ export function CareCoordination({
                 </label>
                 <div className="space-y-2">
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
-                    <input type="radio" name="access" defaultChecked className="text-teal-600" />
+                    <input type="radio" name="access" defaultChecked className="text-[#6B9080]" />
                     <div>
                       <p className="font-medium text-neutral-900 dark:text-white">Full Access</p>
                       <p className="text-xs text-neutral-500">View and contribute to all care coordination</p>
                     </div>
                   </label>
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
-                    <input type="radio" name="access" className="text-teal-600" />
+                    <input type="radio" name="access" className="text-[#6B9080]" />
                     <div>
                       <p className="font-medium text-neutral-900 dark:text-white">Limited Access</p>
                       <p className="text-xs text-neutral-500">View notes and care plan only</p>
@@ -726,7 +726,7 @@ export function CareCoordination({
                 <Button variant="outline" className="flex-1" onClick={() => setShowAddTeamMember(false)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button className="flex-1 bg-primary hover:bg-[#6B9080]">
                   <Send className="w-4 h-4 mr-2" />
                   Send Invite
                 </Button>

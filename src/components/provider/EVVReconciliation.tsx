@@ -140,12 +140,12 @@ export default function EVVReconciliation({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -155,7 +155,7 @@ export default function EVVReconciliation({
           </div>
           <button
             onClick={onRefresh}
-            className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50"
+            className="rounded-lg border border-gray-300 p-2 hover:bg-[#FAF7F2]"
           >
             <RefreshCw className="h-4 w-4 text-gray-600" />
           </button>
@@ -231,8 +231,8 @@ export default function EVVReconciliation({
               onClick={() => setFilterStatus(status)}
               className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filterStatus === status
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary text-white'
+                  : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
               }`}
             >
               {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -372,7 +372,7 @@ export default function EVVReconciliation({
                           <div>
                             <p className="text-xs font-medium text-gray-500 mb-1">Fiscal Agent Confidence</p>
                             <div className="flex items-center gap-2">
-                              <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
+                              <div className="flex-1 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
                                     visit.fiscalAgentConfidence >= 90 ? 'bg-green-500' :
@@ -399,12 +399,12 @@ export default function EVVReconciliation({
                                 onChange={e => setResolutionNote(e.target.value)}
                                 placeholder="Describe resolution action taken..."
                                 rows={2}
-                                className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none"
+                                className="w-full rounded-lg border border-red-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
                               />
                               <button
                                 onClick={() => handleResolve(visit.id)}
                                 disabled={!resolutionNote.trim()}
-                                className="mt-2 w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-40"
+                                className="mt-2 w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-[#6B9080] disabled:opacity-40"
                               >
                                 Resolve Discrepancy
                               </button>
@@ -431,7 +431,7 @@ export default function EVVReconciliation({
         {currentCycle && (
           <button
             onClick={() => onExportProofPacket(currentCycle.id)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-3 text-sm font-semibold text-white hover:bg-teal-700"
+            className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white hover:bg-[#6B9080]"
           >
             <Download className="h-4 w-4" />
             Export Proof Packet — {currentCycle.label}

@@ -155,13 +155,13 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             </button>
           )}
           <div className="flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-teal-600" />
+            <Building2 className="w-5 h-5 text-[#6B9080]" />
             <span className="text-base font-bold text-slate-900">
               Aminy for Payers
             </span>
           </div>
           <div className="ml-auto">
-            <Badge className="bg-teal-50 text-teal-700 border-teal-200 text-xs">
+            <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20 text-xs">
               Payer Partnerships
             </Badge>
           </div>
@@ -188,7 +188,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           <div className="flex gap-3 justify-center mt-6">
             <a
               href="#contact-form"
-              className="inline-flex items-center gap-1.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-1.5 bg-primary hover:bg-[#6B9080] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
             >
               Schedule a Call <ArrowRight className="w-4 h-4" />
             </a>
@@ -210,7 +210,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
         >
           {STATS.map((stat) => (
             <Card key={stat.label} className="p-4 text-center border border-slate-100">
-              <p className="text-2xl font-bold text-teal-600 mb-0.5">{stat.value}</p>
+              <p className="text-2xl font-bold text-[#6B9080] mb-0.5">{stat.value}</p>
               <p className="text-xs text-slate-600 font-medium mb-1">{stat.label}</p>
               <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
                 {stat.note}
@@ -230,8 +230,8 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           {VALUE_PROPS.map((vp) => (
             <Card key={vp.headline} className="p-4 border border-slate-100">
               <div className="flex gap-3">
-                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center">
-                  <vp.icon className="w-5 h-5 text-teal-600" />
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center">
+                  <vp.icon className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
                   <p className="text-sm font-bold text-slate-900 mb-1">{vp.headline}</p>
@@ -254,8 +254,8 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           <div className="space-y-2.5">
             {FEATURES.map((f) => (
               <div key={f.text} className="flex items-start gap-3">
-                <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-teal-100 flex items-center justify-center">
-                  <CheckCircle className="w-3 h-3 text-teal-600" />
+                <div className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-[#6B9080]" />
                 </div>
                 <p className="text-sm text-slate-700">{f.text}</p>
               </div>
@@ -270,10 +270,10 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.25 }}
         >
-          <Card className="p-5 border border-teal-100 bg-teal-50">
+          <Card className="p-5 border border-teal-100 bg-[#6B9080]/10">
             {submitted ? (
               <div className="text-center py-6">
-                <CheckCircle className="w-10 h-10 text-teal-600 mx-auto mb-3" />
+                <CheckCircle className="w-10 h-10 text-[#6B9080] mx-auto mb-3" />
                 <h3 className="text-base font-bold text-slate-900 mb-1">
                   Request received!
                 </h3>
@@ -281,7 +281,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                   Our partnerships team will reach out within 1 business day.
                   <br />
                   Questions? Email{' '}
-                  <span className="font-medium text-teal-700">
+                  <span className="font-medium text-[#6B9080]">
                     partnerships@aminy.com
                   </span>
                 </p>
@@ -289,7 +289,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             ) : (
               <>
                 <div className="flex items-center gap-2 mb-4">
-                  <Phone className="w-4 h-4 text-teal-600" />
+                  <Phone className="w-4 h-4 text-[#6B9080]" />
                   <h3 className="text-base font-bold text-slate-900">
                     Schedule a Payer Partnership Call
                   </h3>
@@ -351,8 +351,8 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           }
                           className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                             form.payerType === opt.id
-                              ? 'border-teal-400 bg-teal-100 text-teal-700'
-                              : 'border-slate-200 bg-white text-slate-600 hover:border-teal-200'
+                              ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
+                              : 'border-slate-200 bg-white text-slate-600 hover:border-[#6B9080]/20'
                           }`}
                         >
                           {opt.label}

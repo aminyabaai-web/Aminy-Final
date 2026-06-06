@@ -229,7 +229,7 @@ export function FiscalAgentSubmissionFlow({
   if (loading) {
     return (
       <div className="p-6 text-center">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-teal-600" />
+        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#6B9080]" />
         <p className="text-gray-600">Loading your hours...</p>
       </div>
     );
@@ -240,8 +240,8 @@ export function FiscalAgentSubmissionFlow({
       {/* Header */}
       <div className="sticky top-0 bg-white p-4 border-b z-10">
         <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-teal-100 rounded-lg">
-            <Building2 className="w-5 h-5 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+            <Building2 className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">Submit Hours</h2>
@@ -270,16 +270,16 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               {/* Summary Card */}
-              <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+              <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-teal-800">
                     Week of {summary ? new Date(summary.weekStart).toLocaleDateString() : '...'}
                   </span>
-                  <Badge className="bg-teal-100 text-teal-800">
+                  <Badge className="bg-[#6B9080]/10 text-teal-800">
                     {formatDuration(totalSelectedHours)} selected
                   </Badge>
                 </div>
-                <p className="text-sm text-teal-700">
+                <p className="text-sm text-[#6B9080]">
                   {entries.length} completed entries ready for submission
                 </p>
               </Card>
@@ -307,7 +307,7 @@ export function FiscalAgentSubmissionFlow({
                           setSelectedEntries(new Set(entries.map((e) => e.id)));
                         }
                       }}
-                      className="text-sm text-teal-600 hover:underline"
+                      className="text-sm text-[#6B9080] hover:underline"
                     >
                       {selectedEntries.size === entries.length ? 'Deselect All' : 'Select All'}
                     </button>
@@ -328,7 +328,7 @@ export function FiscalAgentSubmissionFlow({
                         key={entry.id}
                         className={`p-3 cursor-pointer transition-all ${
                           selectedEntries.has(entry.id)
-                            ? 'border-teal-500 bg-teal-50'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10'
                             : 'border-gray-200'
                         }`}
                       >
@@ -349,7 +349,7 @@ export function FiscalAgentSubmissionFlow({
                             checked={selectedEntries.has(entry.id)}
                             onChange={() => {}}
                             aria-label={`Select ${service.description} entry`}
-                            className="w-4 h-4 text-teal-600"
+                            className="w-4 h-4 text-[#6B9080]"
                           />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
@@ -425,7 +425,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={() => setStep(2)}
                   disabled={selectedEntries.size === 0}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -444,7 +444,7 @@ export function FiscalAgentSubmissionFlow({
             >
               <Card className="p-3 sm:p-4">
                 <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <ClipboardCheck className="w-5 h-5 text-teal-600" />
+                  <ClipboardCheck className="w-5 h-5 text-[#6B9080]" />
                   Hours Summary
                 </h3>
 
@@ -468,7 +468,7 @@ export function FiscalAgentSubmissionFlow({
                     const maxPay = data.hours * service.hourlyRange[1];
 
                     return (
-                      <div key={code} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div key={code} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
                         <div>
                           <div className="font-medium text-gray-900">{service.description}</div>
                           <div className="text-xs text-gray-500">
@@ -486,11 +486,11 @@ export function FiscalAgentSubmissionFlow({
                   })}
 
                   {/* Total */}
-                  <div className="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200">
+                  <div className="flex items-center justify-between p-3 bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20">
                     <div className="font-semibold text-teal-900">Total</div>
                     <div className="text-right">
                       <div className="font-bold text-teal-900">{formatDuration(totalSelectedHours)}</div>
-                      <div className="text-xs text-teal-700">
+                      <div className="text-xs text-[#6B9080]">
                         {selectedEntries.size} entries
                       </div>
                     </div>
@@ -514,7 +514,7 @@ export function FiscalAgentSubmissionFlow({
                       <div className="flex-1">
                         <div className="font-medium flex items-center gap-2 text-gray-500">
                           Direct Electronic Submission
-                          <Badge className="bg-gray-100 text-gray-600 text-xs">Coming soon</Badge>
+                          <Badge className="bg-[#F0EDE8] text-gray-600 text-xs">Coming soon</Badge>
                         </div>
                         <div className="text-sm text-gray-500">
                           Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
@@ -527,12 +527,12 @@ export function FiscalAgentSubmissionFlow({
                     onClick={() => setSubmissionMethod('pdf_download')}
                     className={`w-full p-3 text-left border rounded-lg transition-colors ${
                       submissionMethod === 'pdf_download'
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <Download className="w-5 h-5 text-teal-600" />
+                      <Download className="w-5 h-5 text-[#6B9080]" />
                       <div>
                         <div className="font-medium">Download PDF</div>
                         <div className="text-sm text-gray-500">
@@ -546,7 +546,7 @@ export function FiscalAgentSubmissionFlow({
                     onClick={() => setSubmissionMethod('portal_upload')}
                     className={`w-full p-3 text-left border rounded-lg transition-colors ${
                       submissionMethod === 'portal_upload'
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -588,7 +588,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleGenerateNotes}
                   disabled={isSigning}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   {isSigning ? (
                     <>
@@ -632,7 +632,7 @@ export function FiscalAgentSubmissionFlow({
                 <div className="space-y-2">
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-red-500" />
@@ -648,7 +648,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-blue-500" />
@@ -664,7 +664,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-gray-50"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
                   >
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-5 h-5 text-green-500" />
@@ -719,7 +719,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   {isSubmitting ? (
                     <>
@@ -756,7 +756,7 @@ export function FiscalAgentSubmissionFlow({
                 to {fiscalAgent?.name || 'your fiscal agent'}.
               </p>
 
-              <Card className="p-4 bg-gray-50 text-left mb-4 sm:mb-6">
+              <Card className="p-4 bg-[#FAF7F2] text-left mb-4 sm:mb-6">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Submission ID:</span>
@@ -811,7 +811,7 @@ export function FiscalAgentSubmissionFlow({
                   <Printer className="w-4 h-4 mr-2" />
                   Print Receipt
                 </Button>
-                <Button onClick={() => onComplete(submission)} className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button onClick={() => onComplete(submission)} className="flex-1 bg-primary hover:bg-[#6B9080]">
                   Done
                 </Button>
               </div>

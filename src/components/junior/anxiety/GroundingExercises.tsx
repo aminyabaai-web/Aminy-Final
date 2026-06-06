@@ -33,8 +33,8 @@ const SLATE_200 = '#e2e8f0';
 const SLATE_400 = '#94a3b8';
 /** Tailwind teal-300 (#5eead4) — body part completed fill */
 const TEAL_300 = '#5eead4';
-/** Tailwind teal-600 (#0d9488) — face detail accent */
-const TEAL_600 = '#0d9488';
+/** Tailwind teal-600 (#6B9080) — face detail accent */
+const TEAL_600 = '#6B9080';
 /** Tailwind indigo-100 (#e0e7ff) — inactive corner fill */
 const INDIGO_100 = '#e0e7ff';
 /** Tailwind indigo-200 (#c7d2fe) — square border stroke */
@@ -90,7 +90,7 @@ export function getGroundingStats(): { exercise: string; count: number }[] {
 
 const EXERCISES: { id: ExerciseId; label: string; description: string; emoji: string; bgColor: string; borderColor: string }[] = [
   { id: 'five-senses', label: '5-4-3-2-1 Senses', description: 'Notice what is around you right now', emoji: '👁️', bgColor: 'bg-sky-50', borderColor: 'border-sky-200' },
-  { id: 'body-scan', label: 'Body Scan', description: 'Feel your body from toes to head', emoji: '🧍', bgColor: 'bg-teal-50', borderColor: 'border-teal-200' },
+  { id: 'body-scan', label: 'Body Scan', description: 'Feel your body from toes to head', emoji: '🧍', bgColor: 'bg-[#6B9080]/10', borderColor: 'border-[#6B9080]/20' },
   { id: 'safe-place', label: 'Safe Place', description: 'Imagine your favorite calm place', emoji: '🏖️', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
   { id: 'square-breathing', label: 'Square Breathing', description: 'Breathe along the square path', emoji: '🟦', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-200' },
 ];
@@ -286,16 +286,16 @@ function BodyScan({ onFinish }: { onFinish: () => void }) {
         key={zone.id}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[20px] border border-teal-200 bg-teal-50 p-4 text-center"
+        className="rounded-[20px] border border-[#6B9080]/20 bg-[#6B9080]/10 p-4 text-center"
       >
         <div className="text-sm font-semibold text-teal-800 mb-1">{zone.label}</div>
-        <p className="text-sm text-teal-600">{zone.prompt}</p>
+        <p className="text-sm text-[#6B9080]">{zone.prompt}</p>
       </motion.div>
 
       <button
         type="button"
         onClick={advance}
-        className="mx-auto flex items-center gap-2 rounded-2xl bg-teal-500 px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
+        className="mx-auto flex items-center gap-2 rounded-2xl bg-primary px-6 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
       >
         <Check className="h-4 w-4" />
         {zoneIndex < BODY_ZONES.length - 1 ? 'Next zone' : 'Finish'}
@@ -635,7 +635,7 @@ function CompletionOverlay({ onDismiss }: { onDismiss: () => void }) {
         <button
           type="button"
           onClick={onDismiss}
-          className="rounded-2xl bg-teal-500 px-8 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
+          className="rounded-2xl bg-primary px-8 py-3 text-sm font-medium text-white shadow-sm active:scale-95"
         >
           Done
         </button>

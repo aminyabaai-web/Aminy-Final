@@ -127,7 +127,7 @@ export function ReferralAnalytics({
         {
           label: 'Signed Up',
           value: userStats.pending + userStats.converted,
-          color: 'bg-teal-500',
+          color: 'bg-primary',
           icon: <BarChart3 className="w-4 h-4" />,
         },
         {
@@ -152,13 +152,13 @@ export function ReferralAnalytics({
     return (
       <div className="bg-white rounded-2xl border border-gray-200 p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-5 bg-gray-200 rounded w-40" />
+          <div className="h-5 bg-[#E8E4DF] rounded w-40" />
           <div className="grid grid-cols-3 gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 bg-gray-100 rounded-xl" />
+              <div key={i} className="h-20 bg-[#F0EDE8] rounded-xl" />
             ))}
           </div>
-          <div className="h-32 bg-gray-100 rounded-xl" />
+          <div className="h-32 bg-[#F0EDE8] rounded-xl" />
         </div>
       </div>
     );
@@ -187,7 +187,7 @@ export function ReferralAnalytics({
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#F0EDE8] rounded-full transition-colors"
           aria-label="Refresh"
         >
           <RefreshCw
@@ -205,7 +205,7 @@ export function ReferralAnalytics({
           </p>
         </div>
         <div className="bg-gradient-to-br from-teal-50 to-emerald-50 rounded-xl p-3.5 border border-teal-100">
-          <p className="text-xs text-teal-600 font-medium">Conversions</p>
+          <p className="text-xs text-[#6B9080] font-medium">Conversions</p>
           <p className="text-2xl font-bold text-teal-900 mt-0.5">
             {userStats?.converted ?? 0}
           </p>
@@ -240,7 +240,7 @@ export function ReferralAnalytics({
                     </span>
                     <span className="font-bold text-gray-900">{stage.value}</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                  <div className="w-full bg-[#F0EDE8] rounded-full h-2.5 overflow-hidden">
                     <div
                       className={`${stage.color} h-2.5 rounded-full transition-all duration-700 ease-out`}
                       style={{ width: `${widthPct}%` }}
@@ -260,7 +260,7 @@ export function ReferralAnalytics({
           {userStats && userStats.totalInvites > 0 && (
             <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
               <span className="text-xs text-gray-500">Overall conversion</span>
-              <span className="text-sm font-bold text-teal-600">
+              <span className="text-sm font-bold text-[#6B9080]">
                 {Math.round(
                   (userStats.converted / userStats.totalInvites) * 100
                 )}
@@ -302,7 +302,7 @@ export function ReferralAnalytics({
           )}
           {/* K-factor bar */}
           <div className="mt-3 relative">
-            <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-[#F0EDE8] rounded-full h-3 overflow-hidden">
               <div
                 className={`h-3 rounded-full transition-all duration-700 ${
                   viralMetrics.kFactor >= 1
@@ -373,7 +373,7 @@ export function ReferralAnalytics({
                   {nextTier.badgeIcon}
                 </span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-2 rounded-full transition-all duration-500"
                   style={{
@@ -390,7 +390,7 @@ export function ReferralAnalytics({
                 {nextTier.perks.map((perk) => (
                   <span
                     key={perk}
-                    className="text-xs bg-gray-50 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200"
+                    className="text-xs bg-[#FAF7F2] text-gray-600 px-2 py-0.5 rounded-full border border-gray-200"
                   >
                     {perk}
                   </span>
@@ -416,7 +416,7 @@ export function ReferralAnalytics({
       {onInvitePress && (
         <button
           onClick={onInvitePress}
-          className="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
         >
           <Gift className="w-4 h-4" />
           Invite More Friends

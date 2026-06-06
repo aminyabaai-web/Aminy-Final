@@ -189,7 +189,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
     return (
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
           <span className="ml-2 text-gray-600 dark:text-slate-400">Loading cohort data...</span>
         </div>
       </Card>

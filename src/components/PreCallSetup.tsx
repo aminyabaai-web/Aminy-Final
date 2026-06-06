@@ -431,7 +431,7 @@ export function PreCallSetup({
               </span>
               <span className="text-muted-foreground">{Math.round(audioLevel)}%</span>
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
               <div
                 className={cn(
                   "h-full transition-all duration-100 rounded-full",

@@ -73,9 +73,9 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'goal':
         return 'text-amber-600 bg-amber-50';
       case 'plan':
-        return 'text-teal-600 bg-teal-50';
+        return 'text-[#6B9080] bg-[#6B9080]/10';
       default:
-        return 'text-gray-600 bg-gray-50';
+        return 'text-gray-600 bg-[#FAF7F2]';
     }
   };
 

@@ -351,12 +351,12 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
   }[gridSize];
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-full flex flex-col bg-[#FAF7F2]">
       {/* ---- Header ---- */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-shrink-0">
         <button
           onClick={onBack}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -366,7 +366,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
         </h2>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Settings"
         >
           <Settings className="w-5 h-5 text-gray-600" />
@@ -405,7 +405,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
               <>
                 <button
                   onClick={handleRemoveLastWord}
-                  className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-[#E8E4DF] flex items-center justify-center"
                   aria-label="Remove last word"
                 >
                   <ArrowLeft className="w-4 h-4 text-gray-600" />
@@ -424,7 +424,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
               className={`w-12 h-12 rounded-full flex items-center justify-center ${
                 sentenceStrip.length > 0
                   ? 'bg-blue-500 aac-speak-btn-active'
-                  : 'bg-gray-200'
+                  : 'bg-[#E8E4DF]'
               }`}
               aria-label="Speak sentence"
               disabled={sentenceStrip.length === 0}
@@ -448,7 +448,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
             className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'favorites'
                 ? 'bg-yellow-400 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-gray-600'
             }`}
           >
             <Star className="w-4 h-4" />
@@ -463,7 +463,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeCategory === cat
                     ? `${meta.bgClass} text-white`
-                    : 'bg-gray-100 text-gray-600'
+                    : 'bg-[#F0EDE8] text-gray-600'
                 }`}
               >
                 <span>{meta.emoji}</span>
@@ -489,7 +489,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                     className={`w-8 h-8 rounded-lg text-sm font-medium ${
                       gridSize === size
                         ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-600'
+                        : 'bg-[#F0EDE8] text-gray-600'
                     }`}
                   >
                     {size}
@@ -651,7 +651,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
               <h3 className="text-lg font-semibold">Add Custom Symbol</h3>
               <button
                 onClick={() => setShowAddSymbol(false)}
-                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -711,7 +711,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                         className={`px-2 py-1.5 rounded-lg text-xs font-medium ${
                           customCategory === cat
                             ? `${meta.bgClass} text-white`
-                            : 'bg-gray-100 text-gray-600'
+                            : 'bg-[#F0EDE8] text-gray-600'
                         }`}
                       >
                         {meta.emoji} {meta.label}

@@ -166,7 +166,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       case 'social': return 'text-green-600 bg-green-50 border-green-200';
       case 'sensory': return 'text-purple-600 bg-purple-50 border-purple-200';
       case 'routines': return 'text-orange-600 bg-orange-50 border-orange-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      default: return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
     }
   };
 
@@ -431,7 +431,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <Card className="p-6 text-center">
             <div className="mb-4 sm:mb-6">
               <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center">
-                <Play className="w-8 h-8 text-teal-600" />
+                <Play className="w-8 h-8 text-[#6B9080]" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-primary mb-2">Ready to Learn, {childName}?</h2>
               <p className="text-muted-foreground">
@@ -443,8 +443,8 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               <h3 className="text-sm font-semibold text-primary">Today's Activities:</h3>
               <div className="grid gap-2">
                 {activities.map((activity, index) => (
-                  <div key={activity.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="text-teal-600">{activity.icon}</div>
+                  <div key={activity.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+                    <div className="text-[#6B9080]">{activity.icon}</div>
                     <div className="flex-1 text-left">
                       <div className="text-sm font-medium text-primary">{activity.title}</div>
                       <div className="text-xs text-muted-foreground">{activity.expectedDuration}s</div>
@@ -479,7 +479,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
             
             <Button 
               onClick={startSession}
-              className="w-full bg-teal-600 hover:bg-teal-700"
+              className="w-full bg-primary hover:bg-[#6B9080]"
               size="lg"
             >
               <Play className="w-5 h-5 mr-2" />
@@ -500,7 +500,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-teal-600 border-teal-600">
+            <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]">
               Session Active
             </Badge>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -610,7 +610,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <p className="text-muted-foreground mb-4">Take your time. Resume when ready!</p>
           <Button 
             onClick={() => setSessionPaused(false)}
-            className="bg-teal-600 hover:bg-teal-700"
+            className="bg-primary hover:bg-[#6B9080]"
           >
             <Play className="w-4 h-4 mr-2" />
             Resume Session
@@ -625,7 +625,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           {targets.map(target => {
             const successRate = target.attempts > 0 ? (target.successes / target.attempts) * 100 : 0;
             return (
-              <div key={target.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+              <div key={target.id} className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded-lg">
                 <div className="flex items-center gap-2">
                   <div className={`p-1 rounded border ${getSkillColor(target.skill)}`}>
                     {getSkillIcon(target.skill)}

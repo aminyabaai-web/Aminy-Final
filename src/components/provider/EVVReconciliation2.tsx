@@ -190,7 +190,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   // No real records → friendly empty state instead of zeroed metrics and sample trends.
   if (records.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -205,7 +205,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           </div>
         </div>
         <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
-          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
             <Shield size={30} className="text-gray-400" />
           </div>
           <p className="text-base font-semibold text-gray-700">No EVV records to reconcile</p>
@@ -218,7 +218,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
         <div className="flex items-center gap-3 mb-4">
@@ -273,7 +273,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-              tab === t.id ? 'border-teal-500 text-teal-600' : 'border-transparent text-gray-500'
+              tab === t.id ? 'border-[#6B9080] text-[#6B9080]' : 'border-transparent text-gray-500'
             }`}
           >
             {t.icon}
@@ -292,7 +292,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               {/* Historical trend */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <BarChart3 size={15} className="text-teal-600" />
+                  <BarChart3 size={15} className="text-[#6B9080]" />
                   Historical Clean Rate Trend
                 </h2>
                 <MiniBarChart data={report.historicalCleanRates} />
@@ -344,7 +344,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               {/* Readiness checklist */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <ClipboardList size={15} className="text-teal-600" />
+                  <ClipboardList size={15} className="text-[#6B9080]" />
                   Fiscal Agent Submission Readiness
                 </h2>
                 <div className="space-y-2">
@@ -412,8 +412,8 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                   exported
                     ? 'bg-green-100 text-green-700 border border-green-200'
                     : fiscalExport.readyForSubmission
-                    ? 'bg-teal-600 text-white hover:bg-teal-700'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    ? 'bg-primary text-white hover:bg-[#6B9080]'
+                    : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
                 }`}
               >
                 {exportLoading ? (

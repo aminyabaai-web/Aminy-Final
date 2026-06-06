@@ -61,7 +61,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <div className={`relative ${className}`}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center gap-1"
+          className="p-2 rounded-lg hover:bg-[#F0EDE8] transition-colors flex items-center gap-1"
           aria-label={t('settings.language')}
         >
           <span className="text-lg">{currentLanguageInfo?.flag || '🌐'}</span>
@@ -80,16 +80,16 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
                   disabled={isChanging}
-                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-gray-50 transition-colors ${
+                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-[#FAF7F2] transition-colors ${
                     lang.code === currentLang
-                      ? 'bg-teal-50 text-teal-700'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
                       : 'text-gray-700'
                   }`}
                 >
                   <span>{lang.flag}</span>
                   <span className="flex-1">{lang.nativeName}</span>
                   {lang.code === currentLang && (
-                    <Check className="w-4 h-4 text-teal-600" />
+                    <Check className="w-4 h-4 text-[#6B9080]" />
                   )}
                 </button>
               ))}
@@ -113,8 +113,8 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               disabled={isChanging}
               className={`p-1.5 rounded transition-colors ${
                 lang.code === currentLang
-                  ? 'bg-teal-100 ring-2 ring-teal-500'
-                  : 'hover:bg-gray-100'
+                  ? 'bg-[#6B9080]/10 ring-2 ring-teal-500'
+                  : 'hover:bg-[#F0EDE8]'
               }`}
               title={lang.nativeName}
             >
@@ -162,9 +162,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
                 disabled={isChanging}
-                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 transition-colors ${
+                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#FAF7F2] transition-colors ${
                   lang.code === currentLang
-                    ? 'bg-teal-50'
+                    ? 'bg-[#6B9080]/10'
                     : ''
                 }`}
               >
@@ -174,7 +174,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   <div className="text-sm text-gray-500">{lang.name}</div>
                 </div>
                 {lang.code === currentLang && (
-                  <Check className="w-5 h-5 text-teal-600" />
+                  <Check className="w-5 h-5 text-[#6B9080]" />
                 )}
               </button>
             ))}

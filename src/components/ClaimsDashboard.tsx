@@ -228,7 +228,7 @@ function getStatusConfig(status: ExpenseRecord['status']) {
     case 'pending':
       return { icon: <Clock className="w-4 h-4 text-blue-500" />, label: 'Pending', color: 'bg-blue-50 text-blue-700' };
     case 'self_pay':
-      return { icon: <CreditCard className="w-4 h-4 text-gray-500" />, label: 'Self-Pay', color: 'bg-gray-50 text-gray-700' };
+      return { icon: <CreditCard className="w-4 h-4 text-gray-500" />, label: 'Self-Pay', color: 'bg-[#FAF7F2] text-gray-700' };
   }
 }
 
@@ -240,22 +240,22 @@ function LoadingSkeleton() {
   return (
     <div className="space-y-4 animate-pulse">
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-        <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
+        <div className="h-4 bg-[#E8E4DF] rounded w-1/3 mb-3" />
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="rounded-lg p-3 bg-gray-50">
-              <div className="h-3 bg-gray-200 rounded w-2/3 mb-2" />
-              <div className="h-5 bg-gray-200 rounded w-1/2" />
+            <div key={i} className="rounded-lg p-3 bg-[#FAF7F2]">
+              <div className="h-3 bg-[#E8E4DF] rounded w-2/3 mb-2" />
+              <div className="h-5 bg-[#E8E4DF] rounded w-1/2" />
             </div>
           ))}
         </div>
       </div>
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-        <div className="h-4 bg-gray-200 rounded w-1/4 mb-3" />
+        <div className="h-4 bg-[#E8E4DF] rounded w-1/4 mb-3" />
         {[1, 2, 3].map(i => (
           <div key={i} className="border border-gray-100 rounded-lg p-3 mb-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-            <div className="h-3 bg-gray-200 rounded w-1/2" />
+            <div className="h-4 bg-[#E8E4DF] rounded w-3/4 mb-2" />
+            <div className="h-3 bg-[#E8E4DF] rounded w-1/2" />
           </div>
         ))}
       </div>
@@ -270,8 +270,8 @@ function LoadingSkeleton() {
 function EmptyExpenseState() {
   return (
     <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-      <div className="mx-auto w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center mb-4">
-        <Inbox className="w-6 h-6 text-teal-500" />
+      <div className="mx-auto w-12 h-12 rounded-full bg-[#6B9080]/10 flex items-center justify-center mb-4">
+        <Inbox className="w-6 h-6 text-primary" />
       </div>
       <h3 className="text-sm font-semibold text-gray-900 mb-2">
         No expenses tracked yet
@@ -327,7 +327,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       {/* Summary */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <PiggyBank className="w-4 h-4 text-teal-600" />
+          <PiggyBank className="w-4 h-4 text-[#6B9080]" />
           This Year&apos;s Summary
         </h3>
         <div className="grid grid-cols-2 gap-3">
@@ -343,7 +343,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
             <p className="text-xs text-blue-600 font-medium">Pending Claims</p>
             <p className="text-lg font-bold text-blue-800">{formatCurrency(pendingAmount)}</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-3">
+          <div className="bg-[#FAF7F2] rounded-lg p-3">
             <p className="text-xs text-gray-600 font-medium">Total Billed</p>
             <p className="text-lg font-bold text-gray-800">{formatCurrency(totalCharged)}</p>
           </div>
@@ -401,7 +401,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                   {topAction && (
                     <div className="mt-2 p-2 rounded-md bg-white border border-gray-100">
                       <div className="flex items-start gap-1.5">
-                        <CheckCircle className="w-3.5 h-3.5 text-teal-500 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
                         <div>
                           <p className="text-xs font-medium text-gray-700">Recommended action</p>
                           <p className="text-xs text-gray-600 mt-0.5">{topAction.description}</p>
@@ -417,7 +417,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                       denial.status === 'appealed' ? 'bg-blue-100 text-blue-700' :
                       denial.status === 'resubmitted' ? 'bg-amber-100 text-amber-700' :
                       denial.status === 'under-review' ? 'bg-purple-100 text-purple-700' :
-                      'bg-gray-100 text-gray-600'
+                      'bg-[#F0EDE8] text-gray-600'
                     }`}>
                       {denial.status === 'new' ? 'New' :
                        denial.status === 'appealed' ? 'Appealed' :
@@ -445,7 +445,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
 
       {loadingDenials && (
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center gap-2">
-          <Loader2 className="w-4 h-4 animate-spin text-teal-600" />
+          <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
           <span className="text-xs text-gray-500">Checking for denied claims...</span>
         </div>
       )}
@@ -453,7 +453,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       {/* Expense List */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-teal-600" />
+          <Calendar className="w-4 h-4 text-[#6B9080]" />
           Recent Expenses
         </h3>
         <div className="space-y-3">
@@ -500,11 +500,11 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       </div>
 
       {/* Self-Pay Tip */}
-      <div className="flex items-start gap-2 p-3 bg-teal-50 rounded-xl border border-teal-100">
-        <Info className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-2 p-3 bg-[#6B9080]/10 rounded-xl border border-teal-100">
+        <Info className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
         <div>
           <p className="text-xs font-medium text-teal-800">Paying out-of-pocket?</p>
-          <p className="text-xs text-teal-700 mt-0.5">
+          <p className="text-xs text-[#6B9080] mt-0.5">
             Use the Superbill tab to generate documentation you can submit to your insurance for reimbursement.
           </p>
         </div>
@@ -525,7 +525,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
           must connect their plan before we can show dollar amounts. */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Shield className="w-4 h-4 text-teal-600" />
+          <Shield className="w-4 h-4 text-[#6B9080]" />
           Deductible &amp; Out-of-Pocket Max
         </h3>
         {demo ? (
@@ -535,8 +535,8 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                 <span className="text-gray-600">Individual Deductible</span>
                 <span className="font-medium text-gray-900">$450 / $1,500</span>
               </div>
-              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                <div className="h-full bg-teal-500 rounded-full" style={{ width: '30%' }} />
+              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="h-full bg-primary rounded-full" style={{ width: '30%' }} />
               </div>
               <p className="text-xs text-gray-400 mt-0.5">$1,050 remaining until deductible is met</p>
             </div>
@@ -545,7 +545,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                 <span className="text-gray-600">Out-of-Pocket Maximum</span>
                 <span className="font-medium text-gray-900">$470 / $6,000</span>
               </div>
-              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
               </div>
               <p className="text-xs text-gray-400 mt-0.5">After this, insurance covers 100%</p>
@@ -563,7 +563,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
       {/* Benefits */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <h3 className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Heart className="w-4 h-4 text-teal-600" />
+          <Heart className="w-4 h-4 text-[#6B9080]" />
           Your Benefits
         </h3>
         <div className="space-y-4">
@@ -593,9 +593,9 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                     {b.unit === 'dollars' ? formatCurrency(b.remaining) : `${b.remaining} ${b.unit}`} remaining
                   </span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                   <div
-                    className={`h-full rounded-full ${isLow ? 'bg-red-400' : 'bg-teal-500'}`}
+                    className={`h-full rounded-full ${isLow ? 'bg-red-400' : 'bg-primary'}`}
                     style={{ width: `${usedPercent}%` }}
                   />
                 </div>
@@ -725,7 +725,7 @@ export default function ClaimsDashboard({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-700 to-emerald-600 text-white px-4 pt-12 pb-4">
         <nav aria-label="Coverage navigation" className="mb-3 flex items-center gap-3">
@@ -747,7 +747,7 @@ export default function ClaimsDashboard({
           <button
             type="button"
             onClick={() => setActiveTab('superbill')}
-            className="action-button ml-auto min-h-11 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-teal-700 shadow-sm transition-colors hover:bg-teal-50"
+            className="action-button ml-auto min-h-11 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-[#6B9080] shadow-sm transition-colors hover:bg-[#6B9080]/10"
           >
             Generate superbill
           </button>
@@ -783,16 +783,16 @@ export default function ClaimsDashboard({
         {activeTab === 'superbill' && (
           <Suspense fallback={
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-              <div className="animate-spin w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full mx-auto mb-3" />
+              <div className="animate-spin w-8 h-8 border-2 border-[#6B9080] border-t-transparent rounded-full mx-auto mb-3" />
               <p className="text-sm text-gray-500">Loading superbill generator...</p>
             </div>
           }>
             <div className="space-y-3">
-              <div className="flex items-start gap-2 p-3 bg-teal-50 rounded-xl border border-teal-100">
-                <Info className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+              <div className="flex items-start gap-2 p-3 bg-[#6B9080]/10 rounded-xl border border-teal-100">
+                <Info className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-xs font-medium text-teal-800">What&apos;s a superbill?</p>
-                  <p className="text-xs text-teal-700 mt-0.5">
+                  <p className="text-xs text-[#6B9080] mt-0.5">
                     A superbill is a detailed receipt from your provider. If you pay out-of-pocket,
                     you can submit this to your insurance company to request reimbursement.
                   </p>

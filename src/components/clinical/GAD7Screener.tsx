@@ -140,7 +140,7 @@ const getSeverityInfo = (severity: string) => {
     default:
       return {
         label: 'Unknown',
-        color: 'bg-gray-100 text-gray-700',
+        color: 'bg-[#F0EDE8] text-gray-700',
         bgColor: 'from-gray-50 to-gray-100',
         borderColor: 'border-gray-200',
         description: '',
@@ -284,7 +284,7 @@ export function GAD7Screener({
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <History className="w-5 h-5 text-teal-600" />
+            <History className="w-5 h-5 text-[#6B9080]" />
             Assessment History
           </h2>
           <Button variant="outline" onClick={() => setShowHistoryView(false)}>
@@ -294,7 +294,7 @@ export function GAD7Screener({
 
         {isLoadingHistory ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
           </div>
         ) : history.length === 0 ? (
           <div className="text-center py-12">
@@ -308,14 +308,14 @@ export function GAD7Screener({
           <div className="space-y-3 sm:space-y-4">
             {/* Trend Summary */}
             {history.length >= 2 && (
-              <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
+              <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
                 <p className="text-sm text-gray-600 dark:text-slate-400 mb-2">Score Trend</p>
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="flex items-end gap-1 h-16">
                     {history.slice(0, 5).reverse().map((h, i) => (
                       <div
                         key={h.id}
-                        className="w-8 bg-teal-500 rounded-t transition-all"
+                        className="w-8 bg-primary rounded-t transition-all"
                         style={{ height: `${(h.totalScore / 21) * 100}%`, minHeight: '4px' }}
                         title={`Score: ${h.totalScore}`}
                       />
@@ -398,7 +398,7 @@ export function GAD7Screener({
 
           {/* Score visualization */}
           <div className="mb-4">
-            <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-3 bg-[#E8E4DF] dark:bg-slate-700 rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all ${
                   result.severity === 'minimal' ? 'bg-green-500' :
@@ -486,7 +486,7 @@ export function GAD7Screener({
       <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <Heart className="w-5 h-5 text-teal-600" />
+            <Heart className="w-5 h-5 text-[#6B9080]" />
             GAD-7 Anxiety Screening
           </h2>
           {showHistory && history.length > 0 && (
@@ -510,9 +510,9 @@ export function GAD7Screener({
           <span>Question {currentQuestion + 1} of 7</span>
           <span>{Math.round(progress)}% complete</span>
         </div>
-        <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
           <div
-            className="h-full bg-teal-500 transition-all duration-300"
+            className="h-full bg-primary transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -531,8 +531,8 @@ export function GAD7Screener({
               onClick={() => handleAnswer(option.value)}
               className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                 answers[currentQuestion] === option.value
-                  ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30'
-                  : 'border-gray-200 dark:border-slate-700 hover:border-teal-300 hover:bg-gray-50 dark:hover:bg-slate-800'
+                  ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-teal-900/30'
+                  : 'border-gray-200 dark:border-slate-700 hover:border-[#6B9080]/30 hover:bg-[#FAF7F2] dark:hover:bg-slate-800'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -541,7 +541,7 @@ export function GAD7Screener({
                   <span className="text-sm text-gray-500 dark:text-slate-400 ml-2">({option.days})</span>
                 </div>
                 {answers[currentQuestion] === option.value && (
-                  <CheckCircle className="w-5 h-5 text-teal-600" />
+                  <CheckCircle className="w-5 h-5 text-[#6B9080]" />
                 )}
               </div>
             </button>
@@ -567,10 +567,10 @@ export function GAD7Screener({
               onClick={() => setCurrentQuestion(i)}
               className={`w-2.5 h-2.5 rounded-full transition-all ${
                 i === currentQuestion
-                  ? 'bg-teal-600 scale-125'
+                  ? 'bg-primary scale-125'
                   : answers[i] !== null
                   ? 'bg-teal-300'
-                  : 'bg-gray-200 dark:bg-slate-700'
+                  : 'bg-[#E8E4DF] dark:bg-slate-700'
               }`}
             />
           ))}
@@ -587,7 +587,7 @@ export function GAD7Screener({
       </div>
 
       {/* Info */}
-      <div className="mt-8 p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
+      <div className="mt-8 p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-gray-400 mt-0.5" />
           <div>

@@ -68,7 +68,7 @@ const shortcutCategories: ShortcutCategory[] = [
 
 function KeyboardKey({ children }: { children: React.ReactNode }) {
   return (
-    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-gray-100 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded text-xs font-mono font-medium text-gray-700 dark:text-gray-300 shadow-sm">
+    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-[#F0EDE8] dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded text-xs font-mono font-medium text-gray-700 dark:text-gray-300 shadow-sm">
       {children}
     </kbd>
   );
@@ -120,8 +120,8 @@ export function KeyboardHelpModal() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
-              <Keyboard className="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+            <div className="p-2 bg-[#6B9080]/10 dark:bg-cyan-900/20 rounded-lg">
+              <Keyboard className="w-5 h-5 text-[#6B9080] dark:text-cyan-400" />
             </div>
             <h2
               id="keyboard-help-title"
@@ -177,7 +177,7 @@ export function KeyboardHelpModal() {
           </div>
 
           {/* Tips */}
-          <div className="mt-6 p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg">
+          <div className="mt-6 p-4 bg-[#6B9080]/10 dark:bg-cyan-900/20 rounded-lg">
             <h3 className="text-sm font-semibold text-cyan-800 dark:text-cyan-300 mb-2">
               Tips for keyboard navigation
             </h3>
@@ -191,7 +191,7 @@ export function KeyboardHelpModal() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-900">
           <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             Press <KeyboardKey>Esc</KeyboardKey> to close this dialog
           </p>

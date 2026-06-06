@@ -349,7 +349,7 @@ export function CoverageChatFlow({
       <div className="flex-shrink-0 border-b border-slate-200 bg-gradient-to-r from-teal-50 to-white p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -379,7 +379,7 @@ export function CoverageChatFlow({
           >
             {message.type === 'aminy' && (
               <div className="flex items-start gap-2 max-w-[80%]">
-                <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
@@ -388,7 +388,7 @@ export function CoverageChatFlow({
               </div>
             )}
             {message.type === 'user' && (
-              <div className="bg-teal-500 rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%]">
+              <div className="bg-primary rounded-2xl rounded-tr-none px-4 py-3 max-w-[80%]">
                 <p className="text-sm text-white leading-relaxed">{message.content}</p>
               </div>
             )}
@@ -397,7 +397,7 @@ export function CoverageChatFlow({
         {isProcessing && (
           <div className="flex justify-start">
             <div className="flex items-start gap-2 max-w-[80%]">
-              <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div className="bg-slate-100 rounded-2xl rounded-tl-none px-4 py-3">
@@ -452,7 +452,7 @@ export function CoverageChatFlow({
                 <button
                   key={option.value}
                   onClick={() => handleRadioSelect(option.value)}
-                  className="w-full text-left p-4 rounded-lg border-2 border-slate-200 hover:border-teal-500 hover:bg-teal-50 transition-all"
+                  className="w-full text-left p-4 rounded-lg border-2 border-slate-200 hover:border-[#6B9080] hover:bg-[#6B9080]/10 transition-all"
                 >
                   <div className="font-medium text-slate-900">{option.label}</div>
                   {option.description && (
@@ -471,8 +471,8 @@ export function CoverageChatFlow({
                     key={option.value}
                     className={`flex items-start gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                       selectedOptions.includes(option.value)
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-slate-200 hover:border-teal-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-slate-200 hover:border-[#6B9080]/30'
                     }`}
                   >
                     <input

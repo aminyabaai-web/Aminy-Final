@@ -103,7 +103,7 @@ export function OnboardingQuickStart({
             <div
               key={s}
               className={`h-1 flex-1 rounded-full transition-all duration-500 ${
-                s <= step ? 'bg-teal-500' : 'bg-gray-200'
+                s <= step ? 'bg-primary' : 'bg-[#E8E4DF]'
               }`}
             />
           ))}
@@ -126,7 +126,7 @@ export function OnboardingQuickStart({
         {step === 1 && (
           <div className="w-full max-w-sm text-center animate-in fade-in slide-in-from-right duration-500">
             {/* Aminy logo/icon */}
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center mx-auto mb-6 shadow-lg">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
 
@@ -151,7 +151,7 @@ export function OnboardingQuickStart({
                   onChange={(e) => setChildName(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
                   placeholder="e.g., Alex"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none text-lg transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#6B9080] focus:ring-2 focus:ring-teal-500/20 outline-none text-lg transition-all"
                   autoComplete="off"
                   aria-describedby="name-hint"
                 />
@@ -163,7 +163,7 @@ export function OnboardingQuickStart({
               {/* Age slider */}
               <div>
                 <label htmlFor="child-age" className="block text-sm font-medium text-gray-700 mb-2 text-left">
-                  Age: <span className="text-teal-600 font-bold">{childAge} years old</span>
+                  Age: <span className="text-[#6B9080] font-bold">{childAge} years old</span>
                 </label>
                 <input
                   id="child-age"
@@ -172,7 +172,7 @@ export function OnboardingQuickStart({
                   max={18}
                   value={childAge}
                   onChange={(e) => setChildAge(parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-500"
+                  className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-teal-500"
                   aria-valuemin={2}
                   aria-valuemax={18}
                   aria-valuenow={childAge}
@@ -188,7 +188,7 @@ export function OnboardingQuickStart({
               <button
                 onClick={handleNameSubmit}
                 disabled={childName.trim().length < 1}
-                className="w-full py-3.5 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                className="w-full py-3.5 bg-primary hover:bg-[#6B9080] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
               >
                 Continue
                 <ChevronRight size={18} />
@@ -212,13 +212,13 @@ export function OnboardingQuickStart({
                 <button
                   key={c.id}
                   onClick={() => handleConcernSelect(c.id)}
-                  className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50/50 transition-all active:scale-[0.98] text-left group"
+                  className="w-full flex items-center gap-4 p-4 rounded-xl border border-gray-200 hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/50 transition-all active:scale-[0.98] text-left group"
                 >
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform`}>
                     <c.icon className="w-5 h-5 text-white" />
                   </div>
                   <span className="font-medium text-gray-800">{c.label}</span>
-                  <ArrowRight size={16} className="ml-auto text-gray-400 group-hover:text-teal-500 transition-colors" />
+                  <ArrowRight size={16} className="ml-auto text-gray-400 group-hover:text-primary transition-colors" />
                 </button>
               ))}
             </div>
@@ -271,10 +271,10 @@ export function OnboardingQuickStart({
               {/* Option 2: Talk to Aminy */}
               <button
                 onClick={() => handleDestination('chat')}
-                className="w-full p-5 rounded-2xl bg-white border-2 border-gray-200 text-left hover:border-teal-300 hover:bg-teal-50/30 transition-all active:scale-[0.98]"
+                className="w-full p-5 rounded-2xl bg-white border-2 border-gray-200 text-left hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-all active:scale-[0.98]"
               >
                 <div className="flex items-start gap-3">
-                  <MessageCircle className="w-6 h-6 text-teal-600 flex-shrink-0 mt-0.5" />
+                  <MessageCircle className="w-6 h-6 text-[#6B9080] flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-semibold text-gray-900 text-base">Talk to Aminy AI</div>
                     <div className="text-sm text-gray-500 mt-0.5">

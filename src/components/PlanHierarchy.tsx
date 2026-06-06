@@ -320,7 +320,7 @@ export function PlanHierarchy({
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-slate-700">Overall Progress</span>
-              <span className="text-sm font-semibold text-teal-600">{calculateOverallProgress()}%</span>
+              <span className="text-sm font-semibold text-[#6B9080]">{calculateOverallProgress()}%</span>
             </div>
             <Progress value={calculateOverallProgress()} className="h-2" />
           </div>
@@ -330,9 +330,9 @@ export function PlanHierarchy({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Goal Recommender */}
         {aiRecommendations.length > 0 && showAIRecommendations && (
-          <Card className="p-5 bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200">
+          <Card className="p-5 bg-gradient-to-br from-teal-50 to-white border-2 border-[#6B9080]/20">
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
@@ -359,11 +359,11 @@ export function PlanHierarchy({
               {aiRecommendations.map((rec) => (
                 <div
                   key={rec.id}
-                  className="p-4 bg-white rounded-lg border border-teal-200"
+                  className="p-4 bg-white rounded-lg border border-[#6B9080]/20"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-teal-500" />
+                      <Sparkles className="w-4 h-4 text-primary" />
                       <h4 className="font-medium text-slate-900">{rec.title}</h4>
                     </div>
                     <Badge className={getConfidenceColor(rec.confidence)}>
@@ -373,7 +373,7 @@ export function PlanHierarchy({
                   
                   <p className="text-sm text-slate-700 mb-2">{rec.reason}</p>
                   
-                  <div className="p-3 bg-teal-50 rounded-md mb-3">
+                  <div className="p-3 bg-[#6B9080]/10 rounded-md mb-3">
                     <p className="text-sm text-teal-900">
                       <strong>Suggestion:</strong> {rec.suggestion}
                     </p>
@@ -383,7 +383,7 @@ export function PlanHierarchy({
                     <Button
                       size="sm"
                       onClick={() => handleAcceptRecommendation(rec.id)}
-                      className="bg-teal-500 hover:bg-teal-600"
+                      className="bg-primary hover:bg-primary"
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Use This
@@ -529,8 +529,8 @@ export function PlanHierarchy({
             <CollapsibleTrigger className="w-full">
               <div className="p-5 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                    <CalendarDays className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
+                    <CalendarDays className="w-6 h-6 text-[#6B9080]" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
@@ -583,7 +583,7 @@ export function PlanHierarchy({
                       <div className="mb-3 ml-7">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium text-slate-700">Week Progress</span>
-                          <span className="text-sm font-semibold text-teal-600">{week.progress}%</span>
+                          <span className="text-sm font-semibold text-[#6B9080]">{week.progress}%</span>
                         </div>
                         <Progress value={week.progress} className="h-2" />
                       </div>
@@ -597,12 +597,12 @@ export function PlanHierarchy({
                             onClick={() => handleToggleDailyAction(week.id, action.id)}
                             className={`w-full flex items-center gap-3 p-3 rounded-md border transition-all ${
                               action.completed
-                                ? 'bg-teal-50 border-teal-200'
-                                : 'bg-white border-slate-200 hover:border-teal-300'
+                                ? 'bg-[#6B9080]/10 border-[#6B9080]/20'
+                                : 'bg-white border-slate-200 hover:border-[#6B9080]/30'
                             }`}
                           >
                             {action.completed ? (
-                              <CheckCircle className="w-4 h-4 text-teal-600 flex-shrink-0" />
+                              <CheckCircle className="w-4 h-4 text-[#6B9080] flex-shrink-0" />
                             ) : (
                               <Circle className="w-4 h-4 text-slate-400 flex-shrink-0" />
                             )}

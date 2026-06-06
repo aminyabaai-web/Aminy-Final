@@ -408,7 +408,7 @@ export function PreCallSetup({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 flex flex-col">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-4 py-4">
         <div className="max-w-2xl mx-auto">
@@ -477,7 +477,7 @@ export function PreCallSetup({
               <h2 className="font-semibold text-gray-900 dark:text-white">Device Check</h2>
               <button
                 onClick={() => setShowDeviceSettings(!showDeviceSettings)}
-                className="flex items-center text-sm text-teal-600 dark:text-teal-400"
+                className="flex items-center text-sm text-[#6B9080] dark:text-primary"
               >
                 <Settings className="w-4 h-4 mr-1" />
                 Settings
@@ -490,7 +490,7 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.camera === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-slate-700'
+                    status.camera === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
                   }`}>
                     <Video className={`w-5 h-5 ${
                       status.camera === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-gray-500'
@@ -510,7 +510,7 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.microphone === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-slate-700'
+                    status.microphone === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
                   }`}>
                     <Mic className={`w-5 h-5 ${
                       status.microphone === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-gray-500'
@@ -530,7 +530,7 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.speaker === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-gray-100 dark:bg-slate-700'
+                    status.speaker === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
                   }`}>
                     <Volume2 className={`w-5 h-5 ${
                       status.speaker === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-gray-500'
@@ -547,7 +547,7 @@ export function PreCallSetup({
                   <button
                     onClick={testSpeaker}
                     disabled={testingAudio}
-                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline disabled:opacity-50"
+                    className="text-xs text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
                   >
                     {testingAudio ? 'Playing...' : 'Test'}
                   </button>
@@ -561,7 +561,7 @@ export function PreCallSetup({
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     status.network === 'good' ? 'bg-green-100 dark:bg-green-900/30' :
                     status.network === 'fair' ? 'bg-yellow-100 dark:bg-yellow-900/30' :
-                    'bg-gray-100 dark:bg-slate-700'
+                    'bg-[#F0EDE8] dark:bg-slate-700'
                   }`}>
                     {status.network === 'poor' ? (
                       <WifiOff className="w-5 h-5 text-red-500" />
@@ -598,7 +598,7 @@ export function PreCallSetup({
                   <button
                     onClick={checkNetworkQuality}
                     disabled={status.network === 'checking'}
-                    className="text-xs text-teal-600 dark:text-teal-400 hover:underline disabled:opacity-50"
+                    className="text-xs text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
                   >
                     {status.network === 'checking' ? 'Testing...' : 'Retest'}
                   </button>
@@ -609,7 +609,7 @@ export function PreCallSetup({
 
             {/* Device Settings Dropdown */}
             {showDeviceSettings && devices.cameras.length > 0 && (
-              <div className="p-4 bg-gray-50 dark:bg-slate-900 space-y-3 sm:space-y-4">
+              <div className="p-4 bg-[#FAF7F2] dark:bg-slate-900 space-y-3 sm:space-y-4">
                 {/* Camera Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -717,7 +717,7 @@ export function PreCallSetup({
                       }}
                       className={`mt-3 px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                         audioOnlyMode
-                          ? 'bg-teal-600 text-white hover:bg-teal-700'
+                          ? 'bg-primary text-white hover:bg-[#6B9080]'
                           : 'bg-white dark:bg-slate-800 text-orange-700 dark:text-orange-300 border border-orange-300 dark:border-orange-700 hover:bg-orange-100 dark:hover:bg-orange-900/30'
                       }`}
                     >
@@ -790,7 +790,7 @@ export function PreCallSetup({
         <div className="max-w-2xl mx-auto flex items-center space-x-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-3 px-4 rounded-xl border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+            className="flex-1 py-3 px-4 rounded-xl border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-colors"
           >
             Cancel
           </button>
@@ -798,7 +798,7 @@ export function PreCallSetup({
           <Button
             onClick={onReady}
             disabled={!allReady}
-            className="flex-1 py-3 min-h-[48px] bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-3 min-h-[48px] bg-primary hover:bg-[#6B9080] text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {audioOnlyMode ? (
               <>

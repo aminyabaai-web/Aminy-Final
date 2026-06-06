@@ -227,15 +227,15 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 </div>
               </div>
 
-              <div className="p-4 bg-teal-50 rounded-xl">
+              <div className="p-4 bg-[#6B9080]/10 rounded-xl">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-teal-700">Receptive</span>
+                  <span className="text-sm font-medium text-[#6B9080]">Receptive</span>
                   {renderTrendIcon(receptiveSummary.trend)}
                 </div>
                 <div className="text-xl sm:text-2xl font-bold text-teal-900">
                   {receptiveSummary.averageAccuracy}%
                 </div>
-                <div className="text-xs text-teal-600 mt-1">
+                <div className="text-xs text-[#6B9080] mt-1">
                   {receptiveSummary.sessionCount} sessions tracked
                 </div>
               </div>
@@ -395,7 +395,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                                       className={`flex-1 py-2 text-xs rounded transition-colors ${
                                         sound.currentAccuracy === acc
                                           ? 'bg-green-600 text-white'
-                                          : 'bg-gray-100 hover:bg-gray-200'
+                                          : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
                                       }`}
                                     >
                                       {acc}%
@@ -422,7 +422,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
               {/* Receptive */}
               <div>
                 <h3 className="font-medium text-gray-700 mb-3 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-teal-500 rounded-full" />
+                  <span className="w-2 h-2 bg-primary rounded-full" />
                   Receptive Language
                 </h3>
                 <p className="text-sm text-gray-500 mb-3">Understanding what others say</p>
@@ -430,7 +430,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                   {RECEPTIVE_LANGUAGE_SKILLS.slice(0, 6).map((skill) => (
                     <div
                       key={skill.id}
-                      className="p-3 border rounded-lg hover:border-teal-300 cursor-pointer transition-colors"
+                      className="p-3 border rounded-lg hover:border-[#6B9080]/30 cursor-pointer transition-colors"
                     >
                       <div className="font-medium text-sm">{skill.name}</div>
                       <div className="text-xs text-gray-500">{skill.ageRange}</div>
@@ -484,7 +484,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 {CORE_VOCABULARY_STARTER.slice(0, 20).map((word) => (
                   <span
                     key={word}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                    className="px-3 py-1 bg-[#F0EDE8] text-gray-700 rounded-full text-sm"
                   >
                     {word}
                   </span>

@@ -171,7 +171,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         onValueChange={(value) => updateProfile('deviceType', value)}
         className="space-y-3"
       >
-        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#FAF7F2] transition-colors">
           <RadioGroupItem value="this-device" id="this-device" />
           <Label htmlFor="this-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
@@ -184,7 +184,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
           </Label>
         </div>
 
-        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#FAF7F2] transition-colors">
           <RadioGroupItem value="another-device" id="another-device" />
           <Label htmlFor="another-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
@@ -337,7 +337,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
             </p>
           </div>
 
-          <Card className="p-6 text-center bg-gray-50">
+          <Card className="p-6 text-center bg-[#FAF7F2]">
             {/* Mock QR Code */}
             <div className="w-32 h-32 bg-white border-2 border-gray-300 rounded-lg mx-auto mb-4 flex items-center justify-center">
               <QrCode className="w-16 h-16 text-gray-400" />

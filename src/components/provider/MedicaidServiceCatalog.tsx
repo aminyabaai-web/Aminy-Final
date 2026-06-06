@@ -138,7 +138,7 @@ const CATEGORY_LABELS: Record<ServiceCode['category'], string> = {
 };
 
 const CATEGORY_COLORS: Record<ServiceCode['category'], string> = {
-  habilitation: 'bg-teal-100 text-teal-700',
+  habilitation: 'bg-[#6B9080]/10 text-[#6B9080]',
   'personal-care': 'bg-blue-100 text-blue-700',
   employment: 'bg-green-100 text-green-700',
   companion: 'bg-violet-100 text-violet-700',
@@ -180,11 +180,11 @@ function ServiceCard({ service }: { service: ServiceCode }) {
             </div>
           </div>
           <div className="flex gap-2 mt-2">
-            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.evvRequired ? 'bg-red-50 text-red-700' : 'bg-gray-100 text-gray-500'}`}>
+            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.evvRequired ? 'bg-red-50 text-red-700' : 'bg-[#F0EDE8] text-gray-500'}`}>
               {service.evvRequired ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
               EVV {service.evvRequired ? 'required' : 'not required'}
             </div>
-            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.priorAuthRequired ? 'bg-orange-50 text-orange-700' : 'bg-gray-100 text-gray-500'}`}>
+            <div className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${service.priorAuthRequired ? 'bg-orange-50 text-orange-700' : 'bg-[#F0EDE8] text-gray-500'}`}>
               {service.priorAuthRequired ? <AlertCircle className="w-3 h-3" /> : <CheckCircle className="w-3 h-3" />}
               {service.priorAuthRequired ? 'Prior auth required' : 'No prior auth'}
             </div>
@@ -210,7 +210,7 @@ function ServiceCard({ service }: { service: ServiceCode }) {
                 <ul className="space-y-1">
                   {service.docRequirements.map((req, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                      <CheckCircle className="w-3.5 h-3.5 text-teal-500 mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
                       {req}
                     </li>
                   ))}
@@ -243,12 +243,12 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10 px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
@@ -265,7 +265,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by code or name..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:border-teal-400 focus:outline-none"
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:border-[#6B9080] focus:outline-none"
           />
         </div>
 
@@ -277,8 +277,8 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
               onClick={() => setFilterCategory(cat)}
               className={`text-xs px-3 py-1.5 rounded-full whitespace-nowrap font-medium transition-colors ${
                 filterCategory === cat
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? 'bg-primary text-white'
+                  : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
               }`}
             >
               {cat === 'all' ? 'All' : CATEGORY_LABELS[cat]}

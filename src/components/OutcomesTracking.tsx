@@ -264,7 +264,7 @@ export function OutcomesTracking({
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
-          <RefreshCw className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-4" />
+          <RefreshCw className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
           <p className="text-gray-600">Loading outcomes data...</p>
         </div>
       </div>
@@ -402,7 +402,7 @@ export function OutcomesTracking({
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {caregiverMetrics.parentWellbeing.stressLevel !== null && (
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
+              <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
                 <div className={`text-xl sm:text-2xl font-bold ${
                   caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
                   caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
@@ -421,14 +421,14 @@ export function OutcomesTracking({
               </div>
             )}
             {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
-              <div className="text-center p-4 bg-gray-50 rounded-lg">
-                <div className="text-xl sm:text-2xl font-bold text-teal-600">
+              <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+                <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
                   {caregiverMetrics.parentWellbeing.confidenceScore}%
                 </div>
                 <div className="text-sm text-gray-600">Confidence Score</div>
               </div>
             )}
-            <div className="text-center p-4 bg-gray-50 rounded-lg">
+            <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
               <div className="text-xl sm:text-2xl font-bold text-violet-600">
                 {caregiverMetrics.parentWellbeing.supportSessions}
               </div>
@@ -674,7 +674,7 @@ export function OutcomesTracking({
           {/* Engagement */}
           <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
-              <Activity className="w-4 h-4 text-teal-500" />
+              <Activity className="w-4 h-4 text-primary" />
               Engagement
             </h3>
             <div className="space-y-3">
@@ -775,7 +775,7 @@ function MetricCard({
   color: 'teal' | 'violet' | 'pink' | 'blue' | 'green' | 'red' | 'amber';
 }) {
   const colorClasses = {
-    teal: 'bg-teal-100 text-teal-600',
+    teal: 'bg-[#6B9080]/10 text-[#6B9080]',
     violet: 'bg-violet-100 text-violet-600',
     pink: 'bg-pink-100 text-pink-600',
     blue: 'bg-blue-100 text-blue-600',
@@ -861,8 +861,8 @@ export function OutcomesWidget({
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-center">
-        <div className="p-2 bg-teal-50 rounded-lg">
-          <div className="text-lg font-bold text-teal-600">
+        <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+          <div className="text-lg font-bold text-[#6B9080]">
             {goalsAchieved}/{totalGoals}
           </div>
           <p className="text-xs text-gray-600">Goals</p>

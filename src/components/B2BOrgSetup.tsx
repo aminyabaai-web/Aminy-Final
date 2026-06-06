@@ -114,7 +114,7 @@ export function B2BOrgSetup({
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-gray-100 rounded-lg" aria-label="Back">
+          <button onClick={onBack} className="p-2 hover:bg-[#F0EDE8] rounded-lg" aria-label="Back">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -128,7 +128,7 @@ export function B2BOrgSetup({
         <div className="max-w-2xl mx-auto mt-4 flex gap-2">
           {(['org-info', 'invite-team', 'review'] as SetupStep[]).map((s, i) => (
             <div key={s} className={`flex-1 h-1.5 rounded-full ${
-              ['org-info', 'invite-team', 'review'].indexOf(step) >= i ? 'bg-blue-600' : 'bg-gray-200'
+              ['org-info', 'invite-team', 'review'].indexOf(step) >= i ? 'bg-blue-600' : 'bg-[#E8E4DF]'
             }`} />
           ))}
         </div>
@@ -257,7 +257,7 @@ export function B2BOrgSetup({
 
                 {teamMembers.map((member) => (
                   <div key={member.email} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200">
-                    <div className="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">
+                    <div className="w-8 h-8 bg-[#E8E4DF] text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">
                       {member.email[0].toUpperCase()}
                     </div>
                     <div className="flex-1">
@@ -284,7 +284,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('org-info')}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50"
+                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-[#FAF7F2]"
                 >
                   Back
                 </button>
@@ -340,7 +340,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('invite-team')}
-                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50"
+                  className="flex-1 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-[#FAF7F2]"
                 >
                   Back
                 </button>

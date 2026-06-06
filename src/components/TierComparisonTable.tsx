@@ -102,7 +102,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
             <tr className="border-b border-gray-200">
               <th className="text-left py-2 font-medium text-muted-foreground">Feature</th>
               <th className="text-center py-2 font-medium text-gray-700">Core</th>
-              <th className="text-center py-2 font-medium text-teal-700">Pro</th>
+              <th className="text-center py-2 font-medium text-[#6B9080]">Pro</th>
               <th className="text-center py-2 font-medium text-gray-700">Family</th>
             </tr>
           </thead>
@@ -162,13 +162,13 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
                 <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.core.monthly}</div>
                 <div className="text-xs text-muted-foreground">/month</div>
               </th>
-              <th className="text-center py-4 px-4 bg-teal-50/50 relative">
-                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-teal-600 text-white text-xs">
+              <th className="text-center py-4 px-4 bg-[#6B9080]/10/50 relative">
+                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white text-xs">
                   Most Popular
                 </Badge>
-                <div className="font-semibold text-teal-700 mt-2">Pro</div>
-                <div className="text-xl sm:text-2xl font-bold text-teal-700 mt-1">${tierPricing.pro.monthly}</div>
-                <div className="text-xs text-teal-600">/month</div>
+                <div className="font-semibold text-[#6B9080] mt-2">Pro</div>
+                <div className="text-xl sm:text-2xl font-bold text-[#6B9080] mt-1">${tierPricing.pro.monthly}</div>
+                <div className="text-xs text-[#6B9080]">/month</div>
               </th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Family</div>
@@ -180,16 +180,16 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
           <tbody>
             {features.map((category, catIndex) => (
               <React.Fragment key={catIndex}>
-                <tr className="bg-gray-50">
+                <tr className="bg-[#FAF7F2]">
                   <td colSpan={4} className="py-3 px-4 font-semibold text-sm text-primary">
                     {category.category}
                   </td>
                 </tr>
                 {category.items.map((item, itemIndex) => (
-                  <tr key={itemIndex} className="border-b border-gray-100 hover:bg-gray-50/50">
+                  <tr key={itemIndex} className="border-b border-gray-100 hover:bg-[#FAF7F2]/50">
                     <td className="py-3 px-4 text-sm text-muted-foreground">{item.name}</td>
                     <td className="py-3 px-4 text-center">{renderCell(item.core)}</td>
-                    <td className="py-3 px-4 text-center bg-teal-50/30">{renderCell(item.pro)}</td>
+                    <td className="py-3 px-4 text-center bg-[#6B9080]/10/30">{renderCell(item.pro)}</td>
                     <td className="py-3 px-4 text-center">{renderCell(item.family)}</td>
                   </tr>
                 ))}

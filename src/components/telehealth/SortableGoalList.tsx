@@ -76,7 +76,7 @@ interface DragHandleProps {
 function DragHandle({ listeners, attributes }: DragHandleProps) {
   return (
     <button
-      className="touch-none p-1.5 -ml-1 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-gray-50 transition-colors cursor-grab active:cursor-grabbing"
+      className="touch-none p-1.5 -ml-1 rounded-lg text-gray-400 hover:text-gray-500 hover:bg-[#FAF7F2] transition-colors cursor-grab active:cursor-grabbing"
       aria-label="Drag to reorder"
       {...attributes}
       {...listeners}
@@ -290,7 +290,7 @@ export function SortableGoalList({ goals, onReorder, renderGoalCard }: SortableG
           <div className="opacity-90 shadow-xl rounded-2xl ring-2 ring-cyan-600/40">
             {renderGoalCard(
               activeGoal,
-              <div className="p-1.5 -ml-1 text-cyan-600">
+              <div className="p-1.5 -ml-1 text-[#6B9080]">
                 <GripVertical className="w-5 h-5" />
               </div>
             )}

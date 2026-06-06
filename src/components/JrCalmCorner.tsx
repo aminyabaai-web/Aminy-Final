@@ -511,7 +511,7 @@ export function JrCalmCorner({
                 🎶
               </motion.div>
               <h3 className="text-xl font-bold text-teal-800 mb-2">Pick a sound</h3>
-              <p className="text-teal-600 text-sm mb-6">Close your eyes and listen</p>
+              <p className="text-[#6B9080] text-sm mb-6">Close your eyes and listen</p>
 
               <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto mb-8">
                 {AMBIENT_SOUNDS.map(sound => {
@@ -523,7 +523,7 @@ export function JrCalmCorner({
                       onClick={() => setActiveSound(isActive ? null : sound.id)}
                       className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-2 transition-all ${
                         isActive
-                          ? 'bg-teal-100 border-teal-400 shadow-md'
+                          ? 'bg-[#6B9080]/10 border-[#6B9080] shadow-md'
                           : 'bg-white/50 border-white/50'
                       }`}
                     >
@@ -540,7 +540,7 @@ export function JrCalmCorner({
                               key={i}
                               animate={{ height: [4, 12 + Math.random() * 8, 4] }}
                               transition={{ duration: 0.6 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.1 }}
-                              className="w-1 bg-teal-500 rounded-full"
+                              className="w-1 bg-primary rounded-full"
                             />
                           ))}
                         </motion.div>
@@ -553,7 +553,7 @@ export function JrCalmCorner({
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={handleDone}
-                className="bg-teal-500 text-white px-8 py-3 rounded-2xl font-medium shadow-lg"
+                className="bg-primary text-white px-8 py-3 rounded-2xl font-medium shadow-lg"
               >
                 I'm ready to go back 🌟
               </motion.button>

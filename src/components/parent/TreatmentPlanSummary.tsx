@@ -43,13 +43,13 @@ interface TreatmentPlanSummaryProps {
 
 // Domain colors
 const DOMAIN_COLORS: Record<string, { bg: string; text: string; ring: string }> = {
-  'communication': { bg: 'bg-teal-50', text: 'text-teal-700', ring: 'ring-teal-200' },
+  'communication': { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', ring: 'ring-teal-200' },
   'social-skills': { bg: 'bg-violet-50', text: 'text-violet-700', ring: 'ring-violet-200' },
   'daily-living': { bg: 'bg-blue-50', text: 'text-blue-700', ring: 'ring-blue-200' },
   'behavior-reduction': { bg: 'bg-orange-50', text: 'text-orange-700', ring: 'ring-orange-200' },
   'academic': { bg: 'bg-amber-50', text: 'text-amber-700', ring: 'ring-amber-200' },
   'motor': { bg: 'bg-pink-50', text: 'text-pink-700', ring: 'ring-pink-200' },
-  'sensory': { bg: 'bg-cyan-50', text: 'text-cyan-700', ring: 'ring-cyan-200' },
+  'sensory': { bg: 'bg-[#6B9080]/10', text: 'text-cyan-700', ring: 'ring-cyan-200' },
   'executive-function': { bg: 'bg-indigo-50', text: 'text-indigo-700', ring: 'ring-indigo-200' },
 };
 
@@ -74,7 +74,7 @@ function ProgressRing({ percent, size = 56 }: { percent: number; size?: number }
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#14b8a6"
+          stroke="#6B9080"
           strokeWidth={6}
           strokeDasharray={`${filled} ${circumference}`}
           strokeLinecap="round"
@@ -111,7 +111,7 @@ function ProgressMiniChart({ data }: { data: number[] }) {
             flex: 1,
             height: `${(val / max) * 100}%`,
             minHeight: '3px',
-            backgroundColor: i === data.length - 1 ? '#14b8a6' : '#d1fae5',
+            backgroundColor: i === data.length - 1 ? '#6B9080' : '#d1fae5',
             borderRadius: '2px 2px 0 0',
             transition: 'height 0.5s ease',
           }}
@@ -183,15 +183,15 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
                 <ProgressMiniChart data={sparkline} />
                 <div className="flex justify-between mt-1">
                   <span className="text-xs text-slate-400">8 weeks ago</span>
-                  <span className="text-xs text-teal-600 font-medium">Today: {goal.currentProgressPercent}%</span>
+                  <span className="text-xs text-[#6B9080] font-medium">Today: {goal.currentProgressPercent}%</span>
                 </div>
               </div>
 
               {/* How to help at home */}
-              <div className="bg-teal-50 rounded-xl p-3">
+              <div className="bg-[#6B9080]/10 rounded-xl p-3">
                 <div className="flex items-center gap-1.5 mb-2">
-                  <Home className="w-3.5 h-3.5 text-teal-600" />
-                  <p className="text-xs font-semibold text-teal-700 uppercase tracking-wider">How to help at home</p>
+                  <Home className="w-3.5 h-3.5 text-[#6B9080]" />
+                  <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wider">How to help at home</p>
                 </div>
                 <ul className="space-y-1.5">
                   {goal.howToHelpAtHome.map((tip, i) => (
@@ -317,7 +317,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <Card className="p-5 bg-gradient-to-br from-teal-600 to-cyan-600 border-0 text-white">
+          <Card className="p-5 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] border-0 text-white">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-teal-100 text-xs font-medium uppercase tracking-wider mb-0.5">Overall Progress</p>
@@ -325,7 +325,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
                 <p className="text-teal-100 text-sm mt-0.5">across {plan.goals.length} active goals</p>
               </div>
               <div className="relative">
-                <TrendingUp className="w-16 h-16 text-teal-400/40" />
+                <TrendingUp className="w-16 h-16 text-primary/40" />
               </div>
             </div>
 
@@ -341,8 +341,8 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         {plan.nextSessionDate && (
           <Card className="p-3 bg-white border-slate-200">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-teal-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Calendar className="w-5 h-5 text-teal-600" style={{ width: 18, height: 18 }} />
+              <div className="w-9 h-9 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Calendar className="w-5 h-5 text-[#6B9080]" style={{ width: 18, height: 18 }} />
               </div>
               <div>
                 <p className="text-xs text-slate-400">Next session</p>
@@ -357,7 +357,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         {/* Goals section */}
         <div>
           <h2 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-teal-500" />
+            <CheckCircle className="w-4 h-4 text-primary" />
             Active Goals ({plan.goals.length})
           </h2>
           <div className="space-y-3">

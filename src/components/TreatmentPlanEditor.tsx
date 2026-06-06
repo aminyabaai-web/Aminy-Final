@@ -114,7 +114,7 @@ const DOMAIN_OPTIONS: { value: GoalDomain; label: string; color: string; icon: s
   { value: 'motor', label: 'Motor Skills', color: 'bg-purple-100 text-purple-700', icon: '🏃' },
   { value: 'academic', label: 'Academic', color: 'bg-indigo-100 text-indigo-700', icon: '📚' },
   { value: 'play', label: 'Play Skills', color: 'bg-yellow-100 text-yellow-700', icon: '🎮' },
-  { value: 'self_regulation', label: 'Self-Regulation', color: 'bg-teal-100 text-teal-700', icon: '🧘' },
+  { value: 'self_regulation', label: 'Self-Regulation', color: 'bg-[#6B9080]/10 text-[#6B9080]', icon: '🧘' },
   { value: 'other', label: 'Other', color: 'bg-neutral-100 text-neutral-700', icon: '📋' },
 ];
 
@@ -417,7 +417,7 @@ export function TreatmentPlanEditor({
 
   const getProgressColor = (progress: number) => {
     if (progress >= 80) return 'bg-green-500';
-    if (progress >= 50) return 'bg-teal-500';
+    if (progress >= 50) return 'bg-primary';
     if (progress >= 25) return 'bg-amber-500';
     return 'bg-neutral-300';
   };
@@ -426,7 +426,7 @@ export function TreatmentPlanEditor({
     return (
       <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-neutral-600">Loading treatment plans...</p>
         </div>
       </div>
@@ -443,7 +443,7 @@ export function TreatmentPlanEditor({
         sticky
         actions={
           <Button
-            className="bg-teal-600 hover:bg-teal-700"
+            className="bg-primary hover:bg-[#6B9080]"
             onClick={() => setShowPlanForm(true)}
           >
             <Plus className="w-4 h-4 mr-1" />
@@ -463,7 +463,7 @@ export function TreatmentPlanEditor({
                   <p className="text-sm text-neutral-500">No plans yet</p>
                   <Button
                     size="sm"
-                    className="mt-3 bg-teal-600 hover:bg-teal-700"
+                    className="mt-3 bg-primary hover:bg-[#6B9080]"
                     onClick={() => setShowPlanForm(true)}
                   >
                     Create First Plan
@@ -475,7 +475,7 @@ export function TreatmentPlanEditor({
                     key={plan.id}
                     className={`p-4 cursor-pointer transition-all ${
                       selectedPlan?.id === plan.id
-                        ? 'border-teal-300 bg-teal-50'
+                        ? 'border-[#6B9080]/30 bg-[#6B9080]/10'
                         : 'hover:border-neutral-300 hover:shadow-sm'
                     }`}
                     onClick={() => setSelectedPlan(plan)}
@@ -495,7 +495,7 @@ export function TreatmentPlanEditor({
                       {plan.goals.length} goals • {plan.goals.filter(g => g.status === 'mastered').length} mastered
                     </p>
                     {plan.providerName && (
-                      <p className="text-xs text-teal-600 mt-1">
+                      <p className="text-xs text-[#6B9080] mt-1">
                         By {plan.providerName}
                       </p>
                     )}
@@ -565,7 +565,7 @@ export function TreatmentPlanEditor({
                   {selectedPlan.providerName && (
                     <div className="mt-4 pt-4 border-t border-neutral-100">
                       <p className="text-sm text-neutral-500">
-                        Created by <span className="font-medium text-teal-600">{selectedPlan.providerName}</span>
+                        Created by <span className="font-medium text-[#6B9080]">{selectedPlan.providerName}</span>
                         {selectedPlan.providerCredentials && ` (${selectedPlan.providerCredentials})`}
                       </p>
                     </div>
@@ -576,7 +576,7 @@ export function TreatmentPlanEditor({
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-neutral-900">Progress Overview</h3>
-                    <Badge className="bg-teal-100 text-teal-700">
+                    <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
                       {selectedPlan.goals.filter(g => g.status === 'mastered').length} / {selectedPlan.goals.length} Mastered
                     </Badge>
                   </div>
@@ -585,7 +585,7 @@ export function TreatmentPlanEditor({
                     <div className="text-center py-8">
                       <Target className="w-10 h-10 mx-auto mb-3 text-neutral-300" />
                       <p className="text-neutral-500 mb-3">No goals added yet</p>
-                      <Button onClick={() => setShowGoalForm(true)} className="bg-teal-600 hover:bg-teal-700">
+                      <Button onClick={() => setShowGoalForm(true)} className="bg-primary hover:bg-[#6B9080]">
                         <Plus className="w-4 h-4 mr-1" />
                         Add First Goal
                       </Button>
@@ -748,7 +748,7 @@ export function TreatmentPlanEditor({
                                   </Button>
                                   <Button
                                     size="sm"
-                                    className="bg-teal-600 hover:bg-teal-700"
+                                    className="bg-primary hover:bg-[#6B9080]"
                                     onClick={() => handleSaveProgress(goal.id)}
                                     disabled={isSaving}
                                   >
@@ -815,7 +815,7 @@ export function TreatmentPlanEditor({
                 <p className="text-neutral-500 mb-4">
                   Choose a treatment plan from the sidebar or create a new one
                 </p>
-                <Button onClick={() => setShowPlanForm(true)} className="bg-teal-600 hover:bg-teal-700">
+                <Button onClick={() => setShowPlanForm(true)} className="bg-primary hover:bg-[#6B9080]">
                   <Plus className="w-4 h-4 mr-1" />
                   Create New Plan
                 </Button>
@@ -886,7 +886,7 @@ export function TreatmentPlanEditor({
                       onClick={() => setPlanForm({ ...planForm, reviewFrequency: freq })}
                       className={`flex-1 px-3 py-2 text-sm rounded-lg border transition-colors capitalize ${
                         planForm.reviewFrequency === freq
-                          ? 'bg-teal-100 border-teal-300 text-teal-700'
+                          ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080]'
                           : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
                       }`}
                     >
@@ -902,7 +902,7 @@ export function TreatmentPlanEditor({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
                 onClick={handleSavePlan}
                 disabled={isSaving || !planForm.title}
               >
@@ -1039,7 +1039,7 @@ export function TreatmentPlanEditor({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
                 onClick={handleSaveGoal}
                 disabled={isSaving || !goalForm.title}
               >

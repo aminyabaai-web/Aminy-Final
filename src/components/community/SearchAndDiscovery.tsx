@@ -411,12 +411,12 @@ export function SearchAndDiscovery({
           <Button
             variant={showFilters ? 'default' : 'outline'}
             onClick={() => setShowFilters(!showFilters)}
-            className={showFilters ? 'bg-teal-600' : ''}
+            className={showFilters ? 'bg-primary' : ''}
           >
             <Filter className="w-4 h-4 mr-2" />
             Filters
             {hasActiveFilters && (
-              <span className="ml-1 w-2 h-2 bg-teal-500 rounded-full" />
+              <span className="ml-1 w-2 h-2 bg-primary rounded-full" />
             )}
           </Button>
         </div>
@@ -488,7 +488,7 @@ export function SearchAndDiscovery({
                   type="checkbox"
                   checked={filters.expertOnly}
                   onChange={e => setFilters(prev => ({ ...prev, expertOnly: e.target.checked }))}
-                  className="w-4 h-4 rounded text-teal-600"
+                  className="w-4 h-4 rounded text-[#6B9080]"
                 />
                 <span className="text-sm text-neutral-700 dark:text-slate-300">Expert posts only</span>
               </label>
@@ -514,7 +514,7 @@ export function SearchAndDiscovery({
 
           {isSearching ? (
             <Card className="p-12 flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
             </Card>
           ) : results.length === 0 ? (
             <Card className="p-12 text-center">
@@ -531,7 +531,7 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(result.id)}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-medium flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                       {result.authorName.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -587,7 +587,7 @@ export function SearchAndDiscovery({
           {/* Trending Topics */}
           <Card className="p-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-teal-600" />
+              <TrendingUp className="w-5 h-5 text-[#6B9080]" />
               <h3 className="font-semibold text-neutral-900 dark:text-white">Trending Topics</h3>
             </div>
             <div className="space-y-3">
@@ -630,7 +630,7 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(post.id)}
                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-medium flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                     {post.authorName.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">

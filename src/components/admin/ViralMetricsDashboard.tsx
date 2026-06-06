@@ -60,7 +60,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
     return (
       <Card className={`p-6 ${className}`}>
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
           <span className="ml-2 text-gray-600 dark:text-slate-400">Loading viral metrics...</span>
         </div>
       </Card>
@@ -200,7 +200,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
       {/* Additional Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Users className="w-4 h-4 text-gray-400" />
           <div>
             <p className="text-gray-500 dark:text-slate-400 text-xs">Users Who Invited</p>
@@ -212,7 +212,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-gray-400" />
           <div>
             <p className="text-gray-500 dark:text-slate-400 text-xs">Avg Time to First Invite</p>
@@ -221,7 +221,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-gray-400" />
           <div>
             <p className="text-gray-500 dark:text-slate-400 text-xs">Avg Time to Conversion</p>
@@ -230,7 +230,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <TrendingUp className="w-4 h-4 text-gray-400" />
           <div>
             <p className="text-gray-500 dark:text-slate-400 text-xs">Total Users</p>
@@ -240,12 +240,12 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
       </div>
 
       {/* K-Factor Target */}
-      <div className="mt-4 sm:mt-6 p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg">
+      <div className="mt-4 sm:mt-6 p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 border border-[#6B9080]/20 dark:border-teal-800 rounded-lg">
         <div className="flex items-start gap-3">
-          <Target className="w-5 h-5 text-teal-600 dark:text-teal-400 mt-0.5" />
+          <Target className="w-5 h-5 text-[#6B9080] dark:text-primary mt-0.5" />
           <div>
-            <p className="font-medium text-teal-800 dark:text-teal-300">Target: K &gt; 1.0</p>
-            <p className="text-sm text-teal-700 dark:text-teal-400">
+            <p className="font-medium text-teal-800 dark:text-[#7BA7BC]">Target: K &gt; 1.0</p>
+            <p className="text-sm text-[#6B9080] dark:text-primary">
               {metrics.kFactor >= 1
                 ? "You've achieved viral growth! Each user brings more than one new user."
                 : `Need ${((1 - metrics.kFactor) / metrics.kFactor * 100).toFixed(0)}% more conversions or invites to reach viral threshold.`

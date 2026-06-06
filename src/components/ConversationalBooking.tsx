@@ -244,7 +244,7 @@ function ChatMessage({
         className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           isAI
             ? 'border border-teal-100 bg-white/95 text-slate-800 shadow-sm'
-            : 'bg-teal-600 text-white shadow-sm'
+            : 'bg-primary text-white shadow-sm'
         }`}
       >
         {children}
@@ -272,11 +272,11 @@ function OptionChip({
       onClick={onClick}
       className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all shadow-sm ${
         selected
-          ? 'border-2 border-teal-500 bg-teal-500 text-white'
-          : 'border border-slate-200 bg-white/95 text-slate-700 hover:border-teal-200 hover:bg-teal-50/70'
+          ? 'border-2 border-[#6B9080] bg-primary text-white'
+          : 'border border-slate-200 bg-white/95 text-slate-700 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
       }`}
     >
-      {icon && <span className={selected ? 'text-white' : 'text-teal-600'}>{icon}</span>}
+      {icon && <span className={selected ? 'text-white' : 'text-[#6B9080]'}>{icon}</span>}
       <span className="font-medium">{children}</span>
       {selected && <Check className="w-4 h-4 ml-auto" />}
     </motion.button>
@@ -300,8 +300,8 @@ function ProviderCardMini({
       onClick={onClick}
       className={`w-full flex items-center gap-3 p-4 rounded-2xl text-left transition-all shadow-sm ${
         selected
-          ? 'border-2 border-teal-500 bg-teal-50'
-          : 'border border-slate-200 bg-white/95 hover:border-teal-200 hover:bg-teal-50/70'
+          ? 'border-2 border-[#6B9080] bg-[#6B9080]/10'
+          : 'border border-slate-200 bg-white/95 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
       }`}
     >
       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-lg">
@@ -311,7 +311,7 @@ function ProviderCardMini({
         <div className="flex items-center gap-2">
           <p className="font-semibold text-gray-900 truncate">{provider.name}</p>
           {provider.isAssigned && (
-            <span className="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">
+            <span className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full">
               Your Provider
             </span>
           )}
@@ -320,10 +320,10 @@ function ProviderCardMini({
         <div className="flex items-center gap-2 mt-1">
           <span className="text-sm text-amber-600">★ {provider.rating}</span>
           <span className="text-xs text-gray-400">({provider.reviewCount} reviews)</span>
-          <span className="text-xs text-teal-600 ml-auto">Next: {provider.nextAvailable}</span>
+          <span className="text-xs text-[#6B9080] ml-auto">Next: {provider.nextAvailable}</span>
         </div>
       </div>
-      {selected && <Check className="w-5 h-5 text-teal-600 flex-shrink-0" />}
+      {selected && <Check className="w-5 h-5 text-[#6B9080] flex-shrink-0" />}
     </motion.button>
   );
 }
@@ -663,13 +663,13 @@ export function ConversationalBooking({
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-600">Guided booking</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6B9080]">Guided booking</p>
                 <h2 className="text-lg font-semibold text-slate-900 sm:text-xl">Book calm, supportive care</h2>
                 <p className="mt-1 text-sm text-slate-600">
                   We will keep this simple for {childName} and only show providers available in supported states.
                 </p>
               </div>
-              <div className="ml-auto rounded-2xl border border-teal-100 bg-teal-50/80 px-3 py-2 text-xs text-teal-700">
+              <div className="ml-auto rounded-2xl border border-teal-100 bg-[#6B9080]/10/80 px-3 py-2 text-xs text-[#6B9080]">
                 AZ, MT, and TX cash-pay telehealth are available now.
               </div>
             </div>
@@ -678,7 +678,7 @@ export function ConversationalBooking({
                 <div
                   key={step}
                   className={`h-2 flex-1 rounded-full transition-colors ${
-                    currentStepIndex >= i ? 'bg-teal-500' : 'bg-slate-200'
+                    currentStepIndex >= i ? 'bg-primary' : 'bg-slate-200'
                   }`}
                 />
               ))}
@@ -797,8 +797,8 @@ export function ConversationalBooking({
                   onClick={() => handleProviderPrefSelect('any-available')}
                   className={`w-full rounded-2xl p-4 text-center transition-all shadow-sm ${
                     state.providerPreference === 'any-available'
-                      ? 'border-2 border-teal-500 bg-teal-50 text-teal-700'
-                      : 'border border-slate-200 bg-white/95 text-slate-600 hover:border-teal-200 hover:bg-teal-50/70'
+                      ? 'border-2 border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
+                      : 'border border-slate-200 bg-white/95 text-slate-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
                   }`}
                 >
                   Show me all available providers
@@ -831,7 +831,7 @@ export function ConversationalBooking({
             <>
               <ChatMessage isAI>
                 <div className="flex items-center gap-2 mb-2">
-                  <Shield className="w-5 h-5 text-teal-600" />
+                  <Shield className="w-5 h-5 text-[#6B9080]" />
                   <p className="font-medium">Coverage Coach check</p>
                 </div>
                 {insuranceLoading ? (
@@ -861,7 +861,7 @@ export function ConversationalBooking({
                         type="checkbox"
                         checked={generateSuperbill}
                         onChange={(e) => setGenerateSuperbill(e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                        className="w-4 h-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
                       Prepare a superbill after the visit for reimbursement support
@@ -878,7 +878,7 @@ export function ConversationalBooking({
                         type="checkbox"
                         checked={generateSuperbill}
                         onChange={(e) => setGenerateSuperbill(e.target.checked)}
-                        className="w-4 h-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                        className="w-4 h-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
                       />
                       <FileText className="w-4 h-4" />
                       Prepare a superbill for you to submit later
@@ -893,7 +893,7 @@ export function ConversationalBooking({
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleInsuranceNext}
-                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 text-white shadow-sm transition-colors hover:bg-teal-700"
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 text-white shadow-sm transition-colors hover:bg-[#6B9080]"
                   >
                     <Calendar className="w-4 h-4" />
                     See available times
@@ -1011,8 +1011,8 @@ export function ConversationalBooking({
                   </div>
                   {generateSuperbill && (
                     <div className="flex items-center gap-2 mt-1">
-                      <FileText className="w-4 h-4 text-teal-500" />
-                      <span className="text-xs text-teal-600">Superbill will be prepared after the session</span>
+                      <FileText className="w-4 h-4 text-primary" />
+                      <span className="text-xs text-[#6B9080]">Superbill will be prepared after the session</span>
                     </div>
                   )}
                   <div className="rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs text-slate-600">

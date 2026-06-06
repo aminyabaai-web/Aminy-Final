@@ -255,8 +255,8 @@ export function InsuranceVerification({
                 <h3 className="font-semibold text-gray-900 mb-3">What you'll need:</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                      <CreditCard className="w-4 h-4 text-teal-600" />
+                    <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                      <CreditCard className="w-4 h-4 text-[#6B9080]" />
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Insurance Card</p>
@@ -264,8 +264,8 @@ export function InsuranceVerification({
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center">
-                      <FileText className="w-4 h-4 text-teal-600" />
+                    <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-[#6B9080]" />
                     </div>
                     <div>
                       <p className="font-medium text-gray-900">Member ID & Group Number</p>
@@ -294,7 +294,7 @@ export function InsuranceVerification({
                 )}
                 <Button
                   onClick={() => setStep('front-capture')}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   Start Verification
                   <ChevronRight className="w-4 h-4 ml-2" />
@@ -326,7 +326,7 @@ export function InsuranceVerification({
                 className={`aspect-[1.6/1] rounded-xl border-2 border-dashed flex items-center justify-center cursor-pointer transition-colors ${
                   frontImage
                     ? 'border-green-500 bg-green-50'
-                    : 'border-gray-300 hover:border-teal-500 hover:bg-teal-50'
+                    : 'border-gray-300 hover:border-[#6B9080] hover:bg-[#6B9080]/10'
                 }`}
                 onClick={() => frontInputRef.current?.click()}
               >
@@ -371,7 +371,7 @@ export function InsuranceVerification({
                 </Button>
                 <Button
                   onClick={() => frontInputRef.current?.click()}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   {frontImage ? 'Retake Photo' : 'Take Photo'}
@@ -418,7 +418,7 @@ export function InsuranceVerification({
                 className={`aspect-[1.6/1] rounded-xl border-2 border-dashed flex items-center justify-center cursor-pointer transition-colors ${
                   backImage
                     ? 'border-green-500 bg-green-50'
-                    : 'border-gray-300 hover:border-teal-500 hover:bg-teal-50'
+                    : 'border-gray-300 hover:border-[#6B9080] hover:bg-[#6B9080]/10'
                 }`}
                 onClick={() => backInputRef.current?.click()}
               >
@@ -463,7 +463,7 @@ export function InsuranceVerification({
                 </Button>
                 <Button
                   onClick={() => backInputRef.current?.click()}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   {backImage ? 'Retake Photo' : 'Take Photo'}
@@ -480,7 +480,7 @@ export function InsuranceVerification({
               exit={{ opacity: 0 }}
               className="py-12 text-center"
             >
-              <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-teal-600" />
+              <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-[#6B9080]" />
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Reading Your Card
               </h3>
@@ -493,7 +493,7 @@ export function InsuranceVerification({
                   Scanning card images
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <Loader2 className="w-4 h-4 animate-spin text-teal-500" />
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
                   Extracting member info
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -605,7 +605,7 @@ export function InsuranceVerification({
                 <Button
                   onClick={handleSubmitVerification}
                   disabled={isProcessing || !extractedInfo.memberId}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-primary hover:bg-[#6B9080]"
                 >
                   {isProcessing ? (
                     <>
@@ -695,7 +695,7 @@ export function InsuranceVerification({
                   <DollarSign className="w-4 h-4 mr-2" />
                   Generate Superbill
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button className="flex-1 bg-primary hover:bg-[#6B9080]">
                   Book a Session
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>

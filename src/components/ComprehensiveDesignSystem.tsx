@@ -15,7 +15,7 @@ import {
  * COMPREHENSIVE DESIGN SYSTEM FOR AMINY
  * 
  * A complete, production-ready design system built for Aminy's AI-first experience.
- * Features Apple-clean design with teal accents (#0891b2), white backgrounds, 
+ * Features Apple-clean design with teal accents (#6B9080), white backgrounds, 
  * navy fonts, and minimal styling.
  * 
  * Created for: Figma Make deliverables - Phase 1 Component Library
@@ -222,7 +222,7 @@ export function ComprehensiveDesignSystem() {
         </div>
         
         {/* Chart Placeholder */}
-        <div className="h-32 bg-gray-50 rounded-lg mb-3 flex items-center justify-center">
+        <div className="h-32 bg-[#FAF7F2] rounded-lg mb-3 flex items-center justify-center">
           <span className="text-xs text-gray-400">Chart visualization</span>
         </div>
         
@@ -274,8 +274,8 @@ export function ComprehensiveDesignSystem() {
             <GraduationCap className="w-4 h-4 text-purple-600" />
             <span className="text-sm font-medium text-purple-900">Designed with BCBAs</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-200 rounded-lg">
-            <Sparkles className="w-4 h-4 text-teal-600" />
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg">
+            <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <span className="text-sm font-medium text-teal-900">AI-powered</span>
           </div>
         </div>
@@ -358,13 +358,13 @@ export function ComprehensiveDesignSystem() {
           {[1, 2, 3, 4, 5].map((step, idx) => (
             <React.Fragment key={step}>
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                idx < 2 ? 'bg-accent text-white' : 'bg-gray-200 text-gray-600'
+                idx < 2 ? 'bg-accent text-white' : 'bg-[#E8E4DF] text-gray-600'
               }`}>
                 {idx < 2 ? <Check className="w-4 h-4" /> : step}
               </div>
               {idx < 4 && (
                 <div className={`flex-1 h-0.5 mx-2 ${
-                  idx < 2 ? 'bg-accent' : 'bg-gray-200'
+                  idx < 2 ? 'bg-accent' : 'bg-[#E8E4DF]'
                 }`}></div>
               )}
             </React.Fragment>
@@ -409,9 +409,9 @@ export function ComprehensiveDesignSystem() {
         <h4 className="text-sm font-medium text-muted-foreground">Skeleton Loader</h4>
         <div className="bg-white border border-gray-200 rounded-lg p-4">
           <div className="animate-pulse space-y-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-3/4"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-1/2"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-5/6"></div>
           </div>
         </div>
       </div>
@@ -428,7 +428,7 @@ export function ComprehensiveDesignSystem() {
         <h4 className="text-sm font-medium text-muted-foreground">Colors</h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { name: 'Primary Teal', value: '#0891b2', class: 'bg-cyan-600' },
+            { name: 'Primary Teal', value: '#6B9080', class: 'bg-cyan-600' },
             { name: 'White', value: '#FFFFFF', class: 'bg-white border' },
             { name: 'Navy', value: '#111827', class: 'bg-[#111827]' },
             { name: 'Gray 50', value: '#F9FAFB', class: 'bg-[#F9FAFB] border' },
@@ -542,7 +542,7 @@ export function ComprehensiveDesignSystem() {
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || ButtonShowcase;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -600,7 +600,7 @@ export function ComprehensiveDesignSystem() {
               <h3 className="text-lg sm:text-xl font-semibold text-primary">Modal Example</h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-1 hover:bg-[#F0EDE8] rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

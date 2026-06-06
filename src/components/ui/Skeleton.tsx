@@ -51,7 +51,7 @@ export function Skeleton({
   return (
     <div
       className={`
-        bg-gray-200 dark:bg-slate-700
+        bg-[#E8E4DF] dark:bg-slate-700
         ${roundedClasses[rounded]}
         ${animate ? 'animate-pulse' : ''}
         ${className}
@@ -198,7 +198,7 @@ export function SkeletonTable({
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden ${className}`}>
       {showHeader && (
-        <div className="flex gap-4 p-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+        <div className="flex gap-4 p-4 border-b border-gray-200 dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-800">
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton key={i} height={14} width={`${100 / columns - 2}%`} />
           ))}
@@ -304,7 +304,7 @@ export function SkeletonChart({ className = '' }: { className?: string }) {
               width="100%"
               rounded="sm"
               animate={false}
-              className="bg-gray-200 dark:bg-slate-700"
+              className="bg-[#E8E4DF] dark:bg-slate-700"
             />
           </div>
         ))}

@@ -77,7 +77,7 @@ export function BrowseTopConcerns({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -98,7 +98,7 @@ export function BrowseTopConcerns({
             placeholder="Search concerns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
           />
         </div>
       </div>
@@ -125,7 +125,7 @@ export function BrowseTopConcerns({
                 <p className="text-gray-500 mb-2">No concerns match your search</p>
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="text-cyan-600 font-medium hover:underline"
+                  className="text-[#6B9080] font-medium hover:underline"
                 >
                   Clear search
                 </button>
@@ -180,7 +180,7 @@ export function BrowseTopConcerns({
               recommendedVisitType: 'consult',
               urgencyLevel: 'routine'
             })}
-            className="flex items-center gap-2 text-cyan-600 font-medium text-sm hover:underline"
+            className="flex items-center gap-2 text-[#6B9080] font-medium text-sm hover:underline"
           >
             Describe a different concern
             <ChevronRight className="w-4 h-4" />
@@ -278,7 +278,7 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
       {/* Icon */}
       <div className={`
         w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-3
-        ${isUrgent ? 'bg-amber-50' : 'bg-gray-50'}
+        ${isUrgent ? 'bg-amber-50' : 'bg-[#FAF7F2]'}
       `}>
         {concern.icon || '💭'}
       </div>

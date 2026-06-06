@@ -57,7 +57,7 @@ export function ChildSwitcher({
   // Empty state when no children exist
   if (children.length === 0) {
     return (
-      <div className="p-6 text-center border border-gray-200 rounded-lg bg-gray-50">
+      <div className="p-6 text-center border border-gray-200 rounded-lg bg-[#FAF7F2]">
         <p className="text-sm text-muted-foreground mb-4">
           Add a child to get a plan tailored to them.
         </p>
@@ -97,7 +97,7 @@ export function ChildSwitcher({
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors w-full"
+        className="flex items-center gap-2 p-2 rounded-lg hover:bg-[#F0EDE8] transition-colors w-full"
       >
         <Avatar className="w-8 h-8">
           <AvatarFallback className="bg-accent/20 text-accent font-medium">
@@ -125,7 +125,7 @@ export function ChildSwitcher({
                   onSwitch(child.id);
                   setIsOpen(false);
                 }}
-                className="w-full p-3 flex items-center gap-3 hover:bg-gray-50 transition-colors"
+                className="w-full p-3 flex items-center gap-3 hover:bg-[#FAF7F2] transition-colors"
               >
                 <Avatar className="w-10 h-10">
                   <AvatarFallback className="bg-accent/20 text-accent font-medium">

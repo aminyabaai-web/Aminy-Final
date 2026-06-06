@@ -353,7 +353,7 @@ export function HealthDataIntegration({
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className={`text-lg font-bold ${
                     recentSleep.quality === 'excellent' ? 'text-green-600' :
-                    recentSleep.quality === 'good' ? 'text-teal-600' :
+                    recentSleep.quality === 'good' ? 'text-[#6B9080]' :
                     recentSleep.quality === 'fair' ? 'text-amber-600' :
                     'text-red-600'
                   }`}>
@@ -361,7 +361,7 @@ export function HealthDataIntegration({
                   </span>
                   <span className={`text-xs px-2 py-0.5 rounded-full ${
                     recentSleep.quality === 'excellent' ? 'bg-green-100 text-green-700' :
-                    recentSleep.quality === 'good' ? 'bg-teal-100 text-teal-700' :
+                    recentSleep.quality === 'good' ? 'bg-[#6B9080]/10 text-[#6B9080]' :
                     recentSleep.quality === 'fair' ? 'bg-amber-100 text-amber-700' :
                     'bg-red-100 text-red-700'
                   }`}>
@@ -408,17 +408,17 @@ export function HealthDataIntegration({
 
               {/* Stats grid */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Clock className="w-4 h-4 text-gray-400 mx-auto mb-1" />
                   <p className="text-xs text-gray-500">Bedtime</p>
                   <p className="font-semibold text-gray-900">{recentSleep?.bedtime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Sun className="w-4 h-4 text-gray-400 mx-auto mb-1" />
                   <p className="text-xs text-gray-500">Wake</p>
                   <p className="font-semibold text-gray-900">{recentSleep?.wakeTime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-gray-50 rounded-xl">
+                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <AlertTriangle className="w-4 h-4 text-gray-400 mx-auto mb-1" />
                   <p className="text-xs text-gray-500">Wakeups</p>
                   <p className="font-semibold text-gray-900">{recentSleep?.interruptions ?? '--'}</p>
@@ -427,7 +427,7 @@ export function HealthDataIntegration({
 
               {/* Weekly average */}
               {weeklyAverage && (
-                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-xl">
                   <span className="text-sm text-gray-600">7-Day Average</span>
                   <span className="font-semibold text-gray-900">{weeklyAverage.toFixed(1)} hours</span>
                 </div>
@@ -460,7 +460,7 @@ export function HealthDataIntegration({
  */
 export function SleepBadge({ hours, quality }: { hours: number; quality: SleepData['quality'] }) {
   const color = quality === 'excellent' ? 'bg-green-100 text-green-700' :
-                quality === 'good' ? 'bg-teal-100 text-teal-700' :
+                quality === 'good' ? 'bg-[#6B9080]/10 text-[#6B9080]' :
                 quality === 'fair' ? 'bg-amber-100 text-amber-700' :
                 'bg-red-100 text-red-700';
 

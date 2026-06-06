@@ -481,7 +481,7 @@ export function OnDemandTelehealth({
           ) : providers.length === 0 ? (
             // No providers available
             <Card className="p-6 text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-gray-400" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Verified expert support is not available right now</h3>
@@ -676,7 +676,7 @@ export function OnDemandTelehealth({
           </div>
 
           {/* Price breakdown */}
-          <Card className="p-4 bg-gray-50">
+          <Card className="p-4 bg-[#FAF7F2]">
             <h3 className="font-medium text-gray-900 mb-3">Price Breakdown</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -791,7 +791,7 @@ export function OnDemandTelehealth({
               </p>
 
               {/* Progress bar */}
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+              <div className="w-full bg-[#E8E4DF] rounded-full h-2 mb-4">
                 <div
                   className="bg-accent h-2 rounded-full transition-all duration-500"
                   style={{ width: `${connectionProgress}%` }}

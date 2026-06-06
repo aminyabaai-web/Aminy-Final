@@ -335,7 +335,7 @@ export function AppointmentConfirmationScreen({
           {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
         </span>
         <span className={`text-xs font-medium ${
-          currentPhase === 'success' ? 'text-green-600' : 'text-cyan-600'
+          currentPhase === 'success' ? 'text-green-600' : 'text-[#6B9080]'
         }`}>
           {currentPhase === 'confirm' ? 'Confirm' : currentPhase === 'payment' ? 'Payment' : 'Booked'}
         </span>
@@ -354,7 +354,7 @@ export function AppointmentConfirmationScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -373,7 +373,7 @@ export function AppointmentConfirmationScreen({
           <div className="bg-white rounded-3xl border border-slate-200/80 p-4 shadow-sm">
             <div className="flex gap-3 sm:gap-4">
               {/* Avatar */}
-              <div className="w-14 h-14 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+              <div className="w-14 h-14 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
                 {provider.avatarUrl ? (
                   <img
                     src={provider.avatarUrl}
@@ -396,8 +396,8 @@ export function AppointmentConfirmationScreen({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-teal-200 bg-teal-50/70 p-4">
-            <p className="text-xs uppercase tracking-[0.18em] text-teal-700">Booking rail</p>
+          <div className="rounded-2xl border border-[#6B9080]/20 bg-[#6B9080]/10/70 p-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#6B9080]">Booking rail</p>
             <h4 className="mt-1 text-sm font-semibold text-teal-900">
               {provider.organization === 'aact' ? 'AACT Telehealth powered by Aminy' : 'Aminy Provider Network cash-pay visit'}
             </h4>
@@ -475,12 +475,12 @@ export function AppointmentConfirmationScreen({
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                   placeholder="Promo code"
-                  className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                  className="flex-1 px-3 py-2 text-sm bg-[#FAF7F2] border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                 />
                 <button
                   onClick={handleApplyPromo}
                   disabled={!promoCode.trim()}
-                  className="px-4 py-2 text-sm font-medium text-cyan-600 bg-cyan-600/10 rounded-lg hover:bg-cyan-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 text-sm font-medium text-[#6B9080] bg-cyan-600/10 rounded-lg hover:bg-cyan-600/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Apply
                 </button>
@@ -511,7 +511,7 @@ export function AppointmentConfirmationScreen({
                 <span className="font-medium">HSA/FSA eligible</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
+                <span className="w-5 h-5 bg-[#F0EDE8] rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
                 <span>Superbill provided for insurance reimbursement</span>
               </div>
             </div>
@@ -533,15 +533,15 @@ export function AppointmentConfirmationScreen({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-teal-100 bg-teal-50/70 p-4">
+          <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 p-4">
             <div className="flex items-start gap-3">
-              <Check className="mt-0.5 h-5 w-5 text-teal-600" />
+              <Check className="mt-0.5 h-5 w-5 text-[#6B9080]" />
               <div>
                 <p className="text-sm font-medium text-teal-900">What happens next</p>
                 <p className="mt-1 text-sm text-teal-800">
                   After checkout, Aminy confirms the visit, sends your reminders, and keeps the video room link ready in the app and email. If you need reimbursement, your superbill is prepared after the session.
                 </p>
-                <p className="mt-2 text-xs text-teal-700">
+                <p className="mt-2 text-xs text-[#6B9080]">
                   You will not be bounced between tools. Booking, reminders, room access, and follow-up stay in Aminy.
                 </p>
               </div>
@@ -556,12 +556,12 @@ export function AppointmentConfirmationScreen({
               type="checkbox"
               checked={telehealthConsent}
               onChange={e => setTelehealthConsent(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
             />
             <span className="text-xs text-gray-600 leading-5">
               I consent to receive care via telehealth. I understand this session uses secure video, is not a substitute for emergency care, and that I should call 911 for emergencies. I have reviewed the{' '}
-              <a href="/?screen=privacy-policy" className="text-teal-600 underline">Privacy Policy</a> and{' '}
-              <a href="/?screen=terms-of-service" className="text-teal-600 underline">Terms of Service</a>.
+              <a href="/?screen=privacy-policy" className="text-[#6B9080] underline">Privacy Policy</a> and{' '}
+              <a href="/?screen=terms-of-service" className="text-[#6B9080] underline">Terms of Service</a>.
             </span>
           </label>
           <button
@@ -569,8 +569,8 @@ export function AppointmentConfirmationScreen({
             disabled={!telehealthConsent}
             className={`w-full rounded-2xl py-4 text-lg font-semibold transition-all active:scale-[0.98] ${
               telehealthConsent
-                ? 'bg-teal-600 text-white hover:bg-teal-700'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                ? 'bg-primary text-white hover:bg-[#6B9080]'
+                : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
             }`}
           >
             Continue to secure checkout
@@ -591,7 +591,7 @@ export function AppointmentConfirmationScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentStep('confirm')}
-              className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -654,7 +654,7 @@ export function AppointmentConfirmationScreen({
             className={`w-full py-4 font-semibold text-lg rounded-xl transition-all flex items-center justify-center gap-2 ${
               isProcessing
                 ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                : 'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98]'
+                : 'bg-primary text-white hover:bg-[#6B9080] active:scale-[0.98]'
             }`}
           >
             {isProcessing ? (
@@ -695,7 +695,7 @@ export function AppointmentConfirmationScreen({
         {/* Appointment Summary */}
         <div className="mb-4 bg-white rounded-3xl border border-slate-200/80 p-4 shadow-sm">
           <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-100">
-            <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+            <div className="w-12 h-12 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
               {provider.avatarUrl ? (
                 <img
                   src={provider.avatarUrl}
@@ -732,15 +732,15 @@ export function AppointmentConfirmationScreen({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-teal-100 bg-teal-50/70 p-4">
+        <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 p-4">
             <div className="flex items-start gap-3">
-              <Video className="mt-0.5 h-5 w-5 text-teal-700" />
+              <Video className="mt-0.5 h-5 w-5 text-[#6B9080]" />
               <div>
                 <p className="text-sm font-medium text-teal-900">Joining is simple</p>
                 <p className="mt-1 text-sm text-teal-800">
                   Aminy keeps the room link attached to this appointment and includes it in your reminder messages. The join button appears 15 minutes before start so you never need to hunt for it.
                 </p>
-                <p className="mt-2 text-xs text-teal-700">
+                <p className="mt-2 text-xs text-[#6B9080]">
                   Open Aminy a few minutes early and use the same appointment card for reminders, room access, and follow-up.
                 </p>
               </div>
@@ -752,7 +752,7 @@ export function AppointmentConfirmationScreen({
           <div className="relative">
             <button
               onClick={() => setShowCalendarOptions(!showCalendarOptions)}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-teal-200 bg-white py-3 font-medium text-teal-800 transition-colors hover:bg-teal-50"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-white py-3 font-medium text-teal-800 transition-colors hover:bg-[#6B9080]/10"
             >
               <CalendarPlus className="w-5 h-5" />
               Add to Calendar
@@ -766,7 +766,7 @@ export function AppointmentConfirmationScreen({
                   <button
                     key={option.type}
                     onClick={() => handleAddToCalendar(option.type)}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3"
+                    className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3"
                   >
                     <span className="text-lg">{option.icon}</span>
                     <span className="text-gray-900">{option.name}</span>
@@ -774,7 +774,7 @@ export function AppointmentConfirmationScreen({
                 ))}
                 <button
                   onClick={() => handleAddToCalendar('download')}
-                  className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3 border-t border-gray-100"
+                  className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3 border-t border-gray-100"
                 >
                   <span className="text-lg">📥</span>
                   <span className="text-gray-900">Download .ics file</span>
@@ -801,18 +801,18 @@ export function AppointmentConfirmationScreen({
 
         {/* Quick Intake Prompt */}
         <div className="mt-4 sm:mt-6 p-4 bg-cyan-600/10 rounded-xl">
-          <h4 className="font-medium text-cyan-600 mb-1">Complete Quick Intake</h4>
+          <h4 className="font-medium text-[#6B9080] mb-1">Complete Quick Intake</h4>
           <p className="text-sm text-gray-600 mb-3">
             Help your provider prepare by answering a few questions (2 minutes).
           </p>
-          <button className="text-sm font-medium text-cyan-600 hover:underline flex items-center gap-1">
+          <button className="text-sm font-medium text-[#6B9080] hover:underline flex items-center gap-1">
             Start Quick Intake
             <ExternalLink className="w-4 h-4" />
           </button>
         </div>
 
         {/* Reminder Info */}
-        <div className="mt-4 sm:mt-6 p-4 bg-gray-50 rounded-xl text-sm text-gray-600">
+        <div className="mt-4 sm:mt-6 p-4 bg-[#FAF7F2] rounded-xl text-sm text-gray-600">
           <p className="font-medium text-gray-700 mb-2">We'll remind you:</p>
           <ul className="space-y-1">
             <li>• 24 hours before your visit</li>

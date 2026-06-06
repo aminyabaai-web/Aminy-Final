@@ -95,7 +95,7 @@ const checkInConfigs: Record<CheckInType, CheckInConfig> = {
     ],
     cta: 'View progress',
     ctaAction: 'review',
-    gradient: 'from-teal-400 to-cyan-500',
+    gradient: 'from-[#6B9080] to-[#7BA7BC]',
   },
   milestone_celebration: {
     icon: TrendingUp,

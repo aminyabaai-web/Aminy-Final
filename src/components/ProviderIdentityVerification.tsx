@@ -246,7 +246,7 @@ export function ProviderIdentityVerification({
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#F0EDE8] rounded-lg">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -255,12 +255,12 @@ export function ProviderIdentityVerification({
               {completedSteps}/{state.steps.length} steps complete
             </p>
           </div>
-          <Shield className="w-6 h-6 text-cyan-600" />
+          <Shield className="w-6 h-6 text-[#6B9080]" />
         </div>
 
         {/* Progress bar */}
         <div className="max-w-2xl mx-auto mt-3">
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
             <div
               className="h-full bg-cyan-600 rounded-full transition-all duration-500"
               style={{ width: `${(completedSteps / state.steps.length) * 100}%` }}
@@ -421,7 +421,7 @@ export function ProviderIdentityVerification({
                         <span className="text-sm text-green-600 font-medium">Captured</span>
                         <button
                           onClick={() => startCamera('id_front')}
-                          className="text-sm text-cyan-600 flex items-center gap-1"
+                          className="text-sm text-[#6B9080] flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" /> Retake
                         </button>
@@ -449,7 +449,7 @@ export function ProviderIdentityVerification({
                         <span className="text-sm text-green-600 font-medium">Captured</span>
                         <button
                           onClick={() => startCamera('id_back')}
-                          className="text-sm text-cyan-600 flex items-center gap-1"
+                          className="text-sm text-[#6B9080] flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" /> Retake
                         </button>
@@ -477,7 +477,7 @@ export function ProviderIdentityVerification({
                         <span className="text-sm text-green-600 font-medium">Captured</span>
                         <button
                           onClick={() => startCamera('selfie')}
-                          className="text-sm text-cyan-600 flex items-center gap-1"
+                          className="text-sm text-[#6B9080] flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" /> Retake
                         </button>
@@ -527,7 +527,7 @@ export function ProviderIdentityVerification({
                     {/* Consent form */}
                     {step.id === 'consent' && step.status !== 'complete' && (
                       <div className="mt-3 space-y-3">
-                        <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 max-h-32 overflow-y-auto">
+                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-xs text-gray-600 max-h-32 overflow-y-auto">
                           <p className="font-semibold mb-1">Background Check Authorization</p>
                           <p>I hereby authorize Aminy and its designated background check provider
                           to conduct a background check, which may include criminal history,
@@ -543,7 +543,7 @@ export function ProviderIdentityVerification({
                             type="checkbox"
                             checked={consentChecked}
                             onChange={(e) => setConsentChecked(e.target.checked)}
-                            className="mt-0.5 w-4 h-4 text-cyan-600 rounded border-gray-300 focus:ring-cyan-500"
+                            className="mt-0.5 w-4 h-4 text-[#6B9080] rounded border-gray-300 focus:ring-cyan-500"
                           />
                           <span className="text-sm text-gray-700">
                             I have read and agree to the background check authorization above

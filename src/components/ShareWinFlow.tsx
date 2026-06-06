@@ -56,8 +56,8 @@ const WIN_TEMPLATES = {
   },
   goal: {
     emoji: '🎯',
-    color: 'from-teal-500 to-cyan-500',
-    bgColor: 'bg-teal-50',
+    color: 'from-[#6B9080] to-[#7BA7BC]',
+    bgColor: 'bg-[#6B9080]/10',
   },
   calm_moment: {
     emoji: '🧘',
@@ -180,7 +180,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                 {/* Branding */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-teal-600" />
+                    <Heart className="w-5 h-5 text-[#6B9080]" />
                     <span className="font-semibold text-gray-900">Aminy</span>
                   </div>
                   <Badge variant="outline" className="text-xs">
@@ -195,7 +195,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
                     {win.title}
                   </h3>
                   {win.metric && (
-                    <p className="text-xl sm:text-2xl font-bold text-teal-600 mb-2">
+                    <p className="text-xl sm:text-2xl font-bold text-[#6B9080] mb-2">
                       {win.metric}
                     </p>
                   )}
@@ -213,7 +213,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
             </div>
 
             {/* Share Options */}
-            <div className="p-4 bg-gray-50 border-t">
+            <div className="p-4 bg-[#FAF7F2] border-t">
               <p className="text-sm text-gray-500 mb-3 text-center">
                 Share your progress and inspire other parents
               </p>

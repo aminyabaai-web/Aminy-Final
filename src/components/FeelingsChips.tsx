@@ -32,7 +32,7 @@ export function FeelingsChips({ onFeelingSelected }: FeelingsChipsProps) {
   };
 
   return (
-    <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 contain-layout">
+    <div className="px-4 py-3 bg-[#FAF7F2] border-t border-gray-100 contain-layout">
       <p className="text-xs text-muted-foreground mb-2">How are you feeling?</p>
       <div className="flex gap-2" style={{ minHeight: '44px' }}>
         {feelings.map((feeling) => (

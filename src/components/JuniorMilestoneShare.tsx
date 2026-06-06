@@ -212,7 +212,7 @@ export function JuniorMilestoneShare({
             </div>
             <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
             <div className="flex items-center justify-center gap-2 mt-1">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-sm font-bold">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-sm font-bold">
                 {milestone.childInitial}
               </div>
               <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
@@ -237,7 +237,7 @@ export function JuniorMilestoneShare({
             <button
               onClick={handleNativeShare}
               disabled={sharing}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors disabled:opacity-50"
             >
               <Share2 size={18} />
               {sharing ? 'Sharing...' : 'Share Milestone'}
@@ -245,7 +245,7 @@ export function JuniorMilestoneShare({
           ) : (
             <button
               onClick={handleCopy}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
             >
               {copied ? <Check size={18} /> : <Copy size={18} />}
               {copied ? 'Copied!' : 'Copy to Share'}

@@ -229,7 +229,7 @@ www.aminy.ai
       <>
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 text-sm text-teal-600 hover:text-teal-700"
+          className="flex items-center gap-2 text-sm text-[#6B9080] hover:text-[#6B9080]"
         >
           <FileText className="w-4 h-4" />
           Share Report
@@ -255,7 +255,7 @@ www.aminy.ai
 
   return (
     <>
-      <Card className="p-4 bg-gradient-to-r from-blue-50 to-teal-50 border-blue-200">
+      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-blue-200">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 bg-blue-100 rounded-full">
             <Stethoscope className="w-5 h-5 text-blue-600" />
@@ -265,7 +265,7 @@ www.aminy.ai
             <p className="text-sm text-blue-700 mt-1">
               Generate a provider-ready report to share with your BCBA, therapist, or doctor.
             </p>
-            <Badge className="mt-2 bg-teal-100 text-teal-700">
+            <Badge className="mt-2 bg-[#6B9080]/10 text-[#6B9080]">
               Only with Aminy
             </Badge>
           </div>
@@ -356,10 +356,10 @@ function ShareModal({
             </div>
 
             {/* Report Preview */}
-            <div className="p-4 bg-gray-50 border-b">
+            <div className="p-4 bg-[#FAF7F2] border-b">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">{report.childName}'s Progress Report</p>
@@ -398,7 +398,7 @@ function ShareModal({
                   onDownload();
                 }}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <Download className="w-5 h-5 text-green-600" />
@@ -457,7 +457,7 @@ function ShareModal({
               <button
                 onClick={onCopyLink}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                   {linkCopied ? (

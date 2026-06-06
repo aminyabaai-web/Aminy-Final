@@ -65,10 +65,10 @@ const variantStyles: Record<ButtonVariant, string> = {
     dark:text-slate-300 dark:hover:bg-slate-800
   `,
   outline: `
-    bg-transparent border-2 border-teal-500 text-teal-600
-    hover:bg-teal-50
-    active:bg-teal-100
-    dark:border-teal-400 dark:text-teal-400
+    bg-transparent border-2 border-[#6B9080] text-[#6B9080]
+    hover:bg-[#6B9080]/10
+    active:bg-[#6B9080]/10
+    dark:border-[#6B9080] dark:text-primary
     dark:hover:bg-teal-900/30
   `,
   danger: `
@@ -414,7 +414,7 @@ export function ToggleButton({
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2',
         'disabled:opacity-50 disabled:cursor-not-allowed',
         isOn
-          ? 'bg-teal-500'
+          ? 'bg-primary'
           : 'bg-slate-200 dark:bg-slate-700',
         sizes.track,
         className

@@ -262,7 +262,7 @@ function BreathingCircle({ phase }: { phase: 'inhale' | 'hold' | 'exhale' }) {
   const phaseConfig = {
     inhale: { scale: 1.5, color: '#3b82f6', text: 'Breathe in...', duration: 4 },
     hold: { scale: 1.5, color: '#8b5cf6', text: 'Hold...', duration: 4 },
-    exhale: { scale: 1, color: '#06b6d4', text: 'Breathe out...', duration: 6 }
+    exhale: { scale: 1, color: '#7BA7BC', text: 'Breathe out...', duration: 6 }
   };
 
   const config = phaseConfig[phase];
@@ -431,7 +431,7 @@ function NextStepsStep({
               onClick={() => setOverwhelm(num)}
               className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-gray-700 font-medium ${overwhelm === num
                 ? 'bg-green-500 text-white'
-                : 'bg-gray-100 hover:bg-gray-200'
+                : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
                 }`}
             >
               {num}

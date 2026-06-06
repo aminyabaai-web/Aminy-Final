@@ -157,11 +157,11 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
             <ArrowLeft className="w-5 h-5" />
           </button>
         )}
@@ -213,7 +213,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           {gadHistory.length > 1 && (
             <div className="mt-3 flex items-end gap-1 h-10">
               {[...gadHistory].reverse().slice(0, 6).map((h, i) => (
-                <div key={i} className="flex-1 bg-teal-200 rounded-t" style={{ height: `${(h.score / 21) * 100}%`, minHeight: 2 }} />
+                <div key={i} className="flex-1 bg-[#6B9080]/20 rounded-t" style={{ height: `${(h.score / 21) * 100}%`, minHeight: 2 }} />
               ))}
             </div>
           )}
@@ -229,7 +229,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           <div className="space-y-2">
             {skillsPracticed.map(skill => (
               <div key={skill} className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
                 <span className="text-sm text-gray-700">{skill}</span>
               </div>
             ))}
@@ -238,16 +238,16 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
 
         {/* How you can help */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="bg-teal-50 border border-teal-200 rounded-2xl p-4">
+          className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <Lightbulb className="w-5 h-5 text-teal-600" />
+            <Lightbulb className="w-5 h-5 text-[#6B9080]" />
             <h2 className="font-semibold text-teal-800">How you can help at home</h2>
           </div>
           <div className="space-y-3">
             {(tips.length > 0 ? tips : defaultTips).map((tip, i) => (
               <div key={i} className="flex items-start gap-2">
-                <span className="text-teal-500 font-bold text-sm mt-0.5">{i + 1}.</span>
-                <p className="text-sm text-teal-700">{tip}</p>
+                <span className="text-primary font-bold text-sm mt-0.5">{i + 1}.</span>
+                <p className="text-sm text-[#6B9080]">{tip}</p>
               </div>
             ))}
           </div>

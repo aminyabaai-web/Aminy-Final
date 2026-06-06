@@ -53,13 +53,13 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
     <div className={`relative ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
+        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-600 hover:border-gray-300 dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
         aria-label="Theme settings"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-gray-100 dark:bg-slate-700 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
             <CurrentIcon className="w-5 h-5 text-gray-600 dark:text-slate-300" strokeWidth={1.5} />
           </div>
           
@@ -115,8 +115,8 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
                     onClick={() => handleThemeChange(themeOption.value)}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition-colors duration-150 ${
                       isSelected 
-                        ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300' 
-                        : 'text-slate-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700'
+                        ? 'bg-[#6B9080]/10 dark:bg-teal-900/20 text-[#6B9080] dark:text-[#7BA7BC]' 
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
                     }`}
                     role="menuitemradio"
                     aria-checked={isSelected}
@@ -124,14 +124,14 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
                     <div className="flex items-center space-x-3">
                       <Icon className={`w-4 h-4 ${
                         isSelected 
-                          ? 'text-teal-600 dark:text-teal-400' 
+                          ? 'text-[#6B9080] dark:text-primary' 
                           : 'text-slate-500 dark:text-slate-400'
                       }`} />
                       <div className="text-left">
                         <div className="font-medium">{themeOption.label}</div>
                         <div className={`text-xs ${
                           isSelected 
-                            ? 'text-teal-600 dark:text-teal-400' 
+                            ? 'text-[#6B9080] dark:text-primary' 
                             : 'text-slate-500 dark:text-slate-400'
                         }`}>
                           {themeOption.description}
@@ -140,7 +140,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
                     </div>
                     
                     {isSelected && (
-                      <Check className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                      <Check className="w-4 h-4 text-[#6B9080] dark:text-primary" />
                     )}
                   </button>
                 );

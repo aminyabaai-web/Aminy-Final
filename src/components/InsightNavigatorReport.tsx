@@ -94,7 +94,7 @@ export function InsightNavigatorReport({
     return (
       <div className="flex items-center justify-center py-16">
         <div className="text-center">
-          <RefreshCw className="w-10 h-10 animate-spin text-teal-500 mx-auto mb-4" />
+          <RefreshCw className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
           <h3 className="font-medium text-gray-900 mb-2">Loading Profile</h3>
           <p className="text-sm text-gray-500">Preparing {childProfile?.firstName || 'child'}'s intake document...</p>
         </div>
@@ -141,7 +141,7 @@ export function InsightNavigatorReport({
   if (!hasContent) {
     return (
       <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
-        <Card className="p-6 bg-gradient-to-br from-teal-600 to-cyan-600 text-white border-0">
+        <Card className="p-6 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white border-0">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
               <Brain className="w-8 h-8" />
@@ -162,8 +162,8 @@ export function InsightNavigatorReport({
         </Card>
 
         <Card className="p-8 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-teal-50 flex items-center justify-center mx-auto mb-4">
-            <BookOpen className="w-7 h-7 text-teal-600" />
+          <div className="w-14 h-14 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="w-7 h-7 text-[#6B9080]" />
           </div>
           <h2 className="text-lg font-semibold text-gray-900 mb-2">
             {childProfile?.firstName ? `${childProfile.firstName}'s` : "Your child's"} Insight Navigator builds as you use Aminy
@@ -185,7 +185,7 @@ export function InsightNavigatorReport({
                   toast.info('Log a behavior or chat with Aminy AI to start building this profile.');
                 }
               }}
-              className="bg-teal-600 text-white hover:bg-teal-700"
+              className="bg-primary text-white hover:bg-[#6B9080]"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Start logging
@@ -193,7 +193,7 @@ export function InsightNavigatorReport({
           </div>
         </Card>
 
-        <Card className="p-4 bg-gray-50">
+        <Card className="p-4 bg-[#FAF7F2]">
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Shield className="w-4 h-4 text-green-500" />
             <span>HIPAA-conscious • Encrypted • Parent-controlled</span>
@@ -206,7 +206,7 @@ export function InsightNavigatorReport({
   return (
     <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
-      <Card className="p-6 bg-gradient-to-br from-teal-600 to-cyan-600 text-white border-0">
+      <Card className="p-6 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white border-0">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -290,7 +290,7 @@ export function InsightNavigatorReport({
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-teal-600" />
+            <FileText className="w-5 h-5 text-[#6B9080]" />
             Executive Summary
           </h2>
           <Badge variant="outline" className="text-xs">
@@ -348,13 +348,13 @@ export function InsightNavigatorReport({
             </div>
           </Card>
 
-          <Card className="p-4 bg-teal-50 border-teal-200">
-            <h3 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
+          <Card className="p-4 bg-[#6B9080]/10 border-[#6B9080]/20">
+            <h3 className="font-medium text-[#6B9080] mb-3 flex items-center gap-2">
               <Heart className="w-4 h-4" />What Helps Calm Down
             </h3>
             <div className="flex flex-wrap gap-2">
               {navigator.currentPresentation.calmingStrategies.map((item, idx) => (
-                <Badge key={idx} variant="outline" className="bg-white border-teal-300 text-teal-700">{item}</Badge>
+                <Badge key={idx} variant="outline" className="bg-white border-[#6B9080]/30 text-[#6B9080]">{item}</Badge>
               ))}
             </div>
           </Card>
@@ -398,17 +398,17 @@ export function InsightNavigatorReport({
             </div>
           </Card>
 
-          <Card className="p-4 bg-teal-50 border-teal-200">
-            <h3 className="font-medium text-teal-700 mb-3 flex items-center gap-2">
+          <Card className="p-4 bg-[#6B9080]/10 border-[#6B9080]/20">
+            <h3 className="font-medium text-[#6B9080] mb-3 flex items-center gap-2">
               <Lightbulb className="w-5 h-5" />Recommendations
             </h3>
             <div className="space-y-2">
               {navigator.insights.recommendations.map((item) => (
-                <div key={item.id} className="p-3 bg-white rounded-lg border border-teal-200">
+                <div key={item.id} className="p-3 bg-white rounded-lg border border-[#6B9080]/20">
                   <p className="text-sm text-gray-800">{item.content}</p>
                   <div className="flex gap-2 mt-2">
                     <Badge variant="outline" className="text-xs">{item.category}</Badge>
-                    <Badge className={`text-xs ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'}`}>
+                    <Badge className={`text-xs ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#F0EDE8] text-gray-700'}`}>
                       {item.priority}
                     </Badge>
                   </div>
@@ -479,7 +479,7 @@ export function InsightNavigatorReport({
       </Tabs>
 
       {/* Footer */}
-      <Card className="p-4 bg-gray-50">
+      <Card className="p-4 bg-[#FAF7F2]">
         <div className="flex items-center justify-between text-sm text-gray-500">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-green-500" />

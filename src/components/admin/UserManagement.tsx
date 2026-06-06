@@ -472,7 +472,7 @@ export function UserManagement() {
       <Card className="overflow-hidden">
         {isLoading ? (
           <div className="flex items-center justify-center p-12">
-            <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="text-center p-12">
@@ -518,7 +518,7 @@ export function UserManagement() {
                     >
                       <td className="px-4 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-medium">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-medium">
                             {user.name.split(' ').map(n => n[0]).join('')}
                           </div>
                           <div>
@@ -629,7 +629,7 @@ export function UserManagement() {
             <div className="p-6">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white text-xl font-medium">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-xl font-medium">
                     {selectedUser.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>

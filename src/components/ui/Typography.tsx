@@ -291,9 +291,9 @@ interface LinkTextProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 export function LinkText({ className, variant = 'default', children, ...props }: LinkTextProps) {
   const variantClasses = {
-    default: 'text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 underline-offset-2 hover:underline',
+    default: 'text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] underline-offset-2 hover:underline',
     subtle: 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 hover:underline',
-    bold: 'text-teal-600 dark:text-teal-400 font-semibold hover:text-teal-700 dark:hover:text-teal-300'
+    bold: 'text-[#6B9080] dark:text-primary font-semibold hover:text-[#6B9080] dark:hover:text-[#7BA7BC]'
   };
 
   return (
@@ -352,7 +352,7 @@ export function Highlight({ className, children, color = 'teal' }: {
   color?: 'teal' | 'amber' | 'green' | 'purple';
 }) {
   const colorClasses = {
-    teal: 'bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200',
+    teal: 'bg-[#6B9080]/10 dark:bg-teal-900/30 text-teal-800 dark:text-teal-200',
     amber: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200',
     green: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200',
     purple: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200'
@@ -405,7 +405,7 @@ export function Blockquote({ className, children, cite }: {
   return (
     <blockquote
       className={cn(
-        'pl-4 border-l-4 border-teal-500',
+        'pl-4 border-l-4 border-[#6B9080]',
         'italic text-slate-600 dark:text-slate-300',
         className
       )}

@@ -153,9 +153,9 @@ export function EnhancedReferralDashboard({
   if (!code || !stats) {
     return (
       <div className="p-6 space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2" />
-        <div className="h-40 bg-gray-200 rounded" />
-        <div className="h-24 bg-gray-200 rounded" />
+        <div className="h-8 bg-[#E8E4DF] rounded w-1/2" />
+        <div className="h-40 bg-[#E8E4DF] rounded" />
+        <div className="h-24 bg-[#E8E4DF] rounded" />
       </div>
     );
   }
@@ -166,7 +166,7 @@ export function EnhancedReferralDashboard({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Gift className="w-6 h-6 text-teal-600" />
+            <Gift className="w-6 h-6 text-[#6B9080]" />
             Refer & Earn
           </h2>
           <p className="text-sm text-gray-600">
@@ -255,7 +255,7 @@ export function EnhancedReferralDashboard({
                   <div key={msg.id} className="border border-gray-100 rounded-xl overflow-hidden">
                     <button
                       onClick={() => setActiveShareTemplate(activeShareTemplate === msg.id ? null : msg.id)}
-                      className="w-full p-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between"
+                      className="w-full p-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center justify-between"
                     >
                       <div>
                         <Badge variant="secondary" className="mb-1 text-xs">
@@ -275,7 +275,7 @@ export function EnhancedReferralDashboard({
                           className="overflow-hidden"
                         >
                           <div className="p-3 pt-0 border-t border-gray-100">
-                            <p className="text-xs text-gray-500 mb-3 whitespace-pre-line bg-gray-50 p-2 rounded-lg">
+                            <p className="text-xs text-gray-500 mb-3 whitespace-pre-line bg-[#FAF7F2] p-2 rounded-lg">
                               {msg.body}
                             </p>
                             <div className="grid grid-cols-4 gap-2">
@@ -302,7 +302,7 @@ export function EnhancedReferralDashboard({
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'copy')}
-                                className="flex flex-col items-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                                className="flex flex-col items-center p-2 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
                               >
                                 <Copy className="w-4 h-4 text-gray-600 mb-0.5" />
                                 <span className="text-xs text-gray-700">Copy</span>
@@ -321,7 +321,7 @@ export function EnhancedReferralDashboard({
       </AnimatePresence>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+      <div className="flex gap-1 bg-[#F0EDE8] rounded-xl p-1">
         {(['overview', 'referrals', 'leaderboard'] as const).map((tab) => (
           <button
             key={tab}
@@ -355,7 +355,7 @@ export function EnhancedReferralDashboard({
                 <div className="text-xs text-gray-500">Shared</div>
               </Card>
               <Card className="p-3 text-center">
-                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-teal-500" />
+                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <div className="text-2xl font-bold text-gray-900">{stats.totalSignups}</div>
                 <div className="text-xs text-gray-500">Signed Up</div>
               </Card>
@@ -374,19 +374,19 @@ export function EnhancedReferralDashboard({
             {/* Conversion Funnel */}
             <Card className="p-4">
               <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-teal-600" />
+                <TrendingUp className="w-5 h-5 text-[#6B9080]" />
                 Your Funnel
               </h3>
               <div className="space-y-2">
                 {[
                   { label: 'Codes Shared', value: stats.totalShares, color: 'bg-blue-500' },
                   { label: 'Links Clicked', value: stats.totalClicks, color: 'bg-indigo-500' },
-                  { label: 'Accounts Created', value: stats.totalSignups, color: 'bg-teal-500' },
+                  { label: 'Accounts Created', value: stats.totalSignups, color: 'bg-primary' },
                   { label: 'Sessions Booked', value: stats.totalSessionsBooked, color: 'bg-green-500' },
                 ].map((step, i) => (
                   <div key={step.label} className="flex items-center gap-3">
                     <div className="w-24 text-xs text-gray-500 text-right">{step.label}</div>
-                    <div className="flex-1 h-6 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="flex-1 h-6 bg-[#F0EDE8] rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.max((step.value / Math.max(stats.totalShares, 1)) * 100, 5)}%` }}
@@ -468,7 +468,7 @@ export function EnhancedReferralDashboard({
                 <p className="text-sm text-gray-500 mb-4">Share your code to start earning rewards</p>
                 <Button
                   onClick={() => setShowShareOptions(true)}
-                  className="bg-teal-600 hover:bg-teal-700 text-white"
+                  className="bg-primary hover:bg-[#6B9080] text-white"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Now
@@ -481,7 +481,7 @@ export function EnhancedReferralDashboard({
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       chain.status === 'converted' ? 'bg-green-100' :
                       chain.status === 'first_session' ? 'bg-blue-100' :
-                      'bg-gray-100'
+                      'bg-[#F0EDE8]'
                     }`}>
                       {chain.status === 'converted' ? (
                         <CheckCircle className="w-5 h-5 text-green-600" />
@@ -502,7 +502,7 @@ export function EnhancedReferralDashboard({
                         chain.status === 'converted' ? 'bg-green-100 text-green-700 border-green-200' :
                         chain.status === 'first_session' ? 'bg-blue-100 text-blue-700 border-blue-200' :
                         chain.status === 'trial_started' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                        'bg-gray-100 text-gray-600 border-gray-200'
+                        'bg-[#F0EDE8] text-gray-600 border-gray-200'
                       }>
                         {chain.status === 'converted' ? 'Converted' :
                          chain.status === 'first_session' ? 'Booked Session' :
@@ -519,8 +519,8 @@ export function EnhancedReferralDashboard({
                       const isComplete = i <= Math.max(stepIndex, 1);
                       return (
                         <React.Fragment key={step}>
-                          <div className={`w-2 h-2 rounded-full ${isComplete ? 'bg-teal-500' : 'bg-gray-200'}`} />
-                          {i < 4 && <div className={`flex-1 h-0.5 ${isComplete ? 'bg-teal-500' : 'bg-gray-200'}`} />}
+                          <div className={`w-2 h-2 rounded-full ${isComplete ? 'bg-primary' : 'bg-[#E8E4DF]'}`} />
+                          {i < 4 && <div className={`flex-1 h-0.5 ${isComplete ? 'bg-primary' : 'bg-[#E8E4DF]'}`} />}
                         </React.Fragment>
                       );
                     })}
@@ -561,14 +561,14 @@ export function EnhancedReferralDashboard({
                     <div
                       key={entry.rank}
                       className={`flex items-center gap-3 p-3 rounded-xl ${
-                        entry.isCurrentUser ? 'bg-teal-50 border border-teal-200' : 'bg-gray-50'
+                        entry.isCurrentUser ? 'bg-[#6B9080]/10 border border-[#6B9080]/20' : 'bg-[#FAF7F2]'
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                         entry.rank === 1 ? 'bg-amber-100 text-amber-700' :
-                        entry.rank === 2 ? 'bg-gray-200 text-gray-700' :
+                        entry.rank === 2 ? 'bg-[#E8E4DF] text-gray-700' :
                         entry.rank === 3 ? 'bg-orange-100 text-orange-700' :
-                        'bg-gray-100 text-gray-500'
+                        'bg-[#F0EDE8] text-gray-500'
                       }`}>
                         {entry.rank <= 3 ? (
                           entry.rank === 1 ? <Crown className="w-4 h-4" /> :
@@ -579,7 +579,7 @@ export function EnhancedReferralDashboard({
                       <div className="flex-1">
                         <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-teal-900' : 'text-gray-900'}`}>
                           {entry.name}
-                          {entry.isCurrentUser && <span className="text-teal-600 ml-1">(You)</span>}
+                          {entry.isCurrentUser && <span className="text-[#6B9080] ml-1">(You)</span>}
                         </p>
                       </div>
                       <div className="text-sm font-semibold text-gray-700">
@@ -592,20 +592,20 @@ export function EnhancedReferralDashboard({
             </Card>
 
             {/* Motivational CTA */}
-            <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+            <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
               <div className="flex items-center gap-3">
-                <Sparkles className="w-8 h-8 text-teal-600 flex-shrink-0" />
+                <Sparkles className="w-8 h-8 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-teal-900 text-sm">
                     Share your code to climb the leaderboard
                   </p>
-                  <p className="text-xs text-teal-700">
+                  <p className="text-xs text-[#6B9080]">
                     Every family you help find care moves you up
                   </p>
                 </div>
                 <Button
                   variant="ghost"
-                  className="text-teal-700 hover:bg-teal-100 flex-shrink-0"
+                  className="text-[#6B9080] hover:bg-[#6B9080]/10 flex-shrink-0"
                   aria-label="Share your referral code"
                   onClick={() => {
                     setShowShareOptions(true);

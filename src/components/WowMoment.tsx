@@ -234,7 +234,7 @@ export function WowHero({ onGetStarted, variant = 'emotional' }: WowHeroProps) {
  */
 export function TransformationSection() {
   return (
-    <div className="py-16 px-4 bg-gray-50">
+    <div className="py-16 px-4 bg-[#FAF7F2]">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl md:text-2xl sm:text-3xl font-bold text-center text-primary mb-4">
           Life Before vs. After Aminy
@@ -351,7 +351,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
         </div>
 
         {/* Demo preview */}
-        <div className="bg-gray-50 rounded-2xl p-6 shadow-inner">
+        <div className="bg-[#FAF7F2] rounded-2xl p-6 shadow-inner">
           {!showDemo ? (
             <motion.button
               onClick={() => {

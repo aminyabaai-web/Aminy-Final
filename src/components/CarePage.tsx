@@ -384,7 +384,7 @@ export default function CarePage({
             onClick={() => setActiveView(id as CareView)}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeView === id
-                ? 'border-teal-600 text-teal-600 dark:text-teal-400'
+                ? 'border-[#6B9080] text-[#6B9080] dark:text-primary'
                 : 'border-transparent text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
             }`}
           >

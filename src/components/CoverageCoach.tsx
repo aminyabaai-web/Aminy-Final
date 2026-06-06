@@ -343,7 +343,7 @@ export function CoverageCoach({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
@@ -380,9 +380,9 @@ export function CoverageCoach({
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
         {/* AI-Powered Coverage Chat CTA */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-teal-50 to-white border-2 border-teal-200">
+        <Card className="mb-8 p-6 bg-gradient-to-br from-teal-50 to-white border-2 border-[#6B9080]/20">
           <div className="flex items-start gap-3 sm:gap-4">
-            <div className="w-12 h-12 bg-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
@@ -394,7 +394,7 @@ export function CoverageCoach({
               <div className="flex flex-wrap gap-3">
                 <Button 
                   onClick={handleStartCoverageChat}
-                  className="bg-teal-500 hover:bg-teal-600 gap-2"
+                  className="bg-primary hover:bg-primary gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Start Coverage Chat

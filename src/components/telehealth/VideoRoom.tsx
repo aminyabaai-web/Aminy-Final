@@ -707,7 +707,7 @@ export function VideoRoom({
             <div className="flex gap-3 mt-4 sm:mt-6">
               <button
                 onClick={() => setShowEndConfirm(false)}
-                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors"
               >
                 Cancel
               </button>
@@ -777,7 +777,7 @@ export function VideoRoom({
             </div>
 
             {/* Consent checkbox */}
-            <label className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer mb-4">
+            <label className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-xl cursor-pointer mb-4">
               <input
                 type="checkbox"
                 checked={consentChecked}
@@ -795,7 +795,7 @@ export function VideoRoom({
             <div className="flex gap-3">
               <button
                 onClick={handleRecordingDeclined}
-                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors"
               >
                 Decline
               </button>
@@ -805,7 +805,7 @@ export function VideoRoom({
                 className={`flex-1 py-3 px-4 rounded-xl font-medium transition-colors ${
                   consentChecked
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
                 }`}
               >
                 I Consent

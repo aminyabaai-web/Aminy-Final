@@ -21,7 +21,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
   const effectiveDate = 'January 21, 2026';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
@@ -41,8 +41,8 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
           {/* Introduction */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
+                <FileText className="w-5 h-5 text-[#6B9080]" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Agreement to Terms</h2>
             </div>
@@ -252,16 +252,16 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <p className="text-gray-600 leading-relaxed">
               If you have questions about these Terms, please contact us:
             </p>
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-4 bg-[#FAF7F2] rounded-lg">
               <p className="text-gray-700">
                 <strong>Email:</strong>{' '}
-                <a href="mailto:legal@aminy.ai" className="text-teal-600 hover:underline">
+                <a href="mailto:legal@aminy.ai" className="text-[#6B9080] hover:underline">
                   legal@aminy.ai
                 </a>
               </p>
               <p className="text-gray-700 mt-2">
                 <strong>Support:</strong>{' '}
-                <a href="mailto:support@aminy.ai" className="text-teal-600 hover:underline">
+                <a href="mailto:support@aminy.ai" className="text-[#6B9080] hover:underline">
                   support@aminy.ai
                 </a>
               </p>

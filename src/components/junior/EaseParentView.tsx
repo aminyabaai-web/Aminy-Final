@@ -212,9 +212,9 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
               <p className="text-xs text-gray-500">Sessions</p>
               <p className="text-xl font-black text-indigo-700">{weekSessions.length}</p>
             </div>
-            <div className="bg-teal-50 rounded-xl p-3 text-center">
+            <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
               <p className="text-xs text-gray-500">Total time</p>
-              <p className="text-xl font-black text-teal-700">{totalMinutes}m</p>
+              <p className="text-xl font-black text-[#6B9080]">{totalMinutes}m</p>
             </div>
             <div className="bg-amber-50 rounded-xl p-3 text-center">
               <p className="text-xs text-gray-500">Avg/day</p>
@@ -224,7 +224,7 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
 
           {/* Parent ratings */}
           {(greatCount + okCount + roughCount) > 0 && (
-            <div className="bg-gray-50 rounded-xl p-3">
+            <div className="bg-[#FAF7F2] rounded-xl p-3">
               <p className="text-xs font-semibold text-gray-600 mb-2">Session ratings</p>
               <div className="flex gap-3">
                 <div className="flex items-center gap-1">
@@ -310,7 +310,7 @@ export function PostSessionRatingPrompt({
               <p className="text-xs text-gray-400 capitalize">{tool} session</p>
             </div>
           </div>
-          <button onClick={onDismiss} className="p-1.5 rounded-full bg-gray-100">
+          <button onClick={onDismiss} className="p-1.5 rounded-full bg-[#F0EDE8]">
             <X className="w-4 h-4 text-gray-400" />
           </button>
         </div>
@@ -478,12 +478,12 @@ export function EaseParentView({
                         </div>
                         <p className="text-xs text-indigo-700 ml-6">{goalInfo.goal}</p>
                       </div>
-                      <div className="bg-teal-50 rounded-2xl p-3">
+                      <div className="bg-[#6B9080]/10 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
-                          <Eye className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                          <Eye className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                           <p className="text-xs font-bold text-teal-800">What to observe</p>
                         </div>
-                        <p className="text-xs text-teal-700 ml-6">{goalInfo.whatToObserve}</p>
+                        <p className="text-xs text-[#6B9080] ml-6">{goalInfo.whatToObserve}</p>
                       </div>
                       <div className="bg-amber-50 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">

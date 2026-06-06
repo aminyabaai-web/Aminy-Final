@@ -399,7 +399,7 @@ export function AminyJrEnhanced({
                 setCurrentView('home');
                 speakPrompt("Let's have fun!");
               }}
-              className="bg-gradient-to-r from-teal-500 to-blue-500 hover:from-teal-600 hover:to-blue-600 text-white px-8 py-6 text-xl rounded-2xl shadow-lg"
+              className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-600 hover:to-blue-600 text-white px-8 py-6 text-xl rounded-2xl shadow-lg"
             >
               <Play className="w-6 h-6 mr-2" />
               Let's Go!
@@ -509,7 +509,7 @@ export function AminyJrEnhanced({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Mascot Guide */}
         {currentView === 'home' && (
-          <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+          <Card className="p-6 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
             <div className="flex items-center gap-3 sm:gap-4">
               <CompassMascot mood="encouraging" />
               <div className="flex-1">
@@ -719,7 +719,7 @@ export function AminyJrEnhanced({
                         className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                           mission.completed
                             ? 'bg-green-200 text-green-700'
-                            : 'bg-gray-100 text-gray-600'
+                            : 'bg-[#F0EDE8] text-gray-600'
                         }`}
                       >
                         {mission.completed ? (

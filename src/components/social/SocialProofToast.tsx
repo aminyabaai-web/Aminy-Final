@@ -125,7 +125,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
   const getIcon = (iconType: string) => {
     switch (iconType) {
       case 'calendar':
-        return <Calendar className="w-4 h-4 text-teal-600" />;
+        return <Calendar className="w-4 h-4 text-[#6B9080]" />;
       case 'user-plus':
         return <UserPlus className="w-4 h-4 text-blue-600" />;
       case 'star':
@@ -135,7 +135,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
       case 'heart':
         return <Heart className="w-4 h-4 text-pink-500" />;
       default:
-        return <Star className="w-4 h-4 text-teal-600" />;
+        return <Star className="w-4 h-4 text-[#6B9080]" />;
     }
   };
 
@@ -158,7 +158,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
 
               <div className="p-3 flex items-start gap-3">
                 {/* Avatar / Icon */}
-                <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center flex-shrink-0">
                   {milestoneMessage
                     ? getIcon(milestoneIcon)
                     : currentMessage

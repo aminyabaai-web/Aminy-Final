@@ -231,7 +231,7 @@ export function TelehealthSessionEngine({
               <div
                 key={n}
                 className={`h-1 rounded-full transition-all ${
-                  n <= step ? 'bg-teal-500' : 'bg-slate-200'
+                  n <= step ? 'bg-primary' : 'bg-slate-200'
                 } ${n === step ? 'w-6' : 'w-3'}`}
               />
             ))}
@@ -257,14 +257,14 @@ export function TelehealthSessionEngine({
                   onClick={() => { setSelectedModality(modality); setStep(2); }}
                   className="w-full text-left"
                 >
-                  <Card className={`p-4 border-2 transition-all hover:border-teal-400 hover:shadow-md active:scale-[0.99] ${
+                  <Card className={`p-4 border-2 transition-all hover:border-[#6B9080] hover:shadow-md active:scale-[0.99] ${
                     selectedModality?.id === modality.id
-                      ? 'border-teal-500 bg-teal-50/50'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10/50'
                       : 'border-slate-200 bg-white'
                   }`}>
                     <div className="flex items-start gap-3">
                       {/* Icon */}
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-teal-600 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-[#6B9080] shrink-0">
                         {modality.icon}
                       </div>
 
@@ -273,7 +273,7 @@ export function TelehealthSessionEngine({
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-semibold text-slate-900 text-sm">{modality.label}</span>
                           {modality.cptCodes.map(code => (
-                            <Badge key={code} variant="outline" className="text-xs font-mono border-teal-200 text-teal-700 bg-teal-50">
+                            <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
                               CPT {code}
                             </Badge>
                           ))}
@@ -310,7 +310,7 @@ export function TelehealthSessionEngine({
 
                         {/* Billing note */}
                         <div className="mt-2 flex items-start gap-1.5">
-                          <CheckCircle2 className="w-3 h-3 text-teal-500 mt-0.5 shrink-0" />
+                          <CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" />
                           <p className="text-xs text-slate-500">{modality.billingNote}</p>
                         </div>
 
@@ -346,20 +346,20 @@ export function TelehealthSessionEngine({
             </div>
 
             {/* Selected modality summary */}
-            <Card className="p-3 bg-teal-50 border border-teal-200 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-600">
+            <Card className="p-3 bg-[#6B9080]/10 border border-[#6B9080]/20 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-[#6B9080]">
                 {selectedModality.icon}
               </div>
               <div className="flex-1">
                 <span className="text-sm font-semibold text-teal-900">{selectedModality.label}</span>
                 <div className="flex gap-1 mt-0.5">
                   {selectedModality.cptCodes.map(code => (
-                    <span key={code} className="text-xs font-mono text-teal-600">CPT {code}</span>
+                    <span key={code} className="text-xs font-mono text-[#6B9080]">CPT {code}</span>
                   ))}
                 </div>
               </div>
-              <Clock className="w-4 h-4 text-teal-400" />
-              <span className="text-xs text-teal-600">{selectedModality.estimatedMinutes} min</span>
+              <Clock className="w-4 h-4 text-primary" />
+              <span className="text-xs text-[#6B9080]">{selectedModality.estimatedMinutes} min</span>
             </Card>
 
             <div className="space-y-2">
@@ -369,9 +369,9 @@ export function TelehealthSessionEngine({
                   onClick={() => setSelectedClientId(patient.id)}
                   className="w-full text-left"
                 >
-                  <Card className={`p-4 border-2 transition-all hover:border-teal-400 ${
+                  <Card className={`p-4 border-2 transition-all hover:border-[#6B9080] ${
                     selectedClientId === patient.id
-                      ? 'border-teal-500 bg-teal-50/50'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10/50'
                       : 'border-slate-200 bg-white'
                   }`}>
                     <div className="flex items-center gap-3">
@@ -383,7 +383,7 @@ export function TelehealthSessionEngine({
                         <p className="text-xs text-slate-500">{patient.insurancePayer}</p>
                       </div>
                       {selectedClientId === patient.id && (
-                        <CheckCircle2 className="w-5 h-5 text-teal-500" />
+                        <CheckCircle2 className="w-5 h-5 text-primary" />
                       )}
                     </div>
                   </Card>
@@ -395,9 +395,9 @@ export function TelehealthSessionEngine({
                 onClick={() => setSelectedClientId('new')}
                 className="w-full text-left"
               >
-                <Card className={`p-4 border-2 border-dashed transition-all hover:border-teal-400 ${
+                <Card className={`p-4 border-2 border-dashed transition-all hover:border-[#6B9080] ${
                   selectedClientId === 'new'
-                    ? 'border-teal-500 bg-teal-50/50'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10/50'
                     : 'border-slate-300 bg-white'
                 }`}>
                   <div className="flex items-center gap-3">
@@ -409,7 +409,7 @@ export function TelehealthSessionEngine({
                       <p className="text-xs text-slate-400">Add client details before starting</p>
                     </div>
                     {selectedClientId === 'new' && (
-                      <CheckCircle2 className="w-5 h-5 text-teal-500" />
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
                     )}
                   </div>
                 </Card>
@@ -438,14 +438,14 @@ export function TelehealthSessionEngine({
             {/* Session summary card */}
             <Card className="p-4 border border-slate-200 bg-white space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-teal-600">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/10 to-violet-500/10 flex items-center justify-center text-[#6B9080]">
                   {selectedModality.icon}
                 </div>
                 <div>
                   <p className="font-bold text-slate-900">{selectedModality.label}</p>
                   <div className="flex gap-1.5 mt-0.5">
                     {selectedModality.cptCodes.map(code => (
-                      <Badge key={code} variant="outline" className="text-xs font-mono border-teal-200 text-teal-700 bg-teal-50">
+                      <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
                         CPT {code}
                       </Badge>
                     ))}
@@ -522,19 +522,19 @@ export function TelehealthSessionEngine({
                   >
                     <Card className={`px-4 py-3 border transition-all flex items-center gap-3 ${
                       checkedItems.has(item.id)
-                        ? 'border-teal-300 bg-teal-50'
+                        ? 'border-[#6B9080]/30 bg-[#6B9080]/10'
                         : 'border-slate-200 bg-white hover:border-slate-300'
                     }`}>
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all shrink-0 ${
                         checkedItems.has(item.id)
-                          ? 'border-teal-500 bg-teal-500'
+                          ? 'border-[#6B9080] bg-primary'
                           : 'border-slate-300'
                       }`}>
                         {checkedItems.has(item.id) && (
                           <CheckCircle2 className="w-3 h-3 text-white fill-white" />
                         )}
                       </div>
-                      <div className={`text-slate-500 shrink-0 ${checkedItems.has(item.id) ? 'text-teal-600' : ''}`}>
+                      <div className={`text-slate-500 shrink-0 ${checkedItems.has(item.id) ? 'text-[#6B9080]' : ''}`}>
                         {item.icon}
                       </div>
                       <span className={`text-sm text-left ${

@@ -82,7 +82,7 @@ export function UpgradePrompt({
       <Card className={`p-4 border-2 ${
         prompt.urgency === 'high'
           ? 'border-amber-300 bg-amber-50 dark:border-amber-700 dark:bg-amber-900/20'
-          : 'border-teal-200 bg-teal-50 dark:border-teal-800 dark:bg-teal-900/20'
+          : 'border-[#6B9080]/20 bg-[#6B9080]/10 dark:border-teal-800 dark:bg-teal-900/20'
       }`}>
         <div className="flex items-start gap-4">
           <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${TIER_COLORS[recTier]} flex items-center justify-center flex-shrink-0`}>
@@ -99,7 +99,7 @@ export function UpgradePrompt({
               <Button
                 size="sm"
                 onClick={handleUpgrade}
-                className="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700"
+                className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-700 hover:to-cyan-700"
               >
                 <Zap className="w-4 h-4 mr-1" />
                 {prompt.ctaText}
@@ -138,7 +138,7 @@ export function UpgradePrompt({
           className={`relative overflow-hidden ${
             prompt.urgency === 'high'
               ? 'bg-gradient-to-r from-amber-500 to-orange-500'
-              : 'bg-gradient-to-r from-teal-600 to-cyan-600'
+              : 'bg-gradient-to-r from-[#6B9080] to-[#7BA7BC]'
           }`}
         >
           <div className="max-w-7xl mx-auto px-4 py-3">
@@ -161,7 +161,7 @@ export function UpgradePrompt({
                 <Button
                   size="sm"
                   onClick={handleUpgrade}
-                  className="bg-white text-teal-700 hover:bg-white/90"
+                  className="bg-white text-[#6B9080] hover:bg-white/90"
                 >
                   {prompt.ctaText}
                   <ChevronRight className="w-4 h-4 ml-1" />
@@ -282,7 +282,7 @@ export function UpgradePrompt({
               <Button
                 size="sm"
                 onClick={handleUpgrade}
-                className="mt-2 h-8 text-xs bg-teal-600 hover:bg-teal-700"
+                className="mt-2 h-8 text-xs bg-primary hover:bg-[#6B9080]"
               >
                 {prompt.ctaText}
               </Button>

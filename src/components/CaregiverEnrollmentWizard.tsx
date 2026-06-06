@@ -497,7 +497,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#F0EDE8] rounded-lg">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
           <div className="flex-1">
@@ -512,7 +512,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           <div className="max-w-2xl mx-auto mt-3 flex gap-1">
             {STEPS.map((s, i) => (
               <div key={s.id} className={`flex-1 h-1.5 rounded-full transition-colors ${
-                i <= stepIndex ? 'bg-emerald-600' : 'bg-gray-200'
+                i <= stepIndex ? 'bg-emerald-600' : 'bg-[#E8E4DF]'
               }`} />
             ))}
           </div>
@@ -603,7 +603,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div>
-                <label className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
+                <label className="flex items-center gap-3 p-4 bg-[#FAF7F2] rounded-xl cursor-pointer">
                   <input
                     type="checkbox"
                     checked={data.hasMedicaid}
@@ -644,7 +644,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               )}
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('state-select')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('state-select')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button
@@ -673,7 +673,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'self-directed'
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   Self-Directed
@@ -683,7 +683,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'agency-directed'
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   Agency-Directed
@@ -727,7 +727,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('eligibility')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('eligibility')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button
@@ -767,7 +767,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 ))}
               </div>
 
-              <div className="bg-gray-50 rounded-xl p-3 flex gap-2">
+              <div className="bg-[#FAF7F2] rounded-xl p-3 flex gap-2">
                 <Info className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                 <p className="text-xs text-gray-500">
                   A fiscal agent (also called fiscal intermediary) processes your payroll,
@@ -777,7 +777,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('program-select')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('program-select')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button
@@ -840,7 +840,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('fiscal-agent')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('fiscal-agent')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button
@@ -888,7 +888,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </label>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('documents')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('documents')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button
@@ -942,7 +942,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 </div>
               </div>
 
-              <label className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl cursor-pointer">
+              <label className="flex items-start gap-3 p-4 bg-[#FAF7F2] rounded-xl cursor-pointer">
                 <input
                   type="checkbox"
                   checked={data.agreedToTerms}
@@ -956,7 +956,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </label>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('training')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                <button onClick={() => setStep('training')} className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-[#FAF7F2]">
                   Back
                 </button>
                 <button

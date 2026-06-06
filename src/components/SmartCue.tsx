@@ -74,7 +74,7 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
                 }}
                 className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center mt-0.5"
               >
-                <Sparkles className="w-4 h-4 text-cyan-600" />
+                <Sparkles className="w-4 h-4 text-[#6B9080]" />
               </motion.div>
 
               <div className="flex-1 min-w-0">

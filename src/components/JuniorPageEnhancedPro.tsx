@@ -637,7 +637,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-[#6B9080]/10 text-cyan-600',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       track: 'Prosody',
       voiceReady: true,
       mode: 'rhythm-matching',
@@ -1628,7 +1628,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 >
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
-                      <Badge variant="outline" className="border-cyan-200 bg-white/70 text-slate-600">
+                      <Badge variant="outline" className="border-[#6B9080]/20 bg-white/70 text-slate-600">
                         Calm &amp; rewards
                       </Badge>
                       <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
@@ -1720,7 +1720,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(67,170,139,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
                       >
                         <div>
-                          <div className="flex items-center gap-2 text-sm font-medium text-teal-300">
+                          <div className="flex items-center gap-2 text-sm font-medium text-[#7BA7BC]">
                             <span>✨</span>
                             Sensory Fidget
                           </div>

@@ -20,7 +20,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
   const lastUpdated = 'January 21, 2026';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">
@@ -40,8 +40,8 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           {/* Introduction */}
           <section>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-                <Shield className="w-5 h-5 text-teal-700" />
+              <div className="w-10 h-10 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-[#6B9080]" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Introduction</h2>
             </div>
@@ -157,7 +157,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </ul>
             <p className="text-gray-600 leading-relaxed mt-4">
               To exercise these rights, please contact us at{' '}
-              <a href="mailto:privacy@aminy.ai" className="text-teal-700 hover:underline">
+              <a href="mailto:privacy@aminy.ai" className="text-[#6B9080] hover:underline">
                 privacy@aminy.ai
               </a>
             </p>
@@ -197,10 +197,10 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <p className="text-gray-600 leading-relaxed">
               If you have questions about this Privacy Policy or our data practices, please contact us:
             </p>
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-4 bg-[#FAF7F2] rounded-lg">
               <p className="text-gray-700">
                 <strong>Email:</strong>{' '}
-                <a href="mailto:privacy@aminy.ai" className="text-teal-700 hover:underline">
+                <a href="mailto:privacy@aminy.ai" className="text-[#6B9080] hover:underline">
                   privacy@aminy.ai
                 </a>
               </p>

@@ -1735,7 +1735,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   <span>Exporting...</span>
                   <span>{exportProgress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                   <div
                     className="bg-primary h-2 rounded-full transition-all"
                     style={{ width: `${exportProgress}%` }}

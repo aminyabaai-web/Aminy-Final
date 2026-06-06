@@ -184,9 +184,9 @@ export function ReferralDashboard({
   if (loading) {
     return (
       <Card className="p-6 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2 mb-4" />
-        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-        <div className="h-4 bg-gray-200 rounded w-1/2" />
+        <div className="h-8 bg-[#E8E4DF] rounded w-1/2 mb-4" />
+        <div className="h-4 bg-[#E8E4DF] rounded w-3/4 mb-2" />
+        <div className="h-4 bg-[#E8E4DF] rounded w-1/2" />
       </Card>
     );
   }
@@ -209,7 +209,7 @@ export function ReferralDashboard({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-            <Gift className="w-6 h-6 text-teal-600" />
+            <Gift className="w-6 h-6 text-[#6B9080]" />
             Refer & Earn
           </h2>
           <p className="text-sm text-gray-600">
@@ -434,10 +434,10 @@ export function ReferralDashboard({
                 key={tier.name}
                 className={`p-3 rounded-lg border ${
                   isCurrentTier
-                    ? 'border-teal-500 bg-teal-50'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10'
                     : isUnlocked
                     ? 'border-green-200 bg-green-50'
-                    : 'border-gray-200 bg-gray-50'
+                    : 'border-gray-200 bg-[#FAF7F2]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
@@ -445,7 +445,7 @@ export function ReferralDashboard({
                     <span className="text-lg">{tier.badgeIcon}</span>
                     <span className="font-medium text-gray-900">{tier.name}</span>
                     {isCurrentTier && (
-                      <Badge className="bg-teal-500 text-white text-xs">Current</Badge>
+                      <Badge className="bg-primary text-white text-xs">Current</Badge>
                     )}
                     {isUnlocked && !isCurrentTier && (
                       <CheckCircle className="w-4 h-4 text-green-500" />
@@ -492,7 +492,7 @@ export function ReferralDashboard({
               return (
                 <div
                   key={referral.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -501,7 +501,7 @@ export function ReferralDashboard({
                           ? 'bg-green-100'
                           : referral.status === 'converted'
                           ? 'bg-blue-100'
-                          : 'bg-gray-200'
+                          : 'bg-[#E8E4DF]'
                       }`}
                     >
                       {referral.status === 'rewarded' ? (

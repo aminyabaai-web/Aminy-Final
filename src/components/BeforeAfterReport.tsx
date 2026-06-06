@@ -86,9 +86,9 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
     return (
       <Card className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-full"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
+          <div className="h-6 bg-[#E8E4DF] rounded w-3/4"></div>
+          <div className="h-4 bg-[#E8E4DF] rounded w-full"></div>
+          <div className="h-32 bg-[#E8E4DF] rounded"></div>
         </div>
       </Card>
     );
@@ -469,7 +469,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
         </div>
       </div>
 
-      <div className="text-xs text-gray-500 p-3 bg-gray-50 rounded border">
+      <div className="text-xs text-gray-500 p-3 bg-[#FAF7F2] rounded border">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress. This is educational guidance only. Parents remain decision authority. Consult healthcare providers for clinical questions.
       </div>
     </div>

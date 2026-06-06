@@ -300,7 +300,7 @@ export function JuniorReportCard({
         >
           {/* Header */}
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-white text-lg font-bold">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-lg font-bold">
               {data.childInitial}
             </div>
             <div className="flex-1">
@@ -359,7 +359,7 @@ export function JuniorReportCard({
                   .map(d => (
                     <div key={d.domain} className="flex items-center gap-2">
                       <span className="text-xs text-gray-600 w-16 truncate capitalize">{d.domain}</span>
-                      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
                             d.accuracy >= 80 ? 'bg-green-400' :
@@ -419,7 +419,7 @@ export function JuniorReportCard({
           {onShareTherapist && (
             <button
               onClick={handleShareTherapist}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
             >
               <Send size={18} />
               Share with Therapist

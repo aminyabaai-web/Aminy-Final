@@ -137,15 +137,15 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
     <Card className="p-5 rounded-2xl border-0 shadow-sm bg-white mb-4">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center">
-            <Building2 className="w-4 h-4 text-teal-600" />
+          <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-[#6B9080]" />
           </div>
           <span className="font-semibold text-gray-800 text-sm">Practice Information</span>
         </div>
         {!editing && info.npi && (
           <button
             onClick={() => { setDraft({ ...info }); setEditing(true); setSaveError(null); }}
-            className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 px-2 py-1 rounded-lg hover:bg-teal-50 transition-colors"
+            className="flex items-center gap-1 text-xs text-[#6B9080] hover:text-[#6B9080] px-2 py-1 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             <Pencil className="w-3 h-3" />
             Edit
@@ -186,7 +186,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               value={draft.practiceName}
               onChange={(e) => setDraft((d) => ({ ...d, practiceName: e.target.value }))}
               placeholder="e.g. Sunshine ABA Therapy"
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
           </div>
 
@@ -202,7 +202,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               onChange={(e) => setDraft((d) => ({ ...d, npi: e.target.value.replace(/[^\d]/g, '').slice(0, 10) }))}
               placeholder="1234567890"
               maxLength={10}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm font-mono text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
             {draft.npi.length > 0 && draft.npi.length < 10 && (
               <p className="text-xs text-amber-600 mt-1">{10 - draft.npi.length} more digit{10 - draft.npi.length !== 1 ? 's' : ''} needed</p>
@@ -218,7 +218,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
             <select
               value={draft.taxonomyCode}
               onChange={(e) => setDraft((d) => ({ ...d, taxonomyCode: e.target.value }))}
-              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-gray-50"
+              className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             >
               <option value="">Select taxonomy code…</option>
               {ABA_TAXONOMY_CODES.map((t) => (
@@ -284,7 +284,7 @@ function StatusBadge({ status }: { status: ConnectAccountStatus['status'] }) {
       );
     default:
       return (
-        <Badge className="bg-gray-100 text-gray-600 border-gray-200">
+        <Badge className="bg-[#F0EDE8] text-gray-600 border-gray-200">
           <AlertCircle className="w-3 h-3 mr-1" />
           Not Connected
         </Badge>
@@ -297,7 +297,7 @@ function payoutStatusLabel(status: PayoutRecord['status']) {
     case 'paid': return { label: 'Paid', cls: 'bg-green-100 text-green-700' };
     case 'pending': return { label: 'Pending', cls: 'bg-yellow-100 text-yellow-700' };
     case 'failed': return { label: 'Failed', cls: 'bg-red-100 text-red-700' };
-    case 'canceled': return { label: 'Canceled', cls: 'bg-gray-100 text-gray-600' };
+    case 'canceled': return { label: 'Canceled', cls: 'bg-[#F0EDE8] text-gray-600' };
   }
 }
 
@@ -394,7 +394,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg, #f9fafb)' }}>
-        <Loader2 className="w-8 h-8 animate-spin text-teal-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -457,8 +457,8 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         <Card className="p-5 rounded-2xl border-0 shadow-sm bg-white">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center">
-                <CreditCard className="w-4 h-4 text-teal-600" />
+              <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                <CreditCard className="w-4 h-4 text-[#6B9080]" />
               </div>
               <span className="font-semibold text-gray-800 text-sm">Stripe Connect</span>
             </div>
@@ -488,11 +488,11 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
 
           {isActive && balance && (
             <div className="grid grid-cols-2 gap-3 mb-4">
-              <div className="rounded-xl bg-teal-50 p-3 text-center">
-                <p className="text-xs text-teal-600 font-medium mb-1">Available</p>
-                <p className="text-lg font-bold text-teal-700">{formatCents(balance.availableCents)}</p>
+              <div className="rounded-xl bg-[#6B9080]/10 p-3 text-center">
+                <p className="text-xs text-[#6B9080] font-medium mb-1">Available</p>
+                <p className="text-lg font-bold text-[#6B9080]">{formatCents(balance.availableCents)}</p>
               </div>
-              <div className="rounded-xl bg-gray-50 p-3 text-center">
+              <div className="rounded-xl bg-[#FAF7F2] p-3 text-center">
                 <p className="text-xs text-gray-500 font-medium mb-1">Pending</p>
                 <p className="text-lg font-bold text-gray-700">{formatCents(balance.pendingCents)}</p>
               </div>
@@ -528,7 +528,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         {/* Fee info card */}
         <Card className="p-4 rounded-2xl border-0 shadow-sm bg-white">
           <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="w-4 h-4 text-teal-500" />
+            <TrendingUp className="w-4 h-4 text-primary" />
             <span className="font-semibold text-gray-800 text-sm">Payout Schedule</span>
           </div>
           <div className="space-y-2">
@@ -556,7 +556,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
               <History className="w-4 h-4 text-gray-500" />
               <span className="font-semibold text-gray-800 text-sm">Payout History</span>
               {payouts.length > 0 && (
-                <Badge className="bg-teal-50 text-teal-700 border-0 text-xs">
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-0 text-xs">
                   {payouts.length}
                 </Badge>
               )}

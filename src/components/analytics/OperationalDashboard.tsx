@@ -39,7 +39,7 @@ interface OperationalDashboardProps {
 
 // ─── Sparkline SVG ───────────────────────────────────────────────────
 
-function Sparkline({ points, color = '#14b8a6' }: { points: TimeSeriesPoint[]; color?: string }) {
+function Sparkline({ points, color = '#6B9080' }: { points: TimeSeriesPoint[]; color?: string }) {
   const normalized = normalizeSparkline(points);
   if (normalized.length < 2) return null;
 
@@ -72,7 +72,7 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
             <span className="text-gray-600">{item.label}</span>
             <span className="text-gray-800 font-medium">{item.value}{item.unit || '%'}</span>
           </div>
-          <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
             <div
               className={`h-full rounded-full ${colorClass}`}
               style={{ width: `${(item.value / maxVal) * 100}%` }}
@@ -133,7 +133,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
         <div className="mt-2">
           <Sparkline
             points={sparkData}
-            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#14b8a6'}
+            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#6B9080'}
           />
         </div>
       )}
@@ -194,7 +194,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
       <div className="grid grid-cols-4 gap-2">
         {categories.map(cat => (
           <div key={cat.label} className="text-center">
-            <div className="h-1.5 rounded-full bg-gray-200 overflow-hidden mb-1">
+            <div className="h-1.5 rounded-full bg-[#E8E4DF] overflow-hidden mb-1">
               <div
                 className={`h-full rounded-full ${cat.score >= 80 ? 'bg-green-500' : cat.score >= 60 ? 'bg-amber-500' : 'bg-red-500'}`}
                 style={{ width: `${cat.score}%` }}
@@ -276,12 +276,12 @@ export default function OperationalDashboard({
   }, [onExportPDF]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -310,7 +310,7 @@ export default function OperationalDashboard({
               <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="flex items-center justify-center rounded-full p-2 hover:bg-gray-100 disabled:opacity-50"
+                className="flex items-center justify-center rounded-full p-2 hover:bg-[#F0EDE8] disabled:opacity-50"
                 aria-label="Refresh metrics"
                 title="Refresh metrics"
               >
@@ -319,7 +319,7 @@ export default function OperationalDashboard({
             )}
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50"
+              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-[#FAF7F2]"
             >
               <Download className="h-3.5 w-3.5" />
               Export
@@ -346,8 +346,8 @@ export default function OperationalDashboard({
                 <button
                   key={preset.label}
                   onClick={() => { onDateRangeChange(preset); setShowDatePicker(false); }}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-50 ${
-                    data.dateRange.label === preset.label ? 'bg-teal-50 text-teal-700 font-medium' : 'text-gray-700'
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#FAF7F2] ${
+                    data.dateRange.label === preset.label ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-gray-700'
                   }`}
                 >
                   {preset.label}
@@ -367,7 +367,7 @@ export default function OperationalDashboard({
 
         {/* ─── Family Retention ─────────────────────────────────── */}
         <SectionHeader
-          icon={<Users className="h-4 w-4 text-teal-600" />}
+          icon={<Users className="h-4 w-4 text-[#6B9080]" />}
           title="Family Retention"
         />
         <div className="grid grid-cols-2 gap-3">
@@ -389,7 +389,7 @@ export default function OperationalDashboard({
               { label: '60-Day', value: data.familyRetention.retention60Day },
               { label: '90-Day', value: data.familyRetention.retention90Day },
             ].map(p => (
-              <div key={p.label} className="rounded-lg bg-gray-50 p-2">
+              <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
                 <p className="text-lg font-bold text-gray-900">{p.value}%</p>
                 <p className="text-xs text-gray-500">{p.label}</p>
               </div>
@@ -419,7 +419,7 @@ export default function OperationalDashboard({
                 <div key={r.reason} className="flex items-center justify-between text-xs">
                   <span className="text-gray-700 flex-1 truncate">{r.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-16 h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-16 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <div className="h-full rounded-full bg-rose-400" style={{ width: `${r.percentage}%` }} />
                     </div>
                     <span className="text-gray-500 w-8 text-right">{r.percentage}%</span>
@@ -579,7 +579,7 @@ export default function OperationalDashboard({
                       <span className="text-gray-700">{stage.stage}</span>
                       <span className="text-gray-500">{stage.count} ({stage.conversionRate}%)</span>
                     </div>
-                    <div className="h-4 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${widthPct}%` }}
@@ -637,7 +637,7 @@ export default function OperationalDashboard({
                 <div key={reason.reason} className="flex items-center justify-between text-xs">
                   <span className="text-gray-700 truncate flex-1">{reason.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-20 h-2 rounded-full bg-gray-100 overflow-hidden">
+                    <div className="w-20 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-red-400"
                         style={{ width: `${reason.percentage}%` }}

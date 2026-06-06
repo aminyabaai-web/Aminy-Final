@@ -361,7 +361,7 @@ export function CRSyncStatus({
         <button
           onClick={handleSyncNow}
           disabled={syncing}
-          className="p-1 rounded-md hover:bg-gray-100 text-gray-400 disabled:opacity-50 transition-colors"
+          className="p-1 rounded-md hover:bg-[#F0EDE8] text-gray-400 disabled:opacity-50 transition-colors"
           title="Sync now"
         >
           {syncing ? (
@@ -406,7 +406,7 @@ export function CRSyncStatus({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
               overallFreshness === 'stale'
                 ? 'bg-red-600 hover:bg-red-700 text-white'
-                : 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200'
+                : 'bg-white hover:bg-[#FAF7F2] text-gray-700 border border-gray-200'
             }`}
           >
             {syncing ? (
@@ -483,7 +483,7 @@ export function CRSyncStatus({
           </div>
 
           {/* Privacy Note */}
-          <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+          <div className="bg-[#FAF7F2] rounded-lg p-3 border border-gray-100">
             <p className="text-xs text-gray-500 leading-relaxed">
               Your data is encrypted and only shared with your authorized care
               team. You can control what data is shared in Settings.

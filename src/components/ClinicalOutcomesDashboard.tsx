@@ -202,7 +202,7 @@ export default function ClinicalOutcomesDashboard() {
     : children[0];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-[#FAF7F2] p-4">
       {/* Header */}
       <div className="mb-5">
         <h1 className="text-[22px] font-bold text-[#0D1B2A] mb-1">
@@ -358,7 +358,7 @@ function PrePostCard({ child }: { child: ChildOutcome }) {
         <h3 className="text-[15px] font-bold text-[#0D1B2A]">
           Assessment Comparison
         </h3>
-        <span className="text-[11px] text-slate-500 bg-gray-100 px-2 py-0.5 rounded">
+        <span className="text-[11px] text-slate-500 bg-[#F0EDE8] px-2 py-0.5 rounded">
           {child.assessmentType}
         </span>
       </div>
@@ -401,7 +401,7 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+        <div className="flex-1 h-2.5 bg-[#E8E4DF] rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-[width] duration-500 ease-in-out ${trendBgClasses[goal.trend]}`}
             style={{ width: `${Math.min(goal.percentComplete, 100)}%` }}
@@ -501,7 +501,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
               <span className="text-[13px] font-semibold text-[#0D1B2A]">{cat.category}</span>
               <span className="text-xs text-slate-500">{cat.count} goals / {cat.avgProgress}% avg</span>
             </div>
-            <div className="h-2 bg-gray-200 rounded overflow-hidden">
+            <div className="h-2 bg-[#E8E4DF] rounded overflow-hidden">
               <div
                 className={`h-full rounded ${getCategoryBgClass(i)}`}
                 style={{ width: `${cat.avgProgress}%` }}
@@ -553,8 +553,8 @@ function LoadingSkeleton() {
     <div className="flex flex-col gap-3">
       {[1, 2, 3].map((i) => (
         <div key={i} className="bg-white rounded-xl p-5 h-[100px] shadow-sm">
-          <div className="w-3/5 h-3.5 bg-gray-200 rounded mb-3" />
-          <div className="w-2/5 h-2.5 bg-gray-200 rounded" />
+          <div className="w-3/5 h-3.5 bg-[#E8E4DF] rounded mb-3" />
+          <div className="w-2/5 h-2.5 bg-[#E8E4DF] rounded" />
         </div>
       ))}
     </div>

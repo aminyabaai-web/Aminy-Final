@@ -119,7 +119,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
         <motion.div {...ANIMATIONS.pulse}>
           <Sparkles className="w-12 h-12 text-accent" />
         </motion.div>
@@ -129,7 +129,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] p-4">
         <motion.div {...ANIMATIONS.pageEnter}>
           <Card className="max-w-md p-8 text-center">
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
@@ -304,7 +304,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
                   <span className="text-gray-700">{goal.name}</span>
                   <span className="text-gray-500">{goal.progress}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="w-full bg-[#E8E4DF] rounded-full h-2">
                   <div
                     className="bg-accent rounded-full h-2 transition-all"
                     style={{ width: `${goal.progress}%` }}
@@ -317,7 +317,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
       )}
 
       {/* Locked Features Teaser */}
-      <Card className="p-5 bg-gray-50 border-dashed">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <div className="flex items-center gap-3 mb-3">
           <Lock className="w-5 h-5 text-gray-400" />
           <h3 className="text-sm text-gray-700">More Insights Available</h3>
@@ -361,7 +361,7 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
           <div className="space-y-3">
             <h3 className="text-sm text-gray-900">Active Routines</h3>
             {data.routines.map((routine: PlanRoutine, idx: number) => (
-              <Card key={`${routine.name}-${idx}`} className="p-4 bg-gray-50">
+              <Card key={`${routine.name}-${idx}`} className="p-4 bg-[#FAF7F2]">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-accent" />
                   <span className="text-sm text-gray-900">{routine.name}</span>
@@ -386,7 +386,7 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
       </Card>
 
       {/* Locked Features */}
-      <Card className="p-5 bg-gray-50 border-dashed">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <Lock className="w-5 h-5 text-gray-400 mb-2" />
         <h3 className="text-sm text-gray-700 mb-2">Create Your Own Plans</h3>
         <p className="text-xs text-gray-600">
@@ -422,7 +422,7 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
                   className={`aspect-square rounded ${
                     day.completed
                       ? 'bg-accent'
-                      : 'bg-gray-200'
+                      : 'bg-[#E8E4DF]'
                   }`}
                   title={safeFormatDate(day.date)}
                 />
@@ -446,7 +446,7 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
       </Card>
 
       {/* Locked Features */}
-      <Card className="p-5 bg-gray-50 border-dashed">
+      <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <Lock className="w-5 h-5 text-gray-400 mb-2" />
         <h3 className="text-sm text-gray-700 mb-2">Build Your Own Streaks</h3>
         <p className="text-xs text-gray-600">

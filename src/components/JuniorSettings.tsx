@@ -105,7 +105,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <div className="mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-5 h-5 text-teal-600" />
+              <Clock className="w-5 h-5 text-[#6B9080]" />
               <Label className="font-semibold">Daily Time Limit</Label>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
@@ -158,7 +158,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
               />
             </div>
 
-            <div className="h-px bg-gray-200" />
+            <div className="h-px bg-[#E8E4DF]" />
 
             <div className="flex items-start justify-between gap-3 sm:gap-4">
               <div className="flex-1">
@@ -206,7 +206,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Info Card */}
-        <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+        <div className="bg-[#FAF7F2] rounded-xl p-4 border border-gray-200">
           <p className="text-xs text-muted-foreground text-center">
             Calm tools, rewards, and transition supports are designed to lower stress quickly and make daily routines easier for {childName}.
           </p>

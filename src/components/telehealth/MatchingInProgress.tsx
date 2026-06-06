@@ -81,13 +81,13 @@ function MatchingProgress() {
               {i === activeStep ? (
                 <div className="w-4 h-4 flex-shrink-0 flex items-center justify-center">
                   <motion.div
-                    className="w-3 h-3 rounded-full border-2 border-teal-500 border-t-transparent"
+                    className="w-3 h-3 rounded-full border-2 border-[#6B9080] border-t-transparent"
                     animate={{ rotate: 360 }}
                     transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
                   />
                 </div>
               ) : (
-                <CheckCircle className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
               )}
               <span className={`text-sm ${i === activeStep ? 'text-gray-900 font-medium' : 'text-gray-500'}`}>
                 {step.label}
@@ -196,7 +196,7 @@ export function MatchingInProgress({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-1 rounded-full hover:bg-[#F0EDE8] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
@@ -209,15 +209,15 @@ export function MatchingInProgress({
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-5 space-y-4"
+          className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-teal-50 to-cyan-50 p-5 space-y-4"
         >
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center">
               <PulsingDots />
             </div>
             <div>
               <h2 className="text-base font-bold text-gray-900">Matching in Progress</h2>
-              <p className="text-xs text-teal-700 mt-0.5">You'll hear from us within 24-48 hours</p>
+              <p className="text-xs text-[#6B9080] mt-0.5">You'll hear from us within 24-48 hours</p>
             </div>
           </div>
 
@@ -228,7 +228,7 @@ export function MatchingInProgress({
 
           <MatchingProgress />
 
-          <div className="rounded-xl bg-teal-100/60 border border-teal-200 px-3 py-2">
+          <div className="rounded-xl bg-[#6B9080]/10/60 border border-[#6B9080]/20 px-3 py-2">
             <p className="text-xs text-teal-800 font-medium">
               You'll get a text or email as soon as a match is confirmed — usually within 24-48 hours.
             </p>
@@ -273,7 +273,7 @@ export function MatchingInProgress({
           className="rounded-2xl border border-gray-200 bg-white p-4 space-y-3"
         >
           <div className="flex items-center gap-2">
-            <Bell className="w-4 h-4 text-teal-600" />
+            <Bell className="w-4 h-4 text-[#6B9080]" />
             <h3 className="text-sm font-bold text-gray-900">Get notified when your match is ready</h3>
           </div>
 
@@ -281,9 +281,9 @@ export function MatchingInProgress({
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-2 rounded-xl bg-teal-50 border border-teal-200 p-3"
+              className="flex items-center gap-2 rounded-xl bg-[#6B9080]/10 border border-[#6B9080]/20 p-3"
             >
-              <CheckCircle className="w-4 h-4 text-teal-600 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-[#6B9080] flex-shrink-0" />
               <p className="text-sm text-teal-800 font-medium">
                 Got it! We'll notify you the moment your match is confirmed.
               </p>
@@ -297,14 +297,14 @@ export function MatchingInProgress({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200"
+                  className="w-full rounded-xl border border-gray-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-[#6B9080] focus:ring-1 focus:ring-teal-200"
                 />
               </div>
 
               <label className="flex items-center gap-2.5 cursor-pointer">
                 <div
                   className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-                    notifyPhone ? 'bg-teal-500 border-teal-500' : 'border-gray-300'
+                    notifyPhone ? 'bg-primary border-[#6B9080]' : 'border-gray-300'
                   }`}
                   onClick={() => setNotifyPhone(!notifyPhone)}
                 >

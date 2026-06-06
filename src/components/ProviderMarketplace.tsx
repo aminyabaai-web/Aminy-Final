@@ -186,7 +186,7 @@ const providerColorClasses: Record<string, { bg: string; text: string; border: s
   green: { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' },
   orange: { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' },
   red: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
-  cyan: { bg: 'bg-[#6B9080]/10', text: 'text-cyan-700', border: 'border-cyan-200' },
+  cyan: { bg: 'bg-[#6B9080]/10', text: 'text-cyan-700', border: 'border-[#6B9080]/20' },
 };
 
 export function ProviderMarketplace({
@@ -909,7 +909,7 @@ export function ProviderMarketplace({
                     onClick={() => setFilters(prev => ({ ...prev, availableThisWeek: !prev.availableThisWeek }))}
                     className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
                       filters.availableThisWeek
-                        ? 'bg-[#6B9080]/10 border-teal-300 text-[#6B9080]'
+                        ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080]'
                         : 'bg-white border-gray-300 text-gray-700 hover:bg-[#FAF7F2]'
                     }`}
                   >
@@ -932,7 +932,7 @@ export function ProviderMarketplace({
                   step={25}
                   value={filters.maxPrice}
                   onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-600"
+                  className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-teal-600"
                 />
                 <div className="flex justify-between text-xs text-gray-400 mt-1">
                   <span>$25</span>
@@ -954,7 +954,7 @@ export function ProviderMarketplace({
                     onClick={() => toggleArrayFilter('languages', lang)}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.languages.includes(lang)
-                        ? 'bg-[#6B9080]/10 border-teal-300 text-[#6B9080] border'
+                        ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080] border'
                         : 'bg-white border-gray-200 text-gray-600 border hover:bg-[#FAF7F2]'
                     }`}
                   >
@@ -1052,11 +1052,11 @@ export function ProviderMarketplace({
             {[1, 2, 3].map(i => (
               <Card key={i} className="p-6 animate-pulse">
                 <div className="flex gap-3 sm:gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-2xl" />
+                  <div className="w-16 h-16 bg-[#E8E4DF] rounded-2xl" />
                   <div className="flex-1 space-y-3">
-                    <div className="h-4 bg-gray-200 rounded w-1/3" />
-                    <div className="h-3 bg-gray-200 rounded w-1/4" />
-                    <div className="h-3 bg-gray-200 rounded w-2/3" />
+                    <div className="h-4 bg-[#E8E4DF] rounded w-1/3" />
+                    <div className="h-3 bg-[#E8E4DF] rounded w-1/4" />
+                    <div className="h-3 bg-[#E8E4DF] rounded w-2/3" />
                   </div>
                 </div>
               </Card>

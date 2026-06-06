@@ -307,7 +307,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
         className="max-w-sm w-full bg-white rounded-2xl overflow-hidden shadow-2xl"
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-teal-500 to-cyan-500 p-6 text-white text-center relative">
+        <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] p-6 text-white text-center relative">
           <button
             onClick={onDismiss}
             className="absolute top-3 right-3 p-1 hover:bg-white/20 rounded-full transition-colors"
@@ -348,7 +348,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
 
           <Button
             onClick={onUpgrade}
-            className="w-full py-3 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white font-semibold"
+            className="w-full py-3 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-600 hover:to-cyan-600 text-white font-semibold"
           >
             <Crown className="w-5 h-5 mr-2" />
             Upgrade Now - 7 Days Free

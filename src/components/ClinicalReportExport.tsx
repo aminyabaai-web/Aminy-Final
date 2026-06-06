@@ -130,8 +130,8 @@ export function ClinicalReportExport({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-teal-600 mb-3" />
+      <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[#6B9080] mb-3" />
         <p className="text-sm text-gray-500">Loading your clinical data...</p>
       </div>
     );
@@ -139,13 +139,13 @@ export function ClinicalReportExport({
 
   if (!reportData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-6 text-center">
-        <FileText className="w-10 h-10 text-teal-600 mb-3" />
+      <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 text-center">
+        <FileText className="w-10 h-10 text-[#6B9080] mb-3" />
         <h1 className="text-lg font-semibold text-gray-900 mb-2">No caregiver summary available yet</h1>
         <p className="text-sm text-gray-500 mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
         <button
           onClick={onBack}
-          className="px-4 py-2 rounded-lg bg-teal-600 text-white text-sm font-medium hover:bg-teal-700 transition-colors"
+          className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-[#6B9080] transition-colors"
         >
           Back
         </button>
@@ -170,7 +170,7 @@ export function ClinicalReportExport({
 
   if (step === 'configure') {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         {/* Header */}
         <div
           className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
@@ -196,8 +196,8 @@ export function ClinicalReportExport({
 
         <div className="px-4 py-4 space-y-4 max-w-lg mx-auto">
           {/* Info banner */}
-          <div className="bg-teal-50 border border-teal-200 rounded-lg p-3 flex items-start gap-2.5">
-            <Shield className="w-4 h-4 text-teal-700 mt-0.5 flex-shrink-0" />
+          <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg p-3 flex items-start gap-2.5">
+            <Shield className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
             <p className="text-xs text-teal-800">
               This generates an encrypted clinical PDF you can share with your child's
               pediatrician, BCBA, or school. All data stays on your device.
@@ -218,8 +218,8 @@ export function ClinicalReportExport({
                   onClick={() => setRecipient(opt.value)}
                   className={`px-3 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     recipient === opt.value
-                      ? 'bg-teal-600 text-white border-teal-600'
-                      : 'bg-white text-gray-600 border-gray-200 hover:border-teal-300'
+                      ? 'bg-primary text-white border-[#6B9080]'
+                      : 'bg-white text-gray-600 border-gray-200 hover:border-[#6B9080]/30'
                   }`}
                 >
                   {opt.label}
@@ -233,7 +233,7 @@ export function ClinicalReportExport({
             <label className="text-sm font-medium text-gray-700 mb-2 block">Report period:</label>
             <div className="bg-white rounded-lg border border-gray-200 p-3">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar className="w-4 h-4 text-teal-600" />
+                <Calendar className="w-4 h-4 text-[#6B9080]" />
                 <span>{reportData.reportPeriod.start} to {reportData.reportPeriod.end}</span>
               </div>
               <p className="text-xs text-gray-400 mt-1">3-month reporting window</p>
@@ -252,11 +252,11 @@ export function ClinicalReportExport({
                   key={toggle.key}
                   onClick={() => !toggle.locked && toggleSection(toggle.key)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
-                    toggle.locked ? 'cursor-default' : 'hover:bg-gray-50'
+                    toggle.locked ? 'cursor-default' : 'hover:bg-[#FAF7F2]'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    sections[toggle.key] ? 'bg-teal-100 text-teal-700' : 'bg-gray-100 text-gray-400'
+                    sections[toggle.key] ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-gray-400'
                   }`}>
                     {toggle.icon}
                   </div>
@@ -266,13 +266,13 @@ export function ClinicalReportExport({
                         {toggle.label}
                       </span>
                       {toggle.locked && (
-                        <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">Required</span>
+                        <span className="text-[10px] bg-[#F0EDE8] text-gray-500 px-1.5 py-0.5 rounded">Required</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-400 truncate">{toggle.description}</p>
                   </div>
                   <div className={`w-9 h-5 rounded-full flex items-center transition-colors ${
-                    sections[toggle.key] ? 'bg-teal-600' : 'bg-gray-200'
+                    sections[toggle.key] ? 'bg-primary' : 'bg-[#E8E4DF]'
                   } ${toggle.locked ? 'opacity-50' : ''}`}>
                     <div
                       className="w-4 h-4 rounded-full bg-white shadow-sm ml-0.5 transition-transform"
@@ -287,7 +287,7 @@ export function ClinicalReportExport({
           {/* Generate button */}
           <button
             onClick={() => setStep('preview')}
-            className="w-full bg-teal-600 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 hover:bg-teal-700 transition-colors"
+            className="w-full bg-primary text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 hover:bg-[#6B9080] transition-colors"
           >
             Review & Download
             <ChevronRight className="w-4 h-4" />
@@ -306,7 +306,7 @@ export function ClinicalReportExport({
       : 0;
 
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         {/* Header */}
         <div
           className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
@@ -328,11 +328,11 @@ export function ClinicalReportExport({
           <div className="grid grid-cols-2 gap-2.5">
             <div className="bg-white rounded-lg border border-gray-200 p-3">
               <p className="text-xs text-gray-400">Avg Goal Progress</p>
-              <p className="text-2xl font-bold text-teal-700">{avgProgress}%</p>
+              <p className="text-2xl font-bold text-[#6B9080]">{avgProgress}%</p>
             </div>
             <div className="bg-white rounded-lg border border-gray-200 p-3">
               <p className="text-xs text-gray-400">Attendance Rate</p>
-              <p className="text-2xl font-bold text-teal-700">{reportData.sessions.attendanceRate.toFixed(0)}%</p>
+              <p className="text-2xl font-bold text-[#6B9080]">{reportData.sessions.attendanceRate.toFixed(0)}%</p>
             </div>
             <div className="bg-white rounded-lg border border-gray-200 p-3">
               <p className="text-xs text-gray-400">Treatment Hours</p>
@@ -357,10 +357,10 @@ export function ClinicalReportExport({
               <div key={goal.id} className="flex items-center gap-2 py-1.5">
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-medium text-gray-700 truncate">{goal.domain}: {goal.title}</p>
-                  <div className="w-full bg-gray-100 rounded-full h-1.5 mt-1">
+                  <div className="w-full bg-[#F0EDE8] rounded-full h-1.5 mt-1">
                     <div
                       className={`h-1.5 rounded-full ${
-                        goal.trendDirection === 'improving' ? 'bg-teal-500' : goal.trendDirection === 'declining' ? 'bg-red-500' : 'bg-blue-500'
+                        goal.trendDirection === 'improving' ? 'bg-primary' : goal.trendDirection === 'declining' ? 'bg-red-500' : 'bg-blue-500'
                       }`}
                       style={{ width: `${goal.current}%` }}
                     />
@@ -389,7 +389,7 @@ export function ClinicalReportExport({
           )}
 
           {/* Sections included */}
-          <div className="bg-gray-50 rounded-lg border border-gray-200 p-3">
+          <div className="bg-[#FAF7F2] rounded-lg border border-gray-200 p-3">
             <p className="text-xs text-gray-500 mb-1">Sections included: {enabledSectionCount}</p>
             <p className="text-xs text-gray-400">
               {sectionToggles.filter(t => sections[t.key]).map(t => t.label).join(' · ')}
@@ -400,7 +400,7 @@ export function ClinicalReportExport({
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="w-full bg-teal-600 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 hover:bg-teal-700 transition-colors disabled:opacity-60"
+            className="w-full bg-primary text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2 hover:bg-[#6B9080] transition-colors disabled:opacity-60"
           >
             {generating ? (
               <>
@@ -422,7 +422,7 @@ export function ClinicalReportExport({
   // ── Success Step ──────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <div
         className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
         style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}
@@ -440,9 +440,9 @@ export function ClinicalReportExport({
             {reportData.child.firstName}'s clinical progress report has been downloaded to your device.
           </p>
 
-          <div className="bg-teal-50 rounded-lg p-3 text-left mb-4">
+          <div className="bg-[#6B9080]/10 rounded-lg p-3 text-left mb-4">
             <p className="text-xs font-medium text-teal-800 mb-1">Sharing tips:</p>
-            <ul className="text-xs text-teal-700 space-y-1">
+            <ul className="text-xs text-[#6B9080] space-y-1">
               <li>• Upload to your provider's patient portal</li>
               <li>• Bring a printed copy to your next appointment</li>
               <li>• Share via secure email with your care team</li>
@@ -461,13 +461,13 @@ export function ClinicalReportExport({
         <div className="flex gap-3 w-full mt-4">
           <button
             onClick={() => setStep('configure')}
-            className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-2.5 text-sm font-medium hover:bg-gray-50 transition-colors"
+            className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-2.5 text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
           >
             Generate Another
           </button>
           <button
             onClick={onBack}
-            className="flex-1 bg-teal-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-teal-700 transition-colors"
+            className="flex-1 bg-primary text-white rounded-lg py-2.5 text-sm font-medium hover:bg-[#6B9080] transition-colors"
           >
             Done
           </button>

@@ -248,7 +248,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="relative">
-                    <Sparkles className="w-5 h-5 text-cyan-600" />
+                    <Sparkles className="w-5 h-5 text-[#6B9080]" />
                     {hasNewInsight && (
                       <span className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-emerald-400 via-amber-400 to-violet-400 rounded-full animate-pulse" />
                     )}
@@ -325,7 +325,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
               {messages.length === 0 && (
                 <div className="text-center pt-12">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-50 to-violet-50 flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-cyan-600" />
+                    <Sparkles className="w-8 h-8 text-[#6B9080]" />
                   </div>
                   <p className="text-slate-600 mb-4 sm:mb-6">
                     I'm here to help. What's on your mind?
@@ -423,7 +423,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <div key={memory.id} className="text-xs text-slate-600">
                         <div className="flex items-center gap-2 mb-1">
                           {memory.category === 'calm_cue' && <Heart className="w-3 h-3 text-emerald-500" />}
-                          {memory.category === 'progress' && <TrendingUp className="w-3 h-3 text-cyan-500" />}
+                          {memory.category === 'progress' && <TrendingUp className="w-3 h-3 text-primary" />}
                           <span className="text-slate-400">
                             {new Date(memory.timestamp).toLocaleDateString()}
                           </span>

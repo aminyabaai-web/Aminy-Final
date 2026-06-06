@@ -87,7 +87,7 @@ function NavGroup({
               className={[
                 'group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200',
                 active
-                  ? 'bg-teal-50 text-slate-900 shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-teal-200/80'
+                  ? 'bg-[#6B9080]/10 text-slate-900 shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-teal-200/80'
                   : 'bg-transparent text-slate-700 hover:bg-white/85 hover:text-slate-950',
               ].join(' ')}
             >
@@ -95,8 +95,8 @@ function NavGroup({
                 className={[
                   'flex h-10 w-10 items-center justify-center rounded-2xl transition-colors',
                   active
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-white text-slate-500 shadow-sm group-hover:bg-teal-50 group-hover:text-teal-700',
+                    ? 'bg-primary text-white'
+                    : 'bg-white text-slate-500 shadow-sm group-hover:bg-[#6B9080]/10 group-hover:text-[#6B9080]',
                 ].join(' ')}
               >
                 <Icon className="h-5 w-5" strokeWidth={active ? 2.1 : 1.9} />
@@ -110,7 +110,7 @@ function NavGroup({
               <ChevronRight
                 className={[
                   'h-4 w-4 transition-all',
-                  active ? 'translate-x-0 text-teal-500' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-slate-600',
+                  active ? 'translate-x-0 text-primary' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-slate-600',
                 ].join(' ')}
               />
             </button>
@@ -137,11 +137,11 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
           style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.86))' }}
         >
           <div className="min-w-0">
-            <div className="inline-flex rounded-full bg-teal-50 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-teal-700">
+            <div className="inline-flex rounded-full bg-[#6B9080]/10 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-[#6B9080]">
               Caregiver companion
             </div>
             <div className="mt-4 flex items-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500 to-cyan-500 shadow-[0_12px_28px_rgba(45,212,191,0.2)]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] shadow-[0_12px_28px_rgba(45,212,191,0.2)]">
                 <Compass className="h-7 w-7 text-white" strokeWidth={2} aria-label="Aminy" />
               </div>
               <div className="min-w-0">
@@ -165,7 +165,7 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
               <div className="text-xs font-medium text-slate-500">Focus</div>
               <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-slate-900">
-                <Activity className="h-3.5 w-3.5 text-teal-600" />
+                <Activity className="h-3.5 w-3.5 text-[#6B9080]" />
                 Live workflow
               </div>
               <div className="text-[12px] text-slate-600">Guidance, care access, records</div>

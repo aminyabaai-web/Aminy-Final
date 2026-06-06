@@ -408,7 +408,7 @@ export function B2BPartnerPortal({
             {integrationFeatures.map((feature, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg"
+                className="flex items-start gap-3 p-4 bg-[#FAF7F2] rounded-lg"
               >
                 <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                 <div>
@@ -422,7 +422,7 @@ export function B2BPartnerPortal({
       </section>
 
       {/* Pricing */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-[#FAF7F2]">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-4">
             Simple, Scalable Pricing
@@ -476,10 +476,10 @@ export function B2BPartnerPortal({
 
                 {/* Seat Selector (not for enterprise) */}
                 {tier.key !== 'enterprise' && (
-                  <div className="flex items-center justify-between bg-gray-50 rounded-lg p-2 mb-4">
+                  <div className="flex items-center justify-between bg-[#FAF7F2] rounded-lg p-2 mb-4">
                     <button
                       onClick={() => handleSeatChange(tier.key, -1)}
-                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-[#F0EDE8]"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
@@ -488,7 +488,7 @@ export function B2BPartnerPortal({
                     </span>
                     <button
                       onClick={() => handleSeatChange(tier.key, 1)}
-                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                      className="w-7 h-7 flex items-center justify-center rounded-md bg-white border border-gray-200 text-gray-600 hover:bg-[#F0EDE8]"
                     >
                       <Plus className="w-3 h-3" />
                     </button>

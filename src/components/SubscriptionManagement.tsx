@@ -206,7 +206,7 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
 
                 <Card className="p-4 border border-gray-200">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 bg-gray-100 rounded-lg">
+                    <div className="p-2 bg-[#F0EDE8] rounded-lg">
                       <Calendar className="w-5 h-5 text-gray-600" />
                     </div>
                     <div>
@@ -352,7 +352,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
 
   // Use consistent tier colors from design system
   const tierColors: Record<TierType, string> = {
-    free: 'bg-gray-100 text-gray-700',
+    free: 'bg-[#F0EDE8] text-gray-700',
     starter: 'bg-blue-100 text-blue-700',
     core: 'bg-accent/10 text-accent',
     pro: 'bg-gradient-to-r from-purple-600 to-pink-600 text-white',

@@ -141,7 +141,7 @@ export function PullToRefresh({
             className={`p-2 rounded-full transition-all duration-200 ${
               canRefresh
                 ? 'bg-accent text-white scale-110'
-                : 'bg-gray-100 text-gray-400'
+                : 'bg-[#F0EDE8] text-gray-400'
             }`}
             style={{
               transform: `rotate(${rotation}deg)`,

@@ -153,7 +153,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
         <div className="px-4 py-4 sm:px-6">
@@ -189,8 +189,8 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
             {/* Storage Stats Card */}
             <Card className="p-4 border-0 shadow-sm dark:bg-slate-800 dark:border-slate-700">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
-                  <FolderOpen className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                <div className="w-8 h-8 bg-[#6B9080]/10 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
+                  <FolderOpen className="w-4 h-4 text-[#6B9080] dark:text-primary" />
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">Vault Storage</h3>
@@ -206,9 +206,9 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                       {stats.storageUsed} MB / {stats.storageLimit} MB
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                  <div className="w-full bg-[#E8E4DF] dark:bg-slate-700 rounded-full h-2">
                     <div 
-                      className="bg-teal-600 h-2 rounded-full" 
+                      className="bg-primary h-2 rounded-full" 
                       style={{ width: `${Math.min((stats.storageUsed / stats.storageLimit) * 100, 100)}%` }}
                     />
                   </div>
@@ -221,7 +221,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                       {stats.filesCount} / {stats.filesLimit}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
+                  <div className="w-full bg-[#E8E4DF] dark:bg-slate-700 rounded-full h-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full" 
                       style={{ width: `${Math.min((stats.filesCount / stats.filesLimit) * 100, 100)}%` }}

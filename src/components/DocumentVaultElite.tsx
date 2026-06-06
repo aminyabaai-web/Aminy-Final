@@ -296,7 +296,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
           </div>
           <Button
             size="sm"
-            className="bg-teal-600 hover:bg-teal-700 text-white"
+            className="bg-primary hover:bg-[#6B9080] text-white"
             onClick={() => setShowUpload(true)}
           >
             <Plus className="w-3.5 h-3.5 mr-1" />
@@ -466,7 +466,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                         </button>
                         <button
                           onClick={() => setShareModal(doc)}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-teal-600 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#6B9080] bg-[#6B9080]/10 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
                         >
                           <Share2 className="w-3 h-3" />
                           Share
@@ -558,13 +558,13 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   }}
                 />
                 <div
-                  className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-teal-300 hover:bg-teal-50/30 transition-all"
+                  className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30 transition-all"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <Upload className="w-6 h-6 text-slate-400 mx-auto mb-2" />
                   {selectedFile ? (
                     <>
-                      <p className="text-sm text-teal-700 font-medium">{selectedFile.name}</p>
+                      <p className="text-sm text-[#6B9080] font-medium">{selectedFile.name}</p>
                       <p className="text-xs text-slate-400 mt-0.5">{(selectedFile.size / 1024).toFixed(0)} KB — tap to change</p>
                     </>
                   ) : (
@@ -581,7 +581,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   Cancel
                 </Button>
                 <Button
-                  className="flex-1 bg-teal-600 hover:bg-teal-700 text-white"
+                  className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
                   onClick={handleUpload}
                   disabled={isUploading}
                 >
@@ -632,16 +632,16 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       onClick={() => setSelectedProvider(provider)}
                       className={`w-full text-left flex items-center gap-3 p-3 rounded-xl border transition-all ${
                         selectedProvider === provider
-                          ? 'border-teal-400 bg-teal-50'
+                          ? 'border-[#6B9080] bg-[#6B9080]/10'
                           : 'border-slate-200 hover:border-slate-300'
                       }`}
                     >
-                      <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-teal-700">{provider.charAt(0)}</span>
+                      <div className="w-8 h-8 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs font-bold text-[#6B9080]">{provider.charAt(0)}</span>
                       </div>
                       <span className="text-sm text-slate-800">{provider}</span>
                       {selectedProvider === provider && (
-                        <CheckCircle className="w-4 h-4 text-teal-500 ml-auto" />
+                        <CheckCircle className="w-4 h-4 text-primary ml-auto" />
                       )}
                     </button>
                   ))
@@ -652,7 +652,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Button variant="outline" className="flex-1" onClick={() => setShareModal(null)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-teal-600 hover:bg-teal-700 text-white" onClick={handleShare}>
+                <Button className="flex-1 bg-primary hover:bg-[#6B9080] text-white" onClick={handleShare}>
                   <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   Share Document
                 </Button>

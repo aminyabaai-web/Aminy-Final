@@ -99,8 +99,8 @@ function BigCard({
 function AppointmentRow({ appt }: { appt: Appointment }) {
   return (
     <div className="flex items-start gap-3 py-3 border-t border-gray-100 first:border-0">
-      <div className="mt-0.5 flex-shrink-0 w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center">
-        <Clock className="w-5 h-5 text-teal-700" />
+      <div className="mt-0.5 flex-shrink-0 w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+        <Clock className="w-5 h-5 text-[#6B9080]" />
       </div>
       <div>
         <p className="text-xl font-semibold text-gray-900 leading-tight">{appt.time}</p>
@@ -173,9 +173,9 @@ export default function CaregiverSimpleMode({
 
         {/* Today's Schedule */}
         <BigCard
-          icon={<Calendar className="w-8 h-8 text-teal-600" />}
+          icon={<Calendar className="w-8 h-8 text-[#6B9080]" />}
           title="Today's Schedule"
-          color="border-teal-200 bg-white"
+          color="border-[#6B9080]/20 bg-white"
         >
           {appointments.length === 0 ? (
             <p className="text-xl text-gray-500 py-2">No upcoming appointments.</p>
@@ -273,13 +273,13 @@ export default function CaregiverSimpleMode({
               {/* Aminy support */}
               <a
                 href="tel:18005551234"
-                className="flex items-center gap-4 rounded-xl bg-teal-50 px-4 py-4 border border-teal-200 active:scale-[0.98] transition-transform"
+                className="flex items-center gap-4 rounded-xl bg-[#6B9080]/10 px-4 py-4 border border-[#6B9080]/20 active:scale-[0.98] transition-transform"
                 style={{ minHeight: 80 }}
               >
-                <Phone className="w-8 h-8 text-teal-600 flex-shrink-0" />
+                <Phone className="w-8 h-8 text-[#6B9080] flex-shrink-0" />
                 <div>
-                  <p className="text-xl font-bold text-teal-700">Aminy Support</p>
-                  <p className="text-base text-teal-600">1-800-555-1234 — Mon–Fri 8am–6pm</p>
+                  <p className="text-xl font-bold text-[#6B9080]">Aminy Support</p>
+                  <p className="text-base text-[#6B9080]">1-800-555-1234 — Mon–Fri 8am–6pm</p>
                 </div>
               </a>
 
@@ -295,7 +295,7 @@ export default function CaregiverSimpleMode({
                 <div className="space-y-2 pt-1">
                   <a
                     href="tel:18008294357"
-                    className="flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3 border border-gray-200"
+                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-gray-200"
                   >
                     <Phone className="w-6 h-6 text-gray-500 flex-shrink-0" />
                     <div>
@@ -305,7 +305,7 @@ export default function CaregiverSimpleMode({
                   </a>
                   <a
                     href="tel:18004224453"
-                    className="flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3 border border-gray-200"
+                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-gray-200"
                   >
                     <Phone className="w-6 h-6 text-gray-500 flex-shrink-0" />
                     <div>

@@ -60,7 +60,7 @@ export function PostVisitSummary({
         <h4 className="text-sm font-medium mb-2">Action Items</h4>
         <div className="space-y-2">
           {actionItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+            <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
               <input 
                 type="checkbox" 
                 checked={item.completed}

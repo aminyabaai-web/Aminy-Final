@@ -299,7 +299,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                     <Badge className={
                       prog.type === 'epsdt' ? 'bg-blue-100 text-blue-700' :
                       prog.type === 'insurance_mandate' ? 'bg-purple-100 text-purple-700' :
-                      'bg-teal-100 text-teal-700'
+                      'bg-[#6B9080]/10 text-[#6B9080]'
                     }>
                       {prog.type === 'epsdt' ? 'Federal' :
                        prog.type === 'insurance_mandate' ? 'State Mandate' : 'Waiver'}

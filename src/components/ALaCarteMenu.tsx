@@ -67,7 +67,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       description: 'Brief consultation for specific questions or follow-ups with a Board Certified Behavior Analyst.',
       bestFor: 'Quick questions, follow-ups, progress check-ins',
       icon: GraduationCap,
-      color: 'bg-teal-100 text-teal-700',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       popular: false
     },
     {
@@ -80,7 +80,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       description: 'Expert consultation with a Board Certified Behavior Analyst to review progress and adjust strategies.',
       bestFor: 'Care plan review, strategy adjustments, goal setting',
       icon: GraduationCap,
-      color: 'bg-teal-100 text-teal-700',
+      color: 'bg-[#6B9080]/10 text-[#6B9080]',
       popular: true
     },
     {
@@ -141,11 +141,11 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
               key={session.id}
               className={`p-4 transition-all cursor-pointer hover:shadow-md ${
                 isSelected ? 'ring-2 ring-teal-500' : ''
-              } ${session.popular ? 'border-teal-200 bg-teal-50/30' : ''}`}
+              } ${session.popular ? 'border-[#6B9080]/20 bg-[#6B9080]/10/30' : ''}`}
               onClick={() => handleBookSession(session)}
             >
               {session.popular && (
-                <Badge className="mb-3 bg-teal-500 text-white">
+                <Badge className="mb-3 bg-primary text-white">
                   <Star className="w-3 h-3 mr-1" />
                   Most Popular
                 </Badge>
@@ -197,7 +197,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
               <div className="mt-4 flex justify-end">
                 <Button
                   size="sm"
-                  className={session.popular ? 'bg-teal-600 hover:bg-teal-700' : ''}
+                  className={session.popular ? 'bg-primary hover:bg-[#6B9080]' : ''}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleBookSession(session);

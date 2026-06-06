@@ -192,7 +192,7 @@ export function ProviderInsightsDashboard({
     return (
       <div className="flex items-center justify-center p-12">
         <div className="text-center">
-          <RefreshCw className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
+          <RefreshCw className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-neutral-600 dark:text-slate-400">Loading insights...</p>
         </div>
       </div>
@@ -220,7 +220,7 @@ export function ProviderInsightsDashboard({
                 onClick={() => setSelectedPeriod(period as typeof selectedPeriod)}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   selectedPeriod === period
-                    ? 'bg-white dark:bg-slate-700 text-teal-600 shadow-sm'
+                    ? 'bg-white dark:bg-slate-700 text-[#6B9080] shadow-sm'
                     : 'text-neutral-600 dark:text-slate-400 hover:text-neutral-900'
                 }`}
               >
@@ -240,8 +240,8 @@ export function ProviderInsightsDashboard({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="p-4">
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center">
-              <Users className="w-5 h-5 text-teal-600" />
+            <div className="w-10 h-10 rounded-lg bg-[#6B9080]/10 dark:bg-teal-900/30 flex items-center justify-center">
+              <Users className="w-5 h-5 text-[#6B9080]" />
             </div>
             <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
               +2 this {selectedPeriod}
@@ -435,14 +435,14 @@ export function ProviderInsightsDashboard({
               <FileText className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-neutral-900 dark:text-white group-hover:text-teal-600 transition-colors">
+              <h4 className="font-medium text-neutral-900 dark:text-white group-hover:text-[#6B9080] transition-colors">
                 Generate Report
               </h4>
               <p className="text-sm text-neutral-500 dark:text-slate-400">
                 Create outcome report for insurance
               </p>
             </div>
-            <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-teal-600 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-neutral-400 group-hover:text-[#6B9080] transition-colors" />
           </div>
         </Card>
 

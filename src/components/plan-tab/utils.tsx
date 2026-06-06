@@ -59,7 +59,7 @@ export function getCategoryColor(category: GoalCategory | string): string {
     case 'routines':
       return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/30 dark:border-orange-800';
     default:
-      return 'text-gray-600 bg-gray-50 border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
+      return 'text-gray-600 bg-[#FAF7F2] border-gray-200 dark:text-gray-400 dark:bg-gray-900/30 dark:border-gray-800';
   }
 }
 
@@ -89,7 +89,7 @@ export function getPriorityColor(priority: Priority | string): string {
     case 'low':
       return 'text-green-600 bg-green-50 border-green-200';
     default:
-      return 'text-gray-600 bg-gray-50 border-gray-200';
+      return 'text-gray-600 bg-[#FAF7F2] border-gray-200';
   }
 }
 

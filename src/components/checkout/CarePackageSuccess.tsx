@@ -56,33 +56,33 @@ function getNextSteps(serviceType: ServiceType): NextStep[] {
   switch (serviceType) {
     case 'aba':
       return [
-        { icon: <Phone className="w-4 h-4 text-teal-500" />, text: 'A BCBA will call you within 24 hours to schedule your assessment.' },
-        { icon: <FileText className="w-4 h-4 text-teal-500" />, text: "Complete your child's intake form in the app so we can personalize the plan." },
-        { icon: <Star className="w-4 h-4 text-teal-500" />, text: 'Your first ABA session will be scheduled within 5 business days.' },
+        { icon: <Phone className="w-4 h-4 text-primary" />, text: 'A BCBA will call you within 24 hours to schedule your assessment.' },
+        { icon: <FileText className="w-4 h-4 text-primary" />, text: "Complete your child's intake form in the app so we can personalize the plan." },
+        { icon: <Star className="w-4 h-4 text-primary" />, text: 'Your first ABA session will be scheduled within 5 business days.' },
       ];
     case 'speech':
       return [
-        { icon: <Phone className="w-4 h-4 text-teal-500" />, text: 'A licensed SLP will contact you within 24 hours to discuss goals.' },
-        { icon: <FileText className="w-4 h-4 text-teal-500" />, text: "Fill in your child's communication history in the app to get started." },
-        { icon: <Clock className="w-4 h-4 text-teal-500" />, text: 'Your first speech session will be booked at a time that works for you.' },
+        { icon: <Phone className="w-4 h-4 text-primary" />, text: 'A licensed SLP will contact you within 24 hours to discuss goals.' },
+        { icon: <FileText className="w-4 h-4 text-primary" />, text: "Fill in your child's communication history in the app to get started." },
+        { icon: <Clock className="w-4 h-4 text-primary" />, text: 'Your first speech session will be booked at a time that works for you.' },
       ];
     case 'mh':
       return [
-        { icon: <Phone className="w-4 h-4 text-teal-500" />, text: 'A mental health clinician will reach out within 24 hours.' },
-        { icon: <FileText className="w-4 h-4 text-teal-500" />, text: 'Complete the wellbeing questionnaire inside the app to personalize care.' },
-        { icon: <Clock className="w-4 h-4 text-teal-500" />, text: 'Your first session will be available to schedule immediately.' },
+        { icon: <Phone className="w-4 h-4 text-primary" />, text: 'A mental health clinician will reach out within 24 hours.' },
+        { icon: <FileText className="w-4 h-4 text-primary" />, text: 'Complete the wellbeing questionnaire inside the app to personalize care.' },
+        { icon: <Clock className="w-4 h-4 text-primary" />, text: 'Your first session will be available to schedule immediately.' },
       ];
     case 'subscription':
       return [
-        { icon: <Star className="w-4 h-4 text-teal-500" />, text: 'Your Aminy subscription is now active — all features unlocked.' },
-        { icon: <Users className="w-4 h-4 text-teal-500" />, text: 'Add family members and caregivers to your care team.' },
-        { icon: <Clock className="w-4 h-4 text-teal-500" />, text: 'You can cancel or pause anytime from Settings → Subscription.' },
+        { icon: <Star className="w-4 h-4 text-primary" />, text: 'Your Aminy subscription is now active — all features unlocked.' },
+        { icon: <Users className="w-4 h-4 text-primary" />, text: 'Add family members and caregivers to your care team.' },
+        { icon: <Clock className="w-4 h-4 text-primary" />, text: 'You can cancel or pause anytime from Settings → Subscription.' },
       ];
     default:
       return [
-        { icon: <Phone className="w-4 h-4 text-teal-500" />, text: 'Your care team will be in touch within 24 hours.' },
-        { icon: <FileText className="w-4 h-4 text-teal-500" />, text: 'Check your email for a confirmation receipt from Stripe.' },
-        { icon: <Star className="w-4 h-4 text-teal-500" />, text: 'Head to your dashboard to track progress and upcoming sessions.' },
+        { icon: <Phone className="w-4 h-4 text-primary" />, text: 'Your care team will be in touch within 24 hours.' },
+        { icon: <FileText className="w-4 h-4 text-primary" />, text: 'Check your email for a confirmation receipt from Stripe.' },
+        { icon: <Star className="w-4 h-4 text-primary" />, text: 'Head to your dashboard to track progress and upcoming sessions.' },
       ];
   }
 }
@@ -158,7 +158,7 @@ function AnimatedCheckmark() {
         }
       `}</style>
       <div className="check-animate">
-        <CheckCircle className="w-20 h-20 text-teal-500" strokeWidth={1.5} />
+        <CheckCircle className="w-20 h-20 text-primary" strokeWidth={1.5} />
       </div>
     </>
   );
@@ -223,7 +223,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
         {/* CTA */}
         <button
           onClick={onContinue}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2 mt-2"
+          className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2 mt-2"
         >
           Go to My Dashboard
           <ArrowRight className="w-5 h-5" />

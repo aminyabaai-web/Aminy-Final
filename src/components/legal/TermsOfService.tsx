@@ -40,11 +40,11 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
-          <FileText className="h-6 w-6 text-teal-600" />
+          <FileText className="h-6 w-6 text-[#6B9080]" />
           <h1 className="text-xl font-bold text-gray-900">Terms of Service</h1>
         </div>
       </div>
@@ -433,7 +433,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
         </Section>
 
         <Section title="17. Contact" id="contact">
-          <div className="rounded-lg bg-gray-50 p-4 text-sm">
+          <div className="rounded-lg bg-[#FAF7F2] p-4 text-sm">
             <p><strong>Aminy Inc.</strong></p>
             <p>5070 N. 40th Street, Suite 105</p>
             <p>Phoenix, AZ 85018</p>

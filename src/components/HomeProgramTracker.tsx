@@ -102,7 +102,7 @@ const CATEGORY_INFO: Record<string, { label: string; color: string; icon: string
   motor: { label: 'Motor Skills', color: 'bg-green-100 text-green-700', icon: '✋' },
   behavior: { label: 'Behavior', color: 'bg-amber-100 text-amber-700', icon: '🧠' },
   social: { label: 'Social Skills', color: 'bg-purple-100 text-purple-700', icon: '👥' },
-  academic: { label: 'Academic', color: 'bg-cyan-100 text-cyan-700', icon: '📚' },
+  academic: { label: 'Academic', color: 'bg-[#6B9080]/10 text-cyan-700', icon: '📚' },
   self_care: { label: 'Self-Care', color: 'bg-pink-100 text-pink-700', icon: '🪥' },
 };
 
@@ -387,7 +387,7 @@ export function HomeProgramTracker({
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 text-teal-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin" />
       </div>
     );
   }
@@ -399,7 +399,7 @@ export function HomeProgramTracker({
         <div>
           <div className="flex items-center gap-2 flex-wrap">
             <h2 className="text-xl font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-              <Home className="w-5 h-5 text-teal-600" />
+              <Home className="w-5 h-5 text-[#6B9080]" />
               Home Program
             </h2>
             <AISparkleButton
@@ -413,7 +413,7 @@ export function HomeProgramTracker({
           </p>
         </div>
         {isProvider && (
-          <Button onClick={() => setShowAddForm(true)} className="bg-teal-600 hover:bg-teal-700">
+          <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
             <Plus className="w-4 h-4 mr-2" />
             Assign Activity
           </Button>
@@ -427,7 +427,7 @@ export function HomeProgramTracker({
           <p className="text-xs text-neutral-500 dark:text-neutral-400">Active Activities</p>
         </Card>
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-teal-600">{stats.sessionsThisWeek}</p>
+          <p className="text-2xl font-bold text-[#6B9080]">{stats.sessionsThisWeek}</p>
           <p className="text-xs text-neutral-500 dark:text-neutral-400">Sessions This Week</p>
         </Card>
         <Card className="p-4 text-center">
@@ -589,7 +589,7 @@ export function HomeProgramTracker({
                   {!isProvider && (
                     <>
                       {loggingActivity === activity.id ? (
-                        <div className="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-4 space-y-3">
+                        <div className="bg-[#6B9080]/10 dark:bg-teal-900/20 rounded-lg p-4 space-y-3">
                           <p className="font-medium text-teal-800 dark:text-teal-200">Log Today's Practice</p>
 
                           <div className="grid grid-cols-2 gap-3">
@@ -653,7 +653,7 @@ export function HomeProgramTracker({
                           <div className="flex gap-2">
                             <Button
                               onClick={() => handleLogPractice(activity.id)}
-                              className="bg-teal-600 hover:bg-teal-700"
+                              className="bg-primary hover:bg-[#6B9080]"
                             >
                               <CheckCircle className="w-4 h-4 mr-2" />
                               Save Practice Log
@@ -669,7 +669,7 @@ export function HomeProgramTracker({
                       ) : (
                         <Button
                           onClick={() => setLoggingActivity(activity.id)}
-                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-teal-600 hover:bg-teal-700'}
+                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-[#6B9080]'}
                           disabled={todayLogged}
                         >
                           {todayLogged ? (
@@ -707,7 +707,7 @@ export function HomeProgramTracker({
               : 'Your therapist will assign practice activities here'}
           </p>
           {isProvider && (
-            <Button onClick={() => setShowAddForm(true)} className="bg-teal-600 hover:bg-teal-700">
+            <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
               <Plus className="w-4 h-4 mr-2" />
               Assign First Activity
             </Button>
@@ -808,7 +808,7 @@ export function HomeProgramTracker({
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button onClick={handleAddActivity} className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button onClick={handleAddActivity} className="flex-1 bg-primary hover:bg-[#6B9080]">
                   <Plus className="w-4 h-4 mr-2" />
                   Assign Activity
                 </Button>

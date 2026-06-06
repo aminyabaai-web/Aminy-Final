@@ -381,7 +381,7 @@ export function ABCTrendAnalysis({
       </div>
 
       {/* Summary Header */}
-      <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-teal-200 dark:border-teal-800">
+      <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-teal-800">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-1">
@@ -391,7 +391,7 @@ export function ABCTrendAnalysis({
               Based on {analytics.totalEntries} recorded incidents
             </p>
           </div>
-          <Brain className="w-8 h-8 text-teal-600" />
+          <Brain className="w-8 h-8 text-[#6B9080]" />
         </div>
       </Card>
 
@@ -437,7 +437,7 @@ export function ABCTrendAnalysis({
       {/* Peak Times */}
       <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-teal-600" />
+          <Clock className="w-5 h-5 text-[#6B9080]" />
           Peak Times
         </h3>
 
@@ -449,7 +449,7 @@ export function ABCTrendAnalysis({
               {analytics.hourlyPatterns.map((h) => (
                 <div
                   key={h.hour}
-                  className="flex-1 bg-teal-200 dark:bg-teal-700 rounded-t transition-all hover:bg-teal-300"
+                  className="flex-1 bg-[#6B9080]/20 dark:bg-teal-700 rounded-t transition-all hover:bg-teal-300"
                   style={{ height: `${Math.max(4, h.percentage * 3)}%` }}
                   title={`${h.label}: ${h.count} incidents (${h.percentage.toFixed(1)}%)`}
                 />
@@ -478,7 +478,7 @@ export function ABCTrendAnalysis({
               {analytics.dailyPatterns.map((d) => (
                 <div key={d.day} className="flex items-center gap-3">
                   <span className="w-10 text-sm text-gray-600 dark:text-slate-400">{d.day}</span>
-                  <div className="flex-1 h-4 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="flex-1 h-4 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full transition-all"
                       style={{ width: `${d.percentage}%` }}
@@ -539,7 +539,7 @@ export function ABCTrendAnalysis({
       {/* Top Patterns (Correlations) */}
       <Card className="p-4 sm:p-5 md:p-6">
         <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <Brain className="w-5 h-5 text-teal-600" />
+          <Brain className="w-5 h-5 text-[#6B9080]" />
           Pattern Analysis & Insights
         </h3>
 
@@ -552,7 +552,7 @@ export function ABCTrendAnalysis({
                   ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                   : corr.type === 'moderate'
                   ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
-                  : 'bg-gray-50 dark:bg-slate-800 border-gray-200 dark:border-slate-700'
+                  : 'bg-[#FAF7F2] dark:bg-slate-800 border-gray-200 dark:border-slate-700'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -602,7 +602,7 @@ export function ABCTrendAnalysis({
                       {a.count} ({a.percentage.toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full"
                       style={{ width: `${a.percentage}%` }}
@@ -630,7 +630,7 @@ export function ABCTrendAnalysis({
                       {b.count} ({b.percentage.toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-red-500 rounded-full"
                       style={{ width: `${b.percentage}%` }}

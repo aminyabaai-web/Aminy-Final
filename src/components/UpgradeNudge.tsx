@@ -76,7 +76,7 @@ export function UpgradeNudge({
         rounded-lg p-4 border
         ${urgency === 'high' ? 'bg-amber-50 border-amber-200' :
           urgency === 'medium' ? 'bg-blue-50 border-blue-200' :
-          'bg-gray-50 border-gray-200'}
+          'bg-[#FAF7F2] border-gray-200'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -170,28 +170,28 @@ export function UpgradeNudge({
   // Memory preview - show what AI would remember on higher tier
   if (triggerType === 'memory-preview') {
     return (
-      <Card className="p-4 border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50">
+      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-teal-50 to-cyan-50">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-teal-100">
-              <Brain className="w-5 h-5 text-teal-600" />
+            <div className="p-2 rounded-lg bg-[#6B9080]/10">
+              <Brain className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <p className="font-medium text-gray-900">AI Memory Preview</p>
-                <Badge className="bg-teal-100 text-teal-700 text-xs">Pro Feature</Badge>
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Pro Feature</Badge>
               </div>
               <p className="text-sm text-gray-600">
                 With Pro, Aminy remembers everything about your family - triggers, strategies that work, progress milestones, and more.
               </p>
               <div className="mt-3 p-3 bg-white/60 rounded-lg border border-teal-100">
-                <p className="text-xs text-teal-700 italic">
+                <p className="text-xs text-[#6B9080] italic">
                   "I remember that Alex responds well to visual schedules and needs extra time for transitions.
                   Last week, the morning routine went smoothly when you used the timer.
                   Should we build on that success?"
                 </p>
               </div>
-              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-teal-600 hover:bg-teal-700">
+              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-primary hover:bg-[#6B9080]">
                 <Heart className="w-4 h-4 mr-1" />
                 Get Personalized Memory
               </Button>

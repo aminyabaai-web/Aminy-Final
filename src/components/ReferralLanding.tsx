@@ -159,9 +159,9 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             </div>
 
             {referralCode && (
-              <div className="bg-gray-50 rounded-lg p-3 text-center">
+              <div className="bg-[#FAF7F2] rounded-lg p-3 text-center">
                 <p className="text-xs text-gray-500 mb-1">Your referral code</p>
-                <p className="font-mono font-semibold text-cyan-600">{referralCode}</p>
+                <p className="font-mono font-semibold text-[#6B9080]">{referralCode}</p>
               </div>
             )}
           </div>
@@ -179,7 +179,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
               Icon: Bot,
               title: 'AI Companion',
               desc: '24/7 support that remembers your child',
-              color: 'text-teal-500',
+              color: 'text-primary',
             },
             {
               Icon: BarChart3,
@@ -201,7 +201,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             },
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-              <div className={`w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center`}>
+              <div className={`w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center`}>
                 <item.Icon className={`w-5 h-5 ${item.color}`} />
               </div>
               <div>
@@ -225,7 +225,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
 
         <button
           onClick={onNavigateToLogin}
-          className="w-full bg-white text-cyan-600 py-4 rounded-xl font-semibold border border-gray-200 hover:bg-gray-50 transition-colors"
+          className="w-full bg-white text-[#6B9080] py-4 rounded-xl font-semibold border border-gray-200 hover:bg-[#FAF7F2] transition-colors"
         >
           I Already Have an Account
         </button>
@@ -235,7 +235,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
       <div className="px-6 pb-8">
         <p className="text-xs text-center text-gray-500">
           Credit applies to marketplace sessions. Referral rewards subject to{' '}
-          <span className="text-cyan-600">program terms</span>.
+          <span className="text-[#6B9080]">program terms</span>.
         </p>
       </div>
     </div>

@@ -429,14 +429,14 @@ export default function EVVDashboard({
                 type="button"
                 onClick={onBack}
                 aria-label="Go back"
-                className="min-h-11 min-w-11 rounded-xl p-2 text-slate-600 transition-colors hover:bg-teal-50"
+                className="min-h-11 min-w-11 rounded-xl p-2 text-slate-600 transition-colors hover:bg-[#6B9080]/10"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
             <div className="flex-1">
               <h1 className="flex items-center gap-2 text-lg font-semibold text-slate-900">
-                <Shield className="w-5 h-5 text-teal-500" />
+                <Shield className="w-5 h-5 text-primary" />
                 Visit Verification
               </h1>
               <p className="text-xs text-slate-500">
@@ -446,7 +446,7 @@ export default function EVVDashboard({
             <button
               type="button"
               onClick={() => setActiveTab('clock')}
-              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
             >
               Open live clock
             </button>
@@ -509,7 +509,7 @@ export default function EVVDashboard({
               cutoverSummary.systemsValidated.map((system) => (
                 <span
                   key={system}
-                  className="inline-flex items-center rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-700"
+                  className="inline-flex items-center rounded-full border border-[#6B9080]/20 bg-[#6B9080]/10 px-3 py-1 text-xs font-medium text-[#6B9080]"
                 >
                   {system === 'spokchoice' ? 'SpokChoice' : 'DCI'}
                 </span>
@@ -543,8 +543,8 @@ export default function EVVDashboard({
               onClick={() => setActiveTab(tab.id)}
               className={`min-h-11 flex-1 flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-medium transition-all ${
                 activeTab === tab.id
-                  ? 'bg-teal-600 text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-700 hover:bg-teal-50'
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-[#6B9080]/10'
               }`}
             >
               {tab.icon}
@@ -632,8 +632,8 @@ function ClockTab({
                 onClick={() => onSelectAuth(auth.id)}
                 className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
                   selectedAuth === auth.id
-                    ? 'border-teal-500 bg-teal-50'
-                    : 'border-slate-200 hover:border-teal-200 hover:bg-teal-50/40'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10'
+                    : 'border-slate-200 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/40'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -644,7 +644,7 @@ function ClockTab({
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-medium text-teal-700">
+                    <p className="text-xs font-medium text-[#6B9080]">
                       {auth.remainingUnits} units left
                     </p>
                     <p className="text-xs text-gray-400">
@@ -687,8 +687,8 @@ function ClockTab({
           </>
         ) : (
           <>
-            <div className="w-20 h-20 mx-auto mb-4 bg-teal-50 rounded-full flex items-center justify-center">
-              <Timer className="w-10 h-10 text-teal-600" />
+            <div className="w-20 h-20 mx-auto mb-4 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+              <Timer className="w-10 h-10 text-[#6B9080]" />
             </div>
             <p className="text-gray-600 mb-4 text-sm">
               Select an authorization above and clock in to start tracking your visit.
@@ -696,7 +696,7 @@ function ClockTab({
             <button
               onClick={onClockIn}
               disabled={isClockingIn || !selectedAuth}
-              className="w-full py-4 bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-teal-100"
+              className="w-full py-4 bg-primary hover:bg-[#6B9080] disabled:bg-slate-300 text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-teal-100"
             >
               {isClockingIn ? (
                 <>
@@ -733,7 +733,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
       rejected: 'bg-red-100 text-red-800',
       submitted: 'bg-blue-100 text-blue-800',
     };
-    return styles[status] || 'bg-gray-100 text-gray-800';
+    return styles[status] || 'bg-[#F0EDE8] text-gray-800';
   };
 
   return (
@@ -838,7 +838,7 @@ function BudgetTab({
           ? 'bg-red-500'
           : summary.percentUsed > 70
             ? 'bg-amber-500'
-            : 'bg-teal-500';
+            : 'bg-primary';
 
         return (
           <div key={summary.authorizationId} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
@@ -860,7 +860,7 @@ function BudgetTab({
                 <span>{summary.totalUsed} used</span>
                 <span>{summary.remaining} remaining</span>
               </div>
-              <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-3 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${progressColor}`}
                   style={{ width: `${Math.min(100, summary.percentUsed)}%` }}
@@ -1009,7 +1009,7 @@ function TimesheetsTab({
                 onClick={() => handleGenerateTimesheet(weekKey, true)}
                 disabled={generating}
                 aria-label="Download timesheet"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF

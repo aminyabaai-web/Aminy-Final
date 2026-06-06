@@ -136,7 +136,7 @@ export function SubscriptionPauseFlow({
   if (loading) {
     return (
       <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center">
-        <Loader2 className="w-6 h-6 text-teal-500 animate-spin mx-auto mb-2" />
+        <Loader2 className="w-6 h-6 text-primary animate-spin mx-auto mb-2" />
         <p className="text-sm text-gray-500">Checking subscription status...</p>
       </div>
     );
@@ -145,7 +145,7 @@ export function SubscriptionPauseFlow({
   return (
     <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
       {/* Header */}
-      <div className="bg-gray-50 border-b border-gray-200 px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#FAF7F2] border-b border-gray-200 px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {pauseStatus?.isPaused ? (
             <PauseCircle className="w-4 h-4 text-amber-500" />
@@ -191,7 +191,7 @@ export function SubscriptionPauseFlow({
                     onClick={() => setSelectedDuration(opt.value)}
                     className={`w-full flex items-center justify-between p-3 rounded-xl border-2 transition-all ${
                       selectedDuration === opt.value
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -199,7 +199,7 @@ export function SubscriptionPauseFlow({
                       <div
                         className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                           selectedDuration === opt.value
-                            ? 'border-teal-500 bg-teal-500'
+                            ? 'border-[#6B9080] bg-primary'
                             : 'border-gray-300'
                         }`}
                       >
@@ -256,7 +256,7 @@ export function SubscriptionPauseFlow({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('select')}
-                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
               >
                 Go Back
               </button>
@@ -309,7 +309,7 @@ export function SubscriptionPauseFlow({
             <button
               onClick={handleResume}
               disabled={processing}
-              className="w-full py-3 bg-teal-500 hover:bg-teal-600 disabled:bg-teal-300 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary hover:bg-primary disabled:bg-teal-300 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
             >
               {processing ? (
                 <>
@@ -341,7 +341,7 @@ export function SubscriptionPauseFlow({
             {onClose && (
               <button
                 onClick={onClose}
-                className="text-sm text-teal-600 hover:text-teal-700 font-medium"
+                className="text-sm text-[#6B9080] hover:text-[#6B9080] font-medium"
               >
                 Done
               </button>

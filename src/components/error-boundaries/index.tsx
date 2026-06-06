@@ -185,7 +185,7 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
 
         <button
           onClick={() => window.location.reload()}
-          className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          className="w-full px-4 py-2 bg-[#F0EDE8] text-gray-700 rounded-lg hover:bg-[#E8E4DF] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
         >
           Refresh Page
         </button>
@@ -311,7 +311,7 @@ export function PaymentErrorBoundary({ children }: { children: React.ReactNode }
 function FeatureCardErrorFallback({ retry }: FallbackProps) {
   return (
     <div
-      className="bg-gray-50 rounded-lg p-4 text-center min-h-[120px] flex flex-col items-center justify-center"
+      className="bg-[#FAF7F2] rounded-lg p-4 text-center min-h-[120px] flex flex-col items-center justify-center"
       role="alert"
     >
       <p className="text-gray-500 text-sm mb-2">Unable to load this section</p>
@@ -443,11 +443,11 @@ function DataLoadingErrorFallback({
 
   return (
     <div
-      className="bg-gray-50 rounded-lg p-6 text-center"
+      className="bg-[#FAF7F2] rounded-lg p-6 text-center"
       role="alert"
       aria-live="polite"
     >
-      <div className="w-12 h-12 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+      <div className="w-12 h-12 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
         {isNetworkError ? (
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3m8.293 8.293l1.414 1.414" />
@@ -507,7 +507,7 @@ export function DataLoadingErrorBoundary({
 function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) {
   return (
     <div
-      className="min-h-[50vh] flex items-center justify-center bg-gray-50 p-4"
+      className="min-h-[50vh] flex items-center justify-center bg-[#FAF7F2] p-4"
       role="alert"
       aria-live="assertive"
     >
@@ -536,7 +536,7 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
           </button>
           <a
             href="/"
-            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
+            className="px-6 py-3 bg-[#F0EDE8] text-gray-700 rounded-lg hover:bg-[#E8E4DF] focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-medium"
           >
             Go to Home
           </a>

@@ -110,25 +110,25 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
   const credentialedPayers = panelApplications.filter(p => p.status === 'credentialed');
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
               <ArrowLeft size={20} className="text-gray-700" />
             </button>
           )}
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-              <Users size={18} className="text-teal-600" />
+              <Users size={18} className="text-[#6B9080]" />
               Roster Manager
             </h1>
             <p className="text-xs text-gray-500">Active rosters · {rosterEntries.length} payers</p>
           </div>
           <button
             onClick={() => setShowAddFlow(true)}
-            className="flex items-center gap-1.5 bg-teal-600 text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-teal-700 transition-colors"
+            className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-[#6B9080] transition-colors"
           >
             <Plus size={14} />
             Add to Roster
@@ -183,7 +183,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     {/* Covered Services */}
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {entry.coveredServices.map(svc => (
-                        <span key={svc} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                        <span key={svc} className="text-xs bg-[#F0EDE8] text-gray-600 px-2 py-0.5 rounded-full">
                           {svc}
                         </span>
                       ))}
@@ -240,16 +240,16 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         <React.Fragment key={s}>
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs shrink-0 ${
                             ['submitted', 'acknowledged', 'confirmed'].indexOf(req.status) >= i
-                              ? 'bg-teal-600 text-white'
-                              : 'bg-gray-200 text-gray-400'
+                              ? 'bg-primary text-white'
+                              : 'bg-[#E8E4DF] text-gray-400'
                           }`}>
                             {i + 1}
                           </div>
                           {i < 2 && (
                             <div className={`flex-1 h-0.5 ${
                               ['submitted', 'acknowledged', 'confirmed'].indexOf(req.status) > i
-                                ? 'bg-teal-600'
-                                : 'bg-gray-200'
+                                ? 'bg-primary'
+                                : 'bg-[#E8E4DF]'
                             }`} />
                           )}
                         </React.Fragment>
@@ -272,7 +272,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
           <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Request a Roster Update</h2>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { type: 'service-location' as const, label: 'Add Service Location', icon: <FileText size={16} className="text-teal-600" /> },
+              { type: 'service-location' as const, label: 'Add Service Location', icon: <FileText size={16} className="text-[#6B9080]" /> },
               { type: 'add-supervisor' as const, label: 'Add Supervising BCBA', icon: <Users size={16} className="text-blue-600" /> },
               { type: 'remove-rbt' as const, label: 'Remove Terminated RBT', icon: <XCircle size={16} className="text-red-500" /> },
               { type: 'rate-change' as const, label: 'Rate Negotiation', icon: <DollarSign size={16} className="text-amber-600" /> },
@@ -280,7 +280,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               <button
                 key={item.type}
                 onClick={() => { setShowAddFlow(true); }}
-                className="flex flex-col items-center gap-2 p-4 bg-white border border-gray-200 rounded-2xl hover:bg-gray-50 transition-colors text-center"
+                className="flex flex-col items-center gap-2 p-4 bg-white border border-gray-200 rounded-2xl hover:bg-[#FAF7F2] transition-colors text-center"
               >
                 {item.icon}
                 <span className="text-xs text-gray-700 font-medium leading-tight">{item.label}</span>
@@ -309,7 +309,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-gray-900">Add to Roster</h2>
-                <button onClick={() => setShowAddFlow(false)} className="p-1 rounded-lg hover:bg-gray-100">
+                <button onClick={() => setShowAddFlow(false)} className="p-1 rounded-lg hover:bg-[#F0EDE8]">
                   <XCircle size={20} className="text-gray-400" />
                 </button>
               </div>
@@ -324,11 +324,11 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         onClick={() => setSelectedPayer(p.payerId)}
                         className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
                           selectedPayer === p.payerId
-                            ? 'border-teal-500 bg-teal-50'
-                            : 'border-gray-200 hover:bg-gray-50'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10'
+                            : 'border-gray-200 hover:bg-[#FAF7F2]'
                         }`}
                       >
-                        <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-teal-600' : 'text-gray-400'} />
+                        <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-[#6B9080]' : 'text-gray-400'} />
                         <span className="text-sm font-medium text-gray-800">{p.payer}</span>
                       </button>
                     ))}
@@ -341,7 +341,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <button
                     disabled={!selectedPayer}
                     onClick={() => setAddStep(2)}
-                    className="w-full py-3 bg-teal-600 text-white rounded-xl font-medium text-sm disabled:opacity-40 transition-opacity"
+                    className="w-full py-3 bg-primary text-white rounded-xl font-medium text-sm disabled:opacity-40 transition-opacity"
                   >
                     Continue
                   </button>
@@ -354,7 +354,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     <label className="text-xs font-medium text-gray-600 block mb-1">Effective Date</label>
                     <input
                       type="date"
-                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-teal-400"
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm text-gray-800 focus:outline-none focus:border-[#6B9080]"
                     />
                   </div>
                   <div>
@@ -378,7 +378,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     </button>
                     <button
                       onClick={() => { setShowAddFlow(false); setAddStep(1); }}
-                      className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-medium text-sm flex items-center justify-center gap-2"
+                      className="flex-1 py-3 bg-primary text-white rounded-xl font-medium text-sm flex items-center justify-center gap-2"
                     >
                       <Send size={14} />
                       Submit Request

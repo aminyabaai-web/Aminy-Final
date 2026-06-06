@@ -252,7 +252,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setBilling('monthly')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'monthly' ? 'bg-teal-50 text-teal-700' : 'text-slate-500 hover:bg-slate-50'
+                billing === 'monthly' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
               Monthly
@@ -260,10 +260,10 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setBilling('annual')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'annual' ? 'bg-teal-50 text-teal-700' : 'text-slate-500 hover:bg-slate-50'
+                billing === 'annual' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
-              Annual <span className="text-teal-600 font-semibold">· save up to 28%</span>
+              Annual <span className="text-[#6B9080] font-semibold">· save up to 28%</span>
             </button>
           </div>
         </div>
@@ -290,7 +290,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
               Need more capabilities for your team or clinic?{' '}
               <button
                 onClick={() => setAudience('organization')}
-                className="text-teal-600 font-medium underline underline-offset-2"
+                className="text-[#6B9080] font-medium underline underline-offset-2"
               >
                 See Aminy for Organizations
               </button>

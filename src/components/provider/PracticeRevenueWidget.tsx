@@ -156,7 +156,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
         {onViewDetails && (
           <button
             onClick={onViewDetails}
-            className="flex items-center gap-1 text-xs text-teal-600 font-medium hover:text-teal-700"
+            className="flex items-center gap-1 text-xs text-[#6B9080] font-medium hover:text-[#6B9080]"
           >
             Details
             <ArrowRight className="w-3.5 h-3.5" />
@@ -171,7 +171,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
           { label: 'Paid', amount: data.thisWeekPaid, color: 'text-emerald-700' },
           { label: 'Pending', amount: data.thisWeekPending, color: 'text-amber-600' },
         ].map((item) => (
-          <div key={item.label} className="rounded-xl bg-gray-50 p-2.5 text-center">
+          <div key={item.label} className="rounded-xl bg-[#FAF7F2] p-2.5 text-center">
             <p className={`text-base font-bold ${item.color}`}>{fmt(item.amount)}</p>
             <p className="text-xs text-gray-500 mt-0.5">{item.label}</p>
           </div>

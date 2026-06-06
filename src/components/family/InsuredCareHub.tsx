@@ -152,7 +152,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
         {/* Coverage toggles */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-2 text-sm text-teal-600 font-medium hover:text-teal-700 transition-colors"
+          className="flex items-center gap-2 text-sm text-[#6B9080] font-medium hover:text-[#6B9080] transition-colors"
         >
           {expanded ? 'Hide details' : 'See coverage details'}
           {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -434,7 +434,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
                   activeTab === tab.id
-                    ? 'border-teal-500 text-teal-600'
+                    ? 'border-[#6B9080] text-[#6B9080]'
                     : 'border-transparent text-slate-400 hover:text-slate-600'
                 }`}
               >
@@ -450,7 +450,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
       <div className="p-4 space-y-4 max-w-lg mx-auto pb-8">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
             <p className="text-sm text-slate-500">Checking your benefits with {planId.replace('-', ' ')}...</p>
           </div>
         ) : !benefits ? (
@@ -476,12 +476,12 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
               {activeTab === 'coverage' && benefits && (
                 <>
                   <CoverageCard benefits={benefits} />
-                  <div className="bg-teal-50 rounded-2xl p-4 border border-teal-100">
+                  <div className="bg-[#6B9080]/10 rounded-2xl p-4 border border-teal-100">
                     <div className="flex items-start gap-3">
-                      <Star className="w-5 h-5 text-teal-500 shrink-0 mt-0.5" />
+                      <Star className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-semibold text-teal-800">Aminy handles the billing</p>
-                        <p className="text-sm text-teal-700 mt-0.5 leading-relaxed">
+                        <p className="text-sm text-[#6B9080] mt-0.5 leading-relaxed">
                           We submit claims directly to {benefits.payer} after every session. You just approve the note and we do the rest.
                         </p>
                       </div>
@@ -500,7 +500,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
         {!loading && (
           <button
             onClick={onGetHelp}
-            className="w-full py-3.5 rounded-2xl border-2 border-slate-200 bg-white text-sm font-medium text-slate-600 flex items-center justify-center gap-2 hover:border-teal-300 hover:text-teal-600 transition-colors"
+            className="w-full py-3.5 rounded-2xl border-2 border-slate-200 bg-white text-sm font-medium text-slate-600 flex items-center justify-center gap-2 hover:border-[#6B9080]/30 hover:text-[#6B9080] transition-colors"
           >
             Questions about your coverage?
             <ChevronRight className="w-4 h-4" />

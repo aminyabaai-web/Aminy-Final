@@ -56,9 +56,9 @@ const ERROR_COLORS: Record<ApiErrorType, { bg: string; border: string; icon: str
   auth: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-600', text: 'text-purple-900' },
   'rate-limit': { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'text-orange-600', text: 'text-orange-900' },
   validation: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  'not-found': { bg: 'bg-gray-50', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' },
+  'not-found': { bg: 'bg-[#FAF7F2]', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' },
   server: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  unknown: { bg: 'bg-gray-50', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' }
+  unknown: { bg: 'bg-[#FAF7F2]', border: 'border-gray-200', icon: 'text-gray-600', text: 'text-gray-900' }
 };
 
 export function ErrorDisplay({
@@ -161,7 +161,7 @@ export function ErrorDisplay({
   // Fullscreen variant - for critical errors
   if (variant === 'fullscreen') {
     return (
-      <div className={`min-h-screen bg-gray-50 flex items-center justify-center p-4 ${className}`}>
+      <div className={`min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4 ${className}`}>
         <div className="text-center max-w-md">
           <div className={`w-16 h-16 mx-auto mb-4 sm:mb-6 ${colors.bg} rounded-full flex items-center justify-center`}>
             <Icon className={`w-8 h-8 ${colors.icon}`} />
@@ -180,7 +180,7 @@ export function ErrorDisplay({
                   if (onRetry) onRetry();
                   else window.location.reload();
                 }}
-                className="bg-teal-500 hover:bg-teal-600 text-white"
+                className="bg-primary hover:bg-primary text-white"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try again
@@ -217,7 +217,7 @@ export function ErrorDisplay({
                 {showDetails ? 'Hide' : 'Show'} technical details
               </button>
               {showDetails && (
-                <div className="mt-2 p-3 bg-gray-100 rounded-lg text-left text-xs font-mono text-gray-600">
+                <div className="mt-2 p-3 bg-[#F0EDE8] rounded-lg text-left text-xs font-mono text-gray-600">
                   <p><strong>Type:</strong> {error.type}</p>
                   <p><strong>Message:</strong> {error.technicalMessage}</p>
                   {error.code && <p><strong>Code:</strong> {error.code}</p>}
@@ -303,7 +303,7 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`text-center py-12 px-4 ${className}`}>
-      <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+      <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
         <Icon className="w-8 h-8 text-gray-400" />
       </div>
       <h3 className="text-lg font-medium text-gray-900 mb-1">{title}</h3>
@@ -334,7 +334,7 @@ export function LoadingSkeleton({ lines = 3, className = '' }: LoadingSkeletonPr
       {Array.from({ length: lines }).map((_, i) => (
         <div
           key={i}
-          className="h-4 bg-gray-200 rounded"
+          className="h-4 bg-[#E8E4DF] rounded"
           style={{ width: `${Math.random() * 40 + 60}%` }}
         />
       ))}

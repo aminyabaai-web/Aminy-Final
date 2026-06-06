@@ -186,7 +186,7 @@ export function SessionBundles({
                   bundle.recommended
                     ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-indigo-50'
                     : isSelected
-                    ? 'border-teal-500 bg-teal-50'
+                    ? 'border-[#6B9080] bg-[#6B9080]/10'
                     : 'hover:border-gray-300'
                 }`}
                 onClick={() => handleSelect(bundle)}
@@ -266,7 +266,7 @@ export function SessionBundles({
                   className={`w-full ${
                     bundle.recommended
                       ? 'bg-purple-600 hover:bg-purple-700'
-                      : 'bg-teal-600 hover:bg-teal-700'
+                      : 'bg-primary hover:bg-[#6B9080]'
                   }`}
                 >
                   {purchasingBundle === bundle.id ? (
@@ -291,7 +291,7 @@ export function SessionBundles({
       <div className="text-center text-sm text-gray-500">
         <p>
           Not ready for a bundle?{' '}
-          <button className="text-teal-600 hover:underline">
+          <button className="text-[#6B9080] hover:underline">
             Book a single session instead
           </button>
         </p>
@@ -323,11 +323,11 @@ export function BundleCredits({
   const isExpiringSoon = daysUntilExpiry <= 14;
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-teal-200">
+    <Card className="p-4 bg-gradient-to-r from-teal-50 to-blue-50 border-[#6B9080]/20">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-2 bg-teal-100 rounded-lg">
-            <Package className="w-5 h-5 text-teal-600" />
+          <div className="p-2 bg-[#6B9080]/10 rounded-lg">
+            <Package className="w-5 h-5 text-[#6B9080]" />
           </div>
           <h3 className="font-semibold text-teal-900">Your Session Credits</h3>
         </div>
@@ -339,7 +339,7 @@ export function BundleCredits({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-        <div className="bg-white p-3 rounded-lg border border-teal-200">
+        <div className="bg-white p-3 rounded-lg border border-[#6B9080]/20">
           <div className="flex items-center gap-2 mb-1">
             <Clock className="w-4 h-4 text-blue-500" />
             <span className="text-sm text-gray-600">25-min Consults</span>
@@ -349,7 +349,7 @@ export function BundleCredits({
           </div>
           <Button
             variant="link"
-            className="p-0 h-auto text-sm text-teal-600"
+            className="p-0 h-auto text-sm text-[#6B9080]"
             onClick={() => onBookSession('consult')}
             disabled={consultCredits === 0}
           >
@@ -357,7 +357,7 @@ export function BundleCredits({
           </Button>
         </div>
 
-        <div className="bg-white p-3 rounded-lg border border-teal-200">
+        <div className="bg-white p-3 rounded-lg border border-[#6B9080]/20">
           <div className="flex items-center gap-2 mb-1">
             <Users className="w-4 h-4 text-green-500" />
             <span className="text-sm text-gray-600">50-min Reviews</span>
@@ -367,7 +367,7 @@ export function BundleCredits({
           </div>
           <Button
             variant="link"
-            className="p-0 h-auto text-sm text-teal-600"
+            className="p-0 h-auto text-sm text-[#6B9080]"
             onClick={() => onBookSession('deep-review')}
             disabled={deepReviewCredits === 0}
           >
@@ -376,7 +376,7 @@ export function BundleCredits({
         </div>
       </div>
 
-      <p className="text-xs text-teal-700">
+      <p className="text-xs text-[#6B9080]">
         Credits expire on {expiryDate.toLocaleDateString()}. Use them with any provider!
       </p>
     </Card>

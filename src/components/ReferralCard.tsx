@@ -121,12 +121,12 @@ export function ReferralCard({
         <div className="p-6 space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
+            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
               <Users className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">{referralCount}</p>
               <p className="text-sm text-gray-500">Friends joined</p>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
+            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
               <Heart className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">${rewardEarned}</p>
               <p className="text-sm text-gray-500">Credits earned</p>
@@ -143,7 +143,7 @@ export function ReferralCard({
                 type="text"
                 readOnly
                 value={referralLink}
-                className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-600"
+                className="flex-1 px-3 py-2 text-sm bg-[#F0EDE8] border border-gray-200 rounded-lg text-gray-600"
               />
               <Button
                 onClick={handleCopy}

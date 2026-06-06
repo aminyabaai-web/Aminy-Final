@@ -86,7 +86,7 @@ const ACCESS_LEVELS = {
     label: 'Clinical',
     description: 'Full access plus FHIR export and clinical reports',
     icon: Download,
-    color: 'text-teal-600 bg-teal-50'
+    color: 'text-[#6B9080] bg-[#6B9080]/10'
   }
 };
 
@@ -391,7 +391,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4">
@@ -401,7 +401,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 Access Requests
               </h1>
               {pendingCount > 0 && (
-                <p className="text-sm text-teal-600 dark:text-teal-400 mt-1">
+                <p className="text-sm text-[#6B9080] dark:text-primary mt-1">
                   {pendingCount} pending request{pendingCount > 1 ? 's' : ''}
                 </p>
               )}
@@ -409,7 +409,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             {onClose && (
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -423,14 +423,14 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
               className={`
                 flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all min-h-[44px]
                 ${tab === 'pending'
-                  ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300'
-                  : 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
+                  ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-[#7BA7BC]'
+                  : 'bg-[#F0EDE8] text-gray-600 dark:bg-slate-700 dark:text-gray-400'
                 }
               `}
             >
               Pending
               {pendingCount > 0 && (
-                <span className="ml-2 px-2 py-0.5 bg-teal-500 text-white text-xs rounded-full">
+                <span className="ml-2 px-2 py-0.5 bg-primary text-white text-xs rounded-full">
                   {pendingCount}
                 </span>
               )}
@@ -440,8 +440,8 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
               className={`
                 flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all min-h-[44px]
                 ${tab === 'active'
-                  ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300'
-                  : 'bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-gray-400'
+                  ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-[#7BA7BC]'
+                  : 'bg-[#F0EDE8] text-gray-600 dark:bg-slate-700 dark:text-gray-400'
                 }
               `}
             >
@@ -458,7 +458,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
           <>
             {requests.filter(r => r.status === 'pending').length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Bell className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -480,7 +480,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                     >
                       <div className="flex items-start gap-3 sm:gap-4">
                         {/* Provider Avatar */}
-                        <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center flex-shrink-0">
                           {request.provider.photoUrl ? (
                             <img
                               src={request.provider.photoUrl}
@@ -499,7 +499,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                               {request.provider.name}
                             </h3>
                             {request.provider.verifiedAt && (
-                              <Shield className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                              <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                             )}
                           </div>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -532,7 +532,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
           <>
             {activeAccess.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-gray-100 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-gray-400" />
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -559,7 +559,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                             {access.provider.name}
                           </h3>
                           {access.provider.verifiedAt && (
-                            <Shield className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                            <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                           )}
                         </div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -633,7 +633,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </h2>
                 <button
                   onClick={() => setSelectedRequest(null)}
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
@@ -644,7 +644,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             <div className="p-4 space-y-3 sm:space-y-4 sm:space-y-6">
               {/* Provider Info */}
               <div className="flex items-start gap-3 sm:gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center flex-shrink-0">
                   <User className="w-8 h-8 text-white" />
                 </div>
                 <div>
@@ -653,7 +653,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                       {selectedRequest.provider.name}
                     </h3>
                     {selectedRequest.provider.verifiedAt && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-full">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#6B9080]/10 text-[#6B9080] text-xs rounded-full">
                         <Shield className="w-3 h-3" />
                         Verified
                       </span>
@@ -668,7 +668,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
               </div>
 
               {/* Request Details */}
-              <div className="bg-gray-50 dark:bg-slate-700 rounded-xl p-4">
+              <div className="bg-[#FAF7F2] dark:bg-slate-700 rounded-xl p-4">
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Reason for Request
                 </h4>
@@ -700,28 +700,28 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </h4>
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
                     {selectedRequest.childName}'s profile and basic info
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
                     Current goals and progress
                   </li>
                   {(selectedRequest.requestedLevel === 'full' || selectedRequest.requestedLevel === 'clinical') && (
                     <>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                        <CheckCircle2 className="w-4 h-4 text-primary" />
                         Care plan details
                       </li>
                       <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                        <CheckCircle2 className="w-4 h-4 text-primary" />
                         Vault documents
                       </li>
                     </>
                   )}
                   {selectedRequest.requestedLevel === 'clinical' && (
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-teal-500" />
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
                       FHIR data export
                     </li>
                   )}
@@ -742,7 +742,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                     <button
                       key={days}
                       onClick={() => handleApprove(selectedRequest, days)}
-                      className="py-3 px-4 bg-teal-50 hover:bg-teal-100 text-teal-700 rounded-xl text-sm font-medium transition-colors min-h-[48px]"
+                      className="py-3 px-4 bg-[#6B9080]/10 hover:bg-[#6B9080]/10 text-[#6B9080] rounded-xl text-sm font-medium transition-colors min-h-[48px]"
                     >
                       {label}
                     </button>
@@ -762,7 +762,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </Button>
                 <Button
                   onClick={() => handleApprove(selectedRequest, 30)}
-                  className="flex-1 min-h-[48px] bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 min-h-[48px] bg-primary hover:bg-[#6B9080]"
                 >
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Approve (30 days)

@@ -47,7 +47,7 @@ function SummaryCard({ label, value, subLabel, color }: SummaryCardProps) {
     yellow: 'bg-amber-50 border-amber-200 text-amber-700',
     red: 'bg-red-50 border-red-200 text-red-700',
     blue: 'bg-blue-50 border-blue-200 text-blue-700',
-    gray: 'bg-gray-50 border-gray-200 text-gray-700',
+    gray: 'bg-[#FAF7F2] border-gray-200 text-gray-700',
   };
 
   return (
@@ -68,11 +68,11 @@ function StatusBadge({ status }: { status: string }) {
     underpaid: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Underpaid' },
     posted: { bg: 'bg-emerald-100', text: 'text-emerald-800', label: 'Posted' },
     pending_review: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Pending Review' },
-    write_off: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Write Off' },
+    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-gray-800', label: 'Write Off' },
     appeal: { bg: 'bg-red-100', text: 'text-red-800', label: 'Appeal' },
   };
 
-  const config = statusConfig[status] || { bg: 'bg-gray-100', text: 'text-gray-700', label: status };
+  const config = statusConfig[status] || { bg: 'bg-[#F0EDE8]', text: 'text-gray-700', label: status };
 
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${config.bg} ${config.text}`}>
@@ -90,7 +90,7 @@ function ServiceLineRow({ line }: {
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-gray-50"
+        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-[#FAF7F2]"
       >
         <div className="flex items-center gap-3">
           <span className="font-mono text-sm font-semibold text-gray-900">{line.procedureCode}</span>
@@ -109,7 +109,7 @@ function ServiceLineRow({ line }: {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden bg-gray-50 px-4 pb-3"
+            className="overflow-hidden bg-[#FAF7F2] px-4 pb-3"
           >
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>
@@ -126,7 +126,7 @@ function ServiceLineRow({ line }: {
                 <p className="text-xs font-semibold text-gray-600">Adjustment Reasons:</p>
                 {line.adjustmentReasons.map((adj, i) => (
                   <div key={i} className="flex items-start gap-2 text-xs">
-                    <span className="inline-flex items-center rounded bg-gray-200 px-1.5 py-0.5 font-mono text-gray-700">
+                    <span className="inline-flex items-center rounded bg-[#E8E4DF] px-1.5 py-0.5 font-mono text-gray-700">
                       {adj.groupCode}-{adj.reasonCode}
                     </span>
                     <span className="text-gray-600">{adj.description}</span>
@@ -182,7 +182,7 @@ function WriteOffCard({ suggestion, onAction }: {
         {suggestion.recommendation !== 'review' && (
           <button
             onClick={() => onAction('review')}
-            className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50"
+            className="rounded-md border border-gray-300 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-[#FAF7F2]"
           >
             Review Instead
           </button>
@@ -304,7 +304,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="mx-auto max-w-lg px-4 py-4">
@@ -312,7 +312,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {onNavigateBack && (
               <button
                 onClick={onNavigateBack}
-                className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+                className="rounded-lg p-1.5 text-gray-500 hover:bg-[#F0EDE8]"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -326,7 +326,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
           </div>
 
           {/* Tab Navigation */}
-          <div className="mt-4 flex gap-1 rounded-lg bg-gray-100 p-1">
+          <div className="mt-4 flex gap-1 rounded-lg bg-[#F0EDE8] p-1">
             {(['overview', 'reconciliation', 'write_offs', 'appeals'] as const).map((tab) => (
               <button
                 key={tab}
@@ -419,7 +419,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                 </h3>
                 <div className="mt-3 space-y-2">
                   {unreconciledPayments.slice(0, 10).map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between rounded-lg bg-gray-50 p-2">
+                    <div key={payment.id} className="flex items-center justify-between rounded-lg bg-[#FAF7F2] p-2">
                       <div>
                         <p className="text-xs font-medium text-gray-900">
                           {payment.claimControlNumber} - {payment.procedureCode}
@@ -469,7 +469,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               </div>
 
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-lg bg-gray-50 p-2">
+                <div className="rounded-lg bg-[#FAF7F2] p-2">
                   <p className="text-xs text-gray-500">Charged</p>
                   <p className="text-sm font-bold">${reconciliationResult.originalChargedAmount.toFixed(2)}</p>
                 </div>
@@ -503,7 +503,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                     <div className="flex flex-col items-center">
                       <div className="h-2 w-2 rounded-full bg-gray-400" />
                       {idx < reconciliationResult.timeline.length - 1 && (
-                        <div className="w-px flex-1 bg-gray-200" />
+                        <div className="w-px flex-1 bg-[#E8E4DF]" />
                       )}
                     </div>
                     <div className="pb-3">

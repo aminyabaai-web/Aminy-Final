@@ -192,8 +192,8 @@ export function ProviderWaitlist({
             transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="text-center"
           >
-            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-teal-100 mx-auto mb-4">
-              <CheckCircle className="w-8 h-8 text-teal-600" />
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[#6B9080]/10 mx-auto mb-4">
+              <CheckCircle className="w-8 h-8 text-[#6B9080]" />
             </div>
 
             <h1 className="text-2xl font-bold text-slate-900 mb-2">
@@ -203,7 +203,7 @@ export function ProviderWaitlist({
             {position && (
               <p className="text-slate-500 mb-1">
                 You're{' '}
-                <span className="font-bold text-teal-600">
+                <span className="font-bold text-[#6B9080]">
                   #{position} in line
                 </span>{' '}
                 for {form.service} therapy
@@ -243,9 +243,9 @@ export function ProviderWaitlist({
                   <button
                     key={item.screen}
                     onClick={() => onNavigate?.(item.screen)}
-                    className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-slate-100 text-left hover:border-teal-200 hover:bg-teal-50 transition-colors"
+                    className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-slate-100 text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
                   >
-                    <item.icon className="w-4 h-4 text-teal-600" />
+                    <item.icon className="w-4 h-4 text-[#6B9080]" />
                     <span className="text-xs font-semibold text-slate-800">
                       {item.label}
                     </span>
@@ -294,8 +294,8 @@ export function ProviderWaitlist({
           className="mb-6"
         >
           <div className="flex items-center gap-2 mb-2">
-            <Heart className="w-5 h-5 text-teal-500" />
-            <Badge className="bg-teal-50 text-teal-700 border-teal-200">
+            <Heart className="w-5 h-5 text-primary" />
+            <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20">
               Growing in your area
             </Badge>
           </div>
@@ -321,7 +321,7 @@ export function ProviderWaitlist({
                 key={stat.label}
                 className="flex-1 bg-white rounded-xl border border-slate-100 p-2.5 text-center"
               >
-                <stat.icon className="w-4 h-4 text-teal-500 mx-auto mb-1" />
+                <stat.icon className="w-4 h-4 text-primary mx-auto mb-1" />
                 <p className="text-xs font-bold text-slate-900">{stat.label}</p>
                 <p className="text-xs text-slate-400">{stat.sub}</p>
               </div>
@@ -329,7 +329,7 @@ export function ProviderWaitlist({
           </div>
         ) : (
           <div className="flex items-center gap-2.5 bg-white rounded-xl border border-slate-100 p-3 mb-6">
-            <Heart className="w-4 h-4 text-teal-500 flex-shrink-0" />
+            <Heart className="w-4 h-4 text-primary flex-shrink-0" />
             <p className="text-xs text-slate-500">
               We match families with vetted providers as soon as availability opens
               in your area — and prioritize urgent cases.
@@ -380,14 +380,14 @@ export function ProviderWaitlist({
                   onClick={() => setForm((prev) => ({ ...prev, service: svc.id }))}
                   className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-colors ${
                     form.service === svc.id
-                      ? 'border-teal-400 bg-teal-50'
-                      : 'border-slate-200 bg-white hover:border-teal-200'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10'
+                      : 'border-slate-200 bg-white hover:border-[#6B9080]/20'
                   }`}
                 >
                   <div
                     className={`w-4 h-4 rounded-full border-2 flex-shrink-0 ${
                       form.service === svc.id
-                        ? 'border-teal-500 bg-teal-500'
+                        ? 'border-[#6B9080] bg-primary'
                         : 'border-slate-300'
                     }`}
                   />
@@ -430,7 +430,7 @@ export function ProviderWaitlist({
                   onClick={() => toggleDay(day)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     form.preferredDays.includes(day)
-                      ? 'bg-teal-500 text-white'
+                      ? 'bg-primary text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -453,14 +453,14 @@ export function ProviderWaitlist({
                   onClick={() => toggleTime(time)}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border text-left text-sm transition-colors ${
                     form.preferredTimes.includes(time)
-                      ? 'border-teal-400 bg-teal-50 text-teal-700 font-medium'
-                      : 'border-slate-200 text-slate-600 hover:border-teal-200'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080] font-medium'
+                      : 'border-slate-200 text-slate-600 hover:border-[#6B9080]/20'
                   }`}
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded border-2 flex-shrink-0 ${
                       form.preferredTimes.includes(time)
-                        ? 'border-teal-500 bg-teal-500'
+                        ? 'border-[#6B9080] bg-primary'
                         : 'border-slate-300'
                     }`}
                   />
@@ -489,8 +489,8 @@ export function ProviderWaitlist({
                   onClick={() => setForm((prev) => ({ ...prev, payType: opt.id }))}
                   className={`px-2 py-2 rounded-xl text-xs font-medium border transition-colors ${
                     form.payType === opt.id
-                      ? 'border-teal-400 bg-teal-50 text-teal-700'
-                      : 'border-slate-200 text-slate-600 hover:border-teal-200'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
+                      : 'border-slate-200 text-slate-600 hover:border-[#6B9080]/20'
                   }`}
                 >
                   {opt.label}
@@ -512,14 +512,14 @@ export function ProviderWaitlist({
                   onClick={() => setForm((prev) => ({ ...prev, urgency: opt.id }))}
                   className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl border text-left text-sm font-medium transition-colors ${
                     form.urgency === opt.id
-                      ? 'border-teal-400 bg-teal-50 text-teal-700'
-                      : `border-slate-200 ${opt.color} hover:border-teal-200`
+                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
+                      : `border-slate-200 ${opt.color} hover:border-[#6B9080]/20`
                   }`}
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 ${
                       form.urgency === opt.id
-                        ? 'border-teal-500 bg-teal-500'
+                        ? 'border-[#6B9080] bg-primary'
                         : 'border-slate-300'
                     }`}
                   />
@@ -533,7 +533,7 @@ export function ProviderWaitlist({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold h-12 rounded-xl text-sm mt-2"
+            className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold h-12 rounded-xl text-sm mt-2"
           >
             {isSubmitting ? 'Joining...' : 'Join Waitlist'}
           </Button>
@@ -546,7 +546,7 @@ export function ProviderWaitlist({
         {/* While you wait */}
         <div className="mt-8">
           <p className="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-1.5">
-            <BookOpen className="w-4 h-4 text-teal-500" />
+            <BookOpen className="w-4 h-4 text-primary" />
             While you wait
           </p>
           <div className="grid grid-cols-2 gap-2">
@@ -554,9 +554,9 @@ export function ProviderWaitlist({
               <button
                 key={item.screen}
                 onClick={() => onNavigate?.(item.screen)}
-                className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-slate-100 text-left hover:border-teal-200 hover:bg-teal-50 transition-colors"
+                className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-slate-100 text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
               >
-                <item.icon className="w-4 h-4 text-teal-600" />
+                <item.icon className="w-4 h-4 text-[#6B9080]" />
                 <span className="text-xs font-semibold text-slate-800">
                   {item.label}
                 </span>

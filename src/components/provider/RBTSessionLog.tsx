@@ -68,7 +68,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 pt-12 pb-4">
+      <div className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
           <button onClick={onBack} className="p-1.5 rounded-lg bg-white/20 backdrop-blur-sm">
             <ArrowLeft className="w-5 h-5" />
@@ -112,7 +112,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
             key={v.id}
             onClick={() => setViewMode(v.id)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              viewMode === v.id ? 'bg-teal-100 text-teal-700' : 'text-slate-500 hover:bg-slate-100'
+              viewMode === v.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-slate-500 hover:bg-slate-100'
             }`}
           >
             {v.label}
@@ -185,8 +185,8 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
       {sorted.map((s) => (
         <div key={s.id} className="bg-white rounded-xl p-3 border border-slate-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-              <User className="w-5 h-5 text-teal-600" />
+            <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+              <User className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-slate-800">{s.clientName}</div>
@@ -333,12 +333,12 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
   return (
     <div className="space-y-4">
       {/* Current month highlight */}
-      <div className="bg-white rounded-xl p-4 border border-teal-200">
+      <div className="bg-white rounded-xl p-4 border border-[#6B9080]/20">
         <h3 className="text-sm font-semibold text-slate-700 mb-3">This Month</h3>
         <div className="grid grid-cols-2 gap-3">
-          <div className="text-center p-3 bg-teal-50 rounded-lg">
-            <div className="text-2xl font-bold text-teal-700">{directHours.toFixed(1)}</div>
-            <div className="text-xs text-teal-600">Direct Hours</div>
+          <div className="text-center p-3 bg-[#6B9080]/10 rounded-lg">
+            <div className="text-2xl font-bold text-[#6B9080]">{directHours.toFixed(1)}</div>
+            <div className="text-xs text-[#6B9080]">Direct Hours</div>
           </div>
           <div className="text-center p-3 bg-slate-50 rounded-lg">
             <div className="text-2xl font-bold text-slate-700">
@@ -514,7 +514,7 @@ function NewSessionModal({
           </div>
 
           {calculateDuration() > 0 && (
-            <p className="text-xs text-teal-600 font-medium">Duration: {calculateDuration()} minutes</p>
+            <p className="text-xs text-[#6B9080] font-medium">Duration: {calculateDuration()} minutes</p>
           )}
 
           {/* Session Type */}
@@ -527,7 +527,7 @@ function NewSessionModal({
                   onClick={() => setSessionType(t)}
                   className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     sessionType === t
-                      ? 'bg-teal-600 text-white border-teal-600'
+                      ? 'bg-primary text-white border-[#6B9080]'
                       : 'bg-white text-slate-600 border-slate-300'
                   }`}
                 >
@@ -578,7 +578,7 @@ function NewSessionModal({
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" checked={flagForBCBA}
               onChange={(e) => setFlagForBCBA(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-300 text-teal-600" />
+              className="w-4 h-4 rounded border-slate-300 text-[#6B9080]" />
             <span className="text-sm text-slate-700">Flag for BCBA attention</span>
           </label>
 
@@ -589,7 +589,7 @@ function NewSessionModal({
           )}
 
           <button onClick={handleSave}
-            className="w-full bg-teal-600 text-white py-3 rounded-xl font-semibold text-sm mt-2">
+            className="w-full bg-primary text-white py-3 rounded-xl font-semibold text-sm mt-2">
             Log Session
           </button>
         </div>

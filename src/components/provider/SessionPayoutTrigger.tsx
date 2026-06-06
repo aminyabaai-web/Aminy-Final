@@ -145,7 +145,7 @@ export function SessionPayoutTrigger({
             {/* Header */}
             <div className="px-5 py-4 flex items-center justify-between" style={{ backgroundColor: '#0D1B2A' }}>
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-teal-400" />
+                <DollarSign className="w-4 h-4 text-primary" />
                 <span className="text-white font-semibold text-sm">Release Payment</span>
               </div>
               {onCancel && (
@@ -167,7 +167,7 @@ export function SessionPayoutTrigger({
 
             <div className="p-5 space-y-4">
               {/* Session info */}
-              <div className="rounded-xl bg-gray-50 p-4 space-y-2">
+              <div className="rounded-xl bg-[#FAF7F2] p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <User className="w-3.5 h-3.5 text-gray-400" />
                   <span className="font-medium text-gray-800">{providerName}</span>
@@ -206,11 +206,11 @@ export function SessionPayoutTrigger({
                   <span className="font-medium text-red-500">−{formatCents(platformFeeCents)}</span>
                 </div>
 
-                <div className="h-px bg-gray-100 my-1" />
+                <div className="h-px bg-[#F0EDE8] my-1" />
 
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-semibold text-gray-700">Provider receives</span>
-                  <span className="text-lg font-bold text-teal-600">{formatCents(providerCents)}</span>
+                  <span className="text-lg font-bold text-[#6B9080]">{formatCents(providerCents)}</span>
                 </div>
               </div>
 
@@ -247,7 +247,7 @@ export function SessionPayoutTrigger({
           transition={{ duration: 0.15 }}
         >
           <Card className="rounded-2xl border-0 shadow-sm bg-white p-8 flex flex-col items-center gap-3">
-            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+            <Loader2 className="w-8 h-8 text-primary animate-spin" />
             <p className="text-sm font-medium text-gray-700">Processing payout…</p>
             <p className="text-xs text-gray-400 text-center">Transferring {formatCents(providerCents)} to {providerName}</p>
           </Card>
@@ -269,7 +269,7 @@ export function SessionPayoutTrigger({
             </div>
             <div>
               <h3 className="font-bold text-gray-800 text-base">Payment Released</h3>
-              <p className="text-teal-600 font-semibold text-xl mt-1">{formatCents(payoutRecord.providerAmountCents)}</p>
+              <p className="text-[#6B9080] font-semibold text-xl mt-1">{formatCents(payoutRecord.providerAmountCents)}</p>
               <p className="text-xs text-gray-400 mt-1">Transfer ID: {payoutRecord.transferId}</p>
             </div>
             <p className="text-sm text-gray-500">

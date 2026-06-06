@@ -356,7 +356,7 @@ export function BookVisitScreen({
     return (
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.12),transparent_30%),linear-gradient(180deg,#f7fffd_0%,#f4f7f8_100%)] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-gray-600 font-medium">Finding providers in your area...</p>
           <p className="text-sm text-gray-400 mt-1">This only takes a moment</p>
         </div>
@@ -371,7 +371,7 @@ export function BookVisitScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -391,12 +391,12 @@ export function BookVisitScreen({
           </div>
           <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
-            <span className="w-5 h-5 rounded-full bg-teal-600 flex items-center justify-center text-white text-xs font-bold">2</span>
-            <span className="text-xs font-medium text-teal-700">Choose provider</span>
+            <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">2</span>
+            <span className="text-xs font-medium text-[#6B9080]">Choose provider</span>
           </div>
           <ChevronRight className="w-4 h-4 text-gray-400" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
-            <span className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-xs font-bold">3</span>
+            <span className="w-5 h-5 bg-[#E8E4DF] rounded-full flex items-center justify-center text-gray-500 text-xs font-bold">3</span>
             <span className="text-xs text-gray-400">Confirm</span>
           </div>
         </nav>
@@ -410,8 +410,8 @@ export function BookVisitScreen({
             onClick={() => setVisitFormat('remote')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitFormat === 'remote'
-                ? 'bg-teal-600 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-teal-50'
+                ? 'bg-primary text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-[#6B9080]/10'
             }`}
           >
             <Video className="w-4 h-4" />
@@ -433,8 +433,8 @@ export function BookVisitScreen({
             onClick={() => setVisitType('consult')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'consult'
-                ? 'bg-teal-50 text-teal-700 border-2 border-teal-500'
-                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-teal-50'
+                ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
+                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -444,8 +444,8 @@ export function BookVisitScreen({
             onClick={() => setVisitType('deep-review')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'deep-review'
-                ? 'bg-teal-50 text-teal-700 border-2 border-teal-500'
-                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-teal-50'
+                ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
+                : 'bg-slate-100 text-slate-600 border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -466,10 +466,10 @@ export function BookVisitScreen({
                 onClick={() => setSelectedDate(date)}
                 className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                   isSelected
-                    ? 'bg-teal-600 text-white'
+                    ? 'bg-primary text-white'
                     : isToday
-                    ? 'bg-teal-50 text-teal-700'
-                    : 'bg-slate-100 text-slate-600 hover:bg-teal-50'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080]'
+                    : 'bg-slate-100 text-slate-600 hover:bg-[#6B9080]/10'
                 }`}
               >
                 {formatDate(date)}
@@ -587,7 +587,7 @@ function ProviderCard({
       <div className="p-4 flex gap-3 sm:gap-4">
         {/* Avatar */}
         <div className="relative flex-shrink-0">
-          <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
+          <div className="w-16 h-16 rounded-full bg-[#E8E4DF] overflow-hidden">
             {provider.avatarUrl ? (
               <img
                 src={provider.avatarUrl}
@@ -601,7 +601,7 @@ function ProviderCard({
             )}
           </div>
           {provider.hasVideoIntro && (
-            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
               <Video className="w-3 h-3 text-white" />
             </div>
           )}
@@ -654,7 +654,7 @@ function ProviderCard({
               <button
                 key={slot.id}
                 onClick={() => onSelectSlot(slot)}
-                className="rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-medium text-teal-800 transition-all hover:bg-teal-100 hover:shadow-sm active:scale-95"
+                className="rounded-full border border-[#6B9080]/20 bg-[#6B9080]/10 px-4 py-2 text-sm font-medium text-teal-800 transition-all hover:bg-[#6B9080]/10 hover:shadow-sm active:scale-95"
               >
                 {formatTime(slot.startTime)}
               </button>
@@ -666,7 +666,7 @@ function ProviderCard({
             <p className="text-sm text-gray-500 mb-2">No appointments available today</p>
             <button
               onClick={onJoinWaitlist}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-teal-500 px-4 py-2 text-sm font-medium text-teal-700 transition-all hover:bg-teal-50"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-[#6B9080] px-4 py-2 text-sm font-medium text-[#6B9080] transition-all hover:bg-[#6B9080]/10"
             >
               <Bell className="w-4 h-4" />
               Join Waitlist
@@ -677,7 +677,7 @@ function ProviderCard({
 
       {/* Organization Badge */}
       {provider.organization !== 'independent' && (
-        <div className="px-4 py-2 bg-gray-50 border-t border-gray-100">
+        <div className="px-4 py-2 bg-[#FAF7F2] border-t border-gray-100">
           <span className="text-xs text-gray-500 uppercase tracking-wide">
             {provider.organization === 'aact' && 'AACT Partner'}
             {provider.organization === 'rise' && 'Rise Partner'}
@@ -731,7 +731,7 @@ function NoProvidersCard({
           We don't currently have providers licensed in {userState} with availability in the next 72 hours.
         </p>
         {/* Reassurance copy per requirement */}
-        <p className="text-sm font-medium text-teal-700 mb-4 sm:mb-6">
+        <p className="text-sm font-medium text-[#6B9080] mb-4 sm:mb-6">
           We'll support you at home while you wait.
         </p>
 
@@ -739,7 +739,7 @@ function NoProvidersCard({
           {/* Primary CTA: Join Waitlist */}
           <button
             onClick={onJoinWaitlist}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 font-medium text-white transition-colors hover:bg-teal-700"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 font-medium text-white transition-colors hover:bg-[#6B9080]"
           >
             <Bell className="w-4 h-4" />
             Join Telehealth Waitlist
@@ -752,7 +752,7 @@ function NoProvidersCard({
               {onRequestLocalCare && (
                 <button
                   onClick={onRequestLocalCare}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-teal-200 bg-teal-50 py-3 font-medium text-teal-800 transition-colors hover:bg-teal-100"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-[#6B9080]/20 bg-[#6B9080]/10 py-3 font-medium text-teal-800 transition-colors hover:bg-[#6B9080]/10"
                 >
                   <MapPin className="w-4 h-4" />
                   Request Local Care Support
@@ -776,7 +776,7 @@ function NoProvidersCard({
           {onStartHomeProgram && (
             <button
               onClick={onStartHomeProgram}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-teal-600 py-3 font-medium text-white transition-colors hover:bg-teal-700"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-3 font-medium text-white transition-colors hover:bg-[#6B9080]"
             >
               <Home className="w-4 h-4" />
               Start Aminy Home Program Now
@@ -786,14 +786,14 @@ function NoProvidersCard({
           <div className="pt-4 border-t border-gray-100">
             <h4 className="text-sm font-medium text-gray-700 mb-2">While you wait:</h4>
             <div className="space-y-2 text-left">
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">🎥</span>
                 <div>
                   <p className="text-sm font-medium text-gray-900">Monthly Q&A Sessions</p>
                   <p className="text-xs text-gray-500">Live sessions with providers (included)</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">📚</span>
                 <div>
                   <p className="text-sm font-medium text-gray-900">Evidence-Based Resources</p>
@@ -804,7 +804,7 @@ function NoProvidersCard({
               {showLocalCareOptions && (
                 <button
                   onClick={onRequestLocalCare}
-                  className="w-full flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors text-left"
                 >
                   <span className="text-lg">🔍</span>
                   <div>

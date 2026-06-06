@@ -104,7 +104,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 py-6">
@@ -135,7 +135,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
 
           {/* Overall Progress Bar */}
           <div className="mt-4">
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
               <div 
                 className="h-full bg-accent rounded-full transition-all duration-500"
                 style={{ width: `${overallProgress}%` }}
@@ -157,11 +157,11 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                 {/* Section Header */}
                 <button
                   onClick={() => setExpandedSection(isExpanded ? null : sectionId)}
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      progress === 100 ? 'bg-green-100' : 'bg-gray-100'
+                      progress === 100 ? 'bg-green-100' : 'bg-[#F0EDE8]'
                     }`}>
                       {progress === 100 ? (
                         <CheckCircle className="w-6 h-6 text-green-600" />
@@ -193,7 +193,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                       <div
                         key={item.id}
                         className={`flex items-start gap-3 py-2 ${
-                          item.link ? 'cursor-pointer hover:bg-gray-50 -mx-2 px-2 rounded-lg' : ''
+                          item.link ? 'cursor-pointer hover:bg-[#FAF7F2] -mx-2 px-2 rounded-lg' : ''
                         }`}
                         onClick={() => item.link && onNavigate?.(item.link)}
                       >
@@ -222,7 +222,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
         </div>
 
         {/* Final Summary Card */}
-        <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl border border-teal-200 p-6 text-center">
+        <div className="mt-8 bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl border border-[#6B9080]/20 p-6 text-center">
           <FileCheck className="w-12 h-12 text-accent mx-auto mb-4" />
           <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
             {overallProgress === 100 ? '🎉 All Complete!' : 'Great Progress!'}

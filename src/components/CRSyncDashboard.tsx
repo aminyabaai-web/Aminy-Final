@@ -104,7 +104,7 @@ async function withTimeout<T>(promise: Promise<T>, fallback: T, timeoutMs = 5000
 }
 
 const STATUS_CONFIG = {
-  idle: { color: 'text-gray-500', bg: 'bg-gray-50', label: 'Idle', icon: Clock },
+  idle: { color: 'text-gray-500', bg: 'bg-[#FAF7F2]', label: 'Idle', icon: Clock },
   syncing: { color: 'text-blue-600', bg: 'bg-blue-50', label: 'Syncing...', icon: Loader2 },
   success: { color: 'text-green-600', bg: 'bg-green-50', label: 'Success', icon: CheckCircle2 },
   error: { color: 'text-red-600', bg: 'bg-red-50', label: 'Error', icon: XCircle },
@@ -152,14 +152,14 @@ function SyncRecordCard({
   const [expanded, setExpanded] = useState(false);
   const DirectionIcon = record.direction === 'pull' ? ArrowDown : ArrowUp;
   const directionColor =
-    record.direction === 'pull' ? 'text-blue-500' : 'text-teal-500';
+    record.direction === 'pull' ? 'text-blue-500' : 'text-primary';
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
       <button
         onClick={() => setExpanded(!expanded)}
         aria-label={`${expanded ? 'Collapse' : 'Expand'} sync record for ${DATA_TYPE_LABELS[record.dataType] || record.dataType}`}
-        className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-[#FAF7F2] transition-colors"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <DirectionIcon size={14} className={directionColor} />
@@ -186,7 +186,7 @@ function SyncRecordCard({
             }}
             disabled={syncing || record.status === 'syncing'}
             aria-label={`Sync ${DATA_TYPE_LABELS[record.dataType] || record.dataType} now`}
-            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100 disabled:opacity-50"
+            className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-[#6B9080]/10 p-2 text-[#6B9080] transition-colors hover:bg-[#6B9080]/10 disabled:opacity-50"
             title="Sync now"
           >
             {syncing ? (
@@ -206,19 +206,19 @@ function SyncRecordCard({
       {expanded && (
         <div className="px-3 pb-3 border-t border-gray-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Direction</span>
               <p className="font-medium text-gray-900 capitalize">{record.direction}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Records</span>
               <p className="font-medium text-gray-900">{record.recordsSynced}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Last Sync</span>
               <p className="font-medium text-gray-900">{timeAgo(record.lastSyncAt)}</p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Next Sync</span>
               <p className="font-medium text-gray-900">{timeAgo(record.nextSyncAt)}</p>
             </div>
@@ -298,26 +298,26 @@ function ErrorCard({
         <div className="px-3 pb-3 border-t border-red-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
             {error.error_code && (
-              <div className="text-xs bg-gray-50 rounded p-2">
+              <div className="text-xs bg-[#FAF7F2] rounded p-2">
                 <span className="text-gray-500">Error Code</span>
                 <p className="font-mono font-medium text-gray-900">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
-              <div className="text-xs bg-gray-50 rounded p-2">
+              <div className="text-xs bg-[#FAF7F2] rounded p-2">
                 <span className="text-gray-500">Record ID</span>
                 <p className="font-mono font-medium text-gray-900 truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Retries</span>
               <p className="font-medium text-gray-900">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
-            <div className="text-xs bg-gray-50 rounded p-2">
+            <div className="text-xs bg-[#FAF7F2] rounded p-2">
               <span className="text-gray-500">Created</span>
               <p className="font-medium text-gray-900">
                 {formatDate(error.created_at)}
@@ -383,7 +383,7 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
                   {entry.direction === 'pull' ? (
                     <ArrowDown size={10} className="text-blue-500" />
                   ) : (
-                    <ArrowUp size={10} className="text-teal-500" />
+                    <ArrowUp size={10} className="text-primary" />
                   )}
                   {entry.direction}
                 </span>
@@ -578,7 +578,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="w-6 h-6 text-teal-500 animate-spin" />
+        <Loader2 className="w-6 h-6 text-primary animate-spin" />
       </div>
     );
   }
@@ -596,7 +596,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       <div className="rounded-3xl border border-teal-100 bg-white/92 px-5 py-5 shadow-sm">
         <nav aria-label="CentralReach navigation" className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-teal-700">CentralReach operator lane</p>
+            <p className="text-xs uppercase tracking-[0.18em] text-[#6B9080]">CentralReach operator lane</p>
             <h1 className="mt-1 text-xl font-bold tracking-tight text-slate-900">Sync Dashboard</h1>
             <h2 className="sr-only">CentralReach sync overview</h2>
             <h3 className="sr-only">Import, export, and reconciliation status</h3>
@@ -608,14 +608,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <button
               type="button"
               onClick={() => setActiveTab('status')}
-              className="action-button min-h-11 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
             >
               Review sync health
             </button>
             <button
               onClick={loadData}
               aria-label="Refresh CentralReach sync dashboard"
-              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-teal-50 p-2 text-teal-700 transition-colors hover:bg-teal-100"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-xl bg-[#6B9080]/10 p-2 text-[#6B9080] transition-colors hover:bg-[#6B9080]/10"
               title="Refresh dashboard"
             >
               <RefreshCw size={16} />
@@ -636,7 +636,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       {history && (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
-            <Activity size={16} className="text-teal-500 mx-auto mb-1" />
+            <Activity size={16} className="text-primary mx-auto mb-1" />
             <p className="text-lg font-bold text-gray-900">
               {history.totalSyncs}
             </p>
@@ -678,8 +678,8 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             onClick={() => setActiveTab(tab.id)}
             className={`min-h-11 flex-1 rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
               activeTab === tab.id
-                ? 'bg-teal-600 text-white shadow-sm'
-                : 'text-slate-500 hover:bg-teal-50 hover:text-slate-700'
+                ? 'bg-primary text-white shadow-sm'
+                : 'text-slate-500 hover:bg-[#6B9080]/10 hover:text-slate-700'
             }`}
           >
             {tab.label}
@@ -821,7 +821,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           {/* Push Data */}
           <div>
             <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-              <ArrowUp size={14} className="text-teal-500" />
+              <ArrowUp size={14} className="text-primary" />
               Push (Aminy &rarr; CentralReach)
             </h3>
             <div className="space-y-2">
@@ -909,7 +909,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 </p>
                 <p className="text-xs text-amber-600">Partial</p>
               </div>
-              <div className="text-center bg-gray-50 rounded-lg p-2">
+              <div className="text-center bg-[#FAF7F2] rounded-lg p-2">
                 <p className="text-sm font-bold text-gray-700">
                   {formatDuration(history.avgDurationMs)}
                 </p>

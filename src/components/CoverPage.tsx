@@ -67,8 +67,8 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
               <GraduationCap className="w-4 h-4 text-purple-600" />
               <span className="text-sm font-medium text-purple-900">Designed with BCBAs</span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-2 bg-teal-50 border border-teal-200 rounded-lg">
-              <Sparkles className="w-4 h-4 text-teal-600" />
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg">
+              <Sparkles className="w-4 h-4 text-[#6B9080]" />
               <span className="text-sm font-medium text-teal-900">AI-powered</span>
             </div>
           </div>

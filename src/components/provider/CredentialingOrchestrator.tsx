@@ -60,7 +60,7 @@ const STATUS_CONFIG: Record<PanelApplicationStatus, {
   bg: string;
   border: string;
 }> = {
-  'not-started': { label: 'Not Started', color: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200' },
+  'not-started': { label: 'Not Started', color: 'text-gray-500', bg: 'bg-[#FAF7F2]', border: 'border-gray-200' },
   'submitted': { label: 'Submitted', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
   'pending': { label: 'Pending Review', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
   'credentialed': { label: 'Credentialed', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
@@ -132,7 +132,7 @@ function GanttBar({ label, start, end, status, index }: {
   return (
     <div className="flex items-center gap-3 mb-2">
       <span className="text-xs text-gray-600 w-32 shrink-0 truncate">{label}</span>
-      <div className="flex-1 relative h-6 bg-gray-100 rounded overflow-hidden">
+      <div className="flex-1 relative h-6 bg-[#F0EDE8] rounded overflow-hidden">
         <motion.div
           className={`absolute top-1 bottom-1 rounded ${colors[status]}`}
           style={{ left: `${start}%`, width: `${width}%` }}
@@ -185,7 +185,7 @@ export default function CredentialingOrchestrator({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-navy-dark text-white px-4 pt-12 pb-4" style={{ background: '#0D1B2A' }}>
         <div className="flex items-center gap-3 mb-3">
@@ -275,7 +275,7 @@ export default function CredentialingOrchestrator({
               {/* Payer Kanban Board */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <Users size={15} className="text-teal-600" />
+                  <Users size={15} className="text-[#6B9080]" />
                   Payer Status Board
                 </h2>
                 <div className="space-y-2">
@@ -369,7 +369,7 @@ export default function CredentialingOrchestrator({
               {/* Payer Selector */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                  <Sparkles size={15} className="text-teal-600" />
+                  <Sparkles size={15} className="text-[#6B9080]" />
                   Select Payer for AI Playbook
                 </h2>
                 <div className="grid grid-cols-2 gap-2">
@@ -390,7 +390,7 @@ export default function CredentialingOrchestrator({
                         onClick={() => setSelectedPayer(payerId)}
                         className={`p-3 rounded-xl border-2 text-left transition-all ${
                           selectedPayer === payerId
-                            ? 'border-teal-500 bg-teal-50'
+                            ? 'border-[#6B9080] bg-[#6B9080]/10'
                             : `${cfg.border} ${cfg.bg} hover:opacity-80`
                         }`}
                       >
@@ -407,7 +407,7 @@ export default function CredentialingOrchestrator({
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-sm font-semibold text-gray-800">{selectedPlaybook.payerName} Enrollment</h2>
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    <span className="text-xs text-gray-500 bg-[#F0EDE8] px-2 py-1 rounded-full">
                       ~{selectedPlaybook.totalEstimatedDays} days
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default function CredentialingOrchestrator({
                         <div
                           key={idx}
                           className={`border rounded-xl transition-all ${
-                            isChecked ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'
+                            isChecked ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-[#FAF7F2]'
                           }`}
                         >
                           <div
@@ -491,7 +491,7 @@ export default function CredentialingOrchestrator({
                                       href={step.url}
                                       target="_blank"
                                       rel="noreferrer"
-                                      className="flex items-center gap-1 text-xs text-teal-600 hover:underline"
+                                      className="flex items-center gap-1 text-xs text-[#6B9080] hover:underline"
                                     >
                                       <ExternalLink size={11} />
                                       Open portal
@@ -508,14 +508,14 @@ export default function CredentialingOrchestrator({
 
                   {/* Tips & Common Mistakes */}
                   <div className="mt-4 space-y-3">
-                    <div className="bg-teal-50 rounded-xl p-3 border border-teal-100">
-                      <p className="text-xs font-semibold text-teal-700 mb-2 flex items-center gap-1.5">
+                    <div className="bg-[#6B9080]/10 rounded-xl p-3 border border-teal-100">
+                      <p className="text-xs font-semibold text-[#6B9080] mb-2 flex items-center gap-1.5">
                         <Zap size={12} /> Pro Tips
                       </p>
                       <ul className="space-y-1">
                         {selectedPlaybook.tips.map((tip, i) => (
-                          <li key={i} className="text-xs text-teal-700 flex items-start gap-1.5">
-                            <span className="text-teal-400 shrink-0">•</span> {tip}
+                          <li key={i} className="text-xs text-[#6B9080] flex items-start gap-1.5">
+                            <span className="text-primary shrink-0">•</span> {tip}
                           </li>
                         ))}
                       </ul>
@@ -580,15 +580,15 @@ export default function CredentialingOrchestrator({
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mb-4 text-center">
-                  <div className="bg-gray-50 rounded-xl p-2">
+                  <div className="bg-[#FAF7F2] rounded-xl p-2">
                     <p className="text-xl font-bold text-gray-800">{caqhProfile.completionPercent}%</p>
                     <p className="text-xs text-gray-500">Complete</p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-2">
+                  <div className="bg-[#FAF7F2] rounded-xl p-2">
                     <p className="text-xs text-gray-800 font-semibold leading-tight">{caqhProfile.lastAttestedDate}</p>
                     <p className="text-xs text-gray-500">Last Attested</p>
                   </div>
-                  <div className="bg-gray-50 rounded-xl p-2">
+                  <div className="bg-[#FAF7F2] rounded-xl p-2">
                     <p className="text-xs text-gray-800 font-semibold leading-tight">{caqhProfile.nextAttestationDue}</p>
                     <p className="text-xs text-gray-500">Next Due</p>
                   </div>
@@ -624,7 +624,7 @@ export default function CredentialingOrchestrator({
                           cat.percent === 100 ? 'text-green-600' : cat.percent >= 70 ? 'text-amber-600' : 'text-red-500'
                         }`}>{cat.percent}%</span>
                       </div>
-                      <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
                             cat.percent === 100 ? 'bg-green-500' : cat.percent >= 70 ? 'bg-amber-400' : 'bg-red-400'
@@ -655,7 +655,7 @@ export default function CredentialingOrchestrator({
             >
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
                 <h2 className="text-sm font-semibold text-gray-800 mb-1 flex items-center gap-2">
-                  <Clock size={15} className="text-teal-600" />
+                  <Clock size={15} className="text-[#6B9080]" />
                   Credentialing Timeline
                 </h2>
                 <p className="text-xs text-gray-500 mb-4">Estimated approval milestones by payer</p>
@@ -722,7 +722,7 @@ export default function CredentialingOrchestrator({
                     return (
                       <button
                         key={type}
-                        className="flex items-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-left"
+                        className="flex items-center gap-2 p-3 border border-gray-200 rounded-xl hover:bg-[#FAF7F2] transition-colors text-left"
                       >
                         <Download size={13} className="text-gray-400 shrink-0" />
                         <span className="text-xs text-gray-700">{labels[type]}</span>

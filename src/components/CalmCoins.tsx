@@ -303,7 +303,7 @@ export function CalmCoins({
       </AnimatePresence>
 
       {/* Tab Navigation */}
-      <div className="flex gap-2 p-1 bg-gray-100 rounded-lg">
+      <div className="flex gap-2 p-1 bg-[#F0EDE8] rounded-lg">
         <button
           onClick={() => setActiveTab('earn')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
@@ -337,8 +337,8 @@ export function CalmCoins({
               onClick={() => earnCoins(opportunity.coins, opportunity.name)}
             >
               <div className="flex items-center gap-3 sm:gap-4">
-                <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center">
-                  <opportunity.icon className="w-6 h-6 text-teal-600" />
+                <div className="w-12 h-12 bg-[#6B9080]/10 rounded-xl flex items-center justify-center">
+                  <opportunity.icon className="w-6 h-6 text-[#6B9080]" />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium text-gray-900">{opportunity.name}</p>

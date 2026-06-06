@@ -123,7 +123,7 @@ export function WeeklyOutcomesDashboard({
   const getTrendBadge = () => {
     const badges = {
       improving: { bg: 'bg-green-100', text: 'text-green-700', label: 'Great progress' },
-      stable: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Steady pace' },
+      stable: { bg: 'bg-[#F0EDE8]', text: 'text-gray-700', label: 'Steady pace' },
       needs_attention: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Let\'s reconnect' }
     };
     
@@ -163,7 +163,7 @@ export function WeeklyOutcomesDashboard({
 
       {/* AI Summary */}
       {summary.aiSummary && (
-        <div className="mb-4 sm:mb-6 p-4 bg-teal-50 border border-teal-100 rounded-lg">
+        <div className="mb-4 sm:mb-6 p-4 bg-[#6B9080]/10 border border-teal-100 rounded-lg">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
             <p className="text-sm text-primary leading-relaxed italic">

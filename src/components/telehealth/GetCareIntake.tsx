@@ -76,7 +76,7 @@ export function GetCareIntakeScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -107,7 +107,7 @@ export function GetCareIntakeScreen({
                   setConcernId(undefined);
                 }
               }}
-              className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
           {preselectedConcern && concernId === preselectedConcern.id && (
@@ -157,7 +157,7 @@ export function GetCareIntakeScreen({
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <button
               onClick={() => setShowStateDropdown(!showStateDropdown)}
-              className="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-xl text-left text-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-10 py-3 bg-[#FAF7F2] border border-gray-200 rounded-xl text-left text-gray-900 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             >
               {userState ? getStateName(userState) : 'Select your state'}
             </button>
@@ -172,7 +172,7 @@ export function GetCareIntakeScreen({
                     placeholder="Search states..."
                     value={stateSearch}
                     onChange={(e) => setStateSearch(e.target.value)}
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                    className="w-full px-3 py-2 bg-[#FAF7F2] border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                     autoFocus
                   />
                 </div>
@@ -185,8 +185,8 @@ export function GetCareIntakeScreen({
                         setShowStateDropdown(false);
                         setStateSearch('');
                       }}
-                      className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 transition-colors ${
-                        userState === state.code ? 'bg-cyan-600/10 text-cyan-600 font-medium' : 'text-gray-700'
+                      className={`w-full px-4 py-2 text-left text-sm hover:bg-[#FAF7F2] transition-colors ${
+                        userState === state.code ? 'bg-cyan-600/10 text-[#6B9080] font-medium' : 'text-gray-700'
                       }`}
                     >
                       {state.name}
@@ -204,7 +204,7 @@ export function GetCareIntakeScreen({
               placeholder="City (optional)"
               value={userCity}
               onChange={(e) => setUserCity(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full px-4 py-3 bg-[#FAF7F2] border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
         </section>
@@ -258,7 +258,7 @@ export function GetCareIntakeScreen({
           className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
             isValid
               ? 'bg-cyan-600 text-white hover:bg-[#466379] active:scale-[0.98]'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
           }`}
         >
           See Available Times
@@ -293,8 +293,8 @@ function WhoButton({ icon, label, selected, onClick }: WhoButtonProps) {
       onClick={onClick}
       className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
         selected
-          ? 'bg-cyan-600/10 border-cyan-600 text-cyan-600'
-          : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300'
+          ? 'bg-cyan-600/10 border-cyan-600 text-[#6B9080]'
+          : 'bg-[#FAF7F2] border-gray-200 text-gray-600 hover:border-gray-300'
       }`}
     >
       {icon}
@@ -326,10 +326,10 @@ function VisitTypeButton({
       disabled={disabled}
       className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
         disabled
-          ? 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
+          ? 'bg-[#F0EDE8] border-gray-200 text-gray-400 cursor-not-allowed opacity-60'
           : selected
-          ? 'bg-cyan-600/10 border-cyan-600 text-cyan-600'
-          : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-gray-300'
+          ? 'bg-cyan-600/10 border-cyan-600 text-[#6B9080]'
+          : 'bg-[#FAF7F2] border-gray-200 text-gray-600 hover:border-gray-300'
       }`}
     >
       {icon}

@@ -125,7 +125,7 @@ function HighlightsList({ highlights }: HighlightsListProps) {
         <ul className="px-5 pb-4 space-y-2 border-t border-slate-100 pt-3">
           {highlights.map((item, i) => (
             <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-              <Check className="w-4 h-4 text-teal-500 mt-0.5 shrink-0" />
+              <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
               <span>{item}</span>
             </li>
           ))}
@@ -244,10 +244,10 @@ export function CarePackageCheckoutScreen({
       <div className="flex-1 overflow-y-auto px-4 pt-5 pb-28 space-y-4">
 
         {/* Package Summary Card */}
-        <div className="bg-white rounded-2xl border-2 border-teal-300 shadow-sm p-5">
+        <div className="bg-white rounded-2xl border-2 border-[#6B9080]/30 shadow-sm p-5">
           {/* Service type badge */}
           <div className="flex items-center gap-1.5 mb-3">
-            <span className="inline-flex items-center gap-1.5 bg-teal-50 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full border border-teal-200">
+            <span className="inline-flex items-center gap-1.5 bg-[#6B9080]/10 text-[#6B9080] text-xs font-semibold px-3 py-1 rounded-full border border-[#6B9080]/20">
               {SERVICE_TYPE_ICONS[pkg.serviceType]}
               {SERVICE_TYPE_LABELS[pkg.serviceType]}
             </span>
@@ -270,7 +270,7 @@ export function CarePackageCheckoutScreen({
           <ul className="space-y-2">
             {pkg.highlights.slice(0, 3).map((item, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                <Check className="w-4 h-4 text-teal-500 mt-0.5 shrink-0" />
+                <Check className="w-4 h-4 text-primary mt-0.5 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -299,15 +299,15 @@ export function CarePackageCheckoutScreen({
         </div>
 
         {/* Family info */}
-        <div className="bg-teal-50 rounded-2xl border border-teal-100 px-5 py-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 font-bold text-sm shrink-0">
+        <div className="bg-[#6B9080]/10 rounded-2xl border border-teal-100 px-5 py-4 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center text-[#6B9080] font-bold text-sm shrink-0">
             {childName.charAt(0).toUpperCase()}
           </div>
           <div>
             <p className="text-sm font-semibold text-teal-800">
               Setting up care for {childName}
             </p>
-            <p className="text-xs text-teal-600">Your care team will reach out within 24 hours.</p>
+            <p className="text-xs text-[#6B9080]">Your care team will reach out within 24 hours.</p>
           </div>
         </div>
 
@@ -335,7 +335,7 @@ export function CarePackageCheckoutScreen({
         <button
           onClick={handleCheckout}
           disabled={loading}
-          className="w-full bg-teal-600 hover:bg-teal-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-primary hover:bg-[#6B9080] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2"
         >
           {loading ? (
             <>

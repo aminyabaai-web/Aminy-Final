@@ -354,7 +354,7 @@ export function CaregiverDocumentation({
   const fiInfo = FISCAL_INTERMEDIARIES.find(fi => fi.id === selectedFI);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="px-4 py-4 max-w-4xl mx-auto">

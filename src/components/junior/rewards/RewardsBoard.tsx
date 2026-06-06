@@ -569,7 +569,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                       >
                         {/* Photo/unlock area */}
                         <div
-                          className="relative aspect-square flex items-center justify-center bg-gray-50 cursor-pointer"
+                          className="relative aspect-square flex items-center justify-center bg-[#FAF7F2] cursor-pointer"
                           onClick={() => {
                             if (!reward.photoUrl && !reward.redeemed) {
                               setEditingReward(reward.id);
@@ -659,7 +659,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
                           {/* Progress bar toward photo */}
                           {!reward.redeemed && (
-                            <div className="mt-1.5 mb-1.5 h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="mt-1.5 mb-1.5 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                               <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress * 100}%` }}
@@ -685,12 +685,12 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                                 <div className="flex items-center gap-1">
                                   <button onClick={() => handleCostChange(reward.id, -5)}
                                     aria-label="Lower star goal"
-                                    className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+                                    className="w-5 h-5 rounded-full bg-[#F0EDE8] flex items-center justify-center">
                                     <Minus className="w-2.5 h-2.5 text-gray-500" />
                                   </button>
                                   <button onClick={() => handleCostChange(reward.id, 5)}
                                     aria-label="Raise star goal"
-                                    className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+                                    className="w-5 h-5 rounded-full bg-[#F0EDE8] flex items-center justify-center">
                                     <Plus className="w-2.5 h-2.5 text-gray-500" />
                                   </button>
                                 </div>

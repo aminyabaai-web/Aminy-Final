@@ -550,8 +550,8 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-teal-700 dark:text-teal-300" />,
-      accent: 'bg-teal-100 dark:bg-teal-900/30',
+      icon: <FileText className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />,
+      accent: 'bg-[#6B9080]/10 dark:bg-teal-900/30',
     },
     {
       id: 'calm',
@@ -703,7 +703,7 @@ export function Dashboard10({
                   onClick={() => setActiveChildId(c.id === activeChildId ? undefined : c.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
-                      ? 'border border-teal-200 bg-teal-600 text-white shadow-sm'
+                      ? 'border border-[#6B9080]/20 bg-primary text-white shadow-sm'
                       : 'border border-slate-200 bg-white/85 text-slate-600 hover:bg-white'
                   }`}
                 >
@@ -776,7 +776,7 @@ export function Dashboard10({
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
                         <div key={goal.name} className="text-sm text-slate-600">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-teal-700' : 'text-slate-500'}>{goal.percentMet}%</span>
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-slate-500'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
@@ -817,7 +817,7 @@ export function Dashboard10({
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
-                      <Video className="w-4 h-4 text-teal-600" />
+                      <Video className="w-4 h-4 text-[#6B9080]" />
                     ) : (
                       <Calendar className="w-4 h-4 text-amber-500" />
                     )}
@@ -926,14 +926,14 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-700 rounded-xl p-3"
+            className="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#6B9080]/20 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-teal-600 dark:text-teal-400 mt-0.5 flex-shrink-0" />
+              <Sparkles className="w-4 h-4 text-[#6B9080] dark:text-primary mt-0.5 flex-shrink-0" />
               <p className="text-sm text-teal-800 dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
-                className="h-11 w-11 text-teal-400 hover:text-teal-600 flex-shrink-0 rounded-lg flex items-center justify-center"
+                className="h-11 w-11 text-primary hover:text-[#6B9080] flex-shrink-0 rounded-lg flex items-center justify-center"
                 aria-label="Dismiss personalized tip"
               >
                 <X className="w-3.5 h-3.5" />
@@ -963,8 +963,8 @@ export function Dashboard10({
           <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Video className="w-5 h-5 text-teal-600" />
+                <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
@@ -999,7 +999,7 @@ export function Dashboard10({
         {shouldShowStarterSummary ? (
           <div className="rounded-2xl border border-teal-100 bg-gradient-to-br from-white via-teal-50/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-[#7BA7BC]">
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
@@ -1042,7 +1042,7 @@ export function Dashboard10({
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-2xl font-bold text-teal-600">{dashboardData.routineAdherence}%</p>
+                <p className="text-2xl font-bold text-[#6B9080]">{dashboardData.routineAdherence}%</p>
                 <p className="text-sm text-muted-foreground">Routine</p>
               </div>
               <div>
@@ -1103,7 +1103,7 @@ export function Dashboard10({
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
                     ? 'bg-[#6B9080] text-white shadow-md'
-                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
                 {routine.icon}
@@ -1147,7 +1147,7 @@ export function Dashboard10({
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                      : 'bg-gray-50 dark:bg-slate-700/50 hover:bg-gray-100 dark:hover:bg-slate-700'
+                      : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
@@ -1171,7 +1171,7 @@ export function Dashboard10({
 
             {/* AI Nudge */}
             {completedTasks > 0 && completedTasks < totalTasks && (
-              <div className="mt-4 p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg border border-teal-200 dark:border-teal-800">
+              <div className="mt-4 p-3 bg-[#6B9080]/10 dark:bg-teal-900/20 rounded-lg border border-[#6B9080]/20 dark:border-teal-800">
                 <p className="text-sm text-teal-800 dark:text-teal-200 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   One task away from completing {currentRoutine.label.toLowerCase()}!
@@ -1290,7 +1290,7 @@ export function Dashboard10({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-teal-200 hover:bg-slate-50 hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6B9080]/20 hover:bg-slate-50 hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
                 <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
                   {action.icon}
@@ -1303,20 +1303,20 @@ export function Dashboard10({
           {/* Provider Reports Card */}
           {shouldShowProviderReportsCard ? (
             <div
-              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-teal-200 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-teal-50 to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#6B9080]/20 dark:border-teal-800 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
               onClick={() => onNavigate?.('clinical-reports')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
-              <div className="w-10 h-10 rounded-lg bg-teal-100 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-teal-700 dark:text-teal-300" />
+              <div className="w-10 h-10 rounded-lg bg-[#6B9080]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+                <Stethoscope className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm text-teal-900 dark:text-teal-100">Provider Reports</h3>
-                <p className="text-sm text-teal-700 dark:text-teal-300">Generate clinical PDFs for your child's care team</p>
+                <p className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">Generate clinical PDFs for your child's care team</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
           ) : null}
         </section>
@@ -1494,7 +1494,7 @@ export function Dashboard10({
             </div>
 
             {/* Chat Input - Enhanced */}
-            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-gray-50 dark:bg-slate-750">
+            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-750">
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}

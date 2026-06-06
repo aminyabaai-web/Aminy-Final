@@ -171,7 +171,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
   return (
     <div className="space-y-6">
       {/* View Tabs */}
-      <div className="flex gap-2 bg-gray-100 rounded-xl p-1">
+      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
         {[
           { id: 'roster' as const, label: 'RBT Roster', icon: Users },
           { id: 'supervision' as const, label: 'Supervision', icon: Clock },
@@ -227,7 +227,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
 
           {/* Invite Form */}
           {showInviteForm && (
-            <div className="bg-cyan-50 border border-cyan-200 rounded-xl p-4 space-y-3">
+            <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <input
                   type="text"
@@ -255,7 +255,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={inviteRBT} className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700">
                   Send Invite
                 </button>
-                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-gray-100 rounded-lg">
+                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-[#F0EDE8] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -306,7 +306,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t border-gray-100 p-4 bg-gray-50 space-y-3">
+                      <div className="border-t border-gray-100 p-4 bg-[#FAF7F2] space-y-3">
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div>
                             <p className="text-gray-500">Cert #</p>
@@ -344,7 +344,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                               setShowLogForm(true);
                               setActiveView('supervision');
                             }}
-                            className="flex-1 py-2 text-sm font-medium text-cyan-600 border border-cyan-300 rounded-lg hover:bg-cyan-50"
+                            className="flex-1 py-2 text-sm font-medium text-[#6B9080] border border-cyan-300 rounded-lg hover:bg-[#6B9080]/10"
                           >
                             Log Supervision
                           </button>
@@ -443,7 +443,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={addSupervisionLog} className="px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700">
                   Save Log
                 </button>
-                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-gray-100 rounded-lg">
+                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-gray-600 text-sm hover:bg-[#F0EDE8] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -490,7 +490,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                         </p>
                       </div>
                     </div>
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-2 bg-[#E8E4DF] rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all ${c.isCompliant ? 'bg-green-500' : 'bg-red-500'}`}
                         style={{ width: `${pct}%` }}
@@ -510,7 +510,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 {data.logs.slice(-5).reverse().map(log => {
                   const rbt = data.rbts.find(r => r.id === log.rbtId);
                   return (
-                    <div key={log.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-sm">
+                    <div key={log.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg text-sm">
                       <Calendar className="w-4 h-4 text-gray-400" />
                       <span className="text-gray-500">{new Date(log.date).toLocaleDateString()}</span>
                       <span className="font-medium text-gray-900">{rbt?.name || 'Unknown'}</span>
@@ -564,7 +564,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     inv.status === 'paid' ? 'bg-green-100 text-green-700' :
                     inv.status === 'overdue' ? 'bg-red-100 text-red-700' :
                     inv.status === 'sent' ? 'bg-blue-100 text-blue-700' :
-                    'bg-gray-100 text-gray-600'
+                    'bg-[#F0EDE8] text-gray-600'
                   }`}>
                     {inv.status}
                   </span>

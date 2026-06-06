@@ -115,7 +115,7 @@ const FALLBACK_METRICS: MetricCard[] = [
     change: 12,
     changeLabel: 'vs last month',
     icon: <Calendar className="w-5 h-5" />,
-    color: 'bg-teal-500',
+    color: 'bg-primary',
   },
   {
     id: 'revenue',
@@ -167,7 +167,7 @@ const FALLBACK_DOC_COMPLIANCE: DocComplianceData = {
 // caseload, revenue, or patient figures.
 const EMPTY_METRICS: MetricCard[] = [
   { id: 'caseload', title: 'Active Caseload', value: 0, change: 0, changeLabel: 'from last month', icon: <Users className="w-5 h-5" />, color: 'bg-blue-500' },
-  { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-teal-500' },
+  { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-primary' },
   { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-green-500' },
   { id: 'completion', title: 'Session Completion', value: '0%', change: 0, changeLabel: 'improvement', icon: <CheckCircle className="w-5 h-5" />, color: 'bg-violet-500' },
 ];
@@ -629,7 +629,7 @@ export function ProviderAnalytics({
           change: sessionsChange,
           changeLabel: 'vs last month',
           icon: <Calendar className="w-5 h-5" />,
-          color: 'bg-teal-500',
+          color: 'bg-primary',
         },
         {
           id: 'revenue',
@@ -840,7 +840,7 @@ export function ProviderAnalytics({
         )}
         <div className="flex items-center justify-center py-20">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-teal-500 mx-auto mb-3" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-3" />
             <p className="text-slate-500 text-sm">Loading analytics...</p>
           </div>
         </div>
@@ -919,7 +919,7 @@ export function ProviderAnalytics({
                       onClick={() => handleRangeChange(range)}
                       className={`block w-full text-left px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors ${
                         selectedRange === range
-                          ? 'text-teal-600 font-medium'
+                          ? 'text-[#6B9080] font-medium'
                           : 'text-slate-700 dark:text-slate-200'
                       }`}
                     >
@@ -967,7 +967,7 @@ export function ProviderAnalytics({
                   <span className="text-sm text-slate-500 w-8">{day.date}</span>
                   <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-700">
                     <div
-                      className="bg-teal-500 transition-all"
+                      className="bg-primary transition-all"
                       style={{ width: `${completedWidth}%` }}
                       title={`Completed: ${day.completed}`}
                     />
@@ -989,7 +989,7 @@ export function ProviderAnalytics({
           </div>
           <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-slate-100 dark:border-slate-700">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-teal-500" />
+              <div className="w-3 h-3 rounded-full bg-primary" />
               <span className="text-xs text-slate-500">Completed</span>
             </div>
             <div className="flex items-center gap-2">
@@ -1128,7 +1128,7 @@ export function ProviderAnalytics({
               <Target className="w-4 h-4 text-slate-500" />
               <span className="text-sm font-medium">Goal Updates</span>
             </div>
-            <p className="text-2xl font-bold text-teal-600">{docCompliance.goalUpdates}%</p>
+            <p className="text-2xl font-bold text-[#6B9080]">{docCompliance.goalUpdates}%</p>
             <p className="text-xs text-slate-500">Updated this month</p>
           </div>
           <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-lg">

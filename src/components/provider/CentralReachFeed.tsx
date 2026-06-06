@@ -31,7 +31,7 @@ interface CentralReachFeedProps {
 
 const VALUE_PROPS = [
   {
-    icon: <Target size={16} className="text-teal-600" />,
+    icon: <Target size={16} className="text-[#6B9080]" />,
     title: 'Goal Progress Updates',
     description: 'Saves manual entry of mastery % and data points — Aminy pushes directly to CR goal bank',
     stat: '~3 hrs/week saved',
@@ -89,7 +89,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
   const hoursAgo = Math.round((Date.now() - lastSyncDate.getTime()) / 3600000);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-5 text-white">
         <div className="flex items-center gap-3 mb-4">
@@ -100,7 +100,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
           )}
           <div>
             <h1 className="text-lg font-bold flex items-center gap-2">
-              <Database size={18} className="text-teal-400" />
+              <Database size={18} className="text-primary" />
               CentralReach Data Feed
             </h1>
             <p className="text-xs text-white/60">Aminy → CentralReach sync engine</p>
@@ -128,7 +128,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
         {/* Explainer */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
           <h2 className="text-sm font-semibold text-gray-800 mb-2 flex items-center gap-2">
-            <Sparkles size={15} className="text-teal-600" />
+            <Sparkles size={15} className="text-[#6B9080]" />
             What Aminy sends to CentralReach
           </h2>
           <p className="text-xs text-gray-600 leading-relaxed mb-3">
@@ -139,13 +139,13 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
           {/* Data flow diagram */}
           <div className="flex items-center gap-2 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl p-3 border border-teal-100">
             <div className="text-center">
-              <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center mx-auto">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mx-auto">
                 <Zap size={18} className="text-white" />
               </div>
               <p className="text-xs font-semibold text-gray-700 mt-1">Aminy</p>
             </div>
             <div className="flex-1 flex items-center justify-center">
-              <ArrowRight size={20} className="text-teal-400" />
+              <ArrowRight size={20} className="text-primary" />
             </div>
             <div className="text-center">
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center mx-auto">
@@ -180,7 +180,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
             {VALUE_PROPS.map((vp, i) => (
               <motion.div
                 key={i}
-                className="flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100"
+                className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-xl border border-gray-100"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
@@ -191,7 +191,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-gray-800">{vp.title}</p>
-                    <span className="text-xs font-medium text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full shrink-0 ml-2">
+                    <span className="text-xs font-medium text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded-full shrink-0 ml-2">
                       {vp.stat}
                     </span>
                   </div>
@@ -208,7 +208,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
             <Shield size={15} className="text-purple-600" />
             Data Quality Score: {syncStatus.dataQualityScore}%
           </h2>
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-3">
+          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-3">
             <div
               className="h-full bg-green-500 rounded-full"
               style={{ width: `${syncStatus.dataQualityScore}%` }}
@@ -226,7 +226,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               return (
                 <div key={row.label} className="flex items-center gap-3">
                   <span className="text-xs text-gray-600 w-20 shrink-0">{row.label}</span>
-                  <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="flex-1 h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${pct === 100 ? 'bg-green-500' : pct >= 80 ? 'bg-amber-400' : 'bg-red-400'}`}
                       style={{ width: `${pct}%` }}
@@ -273,7 +273,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
           <button
             onClick={handleSync}
             disabled={syncing}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-medium text-sm border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-medium text-sm border border-gray-200 bg-white text-gray-700 hover:bg-[#FAF7F2] transition-colors"
           >
             <RefreshCw size={15} className={syncing ? 'animate-spin' : ''} />
             {syncing ? 'Syncing…' : 'Sync Now'}
@@ -281,7 +281,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
         </div>
 
         {/* Schedule info */}
-        <div className="flex items-center gap-2 bg-gray-100 rounded-xl p-3">
+        <div className="flex items-center gap-2 bg-[#F0EDE8] rounded-xl p-3">
           <Clock size={14} className="text-gray-500 shrink-0" />
           <p className="text-xs text-gray-500">
             Auto-sync runs every 6 hours. Next sync in ~{6 - (hoursAgo % 6)}h.

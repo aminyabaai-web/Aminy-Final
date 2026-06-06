@@ -155,14 +155,14 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
 
         <div className="space-y-2 mb-4">
           {(Object.entries(FLAG_REASON_LABELS) as [FlagReason, string][]).map(([key, label]) => (
-            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 hover:bg-gray-50">
+            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 hover:bg-[#FAF7F2]">
               <input
                 type="radio"
                 name="reason"
                 value={key}
                 checked={reason === key}
                 onChange={() => setReason(key)}
-                className="h-4 w-4 text-teal-600 focus:ring-teal-500"
+                className="h-4 w-4 text-[#6B9080] focus:ring-teal-500"
               />
               <span className="text-sm text-gray-700">{label}</span>
               {key === 'self-harm' && (
@@ -177,7 +177,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           onChange={e => setDetails(e.target.value)}
           placeholder="Additional details (optional)"
           rows={3}
-          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none focus:ring-1 focus:ring-teal-500"
         />
 
         {reason === 'self-harm' && (
@@ -197,7 +197,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           </button>
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-[#FAF7F2]"
           >
             Cancel
           </button>
@@ -248,15 +248,15 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
-          <Shield className="h-6 w-6 text-teal-600" />
+          <Shield className="h-6 w-6 text-[#6B9080]" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-gray-900">Moderation Queue</h1>
             <p className="text-xs text-gray-500">{pendingCount} pending reports</p>
@@ -272,14 +272,14 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search reports..."
-              className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:border-teal-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:border-[#6B9080] focus:outline-none"
             />
           </div>
           <button
             onClick={() => setFilterStatus(filterStatus === 'pending' ? 'all' : 'pending')}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium ${
               filterStatus === 'pending'
-                ? 'border-teal-200 bg-teal-50 text-teal-700'
+                ? 'border-[#6B9080]/20 bg-[#6B9080]/10 text-[#6B9080]'
                 : 'border-gray-300 bg-white text-gray-600'
             }`}
           >
@@ -329,7 +329,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                      <span className="inline-flex items-center rounded-full bg-[#F0EDE8] px-2 py-0.5 text-xs font-medium text-gray-600">
                         {report.contentType}
                       </span>
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
@@ -345,7 +345,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                   </div>
                   <button
                     onClick={() => setActiveReport(report)}
-                    className="ml-3 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-teal-700"
+                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#6B9080]"
                   >
                     Review
                   </button>
@@ -410,7 +410,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               <select
                 value={selectedAction}
                 onChange={e => setSelectedAction(e.target.value as ModerationAction)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
               >
                 {(Object.entries(ACTION_LABELS) as [ModerationAction, string][]).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
@@ -423,19 +423,19 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 onChange={e => setModNote(e.target.value)}
                 rows={2}
                 placeholder="Internal note (not visible to users)"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-teal-500 focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
               />
 
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={handleAction}
-                  className="flex-1 rounded-lg bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-700"
+                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#6B9080]"
                 >
                   Apply Action
                 </button>
                 <button
                   onClick={() => { setActiveReport(null); setSelectedAction('none'); setModNote(''); }}
-                  className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  className="flex-1 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-[#FAF7F2]"
                 >
                   Cancel
                 </button>
@@ -453,7 +453,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
 export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
   const guidelines = [
     {
-      icon: <ThumbsUp className="h-5 w-5 text-teal-600" />,
+      icon: <ThumbsUp className="h-5 w-5 text-[#6B9080]" />,
       title: 'Be Supportive',
       body: 'This is a community of families navigating autism together. Lead with empathy and kindness. Celebrate wins, offer encouragement during tough times.',
     },
@@ -489,7 +489,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
@@ -513,7 +513,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
           </div>
         ))}
 
-        <div className="mt-6 rounded-xl bg-gray-50 p-4">
+        <div className="mt-6 rounded-xl bg-[#FAF7F2] p-4">
           <h3 className="text-sm font-semibold text-gray-900">Enforcement</h3>
           <p className="mt-1 text-sm text-gray-600">
             Content with {AUTO_HIDE_THRESHOLD}+ reports is automatically hidden pending review.

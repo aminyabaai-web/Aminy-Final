@@ -70,7 +70,7 @@ function PriorityBadge({ priority }: { priority: 'high' | 'medium' | 'low' }) {
   const styles = {
     high: 'bg-red-100 text-red-700',
     medium: 'bg-amber-100 text-amber-700',
-    low: 'bg-gray-100 text-gray-600',
+    low: 'bg-[#F0EDE8] text-gray-600',
   };
   return (
     <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${styles[priority]}`}>
@@ -100,7 +100,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-cyan-800 px-4 pb-6 pt-12">
         <div className="mx-auto max-w-lg">
@@ -225,7 +225,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                     <div className="mt-2 space-y-1.5">
                       {update.focusAreas.map((area, j) => (
                         <div key={j} className="flex items-start gap-2">
-                          <Target className="mt-0.5 h-3 w-3 flex-shrink-0 text-teal-500" />
+                          <Target className="mt-0.5 h-3 w-3 flex-shrink-0 text-primary" />
                           <span className="text-xs text-gray-700">{area}</span>
                         </div>
                       ))}
@@ -283,7 +283,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       <span>{goal.currentPct}%</span>
                       <span>Target: 100%</span>
                     </div>
-                    <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-gray-100">
+                    <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[#F0EDE8]">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${goal.currentPct}%` }}
@@ -342,7 +342,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
               <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500">
                 AI Recommendations
               </h2>
-              <Sparkles className="h-4 w-4 text-teal-500" />
+              <Sparkles className="h-4 w-4 text-primary" />
             </div>
             <div className="space-y-3">
               {plan.aiRecommendations.map((rec, i) => (
@@ -351,10 +351,10 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
-                  className="rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-4"
+                  className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-teal-50 to-cyan-50 p-4"
                 >
                   <div className="flex items-start gap-3">
-                    <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
+                    <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                     <p className="text-xs leading-relaxed text-teal-800">{rec}</p>
                   </div>
                 </motion.div>
@@ -377,13 +377,13 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                 key={i}
                 onClick={() => toggleAction(i)}
                 className={`flex w-full items-start gap-3 border-b border-gray-100 p-4 text-left last:border-b-0 transition-colors ${
-                  checkedActions.has(i) ? 'bg-gray-50' : ''
+                  checkedActions.has(i) ? 'bg-[#FAF7F2]' : ''
                 }`}
               >
                 <div
                   className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
                     checkedActions.has(i)
-                      ? 'border-teal-500 bg-teal-500'
+                      ? 'border-[#6B9080] bg-primary'
                       : 'border-gray-300'
                   }`}
                 >
@@ -425,7 +425,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
         >
           <button
             onClick={onAskAminy}
-            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-teal-600 to-cyan-600 px-6 py-4 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] px-6 py-4 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <Sparkles className="h-5 w-5" />
             Ask Aminy AI about this plan

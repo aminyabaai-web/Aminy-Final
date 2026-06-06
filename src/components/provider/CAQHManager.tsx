@@ -77,11 +77,11 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#FAF7F2]">
         <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
                 <ArrowLeft size={20} className="text-gray-700" />
               </button>
             )}
@@ -95,7 +95,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
           </div>
         </div>
         <div className="flex flex-col items-center justify-center text-center px-6 py-16">
-          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
             <Shield size={28} className="text-slate-400" />
           </div>
           <h2 className="text-base font-semibold text-slate-700">No CAQH profile connected yet</h2>
@@ -122,12 +122,12 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
   const isDueSoon = caqhProfile.daysUntilReAttestation >= 0 && caqhProfile.daysUntilReAttestation < 30;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
               <ArrowLeft size={20} className="text-gray-700" />
             </button>
           )}
@@ -188,12 +188,12 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
               <p className="text-2xl font-bold text-gray-900">{caqhProfile.completionPercent}%</p>
               <p className="text-xs text-gray-500">Overall Completion</p>
             </div>
-            <div className="h-16 w-px bg-gray-100 mx-2" />
+            <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
               <p className="text-lg font-bold text-gray-900">{caqhProfile.nextAttestationDue}</p>
               <p className="text-xs text-gray-500">Next Due Date</p>
             </div>
-            <div className="h-16 w-px bg-gray-100 mx-2" />
+            <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
               <p className={`text-lg font-bold ${isOverdue ? 'text-red-600' : isDueSoon ? 'text-amber-600' : 'text-green-600'}`}>
                 {Math.abs(caqhProfile.daysUntilReAttestation)}d
@@ -203,7 +203,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
           </div>
 
           {/* Overall progress bar */}
-          <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-4">
+          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-4">
             <div
               className={`h-full rounded-full ${
                 caqhProfile.completionPercent >= 90 ? 'bg-green-500' :
@@ -336,7 +336,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                                 {field.required && (
                                   <span className="text-xs text-red-500 font-medium">Required</span>
                                 )}
-                                <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-gray-100">
+                                <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-[#F0EDE8]">
                                   <Upload size={12} className="text-gray-400" />
                                 </button>
                               </div>

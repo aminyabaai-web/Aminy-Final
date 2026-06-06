@@ -441,7 +441,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                       key={cat.id}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => setActiveCategory(cat.id)}
-                      className="bg-white border border-slate-200 rounded-2xl p-4 text-left space-y-3 hover:border-teal-300 transition-colors"
+                      className="bg-white border border-slate-200 rounded-2xl p-4 text-left space-y-3 hover:border-[#6B9080]/30 transition-colors"
                     >
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${cat.bgColor}`}>
                         <Icon className={`w-5 h-5 ${cat.color}`} />
@@ -463,7 +463,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider px-1">Quick Actions</p>
                 <button
                   onClick={() => setShowChat(true)}
-                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-teal-300 transition-colors"
+                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-[#6B9080]/30 transition-colors"
                 >
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#43AA8B' }}>
                     <MessageCircle className="w-5 h-5 text-white" />
@@ -478,7 +478,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <button
                   onClick={handleGenerateLetter}
                   disabled={generatingLetter}
-                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-teal-300 transition-colors disabled:opacity-60"
+                  className="w-full bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-3 hover:border-[#6B9080]/30 transition-colors disabled:opacity-60"
                 >
                   <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                     {generatingLetter ? (

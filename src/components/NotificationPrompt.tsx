@@ -170,7 +170,7 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-white text-teal-700 hover:bg-teal-50"
+              className="bg-white text-[#6B9080] hover:bg-[#6B9080]/10"
             >
               {isEnabling ? 'Enabling...' : 'Enable'}
             </Button>
@@ -266,7 +266,7 @@ export function NotificationPrompt({
               onClick={handleEnable}
               disabled={isEnabling}
               size="sm"
-              className="bg-teal-600 hover:bg-teal-700 text-white"
+              className="bg-primary hover:bg-[#6B9080] text-white"
             >
               <Bell className="w-4 h-4 mr-1" />
               {isEnabling ? 'Enabling...' : 'Enable'}

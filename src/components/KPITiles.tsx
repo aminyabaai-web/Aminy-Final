@@ -57,9 +57,9 @@ export function KPITiles({ userId, childId, timeframe = '7d', variant = 'dashboa
       <div className={`grid ${variant === 'compact' ? 'grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'} gap-3`}>
         {[1, 2, 3, 4].map((i) => (
           <Card key={i} className="p-4 animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-3/4 mb-3"></div>
-            <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
-            <div className="h-3 bg-gray-200 rounded w-full"></div>
+            <div className="h-4 bg-[#E8E4DF] rounded w-3/4 mb-3"></div>
+            <div className="h-8 bg-[#E8E4DF] rounded w-1/2 mb-2"></div>
+            <div className="h-3 bg-[#E8E4DF] rounded w-full"></div>
           </Card>
         ))}
       </div>
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-xs text-gray-500 mt-3 p-2 bg-gray-50 rounded">
+      <div className="text-xs text-gray-500 mt-3 p-2 bg-[#FAF7F2] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>

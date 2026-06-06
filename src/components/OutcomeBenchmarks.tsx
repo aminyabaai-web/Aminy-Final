@@ -75,7 +75,7 @@ export function OutcomeBenchmarks({
     return (
       <Card className="p-5 bg-gradient-to-br from-white to-slate-50">
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
           <span className="ml-2 text-gray-600">Loading benchmarks...</span>
         </div>
       </Card>
@@ -104,7 +104,7 @@ export function OutcomeBenchmarks({
     if (percentile >= 75) return 'bg-green-100 text-green-700';
     if (percentile >= 50) return 'bg-blue-100 text-blue-700';
     if (percentile >= 25) return 'bg-amber-100 text-amber-700';
-    return 'bg-gray-100 text-gray-700';
+    return 'bg-[#F0EDE8] text-gray-700';
   };
 
   return (
@@ -112,7 +112,7 @@ export function OutcomeBenchmarks({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-teal-500 to-blue-500 rounded-xl">
+          <div className="p-2 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-xl">
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
@@ -125,7 +125,7 @@ export function OutcomeBenchmarks({
         {onViewDetails && (
           <button
             onClick={onViewDetails}
-            className="text-sm text-teal-600 hover:text-teal-700 flex items-center gap-1"
+            className="text-sm text-[#6B9080] hover:text-[#6B9080] flex items-center gap-1"
           >
             Details
             <ChevronRight className="w-4 h-4" />
@@ -134,10 +134,10 @@ export function OutcomeBenchmarks({
       </div>
 
       {/* Overall Percentile Hero */}
-      <div className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-teal-200">
+      <div className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl border border-[#6B9080]/20">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-teal-700 mb-1">Overall Progress</p>
+            <p className="text-sm text-[#6B9080] mb-1">Overall Progress</p>
             <div className="flex items-baseline gap-2">
               <span className={`text-4xl font-bold ${getPercentileColor(benchmarks.overallPercentile)}`}>
                 {benchmarks.overallPercentile}
@@ -162,7 +162,7 @@ export function OutcomeBenchmarks({
       {/* Category Breakdown */}
       <div className="space-y-3 sm:space-y-4">
         <h4 className="font-medium text-gray-700 flex items-center gap-2">
-          <Target className="w-4 h-4 text-teal-600" />
+          <Target className="w-4 h-4 text-[#6B9080]" />
           Progress by Area
         </h4>
 
@@ -230,7 +230,7 @@ function BenchmarkRow({
               ? 'bg-green-100 text-green-700'
               : benchmark.percentileBreakpoints.p50 <= benchmark.userPercentile
               ? 'bg-blue-100 text-blue-700'
-              : 'bg-gray-100 text-gray-700'
+              : 'bg-[#F0EDE8] text-gray-700'
           }`}>
             {benchmark.userPercentile}th
           </Badge>
@@ -244,7 +244,7 @@ function BenchmarkRow({
       </div>
 
       {/* Percentile visualization */}
-      <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden">
+      <div className="relative h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
         {/* Quartile markers */}
         <div
           className="absolute top-0 bottom-0 w-0.5 bg-gray-300"
@@ -300,34 +300,34 @@ export function BenchmarkWidget({
 }) {
   return (
     <Card
-      className="p-4 bg-gradient-to-br from-teal-50 to-blue-50 border-teal-200 cursor-pointer hover:shadow-md transition-shadow"
+      className="p-4 bg-gradient-to-br from-teal-50 to-blue-50 border-[#6B9080]/20 cursor-pointer hover:shadow-md transition-shadow"
       onClick={onViewDetails}
     >
       <div className="flex items-center gap-3">
-        <div className="p-2 bg-teal-100 rounded-xl">
-          <Award className="w-5 h-5 text-teal-600" />
+        <div className="p-2 bg-[#6B9080]/10 rounded-xl">
+          <Award className="w-5 h-5 text-[#6B9080]" />
         </div>
         <div className="flex-1">
-          <p className="text-sm text-teal-700 mb-0.5">
+          <p className="text-sm text-[#6B9080] mb-0.5">
             {childName}'s Progress
           </p>
           <div className="flex items-baseline gap-2">
             <span className="text-xl sm:text-2xl font-bold text-teal-900">
               {overallPercentile}
             </span>
-            <span className="text-sm text-teal-600">percentile</span>
+            <span className="text-sm text-[#6B9080]">percentile</span>
             {overallTrend === 'improving' && (
               <TrendingUp className="w-4 h-4 text-green-500" />
             )}
           </div>
         </div>
-        <ChevronRight className="w-5 h-5 text-teal-400" />
+        <ChevronRight className="w-5 h-5 text-primary" />
       </div>
 
       {topCategory && (
-        <div className="mt-3 pt-3 border-t border-teal-200">
+        <div className="mt-3 pt-3 border-t border-[#6B9080]/20">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-teal-700">Top area: {topCategory.name}</span>
+            <span className="text-[#6B9080]">Top area: {topCategory.name}</span>
             <Badge className="bg-green-100 text-green-700">
               {topCategory.percentile}th
             </Badge>

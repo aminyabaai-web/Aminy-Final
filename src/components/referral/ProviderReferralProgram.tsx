@@ -171,8 +171,8 @@ export function ProviderReferralProgram({
   if (!code) {
     return (
       <div className="p-6 space-y-4 animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-1/2" />
-        <div className="h-40 bg-gray-200 rounded" />
+        <div className="h-8 bg-[#E8E4DF] rounded w-1/2" />
+        <div className="h-40 bg-[#E8E4DF] rounded" />
       </div>
     );
   }
@@ -182,7 +182,7 @@ export function ProviderReferralProgram({
       {/* Header */}
       <div>
         <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-          <Users className="w-6 h-6 text-teal-600" />
+          <Users className="w-6 h-6 text-[#6B9080]" />
           Provider Referral Program
         </h2>
         <p className="text-sm text-gray-600">
@@ -274,7 +274,7 @@ export function ProviderReferralProgram({
                 </button>
                 <button
                   onClick={() => handleShare('copy')}
-                  className="flex flex-col items-center p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                  className="flex flex-col items-center p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                 >
                   <Link2 className="w-5 h-5 text-gray-600 mb-1" />
                   <span className="text-xs text-gray-700">Copy Link</span>
@@ -356,12 +356,12 @@ export function ProviderReferralProgram({
         )}
         <div className="space-y-2">
           {referrals.map((referral) => (
-            <div key={referral.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+            <div key={referral.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 referral.status === 'completed' ? 'bg-green-100' :
                 referral.status === 'onboarding' ? 'bg-blue-100' :
                 referral.status === 'applied' ? 'bg-purple-100' :
-                'bg-gray-200'
+                'bg-[#E8E4DF]'
               }`}>
                 {referral.status === 'completed' ? (
                   <CheckCircle className="w-5 h-5 text-green-600" />
@@ -389,7 +389,7 @@ export function ProviderReferralProgram({
                   <Badge className={
                     referral.status === 'onboarding' ? 'bg-blue-100 text-blue-700 border-blue-200' :
                     referral.status === 'applied' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                    'bg-gray-100 text-gray-600 border-gray-200'
+                    'bg-[#F0EDE8] text-gray-600 border-gray-200'
                   }>
                     {referral.status === 'onboarding' ? 'Onboarding' :
                      referral.status === 'applied' ? 'Applied' : 'Invited'}

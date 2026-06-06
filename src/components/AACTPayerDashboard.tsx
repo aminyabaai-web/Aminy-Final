@@ -197,9 +197,9 @@ function KPICard({
                   value={draft}
                   onChange={e => setDraft(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setEditing(false); }}
-                  className="w-20 border border-teal-400 rounded px-1.5 py-0.5 text-sm font-semibold focus:outline-none"
+                  className="w-20 border border-[#6B9080] rounded px-1.5 py-0.5 text-sm font-semibold focus:outline-none"
                 />
-                <button onClick={handleSave} aria-label="Save value" className="text-teal-600 hover:text-teal-700"><Save className="w-3.5 h-3.5" /></button>
+                <button onClick={handleSave} aria-label="Save value" className="text-[#6B9080] hover:text-[#6B9080]"><Save className="w-3.5 h-3.5" /></button>
                 <button onClick={() => setEditing(false)} aria-label="Cancel edit" className="text-gray-400 hover:text-gray-600"><X className="w-3.5 h-3.5" /></button>
               </div>
             ) : (
@@ -224,7 +224,7 @@ function KPICard({
         {metric.manualEntry && !editing && (
           <button
             onClick={() => { setDraft(String(metric.value ?? '')); setEditing(true); }}
-            className="flex-shrink-0 text-gray-300 hover:text-teal-500 transition-colors mt-0.5"
+            className="flex-shrink-0 text-gray-300 hover:text-primary transition-colors mt-0.5"
             aria-label={`Update ${metric.label}`}
             title="Update value"
           >
@@ -373,7 +373,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
   const activeCategory = categories.find(c => c.id === activeTab)!;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-950">
       {/* Header */}
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-6">
@@ -383,13 +383,13 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                 <ArrowLeft className="w-5 h-5" />
               </button>
             )}
-            <div className="p-2 bg-teal-500/20 rounded-xl border border-teal-400/30">
-              <BarChart3 className="w-6 h-6 text-teal-400" />
+            <div className="p-2 bg-primary/20 rounded-xl border border-[#6B9080]/30">
+              <BarChart3 className="w-6 h-6 text-primary" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-bold">AACT Payer Scorecard</h1>
-                <Badge className="bg-teal-500/20 text-teal-300 border border-teal-400/30 text-[10px]">Arizona</Badge>
+                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-[10px]">Arizona</Badge>
               </div>
               <p className="text-sm text-slate-400 mt-0.5">Rate negotiation · Network adequacy · MCO reporting</p>
             </div>
@@ -456,7 +456,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   activeTab === cat.id
                     ? 'bg-slate-900 text-white shadow'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    : 'text-gray-600 hover:bg-[#FAF7F2]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -494,7 +494,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
         {/* Payer-Facing Flag Legend */}
         <div className="mt-6 p-4 rounded-xl bg-white border border-gray-100">
           <div className="flex items-start gap-3">
-            <FileText className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+            <FileText className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-xs font-semibold text-gray-700">Payer Scorecard Export</p>
               <p className="text-[11px] text-gray-500 mt-0.5">

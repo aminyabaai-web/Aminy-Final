@@ -282,9 +282,9 @@ function VisitTypeIcon({ type }: { type: 'video' | 'phone' | 'in-person' }) {
 // Status Badge
 function StatusBadge({ status }: { status: Appointment['status'] }) {
   const styles = {
-    upcoming: 'bg-teal-50 text-teal-700 border-teal-200',
+    upcoming: 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20',
     'in-progress': 'bg-green-50 text-green-700 border-green-200',
-    completed: 'bg-gray-50 text-gray-600 border-gray-200',
+    completed: 'bg-[#FAF7F2] text-gray-600 border-gray-200',
     cancelled: 'bg-red-50 text-red-600 border-red-200',
     'no-show': 'bg-amber-50 text-amber-600 border-amber-200',
   };
@@ -357,7 +357,7 @@ function AppointmentCard({
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <Calendar className="w-4 h-4 text-gray-400" />
             <span>{formatDateTime(appointment.scheduledAt)}</span>
-            <span className="text-teal-600 font-medium">
+            <span className="text-[#6B9080] font-medium">
               ({formatRelativeTime(appointment.scheduledAt)})
             </span>
           </div>
@@ -379,7 +379,7 @@ function AppointmentCard({
 
         {/* Session Notes (for completed) */}
         {appointment.sessionNotes && appointment.status === 'completed' && (
-          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+          <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs font-medium text-gray-500 mb-1">Session Notes</p>
             <p className="text-sm text-gray-700">{appointment.sessionNotes}</p>
           </div>
@@ -404,7 +404,7 @@ function AppointmentCard({
           {showReviewPrompt && (
             <button
               onClick={() => onLeaveReview?.(appointment)}
-              className="w-full flex items-center justify-between p-3 bg-teal-50 border border-teal-200 rounded-lg text-teal-800 hover:bg-teal-100 transition-colors"
+              className="w-full flex items-center justify-between p-3 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg text-teal-800 hover:bg-[#6B9080]/10 transition-colors"
             >
               <div className="flex items-center gap-2">
                 <Star className="w-4 h-4" />
@@ -435,7 +435,7 @@ function AppointmentCard({
             {appointment.canReschedule && (
               <button
                 onClick={() => onReschedule?.(appointment)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 border border-gray-200 rounded-lg hover:bg-[#FAF7F2] transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reschedule
@@ -457,7 +457,7 @@ function AppointmentCard({
         {appointment.status === 'completed' && (
           <button
             onClick={() => onBookAgain?.(appointment)}
-            className="flex items-center gap-2 px-4 py-2 text-teal-600 border border-teal-200 rounded-lg hover:bg-teal-50 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-[#6B9080] border border-[#6B9080]/20 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             <CalendarPlus className="w-4 h-4" />
             Book Again
@@ -531,7 +531,7 @@ export function MyAppointments({
               <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" />
               <button
                 onClick={onBookNew}
-                className="flex items-center gap-1.5 px-3 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 Book New
@@ -541,7 +541,7 @@ export function MyAppointments({
         />
         <div className="px-4 pb-4">
           {/* Tabs */}
-          <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+          <div className="flex gap-1 bg-[#F0EDE8] p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${

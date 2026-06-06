@@ -138,7 +138,7 @@ export function CarePlanTabScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -156,7 +156,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'goals'
                 ? 'bg-cyan-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
             }`}
           >
             <Target className="w-4 h-4" />
@@ -165,7 +165,7 @@ export function CarePlanTabScreen({
               <span className={`px-2 py-0.5 text-xs rounded-full ${
                 activeTab === 'goals'
                   ? 'bg-white/20'
-                  : 'bg-cyan-600/10 text-cyan-600'
+                  : 'bg-cyan-600/10 text-[#6B9080]'
               }`}>
                 {goals.filter(g => g.status === 'active').length}
               </span>
@@ -176,7 +176,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'summaries'
                 ? 'bg-cyan-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'actions'
                 ? 'bg-cyan-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
             }`}
           >
             <ClipboardList className="w-4 h-4" />
@@ -196,7 +196,7 @@ export function CarePlanTabScreen({
               <span className={`px-2 py-0.5 text-xs rounded-full ${
                 activeTab === 'actions'
                   ? 'bg-white/20'
-                  : 'bg-cyan-600/10 text-cyan-600'
+                  : 'bg-cyan-600/10 text-[#6B9080]'
               }`}>
                 {pendingActions.length}
               </span>
@@ -210,7 +210,7 @@ export function CarePlanTabScreen({
         {/* Loading State */}
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
             <span className="ml-2 text-gray-600">Loading care plan...</span>
           </div>
         )}
@@ -338,7 +338,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
     >
       <div className="flex items-start gap-3">
         {/* Provider Avatar */}
-        <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+        <div className="w-10 h-10 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
           {provider.avatarUrl ? (
             <img
               src={provider.avatarUrl}
@@ -371,7 +371,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
       {/* Reason Preview */}
       <div className="mt-3 pt-3 border-t border-gray-100">
         <p className="text-sm text-gray-600 line-clamp-2">{summary.reasonForVisit}</p>
-        <p className="text-xs text-cyan-600 mt-2">
+        <p className="text-xs text-[#6B9080] mt-2">
           {summary.planForNext7Days.length} action items
         </p>
       </div>
@@ -405,7 +405,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
           {item.completed ? (
             <CheckCircle className="w-6 h-6 text-green-500" />
           ) : (
-            <Circle className="w-6 h-6 text-gray-400 hover:text-cyan-600 transition-colors" />
+            <Circle className="w-6 h-6 text-gray-400 hover:text-[#6B9080] transition-colors" />
           )}
         </button>
 
@@ -439,7 +439,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
 function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
   return (
     <div className="text-center py-12">
-      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
         <FileText className="w-8 h-8 text-gray-400" />
       </div>
       <h3 className="text-lg font-medium text-gray-900 mb-2">No visit summaries yet</h3>
@@ -519,13 +519,13 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
       'communication': { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
       'social': { bg: 'bg-purple-50', text: 'text-purple-700', border: 'border-purple-200' },
       'daily-routine': { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
-      'sensory': { bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
+      'sensory': { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', border: 'border-[#6B9080]/20' },
       'behavior': { bg: 'bg-red-50', text: 'text-red-700', border: 'border-red-200' },
       'self-care': { bg: 'bg-green-50', text: 'text-green-700', border: 'border-green-200' },
       'academic': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
       'motor': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
     };
-    return colors[category] || { bg: 'bg-gray-50', text: 'text-gray-700', border: 'border-gray-200' };
+    return colors[category] || { bg: 'bg-[#FAF7F2]', text: 'text-gray-700', border: 'border-gray-200' };
   };
 
   const getCategoryLabel = (category: string) => {
@@ -562,7 +562,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
         <div className="bg-white rounded-2xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center">
-              <BarChart3 className="w-6 h-6 text-cyan-600" />
+              <BarChart3 className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold text-gray-900">
@@ -661,7 +661,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </span>
           <span className="text-xs font-medium text-gray-700">{progressPercent}%</span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2.5">
+        <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
           <div
             className={`h-2.5 rounded-full transition-all duration-500 ${progressBarColor}`}
             style={{ width: `${progressPercent}%` }}
@@ -674,13 +674,13 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-3 flex items-center gap-2">
           <button
             onClick={() => onProgressUpdate(Math.min(goal.currentProgress + 1, goal.targetProgress))}
-            className="flex-1 py-2 text-xs font-medium text-cyan-600 bg-cyan-600/5 rounded-lg hover:bg-cyan-600/10 transition-colors"
+            className="flex-1 py-2 text-xs font-medium text-[#6B9080] bg-cyan-600/5 rounded-lg hover:bg-cyan-600/10 transition-colors"
           >
             + Log Progress
           </button>
           <button
             onClick={() => setShowActions(!showActions)}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-[#FAF7F2] rounded-lg transition-colors"
             aria-label="More actions"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -702,7 +702,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </button>
           <button
             onClick={() => { onStatusChange(goal.status === 'paused' ? 'active' : 'paused'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
           >
             {goal.status === 'paused' ? (
               <><Play className="w-3.5 h-3.5" /> Resume</>
@@ -740,7 +740,7 @@ function EmptyGoals() {
   return (
     <div className="text-center py-12">
       <div className="w-16 h-16 bg-cyan-600/10 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Target className="w-8 h-8 text-cyan-600" />
+        <Target className="w-8 h-8 text-[#6B9080]" />
       </div>
       <h3 className="text-lg font-medium text-gray-900 mb-2">No goals yet</h3>
       <p className="text-gray-500 mb-2 max-w-xs mx-auto">

@@ -245,7 +245,7 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
                     type="checkbox"
                     checked={checked}
                     onChange={(e) => onCheck(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 accent-teal-600"
+                    className="mt-0.5 w-4 h-4 rounded border-slate-300 text-[#6B9080] focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-sm text-amber-800 font-medium">
                     I have read and understand{' '}
@@ -376,7 +376,7 @@ export default function ProviderAgreement({
             <span
               key={key}
               className={`flex items-center gap-1 ${
-                checks[key] ? 'text-teal-600' : 'text-slate-400'
+                checks[key] ? 'text-[#6B9080]' : 'text-slate-400'
               }`}
             >
               {checks[key] ? (

@@ -58,7 +58,7 @@ type ViewState = 'selection' | 'questions' | 'results' | 'history';
 // Helpers
 // ---------------------------------------------------------------------------
 
-const ACCENT = '#0891b2'; // teal-600
+const ACCENT = '#6B9080'; // teal-600
 
 function interpretationColor(interpretation: string): string {
   const lower = interpretation.toLowerCase();

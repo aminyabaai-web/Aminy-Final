@@ -194,7 +194,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <RefreshCw className="w-8 h-8 animate-spin text-teal-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-[#6B9080]" />
       </div>
     );
   }
@@ -290,7 +290,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                     key={cohort.cohortWeek}
                     className={`border-t border-gray-100 dark:border-slate-700 ${
                       selectedCohort === cohort.cohortWeek
-                        ? 'bg-teal-50 dark:bg-teal-900/20'
+                        ? 'bg-[#6B9080]/10 dark:bg-teal-900/20'
                         : ''
                     }`}
                     onClick={() => setSelectedCohort(
@@ -349,7 +349,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 <div key={stage.stage} className="relative">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs font-bold flex items-center justify-center">
+                      <span className="w-6 h-6 rounded-full bg-[#6B9080]/10 dark:bg-teal-900 text-[#6B9080] dark:text-[#7BA7BC] text-xs font-bold flex items-center justify-center">
                         {idx + 1}
                       </span>
                       <span className="font-medium text-gray-900 dark:text-white">
@@ -367,7 +367,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       )}
                     </div>
                   </div>
-                  <div className="h-8 bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden">
+                  <div className="h-8 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(stage.count / funnelData[0].count) * 100}%` }}
@@ -431,11 +431,11 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex-1 h-3 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${feature.adoptionRate}%` }}
-                          className="h-full bg-teal-500 rounded-full"
+                          className="h-full bg-primary rounded-full"
                         />
                       </div>
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-300 w-12 text-right">
@@ -446,11 +446,11 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 ))}
             </div>
 
-            <div className="mt-8 p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg">
-              <h4 className="font-medium text-teal-800 dark:text-teal-300 mb-2">
+            <div className="mt-8 p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 rounded-lg">
+              <h4 className="font-medium text-teal-800 dark:text-[#7BA7BC] mb-2">
                 Retention Drivers
               </h4>
-              <ul className="text-sm text-teal-700 dark:text-teal-400 space-y-1">
+              <ul className="text-sm text-[#6B9080] dark:text-primary space-y-1">
                 <li>• <strong>Morning Mission</strong> has highest retention correlation (r=0.91)</li>
                 <li>• <strong>Telehealth</strong> users retain exceptionally well (r=0.88)</li>
                 <li>• Focus on increasing Routine Tracking adoption (52% → 70% target)</li>
@@ -479,8 +479,8 @@ function SummaryCard({
   return (
     <Card className="p-4">
       <div className="flex items-start justify-between">
-        <div className="p-2 bg-teal-50 dark:bg-teal-900/30 rounded-lg">
-          <Icon className="w-5 h-5 text-teal-600" />
+        <div className="p-2 bg-[#6B9080]/10 dark:bg-teal-900/30 rounded-lg">
+          <Icon className="w-5 h-5 text-[#6B9080]" />
         </div>
         <div className={`flex items-center gap-1 text-sm ${
           positive ? 'text-green-600' : 'text-red-600'

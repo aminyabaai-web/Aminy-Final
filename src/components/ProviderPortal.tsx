@@ -230,7 +230,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       ],
     },
     'slp-session': {
-      label: 'SLP Session Note', badge: 'SLP', badgeClass: 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-teal-300',
+      label: 'SLP Session Note', badge: 'SLP', badgeClass: 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-[#7BA7BC]',
       fields: [
         { key: 'articulation', label: 'Articulation / Phonology', placeholder: 'Phoneme targets (e.g., /r/, /s/ blends), % accuracy, error patterns...' },
         { key: 'language', label: 'Receptive / Expressive Language', placeholder: 'Language sample, MLU, following directions, vocabulary targets...' },
@@ -1246,7 +1246,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   key={patient.id}
                   className={`p-5 hover:shadow-md transition-all cursor-pointer ${
                     patient.profileAccess === 'granted'
-                      ? 'border-[#6B9080]/20/60 hover:border-teal-300/60'
+                      ? 'border-[#6B9080]/20/60 hover:border-[#6B9080]/30/60'
                       : 'border-neutral-200'
                   }`}
                   onClick={() => setSelectedPatient(patient)}
@@ -1442,7 +1442,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         onClick={() => setSelectedPatient(patient)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           selectedPatient?.id === patient.id
-                            ? 'bg-[#6B9080]/10 border-teal-300 dark:bg-teal-900/30'
+                            ? 'bg-[#6B9080]/10 border-[#6B9080]/30 dark:bg-teal-900/30'
                             : 'bg-neutral-50 hover:bg-neutral-100 dark:bg-slate-800 dark:hover:bg-slate-700'
                         }`}
                       >
@@ -1779,7 +1779,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <Card
                     key={patient.id}
                     onClick={() => setSelectedPatient(patient)}
-                    className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-teal-300 dark:hover:border-teal-700"
+                    className="p-4 cursor-pointer hover:shadow-md transition-all hover:border-[#6B9080]/30 dark:hover:border-teal-700"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 flex items-center justify-center">
@@ -2211,7 +2211,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   onClick={() => setPracticeView(view.id)}
                   className={`flex items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2 text-sm font-medium transition-colors ${
                     practiceView === view.id
-                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/20 dark:text-teal-300'
+                      ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/20 dark:text-[#7BA7BC]'
                       : 'border-slate-200 bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:text-neutral-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300'
                   }`}
                 >
@@ -2282,8 +2282,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <div className="grid grid-cols-2 gap-3 min-w-[220px]">
                     <div className="rounded-xl bg-[#6B9080]/10 dark:bg-teal-900/20 p-3">
-                      <p className="text-xs text-[#6B9080] dark:text-teal-300">Readiness</p>
-                      <p className="text-2xl font-semibold text-[#6B9080] dark:text-teal-300">{practiceSummary.readinessScore}%</p>
+                      <p className="text-xs text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
+                      <p className="text-2xl font-semibold text-[#6B9080] dark:text-[#7BA7BC]">{practiceSummary.readinessScore}%</p>
                     </div>
                     <div className="rounded-xl bg-violet-50 dark:bg-violet-900/20 p-3">
                       <p className="text-xs text-violet-700 dark:text-violet-300">Monthly range</p>
@@ -2382,7 +2382,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="rounded-2xl border border-teal-100 dark:border-teal-900/40 bg-[#6B9080]/10/60 dark:bg-teal-900/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
                       <h4 className="font-semibold text-neutral-900 dark:text-white">Payer-network billing</h4>
-                      <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/40 dark:text-teal-300">Early access</Badge>
+                      <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/40 dark:text-[#7BA7BC]">Early access</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
                       Lease an established payer network so insured families can book you without your own contracts.
@@ -2390,7 +2390,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                     <Button
                       variant="outline"
-                      className="mt-3 border-teal-300 text-[#6B9080] hover:bg-[#6B9080]/10"
+                      className="mt-3 border-[#6B9080]/30 text-[#6B9080] hover:bg-[#6B9080]/10"
                       onClick={() => { toast.success('You\'re on the early access list! We\'ll reach out when payer-network billing opens in your area.'); }}
                     >
                       Get early access

@@ -360,10 +360,10 @@ export function ShareToUnlock({
                   exit={{ opacity: 0, scale: 0.95 }}
                 >
                   {/* What you unlock */}
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl mb-4">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl mb-4">
+                    <div className="w-10 h-10 rounded-full bg-[#E8E4DF] flex items-center justify-center">
                       {isShared ? (
-                        <Unlock className="w-5 h-5 text-teal-600" />
+                        <Unlock className="w-5 h-5 text-[#6B9080]" />
                       ) : (
                         <Lock className="w-5 h-5 text-gray-400" />
                       )}
@@ -384,7 +384,7 @@ export function ShareToUnlock({
                     {'share' in navigator && (
                       <Button
                         onClick={() => handleShare('native')}
-                        className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                        className="w-full bg-primary hover:bg-[#6B9080] text-white"
                       >
                         <Share2 className="w-4 h-4 mr-2" />
                         Share Achievement
@@ -394,28 +394,28 @@ export function ShareToUnlock({
                     <div className="grid grid-cols-4 gap-2">
                       <button
                         onClick={() => handleShare('sms')}
-                        className="flex flex-col items-center p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-green-600 mb-1" />
                         <span className="text-xs text-gray-600">Text</span>
                       </button>
                       <button
                         onClick={() => handleShare('email')}
-                        className="flex flex-col items-center p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <Mail className="w-5 h-5 text-blue-600 mb-1" />
                         <span className="text-xs text-gray-600">Email</span>
                       </button>
                       <button
                         onClick={() => handleShare('whatsapp')}
-                        className="flex flex-col items-center p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-emerald-600 mb-1" />
                         <span className="text-xs text-gray-600">WhatsApp</span>
                       </button>
                       <button
                         onClick={() => handleShare('copy')}
-                        className="flex flex-col items-center p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <Copy className="w-5 h-5 text-gray-600 mb-1" />
                         <span className="text-xs text-gray-600">Copy</span>

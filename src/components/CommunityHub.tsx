@@ -286,7 +286,7 @@ const POST_CATEGORIES: { id: PostCategory; name: string; icon: React.ReactNode; 
   { id: 'tips', name: 'Tips', icon: <Sparkles className="w-4 h-4" />, color: 'bg-green-100 text-green-700' },
   { id: 'support', name: 'Support', icon: <Heart className="w-4 h-4" />, color: 'bg-pink-100 text-pink-700' },
   { id: 'resources', name: 'Resources', icon: <Bookmark className="w-4 h-4" />, color: 'bg-violet-100 text-violet-700' },
-  { id: 'bcba-qa', name: 'BCBA Q&A', icon: <Award className="w-4 h-4" />, color: 'bg-teal-100 text-teal-700' },
+  { id: 'bcba-qa', name: 'BCBA Q&A', icon: <Award className="w-4 h-4" />, color: 'bg-[#6B9080]/10 text-[#6B9080]' },
 ];
 
 export function CommunityHub({
@@ -717,7 +717,7 @@ export function CommunityHub({
                 {post.authorName}
               </span>
               {post.isBCBA && (
-                <Badge className="bg-teal-100 text-teal-700 text-xs">
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
                   <Award className="w-3 h-3 mr-1" />
                   BCBA
                 </Badge>
@@ -755,7 +755,7 @@ export function CommunityHub({
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-xs text-slate-500 hover:text-teal-600 cursor-pointer">
+            <span key={tag} className="text-xs text-slate-500 hover:text-[#6B9080] cursor-pointer">
               #{tag}
             </span>
           ))}
@@ -776,7 +776,7 @@ export function CommunityHub({
           </button>
           <button
             onClick={() => handleOpenThread(post)}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600"
+            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#6B9080]"
             aria-label={`View ${post.comments} comments`}
           >
             <MessageSquare className="w-4 h-4" />
@@ -784,7 +784,7 @@ export function CommunityHub({
           </button>
           <button
             onClick={() => handleShare(post)}
-            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-teal-600"
+            className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#6B9080]"
             aria-label="Share post"
           >
             <Share2 className="w-4 h-4" />
@@ -799,7 +799,7 @@ export function CommunityHub({
           <button
             onClick={() => handleBookmark(post.id)}
             className={`p-1.5 rounded-full hover:bg-slate-100 ${
-              post.isBookmarked ? 'text-teal-600' : 'text-slate-400'
+              post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
           >
             <Bookmark className={`w-4 h-4 ${post.isBookmarked ? 'fill-current' : ''}`} />
@@ -928,8 +928,8 @@ export function CommunityHub({
               <Card key={group.id} className="p-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-teal-100 flex items-center justify-center">
-                      <Users className="w-6 h-6 text-teal-600" />
+                    <div className="w-12 h-12 rounded-lg bg-[#6B9080]/10 flex items-center justify-center">
+                      <Users className="w-6 h-6 text-[#6B9080]" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -1021,15 +1021,15 @@ export function CommunityHub({
         {/* BCBA Q&A View */}
         {view === 'bcba-qa' && (
           <div className="space-y-4">
-            <Card className="p-4 bg-teal-50 dark:bg-teal-900/20 border-teal-200">
+            <Card className="p-4 bg-[#6B9080]/10 dark:bg-teal-900/20 border-[#6B9080]/20">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
-                  <Award className="w-6 h-6 text-teal-600 shrink-0" />
+                  <Award className="w-6 h-6 text-[#6B9080] shrink-0" />
                   <div>
                     <h3 className="font-semibold text-teal-900 dark:text-teal-100">
                       Ask a BCBA
                     </h3>
-                    <p className="text-sm text-teal-700 dark:text-teal-200 mt-1">
+                    <p className="text-sm text-[#6B9080] dark:text-teal-200 mt-1">
                       {onNavigate
                         ? 'Send a question to a Board Certified Behavior Analyst and get a written reply, typically within 48-72 hours.'
                         : 'Read answers to questions other parents have asked Board Certified Behavior Analysts below.'}

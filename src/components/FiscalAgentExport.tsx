@@ -176,7 +176,7 @@ export function FiscalAgentExport({
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
             .header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
-            .logo { font-size: 24px; font-weight: bold; color: #0d9488; }
+            .logo { font-size: 24px; font-weight: bold; color: #6B9080; }
             .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .info-item { padding: 5px 0; }
             .info-label { font-weight: bold; color: #666; font-size: 12px; }
@@ -352,7 +352,7 @@ export function FiscalAgentExport({
           <h2 className="text-lg sm:text-xl font-semibold text-neutral-900">Fiscal Agent Export</h2>
           <p className="text-neutral-500">Generate timesheets for {config.name}</p>
         </div>
-        <Badge className="bg-teal-100 text-teal-700">
+        <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
           <Building2 className="w-3.5 h-3.5 mr-1" />
           {config.name}
         </Badge>
@@ -467,7 +467,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div className="flex items-end gap-2">
-                <Button onClick={addEntry} className="flex-1 bg-teal-600 hover:bg-teal-700">
+                <Button onClick={addEntry} className="flex-1 bg-primary hover:bg-[#6B9080]">
                   <Check className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" onClick={() => setShowAddEntry(false)}>
@@ -550,7 +550,7 @@ export function FiscalAgentExport({
             </div>
             <div>
               <p className="text-sm text-neutral-500">Total Amount</p>
-              <p className="text-xl sm:text-2xl font-bold text-teal-600">${totalAmount.toFixed(2)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#6B9080]">${totalAmount.toFixed(2)}</p>
             </div>
           </div>
 
@@ -562,7 +562,7 @@ export function FiscalAgentExport({
             <Button
               onClick={generatePDF}
               disabled={isGenerating || entries.length === 0}
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-primary hover:bg-[#6B9080]"
             >
               {isGenerating ? (
                 <>

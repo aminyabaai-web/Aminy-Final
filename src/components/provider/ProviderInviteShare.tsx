@@ -63,7 +63,7 @@ export function ProviderInviteShare(): React.JSX.Element {
       </p>
 
       {/* URL preview */}
-      <div className="bg-gray-50 dark:bg-slate-800 rounded-lg px-3 py-2 mb-3 font-mono text-xs text-gray-600 dark:text-gray-300 truncate select-all">
+      <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg px-3 py-2 mb-3 font-mono text-xs text-gray-600 dark:text-gray-300 truncate select-all">
         {inviteUrl}
       </div>
 
@@ -88,7 +88,7 @@ export function ProviderInviteShare(): React.JSX.Element {
 
         <button
           onClick={handleEmail}
-          className="flex items-center gap-2 flex-1 justify-center bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
+          className="flex items-center gap-2 flex-1 justify-center bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-gray-700 dark:text-gray-200 text-sm font-medium px-4 py-2.5 rounded-lg transition-colors"
         >
           <Mail className="w-4 h-4" />
           Share via Email

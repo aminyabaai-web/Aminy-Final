@@ -25,9 +25,9 @@ export function DesignSystem() {
   // Design Tokens
   const colorTokens = {
     primary: {
-      'color.bg.primary': { value: '#0891b2', description: 'Primary teal brand color' },
+      'color.bg.primary': { value: '#6B9080', description: 'Primary teal brand color' },
       'color.text.primary-contrast': { value: '#ffffff', description: 'Text on primary backgrounds' },
-      'color.border.primary': { value: '#0891b2', description: 'Primary borders and dividers' },
+      'color.border.primary': { value: '#6B9080', description: 'Primary borders and dividers' },
     },
     surface: {
       'color.bg.surface': { value: '#ffffff', description: 'Main surface background' },
@@ -131,7 +131,7 @@ export function DesignSystem() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -173,7 +173,7 @@ export function DesignSystem() {
                     onClick={() => setSelectedSection(section.id)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                       selectedSection === section.id
-                        ? 'bg-teal-100 dark:bg-teal-900 text-teal-900 dark:text-teal-100'
+                        ? 'bg-[#6B9080]/10 dark:bg-teal-900 text-teal-900 dark:text-teal-100'
                         : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
@@ -201,8 +201,8 @@ export function DesignSystem() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                   <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
-                      <Palette className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                    <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                      <Palette className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                     </div>
                     <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                       Calm Color Palette
@@ -237,7 +237,7 @@ export function DesignSystem() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-teal-50 to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-teal-200 dark:border-teal-800">
+                <div className="bg-gradient-to-r from-teal-50 to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-[#6B9080]/20 dark:border-teal-800">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
                     Mobile-First Grid System
                   </h3>
@@ -247,7 +247,7 @@ export function DesignSystem() {
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-sm">
                     {Array.from({ length: 4 }).map((_, i) => (
-                      <div key={i} className="bg-teal-200 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-teal-800 dark:text-teal-200">
+                      <div key={i} className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-teal-800 dark:text-teal-200">
                         {i + 1}
                       </div>
                     ))}
@@ -367,7 +367,7 @@ export function DesignSystem() {
                       
                       <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
-                          className="bg-teal-200 dark:bg-teal-700 h-8 rounded"
+                          className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded"
                           style={{ width: token.value }}
                         />
                         <span className="text-sm text-slate-600 dark:text-slate-400">
@@ -403,7 +403,7 @@ export function DesignSystem() {
                       
                       <div className="flex items-center gap-3 sm:gap-4 mb-3">
                         <div 
-                          className="bg-teal-200 dark:bg-teal-700 w-16 h-16"
+                          className="bg-[#6B9080]/20 dark:bg-teal-700 w-16 h-16"
                           style={{ borderRadius: token.value }}
                         />
                         <span className="text-sm text-slate-600 dark:text-slate-400">
@@ -438,10 +438,10 @@ export function DesignSystem() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">Primary</h4>
-                        <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Primary Button
                         </button>
-                        <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                           <Heart className="w-4 h-4" />
                           With Icon
                         </button>
@@ -462,7 +462,7 @@ export function DesignSystem() {
                         <button className="w-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Quiet Button
                         </button>
-                        <button className="w-full text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] hover:bg-[#6B9080]/10 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Link Button
                         </button>
                       </div>
@@ -517,11 +517,11 @@ export function DesignSystem() {
                             Checkbox
                           </label>
                           <div className="flex items-center space-x-3">
-                            <input type="checkbox" id="check1" className="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500" />
+                            <input type="checkbox" id="check1" className="w-4 h-4 text-[#6B9080] border-slate-300 rounded focus:ring-teal-500" />
                             <label htmlFor="check1" className="text-sm text-slate-700 dark:text-slate-300">Enable notifications</label>
                           </div>
                           <div className="flex items-center space-x-3">
-                            <input type="checkbox" id="check2" className="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500" />
+                            <input type="checkbox" id="check2" className="w-4 h-4 text-[#6B9080] border-slate-300 rounded focus:ring-teal-500" />
                             <label htmlFor="check2" className="text-sm text-slate-700 dark:text-slate-300">Accept terms</label>
                           </div>
                         </div>
@@ -535,8 +535,8 @@ export function DesignSystem() {
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Cards</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                      <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
-                        <Heart className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                      <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-teal-900 rounded-lg flex items-center justify-center mb-4">
+                        <Heart className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                       </div>
                       <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Basic Card</h4>
                       <p className="text-slate-600 dark:text-slate-400 text-sm">
@@ -544,8 +544,8 @@ export function DesignSystem() {
                       </p>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-teal-50 to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-teal-200 dark:border-teal-800 rounded-lg p-6">
-                      <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center mb-4">
+                    <div className="bg-gradient-to-br from-teal-50 to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-[#6B9080]/20 dark:border-teal-800 rounded-lg p-6">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
                         <Star className="w-6 h-6 text-white" />
                       </div>
                       <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Featured Card</h4>
@@ -614,7 +614,7 @@ export function DesignSystem() {
                       <div>
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Tab Navigation</h4>
                         <div className="flex space-x-1 bg-slate-100 dark:bg-slate-700 p-1 rounded-lg">
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-teal-600 rounded-md transition-colors">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-primary rounded-md transition-colors">
                             Active
                           </button>
                           <button className="flex-1 py-2 px-3 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
@@ -630,7 +630,7 @@ export function DesignSystem() {
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Bottom Navigation</h4>
                         <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2">
                           <div className="flex justify-around">
-                            <button className="flex flex-col items-center p-2 text-teal-600 dark:text-teal-400">
+                            <button className="flex flex-col items-center p-2 text-[#6B9080] dark:text-primary">
                               <Home className="w-5 h-5 mb-1" />
                               <span className="text-xs font-medium">Home</span>
                             </button>
@@ -661,7 +661,7 @@ export function DesignSystem() {
                       <div>
                         <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Filter Chips</h4>
                         <div className="flex flex-wrap gap-2">
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-sm font-medium rounded-full border border-teal-200 dark:border-teal-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#6B9080]/10 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-sm font-medium rounded-full border border-[#6B9080]/20 dark:border-teal-700">
                             <Check className="w-3 h-3" />
                             Selected
                           </button>

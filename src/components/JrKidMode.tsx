@@ -228,7 +228,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     className={`p-6 text-center cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 ${
                       isAffordable
                         ? `${colorClasses.gradient} ${colorClasses.border} ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:opacity-90'}`
-                        : 'opacity-50 cursor-not-allowed bg-gray-100'
+                        : 'opacity-50 cursor-not-allowed bg-[#F0EDE8]'
                     }`}
                     onClick={() => isAffordable && redeemReward()}
                     tabIndex={isAffordable ? 0 : -1}
@@ -613,7 +613,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
                 }`}
               >
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold ${
-                  activityComplete ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-600'
+                  activityComplete ? 'bg-green-500 text-white' : 'bg-[#E8E4DF] text-gray-600'
                 }`}>
                   {activityComplete ? '✓' : index + 1}
                 </div>

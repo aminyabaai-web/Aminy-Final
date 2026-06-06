@@ -53,7 +53,7 @@ export function EmptyState({
 
   return (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-      <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center mb-4">
         <ResolvedIcon className="w-8 h-8 text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
       </div>
 
@@ -68,7 +68,7 @@ export function EmptyState({
       {actionText && onAction && (
         <button
           onClick={onAction}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 active:bg-teal-800 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] active:bg-teal-800 transition-colors"
         >
           {actionText}
         </button>

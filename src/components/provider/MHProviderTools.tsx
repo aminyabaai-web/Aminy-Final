@@ -133,7 +133,7 @@ function PHQ9Widget() {
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-gray-50'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/27</span></p>
             <p className="text-sm capitalize font-medium">{String(latest.severity).replace('_', ' ')} depression</p>
@@ -212,13 +212,13 @@ function GAD7Widget() {
     <div className="bg-white border border-gray-200 rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="font-semibold text-gray-800">GAD-7 Anxiety Screen</h4>
-        <button onClick={() => setShowEntry(f => !f)} className="text-sm text-teal-600 font-medium">
+        <button onClick={() => setShowEntry(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-gray-50'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/21</span></p>
             <p className="text-sm font-medium capitalize">{latest.severity} anxiety</p>
@@ -243,8 +243,8 @@ function GAD7Widget() {
       <AnimatePresence>
         {showEntry && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex gap-2">
-            <input type="number" min={0} max={21} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–21)" className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none" />
-            <button onClick={logScore} disabled={!scoreInput} className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Log</button>
+            <input type="number" min={0} max={21} value={scoreInput} onChange={e => setScoreInput(e.target.value)} placeholder="Score (0–21)" className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
+            <button onClick={logScore} disabled={!scoreInput} className="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium disabled:opacity-50">Log</button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -500,7 +500,7 @@ function MHSessionNote() {
       <div className="space-y-3">
         <div>
           <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Presenting Concerns</label>
-          <textarea value={note.presentingConcerns ?? ''} onChange={e => setNote(n => ({ ...n, presentingConcerns: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none resize-none" />
+          <textarea value={note.presentingConcerns ?? ''} onChange={e => setNote(n => ({ ...n, presentingConcerns: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
 
         <div>
@@ -512,8 +512,8 @@ function MHSessionNote() {
                 onClick={() => toggleIntervention(name)}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                   note.interventions?.includes(name)
-                    ? 'bg-teal-600 text-white border-teal-600'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-teal-300'
+                    ? 'bg-primary text-white border-[#6B9080]'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-[#6B9080]/30'
                 }`}
               >
                 {note.interventions?.includes(name) && <Check className="w-3 h-3 inline mr-1" />}
@@ -525,7 +525,7 @@ function MHSessionNote() {
 
         <div>
           <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Child Response</label>
-          <textarea value={note.childResponse ?? ''} onChange={e => setNote(n => ({ ...n, childResponse: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none resize-none" />
+          <textarea value={note.childResponse ?? ''} onChange={e => setNote(n => ({ ...n, childResponse: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
 
         <div>
@@ -566,11 +566,11 @@ function MHSessionNote() {
 
         <div>
           <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Plan for Next Session</label>
-          <textarea value={note.plan ?? ''} onChange={e => setNote(n => ({ ...n, plan: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-teal-400 focus:outline-none resize-none" />
+          <textarea value={note.plan ?? ''} onChange={e => setNote(n => ({ ...n, plan: e.target.value }))} rows={2} className="w-full mt-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none resize-none" />
         </div>
       </div>
 
-      <button onClick={handleSave} className={`w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${saved ? 'bg-green-500 text-white' : 'bg-teal-600 text-white hover:bg-teal-700'}`}>
+      <button onClick={handleSave} className={`w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all ${saved ? 'bg-green-500 text-white' : 'bg-primary text-white hover:bg-[#6B9080]'}`}>
         {saved ? <><Check className="w-4 h-4" /> Saved!</> : <><Save className="w-4 h-4" /> Save Session Note</>}
       </button>
     </div>
@@ -609,12 +609,12 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="min-h-screen bg-[#FAF7F2] pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-gray-100 text-gray-600">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-gray-600">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}

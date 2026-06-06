@@ -147,7 +147,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         It takes just 2 minutes to complete.
                     </p>
 
-                    <Card className="p-5 bg-gray-50 border border-gray-100 mb-8">
+                    <Card className="p-5 bg-[#FAF7F2] border border-gray-100 mb-8">
                         <h3 className="font-semibold text-gray-900 mb-2 flex items-center">
                             <Info className="w-4 h-4 text-blue-500 mr-2" />
                             Before you begin
@@ -275,7 +275,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                     >
                         <div className="bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-100 p-6 rounded-2xl shadow-sm mb-6">
                             <div className="flex gap-3">
-                                <Activity className="w-6 h-6 text-teal-600 shrink-0 mt-1" />
+                                <Activity className="w-6 h-6 text-[#6B9080] shrink-0 mt-1" />
                                 <div>
                                     <h3 className="text-teal-900 font-semibold text-lg mb-2">How Aminy Can Help</h3>
                                     <p className="text-teal-800 leading-relaxed text-[15px]">

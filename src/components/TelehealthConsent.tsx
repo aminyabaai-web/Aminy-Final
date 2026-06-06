@@ -345,8 +345,8 @@ export function TelehealthConsent({
     return (
       <Card className="p-6 max-w-lg mx-auto">
         <div className="text-center mb-4 sm:mb-6">
-          <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Video className="w-6 h-6 text-teal-600" />
+          <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Video className="w-6 h-6 text-[#6B9080]" />
           </div>
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Confirm Your Session</h2>
           {providerName && (
@@ -364,7 +364,7 @@ export function TelehealthConsent({
             <Label htmlFor="confirm-consent" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
               I confirm I have previously read and agreed to the{' '}
               <button
-                className="text-teal-600 underline hover:text-teal-700"
+                className="text-[#6B9080] underline hover:text-[#6B9080]"
                 onClick={() => setShowFullConsent(true)}
               >
                 Telehealth Consent & Terms
@@ -396,7 +396,7 @@ export function TelehealthConsent({
           <Button
             onClick={onConsent}
             disabled={!acceptedSections.has('quick') || !acceptedSections.has('emergency-quick')}
-            className="flex-1 bg-teal-600 hover:bg-teal-700"
+            className="flex-1 bg-primary hover:bg-[#6B9080]"
           >
             Continue to Session
           </Button>
@@ -425,8 +425,8 @@ export function TelehealthConsent({
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
-        <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <FileText className="w-8 h-8 text-teal-600" />
+        <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FileText className="w-8 h-8 text-[#6B9080]" />
         </div>
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
           Telehealth Informed Consent
@@ -435,7 +435,7 @@ export function TelehealthConsent({
           Please review and acknowledge each section before your session
         </p>
         {providerName && (
-          <Badge className="mt-3 bg-teal-100 text-teal-700">
+          <Badge className="mt-3 bg-[#6B9080]/10 text-[#6B9080]">
             <User className="w-3 h-3 mr-1" />
             Session with {providerName}
           </Badge>
@@ -454,10 +454,10 @@ export function TelehealthConsent({
               <Card key={section.id} className={`overflow-hidden ${isAccepted ? 'border-green-200 bg-green-50/30' : ''}`}>
                 <button
                   onClick={() => toggleSection(section.id)}
-                  className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#F0EDE8]'}`}>
                       <Icon className={`w-4 h-4 ${isAccepted ? 'text-green-600' : 'text-gray-600'}`} />
                     </div>
                     <div className="text-left">
@@ -484,7 +484,7 @@ export function TelehealthConsent({
                     <div className="pt-4 mb-4">
                       {section.content}
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
                       <Checkbox
                         id={`accept-${section.id}`}
                         checked={isAccepted}
@@ -532,7 +532,7 @@ export function TelehealthConsent({
           <Button
             onClick={onConsent}
             disabled={!allRequiredAccepted}
-            className="flex-1 bg-teal-600 hover:bg-teal-700 disabled:opacity-50"
+            className="flex-1 bg-primary hover:bg-[#6B9080] disabled:opacity-50"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             I Consent & Agree
@@ -557,8 +557,8 @@ export function TelehealthMiniDisclaimer({ className = '' }: { className?: strin
       <p>
         Sessions are parent coaching, not medical treatment. Providers are independent professionals,
         not Aminy employees. By booking, you agree to our{' '}
-        <button className="text-teal-600 underline">Terms</button> and{' '}
-        <button className="text-teal-600 underline">Telehealth Consent</button>.
+        <button className="text-[#6B9080] underline">Terms</button> and{' '}
+        <button className="text-[#6B9080] underline">Telehealth Consent</button>.
       </p>
     </div>
   );

@@ -42,7 +42,7 @@ export function FiscalIntermediaryOnePager({
       <div className="flex items-start justify-between mb-8 pb-6 border-b border-gray-200">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-10 h-10 bg-teal-600 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
               <Heart className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl sm:text-2xl font-bold text-gray-900">Aminy</span>
@@ -61,10 +61,10 @@ export function FiscalIntermediaryOnePager({
       {/* Problem Statement */}
       <section className="mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Target className="w-5 h-5 text-teal-600" />
+          <Target className="w-5 h-5 text-[#6B9080]" />
           The Challenge
         </h2>
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-[#FAF7F2] rounded-xl p-4">
           <p className="text-gray-700 leading-relaxed">
             Self-directed families receive <strong>funding for services</strong> but often lack the{' '}
             <strong>daily guidance</strong> to maximize outcomes. Your care coordinators can't be
@@ -94,7 +94,7 @@ export function FiscalIntermediaryOnePager({
       {/* Solution */}
       <section className="mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Zap className="w-5 h-5 text-teal-600" />
+          <Zap className="w-5 h-5 text-[#6B9080]" />
           The Aminy Solution
         </h2>
         <p className="text-gray-700 mb-4">
@@ -104,9 +104,9 @@ export function FiscalIntermediaryOnePager({
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div className="bg-teal-50 rounded-lg p-4">
+          <div className="bg-[#6B9080]/10 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Clock className="w-4 h-4 text-teal-600" />
+              <Clock className="w-4 h-4 text-[#6B9080]" />
               <span className="font-medium text-teal-900">Daily Guidance</span>
             </div>
             <p className="text-sm text-teal-800">
@@ -146,24 +146,24 @@ export function FiscalIntermediaryOnePager({
       {/* Results */}
       <section className="mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-teal-600" />
+          <TrendingUp className="w-5 h-5 text-[#6B9080]" />
           Pilot Results
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">40%</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">40%</div>
             <div className="text-xs text-gray-600 mt-1">Fewer support calls</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">2.5hrs</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">2.5hrs</div>
             <div className="text-xs text-gray-600 mt-1">Saved/family/week</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">94%</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">94%</div>
             <div className="text-xs text-gray-600 mt-1">6-month retention</div>
           </div>
-          <div className="text-center p-4 bg-gray-50 rounded-lg">
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">92%</div>
+          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
             <div className="text-xs text-gray-600 mt-1">Family satisfaction</div>
           </div>
         </div>
@@ -172,7 +172,7 @@ export function FiscalIntermediaryOnePager({
       {/* Integration */}
       <section className="mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
-          <Shield className="w-5 h-5 text-teal-600" />
+          <Shield className="w-5 h-5 text-[#6B9080]" />
           Enterprise Ready
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
@@ -226,7 +226,7 @@ export function FiscalIntermediaryOnePager({
         <h2 className="text-lg font-bold text-gray-900 mb-3">Volume Pricing</h2>
         <div className="overflow-hidden rounded-lg border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+            <thead className="bg-[#FAF7F2]">
               <tr>
                 <th className="px-4 py-2 text-left font-medium text-gray-900">Family Count</th>
                 <th className="px-4 py-2 text-left font-medium text-gray-900">Per Family/Month</th>
@@ -239,9 +239,9 @@ export function FiscalIntermediaryOnePager({
                 <td className="px-4 py-3 text-gray-900 font-medium">$3.00</td>
                 <td className="px-4 py-3 text-gray-600">Core features + support</td>
               </tr>
-              <tr className="bg-teal-50">
+              <tr className="bg-[#6B9080]/10">
                 <td className="px-4 py-3 text-gray-700">100-500</td>
-                <td className="px-4 py-3 text-teal-700 font-medium">$2.50</td>
+                <td className="px-4 py-3 text-[#6B9080] font-medium">$2.50</td>
                 <td className="px-4 py-3 text-gray-600">+ Custom branding + API</td>
               </tr>
               <tr>
@@ -258,7 +258,7 @@ export function FiscalIntermediaryOnePager({
       </section>
 
       {/* CTA */}
-      <section className="bg-teal-600 rounded-xl p-6 text-white text-center">
+      <section className="bg-primary rounded-xl p-6 text-white text-center">
         <h2 className="text-xl font-bold mb-2">Ready to Support More Families?</h2>
         <p className="text-teal-100 mb-4">
           Schedule a demo to see Aminy in action and discuss your specific needs.

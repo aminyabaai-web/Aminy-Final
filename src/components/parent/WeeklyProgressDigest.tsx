@@ -79,14 +79,14 @@ interface WeeklyDigestProps {
 
 function ProgressBar({ value, color = 'teal' }: { value: number; color?: string }) {
   const colorMap: Record<string, string> = {
-    teal: 'bg-teal-500',
+    teal: 'bg-primary',
     green: 'bg-green-500',
     blue: 'bg-blue-500',
     amber: 'bg-amber-500',
     red: 'bg-red-400',
   };
   return (
-    <div className="w-full bg-gray-100 rounded-full h-2.5">
+    <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
       <div
         className={`h-2.5 rounded-full transition-all ${colorMap[color] || colorMap.teal}`}
         style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
@@ -192,7 +192,7 @@ export function WeeklyProgressDigest({
         {/* Ease Activity Breakdown */}
         <Card className="p-4">
           <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Brain size={16} className="text-teal-600" /> Ease Activities
+            <Brain size={16} className="text-[#6B9080]" /> Ease Activities
           </h3>
           <div className="space-y-2.5">
             {easeEngagement.activitiesByDomain.map(d => (
@@ -283,7 +283,7 @@ export function WeeklyProgressDigest({
         {/* Mood Trend */}
         <Card className="p-4">
           <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-            <Wind size={16} className="text-teal-600" /> Mood This Week
+            <Wind size={16} className="text-[#6B9080]" /> Mood This Week
           </h3>
           <div className="flex items-center gap-3">
             <MoodEmoji value={moodTrend.avgMood} />
@@ -301,12 +301,12 @@ export function WeeklyProgressDigest({
         </Card>
 
         {/* Next Week Focus */}
-        <Card className="p-4 bg-teal-50 border-teal-200">
+        <Card className="p-4 bg-[#6B9080]/10 border-[#6B9080]/20">
           <h3 className="font-semibold text-teal-800 mb-2">Next Week's Focus</h3>
           {nextWeekFocus.map((focus, i) => (
             <div key={i} className="flex items-start gap-2 mb-1.5">
-              <ArrowRight size={14} className="text-teal-600 mt-0.5 flex-shrink-0" />
-              <span className="text-sm text-teal-700">{focus}</span>
+              <ArrowRight size={14} className="text-[#6B9080] mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-[#6B9080]">{focus}</span>
             </div>
           ))}
         </Card>
@@ -324,7 +324,7 @@ export function WeeklyProgressDigest({
         {onAskQuestion && (
           <button
             onClick={onAskQuestion}
-            className="w-full bg-teal-600 text-white rounded-xl py-3 px-4 font-medium text-sm flex items-center justify-center gap-2"
+            className="w-full bg-primary text-white rounded-xl py-3 px-4 font-medium text-sm flex items-center justify-center gap-2"
           >
             <Sparkles size={16} />
             Questions? Ask Aminy AI

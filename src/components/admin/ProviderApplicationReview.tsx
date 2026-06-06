@@ -285,7 +285,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
       {/* Applications List */}
       {isLoading ? (
         <Card className="p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-teal-600" />
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#6B9080]" />
           <p className="text-neutral-500">Loading applications...</p>
         </Card>
       ) : loadError ? (
@@ -319,7 +319,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white font-semibold">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-semibold">
                       {app.full_name.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div>
@@ -366,7 +366,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                     {/* Contact Info */}
                     <div className="space-y-3">
                       <h5 className="font-medium text-neutral-900 dark:text-white flex items-center gap-2">
-                        <User className="w-4 h-4 text-teal-600" />
+                        <User className="w-4 h-4 text-[#6B9080]" />
                         Contact Information
                       </h5>
                       <div className="space-y-2 text-sm">
@@ -384,7 +384,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                     {/* Credentials */}
                     <div className="space-y-3">
                       <h5 className="font-medium text-neutral-900 dark:text-white flex items-center gap-2">
-                        <Award className="w-4 h-4 text-teal-600" />
+                        <Award className="w-4 h-4 text-[#6B9080]" />
                         Credentials
                       </h5>
                       <div className="space-y-2 text-sm">
@@ -411,7 +411,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                     <h5 className="font-medium text-neutral-900 dark:text-white mb-2">Specialties</h5>
                     <div className="flex flex-wrap gap-2">
                       {app.specialties.map(s => (
-                        <Badge key={s} className="bg-teal-100 text-teal-700">{s}</Badge>
+                        <Badge key={s} className="bg-[#6B9080]/10 text-[#6B9080]">{s}</Badge>
                       ))}
                     </div>
                   </div>

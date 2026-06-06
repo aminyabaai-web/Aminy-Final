@@ -218,8 +218,8 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
           >
             {/* Provider card */}
             <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-                <span className="text-teal-700 font-bold text-lg">
+              <div className="w-12 h-12 rounded-full bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                <span className="text-[#6B9080] font-bold text-lg">
                   {sessionData.providerName.charAt(0)}
                 </span>
               </div>

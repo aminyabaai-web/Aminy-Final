@@ -193,16 +193,16 @@ export function PaidCaregiverMode({
   // No waiver profile setup yet
   if (!waiverProfile) {
     return (
-      <Card className="p-6 bg-gradient-to-br from-teal-50 to-blue-50 border-teal-200">
+      <Card className="p-6 bg-gradient-to-br from-teal-50 to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3 sm:gap-4">
-          <div className="p-3 bg-teal-100 rounded-xl">
-            <Building2 className="w-6 h-6 text-teal-600" />
+          <div className="p-3 bg-[#6B9080]/10 rounded-xl">
+            <Building2 className="w-6 h-6 text-[#6B9080]" />
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-teal-900 mb-2">
               Paid Caregiver Mode
             </h3>
-            <p className="text-teal-700 mb-4">
+            <p className="text-[#6B9080] mb-4">
               Are you a paid caregiver for {childName} through a Medicaid waiver program?
               Set up your waiver profile to track hours and generate service documentation.
             </p>
@@ -214,7 +214,7 @@ export function PaidCaregiverMode({
               ))}
               <Badge variant="outline" className="text-xs">+ more</Badge>
             </div>
-            <Button onClick={onSetupWaiver} className="bg-teal-600 hover:bg-teal-700">
+            <Button onClick={onSetupWaiver} className="bg-primary hover:bg-[#6B9080]">
               <Settings className="w-4 h-4 mr-2" />
               Set Up Waiver Profile
             </Button>
@@ -322,7 +322,7 @@ export function PaidCaregiverMode({
               <Button
                 onClick={handleClockIn}
                 size="lg"
-                className="w-full bg-teal-600 hover:bg-teal-700"
+                className="w-full bg-primary hover:bg-[#6B9080]"
               >
                 <Play className="w-5 h-5 mr-2" />
                 Clock In
@@ -336,7 +336,7 @@ export function PaidCaregiverMode({
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <h4 className="font-semibold text-gray-900 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-teal-600" />
+            <Calendar className="w-4 h-4 text-[#6B9080]" />
             This Week's Hours
           </h4>
           <span className="text-sm text-gray-500">
@@ -348,7 +348,7 @@ export function PaidCaregiverMode({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
           <div>
-            <div className="text-xl sm:text-2xl font-bold text-teal-600">
+            <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
               {formatHours(weeklyHours)}
             </div>
             <div className="text-xs text-gray-500">Logged</div>
@@ -394,7 +394,7 @@ export function PaidCaregiverMode({
               return (
                 <div
                   key={entry.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${
@@ -428,7 +428,7 @@ export function PaidCaregiverMode({
       {/* Export Actions */}
       <Card className="p-3 sm:p-4">
         <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <FileText className="w-4 h-4 text-teal-600" />
+          <FileText className="w-4 h-4 text-[#6B9080]" />
           Export Documentation
         </h4>
 
@@ -564,7 +564,7 @@ export function WaiverSetupFlow({
                       onClick={() => setFiscalAgentId(agent.id)}
                       className={`w-full p-3 text-left border rounded-lg transition-colors ${
                         fiscalAgentId === agent.id
-                          ? 'border-teal-500 bg-teal-50'
+                          ? 'border-[#6B9080] bg-[#6B9080]/10'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -575,7 +575,7 @@ export function WaiverSetupFlow({
                     onClick={() => setFiscalAgentId('other')}
                     className={`w-full p-3 text-left border rounded-lg transition-colors ${
                       fiscalAgentId === 'other'
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -592,7 +592,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={() => setStep(2)}
                 disabled={!state || !fiscalAgentId}
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
               >
                 Continue
               </Button>
@@ -654,7 +654,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={() => setStep(3)}
                 disabled={!participantId}
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
               >
                 Continue
               </Button>
@@ -682,7 +682,7 @@ export function WaiverSetupFlow({
                     key={key}
                     className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors ${
                       approvedServices.includes(key)
-                        ? 'border-teal-500 bg-teal-50'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -735,7 +735,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={handleComplete}
                 disabled={approvedServices.length === 0}
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Complete Setup

@@ -88,9 +88,9 @@ const STATUS_CONFIG: Record<BAAConfirmation, {
 }> = {
   confirmed: {
     label: 'BAA Confirmed',
-    color: 'text-teal-700',
-    bg: 'bg-teal-50 border-teal-200',
-    icon: <CheckCircle className="w-5 h-5 text-teal-600" />,
+    color: 'text-[#6B9080]',
+    bg: 'bg-[#6B9080]/10 border-[#6B9080]/20',
+    icon: <CheckCircle className="w-5 h-5 text-[#6B9080]" />,
   },
   unconfirmed: {
     label: 'BAA Needed',
@@ -101,7 +101,7 @@ const STATUS_CONFIG: Record<BAAConfirmation, {
   'not-applicable': {
     label: 'Not Required',
     color: 'text-gray-600',
-    bg: 'bg-gray-50 border-gray-200',
+    bg: 'bg-[#FAF7F2] border-gray-200',
     icon: <Shield className="w-5 h-5 text-gray-400" />,
   },
 };
@@ -141,7 +141,7 @@ function VendorRow({ vendor, index }: { vendor: VendorBAA; index: number }) {
           href={vendor.baaLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+          className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-[#6B9080] hover:text-teal-800 transition-colors"
         >
           {vendor.baaStatus === 'unconfirmed' ? 'Confirm BAA' : 'View Security Docs'}
           <ExternalLink className="w-3.5 h-3.5" />
@@ -170,14 +170,14 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </button>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-teal-600" />
+              <Shield className="w-5 h-5 text-[#6B9080]" />
               <h1 className="text-xl font-bold text-gray-900">BAA Status</h1>
             </div>
             <p className="text-sm text-gray-500 mt-0.5">
@@ -211,9 +211,9 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-3 bg-teal-50 border border-teal-200 rounded-xl p-4"
+            className="flex gap-3 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4"
           >
-            <CheckCircle className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0 mt-0.5" />
             <p className="font-semibold text-teal-800">All required BAAs confirmed</p>
           </motion.div>
         )}

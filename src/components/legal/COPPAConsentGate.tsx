@@ -107,18 +107,18 @@ export default function COPPAConsentGate({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-4 py-4 flex items-center gap-3">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 rounded-full hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </button>
         )}
-        <Shield className="w-6 h-6 text-teal-600 flex-shrink-0" />
+        <Shield className="w-6 h-6 text-[#6B9080] flex-shrink-0" />
         <h1 className="text-lg font-bold text-gray-900">Parent Permission Required</h1>
       </div>
 
@@ -190,7 +190,7 @@ export default function COPPAConsentGate({
                   I have read and agree to Aminy&apos;s{' '}
                   <a
                     href="#privacy-policy"
-                    className="text-teal-600 underline"
+                    className="text-[#6B9080] underline"
                     onClick={e => {
                       e.preventDefault();
                       // In a real app, navigate to privacy policy
@@ -204,7 +204,7 @@ export default function COPPAConsentGate({
           </div>
 
           {/* COPPA rights reminder */}
-          <div className="bg-teal-50 border border-teal-200 rounded-xl p-4">
+          <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4">
             <p className="text-xs text-teal-800 leading-relaxed">
               <strong>Your rights under COPPA:</strong> You may review, update, or request deletion of your
               child&apos;s information at any time by contacting us at{' '}
@@ -228,8 +228,8 @@ export default function COPPAConsentGate({
           disabled={!allChecked || loading}
           className={`w-full rounded-xl py-4 font-semibold text-base transition-all ${
             allChecked && !loading
-              ? 'bg-teal-600 text-white hover:bg-teal-700 active:scale-[0.98]'
-              : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-primary text-white hover:bg-[#6B9080] active:scale-[0.98]'
+              : 'bg-[#E8E4DF] text-gray-400 cursor-not-allowed'
           }`}
           style={{ minHeight: 56 }}
         >
@@ -260,7 +260,7 @@ function CheckboxItem({
   label: React.ReactNode;
 }) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer rounded-xl border-2 border-gray-200 bg-white p-4 transition-colors hover:border-teal-300 has-[:checked]:border-teal-500 has-[:checked]:bg-teal-50">
+    <label className="flex items-start gap-3 cursor-pointer rounded-xl border-2 border-gray-200 bg-white p-4 transition-colors hover:border-[#6B9080]/30 has-[:checked]:border-[#6B9080] has-[:checked]:bg-[#6B9080]/10">
       <div className="relative flex-shrink-0 mt-0.5">
         <input
           type="checkbox"
@@ -270,7 +270,7 @@ function CheckboxItem({
         />
         <div
           className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
-            checked ? 'bg-teal-600 border-teal-600' : 'border-gray-300 bg-white'
+            checked ? 'bg-primary border-[#6B9080]' : 'border-gray-300 bg-white'
           }`}
           style={{ minWidth: 24, minHeight: 24 }}
         >

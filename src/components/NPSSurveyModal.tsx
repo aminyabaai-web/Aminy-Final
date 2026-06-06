@@ -130,7 +130,7 @@ export function NPSSurveyModal({
             {/* Header */}
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -141,7 +141,7 @@ export function NPSSurveyModal({
               <button
                 onClick={onClose}
                 aria-label="Close survey"
-                className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-400" />
               </button>
@@ -163,7 +163,7 @@ export function NPSSurveyModal({
                       className={`w-10 h-10 rounded-full font-semibold transition-all ${
                         score === value
                           ? getScoreColor(value) + ' text-white scale-110'
-                          : 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-700'
+                          : 'bg-[#F0EDE8] dark:bg-slate-800 text-gray-700 dark:text-slate-300 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
                       }`}
                     >
                       {value}
@@ -237,7 +237,7 @@ export function NPSSurveyModal({
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="flex-1 bg-teal-600 hover:bg-teal-700"
+                    className="flex-1 bg-primary hover:bg-[#6B9080]"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -260,7 +260,7 @@ export function NPSSurveyModal({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">

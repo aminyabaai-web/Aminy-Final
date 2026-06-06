@@ -148,7 +148,7 @@ export function UsageMeter({
           "text-xs font-medium px-2 py-1 rounded-full",
           normalizedTier === 'pro' ? "bg-purple-100 text-purple-700" :
           normalizedTier === 'core' ? "bg-accent/10 text-accent" :
-          "bg-gray-100 text-gray-600"
+          "bg-[#F0EDE8] text-gray-600"
         )}>
           {tierName}
         </span>

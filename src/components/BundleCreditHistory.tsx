@@ -72,7 +72,7 @@ function getTransactionIcon(type: CreditTransaction['type']) {
     case 'usage': return { icon: MinusCircle, color: 'text-blue-500', bg: 'bg-blue-50' };
     case 'expiry': return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-50' };
     case 'refund': return { icon: CheckCircle2, color: 'text-purple-500', bg: 'bg-purple-50' };
-    default: return { icon: Package, color: 'text-gray-500', bg: 'bg-gray-50' };
+    default: return { icon: Package, color: 'text-gray-500', bg: 'bg-[#FAF7F2]' };
   }
 }
 
@@ -172,7 +172,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col items-center gap-3">
-        <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
         <p className="text-sm text-gray-500">Loading credit history...</p>
       </div>
     );
@@ -216,14 +216,14 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       {/* Current Credit Balance */}
       <div className="bg-white rounded-2xl border border-gray-200 p-5">
         <div className="flex items-center gap-2 mb-3">
-          <Package size={16} className="text-teal-500" />
+          <Package size={16} className="text-primary" />
           <h3 className="text-sm font-semibold text-gray-700">Current Balance</h3>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-3">
-          <div className="bg-teal-50 rounded-xl p-3 text-center">
-            <p className="text-2xl font-bold text-teal-700">{currentCredits.consultCredits}</p>
-            <p className="text-xs text-teal-600">Consult Credits</p>
+          <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
+            <p className="text-2xl font-bold text-[#6B9080]">{currentCredits.consultCredits}</p>
+            <p className="text-xs text-[#6B9080]">Consult Credits</p>
           </div>
           <div className="bg-blue-50 rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-blue-700">{currentCredits.deepReviewCredits}</p>
@@ -237,7 +237,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30
               ? 'bg-amber-50 text-amber-700'
-              : 'bg-gray-50 text-gray-600'
+              : 'bg-[#FAF7F2] text-gray-600'
           }`}>
             <Calendar size={12} />
             <span>
@@ -265,7 +265,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         {transactions.length > 0 ? (
           <div className="relative">
             {/* Timeline line */}
-            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-gray-200" />
+            <div className="absolute left-[15px] top-0 bottom-0 w-px bg-[#E8E4DF]" />
 
             <div className="space-y-4">
               {transactions.map((txn) => {

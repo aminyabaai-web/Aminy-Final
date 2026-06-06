@@ -158,7 +158,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors"
             aria-label="Copy invite link"
           >
-            {copied ? <Check className="w-4 h-4 text-teal-600" /> : <Copy className="w-4 h-4 text-slate-500" />}
+            {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-slate-500" />}
           </button>
         </div>
         <p className="text-xs text-slate-500 mt-2">
@@ -168,12 +168,12 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
 
       {/* What they'll get */}
       <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B30' }}>
-        <p className="text-xs font-semibold text-teal-700 uppercase tracking-wide mb-2">What your providers get</p>
+        <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-2">What your providers get</p>
         <ul className="space-y-1.5 text-sm text-slate-700">
-          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" /><span>Pre-contracted with {config.payers.length} payers (no credentialing wait)</span></li>
-          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" /><span>Sync with {systemOfRecordLabel(config.systemOfRecord)} — sessions, notes, claims auto-flow</span></li>
-          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" /><span>{config.evvSystem ? `${config.evvSystem.toUpperCase()} EVV compliance built-in` : 'No EVV needed'}</span></li>
-          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-teal-600 mt-0.5 shrink-0" /><span>Aminy AI assistant for documentation, supervision, and clinical decision support</span></li>
+          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Pre-contracted with {config.payers.length} payers (no credentialing wait)</span></li>
+          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Sync with {systemOfRecordLabel(config.systemOfRecord)} — sessions, notes, claims auto-flow</span></li>
+          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>{config.evvSystem ? `${config.evvSystem.toUpperCase()} EVV compliance built-in` : 'No EVV needed'}</span></li>
+          <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Aminy AI assistant for documentation, supervision, and clinical decision support</span></li>
         </ul>
       </div>
 
@@ -185,7 +185,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             <p className="text-sm text-slate-700 mt-0.5">Paste your provider roster — we'll pre-create their accounts</p>
           </div>
           {!showCsvInput && (
-            <button onClick={() => setShowCsvInput(true)} className="text-xs text-teal-600 font-semibold px-2.5 py-1 bg-teal-50 rounded-full">
+            <button onClick={() => setShowCsvInput(true)} className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full">
               <Upload className="w-3.5 h-3.5 inline mr-1" />Import
             </button>
           )}
@@ -198,7 +198,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
               onChange={e => setCsvText(e.target.value)}
               placeholder={`one email per line, OR "Name, email" per line\n\nexample@aact.com\nDr. Sarah Lee, sarah@aact.com\nrbt@aact.com`}
               rows={6}
-              className="w-full text-sm font-mono border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400"
+              className="w-full text-sm font-mono border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
             />
             <div className="flex gap-2">
               <button
@@ -225,7 +225,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             <Users className="w-4 h-4 text-slate-400" />
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Roster ({providers.length})</p>
           </div>
-          <button onClick={loadProviders} className="text-xs text-teal-600">Refresh</button>
+          <button onClick={loadProviders} className="text-xs text-[#6B9080]">Refresh</button>
         </div>
 
         {/* Status pills */}

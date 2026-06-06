@@ -42,11 +42,11 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <div className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-gray-100">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
           )}
-          <Shield className="h-6 w-6 text-teal-600" />
+          <Shield className="h-6 w-6 text-[#6B9080]" />
           <h1 className="text-xl font-bold text-gray-900">Privacy Policy</h1>
         </div>
       </div>
@@ -64,9 +64,9 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
 
         {/* Table of Contents */}
-        <nav className="mb-6 rounded-lg bg-gray-50 p-4">
+        <nav className="mb-6 rounded-lg bg-[#FAF7F2] p-4">
           <p className="mb-2 text-sm font-semibold text-gray-900">Contents</p>
-          <ol className="space-y-1 text-sm text-teal-700">
+          <ol className="space-y-1 text-sm text-[#6B9080]">
             {[
               ['#info-collect', '1. Information We Collect'],
               ['#how-use', '2. How We Use Your Information'],
@@ -181,7 +181,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             <li>Child-facing features (Junior Mode) are designed to minimize data collection</li>
             <li>We do not serve behavioral advertising to children</li>
             <li>Parents may review, update, or delete their child&apos;s information at any time by contacting{' '}
-              <a href="mailto:privacy@aminy.app" className="text-teal-700 underline">privacy@aminy.app</a>
+              <a href="mailto:privacy@aminy.app" className="text-[#6B9080] underline">privacy@aminy.app</a>
             </li>
             <li>We do not condition a child&apos;s participation on providing more information than reasonably necessary</li>
             <li>Parents may withdraw consent at any time from Account Settings &rsaquo; Children&apos;s Data</li>
@@ -193,7 +193,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <p>
             If you believe we have inadvertently collected information from a child under 13 without
             proper parental consent, please contact us immediately at{' '}
-            <a href="mailto:privacy@aminy.app" className="text-teal-700 underline">privacy@aminy.app</a>{' '}
+            <a href="mailto:privacy@aminy.app" className="text-[#6B9080] underline">privacy@aminy.app</a>{' '}
             and we will promptly delete that information.
           </p>
         </Section>
@@ -419,7 +419,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
         <Section title="17. Contact Us" id="contact">
           <p>For privacy-related inquiries or to exercise your rights:</p>
-          <div className="mt-2 rounded-lg bg-gray-50 p-4 text-sm">
+          <div className="mt-2 rounded-lg bg-[#FAF7F2] p-4 text-sm">
             <p><strong>Aminy Privacy Team</strong></p>
             <p>Email: privacy@aminy.app</p>
             <p>Phone: 1-800-AMINY-HELP</p>
@@ -431,7 +431,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <strong>HHS Office for Civil Rights:</strong>{' '}
               <a
                 href="https://www.hhs.gov/hipaa/filing-a-complaint"
-                className="text-teal-600 underline"
+                className="text-[#6B9080] underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >

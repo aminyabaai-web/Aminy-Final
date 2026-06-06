@@ -307,7 +307,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-teal-600" />
+            <CheckCircle2 className="h-5 w-5 text-[#6B9080]" />
             Session Preparation
           </DialogTitle>
           <DialogDescription>
@@ -324,7 +324,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             </div>
             <div className="w-full bg-slate-200 rounded-full h-2">
               <div 
-                className="bg-teal-600 h-2 rounded-full transition-all duration-300"
+                className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${sessionPrep.completionRate}%` }}
               />
             </div>
@@ -489,11 +489,11 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render enhanced provider info card
   const renderProviderInfoCard = () => (
-    <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-teal-200">
+    <Card className="p-4 mb-4 bg-gradient-to-r from-teal-50 to-cyan-50 border-[#6B9080]/20">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
-            <User className="h-6 w-6 text-teal-600" />
+          <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
+            <User className="h-6 w-6 text-[#6B9080]" />
           </div>
           <div>
             <h3 className="font-semibold text-teal-900">{currentProvider?.name || 'Sarah Miller'}</h3>
@@ -504,8 +504,8 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                 </Badge>
               ))}
             </div>
-            <p className="text-sm text-teal-700">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
-            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-teal-600">
+            <p className="text-sm text-[#6B9080]">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
+            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-[#6B9080]">
               <span className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 Available today

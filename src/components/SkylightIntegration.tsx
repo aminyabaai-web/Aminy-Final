@@ -176,7 +176,7 @@ export function SkylightIntegration({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 flex items-center gap-2">
-            <Smartphone className="w-5 h-5 text-teal-600" />
+            <Smartphone className="w-5 h-5 text-[#6B9080]" />
             Skylight Display
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -198,7 +198,7 @@ export function SkylightIntegration({
       >
         {!connected ? (
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
               <Link className="w-8 h-8 text-gray-400" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-2">
@@ -286,8 +286,8 @@ export function SkylightIntegration({
               key={routine.id}
               className={`p-4 cursor-pointer transition-all ${
                 selectedRoutines.includes(routine.id)
-                  ? 'ring-2 ring-teal-500 bg-teal-50/50'
-                  : 'hover:bg-gray-50'
+                  ? 'ring-2 ring-teal-500 bg-[#6B9080]/10/50'
+                  : 'hover:bg-[#FAF7F2]'
               }`}
               onClick={() => toggleRoutineSelection(routine.id)}
             >
@@ -314,7 +314,7 @@ export function SkylightIntegration({
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                     selectedRoutines.includes(routine.id)
-                      ? 'bg-teal-600 border-teal-600'
+                      ? 'bg-primary border-[#6B9080]'
                       : 'border-gray-300'
                   }`}
                 >

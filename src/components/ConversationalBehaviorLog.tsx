@@ -143,7 +143,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
           }}
         />
         <button
-          className="absolute right-3 bottom-3 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-teal-600 transition-colors"
+          className="absolute right-3 bottom-3 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-[#6B9080] transition-colors"
           title="Voice input (coming soon)"
         >
           <Mic className="w-4 h-4" />
@@ -153,7 +153,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
       <Button
         onClick={parseDescription}
         disabled={!description.trim() || isParsing}
-        className="w-full bg-teal-600 hover:bg-teal-700"
+        className="w-full bg-primary hover:bg-[#6B9080]"
         size="sm"
       >
         {isParsing ? (
@@ -165,7 +165,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
 
       {/* Parsed preview card */}
       {parsed && (
-        <div className={`rounded-2xl border-2 p-4 space-y-2 ${parsed.is_positive ? 'border-green-300 bg-green-50' : 'border-teal-300 bg-teal-50'}`}>
+        <div className={`rounded-2xl border-2 p-4 space-y-2 ${parsed.is_positive ? 'border-green-300 bg-green-50' : 'border-[#6B9080]/30 bg-[#6B9080]/10'}`}>
           <p className="text-sm font-semibold text-slate-800">
             {parsed.is_positive ? '🎉' : '📋'} {parsed.behavior_type}
           </p>
@@ -210,7 +210,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
               onClick={confirmAndLog}
               disabled={isSaving}
               size="sm"
-              className="flex-1 bg-teal-600 hover:bg-teal-700"
+              className="flex-1 bg-primary hover:bg-[#6B9080]"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4 mr-1" />Confirm & Log</>}
             </Button>

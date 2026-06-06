@@ -1045,7 +1045,7 @@ export function StoreMarketplace({
     }
     if (product.price === 'included') {
       return (
-        <Badge className="bg-teal-100 text-teal-700">
+        <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
           <Crown className="w-3 h-3 mr-1" />
           Included
         </Badge>
@@ -1065,7 +1065,7 @@ export function StoreMarketplace({
           )}
         </div>
         {discounted && tierLabel && (
-          <span className="text-xs text-teal-600 font-medium">{tierLabel}</span>
+          <span className="text-xs text-[#6B9080] font-medium">{tierLabel}</span>
         )}
       </div>
     );
@@ -1124,7 +1124,7 @@ export function StoreMarketplace({
                 <Filter className="w-4 h-4" />
                 Filters
                 {Object.values(filters).some(Boolean) && (
-                  <Badge className="bg-teal-500 text-white text-xs px-1.5">
+                  <Badge className="bg-primary text-white text-xs px-1.5">
                     {Object.values(filters).filter(Boolean).length}
                   </Badge>
                 )}
@@ -1238,7 +1238,7 @@ export function StoreMarketplace({
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && aiRecommendedProducts.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-teal-500" />
+              <Zap className="w-5 h-5 text-primary" />
               Recommended for {childProfile?.name || 'Your Child'}
             </h2>
             <p className="text-sm text-slate-500 mb-4">
@@ -1248,14 +1248,14 @@ export function StoreMarketplace({
               {aiRecommendedProducts.map((product) => (
                 <Card
                   key={`ai-${product.id}`}
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-teal-200 dark:border-teal-800"
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-[#6B9080]/20 dark:border-teal-800"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-teal-50 dark:bg-teal-900/30 relative">
-                    <div className="absolute inset-0 flex items-center justify-center text-teal-300">
+                  <div className="aspect-video bg-[#6B9080]/10 dark:bg-teal-900/30 relative">
+                    <div className="absolute inset-0 flex items-center justify-center text-[#7BA7BC]">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
-                    <Badge className="absolute top-2 left-2 bg-teal-500 text-white">
+                    <Badge className="absolute top-2 left-2 bg-primary text-white">
                       <Zap className="w-3 h-3 mr-1" />
                       AI Pick
                     </Badge>
@@ -1461,7 +1461,7 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                       {product.matchesChildNeeds && (
-                        <Badge className="bg-teal-100 text-teal-700 text-xs">
+                        <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
                           <Zap className="w-3 h-3 mr-0.5" />
                           Matches needs
                         </Badge>

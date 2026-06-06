@@ -97,7 +97,7 @@ function StatusChip({ status }: { status: MetricStatus }) {
     green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
     yellow: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
     red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-    info: 'bg-gray-100 text-gray-500 dark:bg-slate-800 dark:text-slate-400',
+    info: 'bg-[#F0EDE8] text-gray-500 dark:bg-slate-800 dark:text-slate-400',
   };
   const icons: Record<MetricStatus, React.ReactNode> = {
     green: <CheckCircle className="w-3.5 h-3.5" />,
@@ -305,7 +305,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   if (loading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-500 border-t-transparent" />
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#6B9080] border-t-transparent" />
       </div>
     );
   }

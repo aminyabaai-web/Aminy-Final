@@ -263,8 +263,8 @@ export function EmptyState({
             <button
               onClick={secondaryAction.onClick}
               className={`
-                bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300
-                rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-700
+                bg-[#F0EDE8] dark:bg-slate-800 text-gray-700 dark:text-gray-300
+                rounded-lg font-medium hover:bg-[#E8E4DF] dark:hover:bg-slate-700
                 transition-colors
                 ${sizeClasses.button}
               `}

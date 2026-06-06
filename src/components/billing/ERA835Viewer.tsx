@@ -84,7 +84,7 @@ function LineStatusBadge({ status }: { status: PaidClaimLine['claimStatus'] }) {
       );
     default:
       return (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-[#F0EDE8] text-gray-600">
           <Clock className="w-3 h-3" />
           Pending
         </span>
@@ -222,7 +222,7 @@ export function ERA835Viewer({ era, onAppeal, onPost }: ERA835ViewerProps) {
             { label: 'Patient', value: era.patientName || '—' },
             { label: 'Member ID', value: era.memberId || '—' },
           ].map(({ label, value }) => (
-            <div key={label} className="bg-gray-50 rounded-xl px-3 py-2">
+            <div key={label} className="bg-[#FAF7F2] rounded-xl px-3 py-2">
               <p className="text-xs text-gray-400 mb-0.5">{label}</p>
               <p className="text-sm font-medium text-gray-700 truncate">{value}</p>
             </div>

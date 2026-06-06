@@ -95,7 +95,7 @@ export function CalendarConnectionCard() {
           </p>
         </div>
         {activeProvider && (
-          <span className="text-[11px] bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
+          <span className="text-[11px] bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
             <Check className="w-3 h-3" />Active
           </span>
         )}
@@ -182,7 +182,7 @@ function ProviderButton({
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
         isPassive
           ? 'border-slate-100 bg-slate-50 cursor-default'
-          : 'border-slate-200 hover:border-teal-300 hover:bg-teal-50/30'
+          : 'border-slate-200 hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30'
       } ${working ? 'opacity-50' : ''}`}
     >
       <div className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
@@ -192,7 +192,7 @@ function ProviderButton({
         <p className="text-sm font-medium text-slate-800">{title}</p>
         <p className="text-[11px] text-slate-500 truncate">{hint}</p>
       </div>
-      <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-teal-600'}`}>
+      <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>
         {isPassive ? <FileDown className="w-3.5 h-3.5 inline" /> : null} {cta}
       </span>
     </button>

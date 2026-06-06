@@ -555,11 +555,11 @@ You're starting this check-in now. Begin with a warm greeting and your first que
         <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-teal-50 to-cyan-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ClipboardList className="w-5 h-5 text-teal-600" />
+              <ClipboardList className="w-5 h-5 text-[#6B9080]" />
               <h3 className="font-semibold text-gray-900">Action Items</h3>
             </div>
             {incompleteCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-teal-500 text-white text-xs font-medium">
+              <span className="px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
                 {incompleteCount}
               </span>
             )}
@@ -579,8 +579,8 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 disabled={item.completed}
                 className={`w-full p-4 flex items-center gap-3 text-left transition-colors ${
                   item.completed
-                    ? 'bg-gray-50 cursor-default'
-                    : 'hover:bg-gray-50 cursor-pointer'
+                    ? 'bg-[#FAF7F2] cursor-default'
+                    : 'hover:bg-[#FAF7F2] cursor-pointer'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -588,7 +588,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     ? 'bg-green-100'
                     : item.priority === 'high'
                     ? 'bg-amber-100'
-                    : 'bg-gray-100'
+                    : 'bg-[#F0EDE8]'
                 }`}>
                   {item.completed ? (
                     <Check className="w-5 h-5 text-green-600" />
@@ -620,7 +620,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
 
         {items.length > 4 && (
           <div className="p-3 border-t border-gray-100 text-center">
-            <button className="text-sm text-teal-600 hover:text-teal-700 font-medium">
+            <button className="text-sm text-[#6B9080] hover:text-[#6B9080] font-medium">
               View all {items.length} items
             </button>
           </div>
@@ -646,8 +646,8 @@ You're starting this check-in now. Begin with a warm greeting and your first que
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
-                    {React.createElement(activeItem.icon, { className: 'w-5 h-5 text-teal-600' })}
+                  <div className="w-10 h-10 rounded-xl bg-[#6B9080]/10 flex items-center justify-center">
+                    {React.createElement(activeItem.icon, { className: 'w-5 h-5 text-[#6B9080]' })}
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">{activeItem.title}</h3>
@@ -656,7 +656,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 </div>
                 <button
                   onClick={handleCloseItem}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
                 >
                   <X className="w-5 h-5 text-gray-500" />
                 </button>
@@ -670,15 +670,15 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     {msg.role === 'assistant' && (
-                      <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center flex-shrink-0 mr-2">
+                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mr-2">
                         <Sparkles className="w-4 h-4 text-white" />
                       </div>
                     )}
                     <div
                       className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                         msg.role === 'user'
-                          ? 'bg-teal-500 text-white'
-                          : 'bg-gray-100 text-gray-800'
+                          ? 'bg-primary text-white'
+                          : 'bg-[#F0EDE8] text-gray-800'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -698,10 +698,10 @@ You're starting this check-in now. Begin with a warm greeting and your first que
 
                 {isSending && (
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                       <Sparkles className="w-4 h-4 text-white" />
                     </div>
-                    <div className="bg-gray-100 rounded-2xl px-4 py-2.5">
+                    <div className="bg-[#F0EDE8] rounded-2xl px-4 py-2.5">
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -734,7 +734,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isSending}
-                    className="h-10 w-10 rounded-xl bg-teal-500 hover:bg-teal-600 text-white disabled:opacity-50 flex items-center justify-center"
+                    className="h-10 w-10 rounded-xl bg-primary hover:bg-primary text-white disabled:opacity-50 flex items-center justify-center"
                   >
                     {isSending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -748,7 +748,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 {conversation.length >= 4 && (
                   <button
                     onClick={handleCompleteItem}
-                    className="w-full mt-3 py-2 text-sm text-teal-600 hover:text-teal-700 font-medium"
+                    className="w-full mt-3 py-2 text-sm text-[#6B9080] hover:text-[#6B9080] font-medium"
                   >
                     Mark as complete
                   </button>

@@ -338,7 +338,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       responses[currentQuestion] === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-gray-200 hover:border-violet-300 hover:bg-gray-50'
+                        : 'border-gray-200 hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
                     <span className="font-medium text-gray-900">{option.label}</span>
@@ -367,7 +367,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       difficulty === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-gray-200 hover:border-violet-300 hover:bg-gray-50'
+                        : 'border-gray-200 hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
                     <span className="font-medium text-gray-900">{option.label}</span>

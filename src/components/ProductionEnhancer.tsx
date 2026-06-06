@@ -114,7 +114,7 @@ export class ProductionErrorBoundary extends React.Component<
 
 // Default error fallback component
 const DefaultErrorFallback: React.FC<{ error?: Error }> = ({ error }) => (
-  <div className="min-h-screen flex items-center justify-center p-6 bg-gray-50">
+  <div className="min-h-screen flex items-center justify-center p-6 bg-[#FAF7F2]">
     <div className="max-w-md text-center">
       <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
         <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@ const DefaultErrorFallback: React.FC<{ error?: Error }> = ({ error }) => (
         </button>
         <button
           onClick={() => window.history.back()}
-          className="w-full bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+          className="w-full bg-[#E8E4DF] text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
         >
           Go Back
         </button>

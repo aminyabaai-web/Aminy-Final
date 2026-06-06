@@ -183,7 +183,7 @@ const ASSESSMENT_CONFIGS: {
     name: 'Goal Attainment',
     description: 'Measure progress toward treatment goals',
     icon: CheckCircle,
-    color: 'text-teal-600 bg-teal-100',
+    color: 'text-[#6B9080] bg-[#6B9080]/10',
     scales: [
       {
         name: 'Goal Progress',
@@ -389,7 +389,7 @@ export function ClinicalOutcomesTracker({
     return (
       <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-teal-600 animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-neutral-600">Loading clinical outcomes...</p>
         </div>
       </div>
@@ -421,7 +421,7 @@ export function ClinicalOutcomesTracker({
               </Button>
               <Button
                 size="sm"
-                className="bg-teal-600 hover:bg-teal-700"
+                className="bg-primary hover:bg-[#6B9080]"
                 onClick={() => setShowNewAssessment(true)}
               >
                 <Plus className="w-4 h-4 mr-1" />
@@ -440,7 +440,7 @@ export function ClinicalOutcomesTracker({
               onClick={() => setSelectedType('all')}
               className={`px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                 selectedType === 'all'
-                  ? 'bg-teal-100 text-teal-700'
+                  ? 'bg-[#6B9080]/10 text-[#6B9080]'
                   : 'text-neutral-600 hover:bg-neutral-100'
               }`}
             >
@@ -454,7 +454,7 @@ export function ClinicalOutcomesTracker({
                   onClick={() => setSelectedType(config.type)}
                   className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap transition-colors ${
                     selectedType === config.type
-                      ? 'bg-teal-100 text-teal-700'
+                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
                       : 'text-neutral-600 hover:bg-neutral-100'
                   }`}
                 >
@@ -543,7 +543,7 @@ export function ClinicalOutcomesTracker({
                         return (
                           <div
                             key={j}
-                            className="flex-1 bg-teal-200 rounded-t"
+                            className="flex-1 bg-[#6B9080]/20 rounded-t"
                             style={{ height: `${Math.max(10, height)}%` }}
                             title={`${item.rawScore} - ${new Date(item.createdAt).toLocaleDateString()}`}
                           />
@@ -567,7 +567,7 @@ export function ClinicalOutcomesTracker({
               <p className="text-neutral-500 mb-4">
                 Start tracking clinical outcomes to measure progress
               </p>
-              <Button onClick={() => setShowNewAssessment(true)} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => setShowNewAssessment(true)} className="bg-primary hover:bg-[#6B9080]">
                 <Plus className="w-4 h-4 mr-1" />
                 Add First Assessment
               </Button>
@@ -665,8 +665,8 @@ export function ClinicalOutcomesTracker({
                         })}
                         className={`flex items-center gap-2 p-3 rounded-lg border transition-colors text-left ${
                           newAssessment.type === config.type
-                            ? 'bg-teal-50 border-teal-300'
-                            : 'bg-white border-neutral-200 hover:border-teal-200'
+                            ? 'bg-[#6B9080]/10 border-[#6B9080]/30'
+                            : 'bg-white border-neutral-200 hover:border-[#6B9080]/20'
                         }`}
                       >
                         <div className={`p-1.5 rounded ${config.color}`}>
@@ -739,7 +739,7 @@ export function ClinicalOutcomesTracker({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-primary hover:bg-[#6B9080]"
                 onClick={handleSaveAssessment}
                 disabled={isSaving || !newAssessment.name}
               >

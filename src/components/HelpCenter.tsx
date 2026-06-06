@@ -202,8 +202,8 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
         <div className="bg-white border-b border-gray-200">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center">
-                <HelpCircle className="w-5 h-5 text-teal-600" />
+              <div className="w-10 h-10 bg-[#6B9080]/10 rounded-xl flex items-center justify-center">
+                <HelpCircle className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
                 <h2 id="help-center-title" className="text-xl text-slate-900">
@@ -245,7 +245,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                   placeholder="Search help articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
 
         <div className="flex h-[calc(90vh-180px)]">
           {/* Sidebar */}
-          <div className="w-80 border-r border-gray-200 overflow-y-auto bg-gray-50">
+          <div className="w-80 border-r border-gray-200 overflow-y-auto bg-[#FAF7F2]">
             {!selectedArticle ? (
               <div className="p-3 sm:p-4">
                 <nav className="space-y-2">
@@ -269,7 +269,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        activeTab === tab.id ? 'bg-teal-100 text-teal-600' : 'bg-slate-100 text-slate-500'
+                        activeTab === tab.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-slate-100 text-slate-500'
                       }`}>
                         {tab.icon}
                       </div>
@@ -284,7 +284,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <div className="mt-4 sm:mt-6">
                   <Button
                     onClick={() => setShowContactForm(true)}
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                    className="w-full bg-primary hover:bg-[#6B9080] text-white"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Contact Support
@@ -331,7 +331,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                         type="text"
                         required
                         placeholder="Brief description of your issue"
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                       />
                     </div>
                     <div>
@@ -341,11 +341,11 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                         rows={6}
                         required
                         placeholder="Please describe your issue in detail..."
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-[#6B9080]"
                       />
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button type="submit" className="bg-teal-600 hover:bg-teal-700 text-white">
+                      <Button type="submit" className="bg-primary hover:bg-[#6B9080] text-white">
                         <Send className="w-4 h-4 mr-2" />
                         Send Message
                       </Button>
@@ -368,7 +368,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                   <div className="space-y-3">
                     {selectedArticle.bullets.map((bullet: string, index: number) => (
                       <div key={index} className="flex items-start space-x-3">
-                        <div className="w-1.5 h-1.5 bg-teal-600 rounded-full mt-2 flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 flex-shrink-0" />
                         <p className="text-slate-700 leading-relaxed">{bullet}</p>
                       </div>
                     ))}
@@ -379,7 +379,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                     <Button
                       onClick={() => setShowContactForm(true)}
                       variant="outline"
-                      className="text-teal-600 border-teal-200 hover:bg-teal-50"
+                      className="text-[#6B9080] border-[#6B9080]/20 hover:bg-[#6B9080]/10"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
                       Contact Support

@@ -211,7 +211,7 @@ function categoryColor(cat: Denial['category']): string {
     coding: 'bg-orange-100 text-orange-700',
     'medical-necessity': 'bg-red-100 text-red-700',
     'timely-filing': 'bg-slate-100 text-slate-700',
-    eligibility: 'bg-cyan-100 text-cyan-700',
+    eligibility: 'bg-[#6B9080]/10 text-cyan-700',
     duplicate: 'bg-slate-100 text-slate-500',
   };
   return colors[cat] || 'bg-slate-100 text-slate-500';

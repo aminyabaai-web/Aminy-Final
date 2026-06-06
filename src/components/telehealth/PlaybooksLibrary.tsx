@@ -452,7 +452,7 @@ export function PlaybooksLibrary({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -485,7 +485,7 @@ export function PlaybooksLibrary({
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               selectedCategory === 'all'
                 ? 'bg-cyan-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
             }`}
           >
             All
@@ -497,7 +497,7 @@ export function PlaybooksLibrary({
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 selectedCategory === cat
                   ? 'bg-cyan-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
               }`}
             >
               <span>{CATEGORY_ICONS[cat]}</span>
@@ -508,7 +508,7 @@ export function PlaybooksLibrary({
 
         {/* Bookmarked Quick Access */}
         {bookmarkedCount > 0 && (
-          <button className="flex items-center gap-2 text-sm text-cyan-600 hover:underline">
+          <button className="flex items-center gap-2 text-sm text-[#6B9080] hover:underline">
             <BookmarkCheck className="w-4 h-4" />
             {bookmarkedCount} bookmarked
           </button>
@@ -573,7 +573,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
       <button
         onClick={onSelect}
-        className="w-full p-4 text-left hover:bg-gray-50 transition-colors"
+        className="w-full p-4 text-left hover:bg-[#FAF7F2] transition-colors"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -588,7 +588,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
 
             {/* Title & Subtitle */}
             <h3 className="font-semibold text-gray-900 mb-1">{playbook.title}</h3>
-            <p className="text-sm text-cyan-600 mb-2">{playbook.subtitle}</p>
+            <p className="text-sm text-[#6B9080] mb-2">{playbook.subtitle}</p>
 
             {/* Description */}
             <p className="text-sm text-gray-600 line-clamp-2 mb-3">{playbook.description}</p>
@@ -609,9 +609,9 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
               <div className="mt-3">
                 <div className="flex items-center justify-between text-xs mb-1">
                   <span className="text-gray-500">Progress</span>
-                  <span className="text-cyan-600 font-medium">{playbook.progress}%</span>
+                  <span className="text-[#6B9080] font-medium">{playbook.progress}%</span>
                 </div>
-                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                   <div
                     className="h-full bg-cyan-600 rounded-full transition-all"
                     style={{ width: `${playbook.progress}%` }}
@@ -641,7 +641,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             onToggleBookmark();
           }}
           className={`flex items-center gap-2 text-sm ${
-            playbook.isBookmarked ? 'text-cyan-600' : 'text-gray-500 hover:text-gray-700'
+            playbook.isBookmarked ? 'text-[#6B9080]' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
           {playbook.isBookmarked ? (

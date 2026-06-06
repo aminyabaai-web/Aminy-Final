@@ -222,7 +222,7 @@ export function PayerOutcomesDashboard({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
-                <Building2 className="w-5 h-5 text-teal-600" />
+                <Building2 className="w-5 h-5 text-[#6B9080]" />
                 <Badge variant="outline" className="text-xs">
                   {getOrgTypeLabel()}
                 </Badge>
@@ -251,15 +251,15 @@ export function PayerOutcomesDashboard({
                     onClick={() => setSelectedTimeframe(tf)}
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       selectedTimeframe === tf
-                        ? 'bg-teal-600 text-white'
-                        : 'bg-white text-slate-600 hover:bg-teal-50'
+                        ? 'bg-primary text-white'
+                        : 'bg-white text-slate-600 hover:bg-[#6B9080]/10'
                     }`}
                   >
                     {tf === '30d' ? '30 Days' : tf === '90d' ? '90 Days' : '1 Year'}
                   </button>
                 ))}
               </div>
-              <Button onClick={onExportReport} className="rounded-2xl bg-teal-600 text-white hover:bg-teal-700">
+              <Button onClick={onExportReport} className="rounded-2xl bg-primary text-white hover:bg-[#6B9080]">
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </Button>
@@ -272,11 +272,11 @@ export function PayerOutcomesDashboard({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           <TabsList className="mb-6 h-auto flex-wrap justify-start gap-2 rounded-3xl border border-teal-100 bg-white/92 p-2 shadow-sm">
-            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="overview">Overview</TabsTrigger>
-            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="financial">Financial Impact</TabsTrigger>
-            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="quality">Quality Metrics</TabsTrigger>
-            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="utilization">Utilization</TabsTrigger>
-            <TabsTrigger className="rounded-2xl data-[state=active]:bg-teal-600 data-[state=active]:text-white" value="claims">Claims Ops</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-primary data-[state=active]:text-white" value="overview">Overview</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-primary data-[state=active]:text-white" value="financial">Financial Impact</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-primary data-[state=active]:text-white" value="quality">Quality Metrics</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-primary data-[state=active]:text-white" value="utilization">Utilization</TabsTrigger>
+            <TabsTrigger className="rounded-2xl data-[state=active]:bg-primary data-[state=active]:text-white" value="claims">Claims Ops</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -495,7 +495,7 @@ export function PayerOutcomesDashboard({
                   </Badge>
                 </div>
                 <div className="text-center py-4">
-                  <p className="text-5xl font-bold text-teal-600">{metrics.memberSatisfaction}%</p>
+                  <p className="text-5xl font-bold text-[#6B9080]">{metrics.memberSatisfaction}%</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                     {providedMetrics ? 'Based on quarterly CAHPS surveys' : 'Pilot sample metric — not yet sourced from CAHPS surveys'}
                   </p>
@@ -827,9 +827,9 @@ export function PayerOutcomesDashboard({
                         {formatNumber(metrics.activeUsers)} / {formatNumber(metrics.totalMembers)}
                       </span>
                     </div>
-                    <div className="h-3 bg-gray-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-teal-500 rounded-full"
+                        className="h-full bg-primary rounded-full"
                         style={{ width: `${metrics.engagementRate}%` }}
                       />
                     </div>
@@ -839,8 +839,8 @@ export function PayerOutcomesDashboard({
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                      <Activity className="w-5 h-5 text-teal-600 mb-2" />
+                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                      <Activity className="w-5 h-5 text-[#6B9080] mb-2" />
                       <p className="text-2xl font-bold text-gray-900 dark:text-white">
                         {metrics.avgSessionsPerWeek}
                       </p>
@@ -848,7 +848,7 @@ export function PayerOutcomesDashboard({
                         Avg sessions/week
                       </p>
                     </div>
-                    <div className="p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
                       <Clock className="w-5 h-5 text-blue-600 mb-2" />
                       <p className="text-2xl font-bold text-gray-900 dark:text-white">
                         18 min
@@ -950,7 +950,7 @@ function MetricCard({
     blue: 'bg-blue-50 text-blue-600',
     pink: 'bg-pink-50 text-pink-600',
     purple: 'bg-purple-50 text-purple-600',
-    teal: 'bg-teal-50 text-teal-600',
+    teal: 'bg-[#6B9080]/10 text-[#6B9080]',
   };
 
   return (
@@ -995,7 +995,7 @@ function ProgressMetric({
   showPercentage?: boolean;
 }) {
   const colorClasses = {
-    teal: 'bg-teal-500',
+    teal: 'bg-primary',
     blue: 'bg-blue-500',
     purple: 'bg-purple-500',
     pink: 'bg-pink-500',
@@ -1061,7 +1061,7 @@ function UtilizationRow({ feature, percentage }: { feature: string; percentage: 
       </div>
       <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
         <div
-          className="h-full bg-teal-500 rounded-full transition-all duration-500"
+          className="h-full bg-primary rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>

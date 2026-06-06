@@ -345,7 +345,7 @@ export function MilestoneShareCard({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-[#F0EDE8] transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -394,7 +394,7 @@ export function MilestoneShareCard({
 
           <button
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-gray-700 bg-[#F0EDE8] hover:bg-[#E8E4DF] transition-all active:scale-95"
             aria-label="Download image"
           >
             <Download size={18} />

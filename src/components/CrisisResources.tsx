@@ -58,7 +58,7 @@ const CATEGORY_INFO = {
   technique: {
     label: 'Calming Techniques',
     icon: Heart,
-    color: 'bg-teal-500',
+    color: 'bg-primary',
     description: 'Strategies to help during difficult moments',
   },
   safety: {
@@ -191,7 +191,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             onClick={() => setActiveCategory('all')}
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeCategory === 'all'
-                ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400'
+                ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-primary'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
             }`}
           >
@@ -205,7 +205,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 onClick={() => setActiveCategory(category)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === category
-                    ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400'
+                    ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-teal-900/30 dark:text-primary'
                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
                 }`}
               >
@@ -347,7 +347,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                 {resource.phoneNumber && (
                   <a
                     href={`tel:${resource.phoneNumber}`}
-                    className="flex-1 inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors"
+                    className="flex-1 inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary text-white px-4 py-2.5 rounded-lg font-medium transition-colors"
                   >
                     <Phone className="w-4 h-4" />
                     Call {resource.phoneNumber}

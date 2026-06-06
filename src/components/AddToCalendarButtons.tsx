@@ -139,13 +139,13 @@ export function AddToCalendarButtons({
             target={b.provider !== 'apple' ? '_blank' : undefined}
             rel="noopener noreferrer"
             download={b.download}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:border-teal-300 hover:bg-teal-50/40 transition-colors text-left"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors text-left"
           >
             <span className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
               {b.icon}
             </span>
             <span className="text-sm font-medium text-slate-800 flex-1">{b.label} Calendar</span>
-            <span className="text-xs text-teal-600 font-semibold shrink-0">Add →</span>
+            <span className="text-xs text-[#6B9080] font-semibold shrink-0">Add →</span>
           </a>
         ))}
       </div>
@@ -167,7 +167,7 @@ export function AddToCalendarButtons({
             rel="noopener noreferrer"
             download={b.download}
             title={`Add to ${b.label} Calendar`}
-            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:border-teal-300 hover:bg-teal-50/40 transition-colors min-h-[60px] min-w-[60px]"
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/40 transition-colors min-h-[60px] min-w-[60px]"
             aria-label={`Add to ${b.label} Calendar`}
           >
             <span className="w-6 h-6 flex items-center justify-center">{b.icon}</span>

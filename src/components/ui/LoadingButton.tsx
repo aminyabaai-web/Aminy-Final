@@ -28,9 +28,9 @@ interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses = {
   primary: 'bg-cyan-600 text-white hover:bg-[#466379] disabled:bg-gray-300 disabled:text-gray-500',
-  secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:bg-gray-100 disabled:text-gray-400',
-  outline: 'border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-600/5 disabled:border-gray-300 disabled:text-gray-400',
-  ghost: 'text-gray-700 hover:bg-gray-100 disabled:text-gray-400',
+  secondary: 'bg-[#F0EDE8] text-gray-700 hover:bg-[#E8E4DF] disabled:bg-[#F0EDE8] disabled:text-gray-400',
+  outline: 'border-2 border-cyan-600 text-[#6B9080] hover:bg-cyan-600/5 disabled:border-gray-300 disabled:text-gray-400',
+  ghost: 'text-gray-700 hover:bg-[#F0EDE8] disabled:text-gray-400',
   danger: 'bg-red-600 text-white hover:bg-red-700 disabled:bg-gray-300 disabled:text-gray-500',
 };
 
@@ -109,7 +109,7 @@ export const InlineSpinner: React.FC<{
 
   return (
     <Loader2
-      className={`animate-spin text-cyan-600 ${sizeMap[size]} ${className}`}
+      className={`animate-spin text-[#6B9080] ${sizeMap[size]} ${className}`}
       aria-label="Loading"
     />
   );
@@ -124,7 +124,7 @@ export const LoadingPlaceholder: React.FC<{
   className?: string;
   variant?: 'text' | 'circle' | 'rect';
 }> = ({ width, height, className = '', variant = 'rect' }) => {
-  const baseClasses = 'animate-pulse bg-gray-200';
+  const baseClasses = 'animate-pulse bg-[#E8E4DF]';
 
   const variantStyles = {
     text: 'rounded h-4',

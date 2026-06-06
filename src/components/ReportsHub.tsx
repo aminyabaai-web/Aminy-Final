@@ -331,7 +331,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                         reportType === type
                           ? 'border-accent bg-accent/5'
                           : isLocked
-                          ? 'border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed'
+                          ? 'border-gray-200 bg-[#FAF7F2] opacity-50 cursor-not-allowed'
                           : 'border-gray-200 hover:border-accent/50'
                       }`}
                     >

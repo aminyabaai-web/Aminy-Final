@@ -78,7 +78,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
     { id: 'cpt-codes', icon: FileCode, label: 'CPT Codes Explained', color: 'text-purple-600 bg-purple-50' },
     { id: 'appeal', icon: FileText, label: 'Appeal Template', color: 'text-amber-600 bg-amber-50' },
     { id: 'single-case', icon: Handshake, label: 'Single-Case Agreement', color: 'text-green-600 bg-green-50' },
-    { id: 'medicaid', icon: Shield, label: 'Medicaid Waivers', color: 'text-teal-600 bg-teal-50' },
+    { id: 'medicaid', icon: Shield, label: 'Medicaid Waivers', color: 'text-[#6B9080] bg-[#6B9080]/10' },
     { id: 'state-waivers', icon: MapPin, label: 'State-by-State Guide', color: 'text-indigo-600 bg-indigo-50' },
   ];
 
@@ -104,7 +104,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="px-4 py-4 max-w-4xl mx-auto">
@@ -604,7 +604,7 @@ function MedicaidWaiverSection() {
 
   return (
     <div className="space-y-3 sm:space-y-4">
-      <Card className="p-4 bg-teal-50 border-teal-200">
+      <Card className="p-4 bg-[#6B9080]/10 border-[#6B9080]/20">
         <p className="text-sm text-teal-800">
           <strong>What are Medicaid Waivers?</strong> They allow states to provide services not typically covered by Medicaid, enabling care in homes and communities. Wait lists can be long (years in some states), so apply early.
         </p>

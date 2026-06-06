@@ -873,7 +873,7 @@ ${customBlock}${liveScreenContext}`;
                       <p className="text-sm font-semibold text-slate-900">Chat History</p>
                       <button
                         onClick={startNewChat}
-                        className="flex items-center gap-1.5 text-xs text-teal-600 font-medium px-3 py-1.5 bg-teal-50 rounded-full hover:bg-teal-100 transition-colors"
+                        className="flex items-center gap-1.5 text-xs text-[#6B9080] font-medium px-3 py-1.5 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         New Chat
@@ -964,7 +964,7 @@ ${customBlock}${liveScreenContext}`;
                               <p className="text-xs text-slate-500">{userContext.childAge}</p>
                             )}
                             {userContext?.diagnosis && (
-                              <p className="text-xs text-teal-700 font-medium mt-0.5">{userContext.diagnosis}</p>
+                              <p className="text-xs text-[#6B9080] font-medium mt-0.5">{userContext.diagnosis}</p>
                             )}
                           </div>
                           <div className="ml-auto shrink-0 text-right">
@@ -1018,7 +1018,7 @@ ${customBlock}${liveScreenContext}`;
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
                                   <p className="text-xs font-semibold text-slate-800">{p.name}</p>
-                                  {personality === p.id && <Check className="w-3 h-3 text-teal-600 shrink-0" />}
+                                  {personality === p.id && <Check className="w-3 h-3 text-[#6B9080] shrink-0" />}
                                 </div>
                                 <p className="text-[10px] text-slate-500 leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
                               </div>
@@ -1038,7 +1038,7 @@ ${customBlock}${liveScreenContext}`;
                                 setInstructionsDirty(false);
                                 toast.success('Instructions saved');
                               }}
-                              className="text-xs text-teal-600 font-semibold px-2.5 py-1 bg-teal-50 rounded-full hover:bg-teal-100 transition-colors"
+                              className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
                             >
                               Save
                             </button>
@@ -1062,7 +1062,7 @@ ${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400"
+                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
                               rows={4}
                             />
                           </div>
@@ -1083,7 +1083,7 @@ ${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."
-                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-teal-400"
+                              className="w-full text-sm text-slate-800 placeholder-slate-400 border border-slate-200 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
                               rows={3}
                             />
                           </div>
@@ -1113,14 +1113,14 @@ ${customBlock}${liveScreenContext}`;
                                 <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Wins</p>
                                 <div className="flex flex-wrap gap-1.5">
                                   {userContext.celebratingWins.map((w, i) => (
-                                    <span key={i} className="text-xs bg-teal-50 text-teal-700 px-2 py-0.5 rounded-full">{w}</span>
+                                    <span key={i} className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full">{w}</span>
                                   ))}
                                 </div>
                               </div>
                             )}
                             {userContext.lastCalmCue && (
                               <div className="px-3 py-2.5 flex items-center gap-2">
-                                <Sparkles className="w-3.5 h-3.5 text-teal-500 shrink-0" />
+                                <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
                                 <p className="text-xs text-slate-600">Last calm cue: <span className="font-medium text-slate-800">{userContext.lastCalmCue}</span></p>
                               </div>
                             )}

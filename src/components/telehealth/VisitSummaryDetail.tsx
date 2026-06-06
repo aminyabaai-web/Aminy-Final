@@ -56,7 +56,7 @@ export function VisitSummaryDetailScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-gray-700" />
@@ -72,7 +72,7 @@ export function VisitSummaryDetailScreen({
             {onShare && (
               <button
                 onClick={onShare}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
                 aria-label="Share"
               >
                 <Share2 className="w-5 h-5 text-gray-600" />
@@ -81,7 +81,7 @@ export function VisitSummaryDetailScreen({
             {onExport && (
               <button
                 onClick={onExport}
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
                 aria-label="Export"
               >
                 <Download className="w-5 h-5 text-gray-600" />
@@ -96,7 +96,7 @@ export function VisitSummaryDetailScreen({
         {/* Provider Card */}
         <div className="bg-white rounded-2xl border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+            <div className="w-12 h-12 rounded-full bg-[#E8E4DF] overflow-hidden flex-shrink-0">
               {provider.avatarUrl ? (
                 <img
                   src={provider.avatarUrl}
@@ -139,7 +139,7 @@ export function VisitSummaryDetailScreen({
           <ul className="space-y-3">
             {summary.whatWeDiscussed.map((item, index) => (
               <li key={index} className="flex gap-3">
-                <span className="text-cyan-600 font-medium">•</span>
+                <span className="text-[#6B9080] font-medium">•</span>
                 <span className="text-gray-700">{item}</span>
               </li>
             ))}
@@ -148,7 +148,7 @@ export function VisitSummaryDetailScreen({
 
         {/* Your Plan for Next 7 Days */}
         <section className="bg-cyan-600/5 rounded-2xl border border-cyan-600/20 p-4">
-          <h3 className="text-sm font-medium text-cyan-600 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-medium text-[#6B9080] mb-3 flex items-center gap-2">
             <ClipboardList className="w-4 h-4" />
             Your Plan for the Next 7 Days
           </h3>
@@ -172,7 +172,7 @@ export function VisitSummaryDetailScreen({
           </h3>
           <ul className="space-y-2">
             {summary.whatToTrack.map((item, index) => (
-              <li key={index} className="flex items-center gap-3 p-2 bg-gray-50 rounded-lg">
+              <li key={index} className="flex items-center gap-3 p-2 bg-[#FAF7F2] rounded-lg">
                 <div className="w-2 h-2 bg-cyan-600 rounded-full" />
                 <span className="text-gray-700 text-sm">{item}</span>
               </li>
@@ -192,7 +192,7 @@ export function VisitSummaryDetailScreen({
         )}
 
         {/* Legal Disclaimer */}
-        <div className="p-4 bg-gray-50 rounded-xl text-xs text-gray-500">
+        <div className="p-4 bg-[#FAF7F2] rounded-xl text-xs text-gray-500">
           <p className="font-medium text-gray-600 mb-1">Important Note</p>
           <p>
             This summary is for informational purposes and reflects the guidance provided during your

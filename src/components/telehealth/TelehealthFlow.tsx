@@ -106,7 +106,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
       <p className="text-center text-gray-600">Let's make sure everything is ready for your visit</p>
 
       <div className="space-y-4">
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
           <span className="text-2xl">{checking ? '\u23F3' : cameraReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Camera</p>
@@ -114,7 +114,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           </div>
         </div>
 
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
           <span className="text-2xl">{checking ? '\u23F3' : micReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Microphone</p>
@@ -122,7 +122,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           </div>
         </div>
 
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-gray-50">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
           <span className="text-2xl">{'connection' in navigator ? '\u2705' : '\u26A0\uFE0F'}</span>
           <div>
             <p className="font-medium">Internet Connection</p>
@@ -138,7 +138,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
         <button
           onClick={onReady}
           disabled={checking}
-          className="flex-1 py-3 px-4 rounded-lg bg-teal-600 text-white font-medium disabled:opacity-50"
+          className="flex-1 py-3 px-4 rounded-lg bg-primary text-white font-medium disabled:opacity-50"
         >
           {cameraReady && micReady ? 'Join Call' : 'Continue Anyway'}
         </button>
@@ -363,7 +363,7 @@ export function TelehealthFlow({
         <div className="min-h-screen bg-[#F5F5F5]">
           <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
             <div className="flex items-center gap-3">
-              <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-gray-100">
+              <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
                 <ArrowLeft className="w-5 h-5 text-gray-700" />
               </button>
               <div>
@@ -478,7 +478,7 @@ export function TelehealthFlow({
         <div className="min-h-screen bg-[#F5F5F5]">
           <header className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 py-3">
             <div className="flex items-center gap-3">
-              <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-gray-100">
+              <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
                 <ArrowLeft className="w-5 h-5 text-gray-700" />
               </button>
               <div>

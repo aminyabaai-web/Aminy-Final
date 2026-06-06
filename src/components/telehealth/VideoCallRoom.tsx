@@ -559,8 +559,8 @@ export function VideoCall({
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <Card className="max-w-md w-full p-8 text-center">
-          <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Video className="w-8 h-8 text-teal-600" />
+          <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Video className="w-8 h-8 text-[#6B9080]" />
           </div>
           <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
             Ready to Join?
@@ -587,7 +587,7 @@ export function VideoCall({
 
           <Button
             size="lg"
-            className="w-full bg-teal-600 hover:bg-teal-700"
+            className="w-full bg-primary hover:bg-[#6B9080]"
             onClick={initializeCall}
           >
             <Video className="w-5 h-5 mr-2" />
@@ -603,7 +603,7 @@ export function VideoCall({
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-[#6B9080] animate-spin mx-auto mb-4" />
           <p className="text-white text-lg">
             {callState === 'loading' ? 'Setting up your call...' : 'Joining session...'}
           </p>
@@ -635,7 +635,7 @@ export function VideoCall({
               Go Back
             </Button>
             <Button
-              className="flex-1 bg-teal-600 hover:bg-teal-700"
+              className="flex-1 bg-primary hover:bg-[#6B9080]"
               onClick={initializeCall}
             >
               Try Again
@@ -729,7 +729,7 @@ export function VideoCall({
           {participants.filter(p => !p.isLocal).length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
               <div className="text-center">
-                <Loader2 className="w-12 h-12 text-teal-600 animate-spin mx-auto mb-4" />
+                <Loader2 className="w-12 h-12 text-[#6B9080] animate-spin mx-auto mb-4" />
                 <p className="text-white text-lg">
                   Waiting for {isProvider ? 'parent' : 'provider'} to join...
                 </p>
@@ -777,7 +777,7 @@ export function VideoCall({
                   >
                     <div
                       className={`max-w-[80%] rounded-lg px-3 py-2 text-white ${
-                        msg.isLocal ? 'bg-teal-600' : ''
+                        msg.isLocal ? 'bg-primary' : ''
                       }`}
                       style={msg.isLocal ? undefined : { backgroundColor: '#374151' }}
                     >
@@ -815,7 +815,7 @@ export function VideoCall({
                 <Button
                   onClick={sendChatMessage}
                   disabled={!chatInput.trim()}
-                  className="bg-teal-600 hover:bg-teal-700 rounded-lg"
+                  className="bg-primary hover:bg-[#6B9080] rounded-lg"
                 >
                   <Send className="w-5 h-5" />
                 </Button>
@@ -849,7 +849,7 @@ export function VideoCall({
               </p>
               <button
                 onClick={() => { setShowNotes(false); }}
-                className="mt-2 w-full py-2 bg-teal-600 text-white rounded-lg text-sm font-medium"
+                className="mt-2 w-full py-2 bg-primary text-white rounded-lg text-sm font-medium"
               >
                 Done
               </button>
@@ -895,7 +895,7 @@ export function VideoCall({
           <Button
             size="lg"
             variant={screenShareEnabled ? 'default' : 'secondary'}
-            className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 ${screenShareEnabled ? 'bg-teal-600' : ''}`}
+            className={`rounded-full w-12 h-12 sm:w-14 sm:h-14 ${screenShareEnabled ? 'bg-primary' : ''}`}
             onClick={toggleScreenShare}
             aria-label={screenShareEnabled ? 'Stop screen sharing' : 'Share screen'}
           >

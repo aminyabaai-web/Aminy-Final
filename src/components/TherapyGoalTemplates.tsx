@@ -303,7 +303,7 @@ const DISCIPLINE_INFO: Record<TherapyDiscipline, { name: string; icon: React.Ele
   slp: { name: 'Speech-Language', icon: MessageCircle, color: 'text-blue-600 bg-blue-100' },
   ot: { name: 'Occupational Therapy', icon: Hand, color: 'text-green-600 bg-green-100' },
   mental_health: { name: 'Mental Health', icon: Brain, color: 'text-purple-600 bg-purple-100' },
-  aba: { name: 'ABA', icon: Target, color: 'text-teal-600 bg-teal-100' },
+  aba: { name: 'ABA', icon: Target, color: 'text-[#6B9080] bg-[#6B9080]/10' },
 };
 
 // ============================================
@@ -540,7 +540,7 @@ export function TherapyGoalTemplates({
                               e.stopPropagation();
                               handleSelectGoal(template);
                             }}
-                            className="w-full bg-teal-600 hover:bg-teal-700"
+                            className="w-full bg-primary hover:bg-[#6B9080]"
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Add This Goal to Care Plan

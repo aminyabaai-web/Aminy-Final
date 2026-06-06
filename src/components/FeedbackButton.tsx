@@ -64,7 +64,7 @@ export function FeedbackButton() {
         aria-label="Send feedback"
         title="Send feedback"
       >
-        <MessageCircle className="w-5 h-5 text-teal-600 group-hover:scale-110 transition-transform" />
+        <MessageCircle className="w-5 h-5 text-[#6B9080] group-hover:scale-110 transition-transform" />
         <span className="hidden text-sm font-medium sm:inline">Feedback</span>
       </button>
 
@@ -83,7 +83,7 @@ export function FeedbackButton() {
               <button
                 onClick={handleClose}
                 aria-label="Close feedback"
-                className="h-11 w-11 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center"
+                className="h-11 w-11 hover:bg-[#F0EDE8] rounded-full transition-colors flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -98,7 +98,7 @@ export function FeedbackButton() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedType === type
                       ? 'bg-gray-900 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-[#F0EDE8] text-gray-600 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <span className={selectedType === type ? 'text-white' : color}>
@@ -136,7 +136,7 @@ export function FeedbackButton() {
             <Button
               onClick={handleSubmit}
               disabled={isSubmitting || !message.trim()}
-              className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700"
+              className="w-full bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] hover:from-teal-700 hover:to-cyan-700"
             >
               <Send className="w-4 h-4 mr-2" />
               {isSubmitting ? 'Sending...' : 'Send Feedback'}

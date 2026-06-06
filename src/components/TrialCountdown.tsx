@@ -83,7 +83,7 @@ export function TrialCountdown({
   const bgColors = {
     critical: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800',
     high: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800',
-    medium: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800',
+    medium: 'bg-[#6B9080]/10 dark:bg-teal-950/30 border-[#6B9080]/20 dark:border-teal-800',
     low: 'bg-violet-50 dark:bg-violet-950/30 border-violet-200 dark:border-violet-800',
   };
 

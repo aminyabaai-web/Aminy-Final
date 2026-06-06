@@ -370,12 +370,12 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
   // ---- Render ----
 
   return (
-    <div className="h-full flex flex-col bg-gray-50">
+    <div className="h-full flex flex-col bg-[#FAF7F2]">
       {/* Header */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-shrink-0">
         <button
           onClick={onBack}
-          className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -386,7 +386,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
         <div className="flex gap-1.5">
           <button
             onClick={handleResetSchedule}
-            className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
             aria-label="Reset schedule"
           >
             <RotateCcw className="w-4 h-4 text-gray-600" />
@@ -402,7 +402,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'schedule'
                 ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-gray-600'
             }`}
           >
             <Clock className="w-4 h-4 inline mr-1" />
@@ -413,7 +413,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'first-then'
                 ? 'bg-purple-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-gray-600'
             }`}
           >
             <ChevronRight className="w-4 h-4 inline mr-1" />
@@ -424,7 +424,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
             className={`flex-1 py-2 rounded-xl text-sm font-medium transition-colors ${
               view === 'templates'
                 ? 'bg-green-500 text-white'
-                : 'bg-gray-100 text-gray-600'
+                : 'bg-[#F0EDE8] text-gray-600'
             }`}
           >
             <Sparkles className="w-4 h-4 inline mr-1" />
@@ -463,7 +463,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                 resetTimer();
                 setTimerRunning(false);
               }}
-              className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center"
+              className="w-9 h-9 rounded-full bg-[#E8E4DF] flex items-center justify-center"
             >
               <RotateCcw className="w-4 h-4 text-gray-600" />
             </button>
@@ -524,7 +524,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                       onDragEnd={handleDragEnd}
                       className={`
                         flex items-center gap-3 p-3 rounded-2xl border-2 transition-all
-                        ${isDone ? 'bg-gray-50 border-gray-200 opacity-60' : ''}
+                        ${isDone ? 'bg-[#FAF7F2] border-gray-200 opacity-60' : ''}
                         ${isCurrent ? 'bg-blue-50 border-blue-400 vs-current-pulse' : ''}
                         ${!isDone && !isCurrent ? 'bg-white border-gray-200' : ''}
                         ${isDragging ? 'opacity-50 scale-95' : ''}
@@ -544,7 +544,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                       <div className="flex-shrink-0 relative">
                         {/* Connecting line */}
                         {index < items.length - 1 && (
-                          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-4 bg-gray-200" />
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-4 bg-[#E8E4DF]" />
                         )}
                         <div
                           className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
@@ -552,7 +552,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                               ? 'bg-green-100'
                               : isCurrent
                               ? 'bg-blue-100'
-                              : 'bg-gray-100'
+                              : 'bg-[#F0EDE8]'
                           }`}
                         >
                           {isDone ? (
@@ -592,7 +592,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                             className={`w-10 h-10 rounded-full flex items-center justify-center ${
                               isCurrent
                                 ? 'bg-green-500 text-white'
-                                : 'bg-gray-100 text-gray-500'
+                                : 'bg-[#F0EDE8] text-gray-500'
                             }`}
                             aria-label={`Mark ${item.label} as done`}
                           >
@@ -601,14 +601,14 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                         )}
                         <button
                           onClick={() => startEditItem(item)}
-                          className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
                           aria-label={`Edit ${item.label}`}
                         >
                           <Edit3 className="w-3.5 h-3.5 text-gray-400" />
                         </button>
                         <button
                           onClick={() => handleDeleteItem(item.id)}
-                          className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                          className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
                           aria-label={`Delete ${item.label}`}
                         >
                           <Trash2 className="w-3.5 h-3.5 text-gray-400" />
@@ -662,7 +662,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
 
             {/* Arrow */}
             <div className="flex items-center justify-center">
-              <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-[#E8E4DF] flex items-center justify-center">
                 <ChevronRight className="w-6 h-6 text-gray-500 rotate-90" />
               </div>
             </div>
@@ -729,7 +729,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   {template.items.map((item, i) => (
                     <span
                       key={i}
-                      className="bg-gray-100 px-2 py-1 rounded-lg text-xs text-gray-600"
+                      className="bg-[#F0EDE8] px-2 py-1 rounded-lg text-xs text-gray-600"
                     >
                       {item.emoji} {item.label}
                     </span>
@@ -763,7 +763,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   setShowAddItem(false);
                   setEditingItem(null);
                 }}
-                className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>

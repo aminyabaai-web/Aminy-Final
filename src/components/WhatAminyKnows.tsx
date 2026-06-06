@@ -438,7 +438,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: index * 0.05 }}
-                            className="p-4 hover:bg-gray-50/50 transition-colors group"
+                            className="p-4 hover:bg-[#FAF7F2]/50 transition-colors group"
                           >
                             <div className="flex items-start gap-3">
                               <div className="flex-1">
@@ -500,7 +500,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
           transition={{ delay: 0.5 }}
           className="mt-8 text-center"
         >
-          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-gray-50 px-4 py-2 rounded-full">
+          <div className="inline-flex items-center gap-2 text-sm text-muted-foreground bg-[#FAF7F2] px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 text-green-600" />
             This data is private and encrypted
           </div>

@@ -226,7 +226,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
               <button
                 key={t.id}
                 onClick={() => setActiveThread(t)}
-                className="w-full text-left bg-white border border-slate-100 rounded-2xl p-3 hover:border-teal-300 transition-colors"
+                className="w-full text-left bg-white border border-slate-100 rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <p className="text-sm text-slate-800 line-clamp-2 flex-1">{t.question}</p>

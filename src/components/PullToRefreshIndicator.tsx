@@ -59,7 +59,7 @@ export function PullToRefreshIndicator({
         {isRefreshing ? (
           // Spinning loader during refresh
           <svg
-            className="h-6 w-6 animate-spin text-cyan-600"
+            className="h-6 w-6 animate-spin text-[#6B9080]"
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -83,7 +83,7 @@ export function PullToRefreshIndicator({
           // Arrow that flips when threshold is reached
           <svg
             className={`h-6 w-6 transition-colors duration-150 ${
-              canRefresh ? 'text-cyan-600' : 'text-gray-400'
+              canRefresh ? 'text-[#6B9080]' : 'text-gray-400'
             }`}
             viewBox="0 0 24 24"
             fill="none"

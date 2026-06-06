@@ -149,7 +149,7 @@ export function ROICalculator() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
-      <div className="bg-teal-600 dark:bg-teal-700 py-12 px-4">
+      <div className="bg-primary dark:bg-teal-700 py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 rounded-full text-white/90 text-sm mb-4">
             <Calculator className="w-4 h-4" />
@@ -180,7 +180,7 @@ export function ROICalculator() {
                   <Label className="text-gray-700 dark:text-gray-300">
                     Number of Members with ASD/ADHD
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.memberCount.toLocaleString()}
                   </span>
                 </div>
@@ -204,7 +204,7 @@ export function ROICalculator() {
                   <Label className="text-gray-700 dark:text-gray-300">
                     ER Visits per Year (behavioral/crisis)
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.currentERVisitsPerYear}
                   </span>
                 </div>
@@ -227,7 +227,7 @@ export function ROICalculator() {
                   <Label className="text-gray-700 dark:text-gray-300">
                     Crisis Interventions per Year
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.currentCrisisInterventions}
                   </span>
                 </div>
@@ -250,7 +250,7 @@ export function ROICalculator() {
                   <Label className="text-gray-700 dark:text-gray-300">
                     Care Coordinator Calls per Year
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.careCoordinatorCalls.toLocaleString()}
                   </span>
                 </div>
@@ -273,7 +273,7 @@ export function ROICalculator() {
                   <Label className="text-gray-700 dark:text-gray-300">
                     Avg ABA Hours per Member/Week
                   </Label>
-                  <span className="font-semibold text-teal-600">
+                  <span className="font-semibold text-[#6B9080]">
                     {inputs.avgABAHoursPerWeek} hours
                   </span>
                 </div>
@@ -302,7 +302,7 @@ export function ROICalculator() {
               <p className="text-4xl font-bold mb-4">
                 {formatCurrency(results.netSavings)}
               </p>
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-teal-400/30">
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[#6B9080]/30">
                 <div>
                   <p className="text-teal-100 text-sm">ROI</p>
                   <p className="text-2xl font-bold">
@@ -506,12 +506,12 @@ function AssumptionCard({
   source: string;
 }) {
   return (
-    <div className="p-4 bg-gray-50 dark:bg-slate-800/50 rounded-lg">
+    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-teal-600" />
+        <Icon className="w-4 h-4 text-[#6B9080]" />
         <span className="font-medium text-gray-900 dark:text-white">{title}</span>
       </div>
-      <p className="text-lg font-semibold text-teal-600">{value}</p>
+      <p className="text-lg font-semibold text-[#6B9080]">{value}</p>
       <p className="text-xs text-gray-400 mt-1">{source}</p>
     </div>
   );

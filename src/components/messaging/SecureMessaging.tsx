@@ -573,7 +573,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 {onBack && (
                   <button
                     onClick={onBack}
-                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -585,21 +585,21 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   <h2 className="sr-only">Message overview</h2>
                   <h3 className="sr-only">Threads and recent conversations</h3>
                   {totalUnread > 0 && (
-                    <p className="text-sm text-teal-600">{totalUnread} unread</p>
+                    <p className="text-sm text-[#6B9080]">{totalUnread} unread</p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowSearch(!showSearch)}
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <Search className="w-5 h-5 text-gray-500" />
                 </button>
                 <button
                   onClick={handleFindProvider}
                   aria-label="New conversation"
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <Plus className="w-5 h-5 text-gray-500" />
                 </button>
@@ -614,7 +614,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   placeholder="Search messages..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 bg-gray-100 dark:bg-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-4 py-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                   autoFocus
                 />
               </div>
@@ -637,11 +637,11 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               <button
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
-                className="w-full p-4 border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
+                className="w-full p-4 border-b border-gray-100 dark:border-slate-700 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
               >
                 {/* Avatar */}
                 <div className="relative flex-shrink-0">
-                  <div className="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center">
                     <span className="text-white font-medium text-lg">
                       {thread.provider.name.charAt(0)}
                     </span>
@@ -659,7 +659,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                         {thread.provider.name}
                       </span>
                       {thread.provider.isVerified && (
-                        <Shield className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                        <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                       )}
                     </div>
                     <span className="text-xs text-gray-400 flex-shrink-0">
@@ -674,7 +674,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
 
                 {/* Unread badge */}
                 {thread.unreadCount > 0 && (
-                  <div className="flex-shrink-0 w-5 h-5 bg-teal-500 rounded-full flex items-center justify-center">
+                  <div className="flex-shrink-0 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">{thread.unreadCount}</span>
                   </div>
                 )}
@@ -688,14 +688,14 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
 
   // Message Thread View
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 flex flex-col">
       {/* Thread Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSelectedThread(null)}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -703,7 +703,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
             {/* Provider Info */}
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div className="relative flex-shrink-0">
-                <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center">
                   <span className="text-white font-medium">
                     {selectedThread.provider.name.charAt(0)}
                   </span>
@@ -718,7 +718,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     {selectedThread.provider.name}
                   </span>
                   {selectedThread.provider.isVerified && (
-                    <Shield className="w-4 h-4 text-teal-500 flex-shrink-0" />
+                    <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                   )}
                 </div>
                 <p className="text-xs text-gray-500 truncate">
@@ -731,7 +731,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
             <div className="relative">
               <button
                 onClick={() => setShowThreadMenu(!showThreadMenu)}
-                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <MoreVertical className="w-5 h-5 text-gray-500" />
               </button>
@@ -745,7 +745,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-200 dark:border-slate-700 z-20 py-2">
                     <button
                       onClick={toggleMute}
-                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-slate-700 text-left"
+                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
                     >
                       {selectedThread.isMuted ? (
                         <>
@@ -761,7 +761,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     </button>
                     <button
                       onClick={archiveThread}
-                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-slate-700 text-left"
+                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
                     >
                       <Archive className="w-4 h-4 text-gray-500" />
                       <span className="text-sm">Archive</span>
@@ -788,7 +788,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               >
                 {/* Avatar */}
                 {!isOwn && showAvatar && (
-                  <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-medium">
                       {selectedThread.provider.name.charAt(0)}
                     </span>
@@ -802,7 +802,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     className={`
                       px-4 py-2.5 rounded-2xl
                       ${isOwn
-                        ? 'bg-teal-500 text-white rounded-tr-md'
+                        ? 'bg-primary text-white rounded-tr-md'
                         : 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-tl-md shadow-sm'
                       }
                     `}
@@ -820,7 +820,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                         {message.status === 'sending' && <Clock className="w-3 h-3" />}
                         {message.status === 'sent' && <Check className="w-3 h-3" />}
                         {message.status === 'delivered' && <CheckCheck className="w-3 h-3" />}
-                        {message.status === 'read' && <CheckCheck className="w-3 h-3 text-teal-500" />}
+                        {message.status === 'read' && <CheckCheck className="w-3 h-3 text-primary" />}
                       </span>
                     )}
                   </div>
@@ -854,13 +854,13 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
             <button
               onClick={() => toast('Attachments are coming soon.')}
               aria-label="Attach a file"
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
+              className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
             >
               <Paperclip className="w-5 h-5 text-gray-500" />
             </button>
 
             {/* Input */}
-            <div className="flex-1 bg-gray-100 dark:bg-slate-700 rounded-2xl px-4 py-2">
+            <div className="flex-1 bg-[#F0EDE8] dark:bg-slate-700 rounded-2xl px-4 py-2">
               <textarea
                 ref={inputRef}
                 value={newMessage}
@@ -880,8 +880,8 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               className={`
                 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-colors
                 ${newMessage.trim()
-                  ? 'bg-teal-500 text-white hover:bg-teal-600'
-                  : 'bg-gray-100 dark:bg-slate-700 text-gray-400'
+                  ? 'bg-primary text-white hover:bg-primary'
+                  : 'bg-[#F0EDE8] dark:bg-slate-700 text-gray-400'
                 }
               `}
             >

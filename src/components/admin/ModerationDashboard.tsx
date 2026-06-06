@@ -479,7 +479,7 @@ export function ModerationDashboard() {
             variant={filter === f ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter(f)}
-            className={filter === f ? 'bg-teal-600 hover:bg-teal-700' : ''}
+            className={filter === f ? 'bg-primary hover:bg-[#6B9080]' : ''}
           >
             {f === 'pending' && <Clock className="w-4 h-4 mr-1" />}
             {f === 'escalated' && <AlertTriangle className="w-4 h-4 mr-1" />}
@@ -495,7 +495,7 @@ export function ModerationDashboard() {
       <div className="space-y-3">
         {isLoading ? (
           <Card className="p-12 flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#6B9080]" />
           </Card>
         ) : filteredQueue.length === 0 ? (
           <Card className="p-12 text-center">

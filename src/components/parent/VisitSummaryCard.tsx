@@ -155,7 +155,7 @@ export function VisitSummaryCard({
           {!acknowledged && (
             <Button
               onClick={handleAcknowledge}
-              className="gap-2 bg-teal-600 hover:bg-teal-700 text-white flex-1 sm:flex-none"
+              className="gap-2 bg-primary hover:bg-[#6B9080] text-white flex-1 sm:flex-none"
             >
               <Heart className="w-4 h-4" />
               Acknowledge

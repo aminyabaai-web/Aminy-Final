@@ -76,7 +76,7 @@ function ClaimCard({
   return (
     <div
       className={`bg-white rounded-2xl border transition-all shadow-sm overflow-hidden ${
-        selected ? 'border-teal-400 ring-2 ring-teal-100' :
+        selected ? 'border-[#6B9080] ring-2 ring-teal-100' :
         item.status === 'blocked' ? 'border-red-200' :
         item.status === 'submitted' ? 'border-blue-200' :
         'border-gray-100'
@@ -88,7 +88,7 @@ function ClaimCard({
             <button
               onClick={onToggle}
               className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
-                selected ? 'bg-teal-500 border-teal-500' : 'border-gray-300 bg-white'
+                selected ? 'bg-primary border-[#6B9080]' : 'border-gray-300 bg-white'
               }`}
             >
               {selected && <Check size={11} className="text-white" />}
@@ -114,7 +114,7 @@ function ClaimCard({
             </div>
 
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
+              <span className="text-xs bg-[#F0EDE8] text-gray-600 px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
               <span className="text-xs text-gray-500">{item.payerName}</span>
             </div>
 
@@ -242,7 +242,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
         <div className="flex items-center gap-3 mb-4">
@@ -299,13 +299,13 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-1.5 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
                 tab === t.id
-                  ? 'border-teal-500 text-teal-600'
+                  ? 'border-[#6B9080] text-[#6B9080]'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
               {t.label}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                tab === t.id ? 'bg-teal-100 text-teal-700' : 'bg-gray-100 text-gray-500'
+                tab === t.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-gray-500'
               }`}>
                 {count}
               </span>
@@ -320,7 +320,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           <div className="flex items-center justify-between">
             <button
               onClick={handleSelectAll}
-              className="text-xs text-teal-600 font-medium flex items-center gap-1.5"
+              className="text-xs text-[#6B9080] font-medium flex items-center gap-1.5"
             >
               <Layers size={13} />
               {selectedIds.size === filteredClaims.length ? 'Deselect all' : 'Select all'}
@@ -345,7 +345,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         {/* Claims list */}
         {claims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+            <div className="w-14 h-14 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
               <FileText size={26} className="text-gray-400" />
             </div>
             <p className="text-sm font-semibold text-gray-700">No claims yet</p>
@@ -387,7 +387,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
             </div>
             <button
               onClick={() => setShowConfirmModal(true)}
-              className="flex items-center gap-2 bg-teal-600 text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-teal-700 transition-colors"
+              className="flex items-center gap-2 bg-primary text-white font-semibold text-sm px-5 py-3 rounded-xl hover:bg-[#6B9080] transition-colors"
             >
               <Send size={15} />
               Submit Batch
@@ -418,7 +418,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
                 {Array.from(new Set(selectedClaims.map(c => c.payerName))).join(', ')}.
               </p>
 
-              <div className="bg-gray-50 rounded-xl p-3 mb-4 space-y-1">
+              <div className="bg-[#FAF7F2] rounded-xl p-3 mb-4 space-y-1">
                 {selectedClaims.map(c => (
                   <div key={c.id} className="flex items-center justify-between text-xs">
                     <span className="text-gray-600">{c.clientName} · {c.cptCode}</span>
@@ -442,7 +442,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
                 </button>
                 <button
                   onClick={handleBatchSubmit}
-                  className="flex-1 py-3 bg-teal-600 text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2"
                 >
                   <Send size={15} />
                   Submit {selectedIds.size} Claims

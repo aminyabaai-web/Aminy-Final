@@ -191,7 +191,7 @@ export function BCBASessionBriefing({
   }) => (
     <button
       onClick={() => toggleSection(id)}
-      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+      className="w-full flex items-center justify-between p-3 hover:bg-[#FAF7F2] rounded-lg transition-colors"
     >
       <div className="flex items-center gap-3">
         <div className={`p-2 rounded-lg ${color}`}>
@@ -229,7 +229,7 @@ export function BCBASessionBriefing({
         <div className="px-4 mt-4">
           <Card className="p-8">
             <div className="flex flex-col items-center justify-center text-center">
-              <div className="w-12 h-12 border-3 border-teal-500 border-t-transparent rounded-full animate-spin mb-4" />
+              <div className="w-12 h-12 border-3 border-[#6B9080] border-t-transparent rounded-full animate-spin mb-4" />
               <h3 className="font-medium text-gray-900 mb-2">Preparing Your Briefing</h3>
               <p className="text-sm text-gray-500">
                 Analyzing {childName}'s data, progress, and recent activity...
@@ -270,11 +270,11 @@ export function BCBASessionBriefing({
       {PageHeader}
       <div className="space-y-3 sm:space-y-4 sm:space-y-6 px-4 mt-4">
       {/* Header */}
-      <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-teal-200">
+      <Card className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 border-[#6B9080]/20">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-teal-100 rounded-xl">
-              <Brain className="w-6 h-6 text-teal-600" />
+            <div className="p-3 bg-[#6B9080]/10 rounded-xl">
+              <Brain className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
@@ -285,7 +285,7 @@ export function BCBASessionBriefing({
               </p>
             </div>
           </div>
-          <Badge className="bg-teal-100 text-teal-700">
+          <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
             <Sparkles className="w-3 h-3 mr-1" />
             AI-Generated
           </Badge>
@@ -334,7 +334,7 @@ export function BCBASessionBriefing({
       {/* Progress At A Glance */}
       <Card className="p-3 sm:p-4">
         <h3 className="font-medium text-gray-900 mb-4 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-teal-600" />
+          <TrendingUp className="w-4 h-4 text-[#6B9080]" />
           Recent Progress
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -344,7 +344,7 @@ export function BCBASessionBriefing({
               className={`p-3 rounded-lg border ${
                 item.trend === 'up' ? 'bg-green-50 border-green-200' :
                 item.trend === 'down' ? 'bg-red-50 border-red-200' :
-                'bg-gray-50 border-gray-200'
+                'bg-[#FAF7F2] border-gray-200'
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -429,20 +429,20 @@ export function BCBASessionBriefing({
       </Card>
 
       {/* Recommended Guidance */}
-      <Card className="overflow-hidden border-teal-200 bg-teal-50/30">
+      <Card className="overflow-hidden border-[#6B9080]/20 bg-[#6B9080]/10/30">
         <SectionHeader
           id="guidance"
           icon={Target}
           title="Recommended Guidance for Parent"
           count={briefing.recommendedGuidance.length}
-          color="bg-teal-100 text-teal-700"
+          color="bg-[#6B9080]/10 text-[#6B9080]"
         />
         {expandedSections.has('guidance') && (
           <div className="px-4 pb-4">
             <ul className="space-y-2">
               {briefing.recommendedGuidance.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-gray-700">
-                  <Target className="w-4 h-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                  <Target className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                   {item}
                 </li>
               ))}
@@ -481,7 +481,7 @@ export function BCBASessionBriefing({
           icon={FileText}
           title="From Documents (Vault)"
           count={briefing.vaultInsights.length}
-          color="bg-gray-100 text-gray-700"
+          color="bg-[#F0EDE8] text-gray-700"
         />
         {expandedSections.has('vault') && (
           <div className="px-4 pb-4">
@@ -519,7 +519,7 @@ export function BCBASessionBriefing({
       {onStartSession && (
         <Button
           onClick={onStartSession}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-6"
+          className="w-full bg-primary hover:bg-[#6B9080] text-white py-6"
           size="lg"
         >
           <Clock className="w-5 h-5 mr-2" />

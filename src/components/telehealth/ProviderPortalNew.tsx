@@ -274,9 +274,9 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-cyan-600 animate-spin mx-auto mb-3" />
+          <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-gray-600">Loading your portal...</p>
         </div>
       </div>
@@ -286,7 +286,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Error state
   if (loadError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-gray-900 mb-2">Unable to Load Portal</h2>
@@ -303,7 +303,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Top Bar */}
       <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -339,7 +339,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-[#F0EDE8] rounded-lg transition-colors"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -364,8 +364,8 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   onClick={() => setActiveTab(id as PortalTab)}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     activeTab === id
-                      ? 'bg-cyan-600/10 text-cyan-600 border-l-4 border-cyan-600'
-                      : 'text-gray-600 hover:bg-gray-50 border-l-4 border-transparent'
+                      ? 'bg-cyan-600/10 text-[#6B9080] border-l-4 border-cyan-600'
+                      : 'text-gray-600 hover:bg-[#FAF7F2] border-l-4 border-transparent'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -498,7 +498,7 @@ function ProfileTab({
           </div>
           <button
             onClick={() => setShowStateSelector(!showStateSelector)}
-            className="text-sm text-cyan-600 font-medium hover:underline"
+            className="text-sm text-[#6B9080] font-medium hover:underline"
           >
             {showStateSelector ? 'Done' : 'Edit States'}
           </button>
@@ -511,15 +511,15 @@ function ProfileTab({
                 key={state.code}
                 className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
                   provider.licensedStates.includes(state.code)
-                    ? 'bg-cyan-600/10 text-cyan-600'
-                    : 'hover:bg-gray-50'
+                    ? 'bg-cyan-600/10 text-[#6B9080]'
+                    : 'hover:bg-[#FAF7F2]'
                 }`}
               >
                 <input
                   type="checkbox"
                   checked={provider.licensedStates.includes(state.code)}
                   onChange={() => toggleState(state.code)}
-                  className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                  className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
                 />
                 <span className="text-sm">{state.code}</span>
               </label>
@@ -531,7 +531,7 @@ function ProfileTab({
               provider.licensedStates.map((code) => (
                 <span
                   key={code}
-                  className="px-3 py-1 bg-cyan-600/10 text-cyan-600 text-sm font-medium rounded-full"
+                  className="px-3 py-1 bg-cyan-600/10 text-[#6B9080] text-sm font-medium rounded-full"
                 >
                   {code}
                 </span>
@@ -548,13 +548,13 @@ function ProfileTab({
         <h2 className="text-lg font-semibold text-gray-900 mb-4 sm:mb-6">Pricing & Services</h2>
 
         <div className="space-y-3 sm:space-y-4">
-          <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={provider.offersConsult}
                 onChange={(e) => onUpdate({ ...provider, offersConsult: e.target.checked })}
-                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
               />
               <div>
                 <p className="font-medium text-gray-900">25-min Consult</p>
@@ -572,13 +572,13 @@ function ProfileTab({
             </div>
           </label>
 
-          <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={provider.offersDeepReview}
                 onChange={(e) => onUpdate({ ...provider, offersDeepReview: e.target.checked })}
-                className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
               />
               <div>
                 <p className="font-medium text-gray-900">50-min Deep Review</p>
@@ -664,7 +664,7 @@ function AvailabilityTab({
             const dayBlocks = byDay[value] || [];
 
             return (
-              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
+              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
                 <div className="w-28 flex-shrink-0">
                   <p className="font-medium text-gray-900">{label}</p>
                 </div>
@@ -710,7 +710,7 @@ function AvailabilityTab({
             <h2 className="text-lg font-semibold text-gray-900">Time Off</h2>
             <p className="text-sm text-gray-500">Block dates when you're unavailable</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 font-medium rounded-lg hover:bg-[#FAF7F2] transition-colors">
             <Plus className="w-4 h-4" />
             Add Time Off
           </button>
@@ -745,9 +745,9 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
       {appointments.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-gray-50 rounded-lg">
+            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
               <div className="w-12 h-12 bg-cyan-600/10 rounded-full flex items-center justify-center">
-                <Video className="w-6 h-6 text-cyan-600" />
+                <Video className="w-6 h-6 text-[#6B9080]" />
               </div>
               <div className="flex-1">
                 <p className="font-medium text-gray-900">{apt.visitReason}</p>
@@ -762,7 +762,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
                 }`}>
                   {apt.status}
                 </span>
-                <button className="p-2 text-cyan-600 hover:bg-cyan-600/10 rounded-lg transition-colors">
+                <button className="p-2 text-[#6B9080] hover:bg-cyan-600/10 rounded-lg transition-colors">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>

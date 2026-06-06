@@ -88,9 +88,9 @@ const EVENT_TYPE_LABELS: Record<string, { label: string; color: string }> = {
 };
 
 const PLAN_COLORS: Record<string, string> = {
-  free: 'bg-gray-200',
+  free: 'bg-[#E8E4DF]',
   starter: 'bg-teal-400',
-  core: 'bg-teal-500',
+  core: 'bg-primary',
   pro: 'bg-blue-500',
   proplus: 'bg-purple-500',
 };
@@ -112,7 +112,7 @@ function RevenueDashboardAccessDenied({ onBack }: { onBack?: () => void }) {
       {onBack && (
         <button
           onClick={onBack}
-          className="text-sm text-teal-600 hover:text-teal-700 font-medium"
+          className="text-sm text-[#6B9080] hover:text-[#6B9080] font-medium"
         >
           &larr; Go Back
         </button>
@@ -134,7 +134,7 @@ export function StripeRevenueDashboard({ onBack }: StripeRevenueDashboardProps) 
       fallback={<RevenueDashboardAccessDenied onBack={onBack} />}
       loadingFallback={
         <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col items-center gap-3">
-          <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+          <Loader2 className="w-8 h-8 text-primary animate-spin" />
           <p className="text-sm text-gray-500">Verifying access...</p>
         </div>
       }
@@ -224,7 +224,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col items-center gap-3">
-        <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
         <p className="text-sm text-gray-500">Loading revenue data...</p>
       </div>
     );
@@ -235,7 +235,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col items-center gap-3">
         <AlertTriangle className="w-8 h-8 text-amber-500" />
         <p className="text-sm text-red-600">{error}</p>
-        <button onClick={handleRefresh} className="text-sm text-teal-600 hover:text-teal-700 font-medium">
+        <button onClick={handleRefresh} className="text-sm text-[#6B9080] hover:text-[#6B9080] font-medium">
           Retry
         </button>
       </div>
@@ -271,7 +271,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       </div>
 
       {/* Time range selector */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+      <div className="flex gap-1 bg-[#F0EDE8] rounded-lg p-1">
         {(['7d', '30d', '90d', 'all'] as TimeRange[]).map((range) => (
           <button
             key={range}
@@ -472,7 +472,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             Churn Analysis
           </h3>
           {/* Visual churn gauge */}
-          <div className="relative h-4 rounded-full bg-gray-100 overflow-hidden">
+          <div className="relative h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
             <div
               className={`absolute left-0 top-0 h-full rounded-full transition-all duration-700 ${
                 (customers.churnRate || 0) > 5
@@ -534,7 +534,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
                     <div key={i} className="flex flex-col items-center flex-1 gap-1">
                       <span className="text-[9px] font-medium text-gray-600">{m.count}</span>
                       <div
-                        className="w-full rounded-t bg-teal-500 transition-all duration-500"
+                        className="w-full rounded-t bg-primary transition-all duration-500"
                         style={{
                           height: `${Math.max(heightPct, 2)}%`,
                           minHeight: 2,
@@ -580,7 +580,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
                   const colorMap: Record<string, string> = {
                     free: '#d1d5db',
                     starter: '#2dd4bf',
-                    core: '#14b8a6',
+                    core: '#6B9080',
                     pro: '#3b82f6',
                     proplus: '#a855f7',
                   };
@@ -619,7 +619,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <h3 className="text-sm font-semibold text-gray-700">Revenue by Plan</h3>
 
           {/* Distribution bar */}
-          <div className="h-3 rounded-full bg-gray-100 overflow-hidden flex">
+          <div className="h-3 rounded-full bg-[#F0EDE8] overflow-hidden flex">
             {Object.entries(byPlan).map(([plan, data]) => (
               <div
                 key={plan}
@@ -672,7 +672,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
         {recentEvents.length > 0 ? (
           <div className="space-y-2">
             {recentEvents.slice(0, 10).map((event) => {
-              const meta = EVENT_TYPE_LABELS[event.type] || { label: event.type, color: 'text-gray-600 bg-gray-50' };
+              const meta = EVENT_TYPE_LABELS[event.type] || { label: event.type, color: 'text-gray-600 bg-[#FAF7F2]' };
               return (
                 <div key={event.id} className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">

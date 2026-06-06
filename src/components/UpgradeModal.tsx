@@ -79,8 +79,8 @@ export function UpgradeModal({
               </button>
 
               {/* Icon */}
-              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-teal-50 mb-3">
-                <Sparkles className="w-5 h-5 text-teal-600" />
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#6B9080]/10 mb-3">
+                <Sparkles className="w-5 h-5 text-[#6B9080]" />
               </div>
 
               {/* Tier badge */}
@@ -88,7 +88,7 @@ export function UpgradeModal({
                 className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold mb-2 ${
                   prompt.targetTier === 'pro'
                     ? 'bg-purple-100 text-purple-700'
-                    : 'bg-teal-100 text-teal-700'
+                    : 'bg-[#6B9080]/10 text-[#6B9080]'
                 }`}
               >
                 {prompt.targetTier === 'pro' ? 'Pro Feature' : 'Core Feature'}
@@ -105,15 +105,15 @@ export function UpgradeModal({
               </p>
 
               {/* Value prop */}
-              <div className="bg-teal-50 rounded-xl px-3 py-2 mb-4">
-                <p className="text-xs font-medium text-teal-700">
+              <div className="bg-[#6B9080]/10 rounded-xl px-3 py-2 mb-4">
+                <p className="text-xs font-medium text-[#6B9080]">
                   {prompt.valueProp}
                 </p>
               </div>
 
               {/* CTA */}
               <Button
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold h-10 rounded-xl"
+                className="w-full bg-primary hover:bg-[#6B9080] text-white text-sm font-semibold h-10 rounded-xl"
                 onClick={handleUpgrade}
               >
                 {prompt.ctaLabel}

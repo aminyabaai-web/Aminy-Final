@@ -64,7 +64,7 @@ export function AppReviewPrompt() {
         {/* Close button */}
         <button
           onClick={dismissPrompt}
-          className="absolute right-3 top-3 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          className="absolute right-3 top-3 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-[#F0EDE8] transition-colors"
           aria-label="Dismiss"
         >
           <X size={16} />
@@ -114,7 +114,7 @@ export function AppReviewPrompt() {
           )}
           {selectedRating >= 4 && (
             <div className="flex flex-col items-center gap-2 mb-3 animate-in fade-in">
-              <div className="flex items-center gap-1.5 text-xs text-teal-600">
+              <div className="flex items-center gap-1.5 text-xs text-[#6B9080]">
                 <ExternalLink size={12} />
                 <span>Taking you to leave a review...</span>
               </div>
@@ -122,7 +122,7 @@ export function AppReviewPrompt() {
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-teal-700 underline"
+                className="text-xs text-[#6B9080] underline"
               >
                 Leave a review on {store.label}
               </a>

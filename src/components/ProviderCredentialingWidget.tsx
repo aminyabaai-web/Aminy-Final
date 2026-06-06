@@ -46,7 +46,7 @@ const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: strin
   pending:          { bg: 'bg-amber-50',    text: 'text-amber-700',    label: 'In review',      dot: 'bg-amber-400' },
   in_progress:      { bg: 'bg-blue-50',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
   requires_input:   { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Action needed',  dot: 'bg-orange-400' },
-  verified:         { bg: 'bg-teal-50',     text: 'text-teal-700',     label: 'Verified',       dot: 'bg-teal-500' },
+  verified:         { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',     label: 'Verified',       dot: 'bg-primary' },
   failed:           { bg: 'bg-red-50',      text: 'text-red-700',      label: 'Failed',         dot: 'bg-red-500' },
   expired:          { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Expired — renew', dot: 'bg-orange-400' },
 };
@@ -174,7 +174,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <button
                   onClick={row.onAction}
                   disabled={working === row.key}
-                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-teal-700 hover:bg-teal-50 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
                 >
                   {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
                 </button>

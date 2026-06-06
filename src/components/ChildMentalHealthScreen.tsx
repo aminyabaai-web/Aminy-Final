@@ -692,14 +692,14 @@ export function ChildMentalHealthScreen({
           {onBack && currentQuestion === 0 ? (
             <button
               onClick={onBack}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
           ) : currentQuestion > 0 ? (
             <button
               onClick={() => setCurrentQuestion(prev => prev - 1)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -720,7 +720,7 @@ export function ChildMentalHealthScreen({
         </div>
 
         {/* Progress */}
-        <div className="h-2 bg-gray-100 rounded-full overflow-hidden mb-8">
+        <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-8">
           <motion.div
             className="h-full bg-accent"
             initial={{ width: 0 }}

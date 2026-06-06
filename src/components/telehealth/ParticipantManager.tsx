@@ -84,7 +84,7 @@ const ROLE_LABELS: Record<ParticipantRole, string> = {
 };
 
 const ROLE_COLORS: Record<ParticipantRole, string> = {
-  provider: 'bg-teal-100 text-teal-700',
+  provider: 'bg-[#6B9080]/10 text-[#6B9080]',
   parent: 'bg-blue-100 text-blue-700',
   child: 'bg-purple-100 text-purple-700',
   interpreter: 'bg-amber-100 text-amber-700',
@@ -137,7 +137,7 @@ function ParticipantTile({
     <div
       className={`relative rounded-xl border p-3 transition-all ${
         isPinned
-          ? 'border-teal-400 bg-teal-50 shadow-md'
+          ? 'border-[#6B9080] bg-[#6B9080]/10 shadow-md'
           : 'border-slate-200 bg-white hover:border-slate-300'
       }`}
     >
@@ -154,7 +154,7 @@ function ParticipantTile({
             <div
               className={`w-12 h-12 rounded-full flex items-center justify-center text-sm font-semibold ${
                 participant.role === 'provider'
-                  ? 'bg-teal-600 text-white'
+                  ? 'bg-primary text-white'
                   : participant.role === 'child'
                   ? 'bg-purple-500 text-white'
                   : 'bg-blue-500 text-white'
@@ -187,7 +187,7 @@ function ParticipantTile({
                 <span className="text-slate-400 font-normal"> (You)</span>
               )}
             </p>
-            {isPinned && <Pin className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />}
+            {isPinned && <Pin className="w-3.5 h-3.5 text-[#6B9080] flex-shrink-0" />}
           </div>
 
           <div className="flex items-center gap-2 mt-0.5">
@@ -257,7 +257,7 @@ function ParticipantTile({
             onClick={onPin}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               isPinned
-                ? 'bg-teal-100 text-teal-700 hover:bg-teal-200'
+                ? 'bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
@@ -345,7 +345,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <UserPlus className="w-5 h-5 text-teal-600" />
+            <UserPlus className="w-5 h-5 text-[#6B9080]" />
             <h3 className="font-semibold text-slate-900">Invite Participant</h3>
           </div>
           <button
@@ -372,7 +372,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
                   copied
                     ? 'bg-green-100 text-green-700'
-                    : 'bg-teal-600 text-white hover:bg-teal-700'
+                    : 'bg-primary text-white hover:bg-[#6B9080]'
                 }`}
               >
                 {copied ? (
@@ -410,7 +410,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
                 className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   sent
                     ? 'bg-green-100 text-green-700'
-                    : 'bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                    : 'bg-primary text-white hover:bg-[#6B9080] disabled:opacity-50 disabled:cursor-not-allowed'
                 }`}
               >
                 {sent ? 'Sent!' : 'Send'}
@@ -485,7 +485,7 @@ export function ParticipantManager({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
           <div className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-teal-600" />
+            <Users className="w-5 h-5 text-[#6B9080]" />
             <h3 className="font-semibold text-slate-900 text-sm">
               Participants ({participants.length})
             </h3>
@@ -539,7 +539,7 @@ export function ParticipantManager({
             <Button
               onClick={() => setShowInviteModal(true)}
               disabled={!canInviteMore}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-primary hover:bg-[#6B9080] text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <UserPlus className="w-4 h-4" />
               {canInviteMore

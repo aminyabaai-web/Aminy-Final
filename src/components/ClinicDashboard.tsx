@@ -58,7 +58,7 @@ function getStatusColor(status: string): string {
     case 'waitlist':
       return 'bg-blue-100 text-blue-800';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-[#F0EDE8] text-gray-800';
   }
 }
 
@@ -133,7 +133,7 @@ function UtilizationBar({
           {used.toFixed(1)} / {total.toFixed(1)} hrs ({percentage.toFixed(0)}%)
         </span>
       </div>
-      <div className="w-full bg-gray-100 rounded-full h-2.5">
+      <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
         <div
           className={`h-2.5 rounded-full transition-all ${isOverUtilized ? 'bg-red-500' : color}`}
           style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -174,7 +174,7 @@ function ProviderCard({
           {provider.specialties.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {provider.specialties.slice(0, 3).map(s => (
-                <span key={s} className="px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded">
+                <span key={s} className="px-2 py-0.5 text-xs bg-[#F0EDE8] text-gray-600 rounded">
                   {s}
                 </span>
               ))}
@@ -248,7 +248,7 @@ function ClientCard({
             {totalUsed.toFixed(1)} / {totalAuthorized.toFixed(1)}
           </span>
         </div>
-        <div className="w-full bg-gray-100 rounded-full h-2">
+        <div className="w-full bg-[#F0EDE8] rounded-full h-2">
           <div
             className={`h-2 rounded-full ${utilizationPercent > 90 ? 'bg-red-500' : utilizationPercent > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
             style={{ width: `${Math.min(utilizationPercent, 100)}%` }}
@@ -284,7 +284,7 @@ function LocationCard({
             <span className="text-xs text-indigo-600 font-medium">Primary Location</span>
           )}
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+        <span className={`px-2 py-1 text-xs font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-gray-800'}`}>
           {location.isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
@@ -362,10 +362,10 @@ export function ClinicDashboard({
   if (isLoading) {
     return (
       <div className={`animate-pulse space-y-6 ${className}`}>
-        <div className="h-12 bg-gray-200 rounded-lg w-1/3" />
+        <div className="h-12 bg-[#E8E4DF] rounded-lg w-1/3" />
         <div className="grid grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded-xl" />
+            <div key={i} className="h-32 bg-[#E8E4DF] rounded-xl" />
           ))}
         </div>
       </div>
@@ -422,7 +422,7 @@ export function ClinicDashboard({
               <span>{tab.icon}</span>
               {tab.label}
               {tab.count !== undefined && (
-                <span className="ml-1 px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-full">
+                <span className="ml-1 px-2 py-0.5 text-xs bg-[#F0EDE8] text-gray-600 rounded-full">
                   {tab.count}
                 </span>
               )}
@@ -646,7 +646,7 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
                 </label>
               </div>
 
@@ -662,7 +662,7 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
                 </label>
               </div>
 
@@ -678,7 +678,7 @@ export function ClinicDashboard({
                     className="sr-only peer"
                     readOnly
                   />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                  <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
                 </label>
               </div>
 
@@ -704,7 +704,7 @@ export function ClinicDashboard({
                       className="sr-only peer"
                       readOnly
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
+                    <div className="w-11 h-6 bg-[#E8E4DF] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600" />
                   </label>
                 </div>
               </div>
@@ -716,7 +716,7 @@ export function ClinicDashboard({
             {clinic.settings.insuranceCredentials.length > 0 ? (
               <div className="space-y-3">
                 {clinic.settings.insuranceCredentials.map((cred, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={i} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
                     <div>
                       <p className="font-medium text-gray-900">{cred.insurerName}</p>
                       <p className="text-sm text-gray-500">Contract: {cred.contractNumber || 'N/A'}</p>
@@ -732,7 +732,7 @@ export function ClinicDashboard({
                 No insurance credentials configured
               </p>
             )}
-            <button className="mt-4 w-full py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            <button className="mt-4 w-full py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-[#FAF7F2] transition-colors">
               Add Insurance Credential
             </button>
           </div>

@@ -129,8 +129,8 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
     <div className={`rounded-2xl p-4 border ${className}`}
       style={{ background: 'linear-gradient(135deg, #43AA8B10 0%, #57759010 100%)', borderColor: '#43AA8B30' }}>
       <div className="flex items-center gap-2 mb-2">
-        <ShieldCheck className="w-4 h-4 text-teal-600" />
-        <p className="text-xs font-semibold text-teal-700 uppercase tracking-wide">
+        <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
+        <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">
           Verified · {coverage.planName || 'Insurance on file'}
         </p>
       </div>
@@ -140,7 +140,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
           <p className="text-xs text-slate-600">No coverage details available yet — verify again to refresh.</p>
         ) : relevantServices.map((s, i) => (
           <div key={i} className="flex items-center gap-2 text-xs">
-            {s.status === 'covered' && <Check className="w-3.5 h-3.5 text-teal-600 shrink-0" />}
+            {s.status === 'covered' && <Check className="w-3.5 h-3.5 text-[#6B9080] shrink-0" />}
             {s.status === 'prior_auth_required' && <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
             {s.status === 'not_covered' && <X className="w-3.5 h-3.5 text-red-500 shrink-0" />}
             {s.status === 'unknown' && <span className="w-3.5 h-3.5 text-center text-slate-400">?</span>}
@@ -148,7 +148,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
             <span className="font-medium text-slate-800">{s.service}</span>
             <span className="text-slate-500">·</span>
             <span className={
-              s.status === 'covered' ? 'text-teal-700' :
+              s.status === 'covered' ? 'text-[#6B9080]' :
               s.status === 'prior_auth_required' ? 'text-amber-700' :
               s.status === 'not_covered' ? 'text-red-600' :
               'text-slate-500'
@@ -166,7 +166,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
       </div>
 
       {coverage.outOfPocketRemaining != null && (
-        <div className="mt-3 pt-3 border-t border-teal-200 flex items-center justify-between text-xs">
+        <div className="mt-3 pt-3 border-t border-[#6B9080]/20 flex items-center justify-between text-xs">
           <span className="text-slate-600">Out-of-pocket remaining this year:</span>
           <span className="font-semibold text-slate-900">
             ${(coverage.outOfPocketRemaining / 100).toFixed(0)}
@@ -177,7 +177,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
       {onVerifyClick && (
         <button
           onClick={onVerifyClick}
-          className="mt-2 text-xs text-teal-600 font-medium hover:underline"
+          className="mt-2 text-xs text-[#6B9080] font-medium hover:underline"
         >
           Re-verify benefits
         </button>

@@ -157,7 +157,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
             <p className="text-xs text-slate-500 mt-0.5">Target: {plan.target}</p>
           </div>
           <button onClick={copyPlan} className="p-1.5 rounded-lg hover:bg-white/60 transition-colors">
-            {copied ? <Check className="w-4 h-4 text-teal-600" /> : <Copy className="w-4 h-4 text-slate-400" />}
+            {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-slate-400" />}
           </button>
         </div>
         <p className="text-xs text-slate-600 mt-2 italic">"{plan.weeklyGoal}"</p>
@@ -192,13 +192,13 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                     <ol className="space-y-1">
                       {a.steps.map((step, si) => (
                         <li key={si} className="flex gap-2 text-xs text-slate-600">
-                          <span className="w-4 h-4 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center shrink-0 font-medium text-[10px]">{si + 1}</span>
+                          <span className="w-4 h-4 rounded-full bg-[#6B9080]/10 text-[#6B9080] flex items-center justify-center shrink-0 font-medium text-[10px]">{si + 1}</span>
                           {step}
                         </li>
                       ))}
                     </ol>
                     {a.reinforcer && (
-                      <p className="text-xs text-teal-700 bg-teal-50 rounded-lg px-3 py-1.5">✦ Reinforce: {a.reinforcer}</p>
+                      <p className="text-xs text-[#6B9080] bg-[#6B9080]/10 rounded-lg px-3 py-1.5">✦ Reinforce: {a.reinforcer}</p>
                     )}
                   </div>
                 ))}

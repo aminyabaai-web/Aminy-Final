@@ -185,7 +185,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <div
                 key={s}
                 className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  s <= step ? 'bg-blue-600' : 'bg-gray-200'
+                  s <= step ? 'bg-blue-600' : 'bg-[#E8E4DF]'
                 }`}
               />
             ))}

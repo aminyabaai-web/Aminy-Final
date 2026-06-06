@@ -147,7 +147,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               </p>
             )}
 
-            <div className="bg-teal-50 rounded-xl p-4 mb-4 sm:mb-6">
+            <div className="bg-[#6B9080]/10 rounded-xl p-4 mb-4 sm:mb-6">
               <p className="text-sm text-teal-800">
                 We'll email you when it's your turn. In the meantime,
                 check your inbox for a few helpful resources.
@@ -155,16 +155,16 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center gap-3 text-left p-3 bg-gray-50 rounded-lg">
-                <Sparkles className="w-5 h-5 text-teal-600 flex-shrink-0" />
+              <div className="flex items-center gap-3 text-left p-3 bg-[#FAF7F2] rounded-lg">
+                <Sparkles className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Early access perks</p>
                   <p className="text-xs text-gray-600">50% off your first year</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 text-left p-3 bg-gray-50 rounded-lg">
-                <MessageCircle className="w-5 h-5 text-teal-600 flex-shrink-0" />
+              <div className="flex items-center gap-3 text-left p-3 bg-[#FAF7F2] rounded-lg">
+                <MessageCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Shape the product</p>
                   <p className="text-xs text-gray-600">Your feedback builds what we make</p>
@@ -192,14 +192,14 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Badge className="bg-teal-100 text-teal-800 mb-4 sm:mb-6">
+            <Badge className="bg-[#6B9080]/10 text-teal-800 mb-4 sm:mb-6">
               Coming Soon
             </Badge>
 
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
               Gentle guidance for
               <br />
-              <span className="text-teal-600">calmer parenting days</span>
+              <span className="text-[#6B9080]">calmer parenting days</span>
             </h1>
 
             <p className="text-xl text-gray-600 mb-8 max-w-xl mx-auto">
@@ -227,7 +227,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-xl"
+              className="bg-primary hover:bg-[#6B9080] text-white px-6 py-3 rounded-xl"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
@@ -265,8 +265,8 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 transition={{ delay: 0.1 * index }}
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow">
-                  <div className="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
-                    <benefit.icon className="w-6 h-6 text-teal-600" />
+                  <div className="w-12 h-12 bg-[#6B9080]/10 rounded-xl flex items-center justify-center mb-4">
+                    <benefit.icon className="w-6 h-6 text-[#6B9080]" />
                   </div>
                   <h3 className="font-semibold text-lg text-gray-900 mb-2">
                     {benefit.title}
@@ -282,7 +282,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       </section>
 
       {/* Social Proof */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-[#FAF7F2]">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-xl sm:text-2xl font-bold text-center text-gray-900 mb-12">
             Families like yours are waiting
@@ -321,19 +321,19 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-2 text-gray-600">
-              <Shield className="w-5 h-5 text-teal-600" />
+              <Shield className="w-5 h-5 text-[#6B9080]" />
               <span>HIPAA-Conscious</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <Users className="w-5 h-5 text-teal-600" />
+              <Users className="w-5 h-5 text-[#6B9080]" />
               <span>BCBA Advised</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <Heart className="w-5 h-5 text-teal-600" />
+              <Heart className="w-5 h-5 text-[#6B9080]" />
               <span>Parent-Founded</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
-              <Zap className="w-5 h-5 text-teal-600" />
+              <Zap className="w-5 h-5 text-[#6B9080]" />
               <span>HSA/FSA Eligible</span>
             </div>
           </div>
@@ -363,7 +363,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-white text-teal-700 hover:bg-teal-50 px-6 py-3 rounded-xl font-medium"
+              className="bg-white text-[#6B9080] hover:bg-[#6B9080]/10 px-6 py-3 rounded-xl font-medium"
             >
               {isSubmitting ? 'Joining...' : 'Get early access'}
             </Button>

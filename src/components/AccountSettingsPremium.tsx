@@ -407,7 +407,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                 </h2>
                                 <span className={`px-2 py-0.5 rounded-lg text-[11px] font-medium ${
                                     subscription.status === 'active'
-                                        ? 'bg-teal-600/10 text-teal-600'
+                                        ? 'bg-primary/10 text-[#6B9080]'
                                         : 'bg-amber-500/10 text-amber-600'
                                 }`}>
                                     {subscription.status.toUpperCase()}
@@ -434,7 +434,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                         title="Privacy & Data Control"
                         subtitle="HIPAA, BAA, Export"
                         icon={ShieldCheck}
-                        color="#0d9488"
+                        color="#6B9080"
                         active={activeSection === 'privacy'}
                         onClick={() => setActiveSection(activeSection === 'privacy' ? null : 'privacy')}
                     />
@@ -454,7 +454,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                             <p className="text-sm font-medium text-gray-900/90">HIPAA Data Privacy</p>
                                             <p className="text-[13px] text-gray-900/50 mt-0.5">Your data is encrypted and handled under our HIPAA-conscious privacy program.</p>
                                         </div>
-                                        <span className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-teal-600/10 text-teal-600 flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-primary/10 text-[#6B9080] flex items-center gap-1">
                                             <Check size={12} /> Active
                                         </span>
                                     </div>

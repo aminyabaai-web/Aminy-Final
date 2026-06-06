@@ -407,7 +407,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FAF7F2]">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-4">
         <nav aria-label="Provider onboarding navigation" className="max-w-2xl mx-auto flex items-center gap-3">
@@ -416,7 +416,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={onBack}
               aria-label="Go back"
-              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-[#F0EDE8] hover:text-gray-700"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -453,7 +453,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   aria-label={`Open ${step.label} step`}
                   className={`flex h-11 min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isCurrent
-                      ? 'bg-cyan-600/10 text-cyan-600'
+                      ? 'bg-cyan-600/10 text-[#6B9080]'
                       : isCompleted
                         ? 'text-green-600 hover:bg-green-50'
                         : 'text-gray-400'
@@ -467,7 +467,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   <span>{step.label}</span>
                 </button>
                 {idx < STEPS.length - 1 && (
-                  <div className={`flex-1 h-0.5 ${isCompleted ? 'bg-green-300' : 'bg-gray-200'}`} />
+                  <div className={`flex-1 h-0.5 ${isCompleted ? 'bg-green-300' : 'bg-[#E8E4DF]'}`} />
                 )}
               </React.Fragment>
             );
@@ -503,12 +503,12 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     aria-pressed={form.practiceMode === opt.id}
                     className={`text-left p-4 rounded-xl border-2 transition-all ${
                       form.practiceMode === opt.id
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-gray-200 bg-[#FAF7F2] hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-teal-600 shrink-0" />}
+                      {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-[#6B9080] shrink-0" />}
                       <span className="font-semibold text-gray-900">{opt.title}</span>
                     </div>
                     <p className="text-sm text-gray-600">{opt.description}</p>
@@ -632,7 +632,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 </div>
               </div>
 
-              <div className="mb-6 rounded-2xl border border-teal-100 bg-teal-50/70 px-4 py-3 text-sm text-slate-700">
+              <div className="mb-6 rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 px-4 py-3 text-sm text-slate-700">
                 <p className="font-medium text-slate-900">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
                 <p className="mt-1">You can add any licensed state now. Aminy keeps you off the marketplace until your credentials are validated, then turns on live booking only in supported markets where you are actually licensed.</p>
               </div>
@@ -645,22 +645,22 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       key={state.code}
                       className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-sm ${
                         form.licensedStates.includes(state.code)
-                          ? 'bg-cyan-600/10 text-cyan-600 font-medium'
-                          : 'hover:bg-gray-50 text-gray-600'
+                          ? 'bg-cyan-600/10 text-[#6B9080] font-medium'
+                          : 'hover:bg-[#FAF7F2] text-gray-600'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={form.licensedStates.includes(state.code)}
                         onChange={() => toggleState(state.code)}
-                        className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                        className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
                       />
                       {state.code}
                     </label>
                   ))}
                 </div>
                 {form.licensedStates.length > 0 && (
-                  <p className="text-sm text-cyan-600 mt-3 font-medium">
+                  <p className="text-sm text-[#6B9080] mt-3 font-medium">
                     {form.licensedStates.length} state{form.licensedStates.length > 1 ? 's' : ''} selected
                   </p>
                 )}
@@ -682,7 +682,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     id: 'aact-partner' as const,
                     title: 'Aminy Network',
                     badge: 'Insurance — Rolling Out',
-                    badgeClass: 'bg-teal-100 text-teal-700',
+                    badgeClass: 'bg-[#6B9080]/10 text-[#6B9080]',
                     description: `Bill insured sessions under a group payer network — rolling out, pending payer-network access in your state. When live: AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans across ${SUPPORTED_STATES_AND}, with billing, claims, and prior-auths handled for you and ~biweekly payouts. Aminy fee: 10% of insured sessions.`,
                     highlight: true,
                   },
@@ -709,8 +709,8 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     onClick={() => updateForm({ billingTrack: track.id })}
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       form.billingTrack === track.id
-                        ? 'border-teal-500 bg-teal-50'
-                        : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        : 'border-gray-200 bg-[#FAF7F2] hover:border-gray-300'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
@@ -731,13 +731,13 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Services & Pricing</h2>
 
               <div className="space-y-4">
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={form.offersConsult}
                       onChange={e => updateForm({ offersConsult: e.target.checked })}
-                      className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                      className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-gray-900">25-min Consult</p>
@@ -755,13 +755,13 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   </div>
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       checked={form.offersDeepReview}
                       onChange={e => updateForm({ offersDeepReview: e.target.checked })}
-                      className="rounded border-gray-300 text-cyan-600 focus:ring-cyan-600"
+                      className="rounded border-gray-300 text-[#6B9080] focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-gray-900">50-min Deep Review</p>
@@ -796,7 +796,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                               : [...form.acceptedInsurance, plan],
                           })}
                           aria-pressed={active}
-                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-cyan-600/10 text-cyan-600' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
+                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-cyan-600/10 text-[#6B9080]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}
                         >
                           {plan}
                         </button>
@@ -844,7 +844,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               ) : (
                 <div className="space-y-3">
                   {form.availability.map((slot, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div key={idx} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
                       <select
                         aria-label={`Day of week for time block ${idx + 1}`}
                         value={slot.dayOfWeek}
@@ -892,7 +892,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               <h2 className="text-lg font-semibold text-gray-900 mb-6">Review Your Profile</h2>
 
               <div className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-gray-500 mb-2">Profile</h3>
                   <p className="font-semibold text-gray-900">
                     {form.firstName} {form.lastName}, {form.credentials}
@@ -901,11 +901,11 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   {form.bio && <p className="text-sm text-gray-500 mt-2">{form.bio}</p>}
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-gray-500 mb-2">Licensing</h3>
                   <div className="flex flex-wrap gap-1">
                     {form.licensedStates.map(code => (
-                      <span key={code} className="px-2 py-0.5 bg-cyan-600/10 text-cyan-600 text-xs font-medium rounded-full">
+                      <span key={code} className="px-2 py-0.5 bg-cyan-600/10 text-[#6B9080] text-xs font-medium rounded-full">
                         {code}
                       </span>
                     ))}
@@ -918,7 +918,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   )}
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-gray-500 mb-2">Services</h3>
                   {form.offersConsult && (
                     <p className="text-sm text-gray-900">25-min Consult — ${form.consultPrice}</p>
@@ -929,7 +929,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   <p className="text-sm text-gray-500 mt-2">Accepted rails: {form.acceptedInsurance.join(', ')}</p>
                 </div>
 
-                <div className="p-4 bg-gray-50 rounded-lg">
+                <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-gray-500 mb-2">Availability</h3>
                   {form.availability.length > 0 ? (
                     <div className="space-y-1">
@@ -944,7 +944,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-teal-100 bg-teal-50/70 px-4 py-4">
+                <div className="rounded-2xl border border-teal-100 bg-[#6B9080]/10/70 px-4 py-4">
                   <h3 className="text-sm font-semibold text-slate-900">Before you go live</h3>
                   <p className="mt-2 text-sm text-slate-700">
                     Aminy verifies your primary credential, matches your licensed states, and only turns on marketplace discovery after those checks pass. If you add states outside the live launch footprint, they stay saved on your profile and become bookable when that market is opened.
@@ -953,13 +953,13 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               </div>
 
               {/* Non-solicitation acknowledgment */}
-              <div className={`mt-4 rounded-2xl border p-4 transition-colors ${nonSolicitationAck ? 'border-teal-200 bg-teal-50/60' : 'border-neutral-200 bg-neutral-50'}`}>
+              <div className={`mt-4 rounded-2xl border p-4 transition-colors ${nonSolicitationAck ? 'border-[#6B9080]/20 bg-[#6B9080]/10/60' : 'border-neutral-200 bg-neutral-50'}`}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={nonSolicitationAck}
                     onChange={(e) => setNonSolicitationAck(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[#6B9080] focus:ring-teal-500"
                   />
                   <span className="text-sm text-slate-700">
                     <span className="font-semibold text-slate-900">Non-Solicitation Agreement — </span>
@@ -983,7 +983,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           <button
             type="button"
             onClick={stepIndex === 0 ? onBack : prevStep}
-            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-gray-600 transition-colors hover:bg-gray-100"
+            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-gray-600 transition-colors hover:bg-[#F0EDE8]"
           >
             <ArrowLeft className="w-4 h-4" />
             {stepIndex === 0 ? 'Cancel' : 'Back'}

@@ -362,7 +362,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 <h2 id="more-menu-title" className="text-lg font-semibold text-gray-900 dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
-                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
@@ -384,8 +384,8 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                       className={`
                         w-full flex items-center justify-between p-3 rounded-xl transition-colors group min-h-[56px]
                         ${isItemActive
-                          ? 'bg-teal-50 dark:bg-teal-900/20'
-                          : 'hover:bg-gray-50 dark:hover:bg-slate-700'
+                          ? 'bg-[#6B9080]/10 dark:bg-teal-900/20'
+                          : 'hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
                         }
                       `}
                       role="menuitem"
@@ -396,25 +396,25 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         <div className={`
                           w-10 h-10 rounded-xl flex items-center justify-center
                           ${isItemActive
-                            ? 'bg-teal-100 dark:bg-teal-800'
-                            : 'bg-gray-100 dark:bg-slate-600'
+                            ? 'bg-[#6B9080]/10 dark:bg-teal-800'
+                            : 'bg-[#F0EDE8] dark:bg-slate-600'
                           }
                         `}>
                           <Icon
-                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-teal-300' : 'text-gray-600 dark:text-gray-300'}`}
+                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-gray-600 dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
                         </div>
 
                         <div className="text-left">
-                          <div className={`text-sm font-medium ${isItemActive ? 'text-teal-700 dark:text-teal-300' : 'text-gray-900 dark:text-gray-100'}`}>
+                          <div className={`text-sm font-medium ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-gray-900 dark:text-gray-100'}`}>
                             {item.label}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">{item.description}</div>
                         </div>
                       </div>
 
-                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-teal-500' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
+                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-primary' : 'text-gray-400 dark:text-gray-500'} group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors`} />
                     </button>
                   );
                 })}
