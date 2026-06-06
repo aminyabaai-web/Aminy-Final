@@ -172,29 +172,29 @@ const AGE_PRESETS = [
 const S = {
   // Layout
   // Use min-height + relative positioning — position:fixed breaks when parents have transform
-  fullScreen: { minHeight: '100dvh', backgroundColor: '#FAF7F2', display: 'flex', flexDirection: 'column' as const },
-  topBar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid #F0EDE8' },
+  fullScreen: { minHeight: '100dvh', backgroundColor: 'var(--color-bg-screen)', display: 'flex', flexDirection: 'column' as const },
+  topBar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', borderBottom: '1px solid var(--color-border-soft)' },
   topBarBtn: { width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 22, border: 'none', background: 'none', cursor: 'pointer' },
   contentArea: { flex: 1, overflowY: 'auto' as const, overflowX: 'hidden' as const },
   padded: { padding: '28px 20px' },
 
   // Typography
-  h1: { fontSize: 26, fontWeight: 700, color: '#0D1B2A', lineHeight: 1.25, letterSpacing: '-0.025em', margin: 0 },
-  h2: { fontSize: 20, fontWeight: 700, color: '#0D1B2A', lineHeight: 1.3, letterSpacing: '-0.02em', margin: 0 },
-  h3: { fontSize: 14, fontWeight: 600, color: '#1B2733', margin: '0 0 12px 0' },
-  body: { fontSize: 15, color: '#5A6B7A', lineHeight: 1.65, margin: '10px 0 0' },
-  caption: { fontSize: 12, color: '#8E9BAA', lineHeight: 1.5 },
-  label: { fontSize: 14, fontWeight: 500, color: '#1B2733', marginBottom: 8, display: 'block' as const },
+  h1: { fontSize: 26, fontWeight: 700, color: 'var(--color-text-deep)', lineHeight: 1.25, letterSpacing: '-0.025em', margin: 0 },
+  h2: { fontSize: 20, fontWeight: 700, color: 'var(--color-text-deep)', lineHeight: 1.3, letterSpacing: '-0.02em', margin: 0 },
+  h3: { fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)', margin: '0 0 12px 0' },
+  body: { fontSize: 15, color: 'var(--color-text-secondary)', lineHeight: 1.65, margin: '10px 0 0' },
+  caption: { fontSize: 12, color: 'var(--color-text-muted)', lineHeight: 1.5 },
+  label: { fontSize: 14, fontWeight: 500, color: 'var(--color-text-primary)', marginBottom: 8, display: 'block' as const },
 
   // Cards / Buttons
-  concernCard: { display: 'flex', alignItems: 'center', gap: 16, padding: '16px', borderRadius: 18, border: '1px solid #E8E4DF', backgroundColor: '#ffffff', cursor: 'pointer', width: '100%', textAlign: 'left' as const, transition: 'border-color 0.15s, box-shadow 0.15s', marginBottom: 10, boxShadow: '0 1px 3px rgba(27,39,51,0.04)' },
+  concernCard: { display: 'flex', alignItems: 'center', gap: 16, padding: '16px', borderRadius: 18, border: '1px solid var(--color-border-light)', backgroundColor: 'var(--color-surface)', cursor: 'pointer', width: '100%', textAlign: 'left' as const, transition: 'border-color 0.15s, box-shadow 0.15s', marginBottom: 10, boxShadow: '0 1px 3px rgba(27,39,51,0.04)' },
   iconBox: (color: string) => ({ width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: `${color}18` }),
-  primaryBtn: (enabled: boolean) => ({ width: '100%', padding: '15px 24px', borderRadius: 14, border: 'none', backgroundColor: enabled ? '#6B9080' : '#E8E4DF', color: enabled ? '#fff' : '#8E9BAA', fontSize: 15, fontWeight: 600, cursor: enabled ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'background-color 0.15s, opacity 0.15s', boxShadow: enabled ? '0 4px 14px rgba(107,144,128,0.3)' : 'none' }),
-  ageBtn: (selected: boolean) => ({ padding: '12px 16px', borderRadius: 12, border: selected ? '2px solid #6B9080' : '1px solid #E8E4DF', backgroundColor: selected ? 'rgba(107,144,128,0.08)' : '#ffffff', color: selected ? '#4A7A6A' : '#1B2733', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' }),
-  yesNoBtn: (variant: 'yes' | 'no') => ({ flex: 1, padding: '16px 24px', borderRadius: 18, border: variant === 'yes' ? '2px solid rgba(107,144,128,0.5)' : '2px solid #E8E4DF', backgroundColor: variant === 'yes' ? 'rgba(107,144,128,0.06)' : '#ffffff', color: variant === 'yes' ? '#4A7A6A' : '#1B2733', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }),
+  primaryBtn: (enabled: boolean) => ({ width: '100%', padding: '15px 24px', borderRadius: 14, border: 'none', backgroundColor: enabled ? '#6B9080' : 'var(--color-border-light)', color: enabled ? '#fff' : 'var(--color-text-muted)', fontSize: 15, fontWeight: 600, cursor: enabled ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, transition: 'background-color 0.15s, opacity 0.15s', boxShadow: enabled ? '0 4px 14px rgba(107,144,128,0.3)' : 'none' }),
+  ageBtn: (selected: boolean) => ({ padding: '12px 16px', borderRadius: 12, border: selected ? '2px solid #6B9080' : `1px solid var(--color-border-light)`, backgroundColor: selected ? 'rgba(107,144,128,0.08)' : 'var(--color-surface)', color: selected ? '#4A7A6A' : 'var(--color-text-primary)', fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s' }),
+  yesNoBtn: (variant: 'yes' | 'no') => ({ flex: 1, padding: '16px 24px', borderRadius: 18, border: variant === 'yes' ? '2px solid rgba(107,144,128,0.5)' : `2px solid var(--color-border-light)`, backgroundColor: variant === 'yes' ? 'rgba(107,144,128,0.06)' : 'var(--color-surface)', color: variant === 'yes' ? '#4A7A6A' : 'var(--color-text-primary)', fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s' }),
 
   // Progress
-  progressTrack: { height: 4, backgroundColor: '#E8E4DF' },
+  progressTrack: { height: 4, backgroundColor: 'var(--color-border-light)' },
   progressBar: (pct: number) => ({ height: '100%', width: `${pct}%`, background: 'linear-gradient(to right, #6B9080, #7BA7BC)', transition: 'width 0.5s ease', borderRadius: 4 }),
 
   // Results
@@ -203,7 +203,7 @@ const S = {
     const c = colors[level];
     return { padding: 16, borderRadius: 14, backgroundColor: c.bg, border: `1px solid ${c.border}`, color: c.text };
   },
-  stepItem: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: 14, backgroundColor: '#ffffff', border: '1px solid #F0EDE8' },
+  stepItem: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: 14, backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border-soft)' },
   stepNum: { width: 22, height: 22, borderRadius: 11, backgroundColor: 'rgba(107,144,128,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 },
   providerTag: { display: 'inline-block', padding: '6px 12px', borderRadius: 10, backgroundColor: 'rgba(107,144,128,0.08)', color: '#4A7A6A', fontSize: 12, fontWeight: 500, border: '1px solid rgba(107,144,128,0.18)' },
   lureBanner: { padding: 18, borderRadius: 18, background: 'linear-gradient(135deg, rgba(107,144,128,0.06), rgba(123,167,188,0.06))', border: '1px solid rgba(107,144,128,0.14)' },
@@ -215,7 +215,7 @@ const S = {
 
   // Reassurance
   reassurance: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: '14px 16px', marginTop: 18, borderRadius: 14, backgroundColor: 'rgba(107,144,128,0.06)', border: '1px solid rgba(107,144,128,0.12)' },
-  disclaimer: { marginTop: 24, padding: 14, borderRadius: 12, backgroundColor: '#F5F2EC', border: '1px solid #E8E4DF' },
+  disclaimer: { marginTop: 24, padding: 14, borderRadius: 12, backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-light)' },
 };
 
 // ============================================
@@ -324,14 +324,14 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           return (
             <button key={c.id} onClick={() => handleConcernSelect(c.id)} style={S.concernCard}
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(107,144,128,0.4)')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#E8E4DF')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-border-light)')}
             >
               <div style={S.iconBox(c.color)}>
                 <Icon style={{ width: 24, height: 24, color: c.color }} strokeWidth={1.5} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{c.label}</div>
-                <div style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{c.description}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>{c.label}</div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-dim)', marginTop: 2 }}>{c.description}</div>
               </div>
               <ChevronRight style={{ width: 16, height: 16, color: '#d1d5db', flexShrink: 0 }} />
             </button>
@@ -360,13 +360,13 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
         <div style={{ padding: '0 20px 24px' }}>
           {/* Name */}
           <div style={{ marginBottom: 24 }}>
-            <label style={S.label}>Child's first name <span style={{ color: '#9ca3af', fontWeight: 400 }}>(optional)</span></label>
+            <label style={S.label}>Child's first name <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>(optional)</span></label>
             <input
               type="text"
               placeholder="e.g. Liam"
               value={childInfo.name}
               onChange={(e) => setChildInfo(p => ({ ...p, name: e.target.value }))}
-              style={{ width: '100%', padding: '12px 16px', borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 14, color: '#111827', outline: 'none', boxSizing: 'border-box' }}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 12, border: '1px solid var(--color-input-border)', backgroundColor: 'var(--color-surface)', fontSize: 14, color: 'var(--color-text-primary)', outline: 'none', boxSizing: 'border-box' }}
             />
           </div>
           {/* Age */}
@@ -382,12 +382,12 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           </div>
           {/* Instrument preview */}
           {selectedInstrument && childInfo.ageMonths > 0 && (
-            <div style={{ padding: 16, borderRadius: 12, backgroundColor: '#F5F2EC', border: '1px solid #E8E4DF', marginBottom: 24 }}>
+            <div style={{ padding: 16, borderRadius: 12, backgroundColor: 'var(--color-surface-soft)', border: '1px solid var(--color-border-light)', marginBottom: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <CheckCircle style={{ width: 16, height: 16, color: '#6B9080' }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>{selectedInstrument.shortName}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>{selectedInstrument.shortName}</span>
               </div>
-              <p style={{ fontSize: 12, color: '#6b7280', margin: 0, lineHeight: 1.5 }}>
+              <p style={{ fontSize: 12, color: 'var(--color-text-dim)', margin: 0, lineHeight: 1.5 }}>
                 {selectedInstrument.questions.length} questions · About {selectedInstrument.estimatedMinutes} minutes · Used by pediatricians worldwide
               </p>
             </div>
@@ -415,7 +415,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             </div>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
               <h2 style={{ ...S.h2, marginBottom: 12 }}>{showInsight.title}</h2>
-              <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.7, maxWidth: 340, margin: '0 auto' }}>{showInsight.body}</p>
+              <p style={{ fontSize: 14, color: 'var(--color-text-secondary)', lineHeight: 1.7, maxWidth: 340, margin: '0 auto' }}>{showInsight.body}</p>
             </div>
             <button onClick={handleInsightDismiss} style={{ ...S.primaryBtn(true), width: 'auto', padding: '12px 32px' }}>
               Continue <ArrowRight style={{ width: 16, height: 16 }} />
@@ -441,8 +441,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
         {/* Question */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 20px 32px' }}>
           <div style={{ marginBottom: 32 }}>
-            <h2 style={{ fontSize: 18, fontWeight: 600, color: '#111827', lineHeight: 1.5, margin: 0 }}>{qText}</h2>
-            {hText && <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, marginTop: 12, marginBottom: 0 }}>{hText}</p>}
+            <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--color-text-deep)', lineHeight: 1.5, margin: 0 }}>{qText}</h2>
+            {hText && <p style={{ fontSize: 14, color: 'var(--color-text-dim)', lineHeight: 1.6, marginTop: 12, marginBottom: 0 }}>{hText}</p>}
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <button onClick={() => handleAnswer(currentQuestion.id, true)} style={S.yesNoBtn('yes')}>Yes</button>
@@ -477,7 +477,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           {/* Risk badge */}
           <div style={{ ...S.riskBadge(result.riskLevel), marginBottom: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 600, textTransform: 'capitalize' as const, marginBottom: 4 }}>{result.riskLevel} Risk</div>
-            <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{result.summary}</p>
+            <p style={{ fontSize: 14, color: 'var(--color-text-body)', lineHeight: 1.6, margin: 0 }}>{result.summary}</p>
           </div>
 
           {/* Next steps */}
@@ -488,7 +488,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                 <div style={S.stepNum}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: '#6B9080' }}>{i + 1}</span>
                 </div>
-                <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{step}</p>
+                <p style={{ fontSize: 14, color: 'var(--color-text-body)', lineHeight: 1.6, margin: 0 }}>{step}</p>
               </div>
             ))}
           </div>
@@ -515,7 +515,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
               <div style={{ fontSize: 13, fontWeight: 700, color: '#6B9080', letterSpacing: '0.04em', marginBottom: 6 }}>
                 IF YOUR CHILD ALREADY HAS A DIAGNOSIS
               </div>
-              <p style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55, margin: '0 0 12px' }}>
+              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.55, margin: '0 0 12px' }}>
                 Get your personalized First 30 Days plan — state-specific steps for DD agencies,
                 Medicaid waivers, IEP requests, and therapy access.
               </p>
@@ -541,7 +541,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                 <Activity style={{ width: 18, height: 18, color: '#059669' }} />
                 <span style={{ fontSize: 15, fontWeight: 600, color: '#065f46' }}>Ready for a Professional Evaluation?</span>
               </div>
-              <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, margin: '0 0 12px 0' }}>
+              <p style={{ fontSize: 13, color: 'var(--color-text-body)', lineHeight: 1.6, margin: '0 0 12px 0' }}>
                 Based on your screening results, a diagnostic evaluation can provide a clear picture
                 of your child's needs and unlock access to services and support.
               </p>
@@ -558,7 +558,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           <div style={S.lureBanner}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <Sparkles style={{ width: 16, height: 16, color: '#6B9080' }} />
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>What Aminy does next</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>What Aminy does next</span>
             </div>
             {[
               result.riskLevel !== 'low' && `Match you with ${result.recommendedProviders[0]?.toLowerCase() || 'specialist'}s who accept your insurance`,
@@ -569,7 +569,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             ].filter(Boolean).map((item, i) => (
               <div key={i} style={S.lureItem}>
                 <CheckCircle style={{ width: 14, height: 14, color: '#6B9080', flexShrink: 0, marginTop: 3 }} />
-                <span style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.5 }}>{item}</span>
+                <span style={{ fontSize: 14, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{item}</span>
               </div>
             ))}
           </div>
@@ -586,7 +586,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
 
           {/* Disclaimer */}
           <div style={S.disclaimer}>
-            <p style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 11, color: 'var(--color-text-muted)', lineHeight: 1.6, margin: 0 }}>
               This screening is not a diagnosis. Results indicate risk level only. A qualified healthcare
               professional should be consulted for evaluation and diagnosis. If you are concerned about
               your child's immediate safety, call 911 or the 988 Suicide & Crisis Lifeline.
@@ -605,19 +605,19 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
       <div style={S.topBar}>
         {phase !== 'results' ? (
           <button onClick={handleBack} style={S.topBarBtn} aria-label="Go back">
-            <ArrowLeft style={{ width: 20, height: 20, color: '#6b7280' }} />
+            <ArrowLeft style={{ width: 20, height: 20, color: 'var(--color-text-dim)' }} />
           </button>
         ) : <div style={{ width: 44 }} />}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Sparkles style={{ width: 16, height: 16, color: '#6B9080' }} />
-          <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>
             {phase === 'results' ? 'Screening Results' : 'Free Screening'}
           </span>
         </div>
 
         <button onClick={onBack} style={S.topBarBtn} aria-label="Close">
-          <X style={{ width: 20, height: 20, color: '#9ca3af' }} />
+          <X style={{ width: 20, height: 20, color: 'var(--color-text-muted)' }} />
         </button>
       </div>
 

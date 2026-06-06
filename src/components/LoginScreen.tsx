@@ -160,7 +160,7 @@ export function LoginScreen({
     <div
       className="min-h-screen min-h-[100dvh] flex flex-col overflow-y-auto pb-6"
       style={{
-        backgroundColor: '#FAF7F2',
+        backgroundColor: 'var(--color-bg-screen)',
         fontFamily: fontStack,
         ...fontSmoothing,
       }}
@@ -175,7 +175,7 @@ export function LoginScreen({
         <button
           onClick={onBack}
           className="flex items-center gap-2 transition-all hover:opacity-60"
-          style={{ color: 'rgba(17, 24, 39, 0.5)' }}
+          style={{ color: 'var(--color-text-muted)' }}
         >
           <ArrowLeft className="w-5 h-5" />
           <span
@@ -232,7 +232,7 @@ export function LoginScreen({
           >
             <h1
               style={{
-                color: 'rgba(17, 24, 39, 0.88)',
+                color: 'var(--color-text-deep)',
                 fontFamily: fontStack,
                 fontWeight: 600,
                 fontSize: 'clamp(1.5rem, 5vw, 1.75rem)',
@@ -248,7 +248,7 @@ export function LoginScreen({
             <h3 className="sr-only">Email sign in form</h3>
             <p
               style={{
-                color: 'rgba(17, 24, 39, 0.5)',
+                color: 'var(--color-text-muted)',
                 fontFamily: fontStack,
                 fontWeight: 400,
                 fontSize: '15px',
@@ -305,13 +305,13 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: '#FFFFFF',
-                color: 'rgba(17, 24, 39, 0.88)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-deep)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(17, 24, 39, 0.12)',
+                border: '1px solid var(--color-border-light)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -342,13 +342,13 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: '#FFFFFF',
-                color: 'rgba(17, 24, 39, 0.85)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(17, 24, 39, 0.12)',
+                border: '1px solid var(--color-border-light)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -381,10 +381,10 @@ export function LoginScreen({
               marginBottom: '28px',
             }}
           >
-            <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.1)' }} />
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
             <span
               style={{
-                color: 'rgba(17, 24, 39, 0.4)',
+                color: 'var(--color-text-muted)',
                 fontSize: '13px',
                 fontWeight: 450,
                 ...fontSmoothing,
@@ -392,7 +392,7 @@ export function LoginScreen({
             >
               or
             </span>
-            <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(17, 24, 39, 0.1)' }} />
+            <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
           </motion.div>
 
           {/* Email Form */}
@@ -409,7 +409,7 @@ export function LoginScreen({
                 htmlFor="email"
                 style={{
                   display: 'block',
-                  color: 'rgba(17, 24, 39, 0.7)',
+                  color: 'var(--color-text-secondary)',
                   fontSize: '13px',
                   fontWeight: 500,
                   marginBottom: '8px',
@@ -433,12 +433,12 @@ export function LoginScreen({
                   width: '100%',
                   height: '52px',
                   padding: '0 16px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                  border: errors.email ? '2px solid #DC2626' : '1px solid rgba(17, 24, 39, 0.1)',
+                  backgroundColor: 'var(--color-surface)',
+                  border: errors.email ? '2px solid #DC2626' : '1px solid var(--color-input-border)',
                   borderRadius: '12px',
                   fontSize: '15px',
                   fontFamily: fontStack,
-                  color: 'rgba(17, 24, 39, 0.88)',
+                  color: 'var(--color-text-deep)',
                   outline: 'none',
                   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                   ...fontSmoothing,
@@ -451,7 +451,7 @@ export function LoginScreen({
                 }}
                 onBlur={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = 'rgba(17, 24, 39, 0.1)';
+                    e.currentTarget.style.borderColor = 'var(--color-input-border)';
                     e.currentTarget.style.boxShadow = 'none';
                   }
                 }}
@@ -481,7 +481,7 @@ export function LoginScreen({
                 htmlFor="password"
                 style={{
                   display: 'block',
-                  color: 'rgba(17, 24, 39, 0.7)',
+                  color: 'var(--color-text-secondary)',
                   fontSize: '13px',
                   fontWeight: 500,
                   marginBottom: '8px',
@@ -506,12 +506,12 @@ export function LoginScreen({
                     width: '100%',
                     height: '52px',
                     padding: '0 48px 0 16px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                    border: errors.password ? '2px solid #DC2626' : '1px solid rgba(17, 24, 39, 0.1)',
+                    backgroundColor: 'var(--color-surface)',
+                    border: errors.password ? '2px solid #DC2626' : '1px solid var(--color-input-border)',
                     borderRadius: '12px',
                     fontSize: '15px',
                     fontFamily: fontStack,
-                    color: 'rgba(17, 24, 39, 0.88)',
+                    color: 'var(--color-text-deep)',
                     outline: 'none',
                     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
                     ...fontSmoothing,
@@ -524,7 +524,7 @@ export function LoginScreen({
                   }}
                   onBlur={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = 'rgba(17, 24, 39, 0.1)';
+                      e.currentTarget.style.borderColor = 'var(--color-input-border)';
                       e.currentTarget.style.boxShadow = 'none';
                     }
                   }}
@@ -542,7 +542,7 @@ export function LoginScreen({
                     border: 'none',
                     padding: '4px',
                     cursor: 'pointer',
-                    color: 'rgba(17, 24, 39, 0.4)',
+                    color: 'var(--color-text-muted)',
                     transition: 'color 0.2s ease',
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.7)'}
@@ -660,7 +660,7 @@ export function LoginScreen({
           >
             <span
               style={{
-                color: 'rgba(17, 24, 39, 0.5)',
+                color: 'var(--color-text-muted)',
                 fontSize: '14px',
                 ...fontSmoothing,
               }}
@@ -710,9 +710,9 @@ export function LoginScreen({
                   display: 'inline-block',
                   padding: '4px 10px',
                   backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                  border: '1px solid rgba(17, 24, 39, 0.04)',
+                  border: '1px solid var(--color-border-soft)',
                   borderRadius: '10px',
-                  color: 'rgba(17, 24, 39, 0.35)',
+                  color: 'var(--color-text-muted)',
                   fontFamily: fontStack,
                   fontSize: '12px',
                   fontWeight: 450,

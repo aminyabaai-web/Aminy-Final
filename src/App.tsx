@@ -4142,12 +4142,7 @@ export default function App() {
                     </Suspense>
                   )}
 
-                  {/* Feedback Button - hidden during immersive child and booking flows */}
-                  {!['junior', 'conversational-booking', 'video-call', 'pre-call-setup'].includes(currentScreen) && (
-                    <Suspense fallback={null}>
-                      <FeedbackButton />
-                    </Suspense>
-                  )}
+                  {/* Feedback Button moved to Settings/Account screen */}
 
                   {/* App Review Prompt — self-contained, triggered after positive sessions */}
                   <Suspense fallback={null}>
