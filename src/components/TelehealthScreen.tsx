@@ -4,7 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Calendar, Clock, Video, FileText, CheckCircle, Sparkles, Shield, Zap } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, Video, FileText, CheckCircle, Sparkles, Shield, Zap, Heart } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
