@@ -4,6 +4,8 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  VITE_STRIPE_PRICE_ORG_MONTHLY = "price_1TfWmtQaCBrUl24BXNS3sIPj"
+  VITE_STRIPE_PRICE_ORG_YEARLY = "price_1TfWmuQaCBrUl24BOMBNgylW"
 
 # SPA routing — all paths serve index.html
 [[redirects]]
