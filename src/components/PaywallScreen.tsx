@@ -32,6 +32,7 @@ import {
 } from '../lib/tier-utils';
 import type { MonetizationMode } from '../lib/monetization-mode';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { supabase } from '../utils/supabase/client';
 import { addBreadcrumb, captureError } from '../lib/sentry';
 
@@ -124,10 +125,12 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
   const handleSelectTier = async (tierId: TierType) => {
     if (tierId === currentTier) {
+      HAPTICS.light();
       toast.info("You're already on this plan");
       return;
     }
 
+    HAPTICS.success();
     // Free tier doesn't need payment
     if (tierId === 'free') {
       onSubscribe(tierId);

@@ -27,6 +27,7 @@ import {
   Search,
 } from 'lucide-react';
 import { Button } from './ui/button';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { Card } from './ui/card';
 import { Input } from './ui/input';
 import {
@@ -151,10 +152,10 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
           </div>
           <div className="flex flex-col gap-2 sm:min-w-[200px]">
             <Button asChild className="h-11 rounded-2xl bg-red-600 text-white hover:bg-red-700 action-button">
-              <a href="tel:988">Call or text 988 now</a>
+              <a href="tel:988" onClick={() => HAPTICS.heavy()}>Call or text 988 now</a>
             </Button>
             <Button asChild variant="outline" className="h-11 rounded-2xl border-red-200 bg-white text-red-700 hover:bg-red-50 dark:border-red-900/40 dark:bg-slate-900 dark:text-red-300 dark:hover:bg-red-950/30">
-              <a href="tel:911">Call 911 if there is immediate danger</a>
+              <a href="tel:911" onClick={() => HAPTICS.heavy()}>Call 911 if there is immediate danger</a>
             </Button>
           </div>
         </div>

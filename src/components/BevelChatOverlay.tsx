@@ -18,6 +18,7 @@ import {
   type CurrentContext
 } from '../ai/contextLayer';
 import { buildScreenStateBlock } from '../ai/screenStateRegistry';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { getStateAIContext } from '../lib/state-configs';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import {
@@ -1340,7 +1341,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       )}
                     </button>
                     <button
-                      onClick={() => sendMessage(input)}
+                      onClick={() => { HAPTICS.medium(); sendMessage(input); }}
                       disabled={(!input.trim() && !attachedImage) || isLoading}
                       aria-label="Send message"
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"

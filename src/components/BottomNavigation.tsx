@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { productFlags } from '../lib/feature-flags';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -230,11 +231,13 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   key={tab.id}
                   onClick={() => {
                     if (isDisabled) {
+                      HAPTICS.warning();
                       toast('This feature requires Aminy Pro', {
                         description: 'Upgrade to access all features.',
                       });
                       return;
                     }
+                    HAPTICS.medium();
                     onNavigate(tab.id);
                   }}
                   className="relative flex flex-col items-center justify-center group"
@@ -272,12 +275,14 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 key={tab.id}
                 onClick={() => {
                   if (isDisabled) {
+                    HAPTICS.warning();
                     toast('This feature requires Aminy Pro', {
                       description: 'Upgrade to access all features.',
                     });
                     return;
                   }
 
+                  HAPTICS.light();
                   if (tab.id === 'more') {
                     setShowMoreMenu(true);
                   } else {
@@ -388,6 +393,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     <button
                       key={item.id}
                       onClick={() => {
+                        HAPTICS.light();
                         setShowMoreMenu(false);
                         onNavigate(item.id);
                       }}
