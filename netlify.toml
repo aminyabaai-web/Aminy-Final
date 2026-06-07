@@ -6,6 +6,7 @@
   NODE_VERSION = "20"
   VITE_STRIPE_PRICE_ORG_MONTHLY = "price_1TfWmtQaCBrUl24BXNS3sIPj"
   VITE_STRIPE_PRICE_ORG_YEARLY = "price_1TfWmuQaCBrUl24BOMBNgylW"
+  VITE_SENTRY_DSN = "https://1c8a5b1cec3156e9daa7d2ba14586f8b@o4510745456672768.ingest.us.sentry.io/4510749632626688"
 
 # SPA routing — all paths serve index.html
 [[redirects]]
