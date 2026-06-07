@@ -306,6 +306,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
   const [speechAnalysis, setSpeechAnalysis] = useState<SpeechAnalysis | null>(null);
   const [isKidMode, setIsKidMode] = useState(true);
   const [voiceNavEnabled, setVoiceNavEnabled] = useState(true);
+  // Sensory overload toggle — reduces animations, mutes colors; persisted across sessions
+  const [reducedSensory, setReducedSensory] = useState(() => localStorage.getItem('junior_reduced_sensory') === '1');
+  // Break timer — shows reminder after 15 minutes of continuous activity
+  const [showBreakReminder, setShowBreakReminder] = useState(false);
+  const [breakReminderDismissed, setBreakReminderDismissed] = useState(false);
   const [practiceReps, setPracticeReps] = useState(23);
   const [generalizationWins, setGeneralizationWins] = useState(7);
   const [showOnlyRecommended, setShowOnlyRecommended] = useState(true);
@@ -328,6 +333,13 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
     });
     return () => { cancelled = true; };
   }, []);
+
+  // Break timer — remind after 15 minutes of activity
+  useEffect(() => {
+    if (breakReminderDismissed) return;
+    const timer = setTimeout(() => setShowBreakReminder(true), 15 * 60 * 1000);
+    return () => clearTimeout(timer);
+  }, [breakReminderDismissed]);
 
   // TTS narration hook
   const tts = useTTS();
@@ -1562,17 +1574,17 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
   if (isKidMode) {
     return (
       <div
-        className="flex h-screen flex-col"
+        className="flex h-screen flex-col junior-page-root"
         style={{
           background:
             'radial-gradient(circle at top, rgba(45,212,191,0.18), transparent 28%), linear-gradient(180deg,#f7fbfb 0%,#eef7f8 56%,#eef2f8 100%)',
         }}
       >
         {/* Kid-Safe Header */}
-        <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur">
+        <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur junior-header">
           <div className="flex items-center space-x-3">
             <motion.div
-              animate={{ scale: [1, 1.1, 1] }}
+              animate={reducedSensory ? {} : { scale: [1, 1.1, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
               className={`w-12 h-12 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
             >
@@ -1588,21 +1600,53 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
           
           <div className="flex items-center space-x-2">
             {/* Token Counter */}
-            <motion.div 
-              animate={{ scale: todayTokens > 0 ? [1, 1.1, 1] : 1 }}
+            <motion.div
+              animate={reducedSensory ? {} : { scale: todayTokens > 0 ? [1, 1.1, 1] : 1 }}
               className="bg-yellow-100 px-3 py-1 rounded-full flex items-center space-x-1"
             >
               <Star className="w-4 h-4 text-yellow-600" />
               <span className="text-yellow-600">{todayTokens}</span>
             </motion.div>
-            
+
             {/* Offline Indicator */}
             {isOfflineMode && (
               <div className="bg-[#F0EDE8] px-2 py-1 rounded-full">
                 <WifiOff className="w-4 h-4 text-[#5A6B7A]" />
               </div>
             )}
-            
+
+            {/* Sensory overload toggle — Moon = calm/reduced mode */}
+            <button
+              type="button"
+              onClick={() => {
+                const next = !reducedSensory;
+                setReducedSensory(next);
+                localStorage.setItem('junior_reduced_sensory', next ? '1' : '0');
+              }}
+              className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition-colors ${
+                reducedSensory
+                  ? 'border-indigo-300 bg-indigo-100 text-indigo-600'
+                  : 'border-[#E8E4DF] bg-white/90 text-slate-400 hover:border-slate-300 hover:text-[#5A6B7A]'
+              }`}
+              aria-label={reducedSensory ? 'Calm mode on — tap to restore animations' : 'Enable calm mode (reduce animations)'}
+              title={reducedSensory ? 'Calm mode on' : 'Enable calm mode'}
+            >
+              {reducedSensory ? <Moon className="h-4 w-4" /> : <Moon className="h-4 w-4 opacity-40" />}
+            </button>
+
+            {/* Home (panic exit) — always visible, returns to Junior home */}
+            {activeView !== 'home' && (
+              <button
+                type="button"
+                onClick={() => setActiveView('home')}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] text-[#6B9080] shadow-sm transition-colors hover:bg-[#F0EDE8]"
+                aria-label="Go to Junior home screen"
+                title="🏠 Home"
+              >
+                <Home className="h-4 w-4" />
+              </button>
+            )}
+
             <button
               type="button"
               onClick={() => setActiveView('parent-controls')}
@@ -1613,6 +1657,20 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             </button>
           </div>
         </div>
+
+        {/* Break timer reminder — gentle nudge after 15 minutes */}
+        {showBreakReminder && !breakReminderDismissed && (
+          <div className="mx-4 mt-2 flex items-center justify-between rounded-2xl bg-blue-50 px-4 py-2.5 shadow-sm">
+            <p className="text-sm text-blue-700">Time for a quick break? 🌬️</p>
+            <button
+              onClick={() => { setBreakReminderDismissed(true); setShowBreakReminder(false); }}
+              className="ml-3 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+              aria-label="Dismiss break reminder"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto">

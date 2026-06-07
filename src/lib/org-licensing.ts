@@ -5,9 +5,9 @@
  * Org Licensing — B2B seat-based subscriptions for AACT, schools, agencies, enterprise.
  *
  * Pricing model:
- * - $99/seat/month default (price_per_seat_cents on organizations table)
- * - Min 10 seats — orgs below that should stay on individual Pro+ tier
- * - Billed monthly or annually (10% annual discount applied at Stripe level)
+ * - $49/seat/month default (price_per_seat_cents on organizations table)
+ * - Min 5 seats — accessible for smaller ABA clinics
+ * - Billed monthly or annually (15% annual discount applied at Stripe level)
  *
  * Single source of truth for org seat economics. Use this library — don't hardcode
  * prices in components.
@@ -19,9 +19,9 @@ import { projectId } from '../utils/supabase/info';
 export const ORG_PLAN_TYPES = ['clinic', 'school', 'agency', 'enterprise'] as const;
 export type OrgPlanType = typeof ORG_PLAN_TYPES[number];
 
-export const MIN_SEATS = 10;
-export const DEFAULT_PRICE_PER_SEAT_CENTS = 9900;  // $99/seat/mo
-export const ANNUAL_DISCOUNT = 0.10;               // 10% off annual
+export const MIN_SEATS = 5;
+export const DEFAULT_PRICE_PER_SEAT_CENTS = 4900;  // $49/seat/mo
+export const ANNUAL_DISCOUNT = 0.15;               // 15% off annual
 
 export interface Organization {
   id: string;

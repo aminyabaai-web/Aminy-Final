@@ -26,7 +26,7 @@ export interface ConnectAccountStatus {
 
 /**
  * Care rail determines platform take rate.
- * - cash_pay: 35% to Aminy (covers marketplace, AI, compliance, support, processing)
+ * - cash_pay: 25% to Aminy (covers marketplace, AI, compliance, support, processing)
  * - insured/partner: 10% (lighter touch — payer does the heavy lifting)
  * - aact_pilot: 5% (partner discount for AACT-affiliated providers)
  */
@@ -72,11 +72,11 @@ export interface OnboardingLinkResult {
 
 /**
  * Take-rate by rail. Single source of truth — change here, propagates everywhere.
- * Cash-pay 35% matches the implicit rate baked into CASH_PAY_VISITS.providerPayoutCents
+ * Cash-pay 25% matches the implicit rate baked into CASH_PAY_VISITS.providerPayoutCents
  * in src/lib/telehealth-economics.ts.
  */
 export const PLATFORM_FEE_RATES: Record<PayoutRail, number> = {
-  cash_pay: 0.35,
+  cash_pay: 0.25,
   insured: 0.10,
   aact_pilot: 0.05,
 };
