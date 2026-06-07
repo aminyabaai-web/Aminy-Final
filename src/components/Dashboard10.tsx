@@ -75,6 +75,7 @@ import { TrialCountdown } from './TrialCountdown';
 import { BottomNavigation } from './BottomNavigation';
 import { ShareInsightInline } from './ShareInsight';
 import { ReferralCard } from './ReferralCard';
+import { BehaviorInsightsCard } from './BehaviorInsightsCard';
 import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
 import { incrementStreak } from '../lib/streak-service';
@@ -504,6 +505,7 @@ export function Dashboard10({
     shouldShowNotificationPrompt && showNotificationPrompt && hasEstablishedUsage && !dashboardData.nextAppointment;
   const shouldShowSleepInsights = Boolean(userId) && (dashboardData.totalCalmMinutes > 0 || streakDays >= 5 || dashboardData.routineAdherence >= 60);
   const shouldShowWinsCard = todaysWins > 0 || streakDays >= 3;
+  const shouldShowBehaviorInsights = Boolean(userId) && streakDays >= 3;
   const shouldShowActionItems = Boolean(userId) && hasEstablishedUsage;
   const shouldShowReferralCard = streakDays >= 3 || todaysWins >= 5;
   const shouldShowOutcomesCard =
@@ -1309,6 +1311,24 @@ export function Dashboard10({
                 />
               </div>
             </Card>
+          </section>
+        )}
+
+        {/* ========================================
+            BEHAVIOR INSIGHTS - Weekly pattern digest
+            Surfaces AI-ready analysis from logged data
+            ======================================== */}
+        {shouldShowBehaviorInsights && (
+          <section>
+            <BehaviorInsightsCard
+              childId={userData.childId || userData.activeChildId}
+              childName={child.name}
+              onOpenChat={(prompt) => {
+                setShowAIChat(true);
+                setChatInput(prompt);
+              }}
+              onNavigate={onNavigate}
+            />
           </section>
         )}
 

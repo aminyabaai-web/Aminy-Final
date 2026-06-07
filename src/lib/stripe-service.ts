@@ -86,6 +86,7 @@ interface CreateCheckoutParams {
   interval: BillingInterval;
   successUrl?: string;
   cancelUrl?: string;
+  promoCode?: string;
 }
 
 interface CheckoutResponse {
@@ -144,6 +145,7 @@ export async function createCheckoutSession({
   interval,
   successUrl = `${getOrigin()}/?screen=dashboard&payment=success`,
   cancelUrl = `${getOrigin()}/?screen=paywall&payment=cancelled`,
+  promoCode,
 }: CreateCheckoutParams): Promise<CheckoutResponse> {
   const priceId = STRIPE_PRICES[`${tier}_${interval}` as keyof typeof STRIPE_PRICES];
 
@@ -161,6 +163,7 @@ export async function createCheckoutSession({
       customerEmail: email,
       successUrl,
       cancelUrl,
+      ...(promoCode ? { promoCode } : {}),
     },
   });
 

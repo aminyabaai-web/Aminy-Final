@@ -25,6 +25,7 @@ serve(async (req) => {
             userId,
             customerEmail,
             customer,
+            promoCode,
         } = await req.json();
 
         if (!userId) {
@@ -53,12 +54,25 @@ serve(async (req) => {
                     cancelUrl ||
                     `${req.headers.get('origin')}/?screen=paywall&payment=cancelled`,
                 client_reference_id: userId,
-                allow_promotion_codes: true,
+                allow_promotion_codes: !promoCode,
                 metadata: {
                     order_type: isRecurring ? 'subscription' : 'one_time',
                     user_id: userId,
                 },
             };
+
+            // Apply promo/affiliate code if provided (server-side lookup)
+            if (promoCode) {
+                try {
+                    const promoCodes = await stripe.promotionCodes.list({ code: promoCode, active: true, limit: 1 });
+                    if (promoCodes.data.length > 0) {
+                        sessionParams.discounts = [{ promotion_code: promoCodes.data[0].id }];
+                    }
+                } catch (_) {
+                    // Invalid code — fall back to allow_promotion_codes so user can try again
+                    sessionParams.allow_promotion_codes = true;
+                }
+            }
 
             // Pre-fill customer email on the checkout page
             if (customer) {

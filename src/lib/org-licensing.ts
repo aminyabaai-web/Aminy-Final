@@ -23,6 +23,9 @@ export const MIN_SEATS = 5;
 export const DEFAULT_PRICE_PER_SEAT_CENTS = 4900;  // $49/seat/mo
 export const ANNUAL_DISCOUNT = 0.15;               // 15% off annual
 
+export const SOLO_BCBA_PRICE_CENTS = 7900;      // $79/mo flat, 1 clinician
+export const SOLO_BCBA_MAX_CLINICIANS = 1;
+
 export interface Organization {
   id: string;
   name: string;
@@ -74,6 +77,22 @@ export function calculateAnnualAmount(seats: number, pricePerSeatCents: number =
 
 export function formatCents(cents: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+}
+
+export function getSoloBCBAPricing() {
+  return {
+    monthlyAmountCents: SOLO_BCBA_PRICE_CENTS,
+    annualAmountCents: Math.round(SOLO_BCBA_PRICE_CENTS * 12 * (1 - ANNUAL_DISCOUNT)),
+    maxClinicians: SOLO_BCBA_MAX_CLINICIANS,
+    features: [
+      'All provider features',
+      'Unlimited client families',
+      'AI session briefings',
+      'Documentation & notes tools',
+      'BCBA practice dashboard',
+      'Rethink/CentralReach sync (coming soon)',
+    ],
+  };
 }
 
 // ─── Organization queries ───────────────────────────────────────────────────

@@ -204,6 +204,31 @@ export function TelehealthScreen({
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+        {/* Meet & Greet — free 15-min intro call, kills commitment friction */}
+        <Card className="p-4 bg-gradient-to-r from-teal-50 to-emerald-50 border-teal-200">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-teal-100 rounded-lg shrink-0">
+              <Heart className="w-5 h-5 text-teal-600" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-semibold text-teal-900">Free 15-Min Meet & Greet</h3>
+                <span className="text-xs font-semibold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">No cost</span>
+              </div>
+              <p className="text-sm text-teal-800 mb-3">
+                Not sure where to start? Meet a BCBA who specializes in {childName}'s needs — no commitment, no charge. Find the right fit before you commit.
+              </p>
+              <Button
+                size="sm"
+                className="bg-teal-600 hover:bg-teal-700 text-white"
+                onClick={() => onNavigate?.('conversational-booking')}
+              >
+                Book Free Intro Call
+              </Button>
+            </div>
+          </div>
+        </Card>
+
         {/* Urgent Help Card - On-demand sessions */}
         <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
           <div className="flex items-start gap-3 sm:gap-4">
