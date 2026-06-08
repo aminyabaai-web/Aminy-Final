@@ -13,15 +13,16 @@
  * "BCBA Team" means BCBA + their supervised RBTs can respond — wider coverage,
  * faster responses, same clinical accountability.
  *
- * Prior session requirement: For billing (CPT 98970-98972) the client must have
- * an established relationship (≥1 session). Cash-pay clients: same expectation
- * for quality, 3-business-day standard response time.
- *
- * Pricing: $30/mo add-on, or included free with Pro+ Family tier.
+ * Tier access rules:
+ *   - Pro+ Family ($49.99/mo): 10 questions/month, no session required
+ *   - Core / Pro: questions included ONLY within 5-day post-telehealth session window
+ *   - Free: no access (hard paywall)
+ *   If no recent session AND tier is not proplus → show upgrade prompt with
+ *   "Book a session to unlock" path. CPT 98970-98972 require established relationship.
  */
 
 import React, { useEffect, useState } from 'react';
-import { Plus, Clock, Check, Sparkles, ShieldCheck, MessageCircle, Star, Loader2, X } from 'lucide-react';
+import { Plus, Clock, Check, Sparkles, ShieldCheck, MessageCircle, Star, Loader2, X, Lock, CalendarDays } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
@@ -62,10 +63,30 @@ interface AskABCBAProps {
   userId: string;
   childName?: string;
   parentName?: string;
+  /**
+   * True when a telehealth session occurred within the past 5 days.
+   * Pro+ ignores this flag — they have a monthly pool regardless.
+   * Core/Pro/free: access is gated to this post-session window.
+   */
   hasEstablishedSession?: boolean;
+  /** 'proplus' | 'pro' | 'core' | 'free' — controls eligibility */
+  tier?: string;
+  onNavigate?: (screen: string) => void;
 }
 
-export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession = true }: AskABCBAProps) {
+export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession, tier = 'core', onNavigate }: AskABCBAProps) {
+  // Pro+ has a monthly question pool — no session required.
+  // Core/Pro must be within the 5-day post-session window.
+  const isProPlus = tier === 'proplus' || tier === 'pro_plus';
+  const isFree = tier === 'free';
+
+  // Check whether a telehealth session occurred in the past 5 days.
+  // If hasEstablishedSession is explicitly passed, trust the caller; otherwise load from DB.
+  const [recentSessionChecked, setRecentSessionChecked] = useState(hasEstablishedSession !== undefined);
+  const [recentSessionBcbaId, setRecentSessionBcbaId] = useState<string | null>(null);
+  const [hasRecentSession, setHasRecentSession] = useState<boolean>(hasEstablishedSession ?? false);
+
+  const canAccess = isProPlus || hasRecentSession;
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAsk, setShowAsk] = useState(false);
@@ -76,7 +97,25 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
 
   useEffect(() => {
     loadThreads();
+    if (!isProPlus && hasEstablishedSession === undefined) {
+      checkRecentSession();
+    }
   }, []);
+
+  async function checkRecentSession() {
+    const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await supabase
+      .from('session_notes')
+      .select('id, provider_id, session_date')
+      .eq('parent_id', userId)
+      .gte('session_date', fiveDaysAgo)
+      .order('session_date', { ascending: false })
+      .limit(1);
+    const found = !!(data && data.length > 0);
+    setHasRecentSession(found);
+    if (found && data![0].provider_id) setRecentSessionBcbaId(data![0].provider_id);
+    setRecentSessionChecked(true);
+  }
 
   async function loadThreads() {
     setIsLoading(true);
@@ -107,6 +146,9 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           category,
           status: 'pending',
           target_response_at: targetResponseAt,
+          // Route session-bundled questions to the BCBA who did the session
+          assigned_provider_id: recentSessionBcbaId || null,
+          source: recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
         })
         .select()
         .single();
@@ -136,6 +178,18 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
     return <ThreadDetail thread={activeThread} onBack={() => { setActiveThread(null); loadThreads(); }} />;
   }
 
+  // Show loading skeleton while we check session eligibility (non-Pro+)
+  if (!isProPlus && !recentSessionChecked) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F2] pb-20">
+        <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />
+        <div className="px-4 mt-4 space-y-3">
+          {[1,2,3].map(i => <div key={i} className="h-16 bg-white rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
@@ -156,7 +210,9 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1B2733]">Your BCBA team, on demand</p>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">$30/mo add-on · Free with Pro+ Family</p>
+              <p className="text-xs text-[#5A6B7A] mt-0.5">
+                {isProPlus ? '10 questions/month included with Pro+' : 'Included for 5 days after each session · Unlimited on Pro+'}
+              </p>
             </div>
           </div>
           <div className="space-y-2">
@@ -176,27 +232,53 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         </div>
       )}
 
-      {/* Compose CTA */}
+      {/* Compose CTA — gated by tier + session window */}
       {!showAsk && (
         <div className="px-4 mt-4">
-          {!hasEstablishedSession && (
-            <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
-              <Clock className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-              <p className="text-xs text-amber-800">
-                <span className="font-semibold">First session recommended.</span>{' '}
-                For the best guidance, book a telehealth session first so your BCBA team knows your child's context before answering.{' '}
-                Questions are still welcome — the team will reply within 24h.
+          {!canAccess ? (
+            /* Hard gate: Core/Pro user with no recent session */
+            <div className="rounded-2xl border border-[#E8E4DF] bg-white p-5 text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto">
+                <Lock className="w-6 h-6 text-slate-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
+                <p className="text-xs text-[#5A6B7A] mt-1">
+                  BCBA team messaging is available for 5 days after each telehealth session — or any time on Pro+ Family.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <button
+                  onClick={() => onNavigate?.('booking')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
+                  style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                >
+                  <CalendarDays className="w-4 h-4" />
+                  Book a telehealth session
+                </button>
+                <button
+                  onClick={() => onNavigate?.('paywall')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#43AA8B] text-[#43AA8B] font-semibold text-sm"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Upgrade to Pro+ for unlimited access
+                </button>
+              </div>
+              <p className="text-xs text-slate-400">
+                Pro+ Family ($49.99/mo) includes 10 BCBA team questions/month, no session required. Same model as Answers Now — but with instant AI drafts.
               </p>
             </div>
+          ) : (
+            <button
+              onClick={() => setShowAsk(true)}
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
+              style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
+            >
+              <Plus className="w-5 h-5" />
+              Ask your BCBA team
+              {isProPlus && <span className="ml-auto text-xs font-normal opacity-80">Pro+ · 10/mo</span>}
+            </button>
           )}
-          <button
-            onClick={() => setShowAsk(true)}
-            className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
-            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
-          >
-            <Plus className="w-5 h-5" />
-            Ask your BCBA team
-          </button>
         </div>
       )}
 
