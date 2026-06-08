@@ -365,6 +365,11 @@ const AskABCBA = lazy(() =>
     default: m.AskABCBA,
   })),
 );
+const GroupSessionDiscovery = lazy(() =>
+  import("./components/GroupSessionDiscovery").then((m) => ({
+    default: m.GroupSessionDiscovery,
+  })),
+);
 const AACTPartnerSetup = lazy(() =>
   import("./components/AACTPartnerSetup").then((m) => ({
     default: m.AACTPartnerSetup,
@@ -1056,7 +1061,8 @@ type AppScreen =
   | "sensory-fidget" // Calm Corner sensory fidget tool for kids
   | "grant-navigator" // Grant & funding finder for families (Pro)
   | "org-admin" // B2B org admin dashboard (seats, billing, members)
-  | "ask-bcba" // Ask a BCBA — async messaging with AI draft + BCBA review (vs Answers Now)
+  | "ask-bcba" // Ask Your BCBA Team — async messaging with AI draft + clinician review
+  | "group-sessions" // Group parent training sessions discovery — ClassPass-style
   | "aact-partner-setup" // Partner-org admin onboarding microsite (Cori at AACT)
   | "care-coordination" // Unified view across ABA/PT/OT/ST/MH + auth + site of care
   | "just-diagnosed"; // Post-diagnosis onboarding flow — state-aware First 30 Days plan
@@ -2762,6 +2768,7 @@ export default function App() {
                   setViewingProviderId(providerId);
                   navigateToScreen("provider-reviews");
                 }}
+                onNavigateToGroupSessions={() => navigateToScreen("group-sessions")}
               />
             </Suspense>
           );
@@ -2850,7 +2857,7 @@ export default function App() {
           );
 
         case "ask-bcba":
-          // Ask a BCBA — async messaging, AI draft + human BCBA review (Answers Now killer)
+          // Ask Your BCBA Team — async messaging, AI draft + human clinician review (Answers Now killer)
           if (!userData.id) { navigateToScreen('login'); return null; }
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -2859,6 +2866,19 @@ export default function App() {
                 userId={userData.id}
                 childName={userData.childName || undefined}
                 parentName={userData.parentName || undefined}
+              />
+            </Suspense>
+          );
+
+        case "group-sessions":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <GroupSessionDiscovery
+                userId={userData.id || undefined}
+                childName={userData.childName || undefined}
+                parentName={userData.parentName || undefined}
+                onBack={() => navigateToScreen("marketplace")}
+                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>
           );

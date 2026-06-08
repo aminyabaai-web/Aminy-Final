@@ -92,6 +92,7 @@ import { ProviderPerformanceTab } from './provider/ProviderPerformanceTab';
 import { TelehealthSessionEngine } from './provider/TelehealthSessionEngine';
 import CredentialingOrchestrator from './provider/CredentialingOrchestrator';
 import ClaimReadyQueue from './provider/ClaimReadyQueue';
+import { GroupSessionCreator } from './provider/GroupSessionCreator';
 import {
   generateSuperbillFromSession,
   saveSuperbillToSupabase,
@@ -2698,6 +2699,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                 </div>
               </Card>
+            )}
+
+            {/* Group sessions — practice-in-a-box high-margin product */}
+            {practiceView === 'overview' && provider && (
+              <GroupSessionCreator
+                providerId={providerId}
+                providerName={provider.name}
+                providerCredentials={provider.credentials}
+                providerPhotoUrl={provider.photo}
+              />
             )}
 
             {/* Next step into the practice loop (overview only) */}
