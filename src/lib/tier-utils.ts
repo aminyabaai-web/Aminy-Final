@@ -1121,7 +1121,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
     proplus: [
       'Everything in Pro, plus:',
       'AI memory: unlimited — complete family history',
-      'Ask a BCBA included (instant AI + BCBA review)',
+      'Ask Your BCBA Team included (instant AI + clinician review)',
       'Unlimited children profiles',
       '30% off all marketplace sessions',
       'Care coordinator (async support)',

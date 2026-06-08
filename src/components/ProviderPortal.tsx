@@ -337,6 +337,39 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
   const [superbillToast, setSuperbillToast] = useState<string | null>(null);
   const [lastSavedNoteId, setLastSavedNoteId] = useState<string | null>(null);
 
+  // Provider notification system — real items requiring action
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [pendingBCBAThreads, setPendingBCBAThreads] = useState<Array<{
+    id: string;
+    question: string;
+    parent_name: string | null;
+    child_name: string | null;
+    created_at: string;
+    status: string;
+  }>>([]);
+  const [unsignedNoteCount, setUnsignedNoteCount] = useState(0);
+
+  const notificationCount = pendingBCBAThreads.length + unsignedNoteCount;
+
+  const loadProviderNotifications = useCallback(async () => {
+    // Pending BCBA threads waiting for clinician review
+    const { data: threads } = await supabase
+      .from('ask_bcba_threads')
+      .select('id, question, parent_name, child_name, created_at, status')
+      .in('status', ['ai_drafted', 'awaiting_bcba'])
+      .order('created_at', { ascending: true })
+      .limit(20);
+    if (threads) setPendingBCBAThreads(threads);
+
+    // Unsigned notes for this provider
+    const { count } = await supabase
+      .from('session_notes')
+      .select('id', { count: 'exact', head: true })
+      .eq('provider_id', providerId)
+      .eq('signed', false);
+    setUnsignedNoteCount(count || 0);
+  }, [providerId]);
+
   // Load provider data from Supabase
   const loadProviderData = useCallback(async () => {
     setIsRefreshing(true);
@@ -624,7 +657,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
   useEffect(() => {
     loadProviderData();
-  }, [loadProviderData]);
+    loadProviderNotifications();
+  }, [loadProviderData, loadProviderNotifications]);
 
   useEffect(() => {
     let cancelled = false;
@@ -922,15 +956,90 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               >
                 <RefreshCw className={`w-5 h-5 text-neutral-600 dark:text-slate-400 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="relative border-[#E8E4DF] bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 hover:text-[#6B9080]"
-                aria-label="Notifications"
-                onClick={() => toast.info("You're all caught up — no new notifications.")}
-              >
-                <Bell className="w-5 h-5 text-neutral-600 dark:text-slate-400" />
-              </Button>
+              <div className="relative">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="relative border-[#E8E4DF] bg-white text-neutral-600 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 hover:text-[#6B9080]"
+                  aria-label="Notifications"
+                  onClick={() => {
+                    setShowNotifications(v => !v);
+                    if (!showNotifications) loadProviderNotifications();
+                  }}
+                >
+                  <Bell className="w-5 h-5 text-neutral-600 dark:text-slate-400" />
+                  {notificationCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center">
+                      {notificationCount > 9 ? '9+' : notificationCount}
+                    </span>
+                  )}
+                </Button>
+                {showNotifications && (
+                  <div className="absolute right-0 top-12 w-80 bg-white border border-[#E8E4DF] rounded-2xl shadow-xl z-50 overflow-hidden">
+                    <div className="p-3 border-b border-[#E8E4DF] flex items-center justify-between">
+                      <p className="text-sm font-semibold text-[#1B2733]">Action required</p>
+                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-slate-600">
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {notificationCount === 0 ? (
+                        <div className="p-6 text-center">
+                          <CheckCircle className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                          <p className="text-sm text-[#5A6B7A]">All caught up!</p>
+                        </div>
+                      ) : (
+                        <div className="divide-y divide-[#F0EDE8]">
+                          {unsignedNoteCount > 0 && (
+                            <button
+                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              onClick={() => { setActiveTab('clinical-notes'); setShowNotifications(false); }}
+                            >
+                              <div className="flex items-start gap-2">
+                                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                                  <FileText className="w-4 h-4 text-amber-600" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} unsigned note{unsignedNoteCount > 1 ? 's' : ''}</p>
+                                  <p className="text-xs text-[#5A6B7A]">Sign to submit for billing</p>
+                                </div>
+                              </div>
+                            </button>
+                          )}
+                          {pendingBCBAThreads.slice(0, 5).map(thread => (
+                            <button
+                              key={thread.id}
+                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
+                            >
+                              <div className="flex items-start gap-2">
+                                <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                                  <MessageSquare className="w-4 h-4 text-[#6B9080]" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-[#1B2733]">Family Q awaiting review</p>
+                                  <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
+                                  {thread.child_name && <p className="text-xs text-[#5A6B7A]">Re: {thread.child_name}</p>}
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {notificationCount > 0 && (
+                      <div className="p-3 border-t border-[#E8E4DF]">
+                        <button
+                          className="w-full text-center text-xs text-[#6B9080] font-medium"
+                          onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
+                        >
+                          View all pending reviews →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
 
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white font-semibold">
@@ -1220,6 +1329,62 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
               </Card>
             </div>
+
+            {/* Async Review Queue — family questions + unsigned notes needing action */}
+            {notificationCount > 0 && (
+              <Card className="p-4 sm:p-5 border-amber-200 bg-amber-50">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-amber-600" />
+                    <h3 className="font-semibold text-amber-900">Action Required ({notificationCount})</h3>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-amber-700 hover:bg-amber-100"
+                    onClick={() => setActiveTab('ai-summaries')}
+                  >
+                    Review all
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {unsignedNoteCount > 0 && (
+                    <button
+                      className="w-full flex items-center gap-3 p-3 bg-white rounded-xl border border-amber-200 hover:border-amber-400 transition-colors text-left"
+                      onClick={() => setActiveTab('clinical-notes')}
+                    >
+                      <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                        <FileText className="w-4 h-4 text-amber-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} note{unsignedNoteCount > 1 ? 's' : ''} need your signature</p>
+                        <p className="text-xs text-[#5A6B7A]">Sign to unlock billing & share with families</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                    </button>
+                  )}
+                  {pendingBCBAThreads.slice(0, 3).map(thread => (
+                    <button
+                      key={thread.id}
+                      className="w-full flex items-center gap-3 p-3 bg-white rounded-xl border border-amber-200 hover:border-amber-400 transition-colors text-left"
+                      onClick={() => setActiveTab('ai-summaries')}
+                    >
+                      <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                        <MessageSquare className="w-4 h-4 text-[#6B9080]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-[#1B2733]">
+                          {thread.child_name ? `${thread.child_name}'s family` : thread.parent_name || 'Family'} has a question
+                        </p>
+                        <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                    </button>
+                  ))}
+                </div>
+              </Card>
+            )}
 
             {/* Insight Navigator CTA */}
             <Card className="p-6 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200/60">
@@ -1516,6 +1681,52 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </p>
               </div>
             </div>
+
+            {/* Pending family Q's — the provider review queue */}
+            {pendingBCBAThreads.length > 0 && (
+              <Card className="p-4 border-[#6B9080]/30 bg-[#6B9080]/5">
+                <div className="flex items-center gap-2 mb-3">
+                  <MessageSquare className="w-5 h-5 text-[#6B9080]" />
+                  <h3 className="font-semibold text-[#1B2733] dark:text-white">
+                    Family Questions Awaiting Review ({pendingBCBAThreads.length})
+                  </h3>
+                </div>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
+                  AI has drafted instant responses. Review, edit, and sign to complete — families are waiting.
+                </p>
+                <div className="space-y-2">
+                  {pendingBCBAThreads.map(thread => (
+                    <div key={thread.id} className="flex items-start gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl border border-[#E8E4DF]">
+                      <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center shrink-0 mt-0.5">
+                        <MessageSquare className="w-4 h-4 text-[#6B9080]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className="text-sm font-medium text-[#1B2733] dark:text-white">
+                            {thread.child_name ? `Re: ${thread.child_name}` : thread.parent_name || 'Family'}
+                          </p>
+                          <span className="text-xs text-[#5A6B7A]">·</span>
+                          <span className="text-xs text-[#5A6B7A]">
+                            {Math.round((Date.now() - new Date(thread.created_at).getTime()) / 3600000)}h ago
+                          </span>
+                        </div>
+                        <p className="text-sm text-[#3A4A57] dark:text-slate-300 line-clamp-2">{thread.question}</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        className="bg-[#6B9080] hover:bg-[#5A7A6E] text-white shrink-0"
+                        onClick={() => {
+                          // Open the thread in a new review modal or navigate to it
+                          toast.info('Thread review panel — coming soon. Check Supabase for thread ID: ' + thread.id.slice(0, 8));
+                        }}
+                      >
+                        Review
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
 
             {/* Patient selector for AI summaries */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

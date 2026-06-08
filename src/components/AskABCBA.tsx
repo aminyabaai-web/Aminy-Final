@@ -2,16 +2,20 @@
 // CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
 
 /**
- * Ask a BCBA — async question-to-BCBA messaging product.
+ * Ask Your BCBA Team — async question-to-care-team messaging product.
  *
  * Compete with Answers Now ($55/mo) by:
  *   1. AI drafts a response instantly (Claude with full family context)
- *   2. Parent sees AI draft + "Awaiting BCBA review (within 24h)"
- *   3. BCBA reviews + edits + signs within 24h
- *   4. Parent sees final BCBA-signed response
+ *   2. Parent sees AI draft + "Awaiting team review (within 24h)"
+ *   3. BCBA or supervised RBT reviews + edits + signs within 24h
+ *   4. Parent sees final signed response
  *
- * The AI draft is the differentiator — Answers Now makes you wait 24h for ANY
- * response. We give you an instant answer that gets validated by a real BCBA.
+ * "BCBA Team" means BCBA + their supervised RBTs can respond — wider coverage,
+ * faster responses, same clinical accountability.
+ *
+ * Prior session requirement: For billing (CPT 98970-98972) the client must have
+ * an established relationship (≥1 session). Cash-pay clients: same expectation
+ * for quality, 3-business-day standard response time.
  *
  * Pricing: $30/mo add-on, or included free with Pro+ Family tier.
  */
@@ -58,9 +62,10 @@ interface AskABCBAProps {
   userId: string;
   childName?: string;
   parentName?: string;
+  hasEstablishedSession?: boolean;
 }
 
-export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProps) {
+export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession = true }: AskABCBAProps) {
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAsk, setShowAsk] = useState(false);
@@ -115,7 +120,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
         body: JSON.stringify({ threadId: thread.id }),
       }).catch(() => {});
 
-      toast.success('Question sent. AI is drafting an instant response — BCBA review, typically within 24h.');
+      toast.success('Question sent. AI is drafting an instant response — BCBA team review within 24h (3 business days max).');
       setQuestion('');
       setCategory(null);
       setShowAsk(false);
@@ -135,8 +140,8 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
       <ScreenHeader
-        title="Ask a BCBA"
-        subtitle="AI draft instantly · BCBA review, typically within 24 hours"
+        title="Ask Your BCBA Team"
+        subtitle="Instant AI draft · BCBA or RBT review, typically within 24 hours"
         icon={<ShieldCheck className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -150,7 +155,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">BCBA expertise, on demand</p>
+              <p className="text-sm font-semibold text-[#1B2733]">Your BCBA team, on demand</p>
               <p className="text-xs text-[#5A6B7A] mt-0.5">$30/mo add-on · Free with Pro+ Family</p>
             </div>
           </div>
@@ -161,11 +166,11 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
             </div>
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">BCBA-reviewed</span> — a licensed BCBA edits and signs the response, typically within 24 hours</p>
+              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — your BCBA or supervised RBT edits and signs the response, typically within 24 hours</p>
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + BCBA sign-off for less.</p>
+              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + clinician sign-off for less.</p>
             </div>
           </div>
         </div>
@@ -174,13 +179,23 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
       {/* Compose CTA */}
       {!showAsk && (
         <div className="px-4 mt-4">
+          {!hasEstablishedSession && (
+            <div className="mb-3 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
+              <Clock className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+              <p className="text-xs text-amber-800">
+                <span className="font-semibold">First session recommended.</span>{' '}
+                For the best guidance, book a telehealth session first so your BCBA team knows your child's context before answering.{' '}
+                Questions are still welcome — the team will reply within 24h.
+              </p>
+            </div>
+          )}
           <button
             onClick={() => setShowAsk(true)}
             className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
             style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
           >
             <Plus className="w-5 h-5" />
-            Ask a question
+            Ask your BCBA team
           </button>
         </div>
       )}
@@ -231,10 +246,10 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
             style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            {isSubmitting ? 'Sending…' : 'Send to BCBA'}
+            {isSubmitting ? 'Sending…' : 'Send to BCBA team'}
           </button>
 
-          <p className="text-xs text-slate-400 text-center">AI drafts instantly · BCBA review, typically within 24 hours</p>
+          <p className="text-xs text-slate-400 text-center">AI drafts instantly · BCBA team review, typically within 24 hours (3 business days max)</p>
         </div>
       )}
 
@@ -247,7 +262,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
         ) : threads.length === 0 ? (
           <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
             <MessageCircle className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA review typically within 24 hours.</p>
+            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA team review typically within 24 hours.</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -372,7 +387,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA review</p>
+            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA team review</p>
             {thread.target_response_at && (
               <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
@@ -387,7 +402,7 @@ function StatusPill({ status }: { status: Thread['status'] }) {
   const styles: Record<Thread['status'], { bg: string; text: string; label: string; icon: React.ReactNode }> = {
     pending:        { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Drafting…',  icon: <Loader2 className="w-3 h-3 animate-spin" /> },
     ai_drafted:    { bg: 'bg-[#6B9080]/10',   text: 'text-[#6B9080]',   label: 'AI ready',   icon: <Sparkles className="w-3 h-3" /> },
-    awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'BCBA queue', icon: <Clock className="w-3 h-3" /> },
+    awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Team queue', icon: <Clock className="w-3 h-3" /> },
     completed:     { bg: 'bg-emerald-50',text: 'text-emerald-700',label: 'Reviewed',   icon: <Check className="w-3 h-3" /> },
     closed:        { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
   };
