@@ -110,6 +110,7 @@ interface ProviderMarketplaceProps {
   onBookSession?: (providerId: string, sessionType: string, dateTime: string) => void;
   onViewProvider?: (providerId: string) => void;
   onBack?: () => void;
+  onNavigateToGroupSessions?: () => void;
 }
 
 // Filter state interface
@@ -195,7 +196,8 @@ export function ProviderMarketplace({
   childConditions = [],
   userTier = 'core',
   onBookSession,
-  onViewProvider
+  onViewProvider,
+  onNavigateToGroupSessions,
 }: ProviderMarketplaceProps) {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'behavioral' | 'therapy' | 'medical'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -816,6 +818,32 @@ export function ProviderMarketplace({
               </div>
             </div>
           </Card>
+        )}
+
+        {/* Group Training CTA — ClassPass for ABA parent training */}
+        {onNavigateToGroupSessions && (
+          <button
+            onClick={onNavigateToGroupSessions}
+            className="w-full mb-4 p-4 rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 text-left hover:shadow-md transition-all group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-start gap-3">
+                <div className="p-2 bg-emerald-100 rounded-xl shrink-0">
+                  <Users className="w-5 h-5 text-emerald-700" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-emerald-900">Group BCBA Sessions</p>
+                    <span className="text-xs font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">NEW</span>
+                  </div>
+                  <p className="text-sm text-emerald-800 mt-0.5">
+                    Expert-led parent training with up to 4 families · $50/family · Live topics: sleep, meltdowns, school, transitions
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-emerald-600 group-hover:translate-x-1 transition-transform shrink-0" />
+            </div>
+          </button>
         )}
 
         <div className="flex items-center justify-between mb-4">

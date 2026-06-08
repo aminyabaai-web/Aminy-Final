@@ -130,6 +130,22 @@ const MODALITIES: Modality[] = [
     icon: <Shield className="w-5 h-5" />
   },
   {
+    id: 'group-office-hours',
+    label: 'Group Office Hours',
+    cptCodes: ['97156'],
+    description: 'BCBA hosts a live group session for up to 8 families. Topic-based parent training (sleep, mealtime, transitions, school). Cash pay only — most payers don\'t reimburse group ABA.',
+    participants: ['BCBA', 'Up to 8 families'],
+    billingNote: 'Cash pay $35/family, up to 8 families = up to $280/session. Each family bills as a separate 97156 unit. Verify payer policy before using insurance.',
+    requiresBcba: true,
+    requiresBcbaSignoff: false,
+    payerRestricted: true,
+    dailyRoomParticipants: ['bcba', 'family_1', 'family_2', 'family_3'],
+    aiDocTargets: ['group_note', 'parent_training_note', 'attendance_log'],
+    estimatedMinutes: 60,
+    omoNote: 'Up to 8 families per group. BCBA earns $175–$280/hr vs $79–$129/hr for 1:1. AI generates individual session notes for each family post-session.',
+    icon: <Users className="w-5 h-5" />
+  },
+  {
     id: 'omo-supervision',
     label: 'OMO Supervision',
     cptCodes: ['97155', '97153'],

@@ -262,7 +262,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
       id: 'proplus' as TierType,
       name: 'Pro+ Family',
       price: `$${tierPricing.proplus.monthly}/mo`,
-      features: ['AI memory: unlimited', 'Ask a BCBA included', 'Unlimited children', 'Care coordinator', 'Priority support'],
+      features: ['AI memory: unlimited', 'Ask Your BCBA Team included', 'Unlimited children', 'Care coordinator', 'Priority support'],
       highlight: currentTier === 'pro'
     }
   ];

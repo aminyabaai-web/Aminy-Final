@@ -2,22 +2,27 @@
 // CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
 
 /**
- * Ask a BCBA — async question-to-BCBA messaging product.
+ * Ask Your BCBA Team — async question-to-care-team messaging product.
  *
  * Compete with Answers Now ($55/mo) by:
  *   1. AI drafts a response instantly (Claude with full family context)
- *   2. Parent sees AI draft + "Awaiting BCBA review (within 24h)"
- *   3. BCBA reviews + edits + signs within 24h
- *   4. Parent sees final BCBA-signed response
+ *   2. Parent sees AI draft + "Awaiting team review (within 24h)"
+ *   3. BCBA or supervised RBT reviews + edits + signs within 24h
+ *   4. Parent sees final signed response
  *
- * The AI draft is the differentiator — Answers Now makes you wait 24h for ANY
- * response. We give you an instant answer that gets validated by a real BCBA.
+ * "BCBA Team" means BCBA + their supervised RBTs can respond — wider coverage,
+ * faster responses, same clinical accountability.
  *
- * Pricing: $30/mo add-on, or included free with Pro+ Family tier.
+ * Tier access rules:
+ *   - Pro+ Family ($49.99/mo): 10 questions/month, no session required
+ *   - Core / Pro: questions included ONLY within 5-day post-telehealth session window
+ *   - Free: no access (hard paywall)
+ *   If no recent session AND tier is not proplus → show upgrade prompt with
+ *   "Book a session to unlock" path. CPT 98970-98972 require established relationship.
  */
 
 import React, { useEffect, useState } from 'react';
-import { Plus, Clock, Check, Sparkles, ShieldCheck, MessageCircle, Star, Loader2, X } from 'lucide-react';
+import { Plus, Clock, Check, Sparkles, ShieldCheck, MessageCircle, Star, Loader2, X, Lock, CalendarDays } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
@@ -58,9 +63,30 @@ interface AskABCBAProps {
   userId: string;
   childName?: string;
   parentName?: string;
+  /**
+   * True when a telehealth session occurred within the past 5 days.
+   * Pro+ ignores this flag — they have a monthly pool regardless.
+   * Core/Pro/free: access is gated to this post-session window.
+   */
+  hasEstablishedSession?: boolean;
+  /** 'proplus' | 'pro' | 'core' | 'free' — controls eligibility */
+  tier?: string;
+  onNavigate?: (screen: string) => void;
 }
 
-export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProps) {
+export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession, tier = 'core', onNavigate }: AskABCBAProps) {
+  // Pro+ has a monthly question pool — no session required.
+  // Core/Pro must be within the 5-day post-session window.
+  const isProPlus = tier === 'proplus' || tier === 'pro_plus';
+  const isFree = tier === 'free';
+
+  // Check whether a telehealth session occurred in the past 5 days.
+  // If hasEstablishedSession is explicitly passed, trust the caller; otherwise load from DB.
+  const [recentSessionChecked, setRecentSessionChecked] = useState(hasEstablishedSession !== undefined);
+  const [recentSessionBcbaId, setRecentSessionBcbaId] = useState<string | null>(null);
+  const [hasRecentSession, setHasRecentSession] = useState<boolean>(hasEstablishedSession ?? false);
+
+  const canAccess = isProPlus || hasRecentSession;
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAsk, setShowAsk] = useState(false);
@@ -71,7 +97,25 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
 
   useEffect(() => {
     loadThreads();
+    if (!isProPlus && hasEstablishedSession === undefined) {
+      checkRecentSession();
+    }
   }, []);
+
+  async function checkRecentSession() {
+    const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await supabase
+      .from('session_notes')
+      .select('id, provider_id, session_date')
+      .eq('parent_id', userId)
+      .gte('session_date', fiveDaysAgo)
+      .order('session_date', { ascending: false })
+      .limit(1);
+    const found = !!(data && data.length > 0);
+    setHasRecentSession(found);
+    if (found && data![0].provider_id) setRecentSessionBcbaId(data![0].provider_id);
+    setRecentSessionChecked(true);
+  }
 
   async function loadThreads() {
     setIsLoading(true);
@@ -102,6 +146,9 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
           category,
           status: 'pending',
           target_response_at: targetResponseAt,
+          // Route session-bundled questions to the BCBA who did the session
+          assigned_provider_id: recentSessionBcbaId || null,
+          source: recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
         })
         .select()
         .single();
@@ -115,7 +162,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
         body: JSON.stringify({ threadId: thread.id }),
       }).catch(() => {});
 
-      toast.success('Question sent. AI is drafting an instant response — BCBA review, typically within 24h.');
+      toast.success('Question sent. AI is drafting an instant response — BCBA team review within 24h (3 business days max).');
       setQuestion('');
       setCategory(null);
       setShowAsk(false);
@@ -131,12 +178,24 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
     return <ThreadDetail thread={activeThread} onBack={() => { setActiveThread(null); loadThreads(); }} />;
   }
 
+  // Show loading skeleton while we check session eligibility (non-Pro+)
+  if (!isProPlus && !recentSessionChecked) {
+    return (
+      <div className="min-h-screen bg-[#FAF7F2] pb-20">
+        <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />
+        <div className="px-4 mt-4 space-y-3">
+          {[1,2,3].map(i => <div key={i} className="h-16 bg-white rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] pb-20">
       {/* Header */}
       <ScreenHeader
-        title="Ask a BCBA"
-        subtitle="AI draft instantly · BCBA review, typically within 24 hours"
+        title="Ask Your BCBA Team"
+        subtitle="Instant AI draft · BCBA or RBT review, typically within 24 hours"
         icon={<ShieldCheck className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -150,8 +209,10 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">BCBA expertise, on demand</p>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">$30/mo add-on · Free with Pro+ Family</p>
+              <p className="text-sm font-semibold text-[#1B2733]">Your BCBA team, on demand</p>
+              <p className="text-xs text-[#5A6B7A] mt-0.5">
+                {isProPlus ? '10 questions/month included with Pro+' : 'Included for 5 days after each session · Unlimited on Pro+'}
+              </p>
             </div>
           </div>
           <div className="space-y-2">
@@ -161,27 +222,63 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
             </div>
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">BCBA-reviewed</span> — a licensed BCBA edits and signs the response, typically within 24 hours</p>
+              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — your BCBA or supervised RBT edits and signs the response, typically within 24 hours</p>
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + BCBA sign-off for less.</p>
+              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + clinician sign-off for less.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Compose CTA */}
+      {/* Compose CTA — gated by tier + session window */}
       {!showAsk && (
         <div className="px-4 mt-4">
-          <button
-            onClick={() => setShowAsk(true)}
-            className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
-            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
-          >
-            <Plus className="w-5 h-5" />
-            Ask a question
-          </button>
+          {!canAccess ? (
+            /* Hard gate: Core/Pro user with no recent session */
+            <div className="rounded-2xl border border-[#E8E4DF] bg-white p-5 text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto">
+                <Lock className="w-6 h-6 text-slate-400" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
+                <p className="text-xs text-[#5A6B7A] mt-1">
+                  BCBA team messaging is available for 5 days after each telehealth session — or any time on Pro+ Family.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <button
+                  onClick={() => onNavigate?.('booking')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
+                  style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                >
+                  <CalendarDays className="w-4 h-4" />
+                  Book a telehealth session
+                </button>
+                <button
+                  onClick={() => onNavigate?.('paywall')}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#43AA8B] text-[#43AA8B] font-semibold text-sm"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Upgrade to Pro+ for unlimited access
+                </button>
+              </div>
+              <p className="text-xs text-slate-400">
+                Pro+ Family ($49.99/mo) includes 10 BCBA team questions/month, no session required. Same model as Answers Now — but with instant AI drafts.
+              </p>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAsk(true)}
+              className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
+              style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
+            >
+              <Plus className="w-5 h-5" />
+              Ask your BCBA team
+              {isProPlus && <span className="ml-auto text-xs font-normal opacity-80">Pro+ · 10/mo</span>}
+            </button>
+          )}
         </div>
       )}
 
@@ -231,10 +328,10 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
             style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            {isSubmitting ? 'Sending…' : 'Send to BCBA'}
+            {isSubmitting ? 'Sending…' : 'Send to BCBA team'}
           </button>
 
-          <p className="text-xs text-slate-400 text-center">AI drafts instantly · BCBA review, typically within 24 hours</p>
+          <p className="text-xs text-slate-400 text-center">AI drafts instantly · BCBA team review, typically within 24 hours (3 business days max)</p>
         </div>
       )}
 
@@ -247,7 +344,7 @@ export function AskABCBA({ onBack, userId, childName, parentName }: AskABCBAProp
         ) : threads.length === 0 ? (
           <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
             <MessageCircle className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA review typically within 24 hours.</p>
+            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA team review typically within 24 hours.</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -372,7 +469,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA review</p>
+            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA team review</p>
             {thread.target_response_at && (
               <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
@@ -387,7 +484,7 @@ function StatusPill({ status }: { status: Thread['status'] }) {
   const styles: Record<Thread['status'], { bg: string; text: string; label: string; icon: React.ReactNode }> = {
     pending:        { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Drafting…',  icon: <Loader2 className="w-3 h-3 animate-spin" /> },
     ai_drafted:    { bg: 'bg-[#6B9080]/10',   text: 'text-[#6B9080]',   label: 'AI ready',   icon: <Sparkles className="w-3 h-3" /> },
-    awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'BCBA queue', icon: <Clock className="w-3 h-3" /> },
+    awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Team queue', icon: <Clock className="w-3 h-3" /> },
     completed:     { bg: 'bg-emerald-50',text: 'text-emerald-700',label: 'Reviewed',   icon: <Check className="w-3 h-3" /> },
     closed:        { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
   };

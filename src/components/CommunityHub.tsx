@@ -1027,12 +1027,12 @@ export function CommunityHub({
                   <Award className="w-6 h-6 text-[#6B9080] shrink-0" />
                   <div>
                     <h3 className="font-semibold text-[#6B9080] dark:text-teal-100">
-                      Ask a BCBA
+                      Ask Your BCBA Team
                     </h3>
                     <p className="text-sm text-[#6B9080] dark:text-teal-200 mt-1">
                       {onNavigate
-                        ? 'Send a question to a Board Certified Behavior Analyst and get a written reply, typically within 48-72 hours.'
-                        : 'Read answers to questions other parents have asked Board Certified Behavior Analysts below.'}
+                        ? 'Send a question to your BCBA team — instant AI draft, clinician-reviewed reply within 24 hours.'
+                        : 'Read answers to questions other parents have asked their BCBA teams below.'}
                     </p>
                   </div>
                 </div>
