@@ -1345,7 +1345,16 @@ const getInitialScreen = (): AppScreen => {
         }
         return getAuthenticatedLandingScreen();
       } else if (user.email) {
-        return "onboarding";
+        // Returning user whose cached profile says onboarding is incomplete.
+        // This flag can lag the DB (it has been known to fail to persist), so a
+        // fully-onboarded user with an expired session would otherwise be dumped
+        // into a fresh onboarding flow with no way out (onboarding is a
+        // sessionless-OK screen, so the no-session handler won't bounce them to
+        // login). Route to login instead: the auth listener reads DB truth and
+        // forwards to dashboard (onboarding complete) or onboarding (a live
+        // session that genuinely needs it). The !authReady gate hides login
+        // until that resolves, so mid-signup users never see a login flash.
+        return "login";
       }
     }
   } catch (e) {
