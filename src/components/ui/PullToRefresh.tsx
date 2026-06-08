@@ -170,14 +170,16 @@ export function PullToRefresh({
         </div>
       </div>
 
-      {/* Content container */}
+      {/* Content container — only apply transform when actually pulling to avoid creating a
+          containing block for fixed descendants (CSS Transforms spec: any transform value
+          makes the element the containing block for position:fixed children). */}
       <div
         ref={containerRef}
         className="h-full overflow-y-auto overscroll-contain"
-        style={{
-          transform: showIndicator ? `translateY(${indicatorOffset}px)` : 'translateY(0)',
+        style={showIndicator ? {
+          transform: `translateY(${indicatorOffset}px)`,
           transition: isPulling ? 'none' : 'transform 0.2s ease-out',
-        }}
+        } : undefined}
       >
         {children}
       </div>

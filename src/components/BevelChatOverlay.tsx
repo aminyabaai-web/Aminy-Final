@@ -17,7 +17,9 @@ import {
   type UserContext,
   type CurrentContext
 } from '../ai/contextLayer';
+import { generateConversationSummary } from '../lib/ai-engine/conversation-memory';
 import { buildScreenStateBlock } from '../ai/screenStateRegistry';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { getStateAIContext } from '../lib/state-configs';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import {
@@ -335,13 +337,18 @@ export function BevelChatOverlay({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasGeneratedProactive = useRef(false);
 
-  // Save session on close
+  // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
       const preview = userMsgs[0].content.slice(0, 90);
       persistChatSession({ id: sessionId, timestamp: new Date().toISOString(), preview, messages });
       setChatSessions(loadChatSessions());
+    }
+    if (messages.length >= 4) {
+      generateConversationSummary(messages).then(() => {
+        toast.success('Memory updated', { duration: 1500, position: 'bottom-center' });
+      }).catch(() => {});
     }
     onClose();
   }, [messages, sessionId, onClose]);
@@ -1293,6 +1300,31 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 </div>
               )}
 
+              {/* Smart action chips — show only when conversation is empty, collapsed after first message */}
+              {messages.length === 0 && (
+                <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
+                  {[
+                    { emoji: '📊', label: 'Log behavior', starter: 'Log behavior: ' },
+                    { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
+                    { emoji: '📅', label: 'Add appointment', starter: 'Add appointment: ' },
+                    { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
+                  ].map(chip => (
+                    <button
+                      key={chip.label}
+                      onClick={() => {
+                        HAPTICS.light();
+                        setInput(chip.starter);
+                        setTimeout(() => inputRef.current?.focus(), 50);
+                      }}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57] rounded-full text-xs font-medium transition-colors"
+                    >
+                      <span>{chip.emoji}</span>
+                      <span>{chip.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="flex items-end gap-2">
                 {/* Attachment button */}
                 <button
@@ -1340,7 +1372,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       )}
                     </button>
                     <button
-                      onClick={() => sendMessage(input)}
+                      onClick={() => { HAPTICS.medium(); sendMessage(input); }}
                       disabled={(!input.trim() && !attachedImage) || isLoading}
                       aria-label="Send message"
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"

@@ -69,9 +69,13 @@ import { MorningMission, useMorningMission } from './MorningMission';
 import { ActionItems } from './ActionItems';
 import { HealthDataIntegration } from './HealthDataIntegration';
 import { TrialProgressBanner, SoftNudgeModal, HardPaywallModal } from './TrialExperience';
+import { SkeletonDashboard } from './ui/Skeleton';
+import { PullToRefresh } from './ui/PullToRefresh';
+import { TrialCountdown } from './TrialCountdown';
 import { BottomNavigation } from './BottomNavigation';
 import { ShareInsightInline } from './ShareInsight';
 import { ReferralCard } from './ReferralCard';
+import { BehaviorInsightsCard } from './BehaviorInsightsCard';
 import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
 import { incrementStreak } from '../lib/streak-service';
@@ -501,6 +505,7 @@ export function Dashboard10({
     shouldShowNotificationPrompt && showNotificationPrompt && hasEstablishedUsage && !dashboardData.nextAppointment;
   const shouldShowSleepInsights = Boolean(userId) && (dashboardData.totalCalmMinutes > 0 || streakDays >= 5 || dashboardData.routineAdherence >= 60);
   const shouldShowWinsCard = todaysWins > 0 || streakDays >= 3;
+  const shouldShowBehaviorInsights = Boolean(userId) && streakDays >= 3;
   const shouldShowActionItems = Boolean(userId) && hasEstablishedUsage;
   const shouldShowReferralCard = streakDays >= 3 || todaysWins >= 5;
   const shouldShowOutcomesCard =
@@ -615,17 +620,19 @@ export function Dashboard10({
     }
   };
 
-  // Show loading state while data is being fetched
+  // Pull-to-refresh handler
+  const handleRefresh = async () => {
+    if (dashboardData.refresh) {
+      await dashboardData.refresh();
+    }
+  };
+
+  // Show skeleton while data loads instead of a blocking spinner
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen flex items-center justify-center dark:bg-slate-900" style={{ background: '#FAF7F2' }}>
-        <div className="text-center">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-            className="w-12 h-12 border-4 border-[#6B9080] border-t-transparent rounded-full mx-auto mb-4"
-          />
-          <p className="text-[#0D1B2A] dark:text-white font-medium">Loading your calm hub...</p>
+      <div className="min-h-screen dark:bg-slate-900 pb-24" style={{ background: '#FAF7F2' }}>
+        <div className="p-4">
+          <SkeletonDashboard />
         </div>
       </div>
     );
@@ -855,6 +862,18 @@ export function Dashboard10({
           </div>
         </div>
       </header>
+
+      {/* Trial countdown banner — only for free-tier users in their first 7 days */}
+      {userTier === 'free' && userId && (
+        <div className="max-w-4xl mx-auto px-4 pt-3">
+          <TrialCountdown
+            trialStartDate={JSON.parse(localStorage.getItem(`aminy_trial_${userId}`) || '{}').startDate || new Date().toISOString()}
+            onUpgrade={() => onNavigate?.('paywall')}
+            currentTier={userTier}
+            dismissible={true}
+          />
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
@@ -1296,6 +1315,24 @@ export function Dashboard10({
         )}
 
         {/* ========================================
+            BEHAVIOR INSIGHTS - Weekly pattern digest
+            Surfaces AI-ready analysis from logged data
+            ======================================== */}
+        {shouldShowBehaviorInsights && (
+          <section>
+            <BehaviorInsightsCard
+              childId={userData.childId || userData.activeChildId}
+              childName={child.name}
+              onOpenChat={(prompt) => {
+                setShowAIChat(true);
+                setChatInput(prompt);
+              }}
+              onNavigate={onNavigate}
+            />
+          </section>
+        )}
+
+        {/* ========================================
             5. QUICK ACTION GRID (15%)
             ======================================== */}
         <section>
@@ -1450,7 +1487,7 @@ export function Dashboard10({
                   )}
                 </div>
               </div>
-              <p className="text-sm text-gray-300 mt-1">Your always-on parenting support</p>
+              <p className="text-sm text-gray-300 dark:text-slate-300 mt-1">Your always-on parenting support</p>
             </div>
 
             {/* Chat Messages - flex-grow scroll region (header + input stay pinned) */}

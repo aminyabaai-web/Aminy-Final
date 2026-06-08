@@ -17492,3 +17492,20 @@ tr:hover td, .hover-row:hover {
 .dark\:bg-blue-800:is(.dark *) { background-color: oklch(.357 .115 267.935) !important; }
 .dark\:text-blue-100:is(.dark *) { color: oklch(.932 .032 255.585) !important; }
 .dark\:text-blue-200:is(.dark *) { color: oklch(.882 .059 254.128) !important; }
+
+
+/* ============================================================
+   Junior Page dark mode — inline background style overrides
+   ============================================================ */
+.dark .junior-page-root {
+  background: radial-gradient(circle at top, rgba(45,212,191,0.08), transparent 28%),
+    linear-gradient(180deg, #0f172a 0%, #0f1f2f 56%, #0d1b2a 100%) !important;
+}
+.dark .junior-card-white {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.dark .junior-header {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}

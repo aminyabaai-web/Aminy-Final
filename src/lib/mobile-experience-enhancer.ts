@@ -8,13 +8,19 @@
  * Original file was removed. This provides no-op exports to prevent build errors.
  */
 
+const vibrate = (pattern: number | number[]) => {
+  if (typeof navigator !== 'undefined' && navigator.vibrate) {
+    try { navigator.vibrate(pattern); } catch (_) {}
+  }
+};
+
 export const HAPTICS = {
-  light: () => {},
-  medium: () => {},
-  heavy: () => {},
-  success: () => {},
-  warning: () => {},
-  error: () => {},
+  light:   () => vibrate(10),
+  medium:  () => vibrate(25),
+  heavy:   () => vibrate(50),
+  success: () => vibrate([10, 50, 20]),
+  warning: () => vibrate([20, 50, 20, 50, 20]),
+  error:   () => vibrate([50, 30, 50]),
 };
 
 export const ANIMATIONS = {

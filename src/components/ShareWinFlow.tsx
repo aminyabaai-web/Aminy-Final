@@ -21,12 +21,15 @@ import {
   Heart,
   Star,
   X,
+  Gift,
+  MessageCircle,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
+import { generateReferralCode, REFERRAL_PROGRAM_CONFIG } from '../lib/referral-program';
 
 interface WinData {
   type: 'milestone' | 'streak' | 'goal' | 'calm_moment' | 'routine' | 'custom';
@@ -41,6 +44,7 @@ interface ShareWinFlowProps {
   win: WinData;
   onClose?: () => void;
   isOpen?: boolean;
+  userId?: string;
 }
 
 const WIN_TEMPLATES = {
@@ -76,10 +80,15 @@ const WIN_TEMPLATES = {
   },
 };
 
-export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps) {
+export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFlowProps) {
   const [copied, setCopied] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [sharedOnce, setSharedOnce] = useState(false);
+  const [referralCopied, setReferralCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const referralCode = userId ? generateReferralCode(userId) : null;
+  const referralLink = referralCode ? `https://app.aminy.ai/?ref=${referralCode}` : null;
 
   const template = WIN_TEMPLATES[win.type] || WIN_TEMPLATES.custom;
 
@@ -99,6 +108,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
   const handleCopyText = () => {
     navigator.clipboard.writeText(getShareText());
     setCopied(true);
+    setSharedOnce(true);
     toast.success('Copied to clipboard!');
     setTimeout(() => setCopied(false), 2000);
   };
@@ -106,11 +116,21 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
   const handleShareTwitter = () => {
     const text = encodeURIComponent(getShareText());
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+    setSharedOnce(true);
   };
 
   const handleShareFacebook = () => {
     const text = encodeURIComponent(getShareText());
     window.open(`https://www.facebook.com/sharer/sharer.php?quote=${text}`, '_blank');
+    setSharedOnce(true);
+  };
+
+  const handleCopyReferral = () => {
+    if (!referralLink) return;
+    navigator.clipboard.writeText(referralLink);
+    setReferralCopied(true);
+    toast.success('Referral link copied!');
+    setTimeout(() => setReferralCopied(false), 2000);
   };
 
   const handleDownloadImage = async () => {
@@ -128,6 +148,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
       link.href = canvas.toDataURL('image/png');
       link.click();
 
+      setSharedOnce(true);
       toast.success('Image downloaded! Share it on Instagram or anywhere.');
     } catch (error) {
       toast.error('Failed to generate image');
@@ -269,6 +290,46 @@ export function ShareWinFlow({ win, onClose, isOpen = true }: ShareWinFlowProps)
               <div className="p-3 bg-white rounded-lg border text-sm text-[#5A6B7A]">
                 {getShareText()}
               </div>
+
+              {/* Referral nudge — surfaces after sharing, captures viral moment */}
+              <AnimatePresence>
+                {sharedOnce && referralLink && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    className="mt-3 p-3 bg-gradient-to-r from-[#6B9080]/10 to-[#7BA7BC]/10 rounded-xl border border-[#6B9080]/20"
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <Gift className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-[#1B2733]">Know another autism family?</p>
+                        <p className="text-xs text-[#5A6B7A]">
+                          Send them an invite — they get {REFERRAL_PROGRAM_CONFIG.referredReward.description.toLowerCase()}, you get a free month.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleCopyReferral}
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-white rounded-lg border border-[#6B9080]/30 text-sm text-[#6B9080] font-medium hover:bg-[#6B9080]/5 transition-colors"
+                      >
+                        {referralCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        {referralCopied ? 'Copied!' : 'Copy invite link'}
+                      </button>
+                      {referralLink && (
+                        <a
+                          href={`sms:?body=I%20use%20Aminy%20to%20support%20my%20child's%20behavioral%20wellness%20%E2%80%94%20you%20get%20a%20%2425%20credit%20when%20you%20sign%20up:%20${encodeURIComponent(referralLink)}`}
+                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#6B9080] rounded-lg text-sm text-white font-medium hover:bg-[#5A7A6B] transition-colors"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          Text
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </Card>
         </motion.div>

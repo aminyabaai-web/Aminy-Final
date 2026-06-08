@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { productFlags } from '../lib/feature-flags';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -172,9 +173,9 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
   ] : [
     {
       id: 'junior',
-      label: 'Aminy Jr',
+      label: 'Aminy Jr ★',
       icon: Baby,
-      description: 'Calm corner, rewards, and activities'
+      description: "Your child's calm corner, rewards & activities — tap to open"
     },
     {
       id: 'document-vault',
@@ -230,11 +231,13 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   key={tab.id}
                   onClick={() => {
                     if (isDisabled) {
+                      HAPTICS.warning();
                       toast('This feature requires Aminy Pro', {
                         description: 'Upgrade to access all features.',
                       });
                       return;
                     }
+                    HAPTICS.medium();
                     onNavigate(tab.id);
                   }}
                   className="relative flex flex-col items-center justify-center group"
@@ -272,12 +275,14 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 key={tab.id}
                 onClick={() => {
                   if (isDisabled) {
+                    HAPTICS.warning();
                     toast('This feature requires Aminy Pro', {
                       description: 'Upgrade to access all features.',
                     });
                     return;
                   }
 
+                  HAPTICS.light();
                   if (tab.id === 'more') {
                     setShowMoreMenu(true);
                   } else {
@@ -388,14 +393,17 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     <button
                       key={item.id}
                       onClick={() => {
+                        HAPTICS.light();
                         setShowMoreMenu(false);
                         onNavigate(item.id);
                       }}
                       className={`
                         w-full flex items-center justify-between p-3 rounded-xl transition-colors group min-h-[56px]
-                        ${isItemActive
-                          ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
-                          : 'hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
+                        ${item.id === 'junior'
+                          ? 'bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30'
+                          : isItemActive
+                            ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
+                            : 'hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
                         }
                       `}
                       role="menuitem"
@@ -405,26 +413,28 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                       <div className="flex items-center space-x-3">
                         <div className={`
                           w-10 h-10 rounded-xl flex items-center justify-center
-                          ${isItemActive
-                            ? 'bg-[#6B9080]/10 dark:bg-teal-800'
-                            : 'bg-[#F0EDE8] dark:bg-slate-600'
+                          ${item.id === 'junior'
+                            ? 'bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-800 dark:to-pink-900'
+                            : isItemActive
+                              ? 'bg-[#6B9080]/10 dark:bg-teal-800'
+                              : 'bg-[#F0EDE8] dark:bg-slate-600'
                           }
                         `}>
                           <Icon
-                            className={`w-5 h-5 ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#5A6B7A] dark:text-gray-300'}`}
+                            className={`w-5 h-5 ${item.id === 'junior' ? 'text-purple-600 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#5A6B7A] dark:text-gray-300'}`}
                             strokeWidth={1.5}
                           />
                         </div>
 
                         <div className="text-left">
-                          <div className={`text-sm font-medium ${isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
+                          <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
                             {item.label}
                           </div>
                           <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>
                         </div>
                       </div>
 
-                      <ChevronRight className={`w-4 h-4 ${isItemActive ? 'text-primary' : 'text-[#8A9BA8] dark:text-[#5A6B7A]'} group-hover:text-[#5A6B7A] dark:group-hover:text-gray-300 transition-colors`} />
+                      <ChevronRight className={`w-4 h-4 ${item.id === 'junior' ? 'text-purple-400' : isItemActive ? 'text-primary' : 'text-[#8A9BA8] dark:text-[#5A6B7A]'} group-hover:text-[#5A6B7A] dark:group-hover:text-gray-300 transition-colors`} />
                     </button>
                   );
                 })}

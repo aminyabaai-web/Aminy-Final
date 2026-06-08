@@ -5,9 +5,9 @@
  * Org Licensing — B2B seat-based subscriptions for AACT, schools, agencies, enterprise.
  *
  * Pricing model:
- * - $99/seat/month default (price_per_seat_cents on organizations table)
- * - Min 10 seats — orgs below that should stay on individual Pro+ tier
- * - Billed monthly or annually (10% annual discount applied at Stripe level)
+ * - $49/seat/month default (price_per_seat_cents on organizations table)
+ * - Min 5 seats — accessible for smaller ABA clinics
+ * - Billed monthly or annually (15% annual discount applied at Stripe level)
  *
  * Single source of truth for org seat economics. Use this library — don't hardcode
  * prices in components.
@@ -19,9 +19,12 @@ import { projectId } from '../utils/supabase/info';
 export const ORG_PLAN_TYPES = ['clinic', 'school', 'agency', 'enterprise'] as const;
 export type OrgPlanType = typeof ORG_PLAN_TYPES[number];
 
-export const MIN_SEATS = 10;
-export const DEFAULT_PRICE_PER_SEAT_CENTS = 9900;  // $99/seat/mo
-export const ANNUAL_DISCOUNT = 0.10;               // 10% off annual
+export const MIN_SEATS = 5;
+export const DEFAULT_PRICE_PER_SEAT_CENTS = 4900;  // $49/seat/mo
+export const ANNUAL_DISCOUNT = 0.15;               // 15% off annual
+
+export const SOLO_BCBA_PRICE_CENTS = 7900;      // $79/mo flat, 1 clinician
+export const SOLO_BCBA_MAX_CLINICIANS = 1;
 
 export interface Organization {
   id: string;
@@ -74,6 +77,22 @@ export function calculateAnnualAmount(seats: number, pricePerSeatCents: number =
 
 export function formatCents(cents: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(cents / 100);
+}
+
+export function getSoloBCBAPricing() {
+  return {
+    monthlyAmountCents: SOLO_BCBA_PRICE_CENTS,
+    annualAmountCents: Math.round(SOLO_BCBA_PRICE_CENTS * 12 * (1 - ANNUAL_DISCOUNT)),
+    maxClinicians: SOLO_BCBA_MAX_CLINICIANS,
+    features: [
+      'All provider features',
+      'Unlimited client families',
+      'AI session briefings',
+      'Documentation & notes tools',
+      'BCBA practice dashboard',
+      'Rethink/CentralReach sync (coming soon)',
+    ],
+  };
 }
 
 // ─── Organization queries ───────────────────────────────────────────────────

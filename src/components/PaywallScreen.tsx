@@ -32,6 +32,7 @@ import {
 } from '../lib/tier-utils';
 import type { MonetizationMode } from '../lib/monetization-mode';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
+import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { supabase } from '../utils/supabase/client';
 import { addBreadcrumb, captureError } from '../lib/sentry';
 
@@ -61,6 +62,16 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   // Default to yearly for higher ARPU — users can switch to monthly
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState<string | null>(null);
+
+  // Promo code — read from URL (?promo=CODE) then localStorage
+  const [promoCode] = useState<string | null>(() => {
+    const urlPromo = new URLSearchParams(window.location.search).get('promo');
+    if (urlPromo) {
+      localStorage.setItem('aminy_promo_code', urlPromo.toUpperCase());
+      return urlPromo.toUpperCase();
+    }
+    return localStorage.getItem('aminy_promo_code');
+  });
 
   // Insured families are NOT hard-paywalled. We soften the wall and lead with
   // the existing coverage tools using honest "may cover / check" language —
@@ -124,10 +135,12 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
   const handleSelectTier = async (tierId: TierType) => {
     if (tierId === currentTier) {
+      HAPTICS.light();
       toast.info("You're already on this plan");
       return;
     }
 
+    HAPTICS.success();
     // Free tier doesn't need payment
     if (tierId === 'free') {
       onSubscribe(tierId);
@@ -157,12 +170,14 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       }
 
       // Create Stripe checkout session and redirect
+      const storedPromo = localStorage.getItem('aminy_promo_code');
       const { url } = await createCheckoutSession({
         userId: user.id,
         email: user.email || '',
         // Normalize legacy 'starter' to 'core' (single SKU now)
         tier: (tierId === 'starter' ? 'core' : tierId) as 'core' | 'pro',
         interval: billingPeriod === 'monthly' ? 'monthly' : 'annual',
+        ...(storedPromo ? { promoCode: storedPromo } : {}),
       });
 
       // Redirect to Stripe Checkout
@@ -558,6 +573,16 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           })}
         </div>
 
+        {/* Promo Code Banner */}
+        {promoCode && (
+          <div className="mt-6 p-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2">
+            <Check className="w-4 h-4 text-green-600 shrink-0" />
+            <p className="text-sm text-green-800">
+              Promo code <strong>{promoCode}</strong> will be applied at checkout.
+            </p>
+          </div>
+        )}
+
         {/* HSA/FSA Eligible Badge */}
         <div className="mt-8">
           <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
@@ -639,7 +664,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 </div>
                 <div>
                   <p className="font-medium text-violet-900 dark:text-violet-300">Know another family?</p>
-                  <p className="text-sm text-violet-700 dark:text-violet-400">Invite a friend & both get 1 month free</p>
+                  <p className="text-sm text-violet-700 dark:text-violet-400">You get 1 free month. Your friend gets $25 off.</p>
                 </div>
               </div>
               <Button

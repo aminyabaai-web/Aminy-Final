@@ -33,7 +33,7 @@ export function TrialCountdown({
   compact = false,
   dismissible = true,
 }: TrialCountdownProps) {
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => localStorage.getItem('trial_banner_dismissed') === '1');
   const [daysRemaining, setDaysRemaining] = useState<number>(trialDays);
   const [hoursRemaining, setHoursRemaining] = useState<number>(0);
 
@@ -119,7 +119,7 @@ export function TrialCountdown({
       >
         {dismissible && (
           <button
-            onClick={() => setDismissed(true)}
+            onClick={() => { localStorage.setItem('trial_banner_dismissed', '1'); setDismissed(true); }}
             className="absolute top-2 right-2 p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
           >
             <X className="w-4 h-4 text-neutral-400" />
