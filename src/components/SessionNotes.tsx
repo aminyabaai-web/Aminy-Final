@@ -168,8 +168,24 @@ export function SessionNotes({
     providerFollowUp: '',
   });
 
-  // Goal progress
   const [goalProgress, setGoalProgress] = useState<Record<string, 'improved' | 'maintained' | 'needs_attention'>>({});
+
+  // Start/stop time — required for CMS-compliant ABA notes (97155, 97156)
+  const [startTime, setStartTime] = useState('');
+  const [stopTime, setStopTime] = useState('');
+
+  // Federal compliance check: all fields required for defensible ABA notes
+  // Ref: OIG Work Plan 2025, CPT 97155/97156 documentation requirements
+  const complianceItems = [
+    { label: 'Subjective (parent report)', met: (noteData.subjective?.trim().length ?? 0) > 20 },
+    { label: 'Objective (data/observations)', met: (noteData.objective?.trim().length ?? 0) > 20 },
+    { label: 'Assessment (clinical interpretation)', met: (noteData.assessment?.trim().length ?? 0) > 20 },
+    { label: 'Plan (next steps)', met: (noteData.plan?.trim().length ?? 0) > 20 },
+    { label: 'Start time documented', met: startTime.length > 0 },
+    { label: 'Stop time documented', met: stopTime.length > 0 },
+  ];
+  const complianceScore = complianceItems.filter(i => i.met).length;
+  const isCompliant = complianceScore === complianceItems.length;
 
   // Load existing note and templates
   useEffect(() => {
@@ -272,6 +288,9 @@ export function SessionNotes({
         provider_follow_up: noteData.providerFollowUp || null,
         goal_progress: goalProgress,
         shared_with_parent: shareWithParent,
+        start_time: startTime || null,
+        stop_time: stopTime || null,
+        compliance_score: complianceScore,
         updated_at: new Date().toISOString(),
       };
 
@@ -468,7 +487,51 @@ export function SessionNotes({
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-neutral-100 sticky bottom-0 bg-white">
+        <div className="p-6 border-t border-neutral-100 sticky bottom-0 bg-white space-y-4">
+          {/* Start / Stop time — CMS required */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 flex-1">
+              <Clock className="w-4 h-4 text-[#5A6B7A] shrink-0" />
+              <label className="text-xs text-[#5A6B7A] shrink-0">Start</label>
+              <input
+                type="time"
+                value={startTime}
+                onChange={e => setStartTime(e.target.value)}
+                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
+              />
+            </div>
+            <div className="flex items-center gap-2 flex-1">
+              <Clock className="w-4 h-4 text-[#5A6B7A] shrink-0" />
+              <label className="text-xs text-[#5A6B7A] shrink-0">Stop</label>
+              <input
+                type="time"
+                value={stopTime}
+                onChange={e => setStopTime(e.target.value)}
+                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
+              />
+            </div>
+          </div>
+
+          {/* Compliance score — OIG 97155/97156 checklist */}
+          <div className={`rounded-xl p-3 border ${isCompliant ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+            <div className="flex items-center justify-between mb-2">
+              <span className={`text-xs font-semibold flex items-center gap-1.5 ${isCompliant ? 'text-green-700' : 'text-amber-700'}`}>
+                {isCompliant ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                Documentation compliance: {complianceScore}/{complianceItems.length}
+              </span>
+              <span className={`text-xs font-medium ${isCompliant ? 'text-green-600' : 'text-amber-600'}`}>
+                {isCompliant ? 'Audit-ready ✓' : `${complianceItems.length - complianceScore} item${complianceItems.length - complianceScore !== 1 ? 's' : ''} missing`}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {complianceItems.map(item => (
+                <span key={item.label} className={`text-xs px-2 py-0.5 rounded-full ${item.met ? 'bg-green-100 text-green-700' : 'bg-white border border-amber-300 text-amber-700'}`}>
+                  {item.met ? '✓' : '○'} {item.label}
+                </span>
+              ))}
+            </div>
+          </div>
+
           <div className="flex items-center justify-between">
             <button
               onClick={() => setShareWithParent(!shareWithParent)}

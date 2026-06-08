@@ -115,6 +115,8 @@ interface Patient {
   totalSessions: number;
   lastSessionNotes?: string;
   photo?: string;
+  firstContactDate?: string;
+  firstSessionDate?: string;
 }
 
 interface Session {
@@ -1264,6 +1266,40 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </Button>
             </div>
 
+            {/* Intake Pipeline Stats — first-call-to-first-appointment tracking */}
+            {patients.length > 0 && (() => {
+              const pendingIntake = patients.filter(p => p.totalSessions === 0 && p.profileAccess === 'granted');
+              const withTiming = patients.filter(p => p.firstContactDate && p.firstSessionDate);
+              const avgDays = withTiming.length > 0
+                ? Math.round(withTiming.reduce((sum, p) => {
+                    const diff = new Date(p.firstSessionDate!).getTime() - new Date(p.firstContactDate!).getTime();
+                    return sum + diff / (1000 * 60 * 60 * 24);
+                  }, 0) / withTiming.length)
+                : null;
+              const atRisk = pendingIntake.filter(p => {
+                if (!p.firstContactDate) return false;
+                const daysSinceContact = (Date.now() - new Date(p.firstContactDate).getTime()) / (1000 * 60 * 60 * 24);
+                return daysSinceContact > 2;
+              });
+              if (pendingIntake.length === 0 && avgDays === null) return null;
+              return (
+                <div className="grid grid-cols-3 gap-3 p-4 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-[#1B2733]">{pendingIntake.length}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-0.5">Pending first session</p>
+                  </div>
+                  <div className="text-center border-x border-[#E8E4DF]">
+                    <p className="text-2xl font-bold text-[#1B2733]">{avgDays !== null ? `${avgDays}d` : '—'}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
+                  </div>
+                  <div className="text-center">
+                    <p className={`text-2xl font-bold ${atRisk.length > 0 ? 'text-amber-600' : 'text-green-600'}`}>{atRisk.length}</p>
+                    <p className="text-xs text-[#5A6B7A] mt-0.5">Drop-off risk (&gt;48h)</p>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Patient Grid */}
             {filteredPatients.length === 0 ? (
               <Card className="p-8 sm:p-12 text-center">
@@ -1337,11 +1373,20 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
                   <div className="mt-4 pt-4 border-t border-neutral-100 flex items-center justify-between">
                     <div className="text-sm text-[#5A6B7A]">
-                      {patient.totalSessions} total sessions
-                      {patient.nextSession && (
-                        <span className="text-[#6B9080] ml-2">
-                          • Next: {formatDate(patient.nextSession)}
+                      {patient.totalSessions === 0 && patient.profileAccess === 'granted' ? (
+                        <span className="inline-flex items-center gap-1 text-amber-600 font-medium">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          Awaiting first session
                         </span>
+                      ) : (
+                        <>
+                          {patient.totalSessions} total sessions
+                          {patient.nextSession && (
+                            <span className="text-[#6B9080] ml-2">
+                              • Next: {formatDate(patient.nextSession)}
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
                     {patient.profileAccess === 'granted' && (
