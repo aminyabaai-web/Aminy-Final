@@ -52,7 +52,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "dompurify": "^3.4.7",
+    "dompurify": "^3.4.8",
     "embla-carousel-react": "^8.6.0",
     "hono": "^4.12.23",
     "html2canvas": "^1.4.1",
