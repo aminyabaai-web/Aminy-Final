@@ -103,30 +103,48 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   }, []);
 
   async function checkRecentSession() {
-    const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
-    const { data } = await supabase
-      .from('session_notes')
-      .select('id, provider_id, session_date')
-      .eq('parent_id', userId)
-      .gte('session_date', fiveDaysAgo)
-      .order('session_date', { ascending: false })
-      .limit(1);
-    const found = !!(data && data.length > 0);
-    setHasRecentSession(found);
-    if (found && data![0].provider_id) setRecentSessionBcbaId(data![0].provider_id);
-    setRecentSessionChecked(true);
+    try {
+      // session_notes links to the parent via `user_id` (the convention used by
+      // contextLayer + OutcomesTracking). There is no `parent_id` column — querying
+      // it errors and the gate would silently lock out every eligible user.
+      const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      const { data, error } = await supabase
+        .from('session_notes')
+        .select('id, provider_id, session_date')
+        .eq('user_id', userId)
+        .gte('session_date', fiveDaysAgo)
+        .order('session_date', { ascending: false })
+        .limit(1);
+      if (error) throw error;
+      const found = !!(data && data.length > 0);
+      setHasRecentSession(found);
+      if (found && data[0].provider_id) setRecentSessionBcbaId(data[0].provider_id);
+    } catch {
+      // Conservative default: no confirmed recent session. Pro+ access is
+      // unaffected (it never depends on this check).
+      setHasRecentSession(false);
+    } finally {
+      setRecentSessionChecked(true);
+    }
   }
 
   async function loadThreads() {
     setIsLoading(true);
-    const { data } = await supabase
-      .from('ask_bcba_threads')
-      .select('*')
-      .eq('parent_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(50);
-    setThreads((data || []) as Thread[]);
-    setIsLoading(false);
+    try {
+      const { data, error } = await supabase
+        .from('ask_bcba_threads')
+        .select('*')
+        .eq('parent_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      setThreads((data || []) as Thread[]);
+    } catch {
+      toast.error("Couldn't load your questions. Pull to refresh or try again.");
+      setThreads([]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function submitQuestion() {
@@ -146,9 +164,13 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           category,
           status: 'pending',
           target_response_at: targetResponseAt,
-          // Route session-bundled questions to the BCBA who did the session
-          assigned_provider_id: recentSessionBcbaId || null,
-          source: recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
+          // Route session-bundled questions to the BCBA who did the session.
+          // `bcba_id` + `auto_routed` are the real columns on ask_bcba_threads
+          // (there is no assigned_provider_id/source column). When set, the
+          // provider notification queue surfaces the thread to that BCBA; when
+          // null (Pro+ pool), any contracted BCBA can pick it up.
+          bcba_id: recentSessionBcbaId || null,
+          auto_routed: !!recentSessionBcbaId,
         })
         .select()
         .single();
