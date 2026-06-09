@@ -203,13 +203,11 @@ export function Dashboard10({
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
-  const [taskWin, setTaskWin] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [showSoftNudge, setShowSoftNudge] = useState(false);
   const [showHardPaywall, setShowHardPaywall] = useState(false);
   const [conversationsUsed, setConversationsUsed] = useState(0);
-  const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
   const [chatInput, setChatInput] = useState('');
   const [isSendingChat, setIsSendingChat] = useState(false);
@@ -227,8 +225,8 @@ export function Dashboard10({
     if (!userId) return;
     supabase
       .from('session_notes')
-      .select('id, session_date, provider_id')
-      .eq('user_id', userId)
+      .select('id, child_name, session_date, provider_id')
+      .eq('parent_id', userId)
       .eq('status', 'parent_review')
       .order('session_date', { ascending: false })
       .limit(5)
@@ -239,7 +237,7 @@ export function Dashboard10({
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
             id: d.id,
-            childName: userData?.childName || 'Your Child',
+            childName: d.child_name || userData?.childName || 'Your Child',
             sessionDate: d.session_date,
           })));
         }
@@ -653,12 +651,6 @@ export function Dashboard10({
     // Find which routine this task belongs to
     // SAFETY: Use safeTodaysRoutines instead of direct access
     const routine = dailyRoutines.find(r => Array.isArray(r.tasks) && r.tasks.some(t => t.id === taskId));
-    // Only animate when marking a task complete (not uncomplete)
-    const task = routine?.tasks.find(t => t.id === taskId);
-    if (task && !task.completed) {
-      setCompletingTaskId(taskId);
-      setTimeout(() => setCompletingTaskId(null), 600);
-    }
     if (routine && safeTodaysRoutines.length > 0) {
       // Find the routine ID from dashboard data
       const routineData = safeTodaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
@@ -679,7 +671,7 @@ export function Dashboard10({
   // Show skeleton while data loads instead of a blocking spinner
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen bg-mist dark:bg-slate-900 pb-24">
+      <div className="min-h-screen dark:bg-slate-900 pb-24" style={{ background: '#FAF7F2' }}>
         <div className="p-4">
           <SkeletonDashboard />
         </div>
@@ -689,16 +681,9 @@ export function Dashboard10({
 
   return (
     <div
-      className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
+      className="min-h-screen dark:bg-slate-900 pb-24"
+      style={{ background: '#FAF7F2' }}
     >
-      <style>{`
-        @keyframes task-burst {
-          0% { transform: scale(1); }
-          30% { transform: scale(1.08); background: rgba(67,170,139,0.15); }
-          100% { transform: scale(1); }
-        }
-        .task-completed-burst { animation: task-burst 0.6s ease-out; }
-      `}</style>
       {/* ========================================
           STREAK CELEBRATION OVERLAY
           Animated celebration for milestone streaks
@@ -758,39 +743,22 @@ export function Dashboard10({
         </div>
       )}
 
-      {/* Task Win Toast — appears when an action item is completed */}
-      <AnimatePresence>
-        {taskWin && (
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          >
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              <span>{taskWin} ✓</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
-        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 dark:border-slate-700/80 backdrop-blur-xl dashboard-header-bg"
+        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 backdrop-blur-xl"
+        style={{ background: 'linear-gradient(135deg, rgba(247,252,252,0.95) 0%, rgba(240,249,249,0.96) 48%, rgba(238,246,250,0.97) 100%)' }}
       >
         <div className="max-w-4xl mx-auto px-4 py-4">
           {/* Greeting */}
           <div className="mb-4">
-            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950 dark:text-white">
+            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950">
               Hi {userData.parentName || 'there'}, here's {child.name}'s calm start today.
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
-            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A] dark:text-slate-300">{dailyTip}</p>
+            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A]">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -803,7 +771,7 @@ export function Dashboard10({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
                       ? 'border border-[#6B9080]/20 bg-primary text-white shadow-sm'
-                      : 'border border-[#E8E4DF] dark:border-slate-600 bg-white/85 dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] hover:bg-white'
                   }`}
                 >
                   <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
@@ -818,14 +786,14 @@ export function Dashboard10({
           {(aiMemorySync || juniorProgressSync) && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-white">AI memory</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-white">Ease progress</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -833,7 +801,7 @@ export function Dashboard10({
           )}
 
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
+          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
             <div className="relative" style={{ flexShrink: 0 }}>
               <button
                 type="button"
@@ -864,7 +832,7 @@ export function Dashboard10({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-slate-950 dark:text-white">{child.name}</span>
+                <span className="font-medium text-slate-950">{child.name}</span>
                 <Badge variant="outline" className="border-[#E8E4DF] bg-white/85 text-sm text-[#3A4A57]">
                   Age {child.age}
                 </Badge>
@@ -874,25 +842,25 @@ export function Dashboard10({
                   hasGoalMomentum ? (
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
-                        <div key={goal.name} className="text-sm text-[#5A6B7A] dark:text-slate-300">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'}>{goal.percentMet}%</span>
+                        <div key={goal.name} className="text-sm text-[#5A6B7A]">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                    <div className="text-sm text-[#5A6B7A]">
                       Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
                     </div>
                   )
                 ) : (
-                  <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                  <div className="text-sm text-[#5A6B7A]">
                     No goals set yet • Tap to add
                   </div>
                 )}
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-300" />
+            <ChevronRight className="w-5 h-5 text-slate-400" />
           </div>
 
           {/* Upcoming Events Carousel */}
@@ -912,7 +880,7 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-700"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
@@ -922,13 +890,13 @@ export function Dashboard10({
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733] dark:text-white">{event.title}</div>
-                    <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{event.time}</div>
+                    <div className="text-sm font-medium text-[#1B2733]">{event.title}</div>
+                    <div className="text-xs text-[#5A6B7A]">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="py-2 text-sm text-[#5A6B7A] dark:text-slate-300">
+              <div className="py-2 text-sm text-[#5A6B7A]">
                 You're all caught up! No upcoming events.
               </div>
             )}
@@ -949,7 +917,6 @@ export function Dashboard10({
       )}
 
       {/* Main Content */}
-      <PullToRefresh onRefresh={handleRefresh}>
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
 
         {/* Proactive AI Insight — "AI escaping the chat window" */}
@@ -981,7 +948,7 @@ export function Dashboard10({
                 </div>
                 <button
                   onClick={handleDismissInsight}
-                  className="p-1.5 rounded-full text-slate-400 dark:text-slate-300 hover:text-slate-600 dark:hover:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition-colors flex-shrink-0 -mt-0.5 -mr-0.5"
+                  className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition-colors flex-shrink-0 -mt-0.5 -mr-0.5"
                   aria-label="Dismiss"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -1167,7 +1134,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-primary text-white hover:bg-[#216982]"
+                className="rounded-full bg-[#6B9080] text-white hover:bg-[#5A7D6E]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 My treatment plan
@@ -1254,7 +1221,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-primary text-white shadow-md'
+                    ? 'bg-[#6B9080] text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
@@ -1300,7 +1267,7 @@ export function Dashboard10({
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
                       : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
-                  } ${completingTaskId === task.id ? 'task-completed-burst' : ''}`}
+                  }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
@@ -1504,9 +1471,7 @@ export function Dashboard10({
               childAge={child.age}
               parentName={userData.parentName}
               onItemComplete={(item) => {
-                setTaskWin(item.title || '✓ Done!');
-                triggerHaptic('medium');
-                setTimeout(() => setTaskWin(null), 2500);
+                // Could trigger celebration or update streak
               }}
             />
           </section>
@@ -1530,7 +1495,6 @@ export function Dashboard10({
           </section>
         )}
       </main>
-      </PullToRefresh>
 
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)
@@ -1543,7 +1507,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-primary text-white hover:bg-[#4a6478]'
+              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1578,7 +1542,7 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-primary text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1628,7 +1592,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-primary text-white ml-8'
+                      ? 'bg-[#6B9080] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-[#3A4A57] dark:text-gray-200 mr-8'
                   }`}
                 >
