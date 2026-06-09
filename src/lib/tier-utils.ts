@@ -25,6 +25,14 @@ export interface TierEntitlements {
   maxChildren: number | null;
   reportExports: 'none' | 'caregiver' | 'provider';
   providerFeatures: boolean;
+  /** Total vault storage quota in MB. null = unlimited (fair-use). */
+  storageLimitMb: number | null;
+  /**
+   * How many stored memory facts are LOADED into the AI system prompt per
+   * session (injection depth). Distinct from getTierLimits().memoryFacts,
+   * which caps how many facts can be STORED in total.
+   */
+  memoryInjectDepth: number;
 }
 
 const CANONICAL_TIER_MAP: Record<TierType, CanonicalTierName> = {
@@ -112,6 +120,8 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
     maxChildren: 1,
     reportExports: 'none',
     providerFeatures: false,
+    storageLimitMb: 100, // ~20 documents — enough to feel value, upgrade to keep the archive
+    memoryInjectDepth: 5,
   },
   core: {
     aiMessagesPerDay: null,
@@ -119,6 +129,8 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
     maxChildren: 2,
     reportExports: 'caregiver',
     providerFeatures: false,
+    storageLimitMb: 5_000, // 5 GB — full family archive (IEPs, evals, reports)
+    memoryInjectDepth: 25,
   },
   pro: {
     aiMessagesPerDay: null,
@@ -126,6 +138,8 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
     maxChildren: 3,
     reportExports: 'provider',
     providerFeatures: true,
+    storageLimitMb: 25_000, // 25 GB — multi-child, video clips, session recordings
+    memoryInjectDepth: 100,
   },
   family: {
     aiMessagesPerDay: null,
@@ -133,8 +147,29 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
     maxChildren: null,
     reportExports: 'provider',
     providerFeatures: true,
+    storageLimitMb: null, // unlimited (fair-use)
+    memoryInjectDepth: 250,
   },
 };
+
+/**
+ * Storage quota helpers — used by vault-storage before accepting an upload.
+ */
+export function getStorageLimitBytes(tier?: TierType | string | null, trialEndsAt?: string | null): number | null {
+  const limitMb = getTierEntitlements(tier, trialEndsAt).storageLimitMb;
+  return limitMb === null ? null : limitMb * 1024 * 1024;
+}
+
+export function isStorageQuotaExceeded(
+  usedBytes: number,
+  incomingBytes: number,
+  tier?: TierType | string | null,
+  trialEndsAt?: string | null
+): boolean {
+  const limit = getStorageLimitBytes(tier, trialEndsAt);
+  if (limit === null) return false;
+  return usedBytes + incomingBytes > limit;
+}
 
 export function getCanonicalTierName(tier?: TierType | string | null): CanonicalTierName {
   if (!tier) return 'free';

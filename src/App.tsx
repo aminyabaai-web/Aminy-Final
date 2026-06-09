@@ -4167,6 +4167,7 @@ export default function App() {
                         currentPath={currentScreen}
                         childName={userData.childName || undefined}
                         initialPrompt={bevelInitialPrompt}
+                        userTier={effectiveUserTier}
                       />
                     </Suspense>
                   )}

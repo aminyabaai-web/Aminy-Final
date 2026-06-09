@@ -29,6 +29,7 @@ import {
   AI_PERSONALITIES,
   type AIPersonality
 } from '../lib/ai-personality';
+import { getTierEntitlements } from '../lib/tier-utils';
 import { AIChart, parseAIResponseParts } from './AIChart';
 import { AddToCalendarButtons } from './AddToCalendarButtons';
 import { supabase } from '../utils/supabase/client';
@@ -304,6 +305,8 @@ interface BevelChatOverlayProps {
   currentPath: string;
   childName?: string;
   initialPrompt?: string;
+  /** Subscription tier — scales persistent-memory depth (free 5 facts → family 250) */
+  userTier?: string | null;
 }
 
 export function BevelChatOverlay({
@@ -312,7 +315,8 @@ export function BevelChatOverlay({
   userId,
   currentPath,
   childName: propChildName,
-  initialPrompt
+  initialPrompt,
+  userTier
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -351,7 +355,13 @@ export function BevelChatOverlay({
       setChatSessions(loadChatSessions());
     }
     if (messages.length >= 4) {
-      generateConversationSummary(messages).then(() => {
+      const summarizable = messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : String(m.timestamp),
+      }));
+      generateConversationSummary(summarizable).then(() => {
         toast.success('Memory updated', { duration: 1500, position: 'bottom-center' });
       }).catch(() => {});
     }
@@ -403,12 +413,14 @@ export function BevelChatOverlay({
     // Load vault documents and memories in the background — non-blocking
     if (userId && userId !== 'dev-preview-user') {
       // Vault: pull AI summaries + key insights from stored documents
-      supabase
-        .from('vault_documents')
-        .select('title, document_type, ai_summary, key_insights')
-        .eq('user_id', userId)
-        .order('uploaded_at', { ascending: false })
-        .limit(12)
+      Promise.resolve(
+        supabase
+          .from('vault_documents')
+          .select('title, document_type, ai_summary, key_insights')
+          .eq('user_id', userId)
+          .order('uploaded_at', { ascending: false })
+          .limit(12)
+      )
         .then(({ data }) => {
           if (data && data.length > 0) {
             const lines = data
@@ -422,8 +434,8 @@ export function BevelChatOverlay({
         })
         .catch(() => {});
 
-      // Memories: pull recent extracted facts from past sessions
-      fetchMemories(userId, 8)
+      // Memories: pull recent extracted facts from past sessions (depth scales by tier)
+      fetchMemories(userId, getTierEntitlements(userTier).memoryInjectDepth)
         .then(memories => {
           if (memories.length > 0) {
             memoriesRef.current = memories

@@ -83,8 +83,9 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ### Revenue
 - **Tiers**: Core $14.99/mo, Pro $29.99/mo, Pro+ Family $49.99/mo. "Starter" is a legacy alias that maps to Core
-- **B2B Org SKU**: $99/seat/month, min 10 seats, 10% annual discount. See `src/lib/org-licensing.ts` + `OrgAdminDashboard.tsx`. Stripe Checkout via `/org/checkout` endpoint
-- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 35%, insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
+- **B2B Org SKU**: $49/seat/month, min 5 seats, 15% annual discount (lowered June 2026 for smaller-clinic accessibility). See `src/lib/org-licensing.ts` + `OrgAdminDashboard.tsx`. Stripe Checkout via `/org/checkout` endpoint
+- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 25% (lowered from 35% June 2026 to be competitive for solo BCBAs), insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
+- **Per-tier limits** (`src/lib/tier-utils.ts`): AI 3/day free → 100/day fair-use paid; vault storage 100MB free / 5GB Core / 25GB Pro / unlimited Family; memory inject depth 5/25/100/250 facts (prompt injection per session; stored-fact caps are separate in `getTierLimits()`)
 - **Telehealth visits** (`src/lib/telehealth-economics.ts`): $79–$229 cash-pay, fully-modeled provider payout cents
 
 ### Partner attribution
