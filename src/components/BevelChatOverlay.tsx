@@ -14,6 +14,7 @@ import {
   buildAIContextString,
   getCurrentContext,
   storeMemory,
+  fetchMemories,
   type UserContext,
   type CurrentContext
 } from '../ai/contextLayer';
@@ -337,6 +338,9 @@ export function BevelChatOverlay({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasGeneratedProactive = useRef(false);
+  // Vault context and persistent memories — loaded async on open, injected into every system prompt
+  const vaultContextRef = useRef<string>('');
+  const memoriesRef = useRef<string>('');
 
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
@@ -395,6 +399,40 @@ export function BevelChatOverlay({
     setUserContext(context);
     const current = getCurrentContext(currentPath, context);
     setCurrentContext(current);
+
+    // Load vault documents and memories in the background — non-blocking
+    if (userId && userId !== 'dev-preview-user') {
+      // Vault: pull AI summaries + key insights from stored documents
+      supabase
+        .from('vault_documents')
+        .select('title, document_type, ai_summary, key_insights')
+        .eq('user_id', userId)
+        .order('uploaded_at', { ascending: false })
+        .limit(12)
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            const lines = data
+              .filter(d => d.ai_summary || (Array.isArray(d.key_insights) && d.key_insights.length > 0))
+              .map(d => {
+                const insights = Array.isArray(d.key_insights) ? d.key_insights.slice(0, 2).join('; ') : '';
+                return `• ${d.title} [${d.document_type}]: ${d.ai_summary || insights}`.slice(0, 200);
+              });
+            if (lines.length > 0) vaultContextRef.current = lines.join('\n');
+          }
+        })
+        .catch(() => {});
+
+      // Memories: pull recent extracted facts from past sessions
+      fetchMemories(userId, 8)
+        .then(memories => {
+          if (memories.length > 0) {
+            memoriesRef.current = memories
+              .map(m => `[${m.category}] ${m.content}`)
+              .join('\n');
+          }
+        })
+        .catch(() => {});
+    }
 
     if (!hasGeneratedProactive.current) {
       hasGeneratedProactive.current = true;
@@ -541,7 +579,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${stateBlock}${customBlock}${liveScreenContext}`;
+${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file — reference these when relevant):\n${vaultContextRef.current}` : ''}${memoriesRef.current ? `\n\nPERSISTENT MEMORY (facts extracted from past conversations with this family):\n${memoriesRef.current}` : ''}${stateBlock}${customBlock}${liveScreenContext}`;
   };
 
   const sendMessageWithContext = async (
