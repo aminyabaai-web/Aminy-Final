@@ -46,6 +46,9 @@ interface GroupSession {
   provider_name: string | null;
   provider_credentials: string | null;
   provider_photo_url: string | null;
+  /** 'cohort' = multi-week BCBA-moderated program; price covers whole program */
+  format?: 'single' | 'cohort';
+  session_count?: number;
 }
 
 interface GroupSessionDiscoveryProps {
@@ -314,6 +317,11 @@ function GroupSessionListCard({
                 {categoryInfo && <span className="mr-1">{categoryInfo.emoji}</span>}
                 {session.topic}
               </p>
+              {session.format === 'cohort' && (
+                <span className="inline-block mt-1 text-xs font-semibold text-[#577590] bg-[#577590]/10 rounded-full px-2 py-0.5">
+                  {session.session_count ? `${session.session_count}-week` : 'Multi-week'} BCBA cohort
+                </span>
+              )}
               <p className="text-xs text-[#5A6B7A] mt-0.5">
                 {session.provider_name}{session.provider_credentials ? `, ${session.provider_credentials}` : ''}
               </p>

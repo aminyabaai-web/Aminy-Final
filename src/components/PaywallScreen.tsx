@@ -32,6 +32,7 @@ import {
 } from '../lib/tier-utils';
 import type { MonetizationMode } from '../lib/monetization-mode';
 import { createCheckoutSession, isStripeConfigured } from '../lib/stripe-service';
+import { openSubscriptionCheckout } from '../lib/platform-purchase';
 import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { supabase } from '../utils/supabase/client';
 import { addBreadcrumb, captureError } from '../lib/sentry';
@@ -180,8 +181,9 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         ...(storedPromo ? { promoCode: storedPromo } : {}),
       });
 
-      // Redirect to Stripe Checkout
-      window.location.href = url;
+      // Redirect to Stripe Checkout — platform-aware (external browser on
+      // native iOS to avoid the App Store IAP trap; see platform-purchase.ts)
+      openSubscriptionCheckout(url);
     } catch (error: unknown) {
       console.error('Payment error:', error);
       const err = error instanceof Error ? error : new Error('Payment checkout failed');

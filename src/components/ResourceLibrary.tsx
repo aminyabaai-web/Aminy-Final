@@ -10,7 +10,8 @@
  *   - "Ask Your BCBA Team" CTA at the bottom of every article
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { supabase } from '../utils/supabase/client';
 import { Search, BookOpen, FileText, CheckSquare, Scroll, Lock, Sparkles, Users, ChevronRight, X, Clock, ArrowLeft, ExternalLink } from 'lucide-react';
 import { ScreenHeader } from './ui/ScreenHeader';
 import {
@@ -239,6 +240,32 @@ function ArticleView({
   // Premium resources show first ~40% of content, then blur/lock
   const previewLineCount = isLocked ? Math.floor(bodyLines.length * 0.4) : bodyLines.length;
 
+  // Real upcoming group sessions matching this article's topics — turns the
+  // static "browse sessions" card into bookable inventory with dates & spots.
+  const [liveSessions, setLiveSessions] = useState<{
+    id: string; topic: string; session_date: string;
+    price_per_family_cents: number; max_families: number; enrolled_count: number;
+    provider_name: string | null;
+  }[]>([]);
+  useEffect(() => {
+    if (isLocked || !r.relatedGroupTopics?.length) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from('group_sessions')
+          .select('id, topic, session_date, price_per_family_cents, max_families, enrolled_count, provider_name')
+          .in('topic_category', r.relatedGroupTopics!)
+          .in('status', ['open', 'confirmed'])
+          .gte('session_date', new Date().toISOString())
+          .order('session_date', { ascending: true })
+          .limit(2);
+        if (!cancelled && data) setLiveSessions(data);
+      } catch { /* table may not exist in dev — static card still renders */ }
+    })();
+    return () => { cancelled = true; };
+  }, [r.id, isLocked]);
+
   return (
     <div className="min-h-screen bg-mist pb-24">
       {/* Back header */}
@@ -327,14 +354,41 @@ function ArticleView({
               <Users className="w-4 h-4 text-[#6B9080]" />
               <p className="text-xs font-semibold text-[#6B9080]">Live group sessions on this topic</p>
             </div>
-            <p className="text-xs text-[#3A4A57] mb-3">
-              BCBAs host group training sessions on {r.relatedGroupTopics.join(', ')}. Up to 4 families — $50/family — live Q&A.
-            </p>
+            {liveSessions.length > 0 ? (
+              <div className="space-y-2 mb-3">
+                {liveSessions.map((s) => {
+                  const spotsLeft = Math.max(0, s.max_families - s.enrolled_count);
+                  return (
+                    <button
+                      key={s.id}
+                      onClick={() => onNavigate?.('group-sessions')}
+                      className="w-full text-left bg-white rounded-xl px-3 py-2.5 border border-[#E8E4DF] flex items-center gap-2 hover:bg-[#F8F8F6] transition-colors"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-[#1B2733] truncate">{s.topic}</p>
+                        <p className="text-xs text-[#5A6B7A]">
+                          {new Date(s.session_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                          {s.provider_name ? ` · ${s.provider_name}` : ''}
+                          {' · '}${(s.price_per_family_cents / 100).toFixed(0)}/family
+                        </p>
+                      </div>
+                      <span className={`text-xs font-semibold shrink-0 ${spotsLeft <= 1 ? 'text-[#E07A5F]' : 'text-[#43AA8B]'}`}>
+                        {spotsLeft === 0 ? 'Waitlist' : `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-xs text-[#3A4A57] mb-3">
+                BCBAs host group training sessions on {r.relatedGroupTopics.join(', ')}. Up to 4 families — $50/family — live Q&A.
+              </p>
+            )}
             <button
               onClick={() => onNavigate?.('group-sessions')}
               className="flex items-center gap-2 text-xs font-semibold text-[#43AA8B]"
             >
-              Browse group sessions <ExternalLink className="w-3 h-3" />
+              Browse all group sessions <ExternalLink className="w-3 h-3" />
             </button>
           </div>
         )}

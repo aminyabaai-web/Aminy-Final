@@ -106,6 +106,18 @@ interface Event {
   isAttending: boolean;
 }
 
+// Upcoming BCBA-led group session surfaced in the feed strip
+// (rows from the `group_sessions` table — see 20260608100000_group_sessions.sql).
+interface LiveGroupSession {
+  id: string;
+  topic: string;
+  topicCategory: string | null;
+  sessionDate: Date;
+  pricePerFamilyCents: number;
+  maxFamilies: number;
+  enrolledCount: number;
+}
+
 type PostCategory = 'wins' | 'questions' | 'tips' | 'support' | 'resources' | 'bcba-qa';
 type GroupCategory = 'diagnosis' | 'age-group' | 'topic' | 'local';
 type CommunityView = 'feed' | 'groups' | 'events' | 'bcba-qa';
@@ -318,6 +330,8 @@ export function CommunityHub({
   const [threadLoading, setThreadLoading] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [postingComment, setPostingComment] = useState(false);
+  // Upcoming BCBA group sessions for the "Live group sessions" strip.
+  const [groupSessions, setGroupSessions] = useState<LiveGroupSession[]>([]);
 
   // Load posts from Supabase; seed MOCK_POSTS only in demo mode when empty
   useEffect(() => {
@@ -325,12 +339,29 @@ export function CommunityHub({
       if (!userId) return;
       const dbPosts = await getSupabasePosts(userId);
       if (dbPosts.length > 0) {
+        // Mark provider-authored posts so the Verified BCBA badge and booking
+        // CTA render on real data. Best-effort: if the role lookup fails, the
+        // bcba-qa category still flags (parents can't post in that category).
+        let providerIds = new Set<string>();
+        try {
+          const authorIds = [...new Set(dbPosts.map(p => p.userId).filter(Boolean))];
+          if (authorIds.length > 0) {
+            const { data: providerRows } = await supabase
+              .from('profiles')
+              .select('id')
+              .in('id', authorIds)
+              .eq('role', 'provider');
+            providerIds = new Set((providerRows || []).map((r: { id: string }) => r.id));
+          }
+        } catch {
+          // Non-fatal — fall back to the category heuristic below.
+        }
         setPosts(dbPosts.map(p => ({
           id: p.id,
           authorId: p.userId,
           authorName: p.displayName,
           isAnonymous: p.isAnonymous,
-          isBCBA: false,
+          isBCBA: providerIds.has(p.userId) || p.category === 'bcba-qa',
           title: p.title,
           content: p.body,
           category: p.category as PostCategory,
@@ -444,6 +475,74 @@ export function CommunityHub({
     }
     loadEvents();
   }, [demo, userId]);
+
+  // Load upcoming BCBA group sessions for the feed strip. Entirely best-effort:
+  // a missing table or failed query just means the strip doesn't render.
+  useEffect(() => {
+    async function loadGroupSessions() {
+      try {
+        const { data, error } = await supabase
+          .from('group_sessions')
+          .select('id, topic, topic_category, session_date, price_per_family_cents, max_families, enrolled_count, status')
+          .gte('session_date', new Date().toISOString())
+          .in('status', ['open', 'confirmed'])
+          .order('session_date', { ascending: true })
+          .limit(5);
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          setGroupSessions(data.map((s: { id: string; topic: string; topic_category?: string | null; session_date: string; price_per_family_cents?: number; max_families?: number; enrolled_count?: number }) => ({
+            id: s.id,
+            topic: s.topic,
+            topicCategory: s.topic_category ?? null,
+            sessionDate: new Date(s.session_date),
+            pricePerFamilyCents: s.price_per_family_cents ?? 5000,
+            maxFamilies: s.max_families ?? 4,
+            enrolledCount: s.enrolled_count ?? 0,
+          })));
+        }
+      } catch {
+        // Non-fatal — the feed renders without the strip.
+      }
+    }
+    loadGroupSessions();
+  }, []);
+
+  // "Parents like you" suggestion — pure client-side matching of the user's own
+  // pre-signup screening answers (localStorage `aminy_screening_results`) against
+  // the names/descriptions of groups already loaded above. No queries about
+  // other users, no PHI exposure.
+  const suggestedGroup = useMemo(() => {
+    const candidates = groups.filter(g => !g.isJoined);
+    if (candidates.length === 0) return null;
+    let screeningText = '';
+    try {
+      const raw = localStorage.getItem('aminy_screening_results');
+      if (raw) {
+        const results = JSON.parse(raw);
+        if (Array.isArray(results)) {
+          screeningText = results
+            .map((r: { question?: unknown; answer?: unknown }) => `${r?.question ?? ''} ${r?.answer ?? ''}`)
+            .join(' ')
+            .toLowerCase();
+        }
+      }
+    } catch {
+      // Unreadable screening cache — fall back to the most active group.
+    }
+    if (screeningText) {
+      const matched = candidates.find(g =>
+        `${g.name} ${g.description}`
+          .toLowerCase()
+          .split(/\W+/)
+          .some(word => word.length > 3 && screeningText.includes(word))
+      );
+      if (matched) return matched;
+    }
+    // Fallback: the busiest group the user hasn't joined yet.
+    return [...candidates].sort((a, b) => b.memberCount - a.memberCount)[0];
+  }, [groups]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -658,6 +757,24 @@ export function CommunityHub({
       const saved = await addSupabaseComment(userId, activeThread.id, body, userName || 'Parent');
       if (saved) {
         setThreadComments(prev => prev.map(c => c.id === optimistic.id ? saved : c));
+        // Best-effort reply notification for the original post author. Skipped
+        // for self-replies and for demo/sample posts (non-UUID author ids).
+        const authorId = activeThread.authorId;
+        const isPersistedAuthor = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(authorId);
+        if (isPersistedAuthor && authorId !== userId) {
+          try {
+            await supabase.from('scheduled_notifications').insert({
+              user_id: authorId,
+              title: 'New reply to your post',
+              body: `Someone replied to your post "${activeThread.title}"`,
+              notification_type: 'custom',
+              scheduled_for: new Date().toISOString(),
+              data: { type: 'community_reply', post_id: activeThread.id },
+            });
+          } catch {
+            // Notification is best-effort — never block or surface on the reply itself.
+          }
+        }
       }
     } catch {
       // Keep the optimistic comment visible; surfacing an error mid-demo is worse than a silent retry-later.
@@ -717,9 +834,8 @@ export function CommunityHub({
                 {post.authorName}
               </span>
               {post.isBCBA && (
-                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
-                  <Award className="w-3 h-3 mr-1" />
-                  BCBA
+                <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-xs shrink-0">
+                  ✓ Verified BCBA
                 </Badge>
               )}
             </div>
@@ -759,6 +875,26 @@ export function CommunityHub({
               #{tag}
             </span>
           ))}
+        </div>
+      )}
+
+      {/* Book-a-session CTA — BCBA content → marketplace booking loop */}
+      {post.isBCBA && !post.isAnonymous && onNavigate && (
+        <div className="flex items-center justify-between gap-2 mb-4 px-3 py-2 rounded-lg bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border border-[#6B9080]/20">
+          <div className="flex items-center gap-2 min-w-0">
+            <Award className="w-4 h-4 text-[#6B9080] shrink-0" />
+            <span className="text-sm text-[#6B9080] dark:text-teal-200 truncate">
+              Work with {post.authorName}
+            </span>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="shrink-0"
+            onClick={() => onNavigate('marketplace')}
+          >
+            Book session
+          </Button>
         </div>
       )}
 
@@ -895,6 +1031,48 @@ export function CommunityHub({
               </div>
             </div>
 
+            {/* Live group sessions strip — community → group-training booking loop */}
+            {groupSessions.length > 0 && (
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Calendar className="w-4 h-4 text-[#6B9080]" />
+                  <h2 className="text-sm font-semibold text-[#1B2733] dark:text-white">
+                    Live group sessions
+                  </h2>
+                </div>
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                  {groupSessions.map((session) => {
+                    const spotsLeft = Math.max(0, session.maxFamilies - session.enrolledCount);
+                    return (
+                      <button
+                        key={session.id}
+                        onClick={() => onNavigate?.('group-sessions')}
+                        className="text-left shrink-0 w-64 p-3 rounded-xl bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 hover:shadow-md transition-shadow"
+                        aria-label={`View group session: ${session.topic}`}
+                      >
+                        <p className="font-medium text-sm text-[#1B2733] dark:text-white truncate">
+                          {session.topic}
+                        </p>
+                        <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                          {session.sessionDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                          {' · '}
+                          {session.sessionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                        </p>
+                        <div className="flex items-center justify-between mt-2">
+                          <span className="text-sm font-semibold text-[#6B9080] dark:text-teal-200">
+                            ${Math.round(session.pricePerFamilyCents / 100)}/family
+                          </span>
+                          <span className="text-xs text-[#5A6B7A] dark:text-slate-300">
+                            {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Posts */}
             <div className="space-y-4">
               {filteredPosts.length === 0 ? (
@@ -905,7 +1083,37 @@ export function CommunityHub({
                   <Button onClick={() => setShowNewPost(true)}>Create Post</Button>
                 </Card>
               ) : (
-                filteredPosts.map(renderPost)
+                <>
+                  {filteredPosts.slice(0, 2).map(renderPost)}
+                  {/* "Parents like you" — matches the user's own screening data to a loaded group */}
+                  {suggestedGroup && (
+                    <Card className="p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border-[#6B9080]/20">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-lg bg-white dark:bg-slate-800 flex items-center justify-center shrink-0">
+                            <Users className="w-5 h-5 text-[#6B9080]" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-medium text-sm text-[#1B2733] dark:text-white">
+                              Parents like you are in {suggestedGroup.name}
+                            </p>
+                            <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                              {suggestedGroup.memberCount.toLocaleString()} members supporting each other
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          size="sm"
+                          className="shrink-0"
+                          onClick={() => handleJoinGroup(suggestedGroup.id)}
+                        >
+                          Join
+                        </Button>
+                      </div>
+                    </Card>
+                  )}
+                  {filteredPosts.slice(2).map(renderPost)}
+                </>
               )}
             </div>
           </>
@@ -1162,7 +1370,35 @@ export function CommunityHub({
                 </button>
               </div>
               <div className="p-4 overflow-y-auto flex-1 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+                    {activeThread.authorName}
+                  </span>
+                  {activeThread.isBCBA && (
+                    <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-xs shrink-0">
+                      ✓ Verified BCBA
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-300">{activeThread.content}</p>
+                {activeThread.isBCBA && !activeThread.isAnonymous && onNavigate && (
+                  <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[#6B9080]/10 dark:bg-[#6B9080]/10 border border-[#6B9080]/20">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Award className="w-4 h-4 text-[#6B9080] shrink-0" />
+                      <span className="text-sm text-[#6B9080] dark:text-teal-200 truncate">
+                        Work with {activeThread.authorName}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0"
+                      onClick={() => onNavigate('marketplace')}
+                    >
+                      Book session
+                    </Button>
+                  </div>
+                )}
                 <div className="border-t border-[#E8E4DF] dark:border-slate-700 pt-4">
                   <h3 className="text-sm font-medium text-[#3A4A57] dark:text-slate-200 mb-3">
                     Comments {threadComments.length > 0 && `(${threadComments.length})`}

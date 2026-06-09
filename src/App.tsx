@@ -2882,6 +2882,7 @@ export default function App() {
                 childName={userData.childName || undefined}
                 parentName={userData.parentName || undefined}
                 tier={userData.tier || 'core'}
+                pilotOrganization={userData.pilotOrganization || null}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>

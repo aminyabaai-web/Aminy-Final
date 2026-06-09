@@ -48,6 +48,8 @@ interface GroupSession {
   enrolled_count: number;
   status: 'open' | 'confirmed' | 'cancelled' | 'completed';
   cancellation_deadline: string | null;
+  format?: 'single' | 'cohort';
+  session_count?: number;
 }
 
 interface GroupSessionCreatorProps {
@@ -83,6 +85,9 @@ export function GroupSessionCreator({
   const [pricePerFamily, setPricePerFamily] = useState(50);
   const [maxFamilies, setMaxFamilies] = useState(DEFAULT_MAX_FAMILIES);
   const [minFamilies, setMinFamilies] = useState(DEFAULT_MIN_FAMILIES);
+  // Cohorts: multi-week BCBA-moderated programs (community cold-start play)
+  const [format, setFormat] = useState<'single' | 'cohort'>('single');
+  const [sessionCount, setSessionCount] = useState(1);
 
   const providerEarnsPerSession = Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * maxFamilies;
   const guaranteedMin = Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * minFamilies;
@@ -129,6 +134,8 @@ export function GroupSessionCreator({
         min_families: minFamilies,
         cancellation_deadline: cancellationDeadline,
         status: 'open',
+        format,
+        session_count: format === 'cohort' ? sessionCount : 1,
       });
 
       if (error) throw error;
@@ -163,6 +170,7 @@ export function GroupSessionCreator({
     setTopic(''); setCategory(''); setDescription('');
     setSessionDate(''); setSessionTime('');
     setDurationMinutes(60); setPricePerFamily(50);
+    setFormat('single'); setSessionCount(1);
     setMaxFamilies(DEFAULT_MAX_FAMILIES); setMinFamilies(DEFAULT_MIN_FAMILIES);
   };
 
@@ -220,6 +228,47 @@ export function GroupSessionCreator({
           </div>
 
           <div className="space-y-4">
+            {/* Format: one-off office hours vs multi-week cohort */}
+            <div>
+              <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-2 block">Format</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => { setFormat('single'); setSessionCount(1); }}
+                  className="text-left px-3 py-2.5 rounded-xl border transition-all"
+                  style={format === 'single'
+                    ? { background: '#43AA8B20', borderColor: '#43AA8B' }
+                    : { background: 'white', borderColor: '#E8E4DF' }}
+                >
+                  <p className="text-xs font-semibold text-[#1B2733]">Single session</p>
+                  <p className="text-xs text-[#5A6B7A]">One-off office hours, up to 4 families</p>
+                </button>
+                <button
+                  onClick={() => { setFormat('cohort'); setSessionCount(6); setMaxFamilies(10); setPricePerFamily(199); }}
+                  className="text-left px-3 py-2.5 rounded-xl border transition-all"
+                  style={format === 'cohort'
+                    ? { background: '#43AA8B20', borderColor: '#43AA8B' }
+                    : { background: 'white', borderColor: '#E8E4DF' }}
+                >
+                  <p className="text-xs font-semibold text-[#1B2733]">Cohort program</p>
+                  <p className="text-xs text-[#5A6B7A]">Weekly group, 8–12 families, you moderate</p>
+                </button>
+              </div>
+              {format === 'cohort' && (
+                <div className="mt-2 flex items-center gap-2">
+                  <label className="text-xs text-[#5A6B7A]">Weekly sessions:</label>
+                  <Input
+                    type="number"
+                    min={2}
+                    max={12}
+                    value={sessionCount}
+                    onChange={e => setSessionCount(Math.max(2, Math.min(12, Number(e.target.value) || 6)))}
+                    className="w-20"
+                  />
+                  <span className="text-xs text-slate-400">price below is for the whole program</span>
+                </div>
+              )}
+            </div>
+
             {/* Topic */}
             <div>
               <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">

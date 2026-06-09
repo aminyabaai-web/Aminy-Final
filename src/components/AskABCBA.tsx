@@ -27,6 +27,7 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { ScreenHeader } from './ui/ScreenHeader';
+import { routeAskBcbaQuestion, formatAskBcbaPrice, PAY_PER_QUESTION_CENTS, ASK_BCBA_PROPLUS_MONTHLY_QUOTA } from '../lib/ask-bcba-economics';
 
 const CATEGORIES = [
   { id: 'behavior', label: 'Behavior', emoji: '🎯' },
@@ -71,13 +72,17 @@ interface AskABCBAProps {
   hasEstablishedSession?: boolean;
   /** 'proplus' | 'pro' | 'core' | 'free' — controls eligibility */
   tier?: string;
+  /** Partner org slug (e.g. 'aact') — org BCBA teams answer their own families at no platform cost */
+  pilotOrganization?: string | null;
   onNavigate?: (screen: string) => void;
 }
 
-export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession, tier = 'core', onNavigate }: AskABCBAProps) {
+export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession, tier = 'core', pilotOrganization = null, onNavigate }: AskABCBAProps) {
   // Pro+ has a monthly question pool — no session required.
+  // Partner-org families (AACT / Rise) route to their org's own BCBA team — always included.
   // Core/Pro must be within the 5-day post-session window.
   const isProPlus = tier === 'proplus' || tier === 'pro_plus';
+  const isPartnerOrg = !!pilotOrganization;
   const isFree = tier === 'free';
 
   // Check whether a telehealth session occurred in the past 5 days.
@@ -86,7 +91,8 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   const [recentSessionBcbaId, setRecentSessionBcbaId] = useState<string | null>(null);
   const [hasRecentSession, setHasRecentSession] = useState<boolean>(hasEstablishedSession ?? false);
 
-  const canAccess = isProPlus || hasRecentSession;
+  const canAccess = isProPlus || isPartnerOrg || hasRecentSession;
+  const routing = routeAskBcbaQuestion({ tier, pilotOrganization, withinPostSessionWindow: hasRecentSession });
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showAsk, setShowAsk] = useState(false);
@@ -94,6 +100,10 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   const [category, setCategory] = useState<Category | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeThread, setActiveThread] = useState<Thread | null>(null);
+  // Single-question purchase (Rail 3 in ask-bcba-economics.ts). Payment is
+  // collected via Stripe invoice when a BCBA accepts the question — the
+  // parent is never charged for an unanswered question.
+  const [payPerQuestion, setPayPerQuestion] = useState(false);
 
   useEffect(() => {
     loadThreads();
@@ -165,12 +175,17 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           status: 'pending',
           target_response_at: targetResponseAt,
           // Route session-bundled questions to the BCBA who did the session.
-          // `bcba_id` + `auto_routed` are the real columns on ask_bcba_threads
-          // (there is no assigned_provider_id/source column). When set, the
-          // provider notification queue surfaces the thread to that BCBA; when
-          // null (Pro+ pool), any contracted BCBA can pick it up.
+          // `bcba_id` + `auto_routed` are real columns on ask_bcba_threads;
+          // when bcba_id is null (Pro+ pool) any contracted BCBA can pick it up.
+          // Partner-org questions route to the org's BCBA queue via `source`
+          // (rail definitions + payout math in ask-bcba-economics.ts).
           bcba_id: recentSessionBcbaId || null,
           auto_routed: !!recentSessionBcbaId,
+          source: payPerQuestion
+            ? 'pay_per_question'
+            : routing.rail === 'partner_org'
+              ? `partner_org:${routing.partnerOrg}`
+              : recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
         })
         .select()
         .single();
@@ -248,7 +263,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-400">Answers Now charges $55/mo for 24h responses only. We give you an instant answer + clinician sign-off for less.</p>
+              <p className="text-xs text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
             </div>
           </div>
         </div>
@@ -285,9 +300,16 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   <Sparkles className="w-4 h-4" />
                   Upgrade to Pro+ for unlimited access
                 </button>
+                <button
+                  onClick={() => { setPayPerQuestion(true); setShowAsk(true); }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#E8E4DF] text-[#3A4A57] font-medium text-sm hover:bg-[#F0EDE8]"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Ask one question — {formatAskBcbaPrice(PAY_PER_QUESTION_CENTS)}
+                </button>
               </div>
               <p className="text-xs text-slate-400">
-                Pro+ Family ($49.99/mo) includes 10 BCBA team questions/month, no session required. Same model as Answers Now — but with instant AI drafts.
+                Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} BCBA team questions/month, no session required — with instant AI drafts while you wait.
               </p>
             </div>
           ) : (
@@ -309,10 +331,26 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#1B2733]">Ask anything</p>
-            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
+            <button onClick={() => { setShowAsk(false); setQuestion(''); setPayPerQuestion(false); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
               <X className="w-4 h-4" />
             </button>
           </div>
+
+          {payPerQuestion && (
+            <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
+              <p className="text-xs text-[#3A4A57]">
+                <span className="font-semibold">{formatAskBcbaPrice(PAY_PER_QUESTION_CENTS)} single question</span> — you're only charged when a BCBA accepts and answers. Cancel anytime before that.
+              </p>
+            </div>
+          )}
+
+          {isPartnerOrg && (
+            <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
+              <p className="text-xs text-[#3A4A57]">
+                Your question goes to <span className="font-semibold">your care team</span> — included with your organization's program at no charge.
+              </p>
+            </div>
+          )}
 
           <textarea
             value={question}
