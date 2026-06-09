@@ -630,7 +630,7 @@ export function Dashboard10({
   // Show skeleton while data loads instead of a blocking spinner
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen dark:bg-slate-900 pb-24" style={{ background: '#FAF7F2' }}>
+      <div className="min-h-screen bg-mist dark:bg-slate-900 pb-24">
         <div className="p-4">
           <SkeletonDashboard />
         </div>
@@ -640,8 +640,7 @@ export function Dashboard10({
 
   return (
     <div
-      className="min-h-screen dark:bg-slate-900 pb-24"
-      style={{ background: '#FAF7F2' }}
+      className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
     >
       {/* ========================================
           STREAK CELEBRATION OVERLAY
@@ -706,18 +705,17 @@ export function Dashboard10({
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
-        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 backdrop-blur-xl"
-        style={{ background: 'linear-gradient(135deg, rgba(247,252,252,0.95) 0%, rgba(240,249,249,0.96) 48%, rgba(238,246,250,0.97) 100%)' }}
+        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 dark:border-slate-700/80 backdrop-blur-xl dashboard-header-bg"
       >
         <div className="max-w-4xl mx-auto px-4 py-4">
           {/* Greeting */}
           <div className="mb-4">
-            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950">
+            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950 dark:text-white">
               Hi {userData.parentName || 'there'}, here's {child.name}'s calm start today.
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
-            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A]">{dailyTip}</p>
+            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A] dark:text-slate-300">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -730,7 +728,7 @@ export function Dashboard10({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
                       ? 'border border-[#6B9080]/20 bg-primary text-white shadow-sm'
-                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] hover:bg-white'
+                      : 'border border-[#E8E4DF] dark:border-slate-600 bg-white/85 dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
@@ -745,14 +743,14 @@ export function Dashboard10({
           {(aiMemorySync || juniorProgressSync) && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
-                  <span className="font-medium text-[#1B2733]">AI memory</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
+                  <span className="font-medium text-[#1B2733] dark:text-white">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
-                  <span className="font-medium text-[#1B2733]">Ease progress</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
+                  <span className="font-medium text-[#1B2733] dark:text-white">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -760,7 +758,7 @@ export function Dashboard10({
           )}
 
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
+          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
             <div className="relative" style={{ flexShrink: 0 }}>
               <button
                 type="button"
@@ -791,7 +789,7 @@ export function Dashboard10({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-slate-950">{child.name}</span>
+                <span className="font-medium text-slate-950 dark:text-white">{child.name}</span>
                 <Badge variant="outline" className="border-[#E8E4DF] bg-white/85 text-sm text-[#3A4A57]">
                   Age {child.age}
                 </Badge>
@@ -801,19 +799,19 @@ export function Dashboard10({
                   hasGoalMomentum ? (
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
-                        <div key={goal.name} className="text-sm text-[#5A6B7A]">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}>{goal.percentMet}%</span>
+                        <div key={goal.name} className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-[#5A6B7A]">
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
                       Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
                     </div>
                   )
                 ) : (
-                  <div className="text-sm text-[#5A6B7A]">
+                  <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
                     No goals set yet • Tap to add
                   </div>
                 )}
@@ -839,7 +837,7 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-700"
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
@@ -849,13 +847,13 @@ export function Dashboard10({
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733]">{event.title}</div>
-                    <div className="text-xs text-[#5A6B7A]">{event.time}</div>
+                    <div className="text-sm font-medium text-[#1B2733] dark:text-white">{event.title}</div>
+                    <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="py-2 text-sm text-[#5A6B7A]">
+              <div className="py-2 text-sm text-[#5A6B7A] dark:text-slate-300">
                 You're all caught up! No upcoming events.
               </div>
             )}
