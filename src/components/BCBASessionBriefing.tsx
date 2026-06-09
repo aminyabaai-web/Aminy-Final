@@ -28,6 +28,7 @@ import {
 import { ScreenHeader } from './ui/ScreenHeader';
 import { isDemoMode } from '../lib/demo-seed';
 import { supabase } from '../utils/supabase/client';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 interface BCBASessionBriefingProps {
   familyId: string;
@@ -115,7 +116,7 @@ export function BCBASessionBriefing({
       return;
     }
 
-    // Real mode: pull live data from Supabase
+    // Real mode: pull live data from Supabase + optional AI narrative
     try {
       const [goalsRes, logsRes, notesRes] = await Promise.all([
         supabase
@@ -157,7 +158,8 @@ export function BCBASessionBriefing({
         ? [`Last session (${new Date(lastNote.created_at).toLocaleDateString()}): ${lastNote.content?.slice(0, 120) ?? 'Session recorded'}`]
         : [];
 
-      const summary = [
+      // Try AI narrative first; fall back to structured summary
+      let summary = [
         goals.length > 0
           ? `${childName} has ${goals.length} active goal${goals.length !== 1 ? 's' : ''}: ${goals.map(g => g.title).slice(0, 2).join(', ')}.`
           : `No active goals found for ${childName}.`,
@@ -165,6 +167,27 @@ export function BCBASessionBriefing({
           ? `${positiveLogs.length} positive and ${challengeLogs.length} challenging behavior${challengeLogs.length !== 1 ? 's' : ''} logged recently.`
           : 'No recent behavior logs.',
       ].join(' ');
+
+      const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0;
+      if (hasData) {
+        try {
+          const contextPrompt = [
+            `You are preparing a BCBA for a therapy session with ${childName}.`,
+            goals.length > 0 ? `Active goals: ${goals.map(g => g.title).join(', ')}` : '',
+            logs.length > 0 ? `Recent behaviors: ${logs.slice(0, 5).map(l => `${l.behavior_type} (intensity ${l.intensity ?? 'n/a'}, ${l.is_positive ? 'positive' : 'challenging'})`).join('; ')}` : '',
+            notes.length > 0 ? `Last session note: ${notes[0].content?.substring(0, 300)}` : '',
+            'Write a 2–3 sentence clinical session prep summary. Be specific and actionable.',
+          ].filter(Boolean).join('\n');
+          const resp = await fetch(
+            `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+            { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` }, body: JSON.stringify({ userMessage: contextPrompt }) }
+          );
+          if (resp.ok) {
+            const data = await resp.json();
+            summary = data.message || data.content || summary;
+          }
+        } catch {}
+      }
 
       setBriefing({
         summary,

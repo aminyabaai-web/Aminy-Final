@@ -200,34 +200,76 @@ export class AICareplanGenerator {
     userId: string,
     childId: string
   ): Promise<WeeklyGoal[]> {
-    // Fetch current active goals to avoid duplication
     const { data: activeGoals } = await supabase
       .from('care_plan_goals')
       .select('category, title')
       .eq('user_id', userId)
       .eq('status', 'active');
 
-    const activeCategories = new Set(
-      (activeGoals || []).map(g => g.category)
-    );
-
+    const activeCategories = new Set((activeGoals || []).map(g => g.category));
     const context = await this.gatherChildContext(userId, childId);
-    const suggestions: WeeklyGoal[] = [];
 
-    // Suggest goals for uncovered categories
+    // Try AI-powered suggestions first
+    try {
+      const activeGoalTitles = (activeGoals || []).map(g => g.title).join(', ');
+      const prompt = [
+        `Suggest exactly 3 new, specific, measurable goals for ${context.childName}.`,
+        context.age ? `Age: ${context.age}` : '',
+        context.diagnosisInfo ? `Diagnosis: ${context.diagnosisInfo}` : '',
+        context.sensoryProfile ? `Sensory: ${context.sensoryProfile}` : '',
+        activeGoalTitles ? `Already working on: ${activeGoalTitles} — suggest DIFFERENT areas` : '',
+        context.recentBehaviors.length > 0 ? `Recent behavior patterns: ${context.recentBehaviors.join(', ')}` : '',
+        context.juniorProgress.length > 0 ? `Skill progress: ${context.juniorProgress.join('; ')}` : '',
+        '',
+        `Return JSON array with exactly 3 goals:
+[{"title":"string","description":"string","category":"daily-routine|communication|sensory|social|self-care|behavior|academic|motor","frequency":"Daily|3x/week|Weekly","measurable":"string","priority":"low|medium|high"}]
+Return only the JSON array, no other text.`,
+      ].filter(Boolean).join('\n');
+
+      const response = await fetch(`${this.backendUrl}/ai/brain`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+        body: JSON.stringify({
+          userMessage: prompt,
+          systemPrompt: 'You are a clinical care planning assistant for neurodivergent children. Generate specific, measurable, achievable goals grounded in evidence-based ABA and developmental practice. Return only valid JSON arrays.',
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const content: string = data.message || data.content || '';
+        const jsonMatch = content.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]) as Array<Record<string, unknown>>;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed.slice(0, 3).map(g => ({
+              title: (g.title as string) || '',
+              description: (g.description as string) || '',
+              category: (g.category as GoalCategory) || 'daily-routine',
+              targetFrequency: (g.frequency as string) || 'Daily',
+              targetProgress: 100,
+              measurable: (g.measurable as string) || '',
+              priority: ((g.priority as string) || 'medium') as WeeklyGoal['priority'],
+            }));
+          }
+        }
+      }
+    } catch {
+      // Fall through to heuristic
+    }
+
+    // Heuristic fallback: suggest goals for uncovered categories
+    const suggestions: WeeklyGoal[] = [];
     const allCategories: GoalCategory[] = [
       'daily-routine', 'communication', 'sensory', 'social',
       'self-care', 'behavior', 'academic', 'motor',
     ];
-
     for (const category of allCategories) {
       if (activeCategories.has(category)) continue;
       if (suggestions.length >= 3) break;
-
       const goal = this.suggestGoalForCategory(category, context);
       if (goal) suggestions.push(goal);
     }
-
     return suggestions;
   }
 
@@ -413,21 +455,17 @@ export class AICareplanGenerator {
   private async generateWithAI(context: ChildContext): Promise<GeneratedCarePlan> {
     const prompt = this.buildAIPrompt(context);
 
-    const response = await fetch(`${this.backendUrl}/ai/care-plan`, {
+    // Route through /ai/brain (available now) — /ai/care-plan is a dedicated alias
+    // added to make-server that will be live on next deploy
+    const response = await fetch(`${this.backendUrl}/ai/brain`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${publicAnonKey}`,
       },
       body: JSON.stringify({
-        messages: [
-          {
-            role: 'system',
-            content: `You are a clinical care planning assistant for families of neurodivergent children. Generate evidence-informed, practical care plan recommendations. Be warm, specific, and actionable. Return structured JSON.`,
-          },
-          { role: 'user', content: prompt },
-        ],
-        max_tokens: 1500,
+        userMessage: prompt,
+        systemPrompt: `You are a clinical care planning assistant for families of neurodivergent children. Generate evidence-informed, practical care plan recommendations. Be warm, specific, and actionable. Return structured JSON only.`,
       }),
     });
 
