@@ -83,9 +83,12 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ### Revenue
 - **Tiers**: Core $14.99/mo, Pro $29.99/mo, Pro+ Family $49.99/mo. "Starter" is a legacy alias that maps to Core
-- **B2B Org SKU**: $99/seat/month, min 10 seats, 10% annual discount. See `src/lib/org-licensing.ts` + `OrgAdminDashboard.tsx`. Stripe Checkout via `/org/checkout` endpoint
-- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 35%, insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
+- **B2B Org SKU**: seat LADDER (June 2026) — 1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo, MIN_SEATS=1, 15% annual. `SEAT_PRICE_LADDER` in `src/lib/org-licensing.ts` is canonical; `/org/checkout` in make-server mirrors it (redeploy fn after changes)
+- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 25%, insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
 - **Telehealth visits** (`src/lib/telehealth-economics.ts`): $79–$229 cash-pay, fully-modeled provider payout cents
+- **Ask-a-Behaviorist** (`src/lib/ask-bcba-economics.ts`): STAFFING model, never per-answer payouts — on-call RBTs ($25/hr) review AI drafts ≈ $2.50/answer. Rails: partner-org ($0 cost), Pro+ 10 q/mo, 7-day post-1:1-telehealth window (CPT 98970-98972 aligned; group sessions do NOT open it), $19 pay-per-question. User-facing copy says "behaviorist", never promises a BCBA
+- **Group sessions + cohorts**: `group_sessions.format` single|cohort (`session_count` weeks, program pricing). Cross-surfaced in ResourceLibrary article cards + CommunityHub strip
+- **Apple 30% defense** (`src/lib/platform-purchase.ts`): ALL subscription checkouts must use `openSubscriptionCheckout()` — external browser on native iOS, never Stripe inside the WebView
 
 ### Partner attribution
 - `src/lib/partner-org.ts` — detects `?org=aact` URL param, persists to localStorage, applies partner config to profile post-signup
