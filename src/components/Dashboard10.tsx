@@ -202,6 +202,7 @@ export function Dashboard10({
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+  const [taskWin, setTaskWin] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [showSoftNudge, setShowSoftNudge] = useState(false);
@@ -642,6 +643,23 @@ export function Dashboard10({
     <div
       className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
     >
+      {/* Task completion micro-celebration */}
+      <AnimatePresence>
+        {taskWin && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.9 }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
+              <span>✅</span>
+              <span>{taskWin}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ========================================
           STREAK CELEBRATION OVERLAY
           Animated celebration for milestone streaks
@@ -1388,7 +1406,8 @@ export function Dashboard10({
               childAge={child.age}
               parentName={userData.parentName}
               onItemComplete={(item) => {
-                // Could trigger celebration or update streak
+                setTaskWin(item.label || '✓ Done!');
+                setTimeout(() => setTaskWin(null), 2000);
               }}
             />
           </section>
