@@ -760,6 +760,24 @@ export function Dashboard10({
         </div>
       )}
 
+      {/* Task Win Toast — appears when an action item is completed */}
+      <AnimatePresence>
+        {taskWin && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <span>{taskWin} ✓</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
@@ -933,6 +951,7 @@ export function Dashboard10({
       )}
 
       {/* Main Content */}
+      <PullToRefresh onRefresh={handleRefresh}>
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
 
         {/* Proactive AI Insight — "AI escaping the chat window" */}
@@ -1487,8 +1506,9 @@ export function Dashboard10({
               childAge={child.age}
               parentName={userData.parentName}
               onItemComplete={(item) => {
-                setTaskWin(item.label || '✓ Done!');
-                setTimeout(() => setTaskWin(null), 2000);
+                setTaskWin(item.title || '✓ Done!');
+                triggerHaptic('medium');
+                setTimeout(() => setTaskWin(null), 2500);
               }}
             />
           </section>
@@ -1512,6 +1532,7 @@ export function Dashboard10({
           </section>
         )}
       </main>
+      </PullToRefresh>
 
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)
