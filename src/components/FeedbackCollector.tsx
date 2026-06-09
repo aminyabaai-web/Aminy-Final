@@ -16,6 +16,7 @@ import { Dialog, DialogContent } from './ui/dialog';
 import { motion } from 'motion/react';
 import { toast } from 'sonner';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 interface FeedbackCollectorProps {
   isOpen: boolean;
@@ -49,29 +50,40 @@ export function FeedbackCollector({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/feedback/submit`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'X-User-Id': userId
-          },
-          body: JSON.stringify({
-            mood,
-            whatFeltEasiest,
-            whatCouldBeCalmer,
-            context,
-            timestamp: new Date().toISOString()
-          })
-        }
-      );
+      // Primary path: user_feedback table — feeds the admin Feedback Inbox
+      // (RLS lets the user insert their own row and later read the admin's reply).
+      const { error: dbError } = await supabase.from('user_feedback').insert({
+        user_id: userId,
+        mood,
+        context,
+        what_felt_easiest: whatFeltEasiest || null,
+        what_could_be_calmer: whatCouldBeCalmer || null,
+        status: 'new',
+      });
 
-      // Only show the thank-you confirmation if the server actually accepted it —
-      // otherwise we'd be telling the user their feedback landed when it didn't.
-      if (!response.ok) {
-        throw new Error(`Feedback submit failed with status ${response.status}`);
+      if (dbError) {
+        // Fallback: legacy KV endpoint so feedback is never lost
+        const response = await fetch(
+          `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/feedback/submit`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${publicAnonKey}`,
+              'X-User-Id': userId
+            },
+            body: JSON.stringify({
+              mood,
+              whatFeltEasiest,
+              whatCouldBeCalmer,
+              context,
+              timestamp: new Date().toISOString()
+            })
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Feedback submit failed with status ${response.status}`);
+        }
       }
 
       setStep('thanks');
