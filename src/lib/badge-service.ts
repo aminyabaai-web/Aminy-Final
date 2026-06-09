@@ -13,6 +13,14 @@ export interface BadgeDefinition {
   description: string;
   triggerEvent: string;
   requirementCount: number;
+  /**
+   * 'journey' = product milestones (first screening, first booking…).
+   * 'empowerment' = the caregiver skill track — evidence-based framing:
+   * parent-mediated intervention research shows the PARENT is the
+   * intervention, and parental self-efficacy mediates child outcomes.
+   * These badges name the capability the parent just demonstrated.
+   */
+  track?: 'journey' | 'empowerment';
 }
 
 export interface EarnedBadge extends BadgeDefinition {
@@ -102,6 +110,65 @@ export const BADGE_DEFINITIONS: BadgeDefinition[] = [
     description: 'Completed 20 calm sessions',
     triggerEvent: 'calm_session',
     requirementCount: 20,
+  },
+
+  // ── Caregiver Empowerment track ──────────────────────────────────────
+  // "You are your child's most powerful intervention." Each badge names a
+  // real capability the parent has demonstrated — confidence is the
+  // clinical outcome here, not engagement.
+  {
+    id: 'empower_insight_25',
+    name: 'Insight Seeker',
+    emoji: '💡',
+    description: '25 coaching conversations — you understand your child in ways no one else can',
+    triggerEvent: 'conversation',
+    requirementCount: 25,
+    track: 'empowerment',
+  },
+  {
+    id: 'empower_coregulation_50',
+    name: 'Co-Regulation Pro',
+    emoji: '🫂',
+    description: '50 calm sessions — you have become your child\'s safe place',
+    triggerEvent: 'calm_session',
+    requirementCount: 50,
+    track: 'empowerment',
+  },
+  {
+    id: 'empower_consistency_14',
+    name: 'Consistency Builder',
+    emoji: '🌱',
+    description: '14 days straight — consistency is the most powerful tool in behavior support, and you have it',
+    triggerEvent: 'streak',
+    requirementCount: 14,
+    track: 'empowerment',
+  },
+  {
+    id: 'empower_advocate_60',
+    name: 'Empowered Advocate',
+    emoji: '🛡️',
+    description: '60-day streak — you can walk into any IEP meeting or doctor\'s office knowing your child\'s story cold',
+    triggerEvent: 'streak',
+    requirementCount: 60,
+    track: 'empowerment',
+  },
+  {
+    id: 'empower_helper_5',
+    name: 'Community Lifeline',
+    emoji: '💪',
+    description: '5 community posts — another parent got through a hard night because of you',
+    triggerEvent: 'community_post',
+    requirementCount: 5,
+    track: 'empowerment',
+  },
+  {
+    id: 'empower_records_10',
+    name: 'Records Master',
+    emoji: '🗂️',
+    description: '10 documents organized — evaluations, IEPs, reports: you run the binder now',
+    triggerEvent: 'vault_upload',
+    requirementCount: 10,
+    track: 'empowerment',
   },
 ];
 
@@ -197,6 +264,20 @@ async function checkEventCount(userId: string, badge: BadgeDefinition): Promise<
           .eq('user_id', userId)
           .single();
         return (data?.longest_streak || 0) >= badge.requirementCount;
+      }
+      case 'community_post': {
+        const { count } = await supabase
+          .from('community_posts')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', userId);
+        return (count || 0) >= badge.requirementCount;
+      }
+      case 'vault_upload': {
+        const { count } = await supabase
+          .from('vault_documents')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', userId);
+        return (count || 0) >= badge.requirementCount;
       }
       default:
         return false;

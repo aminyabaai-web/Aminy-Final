@@ -2,49 +2,68 @@
 // CONFIDENTIAL AND PROPRIETARY — Trade Secret of Aminy LLC
 
 /**
- * Ask-a-BCBA Economics — who answers, who pays, and what the BCBA earns.
+ * Ask-a-Behaviorist Economics — who answers, who pays, what it costs.
  *
- * The core question this file answers: "BCBAs aren't going to answer parent
- * questions for free." Correct. Three routing rails, each with honest math:
+ * Staffing model (NOT per-answer marketplace payouts — that math never works:
+ * cost would scale with engagement, making the best users the most expensive):
+ * messaging is answered by EMPLOYED/ON-CALL BEHAVIORISTS (RBTs working under
+ * BCBA supervision, ~$25/hr). The AI pre-drafts every answer, so a behaviorist
+ * reviews/edits ~10 answers per hour → effective cost ≈ $2.50/answer.
+ * Escalation path: anything requiring clinical judgment about the treatment
+ * plan gets flagged for the supervising BCBA or converted into a telehealth
+ * booking — "if you want a BCBA, you book a session." Messaging is a
+ * telehealth FUNNEL, not a telehealth substitute.
  *
- * ── Rail 1: PARTNER ORG (preferred — $0 platform payout cost) ──────────────
- *   If the family's profile has pilot_organization set (AACT / Rise Pediatric
- *   Therapies), questions route to the org's OWN BCBA team. The org answers
- *   as part of its care relationship — caregiver support is billable to many
- *   payers (97156 caregiver training adjacent), and the org gets engagement +
- *   retention from its families. Aminy pays nothing; the org agreement covers
- *   it. This is the rail we scale with partners.
+ * ── Rail 1: PARTNER ORG ($0 platform cost — preferred) ─────────────────────
+ *   Families with pilot_organization (AACT / Rise Pediatric Therapies) route
+ *   to the org's OWN clinical team. The org staffs it as part of the
+ *   partnership (engagement + retention + rev share); their team answering
+ *   their families is also clinically better (continuity of care).
  *
- * ── Rail 2: PLATFORM POOL (Pro+ included quota) ────────────────────────────
- *   Pro+ ($49.99/mo) includes ASK_BCBA_PROPLUS_MONTHLY_QUOTA questions/mo
- *   answered by marketplace BCBAs who opt into the answer pool. Aminy pays
- *   BCBA_ANSWER_PAYOUT_CENTS per accepted answer. The AI pre-drafts every
- *   answer (see FeedbackInbox-style draft flow in AskABCBA), so BCBA effort
- *   is review-and-edit ≈ 3–5 min → $12/answer ≈ $144–240/hr effective rate.
- *   Worst-case math: 10 answers × $12 = $120 > $49.99 — which is why the
- *   quota exists alongside observed utilization (~25–35% of quota across
- *   comparable products) and why Rail 1 takes priority whenever available.
- *   Expected blended cost at 30% utilization: 3 × $12 = $36/Pro+ user/mo,
- *   against $49.99 revenue + the fact that Ask-a-BCBA is THE Pro+ upgrade
- *   driver. Margin lives in the upgrade, not the message.
+ * ── Rail 2: PRO+ INCLUDED (always-on messaging) ────────────────────────────
+ *   Pro+ ($49.99/mo) includes ASK_PROPLUS_MONTHLY_QUOTA questions/mo from
+ *   the on-call behaviorist pool. Cost honesty: even at FULL quota burn,
+ *   10 × $2.50 = $25 staffing against $49.99 revenue — profitable at the
+ *   worst case, very profitable at observed ~30% utilization. This is what
+ *   makes always-on messaging viable as a Pro+-only feature.
  *
- * ── Rail 3: PAY-PER-QUESTION (no subscription required) ────────────────────
- *   Core/Pro/free users outside their post-session window can buy a single
- *   question: PAY_PER_QUESTION_CENTS. BCBA still gets the standard payout;
- *   Aminy keeps the difference. This monetizes urgency without forcing a
- *   subscription, and is the comparison shopper's answer to AnswersNow.
+ * ── Rail 3: POST-SESSION WINDOW (Core/Pro, CPT-aligned) ────────────────────
+ *   A 1:1 telehealth session opens a POST_SESSION_WINDOW_DAYS messaging
+ *   window — mirroring CPT digital E/M expectations (98970-98972 measure
+ *   cumulative response time over a 7-day period), so the cash-pay product
+ *   matches what insurance-world clinicians already recognize. GROUP
+ *   sessions do NOT open the window — group is its own product; the 1:1
+ *   session is the clinical relationship and the upgrade path.
+ *
+ * ── Rail 4: PAY-PER-QUESTION ($19, urgency monetizer) ──────────────────────
+ *   No subscription, no session: one question for $19, answered by the same
+ *   behaviorist pool (~$2.50 marginal cost), charged only when accepted.
+ *   Monetizes 2am urgency and funnels into Pro+ ("that $19 would have been
+ *   free on Pro+").
  *
  * Single source of truth — components must import from here, never hardcode.
  */
 
-export const BCBA_ANSWER_PAYOUT_CENTS = 1200;        // $12 per accepted answer
-export const PAY_PER_QUESTION_CENTS = 1900;          // $19 single question (Rail 3)
-export const ASK_BCBA_PROPLUS_MONTHLY_QUOTA = 10;    // included with Pro+
-export const ASK_BCBA_TARGET_RESPONSE_HOURS = 24;    // SLA shown to parents
+/** On-call behaviorist (RBT, BCBA-supervised) hourly staffing rate. */
+export const BEHAVIORIST_HOURLY_RATE_CENTS = 2500;   // $25/hr
+/** AI pre-drafts mean a behaviorist clears ~10 reviewed answers/hour. */
+export const ANSWERS_PER_STAFFED_HOUR = 10;
+/** Effective marginal cost per answer (staffing ÷ throughput). */
+export const EFFECTIVE_COST_PER_ANSWER_CENTS =
+  Math.round(BEHAVIORIST_HOURLY_RATE_CENTS / ANSWERS_PER_STAFFED_HOUR); // $2.50
 
-/** Platform margin on a pay-per-question purchase (Rail 3). */
-export const PAY_PER_QUESTION_PLATFORM_CENTS =
-  PAY_PER_QUESTION_CENTS - BCBA_ANSWER_PAYOUT_CENTS; // $7
+export const PAY_PER_QUESTION_CENTS = 1900;          // $19 single question (Rail 4)
+export const ASK_PROPLUS_MONTHLY_QUOTA = 10;         // included with Pro+
+export const ASK_TARGET_RESPONSE_HOURS = 24;         // SLA shown to parents
+/**
+ * Messaging window opened by a 1:1 telehealth session. 7 days mirrors CPT
+ * digital E/M (98970-98972) cumulative-period expectations. Group sessions
+ * do not open this window.
+ */
+export const POST_SESSION_WINDOW_DAYS = 7;
+
+// Back-compat aliases (old names imported elsewhere before the staffing-model rewrite)
+export const ASK_BCBA_PROPLUS_MONTHLY_QUOTA = ASK_PROPLUS_MONTHLY_QUOTA;
 
 export type AskBcbaRail = 'partner_org' | 'platform_pool' | 'pay_per_question';
 
@@ -52,8 +71,8 @@ export interface AskBcbaRouting {
   rail: AskBcbaRail;
   /** Org slug when rail is partner_org (e.g. 'aact'). */
   partnerOrg: string | null;
-  /** What Aminy pays the answering BCBA for this question. */
-  payoutCents: number;
+  /** Aminy's marginal staffing cost for this answer (0 on partner rail). */
+  costCents: number;
   /** What the parent pays for this question (0 when included). */
   parentPriceCents: number;
   /** Copy shown to the parent about who will answer. */
@@ -62,8 +81,8 @@ export interface AskBcbaRouting {
 
 /**
  * Decide how a question routes. Mirrors the access gating in AskABCBA.tsx
- * (Pro+ = always included; Core/Pro = included for 5 days post-session;
- * everyone else = pay-per-question).
+ * (Pro+ = always included; Core/Pro = included inside the 7-day post-1:1-
+ * telehealth window; everyone else = pay-per-question).
  */
 export function routeAskBcbaQuestion(input: {
   tier: string;
@@ -72,12 +91,12 @@ export function routeAskBcbaQuestion(input: {
 }): AskBcbaRouting {
   const { tier, pilotOrganization, withinPostSessionWindow } = input;
 
-  // Rail 1 — partner org BCBAs answer their own families. $0 platform cost.
+  // Rail 1 — partner org's own clinical team answers. $0 platform cost.
   if (pilotOrganization) {
     return {
       rail: 'partner_org',
       partnerOrg: pilotOrganization,
-      payoutCents: 0,
+      costCents: 0,
       parentPriceCents: 0,
       answeredByLabel: 'your care team',
     };
@@ -85,24 +104,24 @@ export function routeAskBcbaQuestion(input: {
 
   const isProPlus = tier === 'proplus' || tier === 'pro_plus';
 
-  // Rail 2 — included quota (Pro+ always; Core/Pro inside post-session window)
+  // Rails 2+3 — included (Pro+ always; Core/Pro inside post-session window)
   if (isProPlus || withinPostSessionWindow) {
     return {
       rail: 'platform_pool',
       partnerOrg: null,
-      payoutCents: BCBA_ANSWER_PAYOUT_CENTS,
+      costCents: EFFECTIVE_COST_PER_ANSWER_CENTS,
       parentPriceCents: 0,
-      answeredByLabel: 'a licensed BCBA',
+      answeredByLabel: 'a behaviorist on the Aminy clinical team',
     };
   }
 
-  // Rail 3 — single question purchase
+  // Rail 4 — single question purchase
   return {
     rail: 'pay_per_question',
     partnerOrg: null,
-    payoutCents: BCBA_ANSWER_PAYOUT_CENTS,
+    costCents: EFFECTIVE_COST_PER_ANSWER_CENTS,
     parentPriceCents: PAY_PER_QUESTION_CENTS,
-    answeredByLabel: 'a licensed BCBA',
+    answeredByLabel: 'a behaviorist on the Aminy clinical team',
   };
 }
 

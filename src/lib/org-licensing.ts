@@ -5,7 +5,7 @@
  * Org Licensing — B2B seat-based subscriptions for AACT, schools, agencies, enterprise.
  *
  * Pricing model — volume ladder, solo-BCBA friendly:
- * - 1 seat: $79/seat/mo · 2: $69 · 3: $59 · 4: $54 · 5+: $49/seat/mo
+ * - 1 seat: $89/seat/mo · 2: $79 · 3: $69 · 4: $59 · 5+: $49/seat/mo
  * - Min 1 seat — solo BCBAs onboard at the same door as clinics
  * - Orgs with negotiated pricing store price_per_seat_cents on the organizations
  *   table; that custom rate overrides the ladder
@@ -28,14 +28,14 @@ export const ANNUAL_DISCOUNT = 0.15;               // 15% off annual
 /**
  * Volume pricing ladder — price per seat per month, by total seat count.
  * Single source of truth (mirrored in the /org/checkout edge function).
- * Solo BCBAs pay $79; the per-seat price steps down to $49 at 5+ seats.
+ * Solo BCBAs pay $89; the per-seat price steps down in $10 increments to $49 at 5+ seats.
  */
 export const SEAT_PRICE_LADDER: ReadonlyArray<{ minSeats: number; pricePerSeatCents: number }> = [
   { minSeats: 5, pricePerSeatCents: 4900 },  // 5+ seats: $49/seat
-  { minSeats: 4, pricePerSeatCents: 5400 },  // 4 seats:  $54/seat
-  { minSeats: 3, pricePerSeatCents: 5900 },  // 3 seats:  $59/seat
-  { minSeats: 2, pricePerSeatCents: 6900 },  // 2 seats:  $69/seat
-  { minSeats: 1, pricePerSeatCents: 7900 },  // 1 seat:   $79 (solo BCBA)
+  { minSeats: 4, pricePerSeatCents: 5900 },  // 4 seats:  $59/seat
+  { minSeats: 3, pricePerSeatCents: 6900 },  // 3 seats:  $69/seat
+  { minSeats: 2, pricePerSeatCents: 7900 },  // 2 seats:  $79/seat
+  { minSeats: 1, pricePerSeatCents: 8900 },  // 1 seat:   $89 (solo BCBA)
 ];
 
 /** Per-seat monthly price for a given seat count, per the volume ladder. */
@@ -50,7 +50,7 @@ export function getSeatPriceCents(seats: number): number {
 export const DEFAULT_PRICE_PER_SEAT_CENTS = getSeatPriceCents(5);  // $49/seat/mo
 
 // Solo BCBA = the 1-seat rung of the ladder (delegated so they can't drift)
-export const SOLO_BCBA_PRICE_CENTS = getSeatPriceCents(1);  // $79/mo, 1 clinician
+export const SOLO_BCBA_PRICE_CENTS = getSeatPriceCents(1);  // $89/mo, 1 clinician
 export const SOLO_BCBA_MAX_CLINICIANS = 1;
 
 export interface Organization {

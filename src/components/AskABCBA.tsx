@@ -15,7 +15,7 @@
  *
  * Tier access rules:
  *   - Pro+ Family ($49.99/mo): 10 questions/month, no session required
- *   - Core / Pro: questions included ONLY within 5-day post-telehealth session window
+ *   - Core / Pro: questions included ONLY within the 7-day post-telehealth window (CPT 98970-98972 aligned)
  *   - Free: no access (hard paywall)
  *   If no recent session AND tier is not proplus → show upgrade prompt with
  *   "Book a session to unlock" path. CPT 98970-98972 require established relationship.
@@ -27,7 +27,7 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { ScreenHeader } from './ui/ScreenHeader';
-import { routeAskBcbaQuestion, formatAskBcbaPrice, PAY_PER_QUESTION_CENTS, ASK_BCBA_PROPLUS_MONTHLY_QUOTA } from '../lib/ask-bcba-economics';
+import { routeAskBcbaQuestion, formatAskBcbaPrice, PAY_PER_QUESTION_CENTS, ASK_BCBA_PROPLUS_MONTHLY_QUOTA, POST_SESSION_WINDOW_DAYS } from '../lib/ask-bcba-economics';
 
 const CATEGORIES = [
   { id: 'behavior', label: 'Behavior', emoji: '🎯' },
@@ -65,7 +65,7 @@ interface AskABCBAProps {
   childName?: string;
   parentName?: string;
   /**
-   * True when a telehealth session occurred within the past 5 days.
+   * True when a 1:1 telehealth session occurred within the past 7 days (group sessions don't count).
    * Pro+ ignores this flag — they have a monthly pool regardless.
    * Core/Pro/free: access is gated to this post-session window.
    */
@@ -80,12 +80,12 @@ interface AskABCBAProps {
 export function AskABCBA({ onBack, userId, childName, parentName, hasEstablishedSession, tier = 'core', pilotOrganization = null, onNavigate }: AskABCBAProps) {
   // Pro+ has a monthly question pool — no session required.
   // Partner-org families (AACT / Rise) route to their org's own BCBA team — always included.
-  // Core/Pro must be within the 5-day post-session window.
+  // Core/Pro must be within the 7-day post-session window (1:1 telehealth only).
   const isProPlus = tier === 'proplus' || tier === 'pro_plus';
   const isPartnerOrg = !!pilotOrganization;
   const isFree = tier === 'free';
 
-  // Check whether a telehealth session occurred in the past 5 days.
+  // Check whether a 1:1 telehealth session occurred in the past 7 days.
   // If hasEstablishedSession is explicitly passed, trust the caller; otherwise load from DB.
   const [recentSessionChecked, setRecentSessionChecked] = useState(hasEstablishedSession !== undefined);
   const [recentSessionBcbaId, setRecentSessionBcbaId] = useState<string | null>(null);
@@ -117,12 +117,16 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       // session_notes links to the parent via `user_id` (the convention used by
       // contextLayer + OutcomesTracking). There is no `parent_id` column — querying
       // it errors and the gate would silently lock out every eligible user.
-      const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+      // 7-day window mirrors CPT digital E/M (98970-98972) cumulative-period
+      // expectations — see POST_SESSION_WINDOW_DAYS in ask-bcba-economics.ts.
+      // Only 1:1 telehealth sessions (session_notes) open the window; group
+      // sessions live in group_session_enrollments and intentionally do NOT.
+      const windowStart = new Date(Date.now() - POST_SESSION_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
       const { data, error } = await supabase
         .from('session_notes')
         .select('id, provider_id, session_date')
         .eq('user_id', userId)
-        .gte('session_date', fiveDaysAgo)
+        .gte('session_date', windowStart)
         .order('session_date', { ascending: false })
         .limit(1);
       if (error) throw error;
@@ -199,7 +203,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         body: JSON.stringify({ threadId: thread.id }),
       }).catch(() => {});
 
-      toast.success('Question sent. AI is drafting an instant response — BCBA team review within 24h (3 business days max).');
+      toast.success('Question sent. AI is drafting an instant response — a behaviorist reviews within 24h (3 business days max).');
       setQuestion('');
       setCategory(null);
       setShowAsk(false);
@@ -246,9 +250,9 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">Your BCBA team, on demand</p>
+              <p className="text-sm font-semibold text-[#1B2733]">Your behaviorist team, on demand</p>
               <p className="text-xs text-[#5A6B7A] mt-0.5">
-                {isProPlus ? '10 questions/month included with Pro+' : 'Included for 5 days after each session · Unlimited on Pro+'}
+                {isProPlus ? '10 questions/month included with Pro+' : 'Included for 7 days after each 1:1 session · Unlimited on Pro+'}
               </p>
             </div>
           </div>
@@ -259,7 +263,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — your BCBA or supervised RBT edits and signs the response, typically within 24 hours</p>
+              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — a behaviorist (RBT, BCBA-supervised) edits and signs the response, typically within 24 hours — clinical-plan questions escalate to a BCBA or a telehealth session</p>
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
@@ -281,7 +285,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
                 <p className="text-xs text-[#5A6B7A] mt-1">
-                  BCBA team messaging is available for 5 days after each telehealth session — or any time on Pro+ Family.
+                  Behaviorist messaging is included for 7 days after each 1:1 telehealth session — or any time on Pro+ Family. Group sessions don't open the window.
                 </p>
               </div>
               <div className="space-y-2">
@@ -309,7 +313,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 </button>
               </div>
               <p className="text-xs text-slate-400">
-                Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} BCBA team questions/month, no session required — with instant AI drafts while you wait.
+                Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} behaviorist questions/month, no session required — with instant AI drafts while you wait. Want a BCBA? Book a telehealth session.
               </p>
             </div>
           ) : (
@@ -319,7 +323,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(67,170,139,0.3)' }}
             >
               <Plus className="w-5 h-5" />
-              Ask your BCBA team
+              Ask your behaviorist team
               {isProPlus && <span className="ml-auto text-xs font-normal opacity-80">Pro+ · 10/mo</span>}
             </button>
           )}
@@ -388,10 +392,10 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            {isSubmitting ? 'Sending…' : 'Send to BCBA team'}
+            {isSubmitting ? 'Sending…' : 'Send to your behaviorist'}
           </button>
 
-          <p className="text-xs text-slate-400 text-center">AI drafts instantly · BCBA team review, typically within 24 hours (3 business days max)</p>
+          <p className="text-xs text-slate-400 text-center">AI drafts instantly · behaviorist review, typically within 24 hours (3 business days max)</p>
         </div>
       )}
 
@@ -404,7 +408,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         ) : threads.length === 0 ? (
           <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
             <MessageCircle className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, BCBA team review typically within 24 hours.</p>
+            <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, behaviorist review typically within 24 hours.</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -529,7 +533,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">Awaiting BCBA team review</p>
+            <p className="text-sm font-medium text-[#1B2733]">Awaiting behaviorist review</p>
             {thread.target_response_at && (
               <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}

@@ -54,6 +54,7 @@ import type { VaultRecord } from '../types/vault';
 import { useStorage } from '../lib/useStorage';
 import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
 import type { VaultRecordType } from '../lib/vault-storage';
+import { checkAndAwardBadges } from '../lib/badge-service';
 import { supabase } from '../utils/supabase/client';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 
@@ -482,6 +483,8 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
 
       if (result.success) {
         toast.success('Document uploaded successfully!');
+        // Empowerment badges: first upload + Records Master at 10 docs
+        checkAndAwardBadges(user.id, 'vault_upload').catch(() => {});
         // Reload documents
         const { documents } = await listVaultDocuments(user.id, { limit: 100 });
         if (documents) {

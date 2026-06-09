@@ -1970,10 +1970,10 @@ const ORG_MIN_SEATS = 1;
 const ORG_ANNUAL_DISCOUNT = 0.15;
 function orgSeatPriceCents(seats: number): number {
   if (seats >= 5) return 4900;
-  if (seats >= 4) return 5400;
-  if (seats >= 3) return 5900;
-  if (seats >= 2) return 6900;
-  return 7900; // 1 seat (solo BCBA)
+  if (seats >= 4) return 5900;
+  if (seats >= 3) return 6900;
+  if (seats >= 2) return 7900;
+  return 8900; // 1 seat (solo BCBA)
 }
 
 app.post("/make-server-8a022548/org/checkout", async (c) => {

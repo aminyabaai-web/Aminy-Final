@@ -119,7 +119,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
     }
   };
 
-  // Volume ladder hint: "1 seat $79 · 2 $69 · 3 $59 · 4 $54 · 5+ $49/seat"
+  // Volume ladder hint: "1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat"
   const ladderHint = [...SEAT_PRICE_LADDER].reverse()
     .map((r, i, arr) => `${r.minSeats}${i === arr.length - 1 ? '+' : ''}${i === 0 ? ' seat' : ''} $${r.pricePerSeatCents / 100}`)
     .join(' · ') + '/seat';
