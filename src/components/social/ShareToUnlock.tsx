@@ -384,7 +384,7 @@ export function ShareToUnlock({
                     {'share' in navigator && (
                       <Button
                         onClick={() => handleShare('native')}
-                        className="w-full bg-primary hover:bg-[#6B9080] text-white"
+                        className="w-full bg-primary hover:bg-primary text-white"
                       >
                         <Share2 className="w-4 h-4 mr-2" />
                         Share Achievement

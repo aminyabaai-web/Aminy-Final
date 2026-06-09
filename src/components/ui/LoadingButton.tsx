@@ -27,7 +27,7 @@ interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses = {
-  primary: 'bg-[#6B9080] text-white hover:bg-[#466379] disabled:bg-gray-300 disabled:text-[#5A6B7A]',
+  primary: 'bg-primary text-white hover:bg-[#466379] disabled:bg-gray-300 disabled:text-[#5A6B7A]',
   secondary: 'bg-[#F0EDE8] text-[#3A4A57] hover:bg-[#E8E4DF] disabled:bg-[#F0EDE8] disabled:text-[#8A9BA8]',
   outline: 'border-2 border-cyan-600 text-[#6B9080] hover:bg-[#6B9080]/5 disabled:border-[#E8E4DF] disabled:text-[#8A9BA8]',
   ghost: 'text-[#3A4A57] hover:bg-[#F0EDE8] disabled:text-[#8A9BA8]',

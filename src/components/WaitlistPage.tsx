@@ -227,7 +227,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="bg-primary hover:bg-[#6B9080] text-white px-6 py-3 rounded-xl"
+              className="bg-primary hover:bg-primary text-white px-6 py-3 rounded-xl"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">

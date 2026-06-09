@@ -293,7 +293,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
           <p className="text-[#5A6B7A] mb-4">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379]"
+            className="px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379]"
           >
             Try Again
           </button>
@@ -327,7 +327,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -371,7 +371,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{label}</span>
                   {id === 'appointments' && appointments.length > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-[#6B9080] text-white text-xs rounded-full">
+                    <span className="ml-auto px-2 py-0.5 bg-primary text-white text-xs rounded-full">
                       {appointments.length}
                     </span>
                   )}
@@ -652,7 +652,7 @@ function AvailabilityTab({
           </div>
           <button
             onClick={addBlock}
-            className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Time Block

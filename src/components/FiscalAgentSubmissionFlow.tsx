@@ -425,7 +425,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={() => setStep(2)}
                   disabled={selectedEntries.size === 0}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -588,7 +588,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleGenerateNotes}
                   disabled={isSigning}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   {isSigning ? (
                     <>
@@ -719,7 +719,7 @@ export function FiscalAgentSubmissionFlow({
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   {isSubmitting ? (
                     <>
@@ -811,7 +811,7 @@ export function FiscalAgentSubmissionFlow({
                   <Printer className="w-4 h-4 mr-2" />
                   Print Receipt
                 </Button>
-                <Button onClick={() => onComplete(submission)} className="flex-1 bg-primary hover:bg-[#6B9080]">
+                <Button onClick={() => onComplete(submission)} className="flex-1 bg-primary hover:bg-[#216982]">
                   Done
                 </Button>
               </div>

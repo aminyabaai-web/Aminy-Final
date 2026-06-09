@@ -340,7 +340,7 @@ Generate a personalized summary for this parent.`,
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
-                className="bg-primary hover:bg-[#6B9080] h-11 w-11 sm:h-auto sm:w-auto sm:px-4"
+                className="bg-primary hover:bg-[#216982] h-11 w-11 sm:h-auto sm:w-auto sm:px-4"
               >
                 <Send className="w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
@@ -353,7 +353,7 @@ Generate a personalized summary for this parent.`,
               <Button
                 onClick={handleComplete}
                 disabled={isTyping || isGeneratingSummary}
-                className="w-full bg-primary hover:bg-[#6B9080] py-4 sm:py-5 md:py-6 text-sm sm:text-base"
+                className="w-full bg-primary hover:bg-[#216982] py-4 sm:py-5 md:py-6 text-sm sm:text-base"
               >
                 {isGeneratingSummary ? (
                   <>

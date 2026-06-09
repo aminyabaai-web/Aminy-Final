@@ -396,7 +396,7 @@ export function TelehealthConsent({
           <Button
             onClick={onConsent}
             disabled={!acceptedSections.has('quick') || !acceptedSections.has('emergency-quick')}
-            className="flex-1 bg-primary hover:bg-[#6B9080]"
+            className="flex-1 bg-primary hover:bg-[#216982]"
           >
             Continue to Session
           </Button>
@@ -532,7 +532,7 @@ export function TelehealthConsent({
           <Button
             onClick={onConsent}
             disabled={!allRequiredAccepted}
-            className="flex-1 bg-primary hover:bg-[#6B9080] disabled:opacity-50"
+            className="flex-1 bg-primary hover:bg-[#216982] disabled:opacity-50"
           >
             <CheckCircle className="w-4 h-4 mr-2" />
             I Consent & Agree

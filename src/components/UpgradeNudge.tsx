@@ -191,7 +191,7 @@ export function UpgradeNudge({
                   Should we build on that success?"
                 </p>
               </div>
-              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-primary hover:bg-[#6B9080]">
+              <Button size="sm" onClick={onUpgrade} className="mt-3 bg-primary hover:bg-[#216982]">
                 <Heart className="w-4 h-4 mr-1" />
                 Get Personalized Memory
               </Button>

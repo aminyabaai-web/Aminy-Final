@@ -438,10 +438,10 @@ export function DesignSystem() {
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Primary</h4>
-                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full bg-primary hover:bg-primary text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Primary Button
                         </button>
-                        <button className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                        <button className="w-full bg-primary hover:bg-primary text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                           <Heart className="w-4 h-4" />
                           With Icon
                         </button>

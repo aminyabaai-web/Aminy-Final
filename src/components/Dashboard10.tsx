@@ -1069,7 +1069,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-[#6B9080] text-white hover:bg-[#5A7D6E]"
+                className="rounded-full bg-primary text-white hover:bg-[#216982]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 My treatment plan
@@ -1156,7 +1156,7 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-[#6B9080] text-white shadow-md'
+                    ? 'bg-primary text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
                 }`}
               >
@@ -1443,7 +1443,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
+              : 'bg-primary text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1478,7 +1478,7 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-primary text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1528,7 +1528,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-[#6B9080] text-white ml-8'
+                      ? 'bg-primary text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-[#3A4A57] dark:text-gray-200 mr-8'
                   }`}
                 >

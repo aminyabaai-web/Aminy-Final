@@ -762,7 +762,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </Button>
                 <Button
                   onClick={() => handleApprove(selectedRequest, 30)}
-                  className="flex-1 min-h-[48px] bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 min-h-[48px] bg-primary hover:bg-[#216982]"
                 >
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Approve (30 days)

@@ -169,7 +169,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       <div className="flex items-center gap-2">
         <button
           onClick={() => onBook(service.id)}
-          className="flex-1 bg-primary hover:bg-[#6B9080] text-white font-medium py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
+          className="flex-1 bg-primary hover:bg-primary text-white font-medium py-2.5 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
         >
           Book Now
           <ArrowRight className="w-4 h-4" />

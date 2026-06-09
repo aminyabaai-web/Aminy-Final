@@ -221,7 +221,7 @@ export function AIPaywallMessage({
           <div className="flex gap-2">
             <Button 
               onClick={onViewPlans}
-              className="flex-1 bg-primary hover:bg-[#6B9080] text-white font-semibold text-sm"
+              className="flex-1 bg-primary hover:bg-primary text-white font-semibold text-sm"
               size="sm"
             >
               View Plans

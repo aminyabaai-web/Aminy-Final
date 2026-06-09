@@ -257,7 +257,7 @@ export function GetCareIntakeScreen({
           disabled={!isValid}
           className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
             isValid
-              ? 'bg-[#6B9080] text-white hover:bg-[#466379] active:scale-[0.98]'
+              ? 'bg-primary text-white hover:bg-[#466379] active:scale-[0.98]'
               : 'bg-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed'
           }`}
         >

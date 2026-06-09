@@ -587,7 +587,7 @@ export function VideoCall({
 
           <Button
             size="lg"
-            className="w-full bg-primary hover:bg-[#6B9080]"
+            className="w-full bg-primary hover:bg-[#216982]"
             onClick={initializeCall}
           >
             <Video className="w-5 h-5 mr-2" />
@@ -635,7 +635,7 @@ export function VideoCall({
               Go Back
             </Button>
             <Button
-              className="flex-1 bg-primary hover:bg-[#6B9080]"
+              className="flex-1 bg-primary hover:bg-[#216982]"
               onClick={initializeCall}
             >
               Try Again
@@ -815,7 +815,7 @@ export function VideoCall({
                 <Button
                   onClick={sendChatMessage}
                   disabled={!chatInput.trim()}
-                  className="bg-primary hover:bg-[#6B9080] rounded-lg"
+                  className="bg-primary hover:bg-[#216982] rounded-lg"
                 >
                   <Send className="w-5 h-5" />
                 </Button>

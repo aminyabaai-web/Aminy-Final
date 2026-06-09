@@ -153,7 +153,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
       <Button
         onClick={parseDescription}
         disabled={!description.trim() || isParsing}
-        className="w-full bg-primary hover:bg-[#6B9080]"
+        className="w-full bg-primary hover:bg-[#216982]"
         size="sm"
       >
         {isParsing ? (
@@ -210,7 +210,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
               onClick={confirmAndLog}
               disabled={isSaving}
               size="sm"
-              className="flex-1 bg-primary hover:bg-[#6B9080]"
+              className="flex-1 bg-primary hover:bg-[#216982]"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Check className="w-4 h-4 mr-1" />Confirm & Log</>}
             </Button>

@@ -696,7 +696,7 @@ function ClockTab({
             <button
               onClick={onClockIn}
               disabled={isClockingIn || !selectedAuth}
-              className="w-full py-4 bg-primary hover:bg-[#6B9080] disabled:bg-[#E8E4DF] disabled:text-[#8A9BA8] text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-[rgba(107,144,128,0.12)]"
+              className="w-full py-4 bg-primary hover:bg-[#216982] disabled:bg-[#E8E4DF] disabled:text-[#8A9BA8] text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors shadow-lg shadow-[rgba(107,144,128,0.12)]"
             >
               {isClockingIn ? (
                 <>

@@ -109,7 +109,7 @@ export const SessionPrepModal = ({
                 toast.success('Ready for session!');
               }}
               disabled={requiredCompleted < requiredTotal}
-              className="bg-primary hover:bg-[#6B9080]"
+              className="bg-primary hover:bg-[#216982]"
             >
               Mark as Ready
             </Button>
@@ -243,7 +243,7 @@ export const AppointmentCard = ({
     <div className="flex items-center gap-2 flex-wrap">
       {appointment.status === 'confirmed' && (
         <>
-          <Button size="sm" className="bg-primary hover:bg-[#6B9080]" onClick={onJoinSession}>
+          <Button size="sm" className="bg-primary hover:bg-[#216982]" onClick={onJoinSession}>
             <Video className="h-3 w-3 mr-1" />
             Join Session
           </Button>
@@ -383,7 +383,7 @@ export const PostSessionModal = ({
             <Button variant="outline" onClick={onClose}>
               Skip for Now
             </Button>
-            <Button onClick={handleSubmit} className="bg-primary hover:bg-[#6B9080]">
+            <Button onClick={handleSubmit} className="bg-primary hover:bg-[#216982]">
               Complete Session
             </Button>
           </div>

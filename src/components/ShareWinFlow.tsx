@@ -320,7 +320,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                       {referralLink && (
                         <a
                           href={`sms:?body=I%20use%20Aminy%20to%20support%20my%20child's%20behavioral%20wellness%20%E2%80%94%20you%20get%20a%20%2425%20credit%20when%20you%20sign%20up:%20${encodeURIComponent(referralLink)}`}
-                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#6B9080] rounded-lg text-sm text-white font-medium hover:bg-[#5A7A6B] transition-colors"
+                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#6B9080] rounded-lg text-sm text-white font-medium hover:bg-[#216982] transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                           Text

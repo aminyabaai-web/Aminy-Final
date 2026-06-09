@@ -479,7 +479,7 @@ export function ModerationDashboard() {
             variant={filter === f ? 'default' : 'outline'}
             size="sm"
             onClick={() => setFilter(f)}
-            className={filter === f ? 'bg-primary hover:bg-[#6B9080]' : ''}
+            className={filter === f ? 'bg-primary hover:bg-[#216982]' : ''}
           >
             {f === 'pending' && <Clock className="w-4 h-4 mr-1" />}
             {f === 'escalated' && <AlertTriangle className="w-4 h-4 mr-1" />}

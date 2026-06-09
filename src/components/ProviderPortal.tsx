@@ -1175,7 +1175,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
                     <div className="flex gap-3 mt-4">
                       <Button
-                        className="flex-1 bg-primary hover:bg-[#6B9080]"
+                        className="flex-1 bg-primary hover:bg-[#216982]"
                         onClick={() => {
                           if (onStartTelehealthSession) {
                             onStartTelehealthSession(nextSession.id);
@@ -1404,7 +1404,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                   </div>
                 </div>
-                <Button className="bg-primary hover:bg-[#6B9080]">
+                <Button className="bg-primary hover:bg-[#216982]">
                   <Sparkles className="w-4 h-4 mr-2" />
                   View Patients
                 </Button>
@@ -1479,7 +1479,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     : 'Share your provider link with families to start building your patient roster. Parents can connect and grant you access to their Insight Navigator profiles.'}
                 </p>
                 {!searchQuery && (
-                  <Button className="bg-primary hover:bg-[#6B9080]">
+                  <Button className="bg-primary hover:bg-[#216982]">
                     <Plus className="w-4 h-4 mr-2" />
                     Get Your Provider Link
                   </Button>
@@ -1573,7 +1573,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Upcoming Sessions</h2>
-              <Button className="bg-primary hover:bg-[#6B9080]">
+              <Button className="bg-primary hover:bg-[#216982]">
                 <Calendar className="w-4 h-4 mr-2" />
                 Manage Availability
               </Button>
@@ -1615,7 +1615,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           Insight
                         </Button>
                       )}
-                      <Button size="sm" className="bg-primary hover:bg-[#6B9080]">
+                      <Button size="sm" className="bg-primary hover:bg-[#216982]">
                         <Video className="w-4 h-4 mr-1" />
                         Join
                       </Button>
@@ -1715,7 +1715,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <Button
                         size="sm"
-                        className="bg-[#6B9080] hover:bg-[#5A7A6E] text-white shrink-0"
+                        className="bg-[#6B9080] hover:bg-[#216982] text-white shrink-0"
                         onClick={() => {
                           // Open the thread in a new review modal or navigate to it
                           toast.info('Thread review panel — coming soon. Check Supabase for thread ID: ' + thread.id.slice(0, 8));
@@ -1975,7 +1975,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       });
                       setBranding(getBranding());
                     }}
-                    className="bg-primary hover:bg-[#6B9080] text-white"
+                    className="bg-primary hover:bg-primary text-white"
                   >
                     <Save className="w-4 h-4 mr-1" /> Save Branding
                   </Button>
@@ -2093,7 +2093,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{patient.parentName}</p>
                       </div>
                     </div>
-                    <Button size="sm" className="w-full mt-4 bg-primary hover:bg-[#6B9080]">
+                    <Button size="sm" className="w-full mt-4 bg-primary hover:bg-[#216982]">
                       View Care Team
                     </Button>
                   </Card>
@@ -2134,7 +2134,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   });
                   setShowNoteEditor(true);
                 }}
-                className="bg-primary hover:bg-[#6B9080] text-white"
+                className="bg-primary hover:bg-primary text-white"
               >
                 <Plus className="w-4 h-4 mr-1" /> New Note
               </Button>
@@ -2303,7 +2303,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <Button
                       onClick={handleSaveClinicalNote}
                       disabled={isSavingNotes}
-                      className="bg-primary hover:bg-[#6B9080] text-white"
+                      className="bg-primary hover:bg-primary text-white"
                     >
                       {isSavingNotes ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Save className="w-4 h-4 mr-1" />}
                       Save Note
@@ -2398,7 +2398,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-slate-700">
                       <Button
                         onClick={() => handleGenerateSuperbill(note.id)}
-                        className="w-full bg-primary hover:bg-[#6B9080] text-white"
+                        className="w-full bg-primary hover:bg-primary text-white"
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Generate Superbill for This Session
@@ -2672,7 +2672,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                     <Button
                       onClick={() => onNavigate?.('provider-payout-setup')}
-                      className="mt-3 bg-primary hover:bg-[#6B9080] text-white"
+                      className="mt-3 bg-primary hover:bg-primary text-white"
                     >
                       <CreditCard className="w-4 h-4 mr-2" />
                       Set up cash-pay payouts
@@ -2725,7 +2725,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <Button
                     onClick={() => setPracticeView('rbts')}
-                    className="bg-primary hover:bg-[#6B9080] text-white shrink-0"
+                    className="bg-primary hover:bg-primary text-white shrink-0"
                   >
                     <Users className="w-4 h-4 mr-2" />
                     {isOrgCaseload ? 'Open caseload RBTs' : 'Manage your RBTs'}
@@ -2917,7 +2917,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div className="flex gap-3 pt-4 border-t border-neutral-100">
                 {selectedPatient.profileAccess === 'granted' && (
                   <Button
-                    className="flex-1 bg-primary hover:bg-[#6B9080]"
+                    className="flex-1 bg-primary hover:bg-[#216982]"
                     onClick={() => onNavigate?.('insight-report')}
                   >
                     <Eye className="w-4 h-4 mr-2" />

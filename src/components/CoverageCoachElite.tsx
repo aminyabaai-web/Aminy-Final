@@ -440,7 +440,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             />
                           </div>
                         </div>
-                        <Button size="sm" className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={calcOOP}>
+                        <Button size="sm" className="w-full bg-primary hover:bg-primary text-white" onClick={calcOOP}>
                           <Calculator className="w-3.5 h-3.5 mr-1.5" />
                           Calculate
                         </Button>
@@ -463,7 +463,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               {/* Action buttons */}
               <div className="space-y-2">
-                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('benefits')}>
+                <Button className="w-full bg-primary hover:bg-primary text-white" onClick={() => onNavigate?.('benefits')}>
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>
@@ -538,7 +538,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               </div>
 
               <div className="space-y-2">
-                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('marketplace')}>
+                <Button className="w-full bg-primary hover:bg-primary text-white" onClick={() => onNavigate?.('marketplace')}>
                   See Cash-Pay Options
                 </Button>
                 <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => toast.info('Checking your state waiver eligibility...')}>
@@ -620,7 +620,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               </Card>
 
               <div className="space-y-2">
-                <Button className="w-full bg-primary hover:bg-[#6B9080] text-white" onClick={() => onNavigate?.('benefits')}>
+                <Button className="w-full bg-primary hover:bg-primary text-white" onClick={() => onNavigate?.('benefits')}>
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>

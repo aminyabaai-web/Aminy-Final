@@ -180,7 +180,7 @@ export function GroupSessionCreator({
           </p>
         </div>
         <Button
-          className="bg-[#6B9080] hover:bg-[#5A7A6E] text-white"
+          className="bg-[#6B9080] hover:bg-[#216982] text-white"
           onClick={() => setShowCreator(true)}
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -341,7 +341,7 @@ export function GroupSessionCreator({
             <Button
               onClick={handleCreate}
               disabled={isSaving || !topic.trim() || !sessionDate || !sessionTime}
-              className="w-full bg-[#6B9080] hover:bg-[#5A7A6E] text-white"
+              className="w-full bg-[#6B9080] hover:bg-[#216982] text-white"
             >
               {isSaving ? 'Creating…' : 'Create & publish to marketplace'}
             </Button>

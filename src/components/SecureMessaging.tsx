@@ -728,7 +728,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
               <Button
                 onClick={sendMessage}
                 disabled={(!newMessage.trim() && attachments.length === 0) || isSending}
-                className="bg-primary hover:bg-[#6B9080]"
+                className="bg-primary hover:bg-[#216982]"
               >
                 {isSending ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

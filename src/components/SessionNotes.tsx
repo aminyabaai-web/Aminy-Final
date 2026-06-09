@@ -559,7 +559,7 @@ export function SessionNotes({
                 Cancel
               </Button>
               <Button
-                className="bg-primary hover:bg-[#6B9080]"
+                className="bg-primary hover:bg-[#216982]"
                 onClick={handleSave}
                 disabled={isSaving}
               >

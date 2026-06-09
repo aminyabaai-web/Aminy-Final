@@ -531,7 +531,7 @@ export function RecordingPlayback({
                 {/* Play/Pause */}
                 <button
                   onClick={togglePlayPause}
-                  className="p-3 bg-primary hover:bg-[#6B9080] text-white rounded-full transition-colors"
+                  className="p-3 bg-primary hover:bg-primary text-white rounded-full transition-colors"
                   aria-label={playing ? 'Pause' : 'Play'}
                 >
                   {playing ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}

@@ -266,7 +266,7 @@ export function SessionBundles({
                   className={`w-full ${
                     bundle.recommended
                       ? 'bg-purple-600 hover:bg-purple-700'
-                      : 'bg-primary hover:bg-[#6B9080]'
+                      : 'bg-primary hover:bg-[#216982]'
                   }`}
                 >
                   {purchasingBundle === bundle.id ? (

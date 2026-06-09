@@ -669,7 +669,7 @@ export function ProviderMarketplace({
                   Next: {provider.nextAvailable}
                 </span>
               </div>
-              <Button size="sm" className="bg-primary hover:bg-[#6B9080] opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button size="sm" className="bg-primary hover:bg-[#216982] opacity-0 group-hover:opacity-100 transition-opacity">
                 Book Session
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>

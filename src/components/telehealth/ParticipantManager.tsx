@@ -539,7 +539,7 @@ export function ParticipantManager({
             <Button
               onClick={() => setShowInviteModal(true)}
               disabled={!canInviteMore}
-              className="w-full bg-primary hover:bg-[#6B9080] text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full bg-primary hover:bg-primary text-white rounded-xl py-2.5 text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <UserPlus className="w-4 h-4" />
               {canInviteMore

@@ -265,7 +265,7 @@ export function GroupSessionDiscovery({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-[#6B9080] hover:bg-[#5A7A6E] text-white"
+                className="flex-1 bg-[#6B9080] hover:bg-[#216982] text-white"
                 onClick={() => handleBook(bookingSession)}
                 disabled={isBooking}
               >
@@ -350,7 +350,7 @@ function GroupSessionListCard({
               size="sm"
               className={isFull
                 ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                : 'bg-[#6B9080] hover:bg-[#5A7A6E] text-white'
+                : 'bg-[#6B9080] hover:bg-[#216982] text-white'
               }
               disabled={isFull}
               onClick={onBook}

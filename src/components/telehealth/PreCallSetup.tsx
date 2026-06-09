@@ -798,7 +798,7 @@ export function PreCallSetup({
           <Button
             onClick={onReady}
             disabled={!allReady}
-            className="flex-1 py-3 min-h-[48px] bg-primary hover:bg-[#6B9080] text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-3 min-h-[48px] bg-primary hover:bg-primary text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {audioOnlyMode ? (
               <>

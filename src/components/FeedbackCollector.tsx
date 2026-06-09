@@ -199,7 +199,7 @@ export function FeedbackCollector({
               <Button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="flex-1 bg-[#6B9080] hover:bg-[#5A7A6E]"
+                className="flex-1 bg-[#6B9080] hover:bg-[#216982]"
               >
                 {isSubmitting ? (
                   'Sending...'

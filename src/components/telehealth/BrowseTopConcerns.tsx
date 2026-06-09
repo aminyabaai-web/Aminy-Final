@@ -232,7 +232,7 @@ export function BrowseTopConcerns({
               </a>
               <button
                 onClick={handleSafetyAcknowledge}
-                className="block w-full py-3 px-4 bg-[#6B9080] text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
+                className="block w-full py-3 px-4 bg-primary text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
               >
                 Continue to Book Support
               </button>

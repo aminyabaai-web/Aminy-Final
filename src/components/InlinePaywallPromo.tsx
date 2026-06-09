@@ -82,7 +82,7 @@ export function InlinePaywallPromo({
           <Button 
             onClick={onViewPlans}
             size="sm"
-            className="bg-primary hover:bg-[#6B9080] text-white flex-shrink-0"
+            className="bg-primary hover:bg-primary text-white flex-shrink-0"
           >
             View Plans
           </Button>
@@ -165,7 +165,7 @@ export function InlinePaywallPromo({
       {/* CTA */}
       <Button 
         onClick={onViewPlans}
-        className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold shadow-md"
+        className="w-full bg-primary hover:bg-primary text-white font-semibold shadow-md"
         size="lg"
       >
         View All Plans & Start Free Trial

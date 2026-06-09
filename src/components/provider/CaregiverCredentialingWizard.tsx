@@ -75,7 +75,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="pt-8">
                             <Button
                                 onClick={() => handleNext('identity')}
-                                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#6B9080] hover:bg-[#5A7A6E] text-white rounded-xl shadow-lg transition-transform hover:scale-105"
+                                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-[#6B9080] hover:bg-[#216982] text-white rounded-xl shadow-lg transition-transform hover:scale-105"
                             >
                                 Let's Get Started
                             </Button>
@@ -222,7 +222,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <Button
                                 onClick={verifyNPI}
                                 disabled={isProcessing || npiNumber.length !== 10}
-                                className="flex-1 py-6 text-lg font-semibold rounded-xl bg-[#6B9080] text-white hover:bg-[#5A7A6E] disabled:opacity-50"
+                                className="flex-1 py-6 text-lg font-semibold rounded-xl bg-primary text-white hover:bg-[#216982] disabled:opacity-50"
                             >
                                 {isProcessing && npiSubmitted ? 'Checking...' : 'Validate NPI'}
                             </Button>

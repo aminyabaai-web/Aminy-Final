@@ -314,7 +314,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
         {responses[currentQuestion] !== null && currentQuestion < 11 && (
           <Button
             onClick={() => setCurrentQuestion(currentQuestion + 1)}
-            className="bg-primary hover:bg-[#6B9080]"
+            className="bg-primary hover:bg-[#216982]"
           >
             Next
             <ArrowRight className="w-4 h-4 ml-1" />
@@ -416,7 +416,7 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
         {result.totalScore >= 20 && onGetSupport && (
           <Button
             onClick={onGetSupport}
-            className="w-full bg-primary hover:bg-[#6B9080]"
+            className="w-full bg-primary hover:bg-[#216982]"
           >
             <Users className="w-4 h-4 mr-2" />
             Get Caregiver Support

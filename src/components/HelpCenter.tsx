@@ -284,7 +284,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <div className="mt-4 sm:mt-6">
                   <Button
                     onClick={() => setShowContactForm(true)}
-                    className="w-full bg-primary hover:bg-[#6B9080] text-white"
+                    className="w-full bg-primary hover:bg-primary text-white"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Contact Support
@@ -345,7 +345,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       />
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button type="submit" className="bg-primary hover:bg-[#6B9080] text-white">
+                      <Button type="submit" className="bg-primary hover:bg-primary text-white">
                         <Send className="w-4 h-4 mr-2" />
                         Send Message
                       </Button>

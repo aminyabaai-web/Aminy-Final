@@ -318,7 +318,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <p className="text-neutral-600 dark:text-slate-400 mb-6">
                   Welcome to Aminy! Your provider account is active and you're now listed in our marketplace.
                 </p>
-                <Button className="bg-primary hover:bg-[#6B9080]" onClick={onBack}>
+                <Button className="bg-primary hover:bg-[#216982]" onClick={onBack}>
                   Go to Provider Dashboard
                 </Button>
               </>
@@ -550,7 +550,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
               <div className="flex justify-end">
                 <Button
                   onClick={() => { if (validateStep(1)) setStep(2); }}
-                  className="bg-primary hover:bg-[#6B9080]"
+                  className="bg-primary hover:bg-[#216982]"
                 >
                   Continue
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -727,7 +727,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 {verificationResult?.license_valid ? (
                   <Button
                     onClick={() => setStep(3)}
-                    className="bg-primary hover:bg-[#6B9080]"
+                    className="bg-primary hover:bg-[#216982]"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -837,7 +837,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 </Button>
                 <Button
                   onClick={() => { if (validateStep(3)) setStep(4); }}
-                  className="bg-primary hover:bg-[#6B9080]"
+                  className="bg-primary hover:bg-[#216982]"
                 >
                   Review Application
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -1041,7 +1041,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 <Button
                   onClick={handleSubmit}
                   disabled={isSubmitting || !formData.accepts_terms}
-                  className="bg-primary hover:bg-[#6B9080] disabled:opacity-50"
+                  className="bg-primary hover:bg-[#216982] disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <>

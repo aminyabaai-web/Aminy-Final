@@ -429,7 +429,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             type="button"
             onClick={currentStep === 'review' ? handleSubmit : nextStep}
             disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#5A7A6E] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#216982] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
           >
             {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
             <ArrowRight className="w-4 h-4" />

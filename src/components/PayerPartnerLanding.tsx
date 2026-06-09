@@ -188,7 +188,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           <div className="flex gap-3 justify-center mt-6">
             <a
               href="#contact-form"
-              className="inline-flex items-center gap-1.5 bg-primary hover:bg-[#6B9080] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-colors"
             >
               Schedule a Call <ArrowRight className="w-4 h-4" />
             </a>

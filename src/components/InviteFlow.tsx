@@ -432,7 +432,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                     else if (c.phone) handleSMS(c.phone);
                   });
                 }}
-                className="w-full py-2.5 bg-primary hover:bg-[#6B9080] text-white rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full py-2.5 bg-primary hover:bg-primary text-white rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
               >
                 <Send size={16} />
                 Send All Invites

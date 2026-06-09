@@ -237,7 +237,7 @@ export function JuniorMilestoneShare({
             <button
               onClick={handleNativeShare}
               disabled={sharing}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary text-white rounded-xl font-medium transition-colors disabled:opacity-50"
             >
               <Share2 size={18} />
               {sharing ? 'Sharing...' : 'Share Milestone'}
@@ -245,7 +245,7 @@ export function JuniorMilestoneShare({
           ) : (
             <button
               onClick={handleCopy}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary text-white rounded-xl font-medium transition-colors"
             >
               {copied ? <Check size={18} /> : <Copy size={18} />}
               {copied ? 'Copied!' : 'Copy to Share'}

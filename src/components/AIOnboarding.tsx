@@ -281,7 +281,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <div
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'parent'
-                    ? 'bg-[#6B9080] text-white rounded-br-md'
+                    ? 'bg-primary text-white rounded-br-md'
                     : 'bg-white text-[#1B2733] rounded-bl-md shadow-sm border border-[#F0EDE8]'
                 }`}
               >
@@ -342,7 +342,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
                 aria-label="Send answer"
-                className="w-11 h-11 rounded-xl bg-[#6B9080] text-white flex items-center justify-center disabled:opacity-30 active:scale-95 transition-all"
+                className="w-11 h-11 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-30 active:scale-95 transition-all"
               >
                 <Send className="w-4 h-4" />
               </button>

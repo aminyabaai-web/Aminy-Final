@@ -675,7 +675,7 @@ function QuickLogModal({
                   onClick={() => setType(t)}
                   className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-colors ${
                     type === t
-                      ? 'bg-[#6B9080] text-white border-indigo-600'
+                      ? 'bg-primary text-white border-indigo-600'
                       : 'bg-white text-[#5A6B7A] border-slate-300'
                   }`}
                 >
@@ -721,7 +721,7 @@ function QuickLogModal({
 
           <button
             onClick={handleSave}
-            className="w-full bg-[#6B9080] text-white py-3 rounded-xl font-semibold text-sm mt-2"
+            className="w-full bg-primary text-white py-3 rounded-xl font-semibold text-sm mt-2"
           >
             Log Session
           </button>

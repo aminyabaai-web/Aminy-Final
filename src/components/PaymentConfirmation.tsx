@@ -56,7 +56,7 @@ export function PaymentConfirmation({
           </p>
           <Button
             onClick={onContinue}
-            className="w-full bg-primary hover:bg-[#6B9080] text-white"
+            className="w-full bg-primary hover:bg-primary text-white"
           >
             Continue to Dashboard
           </Button>
@@ -102,7 +102,7 @@ export function PaymentConfirmation({
             </Button>
             <Button
               onClick={onContinue}
-              className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
+              className="flex-1 bg-primary hover:bg-primary text-white"
             >
               Continue Anyway
             </Button>

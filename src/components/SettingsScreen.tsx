@@ -918,7 +918,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             </p>
             <button
               onClick={() => onNavigate?.('referral-dashboard')}
-              className="mt-3 w-full py-2.5 bg-primary hover:bg-[#6B9080] text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              className="mt-3 w-full py-2.5 bg-primary hover:bg-primary text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               <Users aria-hidden="true" className="w-4 h-4" />
               Invite Families & Track Rewards
@@ -1319,7 +1319,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <Button
                         onClick={handleConnectCalendar}
                         disabled={calendarConnecting}
-                        className="bg-primary hover:bg-[#6B9080] text-white"
+                        className="bg-primary hover:bg-primary text-white"
                       >
                         {calendarConnecting ? (
                           <>

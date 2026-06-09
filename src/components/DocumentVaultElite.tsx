@@ -296,7 +296,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
           </div>
           <Button
             size="sm"
-            className="bg-primary hover:bg-[#6B9080] text-white"
+            className="bg-primary hover:bg-primary text-white"
             onClick={() => setShowUpload(true)}
           >
             <Plus className="w-3.5 h-3.5 mr-1" />
@@ -581,7 +581,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   Cancel
                 </Button>
                 <Button
-                  className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
+                  className="flex-1 bg-primary hover:bg-primary text-white"
                   onClick={handleUpload}
                   disabled={isUploading}
                 >
@@ -652,7 +652,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Button variant="outline" className="flex-1" onClick={() => setShareModal(null)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-primary hover:bg-[#6B9080] text-white" onClick={handleShare}>
+                <Button className="flex-1 bg-primary hover:bg-primary text-white" onClick={handleShare}>
                   <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   Share Document
                 </Button>

@@ -182,7 +182,7 @@ export function PostVisitSummary({
         <Button
           onClick={handleApprove}
           disabled={isApproving}
-          className="w-full bg-[#6B9080] hover:bg-[#5A7A6E] text-white"
+          className="w-full bg-[#6B9080] hover:bg-[#216982] text-white"
         >
           {isApproving ? (
             <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Saving…</span>

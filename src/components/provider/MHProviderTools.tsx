@@ -344,7 +344,7 @@ function BRIEF2Widget() {
                       onClick={() => setScores(s => ({ ...s, [domain.id]: val }))}
                       className={`flex-1 py-1.5 rounded-lg text-sm font-medium border transition-all ${
                         scores[domain.id] === val
-                          ? 'bg-[#6B9080] text-white border-indigo-600'
+                          ? 'bg-primary text-white border-indigo-600'
                           : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:border-indigo-300'
                       }`}
                     >
@@ -359,7 +359,7 @@ function BRIEF2Widget() {
                 <p className="font-medium">Score: {totalScore}/{maxScore} — {getElevation(totalScore).label}</p>
               </div>
             )}
-            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-[#6B9080] text-white rounded-lg text-sm font-medium disabled:opacity-50">
+            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-primary text-white rounded-lg text-sm font-medium disabled:opacity-50">
               Save Assessment
             </button>
           </motion.div>
