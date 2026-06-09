@@ -224,8 +224,8 @@ export function Dashboard10({
     if (!userId) return;
     supabase
       .from('session_notes')
-      .select('id, child_name, session_date, provider_id')
-      .eq('parent_id', userId)
+      .select('id, session_date, provider_id')
+      .eq('user_id', userId)
       .eq('status', 'parent_review')
       .order('session_date', { ascending: false })
       .limit(5)
@@ -236,7 +236,7 @@ export function Dashboard10({
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
             id: d.id,
-            childName: d.child_name || userData?.childName || 'Your Child',
+            childName: userData?.childName || 'Your Child',
             sessionDate: d.session_date,
           })));
         }
