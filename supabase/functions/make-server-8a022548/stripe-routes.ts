@@ -386,14 +386,21 @@ async function stripeRequest(
   return data;
 }
 
-// Price ID mapping (set these in Stripe Dashboard)
+// Price ID mapping — env override first, then the LIVE Stripe price IDs
+// (created June 9 2026 in the Aminy account, acct_1Sq3G6QaCBrUl24B).
+// Price IDs are public identifiers (they appear in checkout URLs) — safe as
+// fallbacks. Annual prices match the ADVERTISED yearly totals in tier-utils
+// ($129 / $279 / $479), not a derived percent-off.
 const PRICE_IDS: Record<string, string> = {
-  starter_monthly: Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_starter_monthly',
-  starter_annual: Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual',
-  core_monthly: Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_core_monthly',
-  core_annual: Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_core_annual',
-  pro_monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_pro_monthly',
-  pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_pro_annual',
+  // Legacy starter → same prices as core
+  starter_monthly: Deno.env.get('STRIPE_PRICE_STARTER_MONTHLY') || 'price_1TfAcvQaCBrUl24BHrxiGHuv',
+  starter_annual: Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_1TgUiEQaCBrUl24BCnQ5uBQ7',
+  core_monthly: Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_1TfAcvQaCBrUl24BHrxiGHuv',       // $14.99/mo
+  core_annual: Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_1TgUiEQaCBrUl24BCnQ5uBQ7',        // $129/yr
+  pro_monthly: Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_1TfAcxQaCBrUl24B539LF2VT',         // $29.99/mo
+  pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_1TgUiFQaCBrUl24B4XKvn8IH',          // $279/yr
+  proplus_monthly: Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_1TfAczQaCBrUl24Bxrsz0tef', // $49.99/mo
+  proplus_annual: Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TgUiGQaCBrUl24Be9NyZWCn',   // $479/yr
 };
 
 // ============================================================================
@@ -654,8 +661,8 @@ export async function createCheckoutSession(req: Request): Promise<Response> {
       'cancel_url': cancelUrl,
       'allow_promotion_codes': 'true',
       'billing_address_collection': 'auto',
-      // 7-day trial for Starter and Core only - Pro includes BCBA session, so no trial
-      'subscription_data[trial_period_days]': (tier === 'starter' || tier === 'core') ? '7' : '0',
+      // 7-day trial on all paid tiers — matches tierPricing.hasTrial in src/lib/tier-utils.ts
+      'subscription_data[trial_period_days]': '7',
       'subscription_data[metadata][userId]': userId,
       'subscription_data[metadata][tier]': tier,
     });

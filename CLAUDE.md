@@ -106,7 +106,7 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ## What Still Needs Work
 - ✅ **DB migrations: ALL APPLIED** (verified via Supabase MCP June 9, 2026) — audit_log+RLS, org_billing, starter→core, ask_bcba, provider_partner_org, provider_practice_mode, plus schema-gap fixes (audit_log columns 20260607, denial_records 20260606/0608, security hardening 20260606). Do NOT re-apply.
-- **Stripe price IDs** for Org SKU — needs setup in Stripe dashboard then `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY` env vars (**the #1 revenue blocker — app cannot take Org money without this**)
+- **Stripe: ONE deploy command activates everything** — `supabase functions deploy make-server-8a022548`. Done June 9 2026: live price IDs baked into `stripe-routes.ts` PRICE_IDS fallbacks (all 4 tiers incl. proplus, monthly + annual matching ADVERTISED totals $129/$279/$479 — the old Stripe annual prices were 10%-off derivations that overcharged vs the advertised price), org checkout uses dynamic price_data with DB `price_per_seat_cents` (default + rows set to 4900 = $49), 15% org annual, 7-day trial all tiers. `VITE_STRIPE_PRICE_ORG_*` env vars are referenced nowhere — stale idea, ignore.
 - **Branch protection on `main`** — GitHub → Settings → Branches
 - **Sentry DSN** — VITE_SENTRY_DSN env var needs real DSN
 - **A11y**: re-run the axe-core e2e suite to confirm zero WCAG criticals (an old report flagged Privacy Policy, but current `PrivacyPolicy.tsx` has no images — likely stale)
