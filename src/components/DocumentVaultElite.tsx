@@ -276,7 +276,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
+    <div className="min-h-screen bg-mist" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
@@ -296,7 +296,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
           </div>
           <Button
             size="sm"
-            className="bg-primary hover:bg-[#6B9080] text-white"
+            className="bg-primary hover:bg-primary text-white"
             onClick={() => setShowUpload(true)}
           >
             <Plus className="w-3.5 h-3.5 mr-1" />
@@ -581,7 +581,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   Cancel
                 </Button>
                 <Button
-                  className="flex-1 bg-primary hover:bg-[#6B9080] text-white"
+                  className="flex-1 bg-primary hover:bg-primary text-white"
                   onClick={handleUpload}
                   disabled={isUploading}
                 >
@@ -652,7 +652,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Button variant="outline" className="flex-1" onClick={() => setShareModal(null)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-primary hover:bg-[#6B9080] text-white" onClick={handleShare}>
+                <Button className="flex-1 bg-primary hover:bg-primary text-white" onClick={handleShare}>
                   <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   Share Document
                 </Button>

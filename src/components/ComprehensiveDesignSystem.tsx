@@ -542,7 +542,7 @@ export function ComprehensiveDesignSystem() {
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || ButtonShowcase;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

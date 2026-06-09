@@ -354,7 +354,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   <div
                     className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                       message.role === 'user'
-                        ? 'bg-[#6B9080] text-white'
+                        ? 'bg-primary text-white'
                         : 'bg-[#FAF7F2] text-[#1B2733]'
                     }`}
                   >

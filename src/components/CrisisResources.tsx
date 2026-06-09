@@ -96,7 +96,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
   const emergencyResources = getEmergencyResources();
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
+    <div className="min-h-screen bg-mist dark:bg-slate-900">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 px-4 py-3">
         <div className="flex items-center gap-3 mb-3">

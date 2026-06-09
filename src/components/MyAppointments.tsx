@@ -519,7 +519,7 @@ export function MyAppointments({
   const displayedAppointments = activeTab === 'upcoming' ? upcomingAppointments : pastAppointments;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header — shared chrome with back control */}
       <div className="bg-white border-b border-[#E8E4DF]">
         <ScreenHeader

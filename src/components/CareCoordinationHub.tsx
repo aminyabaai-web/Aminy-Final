@@ -153,7 +153,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
   const inactiveServices = services.filter(s => !activeServices.includes(s));
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <ScreenHeader
         title="Care Coordination"

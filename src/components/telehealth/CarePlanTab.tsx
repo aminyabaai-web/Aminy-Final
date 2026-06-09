@@ -132,7 +132,7 @@ export function CarePlanTabScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
@@ -155,7 +155,7 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('goals')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'goals'
-                ? 'bg-[#6B9080] text-white'
+                ? 'bg-primary text-white'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
@@ -175,7 +175,7 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('summaries')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'summaries'
-                ? 'bg-[#6B9080] text-white'
+                ? 'bg-primary text-white'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
@@ -186,7 +186,7 @@ export function CarePlanTabScreen({
             onClick={() => setActiveTab('actions')}
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'actions'
-                ? 'bg-[#6B9080] text-white'
+                ? 'bg-primary text-white'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
@@ -221,7 +221,7 @@ export function CarePlanTabScreen({
             <p className="text-red-600 mb-4">{error}</p>
             <button
               onClick={refresh}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#466379]"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#466379]"
             >
               <RefreshCw className="w-4 h-4" />
               Try Again
@@ -309,7 +309,7 @@ export function CarePlanTabScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
         <button
           onClick={onBookFollowUp}
-          className="w-full py-4 bg-[#6B9080] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 bg-primary text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Book Follow-up
@@ -448,7 +448,7 @@ function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
       </p>
       <button
         onClick={onBookVisit}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-[#6B9080] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-medium rounded-xl hover:bg-[#466379] transition-colors"
       >
         <Video className="w-5 h-5" />
         Book Your First Visit

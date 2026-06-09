@@ -276,7 +276,7 @@ export function SessionScheduler({
           </div>
           <button
             onClick={onCancel}
-            className="w-full py-3 px-4 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium text-sm transition-colors"
+            className="w-full py-3 px-4 bg-primary hover:bg-primary text-white rounded-xl font-medium text-sm transition-colors"
           >
             Done
           </button>

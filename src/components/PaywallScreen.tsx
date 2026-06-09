@@ -202,7 +202,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Close confirmation modal for post-onboarding */}
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -216,7 +216,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             </p>
             <div className="space-y-2">
               <Button
-                className="w-full bg-[#6B9080] hover:bg-[#5A7D6E] text-white"
+                className="w-full bg-[#6B9080] hover:bg-[#216982] text-white"
                 onClick={() => setShowCloseConfirm(false)}
               >
                 Start Free Trial
@@ -454,7 +454,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 {/* Popular Badge */}
                 {tier.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-[#6B9080] text-white px-3 py-1 shadow-sm">
+                    <Badge className="bg-primary text-white px-3 py-1 shadow-sm">
                       Recommended
                     </Badge>
                   </div>
@@ -540,7 +540,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     <Button
                       className={`w-full mt-4 ${
                         tier.popular
-                          ? 'bg-[#6B9080] hover:bg-[#5A7D6E] text-white'
+                          ? 'bg-[#6B9080] hover:bg-[#216982] text-white'
                           : tier.id === 'free'
                           ? 'bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57]'
                           : 'bg-gray-900 hover:bg-gray-800 text-white'

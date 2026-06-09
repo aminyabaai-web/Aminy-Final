@@ -209,7 +209,7 @@ export function CarePackageCheckoutScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Payment Cancelled Banner */}
       {showCancelled && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-3 flex items-start gap-2">
@@ -335,7 +335,7 @@ export function CarePackageCheckoutScreen({
         <button
           onClick={handleCheckout}
           disabled={loading}
-          className="w-full bg-primary hover:bg-[#6B9080] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2"
+          className="w-full bg-primary hover:bg-[#216982] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2"
         >
           {loading ? (
             <>

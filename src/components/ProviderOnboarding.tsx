@@ -407,7 +407,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <nav aria-label="Provider onboarding navigation" className="max-w-2xl mx-auto flex items-center gap-3">
@@ -429,7 +429,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             type="button"
             onClick={currentStep === 'review' ? handleSubmit : nextStep}
             disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#5A7A6E] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#216982] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
           >
             {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
             <ArrowRight className="w-4 h-4" />
@@ -699,7 +699,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     title: 'Cash Pay Only',
                     badge: 'Fastest Start',
                     badgeClass: 'bg-blue-100 text-blue-700',
-                    description: 'No insurance billing. Accept cash-pay families only. Go live in your licensed states immediately. Aminy takes 35% of each session booked through the platform.',
+                    description: 'No insurance billing. Accept cash-pay families only. Go live in your licensed states immediately. Aminy takes 25% of each session booked through the platform.',
                     highlight: false,
                   },
                 ] as const).map(track => (

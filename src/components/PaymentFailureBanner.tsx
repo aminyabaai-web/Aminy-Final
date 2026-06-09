@@ -310,7 +310,7 @@ export function PaymentFailureBanner({
             disabled={portalLoading}
             className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
               info.status === 'cancelled'
-                ? 'bg-primary hover:bg-[#6B9080] text-white'
+                ? 'bg-primary hover:bg-primary text-white'
                 : 'bg-white hover:bg-[#FAF7F2] text-[#3A4A57] border border-[#E8E4DF]'
             }`}
           >

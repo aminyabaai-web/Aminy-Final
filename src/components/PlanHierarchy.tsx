@@ -307,7 +307,7 @@ export function PlanHierarchy({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] p-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">

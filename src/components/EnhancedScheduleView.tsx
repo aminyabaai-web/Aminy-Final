@@ -110,7 +110,7 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
           <Calendar className="mx-auto h-12 w-12 text-slate-400 mb-4" />
           <h3 className="text-lg font-semibold text-[#1B2733] mb-2">Upgrade for Scheduling</h3>
           <p className="text-[#5A6B7A] mb-4">Access appointment scheduling with Core and Pro plans.</p>
-          <Button onClick={onPaywallTrigger} className="bg-primary hover:bg-[#6B9080] text-white">
+          <Button onClick={onPaywallTrigger} className="bg-primary hover:bg-primary text-white">
             View Plans
           </Button>
         </div>
@@ -147,7 +147,7 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
             <p className="text-sm text-[#5A6B7A] mb-4">
               Book your next session with Sarah Miller
             </p>
-            <Button className="bg-primary hover:bg-[#6B9080] text-white">
+            <Button className="bg-primary hover:bg-primary text-white">
               <Plus className="h-4 w-4 mr-2" />
               View Available Times
             </Button>

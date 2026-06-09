@@ -274,7 +274,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+      <div className="min-h-screen bg-mist flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-[#5A6B7A]">Loading your portal...</p>
@@ -286,14 +286,14 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Error state
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-mist flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Unable to Load Portal</h2>
           <p className="text-[#5A6B7A] mb-4">{loadError}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379]"
+            className="px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379]"
           >
             Try Again
           </button>
@@ -303,7 +303,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Top Bar */}
       <header className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -327,7 +327,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379] disabled:opacity-50 transition-all"
             >
               {isSaving ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -371,7 +371,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{label}</span>
                   {id === 'appointments' && appointments.length > 0 && (
-                    <span className="ml-auto px-2 py-0.5 bg-[#6B9080] text-white text-xs rounded-full">
+                    <span className="ml-auto px-2 py-0.5 bg-primary text-white text-xs rounded-full">
                       {appointments.length}
                     </span>
                   )}
@@ -652,7 +652,7 @@ function AvailabilityTab({
           </div>
           <button
             onClick={addBlock}
-            className="flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-[#466379] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Time Block

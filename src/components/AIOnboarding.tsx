@@ -210,7 +210,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8] px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
@@ -281,7 +281,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <div
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'parent'
-                    ? 'bg-[#6B9080] text-white rounded-br-md'
+                    ? 'bg-primary text-white rounded-br-md'
                     : 'bg-white text-[#1B2733] rounded-bl-md shadow-sm border border-[#F0EDE8]'
                 }`}
               >
@@ -342,7 +342,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 onClick={handleSend}
                 disabled={!input.trim() || isTyping}
                 aria-label="Send answer"
-                className="w-11 h-11 rounded-xl bg-[#6B9080] text-white flex items-center justify-center disabled:opacity-30 active:scale-95 transition-all"
+                className="w-11 h-11 rounded-xl bg-primary text-white flex items-center justify-center disabled:opacity-30 active:scale-95 transition-all"
               >
                 <Send className="w-4 h-4" />
               </button>

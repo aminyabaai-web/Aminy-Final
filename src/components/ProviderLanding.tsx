@@ -65,7 +65,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2 sm:px-3" onClick={onLogin}>
               Sign In
             </Button>
-            <Button size="sm" className="bg-primary hover:bg-[#6B9080] text-xs sm:text-sm px-3 sm:px-4" onClick={onApply}>
+            <Button size="sm" className="bg-primary hover:bg-[#216982] text-xs sm:text-sm px-3 sm:px-4" onClick={onApply}>
               Apply Now
             </Button>
           </div>
@@ -93,7 +93,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-[#6B9080] text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"
+                  className="bg-primary hover:bg-[#216982] text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"
                   onClick={onApply}
                 >
                   Apply to Join
@@ -448,7 +448,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
           </p>
           <Button
             size="lg"
-            className="bg-primary hover:bg-[#6B9080] text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"
+            className="bg-primary hover:bg-[#216982] text-base sm:text-lg px-6 sm:px-8 w-full sm:w-auto"
             onClick={onApply}
           >
             Apply Now - It's Free

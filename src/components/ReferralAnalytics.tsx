@@ -416,7 +416,7 @@ export function ReferralAnalytics({
       {onInvitePress && (
         <button
           onClick={onInvitePress}
-          className="w-full py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
+          className="w-full py-3 bg-primary hover:bg-primary text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-2"
         >
           <Gift className="w-4 h-4" />
           Invite More Friends

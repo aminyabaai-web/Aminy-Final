@@ -413,7 +413,7 @@ export function HomeProgramTracker({
           </p>
         </div>
         {isProvider && (
-          <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
+          <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#216982]">
             <Plus className="w-4 h-4 mr-2" />
             Assign Activity
           </Button>
@@ -653,7 +653,7 @@ export function HomeProgramTracker({
                           <div className="flex gap-2">
                             <Button
                               onClick={() => handleLogPractice(activity.id)}
-                              className="bg-primary hover:bg-[#6B9080]"
+                              className="bg-primary hover:bg-[#216982]"
                             >
                               <CheckCircle className="w-4 h-4 mr-2" />
                               Save Practice Log
@@ -669,7 +669,7 @@ export function HomeProgramTracker({
                       ) : (
                         <Button
                           onClick={() => setLoggingActivity(activity.id)}
-                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-[#6B9080]'}
+                          className={todayLogged ? 'bg-green-600 hover:bg-green-700' : 'bg-primary hover:bg-[#216982]'}
                           disabled={todayLogged}
                         >
                           {todayLogged ? (
@@ -707,7 +707,7 @@ export function HomeProgramTracker({
               : 'Your therapist will assign practice activities here'}
           </p>
           {isProvider && (
-            <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#6B9080]">
+            <Button onClick={() => setShowAddForm(true)} className="bg-primary hover:bg-[#216982]">
               <Plus className="w-4 h-4 mr-2" />
               Assign First Activity
             </Button>
@@ -808,7 +808,7 @@ export function HomeProgramTracker({
               </div>
 
               <div className="flex gap-2 pt-4">
-                <Button onClick={handleAddActivity} className="flex-1 bg-primary hover:bg-[#6B9080]">
+                <Button onClick={handleAddActivity} className="flex-1 bg-primary hover:bg-[#216982]">
                   <Plus className="w-4 h-4 mr-2" />
                   Assign Activity
                 </Button>

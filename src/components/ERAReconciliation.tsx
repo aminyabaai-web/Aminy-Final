@@ -304,7 +304,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white shadow-sm">
         <div className="mx-auto max-w-lg px-4 py-4">

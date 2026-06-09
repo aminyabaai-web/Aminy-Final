@@ -1148,7 +1148,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       key={diagnosis}
                       variant={isSelected ? 'default' : 'outline'}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-primary hover:bg-[#6B9080]' : 'hover:bg-[#F0EDE8]'
+                        isSelected ? 'bg-primary hover:bg-[#216982]' : 'hover:bg-[#F0EDE8]'
                       }`}
                       onClick={() => {
                         if (editingChild) {

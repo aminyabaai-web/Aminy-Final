@@ -419,7 +419,7 @@ export function JuniorReportCard({
           {onShareTherapist && (
             <button
               onClick={handleShareTherapist}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-[#6B9080] text-white rounded-xl font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary text-white rounded-xl font-medium transition-colors"
             >
               <Send size={18} />
               Share with Therapist

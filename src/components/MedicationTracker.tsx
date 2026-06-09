@@ -556,7 +556,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
                 Add medications to start tracking
               </p>
-              <Button onClick={() => setShowAddMedication(true)} className="bg-primary hover:bg-[#6B9080]">
+              <Button onClick={() => setShowAddMedication(true)} className="bg-primary hover:bg-[#216982]">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Medication
               </Button>
@@ -632,7 +632,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                           </Button>
                           <Button
                             size="sm"
-                            className="bg-primary hover:bg-[#6B9080]"
+                            className="bg-primary hover:bg-[#216982]"
                             onClick={() => handleLogMedication(log.id, 'taken')}
                           >
                             <CheckCircle className="w-4 h-4 mr-1" />
@@ -670,7 +670,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
       {activeTab === 'medications' && (
         <div className="space-y-4">
           <div className="flex justify-end">
-            <Button onClick={() => setShowAddMedication(true)} className="bg-primary hover:bg-[#6B9080]">
+            <Button onClick={() => setShowAddMedication(true)} className="bg-primary hover:bg-[#216982]">
               <Plus className="w-4 h-4 mr-2" />
               Add Medication
             </Button>
@@ -934,7 +934,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                 Cancel
               </Button>
               <Button
-                className="bg-primary hover:bg-[#6B9080]"
+                className="bg-primary hover:bg-[#216982]"
                 onClick={handleSaveMedication}
                 disabled={!medicationForm.name || !medicationForm.dosage}
               >
@@ -1002,7 +1002,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
 
             <div className="p-6 border-t border-neutral-200 dark:border-slate-700">
               <Button
-                className="w-full bg-primary hover:bg-[#6B9080]"
+                className="w-full bg-primary hover:bg-[#216982]"
                 onClick={() => setShowLogSideEffects(null)}
               >
                 Done

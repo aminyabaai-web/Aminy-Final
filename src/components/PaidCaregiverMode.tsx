@@ -214,7 +214,7 @@ export function PaidCaregiverMode({
               ))}
               <Badge variant="outline" className="text-xs">+ more</Badge>
             </div>
-            <Button onClick={onSetupWaiver} className="bg-primary hover:bg-[#6B9080]">
+            <Button onClick={onSetupWaiver} className="bg-primary hover:bg-[#216982]">
               <Settings className="w-4 h-4 mr-2" />
               Set Up Waiver Profile
             </Button>
@@ -322,7 +322,7 @@ export function PaidCaregiverMode({
               <Button
                 onClick={handleClockIn}
                 size="lg"
-                className="w-full bg-primary hover:bg-[#6B9080]"
+                className="w-full bg-primary hover:bg-[#216982]"
               >
                 <Play className="w-5 h-5 mr-2" />
                 Clock In
@@ -592,7 +592,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={() => setStep(2)}
                 disabled={!state || !fiscalAgentId}
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
               >
                 Continue
               </Button>
@@ -654,7 +654,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={() => setStep(3)}
                 disabled={!participantId}
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
               >
                 Continue
               </Button>
@@ -735,7 +735,7 @@ export function WaiverSetupFlow({
               <Button
                 onClick={handleComplete}
                 disabled={approvedServices.length === 0}
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Complete Setup

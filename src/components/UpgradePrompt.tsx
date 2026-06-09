@@ -282,7 +282,7 @@ export function UpgradePrompt({
               <Button
                 size="sm"
                 onClick={handleUpgrade}
-                className="mt-2 h-8 text-xs bg-primary hover:bg-[#6B9080]"
+                className="mt-2 h-8 text-xs bg-primary hover:bg-[#216982]"
               >
                 {prompt.ctaText}
               </Button>

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { ScreenHeader } from './ui/ScreenHeader';
 import { isDemoMode } from '../lib/demo-seed';
+import { supabase } from '../utils/supabase/client';
 
 interface BCBASessionBriefingProps {
   familyId: string;
@@ -77,94 +78,119 @@ export function BCBASessionBriefing({
   const loadBriefing = async () => {
     setIsLoading(true);
 
-    // Simulate API call - in production, this would call the AI brain
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Real users never see fabricated clinical insights about their child.
-    // Until the AI briefing pipeline is wired, only demo mode shows sample data;
-    // real coaches get an honest "not available yet" state.
-    if (!isDemoMode()) {
-      setBriefing(null);
+    if (isDemoMode()) {
+      // Demo mode: fabricated sample data
+      setBriefing({
+        summary: `${childName} is a ${getAge()} year-old working on communication and daily living skills. Recent focus has been on morning routines and emotional regulation. ${parentName} has been consistently implementing visual schedules with good results, but reports increased anxiety around transitions.`,
+        whatsWorking: [
+          'Visual schedule for morning routine - 80% independence achieved',
+          'First-Then board reducing tantrums during transitions',
+          'Token economy system motivating task completion',
+        ],
+        whatsNotWorking: [
+          'Evening wind-down routine still inconsistent',
+          'Homework time remains a significant challenge',
+        ],
+        opportunities: [
+          `${childName} showing readiness for peer play`,
+          'Parent interest in sensory diet implementation',
+        ],
+        recommendedGuidance: [
+          'Review and simplify evening routine',
+          'Create homework visual schedule with built-in breaks',
+          'Validate parent stress - acknowledge their hard work',
+        ],
+        recentProgress: [
+          { area: 'Morning Routine', trend: 'up', detail: '40% → 80% independence in 6 weeks' },
+          { area: 'Communication', trend: 'up', detail: 'Using 3-word phrases consistently' },
+          { area: 'Emotional Regulation', trend: 'stable', detail: 'Meltdowns reduced but still daily' },
+        ],
+        parentMood: 'stressed',
+        recentConcerns: ['Worried about upcoming IEP meeting', 'Exhausted from sleep disruptions'],
+        lastSessionHighlights: ['Introduced token economy system', 'Set goal for morning routine independence'],
+        vaultInsights: ['Latest evaluation noted sensory processing differences'],
+        suggestedTopics: ['Review evening routine', 'Sibling support strategies', 'Parent self-care check-in'],
+      });
       setIsLoading(false);
       return;
     }
 
-    // Sample briefing data — DEMO MODE ONLY. In production this comes from the
-    // AI analyzing real family data.
-    setBriefing({
-      summary: `${childName} is a ${getAge()} year-old working on communication and daily living skills. Recent focus has been on morning routines and emotional regulation. ${parentName} has been consistently implementing visual schedules with good results, but reports increased anxiety around transitions. The family is motivated and engaged.`,
+    // Real mode: pull live data from Supabase
+    try {
+      const [goalsRes, logsRes, notesRes] = await Promise.all([
+        supabase
+          .from('goals')
+          .select('title, status, target_behavior, progress_notes, updated_at')
+          .eq('user_id', familyId)
+          .eq('status', 'active')
+          .limit(8),
+        supabase
+          .from('behavior_logs')
+          .select('behavior_type, intensity, notes, is_positive, created_at')
+          .eq('user_id', familyId)
+          .order('created_at', { ascending: false })
+          .limit(10),
+        supabase
+          .from('session_notes')
+          .select('content, session_type, created_at')
+          .eq('user_id', familyId)
+          .order('created_at', { ascending: false })
+          .limit(3),
+      ]);
 
-      whatsWorking: [
-        'Visual schedule for morning routine - 80% independence achieved',
-        'First-Then board reducing tantrums during transitions',
-        'Token economy system motivating task completion',
-        'Parent using calm voice during meltdowns - recovery time reduced by 50%'
-      ],
+      const goals = goalsRes.data ?? [];
+      const logs = logsRes.data ?? [];
+      const notes = notesRes.data ?? [];
 
-      whatsNotWorking: [
-        'Evening wind-down routine still inconsistent',
-        'New food introduction attempts causing refusal behaviors',
-        'Homework time remains a significant challenge',
-        'Sibling interactions escalating to physical aggression'
-      ],
+      const positiveLogs = logs.filter(l => l.is_positive);
+      const challengeLogs = logs.filter(l => !l.is_positive);
 
-      opportunities: [
-        `${childName} showing readiness for peer play - consider social skills group`,
-        'Parent interest in sensory diet implementation',
-        'School willing to collaborate on IEP modifications',
-        'Extended family requesting guidance on how to help'
-      ],
+      const working = [
+        ...goals.slice(0, 3).map(g => g.title).filter(Boolean),
+        ...positiveLogs.slice(0, 2).map(l => l.notes || l.behavior_type).filter(Boolean),
+      ];
 
-      recommendedGuidance: [
-        'Review and simplify evening routine - may be too many steps',
-        'Introduce "food bridge" strategy for new food acceptance',
-        'Create homework visual schedule with built-in breaks',
-        'Teach sibling conflict resolution script',
-        'Validate parent stress - acknowledge their hard work'
-      ],
+      const notWorking = challengeLogs.slice(0, 3).map(l => l.notes || l.behavior_type).filter(Boolean);
 
-      recentProgress: [
-        { area: 'Morning Routine', trend: 'up', detail: '40% → 80% independence in 6 weeks' },
-        { area: 'Communication', trend: 'up', detail: 'Using 3-word phrases consistently' },
-        { area: 'Emotional Regulation', trend: 'stable', detail: 'Meltdowns reduced but still daily' },
-        { area: 'Sleep', trend: 'down', detail: 'Bedtime resistance increased this week' }
-      ],
+      const lastNote = notes[0];
+      const lastSessionHighlights = lastNote
+        ? [`Last session (${new Date(lastNote.created_at).toLocaleDateString()}): ${lastNote.content?.slice(0, 120) ?? 'Session recorded'}`]
+        : [];
 
-      parentMood: 'stressed',
+      const summary = [
+        goals.length > 0
+          ? `${childName} has ${goals.length} active goal${goals.length !== 1 ? 's' : ''}: ${goals.map(g => g.title).slice(0, 2).join(', ')}.`
+          : `No active goals found for ${childName}.`,
+        logs.length > 0
+          ? `${positiveLogs.length} positive and ${challengeLogs.length} challenging behavior${challengeLogs.length !== 1 ? 's' : ''} logged recently.`
+          : 'No recent behavior logs.',
+      ].join(' ');
 
-      recentConcerns: [
-        'Worried about upcoming IEP meeting',
-        'Exhausted from sleep disruptions',
-        'Questioning if current strategies are enough'
-      ],
-
-      lastSessionHighlights: [
-        'Introduced token economy system',
-        'Practiced calm response to meltdowns',
-        'Set goal for morning routine independence'
-      ],
-
-      vaultInsights: [
-        'Latest evaluation (3 months ago) noted sensory processing differences',
-        'IEP includes speech goals - align with home strategies',
-        'Medical records show no medication changes recently'
-      ],
-
-      suggestedTopics: [
-        'Review evening routine and troubleshoot',
-        'Prepare for IEP meeting - parent advocacy training',
-        'Sibling support strategies',
-        'Parent self-care check-in'
-      ]
-    });
+      setBriefing({
+        summary,
+        whatsWorking: working.length > 0 ? working : ['No recent positive data logged'],
+        whatsNotWorking: notWorking.length > 0 ? notWorking : ['No challenge behaviors logged recently'],
+        opportunities: goals.slice(0, 3).map(g => `Continue: ${g.title}`),
+        recommendedGuidance: ['Review progress toward active goals', 'Discuss any new concerns with the family'],
+        recentProgress: goals.slice(0, 4).map(g => ({
+          area: g.title,
+          trend: 'stable' as const,
+          detail: g.progress_notes || 'In progress',
+        })),
+        parentMood: 'neutral',
+        recentConcerns: [],
+        lastSessionHighlights,
+        vaultInsights: [],
+        suggestedTopics: goals.map(g => g.title).slice(0, 3),
+      });
+    } catch {
+      setBriefing(null);
+    }
 
     setIsLoading(false);
   };
 
-  const getAge = () => {
-    // Mock age - in production comes from child profile
-    return 5;
-  };
+  const getAge = () => 'school-age';
 
   const toggleSection = (section: string) => {
     const newExpanded = new Set(expandedSections);
@@ -224,7 +250,7 @@ export function BCBASessionBriefing({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-mist pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8">
@@ -243,7 +269,7 @@ export function BCBASessionBriefing({
 
   if (!briefing) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-mist pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8 text-center">
@@ -266,7 +292,7 @@ export function BCBASessionBriefing({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-mist pb-24">
       {PageHeader}
       <div className="space-y-3 sm:space-y-4 sm:space-y-6 px-4 mt-4">
       {/* Header */}
@@ -519,7 +545,7 @@ export function BCBASessionBriefing({
       {onStartSession && (
         <Button
           onClick={onStartSession}
-          className="w-full bg-primary hover:bg-[#6B9080] text-white py-6"
+          className="w-full bg-primary hover:bg-primary text-white py-6"
           size="lg"
         >
           <Clock className="w-5 h-5 mr-2" />

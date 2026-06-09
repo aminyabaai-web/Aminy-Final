@@ -533,7 +533,7 @@ export function ProviderWaitlist({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold h-12 rounded-xl text-sm mt-2"
+            className="w-full bg-primary hover:bg-primary text-white font-semibold h-12 rounded-xl text-sm mt-2"
           >
             {isSubmitting ? 'Joining...' : 'Join Waitlist'}
           </Button>

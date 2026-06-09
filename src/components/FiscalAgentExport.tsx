@@ -467,7 +467,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div className="flex items-end gap-2">
-                <Button onClick={addEntry} className="flex-1 bg-primary hover:bg-[#6B9080]">
+                <Button onClick={addEntry} className="flex-1 bg-primary hover:bg-[#216982]">
                   <Check className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" onClick={() => setShowAddEntry(false)}>
@@ -562,7 +562,7 @@ export function FiscalAgentExport({
             <Button
               onClick={generatePDF}
               disabled={isGenerating || entries.length === 0}
-              className="bg-primary hover:bg-[#6B9080]"
+              className="bg-primary hover:bg-[#216982]"
             >
               {isGenerating ? (
                 <>

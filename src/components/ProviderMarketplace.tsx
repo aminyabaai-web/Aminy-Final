@@ -669,7 +669,7 @@ export function ProviderMarketplace({
                   Next: {provider.nextAvailable}
                 </span>
               </div>
-              <Button size="sm" className="bg-primary hover:bg-[#6B9080] opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button size="sm" className="bg-primary hover:bg-[#216982] opacity-0 group-hover:opacity-100 transition-opacity">
                 Book Session
                 <ArrowRight className="w-4 h-4 ml-1" />
               </Button>
@@ -694,7 +694,7 @@ export function ProviderMarketplace({
   const filteredProviders = filterProviders(providers);
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white">
         <div className="max-w-4xl mx-auto px-4 py-8">

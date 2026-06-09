@@ -161,7 +161,7 @@ export function ErrorDisplay({
   // Fullscreen variant - for critical errors
   if (variant === 'fullscreen') {
     return (
-      <div className={`min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4 ${className}`}>
+      <div className={`min-h-screen bg-mist flex items-center justify-center p-4 ${className}`}>
         <div className="text-center max-w-md">
           <div className={`w-16 h-16 mx-auto mb-4 sm:mb-6 ${colors.bg} rounded-full flex items-center justify-center`}>
             <Icon className={`w-8 h-8 ${colors.icon}`} />

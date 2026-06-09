@@ -163,7 +163,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
   const unconfirmedCount = VENDORS.filter(v => v.baaStatus === 'unconfirmed').length;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">

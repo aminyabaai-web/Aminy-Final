@@ -421,7 +421,7 @@ export function ClinicalOutcomesTracker({
               </Button>
               <Button
                 size="sm"
-                className="bg-primary hover:bg-[#6B9080]"
+                className="bg-primary hover:bg-[#216982]"
                 onClick={() => setShowNewAssessment(true)}
               >
                 <Plus className="w-4 h-4 mr-1" />
@@ -567,7 +567,7 @@ export function ClinicalOutcomesTracker({
               <p className="text-[#5A6B7A] mb-4">
                 Start tracking clinical outcomes to measure progress
               </p>
-              <Button onClick={() => setShowNewAssessment(true)} className="bg-primary hover:bg-[#6B9080]">
+              <Button onClick={() => setShowNewAssessment(true)} className="bg-primary hover:bg-[#216982]">
                 <Plus className="w-4 h-4 mr-1" />
                 Add First Assessment
               </Button>
@@ -739,7 +739,7 @@ export function ClinicalOutcomesTracker({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
                 onClick={handleSaveAssessment}
                 disabled={isSaving || !newAssessment.name}
               >

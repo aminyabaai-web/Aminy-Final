@@ -297,7 +297,7 @@ export function HealthDataIntegration({
           <Button
             onClick={handleConnect}
             disabled={isConnecting}
-            className="w-full bg-indigo-500 hover:bg-[#6B9080] text-white"
+            className="w-full bg-indigo-500 hover:bg-primary text-white"
           >
             {isConnecting ? (
               <span className="flex items-center gap-2">

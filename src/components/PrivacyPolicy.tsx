@@ -20,7 +20,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
   const lastUpdated = 'January 21, 2026';
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-3xl mx-auto px-4 py-4 flex items-center gap-3 sm:gap-4">

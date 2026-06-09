@@ -391,7 +391,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
+    <div className="min-h-screen bg-mist dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-4">
@@ -762,7 +762,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </Button>
                 <Button
                   onClick={() => handleApprove(selectedRequest, 30)}
-                  className="flex-1 min-h-[48px] bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 min-h-[48px] bg-primary hover:bg-[#216982]"
                 >
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   Approve (30 days)

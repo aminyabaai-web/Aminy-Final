@@ -102,7 +102,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
   // so it matches the other full screens instead of floating top-left.
   const wrapScreen = (children: React.ReactNode) =>
     asFullScreen ? (
-      <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 px-4 py-6">
+      <div className="min-h-screen bg-mist dark:bg-slate-900 px-4 py-6">
         <div className="max-w-2xl mx-auto">
           {onBack && (
             <button

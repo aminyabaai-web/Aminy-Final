@@ -479,7 +479,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
             
             <Button 
               onClick={startSession}
-              className="w-full bg-primary hover:bg-[#6B9080]"
+              className="w-full bg-primary hover:bg-[#216982]"
               size="lg"
             >
               <Play className="w-5 h-5 mr-2" />
@@ -610,7 +610,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <p className="text-muted-foreground mb-4">Take your time. Resume when ready!</p>
           <Button 
             onClick={() => setSessionPaused(false)}
-            className="bg-primary hover:bg-[#6B9080]"
+            className="bg-primary hover:bg-[#216982]"
           >
             <Play className="w-4 h-4 mr-2" />
             Resume Session

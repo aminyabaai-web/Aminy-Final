@@ -184,7 +184,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
     : 'Care Package';
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center">
+    <div className="min-h-screen bg-mist flex flex-col items-center">
       {/* Hero section */}
       <div className="relative w-full bg-gradient-to-b from-teal-600 to-teal-700 flex flex-col items-center pt-16 pb-12 overflow-hidden">
         <ConfettiDots />
@@ -223,7 +223,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
         {/* CTA */}
         <button
           onClick={onContinue}
-          className="w-full bg-primary hover:bg-[#6B9080] text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2 mt-2"
+          className="w-full bg-primary hover:bg-primary text-white font-semibold py-4 rounded-2xl text-base transition-colors flex items-center justify-center gap-2 mt-2"
         >
           Go to My Dashboard
           <ArrowRight className="w-5 h-5" />

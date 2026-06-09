@@ -330,7 +330,7 @@ export function AppointmentConfirmationScreen({
         <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
           currentPhase === 'success'
             ? 'bg-green-500 text-white'
-            : 'bg-[#6B9080] text-white'
+            : 'bg-primary text-white'
         }`}>
           {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
         </span>
@@ -826,7 +826,7 @@ export function AppointmentConfirmationScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
           <button
             onClick={handleDone}
-            className="w-full py-4 bg-[#6B9080] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
+            className="w-full py-4 bg-primary text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all"
           >
             Open appointment details &amp; join info
           </button>

@@ -54,7 +54,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">

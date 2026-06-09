@@ -237,7 +237,7 @@ export function NPSSurveyModal({
                   </Button>
                   <Button
                     onClick={handleSubmit}
-                    className="flex-1 bg-primary hover:bg-[#6B9080]"
+                    className="flex-1 bg-primary hover:bg-[#216982]"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

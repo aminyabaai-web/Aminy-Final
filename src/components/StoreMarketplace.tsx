@@ -1072,7 +1072,7 @@ export function StoreMarketplace({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
+    <div className="min-h-screen bg-mist dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">

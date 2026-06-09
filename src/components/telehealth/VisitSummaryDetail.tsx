@@ -49,7 +49,7 @@ export function VisitSummaryDetailScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ export function VisitSummaryDetailScreen({
           <ol className="space-y-3">
             {summary.planForNext7Days.map((item, index) => (
               <li key={index} className="flex gap-3">
-                <span className="w-6 h-6 bg-[#6B9080] text-white text-sm font-medium rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="w-6 h-6 bg-primary text-white text-sm font-medium rounded-full flex items-center justify-center flex-shrink-0">
                   {index + 1}
                 </span>
                 <span className="text-[#3A4A57]">{item}</span>
@@ -206,7 +206,7 @@ export function VisitSummaryDetailScreen({
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-[#E8E4DF] safe-area-bottom">
         <button
           onClick={onBookFollowUp}
-          className="w-full py-4 bg-[#6B9080] text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 bg-primary text-white font-semibold text-lg rounded-xl hover:bg-[#466379] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
           <CalendarPlus className="w-5 h-5" />
           Book Follow-up

@@ -294,7 +294,7 @@ export function InsuranceVerification({
                 )}
                 <Button
                   onClick={() => setStep('front-capture')}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   Start Verification
                   <ChevronRight className="w-4 h-4 ml-2" />
@@ -371,7 +371,7 @@ export function InsuranceVerification({
                 </Button>
                 <Button
                   onClick={() => frontInputRef.current?.click()}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   {frontImage ? 'Retake Photo' : 'Take Photo'}
@@ -463,7 +463,7 @@ export function InsuranceVerification({
                 </Button>
                 <Button
                   onClick={() => backInputRef.current?.click()}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   <Camera className="w-4 h-4 mr-2" />
                   {backImage ? 'Retake Photo' : 'Take Photo'}
@@ -605,7 +605,7 @@ export function InsuranceVerification({
                 <Button
                   onClick={handleSubmitVerification}
                   disabled={isProcessing || !extractedInfo.memberId}
-                  className="flex-1 bg-primary hover:bg-[#6B9080]"
+                  className="flex-1 bg-primary hover:bg-[#216982]"
                 >
                   {isProcessing ? (
                     <>
@@ -695,7 +695,7 @@ export function InsuranceVerification({
                   <DollarSign className="w-4 h-4 mr-2" />
                   Generate Superbill
                 </Button>
-                <Button className="flex-1 bg-primary hover:bg-[#6B9080]">
+                <Button className="flex-1 bg-primary hover:bg-[#216982]">
                   Book a Session
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>

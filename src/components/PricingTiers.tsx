@@ -176,7 +176,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
     : TIERS.filter(t => t.id !== 'free'); // Org screen suppresses Free
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] overflow-y-auto">
+    <div className="min-h-screen bg-mist overflow-y-auto">
       {/* Header */}
       <div className="relative px-4 pt-4 pb-2">
         {onClose && (

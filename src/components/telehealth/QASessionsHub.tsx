@@ -259,7 +259,7 @@ export function QASessionsHub({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
@@ -467,7 +467,7 @@ function UpcomingSessionCard({
                 onClick={onToggleReminder}
                 className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                   session.hasReminder
-                    ? 'bg-[#6B9080] text-white'
+                    ? 'bg-primary text-white'
                     : 'border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]'
                 }`}
               >
@@ -503,7 +503,7 @@ function UpcomingSessionCard({
         ) : (
           <button
             onClick={onRegister}
-            className="w-full py-3 bg-[#6B9080] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 bg-primary text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
           >
             <Video className="w-4 h-4" />
             Register for Free
@@ -594,7 +594,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
         {/* Watch Button */}
         <button
           onClick={onWatch}
-          className="w-full py-2.5 bg-[#6B9080] text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
+          className="w-full py-2.5 bg-primary text-white font-medium rounded-xl hover:bg-[#466379] transition-colors flex items-center justify-center gap-2"
         >
           <Play className="w-4 h-4" />
           Watch Replay

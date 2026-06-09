@@ -540,7 +540,7 @@ export function TherapyGoalTemplates({
                               e.stopPropagation();
                               handleSelectGoal(template);
                             }}
-                            className="w-full bg-primary hover:bg-[#6B9080]"
+                            className="w-full bg-primary hover:bg-[#216982]"
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Add This Goal to Care Plan

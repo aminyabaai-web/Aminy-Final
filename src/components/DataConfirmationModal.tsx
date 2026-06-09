@@ -304,7 +304,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
             <button
               onClick={onConfirm}
               disabled={isProcessing}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#6B9080] text-white text-sm font-semibold active:scale-[0.99] transition-transform disabled:opacity-60"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold active:scale-[0.99] transition-transform disabled:opacity-60"
             >
               {isProcessing ? (
                 <span className="w-3.5 h-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" />

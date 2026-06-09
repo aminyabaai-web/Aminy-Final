@@ -251,8 +251,8 @@ export function EmptyState({
             <button
               onClick={action.onClick}
               className={`
-                bg-[#6B9080] text-white rounded-lg font-medium
-                hover:bg-[#5A7A6E] transition-colors
+                bg-primary text-white rounded-lg font-medium
+                hover:bg-[#216982] transition-colors
                 ${sizeClasses.button}
               `}
             >

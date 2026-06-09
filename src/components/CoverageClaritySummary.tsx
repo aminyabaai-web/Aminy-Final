@@ -258,7 +258,7 @@ export function CoverageClaritySummary({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-500 to-teal-600 text-white p-6">
         <div className="max-w-4xl mx-auto">

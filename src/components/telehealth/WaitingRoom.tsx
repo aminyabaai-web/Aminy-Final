@@ -472,7 +472,7 @@ export function WaitingRoom({
               </p>
               <button
                 onClick={handleRetry}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-[#6B9080] text-white rounded-lg text-sm transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary text-white rounded-lg text-sm transition-colors"
               >
                 <RefreshCw size={14} />
                 Retry ({retryCount})

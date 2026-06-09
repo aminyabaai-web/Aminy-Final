@@ -468,7 +468,7 @@ export function EnhancedReferralDashboard({
                 <p className="text-sm text-[#5A6B7A] mb-4">Share your code to start earning rewards</p>
                 <Button
                   onClick={() => setShowShareOptions(true)}
-                  className="bg-primary hover:bg-[#6B9080] text-white"
+                  className="bg-primary hover:bg-primary text-white"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
                   Share Now

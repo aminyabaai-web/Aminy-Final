@@ -964,7 +964,7 @@ export function CommunityForYou({
   );
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 pb-24">
+    <div className="min-h-screen bg-mist dark:bg-slate-900 pb-24">
       {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">

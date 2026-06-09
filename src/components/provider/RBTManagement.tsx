@@ -219,7 +219,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             <h3 className="font-semibold text-[#1B2733]">RBT Roster</h3>
             <button
               onClick={() => setShowInviteForm(!showInviteForm)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
+              className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
             >
               <UserPlus className="w-4 h-4" /> Invite RBT
             </button>
@@ -252,7 +252,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={inviteRBT} className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
+                <button onClick={inviteRBT} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Send Invite
                 </button>
                 <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
@@ -372,7 +372,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             <h3 className="font-semibold text-[#1B2733]">Supervision Tracking</h3>
             <button
               onClick={() => setShowLogForm(!showLogForm)}
-              className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
+              className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
             >
               <Plus className="w-4 h-4" /> Log Hours
             </button>
@@ -440,7 +440,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={addSupervisionLog} className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
+                <button onClick={addSupervisionLog} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Save Log
                 </button>
                 <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
@@ -530,7 +530,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-[#1B2733]">Client Billing</h3>
-            <button className="flex items-center gap-1.5 px-3 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]">
+            <button className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
               <Plus className="w-4 h-4" /> New Invoice
             </button>
           </div>

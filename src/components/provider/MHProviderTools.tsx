@@ -344,7 +344,7 @@ function BRIEF2Widget() {
                       onClick={() => setScores(s => ({ ...s, [domain.id]: val }))}
                       className={`flex-1 py-1.5 rounded-lg text-sm font-medium border transition-all ${
                         scores[domain.id] === val
-                          ? 'bg-[#6B9080] text-white border-indigo-600'
+                          ? 'bg-primary text-white border-indigo-600'
                           : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:border-indigo-300'
                       }`}
                     >
@@ -359,7 +359,7 @@ function BRIEF2Widget() {
                 <p className="font-medium">Score: {totalScore}/{maxScore} — {getElevation(totalScore).label}</p>
               </div>
             )}
-            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-[#6B9080] text-white rounded-lg text-sm font-medium disabled:opacity-50">
+            <button onClick={logBRIEF} disabled={!allAnswered} className="w-full py-2 bg-primary text-white rounded-lg text-sm font-medium disabled:opacity-50">
               Save Assessment
             </button>
           </motion.div>
@@ -609,7 +609,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-8">
+    <div className="min-h-screen bg-mist pb-8">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">

@@ -28,7 +28,7 @@ interface CoachScreenProps {
 
 export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartChat }: CoachScreenProps) {
   return (
-    <div className="min-h-screen bg-[#FAF7F2]/30 pb-20">
+    <div className="min-h-screen bg-mist/30 pb-20">
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-6">
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-3">

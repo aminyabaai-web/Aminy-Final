@@ -113,7 +113,7 @@ export function UpgradeModal({
 
               {/* CTA */}
               <Button
-                className="w-full bg-primary hover:bg-[#6B9080] text-white text-sm font-semibold h-10 rounded-xl"
+                className="w-full bg-primary hover:bg-primary text-white text-sm font-semibold h-10 rounded-xl"
                 onClick={handleUpgrade}
               >
                 {prompt.ctaLabel}

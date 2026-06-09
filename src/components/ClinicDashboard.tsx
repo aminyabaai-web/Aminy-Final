@@ -557,7 +557,7 @@ export function ClinicDashboard({
               <h2 className="text-lg font-semibold text-[#1B2733]">Providers</h2>
               <p className="text-sm text-[#5A6B7A]">{providers.length} total providers</p>
             </div>
-            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
+            <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#216982] transition-colors">
               Add Provider
             </button>
           </div>
@@ -586,7 +586,7 @@ export function ClinicDashboard({
                 {clients.filter(c => c.status === 'waitlist').length} on waitlist
               </p>
             </div>
-            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
+            <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#216982] transition-colors">
               Add Client
             </button>
           </div>
@@ -611,7 +611,7 @@ export function ClinicDashboard({
               <h2 className="text-lg font-semibold text-[#1B2733]">Locations</h2>
               <p className="text-sm text-[#5A6B7A]">{locations.length} locations</p>
             </div>
-            <button className="px-4 py-2 bg-[#6B9080] text-white rounded-lg hover:bg-[#5A7A6E] transition-colors">
+            <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#216982] transition-colors">
               Add Location
             </button>
           </div>

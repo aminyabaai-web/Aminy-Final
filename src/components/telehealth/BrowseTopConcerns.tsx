@@ -71,7 +71,7 @@ export function BrowseTopConcerns({
   const categoryOrder: ConcernCategory[] = ['most-common', 'autism-neurodivergence', 'caregiver-family'];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
@@ -232,7 +232,7 @@ export function BrowseTopConcerns({
               </a>
               <button
                 onClick={handleSafetyAcknowledge}
-                className="block w-full py-3 px-4 bg-[#6B9080] text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
+                className="block w-full py-3 px-4 bg-primary text-white font-medium text-center rounded-xl hover:bg-[#466379] transition-colors"
               >
                 Continue to Book Support
               </button>

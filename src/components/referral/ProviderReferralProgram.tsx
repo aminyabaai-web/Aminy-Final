@@ -411,7 +411,7 @@ export function ProviderReferralProgram({
             { step: '3', title: 'You earn $100 credit', desc: `Credit applied after onboarding. Earn Featured badge at ${FEATURED_BADGE_THRESHOLD} referrals.` },
           ].map((item) => (
             <div key={item.step} className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-[#6B9080] text-white flex items-center justify-center text-sm flex-shrink-0">
+              <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center text-sm flex-shrink-0">
                 {item.step}
               </div>
               <div>

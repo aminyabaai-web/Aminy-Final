@@ -726,7 +726,7 @@ export function CareCoordination({
                 <Button variant="outline" className="flex-1" onClick={() => setShowAddTeamMember(false)}>
                   Cancel
                 </Button>
-                <Button className="flex-1 bg-primary hover:bg-[#6B9080]">
+                <Button className="flex-1 bg-primary hover:bg-[#216982]">
                   <Send className="w-4 h-4 mr-2" />
                   Send Invite
                 </Button>

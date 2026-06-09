@@ -410,7 +410,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('id_front')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
                         </button>
@@ -438,7 +438,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('id_back')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Photo' : 'Take Photo'}
                         </button>
@@ -466,7 +466,7 @@ export function ProviderIdentityVerification({
                         )}
                         <button
                           onClick={() => startCamera('selfie')}
-                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E]"
+                          className="mt-3 flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
                         >
                           <Camera className="w-4 h-4" /> {step.status === 'failed' ? 'Retake Selfie' : 'Take Selfie'}
                         </button>
@@ -512,7 +512,7 @@ export function ProviderIdentityVerification({
                         <button
                           onClick={handleSsnSubmit}
                           disabled={ssnInput.length !== 4}
-                          className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E] disabled:opacity-40"
+                          className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-40"
                         >
                           Save
                         </button>
@@ -552,7 +552,7 @@ export function ProviderIdentityVerification({
                         <button
                           onClick={handleConsent}
                           disabled={!consentChecked}
-                          className="px-4 py-2 bg-[#6B9080] text-white text-sm font-medium rounded-lg hover:bg-[#5A7A6E] disabled:opacity-40"
+                          className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-40"
                         >
                           Sign & Consent
                         </button>
@@ -587,7 +587,7 @@ export function ProviderIdentityVerification({
           <button
             onClick={handleSubmit}
             disabled={!allComplete || isSubmitting}
-            className="w-full py-3 bg-[#6B9080] text-white font-semibold rounded-xl hover:bg-[#5A7A6E] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
+            className="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-[#216982] disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 transition-colors"
           >
             {isSubmitting ? (
               <>

@@ -360,7 +360,7 @@ export function TelehealthFlow({
   switch (currentStep) {
     case 'choose-path':
       return (
-        <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="min-h-screen bg-mist">
           <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
               <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
@@ -475,7 +475,7 @@ export function TelehealthFlow({
 
     case 'verify-insurance':
       return (
-        <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="min-h-screen bg-mist">
           <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
               <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">

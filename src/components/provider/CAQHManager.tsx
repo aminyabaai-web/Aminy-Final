@@ -77,7 +77,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
 
   if (!provider) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -122,7 +122,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
   const isDueSoon = caqhProfile.daysUntilReAttestation >= 0 && caqhProfile.daysUntilReAttestation < 30;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">

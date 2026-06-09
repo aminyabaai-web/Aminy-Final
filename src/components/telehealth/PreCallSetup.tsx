@@ -408,7 +408,7 @@ export function PreCallSetup({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-mist dark:bg-slate-900 flex flex-col">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 px-4 py-4">
         <div className="max-w-2xl mx-auto">
@@ -798,7 +798,7 @@ export function PreCallSetup({
           <Button
             onClick={onReady}
             disabled={!allReady}
-            className="flex-1 py-3 min-h-[48px] bg-primary hover:bg-[#6B9080] text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 py-3 min-h-[48px] bg-primary hover:bg-primary text-white font-medium rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {audioOnlyMode ? (
               <>

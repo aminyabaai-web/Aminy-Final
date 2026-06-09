@@ -188,7 +188,7 @@ export function OnboardingQuickStart({
               <button
                 onClick={handleNameSubmit}
                 disabled={childName.trim().length < 1}
-                className="w-full py-3.5 bg-primary hover:bg-[#6B9080] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                className="w-full py-3.5 bg-primary hover:bg-[#216982] disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-medium flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
               >
                 Continue
                 <ChevronRight size={18} />

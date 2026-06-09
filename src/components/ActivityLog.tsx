@@ -133,7 +133,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           )}
           <button
             onClick={() => setShowLogForm(v => !v)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#6B9080] text-white text-xs font-semibold hover:bg-[#5a7d6e] transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-[#216982] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             Log behavior
@@ -159,7 +159,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           <button
             onClick={handleAddLog}
             disabled={!logText.trim()}
-            className="w-full py-2 rounded-lg bg-[#6B9080] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#5a7d6e]"
+            className="w-full py-2 rounded-lg bg-[#6B9080] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#216982]"
           >
             Save
           </button>

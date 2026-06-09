@@ -443,7 +443,7 @@ export function TreatmentPlanEditor({
         sticky
         actions={
           <Button
-            className="bg-primary hover:bg-[#6B9080]"
+            className="bg-primary hover:bg-[#216982]"
             onClick={() => setShowPlanForm(true)}
           >
             <Plus className="w-4 h-4 mr-1" />
@@ -463,7 +463,7 @@ export function TreatmentPlanEditor({
                   <p className="text-sm text-[#5A6B7A]">No plans yet</p>
                   <Button
                     size="sm"
-                    className="mt-3 bg-primary hover:bg-[#6B9080]"
+                    className="mt-3 bg-primary hover:bg-[#216982]"
                     onClick={() => setShowPlanForm(true)}
                   >
                     Create First Plan
@@ -585,7 +585,7 @@ export function TreatmentPlanEditor({
                     <div className="text-center py-8">
                       <Target className="w-10 h-10 mx-auto mb-3 text-neutral-300" />
                       <p className="text-[#5A6B7A] mb-3">No goals added yet</p>
-                      <Button onClick={() => setShowGoalForm(true)} className="bg-primary hover:bg-[#6B9080]">
+                      <Button onClick={() => setShowGoalForm(true)} className="bg-primary hover:bg-[#216982]">
                         <Plus className="w-4 h-4 mr-1" />
                         Add First Goal
                       </Button>
@@ -748,7 +748,7 @@ export function TreatmentPlanEditor({
                                   </Button>
                                   <Button
                                     size="sm"
-                                    className="bg-primary hover:bg-[#6B9080]"
+                                    className="bg-primary hover:bg-[#216982]"
                                     onClick={() => handleSaveProgress(goal.id)}
                                     disabled={isSaving}
                                   >
@@ -815,7 +815,7 @@ export function TreatmentPlanEditor({
                 <p className="text-[#5A6B7A] mb-4">
                   Choose a treatment plan from the sidebar or create a new one
                 </p>
-                <Button onClick={() => setShowPlanForm(true)} className="bg-primary hover:bg-[#6B9080]">
+                <Button onClick={() => setShowPlanForm(true)} className="bg-primary hover:bg-[#216982]">
                   <Plus className="w-4 h-4 mr-1" />
                   Create New Plan
                 </Button>
@@ -902,7 +902,7 @@ export function TreatmentPlanEditor({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
                 onClick={handleSavePlan}
                 disabled={isSaving || !planForm.title}
               >
@@ -1039,7 +1039,7 @@ export function TreatmentPlanEditor({
                 Cancel
               </Button>
               <Button
-                className="flex-1 bg-primary hover:bg-[#6B9080]"
+                className="flex-1 bg-primary hover:bg-[#216982]"
                 onClick={handleSaveGoal}
                 disabled={isSaving || !goalForm.title}
               >

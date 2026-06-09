@@ -97,7 +97,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
   // ─── Intro screen ──────────────────────────────────────────────────────
   if (step === 'intro') {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <div className="min-h-screen bg-mist flex flex-col">
         <div className="px-4 pt-3">
           {onBack && (
             <button onClick={onBack} className="flex items-center gap-1 text-sm text-[#5A6B7A]">
@@ -148,7 +148,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
       '#64748b';
 
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <div className="min-h-screen bg-mist flex flex-col">
         <div className="px-4 pt-3">
           {onBack && (
             <button onClick={onBack} className="flex items-center gap-1 text-sm text-[#5A6B7A]">
@@ -205,7 +205,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
 
   // ─── Question screen ──────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Header with progress */}
       <div className="px-4 pt-3 pb-3 bg-white border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between mb-2">

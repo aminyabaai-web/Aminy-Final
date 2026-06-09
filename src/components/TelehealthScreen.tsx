@@ -187,7 +187,7 @@ export function TelehealthScreen({
               variant={activeView === 'credits' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveView('credits')}
-              className={activeView === 'credits' ? 'bg-primary hover:bg-[#6B9080]' : ''}
+              className={activeView === 'credits' ? 'bg-primary hover:bg-[#216982]' : ''}
             >
               Sessions & Credits
             </Button>
@@ -195,7 +195,7 @@ export function TelehealthScreen({
               variant={activeView === 'history' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setActiveView('history')}
-              className={activeView === 'history' ? 'bg-primary hover:bg-[#6B9080]' : ''}
+              className={activeView === 'history' ? 'bg-primary hover:bg-[#216982]' : ''}
             >
               History & Notes
             </Button>
@@ -309,7 +309,7 @@ export function TelehealthScreen({
               </ul>
             </div>
 
-            <Button className="w-full mt-4 bg-primary hover:bg-[#6B9080]">
+            <Button className="w-full mt-4 bg-primary hover:bg-[#216982]">
               <FileText className="w-4 h-4 mr-2" />
               Generate Progress Report with Session Notes
             </Button>

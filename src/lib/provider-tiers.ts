@@ -47,7 +47,7 @@ export const PROVIDER_TIERS: Record<ProviderTier, ProviderTierConfig> = {
       'AI-assisted session notes (SOAP)',
       'Client scheduling & calendar',
       'Set your own cash-pay rates',
-      'Secure HIPAA-compliant messaging',
+      'Secure, privacy-first messaging',
       'Basic analytics (sessions, revenue)',
     ],
     requirements: [

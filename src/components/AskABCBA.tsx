@@ -203,7 +203,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   // Show loading skeleton while we check session eligibility (non-Pro+)
   if (!isProPlus && !recentSessionChecked) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-20">
+      <div className="min-h-screen bg-mist pb-20">
         <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />
         <div className="px-4 mt-4 space-y-3">
           {[1,2,3].map(i => <div key={i} className="h-16 bg-white rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
@@ -213,7 +213,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <ScreenHeader
         title="Ask Your BCBA Team"
@@ -432,7 +432,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
   const aiDrafting = !thread.ai_draft && thread.status === 'pending';
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       <ScreenHeader
         title="Question detail"
         onBack={onBack}

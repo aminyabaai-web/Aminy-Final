@@ -197,7 +197,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
               <div className="mt-4 flex justify-end">
                 <Button
                   size="sm"
-                  className={session.popular ? 'bg-primary hover:bg-[#6B9080]' : ''}
+                  className={session.popular ? 'bg-primary hover:bg-[#216982]' : ''}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleBookSession(session);

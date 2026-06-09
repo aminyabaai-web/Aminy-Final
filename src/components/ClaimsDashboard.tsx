@@ -725,7 +725,7 @@ export default function ClaimsDashboard({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#6B9080] to-[#43AA8B] text-white px-4 pt-12 pb-4">
         <nav aria-label="Coverage navigation" className="mb-3 flex items-center gap-3">

@@ -446,7 +446,7 @@ export function PlaybooksLibrary({
   const bookmarkedCount = playbooks.filter(pb => pb.isBookmarked).length;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
@@ -484,7 +484,7 @@ export function PlaybooksLibrary({
             onClick={() => setSelectedCategory('all')}
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               selectedCategory === 'all'
-                ? 'bg-[#6B9080] text-white'
+                ? 'bg-primary text-white'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
@@ -496,7 +496,7 @@ export function PlaybooksLibrary({
               onClick={() => setSelectedCategory(cat)}
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 selectedCategory === cat
-                  ? 'bg-[#6B9080] text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >

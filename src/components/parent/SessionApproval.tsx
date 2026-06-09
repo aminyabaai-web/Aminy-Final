@@ -192,7 +192,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         {onBack && (

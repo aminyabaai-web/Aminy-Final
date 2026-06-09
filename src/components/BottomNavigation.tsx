@@ -207,7 +207,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
     <nav
       id="main-navigation"
       tabIndex={-1}
-      className="fixed bottom-0 left-0 right-0 bg-[#FAF7F2] dark:bg-slate-900 border-t border-[#F0EDE8] dark:border-slate-700 z-50 outline-none md:hidden"
+      className="fixed bottom-0 left-0 right-0 bg-mist dark:bg-slate-900 border-t border-[#E8E4DF] dark:border-slate-700 z-50 outline-none md:hidden"
       style={{
         paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
         overflow: 'visible',
@@ -403,7 +403,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                           ? 'bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30'
                           : isItemActive
                             ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10'
-                            : 'hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
+                            : 'hover:bg-mist dark:hover:bg-slate-700'
                         }
                       `}
                       role="menuitem"

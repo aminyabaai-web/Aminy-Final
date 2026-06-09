@@ -110,7 +110,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
   const credentialedPayers = panelApplications.filter(p => p.status === 'credentialed');
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">
