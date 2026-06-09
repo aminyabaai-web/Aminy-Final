@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-visual" />
-    <meta name="theme-color" content="#6B9080" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#2A7D99" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -114,9 +114,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Load Manrope font (primary) and Inter (fallback) with display=swap for FOUT -->
+    <!-- Aminy Design System fonts: Schibsted Grotesk (UI), Fredoka (brand wordmark), Manrope (legacy fallback) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Fredoka:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
@@ -136,14 +136,14 @@
         --vh: 1vh;
         --safe-area-inset-top: env(safe-area-inset-top, 0px);
         --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-        /* Brand colors */
-        --brand-navy: #1B2733;
-        --brand-cream: #FAF7F2;
-        --brand-teal: #6B9080;
+        /* Brand colors — Aminy Design System v2 (sampled from logo) */
+        --brand-navy: #0C2230;
+        --brand-cream: #F6FBFB;
+        --brand-teal: #2A7D99;
         --brand-coral: #E07A5F;
       }
       html {
-        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Schibsted Grotesk', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       }
       body {
         margin: 0;
@@ -152,7 +152,7 @@
         min-height: calc(var(--vh, 1vh) * 100);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Schibsted Grotesk', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         background-color: var(--brand-cream);
         color: var(--brand-navy);
       }
