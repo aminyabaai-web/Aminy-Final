@@ -2455,7 +2455,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <div>
               <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Claims & Billing</h2>
               <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
-                Aminy submits all claims under the Aminy Network group NPI. You get paid biweekly regardless of payer timing.
+                Aminy submits all claims under the Aminy Network group NPI. Payments are issued on a net-30 basis after payer remittance; contact billing support if a payer is delayed beyond 45 days.
               </p>
             </div>
             <ClaimReadyQueue

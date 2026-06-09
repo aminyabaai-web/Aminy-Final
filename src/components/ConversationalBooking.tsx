@@ -624,9 +624,12 @@ export function ConversationalBooking({
     }
   };
 
-  // Get recommended providers based on concern
+  // Get recommended providers based on concern.
+  // Only fall back to FALLBACK_PROVIDERS in demo mode — in production, return
+  // whatever the real marketplace query surfaced (possibly empty, which renders
+  // a "no providers yet" empty state rather than fake provider cards).
   const getRecommendedProviders = () => {
-    const availableProviders = providers.length > 0 ? providers : FALLBACK_PROVIDERS;
+    const availableProviders = providers.length > 0 ? providers : (isDemoMode() ? FALLBACK_PROVIDERS : []);
     if (!state.concern) return availableProviders;
     return availableProviders.filter(p => {
       if (state.concern?.mapsTo === 'any') return true;
