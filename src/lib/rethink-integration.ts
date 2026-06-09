@@ -1499,38 +1499,34 @@ export async function handleRethinkWebhook(
 }
 
 async function handleSessionCompleted(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Session completed/signed webhook:', payload.data);
-  // Production: update local session cache, trigger parent dashboard refresh
+  // Real handling occurs in supabase/functions/rethink/index.ts (handleWebhook).
+  // Rethink posts webhooks directly to the edge function — this client-side path
+  // is only reachable during local development/testing.
+  console.info('[Rethink] session completed (client-side stub):', payload.data);
 }
 
 async function handleGoalUpdated(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Goal updated/mastered webhook:', payload.data);
-  // Production: update care plan view with latest goal progress
+  console.info('[Rethink] goal updated (client-side stub):', payload.data);
 }
 
 async function handleBehaviorUpdated(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Behavior updated webhook:', payload.data);
-  // Production: update behavior tracking panel
+  console.info('[Rethink] behavior updated (client-side stub):', payload.data);
 }
 
 async function handleAuthorizationChanged(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Authorization changed webhook:', payload.data);
-  // Production: update CoverageCoach, trigger low-units alert if needed
+  console.info('[Rethink] authorization changed (client-side stub):', payload.data);
 }
 
 async function handleStaffAssigned(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Staff assigned webhook:', payload.data);
-  // Production: refresh provider portal staff cards
+  console.info('[Rethink] staff assigned (client-side stub):', payload.data);
 }
 
 async function handleClientUpdated(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Client updated webhook:', payload.data);
-  // Production: refresh client demographics / diagnosis info
+  console.info('[Rethink] client updated (client-side stub):', payload.data);
 }
 
 async function handleNoteSigned(payload: RethinkWebhookEvent): Promise<void> {
-  console.info('[Rethink] Note signed webhook:', payload.data);
-  // Production: make session summary available to parent in dashboard
+  console.info('[Rethink] note signed (client-side stub):', payload.data);
 }
 
 async function handleDataSheetSubmitted(payload: RethinkWebhookEvent): Promise<void> {
