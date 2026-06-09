@@ -1046,7 +1046,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             </div>
 
             {/* Coaching add-on (Pro) */}
-            <div className="p-4 bg-purple-50 rounded-lg border border-purple-200 text-center">
+            <div className="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-700 text-center">
               <Stethoscope className="w-10 h-10 text-purple-400 mx-auto mb-3" />
               <h3 className="font-semibold text-[#1B2733] mb-1">Add 1-on-1 coaching</h3>
               <p className="text-sm text-[#5A6B7A] mb-4 max-w-xs mx-auto">
