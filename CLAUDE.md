@@ -6,7 +6,7 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ## Critical Architecture Rules
 
-### Navigation — 42 Screens via State (NOT React Router)
+### Navigation — 106 Screens via State (NOT React Router)
 - All navigation uses `currentScreen` state in `App.tsx`
 - NEVER add React Router — it will break the entire app
 - Debug: `window.__navigateToScreen('screen-name')` in browser console

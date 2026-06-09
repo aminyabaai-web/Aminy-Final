@@ -1,4 +1,11 @@
-# Aminy Audit Findings (authoritative, 75 items)
+# Aminy Audit Findings — HISTORICAL (resolved)
+
+> **STATUS June 9 2026:** This 75-item list is from a prior audit pass and is **STALE**.
+> Spot-verification confirmed the CRITICAL items are fixed in current code:
+> session-payout demo-gated (App.tsx:3831), MyAppointments fully wired (App.tsx:3156),
+> CareTab/SettingsScreen/MedicationTracker/ProviderPortal all `isDemoMode()`-gated,
+> booking fallback gated, payout copy honest, fee displays derive from PLATFORM_FEE_RATES.
+> **Do NOT re-fix from this list — verify against current source first.** Kept for audit trail only.
 
 ## src/App.tsx
 - **[CRITICAL] L3550** (mock-data-visible)
