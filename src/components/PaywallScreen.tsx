@@ -428,7 +428,10 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             }`}
           >
             Yearly
-            <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs">Save 30%</Badge>
+            <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs">
+              {/* Largest real annual savings across tiers (Core: 1 − 129/179.88 ≈ 28%) */}
+              Save up to {Math.round((1 - tierPricing.core.yearly / (tierPricing.core.monthly * 12)) * 100)}%
+            </Badge>
           </button>
         </div>
 
@@ -501,7 +504,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                                     <span className="text-sm text-[#5A6B7A]">/yr</span>
                                   </div>
                                   <span className="text-[10px] font-semibold text-[#43AA8B] leading-none mt-0.5">
-                                    Save ${savings} (2 months free)
+                                    Save ${savings} ({Math.floor(Number(savings) / monthlyPrice)} months free)
                                   </span>
                                 </div>
                               );

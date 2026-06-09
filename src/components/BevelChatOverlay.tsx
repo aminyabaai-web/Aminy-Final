@@ -346,8 +346,36 @@ export function BevelChatOverlay({
   const vaultContextRef = useRef<string>('');
   const memoriesRef = useRef<string>('');
 
+  // CRITICAL: AI calls must carry the user's session JWT, not the anon key.
+  // With the anon key the edge function can't identify the user and rate-limits
+  // every subscriber at the FREE tier (3 msgs/day by IP). Session token = paid limits.
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session?.access_token ?? publicAnonKey}`,
+      };
+    } catch {
+      return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` };
+    }
+  };
+
+  // Stop any active recording and release the microphone — prevents the
+  // browser mic indicator staying lit after the overlay closes mid-recording.
+  const releaseMicrophone = useCallback(() => {
+    try {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+      }
+      mediaRecorderRef.current?.stream?.getTracks().forEach(t => t.stop());
+    } catch { /* already released */ }
+    setIsRecording(false);
+  }, []);
+
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
+    releaseMicrophone();
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
       const preview = userMsgs[0].content.slice(0, 90);
@@ -366,11 +394,12 @@ export function BevelChatOverlay({
       }).catch(() => {});
     }
     onClose();
-  }, [messages, sessionId, onClose]);
+  }, [messages, sessionId, onClose, releaseMicrophone]);
 
   useEffect(() => {
     if (!isOpen) {
       hasGeneratedProactive.current = false;
+      releaseMicrophone();
     } else {
       setMessages([]);
       setAttachedImage(null);
@@ -380,7 +409,7 @@ export function BevelChatOverlay({
       setInstructionsDirty(false);
       setChatSessions(loadChatSessions());
     }
-  }, [isOpen]);
+  }, [isOpen, releaseMicrophone]);
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -467,8 +496,8 @@ export function BevelChatOverlay({
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
-          body: JSON.stringify({ userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
+          headers: await getAuthHeaders(),
+          body: JSON.stringify({ userId, userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
         }
       );
       if (!response.ok) throw new Error('no response');
@@ -617,8 +646,9 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          headers: await getAuthHeaders(),
           body: JSON.stringify({
+            userId,
             userMessage: text,
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -700,8 +730,9 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          headers: await getAuthHeaders(),
           body: JSON.stringify({
+            userId,
             userMessage: messagePayload,
             conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -787,7 +818,7 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
             `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/transcribe`,
             {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+              headers: await getAuthHeaders(),
               body: JSON.stringify({ audioBase64: base64Audio, mimeType }),
             }
           );

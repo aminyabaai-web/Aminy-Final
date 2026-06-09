@@ -707,14 +707,16 @@ export async function startTrial(userId: string): Promise<boolean> {
     const trialEnd = new Date();
     trialEnd.setDate(trialEnd.getDate() + 7); // 7-day trial
 
+    // Column names must match handleOnboardingComplete in App.tsx
+    // (trial_started_at / trial_ends_at) — the canonical trial_tracking schema.
     await supabase.from('trial_tracking').upsert({
       user_id: userId,
-      trial_start: new Date().toISOString(),
-      trial_end: trialEnd.toISOString(),
+      trial_started_at: new Date().toISOString(),
+      trial_ends_at: trialEnd.toISOString(),
       conversations_used: 0,
       soft_paywall_shown: false,
       hard_paywall_shown: false,
-    });
+    }, { onConflict: 'user_id' });
 
     // Update user tier to core (trial)
     await supabase
@@ -747,7 +749,7 @@ export async function getTrialStatus(userId: string): Promise<{
 
   if (error || !data) return null;
 
-  const trialEnd = new Date(data.trial_end);
+  const trialEnd = new Date(data.trial_ends_at || data.trial_end);
   const now = new Date();
   const daysRemaining = Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
 
