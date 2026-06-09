@@ -471,7 +471,7 @@ const COMPETITIVE_ADVANTAGES: CompetitiveAdvantage[] = [
     id: 'provider_messaging',
     name: 'Provider Messaging',
     category: 'logistics',
-    aminyCapability: 'Secure HIPAA-compliant messaging with providers.',
+    aminyCapability: 'Secure, privacy-first messaging with providers.',
     careCompanionStatus: 'comparable',
     careCompanionNotes: 'CareCompanion has basic messaging.',
     acquisitionImportance: 3,

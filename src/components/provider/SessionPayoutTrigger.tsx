@@ -47,7 +47,7 @@ export interface SessionPayoutTriggerProps {
   stripeConnectAccountId: string;
   /** Total collected from the family in cents */
   sessionAmountCents: number;
-  /** Care rail — determines platform take rate (cash 35%, insured 10%, aact 5%) */
+  /** Care rail — determines platform take rate (cash 25%, insured 10%, aact 5%) */
   rail?: import('../../lib/stripe-connect').PayoutRail;
   /** Human-readable session description */
   sessionDescription?: string;

@@ -699,7 +699,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     title: 'Cash Pay Only',
                     badge: 'Fastest Start',
                     badgeClass: 'bg-blue-100 text-blue-700',
-                    description: 'No insurance billing. Accept cash-pay families only. Go live in your licensed states immediately. Aminy takes 35% of each session booked through the platform.',
+                    description: 'No insurance billing. Accept cash-pay families only. Go live in your licensed states immediately. Aminy takes 25% of each session booked through the platform.',
                     highlight: false,
                   },
                 ] as const).map(track => (
