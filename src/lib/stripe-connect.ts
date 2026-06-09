@@ -331,7 +331,7 @@ export function formatCents(cents: number, currency = 'USD'): string {
   }).format(cents / 100);
 }
 
-/** Returns provider net amount given total + rail (cash 35%, insured 10%, aact 5%) */
+/** Returns provider net amount given total + rail (cash 25%, insured 10%, aact 5%) */
 export function calculateProviderAmount(totalCents: number, rail: PayoutRail = 'cash_pay'): {
   providerCents: number;
   platformFeeCents: number;

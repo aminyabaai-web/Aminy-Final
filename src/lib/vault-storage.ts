@@ -11,6 +11,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { getStorageLimitBytes, type TierType } from './tier-utils';
 
 // ============================================================================
 // Constants
@@ -37,6 +38,8 @@ export interface UploadResult {
   filePath?: string;
   url?: string;
   error?: string;
+  /** True when the upload was rejected because the tier's storage quota is full */
+  quotaExceeded?: boolean;
 }
 
 export interface VaultDocument {
@@ -178,6 +181,9 @@ export async function uploadVaultFile(
     childId?: string;
     metadata?: Partial<VaultDocumentMetadata>;
     onProgress?: UploadProgressCallback;
+    /** User's subscription tier — enables per-tier storage quota enforcement */
+    tier?: TierType | string | null;
+    trialEndsAt?: string | null;
   } = {}
 ): Promise<UploadResult> {
   const {
@@ -186,12 +192,31 @@ export async function uploadVaultFile(
     childId,
     metadata = {},
     onProgress,
+    tier,
+    trialEndsAt,
   } = options;
 
   // Validate file
   const validation = validateFile(file);
   if (!validation.valid) {
     return { success: false, error: validation.error };
+  }
+
+  // Per-tier storage quota check (free 100MB / Core 5GB / Pro 25GB / Family unlimited)
+  if (tier !== undefined) {
+    const limitBytes = getStorageLimitBytes(tier, trialEndsAt);
+    if (limitBytes !== null) {
+      const { usedBytes } = await getStorageUsage(userId);
+      if (usedBytes + file.size > limitBytes) {
+        const limitMb = Math.round(limitBytes / 1024 / 1024);
+        const usedMb = Math.round(usedBytes / 1024 / 1024);
+        return {
+          success: false,
+          error: `Storage limit reached (${usedMb}MB of ${limitMb >= 1000 ? `${limitMb / 1000}GB` : `${limitMb}MB`} used). Upgrade your plan for more vault space.`,
+          quotaExceeded: true,
+        };
+      }
+    }
   }
 
   try {

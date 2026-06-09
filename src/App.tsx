@@ -2256,7 +2256,9 @@ export default function App() {
             }));
           }
 
-          // Trial tracking - non-blocking
+          // Trial tracking - non-blocking. NOTE: Supabase resolves with
+          // { error } rather than rejecting, so check the result explicitly —
+          // .then(null, handler) silently loses DB errors.
           const trialEnd = new Date();
           trialEnd.setDate(trialEnd.getDate() + 7);
           supabase.from('trial_tracking').upsert({
@@ -2266,7 +2268,10 @@ export default function App() {
             conversations_used: 0,
             max_trial_conversations: 5,
             is_converted: false,
-          }, { onConflict: 'user_id' }).then(null, (err: unknown) => logger.error('Trial tracking error', err));
+          }, { onConflict: 'user_id' }).then(
+            ({ error }) => { if (error) logger.error('Trial tracking error', error); },
+            (err: unknown) => logger.error('Trial tracking error', err)
+          );
 
           if (primaryChild?.id) {
             const defaultGoals = [
@@ -2282,7 +2287,10 @@ export default function App() {
                 created_at: new Date().toISOString(),
               })),
               { onConflict: 'id' }
-            ).then(null, (err: unknown) => logger.error('Goals creation error', err));
+            ).then(
+              ({ error }) => { if (error) logger.error('Goals creation error', error); },
+              (err: unknown) => logger.error('Goals creation error', err)
+            );
 
             generateDailyPlan({ userId, childId: primaryChild.id }).catch((err) => {
               logger.error('Daily plan generation error', err);
@@ -2314,7 +2322,10 @@ export default function App() {
                   answers: sr.answers,
                   summary: sr.summary,
                   completed_at: sr.completedAt,
-                }).then(null, (err: unknown) => logger.dev('Screening migration error', err));
+                }).then(
+                  ({ error }) => { if (error) logger.dev('Screening migration error', error); },
+                  (err: unknown) => logger.dev('Screening migration error', err)
+                );
               }
               clearLocalScreeningResults();
             }
@@ -4167,6 +4178,7 @@ export default function App() {
                         currentPath={currentScreen}
                         childName={userData.childName || undefined}
                         initialPrompt={bevelInitialPrompt}
+                        userTier={effectiveUserTier}
                       />
                     </Suspense>
                   )}

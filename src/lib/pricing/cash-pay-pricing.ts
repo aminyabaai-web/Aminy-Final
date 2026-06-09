@@ -14,7 +14,7 @@
  * Rate methodology:
  * - Family prices: At or slightly below market average for telehealth convenience
  * - Provider rates: Competitive enough to attract quality providers ($130/hr BCBA, $65/hr RBT)
- * - Aminy margin: 30-35% take rate (above Headway ~15%, below BetterHelp ~65%)
+ * - Aminy margin: 25% cash-pay take rate (above Headway ~15%, below BetterHelp ~65%) — see PLATFORM_FEE_RATES
  * - Membership discounts: Aminy absorbs discount, provider rate stays fixed
  *
  * Sources: ABA therapy cost surveys 2025-2026, SimplePractice rate data,

@@ -1995,11 +1995,12 @@ app.post("/make-server-8a022548/org/checkout", async (c) => {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeKey) return c.json({ error: 'Stripe not configured' }, 500);
 
-    // Calculate amount: seats × price/seat × (12 if annual with 10% off, 1 if monthly)
-    const seatPriceCents = org.price_per_seat_cents || 9900;
+    // Calculate amount: seats × price/seat × (12 if annual with 15% off, 1 if monthly)
+    // Keep in sync with src/lib/org-licensing.ts ($49/seat, 15% annual — June 2026)
+    const seatPriceCents = org.price_per_seat_cents || 4900;
     const seats = org.seat_count;
     const unitAmount = interval === 'year'
-      ? Math.round(seatPriceCents * 12 * 0.9)  // 10% annual discount
+      ? Math.round(seatPriceCents * 12 * 0.85)  // 15% annual discount
       : seatPriceCents;
 
     // Build Stripe checkout URL — using `price_data` for dynamic per-seat pricing
@@ -2010,7 +2011,7 @@ app.post("/make-server-8a022548/org/checkout", async (c) => {
     params.set('client_reference_id', orgId);
     params.set('line_items[0][price_data][currency]', 'usd');
     params.set('line_items[0][price_data][product_data][name]', `Aminy for Organizations — ${org.name}`);
-    params.set('line_items[0][price_data][product_data][description]', `${seats} seats — ${interval === 'year' ? 'Annual (10% off)' : 'Monthly'}`);
+    params.set('line_items[0][price_data][product_data][description]', `${seats} seats — ${interval === 'year' ? 'Annual (15% off)' : 'Monthly'}`);
     params.set('line_items[0][price_data][unit_amount]', String(unitAmount));
     params.set('line_items[0][price_data][recurring][interval]', interval === 'year' ? 'year' : 'month');
     params.set('line_items[0][quantity]', String(seats));

@@ -116,10 +116,10 @@ const US_STATES = [
 // Platform fee percentages derived from the canonical rail rates
 // (src/lib/stripe-connect.ts PLATFORM_FEE_RATES) so the application never
 // shows a hardcoded/fabricated fee. Cash-pay is the default self-pay rail.
-const CASH_PAY_FEE_PCT = Math.round(PLATFORM_FEE_RATES.cash_pay * 100); // 35
+const CASH_PAY_FEE_PCT = Math.round(PLATFORM_FEE_RATES.cash_pay * 100); // 25
 const INSURED_FEE_PCT = Math.round(PLATFORM_FEE_RATES.insured * 100); // 10
 const AACT_PILOT_FEE_PCT = Math.round(PLATFORM_FEE_RATES.aact_pilot * 100); // 5
-const CASH_PAY_PROVIDER_SHARE = 1 - PLATFORM_FEE_RATES.cash_pay; // 0.65
+const CASH_PAY_PROVIDER_SHARE = 1 - PLATFORM_FEE_RATES.cash_pay; // 0.75
 
 export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: ProviderApplicationProps) {
   const [step, setStep] = useState(1);

@@ -24,7 +24,7 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 ### 2. Bargaining Power of Suppliers (BCBAs/Providers) — HIGH
 - **Supply scarcity is severe**: 115-day average waitlist, 43% ABA utilization, ABA therapist shortage worsening. Providers hold power because demand >> supply.
 - **AACT dependency risk**: The insured marketplace rail (AHCCCS + 9 payers, 5% take) requires a live AACT/Rise deal that doesn't exist yet. If AACT builds its own app or contracts with Headway, Aminy's insured strategy is at risk.
-- **Mitigation**: Cash-pay marketplace (35% take, no payer contract needed) + B2B SaaS (per-org licensing) reduce AACT dependency. Independent provider onboarding is the path.
+- **Mitigation**: Cash-pay marketplace (25% take, no payer contract needed) + B2B SaaS (per-org licensing) reduce AACT dependency. Independent provider onboarding is the path.
 - **Verdict**: Close AACT deal fast OR pivot to independent provider network. Don't let the pitch hinge on a deal that isn't signed.
 
 ### 3. Bargaining Power of Buyers (Families) — MODERATE
@@ -58,7 +58,7 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 | Revenue lane | Status | Action needed |
 |---|---|---|
 | **B2C subs** ($14.99/$29.99/$49.99/mo) | ✅ Live, Stripe configured | Drive trial → paid conversion via push notifications + email |
-| **Cash-pay marketplace** (35% take) | ✅ Code live | Onboard 10–20 independent BCBAs; no payer contract needed |
+| **Cash-pay marketplace** (25% take) | ✅ Code live | Onboard 10–20 independent BCBAs; no payer contract needed |
 | **Free screening funnel** → trial conversion | ✅ M-CHAT + developmental screener | Optimize: A/B test CTA copy, add social proof ("3,847 families screened this month") |
 | **Referral program** (14-day Pro trial reward) | ✅ Scaffolded | Launch with 5 beta families; measure K-factor |
 
@@ -72,7 +72,7 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 
 | Initiative | Why it matters | Blocked on |
 |---|---|---|
-| **B2B SaaS** ($99–$499/seat/mo, orgs 10–100 seats) | 75%+ gross margin, longer retention, ACV $12K–$60K/org | Sales outreach to AZ/CA clinic networks |
+| **B2B SaaS** ($49/seat/mo, orgs 5–100 seats) | 75%+ gross margin, longer retention, ACV $2.9K–$59K/org | Sales outreach to AZ/CA clinic networks |
 | **Rethink EMR sync** (bidirectional family ↔ provider) | Removes AACT dependency; any Rethink-using clinic is a target | Rethink sandbox creds + API agreement |
 | **AACT deal** (insured rail, 5% take, AHCCCS + 9 payers) | Unlocks insured families at low take rate → volume | Legal negotiation; close before Rethink builds it |
 | **Payer-type funnel** (insured → coverage tools, cash → upgrade) | Highest near-term ARPU lever; insured users routed wrong today | 2-week eng sprint (funnel already scaffolded) |
@@ -108,14 +108,14 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 ---
 
 ## Marketplace Economics
-- `PLATFORM_FEE_RATES`: cash_pay 35% / insured 10% / aact_pilot 5%. Provider payout is fixed; platform take = remainder.
+- `PLATFORM_FEE_RATES`: cash_pay 25% / insured 10% / aact_pilot 5% (cash-pay lowered from 35% June 2026 — competitive for solo BCBAs, still strong margin). Provider payout is fixed; platform take = remainder.
 - **Session discounts are PLATFORM-ABSORBED** (provider always paid full) and **cash-pay ONLY**.
 - Worked example: Standard $149 session, provider payout $95. Family Plan 30% discount → family pays $106.92, platform keeps $11.92 (≥ $5 floor), provider gets $95.
 
 ---
 
 ## B2B — Two Distinct Lanes
-- **Org seat-licensing** (`org-licensing.ts`): $99/seat/mo, min 10 seats, 10% annual; target = clinics/schools/agencies. `OrgAdminDashboard`.
+- **Org seat-licensing** (`org-licensing.ts`): $49/seat/mo, min 5 seats, 15% annual (lowered June 2026 — accessible to small ABA clinics, PLG-friendly entry); target = clinics/schools/agencies. `OrgAdminDashboard`.
 - **Provider marketplace / practice-in-a-box** (take-rate rails): target = independent BCBAs. For clinics, choose ONE model (seat vs. take-rate) to avoid cannibalization.
 - **AACT/Rise pilot** (`aact_pilot` rail): 5% take, pre-contracted with 10 payers. Aspirational — gated on a signed deal.
 
@@ -131,7 +131,7 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 For investors, state each lane's CAC, ARPU, gross margin, and stage:
 - **Lane 1 (B2C)**: CAC ~$15–50 (organic/screening funnel), ARPU $180/yr (Core avg), GM 85%+ (SaaS), **Stage: launched, pre-revenue**
 - **Lane 2 (B2B SaaS)**: CAC ~$500–2K (sales-assisted), ACV $12K–$60K/org, GM 75%+, **Stage: scaffolded, pre-revenue**
-- **Lane 3 (Marketplace)**: CAC = provider onboarding cost, take 35%, GM ~35%, **Stage: code live, 0 providers**
+- **Lane 3 (Marketplace)**: CAC = provider onboarding cost, take 25%, GM ~25%, **Stage: code live, 0 providers**
 
 ### Fix 3: Be honest about AACT
 Say: *"We have a working prototype partnership framework and active conversations with AACT/Rise. The deal is not signed. Our go-to-market does NOT depend on it — we have a path to $300K MRR with independent providers and direct B2C before any partner deal closes."*

@@ -224,6 +224,7 @@ export async function inviteMember(orgId: string, email: string, role: OrgMember
       email: email.toLowerCase().trim(),
       role,
       status: 'invited',
+      invited_at: new Date().toISOString(),
     })
     .select()
     .single();
