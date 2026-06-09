@@ -78,6 +78,7 @@ import { ReferralCard } from './ReferralCard';
 import { BehaviorInsightsCard } from './BehaviorInsightsCard';
 import { NotificationPrompt, useShouldShowNotificationPrompt } from './NotificationPrompt';
 import { supabase } from '../utils/supabase/client';
+import { getInsightEngine, type Insight } from '../lib/proactive-insights';
 import { incrementStreak } from '../lib/streak-service';
 import { useDashboardData, getDefaultRoutines, getDefaultGoals } from '../hooks/useDashboardData';
 import { getUserBadges, type EarnedBadge } from '../lib/badge-service';
@@ -382,6 +383,10 @@ export function Dashboard10({
   // Multi-child support
   const [activeChildId, setActiveChildId] = useState<string | undefined>(undefined);
 
+  // Proactive AI insight — surfaced without requiring chat
+  const [dailyInsight, setDailyInsight] = useState<Insight | null>(null);
+  const [insightDismissed, setInsightDismissed] = useState(false);
+
   // Load real dashboard data from database (with child filtering)
   const dashboardData = useDashboardData(userId || undefined, activeChildId);
 
@@ -393,6 +398,42 @@ export function Dashboard10({
     else if (hour >= 17 && hour < 20) setActiveRoutine('evening');
     else setActiveRoutine('bedtime');
   }, []);
+
+  // Generate proactive AI insight once per day (cache in localStorage)
+  useEffect(() => {
+    if (!userId) return;
+    const today = new Date().toDateString();
+    const cacheKey = `aminy_insight_${userId}_${today}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const { insight, dismissed } = JSON.parse(cached);
+        if (!dismissed && insight) setDailyInsight(insight);
+        return;
+      }
+    } catch {}
+    getInsightEngine()
+      .generateDailyInsight(userId, activeChildId || undefined)
+      .then(insight => {
+        if (insight) {
+          setDailyInsight(insight);
+          localStorage.setItem(cacheKey, JSON.stringify({ insight, dismissed: false }));
+        }
+      })
+      .catch(() => {});
+  }, [userId, activeChildId]);
+
+  const handleDismissInsight = () => {
+    setInsightDismissed(true);
+    if (dailyInsight && userId) {
+      const today = new Date().toDateString();
+      localStorage.setItem(
+        `aminy_insight_${userId}_${today}`,
+        JSON.stringify({ insight: dailyInsight, dismissed: true })
+      );
+      getInsightEngine().dismissInsight(dailyInsight.id).catch(() => {});
+    }
+  };
 
   // Use real data from hook, with fallback for empty states
   // SAFETY: Always ensure arrays are defined before accessing .length or .map()
@@ -719,6 +760,24 @@ export function Dashboard10({
         </div>
       )}
 
+      {/* Task Win Toast — appears when an action item is completed */}
+      <AnimatePresence>
+        {taskWin && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
+            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          >
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              <span>{taskWin} ✓</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
@@ -892,7 +951,48 @@ export function Dashboard10({
       )}
 
       {/* Main Content */}
+      <PullToRefresh onRefresh={handleRefresh}>
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
+
+        {/* Proactive AI Insight — "AI escaping the chat window" */}
+        <AnimatePresence>
+          {dailyInsight && !insightDismissed && (
+            <motion.div
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97, y: -4 }}
+              transition={{ duration: 0.25 }}
+              className="rounded-2xl bg-gradient-to-r from-[#EDF6FA] to-white dark:from-slate-800/70 dark:to-slate-800 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 shadow-sm overflow-hidden"
+            >
+              <div className="flex items-start gap-3 p-4">
+                <div className="w-8 h-8 rounded-full bg-[#2A7D99]/10 dark:bg-[#2A7D99]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Sparkles className="w-4 h-4 text-[#2A7D99]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-semibold text-[#2A7D99] uppercase tracking-widest mb-0.5">Aminy noticed</p>
+                  <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-snug">{dailyInsight.title}</p>
+                  <p className="mt-1 text-xs text-[#5A6B7A] dark:text-slate-400 leading-relaxed">{dailyInsight.body}</p>
+                  {dailyInsight.actionType && (
+                    <button
+                      onClick={() => { triggerHaptic('light'); onNavigate?.(dailyInsight.actionType!); }}
+                      className="mt-2 text-xs font-semibold text-[#2A7D99] hover:underline"
+                    >
+                      {({'ask-aminy': 'Talk to Aminy', 'junior-session': 'Open Ease', 'junior-progress': 'View progress', reports: 'See reports', 'care-plan': 'View care plan', 'analytics-charts': 'See analytics'} as Record<string, string>)[dailyInsight.actionType] ?? 'Learn more'} →
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={handleDismissInsight}
+                  className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition-colors flex-shrink-0 -mt-0.5 -mr-0.5"
+                  aria-label="Dismiss"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {shouldShowWellnessScore && (
           <div className="relative">
             <WellnessScoreWidget
@@ -1406,8 +1506,9 @@ export function Dashboard10({
               childAge={child.age}
               parentName={userData.parentName}
               onItemComplete={(item) => {
-                setTaskWin(item.label || '✓ Done!');
-                setTimeout(() => setTaskWin(null), 2000);
+                setTaskWin(item.title || '✓ Done!');
+                triggerHaptic('medium');
+                setTimeout(() => setTaskWin(null), 2500);
               }}
             />
           </section>
@@ -1431,6 +1532,7 @@ export function Dashboard10({
           </section>
         )}
       </main>
+      </PullToRefresh>
 
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)

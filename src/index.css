@@ -17658,3 +17658,31 @@ tr:hover td, .hover-row:hover {
 .dark .dashboard-header-bg {
   background: rgba(15, 23, 42, 0.95) !important;
 }
+
+/* Text legibility inside junior-page-root */
+.dark .junior-page-root .text-slate-950 { color: #f8fafc !important; }
+.dark .junior-page-root .text-slate-900 { color: #f1f5f9 !important; }
+.dark .junior-page-root .text-slate-800 { color: #e2e8f0 !important; }
+.dark .junior-page-root .text-slate-700 { color: #cbd5e1 !important; }
+.dark .junior-page-root .text-slate-600 { color: #94a3b8 !important; }
+/* Inline-style card backgrounds — target rounded-[32px] cards */
+.dark .junior-page-root .rounded-\[32px\] {
+  background: linear-gradient(180deg, #162032 0%, #0f172a 100%) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+.dark .junior-page-root .rounded-3xl {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+}
+/* Activity cards */
+.dark .junior-page-root .rounded-2xl:not(.bg-\[\#43AA8B\]):not(.bg-\[\#E07A5F\]):not(.bg-amber-500):not(.bg-indigo-500):not(.bg-blue-500):not(.bg-green-500):not(.bg-purple-500) {
+  background-color: rgba(30, 41, 59, 0.7) !important;
+}
+/* Yellow/amber token badge */
+.dark .junior-page-root .bg-yellow-100 { background-color: rgba(120, 80, 10, 0.35) !important; }
+.dark .junior-page-root .text-yellow-600 { color: #fbbf24 !important; }
+.dark .junior-page-root .bg-amber-50,
+.dark .junior-page-root .bg-orange-50 { background-color: rgba(120, 60, 5, 0.2) !important; }
+.dark .junior-page-root .text-amber-600 { color: #fcd34d !important; }
+/* Scrollable content area */
+.dark .junior-page-root .flex-1.overflow-y-auto { background: transparent !important; }

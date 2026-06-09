@@ -322,6 +322,7 @@ export function BevelChatOverlay({
   const [personality, setPersonality] = useState<AIPersonality>('caregiver');
   const [showHistory, setShowHistory] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showCapabilities, setShowCapabilities] = useState(false);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [attachedImage, setAttachedImage] = useState<{ name: string; dataUrl: string } | null>(null);
   const [sessionId] = useState(() => `session-${Date.now()}`);
@@ -1159,6 +1160,51 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           </div>
                         </div>
                       )}
+
+                      {/* ── What Aminy can do ── */}
+                      <div className="px-4 mt-5">
+                        <button
+                          type="button"
+                          onClick={() => setShowCapabilities(v => !v)}
+                          className="w-full flex items-center justify-between text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-0 py-1"
+                        >
+                          <span className="flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> Aminy can do more</span>
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showCapabilities ? 'rotate-180' : ''}`} />
+                        </button>
+                        {showCapabilities && (
+                          <div className="mt-2 rounded-xl border border-[#E8E4DF] overflow-hidden divide-y divide-[#F0EDE8]">
+                            {[
+                              { emoji: '📊', label: 'Log a behavior', desc: 'Record an ABC entry (antecedent, behavior, consequence)', example: 'Log behavior: hitting when transitions happen' },
+                              { emoji: '🎯', label: 'Log a win', desc: 'Capture a positive moment or progress milestone', example: 'Log a win: said "please" unprompted at dinner' },
+                              { emoji: '📅', label: 'Add an appointment', desc: 'Save a provider visit, therapy session, or reminder', example: 'Add appointment: OT on Friday at 3pm with Dr. Kim' },
+                              { emoji: '😌', label: 'Set a calm cue', desc: 'Save a regulation strategy that works for your child', example: "Set calm cue: deep pressure squeeze for 30 seconds" },
+                              { emoji: '💭', label: 'Log a struggle', desc: 'Note a difficult moment to review with your BCBA', example: "Log a struggle: couldn't transition from iPad to dinner" },
+                            ].map(cap => (
+                              <button
+                                key={cap.label}
+                                type="button"
+                                onClick={() => {
+                                  HAPTICS.light();
+                                  setShowCapabilities(false);
+                                  setShowSettings(false);
+                                  setTimeout(() => {
+                                    setInput(cap.example + ' ');
+                                    inputRef.current?.focus();
+                                  }, 200);
+                                }}
+                                className="w-full flex items-start gap-2.5 px-3 py-2.5 text-left hover:bg-[#FAF7F2] transition-colors"
+                              >
+                                <span className="text-base leading-tight mt-0.5">{cap.emoji}</span>
+                                <div className="min-w-0">
+                                  <p className="text-xs font-semibold text-[#1B2733]">{cap.label}</p>
+                                  <p className="text-[10px] text-[#5A6B7A] leading-tight mt-0.5">{cap.desc}</p>
+                                  <p className="text-[10px] text-[#6B9080] italic mt-0.5 line-clamp-1">e.g. "{cap.example}"</p>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
 
                       {/* ── Actions ── */}
                       <div className="px-4 mt-5 mb-6 space-y-2">

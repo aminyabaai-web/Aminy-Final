@@ -3950,6 +3950,77 @@ Return as JSON with: name (routine name), description (brief description), diffi
 });
 
 // ============================================================================
+// AI CARE PLAN GENERATION
+// ============================================================================
+
+app.post("/make-server-8a022548/ai/care-plan", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { messages, max_tokens } = body;
+
+    const authHeader = c.req.header('Authorization');
+    const authResult = await verifyAuth(authHeader);
+    const rateLimitId = (authResult.authenticated && authResult.user)
+      ? authResult.user.userId
+      : (c.req.header('x-forwarded-for') || 'anonymous');
+    const userTier: TierType = (authResult.authenticated && authResult.user)
+      ? authResult.user.tier
+      : 'free';
+
+    const rateLimitCheck = await checkAllRateLimits(rateLimitId, userTier, 'ai-brain');
+    if (!rateLimitCheck.allowed) {
+      return c.json({ error: rateLimitCheck.reason }, { status: 429, headers: getRateLimitHeaders(rateLimitCheck.result) });
+    }
+
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    const openaiApiKey = Deno.env.get('OPENAI_API_KEY');
+
+    if (anthropicApiKey) {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': anthropicApiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: max_tokens || 1500,
+          system: messages?.find((m: {role: string}) => m.role === 'system')?.content || 'You are a clinical care planning assistant for families of neurodivergent children. Generate evidence-informed, practical care plan recommendations. Be warm, specific, and actionable. Return structured JSON only.',
+          messages: (messages || []).filter((m: {role: string}) => m.role !== 'system'),
+        }),
+      });
+      if (!response.ok) {
+        return c.json({ error: 'AI care plan generation failed', status: response.status }, 500);
+      }
+      const data = await response.json();
+      const content = data.content?.[0]?.text || '';
+      return c.json({ message: content, content });
+    }
+
+    if (openaiApiKey) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiApiKey}` },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          max_tokens: max_tokens || 1500,
+          messages: messages || [],
+        }),
+      });
+      if (!response.ok) return c.json({ error: 'AI care plan generation failed' }, 500);
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || '';
+      return c.json({ message: content, content });
+    }
+
+    return c.json({ error: 'No AI provider configured' }, 500);
+  } catch (error) {
+    return c.json({ error: 'Care plan generation failed' }, 500);
+  }
+});
+
+// ============================================================================
 // RETENTION ENGINE ENDPOINTS
 // ============================================================================
 
