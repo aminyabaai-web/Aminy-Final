@@ -274,7 +274,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+      <div className="min-h-screen bg-mist flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin mx-auto mb-3" />
           <p className="text-[#5A6B7A]">Loading your portal...</p>
@@ -286,7 +286,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   // Error state
   if (loadError) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-mist flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-sm p-6 max-w-md text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Unable to Load Portal</h2>
@@ -303,7 +303,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Top Bar */}
       <header className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">

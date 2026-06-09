@@ -366,7 +366,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
     };
 
     return (
-        <div className="min-h-screen bg-[#FAF7F2] py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+        <div className="min-h-screen bg-mist py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
             <div className="max-w-2xl w-full mx-auto">
                 {onBack && (
                     <button

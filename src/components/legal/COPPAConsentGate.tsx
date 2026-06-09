@@ -107,7 +107,7 @@ export default function COPPAConsentGate({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3">
         {onBack && (

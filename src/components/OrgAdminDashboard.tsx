@@ -133,7 +133,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+      <div className="min-h-screen bg-mist flex items-center justify-center">
         <Loader2 className="w-6 h-6 text-slate-400 animate-spin" />
       </div>
     );
@@ -141,7 +141,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
   if (!org) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <div className="min-h-screen bg-mist flex flex-col">
         {onBack && (
           <div className="px-4 pt-3 pb-2">
             <button onClick={onBack} className="flex items-center gap-1 text-sm text-[#5A6B7A]">
@@ -164,7 +164,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-12">
+    <div className="min-h-screen bg-mist pb-12">
       {/* Header */}
       <ScreenHeader
         title={org.name}

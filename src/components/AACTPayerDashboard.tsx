@@ -373,7 +373,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
   const activeCategory = categories.find(c => c.id === activeTab)!;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-950">
+    <div className="min-h-screen bg-mist dark:bg-slate-950">
       {/* Header */}
       <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 text-white">
         <div className="max-w-5xl mx-auto px-4 py-6">

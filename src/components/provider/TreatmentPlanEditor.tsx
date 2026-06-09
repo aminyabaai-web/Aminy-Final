@@ -848,7 +848,7 @@ export function TreatmentPlanEditor({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center">
+      <div className="min-h-screen bg-mist flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-[#5A6B7A] text-sm">Loading treatment plan...</p>
@@ -877,7 +877,7 @@ export function TreatmentPlanEditor({
         }
       `}</style>
 
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         {/* Header */}
         <div className="bg-slate-900 sticky top-0 z-20 no-print">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">

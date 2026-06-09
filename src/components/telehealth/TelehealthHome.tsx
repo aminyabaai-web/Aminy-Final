@@ -199,7 +199,7 @@ export function TelehealthHome({
 
   return (
     <div
-      className="min-h-screen bg-[#FAF7F2]"
+      className="min-h-screen bg-mist"
       style={{ background: 'linear-gradient(180deg, #FAF7F2 0%, #f6faf8 40%, #eef4f8 100%)' }}
     >
       {/* Header */}

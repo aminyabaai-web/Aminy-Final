@@ -71,7 +71,7 @@ export function BrowseTopConcerns({
   const categoryOrder: ConcernCategory[] = ['most-common', 'autism-neurodivergence', 'caregiver-family'];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">

@@ -407,7 +407,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <header className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <nav aria-label="Provider onboarding navigation" className="max-w-2xl mx-auto flex items-center gap-3">

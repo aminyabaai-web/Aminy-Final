@@ -857,7 +857,7 @@ export default function DenialWorkbench({
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">

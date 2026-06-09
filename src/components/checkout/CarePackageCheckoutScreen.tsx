@@ -209,7 +209,7 @@ export function CarePackageCheckoutScreen({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Payment Cancelled Banner */}
       {showCancelled && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-3 flex items-start gap-2">

@@ -202,7 +202,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Close confirmation modal for post-onboarding */}
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">

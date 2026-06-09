@@ -130,7 +130,7 @@ export function ClinicalReportExport({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-mist flex flex-col items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-[#6B9080] mb-3" />
         <p className="text-sm text-[#5A6B7A]">Loading your clinical data...</p>
       </div>
@@ -139,7 +139,7 @@ export function ClinicalReportExport({
 
   if (!reportData) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 text-center">
+      <div className="min-h-screen bg-mist flex flex-col items-center justify-center px-6 text-center">
         <FileText className="w-10 h-10 text-[#6B9080] mb-3" />
         <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No caregiver summary available yet</h1>
         <p className="text-sm text-[#5A6B7A] mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
@@ -170,7 +170,7 @@ export function ClinicalReportExport({
 
   if (step === 'configure') {
     return (
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         {/* Header */}
         <div
           className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
@@ -306,7 +306,7 @@ export function ClinicalReportExport({
       : 0;
 
     return (
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         {/* Header */}
         <div
           className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
@@ -422,7 +422,7 @@ export function ClinicalReportExport({
   // ── Success Step ──────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       <div
         className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white px-4 pb-6"
         style={{ paddingTop: 'calc(3rem + env(safe-area-inset-top))' }}

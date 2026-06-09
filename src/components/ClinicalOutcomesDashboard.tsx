@@ -202,7 +202,7 @@ export default function ClinicalOutcomesDashboard() {
     : children[0];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4">
+    <div className="min-h-screen bg-mist p-4">
       {/* Header */}
       <div className="mb-5">
         <h1 className="text-[22px] font-bold text-[#0D1B2A] mb-1">

@@ -89,7 +89,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
   const hoursAgo = Math.round((Date.now() - lastSyncDate.getTime()) / 3600000);
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-5 text-white">
         <div className="flex items-center gap-3 mb-4">

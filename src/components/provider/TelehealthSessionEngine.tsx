@@ -231,7 +231,7 @@ export function TelehealthSessionEngine({
   const allChecked = PRE_SESSION_CHECKLIST.every(item => checkedItems.has(item.id));
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-8">
+    <div className="min-h-screen bg-mist pb-8">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         <button

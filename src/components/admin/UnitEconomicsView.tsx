@@ -212,7 +212,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   const hasRealData = !!(retentionData && retentionData.cohorts.length > 0);
   if (!isDemoMode() && !hasRealData) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -241,7 +241,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Demo Data Banner — only when showing sample (non-real) metrics */}
       {!hasRealData && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">

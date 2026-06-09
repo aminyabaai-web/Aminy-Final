@@ -184,7 +184,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
     : 'Care Package';
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center">
+    <div className="min-h-screen bg-mist flex flex-col items-center">
       {/* Hero section */}
       <div className="relative w-full bg-gradient-to-b from-teal-600 to-teal-700 flex flex-col items-center pt-16 pb-12 overflow-hidden">
         <ConfettiDots />

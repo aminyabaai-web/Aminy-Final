@@ -688,7 +688,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
 
   // Message Thread View
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900 flex flex-col">
+    <div className="min-h-screen bg-mist dark:bg-slate-900 flex flex-col">
       {/* Thread Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 py-3">

@@ -190,7 +190,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   // No real records → friendly empty state instead of zeroed metrics and sample trends.
   if (records.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2]">
+      <div className="min-h-screen bg-mist">
         <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
           <div className="flex items-center gap-3">
             {onBack && (
@@ -218,7 +218,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div style={{ background: '#0D1B2A' }} className="px-4 pt-12 pb-4 text-white">
         <div className="flex items-center gap-3 mb-4">

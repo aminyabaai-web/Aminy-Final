@@ -100,7 +100,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-gradient-to-br from-teal-600 via-teal-700 to-cyan-800 px-4 pb-6 pt-12">
         <div className="mx-auto max-w-lg">

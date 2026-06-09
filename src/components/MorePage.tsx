@@ -213,7 +213,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] dark:bg-slate-900">
+    <div className="min-h-screen bg-mist dark:bg-slate-900">
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-600">
         <div className="px-4 py-6 sm:px-6">

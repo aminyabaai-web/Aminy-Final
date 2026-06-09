@@ -26,7 +26,7 @@ function Skeleton({ className = '' }: { className?: string }) {
 
 export function DashboardSkeleton() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4 space-y-4" role="status" aria-label="Loading dashboard">
+    <div className="min-h-screen bg-mist p-4 space-y-4" role="status" aria-label="Loading dashboard">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
@@ -119,7 +119,7 @@ export function ChatSkeleton() {
 
 export function CommunitySkeleton() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4 space-y-4" role="status" aria-label="Loading community">
+    <div className="min-h-screen bg-mist p-4 space-y-4" role="status" aria-label="Loading community">
       {/* Search bar */}
       <Skeleton className="h-12 w-full rounded-xl" />
 
@@ -154,7 +154,7 @@ export function CommunitySkeleton() {
 
 export function SettingsSkeleton() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4 space-y-4" role="status" aria-label="Loading settings">
+    <div className="min-h-screen bg-mist p-4 space-y-4" role="status" aria-label="Loading settings">
       <Skeleton className="h-8 w-32 mb-6" />
 
       {[1, 2, 3, 4, 5].map(i => (
@@ -174,7 +174,7 @@ export function SettingsSkeleton() {
 
 export function GenericSkeleton() {
   return (
-    <div className="min-h-screen bg-[#FAF7F2] p-4 space-y-4" role="status" aria-label="Loading">
+    <div className="min-h-screen bg-mist p-4 space-y-4" role="status" aria-label="Loading">
       <Skeleton className="h-8 w-48" />
       <Skeleton className="h-4 w-full" />
       <Skeleton className="h-4 w-3/4" />

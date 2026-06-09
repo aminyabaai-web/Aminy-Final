@@ -333,7 +333,7 @@ export function SessionPayoutTrigger({
 
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center px-6">
+      <div className="min-h-screen bg-mist flex items-center justify-center px-6">
         <div className="w-full max-w-md">{content}</div>
       </div>
     );

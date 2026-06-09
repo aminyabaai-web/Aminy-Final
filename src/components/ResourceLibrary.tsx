@@ -88,7 +88,7 @@ export function ResourceLibrary({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       <ScreenHeader
         title="Resource Library"
         subtitle="BCBA-authored guides · evidence-based · plain language"
@@ -240,7 +240,7 @@ function ArticleView({
   const previewLineCount = isLocked ? Math.floor(bodyLines.length * 0.4) : bodyLines.length;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-mist pb-24">
       {/* Back header */}
       <div className="sticky top-0 z-10 bg-[#FAF7F2] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         <button onClick={onBack} className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E8E4DF]">

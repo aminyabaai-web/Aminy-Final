@@ -422,7 +422,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4">

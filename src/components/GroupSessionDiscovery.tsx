@@ -147,7 +147,7 @@ export function GroupSessionDiscovery({
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-mist pb-24">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-3xl mx-auto px-4 py-4">

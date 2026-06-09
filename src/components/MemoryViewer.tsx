@@ -83,7 +83,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-20">
+    <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
         {onBack && (

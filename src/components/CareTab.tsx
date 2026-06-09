@@ -958,7 +958,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]/30 pb-20">
+    <div className="min-h-screen bg-mist/30 pb-20">
       {/* Header — shared chrome via ScreenHeader (back control + consistent
           padding); Pro badge preserved as a trailing action. */}
       <ScreenHeader

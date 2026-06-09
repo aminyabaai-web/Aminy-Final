@@ -66,7 +66,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2]">
+    <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">

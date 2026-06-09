@@ -210,7 +210,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
   ];
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-mist flex flex-col">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8] px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">

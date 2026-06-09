@@ -224,7 +224,7 @@ export function BCBASessionBriefing({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-mist pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8">
@@ -243,7 +243,7 @@ export function BCBASessionBriefing({
 
   if (!briefing) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-mist pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8 text-center">
@@ -266,7 +266,7 @@ export function BCBASessionBriefing({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-mist pb-24">
       {PageHeader}
       <div className="space-y-3 sm:space-y-4 sm:space-y-6 px-4 mt-4">
       {/* Header */}
