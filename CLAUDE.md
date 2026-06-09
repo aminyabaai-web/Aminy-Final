@@ -105,21 +105,15 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 - `AACTPartnerSetup.tsx` — partner-admin onboarding microsite (aact-partner-setup screen)
 
 ## What Still Needs Work
-- **Pending DB migrations** to apply via `supabase db push`:
-  - `20260514010000_audit_log_and_admin_rls.sql`
-  - `20260515120000_org_billing.sql`
-  - `20260515130000_consolidate_starter_to_core.sql`
-  - `20260515140000_ask_bcba.sql`
-  - `20260515150000_provider_partner_org.sql`
-- **Schema gaps to fix** (causing console warnings on smoke test, not crashes):
-  - `audit_log.action_description` column missing in deployed schema (migration not pushed)
-  - `denial_records` table missing (claims-dashboard logs error, renders empty state)
-  - `provider_profiles.is_active` column not in deployed schema
-- **Stripe price IDs** for Org SKU — needs setup in Stripe dashboard then `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY` env vars
+- ✅ **DB migrations: ALL APPLIED** (verified via Supabase MCP June 9, 2026) — audit_log+RLS, org_billing, starter→core, ask_bcba, provider_partner_org, provider_practice_mode, plus schema-gap fixes (audit_log columns 20260607, denial_records 20260606/0608, security hardening 20260606). Do NOT re-apply.
+- **Stripe price IDs** for Org SKU — needs setup in Stripe dashboard then `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY` env vars (**the #1 revenue blocker — app cannot take Org money without this**)
 - **Branch protection on `main`** — GitHub → Settings → Branches
 - **Sentry DSN** — VITE_SENTRY_DSN env var needs real DSN
+- **A11y**: re-run the axe-core e2e suite to confirm zero WCAG criticals (an old report flagged Privacy Policy, but current `PrivacyPolicy.tsx` has no images — likely stale)
+- **Design polish (non-blocking)**: 8 screens have 11px min font (target 12px): telehealth, junior, provider-portal, provider-onboarding, claims-dashboard, payer-dashboard, evv-dashboard, cr-sync; cr-sync + telehealth lack a clear primary CTA
 - Debug hooks (`window.__navigateToScreen`) + the `App.tsx` dummy-userId bypass are **already `import.meta.env.DEV`-gated** (not in prod; the hooks are needed by E2E which runs on the dev server). The opacity hack (`* { opacity: 1 !important }`) is **load-bearing** (motion/react WAAPI bug) — do NOT remove until that's fixed.
 
-## Current state & strategy (2026-05-30) — see STRATEGY.md + HANDOFF.md
-- Active branch `phase-b-all-component-audit` → **PR #199**. Revenue model v2 live (tiers/discount/fair-use/trial all drift-guarded by `tier-config-consistency.test.ts`); Claude confirmed primary in prod; independent-BCBA practice-in-a-box wedge built (`ProviderPortal` my-practice hub + `provider-practice.ts` practiceMode + honest billing rails); payer-type funnel (insured→coverage tools, cash→full funnel).
-- **Blocked on owner:** Rethink sandbox creds (to *prove* EMR sync — today scaffolded), `supabase db push` the pending migrations (incl. `20260530000000_provider_practice_mode.sql`), set the Rethink/remaining secrets, rotate the Twilio token, Stripe Org price IDs, Sentry DSN, branch protection, staff/cold-eye validation.
+## Current state & strategy (2026-06-09) — see STRATEGY.md + INVESTOR-READINESS.md
+- Revenue model v2 live and drift-guarded; June 2026 pricing: cash-pay take 25%, B2B $49/seat min 5 seats 15% annual; per-tier storage quotas (100MB/5GB/25GB/∞) + AI memory inject depth (5/25/100/250) enforced.
+- AI context fully wired: vault docs + BCBA session-note content + persistent memories all injected into chat system prompt; AI calls carry session JWT (paid users get paid limits).
+- **Blocked on owner:** Rethink sandbox creds (EMR sync scaffolded, unproven), remaining secrets, rotate the Twilio token, Stripe Org price IDs, Sentry DSN, branch protection, executed BAAs (Anthropic/Twilio/Sentry), clinical advisor, staff/cold-eye validation. See INVESTOR-READINESS.md "Pre-Investor Priority Stack".
