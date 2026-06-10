@@ -15,6 +15,7 @@ import { navigateToScreen, trackConsoleErrors, verifyScreenRenders, loadApp, has
 /** Set up mock auth so screens that require user data don't crash */
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       id: 'test-user-001',
       userId: 'test-user-001',

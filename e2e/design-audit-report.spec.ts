@@ -69,6 +69,7 @@ interface FullAuditReport {
 
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',
@@ -87,7 +88,8 @@ async function setupMockAuth(page: Page) {
 async function setupAuditAuth(page: Page, authMode: AuditAuthMode) {
   if (authMode === 'provider') {
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         id: 'test-provider-001',
         userId: 'test-provider-001',
         parentName: 'Dr. Test Provider',
@@ -112,7 +114,8 @@ async function setupAuditAuth(page: Page, authMode: AuditAuthMode) {
 
   if (authMode === 'admin') {
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         id: 'test-admin-001',
         userId: 'test-admin-001',
         parentName: 'Admin User',

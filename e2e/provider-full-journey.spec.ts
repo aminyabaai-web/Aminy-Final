@@ -33,6 +33,7 @@ function seedAuthenticatedProvider() {
 
 async function setupAuthenticatedProvider(page: Page) {
   await page.addInitScript((user) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify(user));
   }, seedAuthenticatedProvider());
 }

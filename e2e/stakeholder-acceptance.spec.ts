@@ -21,6 +21,7 @@ async function setupMockAuth(page: Page, options: { tier?: string; hasOnboarding
   const { tier = 'essentials', hasOnboarding = true } = options;
 
   await page.addInitScript((args) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',

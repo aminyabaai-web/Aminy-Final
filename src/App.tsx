@@ -1240,6 +1240,8 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "provider-portal", "provider-onboarding", "cr-sync",
   "share-viewer", "medications", "mchat-screening",
   "aact-ops-dashboard",
+  // Pricing must be linkable from marketing emails/ads (and E2E deep-links it)
+  "paywall",
 ];
 
 const CHROMELESS_SCREENS = new Set<AppScreen>([

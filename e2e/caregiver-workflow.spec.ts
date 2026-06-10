@@ -20,6 +20,7 @@ function seedAuthenticatedCaregiver() {
 
 async function setupAuthenticatedCaregiver(page: import('@playwright/test').Page) {
   await page.addInitScript((user) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify(user));
   }, seedAuthenticatedCaregiver());
 }

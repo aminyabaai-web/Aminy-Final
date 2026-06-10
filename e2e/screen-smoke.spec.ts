@@ -84,6 +84,7 @@ function seedAuth() {
 
 async function setupAuth(page: Page) {
   await page.addInitScript((user) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify(user));
   }, seedAuth());
 }

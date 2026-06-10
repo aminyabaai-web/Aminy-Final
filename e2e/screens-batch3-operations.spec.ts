@@ -16,6 +16,7 @@ import { navigateToScreen, trackConsoleErrors, verifyScreenRenders, loadApp, has
 
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       id: 'test-user-001',
       userId: 'test-user-001',
@@ -36,6 +37,7 @@ async function setupMockAuth(page: Page) {
 
 async function setupAdminAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       id: 'test-admin-001',
       userId: 'test-admin-001',
@@ -56,6 +58,7 @@ async function setupAdminAuth(page: Page) {
 
 async function setupProviderAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       id: 'test-provider-001',
       userId: 'test-provider-001',

@@ -20,6 +20,7 @@ async function setupMockAuth(page: Page, options: { tier?: string } = {}) {
   const { tier = 'essentials' } = options;
 
   await page.addInitScript((args) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',
@@ -201,7 +202,8 @@ test.describe('Ask Aminy AI Chat', () => {
 test.describe('AI Intake/Onboarding', () => {
   test('AI intake chat is available during onboarding', async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         email: 'new@test.com',
         hasCompletedOnboarding: false,
       }));
@@ -232,7 +234,8 @@ test.describe('AI Intake/Onboarding', () => {
 
   test('AI collects child information conversationally', async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         email: 'new@test.com',
         hasCompletedOnboarding: false,
       }));
