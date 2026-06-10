@@ -24,6 +24,7 @@ import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
 import { PasswordStrengthMeter } from './PasswordStrengthMeter';
 
+// Design-system font stack — Schibsted Grotesk first, Manrope fallback
 const fontStack = "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
@@ -31,6 +32,21 @@ const fontSmoothing: React.CSSProperties = {
   MozOsxFontSmoothing: 'grayscale',
   textRendering: 'geometricPrecision',
 } as React.CSSProperties;
+
+// Design-system mist background
+const mistBg: React.CSSProperties = {
+  background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)',
+};
+
+// Design-system surface (cards/inputs/oauth buttons)
+const surfaceBg = 'rgba(255,255,255,0.92)';
+const surfaceFilter = 'blur(12px)';
+
+// Primary teal tokens
+const TEAL = '#2A7D99';
+const TEAL_HOVER = '#1F6080';
+const TEAL_BORDER = 'rgba(42, 125, 153, 0.18)';
+const TEAL_RING = '0 0 0 3px rgba(42, 125, 153, 0.12)';
 
 // Apple icon SVG
 const AppleIcon = () => (
@@ -204,37 +220,52 @@ export function CreateAccountScreen({
     });
   };
 
-  // Common input styles
+  // Common input styles — surface white, rounded-xl (14px), teal focus
   const inputStyles: React.CSSProperties = {
     width: '100%',
-    height: '44px',
-    backgroundColor: 'var(--color-surface)',
-    border: '1px solid var(--color-input-border)',
-    borderRadius: '12px',
+    height: '52px',
+    backgroundColor: surfaceBg,
+    backdropFilter: surfaceFilter,
+    border: `1px solid rgba(209, 213, 219, 1)`,
+    borderRadius: '14px',
     padding: '0 16px',
     fontSize: '15px',
     fontFamily: fontStack,
     color: 'var(--color-text-deep)',
     outline: 'none',
-    transition: 'border-color 0.2s ease',
+    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
     ...fontSmoothing,
   };
 
   const labelStyles: React.CSSProperties = {
     display: 'block',
     marginBottom: '6px',
-    color: 'var(--color-text-muted)',
+    color: 'var(--color-text-secondary)',
     fontFamily: fontStack,
     fontSize: '13px',
-    fontWeight: 400,
+    fontWeight: 500,
     ...fontSmoothing,
+  };
+
+  const inputFocus = (e: React.FocusEvent<HTMLInputElement>, hasError: boolean) => {
+    if (!hasError) {
+      e.currentTarget.style.borderColor = TEAL;
+      e.currentTarget.style.boxShadow = TEAL_RING;
+    }
+  };
+
+  const inputBlur = (e: React.FocusEvent<HTMLInputElement>, hasError: boolean) => {
+    if (!hasError) {
+      e.currentTarget.style.borderColor = 'rgba(209, 213, 219, 1)';
+      e.currentTarget.style.boxShadow = 'none';
+    }
   };
 
   return (
     <div
       className="min-h-screen min-h-[100dvh]"
       style={{
-        backgroundColor: '#F8F8F6',
+        ...mistBg,
         fontFamily: fontStack,
         display: 'flex',
         flexDirection: 'column',
@@ -247,7 +278,7 @@ export function CreateAccountScreen({
           padding: '12px 20px 4px',
           position: 'sticky',
           top: 0,
-          backgroundColor: '#F8F8F6',
+          background: 'linear-gradient(180deg, #F6FBFB 0%, rgba(246,251,251,0.0) 100%)',
           zIndex: 10,
         }}
       >
@@ -270,8 +301,8 @@ export function CreateAccountScreen({
               transition: 'color 0.2s ease',
               ...fontSmoothing,
             }}
-            onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)'}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)')}
           >
             <ArrowLeft style={{ width: '16px', height: '16px' }} />
             <span>Back</span>
@@ -288,16 +319,15 @@ export function CreateAccountScreen({
       >
         <div style={{ maxWidth: '420px', margin: '0 auto' }}>
 
-          {/* Logo - Clean container with NO background elements */}
+          {/* Logo */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.05 }}
             style={{
               display: 'flex',
               justifyContent: 'center',
               marginBottom: '16px',
-              // Explicitly no backgrounds, borders, or shadows
               background: 'none',
               border: 'none',
               boxShadow: 'none',
@@ -311,7 +341,6 @@ export function CreateAccountScreen({
                 aspectRatio: '827 / 338',
                 objectFit: 'contain',
                 display: 'block',
-                // Explicitly no backgrounds or effects
                 background: 'none',
                 border: 'none',
                 boxShadow: 'none',
@@ -319,11 +348,11 @@ export function CreateAccountScreen({
             />
           </motion.div>
 
-          {/* Headline */}
+          {/* Headline — staggered fadeInUp */}
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
             style={{
               color: 'var(--color-text-deep)',
               fontFamily: fontStack,
@@ -343,7 +372,7 @@ export function CreateAccountScreen({
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             style={{
               color: 'var(--color-text-muted)',
               fontFamily: fontStack,
@@ -351,7 +380,7 @@ export function CreateAccountScreen({
               fontSize: '13px',
               lineHeight: 1.5,
               textAlign: 'center',
-              marginBottom: '16px',
+              marginBottom: '20px',
               ...fontSmoothing,
             }}
           >
@@ -361,30 +390,30 @@ export function CreateAccountScreen({
           <h2 className="sr-only">Create your Aminy account</h2>
           <h3 className="sr-only">Choose how you want to get started</h3>
 
-          {/* Social Auth Buttons - Side by side to save space */}
+          {/* Social Auth Buttons — stacked vertically, h-[52px], teal border */}
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}
           >
             <button
               type="button"
               onClick={() => handleSocialAuth('apple')}
               disabled={isLoading || socialAuthLoading !== null}
               style={{
-                flex: 1,
-                height: '42px',
+                width: '100%',
+                height: '52px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                gap: '10px',
                 backgroundColor: '#000000',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
-                fontSize: '13px',
-                borderRadius: '10px',
+                fontSize: '14px',
+                borderRadius: '14px',
                 border: 'none',
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'apple' ? 0.5 : 1,
@@ -397,26 +426,28 @@ export function CreateAccountScreen({
               ) : (
                 <AppleIcon />
               )}
-              {socialAuthLoading === 'apple' ? 'Connecting...' : 'Apple'}
+              {socialAuthLoading === 'apple' ? 'Connecting...' : 'Continue with Apple'}
             </button>
+
             <button
               type="button"
               onClick={() => handleSocialAuth('google')}
               disabled={isLoading || socialAuthLoading !== null}
               style={{
-                flex: 1,
-                height: '42px',
+                width: '100%',
+                height: '52px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
-                backgroundColor: 'var(--color-surface)',
+                gap: '10px',
+                backgroundColor: surfaceBg,
+                backdropFilter: surfaceFilter,
                 color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
-                fontSize: '13px',
-                borderRadius: '10px',
-                border: '1px solid var(--color-border-light)',
+                fontSize: '14px',
+                borderRadius: '14px',
+                border: `1px solid ${TEAL_BORDER}`,
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'google' ? 0.5 : 1,
                 transition: 'opacity 0.2s ease',
@@ -428,7 +459,7 @@ export function CreateAccountScreen({
               ) : (
                 <GoogleIcon />
               )}
-              {socialAuthLoading === 'google' ? 'Connecting...' : 'Google'}
+              {socialAuthLoading === 'google' ? 'Connecting...' : 'Continue with Google'}
             </button>
           </motion.div>
 
@@ -437,25 +468,25 @@ export function CreateAccountScreen({
             type="button"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             onClick={handleMagicLink}
             disabled={isLoading || socialAuthLoading !== null || magicLinkState !== 'idle'}
             style={{
               width: '100%',
-              height: '42px',
+              height: '44px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              backgroundColor: 'rgba(107, 144, 128, 0.08)',
-              color: '#3F5C50',
+              backgroundColor: `rgba(42, 125, 153, 0.07)`,
+              color: TEAL,
               fontFamily: fontStack,
               fontWeight: 500,
               fontSize: '13px',
-              borderRadius: '10px',
-              border: '1px solid rgba(107, 144, 128, 0.18)',
+              borderRadius: '12px',
+              border: `1px solid ${TEAL_BORDER}`,
               cursor: magicLinkState !== 'idle' ? 'default' : 'pointer',
-              marginBottom: '12px',
+              marginBottom: '16px',
               transition: 'background-color 0.2s ease',
               ...fontSmoothing,
             }}
@@ -471,9 +502,9 @@ export function CreateAccountScreen({
           </motion.button>
 
           {/* Divider */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '12px', fontFamily: fontStack }}>or</span>
+            <span style={{ color: 'var(--color-text-muted)', fontSize: '12px', fontFamily: fontStack }}>or continue with email</span>
             <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
           </div>
 
@@ -485,19 +516,19 @@ export function CreateAccountScreen({
               style={{
                 marginBottom: '16px',
                 padding: '12px 14px',
-                borderRadius: '10px',
-                backgroundColor: 'rgba(180, 90, 90, 0.06)',
-                border: '1px solid rgba(180, 90, 90, 0.12)',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(239, 68, 68, 0.06)',
+                border: '1px solid rgba(239, 68, 68, 0.15)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
               }}
             >
-              <AlertCircle style={{ width: '15px', height: '15px', color: 'rgba(180, 90, 90, 0.7)', flexShrink: 0 }} />
+              <AlertCircle style={{ width: '15px', height: '15px', color: '#DC2626', flexShrink: 0 }} />
               <p
                 style={{
                   fontSize: '13px',
-                  color: 'rgba(180, 90, 90, 0.85)',
+                  color: '#DC2626',
                   fontFamily: fontStack,
                   margin: 0,
                   ...fontSmoothing,
@@ -508,14 +539,14 @@ export function CreateAccountScreen({
             </motion.div>
           )}
 
-          {/* Form */}
+          {/* Form — staggered fadeInUp */}
           <h3 className="sr-only">Sign up with email</h3>
           <motion.form
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             onSubmit={handleSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
           >
             {/* Full Name */}
             <div>
@@ -533,11 +564,13 @@ export function CreateAccountScreen({
                 disabled={isLoading}
                 style={{
                   ...inputStyles,
-                  borderColor: errors.fullName ? 'rgba(180, 90, 90, 0.4)' : 'rgba(17, 24, 39, 0.1)',
+                  borderColor: errors.fullName ? '#DC2626' : 'rgba(209, 213, 219, 1)',
                 }}
+                onFocus={(e) => inputFocus(e, !!errors.fullName)}
+                onBlur={(e) => inputBlur(e, !!errors.fullName)}
               />
               {errors.fullName && (
-                <p style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p style={{ marginTop: '4px', fontSize: '12px', color: '#DC2626', fontFamily: fontStack }}>
                   {errors.fullName}
                 </p>
               )}
@@ -562,11 +595,13 @@ export function CreateAccountScreen({
                 aria-describedby={errors.email ? 'signup-email-error' : undefined}
                 style={{
                   ...inputStyles,
-                  borderColor: errors.email ? 'rgba(180, 90, 90, 0.4)' : 'rgba(17, 24, 39, 0.1)',
+                  borderColor: errors.email ? '#DC2626' : 'rgba(209, 213, 219, 1)',
                 }}
+                onFocus={(e) => inputFocus(e, !!errors.email)}
+                onBlur={(e) => inputBlur(e, !!errors.email)}
               />
               {errors.email && (
-                <p id="signup-email-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-email-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: '#DC2626', fontFamily: fontStack }}>
                   {errors.email}
                 </p>
               )}
@@ -594,8 +629,10 @@ export function CreateAccountScreen({
                   style={{
                     ...inputStyles,
                     paddingRight: '48px',
-                    borderColor: errors.password ? 'rgba(180, 90, 90, 0.4)' : 'rgba(17, 24, 39, 0.1)',
+                    borderColor: errors.password ? '#DC2626' : 'rgba(209, 213, 219, 1)',
                   }}
+                  onFocus={(e) => inputFocus(e, !!errors.password)}
+                  onBlur={(e) => inputBlur(e, !!errors.password)}
                 />
                 <button
                   type="button"
@@ -623,7 +660,7 @@ export function CreateAccountScreen({
                 </button>
               </div>
               {errors.password && (
-                <p id="signup-password-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-password-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: '#DC2626', fontFamily: fontStack }}>
                   {errors.password}
                 </p>
               )}
@@ -653,8 +690,10 @@ export function CreateAccountScreen({
                   style={{
                     ...inputStyles,
                     paddingRight: '48px',
-                    borderColor: errors.confirmPassword ? 'rgba(180, 90, 90, 0.4)' : 'rgba(17, 24, 39, 0.1)',
+                    borderColor: errors.confirmPassword ? '#DC2626' : 'rgba(209, 213, 219, 1)',
                   }}
+                  onFocus={(e) => inputFocus(e, !!errors.confirmPassword)}
+                  onBlur={(e) => inputBlur(e, !!errors.confirmPassword)}
                 />
                 <button
                   type="button"
@@ -682,13 +721,13 @@ export function CreateAccountScreen({
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p id="signup-confirm-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p id="signup-confirm-error" role="alert" style={{ marginTop: '4px', fontSize: '12px', color: '#DC2626', fontFamily: fontStack }}>
                   {errors.confirmPassword}
                 </p>
               )}
             </div>
 
-            {/* Terms - Custom styled checkbox */}
+            {/* Terms — Custom styled checkbox */}
             <div style={{ marginTop: '2px' }}>
               <div
                 style={{
@@ -704,7 +743,7 @@ export function CreateAccountScreen({
                   if (errors.terms) clearError('terms');
                 }}
               >
-                {/* Custom checkbox */}
+                {/* Custom checkbox — teal when checked */}
                 <div
                   style={{
                     width: '18px',
@@ -712,8 +751,8 @@ export function CreateAccountScreen({
                     minWidth: '18px',
                     marginTop: '1px',
                     borderRadius: '4px',
-                    border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#5a7380' : 'rgba(17, 24, 39, 0.2)'}`,
-                    backgroundColor: acceptedTerms ? '#5a7380' : '#FFFFFF',
+                    border: `1.5px solid ${errors.terms ? '#DC2626' : acceptedTerms ? TEAL : 'rgba(17, 24, 39, 0.2)'}`,
+                    backgroundColor: acceptedTerms ? TEAL : '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -738,7 +777,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#5a7380',
+                      color: TEAL,
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -761,7 +800,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#5a7380',
+                      color: TEAL,
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -782,13 +821,13 @@ export function CreateAccountScreen({
                 </span>
               </div>
               {errors.terms && (
-                <p style={{ marginTop: '6px', marginLeft: '28px', fontSize: '12px', color: 'rgba(180, 90, 90, 0.85)', fontFamily: fontStack }}>
+                <p style={{ marginTop: '6px', marginLeft: '28px', fontSize: '12px', color: '#DC2626', fontFamily: fontStack }}>
                   {errors.terms}
                 </p>
               )}
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button — primary teal, h-[52px], font-semibold */}
             <button
               type="submit"
               disabled={isLoading}
@@ -800,15 +839,15 @@ export function CreateAccountScreen({
                 justifyContent: 'center',
                 gap: '8px',
                 marginTop: '4px',
-                backgroundColor: '#5a7380',
+                backgroundColor: TEAL,
                 color: '#FFFFFF',
                 fontFamily: fontStack,
-                fontWeight: 500,
+                fontWeight: 600,
                 fontSize: '15px',
                 letterSpacing: '-0.01em',
                 padding: '0 24px',
-                height: '44px',
-                borderRadius: '12px',
+                height: '52px',
+                borderRadius: '14px',
                 border: 'none',
                 cursor: isLoading ? 'default' : 'pointer',
                 transition: 'background-color 0.2s ease',
@@ -816,10 +855,10 @@ export function CreateAccountScreen({
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                if (!isLoading) e.currentTarget.style.backgroundColor = '#4f6872';
+                if (!isLoading) e.currentTarget.style.backgroundColor = TEAL_HOVER;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#5a7380';
+                e.currentTarget.style.backgroundColor = TEAL;
               }}
             >
               {isLoading ? (
@@ -873,17 +912,17 @@ export function CreateAccountScreen({
               style={{
                 background: 'none',
                 border: 'none',
-                color: 'var(--color-text-muted)',
+                color: TEAL,
                 fontFamily: fontStack,
                 fontSize: '13px',
-                fontWeight: 400,
+                fontWeight: 500,
                 cursor: 'pointer',
                 padding: '8px 16px',
-                transition: 'color 0.2s ease',
+                transition: 'opacity 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)'}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
               Already have an account? Sign in
             </button>
@@ -900,8 +939,8 @@ export function CreateAccountScreen({
           color: rgba(17, 24, 39, 0.35);
         }
         input:focus {
-          border-color: rgba(90, 115, 128, 0.5) !important;
-          box-shadow: 0 0 0 3px rgba(90, 115, 128, 0.1);
+          border-color: ${TEAL} !important;
+          box-shadow: ${TEAL_RING};
         }
       `}</style>
     </div>

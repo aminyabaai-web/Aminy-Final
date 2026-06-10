@@ -965,7 +965,12 @@ export function Dashboard10({
         </AnimatePresence>
 
         {shouldShowWellnessScore && (
-          <div className="relative">
+          <motion.div
+            className="relative"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+          >
             <WellnessScoreWidget
               score={wellnessScore}
               childName={child.name}
@@ -978,7 +983,7 @@ export function Dashboard10({
                 visual
               />
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Pending Session Reviews — parent needs to approve */}
@@ -1224,7 +1229,11 @@ export function Dashboard10({
         {/* ========================================
             2. DAILY FLOW (30%) - Routine Hub
             ======================================== */}
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.16, ease: [0.25, 0.1, 0.25, 1] }}
+        >
           {/* Time of Day Selector */}
           <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
             {dailyRoutines.map((routine) => (
@@ -1313,7 +1322,7 @@ export function Dashboard10({
               </div>
             )}
           </Card>
-        </section>
+        </motion.section>
 
         {/* ========================================
             3. OUTCOMES DASHBOARD - Measurable Progress
@@ -1431,7 +1440,11 @@ export function Dashboard10({
         {/* ========================================
             5. QUICK ACTION GRID (15%)
             ======================================== */}
-        <section>
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.24, ease: [0.25, 0.1, 0.25, 1] }}
+        >
           <h2
             className="font-bold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2"
             style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif", letterSpacing: '-0.025em' }}
@@ -1474,7 +1487,7 @@ export function Dashboard10({
               <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
           ) : null}
-        </section>
+        </motion.section>
 
         {/* ========================================
             6. ACTION ITEMS - Organic Data Collection
@@ -1525,8 +1538,9 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
+              : 'bg-[#2A7D99] text-white hover:bg-[#1f6180]'
           }`}
+          style={{ boxShadow: !showAIChat ? '0 0 20px rgba(42,125,153,0.15), 0 4px 12px rgba(0,0,0,0.12)' : undefined }}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
         >
@@ -1560,7 +1574,7 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-[#2A7D99] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1610,7 +1624,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-[#6B9080] text-white ml-8'
+                      ? 'bg-[#2A7D99] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-[#3A4A57] dark:text-gray-200 mr-8'
                   }`}
                 >
@@ -1622,7 +1636,7 @@ export function Dashboard10({
               {isSendingChat && (
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
+                    <Loader2 className="w-4 h-4 animate-spin text-[#2A7D99]" />
                     <span className="text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
                   </div>
                 </div>
@@ -1639,7 +1653,7 @@ export function Dashboard10({
                       onClick={() => {
                         setChatInput(prompt);
                       }}
-                      className="text-sm px-3 py-1.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 transition-colors"
+                      className="text-sm px-3 py-1.5 rounded-full bg-[#2A7D99]/10 text-[#2A7D99] hover:bg-[#2A7D99]/20 transition-colors"
                     >
                       {prompt}
                     </button>
@@ -1665,7 +1679,7 @@ export function Dashboard10({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleChatKeyDown}
                   placeholder="Message Aminy AI..."
-                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-[#E8E4DF] dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20 transition-all"
+                  className="flex-1 px-4 py-3 text-sm rounded-xl border-2 border-[#E8E4DF] dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:border-[#2A7D99] focus:ring-2 focus:ring-[#2A7D99]/20 transition-all"
                   aria-label="Chat message input"
                   disabled={isSendingChat}
                 />
@@ -1673,7 +1687,7 @@ export function Dashboard10({
                   size="sm"
                   onClick={handleSendChat}
                   disabled={!chatInput.trim() || isSendingChat}
-                  className="h-12 w-12 bg-[#6B9080] hover:bg-[#4a6478] rounded-xl transition-all disabled:opacity-50 p-0"
+                  className="h-12 w-12 bg-[#2A7D99] hover:bg-[#1f6180] rounded-xl transition-all disabled:opacity-50 p-0"
                   aria-label="Send message"
                 >
                   {isSendingChat ? (
