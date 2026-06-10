@@ -24,7 +24,7 @@ interface LoginScreenProps {
   onCreateAccount: () => void;
 }
 
-const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Inter\", \"Helvetica Neue\", Arial, sans-serif";
+const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -160,7 +160,7 @@ export function LoginScreen({
     <div
       className="min-h-screen min-h-[100dvh] flex flex-col overflow-y-auto pb-6"
       style={{
-        backgroundColor: 'var(--color-bg-screen)',
+        background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)',
         fontFamily: fontStack,
         ...fontSmoothing,
       }}
@@ -242,7 +242,7 @@ export function LoginScreen({
                 ...fontSmoothing,
               }}
             >
-              Sign in to your account
+              Welcome back
             </h1>
             <h2 className="sr-only">Sign in options</h2>
             <h3 className="sr-only">Email sign in form</h3>
@@ -255,7 +255,7 @@ export function LoginScreen({
                 ...fontSmoothing,
               }}
             >
-              Sign in to support your child
+              Sign in to support your child.
             </p>
           </motion.div>
 
@@ -305,21 +305,22 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: 'var(--color-surface)',
+                backgroundColor: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
                 color: 'var(--color-text-deep)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid var(--color-border-light)',
+                border: '1px solid rgba(42,125,153,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)')}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.98)')}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.92)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
@@ -342,20 +343,21 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: 'var(--color-surface)',
+                backgroundColor: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
                 color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid var(--color-border-light)',
+                border: '1px solid rgba(42,125,153,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.98)')}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.92)'}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
@@ -399,7 +401,7 @@ export function LoginScreen({
           <motion.form
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             onSubmit={handleSubmit}
             style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
           >
@@ -445,8 +447,8 @@ export function LoginScreen({
                 }}
                 onFocus={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = '#6B9080';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
+                    e.currentTarget.style.borderColor = '#2A7D99';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
                   }
                 }}
                 onBlur={(e) => {
@@ -518,8 +520,8 @@ export function LoginScreen({
                   }}
                   onFocus={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = '#6B9080';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
+                      e.currentTarget.style.borderColor = '#2A7D99';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
                     }
                   }}
                   onBlur={(e) => {
@@ -610,7 +612,7 @@ export function LoginScreen({
                 width: '100%',
                 height: '52px',
                 marginTop: '8px',
-                backgroundColor: '#6B9080',
+                backgroundColor: '#2A7D99',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -623,8 +625,8 @@ export function LoginScreen({
                 transition: 'background-color 0.2s ease, transform 0.1s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#5A7D6E')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6B9080'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#1F6080')}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2A7D99'}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
@@ -652,7 +654,7 @@ export function LoginScreen({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
+            transition={{ duration: 0.4, delay: 0.45 }}
             style={{
               textAlign: 'center',
               marginTop: '28px',
@@ -674,12 +676,12 @@ export function LoginScreen({
                 background: 'none',
                 border: 'none',
                 padding: 0,
-                color: '#6B9080',
+                color: '#2A7D99',
                 fontSize: '14px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-                textDecorationColor: 'rgba(107, 144, 128, 0.3)',
+                textDecorationColor: 'rgba(42,125,153,0.3)',
                 textUnderlineOffset: '2px',
                 transition: 'opacity 0.2s ease',
                 ...fontSmoothing,
@@ -695,7 +697,7 @@ export function LoginScreen({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.55 }}
             style={{
               display: 'flex',
               justifyContent: 'center',
