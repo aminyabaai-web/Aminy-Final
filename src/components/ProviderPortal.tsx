@@ -376,11 +376,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     setIsRefreshing(true);
     if (import.meta.env.DEV) console.log('[ProviderPortal] Loading data for provider:', providerId);
 
-    // Dev-mode fast-fail: if the provider ID is a synthetic dev ID, skip DB and
-    // render immediately so audit/E2E tests don't hang on network timeouts.
-    if (import.meta.env.DEV && providerId.startsWith('dev-')) {
+    // Dev-mode fast-fail: if the provider ID is a synthetic dev ID, OR if this is
+    // an E2E test run (__e2e_auth='bypass'), skip DB and render immediately so
+    // audit/E2E tests don't hang on network timeouts regardless of providerId value.
+    const isE2EBypass = import.meta.env.DEV &&
+      (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
+    if (import.meta.env.DEV && (providerId.startsWith('dev-') || isE2EBypass)) {
       setProvider({
-        id: providerId,
+        id: providerId || 'dev-provider-test',
         name: 'Dev Provider',
         credentials: 'BCBA-D',
         type: 'bcba',
