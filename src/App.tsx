@@ -2516,6 +2516,8 @@ export default function App() {
                 onFreeScreening={() => navigateToScreen("free-screening")}
                 onPreDiagnosis={() => navigateToScreen("pre-diagnosis")}
                 onJustDiagnosed={() => navigateToScreen("just-diagnosed")}
+                onTeleABA={() => navigateToScreen("telehealth")}
+                onPricing={() => navigateToScreen("paywall")}
               />
             </Suspense>
           );
