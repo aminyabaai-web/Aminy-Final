@@ -22,6 +22,9 @@ export interface UserContext {
   // Active goals this child is working on
   activeGoals?: string[];
 
+  // Recent BCBA/provider session observations (content snippets from session_notes)
+  recentSessionNotes?: string[];
+
   // Recent Activity
   lastJrSession?: {
     timestamp: Date;
@@ -102,14 +105,14 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         .limit(1)
         .maybeSingle(),
 
-      // Sessions completed this week
+      // Sessions completed this week + recent note content for AI context
       supabase
         .from('session_notes')
-        .select('id, session_date, modality')
+        .select('id, session_date, modality, content, notes, observations')
         .eq('user_id', userId)
         .gte('session_date', weekAgo.split('T')[0])
-        .eq('billing_status', 'submitted')
-        .limit(20),
+        .order('session_date', { ascending: false })
+        .limit(5),
 
       // Active treatment goals (top 5 names)
       supabase
@@ -141,6 +144,14 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
 
     const sessionsCompleted = sessions?.length ?? 0;
     const activeGoalNames = goals?.map((g: { title: string }) => g.title).filter(Boolean) ?? [];
+    const recentSessionNotes = (sessions || [])
+      .map((s: { content?: string; notes?: string; observations?: string; session_date?: string }) => {
+        const text = s.content || s.notes || s.observations || '';
+        if (!text) return null;
+        return text.slice(0, 180).trim();
+      })
+      .filter((n): n is string => !!n)
+      .slice(0, 3);
 
     return {
       // From Supabase children table
@@ -162,6 +173,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         calmMoments: kvContext.progressThisWeek?.calmMoments ?? 0,
         newStrategies: kvContext.progressThisWeek?.newStrategies ?? 0,
       },
+      recentSessionNotes: recentSessionNotes.length > 0 ? recentSessionNotes : undefined,
 
       // From KV (AI-generated, persisted)
       lastCalmCue: kvContext.lastCalmCue,
@@ -304,6 +316,10 @@ export function buildAIContextString(context: UserContext): string {
   if (context.lastJrSession) {
     const timeAgo = getTimeAgo(context.lastJrSession.timestamp);
     parts.push(`Last Ease session was ${timeAgo}: ${context.lastJrSession.activity}.`);
+  }
+
+  if (context.recentSessionNotes && context.recentSessionNotes.length > 0) {
+    parts.push(`Recent provider observations: ${context.recentSessionNotes.join(' | ')}.`);
   }
 
   return parts.join(' ');

@@ -222,9 +222,17 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         toast.error('Please sign in to upload documents');
         return;
       }
+      // Resolve tier for storage-quota enforcement (free 100MB / Core 5GB / Pro 25GB)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('tier, trial_ends_at')
+        .eq('id', user.id)
+        .maybeSingle();
       const result = await uploadVaultFile(selectedFile, user.id, {
         recordType: 'uploaded',
         source: 'parent-upload',
+        tier: profile?.tier ?? 'free',
+        trialEndsAt: profile?.trial_ends_at ?? null,
       });
       if (!result.success) {
         toast.error(result.error || 'Upload failed. Please try again.');

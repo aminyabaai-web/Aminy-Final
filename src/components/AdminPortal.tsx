@@ -48,6 +48,7 @@ import { UserManagement } from './admin/UserManagement';
 import { ModerationDashboard } from './admin/ModerationDashboard';
 import { AIInsights } from './admin/AIInsights';
 import { ProviderApplicationReview } from './admin/ProviderApplicationReview';
+import { FeedbackInbox } from './admin/FeedbackInbox';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 import { MRRDashboard } from './MRRDashboard';
 import { useAuditedAction } from '../hooks/useAuditedAction';
@@ -208,7 +209,7 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
 export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
   useAuditedAction('user_account');
   const [selectedOrg, setSelectedOrg] = useState<string>(orgId || 'aact');
-  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications' | 'feedback'>('overview');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | 'all'>('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -716,6 +717,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
           <nav className="flex gap-1 overflow-x-auto scrollbar-hide">
             {[
               { id: 'overview', label: 'Overview', icon: Activity },
+              { id: 'feedback', label: 'Feedback', icon: Heart },
               { id: 'users', label: 'Users', icon: Users },
               { id: 'revenue', label: 'Revenue', icon: CreditCard },
               { id: 'insights', label: 'AI Insights', icon: Star },
@@ -729,7 +731,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => setActiveSection(id as 'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications')}
+                onClick={() => setActiveSection(id as 'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications' | 'feedback')}
                 className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
                   activeSection === id
                     ? 'border-accent text-accent'
@@ -1203,6 +1205,10 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               </div>
             </div>
           </div>
+        )}
+
+        {activeSection === 'feedback' && (
+          <FeedbackInbox />
         )}
 
         {activeSection === 'users' && (

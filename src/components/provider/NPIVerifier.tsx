@@ -34,7 +34,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
   const [state, setState] = useState<VerifyState>('idle');
   const [verifiedName, setVerifiedName] = useState('');
   const [taxonomy, setTaxonomy] = useState('');
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const runVerification = useCallback(async (npiValue: string) => {
     const clean = npiValue.replace(/\D/g, '');

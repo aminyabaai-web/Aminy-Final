@@ -479,6 +479,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
         recordType: (recordType.toLowerCase().replace(/[^a-z-]/g, '-') as VaultRecordType) || 'other',
         source: 'parent-upload',
         onProgress: (p) => setUploadProgress(p),
+        tier: userTier,
       });
 
       if (result.success) {

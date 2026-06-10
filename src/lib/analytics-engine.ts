@@ -10,6 +10,8 @@
  * and behavioral patterns to optimize the Aminy experience.
  */
 
+import { publicAnonKey } from '../utils/supabase/info';
+
 // Core Analytics Types
 export interface AnalyticsEvent {
   event: string;
@@ -477,10 +479,16 @@ class AnalyticsEngine {
     const EDGE_FUNCTION_BASE = `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548`;
 
     try {
-      // Send to backend for persistent storage
+      // Send to backend for persistent storage.
+      // NOTE: the Supabase gateway requires an Authorization header (anon key
+      // minimum) — without it every call 401s before the function runs and
+      // ALL analytics silently drop (confirmed in prod edge logs June 2026).
       await fetch(`${EDGE_FUNCTION_BASE}/analytics/track`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${publicAnonKey}`,
+        },
         body: JSON.stringify({ events, sessionId: this.sessionId })
       });
     } catch (error) {

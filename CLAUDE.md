@@ -6,7 +6,7 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 
 ## Critical Architecture Rules
 
-### Navigation — 42 Screens via State (NOT React Router)
+### Navigation — 106 Screens via State (NOT React Router)
 - All navigation uses `currentScreen` state in `App.tsx`
 - NEVER add React Router — it will break the entire app
 - Debug: `window.__navigateToScreen('screen-name')` in browser console
@@ -84,7 +84,8 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 ### Revenue
 - **Tiers**: Core $14.99/mo, Pro $29.99/mo, Pro+ Family $49.99/mo. "Starter" is a legacy alias that maps to Core
 - **B2B Org SKU**: seat LADDER (June 2026) — 1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo, MIN_SEATS=1, 15% annual. `SEAT_PRICE_LADDER` in `src/lib/org-licensing.ts` is canonical; `/org/checkout` in make-server mirrors it (redeploy fn after changes)
-- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 25%, insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
+- **Platform take rate** (`src/lib/stripe-connect.ts`): rail-parameterized — cash-pay 25% (lowered from 35% June 2026 to be competitive for solo BCBAs), insured 10%, aact_pilot 5%. Single source of truth: `PLATFORM_FEE_RATES`
+- **Per-tier limits** (`src/lib/tier-utils.ts`): AI 3/day free → 100/day fair-use paid; vault storage 100MB free / 5GB Core / 25GB Pro / unlimited Family; memory inject depth 5/25/100/250 facts (prompt injection per session; stored-fact caps are separate in `getTierLimits()`)
 - **Telehealth visits** (`src/lib/telehealth-economics.ts`): $79–$229 cash-pay, fully-modeled provider payout cents
 - **Ask-a-Behaviorist** (`src/lib/ask-bcba-economics.ts`): STAFFING model, never per-answer payouts — on-call RBTs ($25/hr) review AI drafts ≈ $2.50/answer. Rails: partner-org ($0 cost), Pro+ 10 q/mo, 7-day post-1:1-telehealth window (CPT 98970-98972 aligned; group sessions do NOT open it). NO pay-per-question (owner decision — gate to book-session/upgrade instead). User-facing copy says "behaviorist", never promises a BCBA
 - **Group sessions + cohorts**: `group_sessions.format` single|cohort (`session_count` weeks, program pricing). Cross-surfaced in ResourceLibrary article cards + CommunityHub strip
@@ -107,21 +108,15 @@ Behavioral wellness PWA for neurodivergent families. React 19 + TypeScript + Vit
 - `AACTPartnerSetup.tsx` — partner-admin onboarding microsite (aact-partner-setup screen)
 
 ## What Still Needs Work
-- **Pending DB migrations** to apply via `supabase db push`:
-  - `20260514010000_audit_log_and_admin_rls.sql`
-  - `20260515120000_org_billing.sql`
-  - `20260515130000_consolidate_starter_to_core.sql`
-  - `20260515140000_ask_bcba.sql`
-  - `20260515150000_provider_partner_org.sql`
-- **Schema gaps to fix** (causing console warnings on smoke test, not crashes):
-  - `audit_log.action_description` column missing in deployed schema (migration not pushed)
-  - `denial_records` table missing (claims-dashboard logs error, renders empty state)
-  - `provider_profiles.is_active` column not in deployed schema
-- **Stripe price IDs** for Org SKU — needs setup in Stripe dashboard then `VITE_STRIPE_PRICE_ORG_MONTHLY` / `_YEARLY` env vars
+- ✅ **DB migrations: ALL APPLIED** (verified via Supabase MCP June 9, 2026) — audit_log+RLS, org_billing, starter→core, ask_bcba, provider_partner_org, provider_practice_mode, plus schema-gap fixes (audit_log columns 20260607, denial_records 20260606/0608, security hardening 20260606). Do NOT re-apply.
+- **Stripe: ONE deploy command activates everything** — `supabase functions deploy make-server-8a022548`. Done June 9 2026: live price IDs baked into `stripe-routes.ts` PRICE_IDS fallbacks (all 4 tiers incl. proplus, monthly + annual matching ADVERTISED totals $129/$279/$479 — the old Stripe annual prices were 10%-off derivations that overcharged vs the advertised price), org checkout uses dynamic price_data with DB `price_per_seat_cents` (default + rows set to 4900 = $49), 15% org annual, 7-day trial all tiers. `VITE_STRIPE_PRICE_ORG_*` env vars are referenced nowhere — stale idea, ignore.
 - **Branch protection on `main`** — GitHub → Settings → Branches
 - **Sentry DSN** — VITE_SENTRY_DSN env var needs real DSN
+- **A11y**: re-run the axe-core e2e suite to confirm zero WCAG criticals (an old report flagged Privacy Policy, but current `PrivacyPolicy.tsx` has no images — likely stale)
+- **Design polish (non-blocking)**: 8 screens have 11px min font (target 12px): telehealth, junior, provider-portal, provider-onboarding, claims-dashboard, payer-dashboard, evv-dashboard, cr-sync; cr-sync + telehealth lack a clear primary CTA
 - Debug hooks (`window.__navigateToScreen`) + the `App.tsx` dummy-userId bypass are **already `import.meta.env.DEV`-gated** (not in prod; the hooks are needed by E2E which runs on the dev server). The opacity hack (`* { opacity: 1 !important }`) is **load-bearing** (motion/react WAAPI bug) — do NOT remove until that's fixed.
 
-## Current state & strategy (2026-05-30) — see STRATEGY.md + HANDOFF.md
-- Active branch `phase-b-all-component-audit` → **PR #199**. Revenue model v2 live (tiers/discount/fair-use/trial all drift-guarded by `tier-config-consistency.test.ts`); Claude confirmed primary in prod; independent-BCBA practice-in-a-box wedge built (`ProviderPortal` my-practice hub + `provider-practice.ts` practiceMode + honest billing rails); payer-type funnel (insured→coverage tools, cash→full funnel).
-- **Blocked on owner:** Rethink sandbox creds (to *prove* EMR sync — today scaffolded), `supabase db push` the pending migrations (incl. `20260530000000_provider_practice_mode.sql`), set the Rethink/remaining secrets, rotate the Twilio token, Stripe Org price IDs, Sentry DSN, branch protection, staff/cold-eye validation.
+## Current state & strategy (2026-06-09) — see STRATEGY.md + INVESTOR-READINESS.md
+- Revenue model v2 live and drift-guarded; June 2026 pricing: cash-pay take 25%, B2B $49/seat min 5 seats 15% annual; per-tier storage quotas (100MB/5GB/25GB/∞) + AI memory inject depth (5/25/100/250) enforced.
+- AI context fully wired: vault docs + BCBA session-note content + persistent memories all injected into chat system prompt; AI calls carry session JWT (paid users get paid limits).
+- **Blocked on owner:** Rethink sandbox creds (EMR sync scaffolded, unproven), remaining secrets, rotate the Twilio token, Stripe Org price IDs, Sentry DSN, branch protection, executed BAAs (Anthropic/Twilio/Sentry), clinical advisor, staff/cold-eye validation. See INVESTOR-READINESS.md "Pre-Investor Priority Stack".

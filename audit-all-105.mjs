@@ -188,7 +188,8 @@ log('\n── [12] Join / Referral Landing ──');
 await nav(page,'join'); await page.waitForTimeout(700);
 await shot(page,'12-join');
 await checkContent(page,'Join');
-if(await page.$('button:has-text("Sign Up"),button:has-text("Create"),button:has-text("Join"),button:has-text("Get Started"),button:has-text("Claim"),button:has-text("I Already")')) pass('Signup CTA found'); else warn('Join','No signup CTA');
+// Lazy-loaded screen — wait for the chunk + render instead of an instant check
+try { await page.waitForSelector('button:has-text("Sign Up"),button:has-text("Create"),button:has-text("Join"),button:has-text("Get Started"),button:has-text("Claim"),button:has-text("I Already")', { timeout: 5000 }); pass('Signup CTA found'); } catch { warn('Join','No signup CTA'); }
 await dark(page); await shot(page,'12-join-dark'); await light(page);
 
 // ── [13] Share Viewer
@@ -605,8 +606,10 @@ log('\n── [56] Parent Approval ──');
 await nav(page,'parent-approval'); await page.waitForTimeout(700);
 await shot(page,'56-parent-approval');
 await checkContent(page,'ParentApproval');
-const approveBtn = await page.$('button:has-text("Approve"),button:has-text("Accept"),button:has-text("Yes"),button:has-text("Apply")');
-const rejectBtn = await page.$('button:has-text("Reject"),button:has-text("Decline"),button:has-text("No"),button:has-text("Not Now")');
+// Lazy-loaded screen — wait for render; buttons exist when suggestion.status==='proposed'
+let approveBtn = null, rejectBtn = null;
+try { approveBtn = await page.waitForSelector('button:has-text("Approve"),button:has-text("Accept"),button:has-text("Yes"),button:has-text("Apply")', { timeout: 5000 }); } catch {}
+rejectBtn = await page.$('button:has-text("Reject"),button:has-text("Decline"),button:has-text("No"),button:has-text("Not Now")');
 if(approveBtn) pass('Approve button found'); else warn('ParentApproval','No approve button');
 if(rejectBtn) pass('Reject button found'); else warn('ParentApproval','No reject button');
 await dark(page); await shot(page,'56-parent-approval-dark'); await light(page);

@@ -61,7 +61,7 @@ export const PARTNER_CONFIGS: Record<PartnerOrgId, PartnerConfig> = {
   unknown: {
     id: 'unknown',
     displayName: 'Direct Sign-up',
-    payoutRail: 'cash_pay',  // 35% — direct providers
+    payoutRail: 'cash_pay',  // 25% platform fee — direct providers (see PLATFORM_FEE_RATES)
     payers: [],
     systemOfRecord: 'aminy_native',
     evvSystem: null,

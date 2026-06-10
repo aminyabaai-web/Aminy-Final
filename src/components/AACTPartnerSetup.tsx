@@ -18,6 +18,7 @@ import { Copy, Check, Upload, Users, Building2, ExternalLink, AlertCircle, Loade
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { PARTNER_CONFIGS, type PartnerOrgId } from '../lib/partner-org';
+import { PLATFORM_FEE_RATES } from '../lib/stripe-connect';
 import { ScreenHeader } from './ui/ScreenHeader';
 
 /** Proper-noun display labels for the system-of-record enum. */
@@ -268,9 +269,10 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
 }
 
 function getRatePercent(rail: string): number {
-  if (rail === 'aact_pilot') return 0.05;
-  if (rail === 'insured') return 0.10;
-  return 0.35;
+  // Single source of truth: PLATFORM_FEE_RATES in stripe-connect.ts
+  if (rail === 'aact_pilot') return PLATFORM_FEE_RATES.aact_pilot;
+  if (rail === 'insured') return PLATFORM_FEE_RATES.insured;
+  return PLATFORM_FEE_RATES.cash_pay;
 }
 
 export default AACTPartnerSetup;

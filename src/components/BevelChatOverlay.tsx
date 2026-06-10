@@ -14,6 +14,7 @@ import {
   buildAIContextString,
   getCurrentContext,
   storeMemory,
+  fetchMemories,
   type UserContext,
   type CurrentContext
 } from '../ai/contextLayer';
@@ -28,6 +29,7 @@ import {
   AI_PERSONALITIES,
   type AIPersonality
 } from '../lib/ai-personality';
+import { getTierEntitlements } from '../lib/tier-utils';
 import { AIChart, parseAIResponseParts } from './AIChart';
 import { AddToCalendarButtons } from './AddToCalendarButtons';
 import { supabase } from '../utils/supabase/client';
@@ -303,6 +305,8 @@ interface BevelChatOverlayProps {
   currentPath: string;
   childName?: string;
   initialPrompt?: string;
+  /** Subscription tier — scales persistent-memory depth (free 5 facts → family 250) */
+  userTier?: string | null;
 }
 
 export function BevelChatOverlay({
@@ -311,7 +315,8 @@ export function BevelChatOverlay({
   userId,
   currentPath,
   childName: propChildName,
-  initialPrompt
+  initialPrompt,
+  userTier
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -337,9 +342,40 @@ export function BevelChatOverlay({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasGeneratedProactive = useRef(false);
+  // Vault context and persistent memories — loaded async on open, injected into every system prompt
+  const vaultContextRef = useRef<string>('');
+  const memoriesRef = useRef<string>('');
+
+  // CRITICAL: AI calls must carry the user's session JWT, not the anon key.
+  // With the anon key the edge function can't identify the user and rate-limits
+  // every subscriber at the FREE tier (3 msgs/day by IP). Session token = paid limits.
+  const getAuthHeaders = async (): Promise<Record<string, string>> => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session?.access_token ?? publicAnonKey}`,
+      };
+    } catch {
+      return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` };
+    }
+  };
+
+  // Stop any active recording and release the microphone — prevents the
+  // browser mic indicator staying lit after the overlay closes mid-recording.
+  const releaseMicrophone = useCallback(() => {
+    try {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+      }
+      mediaRecorderRef.current?.stream?.getTracks().forEach(t => t.stop());
+    } catch { /* already released */ }
+    setIsRecording(false);
+  }, []);
 
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
+    releaseMicrophone();
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
       const preview = userMsgs[0].content.slice(0, 90);
@@ -347,16 +383,23 @@ export function BevelChatOverlay({
       setChatSessions(loadChatSessions());
     }
     if (messages.length >= 4) {
-      generateConversationSummary(messages).then(() => {
+      const summarizable = messages.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : String(m.timestamp),
+      }));
+      generateConversationSummary(summarizable).then(() => {
         toast.success('Memory updated', { duration: 1500, position: 'bottom-center' });
       }).catch(() => {});
     }
     onClose();
-  }, [messages, sessionId, onClose]);
+  }, [messages, sessionId, onClose, releaseMicrophone]);
 
   useEffect(() => {
     if (!isOpen) {
       hasGeneratedProactive.current = false;
+      releaseMicrophone();
     } else {
       setMessages([]);
       setAttachedImage(null);
@@ -366,7 +409,7 @@ export function BevelChatOverlay({
       setInstructionsDirty(false);
       setChatSessions(loadChatSessions());
     }
-  }, [isOpen]);
+  }, [isOpen, releaseMicrophone]);
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -396,6 +439,42 @@ export function BevelChatOverlay({
     const current = getCurrentContext(currentPath, context);
     setCurrentContext(current);
 
+    // Load vault documents and memories in the background — non-blocking
+    if (userId && userId !== 'dev-preview-user') {
+      // Vault: pull AI summaries + key insights from stored documents
+      Promise.resolve(
+        supabase
+          .from('vault_documents')
+          .select('title, document_type, ai_summary, key_insights')
+          .eq('user_id', userId)
+          .order('uploaded_at', { ascending: false })
+          .limit(12)
+      )
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            const lines = data
+              .filter(d => d.ai_summary || (Array.isArray(d.key_insights) && d.key_insights.length > 0))
+              .map(d => {
+                const insights = Array.isArray(d.key_insights) ? d.key_insights.slice(0, 2).join('; ') : '';
+                return `• ${d.title} [${d.document_type}]: ${d.ai_summary || insights}`.slice(0, 200);
+              });
+            if (lines.length > 0) vaultContextRef.current = lines.join('\n');
+          }
+        })
+        .catch(() => {});
+
+      // Memories: pull recent extracted facts from past sessions (depth scales by tier)
+      fetchMemories(userId, getTierEntitlements(userTier).memoryInjectDepth)
+        .then(memories => {
+          if (memories.length > 0) {
+            memoriesRef.current = memories
+              .map(m => `[${m.category}] ${m.content}`)
+              .join('\n');
+          }
+        })
+        .catch(() => {});
+    }
+
     if (!hasGeneratedProactive.current) {
       hasGeneratedProactive.current = true;
       if (initialPrompt) {
@@ -417,8 +496,8 @@ export function BevelChatOverlay({
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
-          body: JSON.stringify({ userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
+          headers: await getAuthHeaders(),
+          body: JSON.stringify({ userId, userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
         }
       );
       if (!response.ok) throw new Error('no response');
@@ -541,7 +620,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${stateBlock}${customBlock}${liveScreenContext}`;
+${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file — reference these when relevant):\n${vaultContextRef.current}` : ''}${memoriesRef.current ? `\n\nPERSISTENT MEMORY (facts extracted from past conversations with this family):\n${memoriesRef.current}` : ''}${stateBlock}${customBlock}${liveScreenContext}`;
   };
 
   const sendMessageWithContext = async (
@@ -567,8 +646,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          headers: await getAuthHeaders(),
           body: JSON.stringify({
+            userId,
             userMessage: text,
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -650,8 +730,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          headers: await getAuthHeaders(),
           body: JSON.stringify({
+            userId,
             userMessage: messagePayload,
             conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -737,7 +818,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
             `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/transcribe`,
             {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+              headers: await getAuthHeaders(),
               body: JSON.stringify({ audioBase64: base64Audio, mimeType }),
             }
           );
