@@ -41,6 +41,11 @@ jobs:
         run: npx playwright test --project=chromium --workers=2 --shard=${{ matrix.shard }}/4 --grep-invert "Visual Regression|Console Error Monitoring|Button & Navigation Audit"
         env:
           CI: true
+          # Public client config (the anon key ships in every browser bundle —
+          # not a secret). Without these the app renders a BLANK page in CI:
+          # .env.local is gitignored, so every content assertion was failing.
+          VITE_SUPABASE_URL: https://qpzsvafwcwyrkdolrjbu.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwenN2YWZ3Y3d5cmtkb2xyamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzMDAsImV4cCI6MjA3NjczNzMwMH0.bqGspljemM6itV7_x1iSdrWCPkJSU_jRbZduxcaTNeY
 
       - name: Dump rendered page text for key screens (debuggable from logs)
         if: failure()
