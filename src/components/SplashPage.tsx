@@ -102,12 +102,8 @@ export function SplashPage({
             borderBottom: '1px solid rgba(42,125,153,0.07)',
           }}
         >
-          {/* Wordmark */}
-          <img
-            src={aminyLogoCropped}
-            alt="Aminy"
-            style={{ height: '28px', width: 'auto', objectFit: 'contain' }}
-          />
+          {/* No nav wordmark — hero logo below is the brand mark */}
+          <div style={{ width: '80px' }} />
 
           {/* Nav links — hidden on small screens */}
           <div
@@ -250,7 +246,7 @@ export function SplashPage({
             </span>
           </motion.div>
 
-          {/* Logo lockup */}
+          {/* Logo lockup — breathe animation */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -258,12 +254,13 @@ export function SplashPage({
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginBottom: '40px',
+              marginBottom: '18px',
             }}
           >
             <img
               src={aminyLogoCropped}
-              alt="Aminy — Gentle Guidance. Meaningful Progress."
+              alt="Aminy"
+              className="aminy-logo-breathe"
               style={{
                 width: 'min(52vw, 220px)',
                 aspectRatio: '827 / 338',
@@ -272,25 +269,25 @@ export function SplashPage({
             />
           </motion.div>
 
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+          {/* Brand tagline — one line, centered, the brand statement */}
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.18 }}
+            transition={{ duration: 0.8, delay: 0.16 }}
             style={{
-              color: TEXT,
-              fontFamily: fontStack,
-              fontWeight: 700,
-              fontSize: 'clamp(1.85rem, 5.8vw, 2.25rem)',
-              lineHeight: 1.22,
-              letterSpacing: '-0.025em',
               textAlign: 'center',
-              marginBottom: '20px',
+              color: TEXT_MUTED,
+              fontFamily: fontStack,
+              fontWeight: 500,
+              fontSize: 'clamp(0.95rem, 2.8vw, 1.05rem)',
+              letterSpacing: '0.005em',
+              marginBottom: '36px',
+              whiteSpace: 'nowrap',
               ...fontSmoothing,
             }}
           >
-            The calm center of<br />your child's care.
-          </motion.h1>
+            Gentle guidance. Meaningful progress.
+          </motion.p>
 
           {/* Subheadline */}
           <motion.p
