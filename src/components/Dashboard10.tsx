@@ -209,6 +209,7 @@ export function Dashboard10({
   const [showSoftNudge, setShowSoftNudge] = useState(false);
   const [showHardPaywall, setShowHardPaywall] = useState(false);
   const [conversationsUsed, setConversationsUsed] = useState(0);
+  const [completingTaskId, setCompletingTaskId] = useState<string | null>(null);
   const chatButtonRef = useRef<HTMLButtonElement>(null);
   const [chatInput, setChatInput] = useState('');
   const [isSendingChat, setIsSendingChat] = useState(false);
@@ -652,6 +653,12 @@ export function Dashboard10({
     // Find which routine this task belongs to
     // SAFETY: Use safeTodaysRoutines instead of direct access
     const routine = dailyRoutines.find(r => Array.isArray(r.tasks) && r.tasks.some(t => t.id === taskId));
+    // Only animate when marking a task complete (not uncomplete)
+    const task = routine?.tasks.find(t => t.id === taskId);
+    if (task && !task.completed) {
+      setCompletingTaskId(taskId);
+      setTimeout(() => setCompletingTaskId(null), 600);
+    }
     if (routine && safeTodaysRoutines.length > 0) {
       // Find the routine ID from dashboard data
       const routineData = safeTodaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
@@ -684,6 +691,14 @@ export function Dashboard10({
     <div
       className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
     >
+      <style>{`
+        @keyframes task-burst {
+          0% { transform: scale(1); }
+          30% { transform: scale(1.08); background: rgba(67,170,139,0.15); }
+          100% { transform: scale(1); }
+        }
+        .task-completed-burst { animation: task-burst 0.6s ease-out; }
+      `}</style>
       {/* ========================================
           STREAK CELEBRATION OVERLAY
           Animated celebration for milestone streaks
@@ -877,7 +892,7 @@ export function Dashboard10({
                 )}
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-400" />
+            <ChevronRight className="w-5 h-5 text-slate-400 dark:text-slate-300" />
           </div>
 
           {/* Upcoming Events Carousel */}
@@ -966,7 +981,7 @@ export function Dashboard10({
                 </div>
                 <button
                   onClick={handleDismissInsight}
-                  className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition-colors flex-shrink-0 -mt-0.5 -mr-0.5"
+                  className="p-1.5 rounded-full text-slate-400 dark:text-slate-300 hover:text-slate-600 dark:hover:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-slate-700 transition-colors flex-shrink-0 -mt-0.5 -mr-0.5"
                   aria-label="Dismiss"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -1285,7 +1300,7 @@ export function Dashboard10({
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
                       : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
-                  }`}
+                  } ${completingTaskId === task.id ? 'task-completed-burst' : ''}`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
