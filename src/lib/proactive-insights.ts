@@ -157,7 +157,7 @@ export class AnalyticsInsightEngine {
       result.insights = this.generateProgressInsights(userId, childId, result);
 
     } catch (err) {
-      console.error('[ProactiveInsights] Junior progress analysis failed:', err);
+      console.warn('[ProactiveInsights] Junior progress analysis failed:', err);
     }
 
     return result;
@@ -379,7 +379,7 @@ export class AnalyticsInsightEngine {
       result.insights = this.generateBehaviorInsights(userId, childId, result);
 
     } catch (err) {
-      console.error('[ProactiveInsights] Behavior pattern analysis failed:', err);
+      console.warn('[ProactiveInsights] Behavior pattern analysis failed:', err);
     }
 
     return result;
@@ -608,7 +608,7 @@ export class AnalyticsInsightEngine {
       return best;
 
     } catch (err) {
-      console.error('[ProactiveInsights] Daily insight generation failed:', err);
+      console.warn('[ProactiveInsights] Daily insight generation failed:', err);
       return null;
     }
   }
@@ -634,7 +634,7 @@ export class AnalyticsInsightEngine {
       if (error) throw error;
       return (data || []).map(mapDbInsight);
     } catch (err) {
-      console.error('[ProactiveInsights] Failed to get unread insights:', err);
+      console.warn('[ProactiveInsights] Failed to get unread insights:', err);
       return [];
     }
   }
@@ -649,7 +649,7 @@ export class AnalyticsInsightEngine {
         .update({ is_read: true })
         .eq('id', insightId);
     } catch (err) {
-      console.error('[ProactiveInsights] Failed to mark insight as read:', err);
+      console.warn('[ProactiveInsights] Failed to mark insight as read:', err);
     }
   }
 
@@ -663,7 +663,7 @@ export class AnalyticsInsightEngine {
         .update({ is_dismissed: true })
         .eq('id', insightId);
     } catch (err) {
-      console.error('[ProactiveInsights] Failed to dismiss insight:', err);
+      console.warn('[ProactiveInsights] Failed to dismiss insight:', err);
     }
   }
 
@@ -688,7 +688,7 @@ export class AnalyticsInsightEngine {
         is_dismissed: false,
       });
     } catch (err) {
-      console.error('[ProactiveInsights] Failed to persist insight:', err);
+      console.warn('[ProactiveInsights] Failed to persist insight:', err);
     }
   }
 }

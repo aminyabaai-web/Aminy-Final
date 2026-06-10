@@ -470,7 +470,7 @@ class AnalyticsEngine {
     } catch (error) {
       // Re-queue events on failure
       this.events.unshift(...eventsToFlush);
-      console.error('📊 Failed to flush analytics events:', error);
+      console.warn('📊 Failed to flush analytics events:', error);
     }
   }
 
