@@ -35,11 +35,9 @@
  *   sessions do NOT open the window — group is its own product; the 1:1
  *   session is the clinical relationship and the upgrade path.
  *
- * ── Rail 4: PAY-PER-QUESTION ($19, urgency monetizer) ──────────────────────
- *   No subscription, no session: one question for $19, answered by the same
- *   behaviorist pool (~$2.50 marginal cost), charged only when accepted.
- *   Monetizes 2am urgency and funnels into Pro+ ("that $19 would have been
- *   free on Pro+").
+ * No pay-per-question rail (owner decision): outside these rails the answer
+ * is "book a telehealth session or upgrade to Pro+" — keeping the upgrade
+ * paths clean instead of monetizing one-off questions.
  *
  * Single source of truth — components must import from here, never hardcode.
  */
@@ -52,7 +50,6 @@ export const ANSWERS_PER_STAFFED_HOUR = 10;
 export const EFFECTIVE_COST_PER_ANSWER_CENTS =
   Math.round(BEHAVIORIST_HOURLY_RATE_CENTS / ANSWERS_PER_STAFFED_HOUR); // $2.50
 
-export const PAY_PER_QUESTION_CENTS = 1900;          // $19 single question (Rail 4)
 export const ASK_PROPLUS_MONTHLY_QUOTA = 10;         // included with Pro+
 export const ASK_TARGET_RESPONSE_HOURS = 24;         // SLA shown to parents
 /**
@@ -65,7 +62,7 @@ export const POST_SESSION_WINDOW_DAYS = 7;
 // Back-compat aliases (old names imported elsewhere before the staffing-model rewrite)
 export const ASK_BCBA_PROPLUS_MONTHLY_QUOTA = ASK_PROPLUS_MONTHLY_QUOTA;
 
-export type AskBcbaRail = 'partner_org' | 'platform_pool' | 'pay_per_question';
+export type AskBcbaRail = 'partner_org' | 'platform_pool';
 
 export interface AskBcbaRouting {
   rail: AskBcbaRail;
@@ -80,15 +77,15 @@ export interface AskBcbaRouting {
 }
 
 /**
- * Decide how a question routes. Mirrors the access gating in AskABCBA.tsx
- * (Pro+ = always included; Core/Pro = included inside the 7-day post-1:1-
- * telehealth window; everyone else = pay-per-question).
+ * Decide how a question routes. Returns null when the user has no included
+ * access — the UI shows the gate (book a telehealth session / upgrade to
+ * Pro+) instead of a purchase option. Mirrors the gating in AskABCBA.tsx.
  */
 export function routeAskBcbaQuestion(input: {
   tier: string;
   pilotOrganization?: string | null;
   withinPostSessionWindow?: boolean;
-}): AskBcbaRouting {
+}): AskBcbaRouting | null {
   const { tier, pilotOrganization, withinPostSessionWindow } = input;
 
   // Rail 1 — partner org's own clinical team answers. $0 platform cost.
@@ -115,14 +112,8 @@ export function routeAskBcbaQuestion(input: {
     };
   }
 
-  // Rail 4 — single question purchase
-  return {
-    rail: 'pay_per_question',
-    partnerOrg: null,
-    costCents: EFFECTIVE_COST_PER_ANSWER_CENTS,
-    parentPriceCents: PAY_PER_QUESTION_CENTS,
-    answeredByLabel: 'a behaviorist on the Aminy clinical team',
-  };
+  // Not included — UI gates to "book a session" / "upgrade to Pro+"
+  return null;
 }
 
 export function formatAskBcbaPrice(cents: number): string {

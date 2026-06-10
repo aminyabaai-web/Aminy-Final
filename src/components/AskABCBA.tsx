@@ -27,7 +27,7 @@ import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { ScreenHeader } from './ui/ScreenHeader';
-import { routeAskBcbaQuestion, formatAskBcbaPrice, PAY_PER_QUESTION_CENTS, ASK_BCBA_PROPLUS_MONTHLY_QUOTA, POST_SESSION_WINDOW_DAYS } from '../lib/ask-bcba-economics';
+import { routeAskBcbaQuestion, ASK_BCBA_PROPLUS_MONTHLY_QUOTA, POST_SESSION_WINDOW_DAYS } from '../lib/ask-bcba-economics';
 
 const CATEGORIES = [
   { id: 'behavior', label: 'Behavior', emoji: '🎯' },
@@ -100,10 +100,6 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   const [category, setCategory] = useState<Category | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeThread, setActiveThread] = useState<Thread | null>(null);
-  // Single-question purchase (Rail 3 in ask-bcba-economics.ts). Payment is
-  // collected via Stripe invoice when a BCBA accepts the question — the
-  // parent is never charged for an unanswered question.
-  const [payPerQuestion, setPayPerQuestion] = useState(false);
 
   useEffect(() => {
     loadThreads();
@@ -185,11 +181,9 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           // (rail definitions + payout math in ask-bcba-economics.ts).
           bcba_id: recentSessionBcbaId || null,
           auto_routed: !!recentSessionBcbaId,
-          source: payPerQuestion
-            ? 'pay_per_question'
-            : routing.rail === 'partner_org'
-              ? `partner_org:${routing.partnerOrg}`
-              : recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
+          source: routing?.rail === 'partner_org'
+            ? `partner_org:${routing.partnerOrg}`
+            : recentSessionBcbaId ? 'session_bundled' : 'pro_plus_pool',
         })
         .select()
         .single();
@@ -304,13 +298,6 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   <Sparkles className="w-4 h-4" />
                   Upgrade to Pro+ for unlimited access
                 </button>
-                <button
-                  onClick={() => { setPayPerQuestion(true); setShowAsk(true); }}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#E8E4DF] text-[#3A4A57] font-medium text-sm hover:bg-[#F0EDE8]"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Ask one question — {formatAskBcbaPrice(PAY_PER_QUESTION_CENTS)}
-                </button>
               </div>
               <p className="text-xs text-slate-400">
                 Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} behaviorist questions/month, no session required — with instant AI drafts while you wait. Want a BCBA? Book a telehealth session.
@@ -335,18 +322,10 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#1B2733]">Ask anything</p>
-            <button onClick={() => { setShowAsk(false); setQuestion(''); setPayPerQuestion(false); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
+            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
               <X className="w-4 h-4" />
             </button>
           </div>
-
-          {payPerQuestion && (
-            <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
-              <p className="text-xs text-[#3A4A57]">
-                <span className="font-semibold">{formatAskBcbaPrice(PAY_PER_QUESTION_CENTS)} single question</span> — you're only charged when a BCBA accepts and answers. Cancel anytime before that.
-              </p>
-            </div>
-          )}
 
           {isPartnerOrg && (
             <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
