@@ -579,6 +579,440 @@ The gold standard is a sensory-based feeding therapy program. The hierarchy: tol
 Fewer than 20 accepted foods, nutritional deficiency, weight loss, extreme anxiety that spreads to non-mealtime contexts. Seek a feeding-specialized SLP or OT.`,
     relatedGroupTopics: ['feeding'],
   },
+
+  // ── SAFETY ────────────────────────────────────────────────────────────────
+  {
+    id: 'elopement-safety-plan',
+    title: 'Elopement: Building a Safety Plan That Works',
+    subtitle: 'Half of autistic children wander — here\'s the plan that keeps them safe',
+    category: 'behavior',
+    tags: ['elopement', 'wandering', 'safety', 'autism', 'emergency'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Nearly 50% of autistic children attempt to elope (wander or bolt) — and it's the single greatest safety fear most parents carry. A real safety plan has three layers: prevention, containment, and rapid response.
+
+**First: understand WHY your child elopes**
+Elopement always has a function. The most common:
+- **Toward something** — water (the most dangerous), trains, a favorite place
+- **Away from something** — sensory overload, demands, anxiety
+- **The act itself** — running feels regulating
+
+Log every incident: where they were heading, what happened right before. The function determines the intervention.
+
+**Layer 1 — Prevention**
+1. Teach an exit-asking routine ("I need to go" card or phrase) and honor it EVERY time — eloping decreases when leaving legitimately works
+2. Schedule movement breaks before overload builds
+3. Visual "STOP" cues on exits — paired with explicit teaching, not alone
+4. Address the trigger pattern your log reveals
+
+**Layer 2 — Containment**
+1. Deadbolts above the child's reach + door/window chimes (cheap, instant alert)
+2. GPS tracker — shoe insert, belt clip, or watch (AngelSense, Jiobit are autism-specific)
+3. Fence the yard if water or roads are nearby
+4. Brief every caregiver: school, grandparents, respite — elopement plans fail at handoffs
+
+**Layer 3 — Rapid response**
+1. Register with your local police department's special-needs registry (most have one)
+2. Prepare a "first 5 minutes" card: recent photo, height/weight, communication level, fascinations (where they'd head), water sources nearby
+3. Search WATER FIRST. Drowning is the leading cause of death in elopement cases.
+4. Teach your child their name + your phone number — by speech, card, or medical ID bracelet
+
+**The IEP connection**
+If elopement happens at school, it belongs in the IEP with a formal safety plan — not an informal understanding with one aide. Request it in writing.`,
+    relatedQuestions: ['My son keeps trying to run out the front door', 'What GPS tracker works for a child who removes everything?'],
+    relatedGroupTopics: ['behavior', 'safety'],
+  },
+
+  // ── TOILETING ─────────────────────────────────────────────────────────────
+  {
+    id: 'toilet-training-autism',
+    title: 'Toilet Training: The Autism-Adapted Protocol',
+    subtitle: 'Why standard methods stall — and the data-based approach that works',
+    category: 'behavior',
+    tags: ['toileting', 'potty training', 'autism', 'routines'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: true,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Autistic children toilet train later on average — and that's okay. Readiness matters more than age. Standard 3-day methods usually fail because they assume the child finds social praise reinforcing and tolerates interruption well. Here's the adapted approach BCBAs actually use.
+
+**Readiness signals (age is NOT one of them)**
+- Stays dry 1–2 hours at a time
+- Shows awareness of being wet/soiled (pulling at diaper, moving away)
+- Can sit (even briefly) on the toilet without distress
+- Follows a 1–2 step routine with visual support
+
+If none of these are present, wait and work on the prerequisite skills. Forcing it early creates toilet anxiety that takes months to undo.
+
+**The protocol**
+1. **Data first (3 days):** Log every wet/soiled diaper time. You're finding their natural rhythm.
+2. **Scheduled sits:** Take them at their high-probability times — not every 20 minutes (that teaches the toilet is an interruption machine).
+3. **Visual sequence on the wall:** pants down → sit → try → wipe → flush → wash. Same order, every time, photographed steps work better than cartoons for many kids.
+4. **Reinforce SITTING first, production second.** The most common mistake is only rewarding success — sitting calmly IS the skill in week one.
+5. **The powerful reinforcer rule:** Whatever you use (a specific video, a particular snack) must be available ONLY for toileting. If they get it elsewhere free, it stops working.
+
+**Sensory blockers to check**
+- Toilet flush sound (let them flush with headphones on, or flush after they leave)
+- Cold seat (padded ring)
+- Feet dangling (footstool — non-negotiable, dangling feet make bodies feel unsafe)
+- Bathroom echo and lighting
+
+**Regression is normal**
+New school, new sibling, illness — expect setbacks and return to a denser schedule briefly. Regression is not failure; it's a flare.
+
+**When to get help**
+Constipation (treat it FIRST — most "training failures" are withholding from painful stools), age 5+ with no progress after a systematic attempt, or fear so intense the bathroom itself is avoided. Your BCBA or pediatrician can build an individualized plan.`,
+    relatedQuestions: ['Is 5 too old to not be potty trained?', 'He will pee in the toilet but refuses to poop'],
+    relatedGroupTopics: ['routines'],
+  },
+
+  // ── FAMILY ────────────────────────────────────────────────────────────────
+  {
+    id: 'sibling-support',
+    title: 'The Siblings: Supporting the Kids Who Aren\'t in Therapy',
+    subtitle: 'Neurotypical siblings carry an invisible load — here\'s how to lighten it',
+    category: 'social',
+    tags: ['siblings', 'family', 'support', 'wellbeing'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Siblings of autistic children grow up faster. They learn to wait, to de-escalate, to explain their brother or sister to strangers. Many become extraordinary humans because of it — but only if the load is acknowledged.
+
+**What siblings commonly feel (and rarely say)**
+- Guilt for being angry at a sibling "who can't help it"
+- Embarrassment in public, then shame about the embarrassment
+- Invisibility — every family resource flows to the child with higher needs
+- Fear about the future ("will I have to take care of them?")
+
+**The protected-time rule**
+Fifteen minutes a day, or one hour a week, that belongs ONLY to the sibling. Not interruptible by a meltdown (have a backup plan for coverage). The consistency matters more than the duration — it's proof they're held in mind.
+
+**Give them language, scaled by age**
+- Age 4–6: "His brain works differently. Loud places hurt his ears like a sunburn hurts skin."
+- Age 7–11: Actual diagnosis name, what it means, what it doesn't mean. Kids fill information gaps with worse stories than the truth.
+- Age 12+: Honest conversations about the future, including the explicit reassurance: "Your life is yours. Caring for your sibling is our job, not your inheritance."
+
+**Let them be a kid, not a co-therapist**
+It's tempting to enlist siblings as helpers — and some genuinely enjoy it. But "helper" must be a role they can decline. Watch for the parentified child who never says no.
+
+**Sibling rage is information, not betrayal**
+When a sibling explodes with "I hate him, he ruins everything" — that's trust. Don't correct it ("you don't mean that"). Receive it: "It IS unfair sometimes. You're allowed to feel that and still love him." Both things are true.
+
+**Resources**
+Sibshops (sibling support groups, search by city) are the gold standard. Many kids meet the only other people on earth who get it.`,
+    relatedQuestions: ['My daughter resents her autistic brother', 'How do I explain autism to a 5-year-old?'],
+    relatedGroupTopics: ['family', 'support'],
+  },
+
+  // ── PARENT WELLBEING ──────────────────────────────────────────────────────
+  {
+    id: 'parent-burnout',
+    title: 'Caregiver Burnout Is a Clinical Issue, Not a Character Flaw',
+    subtitle: 'The research on parental burnout in autism families — and what actually helps',
+    category: 'behavior',
+    tags: ['burnout', 'self-care', 'parent', 'mental health', 'stress'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Mothers of autistic children show cortisol profiles similar to combat soldiers — that's not a metaphor, it's a published finding (Seltzer et al.). If you're exhausted, it's not because you're doing it wrong. It's because the load is objectively extreme.
+
+**Burnout is not the same as stress**
+Stress is having too much. Burnout is having nothing left. Signs you've crossed over:
+- Going through caregiving motions on autopilot, feeling detached from your child
+- Dreading routines you used to manage fine
+- Rage that surprises you, followed by crushing guilt
+- "I can't do this anymore" thoughts that recur, not just on the worst days
+
+**Why "self-care" advice fails autism parents**
+Bubble baths don't fix structural overload. What moves the needle is reducing the load itself:
+1. **Respite is medicine, not luxury.** Most states fund respite hours through Medicaid waivers (check your state's DD services — Aminy's Coverage Coach can help you find them). Using respite predicts lower depression scores in caregiver studies more than ANY self-care behavior.
+2. **Lower the bar deliberately.** Pick the two things that matter this season (safety + sleep, for example) and consciously let the rest be mediocre. Mediocre is a strategy, not a failure.
+3. **One micro-recovery daily.** Not an hour — 10 minutes that is yours, defended like a medical appointment.
+4. **Treat your own mental health.** Parental depression and anxiety are 2–3× more prevalent in autism parents. Treating YOUR brain is a clinical intervention for your child — regulated parents co-regulate kids.
+
+**The oxygen mask is real**
+Your child's outcomes are mediated by your capacity. This is uncomfortable but liberating: caring for yourself isn't selfish; it's the platform every other intervention stands on.
+
+**Crisis line**
+If you're having thoughts of harming yourself: call or text 988 (Suicide & Crisis Lifeline). For overwhelming moments that aren't emergencies, Aminy's crisis resources screen lists parent warmlines by state.`,
+    relatedQuestions: ['I feel like a terrible parent', 'How do I get respite care?'],
+    relatedGroupTopics: ['support', 'self-care'],
+  },
+
+  // ── FUNDING ───────────────────────────────────────────────────────────────
+  {
+    id: 'funding-navigation',
+    title: 'Paying for Autism Care: The Funding Map Nobody Gives You',
+    subtitle: 'Insurance, Medicaid waivers, grants, and HSA strategies — in plain English',
+    category: 'school',
+    tags: ['insurance', 'medicaid', 'funding', 'waiver', 'grants', 'money'],
+    type: 'guide',
+    readTimeMinutes: 7,
+    isPremium: true,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Autism care can cost $40,000–$60,000+ per year. Almost no family pays that out of pocket — but the funding map is deliberately confusing. Here's the whole picture.
+
+**Layer 1: Private insurance (if you have it)**
+All 50 states now mandate some autism coverage, but the details vary wildly. Key facts:
+- ABA typically requires a formal autism diagnosis + prior authorization
+- Self-funded employer plans (most large companies) are exempt from state mandates but most cover ABA anyway — ASK
+- Denials are routinely overturned on appeal. Always appeal. The first denial is often automated.
+
+**Layer 2: Medicaid — even if your income is "too high"**
+This is the layer most families miss. Children with disabilities can qualify for Medicaid REGARDLESS of parent income through:
+- **TEFRA/Katie Beckett provisions** (~half of states): child's needs, not family income
+- **HCBS waivers**: home and community-based services — respite, habilitation, sometimes ABA. Waitlists can be years, so APPLY NOW even if you don't need it yet.
+Medicaid as secondary insurance also picks up copays your primary leaves behind.
+
+**Layer 3: School district**
+If a service is educationally necessary it goes in the IEP and the district pays: speech, OT, social skills, sometimes district-funded ABA support. The school evaluation is free — formally request it in writing.
+
+**Layer 4: Grants and one-time funds**
+- Autism Care Today, ACT Today, MyGOAL, United Healthcare Children's Foundation — equipment, therapy, camps
+- Local Autism Society chapters often have emergency funds
+- AAC devices: ask the SLP about device-loan programs before buying
+
+**Layer 5: Tax strategy**
+- ABLE accounts: tax-advantaged savings that don't break benefit eligibility (up to $100K doesn't count against SSI)
+- Therapy mileage, special diets (with doctor letter), and home modifications can be medical deductions
+- HSA/FSA funds cover therapy copays, sensory equipment with a Letter of Medical Necessity — and your Aminy subscription qualifies
+
+**The order of operations**
+1. Apply for the Medicaid waiver TODAY (the waitlist is the bottleneck)
+2. Get the school evaluation request in writing this week
+3. Appeal every insurance denial
+4. ABLE account once any benefits exist
+
+Aminy's Coverage Coach walks you through your state's specific programs — open it from the Benefits tab.`,
+    relatedQuestions: ['We make too much for Medicaid but can\'t afford therapy', 'What is a Medicaid waiver?'],
+    relatedGroupTopics: ['insurance', 'advocacy'],
+  },
+
+  // ── BEHAVIOR: AGGRESSION ──────────────────────────────────────────────────
+  {
+    id: 'aggression-self-injury',
+    title: 'Aggression and Self-Injury: The Functional Approach',
+    subtitle: 'The behaviors that scare parents most — and the framework that actually reduces them',
+    category: 'behavior',
+    tags: ['aggression', 'self-injury', 'SIB', 'hitting', 'safety', 'behavior'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: true,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Hitting, biting, head-banging — these behaviors frighten parents into reactive mode. But aggression and self-injury follow the same laws as all behavior: they happen because they WORK. Find what they accomplish, and you can replace them.
+
+**Rule out pain FIRST**
+Before any behavior plan: dental exam, ear check, GI workup (constipation and reflux are epidemic in autistic kids and invisible drivers of self-injury). A child who can't say "my tooth hurts" may hit their face instead. New or escalating self-injury = medical evaluation, full stop.
+
+**The four functions, applied**
+- **Escape**: aggression ends demands → child learns hitting = work stops
+- **Attention**: even angry attention is attention for a child who's invisible otherwise
+- **Tangible**: aggression has produced the iPad before → it will be tried again
+- **Automatic/sensory**: head-banging can produce endorphin release or block overwhelming input
+
+Your ABC log (track it in Aminy) reveals the function in 1–2 weeks. The intervention DEPENDS on the function — escape-driven aggression and sensory-driven self-injury need opposite responses.
+
+**The universal moves (safe for any function)**
+1. **Teach a replacement that works FASTER than the behavior.** A "break" card only competes with hitting if it produces a break instantly, every time, at first.
+2. **Catch the ramp.** Aggression rarely comes from zero — there's a build (pacing, vocal changes, repetitive questions). Intervene at the ramp, not the peak.
+3. **During the behavior: minimum attention, maximum safety.** Block, don't restrain (restraint escalates and is dangerous). Flat voice, few words.
+4. **Never give the function during the episode.** If it's escape-driven, the demand resumes (modified if needed) once calm.
+
+**Protect everyone**
+Head-banging: padded zone, helmet conversation with your team if intense. Aggression toward siblings: physical safety plan first, behavior plan second.
+
+**Get professional support if**
+Behavior draws blood, involves weapons-grade objects, targets infants, or you're afraid in your own home. This is exactly what intensive ABA exists for — and crisis-level behavior often qualifies for expedited insurance authorization.`,
+    relatedQuestions: ['My son hits his head when frustrated', 'She attacks her baby brother and I\'m scared'],
+    relatedGroupTopics: ['behavior', 'safety'],
+  },
+
+  // ── COMMUNICATION: ECHOLALIA ──────────────────────────────────────────────
+  {
+    id: 'echolalia-gestalt',
+    title: 'Echolalia Is Communication: Understanding Gestalt Language',
+    subtitle: 'Why script-repeating isn\'t meaningless — it\'s a different path to language',
+    category: 'communication',
+    tags: ['echolalia', 'gestalt', 'language', 'speech', 'scripting'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Your child quotes entire movie scenes. Answers questions with lines from songs. Repeats your question back instead of answering. Old-school advice said to extinguish this "meaningless" echo. Modern speech science says the opposite: echolalia is often a STAGE of language development, not a dead end.
+
+**Gestalt language processing**
+Some children acquire language in whole chunks ("gestalts") rather than single words. Where an analytic processor builds "want" → "want cookie" → "I want a cookie," a gestalt processor might start with the entire phrase "ToInfinityAndBeyond!" as a unit meaning excitement. Many autistic children are gestalt processors.
+
+**Decode the script**
+Echolalia usually carries meaning — you have to find it:
+- "Are you okay?" (when THEY are hurt) — they've heard it in that context; it means "I'm hurt"
+- A scene from a movie where a character leaves — may mean "I'm anxious about you leaving"
+- Immediate echo of your question — often means "I'm processing" or "I don't know how to answer"
+
+Log scripts and their contexts in Aminy. The pattern is the dictionary.
+
+**How to respond (do this, not that)**
+- DON'T: "Stop scripting" or ignore it
+- DO: Acknowledge the communicative intent. If "Are you okay?" means "I'm hurt," respond: "You're hurt! Let me see."
+- DO: Model the next-stage language naturally: child says the whole movie line; you respond with a smaller remix of it
+- DON'T: Drill "say it THIS way" — partial scripts loosen naturally as the system matures
+
+**The stages (so you can see progress)**
+1. Whole scripts ("Let's get out of here!")
+2. Mix-and-match chunks ("Let's get + cookie")
+3. Single words isolated from chunks
+4. Original novel grammar
+
+Movement through stages can take years. The job is meaning and connection at every stage — not speed.
+
+**Tell your team**
+Ask whether your SLP is familiar with gestalt language processing / Natural Language Acquisition (NLA). It changes therapy targets significantly.`,
+    relatedQuestions: ['My son only quotes movies, is that talking?', 'Should I stop my daughter from scripting?'],
+    relatedGroupTopics: ['communication'],
+  },
+
+  // ── ADOLESCENCE ───────────────────────────────────────────────────────────
+  {
+    id: 'puberty-adolescence',
+    title: 'Puberty and Autism: The Guide Nobody Hands You',
+    subtitle: 'Body changes, big feelings, and safety — preparing early changes everything',
+    category: 'social',
+    tags: ['puberty', 'adolescence', 'teen', 'hygiene', 'safety'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: true,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Puberty arrives on a biological schedule that doesn't wait for developmental readiness. For autistic kids, body changes can be genuinely frightening without preparation — and the social rules shift exactly when peers stop being forgiving. Start earlier than feels necessary: age 8–9 for the basics.
+
+**Teach the body changes BEFORE they happen**
+Surprise is the enemy. Social narratives with visuals, repeated calmly long before changes start:
+- What will change (hair, smell, size, periods, erections — use real words)
+- That it happens to EVERYONE and is healthy
+- Who they can ask (name 2–3 specific safe people)
+
+For menstruation: practice the full hygiene routine with supplies BEFORE the first period. Track cycles once started — for many autistic girls, premenstrual mood and sensory amplification are severe (PMDD is more common; it's treatable).
+
+**Hygiene as a visual routine, not nagging**
+Deodorant, showering, and face-washing fail as verbal reminders. Build a visual sequence in the bathroom, same as any routine. Tie it to a fixed anchor (after breakfast, not "when you're smelly").
+
+**Privacy rules are now safety-critical**
+Concrete, explicit teaching — vague hints don't transfer:
+- Where touching your own body is okay (own bedroom/bathroom, door closed) — frame as WHERE, not shame
+- Public vs. private body parts, clothing rules
+- The underwear rule: nobody touches where your swimsuit covers, no keeping secrets about bodies — autistic children are sexually victimized at far higher rates; explicit teaching is protection
+
+**The emotional storm is real**
+Hormones amplify everything. Meltdowns may return after years of calm. This is neurology, not regression of skills — adjust support up temporarily without shame.
+
+**Update the supports**
+- IEP: add transition planning (legally required by 16, smart by 14)
+- Re-evaluate medication with a prescriber who knows autism + adolescence
+- Peer relationships: explicit teaching about flirting vs. friendliness, online safety, and consent — in both directions`,
+    relatedQuestions: ['How do I prepare my autistic daughter for her period?', 'My teenage son touches himself in public'],
+    relatedGroupTopics: ['social', 'teens'],
+  },
+
+  // ── SCREENS ───────────────────────────────────────────────────────────────
+  {
+    id: 'screen-time-autism',
+    title: 'Screen Time and Autism: An Honest Framework',
+    subtitle: 'Beyond the guilt — what screens actually do for autistic brains, good and bad',
+    category: 'behavior',
+    tags: ['screens', 'iPad', 'video games', 'YouTube', 'routines'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Every autism parent carries screen guilt. Here's the honest version: screens are neither poison nor babysitter-of-shame. For autistic kids they're often genuine regulation, predictability, and special-interest joy — AND they can crowd out everything else. The framework is function, not minutes.
+
+**Why screens are MORE compelling for autistic brains**
+- Perfect predictability (the video is identical every time — the world isn't)
+- Controllable sensory input (volume, brightness, pause button)
+- No social demands
+- Special interests live there
+
+That's why "just take it away" produces meltdowns that look like addiction withdrawal. You're not removing entertainment; you're removing a regulation tool.
+
+**The questions that matter (instead of counting minutes)**
+1. Is it displacing sleep? (The non-negotiable. Screens off 60 min before bed, devices out of the bedroom.)
+2. Is it displacing ALL other regulation? If the iPad is the only calming tool, build alternatives alongside it — not instead of it.
+3. Can they transition off without a crisis? If no — that's the skill to teach, not the screen to ban.
+4. Is the content feeding or feeding on them? A kid deep in train videos is in special-interest heaven. Endless algorithmic shorts are a different machine.
+
+**Make transitions off-screen survivable**
+- Countdown warnings tied to content units, not minutes ("after this episode" beats "in 5 minutes" — episodes have natural endings)
+- First/Then with the NEXT preferred thing visible ("First tablet off, then trampoline")
+- Never make screen-removal the consequence for unrelated behavior — it turns the most valuable reinforcer into a battleground
+
+**Use the screen, don't fight it**
+Screens are the most powerful reinforcer most autistic kids have. That's leverage: earned through token boards, used in First/Then sequences, deployed for tough transitions (the dentist iPad is medicine, use it without shame).
+
+**The honest bottom line**
+A regulated kid who watched four hours on a hard day beats a dysregulated kid who hit their quota. Aim the worry at sleep, breadth of regulation tools, and transition skills — not the minute count.`,
+    relatedQuestions: ['Is my son addicted to his iPad?', 'Screen time limits cause huge meltdowns'],
+    relatedGroupTopics: ['routines', 'behavior'],
+  },
+
+  // ── NEW DIAGNOSIS ─────────────────────────────────────────────────────────
+  {
+    id: 'first-90-days',
+    title: 'Just Diagnosed: Your First 90 Days, Step by Step',
+    subtitle: 'The roadmap for the overwhelming weeks after the diagnosis',
+    category: 'behavior',
+    tags: ['diagnosis', 'new diagnosis', 'roadmap', 'getting started'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `The diagnosis appointment ends, you're handed a packet, and the door closes. Here's what the packet should have said.
+
+**Week 1–2: Breathe. Nothing is on fire.**
+The diagnosis changed your information, not your child. They are the same kid they were last week. You don't have to learn everything this month. Two tasks only:
+1. Request the full written evaluation report (you'll need it for everything)
+2. Tell the people who need to know — on your timeline, in your words
+
+**Week 3–4: Start the clocks (waitlists are the enemy)**
+Several waitlists are months-to-years long. Getting ON them costs nothing:
+1. **Medicaid waiver application** — your state's DD services agency (even if your income seems too high — see the Funding guide)
+2. **ABA intake** at 2–3 providers (multi-list; take the first good fit)
+3. **School:** written request for evaluation/IEP eligibility (they have legal timelines once it's in writing)
+4. **SSI** if income-eligible
+
+**Month 2: Build the home base**
+- Start ONE routine with visual supports (mornings are the classic). Small wins compound.
+- Start logging behaviors in Aminy — by intake day you'll hand the BCBA a month of ABC data, which accelerates everything
+- Read your child's evaluation report twice: once to cry, once to highlight the recommendations (they're your service-request checklist)
+
+**Month 3: Assemble the team**
+- First IEP meeting (bring the advocacy guide; you can bring a support person)
+- ABA intake assessments
+- Find ONE parent who's two years ahead of you — local support group or Aminy community. They're worth ten pamphlets.
+
+**What NOT to do in the first 90 days**
+- Don't buy a supplement protocol from the internet
+- Don't commit to 40 hrs/week of anything before you've seen your child's response
+- Don't read prognosis forums at 2am — every trajectory on earth is in there and none of them is your child
+- Don't quit your job in week 2 (some parents eventually restructure work; do it from data, not panic)
+
+**The truth from the other side**
+Thousands of parents will tell you the same thing: the diagnosis day felt like an ending, and it was actually the day the right help became possible. Your child just became eligible for every support in this library.`,
+    relatedQuestions: ['We just got the diagnosis, what do I do first?', 'How long are ABA waitlists?'],
+    relatedGroupTopics: ['new-diagnosis', 'support'],
+  },
 ];
 
 export function getResourcesByCategory(category: string): Resource[] {
