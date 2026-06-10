@@ -338,13 +338,15 @@ async function handleWebhook(event: string, data: Record<string, unknown>) {
         .eq('rethink_client_id', note.client_id)
         .maybeSingle();
       if (profile) {
+        // notification_type must satisfy the CHECK in 006_push_notifications.sql
+        // ('custom' is the catch-all); there is no status column on this table.
         await sb.from('scheduled_notifications').insert({
           user_id: profile.id,
-          notification_type: 'session_note_ready',
+          notification_type: 'custom',
           title: 'Session notes signed',
           body: `Your provider has signed the session notes for today's session.`,
           scheduled_for: new Date().toISOString(),
-          status: 'pending',
+          data: { type: 'session_note_ready' },
         });
       }
       break;
@@ -369,15 +371,36 @@ Deno.serve(async (req: Request): Promise<Response> => {
     });
   }
 
+  // Read raw body ONCE — webhook HMAC must verify the exact bytes Rethink
+  // signed (re-serialized JSON will not byte-match).
+  const rawBody = await req.text();
   let body: Record<string, unknown>;
   try {
-    body = await req.json();
+    body = JSON.parse(rawBody);
   } catch {
     return json({ error: 'Invalid JSON' }, 400);
   }
 
   const action = body.action as string;
-  const providerId = (body.provider_id as string) ?? 'default';
+
+  // ── Authorization gate ──────────────────────────────────────────────────
+  // Webhook: authenticated by HMAC below (Rethink sends no Supabase JWT).
+  // Everything else returns PHI or pushes clinical data — require a real
+  // authenticated user, and scope provider_id to the caller (admins exempt).
+  let providerId = 'default';
+  if (action !== 'webhook') {
+    const sb = serviceClient();
+    const jwt = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '');
+    const { data: { user } = { user: null } } = await sb.auth.getUser(jwt);
+    if (!user) return json({ error: 'Authentication required' }, 401);
+    providerId = (body.provider_id as string) || user.id;
+    if (providerId !== user.id) {
+      const { data: prof } = await sb.from('profiles').select('role').eq('id', user.id).single();
+      if (prof?.role !== 'admin') {
+        return json({ error: 'provider_id must match the authenticated user' }, 403);
+      }
+    }
+  }
 
   try {
     // ── OAuth ─────────────────────────────────────────────────────────────
@@ -478,11 +501,16 @@ Deno.serve(async (req: Request): Promise<Response> => {
 
     // ── Inbound webhook ───────────────────────────────────────────────────
     if (action === 'webhook') {
-      // Verify signature if secret is set
-      if (RETHINK_WEBHOOK_SECRET) {
-        const sig = req.headers.get('x-rethink-signature') ?? '';
-        const expected = await computeHmac(RETHINK_WEBHOOK_SECRET, JSON.stringify(body));
-        if (sig !== expected) return json({ error: 'Invalid signature' }, 401);
+      // HMAC over the RAW request body is the webhook's only authentication.
+      // No secret configured -> refuse everything (an open write path into
+      // session_notes/goals/behavior_logs is worse than a dead webhook).
+      if (!RETHINK_WEBHOOK_SECRET) {
+        return json({ error: 'Webhook not configured (RETHINK_WEBHOOK_SECRET unset)' }, 401);
+      }
+      const sig = req.headers.get('x-rethink-signature') ?? '';
+      const expected = await computeHmac(RETHINK_WEBHOOK_SECRET, rawBody);
+      if (!sig || !timingSafeEqual(sig, expected)) {
+        return json({ error: 'Invalid signature' }, 401);
       }
       const event  = body.event as string;
       const data   = (body.data ?? {}) as Record<string, unknown>;
@@ -499,7 +527,14 @@ Deno.serve(async (req: Request): Promise<Response> => {
   }
 });
 
-// ── HMAC helper ──────────────────────────────────────────────────────────────
+// ── HMAC helpers ─────────────────────────────────────────────────────────────
+
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let out = 0;
+  for (let i = 0; i < a.length; i++) out |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return out === 0;
+}
 
 async function computeHmac(secret: string, message: string): Promise<string> {
   const enc = new TextEncoder();

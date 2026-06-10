@@ -1963,7 +1963,7 @@ app.post("/make-server-8a022548/ai/transcribe", async (c) => {
 
 // ─── B2B Org Subscription Checkout ──────────────────────────────────────────
 // Per-seat billing for solo BCBAs, AACT pilots, clinics, schools, agencies, enterprise.
-// Volume ladder: 1 seat $79 · 2 $69 · 3 $59 · 4 $54 · 5+ $49/seat/mo, 15% off annual.
+// Volume ladder: 1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo, 15% off annual.
 // Mirror of src/lib/org-licensing.ts (the canonical copy) — edge functions can't
 // import src/lib, so update both together.
 const ORG_MIN_SEATS = 1;

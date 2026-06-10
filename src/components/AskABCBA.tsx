@@ -162,6 +162,27 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
     setIsSubmitting(true);
 
     try {
+      // 0. Enforce the Pro+ monthly quota (partner-org and session-window
+      // questions are exempt — their volume is governed elsewhere). Without
+      // this check the displayed "10/mo" was never enforced, leaving
+      // unbounded behaviorist staffing exposure.
+      if (isProPlus && !isPartnerOrg && !recentSessionBcbaId) {
+        const monthStart = new Date();
+        monthStart.setDate(1);
+        monthStart.setHours(0, 0, 0, 0);
+        const { count } = await supabase
+          .from('ask_bcba_threads')
+          .select('*', { count: 'exact', head: true })
+          .eq('parent_id', userId)
+          .eq('source', 'pro_plus_pool')
+          .gte('created_at', monthStart.toISOString());
+        if ((count ?? 0) >= ASK_BCBA_PROPLUS_MONTHLY_QUOTA) {
+          toast.error(`You've used all ${ASK_BCBA_PROPLUS_MONTHLY_QUOTA} questions this month. They reset on the 1st — or book a telehealth session for anything urgent.`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       // 1. Insert the thread
       const targetResponseAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
       const { data: thread, error } = await supabase
@@ -214,7 +235,9 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   }
 
   // Show loading skeleton while we check session eligibility (non-Pro+)
-  if (!isProPlus && !recentSessionChecked) {
+  // Partner-org families never depend on the session-window check — don't
+  // make them wait on it.
+  if (!isProPlus && !isPartnerOrg && !recentSessionChecked) {
     return (
       <div className="min-h-screen bg-mist pb-20">
         <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />

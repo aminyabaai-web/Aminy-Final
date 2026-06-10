@@ -82,7 +82,7 @@ describe('Org Seat Price Ladder', () => {
     expect(MIN_SEATS).toBe(1);
   });
 
-  it('follows the volume ladder: $79 / $69 / $59 / $54 / $49 per seat', () => {
+  it('follows the volume ladder: $89 / $79 / $69 / $59 / $49 per seat', () => {
     expect(getSeatPriceCents(1)).toBe(8900);
     expect(getSeatPriceCents(2)).toBe(7900);
     expect(getSeatPriceCents(3)).toBe(6900);

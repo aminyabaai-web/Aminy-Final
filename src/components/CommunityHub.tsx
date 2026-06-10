@@ -763,13 +763,11 @@ export function CommunityHub({
         const isPersistedAuthor = /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(authorId);
         if (isPersistedAuthor && authorId !== userId) {
           try {
-            await supabase.from('scheduled_notifications').insert({
-              user_id: authorId,
-              title: 'New reply to your post',
-              body: `Someone replied to your post "${activeThread.title}"`,
-              notification_type: 'custom',
-              scheduled_for: new Date().toISOString(),
-              data: { type: 'community_reply', post_id: activeThread.id },
+            // Direct insert is RLS-blocked (policy requires auth.uid() = user_id);
+            // the SECURITY DEFINER RPC is the sanctioned cross-user path.
+            await supabase.rpc('notify_community_reply', {
+              target_user: authorId,
+              post_title: activeThread.title,
             });
           } catch {
             // Notification is best-effort — never block or surface on the reply itself.

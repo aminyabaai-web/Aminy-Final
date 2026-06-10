@@ -20,6 +20,7 @@
  */
 
 import { Capacitor } from '@capacitor/core';
+import { Browser } from '@capacitor/browser';
 
 /** True when running inside the iOS or Android native shell (not the PWA). */
 export function isNativeShell(): boolean {
@@ -37,9 +38,14 @@ export function isNativeShell(): boolean {
  */
 export function openSubscriptionCheckout(url: string): void {
   if (isNativeShell()) {
-    // _system → external browser (Safari/Chrome), outside the WebView.
-    // Capacitor routes window.open with _system/_blank through the OS.
-    window.open(url, '_system');
+    // @capacitor/browser opens SFSafariViewController / Custom Tabs —
+    // genuinely outside the WKWebView, which is what keeps the purchase
+    // off Apple's IAP rails. (A bare window.open '_system' is a Cordova
+    // convention Capacitor does not guarantee.) Falls back to window.open
+    // if the plugin is unavailable in an old shell.
+    Browser.open({ url }).catch(() => {
+      window.open(url, '_blank', 'noopener');
+    });
   } else {
     window.location.href = url;
   }
