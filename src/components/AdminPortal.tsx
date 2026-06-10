@@ -49,6 +49,7 @@ import { ModerationDashboard } from './admin/ModerationDashboard';
 import { AIInsights } from './admin/AIInsights';
 import { ProviderApplicationReview } from './admin/ProviderApplicationReview';
 import { FeedbackInbox } from './admin/FeedbackInbox';
+import { ProviderQualityPanel } from './admin/ProviderQualityPanel';
 import { getAggregatedMetrics, getRetentionMetrics } from '../lib/outcomes-tracking';
 import { MRRDashboard } from './MRRDashboard';
 import { useAuditedAction } from '../hooks/useAuditedAction';
@@ -1208,7 +1209,10 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
         )}
 
         {activeSection === 'feedback' && (
-          <FeedbackInbox />
+          <div className="space-y-8">
+            <FeedbackInbox />
+            <ProviderQualityPanel />
+          </div>
         )}
 
         {activeSection === 'users' && (
