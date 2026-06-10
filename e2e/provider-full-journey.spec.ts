@@ -70,11 +70,15 @@ test.describe('Provider Full Journey', () => {
 
   test('provider portal renders for authenticated provider', async ({ page }) => {
     await setupAuthenticatedProvider(page);
-    // Deep-link directly to provider-portal so we don't depend on the __navigateToScreen
-    // hook being available. ?demo=true enables ProviderPortal demo data. authReady is
-    // bypassed immediately when __e2e_auth='bypass' is set (see App.tsx useState init).
-    await page.goto('/?screen=provider-portal&demo=true');
+    // Use the same pattern as screen-smoke.spec.ts (42-Screen Smoke > "provider-portal"
+    // renders without errors) which reliably passes: navigate to / first so the app
+    // initialises cleanly, then use the debug hook to switch screens. Deep-linking
+    // directly to /?screen=provider-portal caused subcomponent Supabase requests to
+    // keep the network busy, preventing networkidle from settling and leaving the page
+    // in a loading state when the assertion fired.
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await navigateToScreen(page, 'provider-portal');
 
     // Should see at least one navigation tab from the portal (Insights, Sessions, Notes, etc.)
     const portalTab = page.locator('text=/insights|sessions|notes|earnings|my practice/i').first();
