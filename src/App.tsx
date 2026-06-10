@@ -1265,6 +1265,18 @@ const CHROMELESS_SCREENS = new Set<AppScreen>([
 
 // Initialize screen state synchronously to prevent LCP delays
 const getInitialScreen = (): AppScreen => {
+  // Persist partner org URL param early (before auth check) so it's available post-signup.
+  // detectPartnerOrg() is only called post-auth; this ensures the flag is set immediately.
+  if (typeof window !== 'undefined') {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const orgParam = p.get('org') || p.get('partner') || p.get('pilot_organization');
+      if (orgParam === 'aact' || orgParam === 'rise') {
+        localStorage.setItem('aminy_partner_org', orgParam);
+      }
+    } catch {}
+  }
+
   // Check for auth callback first (OAuth redirects, password reset)
   const pathname = window.location.pathname;
   if (pathname === '/auth/callback' || pathname.includes('/auth/callback')) {
@@ -2442,9 +2454,10 @@ export default function App() {
     currentScreen !== "mfa-enrollment" &&
     currentScreen !== "mfa-verification";
 
-  // Determine if screen should have pull-to-refresh
-  const shouldEnablePullToRefresh =
-    currentScreen === "dashboard";
+  // Dashboard10 has its own internal PullToRefresh; the outer wrapper in App.tsx is
+  // redundant and its always-on transform:translateY(0px) creates a CSS containing
+  // block that breaks position:fixed descendants (chat FAB, bottom nav). Disabled.
+  const shouldEnablePullToRefresh = false;
 
   // Render current screen with lazy loading
   const renderScreen = () => {

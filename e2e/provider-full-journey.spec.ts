@@ -69,7 +69,8 @@ test.describe('Provider Full Journey', () => {
 
   test('provider portal renders for authenticated provider', async ({ page }) => {
     await setupAuthenticatedProvider(page);
-    await page.goto('/');
+    // Use ?demo=true so ProviderPortal loads mock data immediately (no Supabase round-trip)
+    await page.goto('/?demo=true');
     await navigateToScreen(page, 'provider-portal');
 
     // Should see at least one navigation tab from the portal (Insights, Sessions, Notes, etc.)

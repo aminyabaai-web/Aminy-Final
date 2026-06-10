@@ -16,8 +16,11 @@ async function isProtectedRoute(page: Page): Promise<boolean> {
 // ============================================
 test.describe('Authentication Flow', () => {
   test('should display login screen', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle');
+    // App uses state-based navigation (no URL router) — navigate to login via the debug hook
+    await page.goto('/');
+    await page.waitForFunction(() => typeof (window as any).__navigateToScreen === 'function', { timeout: 10000 }).catch(() => {});
+    await page.evaluate(() => (window as any).__navigateToScreen?.('login'));
+    await page.waitForTimeout(500);
 
     // Should have login elements
     const loginElements = page.locator('text=/sign in|log in|email|password/i');
@@ -25,8 +28,11 @@ test.describe('Authentication Flow', () => {
   });
 
   test('should have create account option', async ({ page }) => {
-    await page.goto('/login');
-    await page.waitForLoadState('networkidle');
+    // App uses state-based navigation (no URL router) — navigate to login via the debug hook
+    await page.goto('/');
+    await page.waitForFunction(() => typeof (window as any).__navigateToScreen === 'function', { timeout: 10000 }).catch(() => {});
+    await page.evaluate(() => (window as any).__navigateToScreen?.('login'));
+    await page.waitForTimeout(500);
 
     // Should have create account link/button (LoginScreen says "Create one")
     const createAccount = page.locator('text=/create account|sign up|register|create one|join|get started/i');
