@@ -70,9 +70,11 @@ test.describe('Provider Full Journey', () => {
 
   test('provider portal renders for authenticated provider', async ({ page }) => {
     await setupAuthenticatedProvider(page);
-    // Use ?demo=true so ProviderPortal loads mock data immediately (no Supabase round-trip)
-    await page.goto('/?demo=true');
-    await navigateToScreen(page, 'provider-portal');
+    // Deep-link directly to provider-portal so we don't depend on the __navigateToScreen
+    // hook being available. ?demo=true enables ProviderPortal demo data. authReady is
+    // bypassed immediately when __e2e_auth='bypass' is set (see App.tsx useState init).
+    await page.goto('/?screen=provider-portal&demo=true');
+    await page.waitForLoadState('networkidle');
 
     // Should see at least one navigation tab from the portal (Insights, Sessions, Notes, etc.)
     const portalTab = page.locator('text=/insights|sessions|notes|earnings|my practice/i').first();
