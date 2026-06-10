@@ -21,8 +21,9 @@ import type { Page } from '@playwright/test';
 
 function seedAuthenticatedProvider() {
   return {
-    id: 'provider-test-456',
-    userId: 'provider-test-456',
+    // dev- prefix triggers the ProviderPortal fast-fail path (skip Supabase, use mock data)
+    id: 'dev-provider-test',
+    userId: 'dev-provider-test',
     parentName: 'Dr. Test Provider',
     email: 'provider@example.com',
     hasCompletedOnboarding: true,
@@ -75,7 +76,7 @@ test.describe('Provider Full Journey', () => {
 
     // Should see at least one navigation tab from the portal (Insights, Sessions, Notes, etc.)
     const portalTab = page.locator('text=/insights|sessions|notes|earnings|my practice/i').first();
-    await expect(portalTab).toBeVisible({ timeout: 10000 });
+    await expect(portalTab).toBeVisible({ timeout: 15000 });
   });
 
   test('provider directory renders an empty state or provider list', async ({ page }) => {

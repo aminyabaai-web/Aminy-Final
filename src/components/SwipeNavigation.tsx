@@ -26,6 +26,10 @@ export function SwipeNavigation({
 }: SwipeNavigationProps) {
   const [swipeDistance, setSwipeDistance] = useState(0);
   const [isSwiping, setIsSwiping] = useState(false);
+  // Track snap-back window so we can keep the transition active while animating
+  // to 0, but remove the transform entirely at idle (avoids creating a CSS
+  // containing block that breaks position:fixed descendants).
+  const [isSnappingBack, setIsSnappingBack] = useState(false);
   const [showLeftIndicator, setShowLeftIndicator] = useState(false);
   const [showRightIndicator, setShowRightIndicator] = useState(false);
   
@@ -112,13 +116,16 @@ export function SwipeNavigation({
         }
       }
       
-      // Reset state
+      // Snap back: keep transform active for the animation duration (300ms),
+      // then remove it entirely so the containing block is cleared at idle.
+      setIsSnappingBack(true);
       setSwipeDistance(0);
       setIsSwiping(false);
       setShowLeftIndicator(false);
       setShowRightIndicator(false);
       isSwipingRef.current = false;
       swipeDirection.current = null;
+      setTimeout(() => setIsSnappingBack(false), 350);
     };
     
     const container = containerRef.current;
@@ -143,10 +150,10 @@ export function SwipeNavigation({
     <div
       ref={containerRef}
       className="relative h-full w-full overflow-hidden"
-      style={{
+      style={(swipeDistance !== 0 || isSwiping || isSnappingBack) ? {
         transform: `translateX(${swipeDistance}px)`,
         transition: isSwipingRef.current ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
+      } : undefined}
     >
       {/* Left swipe indicator */}
       {showIndicators && onSwipeLeft && (
