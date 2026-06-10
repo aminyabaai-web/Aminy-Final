@@ -870,7 +870,7 @@ test.describe('Animation & Transition Audit', () => {
     const startTime = Date.now();
 
     // Navigate to different screen
-    const settingsLink = page.locator('text=/settings/i, [aria-label*="settings"]').first();
+    const settingsLink = page.locator('text=/settings/i').or(page.locator('[aria-label*="settings"]')).first();
     if (await settingsLink.isVisible()) {
       await settingsLink.click();
       await page.waitForLoadState('networkidle');

@@ -28,8 +28,8 @@ test.describe('Authentication Flow', () => {
     await page.goto('/login');
     await page.waitForLoadState('networkidle');
 
-    // Should have create account link/button
-    const createAccount = page.locator('text=/create account|sign up|register/i');
+    // Should have create account link/button (LoginScreen says "Create one")
+    const createAccount = page.locator('text=/create account|sign up|register|create one|join|get started/i');
     await expect(createAccount.first()).toBeVisible({ timeout: 10000 });
   });
 

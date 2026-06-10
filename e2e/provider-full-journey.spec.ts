@@ -39,10 +39,12 @@ async function setupAuthenticatedProvider(page: Page) {
 }
 
 async function navigateToScreen(page: Page, screen: string) {
+  // Wait for React hydration to complete before calling the debug hook
+  await page.waitForFunction(() => typeof (window as any).__navigateToScreen === 'function', { timeout: 10000 }).catch(() => {});
   await page.evaluate((name) => {
     (window as { __navigateToScreen?: (screenName: string) => void }).__navigateToScreen?.(name);
   }, screen);
-  await page.waitForTimeout(600);
+  await page.waitForTimeout(800);
 }
 
 test.describe('Provider Full Journey', () => {
@@ -107,7 +109,8 @@ test.describe('Provider Full Journey', () => {
   test('AACT-attributed signup applies partner config to profile', async ({ page }) => {
     // Visit with ?org=aact and verify localStorage flag set
     await page.goto('/?org=aact');
-    await page.waitForTimeout(400);
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(1500);
 
     // partner-org.ts persists the attribution flag
     const stored = await page.evaluate(() => localStorage.getItem('aminy_partner_org'));
