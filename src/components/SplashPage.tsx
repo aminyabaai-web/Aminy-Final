@@ -22,6 +22,8 @@ interface SplashPageProps {
   onFreeScreening?: () => void;
   onPreDiagnosis?: () => void;
   onJustDiagnosed?: () => void;
+  onTeleABA?: () => void;
+  onPricing?: () => void;
 }
 
 const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif";

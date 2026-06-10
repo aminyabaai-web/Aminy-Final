@@ -303,6 +303,7 @@ interface BevelChatOverlayProps {
   currentPath: string;
   childName?: string;
   initialPrompt?: string;
+  userTier?: string;
 }
 
 export function BevelChatOverlay({
