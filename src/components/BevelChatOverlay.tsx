@@ -48,7 +48,7 @@ type SmartAction =
 
 function parseSmartActions(text: string): { cleanText: string; actions: SmartAction[] } {
   const actions: SmartAction[] = [];
-  const cleaned = text.replace(/\[ACTION:([A-Z_]+):(\{.*?\})\]/gs, (_match, type, json) => {
+  const cleaned = text.replace(/\[ACTION:([A-Z_]+):([\s\S]*?\})\]/g, (_match, type, json) => {
     try {
       actions.push({ type, payload: JSON.parse(json) } as SmartAction);
     } catch { /* ignore malformed */ }
@@ -702,7 +702,7 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
       imageUrl: img?.dataUrl
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    setMessages(prev => [...prev, userMsg].slice(-150));
     setInput('');
     setIsLoading(true);
 
@@ -844,12 +844,12 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
       recorder.start();
       setIsRecording(true);
     } catch (err) {
+      releaseMicrophone();
       if ((err as Error).name === 'NotAllowedError') {
         toast.error('Microphone permission needed for voice input');
       } else {
         toast.error('Could not access microphone');
       }
-      setIsRecording(false);
     }
   }, [isRecording]);
 

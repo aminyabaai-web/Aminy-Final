@@ -24,7 +24,7 @@ interface LoginScreenProps {
   onCreateAccount: () => void;
 }
 
-const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Inter\", \"Helvetica Neue\", Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -242,7 +242,7 @@ export function LoginScreen({
                 ...fontSmoothing,
               }}
             >
-              Welcome back
+              Sign in to your account
             </h1>
             <h2 className="sr-only">Sign in options</h2>
             <h3 className="sr-only">Email sign in form</h3>
@@ -255,7 +255,7 @@ export function LoginScreen({
                 ...fontSmoothing,
               }}
             >
-              Sign in to continue
+              Sign in to support your child
             </p>
           </motion.div>
 
@@ -581,7 +581,7 @@ export function LoginScreen({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#6B9080',
+                    color: '#2A7D99',
                     fontSize: '13px',
                     fontWeight: 500,
                     cursor: 'pointer',

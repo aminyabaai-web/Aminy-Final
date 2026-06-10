@@ -24,7 +24,7 @@ import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
 import { PasswordStrengthMeter } from './PasswordStrengthMeter';
 
-const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Inter\", \"Helvetica Neue\", Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -234,7 +234,7 @@ export function CreateAccountScreen({
     <div
       className="min-h-screen min-h-[100dvh]"
       style={{
-        backgroundColor: '#F8F8F6',
+        background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)',
         fontFamily: fontStack,
         display: 'flex',
         flexDirection: 'column',
@@ -247,7 +247,9 @@ export function CreateAccountScreen({
           padding: '12px 20px 4px',
           position: 'sticky',
           top: 0,
-          backgroundColor: '#F8F8F6',
+          background: 'rgba(246,251,251,0.92)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           zIndex: 10,
         }}
       >
@@ -336,7 +338,7 @@ export function CreateAccountScreen({
               ...fontSmoothing,
             }}
           >
-            Create your account
+            Get started with Aminy
           </motion.h1>
 
           {/* Subhead */}
@@ -355,26 +357,26 @@ export function CreateAccountScreen({
               ...fontSmoothing,
             }}
           >
-            Start your 7-day free trial
+            7-day free trial · No credit card required · Cancel anytime
           </motion.p>
 
           <h2 className="sr-only">Create your Aminy account</h2>
           <h3 className="sr-only">Choose how you want to get started</h3>
 
-          {/* Social Auth Buttons - Side by side to save space */}
+          {/* Social Auth Buttons - Full-width stacked for prominence */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            style={{ display: 'flex', gap: '10px', marginBottom: '12px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}
           >
             <button
               type="button"
               onClick={() => handleSocialAuth('apple')}
               disabled={isLoading || socialAuthLoading !== null}
               style={{
-                flex: 1,
-                height: '42px',
+                width: '100%',
+                height: '48px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -404,8 +406,8 @@ export function CreateAccountScreen({
               onClick={() => handleSocialAuth('google')}
               disabled={isLoading || socialAuthLoading !== null}
               style={{
-                flex: 1,
-                height: '42px',
+                width: '100%',
+                height: '48px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

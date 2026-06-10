@@ -114,8 +114,8 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       icon: Target,
       popular: true,
       gradient: 'from-[#FAF7F2] to-cyan-50',
-      iconBg: 'bg-[#6B9080]/10',
-      iconColor: 'text-[#6B9080]',
+      iconBg: 'bg-[#2A7D99]/10',
+      iconColor: 'text-[#2A7D99]',
     },
     {
       id: 'pro',
@@ -210,28 +210,27 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
             <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
-              Skip the free trial?
+              {childName ? `${childName}'s plan is ready` : 'Your personalized plan is ready'}
             </h3>
-            <p className="text-[#5A6B7A] dark:text-slate-300 mb-4 text-sm">
-              {childName ? `${childName}'s personalized plan is ready.` : 'Your personalized plan is ready.'}
-              {' '}The free trial gives you full access for 7 days with no commitment.
+            <p className="text-[#5A6B7A] dark:text-slate-300 mb-4 text-sm leading-relaxed">
+              Based on your screening results, we've built a daily support plan — 24/7 AI guidance, session booking, and a calm corner for tough moments. All free for 7 days. No credit card.
             </p>
             <div className="space-y-2">
               <Button
-                className="w-full bg-[#6B9080] hover:bg-[#216982] text-white"
+                className="w-full bg-[#2A7D99] hover:bg-[#1F6080] text-white font-semibold"
                 onClick={() => setShowCloseConfirm(false)}
               >
-                Start Free Trial
+                Start My Free 7-Day Trial →
               </Button>
               <Button
                 variant="ghost"
-                className="w-full text-[#5A6B7A]"
+                className="w-full text-[#8A9BA8] text-sm"
                 onClick={() => {
                   setShowCloseConfirm(false);
                   onClose?.();
                 }}
               >
-                Continue with limited features
+                Continue with limited access
               </Button>
             </div>
           </div>
@@ -451,7 +450,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 key={tier.id}
                 className={`relative p-5 transition-all duration-200 cursor-pointer hover:shadow-lg ${
                   tier.popular
-                    ? 'ring-2 ring-[#6B9080] shadow-md'
+                    ? 'ring-2 ring-[#2A7D99] shadow-md'
                     : 'border border-[#E8E4DF] hover:border-[#E8E4DF]'
                 } ${isCurrentTier ? 'opacity-60' : ''}`}
                 onClick={() => !isCurrentTier && handleSelectTier(tier.id)}
@@ -545,7 +544,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     <Button
                       className={`w-full mt-4 ${
                         tier.popular
-                          ? 'bg-[#6B9080] hover:bg-[#216982] text-white'
+                          ? 'bg-[#2A7D99] hover:bg-[#1F6080] text-white'
                           : tier.id === 'free'
                           ? 'bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57]'
                           : 'bg-gray-900 hover:bg-gray-800 text-white'

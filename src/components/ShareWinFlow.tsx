@@ -60,8 +60,8 @@ const WIN_TEMPLATES = {
   },
   goal: {
     emoji: '🎯',
-    color: 'from-[#6B9080] to-[#7BA7BC]',
-    bgColor: 'bg-[#6B9080]/10',
+    color: 'from-[#2A7D99] to-[#7BA7BC]',
+    bgColor: 'bg-[#2A7D99]/10',
   },
   calm_moment: {
     emoji: '🧘',
@@ -201,7 +201,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                 {/* Branding */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-[#6B9080]" />
+                    <Heart className="w-5 h-5 text-[#2A7D99]" />
                     <span className="font-semibold text-[#1B2733]">Aminy</span>
                   </div>
                   <Badge variant="outline" className="text-xs">
@@ -216,7 +216,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                     {win.title}
                   </h3>
                   {win.metric && (
-                    <p className="text-xl sm:text-2xl font-bold text-[#6B9080] mb-2">
+                    <p className="text-xl sm:text-2xl font-bold text-[#2A7D99] mb-2">
                       {win.metric}
                     </p>
                   )}
@@ -298,10 +298,10 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    className="mt-3 p-3 bg-gradient-to-r from-[#6B9080]/10 to-[#7BA7BC]/10 rounded-xl border border-[#6B9080]/20"
+                    className="mt-3 p-3 bg-gradient-to-r from-[#2A7D99]/10 to-[#7BA7BC]/10 rounded-xl border border-[#2A7D99]/20"
                   >
                     <div className="flex items-start gap-2 mb-2">
-                      <Gift className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
+                      <Gift className="w-4 h-4 text-[#2A7D99] shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-semibold text-[#1B2733]">Know another autism family?</p>
                         <p className="text-xs text-[#5A6B7A]">
@@ -312,7 +312,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                     <div className="flex gap-2">
                       <button
                         onClick={handleCopyReferral}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-white rounded-lg border border-[#6B9080]/30 text-sm text-[#6B9080] font-medium hover:bg-[#6B9080]/5 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-white rounded-lg border border-[#2A7D99]/30 text-sm text-[#2A7D99] font-medium hover:bg-[#2A7D99]/5 transition-colors"
                       >
                         {referralCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                         {referralCopied ? 'Copied!' : 'Copy invite link'}
@@ -320,7 +320,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                       {referralLink && (
                         <a
                           href={`sms:?body=I%20use%20Aminy%20to%20support%20my%20child's%20behavioral%20wellness%20%E2%80%94%20you%20get%20a%20%2425%20credit%20when%20you%20sign%20up:%20${encodeURIComponent(referralLink)}`}
-                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#6B9080] rounded-lg text-sm text-white font-medium hover:bg-[#216982] transition-colors"
+                          className="flex items-center justify-center gap-1.5 px-3 py-2 bg-[#2A7D99] rounded-lg text-sm text-white font-medium hover:bg-[#1F6080] transition-colors"
                         >
                           <MessageCircle className="w-4 h-4" />
                           Text
