@@ -1962,20 +1962,8 @@ app.post("/make-server-8a022548/ai/transcribe", async (c) => {
 });
 
 // ─── B2B Org Subscription Checkout ──────────────────────────────────────────
-// Per-seat billing for solo BCBAs, AACT pilots, clinics, schools, agencies, enterprise.
-// Volume ladder: 1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo, 15% off annual.
-// Mirror of src/lib/org-licensing.ts (the canonical copy) — edge functions can't
-// import src/lib, so update both together.
-const ORG_MIN_SEATS = 1;
-const ORG_ANNUAL_DISCOUNT = 0.15;
-function orgSeatPriceCents(seats: number): number {
-  if (seats >= 5) return 4900;
-  if (seats >= 4) return 5900;
-  if (seats >= 3) return 6900;
-  if (seats >= 2) return 7900;
-  return 8900; // 1 seat (solo BCBA)
-}
-
+// Per-seat billing for AACT pilots, clinics, schools, agencies, enterprise.
+// Default $99/seat/mo, 10% off annual.
 app.post("/make-server-8a022548/org/checkout", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -2007,15 +1995,13 @@ app.post("/make-server-8a022548/org/checkout", async (c) => {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeKey) return c.json({ error: 'Stripe not configured' }, 500);
 
-    // Calculate amount: seats × price/seat × (12 if annual with 15% off, 1 if monthly)
-    // Negotiated price_per_seat_cents (DB) overrides the volume ladder.
+    // Volume pricing ladder: 1=$89, 2=$79, 3=$69, 4=$59, 5+=$49 per seat/mo
+    const ladder = [{ min: 5, cents: 4900 }, { min: 4, cents: 5900 }, { min: 3, cents: 6900 }, { min: 2, cents: 7900 }, { min: 1, cents: 8900 }];
     const seats = org.seat_count;
-    if (!seats || seats < ORG_MIN_SEATS) {
-      return c.json({ error: `Seat count must be at least ${ORG_MIN_SEATS}` }, 400);
-    }
-    const seatPriceCents = org.price_per_seat_cents || orgSeatPriceCents(seats);
+    const seatPriceCents = org.price_per_seat_cents ||
+      (ladder.find(r => seats >= r.min)?.cents ?? 4900);
     const unitAmount = interval === 'year'
-      ? Math.round(seatPriceCents * 12 * (1 - ORG_ANNUAL_DISCOUNT))  // 15% annual discount
+      ? Math.round(seatPriceCents * 12 * 0.85)  // 15% annual discount
       : seatPriceCents;
 
     // Build Stripe checkout URL — using `price_data` for dynamic per-seat pricing
@@ -2026,7 +2012,7 @@ app.post("/make-server-8a022548/org/checkout", async (c) => {
     params.set('client_reference_id', orgId);
     params.set('line_items[0][price_data][currency]', 'usd');
     params.set('line_items[0][price_data][product_data][name]', `Aminy for Organizations — ${org.name}`);
-    params.set('line_items[0][price_data][product_data][description]', `${seats} ${seats === 1 ? 'seat' : 'seats'} — ${interval === 'year' ? 'Annual (15% off)' : 'Monthly'}`);
+    params.set('line_items[0][price_data][product_data][description]', `${seats} seats — ${interval === 'year' ? 'Annual (15% off)' : 'Monthly'}`);
     params.set('line_items[0][price_data][unit_amount]', String(unitAmount));
     params.set('line_items[0][price_data][recurring][interval]', interval === 'year' ? 'year' : 'month');
     params.set('line_items[0][quantity]', String(seats));
