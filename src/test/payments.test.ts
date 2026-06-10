@@ -4,6 +4,16 @@
  */
 
 import { describe, it, expect } from 'vitest';
+import {
+  MIN_SEATS,
+  DEFAULT_PRICE_PER_SEAT_CENTS,
+  SOLO_BCBA_PRICE_CENTS,
+  ANNUAL_DISCOUNT,
+  getSeatPriceCents,
+  calculateMonthlyAmount,
+  calculateAnnualAmount,
+  getSoloBCBAPricing,
+} from '../lib/org-licensing';
 
 // Define pricing inline to avoid import resolution issues
 // Must match tier-utils.ts and stripe-service.ts
@@ -64,6 +74,52 @@ describe('Price Formatting', () => {
 
   it('should handle large prices', () => {
     expect(formatPrice(44900)).toBe('$449.00');
+  });
+});
+
+describe('Org Seat Price Ladder', () => {
+  it('supports solo BCBAs — minimum 1 seat', () => {
+    expect(MIN_SEATS).toBe(1);
+  });
+
+  it('follows the volume ladder: $89 / $79 / $69 / $59 / $49 per seat', () => {
+    expect(getSeatPriceCents(1)).toBe(8900);
+    expect(getSeatPriceCents(2)).toBe(7900);
+    expect(getSeatPriceCents(3)).toBe(6900);
+    expect(getSeatPriceCents(4)).toBe(5900);
+    expect(getSeatPriceCents(5)).toBe(4900);
+    expect(getSeatPriceCents(10)).toBe(4900);
+  });
+
+  it('calculates monthly totals from the ladder when no custom price given', () => {
+    expect(calculateMonthlyAmount(1)).toBe(8900);    // 1 × $89
+    expect(calculateMonthlyAmount(2)).toBe(15800);   // 2 × $79
+    expect(calculateMonthlyAmount(3)).toBe(20700);   // 3 × $69
+    expect(calculateMonthlyAmount(4)).toBe(23600);   // 4 × $59
+    expect(calculateMonthlyAmount(5)).toBe(24500);   // 5 × $49
+    expect(calculateMonthlyAmount(10)).toBe(49000);  // 10 × $49
+  });
+
+  it('applies the 15% annual discount on ladder pricing', () => {
+    expect(ANNUAL_DISCOUNT).toBe(0.15);
+    expect(calculateAnnualAmount(1)).toBe(Math.round(8900 * 12 * 0.85));
+    expect(calculateAnnualAmount(10)).toBe(Math.round(49000 * 12 * 0.85));
+  });
+
+  it('lets negotiated per-seat pricing override the ladder', () => {
+    expect(calculateMonthlyAmount(2, 4000)).toBe(8000);                       // 2 × $40 custom
+    expect(calculateAnnualAmount(2, 4000)).toBe(Math.round(8000 * 12 * 0.85));
+  });
+
+  it('keeps solo BCBA pricing pinned to the 1-seat rung', () => {
+    expect(SOLO_BCBA_PRICE_CENTS).toBe(getSeatPriceCents(1));
+    const solo = getSoloBCBAPricing();
+    expect(solo.monthlyAmountCents).toBe(8900);
+    expect(solo.annualAmountCents).toBe(Math.round(8900 * 12 * 0.85));
+  });
+
+  it('keeps the legacy default at the 5+ volume rate', () => {
+    expect(DEFAULT_PRICE_PER_SEAT_CENTS).toBe(4900);
   });
 });
 

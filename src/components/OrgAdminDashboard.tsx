@@ -23,11 +23,14 @@ import {
   updateSeatCount,
   createOrgCheckoutSession,
   formatCents,
+  getSeatPriceCents,
   MIN_SEATS,
+  SEAT_PRICE_LADDER,
   type Organization,
   type OrgMember,
   type OrgUsage,
 } from '../lib/org-licensing';
+import { openSubscriptionCheckout } from '../lib/platform-purchase';
 import { ScreenHeader } from './ui/ScreenHeader';
 
 interface OrgAdminDashboardProps {
@@ -98,7 +101,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
   const handleSaveSeats = async () => {
     if (!org) return;
     if (newSeatCount < MIN_SEATS) {
-      toast.error(`Minimum ${MIN_SEATS} seats required`);
+      toast.error(`Seat count must be at least ${MIN_SEATS}`);
       return;
     }
     try {
@@ -116,6 +119,19 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
     }
   };
 
+  // Volume ladder hint: "1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat"
+  const ladderHint = [...SEAT_PRICE_LADDER].reverse()
+    .map((r, i, arr) => `${r.minSeats}${i === arr.length - 1 ? '+' : ''}${i === 0 ? ' seat' : ''} $${r.pricePerSeatCents / 100}`)
+    .join(' · ') + '/seat';
+
+  // Effective per-seat price for a seat count: orgs on negotiated pricing keep
+  // their DB rate; everyone else gets the volume ladder rate for that count.
+  const effectiveSeatPriceCents = (seats: number): number => {
+    if (!org) return getSeatPriceCents(seats);
+    const onLadder = org.pricePerSeatCents === getSeatPriceCents(org.seatCount);
+    return onLadder ? getSeatPriceCents(seats) : org.pricePerSeatCents;
+  };
+
   const handleStartCheckout = async (interval: 'month' | 'year') => {
     if (!org) return;
     try {
@@ -125,7 +141,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         successUrl: `${window.location.origin}/org-admin?checkout=success`,
         cancelUrl: `${window.location.origin}/org-admin?checkout=cancelled`,
       });
-      window.location.href = url;
+      openSubscriptionCheckout(url);
     } catch (e: any) {
       toast.error(e?.message || 'Could not start checkout');
     }
@@ -155,7 +171,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
-            <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for clinics, schools, agencies, and AACT-style pilots — anyone managing 10+ caregivers under one billing account.</p>
+            <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for solo BCBAs, clinics, schools, agencies, and AACT-style pilots — from a single seat to enterprise, under one billing account.</p>
             <p className="text-xs text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
         </div>
@@ -188,8 +204,8 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           </div>
 
           <div className="space-y-3">
-            <Row label="Monthly" value={formatCents(usage.monthlyAmountCents)} subtitle={`${org.seatCount} seats × ${formatCents(org.pricePerSeatCents)}/seat`} />
-            <Row label="Annual (save 10%)" value={formatCents(usage.annualAmountCents)} subtitle="billed yearly" />
+            <Row label="Monthly" value={formatCents(usage.monthlyAmountCents)} subtitle={`${org.seatCount} ${org.seatCount === 1 ? 'seat' : 'seats'} × ${formatCents(org.pricePerSeatCents)}/seat`} />
+            <Row label="Annual (save 15%)" value={formatCents(usage.annualAmountCents)} subtitle="billed yearly" />
             {usage.nextBillingDate && (
               <Row label="Next billing" value={new Date(usage.nextBillingDate).toLocaleDateString()} />
             )}
@@ -201,7 +217,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                 Start Monthly
               </button>
               <button onClick={() => handleStartCheckout('year')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl border border-[#6B9080] text-[#6B9080] bg-white">
-                Start Annual (-10%)
+                Start Annual (-15%)
               </button>
             </div>
           )}
@@ -234,15 +250,20 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           </div>
 
           {seatEditMode ? (
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                min={MIN_SEATS}
-                value={newSeatCount}
-                onChange={e => setNewSeatCount(parseInt(e.target.value || '0', 10))}
-                className="w-24 text-2xl font-bold border border-[#E8E4DF] rounded-lg px-3 py-1 text-center"
-              />
-              <span className="text-sm text-[#5A6B7A]">seats (min {MIN_SEATS})</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min={MIN_SEATS}
+                  value={newSeatCount}
+                  onChange={e => setNewSeatCount(parseInt(e.target.value || '0', 10))}
+                  className="w-24 text-2xl font-bold border border-[#E8E4DF] rounded-lg px-3 py-1 text-center"
+                />
+                <span className="text-sm text-[#5A6B7A]">
+                  seats × {formatCents(effectiveSeatPriceCents(Math.max(MIN_SEATS, newSeatCount)))}/seat
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-2">Volume pricing: {ladderHint}</p>
             </div>
           ) : (
             <div className="flex items-baseline gap-2">

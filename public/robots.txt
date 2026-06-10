@@ -4,8 +4,9 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemaps
 Sitemap: https://aminy.ai/sitemap.xml
+Sitemap: https://aminy.ai/sitemap-resources.xml
 
 # Disallow sensitive paths
 Disallow: /api/

@@ -44,9 +44,16 @@ vi.mock('lucide-react', () => {
     function MockIcon(props: Record<string, unknown>) {
       return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
     };
-  return new Proxy({}, {
-    get: (_target, prop: string) => icon(prop),
-  });
+  // vitest 4 builds a module namespace from the factory's own keys, so a keyless
+  // Proxy no longer works — enumerate every icon CommunityHub imports.
+  const names = [
+    'Users', 'MessageCircle', 'Heart', 'Share2', 'Plus', 'Search', 'Filter',
+    'Crown', 'Shield', 'Award', 'MapPin', 'Calendar', 'Clock', 'ThumbsUp',
+    'MessageSquare', 'Eye', 'EyeOff', 'Flag', 'MoreHorizontal', 'ArrowLeft',
+    'Send', 'Image', 'Sparkles', 'Star', 'CheckCircle', 'AlertCircle',
+    'Bookmark', 'TrendingUp', 'Hash', 'X',
+  ];
+  return Object.fromEntries(names.map((n) => [n, icon(n)]));
 });
 
 vi.mock('../../components/ui/card', () => ({
@@ -87,6 +94,11 @@ vi.mock('../../lib/badge-service', () => ({
   checkAndAwardBadges: vi.fn(),
 }));
 
+// Demo mode on so the sample posts/groups/events seed (real accounts start empty).
+vi.mock('../../lib/demo-seed', () => ({
+  isDemoMode: () => true,
+}));
+
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { CommunityHub } from '../../components/CommunityHub';
@@ -120,7 +132,8 @@ describe('CommunityHub', () => {
     expect(screen.getByText('Feed')).toBeInTheDocument();
     expect(screen.getByText('Groups')).toBeInTheDocument();
     expect(screen.getByText('Events')).toBeInTheDocument();
-    expect(screen.getByText('BCBA Q&A')).toBeInTheDocument();
+    // "BCBA Q&A" renders as both a view tab and a category chip.
+    expect(screen.getAllByText('BCBA Q&A').length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows new post button', () => {
@@ -133,10 +146,28 @@ describe('CommunityHub', () => {
     expect(screen.getByPlaceholderText('Search posts...')).toBeInTheDocument();
   });
 
-  it('renders mock posts with titles', () => {
+  it('renders mock posts with titles', async () => {
     render(<CommunityHub {...defaultProps} />);
-    expect(screen.getByText('First successful dentist visit!')).toBeInTheDocument();
-    expect(screen.getByText('AMA: Managing mealtime challenges')).toBeInTheDocument();
+    // Posts seed asynchronously (Supabase load resolves empty, then demo seeds).
+    expect(await screen.findByText('First successful dentist visit!')).toBeInTheDocument();
+    expect(await screen.findByText('AMA: Managing mealtime challenges')).toBeInTheDocument();
+  });
+
+  it('shows the Verified BCBA badge and Book session CTA on BCBA-authored posts', async () => {
+    render(<CommunityHub {...defaultProps} />);
+    // The seeded BCBA AMA post gets the verified badge and the marketplace CTA.
+    expect(await screen.findByText('✓ Verified BCBA')).toBeInTheDocument();
+    expect(screen.getByText('Work with Dr. Emily Chen, BCBA')).toBeInTheDocument();
+    const bookButton = screen.getByText('Book session');
+    fireEvent.click(bookButton);
+    expect(defaultProps.onNavigate).toHaveBeenCalledWith('marketplace');
+  });
+
+  it('shows the "Parents like you" group suggestion with a Join button', async () => {
+    render(<CommunityHub {...defaultProps} />);
+    expect(
+      await screen.findByText(/Parents like you are in/)
+    ).toBeInTheDocument();
   });
 
   it('renders back button and calls onBack', () => {

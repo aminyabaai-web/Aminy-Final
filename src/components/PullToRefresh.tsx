@@ -122,10 +122,10 @@ export function PullToRefresh({
     <div
       ref={containerRef}
       className="relative h-full overflow-y-auto"
-      style={{
+      style={pullDistance > 0 || isRefreshing ? {
         transform: `translateY(${pullDistance}px)`,
         transition: isDragging.current ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}
+      } : undefined}
     >
       {/* Pull-to-refresh indicator */}
       <div

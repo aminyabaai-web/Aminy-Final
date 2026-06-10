@@ -16,6 +16,7 @@ import { test, expect, Page } from '@playwright/test';
 
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',
@@ -347,7 +348,8 @@ test.describe('Visual Regression - Protected Pages', () => {
   test.describe('Onboarding', () => {
     test('mobile viewport', async ({ page }) => {
       await page.addInitScript(() => {
-        localStorage.setItem('aminy-user', JSON.stringify({
+        localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
           parentName: 'Test Parent',
           email: 'test@example.com',
           hasCompletedOnboarding: false,

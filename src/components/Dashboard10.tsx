@@ -684,23 +684,6 @@ export function Dashboard10({
     <div
       className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
     >
-      {/* Task completion micro-celebration */}
-      <AnimatePresence>
-        {taskWin && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -16, scale: 0.9 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          >
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
-              <span>✅</span>
-              <span>{taskWin}</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ========================================
           STREAK CELEBRATION OVERLAY
           Animated celebration for milestone streaks

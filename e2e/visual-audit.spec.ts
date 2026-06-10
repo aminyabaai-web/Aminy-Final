@@ -78,6 +78,7 @@ const SCREENSHOTS_DIR = path.join(process.cwd(), 'e2e-screenshots');
 // Helper: Create mock authenticated user in localStorage
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',

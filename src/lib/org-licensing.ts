@@ -4,13 +4,16 @@
 /**
  * Org Licensing — B2B seat-based subscriptions for AACT, schools, agencies, enterprise.
  *
- * Pricing model:
- * - $49/seat/month default (price_per_seat_cents on organizations table)
- * - Min 5 seats — accessible for smaller ABA clinics
+ * Pricing model — volume ladder, solo-BCBA friendly:
+ * - 1 seat: $89/seat/mo · 2: $79 · 3: $69 · 4: $59 · 5+: $49/seat/mo
+ * - Min 1 seat — solo BCBAs onboard at the same door as clinics
+ * - Orgs with negotiated pricing store price_per_seat_cents on the organizations
+ *   table; that custom rate overrides the ladder
  * - Billed monthly or annually (15% annual discount applied at Stripe level)
  *
  * Single source of truth for org seat economics. Use this library — don't hardcode
- * prices in components.
+ * prices in components. (The /org/checkout edge function keeps a mirrored copy of
+ * the ladder — edge functions can't import src/lib — update both together.)
  */
 
 import { supabase } from '../utils/supabase/client';
@@ -19,11 +22,35 @@ import { projectId } from '../utils/supabase/info';
 export const ORG_PLAN_TYPES = ['clinic', 'school', 'agency', 'enterprise'] as const;
 export type OrgPlanType = typeof ORG_PLAN_TYPES[number];
 
-export const MIN_SEATS = 5;
-export const DEFAULT_PRICE_PER_SEAT_CENTS = 4900;  // $49/seat/mo
+export const MIN_SEATS = 1;
 export const ANNUAL_DISCOUNT = 0.15;               // 15% off annual
 
-export const SOLO_BCBA_PRICE_CENTS = 7900;      // $79/mo flat, 1 clinician
+/**
+ * Volume pricing ladder — price per seat per month, by total seat count.
+ * Single source of truth (mirrored in the /org/checkout edge function).
+ * Solo BCBAs pay $89; the per-seat price steps down in $10 increments to $49 at 5+ seats.
+ */
+export const SEAT_PRICE_LADDER: ReadonlyArray<{ minSeats: number; pricePerSeatCents: number }> = [
+  { minSeats: 5, pricePerSeatCents: 4900 },  // 5+ seats: $49/seat
+  { minSeats: 4, pricePerSeatCents: 5900 },  // 4 seats:  $59/seat
+  { minSeats: 3, pricePerSeatCents: 6900 },  // 3 seats:  $69/seat
+  { minSeats: 2, pricePerSeatCents: 7900 },  // 2 seats:  $79/seat
+  { minSeats: 1, pricePerSeatCents: 8900 },  // 1 seat:   $89 (solo BCBA)
+];
+
+/** Per-seat monthly price for a given seat count, per the volume ladder. */
+export function getSeatPriceCents(seats: number): number {
+  // Ladder is sorted high→low minSeats; first rung the count clears wins.
+  const rung = SEAT_PRICE_LADDER.find(r => seats >= r.minSeats);
+  // Below 1 seat is invalid input — charge the solo rate rather than throw.
+  return rung ? rung.pricePerSeatCents : SEAT_PRICE_LADDER[SEAT_PRICE_LADDER.length - 1].pricePerSeatCents;
+}
+
+/** The 5+ seat volume rate — kept for back-compat with existing callers. */
+export const DEFAULT_PRICE_PER_SEAT_CENTS = getSeatPriceCents(5);  // $49/seat/mo
+
+// Solo BCBA = the 1-seat rung of the ladder (delegated so they can't drift)
+export const SOLO_BCBA_PRICE_CENTS = getSeatPriceCents(1);  // $89/mo, 1 clinician
 export const SOLO_BCBA_MAX_CLINICIANS = 1;
 
 export interface Organization {
@@ -66,13 +93,15 @@ export interface OrgUsage {
 
 // ─── Pricing helpers ─────────────────────────────────────────────────────────
 
-export function calculateMonthlyAmount(seats: number, pricePerSeatCents: number = DEFAULT_PRICE_PER_SEAT_CENTS): number {
-  return seats * pricePerSeatCents;
+/** Monthly total. Omit pricePerSeatCents to use the volume ladder; pass it for orgs with negotiated pricing (stored in DB). */
+export function calculateMonthlyAmount(seats: number, pricePerSeatCents?: number): number {
+  return seats * (pricePerSeatCents ?? getSeatPriceCents(seats));
 }
 
-export function calculateAnnualAmount(seats: number, pricePerSeatCents: number = DEFAULT_PRICE_PER_SEAT_CENTS): number {
+/** Annual total. Omit pricePerSeatCents to use the volume ladder; pass it for orgs with negotiated pricing (stored in DB). */
+export function calculateAnnualAmount(seats: number, pricePerSeatCents?: number): number {
   // 12 months × seat price × (1 - annual discount)
-  return Math.round(seats * pricePerSeatCents * 12 * (1 - ANNUAL_DISCOUNT));
+  return Math.round(seats * (pricePerSeatCents ?? getSeatPriceCents(seats)) * 12 * (1 - ANNUAL_DISCOUNT));
 }
 
 export function formatCents(cents: number): string {
@@ -80,9 +109,10 @@ export function formatCents(cents: number): string {
 }
 
 export function getSoloBCBAPricing() {
+  // Solo BCBA = the 1-seat rung of the ladder — delegate so the two can't drift.
   return {
-    monthlyAmountCents: SOLO_BCBA_PRICE_CENTS,
-    annualAmountCents: Math.round(SOLO_BCBA_PRICE_CENTS * 12 * (1 - ANNUAL_DISCOUNT)),
+    monthlyAmountCents: calculateMonthlyAmount(1),
+    annualAmountCents: calculateAnnualAmount(1),
     maxClinicians: SOLO_BCBA_MAX_CLINICIANS,
     features: [
       'All provider features',
@@ -180,7 +210,7 @@ export async function createOrganization(input: {
   if (!user) throw new Error('Not authenticated');
 
   if (input.seatCount < MIN_SEATS) {
-    throw new Error(`Minimum ${MIN_SEATS} seats required for org licensing`);
+    throw new Error(`Seat count must be at least ${MIN_SEATS}`);
   }
 
   const { data, error } = await supabase
@@ -247,7 +277,7 @@ export async function removeMember(memberId: string): Promise<void> {
 /** Update seat count (will trigger Stripe subscription update via webhook). */
 export async function updateSeatCount(orgId: string, newSeatCount: number): Promise<void> {
   if (newSeatCount < MIN_SEATS) {
-    throw new Error(`Minimum ${MIN_SEATS} seats required`);
+    throw new Error(`Seat count must be at least ${MIN_SEATS}`);
   }
   const { error } = await supabase
     .from('organizations')
@@ -306,7 +336,8 @@ function mapRowToOrg(row: any): Organization {
     stripeSubscriptionId: row.stripe_subscription_id,
     subscriptionStatus: row.subscription_status || 'inactive',
     billingInterval: row.billing_interval || 'month',
-    pricePerSeatCents: row.price_per_seat_cents || DEFAULT_PRICE_PER_SEAT_CENTS,
+    // No negotiated price in DB → ladder rate for this org's seat count
+    pricePerSeatCents: row.price_per_seat_cents || getSeatPriceCents(row.seat_count),
     currentPeriodEnd: row.current_period_end,
     trialEndsAt: row.trial_ends_at,
     createdAt: row.created_at,

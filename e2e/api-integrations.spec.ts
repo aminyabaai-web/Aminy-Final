@@ -20,6 +20,7 @@ async function setupMockAuth(page: Page, options: { tier?: string } = {}) {
   const { tier = 'essentials' } = options;
 
   await page.addInitScript((args) => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',
@@ -629,7 +630,8 @@ test.describe('Provider Portal API', () => {
   test('provider portal loads data', async ({ page }) => {
     // Mock provider auth
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         email: 'provider@test.com',
         role: 'provider',
         tier: 'provider',
@@ -650,7 +652,8 @@ test.describe('Provider Portal API', () => {
 
   test('BCBA portal loads data', async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem('aminy-user', JSON.stringify({
+      localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         email: 'bcba@test.com',
         role: 'bcba',
         tier: 'provider',

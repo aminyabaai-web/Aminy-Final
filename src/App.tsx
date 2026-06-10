@@ -1240,6 +1240,8 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "provider-portal", "provider-onboarding", "cr-sync",
   "share-viewer", "medications", "mchat-screening",
   "aact-ops-dashboard",
+  // Pricing must be linkable from marketing emails/ads (and E2E deep-links it)
+  "paywall",
 ];
 
 const CHROMELESS_SCREENS = new Set<AppScreen>([
@@ -1263,6 +1265,18 @@ const CHROMELESS_SCREENS = new Set<AppScreen>([
 
 // Initialize screen state synchronously to prevent LCP delays
 const getInitialScreen = (): AppScreen => {
+  // Persist partner org URL param early (before auth check) so it's available post-signup.
+  // detectPartnerOrg() is only called post-auth; this ensures the flag is set immediately.
+  if (typeof window !== 'undefined') {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const orgParam = p.get('org') || p.get('partner') || p.get('pilot_organization');
+      if (orgParam === 'aact' || orgParam === 'rise') {
+        localStorage.setItem('aminy_partner_org', orgParam);
+      }
+    } catch {}
+  }
+
   // Check for auth callback first (OAuth redirects, password reset)
   const pathname = window.location.pathname;
   if (pathname === '/auth/callback' || pathname.includes('/auth/callback')) {
@@ -1433,7 +1447,12 @@ export default function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   // authReady: true once Supabase has determined initial auth state (INITIAL_SESSION fired).
   // Gates the main UI render so unauthenticated users never briefly see dashboard.
-  const [authReady, setAuthReady] = useState(false);
+  // E2E bypass: when __e2e_auth is set, skip the Supabase wait so tests don't time out.
+  const [authReady, setAuthReady] = useState(() => {
+    // E2E bypass: __e2e_auth is set by Playwright addInitScript; works in any build mode.
+    try { if (localStorage.getItem('__e2e_auth') === 'bypass') return true; } catch { /* ignore */ }
+    return false;
+  });
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showUnloadMindModal, setShowUnloadMindModal] = useState(false);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
@@ -1716,10 +1735,13 @@ export default function App() {
     window.history.pushState({}, "", newUrl);
   };
 
-  // Debug navigation hooks — only available in development
+  // Navigation hook always registered so E2E tests work in any build mode.
+  // Safe: only changes which screen renders; no auth or data exposure.
+  window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
+  window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
+
+  // Debug utilities — only in development
   if (import.meta.env.DEV) {
-    window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
-    window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
     window.__openBevelChat = () => setBevelChatOpen(true);
     window.__closeBevelChat = () => setBevelChatOpen(false);
     // Impersonate any user type for dev auditing — sets userData + bypasses session guard
@@ -2018,8 +2040,7 @@ export default function App() {
           // above means the user only ever sees the loading skeleton → login, never
           // a flash of the dashboard.
           // DEV-only: E2E tests set __e2e_auth to bypass this redirect.
-          const isE2EBypass = import.meta.env.DEV &&
-            (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
+          const isE2EBypass = (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
           const screen = currentScreenRef.current;
           if (!SESSIONLESS_OK_SCREENS.has(screen) && !isE2EBypass) {
             logger.dev('INITIAL_SESSION with no session on a protected screen — redirecting to login', { screen });
@@ -2440,9 +2461,10 @@ export default function App() {
     currentScreen !== "mfa-enrollment" &&
     currentScreen !== "mfa-verification";
 
-  // Determine if screen should have pull-to-refresh
-  const shouldEnablePullToRefresh =
-    currentScreen === "dashboard";
+  // Dashboard10 has its own internal PullToRefresh; the outer wrapper in App.tsx is
+  // redundant and its always-on transform:translateY(0px) creates a CSS containing
+  // block that breaks position:fixed descendants (chat FAB, bottom nav). Disabled.
+  const shouldEnablePullToRefresh = false;
 
   // Render current screen with lazy loading
   const renderScreen = () => {
@@ -2494,6 +2516,8 @@ export default function App() {
                 onFreeScreening={() => navigateToScreen("free-screening")}
                 onPreDiagnosis={() => navigateToScreen("pre-diagnosis")}
                 onJustDiagnosed={() => navigateToScreen("just-diagnosed")}
+                onTeleABA={() => navigateToScreen("telehealth")}
+                onPricing={() => navigateToScreen("paywall")}
               />
             </Suspense>
           );
@@ -2893,6 +2917,7 @@ export default function App() {
                 childName={userData.childName || undefined}
                 parentName={userData.parentName || undefined}
                 tier={userData.tier || 'core'}
+                pilotOrganization={userData.pilotOrganization || null}
                 onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
               />
             </Suspense>

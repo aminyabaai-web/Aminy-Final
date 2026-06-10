@@ -34,6 +34,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { secureFetch } from './security/secure-fetch';
 import { RETHINK_CONFIG, isRethinkConfigured, getRethinkOAuthUrl } from './rethink-config';
 
@@ -839,9 +840,10 @@ async function callRethinkEdgeFunction<T>(
   action: string,
   data: Record<string, unknown>,
 ): Promise<T> {
-  const token = localStorage.getItem('supabase.auth.token');
-  const authToken = token != null ? (JSON.parse(token) as { access_token?: string }).access_token : null;
-  const bearer = authToken ?? publicAnonKey;
+  // The edge function requires a real user JWT (PHI routes 401 on anon) —
+  // get it from the live session, not the legacy localStorage key.
+  const { data: { session } } = await supabase.auth.getSession();
+  const bearer = session?.access_token ?? publicAnonKey;
 
   const result = await secureFetch<T>(RETHINK_FUNCTION_URL, {
     method: 'POST',

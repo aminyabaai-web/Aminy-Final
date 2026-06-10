@@ -18,6 +18,7 @@ import { test, expect, Page } from '@playwright/test';
 
 async function setupMockAuth(page: Page) {
   await page.addInitScript(() => {
+    localStorage.setItem('__e2e_auth', 'bypass');
     localStorage.setItem('aminy-user', JSON.stringify({
       parentName: 'Test Parent',
       childName: 'Alex',
@@ -869,7 +870,7 @@ test.describe('Animation & Transition Audit', () => {
     const startTime = Date.now();
 
     // Navigate to different screen
-    const settingsLink = page.locator('text=/settings/i, [aria-label*="settings"]').first();
+    const settingsLink = page.locator('text=/settings/i').or(page.locator('[aria-label*="settings"]')).first();
     if (await settingsLink.isVisible()) {
       await settingsLink.click();
       await page.waitForLoadState('networkidle');

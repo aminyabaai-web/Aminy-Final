@@ -8767,7 +8767,7 @@ html {
   }
 }
 
-.aminy-button-primary, .aminy-plan-button, button[class*="bg-primary"] {
+.aminy-button-primary, .aminy-plan-button, button[class*="bg-primary"]:not([class*="fixed"]) {
   border-radius: .75rem;
   min-height: 36px;
   font-weight: 500;
@@ -16846,6 +16846,13 @@ main#main,
   filter: none !important;
   contain: none !important;
   will-change: auto !important;
+}
+
+/* Ensure the .fixed utility always wins position: fixed even against unlayered rules
+   like button[class*="bg-primary"] { position: relative } that cascade above @layer utilities.
+   Must come AFTER the containing-block reset above. */
+.fixed {
+  position: fixed !important;
 }
 
 /* ============================================================

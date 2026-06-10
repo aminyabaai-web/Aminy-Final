@@ -4,12 +4,13 @@
 // See LICENSE file for details.
 
 /**
- * SplashPage - Calm / Apple / Premium
+ * SplashPage — Aminy Design System · marketing landing surface
+ * Teal (#2A7D99) · Schibsted Grotesk · Mist background
  */
 
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Zap, Moon, CheckCircle, Shield, Star, Clock } from 'lucide-react';
 import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import { MedicalDisclaimer } from './MedicalDisclaimer';
 
@@ -22,9 +23,12 @@ interface SplashPageProps {
   onFreeScreening?: () => void;
   onPreDiagnosis?: () => void;
   onJustDiagnosed?: () => void;
+  onTeleABA?: () => void;
+  onPricing?: () => void;
 }
 
-const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+// Design system font stack — Schibsted Grotesk is primary
+const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -32,156 +36,236 @@ const fontSmoothing: React.CSSProperties = {
   textRendering: 'geometricPrecision',
 } as React.CSSProperties;
 
+// Design system tokens
+const TEAL = '#2A7D99';
+const TEAL_DARK = '#1F6080';
+const TEAL_LIGHT = 'rgba(42,125,153,0.08)';
+const TEAL_BORDER = 'rgba(42,125,153,0.20)';
+const TEXT = 'rgba(19,47,67,0.90)';
+const TEXT_MUTED = 'rgba(19,47,67,0.50)';
+const TEXT_FAINT = 'rgba(19,47,67,0.36)';
+
 export function SplashPage({
   onStartTrial,
   onSignIn,
   onForProviders,
   onFreeScreening,
-  onPreDiagnosis,
   onJustDiagnosed,
+  onTeleABA,
+  onPricing,
 }: SplashPageProps) {
 
   useEffect(() => {
-    document.title = "Aminy — ABA for Everyday Life";
+    document.title = "Aminy — The calm center of your child's care";
 
-    // Set meta description
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
       metaDesc = document.createElement('meta');
       metaDesc.setAttribute('name', 'description');
       document.head.appendChild(metaDesc);
     }
-    metaDesc.setAttribute('content', 'Gentle, always-there support grounded in ABA—routines, guidance, and progress tools for neurodivergent family life.');
+    metaDesc.setAttribute('content', 'ABA-grounded support for neurodivergent families. Routines, AI guidance, and progress tools — coordinated by an AI that knows your child.');
   }, []);
 
   return (
     <div
       className="min-h-screen min-h-[100dvh] flex flex-col"
       style={{
-        backgroundColor: '#F8F8F6',
+        background: 'linear-gradient(180deg, #F6FBFB 0%, #EDF4F7 100%)',
         fontFamily: fontStack,
         ...fontSmoothing,
       }}
     >
+      {/* ─── Nav ─────────────────────────────────────────────── */}
       <nav
         aria-label="Primary"
         style={{
           display: 'flex',
           justifyContent: 'center',
-          padding: '18px 24px 0',
+          padding: '16px 24px 0',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          backgroundColor: 'rgba(246,251,251,0.88)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
         }}
       >
         <div
           style={{
             display: 'flex',
             width: '100%',
-            maxWidth: '920px',
+            maxWidth: '960px',
             alignItems: 'center',
-            justifyContent: 'flex-end',  // CTAs only — hero logo below carries the brand
-            gap: '12px',
+            justifyContent: 'space-between',
+            paddingBottom: '14px',
+            borderBottom: '1px solid rgba(42,125,153,0.07)',
           }}
         >
-          {/* No duplicate wordmark: the hero logo image below is the brand mark. */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            {onForProviders && (
+          {/* Wordmark */}
+          <img
+            src={aminyLogoCropped}
+            alt="Aminy"
+            style={{ height: '28px', width: 'auto', objectFit: 'contain' }}
+          />
+
+          {/* Nav links — hidden on small screens */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+            }}
+            className="hidden sm:flex"
+          >
+            {[
+              { label: 'For families', action: onFreeScreening || onStartTrial },
+              { label: 'For providers', action: onForProviders },
+              { label: 'TeleABA', action: onTeleABA },
+              { label: 'Pricing', action: onPricing },
+            ].map(({ label, action }) => (
               <button
-                onClick={onForProviders}
+                key={label}
+                onClick={action || undefined}
                 style={{
                   border: 'none',
                   background: 'transparent',
-                  color: 'rgba(17, 24, 39, 0.6)',
+                  color: TEXT_MUTED,
                   fontFamily: fontStack,
                   fontSize: '13px',
                   fontWeight: 500,
-                  cursor: 'pointer',
-                  padding: '10px 14px',
-                  borderRadius: '12px',
+                  cursor: action ? 'pointer' : 'default',
+                  padding: '8px 12px',
+                  borderRadius: '10px',
+                  transition: 'color 0.15s, background 0.15s',
                   ...fontSmoothing,
                 }}
+                onMouseEnter={(e) => {
+                  if (action) {
+                    e.currentTarget.style.color = TEXT;
+                    e.currentTarget.style.background = TEAL_LIGHT;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = TEXT_MUTED;
+                  e.currentTarget.style.background = 'transparent';
+                }}
               >
-                For providers
+                {label}
               </button>
-            )}
+            ))}
+          </div>
+
+          {/* Auth CTAs */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {onSignIn && (
               <button
                 onClick={onSignIn}
                 className="action-button"
                 style={{
-                  border: '1px solid rgba(17, 24, 39, 0.08)',
-                  background: 'rgba(255,255,255,0.72)',
-                  color: 'rgba(17, 24, 39, 0.82)',
+                  border: `1px solid rgba(42,125,153,0.18)`,
+                  background: 'rgba(255,255,255,0.80)',
+                  color: TEXT,
                   fontFamily: fontStack,
                   fontSize: '13px',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  padding: '10px 16px',
-                  borderRadius: '12px',
+                  padding: '9px 16px',
+                  borderRadius: '10px',
+                  transition: 'all 0.15s',
                   ...fontSmoothing,
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = TEAL_BORDER; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(42,125,153,0.18)'; }}
               >
                 Sign in
               </button>
             )}
+            <button
+              onClick={onStartTrial}
+              className="action-button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                backgroundColor: TEAL,
+                color: '#FFFFFF',
+                fontFamily: fontStack,
+                fontWeight: 600,
+                fontSize: '13px',
+                padding: '9px 16px',
+                borderRadius: '10px',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'background-color 0.15s',
+                ...fontSmoothing,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = TEAL_DARK; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = TEAL; }}
+            >
+              Start free
+              <ArrowRight style={{ width: '13px', height: '13px', strokeWidth: 2.5 }} />
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Main Content */}
+      {/* ─── Hero ─────────────────────────────────────────────── */}
       <main
         className="flex-1 flex flex-col items-center px-6 sm:px-8"
         style={{
-          paddingTop: 'clamp(48px, 10vh, 96px)',
+          paddingTop: 'clamp(52px, 11vh, 104px)',
           paddingBottom: '48px',
           overflowY: 'auto',
         }}
       >
-        <div style={{ width: '100%', maxWidth: '620px', margin: '0 auto' }}>
+        <div style={{ width: '100%', maxWidth: '640px', margin: '0 auto' }}>
 
-          {/* Top Badge */}
+          {/* Eyebrow pill */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0 }}
-            style={{
-              textAlign: 'center',
-              marginBottom: '32px',
-            }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0 }}
+            style={{ textAlign: 'center', marginBottom: '28px' }}
           >
             <span
               style={{
-                display: 'inline-block',
-                padding: '4px 14px',
-                backgroundColor: 'rgba(255, 255, 255, 0.4)',
-                border: '1px solid rgba(17, 24, 39, 0.03)',
-                borderRadius: '14px',
-                color: 'rgba(17, 24, 39, 0.42)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '5px 14px',
+                backgroundColor: TEAL_LIGHT,
+                border: `1px solid ${TEAL_BORDER}`,
+                borderRadius: '999px',
+                color: TEAL,
                 fontFamily: fontStack,
                 fontSize: '12px',
-                fontWeight: 450,
-                letterSpacing: '0.015em',
+                fontWeight: 600,
+                letterSpacing: '0.01em',
                 ...fontSmoothing,
               }}
             >
-              ABA-Based · Clinically Grounded · Built for Families
+              <Star style={{ width: '11px', height: '11px', fill: TEAL, color: TEAL }} />
+              The Family OS for neurodivergent care
             </span>
           </motion.div>
 
-          {/* Logo */}
+          {/* Logo lockup */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.4, delay: 0.1 }}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.0, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginBottom: '52px',
+              marginBottom: '40px',
             }}
           >
             <img
               src={aminyLogoCropped}
-              alt="Aminy - Gentle Guidance. Meaningful Progress."
+              alt="Aminy — Gentle Guidance. Meaningful Progress."
               style={{
-                width: 'min(58vw, 240px)',
+                width: 'min(52vw, 220px)',
                 aspectRatio: '827 / 338',
                 objectFit: 'contain',
               }}
@@ -190,56 +274,56 @@ export function SplashPage({
 
           {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.25 }}
+            transition={{ duration: 0.9, delay: 0.18 }}
             style={{
-              color: 'rgba(17, 24, 39, 0.88)',
+              color: TEXT,
               fontFamily: fontStack,
-              fontWeight: 540,
-              fontSize: 'clamp(1.75rem, 5.5vw, 2.15rem)',
-              lineHeight: 1.24,
-              letterSpacing: '-0.02em',
+              fontWeight: 700,
+              fontSize: 'clamp(1.85rem, 5.8vw, 2.25rem)',
+              lineHeight: 1.22,
+              letterSpacing: '-0.025em',
               textAlign: 'center',
-              marginBottom: '28px',
+              marginBottom: '20px',
               ...fontSmoothing,
             }}
           >
-            The Family OS for neurodivergent care.
+            The calm center of<br />your child's care.
           </motion.h1>
 
-          {/* Context line */}
+          {/* Subheadline */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
+            transition={{ duration: 0.9, delay: 0.30 }}
             style={{
-              color: 'rgba(17, 24, 39, 0.44)',
+              color: TEXT_MUTED,
               fontFamily: fontStack,
               fontWeight: 400,
-              fontSize: '15px',
-              lineHeight: 1.6,
-              letterSpacing: '-0.006em',
+              fontSize: '15.5px',
+              lineHeight: 1.62,
+              letterSpacing: '-0.005em',
               textAlign: 'center',
-              marginBottom: '40px',
+              marginBottom: '36px',
               maxWidth: '44ch',
               marginLeft: 'auto',
               marginRight: 'auto',
               ...fontSmoothing,
             }}
           >
-            One place for every kind of care your child needs — ABA, speech, OT, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
+            One place for ABA, speech, OT, and mental health — coordinated by an AI that knows your family. From finding a provider to tracking progress to navigating insurance.
           </motion.p>
 
           {/* Primary CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.55 }}
+            transition={{ duration: 0.9, delay: 0.42 }}
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginBottom: '20px',
+              marginBottom: '14px',
             }}
           >
             <button
@@ -250,29 +334,32 @@ export function SplashPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: '#6B9080',
+                backgroundColor: TEAL,
                 color: '#FFFFFF',
                 fontFamily: fontStack,
-                fontWeight: 500,
-                fontSize: '15px',
+                fontWeight: 600,
+                fontSize: '15.5px',
                 letterSpacing: '-0.008em',
-                padding: '0 32px',
-                height: '52px',
+                padding: '0 36px',
+                height: '54px',
                 borderRadius: '14px',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'background-color 0.2s ease',
+                boxShadow: '0 2px 16px rgba(42,125,153,0.28)',
+                transition: 'background-color 0.18s, box-shadow 0.18s',
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#5A7D6E';
+                e.currentTarget.style.backgroundColor = TEAL_DARK;
+                e.currentTarget.style.boxShadow = '0 4px 24px rgba(42,125,153,0.38)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#6B9080';
+                e.currentTarget.style.backgroundColor = TEAL;
+                e.currentTarget.style.boxShadow = '0 2px 16px rgba(42,125,153,0.28)';
               }}
             >
               Start free
-              <ArrowRight style={{ width: '15px', height: '15px', strokeWidth: 2 }} />
+              <ArrowRight style={{ width: '16px', height: '16px', strokeWidth: 2 }} />
             </button>
           </motion.div>
 
@@ -280,59 +367,45 @@ export function SplashPage({
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.7 }}
+            transition={{ duration: 0.8, delay: 0.54 }}
             style={{
               textAlign: 'center',
-              marginBottom: '12px',
-              color: 'rgba(17, 24, 39, 0.38)',
+              marginBottom: '10px',
+              color: TEXT_FAINT,
               fontFamily: fontStack,
               fontSize: '12.5px',
               fontWeight: 400,
-              letterSpacing: '0.01em',
+              letterSpacing: '0.005em',
               ...fontSmoothing,
             }}
           >
             7-day free trial · No credit card required
           </motion.p>
 
-          {/* Provider entry intentionally lives in two places only: the top-right
-             "For providers" nav and the "Provider pilot by invitation" link below.
-             Removed the duplicate "Are you a provider?" CTA that pointed to the same
-             onForProviders handler — it was the third provider entry and cluttered
-             the secondary stack. */}
-
-          {/* "No diagnosis yet? You belong here too" standalone CTA removed to
-             declutter the secondary stack — the boxed "Concerned about your child?
-             Free screening" CTA below serves the same concerned/undiagnosed-parent
-             audience. onPreDiagnosis remains wired and can be re-surfaced if a
-             distinct pre-diagnosis entry point is wanted later. */}
-
-          {/* Secondary acquisition CTAs — two chips in a clean row */}
+          {/* Intent pills */}
           {(onFreeScreening || onJustDiagnosed) && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.75 }}
+              transition={{ duration: 0.8, delay: 0.60 }}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '10px',
                 marginBottom: '20px',
-                padding: '0 20px',
+                padding: '0 16px',
               }}
             >
-              {/* Divider label */}
               <div style={{
                 fontSize: '11px',
                 fontWeight: 600,
-                color: 'rgba(17,24,39,0.30)',
+                color: TEXT_FAINT,
                 letterSpacing: '0.08em',
                 ...fontSmoothing,
               }}>
                 OR
               </div>
-              {/* Chip row */}
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {onFreeScreening && (
                   <button
@@ -340,28 +413,29 @@ export function SplashPage({
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px',
-                      background: 'rgba(107,144,128,0.07)',
-                      border: '1px solid rgba(107,144,128,0.22)',
-                      borderRadius: '100px',
-                      color: '#6B9080',
+                      gap: '6px',
+                      background: TEAL_LIGHT,
+                      border: `1px solid ${TEAL_BORDER}`,
+                      borderRadius: '999px',
+                      color: TEAL,
                       fontFamily: fontStack,
                       fontSize: '13px',
                       fontWeight: 600,
                       cursor: 'pointer',
                       padding: '9px 16px',
-                      transition: 'all 0.18s ease',
+                      transition: 'all 0.16s',
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(107,144,128,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(107,144,128,0.40)';
+                      e.currentTarget.style.background = 'rgba(42,125,153,0.13)';
+                      e.currentTarget.style.borderColor = 'rgba(42,125,153,0.35)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(107,144,128,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(107,144,128,0.22)';
+                      e.currentTarget.style.background = TEAL_LIGHT;
+                      e.currentTarget.style.borderColor = TEAL_BORDER;
                     }}
                   >
+                    <Shield style={{ width: '13px', height: '13px' }} />
                     Concerned? Free screening →
                   </button>
                 )}
@@ -371,28 +445,29 @@ export function SplashPage({
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '5px',
-                      background: 'rgba(123,167,188,0.07)',
-                      border: '1px solid rgba(123,167,188,0.25)',
-                      borderRadius: '100px',
-                      color: '#4A8A9C',
+                      gap: '6px',
+                      background: 'rgba(19,47,67,0.04)',
+                      border: '1px solid rgba(19,47,67,0.10)',
+                      borderRadius: '999px',
+                      color: TEXT_MUTED,
                       fontFamily: fontStack,
                       fontSize: '13px',
                       fontWeight: 600,
                       cursor: 'pointer',
                       padding: '9px 16px',
-                      transition: 'all 0.18s ease',
+                      transition: 'all 0.16s',
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.45)';
+                      e.currentTarget.style.background = 'rgba(19,47,67,0.07)';
+                      e.currentTarget.style.color = TEXT;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.25)';
+                      e.currentTarget.style.background = 'rgba(19,47,67,0.04)';
+                      e.currentTarget.style.color = TEXT_MUTED;
                     }}
                   >
+                    <Clock style={{ width: '13px', height: '13px' }} />
                     Just diagnosed? First 30 Days plan →
                   </button>
                 )}
@@ -400,15 +475,12 @@ export function SplashPage({
             </motion.div>
           )}
 
-          {/* Sign in */}
+          {/* Sign in / provider links */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            style={{
-              textAlign: 'center',
-              marginBottom: '44px',
-            }}
+            transition={{ duration: 0.8, delay: 0.68 }}
+            style={{ textAlign: 'center', marginBottom: '44px' }}
           >
             {onSignIn && (
               <button
@@ -416,40 +488,39 @@ export function SplashPage({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: 'rgba(17, 24, 39, 0.45)',
+                  color: TEXT_FAINT,
                   fontFamily: fontStack,
                   fontSize: '13px',
                   fontWeight: 400,
                   cursor: 'pointer',
                   padding: '8px 16px',
-                  transition: 'color 0.2s ease',
+                  transition: 'color 0.16s',
                   ...fontSmoothing,
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.65)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.45)'}
+                onMouseEnter={(e) => { e.currentTarget.style.color = TEXT_MUTED; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = TEXT_FAINT; }}
               >
                 Already have an account? Sign in
               </button>
             )}
-
             {onForProviders && (
-              <div style={{ marginTop: '8px' }}>
+              <div style={{ marginTop: '6px' }}>
                 <button
                   onClick={onForProviders}
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(107, 144, 128, 0.75)',
+                    color: 'rgba(42,125,153,0.65)',
                     fontFamily: fontStack,
                     fontSize: '12px',
                     fontWeight: 500,
                     cursor: 'pointer',
                     padding: '6px 12px',
-                    transition: 'color 0.2s ease',
+                    transition: 'color 0.16s',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(107, 144, 128, 0.75)'}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = TEAL; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(42,125,153,0.65)'; }}
                 >
                   Provider pilot by invitation →
                 </button>
@@ -457,33 +528,37 @@ export function SplashPage({
             )}
           </motion.div>
 
-          {/* Bottom Badges */}
+          {/* Trust chips */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 0.95 }}
+            transition={{ duration: 1.0, delay: 0.80 }}
             style={{
               display: 'flex',
               flexWrap: 'wrap',
               justifyContent: 'center',
-              gap: '10px',
-              rowGap: '8px',
+              gap: '8px',
             }}
           >
-            {['Built by Parents', 'Backed by ABA Experts', 'HIPAA-Conscious', 'Private by Design'].map((text) => (
+            {[
+              'Built by Parents',
+              'Backed by ABA Experts',
+              'HIPAA-Conscious',
+              'Private by Design',
+            ].map((text) => (
               <span
                 key={text}
                 style={{
                   display: 'inline-block',
-                  padding: '4px 11px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.35)',
-                  border: '1px solid rgba(17, 24, 39, 0.03)',
-                  borderRadius: '12px',
-                  color: 'rgba(17, 24, 39, 0.38)',
+                  padding: '4px 12px',
+                  backgroundColor: 'rgba(255,255,255,0.55)',
+                  border: '1px solid rgba(42,125,153,0.08)',
+                  borderRadius: '10px',
+                  color: TEXT_FAINT,
                   fontFamily: fontStack,
                   fontSize: '12px',
-                  fontWeight: 450,
-                  letterSpacing: '0.01em',
+                  fontWeight: 500,
+                  letterSpacing: '0.005em',
                   ...fontSmoothing,
                 }}
               >
@@ -492,61 +567,65 @@ export function SplashPage({
             ))}
           </motion.div>
 
-          {/* Value Proposition - Forta Differentiation */}
+          {/* Value props */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.1 }}
-            style={{
-              marginTop: '40px',
-              textAlign: 'center',
-            }}
+            transition={{ duration: 1.0, delay: 0.95 }}
+            style={{ marginTop: '44px', textAlign: 'center' }}
           >
             <div
               style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
-                gap: '20px',
+                gap: '28px',
               }}
             >
               {[
-                { icon: '⚡', text: 'Start Today', subtext: 'No waitlist' },
-                { icon: '🌙', text: 'AI guidance, anytime', subtext: 'Here whenever you need it' },
-                { icon: '✓', text: 'No Diagnosis', subtext: 'Required' },
-              ].map((item) => (
+                { Icon: Zap, text: 'Start Today', subtext: 'No waitlist' },
+                { Icon: Moon, text: 'AI guidance, anytime', subtext: 'Here when you need it' },
+                { Icon: CheckCircle, text: 'No Diagnosis', subtext: 'Required' },
+              ].map(({ Icon, text, subtext }) => (
                 <div
-                  key={item.text}
+                  key={text}
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: '5px',
                   }}
                 >
-                  <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                  <Icon
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      color: TEAL,
+                      strokeWidth: 1.8,
+                    }}
+                  />
                   <span
                     style={{
-                      color: 'rgba(17, 24, 39, 0.55)',
+                      color: TEXT_MUTED,
                       fontFamily: fontStack,
                       fontSize: '12px',
-                      fontWeight: 500,
-                      letterSpacing: '0.01em',
+                      fontWeight: 600,
+                      letterSpacing: '0.005em',
                       ...fontSmoothing,
                     }}
                   >
-                    {item.text}
+                    {text}
                   </span>
                   <span
                     style={{
-                      color: 'rgba(17, 24, 39, 0.35)',
+                      color: TEXT_FAINT,
                       fontFamily: fontStack,
                       fontSize: '12px',
                       fontWeight: 400,
                       ...fontSmoothing,
                     }}
                   >
-                    {item.subtext}
+                    {subtext}
                   </span>
                 </div>
               ))}
@@ -556,40 +635,36 @@ export function SplashPage({
         </div>
       </main>
 
-      {/* Trust line */}
+      {/* ─── Footer ───────────────────────────────────────────── */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.25 }}
+        transition={{ duration: 0.8, delay: 1.10 }}
         style={{
           textAlign: 'center',
-          color: 'rgba(17, 24, 39, 0.32)',
+          color: TEXT_FAINT,
           fontFamily: fontStack,
           fontSize: '11.5px',
           fontWeight: 400,
-          letterSpacing: '0.01em',
+          letterSpacing: '0.005em',
           padding: '0 24px',
-          marginTop: '28px',
+          marginTop: '24px',
           ...fontSmoothing,
         }}
       >
         Trusted by ABA providers and pediatric behavioral health families
       </motion.p>
 
-      {/* Medical Disclaimer */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.3 }}
-        style={{
-          padding: '0 24px',
-          marginTop: '12px',
-        }}
+        transition={{ duration: 0.8, delay: 1.15 }}
+        style={{ padding: '0 24px', marginTop: '10px' }}
       >
         <MedicalDisclaimer variant="inline" className="text-center max-w-md mx-auto" />
       </motion.div>
 
-      {/* Footer spacer — extra room for cookie consent banner on mobile */}
+      {/* Footer spacer */}
       <div style={{ height: 'max(96px, calc(env(safe-area-inset-bottom, 0px) + 80px))' }} />
     </div>
   );

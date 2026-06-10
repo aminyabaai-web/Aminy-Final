@@ -169,7 +169,8 @@ test.describe('Operator rails backend proof', () => {
 
     await page.evaluate(({ userId, childId, childName }) => {
       const existing = JSON.parse(window.localStorage.getItem('aminy-user') || '{}');
-      window.localStorage.setItem('aminy-user', JSON.stringify({
+      window.localStorage.setItem('__e2e_auth', 'bypass');
+    localStorage.setItem('aminy-user', JSON.stringify({
         ...existing,
         id: userId,
         userId,
