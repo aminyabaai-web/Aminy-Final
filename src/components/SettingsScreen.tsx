@@ -46,6 +46,7 @@ import {
   Clock,
   ExternalLink,
   HelpCircle,
+  MessageCircle,
   Globe,
   Fingerprint,
   ShieldCheck,
@@ -1566,6 +1567,19 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
         {/* Help Section */}
         <Card className="divide-y divide-gray-200 dark:divide-slate-700">
+          <button
+            onClick={() => onNavigate?.('feedback')}
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <MessageCircle aria-hidden="true" className="w-5 h-5 text-[#2A7D99]" />
+              <div className="text-left">
+                <p className="font-medium dark:text-white">Send Feedback</p>
+                <p className="text-sm text-muted-foreground">Help us improve Aminy</p>
+              </div>
+            </div>
+            <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+          </button>
           <button
             onClick={() => window.open('mailto:support@aminy.ai', '_blank')}
             className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"

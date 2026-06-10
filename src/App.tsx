@@ -2658,6 +2658,11 @@ export default function App() {
                     setBevelChatOpen(true);
                     return;
                   }
+                  // Feedback — open inline collector, don't navigate to a screen
+                  if (destination === "feedback") {
+                    setShowFeedbackCollector(true);
+                    return;
+                  }
                   // Map nav IDs to screen IDs (bottom nav / More menu aliases)
                   const navAliases: Record<string, AppScreen> = {
                     'plan': 'care-plan',
@@ -2742,7 +2747,10 @@ export default function App() {
               <SettingsScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
-                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onNavigate={(screen) => {
+                  if (screen === 'feedback') { setShowFeedbackCollector(true); return; }
+                  navigateToScreen(screen as AppScreen);
+                }}
                 userTier={effectiveUserTier}
               />
             </Suspense>

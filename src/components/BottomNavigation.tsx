@@ -159,6 +159,12 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       description: 'CPT codes and superbills'
     },
     {
+      id: 'feedback',
+      label: 'Feedback',
+      icon: MessageCircle,
+      description: 'Help us improve Aminy'
+    },
+    {
       id: 'settings',
       label: 'Settings',
       icon: Settings,
@@ -194,6 +200,12 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
       label: 'Community',
       icon: Users,
       description: 'Connect with families'
+    },
+    {
+      id: 'feedback',
+      label: 'Feedback',
+      icon: MessageCircle,
+      description: 'Help us improve Aminy'
     },
     {
       id: 'settings',
