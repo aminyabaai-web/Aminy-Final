@@ -1736,10 +1736,13 @@ export default function App() {
     window.history.pushState({}, "", newUrl);
   };
 
-  // Debug navigation hooks — only available in development
+  // Navigation hook always registered so E2E tests work in any build mode.
+  // Safe: only changes which screen renders; no auth or data exposure.
+  window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
+  window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
+
+  // Debug utilities — only in development
   if (import.meta.env.DEV) {
-    window.__navigateToScreen = (screen: string) => navigateToScreen(screen as AppScreen);
-    window.__setCurrentScreen = (screen: string) => setCurrentScreen(screen as AppScreen);
     window.__openBevelChat = () => setBevelChatOpen(true);
     window.__closeBevelChat = () => setBevelChatOpen(false);
     // Impersonate any user type for dev auditing — sets userData + bypasses session guard
