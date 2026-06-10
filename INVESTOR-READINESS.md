@@ -193,3 +193,70 @@ Rethink EMR sync, AACT close, full multi-browser E2E, Sentry DSN.
 | Execution readiness | D | Gap to first revenue = 2 hours of Stripe config + outreach |
 
 **Overall: 6.5/10. Strong enough for the right investor. De-risk with 60–90 days of operational (not technical) work.**
+
+---
+
+## ADDENDUM — June 10, 2026: Economics finalized (supersedes sections 2 & 3 where they conflict)
+
+### What changed and why it strengthens the pitch
+
+**1. Ask-a-Behaviorist moved from payout model to staffing model.**
+The earlier design paid marketplace BCBAs per answer — a variable cost that
+scales with engagement (your best users become your most expensive). Final
+model: employed/on-call RBTs under BCBA supervision (~$25/hr) review AI
+pre-drafts at ~10 answers/hr → **~$2.50 marginal cost per answer**. Pro+
+worst case (full 10-question quota, now hard-enforced at submit) is $25
+staffing against $49.99 revenue — **profitable at 100% utilization**,
+~85% contribution margin at observed-norm ~30% utilization. "Want a BCBA?
+Book a telehealth session" turns messaging into a telehealth funnel rather
+than a substitute. No pay-per-question SKU — non-subscribers see exactly
+two paths (book a session / upgrade), keeping the upgrade funnel clean.
+
+**2. Partner rail bears the clinical load at $0 platform cost.**
+AACT/Rise families route to their org's own clinical team (continuity of
+care, org retention benefit, rev-share aligned). Volume terms live in the
+partnership agreement, not in code.
+
+**3. B2B ladder unlocks the solo-BCBA long tail.**
+1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo (15% annual). Min seats
+1 (was 5). The US has ~70k BCBAs and a large solo/micro-practice segment no
+EMR prices for; $89 with AI briefings + practice tools is an easy yes, and
+$10 steps give clinics a visible reason to grow seats. Checkout edge
+function mirrors the ladder server-side (drift-guarded by tests).
+
+**4. Content is now an acquisition channel, not just retention.**
+The full resource library renders as public, crawlable pages at
+/resources/<slug>/ (JSON-LD, OG tags, premium gated at 25% with app CTA +
+sitemap). Every BCBA-grade article compounds as SEO surface against
+competitors whose content sits behind app walls.
+
+**5. Community cold-start has a revenue-positive answer: cohorts.**
+group_sessions now supports multi-week BCBA-moderated cohort programs
+(8–12 families, program pricing, e.g. $199/6 weeks). Cohorts guarantee
+response density while the open community reaches liquidity, and graduates
+seed it. Verified-BCBA badges + book-a-session CTAs on community posts
+close the content→booking loop (BCBA content is their marketing, our take
+rate monetizes it).
+
+**6. Apple exposure: structurally zero.**
+All subscription checkouts route through platform-purchase.ts — external
+browser (SFSafariViewController via @capacitor/browser) on native iOS,
+normal web checkout otherwise. Netflix model; 0% to Apple. Marketplace
+telehealth (real-world services) is IAP-exempt by rule.
+
+### Updated retention mechanics
+Caregiver Empowerment badge track added (6 badges naming demonstrated
+capabilities — co-regulation, consistency, advocacy, records mastery,
+community help). Parent-mediated-intervention research positions parental
+self-efficacy as the strongest mediator of child outcomes; the badge track
+makes that the product's retention engine rather than generic gamification.
+
+### Grade movement
+Technical/product readiness after this pass: the prior 6.5/10 was gated on
+operational proof, not code. With economics now closing at worst-case
+utilization, security hardening complete (PHI route auth, HMAC-verified
+webhooks, RLS-safe notification paths), schema gaps closed (behavior_logs
+now actually persists — previously failing silently), CI green and a
+105-screen zero-issue live audit: **product 8.5/10; the remaining gap to
+10 is traction evidence (paying families, BCBA earnings proof, pilot
+conversion) that only operating time can produce.**
