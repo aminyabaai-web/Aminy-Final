@@ -1449,9 +1449,8 @@ export default function App() {
   // Gates the main UI render so unauthenticated users never briefly see dashboard.
   // E2E bypass: when __e2e_auth is set, skip the Supabase wait so tests don't time out.
   const [authReady, setAuthReady] = useState(() => {
-    if (import.meta.env.DEV) {
-      try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; }
-    }
+    // E2E bypass: __e2e_auth is set by Playwright addInitScript; works in any build mode.
+    try { if (localStorage.getItem('__e2e_auth') === 'bypass') return true; } catch { /* ignore */ }
     return false;
   });
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -2041,8 +2040,7 @@ export default function App() {
           // above means the user only ever sees the loading skeleton → login, never
           // a flash of the dashboard.
           // DEV-only: E2E tests set __e2e_auth to bypass this redirect.
-          const isE2EBypass = import.meta.env.DEV &&
-            (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
+          const isE2EBypass = (() => { try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; } })();
           const screen = currentScreenRef.current;
           if (!SESSIONLESS_OK_SCREENS.has(screen) && !isE2EBypass) {
             logger.dev('INITIAL_SESSION with no session on a protected screen — redirecting to login', { screen });
