@@ -1427,14 +1427,26 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
                 </div>
               )}
 
-              {/* Smart action chips — show only when conversation is empty, collapsed after first message */}
-              {messages.length === 0 && (
-                <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
+              {/* Smart action chips — show only when conversation is empty (Phase 5 AI discoverability) */}
+              {messages.length === 0 && !isProactiveLoading && (
+                <div
+                  className="mb-2"
+                  style={{
+                    display: 'flex',
+                    gap: '8px',
+                    overflowX: 'auto',
+                    padding: '8px 12px 0',
+                    scrollbarWidth: 'none',
+                    marginLeft: '-16px',
+                    marginRight: '-16px',
+                  }}
+                >
                   {[
-                    { emoji: '📊', label: 'Log behavior', starter: 'Log behavior: ' },
-                    { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
-                    { emoji: '📅', label: 'Add appointment', starter: 'Add appointment: ' },
+                    { emoji: '📊', label: 'Log a behavior', starter: 'Log behavior: ' },
+                    { emoji: '🏆', label: 'Log a win', starter: 'We had a win today: ' },
+                    { emoji: '📅', label: 'Book session', starter: 'Help me book a session' },
                     { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
+                    { emoji: '💬', label: 'Ask anything', starter: 'I need help with ' },
                   ].map(chip => (
                     <button
                       key={chip.label}
@@ -1443,7 +1455,21 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
                         setInput(chip.starter);
                         setTimeout(() => inputRef.current?.focus(), 50);
                       }}
-                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57] rounded-full text-xs font-medium transition-colors"
+                      style={{
+                        flexShrink: 0,
+                        background: 'rgba(42,125,153,0.08)',
+                        border: '1px solid rgba(42,125,153,0.20)',
+                        borderRadius: '999px',
+                        color: '#2A7D99',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        padding: '6px 12px',
+                        cursor: 'pointer',
+                        whiteSpace: 'nowrap',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                      }}
                     >
                       <span>{chip.emoji}</span>
                       <span>{chip.label}</span>
