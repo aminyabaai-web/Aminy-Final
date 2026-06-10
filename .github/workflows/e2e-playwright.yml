@@ -42,14 +42,32 @@ jobs:
         env:
           CI: true
 
-      - name: Print failure DOM snapshots (debuggable from logs)
+      - name: Dump rendered page text for key screens (debuggable from logs)
         if: failure()
         run: |
-          for f in $(find test-results -name "error-context.md" | head -4); do
-            echo "═════ $f ═════"
-            head -c 6000 "$f"
-            echo
-          done
+          (npm run dev -- --host 0.0.0.0 --port 5173 >/dev/null 2>&1 &)
+          sleep 20
+          node -e '
+            (async () => {
+              const { chromium } = require("playwright");
+              const b = await chromium.launch();
+              const p = await b.newPage();
+              p.on("console", m => { if (m.type() === "error") console.log("[console.error]", m.text().slice(0, 200)); });
+              await p.addInitScript(() => {
+                localStorage.setItem("__e2e_auth", "bypass");
+                localStorage.setItem("aminy-user", JSON.stringify({ parentName: "Test Parent", childName: "Alex", hasCompletedOnboarding: true, tier: "free", role: "parent" }));
+              });
+              for (const u of ["/", "/?screen=crisis-resources", "/?screen=paywall", "/?screen=create-account"]) {
+                try {
+                  await p.goto("http://localhost:5173" + u, { timeout: 60000 });
+                  await p.waitForTimeout(8000);
+                  console.log("══════ PAGE:", u, "══════");
+                  console.log((await p.evaluate(() => document.body.innerText)).slice(0, 1500));
+                } catch (e) { console.log("PAGE", u, "ERROR:", String(e).slice(0, 300)); }
+              }
+              await b.close();
+            })().catch(e => { console.error(e); process.exit(0); });
+          '
 
       - name: Upload Playwright report
         if: always()
