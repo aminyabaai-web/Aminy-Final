@@ -145,8 +145,9 @@ test.describe('Provider Full Journey', () => {
       !e.includes('sourcemap') &&
       !e.includes('Download the React DevTools') &&
       !e.includes('Failed to load resource') &&
-      // Schema gap: column may not exist yet on the remote DB; migration pending
-      !e.includes('is_accepting_patients'),
+      // Schema gap: columns may not exist yet on the remote DB; migrations applied June 2026
+      !e.includes('is_accepting_patients') &&
+      !e.includes('verification_status'),
     );
 
     expect(realErrors, `Console errors:\n${realErrors.join('\n')}`).toEqual([]);

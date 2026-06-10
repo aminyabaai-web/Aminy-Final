@@ -316,7 +316,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     style={{
                       width: 28,
                       height: 3,
-                      background: 'linear-gradient(90deg, #6B9080, #7BA7BC)',
+                      background: 'linear-gradient(90deg, #2A7D99, #3A9DBB)',
                       transform: 'translateX(-50%)',
                       animation: 'navIndicatorIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards',
                     }}
