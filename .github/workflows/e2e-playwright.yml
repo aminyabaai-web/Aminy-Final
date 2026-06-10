@@ -48,6 +48,8 @@ jobs:
           VITE_SUPABASE_URL: https://qpzsvafwcwyrkdolrjbu.supabase.co
           VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwenN2YWZ3Y3d5cmtkb2xyamJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNjEzMDAsImV4cCI6MjA3NjczNzMwMH0.bqGspljemM6itV7_x1iSdrWCPkJSU_jRbZduxcaTNeY
           VITE_SENTRY_DSN: https://1c8a5b1cec3156e9daa7d2ba14586f8b@o4510745456672768.ingest.us.sentry.io/4510749632626688
+          # Enable B2B-gated screens (provider-portal, etc.) in CI so E2E tests can reach them
+          VITE_B2B_ENABLED: 'true'
 
       - name: Upload Playwright report
         if: always()

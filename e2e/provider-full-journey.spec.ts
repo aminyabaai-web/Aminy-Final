@@ -29,6 +29,9 @@ function seedAuthenticatedProvider() {
     hasCompletedOnboarding: true,
     tier: 'pro',
     role: 'provider',
+    // 'AZ' is in SUPPORTED_MARKET_STATES — required so matchesScope() returns true for
+    // 'limited_launch' surfaces like provider-portal, otherwise renderScreen() gates them.
+    state: 'AZ',
   };
 }
 
