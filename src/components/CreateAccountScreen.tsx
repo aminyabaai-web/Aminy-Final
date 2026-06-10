@@ -24,7 +24,7 @@ import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
 import { PasswordStrengthMeter } from './PasswordStrengthMeter';
 
-const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+const fontStack = "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',

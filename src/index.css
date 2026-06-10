@@ -6612,6 +6612,22 @@ img[fetchpriority="high"], img[loading="eager"] {
   }
 }
 
+/* Junior Calm Corner CTA — gentle teal glow pulse */
+@keyframes calmCornerGlow {
+  0%, 100% {
+    box-shadow: 0 20px 50px rgba(15,23,42,0.22), 0 0 0 rgba(42,125,153,0);
+  }
+  50% {
+    box-shadow: 0 20px 50px rgba(15,23,42,0.22), 0 0 24px rgba(42,125,153,0.35);
+  }
+}
+
+/* Aminy brand breathe animation — used on mascot/buddy elements */
+@keyframes aminyBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
 @keyframes aiShimmer {
   0% {
     background-position: -200%;

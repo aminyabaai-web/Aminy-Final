@@ -24,13 +24,31 @@ interface LoginScreenProps {
   onCreateAccount: () => void;
 }
 
-const fontStack = 'Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "Helvetica Neue", Arial, "Noto Sans", sans-serif';
+// Design-system font stack — Schibsted Grotesk first, Manrope fallback
+const fontStack = "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
   MozOsxFontSmoothing: 'grayscale',
   textRendering: 'geometricPrecision',
 } as React.CSSProperties;
+
+// Design-system mist background
+const mistBg: React.CSSProperties = {
+  background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)',
+};
+
+// Design-system surface for inputs / OAuth buttons
+const surfaceStyle: React.CSSProperties = {
+  backgroundColor: 'rgba(255,255,255,0.92)',
+  backdropFilter: 'blur(12px)',
+};
+
+// Primary teal tokens
+const TEAL = '#2A7D99';
+const TEAL_HOVER = '#1F6080';
+const TEAL_BORDER = 'rgba(42, 125, 153, 0.18)';
+const TEAL_RING = '0 0 0 3px rgba(42, 125, 153, 0.12)';
 
 export function LoginScreen({
   onBack,
@@ -160,7 +178,7 @@ export function LoginScreen({
     <div
       className="min-h-screen min-h-[100dvh] flex flex-col overflow-y-auto pb-6"
       style={{
-        backgroundColor: 'var(--color-bg-screen)',
+        ...mistBg,
         fontFamily: fontStack,
         ...fontSmoothing,
       }}
@@ -255,7 +273,7 @@ export function LoginScreen({
                 ...fontSmoothing,
               }}
             >
-              Sign in to continue
+              Sign in to support your child.
             </p>
           </motion.div>
 
@@ -288,7 +306,7 @@ export function LoginScreen({
             </motion.div>
           )}
 
-          {/* OAuth Buttons */}
+          {/* OAuth Buttons — stacked vertically, h-[52px], surface white */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -305,25 +323,25 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: 'var(--color-surface)',
+                ...surfaceStyle,
                 color: 'var(--color-text-deep)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid var(--color-border-light)',
+                border: `1px solid ${TEAL_BORDER}`,
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)')}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,1)')}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.92)';
                 e.currentTarget.style.transform = 'scale(1)';
               }}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
-              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09z"/>
@@ -342,22 +360,22 @@ export function LoginScreen({
                 gap: '12px',
                 width: '100%',
                 height: '52px',
-                backgroundColor: 'var(--color-surface)',
+                ...surfaceStyle,
                 color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid var(--color-border-light)',
+                border: `1px solid ${TEAL_BORDER}`,
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.02)')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FFFFFF'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.92)')}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
-              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
               <svg width="18" height="18" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -395,11 +413,11 @@ export function LoginScreen({
             <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
           </motion.div>
 
-          {/* Email Form */}
+          {/* Email Form — staggered fadeInUp */}
           <motion.form
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
+            transition={{ duration: 0.5, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
             onSubmit={handleSubmit}
             style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
           >
@@ -413,6 +431,7 @@ export function LoginScreen({
                   fontSize: '13px',
                   fontWeight: 500,
                   marginBottom: '8px',
+                  fontFamily: fontStack,
                   ...fontSmoothing,
                 }}
               >
@@ -433,9 +452,9 @@ export function LoginScreen({
                   width: '100%',
                   height: '52px',
                   padding: '0 16px',
-                  backgroundColor: 'var(--color-surface)',
-                  border: errors.email ? '2px solid #DC2626' : '1px solid var(--color-input-border)',
-                  borderRadius: '12px',
+                  ...surfaceStyle,
+                  border: errors.email ? '2px solid #DC2626' : '1px solid rgba(209, 213, 219, 1)',
+                  borderRadius: '14px',
                   fontSize: '15px',
                   fontFamily: fontStack,
                   color: 'var(--color-text-deep)',
@@ -445,13 +464,13 @@ export function LoginScreen({
                 }}
                 onFocus={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = '#6B9080';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
+                    e.currentTarget.style.borderColor = TEAL;
+                    e.currentTarget.style.boxShadow = TEAL_RING;
                   }
                 }}
                 onBlur={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = 'var(--color-input-border)';
+                    e.currentTarget.style.borderColor = 'rgba(209, 213, 219, 1)';
                     e.currentTarget.style.boxShadow = 'none';
                   }
                 }}
@@ -485,6 +504,7 @@ export function LoginScreen({
                   fontSize: '13px',
                   fontWeight: 500,
                   marginBottom: '8px',
+                  fontFamily: fontStack,
                   ...fontSmoothing,
                 }}
               >
@@ -506,9 +526,9 @@ export function LoginScreen({
                     width: '100%',
                     height: '52px',
                     padding: '0 48px 0 16px',
-                    backgroundColor: 'var(--color-surface)',
-                    border: errors.password ? '2px solid #DC2626' : '1px solid var(--color-input-border)',
-                    borderRadius: '12px',
+                    ...surfaceStyle,
+                    border: errors.password ? '2px solid #DC2626' : '1px solid rgba(209, 213, 219, 1)',
+                    borderRadius: '14px',
                     fontSize: '15px',
                     fontFamily: fontStack,
                     color: 'var(--color-text-deep)',
@@ -518,13 +538,13 @@ export function LoginScreen({
                   }}
                   onFocus={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = '#6B9080';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(107, 144, 128, 0.1)';
+                      e.currentTarget.style.borderColor = TEAL;
+                      e.currentTarget.style.boxShadow = TEAL_RING;
                     }
                   }}
                   onBlur={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = 'var(--color-input-border)';
+                      e.currentTarget.style.borderColor = 'rgba(209, 213, 219, 1)';
                       e.currentTarget.style.boxShadow = 'none';
                     }
                   }}
@@ -545,8 +565,8 @@ export function LoginScreen({
                     color: 'var(--color-text-muted)',
                     transition: 'color 0.2s ease',
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.7)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(17, 24, 39, 0.4)'}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(17, 24, 39, 0.7)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(17, 24, 39, 0.4)')}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -581,23 +601,24 @@ export function LoginScreen({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#6B9080',
+                    color: TEAL,
                     fontSize: '13px',
                     fontWeight: 500,
+                    fontFamily: fontStack,
                     cursor: 'pointer',
                     padding: '4px 0',
                     transition: 'opacity 0.2s ease',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
                 >
                   Forgot password?
                 </button>
               </div>
             )}
 
-            {/* Sign In Button */}
+            {/* Sign In Button — primary teal, h-[52px], font-semibold */}
             <button
               type="submit"
               disabled={isLoading}
@@ -610,10 +631,10 @@ export function LoginScreen({
                 width: '100%',
                 height: '52px',
                 marginTop: '8px',
-                backgroundColor: '#6B9080',
+                backgroundColor: TEAL,
                 color: '#FFFFFF',
                 fontFamily: fontStack,
-                fontWeight: 500,
+                fontWeight: 600,
                 fontSize: '15px',
                 letterSpacing: '-0.008em',
                 borderRadius: '14px',
@@ -623,10 +644,10 @@ export function LoginScreen({
                 transition: 'background-color 0.2s ease, transform 0.1s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#5A7D6E')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#6B9080'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = TEAL_HOVER)}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = TEAL)}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
-              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
               {isLoading ? (
                 <>
@@ -652,7 +673,7 @@ export function LoginScreen({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.35 }}
+            transition={{ duration: 0.4, delay: 0.45 }}
             style={{
               textAlign: 'center',
               marginTop: '28px',
@@ -662,10 +683,11 @@ export function LoginScreen({
               style={{
                 color: 'var(--color-text-muted)',
                 fontSize: '14px',
+                fontFamily: fontStack,
                 ...fontSmoothing,
               }}
             >
-              Don't have an account?
+              Don&apos;t have an account?
             </span>{' '}
             <button
               onClick={onCreateAccount}
@@ -674,18 +696,19 @@ export function LoginScreen({
                 background: 'none',
                 border: 'none',
                 padding: 0,
-                color: '#6B9080',
+                color: TEAL,
                 fontSize: '14px',
                 fontWeight: 500,
+                fontFamily: fontStack,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-                textDecorationColor: 'rgba(107, 144, 128, 0.3)',
+                textDecorationColor: 'rgba(42, 125, 153, 0.3)',
                 textUnderlineOffset: '2px',
                 transition: 'opacity 0.2s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.7')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
               Create one
             </button>
@@ -695,7 +718,7 @@ export function LoginScreen({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.55 }}
             style={{
               display: 'flex',
               justifyContent: 'center',

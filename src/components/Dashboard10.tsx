@@ -10,8 +10,8 @@
  * - Every element should pass the "exhale test" — does seeing this help the parent breathe easier?
  * - CTCA Child Standard: treat every family like YOUR child is the patient
  * - Single-scroll calm hub that celebrates consistency, not perfection
- * - Brand colors: #0D1B2A navy, #F5F5F5 cream, #6B9080 teal accents
- * - Inter font, 8-12px corners, soft shadows
+ * - Brand colors: #0D1B2A navy, #F6FBFB mist, #2A7D99 primary teal
+ * - Schibsted Grotesk / Manrope font, rounded-2xl cards, soft shadows
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
@@ -85,6 +85,7 @@ import { getUserBadges, type EarnedBadge } from '../lib/badge-service';
 import { useNudgeEngine } from '../hooks/useNudgeEngine';
 import { subscribeToPush, isPushSupported, getNotificationPermission } from '../lib/push-notifications';
 import { triggerHaptic } from '../lib/haptics';
+import { getTimeBasedGreeting } from '../lib/brand-system';
 
 // Types
 interface ChildProfile {
@@ -203,7 +204,6 @@ export function Dashboard10({
   const [activeTab, setActiveTab] = useState<'home' | 'resources' | 'community' | 'profile'>('home');
   const [dailyTip] = useState(() => DAILY_TIPS[Math.floor(Math.random() * DAILY_TIPS.length)]);
   const [showStreakCelebration, setShowStreakCelebration] = useState(false);
-  const [taskWin, setTaskWin] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [badges, setBadges] = useState<EarnedBadge[]>([]);
   const [showSoftNudge, setShowSoftNudge] = useState(false);
@@ -226,8 +226,8 @@ export function Dashboard10({
     if (!userId) return;
     supabase
       .from('session_notes')
-      .select('id, session_date, provider_id')
-      .eq('user_id', userId)
+      .select('id, child_name, session_date, provider_id')
+      .eq('parent_id', userId)
       .eq('status', 'parent_review')
       .order('session_date', { ascending: false })
       .limit(5)
@@ -238,7 +238,7 @@ export function Dashboard10({
         if (data && data.length > 0) {
           setPendingReviews(data.map(d => ({
             id: d.id,
-            childName: userData?.childName || 'Your Child',
+            childName: d.child_name || userData?.childName || 'Your Child',
             sessionDate: d.session_date,
           })));
         }
@@ -598,8 +598,8 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />,
-      accent: 'bg-[#6B9080]/10 dark:bg-[#6B9080]/15',
+      icon: <FileText className="w-5 h-5 text-[#2A7D99] dark:text-[#2A7D99]" />,
+      accent: 'bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15',
     },
     {
       id: 'calm',
@@ -670,9 +670,11 @@ export function Dashboard10({
   };
 
   // Show skeleton while data loads instead of a blocking spinner
+  const MIST_BG = 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)';
+
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen bg-mist dark:bg-slate-900 pb-24">
+      <div className="min-h-screen dark:bg-slate-900 pb-24" style={{ background: MIST_BG }}>
         <div className="p-4">
           <SkeletonDashboard />
         </div>
@@ -682,7 +684,8 @@ export function Dashboard10({
 
   return (
     <div
-      className="min-h-screen bg-mist dark:bg-slate-900 pb-24"
+      className="min-h-screen dark:bg-slate-900 pb-24"
+      style={{ background: MIST_BG }}
     >
       {/* ========================================
           STREAK CELEBRATION OVERLAY
@@ -743,39 +746,25 @@ export function Dashboard10({
         </div>
       )}
 
-      {/* Task Win Toast — appears when an action item is completed */}
-      <AnimatePresence>
-        {taskWin && (
-          <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 16, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          >
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-[#43AA8B] text-white rounded-full shadow-lg text-sm font-semibold whitespace-nowrap">
-              <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              <span>{taskWin} ✓</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
-        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 dark:border-slate-700/80 backdrop-blur-xl dashboard-header-bg"
+        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 backdrop-blur-xl"
+        style={{ background: 'rgba(246,251,251,0.97)' }}
       >
         <div className="max-w-4xl mx-auto px-4 py-4">
           {/* Greeting */}
           <div className="mb-4">
-            <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950 dark:text-white">
-              Hi {userData.parentName || 'there'}, here's {child.name}'s calm start today.
+            <h1
+              className="text-[1.05rem] font-bold tracking-[-0.025em] text-slate-950"
+              style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}
+            >
+              {getTimeBasedGreeting()}, {userData.parentName || 'there'} — here's {child.name}'s calm start today.
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
-            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A] dark:text-slate-300">{dailyTip}</p>
+            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A]">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -787,11 +776,11 @@ export function Dashboard10({
                   onClick={() => setActiveChildId(c.id === activeChildId ? undefined : c.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
-                      ? 'border border-[#6B9080]/20 bg-primary text-white shadow-sm'
-                      : 'border border-[#E8E4DF] dark:border-slate-600 bg-white/85 dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700'
+                      ? 'border border-[#2A7D99]/20 bg-[#2A7D99] text-white shadow-sm'
+                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] hover:bg-white'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-[#2A7D99] flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -803,14 +792,14 @@ export function Dashboard10({
           {(aiMemorySync || juniorProgressSync) && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-white">AI memory</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-800 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-white">Ease progress</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
+                  <span className="font-medium text-[#1B2733]">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -818,14 +807,14 @@ export function Dashboard10({
           )}
 
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
+          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
             <div className="relative" style={{ flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => onNavigate?.('profile')}
                 aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #6B9080, #7BA7BC)', border: 'none', cursor: 'pointer' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D99, #1f6180)', border: 'none', cursor: 'pointer' }}
               >
                 {child.photoUrl ? (
                   <img src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />
@@ -839,7 +828,7 @@ export function Dashboard10({
                   style={{
                     position: 'absolute', bottom: -2, right: -2,
                     width: 16, height: 16, borderRadius: 9999,
-                    background: '#fff', color: '#6B9080',
+                    background: '#fff', color: '#2A7D99',
                     fontSize: 12, lineHeight: '14px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
@@ -849,7 +838,7 @@ export function Dashboard10({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-slate-950 dark:text-white">{child.name}</span>
+                <span className="font-medium text-slate-950">{child.name}</span>
                 <Badge variant="outline" className="border-[#E8E4DF] bg-white/85 text-sm text-[#3A4A57]">
                   Age {child.age}
                 </Badge>
@@ -859,19 +848,19 @@ export function Dashboard10({
                   hasGoalMomentum ? (
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
-                        <div key={goal.name} className="text-sm text-[#5A6B7A] dark:text-slate-300">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'}>{goal.percentMet}%</span>
+                        <div key={goal.name} className="text-sm text-[#5A6B7A]">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#2A7D99]' : 'text-[#5A6B7A]'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                    <div className="text-sm text-[#5A6B7A]">
                       Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
                     </div>
                   )
                 ) : (
-                  <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                  <div className="text-sm text-[#5A6B7A]">
                     No goals set yet • Tap to add
                   </div>
                 )}
@@ -897,23 +886,23 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-700"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
-                      <Video className="w-4 h-4 text-[#6B9080]" />
+                      <Video className="w-4 h-4 text-[#2A7D99]" />
                     ) : (
                       <Calendar className="w-4 h-4 text-amber-500" />
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733] dark:text-white">{event.title}</div>
-                    <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{event.time}</div>
+                    <div className="text-sm font-medium text-[#1B2733]">{event.title}</div>
+                    <div className="text-xs text-[#5A6B7A]">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="py-2 text-sm text-[#5A6B7A] dark:text-slate-300">
+              <div className="py-2 text-sm text-[#5A6B7A]">
                 You're all caught up! No upcoming events.
               </div>
             )}
@@ -934,7 +923,6 @@ export function Dashboard10({
       )}
 
       {/* Main Content */}
-      <PullToRefresh onRefresh={handleRefresh}>
       <main className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
 
         {/* Proactive AI Insight — "AI escaping the chat window" */}
@@ -1063,14 +1051,14 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#6B9080]/20 dark:border-teal-700 rounded-xl p-3"
+            className="bg-gradient-to-r from-[#EAF3F7] to-[#F6FBFB] dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#2A7D99]/20 dark:border-teal-700 rounded-2xl p-3"
           >
             <div className="flex items-start gap-2">
-              <Sparkles className="w-4 h-4 text-[#6B9080] dark:text-primary mt-0.5 flex-shrink-0" />
-              <p className="text-sm text-[#6B9080] dark:text-teal-200 flex-1">{activeTip}</p>
+              <Sparkles className="w-4 h-4 text-[#2A7D99] dark:text-primary mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-[#2A7D99] dark:text-teal-200 flex-1">{activeTip}</p>
               <button
                 onClick={() => setShowTip(false)}
-                className="h-11 w-11 text-primary hover:text-[#6B9080] flex-shrink-0 rounded-lg flex items-center justify-center"
+                className="h-11 w-11 text-[#2A7D99] hover:text-[#1f6180] flex-shrink-0 rounded-lg flex items-center justify-center"
                 aria-label="Dismiss personalized tip"
               >
                 <X className="w-3.5 h-3.5" />
@@ -1100,8 +1088,8 @@ export function Dashboard10({
           <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
-                  <Video className="w-5 h-5 text-[#6B9080]" />
+                <div className="w-10 h-10 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-[#2A7D99]" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Next: {dashboardData.nextAppointment.providerName}</p>
@@ -1134,13 +1122,16 @@ export function Dashboard10({
 
         {/* Weekly Summary / Starter Card */}
         {shouldShowStarterSummary ? (
-          <div className="rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-white via-transparent/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
+          <div className="rounded-2xl border border-[#2A7D99]/15 bg-gradient-to-br from-[#F6FBFB] via-white to-[#EAF3F7] p-5 shadow-[0_1px_3px_0_rgb(0_0_0/0.05),0_1px_2px_-1px_rgb(0_0_0/0.05)] dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-[#7BA7BC]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2A7D99]/10 text-[#2A7D99] dark:bg-[#2A7D99]/15 dark:text-[#2A7D99]">
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">
+                <h3
+                  className="text-sm font-bold text-[#1B2733] dark:text-slate-100"
+                  style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif", letterSpacing: '-0.025em' }}
+                >
                   Start gently today
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-[#5A6B7A] dark:text-slate-300">
@@ -1152,7 +1143,7 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-primary text-white hover:bg-[#216982]"
+                className="rounded-full bg-[#2A7D99] text-white hover:bg-[#1f6180]"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 My treatment plan
@@ -1168,9 +1159,12 @@ export function Dashboard10({
             </div>
           </div>
         ) : (
-          <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-neutral-200/60 dark:border-slate-700 shadow-[0_1px_3px_0_rgb(0_0_0/0.05),0_1px_2px_-1px_rgb(0_0_0/0.05)]">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold">This Week</h3>
+              <h3
+                className="text-sm font-bold text-[#1B2733] dark:text-white"
+                style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif", letterSpacing: '-0.025em' }}
+              >This Week</h3>
               <AISparkleButton
                 prompt={`Summarize this week's progress for ${child?.name || 'my child'}: ${dashboardData.routineAdherence}% routine adherence, ${dashboardData.streak || streakDays} day streak, ${dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0} of ${dashboardData.activeGoals?.length || 0} goals met. Show me a quick visual of the week and tell me what to focus on next.`}
                 label="Explain"
@@ -1179,7 +1173,7 @@ export function Dashboard10({
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-2xl font-bold text-[#6B9080]">{dashboardData.routineAdherence}%</p>
+                <p className="text-2xl font-bold text-[#2A7D99]">{dashboardData.routineAdherence}%</p>
                 <p className="text-sm text-muted-foreground">Routine</p>
               </div>
               <div>
@@ -1239,14 +1233,14 @@ export function Dashboard10({
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
-                    ? 'bg-primary text-white shadow-md'
-                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    ? 'bg-[#2A7D99] text-white shadow-md'
+                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EAF3F7] dark:hover:bg-slate-700'
                 }`}
               >
                 {routine.icon}
                 <span className="font-medium text-sm">{routine.label}</span>
                 {routine.completedCount > 0 && (
-                  <Badge className="bg-green-500 text-white text-sm">
+                  <Badge className="bg-[#2A7D99] text-white text-sm">
                     {routine.completedCount}/{routine.tasks.length}
                   </Badge>
                 )}
@@ -1256,12 +1250,15 @@ export function Dashboard10({
 
           {/* Current Routine Card */}
           <Card
-            className="p-4 bg-white dark:bg-slate-800 shadow-sm border-0"
+            className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-neutral-200/60 shadow-[0_1px_3px_0_rgb(0_0_0/0.05),0_1px_2px_-1px_rgb(0_0_0/0.05)]"
             data-testid="active-routine-card"
             data-plan-snapshot-id={activePlanSnapshotId || ''}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+              <h2
+                className="font-bold text-[#1B2733] dark:text-white flex items-center gap-2"
+                style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif", letterSpacing: '-0.025em' }}
+              >
                 {currentRoutine.icon}
                 {currentRoutine.label}
               </h2>
@@ -1281,15 +1278,15 @@ export function Dashboard10({
                   onClick={() => handleTaskToggle(task.id)}
                   data-testid={`routine-task-${task.id}`}
                   data-plan-item-id={task.id}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
+                  className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all ${
                     task.completed
-                      ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                      : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                      ? 'bg-[#EAF3F7] dark:bg-[#2A7D99]/15 border border-[#2A7D99]/25 dark:border-[#2A7D99]/30'
+                      : 'bg-[#F6FBFB] dark:bg-slate-700/50 hover:bg-[#EAF3F7] dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
-                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#1B2733] dark:text-white'}`}>
+                    <div className={`font-medium ${task.completed ? 'text-[#2A7D99] dark:text-[#2A7D99]' : 'text-[#1B2733] dark:text-white'}`}>
                       {task.title}
                     </div>
                     <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{task.description}</div>
@@ -1297,7 +1294,7 @@ export function Dashboard10({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-[#8A9BA8]">{task.timeEstimate}</span>
                     {task.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-green-500" />
+                      <CheckCircle2 className="w-6 h-6 text-[#2A7D99]" />
                     ) : (
                       <div className="w-6 h-6 rounded-full border-2 border-[#E8E4DF] dark:border-gray-600" />
                     )}
@@ -1308,8 +1305,8 @@ export function Dashboard10({
 
             {/* AI Nudge */}
             {completedTasks > 0 && completedTasks < totalTasks && (
-              <div className="mt-4 p-3 bg-[#6B9080]/10 dark:bg-[#6B9080]/10 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
-                <p className="text-sm text-[#6B9080] dark:text-teal-200 flex items-center gap-2">
+              <div className="mt-4 p-3 bg-[#2A7D99]/10 dark:bg-[#2A7D99]/10 rounded-xl border border-[#2A7D99]/20 dark:border-[#2A7D99]/30">
+                <p className="text-sm text-[#2A7D99] dark:text-teal-200 flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
                   One task away from completing {currentRoutine.label.toLowerCase()}!
                 </p>
@@ -1435,8 +1432,11 @@ export function Dashboard10({
             5. QUICK ACTION GRID (15%)
             ======================================== */}
         <section>
-          <h2 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-[#6B9080]" />
+          <h2
+            className="font-bold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2"
+            style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif", letterSpacing: '-0.025em' }}
+          >
+            <Zap className="w-5 h-5 text-[#2A7D99]" />
             Quick Actions
           </h2>
 
@@ -1445,7 +1445,7 @@ export function Dashboard10({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#6B9080]/20 hover:bg-[#FAF7F2] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-2xl border border-neutral-200/60 bg-white p-4 text-[#3A4A57] shadow-[0_1px_3px_0_rgb(0_0_0/0.05),0_1px_2px_-1px_rgb(0_0_0/0.05)] transition-all hover:-translate-y-0.5 hover:border-[#2A7D99]/20 hover:bg-[#F6FBFB] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
                 <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
                   {action.icon}
@@ -1458,18 +1458,18 @@ export function Dashboard10({
           {/* Provider Reports Card */}
           {shouldShowProviderReportsCard ? (
             <div
-              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#6B9080]/20 dark:border-[#6B9080]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              className="mt-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#EAF3F7] to-[#F6FBFB] dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
               onClick={() => onNavigate?.('clinical-reports')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
-              <div className="w-10 h-10 rounded-lg bg-[#6B9080]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-[#6B9080] dark:text-[#7BA7BC]" />
+              <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
+                <Stethoscope className="w-5 h-5 text-[#2A7D99] dark:text-[#2A7D99]" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-sm text-[#6B9080] dark:text-teal-100">Provider Reports</h3>
-                <p className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">Generate clinical PDFs for your child's care team</p>
+                <h3 className="font-medium text-sm text-[#2A7D99] dark:text-teal-100">Provider Reports</h3>
+                <p className="text-sm text-[#2A7D99]/80 dark:text-[#2A7D99]/70">Generate clinical PDFs for your child's care team</p>
               </div>
               <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
@@ -1489,9 +1489,7 @@ export function Dashboard10({
               childAge={child.age}
               parentName={userData.parentName}
               onItemComplete={(item) => {
-                setTaskWin(item.title || '✓ Done!');
-                triggerHaptic('medium');
-                setTimeout(() => setTaskWin(null), 2500);
+                // Could trigger celebration or update streak
               }}
             />
           </section>
@@ -1515,7 +1513,6 @@ export function Dashboard10({
           </section>
         )}
       </main>
-      </PullToRefresh>
 
       {/* ========================================
           6. PERSISTENT AI COMPANION (Floating)
@@ -1528,7 +1525,7 @@ export function Dashboard10({
           className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0'
-              : 'bg-primary text-white hover:bg-[#4a6478]'
+              : 'bg-[#6B9080] text-white hover:bg-[#4a6478]'
           }`}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
@@ -1563,7 +1560,7 @@ export function Dashboard10({
                   Chat with Aminy
                 </h3>
                 <div className="flex items-center gap-2">
-                  <Badge className="bg-primary text-white text-sm">AI Companion</Badge>
+                  <Badge className="bg-[#6B9080] text-white text-sm">AI Companion</Badge>
                   <button
                     onClick={() => setIsFullScreenChat(!isFullScreenChat)}
                     className="h-11 w-11 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
@@ -1613,7 +1610,7 @@ export function Dashboard10({
                   key={msg.id}
                   className={`rounded-xl p-3 text-sm shadow-sm ${
                     msg.role === 'user'
-                      ? 'bg-primary text-white ml-8'
+                      ? 'bg-[#6B9080] text-white ml-8'
                       : 'bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 text-[#3A4A57] dark:text-gray-200 mr-8'
                   }`}
                 >
