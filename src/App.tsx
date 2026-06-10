@@ -1447,7 +1447,13 @@ export default function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   // authReady: true once Supabase has determined initial auth state (INITIAL_SESSION fired).
   // Gates the main UI render so unauthenticated users never briefly see dashboard.
-  const [authReady, setAuthReady] = useState(false);
+  // E2E bypass: when __e2e_auth is set, skip the Supabase wait so tests don't time out.
+  const [authReady, setAuthReady] = useState(() => {
+    if (import.meta.env.DEV) {
+      try { return localStorage.getItem('__e2e_auth') === 'bypass'; } catch { return false; }
+    }
+    return false;
+  });
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showUnloadMindModal, setShowUnloadMindModal] = useState(false);
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
