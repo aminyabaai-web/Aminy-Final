@@ -42,6 +42,15 @@ jobs:
         env:
           CI: true
 
+      - name: Print failure DOM snapshots (debuggable from logs)
+        if: failure()
+        run: |
+          for f in $(find test-results -name "error-context.md" | head -4); do
+            echo "═════ $f ═════"
+            head -c 6000 "$f"
+            echo
+          done
+
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
