@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 interface NPSSurveyModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit?: () => void;
   userId: string;
   childName?: string;
   trigger?: 'day_7' | 'post_session' | 'monthly' | 'manual';
@@ -31,6 +32,7 @@ interface NPSSurveyModalProps {
 export function NPSSurveyModal({
   isOpen,
   onClose,
+  onSubmit,
   userId,
   childName = 'your child',
   trigger = 'manual'
@@ -75,6 +77,7 @@ export function NPSSurveyModal({
       }
 
       setStep('thanks');
+      onSubmit?.();
 
       // Auto-close after thanks message
       setTimeout(() => {

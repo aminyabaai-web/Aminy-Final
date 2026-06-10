@@ -37,6 +37,7 @@ interface PricingTiersProps {
 type Audience = 'individual' | 'provider';
 
 interface FeatureRow { icon: React.ReactNode; text: string }
+interface PricingTableRow { seats: string; price: string }
 interface TierCard {
   id: TierType | 'org' | 'solo';
   name: string;
@@ -53,6 +54,8 @@ interface TierCard {
   features: FeatureRow[];
   features_heading?: string;
   promoFooter?: string;
+  /** Optional volume pricing table rendered between CTA and feature list */
+  pricingTable?: PricingTableRow[];
 }
 
 function Dot() { return <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block shrink-0" />; }
@@ -135,8 +138,8 @@ const PROVIDER_TIERS: TierCard[] = [
     id: 'solo',
     name: 'Solo Practice',
     tagline: 'Practice-in-a-box for independent BCBAs',
-    priceMonthly: 79,
-    priceAnnual: Math.round(79 * 12 * 0.85),
+    priceMonthly: 89,
+    priceAnnual: Math.round(89 * 12 * 0.85),
     cta: 'Start Solo Practice',
     features_heading: 'Everything you need to run your practice:',
     features: [
@@ -157,8 +160,14 @@ const PROVIDER_TIERS: TierCard[] = [
     featured: true,
     cta: 'Start Clinic Plan',
     features_heading: 'Everything in Solo, plus:',
+    pricingTable: [
+      { seats: '1 clinician',   price: '$89/mo' },
+      { seats: '2 clinicians',  price: '$79/seat' },
+      { seats: '3 clinicians',  price: '$69/seat' },
+      { seats: '4 clinicians',  price: '$59/seat' },
+      { seats: '5+ clinicians', price: '$49/seat' },
+    ],
     features: [
-      { icon: <Spark />, text: 'From $49 / clinician seat / month (min 5 seats)' },
       { icon: <Spark />, text: 'Multi-clinician team coordination' },
       { icon: <Spark />, text: 'EMR integration (Rethink, CentralReach)' },
       { icon: <Spark />, text: 'Authorization + billing tracking' },
@@ -421,10 +430,10 @@ function TierCardView({
               : 'free to start, then per month'
             : displayPrice === 0
               ? 'USD / month'
-              : tier.id === 'org'
+              : (tier.id === 'org' || tier.id === 'solo')
                 ? billing === 'annual'
-                  ? 'USD / clinician / month, billed annually'
-                  : 'USD / clinician / month'
+                  ? 'USD / month, billed annually'
+                  : 'USD / month'
                 : billing === 'annual'
                   ? 'USD / month, billed annually'
                   : 'USD / month'}
@@ -449,6 +458,26 @@ function TierCardView({
           {!tier.ctaCurrent && <ArrowRight className="w-4 h-4" />}
         </>}
       </button>
+
+      {/* Volume pricing table */}
+      {tier.pricingTable && tier.pricingTable.length > 0 && (
+        <div className="mb-5">
+          <p className="text-xs font-semibold text-[#1B2733] mb-2">Volume pricing</p>
+          <div className="rounded-xl border border-[#E8E4DF] overflow-hidden">
+            {tier.pricingTable.map((row, i) => (
+              <div
+                key={i}
+                className={`flex items-center justify-between px-3 py-1.5 text-xs ${
+                  i < tier.pricingTable!.length - 1 ? 'border-b border-[#E8E4DF]' : ''
+                } ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'}`}
+              >
+                <span className="text-[#5A6B7A]">{row.seats}</span>
+                <span className="font-semibold text-[#2A7D99]">{row.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Features */}
       {tier.features_heading && (
