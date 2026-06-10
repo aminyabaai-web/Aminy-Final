@@ -6612,6 +6612,22 @@ img[fetchpriority="high"], img[loading="eager"] {
   }
 }
 
+/* Junior Calm Corner CTA — gentle teal glow pulse */
+@keyframes calmCornerGlow {
+  0%, 100% {
+    box-shadow: 0 20px 50px rgba(15,23,42,0.22), 0 0 0 rgba(42,125,153,0);
+  }
+  50% {
+    box-shadow: 0 20px 50px rgba(15,23,42,0.22), 0 0 24px rgba(42,125,153,0.35);
+  }
+}
+
+/* Aminy brand breathe animation — used on mascot/buddy elements */
+@keyframes aminyBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
 @keyframes aiShimmer {
   0% {
     background-position: -200%;
@@ -16756,6 +16772,40 @@ button[class*="bg-primary"] {
 .ring-\[\#6B9080\] { --tw-ring-color: #6B9080; }
 .focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #6B9080; }
 
+/* #2A7D99 — Primary teal (Design System override: replaces #6B9080/#7BA7BC) */
+.bg-\[\#2A7D99\] { background-color: #2A7D99; }
+.text-\[\#2A7D99\] { color: #2A7D99; }
+.border-\[\#2A7D99\] { border-color: #2A7D99; }
+.from-\[\#2A7D99\] { --tw-gradient-from: #2A7D99; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#2A7D99\] { --tw-gradient-to: #2A7D99; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.bg-\[\#2A7D99\]\/10 { background-color: color-mix(in oklab, #2A7D99 10%, transparent); }
+.bg-\[\#2A7D99\]\/15 { background-color: color-mix(in oklab, #2A7D99 15%, transparent); }
+.bg-\[\#2A7D99\]\/20 { background-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.bg-\[\#2A7D99\]\/25 { background-color: color-mix(in oklab, #2A7D99 25%, transparent); }
+.border-\[\#2A7D99\]\/15 { border-color: color-mix(in oklab, #2A7D99 15%, transparent); }
+.border-\[\#2A7D99\]\/20 { border-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.border-\[\#2A7D99\]\/25 { border-color: color-mix(in oklab, #2A7D99 25%, transparent); }
+.border-\[\#2A7D99\]\/30 { border-color: color-mix(in oklab, #2A7D99 30%, transparent); }
+.ring-\[\#2A7D99\]\/20 { --tw-ring-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.focus\:ring-\[\#2A7D99\]:focus { --tw-ring-color: #2A7D99; }
+.focus\:border-\[\#2A7D99\]:focus { border-color: #2A7D99; }
+.hover\:bg-\[\#2A7D99\]:hover { background-color: #2A7D99; }
+.hover\:bg-\[\#2A7D99\]\/20:hover { background-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.hover\:border-\[\#2A7D99\]\/20:hover { border-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.hover\:text-\[\#1f6180\]:hover { color: #1f6180; }
+/* #1f6180 — Darker teal hover state */
+.bg-\[\#1f6180\] { background-color: #1f6180; }
+.hover\:bg-\[\#1f6180\]:hover { background-color: #1f6180; }
+/* Mist background variants for teal system */
+.bg-\[\#EAF3F7\] { background-color: #EAF3F7; }
+.hover\:bg-\[\#EAF3F7\]:hover { background-color: #EAF3F7; }
+.bg-\[\#F6FBFB\] { background-color: #F6FBFB; }
+.hover\:bg-\[\#F6FBFB\]:hover { background-color: #F6FBFB; }
+.from-\[\#EAF3F7\] { --tw-gradient-from: #EAF3F7; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.from-\[\#F6FBFB\] { --tw-gradient-from: #F6FBFB; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#F6FBFB\] { --tw-gradient-to: #F6FBFB; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#EAF3F7\] { --tw-gradient-to: #EAF3F7; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+
 /* ── Design System v2 utilities ─────────────────────────────── */
 /* Mist surface — the app default background */
 .bg-mist        { background-color: var(--aminy-mist); }
@@ -17512,10 +17562,38 @@ button, a, [role="button"] {
 
 /* Ensure avatars always have brand gradient fallback when empty */
 [data-radix-avatar-fallback] {
-  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  background: linear-gradient(135deg, #2A7D99, #3A9DBB);
   color: white;
   font-weight: 600;
   letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   Splash logo breathe — gentle scale pulse
+   ============================================================ */
+@keyframes aminy-logo-breathe {
+  0%, 100% { transform: scale(1);     opacity: 1; }
+  50%       { transform: scale(1.025); opacity: 0.94; }
+}
+.aminy-logo-breathe {
+  animation: aminy-logo-breathe 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* CTA shimmer sweep — single pass on load */
+@keyframes aminy-cta-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.aminy-cta-shimmer {
+  background-image: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.22) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: aminy-cta-shimmer 2.4s ease-in-out 1.2s 1 forwards;
 }
 
 /* Table/list row hover warmth */

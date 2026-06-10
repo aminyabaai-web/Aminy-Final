@@ -29,9 +29,13 @@ import {
   ChevronRight,
   CheckCircle,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Star,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '../ui/button';
+import { supabase } from '../../utils/supabase/client';
+import { projectId, publicAnonKey } from '../../utils/supabase/info';
 
 interface Insight {
   id: string;
@@ -61,90 +65,208 @@ interface ChurnRisk {
   suggestedAction: string;
 }
 
+interface ProviderNPSRow {
+  score: number;
+  feedback: string | null;
+  created_at: string;
+  trigger: string | null;
+}
+
+interface ProviderStats {
+  npsRows: ProviderNPSRow[];
+  npsScore: number | null;
+  pendingCount: number;
+  verifiedCount: number;
+  rejectedCount: number;
+}
+
+// Parse a JSON array out of an AI response that may have surrounding prose
+function extractInsightsJSON(text: string): Insight[] | null {
+  const arrayMatch = text.match(/\[[\s\S]*\]/);
+  if (!arrayMatch) return null;
+  try {
+    const parsed = JSON.parse(arrayMatch[0]);
+    if (!Array.isArray(parsed)) return null;
+    // Normalise confidence: AI returns 0–100, we store 0–1
+    return parsed.map((item: Record<string, unknown>, i: number) => ({
+      id: String(item.id ?? i + 1),
+      type: (['opportunity', 'risk', 'suggestion', 'trend'].includes(item.type as string)
+        ? item.type
+        : 'suggestion') as Insight['type'],
+      priority: (['high', 'medium', 'low'].includes(item.priority as string)
+        ? item.priority
+        : 'medium') as Insight['priority'],
+      title: String(item.title ?? 'Insight'),
+      description: String(item.description ?? ''),
+      metric: item.metric ? String(item.metric) : undefined,
+      impact: item.impact ? String(item.impact) : undefined,
+      action: item.action ? String(item.action) : undefined,
+      confidence:
+        typeof item.confidence === 'number'
+          ? item.confidence > 1
+            ? item.confidence / 100
+            : item.confidence
+          : 0.75,
+    }));
+  } catch {
+    return null;
+  }
+}
+
+// Build statistical fallback insights from raw data when AI call fails
+function buildFallbackInsights(
+  npsData: Array<{ score: number; feedback?: string | null }>,
+  feedbackData: Array<{ rating?: number | null; comment?: string | null }>,
+  providerCount: number
+): Insight[] {
+  const insights: Insight[] = [];
+
+  if (npsData.length > 0) {
+    const avg = npsData.reduce((s, r) => s + r.score, 0) / npsData.length;
+    const promoters = npsData.filter(r => r.score >= 9).length;
+    const detractors = npsData.filter(r => r.score <= 6).length;
+    const npsScore = Math.round(((promoters - detractors) / npsData.length) * 100);
+    insights.push({
+      id: 'fb-nps',
+      type: npsScore >= 50 ? 'opportunity' : npsScore >= 20 ? 'trend' : 'risk',
+      priority: npsScore < 20 ? 'high' : 'medium',
+      title: `NPS score: ${npsScore}`,
+      description: `Based on ${npsData.length} responses, average score is ${avg.toFixed(1)}/10. ${promoters} promoters vs ${detractors} detractors.`,
+      metric: `${npsScore} NPS`,
+      confidence: 0.95,
+    });
+  }
+
+  if (feedbackData.length > 0) {
+    const rated = feedbackData.filter(f => f.rating != null);
+    if (rated.length > 0) {
+      const avgRating = rated.reduce((s, f) => s + (f.rating ?? 0), 0) / rated.length;
+      insights.push({
+        id: 'fb-feedback',
+        type: avgRating >= 4 ? 'opportunity' : 'risk',
+        priority: avgRating < 3 ? 'high' : 'medium',
+        title: `Message feedback avg: ${avgRating.toFixed(1)}/5`,
+        description: `${rated.length} rated messages. Average rating ${avgRating.toFixed(1)}.`,
+        metric: `${avgRating.toFixed(1)} avg rating`,
+        confidence: 0.9,
+      });
+    }
+  }
+
+  if (providerCount > 0) {
+    insights.push({
+      id: 'fb-providers',
+      type: 'trend',
+      priority: 'low',
+      title: `${providerCount} provider profiles on platform`,
+      description: 'Provider network is growing. Review pending verifications to expand supply.',
+      metric: `${providerCount} providers`,
+      confidence: 1.0,
+    });
+  }
+
+  if (insights.length === 0) {
+    insights.push({
+      id: 'fb-empty',
+      type: 'suggestion',
+      priority: 'low',
+      title: 'Insufficient data for AI analysis',
+      description: 'Not enough user feedback has been collected yet. Insights will improve as data accumulates.',
+      confidence: 1.0,
+    });
+  }
+
+  return insights;
+}
+
 export function AIInsights() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [lastAnalyzed, setLastAnalyzed] = useState<Date | null>(null);
   const [insights, setInsights] = useState<Insight[]>([]);
   const [featureUsage, setFeatureUsage] = useState<FeatureUsage[]>([]);
   const [churnRisks, setChurnRisks] = useState<ChurnRisk[]>([]);
-  const [activeTab, setActiveTab] = useState<'insights' | 'features' | 'churn' | 'revenue'>('insights');
+  const [providerStats, setProviderStats] = useState<ProviderStats | null>(null);
+  const [activeTab, setActiveTab] = useState<'insights' | 'features' | 'churn' | 'revenue' | 'provider'>('insights');
 
-  // Simulate AI analysis (would call Claude API in production)
   const runAnalysis = async () => {
     setIsAnalyzing(true);
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // AI-generated insights based on user data patterns
-    setInsights([
-      {
-        id: '1',
-        type: 'opportunity',
-        priority: 'high',
-        title: 'Upgrade prompt timing optimization',
-        description: 'Users who hit message limits between 7-9pm convert 3x better than daytime. Consider shifting upgrade prompts to evening hours.',
-        metric: '+47% conversion potential',
-        impact: '+$2,400/mo revenue',
-        action: 'Adjust upgrade trigger timing',
-        confidence: 0.89
-      },
-      {
-        id: '2',
-        type: 'risk',
-        priority: 'high',
-        title: '23 users at high churn risk',
-        description: 'Users who haven\'t used AI chat in 7+ days have 68% churn probability. These users need re-engagement.',
-        metric: '23 users affected',
-        impact: '-$1,800/mo if churned',
-        action: 'Send win-back campaign',
-        confidence: 0.92
-      },
-      {
-        id: '3',
-        type: 'suggestion',
-        priority: 'medium',
-        title: 'Document vault underutilized',
-        description: 'Only 12% of Pro users have uploaded documents. Users with 3+ documents have 89% retention vs 54% without.',
-        metric: '12% adoption',
-        impact: '+35% retention potential',
-        action: 'Add document upload prompts after onboarding',
-        confidence: 0.85
-      },
-      {
-        id: '4',
-        type: 'trend',
-        priority: 'medium',
-        title: 'Behavior strategy queries growing',
-        description: 'Queries about meltdowns and tantrums up 34% this week. Consider adding dedicated "Meltdown Mode" quick action.',
-        metric: '+34% week-over-week',
-        action: 'Build crisis-mode feature',
-        confidence: 0.78
-      },
-      {
-        id: '5',
-        type: 'opportunity',
-        priority: 'high',
-        title: 'Referral program underperforming',
-        description: 'Only 8% of users have shared referral codes. Users who refer have 2.3x LTV. Need more prominent referral CTAs.',
-        metric: '8% share rate',
-        impact: '+$5,200/mo potential',
-        action: 'Add referral prompt after positive AI interactions',
-        confidence: 0.87
-      },
-      {
-        id: '6',
-        type: 'suggestion',
-        priority: 'low',
-        title: 'Spanish language opportunity',
-        description: 'Based on user locations and names, ~18% of users may prefer Spanish. Competitors offer Spanish support.',
-        metric: '18% addressable',
-        impact: '+$800/mo potential',
-        action: 'Add Spanish language option',
-        confidence: 0.72
-      }
+    // ── 1. Fetch real data from Supabase ──────────────────────────────────
+    const [npsRes, feedbackRes, providerRes] = await Promise.all([
+      supabase
+        .from('nps_responses')
+        .select('score, feedback, created_at, trigger')
+        .order('created_at', { ascending: false })
+        .limit(100),
+      supabase
+        .from('message_feedback')
+        .select('rating, comment, created_at')
+        .limit(100),
+      supabase
+        .from('provider_profiles')
+        .select('id, verification_status, created_at', { count: 'exact' }),
     ]);
 
+    const npsData = (npsRes.data ?? []) as Array<{ score: number; feedback?: string | null; created_at: string; trigger?: string | null }>;
+    const feedbackData = (feedbackRes.data ?? []) as Array<{ rating?: number | null; comment?: string | null; created_at: string }>;
+    const providerCount = providerRes.count ?? (providerRes.data?.length ?? 0);
+    const providerProfiles = (providerRes.data ?? []) as Array<{ id: string; verification_status: string | null; created_at: string }>;
+
+    // ── 2. Build provider stats ───────────────────────────────────────────
+    const providerNPSRows = npsData.filter(
+      r => r.trigger?.toLowerCase().includes('provider')
+    ) as ProviderNPSRow[];
+    let providerNPSScore: number | null = null;
+    if (providerNPSRows.length > 0) {
+      const p = providerNPSRows.filter(r => r.score >= 9).length;
+      const d = providerNPSRows.filter(r => r.score <= 6).length;
+      providerNPSScore = Math.round(((p - d) / providerNPSRows.length) * 100);
+    }
+    setProviderStats({
+      npsRows: providerNPSRows,
+      npsScore: providerNPSScore,
+      pendingCount: providerProfiles.filter(p => (p.verification_status ?? 'pending') === 'pending').length,
+      verifiedCount: providerProfiles.filter(p => p.verification_status === 'verified').length,
+      rejectedCount: providerProfiles.filter(p => p.verification_status === 'rejected').length,
+    });
+
+    // ── 3. Call Claude for AI insights ────────────────────────────────────
+    let aiInsights: Insight[] | null = null;
+    try {
+      const aiRes = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify({
+            userId: 'admin',
+            messages: [
+              {
+                role: 'user',
+                content: `Analyze this app feedback data and provide admin insights:\n\nNPS Data: ${JSON.stringify(npsData.slice(0, 20))}\n\nFeedback: ${JSON.stringify(feedbackData.slice(0, 20))}\n\nProvider stats: ${providerCount} providers total\n\nProvide 4-6 specific, actionable insights for improving the app. Format as JSON array with fields: id, type (opportunity|risk|suggestion|trend), priority (high|medium|low), title, description, metric, impact, action, confidence (0-100).`,
+              },
+            ],
+            systemContext:
+              'You are an AI advisor for Aminy, a behavioral wellness app for autism families. Analyze the provided feedback data and give actionable admin insights.',
+          }),
+        }
+      );
+      if (aiRes.ok) {
+        const data = await aiRes.json();
+        const text: string = data?.message?.content ?? data?.content ?? data?.text ?? '';
+        aiInsights = extractInsightsJSON(text);
+      }
+    } catch (err) {
+      console.warn('[AIInsights] AI call failed, using fallback:', err);
+    }
+
+    // ── 4. Set insights (AI or fallback) ─────────────────────────────────
+    setInsights(aiInsights ?? buildFallbackInsights(npsData, feedbackData, providerCount));
+
+    // ── 5. Feature usage and churn remain static/illustrative ─────────────
     setFeatureUsage([
       { feature: 'AI Chat', usagePercent: 94, trend: 'up', recommendation: 'Core feature - maintain quality' },
       { feature: 'Daily Routines', usagePercent: 67, trend: 'up', recommendation: 'Growing - add more templates' },
@@ -259,16 +381,17 @@ export function AIInsights() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b border-neutral-200 dark:border-slate-700">
+      <div className="flex flex-wrap gap-1 border-b border-neutral-200 dark:border-slate-700">
         {[
           { id: 'insights', label: 'Key Insights', icon: Sparkles },
           { id: 'features', label: 'Feature Usage', icon: Target },
           { id: 'churn', label: 'Churn Risk', icon: AlertTriangle },
-          { id: 'revenue', label: 'Revenue Tips', icon: DollarSign }
+          { id: 'revenue', label: 'Revenue Tips', icon: DollarSign },
+          { id: 'provider', label: 'Provider Feedback', icon: ShieldCheck },
         ].map(tab => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as 'insights' | 'features' | 'churn' | 'revenue')}
+            onClick={() => setActiveTab(tab.id as 'insights' | 'features' | 'churn' | 'revenue' | 'provider')}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors ${
               activeTab === tab.id
                 ? 'border-violet-600 text-violet-600'
@@ -493,6 +616,117 @@ export function AIInsights() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'provider' && (
+            <div className="space-y-5">
+              {/* Provider NPS */}
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-5">
+                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                  <Star className="w-4 h-4 text-amber-500" />
+                  Provider Satisfaction NPS
+                </h3>
+                {!providerStats || providerStats.npsRows.length === 0 ? (
+                  <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
+                    No provider NPS responses yet — will populate once providers complete sessions.
+                  </p>
+                ) : (
+                  <>
+                    <div className="flex items-baseline gap-2 mb-4">
+                      <span
+                        className={`text-4xl font-bold ${
+                          providerStats.npsScore !== null && providerStats.npsScore >= 50
+                            ? 'text-green-600'
+                            : providerStats.npsScore !== null && providerStats.npsScore >= 20
+                            ? 'text-amber-600'
+                            : 'text-rose-600'
+                        }`}
+                      >
+                        {providerStats.npsScore ?? '—'}
+                      </span>
+                      <span className="text-sm text-[#5A6B7A]">
+                        / 100 · {providerStats.npsRows.length} responses
+                      </span>
+                    </div>
+                    {/* Verification breakdown */}
+                    <div className="grid grid-cols-3 gap-3 mb-4">
+                      {[
+                        { label: 'Verified', count: providerStats.verifiedCount, color: 'text-green-600 bg-green-50' },
+                        { label: 'Pending', count: providerStats.pendingCount, color: 'text-amber-600 bg-amber-50' },
+                        { label: 'Rejected', count: providerStats.rejectedCount, color: 'text-rose-600 bg-rose-50' },
+                      ].map(s => (
+                        <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
+                          <div className="text-xl font-bold">{s.count}</div>
+                          <div className="text-xs">{s.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Recent feedback table */}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="text-left text-xs text-[#5A6B7A] border-b border-neutral-100 dark:border-slate-700">
+                            <th className="pb-2 pr-3 font-medium">Score</th>
+                            <th className="pb-2 pr-3 font-medium">Trigger</th>
+                            <th className="pb-2 font-medium">Comment</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {providerStats.npsRows.slice(0, 8).map((row, i) => (
+                            <tr
+                              key={i}
+                              className="border-b border-neutral-50 dark:border-slate-800 last:border-0"
+                            >
+                              <td className="py-2 pr-3">
+                                <span
+                                  className={`px-1.5 py-0.5 rounded text-xs font-semibold ${
+                                    row.score >= 9
+                                      ? 'bg-green-100 text-green-700'
+                                      : row.score >= 7
+                                      ? 'bg-amber-100 text-amber-700'
+                                      : 'bg-rose-100 text-rose-700'
+                                  }`}
+                                >
+                                  {row.score}
+                                </span>
+                              </td>
+                              <td className="py-2 pr-3 text-[#5A6B7A] dark:text-[#8A9BA8] text-xs">
+                                {row.trigger ?? '—'}
+                              </td>
+                              <td className="py-2 text-[#5A6B7A] dark:text-[#8A9BA8] max-w-xs truncate">
+                                {row.feedback ?? <em>No comment</em>}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Verification status (shown even with no NPS) */}
+              {providerStats && providerStats.npsRows.length === 0 && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-5">
+                  <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-teal-600" />
+                    Verification Status
+                  </h3>
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { label: 'Verified', count: providerStats.verifiedCount, color: 'text-green-600 bg-green-50 dark:bg-green-900/20' },
+                      { label: 'Pending', count: providerStats.pendingCount, color: 'text-amber-600 bg-amber-50 dark:bg-amber-900/20' },
+                      { label: 'Rejected', count: providerStats.rejectedCount, color: 'text-rose-600 bg-rose-50 dark:bg-rose-900/20' },
+                    ].map(s => (
+                      <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
+                        <div className="text-xl font-bold">{s.count}</div>
+                        <div className="text-xs">{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>

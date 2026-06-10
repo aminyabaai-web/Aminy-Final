@@ -649,7 +649,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-[#6B9080]/10 text-[#6B9080]',
+      color: 'bg-[#2A7D99]/10 text-[#2A7D99]',
       track: 'Prosody',
       voiceReady: true,
       mode: 'rhythm-matching',
@@ -731,7 +731,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'pro',
       tier: 'pro',
-      color: 'bg-indigo-100 text-[#6B9080]',
+      color: 'bg-indigo-100 text-[#2A7D99]',
       track: 'Interoception',
       voiceReady: true,
       regulationFriendly: true,
@@ -750,7 +750,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'micro',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-indigo-100 text-[#6B9080]',
+      color: 'bg-indigo-100 text-[#2A7D99]',
       track: 'Calm',
       voiceReady: true,
       regulationFriendly: true,
@@ -814,7 +814,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       sessionSize: 'standard',
       unlocked: safeTier === 'core' || safeTier === 'pro',
       tier: 'core',
-      color: 'bg-[#6B9080]/10 text-[#6B9080]',
+      color: 'bg-[#2A7D99]/10 text-[#2A7D99]',
       track: 'Narrative Skills',
       voiceReady: true,
       focus: ['sequencing', 'narration', 'comprehension'],
@@ -1581,18 +1581,18 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
         }}
       >
         {/* Kid-Safe Header */}
-        <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur junior-header">
+        <div className="flex items-center justify-between border-b border-white/70 bg-white/90 p-4 backdrop-blur junior-header dark:bg-slate-900/90 dark:border-slate-700/70">
           <div className="flex items-center space-x-3">
             <motion.div
-              animate={reducedSensory ? {} : { scale: [1, 1.1, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={reducedSensory ? {} : { scale: [1, 1.02, 1] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               className={`w-12 h-12 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
             >
               {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
             </motion.div>
             <div>
-              <p className="text-xl font-semibold text-slate-950">Hi {childName}!</p>
-              <p className="text-sm text-[#5A6B7A]">
+              <p className="text-xl font-semibold text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Hi {childName}!</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>
                 With {buddyVoices.find(b => b.id === selectedBuddy)?.name}
               </p>
             </div>
@@ -1602,7 +1602,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             {/* Token Counter */}
             <motion.div
               animate={reducedSensory ? {} : { scale: todayTokens > 0 ? [1, 1.1, 1] : 1 }}
-              className="bg-yellow-100 px-3 py-1 rounded-full flex items-center space-x-1"
+              className="bg-yellow-100 px-3 py-1 rounded-full flex items-center space-x-1 dark:bg-yellow-900/40"
             >
               <Star className="w-4 h-4 text-yellow-600" />
               <span className="text-yellow-600">{todayTokens}</span>
@@ -1639,7 +1639,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               <button
                 type="button"
                 onClick={() => setActiveView('home')}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] text-[#6B9080] shadow-sm transition-colors hover:bg-[#F0EDE8]"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] shadow-sm transition-colors hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#3A9DBB] dark:hover:bg-slate-700"
                 aria-label="Go to Junior home screen"
                 title="🏠 Home"
               >
@@ -1678,7 +1678,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             <div className="p-4 sm:p-6 md:p-8">
               <div className="mx-auto max-w-5xl space-y-5">
                 <div
-                  className="overflow-hidden rounded-[32px] border border-white/70 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)]"
+                  className="overflow-hidden rounded-[32px] border border-white/70 dark:border-slate-700/70 p-6 shadow-[0_24px_80px_rgba(15,23,42,0.10)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.40)]"
                   style={{
                     background:
                       'radial-gradient(circle at top left, rgba(45,212,191,0.26), transparent 32%), linear-gradient(180deg,#f7fbfb 0%,#eef7f8 100%)',
@@ -1686,32 +1686,32 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 >
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
-                      <Badge variant="outline" className="border-[#6B9080]/20 bg-white/70 text-[#5A6B7A]">
+                      <Badge variant="outline" className="border-[#2A7D99]/20 bg-white/70 text-[#5A6B7A] dark:bg-slate-800/70 dark:text-slate-300">
                         Calm &amp; rewards
                       </Badge>
-                      <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
+                      <h1 className="mt-3 text-3xl font-semibold tracking-[-0.04em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>
                         Calm first. Then celebrate the win.
                       </h1>
                       <h2 className="sr-only">Calm Corner overview</h2>
                       <h3 className="sr-only">Rewards and transition support</h3>
-                      <p className="mt-3 max-w-xl text-sm leading-6 text-[#5A6B7A]">
+                      <p className="mt-3 max-w-xl text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">
                         This space is focused on helping {childName} regulate, work toward a reward, and move through tough transitions without turning the app into one more noisy distraction.
                       </p>
                     </div>
 
                     <div className="grid min-w-[220px] grid-cols-2 gap-3 self-stretch lg:w-[280px]">
-                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
-                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Stars today</div>
-                        <div className="mt-2 flex items-center gap-2 text-2xl font-semibold text-slate-950">
+                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm dark:bg-slate-800/80 dark:border-slate-700/70">
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Stars today</div>
+                        <div className="mt-2 flex items-center gap-2 text-2xl font-semibold text-slate-950 dark:text-slate-50">
                           <Star className="h-5 w-5 text-amber-500" />
                           {todayTokens}
                         </div>
-                        <div className="mt-1 text-xs text-[#5A6B7A]">Earned for calm moments and progress.</div>
+                        <div className="mt-1 text-xs text-[#5A6B7A] dark:text-slate-400">Earned for calm moments and progress.</div>
                       </div>
-                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm">
-                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Current feeling</div>
+                      <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm dark:bg-slate-800/80 dark:border-slate-700/70">
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Current feeling</div>
                         <div className="mt-2 text-2xl">{emotionDetected === 'calm' ? '😌' : emotionDetected === 'frustrated' ? '😤' : emotionDetected === 'anxious' ? '😰' : '🤩'}</div>
-                        <div className="mt-1 text-xs capitalize text-[#5A6B7A]">{emotionDetected}</div>
+                        <div className="mt-1 text-xs capitalize text-[#5A6B7A] dark:text-slate-400">{emotionDetected}</div>
                       </div>
                     </div>
                   </div>
@@ -1754,7 +1754,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     <button
                       type="button"
                       onClick={() => setActiveView('calm-corner')}
-                      className="group flex min-h-[152px] items-center justify-between rounded-[28px] border border-slate-900/5 bg-slate-950 px-5 py-5 text-left text-white shadow-[0_20px_50px_rgba(15,23,42,0.22)] transition-transform duration-200 hover:-translate-y-0.5"
+                      className="group flex min-h-[152px] items-center justify-between rounded-[28px] border border-slate-900/5 bg-slate-950 px-5 py-5 text-left text-white shadow-[0_20px_50px_rgba(15,23,42,0.22)] transition-all duration-200 hover:-translate-y-0.5"
+                      style={reducedSensory ? undefined : {
+                        animation: 'calmCornerGlow 4s ease-in-out infinite',
+                      }}
                     >
                       <div className="max-w-sm">
                         <div className="flex items-center gap-2 text-sm font-medium text-cyan-200">
@@ -1790,11 +1793,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     )}
                     </div>
 
-                    <div className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-sm">
-                      <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Quick support</div>
-                      <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950">What helps right now?</div>
+                    <div className="rounded-[28px] border border-white/70 bg-white/85 p-5 shadow-sm dark:bg-slate-800/85 dark:border-slate-700/70">
+                      <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Quick support</div>
+                      <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>What helps right now?</div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Badge variant="outline" className="border-[#6B9080]/20 bg-[#6B9080]/10 text-cyan-700">Waiting room mode</Badge>
+                        <Badge variant="outline" className="border-[#2A7D99]/20 bg-[#2A7D99]/10 text-[#2A7D99] dark:text-[#3A9DBB]">Waiting room mode</Badge>
                         <Badge variant="outline" className="border-purple-100 bg-purple-50 text-purple-700">Transition timer</Badge>
                         <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-700">Reward ready</Badge>
                       </div>
@@ -1881,7 +1884,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
                           </div>
                         </div>
-                        <div className="rounded-2xl border border-[#6B9080]/20 bg-[#6B9080]/10 px-4 py-3">
+                        <div className="rounded-2xl border border-[#2A7D99]/20 bg-[#2A7D99]/10 px-4 py-3 dark:bg-[#2A7D99]/20 dark:border-[#2A7D99]/30">
                           <div className="text-xs uppercase tracking-[0.18em] text-cyan-700">Then</div>
                           <div className="mt-1 text-sm font-medium text-cyan-900">
                             {homeTransition.then.emoji ? `${homeTransition.then.emoji} ` : ''}{homeTransition.then.label}
@@ -1905,35 +1908,35 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   <button
                     type="button"
                     onClick={() => setActiveView('rewards')}
-                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5"
+                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5 dark:bg-slate-800 dark:border-slate-700/70"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
                       <Gift className="h-6 w-6" />
                     </div>
-                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Rewards</div>
-                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">Spend stars, celebrate wins, and keep the goal visible.</p>
+                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Rewards</div>
+                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">Spend stars, celebrate wins, and keep the goal visible.</p>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setActiveView('visual-schedule')}
-                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5"
+                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5 dark:bg-slate-800 dark:border-slate-700/70"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
                       <Clock className="h-6 w-6" />
                     </div>
-                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950">Transitions</div>
-                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">Use first/then boards, routines, and countdowns to lower friction.</p>
+                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Transitions</div>
+                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">Use first/then boards, routines, and countdowns to lower friction.</p>
                   </button>
                 </div>
 
-                <Card className="rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.06)]">
+                <Card className="rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.06)] dark:bg-slate-800/95 dark:border-slate-700/70">
                   <div className="p-6">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <div>
-                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Only if helpful</div>
-                        <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Optional practice</h2>
-                        <p className="mt-1 text-sm text-[#5A6B7A]">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Only if helpful</div>
+                        <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Optional practice</h2>
+                        <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
                       </div>
                       <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-[#5A6B7A] hover:bg-[#F0EDE8]">
                         Change buddy voice
@@ -1950,7 +1953,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             setActiveView('activity');
                             setCurrentWord('star');
                           }}
-                          className={`${activity.color} rounded-[24px] p-4 text-left shadow-sm transition-transform duration-200 hover:-translate-y-0.5`}
+                          className={`${activity.color} rounded-[24px] p-4 text-left shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 dark:bg-slate-800`}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-3">
@@ -2403,11 +2406,17 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     key={filter.id}
                     whileHover={{ scale: 1.05 }}
                     onClick={() => setActiveTrackFilter(filter.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap ${
-                      activeTrackFilter === filter.id 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                    className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200 ${
+                      activeTrackFilter === filter.id
+                        ? 'text-white'
+                        : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
                     }`}
+                    style={activeTrackFilter === filter.id ? {
+                      background: 'linear-gradient(90deg, #2A7D99, #3A9DBB)',
+                      fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",
+                    } : {
+                      fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",
+                    }}
                   >
                     <filter.icon className="w-4 h-4" />
                     <span className="text-sm">{filter.label}</span>
@@ -2443,7 +2452,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         setActiveView('activity');
                         setCurrentWord(activity.focus?.[0]?.replace(/[\/\[\]]/g, '') || 'star');
                       }}
-                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm relative ${
+                      className={`${activity.color} rounded-2xl p-4 cursor-pointer shadow-sm hover:shadow-md transition-shadow relative ${
                         !activity.unlocked ? 'opacity-60' : ''
                       }`}
                     >
@@ -2488,7 +2497,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           </Badge>
                         )}
                         {activity.prosodyFocus && (
-                          <Badge variant="outline" className="text-xs bg-[#6B9080]/10">
+                          <Badge variant="outline" className="text-xs bg-[#2A7D99]/10 text-[#2A7D99]">
                             Prosody
                           </Badge>
                         )}
@@ -2538,7 +2547,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     }}
                     className={`${buddy.color} rounded-2xl p-6 cursor-pointer shadow-sm ${
                       !buddy.unlocked ? 'opacity-50' : ''
-                    } ${selectedBuddy === buddy.id ? 'ring-2 ring-blue-500' : ''}`}
+                    } ${selectedBuddy === buddy.id ? 'ring-2 ring-[#2A7D99]' : ''}`}
                   >
                     <div className="flex items-center space-x-4 mb-4">
                       <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">

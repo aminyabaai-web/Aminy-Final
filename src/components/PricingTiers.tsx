@@ -34,11 +34,12 @@ interface PricingTiersProps {
   onCheckCoverage?: () => void;
 }
 
-type Audience = 'personal' | 'organization';
+type Audience = 'individual' | 'provider';
 
 interface FeatureRow { icon: React.ReactNode; text: string }
+interface PricingTableRow { seats: string; price: string }
 interface TierCard {
-  id: TierType | 'org';
+  id: TierType | 'org' | 'solo';
   name: string;
   tagline: string;
   priceMonthly: number;
@@ -53,6 +54,8 @@ interface TierCard {
   features: FeatureRow[];
   features_heading?: string;
   promoFooter?: string;
+  /** Optional volume pricing table rendered between CTA and feature list */
+  pricingTable?: PricingTableRow[];
 }
 
 function Dot() { return <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block shrink-0" />; }
@@ -129,20 +132,65 @@ const TIERS: TierCard[] = [
   },
 ];
 
+// Provider / B2B tiers — shown when audience === 'provider'
+const PROVIDER_TIERS: TierCard[] = [
+  {
+    id: 'solo',
+    name: 'Solo Practice',
+    tagline: 'Practice-in-a-box for independent BCBAs',
+    priceMonthly: 89,
+    priceAnnual: Math.round(89 * 12 * 0.85),
+    cta: 'Start Solo Practice',
+    features_heading: 'Everything you need to run your practice:',
+    features: [
+      { icon: <Spark />, text: 'AI clinical notes + session documentation' },
+      { icon: <Spark />, text: 'Client & family portal' },
+      { icon: <Spark />, text: 'Session scheduling + SMS reminders' },
+      { icon: <Spark />, text: 'Goal tracking + progress reports' },
+      { icon: <Spark />, text: 'AI-powered parent coaching tools' },
+      { icon: <Spark />, text: '1 clinician seat' },
+    ],
+  },
+  {
+    id: 'org',
+    name: 'Clinic',
+    tagline: 'Full team coordination for ABA clinics',
+    priceMonthly: 49,
+    priceAnnual: Math.round(49 * 12 * 0.85),
+    featured: true,
+    cta: 'Start Clinic Plan',
+    features_heading: 'Everything in Solo, plus:',
+    pricingTable: [
+      { seats: '1 clinician',   price: '$89/mo' },
+      { seats: '2 clinicians',  price: '$79/seat' },
+      { seats: '3 clinicians',  price: '$69/seat' },
+      { seats: '4 clinicians',  price: '$59/seat' },
+      { seats: '5+ clinicians', price: '$49/seat' },
+    ],
+    features: [
+      { icon: <Spark />, text: 'Multi-clinician team coordination' },
+      { icon: <Spark />, text: 'EMR integration (Rethink, CentralReach)' },
+      { icon: <Spark />, text: 'Authorization + billing tracking' },
+      { icon: <Spark />, text: 'Org-wide analytics + outcome reports' },
+      { icon: <Spark />, text: 'Dedicated onboarding support' },
+    ],
+    promoFooter: 'Minimum 5 seats. Volume discounts available for 20+ seats. Contact us for enterprise pricing.',
+  },
+];
+
 export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, monetizationMode = 'cash', onCheckCoverage }: PricingTiersProps) {
   const isInsured = monetizationMode === 'insured';
   const handleCheckCoverage = () => {
     if (onCheckCoverage) onCheckCoverage();
     else onClose?.();
   };
-  const [audience, setAudience] = useState<Audience>('personal');
+  const [audience, setAudience] = useState<Audience>('individual');
   const [billing, setBilling] = useState<'monthly' | 'annual'>('annual');
   const [loadingTier, setLoadingTier] = useState<string | null>(null);
 
   async function handleSelect(tier: TierCard) {
     if (tier.ctaCurrent) return;
-    if (tier.id === 'org') {
-      // Org tier routes to a different signup
+    if (tier.id === 'org' || tier.id === 'solo') {
       window.location.href = '/?screen=org-admin';
       return;
     }
@@ -171,9 +219,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
     }
   }
 
-  const visibleTiers = audience === 'personal'
-    ? TIERS
-    : TIERS.filter(t => t.id !== 'free'); // Org screen suppresses Free
+  const visibleTiers = audience === 'individual' ? TIERS : PROVIDER_TIERS;
 
   return (
     <div className="min-h-screen bg-mist overflow-y-auto">
@@ -228,23 +274,26 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         <div className="flex justify-center mb-4">
           <div className="bg-white border border-[#E8E4DF] rounded-full p-1 inline-flex">
             <button
-              onClick={() => setAudience('personal')}
-              className={`text-sm font-medium px-5 py-2 rounded-full transition-colors ${
-                audience === 'personal' ? 'bg-slate-900 text-white' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
+              onClick={() => setAudience('individual')}
+              className={`text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 ${
+                audience === 'individual' ? 'bg-[#2A7D99] text-white shadow-sm' : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
               }`}
             >
-              Personal
+              Individual
             </button>
             <button
-              onClick={() => setAudience('organization')}
-              className={`text-sm font-medium px-5 py-2 rounded-full transition-colors ${
-                audience === 'organization' ? 'bg-slate-900 text-white' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
+              onClick={() => setAudience('provider')}
+              className={`text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 ${
+                audience === 'provider' ? 'bg-[#2A7D99] text-white shadow-sm' : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
               }`}
             >
-              Organization
+              Provider
             </button>
           </div>
         </div>
+        <p className="text-center text-xs text-[#8A9BA8] mb-4">
+          {audience === 'individual' ? 'For families & caregivers' : 'For BCBAs, clinics & ABA organizations'}
+        </p>
 
         {/* Billing toggle */}
         <div className="flex justify-center mb-6">
@@ -252,7 +301,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setBilling('monthly')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'monthly' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
+                billing === 'monthly' ? 'bg-[#2A7D99]/10 text-[#2A7D99]' : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
               }`}
             >
               Monthly
@@ -260,10 +309,10 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             <button
               onClick={() => setBilling('annual')}
               className={`font-medium px-4 py-1.5 rounded-full transition-colors ${
-                billing === 'annual' ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
+                billing === 'annual' ? 'bg-[#2A7D99]/10 text-[#2A7D99]' : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
               }`}
             >
-              Annual <span className="text-[#6B9080] font-semibold">· save up to 28%</span>
+              Annual <span className="text-[#2A7D99] font-semibold">· save up to 28%</span>
             </button>
           </div>
         </div>
@@ -283,16 +332,29 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
           ))}
         </div>
 
-        {/* Need more? */}
-        {audience === 'personal' && (
+        {/* Cross-sell nudge */}
+        {audience === 'individual' && (
           <div className="text-center mt-8 px-4">
             <p className="text-xs text-[#5A6B7A]">
-              Need more capabilities for your team or clinic?{' '}
+              Are you a BCBA or running a clinic?{' '}
               <button
-                onClick={() => setAudience('organization')}
-                className="text-[#6B9080] font-medium underline underline-offset-2"
+                onClick={() => setAudience('provider')}
+                className="text-[#2A7D99] font-semibold underline underline-offset-2"
               >
-                See Aminy for Organizations
+                See Provider plans →
+              </button>
+            </p>
+          </div>
+        )}
+        {audience === 'provider' && (
+          <div className="text-center mt-8 px-4">
+            <p className="text-xs text-[#5A6B7A]">
+              Looking for personal use?{' '}
+              <button
+                onClick={() => setAudience('individual')}
+                className="text-[#2A7D99] font-semibold underline underline-offset-2"
+              >
+                See Individual plans →
               </button>
             </p>
           </div>
@@ -368,9 +430,13 @@ function TierCardView({
               : 'free to start, then per month'
             : displayPrice === 0
               ? 'USD / month'
-              : billing === 'annual'
-                ? `USD / month, billed annually`
-                : 'USD / month'}
+              : (tier.id === 'org' || tier.id === 'solo')
+                ? billing === 'annual'
+                  ? 'USD / month, billed annually'
+                  : 'USD / month'
+                : billing === 'annual'
+                  ? 'USD / month, billed annually'
+                  : 'USD / month'}
         </p>
       </div>
 
@@ -392,6 +458,26 @@ function TierCardView({
           {!tier.ctaCurrent && <ArrowRight className="w-4 h-4" />}
         </>}
       </button>
+
+      {/* Volume pricing table */}
+      {tier.pricingTable && tier.pricingTable.length > 0 && (
+        <div className="mb-5">
+          <p className="text-xs font-semibold text-[#1B2733] mb-2">Volume pricing</p>
+          <div className="rounded-xl border border-[#E8E4DF] overflow-hidden">
+            {tier.pricingTable.map((row, i) => (
+              <div
+                key={i}
+                className={`flex items-center justify-between px-3 py-1.5 text-xs ${
+                  i < tier.pricingTable!.length - 1 ? 'border-b border-[#E8E4DF]' : ''
+                } ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'}`}
+              >
+                <span className="text-[#5A6B7A]">{row.seats}</span>
+                <span className="font-semibold text-[#2A7D99]">{row.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Features */}
       {tier.features_heading && (

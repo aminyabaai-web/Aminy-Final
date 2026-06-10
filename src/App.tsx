@@ -1799,36 +1799,42 @@ export default function App() {
     return () => window.removeEventListener('dataservice:error', handler);
   }, []);
 
-  // NPS Survey trigger — show after 7 days of first sign-up, max once per 90 days
+  // NPS Survey trigger — non-annoying: dashboard-only, 7-day tenure, 30-day cooldown,
+  // 7-day dismissed cooldown, 5-second settle delay so it never interrupts onboarding.
   useEffect(() => {
-    const NPS_COOLDOWN_KEY = 'aminy-nps-last-shown';
-    const NPS_FIRST_LOGIN_KEY = 'aminy-first-login';
-    const NPS_COOLDOWN_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
-    const NPS_DELAY_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
-
-    if (!userData.id) return;
+    // Only fire when the user is authenticated and viewing the dashboard
+    if (!userData.id || currentScreen !== 'dashboard') return;
 
     try {
-      // Respect cooldown
-      const lastShown = localStorage.getItem(NPS_COOLDOWN_KEY);
-      if (lastShown && Date.now() - Number(lastShown) < NPS_COOLDOWN_MS) return;
+      const now = Date.now();
+      const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-      // Track first login time
-      let firstLogin = Number(localStorage.getItem(NPS_FIRST_LOGIN_KEY) || '0');
-      if (!firstLogin) {
-        firstLogin = Date.now();
-        localStorage.setItem(NPS_FIRST_LOGIN_KEY, String(firstLogin));
+      // 1. Seed first-seen timestamp on first ever load
+      let firstSeen = localStorage.getItem('aminy_first_seen');
+      if (!firstSeen) {
+        firstSeen = new Date().toISOString();
+        localStorage.setItem('aminy_first_seen', firstSeen);
       }
 
-      // Show after 7 days of first login
-      if (Date.now() - firstLogin >= NPS_DELAY_MS) {
-        const timer = setTimeout(() => setShowNPSSurvey(true), 15000);
-        return () => clearTimeout(timer);
-      }
+      // 2. User must have been around for at least 7 days
+      const tenureDays = (now - new Date(firstSeen).getTime()) / MS_PER_DAY;
+      if (tenureDays < 7) return;
+
+      // 3. Don't show if a completed survey was submitted within the last 30 days
+      const npsLast = localStorage.getItem('aminy_nps_last');
+      if (npsLast && now - new Date(npsLast).getTime() < 30 * MS_PER_DAY) return;
+
+      // 4. Don't show if the user dismissed within the last 7 days
+      const npsDismissed = localStorage.getItem('aminy_nps_dismissed');
+      if (npsDismissed && now - new Date(npsDismissed).getTime() < 7 * MS_PER_DAY) return;
+
+      // All conditions met — show after a 5-second settle delay
+      const timer = setTimeout(() => setShowNPSSurvey(true), 5000);
+      return () => clearTimeout(timer);
     } catch {
       // Silently fail — NPS is non-critical
     }
-  }, [userData.id]);
+  }, [userData.id, currentScreen]);
 
   // CSS rule [style*="opacity: 0"] { opacity: 1 !important } in index.css handles
   // the inline opacity:0 that motion/react v12 sets as initial animation state.
@@ -2652,6 +2658,11 @@ export default function App() {
                     setBevelChatOpen(true);
                     return;
                   }
+                  // Feedback — open inline collector, don't navigate to a screen
+                  if (destination === "feedback") {
+                    setShowFeedbackCollector(true);
+                    return;
+                  }
                   // Map nav IDs to screen IDs (bottom nav / More menu aliases)
                   const navAliases: Record<string, AppScreen> = {
                     'plan': 'care-plan',
@@ -2736,7 +2747,10 @@ export default function App() {
               <SettingsScreen
                 onBack={() => navigateToScreen("dashboard")}
                 onLogout={handleLogout}
-                onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
+                onNavigate={(screen) => {
+                  if (screen === 'feedback') { setShowFeedbackCollector(true); return; }
+                  navigateToScreen(screen as AppScreen);
+                }}
                 userTier={effectiveUserTier}
               />
             </Suspense>
@@ -4269,7 +4283,12 @@ export default function App() {
                     </Suspense>
                   )}
 
-                  {/* Feedback Button moved to Settings/Account screen */}
+                  {/* Floating Feedback Button — shown on dashboard for authenticated users */}
+                  {userData.id && currentScreen === 'dashboard' && (
+                    <Suspense fallback={null}>
+                      <FeedbackButton />
+                    </Suspense>
+                  )}
 
                   {/* App Review Prompt — self-contained, triggered after positive sessions */}
                   <Suspense fallback={null}>
@@ -4284,7 +4303,12 @@ export default function App() {
                         onClose={() => {
                           setShowNPSSurvey(false);
                           try {
-                            localStorage.setItem('aminy-nps-last-shown', String(Date.now()));
+                            localStorage.setItem('aminy_nps_dismissed', new Date().toISOString());
+                          } catch { /* non-critical */ }
+                        }}
+                        onSubmit={() => {
+                          try {
+                            localStorage.setItem('aminy_nps_last', new Date().toISOString());
                           } catch { /* non-critical */ }
                         }}
                         userId={userData.id || userData.userId || ''}
