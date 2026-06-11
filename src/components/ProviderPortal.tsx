@@ -101,6 +101,7 @@ import {
   type ProviderForSuperbill,
 } from '../lib/superbill-service';
 import type { Superbill } from '../types/telehealth';
+import { NPSSurveyModal } from './NPSSurveyModal';
 
 // Lazy-load the SuperbillGenerator for the provider-side superbill overlay
 const SuperbillGenerator = React.lazy(() => import('./SuperbillGenerator'));
@@ -337,6 +338,28 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
   const [generatedSuperbill, setGeneratedSuperbill] = useState<Superbill | null>(null);
   const [superbillToast, setSuperbillToast] = useState<string | null>(null);
   const [lastSavedNoteId, setLastSavedNoteId] = useState<string | null>(null);
+
+  // Provider NPS — fires once after the provider has been in the portal for 3 minutes,
+  // subject to a 30-day cooldown stored in aminy_provider_nps_last. Any close (dismiss
+  // or post-submit) resets the cooldown. Non-annoying: one prompt per 30 days max.
+  const [showProviderNPS, setShowProviderNPS] = useState(false);
+
+  useEffect(() => {
+    const LAST_KEY = 'aminy_provider_nps_last';
+    const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+    const DELAY_MS = 3 * 60 * 1000; // 3-minute delay so it doesn't interrupt active work
+
+    try {
+      const lastShown = localStorage.getItem(LAST_KEY);
+      if (lastShown && Date.now() - new Date(lastShown).getTime() < THIRTY_DAYS_MS) return;
+    } catch {
+      // localStorage unavailable — skip silently
+      return;
+    }
+
+    const timer = setTimeout(() => setShowProviderNPS(true), DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [providerId]);
 
   // Provider notification system — real items requiring action
   const [showNotifications, setShowNotifications] = useState(false);
@@ -1568,10 +1591,25 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       )}
                     </div>
                     {patient.profileAccess === 'granted' && (
-                      <Button size="sm" variant="ghost" className="text-[#6B9080]">
-                        <Eye className="w-4 h-4 mr-1" />
-                        Insight Navigator
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-[#6B9080]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPatient(patient);
+                            setActiveTab('ai-summaries');
+                          }}
+                        >
+                          <Brain className="w-4 h-4 mr-1" />
+                          Prepare for session →
+                        </Button>
+                        <Button size="sm" variant="ghost" className="text-[#6B9080]">
+                          <Eye className="w-4 h-4 mr-1" />
+                          Insight Navigator
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </Card>
@@ -2965,6 +3003,25 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </div>
           </Card>
         </div>
+      )}
+
+      {/* Provider NPS Survey — fires after 3 min in portal, max once per 30 days.
+          onClose is called for both X-dismiss and post-submit auto-close; writing
+          aminy_provider_nps_last on either path matches the consumer NPS pattern in
+          App.tsx and ensures the 30-day cooldown fires regardless of path. */}
+      {showProviderNPS && (
+        <NPSSurveyModal
+          isOpen={showProviderNPS}
+          onClose={() => {
+            setShowProviderNPS(false);
+            try {
+              localStorage.setItem('aminy_provider_nps_last', new Date().toISOString());
+            } catch { /* non-critical */ }
+          }}
+          userId={providerId}
+          childName={undefined}
+          trigger="post_session"
+        />
       )}
     </div>
   );

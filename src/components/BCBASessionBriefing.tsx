@@ -95,9 +95,29 @@ export function BCBASessionBriefing({
         const logs = logsRes.data || [];
         const notes = notesRes.data || [];
 
+        const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0;
+
+        // No history at all — show a helpful empty state instead of fabricated text
+        if (!hasData) {
+          setBriefing({
+            summary: 'No data yet for this family — session notes will appear here after your first session.',
+            whatsWorking: [],
+            whatsNotWorking: [],
+            opportunities: [],
+            recommendedGuidance: [],
+            recentProgress: [],
+            parentMood: 'neutral',
+            recentConcerns: [],
+            lastSessionHighlights: [],
+            vaultInsights: [],
+            suggestedTopics: [],
+          });
+          setIsLoading(false);
+          return;
+        }
+
         // Generate AI session prep narrative
         let aiNarrative = '';
-        const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0;
         if (hasData) {
           try {
             const contextPrompt = [

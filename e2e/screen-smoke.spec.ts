@@ -100,7 +100,10 @@ test.describe('42-Screen Smoke', () => {
 
       await setupAuth(page);
       await page.goto('/');
-      await page.waitForLoadState('networkidle');
+      // domcontentloaded, not networkidle: background API polling under CI
+      // load means the network never goes quiet and networkidle times out
+      await page.waitForLoadState('domcontentloaded');
+      await page.waitForTimeout(1200);
 
       await page.evaluate((name) => {
         (window as { __navigateToScreen?: (n: string) => void }).__navigateToScreen?.(name);

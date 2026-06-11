@@ -14,7 +14,6 @@ import {
   buildAIContextString,
   getCurrentContext,
   storeMemory,
-  fetchMemories,
   type UserContext,
   type CurrentContext
 } from '../ai/contextLayer';
@@ -29,7 +28,6 @@ import {
   AI_PERSONALITIES,
   type AIPersonality
 } from '../lib/ai-personality';
-import { getTierEntitlements } from '../lib/tier-utils';
 import { AIChart, parseAIResponseParts } from './AIChart';
 import { AddToCalendarButtons } from './AddToCalendarButtons';
 import { supabase } from '../utils/supabase/client';
@@ -48,7 +46,7 @@ type SmartAction =
 
 function parseSmartActions(text: string): { cleanText: string; actions: SmartAction[] } {
   const actions: SmartAction[] = [];
-  const cleaned = text.replace(/\[ACTION:([A-Z_]+):([\s\S]*?\})\]/g, (_match, type, json) => {
+  const cleaned = text.replace(/\[ACTION:([A-Z_]+):(\{.*?\})\]/gs, (_match, type, json) => {
     try {
       actions.push({ type, payload: JSON.parse(json) } as SmartAction);
     } catch { /* ignore malformed */ }
@@ -305,8 +303,7 @@ interface BevelChatOverlayProps {
   currentPath: string;
   childName?: string;
   initialPrompt?: string;
-  /** Subscription tier — scales persistent-memory depth (free 5 facts → family 250) */
-  userTier?: string | null;
+  userTier?: string;
 }
 
 export function BevelChatOverlay({
@@ -315,8 +312,7 @@ export function BevelChatOverlay({
   userId,
   currentPath,
   childName: propChildName,
-  initialPrompt,
-  userTier
+  initialPrompt
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -327,12 +323,12 @@ export function BevelChatOverlay({
   const [personality, setPersonality] = useState<AIPersonality>('caregiver');
   const [showHistory, setShowHistory] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showCapabilities, setShowCapabilities] = useState(false);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [attachedImage, setAttachedImage] = useState<{ name: string; dataUrl: string } | null>(null);
   const [sessionId] = useState(() => `session-${Date.now()}`);
   const [customInstructions, setCustomInstructions] = useState<CustomInstructions>(loadCustomInstructions);
   const [instructionsDirty, setInstructionsDirty] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -342,40 +338,9 @@ export function BevelChatOverlay({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasGeneratedProactive = useRef(false);
-  // Vault context and persistent memories — loaded async on open, injected into every system prompt
-  const vaultContextRef = useRef<string>('');
-  const memoriesRef = useRef<string>('');
-
-  // CRITICAL: AI calls must carry the user's session JWT, not the anon key.
-  // With the anon key the edge function can't identify the user and rate-limits
-  // every subscriber at the FREE tier (3 msgs/day by IP). Session token = paid limits.
-  const getAuthHeaders = async (): Promise<Record<string, string>> => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session?.access_token ?? publicAnonKey}`,
-      };
-    } catch {
-      return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` };
-    }
-  };
-
-  // Stop any active recording and release the microphone — prevents the
-  // browser mic indicator staying lit after the overlay closes mid-recording.
-  const releaseMicrophone = useCallback(() => {
-    try {
-      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-        mediaRecorderRef.current.stop();
-      }
-      mediaRecorderRef.current?.stream?.getTracks().forEach(t => t.stop());
-    } catch { /* already released */ }
-    setIsRecording(false);
-  }, []);
 
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
-    releaseMicrophone();
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
       const preview = userMsgs[0].content.slice(0, 90);
@@ -383,23 +348,20 @@ export function BevelChatOverlay({
       setChatSessions(loadChatSessions());
     }
     if (messages.length >= 4) {
-      const summarizable = messages.map(m => ({
-        id: m.id,
-        role: m.role,
-        content: m.content,
-        timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : String(m.timestamp),
+      const summaryMessages = messages.map(m => ({
+        ...m,
+        timestamp: m.timestamp instanceof Date ? m.timestamp.toISOString() : m.timestamp,
       }));
-      generateConversationSummary(summarizable).then(() => {
+      generateConversationSummary(summaryMessages).then(() => {
         toast.success('Memory updated', { duration: 1500, position: 'bottom-center' });
       }).catch(() => {});
     }
     onClose();
-  }, [messages, sessionId, onClose, releaseMicrophone]);
+  }, [messages, sessionId, onClose]);
 
   useEffect(() => {
     if (!isOpen) {
       hasGeneratedProactive.current = false;
-      releaseMicrophone();
     } else {
       setMessages([]);
       setAttachedImage(null);
@@ -408,8 +370,9 @@ export function BevelChatOverlay({
       setCustomInstructions(loadCustomInstructions());
       setInstructionsDirty(false);
       setChatSessions(loadChatSessions());
+      setHasInteracted(false);
     }
-  }, [isOpen, releaseMicrophone]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -439,42 +402,6 @@ export function BevelChatOverlay({
     const current = getCurrentContext(currentPath, context);
     setCurrentContext(current);
 
-    // Load vault documents and memories in the background — non-blocking
-    if (userId && userId !== 'dev-preview-user') {
-      // Vault: pull AI summaries + key insights from stored documents
-      Promise.resolve(
-        supabase
-          .from('vault_documents')
-          .select('title, document_type, ai_summary, key_insights')
-          .eq('user_id', userId)
-          .order('uploaded_at', { ascending: false })
-          .limit(12)
-      )
-        .then(({ data }) => {
-          if (data && data.length > 0) {
-            const lines = data
-              .filter(d => d.ai_summary || (Array.isArray(d.key_insights) && d.key_insights.length > 0))
-              .map(d => {
-                const insights = Array.isArray(d.key_insights) ? d.key_insights.slice(0, 2).join('; ') : '';
-                return `• ${d.title} [${d.document_type}]: ${d.ai_summary || insights}`.slice(0, 200);
-              });
-            if (lines.length > 0) vaultContextRef.current = lines.join('\n');
-          }
-        })
-        .catch(() => {});
-
-      // Memories: pull recent extracted facts from past sessions (depth scales by tier)
-      fetchMemories(userId, getTierEntitlements(userTier).memoryInjectDepth)
-        .then(memories => {
-          if (memories.length > 0) {
-            memoriesRef.current = memories
-              .map(m => `[${m.category}] ${m.content}`)
-              .join('\n');
-          }
-        })
-        .catch(() => {});
-    }
-
     if (!hasGeneratedProactive.current) {
       hasGeneratedProactive.current = true;
       if (initialPrompt) {
@@ -496,8 +423,8 @@ export function BevelChatOverlay({
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: await getAuthHeaders(),
-          body: JSON.stringify({ userId, userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
+          body: JSON.stringify({ userMessage: 'Open session', conversationHistory: [], systemPrompt: proactivePrompt })
         }
       );
       if (!response.ok) throw new Error('no response');
@@ -620,7 +547,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file — reference these when relevant):\n${vaultContextRef.current}` : ''}${memoriesRef.current ? `\n\nPERSISTENT MEMORY (facts extracted from past conversations with this family):\n${memoriesRef.current}` : ''}${stateBlock}${customBlock}${liveScreenContext}`;
+${stateBlock}${customBlock}${liveScreenContext}`;
   };
 
   const sendMessageWithContext = async (
@@ -646,9 +573,8 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: await getAuthHeaders(),
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
           body: JSON.stringify({
-            userId,
             userMessage: text,
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -702,8 +628,9 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
       imageUrl: img?.dataUrl
     };
 
-    setMessages(prev => [...prev, userMsg].slice(-150));
+    setMessages(prev => [...prev, userMsg]);
     setInput('');
+    setHasInteracted(true);
     setIsLoading(true);
 
     try {
@@ -730,9 +657,8 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
           method: 'POST',
-          headers: await getAuthHeaders(),
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
           body: JSON.stringify({
-            userId,
             userMessage: messagePayload,
             conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
             systemPrompt
@@ -818,7 +744,7 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
             `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/transcribe`,
             {
               method: 'POST',
-              headers: await getAuthHeaders(),
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
               body: JSON.stringify({ audioBase64: base64Audio, mimeType }),
             }
           );
@@ -844,12 +770,12 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
       recorder.start();
       setIsRecording(true);
     } catch (err) {
-      releaseMicrophone();
       if ((err as Error).name === 'NotAllowedError') {
         toast.error('Microphone permission needed for voice input');
       } else {
         toast.error('Could not access microphone');
       }
+      setIsRecording(false);
     }
   }, [isRecording]);
 
@@ -1242,51 +1168,6 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
                         </div>
                       )}
 
-                      {/* ── What Aminy can do ── */}
-                      <div className="px-4 mt-5">
-                        <button
-                          type="button"
-                          onClick={() => setShowCapabilities(v => !v)}
-                          className="w-full flex items-center justify-between text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-0 py-1"
-                        >
-                          <span className="flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> Aminy can do more</span>
-                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showCapabilities ? 'rotate-180' : ''}`} />
-                        </button>
-                        {showCapabilities && (
-                          <div className="mt-2 rounded-xl border border-[#E8E4DF] overflow-hidden divide-y divide-[#F0EDE8]">
-                            {[
-                              { emoji: '📊', label: 'Log a behavior', desc: 'Record an ABC entry (antecedent, behavior, consequence)', example: 'Log behavior: hitting when transitions happen' },
-                              { emoji: '🎯', label: 'Log a win', desc: 'Capture a positive moment or progress milestone', example: 'Log a win: said "please" unprompted at dinner' },
-                              { emoji: '📅', label: 'Add an appointment', desc: 'Save a provider visit, therapy session, or reminder', example: 'Add appointment: OT on Friday at 3pm with Dr. Kim' },
-                              { emoji: '😌', label: 'Set a calm cue', desc: 'Save a regulation strategy that works for your child', example: "Set calm cue: deep pressure squeeze for 30 seconds" },
-                              { emoji: '💭', label: 'Log a struggle', desc: 'Note a difficult moment to review with your BCBA', example: "Log a struggle: couldn't transition from iPad to dinner" },
-                            ].map(cap => (
-                              <button
-                                key={cap.label}
-                                type="button"
-                                onClick={() => {
-                                  HAPTICS.light();
-                                  setShowCapabilities(false);
-                                  setShowSettings(false);
-                                  setTimeout(() => {
-                                    setInput(cap.example + ' ');
-                                    inputRef.current?.focus();
-                                  }, 200);
-                                }}
-                                className="w-full flex items-start gap-2.5 px-3 py-2.5 text-left hover:bg-[#FAF7F2] transition-colors"
-                              >
-                                <span className="text-base leading-tight mt-0.5">{cap.emoji}</span>
-                                <div className="min-w-0">
-                                  <p className="text-xs font-semibold text-[#1B2733]">{cap.label}</p>
-                                  <p className="text-[10px] text-[#5A6B7A] leading-tight mt-0.5">{cap.desc}</p>
-                                  <p className="text-[10px] text-[#6B9080] italic mt-0.5 line-clamp-1">e.g. "{cap.example}"</p>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
                       {/* ── Actions ── */}
                       <div className="px-4 mt-5 mb-6 space-y-2">
                         <button
@@ -1427,49 +1308,24 @@ ${vaultContextRef.current ? `\n\nFAMILY VAULT (AI-analyzed documents on file —
                 </div>
               )}
 
-              {/* Smart action chips — show only when conversation is empty (Phase 5 AI discoverability) */}
-              {messages.length === 0 && !isProactiveLoading && (
-                <div
-                  className="mb-2"
-                  style={{
-                    display: 'flex',
-                    gap: '8px',
-                    overflowX: 'auto',
-                    padding: '8px 12px 0',
-                    scrollbarWidth: 'none',
-                    marginLeft: '-16px',
-                    marginRight: '-16px',
-                  }}
-                >
+              {/* Smart action chips — show only when conversation is empty and user hasn't interacted */}
+              {!hasInteracted && messages.length === 0 && (
+                <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
                   {[
                     { emoji: '📊', label: 'Log a behavior', starter: 'Log behavior: ' },
-                    { emoji: '🏆', label: 'Log a win', starter: 'We had a win today: ' },
-                    { emoji: '📅', label: 'Book session', starter: 'Help me book a session' },
+                    { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
+                    { emoji: '📅', label: 'Book appointment', starter: 'Book appointment: ' },
                     { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
-                    { emoji: '💬', label: 'Ask anything', starter: 'I need help with ' },
                   ].map(chip => (
                     <button
                       key={chip.label}
                       onClick={() => {
                         HAPTICS.light();
                         setInput(chip.starter);
+                        setHasInteracted(true);
                         setTimeout(() => inputRef.current?.focus(), 50);
                       }}
-                      style={{
-                        flexShrink: 0,
-                        background: 'rgba(42,125,153,0.08)',
-                        border: '1px solid rgba(42,125,153,0.20)',
-                        borderRadius: '999px',
-                        color: '#2A7D99',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        padding: '6px 12px',
-                        cursor: 'pointer',
-                        whiteSpace: 'nowrap',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '5px',
-                      }}
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm whitespace-nowrap border border-cyan-200 dark:border-cyan-700 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-colors"
                     >
                       <span>{chip.emoji}</span>
                       <span>{chip.label}</span>

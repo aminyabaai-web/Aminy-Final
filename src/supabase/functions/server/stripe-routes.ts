@@ -42,13 +42,13 @@ const PRICE_TO_TIER: Record<string, string> = {
   [Deno.env.get('STRIPE_PRICE_CORE_MONTHLY') || 'price_1TfAcvQaCBrUl24BHrxiGHuv']: 'core',
   [Deno.env.get('STRIPE_PRICE_PRO_MONTHLY') || 'price_1TfAcxQaCBrUl24B539LF2VT']: 'pro',
   [Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_1TfAczQaCBrUl24Bxrsz0tef']: 'proplus',
-  [Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfAd0QaCBrUl24BXJdZNpnI']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfWmtQaCBrUl24BXNS3sIPj']: 'proplus',
   // Annual prices
   [Deno.env.get('STRIPE_PRICE_STARTER_ANNUAL') || 'price_starter_annual']: 'starter',
   [Deno.env.get('STRIPE_PRICE_CORE_ANNUAL') || 'price_1TfAcwQaCBrUl24BEcw7WT7q']: 'core',
   [Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_1TfAcyQaCBrUl24BzbssMb2c']: 'pro',
   [Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TfAczQaCBrUl24BzkqNWx4K']: 'proplus',
-  [Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfAd1QaCBrUl24BHLbXTZFx']: 'proplus',
+  [Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfWmuQaCBrUl24BOMBNgylW']: 'proplus',
 };
 
 /**
@@ -323,8 +323,8 @@ const PRICE_IDS: Record<string, string> = {
   pro_annual: Deno.env.get('STRIPE_PRICE_PRO_ANNUAL') || 'price_1TfAcyQaCBrUl24BzbssMb2c',
   proplus_monthly: Deno.env.get('STRIPE_PRICE_PROPLUS_MONTHLY') || 'price_1TfAczQaCBrUl24Bxrsz0tef',
   proplus_annual: Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TfAczQaCBrUl24BzkqNWx4K',
-  org_monthly: Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfAd0QaCBrUl24BXJdZNpnI',
-  org_annual: Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfAd1QaCBrUl24BHLbXTZFx',
+  org_monthly: Deno.env.get('STRIPE_PRICE_ORG_MONTHLY') || 'price_1TfWmtQaCBrUl24BXNS3sIPj',
+  org_annual: Deno.env.get('STRIPE_PRICE_ORG_ANNUAL') || 'price_1TfWmuQaCBrUl24BOMBNgylW',
 };
 
 // ============================================================================

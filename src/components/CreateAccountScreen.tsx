@@ -24,7 +24,7 @@ import { useFormValidation } from '../lib/use-form-validation';
 import { createAccountSchema } from '../lib/schemas';
 import { PasswordStrengthMeter } from './PasswordStrengthMeter';
 
-const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Inter\", \"Helvetica Neue\", Arial, sans-serif";
+const fontStack = "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", \"Inter\", \"Helvetica Neue\", Arial, \"Noto Sans\", sans-serif";
 
 const fontSmoothing: React.CSSProperties = {
   WebkitFontSmoothing: 'antialiased',
@@ -207,16 +207,18 @@ export function CreateAccountScreen({
   // Common input styles
   const inputStyles: React.CSSProperties = {
     width: '100%',
-    height: '44px',
-    backgroundColor: 'var(--color-surface)',
+    height: '52px',
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
     border: '1px solid var(--color-input-border)',
-    borderRadius: '12px',
+    borderRadius: '14px',
     padding: '0 16px',
     fontSize: '15px',
     fontFamily: fontStack,
     color: 'var(--color-text-deep)',
     outline: 'none',
-    transition: 'border-color 0.2s ease',
+    transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
     ...fontSmoothing,
   };
 
@@ -247,9 +249,7 @@ export function CreateAccountScreen({
           padding: '12px 20px 4px',
           position: 'sticky',
           top: 0,
-          background: 'rgba(246,251,251,0.92)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
+          background: 'transparent',
           zIndex: 10,
         }}
       >
@@ -294,7 +294,7 @@ export function CreateAccountScreen({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.05 }}
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -325,7 +325,7 @@ export function CreateAccountScreen({
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
             style={{
               color: 'var(--color-text-deep)',
               fontFamily: fontStack,
@@ -338,14 +338,14 @@ export function CreateAccountScreen({
               ...fontSmoothing,
             }}
           >
-            Get started with Aminy
+            Create your account
           </motion.h1>
 
           {/* Subhead */}
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             style={{
               color: 'var(--color-text-muted)',
               fontFamily: fontStack,
@@ -357,18 +357,18 @@ export function CreateAccountScreen({
               ...fontSmoothing,
             }}
           >
-            7-day free trial · No credit card required · Cancel anytime
+            Start your 7-day free trial
           </motion.p>
 
           <h2 className="sr-only">Create your Aminy account</h2>
           <h3 className="sr-only">Choose how you want to get started</h3>
 
-          {/* Social Auth Buttons - Full-width stacked for prominence */}
+          {/* Social Auth Buttons - Stacked vertically */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}
+            transition={{ duration: 0.5, delay: 0.25 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '12px' }}
           >
             <button
               type="button"
@@ -376,7 +376,7 @@ export function CreateAccountScreen({
               disabled={isLoading || socialAuthLoading !== null}
               style={{
                 width: '100%',
-                height: '48px',
+                height: '52px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -385,8 +385,8 @@ export function CreateAccountScreen({
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
-                fontSize: '13px',
-                borderRadius: '10px',
+                fontSize: '14px',
+                borderRadius: '14px',
                 border: 'none',
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'apple' ? 0.5 : 1,
@@ -399,7 +399,7 @@ export function CreateAccountScreen({
               ) : (
                 <AppleIcon />
               )}
-              {socialAuthLoading === 'apple' ? 'Connecting...' : 'Apple'}
+              {socialAuthLoading === 'apple' ? 'Connecting...' : 'Continue with Apple'}
             </button>
             <button
               type="button"
@@ -407,18 +407,20 @@ export function CreateAccountScreen({
               disabled={isLoading || socialAuthLoading !== null}
               style={{
                 width: '100%',
-                height: '48px',
+                height: '52px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: 'var(--color-surface)',
+                backgroundColor: 'rgba(255,255,255,0.92)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 color: 'var(--color-text-primary)',
                 fontFamily: fontStack,
                 fontWeight: 500,
-                fontSize: '13px',
-                borderRadius: '10px',
-                border: '1px solid var(--color-border-light)',
+                fontSize: '14px',
+                borderRadius: '14px',
+                border: '1.5px solid #2A7D99',
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'google' ? 0.5 : 1,
                 transition: 'opacity 0.2s ease',
@@ -430,7 +432,7 @@ export function CreateAccountScreen({
               ) : (
                 <GoogleIcon />
               )}
-              {socialAuthLoading === 'google' ? 'Connecting...' : 'Google'}
+              {socialAuthLoading === 'google' ? 'Connecting...' : 'Continue with Google'}
             </button>
           </motion.div>
 
@@ -439,23 +441,23 @@ export function CreateAccountScreen({
             type="button"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
             onClick={handleMagicLink}
             disabled={isLoading || socialAuthLoading !== null || magicLinkState !== 'idle'}
             style={{
               width: '100%',
-              height: '42px',
+              height: '48px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              backgroundColor: 'rgba(107, 144, 128, 0.08)',
-              color: '#3F5C50',
+              backgroundColor: 'rgba(42,125,153,0.07)',
+              color: '#2A7D99',
               fontFamily: fontStack,
               fontWeight: 500,
               fontSize: '13px',
-              borderRadius: '10px',
-              border: '1px solid rgba(107, 144, 128, 0.18)',
+              borderRadius: '14px',
+              border: '1px solid rgba(42,125,153,0.18)',
               cursor: magicLinkState !== 'idle' ? 'default' : 'pointer',
               marginBottom: '12px',
               transition: 'background-color 0.2s ease',
@@ -515,7 +517,7 @@ export function CreateAccountScreen({
           <motion.form
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
             onSubmit={handleSubmit}
             style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
           >
@@ -714,8 +716,8 @@ export function CreateAccountScreen({
                     minWidth: '18px',
                     marginTop: '1px',
                     borderRadius: '4px',
-                    border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#5a7380' : 'rgba(17, 24, 39, 0.2)'}`,
-                    backgroundColor: acceptedTerms ? '#5a7380' : '#FFFFFF',
+                    border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#2A7D99' : 'rgba(17, 24, 39, 0.2)'}`,
+                    backgroundColor: acceptedTerms ? '#2A7D99' : '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -740,7 +742,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#5a7380',
+                      color: '#2A7D99',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -763,7 +765,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#5a7380',
+                      color: '#2A7D99',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -802,15 +804,15 @@ export function CreateAccountScreen({
                 justifyContent: 'center',
                 gap: '8px',
                 marginTop: '4px',
-                backgroundColor: '#5a7380',
+                backgroundColor: '#2A7D99',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
-                fontWeight: 500,
+                fontWeight: 600,
                 fontSize: '15px',
                 letterSpacing: '-0.01em',
                 padding: '0 24px',
-                height: '44px',
-                borderRadius: '12px',
+                height: '52px',
+                borderRadius: '14px',
                 border: 'none',
                 cursor: isLoading ? 'default' : 'pointer',
                 transition: 'background-color 0.2s ease',
@@ -818,10 +820,10 @@ export function CreateAccountScreen({
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                if (!isLoading) e.currentTarget.style.backgroundColor = '#4f6872';
+                if (!isLoading) e.currentTarget.style.backgroundColor = '#1F6080';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#5a7380';
+                e.currentTarget.style.backgroundColor = '#2A7D99';
               }}
             >
               {isLoading ? (
@@ -902,8 +904,8 @@ export function CreateAccountScreen({
           color: rgba(17, 24, 39, 0.35);
         }
         input:focus {
-          border-color: rgba(90, 115, 128, 0.5) !important;
-          box-shadow: 0 0 0 3px rgba(90, 115, 128, 0.1);
+          border-color: #2A7D99 !important;
+          box-shadow: 0 0 0 3px rgba(42,125,153,0.12);
         }
       `}</style>
     </div>

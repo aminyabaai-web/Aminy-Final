@@ -36,11 +36,11 @@ test.describe('Caregiver Workflow Routing', () => {
   test('clinical reports screen remains reachable and shows the caregiver-summary-backed empty state', async ({ page }) => {
     await setupAuthenticatedCaregiver(page);
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1000);
 
     await navigateToScreen(page, 'clinical-reports');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     await expect(page).toHaveURL(/screen=clinical-reports/);
     await expect(page.getByRole('heading', { name: 'No caregiver summary available yet' })).toBeVisible();
@@ -50,11 +50,11 @@ test.describe('Caregiver Workflow Routing', () => {
   test('weekly insights remains reachable and does not dead-end on dashboard', async ({ page }) => {
     await setupAuthenticatedCaregiver(page);
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     await page.waitForTimeout(1000);
 
     await navigateToScreen(page, 'weekly-insights');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     await expect(page).toHaveURL(/screen=weekly-insights/);
     await expect(page.getByRole('heading', { name: 'Weekly Insights' })).toBeVisible();

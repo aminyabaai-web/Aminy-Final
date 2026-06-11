@@ -341,6 +341,16 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
     return () => clearTimeout(timer);
   }, [breakReminderDismissed]);
 
+  // Auto-dismiss break reminder after 10 seconds
+  useEffect(() => {
+    if (!showBreakReminder || breakReminderDismissed) return;
+    const autoDismiss = setTimeout(() => {
+      setShowBreakReminder(false);
+      setBreakReminderDismissed(true);
+    }, 10000);
+    return () => clearTimeout(autoDismiss);
+  }, [showBreakReminder, breakReminderDismissed]);
+
   // TTS narration hook
   const tts = useTTS();
 
@@ -1574,7 +1584,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
   if (isKidMode) {
     return (
       <div
-        className="flex h-screen flex-col junior-page-root"
+        className="flex h-screen flex-col junior-page-root dark:bg-slate-900"
         style={{
           background:
             'radial-gradient(circle at top, rgba(45,212,191,0.18), transparent 28%), linear-gradient(180deg,#f7fbfb 0%,#eef7f8 56%,#eef2f8 100%)',
@@ -1597,7 +1607,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             {/* Token Counter */}
             <motion.div
@@ -1610,8 +1620,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
             {/* Offline Indicator */}
             {isOfflineMode && (
-              <div className="bg-[#F0EDE8] px-2 py-1 rounded-full">
-                <WifiOff className="w-4 h-4 text-[#5A6B7A]" />
+              <div className="bg-[#F0EDE8] px-2 py-1 rounded-full dark:bg-slate-700">
+                <WifiOff className="w-4 h-4 text-[#5A6B7A] dark:text-slate-300" />
               </div>
             )}
 
@@ -1625,8 +1635,8 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               }}
               className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition-colors ${
                 reducedSensory
-                  ? 'border-indigo-300 bg-indigo-100 text-indigo-600'
-                  : 'border-[#E8E4DF] bg-white/90 text-slate-400 hover:border-slate-300 hover:text-[#5A6B7A]'
+                  ? 'border-indigo-300 bg-indigo-100 text-indigo-600 dark:border-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-300'
+                  : 'border-[#E8E4DF] bg-white/90 text-slate-400 hover:border-slate-300 hover:text-[#5A6B7A] dark:border-slate-600 dark:bg-slate-700/50 dark:text-slate-400 dark:hover:border-slate-500'
               }`}
               aria-label={reducedSensory ? 'Calm mode on — tap to restore animations' : 'Enable calm mode (reduce animations)'}
               title={reducedSensory ? 'Calm mode on' : 'Enable calm mode'}
@@ -1635,22 +1645,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             </button>
 
             {/* Home (panic exit) — always visible, returns to Junior home */}
-            {activeView !== 'home' && (
-              <button
-                type="button"
-                onClick={() => setActiveView('home')}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] shadow-sm transition-colors hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#3A9DBB] dark:hover:bg-slate-700"
-                aria-label="Go to Junior home screen"
-                title="🏠 Home"
-              >
-                <Home className="h-4 w-4" />
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                console.log('[Junior] Quick exit used');
+                setActiveView('home');
+              }}
+              className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition-colors ${
+                activeView === 'home'
+                  ? 'border-[#E8E4DF] bg-white/90 text-slate-300 cursor-default dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
+                  : 'border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#3A9DBB] dark:hover:bg-slate-700'
+              }`}
+              aria-label="Go to Junior home screen"
+              title="🏠 Home"
+            >
+              <Home className="h-4 w-4" />
+            </button>
 
             <button
               type="button"
               onClick={() => setActiveView('parent-controls')}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-white/90 text-slate-400 shadow-sm transition-colors hover:border-slate-300 hover:text-[#5A6B7A]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#E8E4DF] bg-white/90 text-slate-400 shadow-sm transition-colors hover:border-slate-300 hover:text-[#5A6B7A] dark:border-slate-600 dark:bg-slate-800/90 dark:text-slate-500 dark:hover:border-slate-500 dark:hover:text-slate-300"
               aria-label="Open parent controls"
             >
               <Shield className="h-4 w-4" />
@@ -1660,11 +1675,11 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
         {/* Break timer reminder — gentle nudge after 15 minutes */}
         {showBreakReminder && !breakReminderDismissed && (
-          <div className="mx-4 mt-2 flex items-center justify-between rounded-2xl bg-blue-50 px-4 py-2.5 shadow-sm">
-            <p className="text-sm text-blue-700">Time for a quick break? 🌬️</p>
+          <div className="mx-4 mt-2 flex items-center justify-between rounded-2xl bg-blue-50 px-4 py-2.5 shadow-sm dark:bg-blue-900/30 dark:border dark:border-blue-800/40">
+            <p className="text-sm text-blue-700 dark:text-blue-300">Time for a quick break? 🌬️</p>
             <button
               onClick={() => { setBreakReminderDismissed(true); setShowBreakReminder(false); }}
-              className="ml-3 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+              className="ml-3 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors dark:text-blue-400 dark:hover:text-blue-200"
               aria-label="Dismiss break reminder"
             >
               Dismiss
@@ -1814,15 +1829,15 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 </div>
 
                 <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
+                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-white/95 shadow-[0_16px_50px_rgba(15,23,42,0.08)] dark:bg-slate-800/95 dark:border-slate-700/70">
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Current reward goal</div>
-                          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950">
+                          <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Current reward goal</div>
+                          <h3 className="mt-2 text-2xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-slate-50">
                             {motivationGoal.emoji} {motivationGoal.title}
                           </h3>
-                          <p className="mt-2 text-sm leading-6 text-[#5A6B7A]">{motivationGoal.goal}</p>
+                          <p className="mt-2 text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">{motivationGoal.goal}</p>
                         </div>
                         <Badge className="bg-amber-100 text-amber-700">{motivationGoal.current}/{motivationGoal.target}</Badge>
                       </div>
@@ -1840,7 +1855,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
                       <div className="mt-5">
                         <Progress value={motivationProgress} className="h-3 bg-[#F0EDE8]" />
-                        <div className="mt-2 flex items-center justify-between text-xs text-[#5A6B7A]">
+                        <div className="mt-2 flex items-center justify-between text-xs text-[#5A6B7A] dark:text-slate-400">
                           <span>{motivationGoal.current} days complete</span>
                           <span>{motivationGoal.target - motivationGoal.current} to go</span>
                         </div>
@@ -1866,27 +1881,27 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     </div>
                   </Card>
 
-                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-[linear-gradient(180deg,_#ffffff_0%,_#f6f8fb_100%)] shadow-[0_16px_50px_rgba(15,23,42,0.08)]">
+                  <Card className="overflow-hidden rounded-[28px] border-white/80 bg-[linear-gradient(180deg,_#ffffff_0%,_#f6f8fb_100%)] shadow-[0_16px_50px_rgba(15,23,42,0.08)] dark:bg-slate-800 dark:border-slate-700/70">
                     <div className="p-6">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Transition support</div>
+                        <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Transition support</div>
                         {homeTransition.isExample && (
                           <Badge variant="outline" className="border-[#E8E4DF] bg-[#FAF7F2] text-[#5A6B7A]">
                             Example
                           </Badge>
                         )}
                       </div>
-                      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950">Make the next step obvious</h3>
+                      <h3 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-slate-50">Make the next step obvious</h3>
                       <div className="mt-4 space-y-3">
-                        <div className="rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3">
-                          <div className="text-xs uppercase tracking-[0.18em] text-slate-400">First</div>
-                          <div className="mt-1 text-sm font-medium text-[#1B2733]">
+                        <div className="rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 dark:bg-slate-700 dark:border-slate-600">
+                          <div className="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">First</div>
+                          <div className="mt-1 text-sm font-medium text-[#1B2733] dark:text-slate-200">
                             {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
                           </div>
                         </div>
                         <div className="rounded-2xl border border-[#2A7D99]/20 bg-[#2A7D99]/10 px-4 py-3 dark:bg-[#2A7D99]/20 dark:border-[#2A7D99]/30">
-                          <div className="text-xs uppercase tracking-[0.18em] text-cyan-700">Then</div>
-                          <div className="mt-1 text-sm font-medium text-cyan-900">
+                          <div className="text-xs uppercase tracking-[0.18em] text-cyan-700 dark:text-cyan-400">Then</div>
+                          <div className="mt-1 text-sm font-medium text-cyan-900 dark:text-cyan-200">
                             {homeTransition.then.emoji ? `${homeTransition.then.emoji} ` : ''}{homeTransition.then.label}
                           </div>
                         </div>
@@ -1895,7 +1910,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2]"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2] dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                       >
                         Open visual schedule
                         <ArrowRight className="h-4 w-4" />
@@ -2032,7 +2047,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
                   }
                 }}
-                className="bg-white rounded-3xl shadow-lg overflow-hidden"
+                className="bg-white rounded-3xl shadow-lg overflow-hidden dark:bg-slate-800"
               >
                 {/* Activity Header */}
                 <div className={`${selectedActivity.color} p-6`}>
@@ -2382,12 +2397,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
                   aria-label="Back to home"
-                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center"
+                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center dark:bg-slate-700 dark:text-slate-200"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
 
-                <h2 className="text-xl">🎯 Choose Activity</h2>
+                <h2 className="text-xl dark:text-slate-50">🎯 Choose Activity</h2>
                 
                 <motion.button
                   whileHover={{ scale: 1.1 }}
