@@ -19,6 +19,11 @@ _Last updated: 2026-06-11. Every session should read this before starting and up
 
 ## Architecture debt
 
+### 2b. Rate limiter fail-open — alerting improved 2026-06-11
+`checkRateLimit`, `checkGlobalRateLimit`, `checkDailyUsage` in `make-server-8a022548/rate-limiter.ts` all fail open (correct for UX — don't deny service when rate-limit infra is down).
+**Fixed:** All three now log `[RATE_LIMIT_FAIL_OPEN]` as structured JSON with userId/endpoint/tier. Filter on this tag in Supabase dashboard → Functions → Logs to detect abuse.
+**Still open:** No push alert — would require Supabase log-based alerting or a webhook call from the catch block.
+
 ### 3. `make-server-8a022548` edge function — 4,000-line monolith
 All AI, billing, and provider routes are in one function. A deploy for any route redeploys all ~322KB.
 **Impact:** Slow deploys; one broken route blocks all.
@@ -34,10 +39,10 @@ All CSS utilities, custom colors, gradients, oklch fallbacks, and dark-mode over
 **Impact:** Dark mode gaps keep appearing because reviewers miss things in a 16k-line file.
 **Fix path:** No urgent refactor, but: when adding new components, add dark variants in the component file (Tailwind `dark:` classes) rather than in index.css.
 
-### 6. `App.tsx` — 42-screen state machine
-All screen routing lives in one file.
-**Impact:** Every screen change touches App.tsx; merge conflicts are frequent.
-**Fix path:** Extract screen groups into lazy-loaded chunks (React.lazy + Suspense). Group by user type: parent-screens, provider-screens, admin-screens.
+### 6. `App.tsx` — 42-screen state machine (lazy loading ALREADY DONE)
+All screen routing lives in one file. **All 42 screen components are already lazy-loaded** with `React.lazy()` + `Suspense` — first paint is not blocked.
+**Remaining impact:** Every new screen still requires an App.tsx edit → merge conflicts.
+**Fix path:** No urgency on splitting further; the bundle cost is already solved.
 
 ---
 
@@ -47,9 +52,9 @@ All screen routing lives in one file.
 `src/lib/cr-sync.ts` and the `cr-sync` screen exist but are not used. AACT/Rise uses **Rethink**, not CentralReach.
 **Action needed:** Remove from nav entirely until/unless a CentralReach customer is signed. Wire is clean to remove.
 
-### 8. Daily.co video — falls back to mocks
-Telehealth video falls back to mock/stub when Daily.co isn't configured.
-**Action needed:** Either get Daily.co credentials + wire them, or remove the feature card from the UI until ready.
+### 8. Daily.co video — shows error when unconfigured (no mock fallback)
+When `VITE_DAILY_DOMAIN` env var is missing, `OnDemandTelehealth` shows "Video calling is being set up. Please try again shortly." — does NOT silently fall back to mocks. `src/lib/telehealth-demo-mode.ts` exists but is not auto-invoked.
+**Action needed:** Either set `VITE_DAILY_DOMAIN` + `VITE_DAILY_API_KEY` (Netlify env vars), or remove the on-demand telehealth card from the UI until ready.
 
 ### 9. Payer / EVV / Claims dashboards — render empty state
 `payer-dashboard`, `evv-dashboard`, `claims-dashboard` render empty states because the backing tables aren't populated.
@@ -71,9 +76,9 @@ Free plan pauses projects after 7 days inactivity → data loss risk before AACT
 A token was exposed in a session transcript.
 **Action:** https://supabase.com/dashboard/account/tokens → revoke old token → create new one.
 
-### 13. Stripe price IDs for Org SKU
-Org checkout flow needs `VITE_STRIPE_PRICE_ORG_MONTHLY` and `VITE_STRIPE_PRICE_ORG_YEARLY` env vars.
-**Action:** Create prices in Stripe dashboard → add to Netlify env vars.
+### 13. ~~Stripe price IDs for Org SKU~~ — NOT NEEDED (RESOLVED)
+The live `make-server-8a022548` org checkout uses **dynamic `price_data`** computed per-seat from the volume ladder and DB `price_per_seat_cents`. No static Stripe price IDs are needed.
+`VITE_STRIPE_PRICE_ORG_*` env vars are referenced in the legacy `src/supabase/functions/server/index.tsx` only — that file is NOT the deployed function. Those vars are stale; ignore.
 
 ### 14. Rethink sandbox credentials
 See item 10.
