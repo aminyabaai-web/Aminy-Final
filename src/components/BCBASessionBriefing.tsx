@@ -82,40 +82,25 @@ export function BCBASessionBriefing({
     if (!isDemoMode()) {
       // Real mode: query Supabase for live family data + AI narrative
       try {
-        const { data: child } = await supabase
-          .from('children')
-          .select('*')
-          .eq('id', familyId)
-          .maybeSingle();
+        const [goalsRes, logsRes, notesRes] = await Promise.all([
+          supabase.from('goals').select('title, status, target_behavior, progress_notes, updated_at')
+            .eq('user_id', familyId).eq('status', 'active').limit(8),
+          supabase.from('behavior_logs').select('behavior_type, intensity, notes, is_positive, created_at')
+            .eq('user_id', familyId).order('created_at', { ascending: false }).limit(10),
+          supabase.from('session_notes').select('content, session_type, created_at')
+            .eq('user_id', familyId).order('created_at', { ascending: false }).limit(3),
+        ]);
 
-        const { data: goals } = await supabase
-          .from('goals')
-          .select('*')
-          .eq('child_id', familyId)
-          .eq('status', 'active');
-
-        const { data: recentLogs } = await supabase
-          .from('behavior_logs')
-          .select('*')
-          .eq('child_id', familyId)
-          .order('created_at', { ascending: false })
-          .limit(10);
-
-        const notesRes = await supabase
-          .from('session_notes')
-          .select('content, session_type, created_at')
-          .eq('child_id', familyId)
-          .order('created_at', { ascending: false })
-          .limit(3);
-
-        const goalsData = goals || [];
-        const logs = recentLogs || [];
+        const goals = goalsRes.data || [];
+        const logs = logsRes.data || [];
         const notes = notesRes.data || [];
 
-        // If no data at all, show the helpful empty-state message
-        if (!child && goalsData.length === 0 && logs.length === 0 && notes.length === 0) {
+        const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0;
+
+        // No history at all — show a helpful empty state instead of fabricated text
+        if (!hasData) {
           setBriefing({
-            summary: `No data yet for this family — session notes will appear here after your first session.`,
+            summary: 'No data yet for this family — session notes will appear here after your first session.',
             whatsWorking: [],
             whatsNotWorking: [],
             opportunities: [],
@@ -131,16 +116,15 @@ export function BCBASessionBriefing({
           return;
         }
 
-        // Generate AI session prep narrative (best-effort — falls back to structured data)
+        // Generate AI session prep narrative
         let aiNarrative = '';
-        const hasData = goalsData.length > 0 || logs.length > 0 || notes.length > 0;
         if (hasData) {
           try {
             const contextPrompt = [
               `You are preparing a BCBA for a therapy session with ${childName}.`,
-              goalsData.length > 0 ? `Active goals: ${goalsData.map((g: Record<string, unknown>) => g.title).join(', ')}` : '',
-              logs.length > 0 ? `Recent behaviors: ${logs.slice(0, 5).map((l: Record<string, unknown>) => `${l.behavior_type} (intensity ${l.intensity ?? 'n/a'}, ${l.is_positive ? 'positive' : 'challenging'})`).join('; ')}` : '',
-              notes.length > 0 ? `Last session note: ${String(notes[0].content ?? '').substring(0, 300)}` : '',
+              goals.length > 0 ? `Active goals: ${goals.map(g => g.title).join(', ')}` : '',
+              logs.length > 0 ? `Recent behaviors: ${logs.slice(0, 5).map(l => `${l.behavior_type} (intensity ${l.intensity ?? 'n/a'}, ${l.is_positive ? 'positive' : 'challenging'})`).join('; ')}` : '',
+              notes.length > 0 ? `Last session note: ${notes[0].content?.substring(0, 300)}` : '',
               'Write a 2–3 sentence clinical session prep summary. Be specific and actionable. Focus on what to prioritize today based on the data.',
             ].filter(Boolean).join('\n');
 
@@ -156,38 +140,28 @@ export function BCBASessionBriefing({
               const data = await resp.json();
               aiNarrative = data.message || data.content || '';
             }
-          } catch {
-            // AI narrative failed — fall back to structured data summary below
-          }
+          } catch {}
         }
 
-        const recentChallenges = logs
-          .filter((l: Record<string, unknown>) => !l.is_positive)
-          .map((l: Record<string, unknown>) => l.behavior_type as string)
-          .filter(Boolean)
-          .slice(0, 4);
-        const recentWins = logs
-          .filter((l: Record<string, unknown>) => l.is_positive)
-          .map((l: Record<string, unknown>) => (l.behavior_type as string) || (l.notes as string) || '')
-          .filter(Boolean)
-          .slice(0, 4);
+        const recentChallenges = logs.filter(l => !l.is_positive).map(l => l.behavior_type).filter(Boolean).slice(0, 4);
+        const recentWins = logs.filter(l => l.is_positive).map(l => l.behavior_type || l.notes || '').filter(Boolean).slice(0, 4);
 
         setBriefing({
-          summary: aiNarrative || `${childName} has ${goalsData.length} active goal${goalsData.length !== 1 ? 's' : ''} on file. ${logs.length > 0 ? `${logs.length} behavior event${logs.length !== 1 ? 's' : ''} logged recently.` : 'No recent behavior logs.'}`,
-          whatsWorking: recentWins.length > 0 ? recentWins : goalsData.slice(0, 3).map((g: Record<string, unknown>) => g.title as string),
+          summary: aiNarrative || `${childName} has ${goals.length} active goal${goals.length !== 1 ? 's' : ''} on file. ${logs.length > 0 ? `${logs.length} behavior event${logs.length !== 1 ? 's' : ''} logged recently.` : 'No recent behavior logs.'}`,
+          whatsWorking: recentWins.length > 0 ? recentWins : goals.slice(0, 3).map(g => g.title),
           whatsNotWorking: recentChallenges.length > 0 ? recentChallenges : ['No recent challenges logged'],
-          opportunities: goalsData.slice(0, 3).map((g: Record<string, unknown>) => `Continue working on: ${g.title}`),
-          recommendedGuidance: notes.map(n => String(n.content ?? '').substring(0, 100)).filter(Boolean).slice(0, 4),
-          recentProgress: goalsData.slice(0, 4).map((g: Record<string, unknown>) => ({
-            area: g.title as string,
+          opportunities: goals.slice(0, 3).map(g => `Continue working on: ${g.title}`),
+          recommendedGuidance: notes.map(n => n.content?.substring(0, 100) || '').filter(Boolean).slice(0, 4),
+          recentProgress: goals.slice(0, 4).map(g => ({
+            area: g.title,
             trend: 'stable' as const,
-            detail: (g.progress_notes as string) || 'In progress',
+            detail: g.progress_notes || 'In progress',
           })),
           parentMood: 'neutral',
           recentConcerns: recentChallenges,
-          lastSessionHighlights: notes.slice(0, 2).map(n => String(n.content ?? '').substring(0, 100)).filter(Boolean),
+          lastSessionHighlights: notes.slice(0, 2).map(n => n.content?.substring(0, 100) || '').filter(Boolean),
           vaultInsights: [],
-          suggestedTopics: goalsData.slice(0, 3).map((g: Record<string, unknown>) => `Review: ${g.title}`),
+          suggestedTopics: goals.slice(0, 3).map(g => `Review: ${g.title}`),
         });
       } catch (err) {
         console.error('[BCBABriefing] Real data load failed:', err);
@@ -199,7 +173,6 @@ export function BCBASessionBriefing({
     }
 
     // Demo mode: show sample fabricated data
-    await new Promise(resolve => setTimeout(resolve, 1500));
 
     // Sample briefing data — DEMO MODE ONLY. In production this comes from the
     // AI analyzing real family data.
@@ -444,34 +417,32 @@ export function BCBASessionBriefing({
       </Card>
 
       {/* Progress At A Glance */}
-      {briefing.recentProgress.length > 0 && (
-        <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-[#6B9080]" />
-            Recent Progress
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {briefing.recentProgress.map((item) => (
-              <div
-                key={item.area}
-                className={`p-3 rounded-lg border ${
-                  item.trend === 'up' ? 'bg-green-50 border-green-200' :
-                  item.trend === 'down' ? 'bg-red-50 border-red-200' :
-                  'bg-[#FAF7F2] border-[#E8E4DF]'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  {item.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-600" />}
-                  {item.trend === 'down' && <TrendingDown className="w-4 h-4 text-red-600" />}
-                  {item.trend === 'stable' && <span className="w-4 h-4 text-[#8A9BA8]">—</span>}
-                  <span className="font-medium text-sm">{item.area}</span>
-                </div>
-                <p className="text-xs text-[#5A6B7A]">{item.detail}</p>
+      <Card className="p-3 sm:p-4">
+        <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-[#6B9080]" />
+          Recent Progress
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {briefing.recentProgress.map((item) => (
+            <div
+              key={item.area}
+              className={`p-3 rounded-lg border ${
+                item.trend === 'up' ? 'bg-green-50 border-green-200' :
+                item.trend === 'down' ? 'bg-red-50 border-red-200' :
+                'bg-[#FAF7F2] border-[#E8E4DF]'
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                {item.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-600" />}
+                {item.trend === 'down' && <TrendingDown className="w-4 h-4 text-red-600" />}
+                {item.trend === 'stable' && <span className="w-4 h-4 text-[#8A9BA8]">—</span>}
+                <span className="font-medium text-sm">{item.area}</span>
               </div>
-            ))}
-          </div>
-        </Card>
-      )}
+              <p className="text-xs text-[#5A6B7A]">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
 
       {/* What's Working */}
       <Card className="overflow-hidden">
@@ -484,18 +455,14 @@ export function BCBASessionBriefing({
         />
         {expandedSections.has('working') && (
           <div className="px-4 pb-4">
-            {briefing.whatsWorking.length > 0 ? (
-              <ul className="space-y-2">
-                {briefing.whatsWorking.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-[#5A6B7A] py-2">No wins logged yet — check back after your first session.</p>
-            )}
+            <ul className="space-y-2">
+              {briefing.whatsWorking.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
+                  <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </Card>
@@ -524,124 +491,114 @@ export function BCBASessionBriefing({
       </Card>
 
       {/* Opportunities */}
-      {briefing.opportunities.length > 0 && (
-        <Card className="overflow-hidden">
-          <SectionHeader
-            id="opportunities"
-            icon={Lightbulb}
-            title="Opportunities"
-            count={briefing.opportunities.length}
-            color="bg-blue-100 text-blue-700"
-          />
-          {expandedSections.has('opportunities') && (
-            <div className="px-4 pb-4">
-              <ul className="space-y-2">
-                {briefing.opportunities.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Card>
-      )}
+      <Card className="overflow-hidden">
+        <SectionHeader
+          id="opportunities"
+          icon={Lightbulb}
+          title="Opportunities"
+          count={briefing.opportunities.length}
+          color="bg-blue-100 text-blue-700"
+        />
+        {expandedSections.has('opportunities') && (
+          <div className="px-4 pb-4">
+            <ul className="space-y-2">
+              {briefing.opportunities.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
+                  <Lightbulb className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Card>
 
       {/* Recommended Guidance */}
-      {briefing.recommendedGuidance.length > 0 && (
-        <Card className="overflow-hidden border-[#6B9080]/20 bg-[#6B9080]/10/30">
-          <SectionHeader
-            id="guidance"
-            icon={Target}
-            title="Recommended Guidance for Parent"
-            count={briefing.recommendedGuidance.length}
-            color="bg-[#6B9080]/10 text-[#6B9080]"
-          />
-          {expandedSections.has('guidance') && (
-            <div className="px-4 pb-4">
-              <ul className="space-y-2">
-                {briefing.recommendedGuidance.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <Target className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Card>
-      )}
+      <Card className="overflow-hidden border-[#6B9080]/20 bg-[#6B9080]/10/30">
+        <SectionHeader
+          id="guidance"
+          icon={Target}
+          title="Recommended Guidance for Parent"
+          count={briefing.recommendedGuidance.length}
+          color="bg-[#6B9080]/10 text-[#6B9080]"
+        />
+        {expandedSections.has('guidance') && (
+          <div className="px-4 pb-4">
+            <ul className="space-y-2">
+              {briefing.recommendedGuidance.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
+                  <Target className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Card>
 
       {/* Recent Parent Concerns */}
-      {briefing.recentConcerns.length > 0 && (
-        <Card className="overflow-hidden">
-          <SectionHeader
-            id="concerns"
-            icon={MessageSquare}
-            title="Recent Parent Concerns"
-            count={briefing.recentConcerns.length}
-            color="bg-violet-100 text-violet-700"
-          />
-          {expandedSections.has('concerns') && (
-            <div className="px-4 pb-4">
-              <ul className="space-y-2">
-                {briefing.recentConcerns.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <MessageSquare className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Card>
-      )}
+      <Card className="overflow-hidden">
+        <SectionHeader
+          id="concerns"
+          icon={MessageSquare}
+          title="Recent Parent Concerns"
+          count={briefing.recentConcerns.length}
+          color="bg-violet-100 text-violet-700"
+        />
+        {expandedSections.has('concerns') && (
+          <div className="px-4 pb-4">
+            <ul className="space-y-2">
+              {briefing.recentConcerns.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
+                  <MessageSquare className="w-4 h-4 text-violet-500 mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Card>
 
       {/* Vault Insights */}
-      {briefing.vaultInsights.length > 0 && (
-        <Card className="overflow-hidden">
-          <SectionHeader
-            id="vault"
-            icon={FileText}
-            title="From Documents (Vault)"
-            count={briefing.vaultInsights.length}
-            color="bg-[#F0EDE8] text-[#3A4A57]"
-          />
-          {expandedSections.has('vault') && (
-            <div className="px-4 pb-4">
-              <ul className="space-y-2">
-                {briefing.vaultInsights.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <FileText className="w-4 h-4 text-[#5A6B7A] mt-0.5 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </Card>
-      )}
+      <Card className="overflow-hidden">
+        <SectionHeader
+          id="vault"
+          icon={FileText}
+          title="From Documents (Vault)"
+          count={briefing.vaultInsights.length}
+          color="bg-[#F0EDE8] text-[#3A4A57]"
+        />
+        {expandedSections.has('vault') && (
+          <div className="px-4 pb-4">
+            <ul className="space-y-2">
+              {briefing.vaultInsights.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
+                  <FileText className="w-4 h-4 text-[#5A6B7A] mt-0.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </Card>
 
       {/* Suggested Session Topics */}
-      {briefing.suggestedTopics.length > 0 && (
-        <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
-          <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-violet-600" />
-            Suggested Session Topics
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {briefing.suggestedTopics.map((topic) => (
-              <Badge
-                key={topic}
-                className="bg-white border border-violet-200 text-violet-700 hover:bg-violet-50 cursor-pointer"
-              >
-                {topic}
-              </Badge>
-            ))}
-          </div>
-        </Card>
-      )}
+      <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+        <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-violet-600" />
+          Suggested Session Topics
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {briefing.suggestedTopics.map((topic) => (
+            <Badge
+              key={topic}
+              className="bg-white border border-violet-200 text-violet-700 hover:bg-violet-50 cursor-pointer"
+            >
+              {topic}
+            </Badge>
+          ))}
+        </div>
+      </Card>
 
       {/* Start Session CTA */}
       {onStartSession && (
