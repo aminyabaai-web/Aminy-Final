@@ -212,6 +212,8 @@ export function Dashboard10({
   const [chatInput, setChatInput] = useState('');
   const [isSendingChat, setIsSendingChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [showTaskCelebration, setShowTaskCelebration] = useState(false);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(99);
 
   // Get conversation context for sending messages
   const { messages: chatMessages, sendMessage, createConversation, setChildContext, currentConversation } = useConversation();
@@ -607,10 +609,31 @@ export function Dashboard10({
     }
   };
 
+  // Compute trial days remaining for the countdown banner (Change 3)
+  useEffect(() => {
+    if (userTier !== 'free' || !userId) return;
+    const stored = localStorage.getItem(`aminy_trial_${userId}`);
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        const start = new Date(data.startDate);
+        const now = new Date();
+        const days = Math.max(0, 7 - Math.floor((now.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)));
+        setTrialDaysRemaining(days);
+      } catch {
+        setTrialDaysRemaining(7);
+      }
+    } else {
+      setTrialDaysRemaining(7);
+    }
+  }, [userId, userTier]);
+
   const handleTaskToggle = async (taskId: string) => {
     // Find which routine this task belongs to
     // SAFETY: Use safeTodaysRoutines instead of direct access
     const routine = dailyRoutines.find(r => Array.isArray(r.tasks) && r.tasks.some(t => t.id === taskId));
+    // Only fire the celebration if the task was previously incomplete
+    const wasIncomplete = routine?.tasks.some(t => t.id === taskId && !t.completed);
     if (routine && safeTodaysRoutines.length > 0) {
       // Find the routine ID from dashboard data
       const routineData = safeTodaysRoutines.find(r => r.timeOfDay === routine.timeOfDay);
@@ -618,6 +641,12 @@ export function Dashboard10({
         // Use the completeRoutineStep from the hook
         await dashboardData.completeRoutineStep(routineData.timeOfDay, taskId);
       }
+    }
+    // Show brief task celebration when marking complete (Change 4)
+    if (wasIncomplete) {
+      triggerHaptic('medium');
+      setShowTaskCelebration(true);
+      setTimeout(() => setShowTaskCelebration(false), 1500);
     }
   };
 
@@ -704,6 +733,33 @@ export function Dashboard10({
       )}
 
       {/* ========================================
+          TASK COMPLETION CONFETTI — CSS-only sparkle burst (Change 4)
+          Auto-dismisses after 1.5s via state timeout above
+          ======================================== */}
+      <AnimatePresence>
+        {showTaskCelebration && (
+          <motion.div
+            key="task-celebration"
+            initial={{ opacity: 0, scale: 0.7, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.7, y: -20 }}
+            transition={{ duration: 0.25 }}
+            className="fixed bottom-32 left-1/2 z-50 -translate-x-1/2 pointer-events-none"
+          >
+            <div className="flex items-center gap-2 bg-green-500 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-semibold">
+              <CheckCircle2 className="w-4 h-4" />
+              Done!
+              <span className="ml-1 inline-flex gap-0.5">
+                <span className="inline-block animate-bounce" style={{ animationDelay: '0ms' }}>✦</span>
+                <span className="inline-block animate-bounce" style={{ animationDelay: '80ms' }}>✦</span>
+                <span className="inline-block animate-bounce" style={{ animationDelay: '160ms' }}>✦</span>
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ========================================
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
@@ -718,7 +774,7 @@ export function Dashboard10({
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
-            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A]">{dailyTip}</p>
+            <p className="mt-1 max-w-2xl text-sm italic text-[#5A6B7A] dark:text-slate-300">{dailyTip}</p>
           </div>
 
           {/* Multi-Child Switcher */}
@@ -731,7 +787,7 @@ export function Dashboard10({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-colors flex-shrink-0 ${
                     (activeChildId === c.id || (!activeChildId && c.isPrimary))
                       ? 'border border-[#2A7D99]/20 bg-primary text-white shadow-sm'
-                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] hover:bg-white'
+                      : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] dark:text-slate-300 dark:bg-slate-700/50 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#3A9DBB] flex items-center justify-center text-sm font-bold text-white">
@@ -746,14 +802,14 @@ export function Dashboard10({
           {(aiMemorySync || juniorProgressSync) && (
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
-                  <span className="font-medium text-[#1B2733]">AI memory</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
+                  <span className="font-medium text-[#1B2733] dark:text-slate-100">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
-                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] bg-white/80 px-3 py-1.5 text-sm text-[#5A6B7A] shadow-sm">
-                  <span className="font-medium text-[#1B2733]">Ease progress</span>
+                <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
+                  <span className="font-medium text-[#1B2733] dark:text-slate-100">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -761,7 +817,7 @@ export function Dashboard10({
           )}
 
           {/* Child Profile Snapshot */}
-          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
+          <div className="flex items-center gap-3 rounded-[22px] border border-white/80 bg-white/80 dark:bg-slate-800/90 dark:border-slate-700 p-4 shadow-[0_18px_40px_rgba(15,23,42,0.06)] sm:gap-4">
             <div className="relative" style={{ flexShrink: 0 }}>
               <button
                 type="button"
@@ -802,19 +858,19 @@ export function Dashboard10({
                   hasGoalMomentum ? (
                     <div className="flex gap-3">
                       {child.goals.slice(0, 2).map((goal) => (
-                        <div key={goal.name} className="text-sm text-[#5A6B7A]">
-                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#2A7D99]' : 'text-[#5A6B7A]'}>{goal.percentMet}%</span>
+                        <div key={goal.name} className="text-sm text-[#5A6B7A] dark:text-slate-300">
+                          {goal.name}: <span className={goal.trend === 'up' ? 'text-[#2A7D99] dark:text-teal-300' : 'text-[#5A6B7A] dark:text-slate-300'}>{goal.percentMet}%</span>
                           {goal.trend === 'up' && ' ↑'}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-[#5A6B7A]">
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
                       Starting focus areas: {child.goals.slice(0, 2).map((goal) => goal.name).join(' • ')}
                     </div>
                   )
                 ) : (
-                  <div className="text-sm text-[#5A6B7A]">
+                  <div className="text-sm text-[#5A6B7A] dark:text-slate-300">
                     No goals set yet • Tap to add
                   </div>
                 )}
@@ -840,7 +896,7 @@ export function Dashboard10({
                         : 'care-plan'
                     )
                   }
-                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] bg-white/85 px-4 py-3 shadow-sm transition-colors hover:bg-white"
+                  className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800/85 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-800"
                 >
                   <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#43AA8B15' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
@@ -850,13 +906,13 @@ export function Dashboard10({
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733]">{event.title}</div>
-                    <div className="text-xs text-[#5A6B7A]">{event.time}</div>
+                    <div className="text-sm font-medium text-[#1B2733] dark:text-slate-100">{event.title}</div>
+                    <div className="text-xs text-[#5A6B7A] dark:text-slate-300">{event.time}</div>
                   </div>
                 </button>
               ))
             ) : (
-              <div className="py-2 text-sm text-[#5A6B7A]">
+              <div className="py-2 text-sm text-[#5A6B7A] dark:text-slate-300">
                 You're all caught up! No upcoming events.
               </div>
             )}
@@ -864,8 +920,8 @@ export function Dashboard10({
         </div>
       </header>
 
-      {/* Trial countdown banner — only for free-tier users in their first 7 days */}
-      {userTier === 'free' && userId && (
+      {/* Trial countdown banner — only show when <= 5 days remaining and not dismissed (Change 3) */}
+      {userTier === 'free' && userId && trialDaysRemaining <= 5 && (
         <div className="max-w-4xl mx-auto px-4 pt-3">
           <TrialCountdown
             trialStartDate={JSON.parse(localStorage.getItem(`aminy_trial_${userId}`) || '{}').startDate || new Date().toISOString()}
