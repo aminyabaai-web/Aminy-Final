@@ -328,6 +328,7 @@ export function BevelChatOverlay({
   const [sessionId] = useState(() => `session-${Date.now()}`);
   const [customInstructions, setCustomInstructions] = useState<CustomInstructions>(loadCustomInstructions);
   const [instructionsDirty, setInstructionsDirty] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -369,6 +370,7 @@ export function BevelChatOverlay({
       setCustomInstructions(loadCustomInstructions());
       setInstructionsDirty(false);
       setChatSessions(loadChatSessions());
+      setHasInteracted(false);
     }
   }, [isOpen]);
 
@@ -628,6 +630,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
     setMessages(prev => [...prev, userMsg]);
     setInput('');
+    setHasInteracted(true);
     setIsLoading(true);
 
     try {
@@ -1305,13 +1308,13 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 </div>
               )}
 
-              {/* Smart action chips — show only when conversation is empty, collapsed after first message */}
-              {messages.length === 0 && (
+              {/* Smart action chips — show only when conversation is empty and user hasn't interacted */}
+              {!hasInteracted && messages.length === 0 && (
                 <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
                   {[
-                    { emoji: '📊', label: 'Log behavior', starter: 'Log behavior: ' },
+                    { emoji: '📊', label: 'Log a behavior', starter: 'Log behavior: ' },
                     { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
-                    { emoji: '📅', label: 'Add appointment', starter: 'Add appointment: ' },
+                    { emoji: '📅', label: 'Book appointment', starter: 'Book appointment: ' },
                     { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
                   ].map(chip => (
                     <button
@@ -1319,9 +1322,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       onClick={() => {
                         HAPTICS.light();
                         setInput(chip.starter);
+                        setHasInteracted(true);
                         setTimeout(() => inputRef.current?.focus(), 50);
                       }}
-                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57] rounded-full text-xs font-medium transition-colors"
+                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm whitespace-nowrap border border-cyan-200 dark:border-cyan-700 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-colors"
                     >
                       <span>{chip.emoji}</span>
                       <span>{chip.label}</span>
