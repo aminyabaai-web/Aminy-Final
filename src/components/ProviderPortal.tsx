@@ -1591,10 +1591,25 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       )}
                     </div>
                     {patient.profileAccess === 'granted' && (
-                      <Button size="sm" variant="ghost" className="text-[#6B9080]">
-                        <Eye className="w-4 h-4 mr-1" />
-                        Insight Navigator
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-[#6B9080]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPatient(patient);
+                            setActiveTab('ai-summaries');
+                          }}
+                        >
+                          <Brain className="w-4 h-4 mr-1" />
+                          Prepare for session →
+                        </Button>
+                        <Button size="sm" variant="ghost" className="text-[#6B9080]">
+                          <Eye className="w-4 h-4 mr-1" />
+                          Insight Navigator
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </Card>
