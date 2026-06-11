@@ -38,28 +38,26 @@ export function stripHtml(dirty: string): string {
 }
 
 /**
- * Sanitize user input for AI/LLM prompts
- * Prevents prompt injection attacks
+ * Sanitize user input for AI/LLM prompts.
+ *
+ * Strategy: strip model-specific control tokens (LLaMA [INST], Alpaca <<SYS>>) that have
+ * no legitimate use in parent messages. Leave everything else — Claude itself is the
+ * best injection defense, and over-filtering damages real parent messages (behavior
+ * comparisons with < >, formatted data in code blocks, "the system: " narratives).
+ * Log suspected injection for monitoring without blocking the message.
  */
 export function sanitizeForAI(input: string): string {
   if (!input || typeof input !== 'string') {
     return '';
   }
 
-  // Remove common prompt injection patterns
+  // Only strip model-specific control tokens that cannot appear in real messages
   let sanitized = input
-    // Remove attempts to break out of context
     .replace(/\[SYSTEM\]/gi, '[filtered]')
     .replace(/\[INST\]/gi, '[filtered]')
     .replace(/\[\/INST\]/gi, '[filtered]')
     .replace(/<<SYS>>/gi, '[filtered]')
     .replace(/<<\/SYS>>/gi, '[filtered]')
-    // Remove attempts to impersonate system/assistant
-    .replace(/^(system|assistant|human|user):/gim, '[filtered]:')
-    // Remove markdown code blocks that might contain injection
-    .replace(/```[\s\S]*?```/g, '[code removed]')
-    // Remove excessive special characters that might be used for injection
-    .replace(/[<>{}[\]\\]/g, '')
     // Normalize whitespace
     .replace(/\s+/g, ' ')
     .trim();
