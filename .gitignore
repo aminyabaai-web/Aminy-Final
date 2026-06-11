@@ -1,3 +1,6 @@
+# Claude Code agent worktrees
+.claude/worktrees/
+
 # iCloud sync duplicates
 * 2.*
 * 2.js
