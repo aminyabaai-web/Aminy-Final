@@ -119,8 +119,8 @@ export async function checkRateLimit(
       resetAt: entry.resetAt,
     };
   } catch (error) {
-    // On error, allow the request (fail open) but log it
-    console.error('Rate limit check failed:', error);
+    // Fail open: KV store unavailable. Log with context so abuse is detectable in function logs.
+    console.error('[RATE_LIMIT_FAIL_OPEN]', { key, userId, endpoint, tier, error: String(error) });
     return {
       allowed: true,
       remaining: config.maxRequests,
@@ -174,7 +174,7 @@ export async function checkGlobalRateLimit(): Promise<RateLimitResult> {
       resetAt: entry.resetAt,
     };
   } catch (error) {
-    console.error('Global rate limit check failed:', error);
+    console.error('[RATE_LIMIT_FAIL_OPEN]', { key: 'global', error: String(error) });
     return {
       allowed: true,
       remaining: GLOBAL_RATE_LIMIT.maxRequests,
@@ -327,8 +327,7 @@ export async function checkDailyUsage(
       shouldShowPaywall,
     };
   } catch (error) {
-    console.error('Daily usage check failed:', error);
-    // Fail open - allow the request but log the error
+    console.error('[RATE_LIMIT_FAIL_OPEN]', { key: `daily:${userId}`, userId, tier, error: String(error) });
     return {
       allowed: true,
       messagesUsed: 0,
