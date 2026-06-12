@@ -1,0 +1,34 @@
+name: Deploy Edge Functions
+
+on:
+  workflow_dispatch:
+    inputs:
+      function:
+        description: 'Function to deploy (leave blank for all)'
+        required: false
+        default: 'all'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Deploy edge functions
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          FUNCTION="${{ github.event.inputs.function }}"
+          PROJECT_REF="qpzsvafwcwyrkdolrjbu"
+
+          if [ "$FUNCTION" = "all" ] || [ -z "$FUNCTION" ]; then
+            echo "Deploying all edge functions..."
+            supabase functions deploy --project-ref "$PROJECT_REF" --no-verify-jwt
+          else
+            echo "Deploying $FUNCTION..."
+            supabase functions deploy "$FUNCTION" --project-ref "$PROJECT_REF" --no-verify-jwt
+          fi
