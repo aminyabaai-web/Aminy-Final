@@ -5,10 +5,11 @@ _Last updated: 2026-06-11. Every session should read this before starting and up
 
 ## Load-bearing workarounds (do NOT remove without fixing the root cause)
 
-### 1. `* { opacity: 1 !important }` in `src/index.css`
-**Root cause:** motion/react v12 WAAPI bug leaves `opacity: 0` as an inline style after animations complete.
-**Workaround:** The CSS override + a cleanup interval in `App.tsx` (`clearOpacityHack`).
-**Fix path:** Replace framer-motion `motion.*` with CSS transitions for simple enter/exit animations. Only keep motion/react for complex sequenced animations. Remove the hack after confirming opacity is clean.
+### 1. `[style*="opacity: 0"] { opacity: 1 !important }` in `src/index.css`
+**Root cause:** motion/react v12 WAAPI bug leaves `opacity: 0` as an inline style after exit animations complete.
+**Workaround:** The CSS attribute selector targets only elements with an inline `style="...opacity: 0..."` — does NOT override Tailwind class-based `opacity-50`/`opacity-75` etc. (those use CSS classes, not inline styles). WAAPI takes precedence over `!important` while animations are running, so active transitions still work correctly.
+**Impact:** Lower than originally documented — Tailwind opacity utilities are NOT broken by this hack. The real cost is conceptual overhead (195 files import motion/react) and bundle size.
+**Fix path:** Not urgent. If replacing motion/react: convert simple enter/exit patterns to CSS `@keyframes`, keep motion/react for physics-based animations (SensoryFidget, SquishBall).
 
 ### 2. `window.__navigateToScreen` debug hook in `App.tsx`
 **Root cause:** E2E smoke tests need a programmatic navigation handle. React Router was ruled out (see CLAUDE.md).

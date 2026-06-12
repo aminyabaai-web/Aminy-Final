@@ -1719,26 +1719,36 @@ app.get("/make-server-8a022548/payments/subscription", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get subscription from KV store
-    let subscription = await kv.get(`subscription:${user.id}`);
-    
-    // If no subscription, create a default free tier
-    if (!subscription) {
-      subscription = {
-        id: `sub-${user.id}`,
-        userId: user.id,
-        tier: 'free',
-        status: 'active',
-        currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        cancelAtPeriodEnd: false,
-        credits: 0,
-        referralCredits: 0,
-      };
-      await kv.set(`subscription:${user.id}`, subscription);
-    }
+    // Read tier from profiles (authoritative — updated by Stripe webhooks)
+    const [profileRes, trialRes, stripeResp] = await Promise.all([
+      supabase.from('profiles').select('tier, subscription_status').eq('id', user.id).single(),
+      supabase.from('trial_tracking').select('trial_ends_at, is_converted').eq('user_id', user.id).maybeSingle(),
+      getSubscription(user.id),
+    ]);
 
-    return c.json(subscription);
+    const tier = profileRes.data?.tier || 'free';
+    const trial = trialRes.data;
+    const trialActive = trial && !trial.is_converted && trial.trial_ends_at && new Date(trial.trial_ends_at) > new Date();
+    const status = trialActive ? 'trialing' : (profileRes.data?.subscription_status || (tier !== 'free' ? 'active' : 'none'));
+
+    // Enrich with Stripe period data if available
+    let currentPeriodEnd: string | undefined;
+    let cancelAtPeriodEnd = false;
+    try {
+      const stripeData = await stripeResp.json();
+      currentPeriodEnd = stripeData.currentPeriodEnd || undefined;
+      cancelAtPeriodEnd = stripeData.cancelAtPeriodEnd || false;
+    } catch { /* no Stripe customer yet — fine */ }
+
+    return c.json({
+      tier,
+      status,
+      currentPeriodEnd,
+      cancelAtPeriodEnd,
+      trialEndsAt: trial?.trial_ends_at || undefined,
+      credits: 0,
+      referralCredits: 0,
+    });
   } catch (error) {
     return c.json({ error: 'Failed to fetch subscription' }, 500);
   }
@@ -2435,18 +2445,19 @@ app.post("/make-server-8a022548/payments/trial/expire", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    const subscription = await kv.get(`subscription:${user.id}`);
-    if (subscription && subscription.status === 'trialing') {
-      // Trial expired without payment - downgrade to free
-      subscription.status = 'none'; // No active subscription
-      subscription.tier = 'free';   // Downgrade to free tier
-      delete subscription.trialEndsAt;
-      await kv.set(`subscription:${user.id}`, subscription);
+    // Check if user is actually in trial before downgrading
+    const { data: trial } = await supabase
+      .from('trial_tracking')
+      .select('trial_ends_at, is_converted')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-      // Also update the user's profile tier in database
+    const trialExpired = trial && !trial.is_converted && trial.trial_ends_at && new Date(trial.trial_ends_at) <= new Date();
+
+    if (trialExpired) {
       await supabase
         .from('profiles')
-        .update({ tier: 'free', updated_at: new Date().toISOString() })
+        .update({ tier: 'free', subscription_status: 'none', updated_at: new Date().toISOString() })
         .eq('id', user.id);
     }
 
