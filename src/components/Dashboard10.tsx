@@ -291,30 +291,35 @@ export function Dashboard10({
     }
   }, [userId]);
 
-  // Check trial status for free users
+  // Check trial status
   useEffect(() => {
-    if (userTier === 'free' && userId) {
-      supabase
-        .from('trial_tracking')
-        .select('conversations_used, has_seen_nudge')
-        .eq('user_id', userId)
-        .limit(1)
-        .then(({ data }) => {
-          const trial = Array.isArray(data) ? data[0] : null;
-          if (trial) {
-            setConversationsUsed(trial.conversations_used || 0);
-            // Show soft nudge after 3 conversations if not seen
-            if (trial.conversations_used >= 3 && !trial.has_seen_nudge) {
-              setShowSoftNudge(true);
-            }
-            // Show hard paywall after 5 conversations
-            if (trial.conversations_used >= 5) {
-              setShowHardPaywall(true);
-            }
+    if (!userId) return;
+    supabase
+      .from('trial_tracking')
+      .select('conversations_used, has_seen_nudge, trial_ends_at, is_converted')
+      .eq('user_id', userId)
+      .limit(1)
+      .then(({ data }) => {
+        const trial = Array.isArray(data) ? data[0] : null;
+        if (trial) {
+          setConversationsUsed(trial.conversations_used || 0);
+          // Show soft nudge after 3 conversations if not seen
+          if (trial.conversations_used >= 3 && !trial.has_seen_nudge && userTier === 'free') {
+            setShowSoftNudge(true);
           }
-        });
-    }
-  }, [userTier, userId]);
+          // Show hard paywall after 5 conversations
+          if (trial.conversations_used >= 5 && userTier === 'free') {
+            setShowHardPaywall(true);
+          }
+          // Compute days remaining from DB (not localStorage)
+          if (trial.trial_ends_at && !trial.is_converted) {
+            const msLeft = new Date(trial.trial_ends_at).getTime() - Date.now();
+            const days = Math.max(0, Math.ceil(msLeft / (24 * 60 * 60 * 1000)));
+            setTrialDaysRemaining(days);
+          }
+        }
+      });
+  }, [userId, userTier]);
 
   // Get user ID from Supabase + increment daily streak
   useEffect(() => {
@@ -609,24 +614,6 @@ export function Dashboard10({
     }
   };
 
-  // Compute trial days remaining for the countdown banner (Change 3)
-  useEffect(() => {
-    if (userTier !== 'free' || !userId) return;
-    const stored = localStorage.getItem(`aminy_trial_${userId}`);
-    if (stored) {
-      try {
-        const data = JSON.parse(stored);
-        const start = new Date(data.startDate);
-        const now = new Date();
-        const days = Math.max(0, 7 - Math.floor((now.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)));
-        setTrialDaysRemaining(days);
-      } catch {
-        setTrialDaysRemaining(7);
-      }
-    } else {
-      setTrialDaysRemaining(7);
-    }
-  }, [userId, userTier]);
 
   const handleTaskToggle = async (taskId: string) => {
     // Find which routine this task belongs to
@@ -920,11 +907,11 @@ export function Dashboard10({
         </div>
       </header>
 
-      {/* Trial countdown banner — only show when <= 5 days remaining and not dismissed (Change 3) */}
-      {userTier === 'free' && userId && trialDaysRemaining <= 5 && (
+      {/* Trial countdown banner — show when trial active and <= 5 days remaining */}
+      {userId && trialDaysRemaining <= 5 && trialDaysRemaining >= 0 && (
         <div className="max-w-4xl mx-auto px-4 pt-3">
           <TrialCountdown
-            trialStartDate={JSON.parse(localStorage.getItem(`aminy_trial_${userId}`) || '{}').startDate || new Date().toISOString()}
+            trialStartDate={new Date(Date.now() - (7 - trialDaysRemaining) * 24 * 60 * 60 * 1000).toISOString()}
             onUpgrade={() => onNavigate?.('paywall')}
             currentTier={userTier}
             dismissible={true}
