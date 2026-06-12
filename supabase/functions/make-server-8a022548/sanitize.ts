@@ -6,36 +6,28 @@
  */
 
 /**
- * Sanitize user input for AI/LLM prompts
- * Prevents prompt injection attacks
+ * Sanitize user input for AI/LLM prompts.
+ *
+ * Strategy: strip model-specific control tokens (LLaMA [INST], Alpaca <<SYS>>) that have
+ * no legitimate use in parent messages. Leave everything else — Claude itself is the
+ * best injection defense, and over-filtering damages real parent messages (behavior
+ * comparisons with < >, formatted data in code blocks, "the school system:" narratives).
  */
 export function sanitizeForAI(input: string): string {
   if (!input || typeof input !== 'string') {
     return '';
   }
 
-  // Remove common prompt injection patterns
   let sanitized = input
-    // Remove attempts to break out of context
-    .replace(/\[SYSTEM\]/gi, '[filtered]')
+    // Strip LLaMA/Alpaca model-control tokens only
     .replace(/\[INST\]/gi, '[filtered]')
     .replace(/\[\/INST\]/gi, '[filtered]')
     .replace(/<<SYS>>/gi, '[filtered]')
     .replace(/<<\/SYS>>/gi, '[filtered]')
-    // Remove attempts to impersonate system/assistant
-    .replace(/^(system|assistant|human|user):/gim, '[filtered]:')
-    // Remove markdown code blocks that might contain injection
-    .replace(/```[\s\S]*?```/g, '[code block]')
     // Remove attempts to override instructions
     .replace(/ignore (all |previous |prior |above )?(instructions|rules|guidelines)/gi, '[filtered]')
     .replace(/disregard (all |previous |prior |above )?(instructions|rules|guidelines)/gi, '[filtered]')
     .replace(/forget (all |previous |prior |above )?(instructions|rules|guidelines)/gi, '[filtered]')
-    // Remove attempts to reveal system prompt
-    .replace(/what (are |is )?(your|the) (system |initial )?(prompt|instructions)/gi, '[filtered]')
-    .replace(/show (me )?(your|the) (system |initial )?(prompt|instructions)/gi, '[filtered]')
-    .replace(/print (your|the) (system |initial )?(prompt|instructions)/gi, '[filtered]')
-    // Remove excessive special characters that might be used for injection
-    .replace(/[<>{}[\]\\`]/g, '')
     // Normalize whitespace but preserve natural line breaks
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[ \t]+/g, ' ')
