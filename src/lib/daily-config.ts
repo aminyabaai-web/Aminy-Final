@@ -9,9 +9,9 @@
  */
 
 // Environment configuration
+// API key is server-side only (Supabase secret: DAILY_API_KEY) — never expose via VITE_
 const DAILY_CONFIG = {
   domain: import.meta.env.VITE_DAILY_DOMAIN || '',
-  apiKey: import.meta.env.VITE_DAILY_API_KEY || '', // Only used server-side
 } as const;
 
 /**
