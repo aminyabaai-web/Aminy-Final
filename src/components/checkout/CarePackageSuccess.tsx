@@ -10,8 +10,9 @@
  * Pure CSS animations only (no framer-motion) to avoid WAAPI opacity bug.
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { CheckCircle, ArrowRight, Clock, Phone, FileText, Star, Users } from 'lucide-react';
+import { fireConfetti } from '../../lib/confetti';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -177,6 +178,12 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
   const serviceType = inferServiceType(packageId);
   const childName = getChildName();
   const nextSteps = getNextSteps(serviceType);
+
+  useEffect(() => {
+    // Slight delay so the page renders first
+    const timer = setTimeout(() => fireConfetti('upgrade'), 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Derive a readable package name from the URL param
   const packageDisplayName = packageId
