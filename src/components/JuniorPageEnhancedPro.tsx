@@ -1819,7 +1819,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2]"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
                       >
                         Open today’s transition board
                         <ArrowRight className="h-4 w-4" />
@@ -1843,7 +1843,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       </div>
 
                       <div className="mt-4 flex items-center gap-3 rounded-2xl border border-amber-100 bg-amber-50/70 px-4 py-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-slate-700 text-2xl shadow-sm">
                           {motivationGoal.emoji}
                         </div>
                         <div>
@@ -1872,7 +1872,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <Button
                           variant="outline"
                           onClick={() => setActiveView('rewards')}
-                          className="h-12 rounded-2xl border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2]"
+                          className="h-12 rounded-2xl border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
                         >
                           <Gift className="mr-2 h-4 w-4" />
                           Open rewards
@@ -1991,7 +1991,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('activity-select')}
-                        className="h-12 rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#5A6B7A] hover:bg-[#FAF7F2]"
+                        className="h-12 rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#5A6B7A] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
                       >
                         <Gamepad2 className="mr-2 h-4 w-4" />
                         Open optional practice

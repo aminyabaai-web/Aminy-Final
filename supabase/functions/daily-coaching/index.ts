@@ -62,7 +62,109 @@ function getDayContext(): string {
     : `It's ${day} — a school day, so morning and transition routines matter most.`;
 }
 
-async function generateTip(user: UserRow): Promise<string | null> {
+interface BehaviorPattern {
+  summary: string;          // Human-readable description for the prompt
+  notificationTitle: string; // Override morning greeting with something relevant
+  priority: 'high' | 'normal';
+}
+
+// Detect actionable patterns from the last 7 days of behavior logs + abc_entries.
+// Returns null if no pattern is strong enough to surface.
+async function detectBehaviorPatterns(userId: string): Promise<BehaviorPattern | null> {
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const [logsRes, abcRes] = await Promise.all([
+    supabase
+      .from('behavior_logs')
+      .select('behavior_type, logged_at, intensity, antecedent, trigger')
+      .eq('user_id', userId)
+      .eq('is_positive', false)
+      .gte('logged_at', oneWeekAgo)
+      .order('logged_at', { ascending: false })
+      .limit(30),
+    supabase
+      .from('abc_entries')
+      .select('behavior_category, antecedent_category, occurred_at, intensity')
+      .eq('user_id', userId)
+      .gte('occurred_at', oneWeekAgo)
+      .order('occurred_at', { ascending: false })
+      .limit(30),
+  ]);
+
+  const logs = logsRes.data ?? [];
+  const abc = abcRes.data ?? [];
+
+  if (logs.length + abc.length < 2) return null; // Not enough data
+
+  // ── Time-of-day clustering ──────────────────────────────────────────────────
+  // Build an hour-bucket histogram across both sources
+  const hourBuckets: Record<number, number> = {};
+  for (const entry of logs) {
+    const h = new Date(entry.logged_at).getHours();
+    hourBuckets[h] = (hourBuckets[h] || 0) + 1;
+  }
+  for (const entry of abc) {
+    const h = new Date(entry.occurred_at).getHours();
+    hourBuckets[h] = (hourBuckets[h] || 0) + 1;
+  }
+
+  // Find the 2-hour window with the most incidents
+  let peakWindow = { start: 0, count: 0 };
+  for (let h = 0; h < 22; h++) {
+    const count = (hourBuckets[h] || 0) + (hourBuckets[h + 1] || 0);
+    if (count > peakWindow.count) peakWindow = { start: h, count };
+  }
+
+  if (peakWindow.count >= 3) {
+    const startLabel = `${peakWindow.start % 12 || 12}${peakWindow.start < 12 ? 'am' : 'pm'}`;
+    const endLabel = `${(peakWindow.start + 2) % 12 || 12}${(peakWindow.start + 2) < 12 ? 'am' : 'pm'}`;
+    const windowName =
+      peakWindow.start >= 6 && peakWindow.start <= 9 ? 'morning routine' :
+      peakWindow.start >= 15 && peakWindow.start <= 18 ? 'after-school/dinner transition' :
+      peakWindow.start >= 19 ? 'bedtime routine' : `${startLabel}–${endLabel} window`;
+
+    return {
+      summary: `${peakWindow.count} challenging behaviors occurred in the ${startLabel}–${endLabel} window this week — clustered around the ${windowName}.`,
+      notificationTitle: `A pattern Aminy noticed 👀`,
+      priority: 'high',
+    };
+  }
+
+  // ── Antecedent pattern ──────────────────────────────────────────────────────
+  const antecedentCounts: Record<string, number> = {};
+  for (const entry of [...logs, ...abc]) {
+    const ant = (('antecedent' in entry ? entry.antecedent : entry.antecedent_category) ?? '').toLowerCase();
+    if (ant.includes('transition') || ant.includes('change')) antecedentCounts.transition = (antecedentCounts.transition || 0) + 1;
+    else if (ant.includes('demand') || ant.includes('request') || ant.includes('task')) antecedentCounts.demand = (antecedentCounts.demand || 0) + 1;
+    else if (ant.includes('sensory') || ant.includes('noise') || ant.includes('light')) antecedentCounts.sensory = (antecedentCounts.sensory || 0) + 1;
+  }
+
+  const topAnt = Object.entries(antecedentCounts).sort((a, b) => b[1] - a[1])[0];
+  if (topAnt && topAnt[1] >= 3) {
+    const antLabel = topAnt[0] === 'transition' ? 'transitions and changes' :
+                     topAnt[0] === 'demand' ? 'task demands and requests' :
+                     'sensory input';
+    return {
+      summary: `${topAnt[1]} incidents this week were triggered by ${antLabel}.`,
+      notificationTitle: `Aminy spotted a trigger pattern`,
+      priority: 'high',
+    };
+  }
+
+  // ── High frequency ──────────────────────────────────────────────────────────
+  const totalIncidents = logs.length + abc.length;
+  if (totalIncidents >= 5) {
+    return {
+      summary: `${totalIncidents} challenging behavior incidents logged this week — a higher-than-usual week.`,
+      notificationTitle: `This week was a tough one`,
+      priority: 'normal',
+    };
+  }
+
+  return null;
+}
+
+async function generateTip(user: UserRow, pattern: BehaviorPattern | null): Promise<string | null> {
   if (!ANTHROPIC_KEY) return null;
 
   const childDesc = [
@@ -80,15 +182,20 @@ async function generateTip(user: UserRow): Promise<string | null> {
     user.recent_behavior ? `Recent behavior note: "${user.recent_behavior}".` : null,
   ].filter(Boolean).join(' ');
 
+  const patternSection = pattern
+    ? `\nIMPORTANT — a real pattern was detected from this family's logs this week: ${pattern.summary} Address this pattern specifically. Do NOT give generic advice — speak directly to this pattern and what to do about it.`
+    : '';
+
   const prompt = `You are Aminy, a warm and knowledgeable ABA parenting coach.
 ${getDayContext()}
-The parent is supporting ${childDesc}. ${challengesText} ${recentContext}
+The parent is supporting ${childDesc}. ${challengesText} ${recentContext}${patternSection}
 
 Write ONE practical, specific tip for today. Requirements:
 - 1-2 sentences max. No greeting, no sign-off.
 - Concrete and actionable (what to do, not just general encouragement).
 - Warm and empathetic tone — never clinical or preachy.
 - Directly relevant to ABA, transitions, routines, or the child's noted challenges.
+- If a pattern was detected, address it directly — this is the most valuable thing you can do.
 - If there's a recent win, acknowledge it briefly and build on it.
 
 Return only the tip text, nothing else.`;
@@ -165,23 +272,26 @@ async function runDailyCoaching(): Promise<{ sent: number; skipped: number; erro
     const batch = users.slice(i, i + BATCH);
     await Promise.all(batch.map(async (user: UserRow) => {
       try {
-        const tip = (await generateTip(user)) ?? getFallbackTip(user.user_id);
+        const pattern = await detectBehaviorPatterns(user.user_id).catch(() => null);
+        const tip = (await generateTip(user, pattern)) ?? getFallbackTip(user.user_id);
         const parentName = user.parent_name?.split(' ')[0] || 'there';
+        const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
 
         const { error: insertErr } = await supabase
           .from('scheduled_notifications')
           .insert({
             user_id: user.user_id,
-            title: `Good morning, ${parentName} 👋`,
+            title,
             body: tip,
             tag: 'daily-coaching',
             notification_type: 'daily_checkin',
             scheduled_for: new Date().toISOString(),
-            priority: 'normal',
+            priority: pattern?.priority ?? 'normal',
             data: {
               type: 'daily_coaching',
               screen: 'dashboard',
               ai_generated: !!ANTHROPIC_KEY,
+              pattern_detected: !!pattern,
             },
           });
 
@@ -250,23 +360,26 @@ async function runDirectQuery(stats: { sent: number; skipped: number; errors: nu
           recent_behavior: null,
         };
 
-        const tip = (await generateTip(user)) ?? getFallbackTip(user.user_id);
+        const pattern = await detectBehaviorPatterns(user.user_id).catch(() => null);
+        const tip = (await generateTip(user, pattern)) ?? getFallbackTip(user.user_id);
         const parentName = (user.parent_name?.split(' ')[0]) || 'there';
+        const title = pattern?.notificationTitle ?? `Good morning, ${parentName} 👋`;
 
         const { error: insertErr } = await supabase
           .from('scheduled_notifications')
           .insert({
             user_id: user.user_id,
-            title: `Good morning, ${parentName} 👋`,
+            title,
             body: tip,
             tag: 'daily-coaching',
             notification_type: 'daily_checkin',
             scheduled_for: new Date().toISOString(),
-            priority: 'normal',
+            priority: pattern?.priority ?? 'normal',
             data: {
               type: 'daily_coaching',
               screen: 'dashboard',
               ai_generated: !!ANTHROPIC_KEY,
+              pattern_detected: !!pattern,
             },
           });
 

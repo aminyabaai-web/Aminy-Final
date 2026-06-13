@@ -5,10 +5,11 @@ _Last updated: 2026-06-11. Every session should read this before starting and up
 
 ## Load-bearing workarounds (do NOT remove without fixing the root cause)
 
-### 1. `* { opacity: 1 !important }` in `src/index.css`
-**Root cause:** motion/react v12 WAAPI bug leaves `opacity: 0` as an inline style after animations complete.
-**Workaround:** The CSS override + a cleanup interval in `App.tsx` (`clearOpacityHack`).
-**Fix path:** Replace framer-motion `motion.*` with CSS transitions for simple enter/exit animations. Only keep motion/react for complex sequenced animations. Remove the hack after confirming opacity is clean.
+### 1. `[style*="opacity: 0"] { opacity: 1 !important }` in `src/index.css`
+**Root cause:** motion/react v12 WAAPI bug leaves `opacity: 0` as an inline style after exit animations complete.
+**Workaround:** The CSS attribute selector targets only elements with an inline `style="...opacity: 0..."` — does NOT override Tailwind class-based `opacity-50`/`opacity-75` etc. (those use CSS classes, not inline styles). WAAPI takes precedence over `!important` while animations are running, so active transitions still work correctly.
+**Impact:** Lower than originally documented — Tailwind opacity utilities are NOT broken by this hack. The real cost is conceptual overhead (195 files import motion/react) and bundle size.
+**Fix path:** Not urgent. If replacing motion/react: convert simple enter/exit patterns to CSS `@keyframes`, keep motion/react for physics-based animations (SensoryFidget, SquishBall).
 
 ### 2. `window.__navigateToScreen` debug hook in `App.tsx`
 **Root cause:** E2E smoke tests need a programmatic navigation handle. React Router was ruled out (see CLAUDE.md).
@@ -48,17 +49,18 @@ All screen routing lives in one file. **All 42 screen components are already laz
 
 ## Features that are scaffolded / not fully wired
 
-### 7. CentralReach integration — DORMANT
-`src/lib/cr-sync.ts` and the `cr-sync` screen exist but are not used. AACT/Rise uses **Rethink**, not CentralReach.
-**Action needed:** Remove from nav entirely until/unless a CentralReach customer is signed. Wire is clean to remove.
+### 7. CentralReach integration — DORMANT but already gated
+`src/lib/cr-sync.ts` and the `cr-sync` screen exist. Gated by `crSyncEnabled` feature flag — unreachable from regular user navigation. AACT/Rise uses **Rethink**, not CentralReach.
+**Status:** No urgency — gate works. Remove when a dedicated cleanup session won't introduce risk.
 
-### 8. Daily.co video — shows error when unconfigured (no mock fallback)
-When `VITE_DAILY_DOMAIN` env var is missing, `OnDemandTelehealth` shows "Video calling is being set up. Please try again shortly." — does NOT silently fall back to mocks. `src/lib/telehealth-demo-mode.ts` exists but is not auto-invoked.
-**Action needed:** Either set `VITE_DAILY_DOMAIN` + `VITE_DAILY_API_KEY` (Netlify env vars), or remove the on-demand telehealth card from the UI until ready.
+### 8. Daily.co video — needs credentials, API key security fixed 2026-06-11
+When `VITE_DAILY_DOMAIN` is missing, `OnDemandTelehealth` shows "Video calling is being set up."
+**Fixed:** Removed `VITE_DAILY_API_KEY` from `src/lib/daily-config.ts` — API key must be a Supabase secret (`DAILY_API_KEY`), never a `VITE_` var (would expose it in the browser bundle).
+**Owner action:** Sign up at daily.co, add `VITE_DAILY_DOMAIN=<subdomain>` to Netlify env vars, add `DAILY_API_KEY=<key>` to Supabase secrets. Use the prebuilt iframe — don't build custom video UI.
 
-### 9. Payer / EVV / Claims dashboards — render empty state
-`payer-dashboard`, `evv-dashboard`, `claims-dashboard` render empty states because the backing tables aren't populated.
-**Action needed:** Hide from nav for non-AACT users until the real data pipeline is wired.
+### 9. Payer / EVV / Claims dashboards — already gated, not a nav problem
+`payer-dashboard` (`b2gEnabled`), `evv-dashboard` (pilot state), `claims-dashboard` (`b2gEnabled`) are all feature-gated — unreachable by regular users. They render empty states only in E2E smoke tests (via debug `window.__navigateToScreen`).
+**Status:** No action needed for regular users. Data pipeline wiring needed if/when AACT pilot enables b2g.
 
 ### 10. Rethink integration — mock data only
 `src/lib/rethink-integration.ts` webhook handlers are stubs. Edge function returns mock data.

@@ -157,21 +157,18 @@ async function trackTokenUsage(
   usage: AIUsage
 ): Promise<void> {
   try {
-    // Store token usage for cost monitoring
-    const usageKey = `ai_tokens:${userId}:${new Date().toISOString().split('T')[0]}`;
-    const existing = await kv.get(usageKey) || { totalTokens: 0, totalCost: 0, requests: 0 };
-
-    await kv.set(usageKey, {
-      totalTokens: existing.totalTokens + usage.totalTokens,
-      totalCost: existing.totalCost + usage.estimatedCost,
-      requests: existing.requests + 1,
-      lastUpdated: new Date().toISOString(),
-    });
-
-    // Alert if daily cost exceeds threshold (logged for monitoring)
+    // Log token usage for cost monitoring (structured log — queryable in Supabase Functions logs)
     const DAILY_COST_ALERT_THRESHOLD = 10; // $10/day per user
-    if (existing.totalCost + usage.estimatedCost > DAILY_COST_ALERT_THRESHOLD) {
-      console.warn(`[COST ALERT] User ${userId} exceeded $${DAILY_COST_ALERT_THRESHOLD}/day AI spend`);
+    const logEntry = {
+      userId,
+      date: new Date().toISOString().split('T')[0],
+      totalTokens: usage.totalTokens,
+      estimatedCost: usage.estimatedCost,
+    };
+    if (usage.estimatedCost > DAILY_COST_ALERT_THRESHOLD) {
+      console.warn(`[COST ALERT] User ${userId} exceeded $${DAILY_COST_ALERT_THRESHOLD}/day AI spend`, logEntry);
+    } else {
+      console.log('[TOKEN_USAGE]', JSON.stringify(logEntry));
     }
   } catch (error) {
     console.error('Token tracking error:', error);
@@ -879,7 +876,6 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
 
     // Get token usage for today
     const today = new Date().toISOString().split('T')[0];
-    const tokenUsage = await kv.get(`ai_tokens:${user.id}:${today}`) || { totalTokens: 0, totalCost: 0, requests: 0 };
 
     return c.json({
       tier,
@@ -891,9 +887,9 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
         resetsAt: dailyUsage.resetsAt,
       },
       tokenUsage: {
-        totalTokens: tokenUsage.totalTokens,
-        estimatedCost: tokenUsage.totalCost,
-        requests: tokenUsage.requests,
+        totalTokens: 0,
+        estimatedCost: 0,
+        requests: dailyUsage.messagesUsed,
         date: today,
       },
     });
@@ -910,21 +906,27 @@ app.get("/make-server-8a022548/ai/usage", async (c) => {
 // Track analytics events (no auth required for anonymous tracking)
 app.post("/make-server-8a022548/analytics/track", async (c) => {
   try {
-    const { events, sessionId } = await c.req.json();
+    const { events, sessionId, userId } = await c.req.json();
 
     if (!events || !Array.isArray(events)) {
       return c.json({ error: 'events array required' }, 400);
     }
 
-    // Store analytics events in KV store by session
-    const analyticsKey = `analytics:${sessionId}:${Date.now()}`;
-    await kv.set(analyticsKey, {
-      events,
-      sessionId,
-      receivedAt: new Date().toISOString(),
-      ip: c.req.header('x-forwarded-for') || 'unknown',
-      userAgent: c.req.header('user-agent') || 'unknown',
-    });
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const rows = events.map((e: Record<string, unknown>) => ({
+      user_id: userId || (e.userId as string) || null,
+      event_type: (e.eventType as string) || 'track',
+      event_name: (e.eventName || e.name || e.type) as string || 'unknown',
+      properties: e,
+      session_id: sessionId || null,
+    }));
+
+    await supabase.from('analytics_events').insert(rows);
 
     return c.json({ success: true, received: events.length });
   } catch (error) {
@@ -954,16 +956,17 @@ app.post("/make-server-8a022548/events/log", async (c) => {
     }
 
     const event = await c.req.json();
-    const eventId = `event:${user.id}:${Date.now()}`;
-    
-    await kv.set(eventId, {
-      ...event,
-      id: eventId,
-      userId: user.id,
-      timestamp: new Date().toISOString(),
-    });
 
-    return c.json({ success: true, eventId });
+    const { data, error } = await supabase.from('analytics_events').insert({
+      user_id: user.id,
+      event_type: event.eventType || 'log',
+      event_name: event.eventName || event.name || event.type || 'unknown',
+      properties: event,
+      session_id: event.sessionId || null,
+    }).select('id').single();
+
+    if (error) throw error;
+    return c.json({ success: true, eventId: data.id });
   } catch (error) {
     return c.json({ error: 'Failed to log event' }, 500);
   }
@@ -988,16 +991,18 @@ app.get("/make-server-8a022548/events/child/:childId", async (c) => {
     const startDate = c.req.query('start');
     const endDate = c.req.query('end');
 
-    // Fetch events from KV store
-    const allEvents = await kv.getByPrefix(`event:${user.id}:`);
-    const filteredEvents = allEvents.filter(event => {
-      if (event.childId !== childId) return false;
-      if (startDate && event.timestamp < startDate) return false;
-      if (endDate && event.timestamp > endDate) return false;
-      return true;
-    });
+    let query = supabase
+      .from('analytics_events')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(100);
 
-    return c.json(filteredEvents);
+    if (startDate) query = query.gte('created_at', startDate);
+    if (endDate) query = query.lte('created_at', endDate);
+
+    const { data: filteredEvents } = await query;
+    return c.json(filteredEvents || []);
   } catch (error) {
     return c.json({ error: 'Failed to fetch events' }, 500);
   }
@@ -1505,7 +1510,16 @@ Powered by ABA principles for behavioral wellness
       fileName,
     };
 
-    await kv.set(`report:${reportId}`, reportMetadata);
+    await supabase.from('user_reports').insert({
+      id: reportId,
+      user_id: user.id,
+      child_id: childId,
+      report_type: reportType,
+      signed_url: urlData.signedUrl,
+      expires_at: expiresAt.toISOString(),
+      file_size: reportContent.length,
+      file_name: fileName,
+    });
 
     return c.json(reportMetadata);
   } catch (error) {
@@ -1529,9 +1543,14 @@ app.get("/make-server-8a022548/reports/:reportId", async (c) => {
     }
 
     const reportId = c.req.param('reportId');
-    const report = await kv.get(`report:${reportId}`);
+    const { data: report } = await supabase
+      .from('user_reports')
+      .select('*')
+      .eq('id', reportId)
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    if (!report || report.userId !== user.id) {
+    if (!report) {
       return c.json({ error: 'Report not found' }, 404);
     }
 
@@ -1559,15 +1578,18 @@ app.get("/make-server-8a022548/reports/list", async (c) => {
     const childId = c.req.query('childId');
     const reportType = c.req.query('type');
 
-    const allReports = await kv.getByPrefix('report:');
-    const userReports = allReports.filter(report => {
-      if (report.userId !== user.id) return false;
-      if (childId && report.childId !== childId) return false;
-      if (reportType && report.reportType !== reportType) return false;
-      return true;
-    });
+    let query = supabase
+      .from('user_reports')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('generated_at', { ascending: false });
 
-    return c.json(userReports);
+    if (childId) query = query.eq('child_id', childId);
+    if (reportType) query = query.eq('report_type', reportType);
+
+    const { data: userReports } = await query;
+
+    return c.json(userReports || []);
   } catch (error) {
     return c.json({ error: 'Failed to list reports' }, 500);
   }
@@ -1589,18 +1611,25 @@ app.delete("/make-server-8a022548/reports/:reportId", async (c) => {
     }
 
     const reportId = c.req.param('reportId');
-    const report = await kv.get(`report:${reportId}`);
+    const { data: report } = await supabase
+      .from('user_reports')
+      .select('file_name')
+      .eq('id', reportId)
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    if (!report || report.userId !== user.id) {
+    if (!report) {
       return c.json({ error: 'Report not found' }, 404);
     }
 
     // Delete from storage
     const bucketName = 'make-8a022548-reports';
-    await supabase.storage.from(bucketName).remove([report.fileName]);
+    if (report.file_name) {
+      await supabase.storage.from(bucketName).remove([report.file_name]);
+    }
 
     // Delete metadata
-    await kv.del(`report:${reportId}`);
+    await supabase.from('user_reports').delete().eq('id', reportId).eq('user_id', user.id);
 
     return c.json({ success: true });
   } catch (error) {
@@ -1626,8 +1655,13 @@ app.post("/make-server-8a022548/reports/:reportId/share", async (c) => {
     const reportId = c.req.param('reportId');
     const { recipientEmail, message } = await c.req.json();
 
-    const report = await kv.get(`report:${reportId}`);
-    if (!report || report.userId !== user.id) {
+    const { data: report } = await supabaseClient
+      .from('user_reports')
+      .select('child_name')
+      .eq('id', reportId)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    if (!report) {
       return c.json({ error: 'Report not found' }, 404);
     }
 
@@ -1639,7 +1673,7 @@ app.post("/make-server-8a022548/reports/:reportId/share", async (c) => {
       .single();
 
     const senderName = profile?.full_name || 'An Aminy parent';
-    const childName = report.childName || 'their child';
+    const childName = report.child_name || 'their child';
     const reportUrl = `https://app.aminy.ai/shared/report/${reportId}`;
 
     await sendReportShareEmail(recipientEmail, senderName, childName, reportUrl, message);
@@ -1674,15 +1708,16 @@ app.post("/make-server-8a022548/reports/share-direct", async (c) => {
 
     const senderName = parentName || 'An Aminy parent';
 
-    // Store report in KV with 7-day TTL for the shareable link
+    // Store report in Postgres for the shareable link (7-day TTL tracked via expires_at)
     const reportId = crypto.randomUUID();
-    await kv.set(`report:${reportId}`, {
-      userId: user.id,
-      childName,
-      parentName: senderName,
-      reportSummary,
-      createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    await supabaseClient.from('user_reports').insert({
+      id: reportId,
+      user_id: user.id,
+      child_name: childName,
+      parent_name: senderName,
+      report_summary: reportSummary,
+      report_type: 'shared',
+      expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
     });
 
     const reportUrl = `https://app.aminy.ai/shared/report/${reportId}`;
@@ -1719,26 +1754,36 @@ app.get("/make-server-8a022548/payments/subscription", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    // Get subscription from KV store
-    let subscription = await kv.get(`subscription:${user.id}`);
-    
-    // If no subscription, create a default free tier
-    if (!subscription) {
-      subscription = {
-        id: `sub-${user.id}`,
-        userId: user.id,
-        tier: 'free',
-        status: 'active',
-        currentPeriodStart: new Date().toISOString(),
-        currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        cancelAtPeriodEnd: false,
-        credits: 0,
-        referralCredits: 0,
-      };
-      await kv.set(`subscription:${user.id}`, subscription);
-    }
+    // Read tier from profiles (authoritative — updated by Stripe webhooks)
+    const [profileRes, trialRes, stripeResp] = await Promise.all([
+      supabase.from('profiles').select('tier, subscription_status').eq('id', user.id).single(),
+      supabase.from('trial_tracking').select('trial_ends_at, is_converted').eq('user_id', user.id).maybeSingle(),
+      getSubscription(user.id),
+    ]);
 
-    return c.json(subscription);
+    const tier = profileRes.data?.tier || 'free';
+    const trial = trialRes.data;
+    const trialActive = trial && !trial.is_converted && trial.trial_ends_at && new Date(trial.trial_ends_at) > new Date();
+    const status = trialActive ? 'trialing' : (profileRes.data?.subscription_status || (tier !== 'free' ? 'active' : 'none'));
+
+    // Enrich with Stripe period data if available
+    let currentPeriodEnd: string | undefined;
+    let cancelAtPeriodEnd = false;
+    try {
+      const stripeData = await stripeResp.json();
+      currentPeriodEnd = stripeData.currentPeriodEnd || undefined;
+      cancelAtPeriodEnd = stripeData.cancelAtPeriodEnd || false;
+    } catch { /* no Stripe customer yet — fine */ }
+
+    return c.json({
+      tier,
+      status,
+      currentPeriodEnd,
+      cancelAtPeriodEnd,
+      trialEndsAt: trial?.trial_ends_at || undefined,
+      credits: 0,
+      referralCredits: 0,
+    });
   } catch (error) {
     return c.json({ error: 'Failed to fetch subscription' }, 500);
   }
@@ -2435,18 +2480,19 @@ app.post("/make-server-8a022548/payments/trial/expire", async (c) => {
       return c.json({ error: 'Unauthorized' }, 401);
     }
 
-    const subscription = await kv.get(`subscription:${user.id}`);
-    if (subscription && subscription.status === 'trialing') {
-      // Trial expired without payment - downgrade to free
-      subscription.status = 'none'; // No active subscription
-      subscription.tier = 'free';   // Downgrade to free tier
-      delete subscription.trialEndsAt;
-      await kv.set(`subscription:${user.id}`, subscription);
+    // Check if user is actually in trial before downgrading
+    const { data: trial } = await supabase
+      .from('trial_tracking')
+      .select('trial_ends_at, is_converted')
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-      // Also update the user's profile tier in database
+    const trialExpired = trial && !trial.is_converted && trial.trial_ends_at && new Date(trial.trial_ends_at) <= new Date();
+
+    if (trialExpired) {
       await supabase
         .from('profiles')
-        .update({ tier: 'free', updated_at: new Date().toISOString() })
+        .update({ tier: 'free', subscription_status: 'none', updated_at: new Date().toISOString() })
         .eq('id', user.id);
     }
 
@@ -2866,15 +2912,14 @@ app.get("/make-server-8a022548/stress-logs/recent", async (c) => {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
-    // Get all stress logs for user
-    const allLogs = await kv.getByPrefix(`stress_log:${user.id}:`);
-    
-    // Filter by date
-    const recentLogs = allLogs
-      .filter((log: any) => new Date(log.timestamp) >= cutoffDate)
-      .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    const { data: recentLogs } = await supabase
+      .from('stress_logs')
+      .select('*')
+      .eq('user_id', user.id)
+      .gte('created_at', cutoffDate.toISOString())
+      .order('created_at', { ascending: false });
 
-    return c.json({ logs: recentLogs });
+    return c.json({ logs: recentLogs || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch stress logs' }, 500);
   }
@@ -2901,19 +2946,14 @@ app.post("/make-server-8a022548/stress-logs/log", async (c) => {
       return c.json({ error: 'Stress level must be between 1 and 10' }, 400);
     }
 
-    const timestamp = new Date().toISOString();
-    const log = {
-      id: `stress_${Date.now()}_${Math.random().toString(36).substring(7)}`,
-      userId: user.id,
-      childId,
-      stressLevel,
-      trigger,
-      notes,
-      timestamp,
-    };
+    const { data: log, error } = await supabase.from('stress_logs').insert({
+      user_id: user.id,
+      stress_level: stressLevel,
+      context: 'morning',
+      notes: [trigger, notes].filter(Boolean).join(' | ') || null,
+    }).select().single();
 
-    await kv.set(`stress_log:${user.id}:${timestamp}`, log);
-
+    if (error) throw error;
     return c.json(log);
   } catch (error) {
     return c.json({ error: 'Failed to log stress' }, 500);
@@ -2928,35 +2968,34 @@ app.post("/make-server-8a022548/stress-logs/log", async (c) => {
 app.post("/make-server-8a022548/jr-session", async (c) => {
   try {
     const { parentId, childId, coinsEarned, timestamp } = await c.req.json();
-    
+
     if (!parentId || !coinsEarned) {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
-    // Get current balance
-    const balanceKey = `calm_coins:${parentId}`;
-    const currentBalance = await kv.get(balanceKey) || 0;
-    const newBalance = currentBalance + coinsEarned;
-    
-    // Update balance
-    await kv.set(balanceKey, newBalance);
-    
-    // Log transaction
-    const transactionId = `transaction:${parentId}:${Date.now()}`;
-    await kv.set(transactionId, {
-      parentId,
-      childId,
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Record in calm_coins table (balance is computed as SUM)
+    await supabase.from('calm_coins').insert({
+      user_id: parentId,
       amount: coinsEarned,
-      type: 'earned',
-      source: 'aminy_jr',
-      timestamp: timestamp || new Date().toISOString()
+      reason: 'Aminy Jr session',
+      source_type: 'bonus',
+      source_id: childId || null,
     });
 
-    return c.json({ 
-      success: true, 
-      newBalance,
-      coinsEarned 
-    });
+    // Get updated balance
+    const { data: balanceRows } = await supabase
+      .from('calm_coins')
+      .select('amount')
+      .eq('user_id', parentId);
+    const newBalance = (balanceRows || []).reduce((sum, r) => sum + (r.amount || 0), 0);
+
+    return c.json({ success: true, newBalance, coinsEarned });
   } catch (error) {
     return c.json({ error: 'Failed to sync Calm Coins' }, 500);
   }
@@ -2966,19 +3005,33 @@ app.post("/make-server-8a022548/jr-session", async (c) => {
 app.post("/make-server-8a022548/jr-session/save", async (c) => {
   try {
     const session = await c.req.json();
-    
-    if (!session.childId || !session.parentId) {
+
+    if (!session.parentId) {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
-    const sessionId = `jr_session:${session.childId}:${Date.now()}`;
-    await kv.set(sessionId, {
-      ...session,
-      id: sessionId,
-      savedAt: new Date().toISOString()
-    });
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
 
-    return c.json({ success: true, sessionId });
+    const { data, error } = await supabase.from('jr_sessions').insert({
+      child_id: session.childId || null,
+      parent_id: session.parentId,
+      session_type: session.sessionType || 'general',
+      activity_name: session.activityName || null,
+      duration_seconds: session.durationSeconds || null,
+      coins_earned: session.coinsEarned || 0,
+      completed: session.completed ?? true,
+      score: session.score || null,
+      data: session,
+      started_at: session.startedAt || new Date().toISOString(),
+      completed_at: session.completedAt || new Date().toISOString(),
+    }).select('id').single();
+
+    if (error) throw error;
+    return c.json({ success: true, sessionId: data.id });
   } catch (error) {
     return c.json({ error: 'Failed to save session' }, 500);
   }
@@ -2988,15 +3041,20 @@ app.post("/make-server-8a022548/jr-session/save", async (c) => {
 app.get("/make-server-8a022548/jr-session/:childId", async (c) => {
   try {
     const childId = c.req.param('childId');
-    const prefix = `jr_session:${childId}:`;
-    const sessions = await kv.getByPrefix(prefix);
-    
-    // Sort by timestamp descending
-    const sortedSessions = sessions.sort((a, b) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    return c.json({ sessions: sortedSessions });
+    const { data: sessions } = await supabase
+      .from('jr_sessions')
+      .select('*')
+      .eq('child_id', childId)
+      .order('started_at', { ascending: false })
+      .limit(50);
+
+    return c.json({ sessions: sessions || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch sessions' }, 500);
   }
@@ -3015,45 +3073,36 @@ app.post("/make-server-8a022548/shop/purchase", async (c) => {
       return c.json({ error: 'Missing required fields' }, 400);
     }
 
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
     let newBalance: number | undefined;
 
     if (paymentMethod === 'coins') {
-      // Check balance
-      const balanceKey = `calm_coins:${parentId}`;
-      const currentBalance = await kv.get(balanceKey) || 0;
+      // Check current balance from Postgres
+      const { data: rows } = await supabase.from('calm_coins').select('amount').eq('user_id', parentId);
+      const currentBalance = (rows || []).reduce((sum, r) => sum + (r.amount || 0), 0);
 
       if (currentBalance < amount) {
         return c.json({ error: 'Insufficient Calm Coins' }, 400);
       }
 
-      // Deduct coins
-      newBalance = currentBalance - amount;
-      await kv.set(balanceKey, newBalance);
-
-      // Log transaction
-      const transactionId = `transaction:${parentId}:${Date.now()}`;
-      await kv.set(transactionId, {
-        parentId,
+      // Record deduction as negative transaction
+      await supabase.from('calm_coins').insert({
+        user_id: parentId,
         amount: -amount,
-        type: 'spent',
-        source: 'shop_purchase',
-        itemId,
-        timestamp: new Date().toISOString()
+        reason: `Shop purchase: ${itemId}`,
+        source_type: 'redemption',
+        source_id: itemId,
       });
+      newBalance = currentBalance - amount;
     }
 
-    // Save purchase record
+    // No separate purchases table needed — calm_coins row IS the record for coin purchases
     const purchaseId = `purchase:${parentId}:${Date.now()}`;
-    await kv.set(purchaseId, {
-      id: purchaseId,
-      parentId,
-      itemId,
-      itemDetails,
-      paymentMethod,
-      amount,
-      status: 'completed',
-      timestamp: new Date().toISOString()
-    });
 
     return c.json({
       success: true,
@@ -3065,19 +3114,22 @@ app.post("/make-server-8a022548/shop/purchase", async (c) => {
   }
 });
 
-// Get user purchases
+// Get user purchases (coin redemptions from calm_coins with source_type='redemption')
 app.get("/make-server-8a022548/shop/purchases/:parentId", async (c) => {
   try {
     const parentId = c.req.param('parentId');
-    const prefix = `purchase:${parentId}:`;
-    const purchases = await kv.getByPrefix(prefix);
-    
-    // Sort by timestamp descending
-    const sortedPurchases = purchases.sort((a, b) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
-
-    return c.json({ purchases: sortedPurchases });
+    const { data } = await supabase
+      .from('calm_coins')
+      .select('*')
+      .eq('user_id', parentId)
+      .eq('source_type', 'redemption')
+      .order('created_at', { ascending: false });
+    return c.json({ purchases: data || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch purchases' }, 500);
   }
@@ -3087,9 +3139,13 @@ app.get("/make-server-8a022548/shop/purchases/:parentId", async (c) => {
 app.get("/make-server-8a022548/shop/balance/:parentId", async (c) => {
   try {
     const parentId = c.req.param('parentId');
-    const balanceKey = `calm_coins:${parentId}`;
-    const balance = await kv.get(balanceKey) || 0;
-
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+    const { data } = await supabase.from('calm_coins').select('amount').eq('user_id', parentId);
+    const balance = (data || []).reduce((sum, r) => sum + (r.amount || 0), 0);
     return c.json({ balance });
   } catch (error) {
     return c.json({ error: 'Failed to fetch balance' }, 500);
@@ -3100,15 +3156,18 @@ app.get("/make-server-8a022548/shop/balance/:parentId", async (c) => {
 app.get("/make-server-8a022548/shop/transactions/:parentId", async (c) => {
   try {
     const parentId = c.req.param('parentId');
-    const prefix = `transaction:${parentId}:`;
-    const transactions = await kv.getByPrefix(prefix);
-    
-    // Sort by timestamp descending
-    const sortedTransactions = transactions.sort((a, b) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
-
-    return c.json({ transactions: sortedTransactions });
+    const { data } = await supabase
+      .from('calm_coins')
+      .select('*')
+      .eq('user_id', parentId)
+      .order('created_at', { ascending: false })
+      .limit(50);
+    return c.json({ transactions: data || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch transactions' }, 500);
   }
@@ -3121,21 +3180,26 @@ app.get("/make-server-8a022548/shop/transactions/:parentId", async (c) => {
 // Save coverage report
 app.post("/make-server-8a022548/coverage/reports", async (c) => {
   try {
-    const { parentId, report } = await c.req.json();
-    
-    if (!parentId || !report) {
-      return c.json({ error: 'Missing required fields' }, 400);
-    }
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) return c.json({ error: 'Unauthorized' }, 401);
 
-    const reportId = `coverage_report:${parentId}:${Date.now()}`;
-    await kv.set(reportId, {
-      ...report,
-      id: reportId,
-      parentId,
-      savedAt: new Date().toISOString()
-    });
+    const { report } = await c.req.json();
+    if (!report) return c.json({ error: 'Missing report data' }, 400);
 
-    return c.json({ success: true, reportId });
+    const { data, error } = await supabase
+      .from('coverage_reports')
+      .insert({ user_id: user.id, report })
+      .select('id')
+      .single();
+
+    if (error) return c.json({ error: 'Failed to save report' }, 500);
+    return c.json({ success: true, reportId: data.id });
   } catch (error) {
     return c.json({ error: 'Failed to save report' }, 500);
   }
@@ -3144,16 +3208,22 @@ app.post("/make-server-8a022548/coverage/reports", async (c) => {
 // Get coverage reports for parent
 app.get("/make-server-8a022548/coverage/reports/:parentId", async (c) => {
   try {
-    const parentId = c.req.param('parentId');
-    const prefix = `coverage_report:${parentId}:`;
-    const reports = await kv.getByPrefix(prefix);
-    
-    // Sort by savedAt descending
-    const sortedReports = reports.sort((a, b) => 
-      new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime()
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) return c.json({ error: 'Unauthorized' }, 401);
 
-    return c.json({ reports: sortedReports });
+    const { data: reports } = await supabase
+      .from('coverage_reports')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('saved_at', { ascending: false });
+
+    return c.json({ reports: reports || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch reports' }, 500);
   }
@@ -3162,9 +3232,18 @@ app.get("/make-server-8a022548/coverage/reports/:parentId", async (c) => {
 // Delete coverage report
 app.delete("/make-server-8a022548/coverage/reports/:reportId", async (c) => {
   try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+    const { data: { user } } = await supabase.auth.getUser(accessToken);
+    if (!user?.id) return c.json({ error: 'Unauthorized' }, 401);
+
     const reportId = c.req.param('reportId');
-    await kv.del(reportId);
-    
+    await supabase.from('coverage_reports').delete().eq('id', reportId).eq('user_id', user.id);
+
     return c.json({ success: true });
   } catch (error) {
     return c.json({ error: 'Failed to delete report' }, 500);
@@ -3370,13 +3449,21 @@ app.post("/make-server-8a022548/email/weekly-digest", async (c) => {
 app.get("/make-server-8a022548/context/user/:userId", async (c) => {
   try {
     const userId = c.req.param('userId');
-    
-    // Fetch user context from KV store
-    const context = await kv.get(`context:${userId}`) || {
-      progressThisWeek: { sessionsCompleted: 0, calmMoments: 0, newStrategies: 0 },
-      strugglingWith: [],
-      celebratingWins: []
-    };
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('ai_context')
+      .eq('id', userId)
+      .maybeSingle();
+
+    const context = profile?.ai_context && Object.keys(profile.ai_context).length > 0
+      ? profile.ai_context
+      : { progressThisWeek: { sessionsCompleted: 0, calmMoments: 0, newStrategies: 0 }, strugglingWith: [], celebratingWins: [] };
 
     return c.json({ context });
   } catch (error) {
@@ -3393,15 +3480,16 @@ app.post("/make-server-8a022548/context/update", async (c) => {
     }
 
     const { updates } = await c.req.json();
-    
-    // Get existing context
-    const existingContext = await kv.get(`context:${userId}`) || {};
-    
-    // Merge updates
-    const newContext = { ...existingContext, ...updates };
-    
-    // Save
-    await kv.set(`context:${userId}`, newContext);
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Read-modify-write: merge updates into existing ai_context
+    const { data } = await supabase.from('profiles').select('ai_context').eq('id', userId).maybeSingle();
+    const merged = { ...(data?.ai_context || {}), ...updates };
+    await supabase.from('profiles').update({ ai_context: merged }).eq('id', userId);
 
     return c.json({ success: true });
   } catch (error) {
@@ -3409,7 +3497,7 @@ app.post("/make-server-8a022548/context/update", async (c) => {
   }
 });
 
-// Store memory (30-day lifecycle)
+// Store memory fact
 app.post("/make-server-8a022548/memory/store", async (c) => {
   try {
     const userId = c.req.header('X-User-Id');
@@ -3417,23 +3505,43 @@ app.post("/make-server-8a022548/memory/store", async (c) => {
       return c.json({ error: 'X-User-Id header required' }, 400);
     }
 
-    const memory = await c.req.json();
-    const memoryId = `memory:${userId}:${Date.now()}`;
-    
-    await kv.set(memoryId, {
-      ...memory,
-      id: memoryId,
-      userId,
-      timestamp: new Date().toISOString()
-    });
+    const { childId, category, content, source, confidence } = await c.req.json();
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
 
-    return c.json({ success: true, memoryId });
+    // Map source values to DB constraint: conversation|document|user_input|observation
+    const sourceMap: Record<string, string> = {
+      conversation: 'conversation',
+      onboarding: 'user_input',
+      vault: 'document',
+      provider: 'document',
+      manual: 'user_input',
+    };
+    const dbSource = sourceMap[source] || 'user_input';
+
+    const { data, error } = await supabase.from('memory_facts').upsert({
+      id: `${userId}:${childId || 'global'}:${category}:${Date.now()}`,
+      user_id: userId,
+      child_id: childId || null,
+      category: category || 'general',
+      key: `${category}:${Date.now()}`,
+      value: typeof content === 'string' ? content : JSON.stringify(content),
+      source: dbSource,
+      confidence: confidence || 0.8,
+      is_active: true,
+    }, { onConflict: 'id' }).select('id').single();
+
+    if (error) throw error;
+    return c.json({ success: true, memoryId: data.id });
   } catch (error) {
     return c.json({ error: 'Failed to store memory' }, 500);
   }
 });
 
-// Get recent memories
+// Get recent memory facts
 app.get("/make-server-8a022548/memory/recent", async (c) => {
   try {
     const userId = c.req.header('X-User-Id');
@@ -3442,21 +3550,21 @@ app.get("/make-server-8a022548/memory/recent", async (c) => {
     }
 
     const limit = parseInt(c.req.query('limit') || '5');
-    
-    // Fetch memories
-    const allMemories = await kv.getByPrefix(`memory:${userId}:`);
-    
-    // Filter expired (> 30 days) and sort by timestamp
-    const now = Date.now();
-    const validMemories = allMemories
-      .filter(m => {
-        const expiresAt = m.expiresAt ? new Date(m.expiresAt).getTime() : now + 30 * 24 * 60 * 60 * 1000;
-        return expiresAt > now;
-      })
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, limit);
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
 
-    return c.json({ memories: validMemories });
+    const { data: memories } = await supabase
+      .from('memory_facts')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    return c.json({ memories: memories || [] });
   } catch (error) {
     return c.json({ error: 'Failed to fetch memories' }, 500);
   }
@@ -3471,17 +3579,20 @@ app.post("/make-server-8a022548/feedback/submit", async (c) => {
     }
 
     const feedback = await c.req.json();
-    const feedbackId = `feedback:${userId}:${Date.now()}`;
-    
-    await kv.set(feedbackId, {
-      ...feedback,
-      id: feedbackId,
-      userId,
-      submittedAt: new Date().toISOString()
-    });
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
 
+    const { data, error } = await supabase.from('user_feedback').insert({
+      user_id: userId,
+      message: typeof feedback === 'string' ? feedback : JSON.stringify(feedback),
+      feedback_type: feedback.type || 'other',
+    }).select('id').single();
 
-    return c.json({ success: true, feedbackId });
+    if (error) throw error;
+    return c.json({ success: true, feedbackId: data.id });
   } catch (error) {
     return c.json({ error: 'Failed to submit feedback' }, 500);
   }
