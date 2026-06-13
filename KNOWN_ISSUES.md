@@ -1,5 +1,5 @@
 # Known Issues — Aminy
-_Last updated: 2026-06-11. Every session should read this before starting and update it before closing._
+_Last updated: 2026-06-13. Every session should read this before starting and update it before closing._
 
 ---
 
@@ -30,10 +30,11 @@ All AI, billing, and provider routes are in one function. A deploy for any route
 **Impact:** Slow deploys; one broken route blocks all.
 **Fix path:** Split into `supabase/functions/ai/`, `billing/`, `provider/`. Shared auth/DB helpers in a `_shared/` dir.
 
-### 4. Key-value store used for relational queries
-Some provider/session data is stored in a KV table instead of the real Postgres tables.
-**Impact:** Can't efficiently query "providers in AZ accepting patients."
-**Fix path:** Migrate provider-routes to query `provider_profiles`, `children`, `session_notes` directly.
+### 4. Key-value store used for relational queries — MOSTLY RESOLVED 2026-06-12
+34 of ~48 KV endpoints migrated to Postgres (PR #251): user_reports, coverage_reports, profiles.ai_context, memory_facts, calm_coins, jr_sessions, analytics_events, stress_logs, user_feedback, subscriptions.
+**Remaining KV:** 14 usages in dormant focus-task and coach-portal routes (not user-facing).
+**Still open:** provider-routes still queries KV for provider listings — can't do "providers in AZ" efficiently.
+**Fix path:** Migrate provider-routes to query `provider_profiles` directly. Blocked on: deploy `make-server-8a022548` with KV migration changes (needs Supabase token — see item 12).
 
 ### 5. `src/index.css` at ~16k lines
 All CSS utilities, custom colors, gradients, oklch fallbacks, and dark-mode overrides in one file.
@@ -74,9 +75,12 @@ When `VITE_DAILY_DOMAIN` is missing, `OnDemandTelehealth` shows "Video calling i
 Free plan pauses projects after 7 days inactivity → data loss risk before AACT pilot.
 **Action:** supabase.com/dashboard → your org → Billing → Upgrade to Pro ($25/mo).
 
-### 12. Rotate Supabase access token
-A token was exposed in a session transcript.
-**Action:** https://supabase.com/dashboard/account/tokens → revoke old token → create new one.
+### 12. Rotate Supabase access token + deploy make-server-8a022548
+A token was exposed in a session transcript. The `make-server-8a022548` edge function also needs redeployment to activate KV→Postgres migration (PR #251) and sanitizeForAI fix.
+**Action (two steps):**
+1. https://supabase.com/dashboard/account/tokens → revoke old token → create new one
+2. From repo root: `SUPABASE_ACCESS_TOKEN=<new-token> npx supabase functions deploy make-server-8a022548 --project-ref qpzsvafwcwyrkdolrjbu --no-verify-jwt`
+   OR: add token as GitHub secret `SUPABASE_ACCESS_TOKEN` → Actions tab → "Deploy Edge Functions" workflow → run with `function: make-server-8a022548`
 
 ### 13. ~~Stripe price IDs for Org SKU~~ — NOT NEEDED (RESOLVED)
 The live `make-server-8a022548` org checkout uses **dynamic `price_data`** computed per-seat from the volume ladder and DB `price_per_seat_cents`. No static Stripe price IDs are needed.
@@ -90,17 +94,17 @@ See item 10.
 
 ## AI / product gaps
 
-### 15. AI is reactive, not proactive
-The AI waits for the parent to open chat. The data for proactive nudges exists (behavior logs, streak data).
-**Example feature:** "3 meltdowns logged this week, all ~5pm — want to talk about the dinner transition?"
-**Fix path:** A Supabase cron (pg_cron) or edge function scheduled trigger that queries behavior patterns and sends push notifications via `src/lib/notifications.ts`.
+### 15. AI is reactive, not proactive — RESOLVED 2026-06-12
+`daily-coaching` edge function deployed (v3). Queries `behavior_logs` + `abc_entries` for 7-day patterns before generating tips. Detects time-clustering, antecedent patterns, high frequency. Fires via pg_cron at 12:00 UTC.
+**Setup still needed:** `SELECT cron.schedule(...)` in Supabase SQL editor (see function header comment). Requires pg_cron extension enabled on Pro plan.
 
 ### 16. Memory is session summaries only
 `conversation-memory.ts` stores summaries. No structured child model (sensory profile, known triggers, what's worked).
 **Fix path:** `child_profile` table with structured fields, updated by AI after each session that contains new behavioral data.
 
 ### 17. `sanitizeForAI` was over-filtering legitimate messages
-**Fixed 2026-06-11:** Removed stripping of `<>{}[]` chars and code blocks, removed role-prefix regex that fired on "the school system:". Now only strips LLaMA/Alpaca control tokens. Claude is the real injection defense.
+**Fixed 2026-06-11 (frontend):** `src/lib/sanitize.ts` — removed stripping of `<>{}[]` chars and code blocks.
+**Fixed 2026-06-12 (edge function):** `supabase/functions/make-server-8a022548/sanitize.ts` — same fix applied. Active once make-server-8a022548 is redeployed (blocked on item 12).
 
 ---
 
