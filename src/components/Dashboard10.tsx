@@ -85,6 +85,7 @@ import { getUserBadges, type EarnedBadge } from '../lib/badge-service';
 import { useNudgeEngine } from '../hooks/useNudgeEngine';
 import { subscribeToPush, isPushSupported, getNotificationPermission } from '../lib/push-notifications';
 import { triggerHaptic } from '../lib/haptics';
+import { fireConfetti } from '../lib/confetti';
 
 // Types
 interface ChildProfile {
@@ -554,6 +555,7 @@ export function Dashboard10({
     const milestones = [5, 7, 14, 21, 30, 60, 90];
     if (milestones.includes(streakDays)) {
       setShowStreakCelebration(true);
+      fireConfetti('streak');
       const timer = setTimeout(() => setShowStreakCelebration(false), 5000);
       return () => clearTimeout(timer);
     }
@@ -633,6 +635,7 @@ export function Dashboard10({
     if (wasIncomplete) {
       triggerHaptic('medium');
       setShowTaskCelebration(true);
+      fireConfetti('task');
       setTimeout(() => setShowTaskCelebration(false), 1500);
     }
   };

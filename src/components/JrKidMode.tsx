@@ -24,6 +24,7 @@ import {
   Sparkles,
   Heart
 } from 'lucide-react';
+import { fireConfetti } from '../lib/confetti';
 
 interface ModuleSession {
   module: string;
@@ -112,22 +113,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
   };
 
   const showCelebration = () => {
-    // Create confetti effect
-    if (!prefersReducedMotion) {
-      const celebration = document.createElement('div');
-      celebration.className = 'fixed inset-0 pointer-events-none z-50';
-      celebration.innerHTML = '🎉'.repeat(20);
-      celebration.style.cssText = `
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-        font-size: 2rem;
-        animation: enhanced-confetti 1.5s ease-out;
-      `;
-      document.body.appendChild(celebration);
-      setTimeout(() => document.body.removeChild(celebration), 1500);
-    }
+    fireConfetti('junior');
   };
 
   const redeemReward = () => {
