@@ -69,6 +69,7 @@ import { useBackgroundSync } from "./hooks/useBackgroundSync";
 import { useAccessibilityEnhancements } from "./hooks/useAccessibilityEnhancements";
 import { initTracking } from "./lib/tracking-init";
 import { BREADCRUMB_TRAILS } from "./lib/breadcrumb-trails";
+import { fireConfetti } from "./lib/confetti";
 
 // DEFERRED - Load after first paint
 const SafetyBoundary = lazy(() =>
@@ -2202,6 +2203,7 @@ export default function App() {
     }));
 
     navigateToScreen(getAuthenticatedLandingScreen());
+    setTimeout(() => fireConfetti('goal'), 500);
 
     // Do DB operations in background - don't block the user
     (async () => {
@@ -2376,6 +2378,7 @@ export default function App() {
       tier,
     }));
     navigateToScreen("dashboard");
+    setTimeout(() => fireConfetti('upgrade'), 300);
     // Use utility function for consistent tier display names
     toast.success(
       `Upgraded to ${getTierDisplayName(tier)}! 🚀`,
