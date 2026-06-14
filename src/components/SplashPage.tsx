@@ -177,7 +177,7 @@ export function SplashPage({
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginBottom: '52px',
+              marginBottom: '36px',
             }}
           >
             <img
@@ -191,16 +191,6 @@ export function SplashPage({
               }}
             />
           </motion.div>
-
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            style={{ textAlign: 'center', color: 'rgba(19,47,67,0.50)', fontWeight: 500, fontSize: 'clamp(0.95rem, 2.8vw, 1.05rem)', whiteSpace: 'nowrap', fontFamily: "'Schibsted Grotesk', Manrope, sans-serif", marginBottom: '20px' }}
-          >
-            Gentle guidance. Meaningful progress.
-          </motion.p>
 
           {/* Headline */}
           <motion.h1
