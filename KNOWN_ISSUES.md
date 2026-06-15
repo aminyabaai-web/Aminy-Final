@@ -57,7 +57,8 @@ All screen routing lives in one file. **All 42 screen components are already laz
 ### 8. Daily.co video — needs credentials, API key security fixed 2026-06-11
 When `VITE_DAILY_DOMAIN` is missing, `OnDemandTelehealth` shows "Video calling is being set up."
 **Fixed:** Removed `VITE_DAILY_API_KEY` from `src/lib/daily-config.ts` — API key must be a Supabase secret (`DAILY_API_KEY`), never a `VITE_` var (would expose it in the browser bundle).
-**Owner action:** Sign up at daily.co, add `VITE_DAILY_DOMAIN=<subdomain>` to Netlify env vars, add `DAILY_API_KEY=<key>` to Supabase secrets. Use the prebuilt iframe — don't build custom video UI.
+**Done 2026-06-15:** `VITE_DAILY_DOMAIN=aminyabaai` is set on Netlify (all contexts, via MCP) and committed to `netlify.toml [build.environment]`. Rooms resolve to `https://aminyabaai.daily.co/<room>`.
+**Owner action remaining:** Add `DAILY_API_KEY=<key>` to Supabase secrets (dashboard → Project Settings → Edge Functions → Secrets, or `supabase secrets set DAILY_API_KEY=…`). This is the only piece that can't be set from MCP (no secret-management tool) — it's server-side only and must never be a `VITE_` var. Use the prebuilt iframe — don't build custom video UI.
 
 ### 9. Payer / EVV / Claims dashboards — already gated, not a nav problem
 `payer-dashboard` (`b2gEnabled`), `evv-dashboard` (pilot state), `claims-dashboard` (`b2gEnabled`) are all feature-gated — unreachable by regular users. They render empty states only in E2E smoke tests (via debug `window.__navigateToScreen`).
