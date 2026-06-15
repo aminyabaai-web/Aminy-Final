@@ -311,7 +311,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                   <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
                 </div>
                 {index < arr.length - 1 && (
-                  <div className="flex items-center justify-center pt-5 flex-shrink-0">
+                  <div className="flex items-center justify-center h-16 flex-shrink-0">
                     <ArrowRight className="w-6 h-6 text-primary" />
                   </div>
                 )}
