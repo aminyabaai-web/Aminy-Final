@@ -531,7 +531,7 @@ export function CommunityForYou({
         <button
           key={id}
           onClick={() => setActiveTab(id as typeof activeTab)}
-          className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all ${
             activeTab === id
               ? 'bg-primary text-white shadow-md'
               : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
