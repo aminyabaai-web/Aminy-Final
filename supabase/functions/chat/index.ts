@@ -42,13 +42,16 @@ serve(async (req) => {
         headers: {
           'x-api-key': anthropicKey,
           'anthropic-version': '2023-06-01',
+          'anthropic-beta': 'prompt-caching-2024-07-31',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6',
           max_tokens: max_tokens,
           temperature: temperature,
-          system: systemMessage,
+          // Cache the system prompt — it's ~1,200 tokens sent on every message.
+          // Cached tokens cost 90% less ($0.30/MTok vs $3/MTok input).
+          system: systemMessage ? [{ type: 'text', text: systemMessage, cache_control: { type: 'ephemeral' } }] : undefined,
           messages: conversationMessages,
         }),
       })
@@ -90,7 +93,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4o-mini', // fallback only — 20× cheaper than gpt-4o, quality fine for edge cases
         messages: messages,
         max_tokens: max_tokens,
         temperature: temperature,
