@@ -17771,3 +17771,93 @@ tr:hover td, .hover-row:hover {
 .dark .junior-page-root .text-amber-600 { color: #fcd34d !important; }
 /* Scrollable content area */
 .dark .junior-page-root .flex-1.overflow-y-auto { background: transparent !important; }
+
+/* ============================================================
+   Dark-mode gradient variants — PRECOMPILED (Tailwind v4 has no JIT here)
+   These dark:from/via/to-* classes are authored in 30+ components but were
+   never emitted into the bundle, so they silently no-op and cards rendered
+   their LIGHT gradient under light-forced text → invisible. Generated to
+   mirror the existing compiled light gradient rules. See CLAUDE.md
+   "Tailwind v4 is precompiled".
+   ============================================================ */
+.dark\:from-amber-900\/10:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-amber-900) 10%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-amber-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-amber-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-blue-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-blue-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-blue-900\/30:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-blue-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-green-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-green-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-orange-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-orange-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-purple-800:is(.dark *) { --tw-gradient-from: #6b21a8; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-purple-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-purple-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-red-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-red-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-slate-700:is(.dark *) { --tw-gradient-from: #334155; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-slate-800:is(.dark *) { --tw-gradient-from: #1e293b; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-slate-900:is(.dark *) { --tw-gradient-from: #0f172a; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-slate-950:is(.dark *) { --tw-gradient-from: #020617; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-400:is(.dark *) { --tw-gradient-from: #2dd4bf; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-600:is(.dark *) { --tw-gradient-from: #0d9488; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-teal-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-900\/30:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-teal-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-900\/40:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-teal-900) 40%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-teal-950:is(.dark *) { --tw-gradient-from: #042f2e; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-violet-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-violet-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-violet-900\/30:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-violet-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:from-yellow-900\/20:is(.dark *) { --tw-gradient-from: color-mix(in oklab, var(--color-yellow-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-amber-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-amber-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-blue-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-blue-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-blue-950:is(.dark *) { --tw-gradient-to: #172554; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-cyan-500:is(.dark *) { --tw-gradient-to: #06b6d4; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-cyan-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-cyan-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-cyan-900\/30:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-cyan-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-emerald-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-emerald-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-emerald-900\/30:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-emerald-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-orange-900\/10:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-orange-900) 10%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-orange-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-orange-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-orange-950:is(.dark *) { --tw-gradient-to: #431407; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-pink-900:is(.dark *) { --tw-gradient-to: #831843; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-pink-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-pink-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-purple-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-purple-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-purple-900\/30:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-purple-900) 30%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-red-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-red-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-rose-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-rose-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-slate-600:is(.dark *) { --tw-gradient-to: #475569; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-slate-700:is(.dark *) { --tw-gradient-to: #334155; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-slate-800:is(.dark *) { --tw-gradient-to: #1e293b; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-slate-900:is(.dark *) { --tw-gradient-to: #0f172a; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-slate-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-slate-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-teal-700:is(.dark *) { --tw-gradient-to: #0f766e; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-teal-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-teal-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:to-yellow-900\/20:is(.dark *) { --tw-gradient-to: color-mix(in oklab, var(--color-yellow-900) 20%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.dark\:via-slate-800\/80:is(.dark *) { --tw-gradient-via: color-mix(in oklab, var(--color-slate-800) 80%, transparent); --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-via-stops); }
+.dark\:via-teal-950\/20:is(.dark *) { --tw-gradient-via: color-mix(in oklab, var(--color-teal-950) 20%, transparent); --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-via-stops); }
+
+/* Age badge & other bg-white/85 surfaces — darken so light text stays legible */
+.dark .bg-white\/85 { background-color: #1e293b !important; }
+.dark .bg-white\/75 { background-color: #1e293b !important; }
+.dark .bg-white\/60 { background-color: rgba(30,41,59,0.6) !important; }
+/* Missing compiled dark border */
+.dark\:border-slate-600:is(.dark *) { border-color: #475569 !important; }
+
+/* ============================================================
+   Dark-mode page background — bg-mist / bg-app are the page bg for 100+
+   screens but --aminy-mist was only ever defined light in :root, so every
+   bg-mist page stayed light while the global .dark text override forced text
+   light → invisible. Override the variable in .dark (placed after the :root
+   definition so it wins the cascade). Fixes all bg-mist/bg-app/--color-bg
+   surfaces at once.
+   ============================================================ */
+.dark {
+  --aminy-mist: #0f172a;
+  --aminy-mist-deep: #0b1220;
+}
+
+/* ============================================================
+   Reusable light "hero" welcome card — light mist gradient in light mode,
+   slate gradient in dark mode. Replaces inline white-gradient styles that
+   stayed white in dark mode and hid their (globally light-forced) text.
+   ============================================================ */
+.aminy-hero-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,249,249,0.95), rgba(235,246,250,0.96));
+}
+.dark .aminy-hero-card {
+  background: linear-gradient(135deg, #1e293b 0%, #1e293b 50%, #0f172a 100%) !important;
+}
