@@ -753,8 +753,7 @@ export function Dashboard10({
           1. HEADER & TOP NAVIGATION (20%)
           ======================================== */}
       <header
-        className="sticky top-0 z-20 border-b border-[#E8E4DF]/80 backdrop-blur-xl"
-        style={{ background: 'linear-gradient(135deg, rgba(247,252,252,0.95) 0%, rgba(240,249,249,0.96) 48%, rgba(238,246,250,0.97) 100%)' }}
+        className="dashboard-header-bg sticky top-0 z-20 border-b border-[#E8E4DF]/80 dark:border-slate-700/80 backdrop-blur-xl"
       >
         <div className="max-w-4xl mx-auto px-4 py-4">
           {/* Greeting */}

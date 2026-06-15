@@ -422,10 +422,10 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Coach Office Hours */}
       <div className="p-4 bg-[#EEF4F8] rounded-lg border border-[#C8DDE8]">
         <div className="flex items-center gap-2 mb-2">
-          <Clock className="w-4 h-4 text-blue-600" />
-          <span className="font-medium text-blue-900">Coach Office Hours</span>
+          <Clock className="w-4 h-4 text-blue-600 dark:text-blue-300" />
+          <span className="font-medium text-blue-900 dark:text-blue-200">Coach Office Hours</span>
         </div>
-        <p className="text-sm text-blue-700">
+        <p className="text-sm text-blue-700 dark:text-blue-200">
           Monday-Friday: 9:00 AM - 5:00 PM PST • Response time: Within 24 hours
         </p>
       </div>

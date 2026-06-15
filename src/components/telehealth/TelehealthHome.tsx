@@ -198,10 +198,7 @@ export function TelehealthHome({
   }
 
   return (
-    <div
-      className="min-h-screen bg-mist"
-      style={{ background: 'linear-gradient(180deg, #FAF7F2 0%, #f6faf8 40%, #eef4f8 100%)' }}
-    >
+    <div className="min-h-screen bg-app">
       {/* Header */}
       <header className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/90 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between">
@@ -224,15 +221,12 @@ export function TelehealthHome({
       {/* Content */}
       <div className="px-4 py-6 pb-24 space-y-3 sm:space-y-6">
         {/* Greeting */}
-        <div
-          className="rounded-2xl border border-white/80 p-5 shadow-md"
-          style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.96), rgba(240,249,249,0.95), rgba(235,246,250,0.96))' }}
-        >
-          <div className="inline-flex rounded-full bg-[#6B9080]/10 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-[#6B9080]">
+        <div className="aminy-hero-card rounded-2xl border border-white/80 dark:border-slate-700 p-5 shadow-md">
+          <div className="inline-flex rounded-full bg-[#6B9080]/10 dark:bg-[#6B9080]/25 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-[#6B9080] dark:text-[#8FBCA8]">
             Supported in {userState.toUpperCase()}
           </div>
-          <h2 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-slate-950 sm:text-xl">Hi {userName}!</h2>
-          <p className="mt-1 max-w-xl text-sm leading-6 text-[#5A6B7A]">
+          <h2 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-100 sm:text-xl">Hi {userName}!</h2>
+          <p className="mt-1 max-w-xl text-sm leading-6 text-[#5A6B7A] dark:text-slate-300">
             Find calm support fast. Book expert care, ask Aminy for guidance, or take the next small step without losing momentum.
           </p>
         </div>
