@@ -65,6 +65,14 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   // The 5 main More tabs as mentioned by the user
   const mainMoreItems = [
     {
+      id: 'junior',
+      icon: Sparkles,
+      label: 'Aminy Ease ★',
+      sublabel: "Your child's calm, rewards & transitions mode",
+      destination: 'junior',
+      analytics: 'junior'
+    },
+    {
       id: 'document-vault',
       icon: FileText,
       label: 'Document Vault',
@@ -130,14 +138,6 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
       sublabel: 'Manage alerts and reminders',
       destination: 'settings', // Routes to SettingsPage with notifications section
       analytics: 'notifications'
-    },
-    {
-      id: 'junior',
-      icon: Sparkles,
-      label: 'Aminy Ease',
-      sublabel: 'Calm, rewards, transitions',
-      destination: 'junior', // Routes to junior tab
-      analytics: 'junior'
     }
   ];
 
@@ -193,30 +193,34 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
     }
   };
 
-  const MenuItem = ({ item, isFirst = false }: { item: MoreMenuItem; isFirst?: boolean }) => {
+  const MenuItem = ({ item, isFirst = false, accent = false }: { item: MoreMenuItem; isFirst?: boolean; accent?: boolean }) => {
     const Icon = item.icon;
-    
+
     return (
       <button
         ref={isFirst ? firstItemRef : undefined}
         role="menuitem"
         onClick={() => handleItemClick(item)}
         onKeyDown={(e) => handleKeyDown(e, item)}
-        className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF] dark:border-slate-600 hover:border-[#E8E4DF] dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group"
+        className={`w-full flex items-center justify-between p-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group ${
+          accent
+            ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800 hover:bg-teal-100 dark:hover:bg-teal-900/30'
+            : 'bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-600 hover:border-[#E8E4DF] dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
+        }`}
         aria-label={`Open ${item.label}`}
       >
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
-            <Icon className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" strokeWidth={1.5} />
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${accent ? 'bg-teal-100 dark:bg-teal-800/50' : 'bg-[#F0EDE8] dark:bg-slate-700'}`}>
+            <Icon className={`w-5 h-5 ${accent ? 'text-teal-600 dark:text-teal-300' : 'text-[#5A6B7A] dark:text-slate-300'}`} strokeWidth={1.5} />
           </div>
-          
+
           <div className="text-left">
-            <div className="text-sm text-[#1B2733] dark:text-slate-100">{item.label}</div>
-            <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{item.sublabel}</div>
+            <div className={`text-sm ${accent ? 'text-teal-800 dark:text-teal-200 font-medium' : 'text-[#1B2733] dark:text-slate-100'}`}>{item.label}</div>
+            <div className={`text-xs ${accent ? 'text-teal-600 dark:text-teal-400' : 'text-[#5A6B7A] dark:text-slate-400'}`}>{item.sublabel}</div>
           </div>
         </div>
 
-        <ChevronRight className="w-4 h-4 text-[#8A9BA8] dark:text-slate-400 group-hover:text-[#5A6B7A] dark:group-hover:text-slate-300 transition-colors" />
+        <ChevronRight className={`w-4 h-4 transition-colors ${accent ? 'text-teal-400 dark:text-teal-500 group-hover:text-teal-600 dark:group-hover:text-teal-300' : 'text-[#8A9BA8] dark:text-slate-400 group-hover:text-[#5A6B7A] dark:group-hover:text-slate-300'}`} />
       </button>
     );
   };
@@ -242,7 +246,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
             <h2 className="text-sm text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-3">Main Features</h2>
             <div className="space-y-2">
               {mainMoreItems.map((item, index) => (
-                <MenuItem key={item.id} item={item} isFirst={index === 0} />
+                <MenuItem key={item.id} item={item} isFirst={index === 0} accent={index === 0} />
               ))}
             </div>
           </div>
