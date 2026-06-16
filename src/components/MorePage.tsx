@@ -155,7 +155,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
       icon: Shield,
       label: 'Privacy & Safety',
       sublabel: 'Your data and safety',
-      destination: 'privacy', // Routes to SettingsPage with privacy section
+      destination: 'privacy-policy',
       analytics: 'privacy'
     },
     {
@@ -163,7 +163,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
       icon: FileText,
       label: 'Terms & Policies',
       sublabel: 'Legal information',
-      destination: 'terms', // Opens external terms page
+      destination: 'terms-of-service',
       analytics: 'terms'
     }
   ];
@@ -171,6 +171,15 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   const handleItemClick = (item: MoreMenuItem) => {
     try {
       onAnalytics('more_item_opened', { item: item.analytics });
+      // Some destinations need special handling before they have their own screens
+      if (item.destination === 'support') {
+        window.open('mailto:support@aminy.ai?subject=Aminy%20Support', '_blank');
+        return;
+      }
+      if (item.destination === 'feedback') {
+        window.open('mailto:feedback@aminy.ai?subject=Aminy%20Feedback', '_blank');
+        return;
+      }
       onNavigate(item.destination);
     } catch (error) {
       console.error('Navigation error:', error);

@@ -103,7 +103,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                   Sign In
                 </Button>
               </div>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-6 mt-6 sm:mt-8 text-xs sm:text-sm text-neutral-600 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 sm:gap-x-8 mt-6 sm:mt-8 text-xs sm:text-sm text-neutral-600 dark:text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
                   Free to join
@@ -311,7 +311,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                   <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
                 </div>
                 {index < arr.length - 1 && (
-                  <div className="flex items-center justify-center pt-5 flex-shrink-0">
+                  <div className="flex items-center justify-center h-16 flex-shrink-0">
                     <ArrowRight className="w-6 h-6 text-primary" />
                   </div>
                 )}

@@ -217,7 +217,7 @@ async function handleAppointments(
 
     // Generate video room name if video format
     const videoRoomName = visitFormat === 'video' ? `aminy-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` : null;
-    const videoRoomUrl = videoRoomName ? `https://aminy.daily.co/${videoRoomName}` : null;
+    const videoRoomUrl = videoRoomName ? `https://aminyabaai.daily.co/${videoRoomName}` : null;
 
     // Create appointment in database - matching schema exactly
     const { data: appointment, error } = await supabase

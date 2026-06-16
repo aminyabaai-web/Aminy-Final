@@ -17,7 +17,7 @@
   to = "/index.html"
   status = 200
 
-# Security headers
+# Security headers + no-cache for all HTML routes (SPA: index.html is served for every path)
 [[headers]]
   for = "/*"
   [headers.values]
@@ -28,6 +28,7 @@
     Permissions-Policy = "camera=(self), microphone=(self), geolocation=()"
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://api.anthropic.com https://sentry.io https://*.sentry.io https://*.daily.co wss://*.daily.co; frame-src https://js.stripe.com https://hooks.stripe.com https://*.daily.co; media-src 'self' blob: https://*.daily.co; worker-src 'self' blob:"
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Cache-Control = "no-cache, no-store, must-revalidate"
 
 # Cache static assets aggressively
 [[headers]]

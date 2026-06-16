@@ -4221,6 +4221,7 @@ export default function App() {
                         childName={userData.childName || undefined}
                         initialPrompt={bevelInitialPrompt}
                         userTier={effectiveUserTier}
+                        onUpgrade={() => { setBevelChatOpen(false); navigateToScreen('paywall'); }}
                       />
                     </Suspense>
                   )}

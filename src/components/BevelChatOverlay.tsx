@@ -147,6 +147,7 @@ interface Message {
   timestamp: Date;
   chips?: string[];
   imageUrl?: string;
+  isUpgradePrompt?: boolean;
 }
 
 interface ChatSession {
@@ -304,6 +305,21 @@ interface BevelChatOverlayProps {
   childName?: string;
   initialPrompt?: string;
   userTier?: string;
+  onUpgrade?: () => void;
+}
+
+const FREE_DAILY_LIMIT = 3;
+
+function getFreeDailyKey(userId: string) {
+  return `aminy_ai_daily_${userId}_${new Date().toISOString().slice(0, 10)}`;
+}
+function getFreeDailyCount(userId: string): number {
+  return parseInt(localStorage.getItem(getFreeDailyKey(userId)) || '0', 10);
+}
+function incrementFreeDailyCount(userId: string): number {
+  const next = getFreeDailyCount(userId) + 1;
+  localStorage.setItem(getFreeDailyKey(userId), String(next));
+  return next;
 }
 
 export function BevelChatOverlay({
@@ -312,7 +328,9 @@ export function BevelChatOverlay({
   userId,
   currentPath,
   childName: propChildName,
-  initialPrompt
+  initialPrompt,
+  userTier,
+  onUpgrade,
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -616,6 +634,25 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
   const sendMessage = useCallback(async (text: string, imageData?: { name: string; dataUrl: string }) => {
     if (!text.trim() || isLoading) return;
+
+    // Free tier daily limit gate
+    const isFree = !userTier || userTier === 'free';
+    if (isFree) {
+      const used = getFreeDailyCount(userId);
+      if (used >= FREE_DAILY_LIMIT) {
+        const limitMsg = {
+          id: Date.now().toString() + '-limit',
+          role: 'assistant' as const,
+          content: `You've used your ${FREE_DAILY_LIMIT} free messages for today 💛\n\nUpgrade to **Core** for unlimited AI chat, Junior mode, and full memory — starting at $14.99/mo with a 7-day free trial.`,
+          timestamp: new Date(),
+          isUpgradePrompt: true,
+        };
+        setMessages(prev => [...prev, limitMsg]);
+        setInput('');
+        return;
+      }
+      incrementFreeDailyCount(userId);
+    }
 
     const img = imageData || attachedImage;
     setAttachedImage(null);
@@ -1222,15 +1259,26 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         )}
                         <div className="px-4 py-3">
                           {msg.role === 'assistant' ? (
-                            parseAIResponseParts(msg.content).map((part, pi) => {
-                              if (part.type === 'chart')    return <AIChart key={pi} spec={part.content} />;
-                              if (part.type === 'calendar') return (
-                                <div key={pi} className="my-2">
-                                  <AddToCalendarButtons appointment={part.content} variant="inline" label="Add to your calendar" />
-                                </div>
-                              );
-                              return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;
-                            })
+                            <>
+                              {parseAIResponseParts(msg.content).map((part, pi) => {
+                                if (part.type === 'chart')    return <AIChart key={pi} spec={part.content} />;
+                                if (part.type === 'calendar') return (
+                                  <div key={pi} className="my-2">
+                                    <AddToCalendarButtons appointment={part.content} variant="inline" label="Add to your calendar" />
+                                  </div>
+                                );
+                                return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;
+                              })}
+                              {msg.isUpgradePrompt && (
+                                <button
+                                  onClick={() => { onUpgrade?.(); onClose(); }}
+                                  className="mt-3 w-full py-2.5 px-4 rounded-xl text-sm font-semibold text-white"
+                                  style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                                >
+                                  Start 7-day free trial →
+                                </button>
+                              )}
+                            </>
                           ) : (
                             <p className="whitespace-pre-wrap">{msg.content}</p>
                           )}

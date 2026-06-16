@@ -37,6 +37,15 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [analytics, setAnalytics] = useState(true);
   const [marketing, setMarketing] = useState(false);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+
+  useEffect(() => {
+    const obs = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    obs.observe(document.documentElement, { attributeFilter: ['class'] });
+    return () => obs.disconnect();
+  }, []);
   // Offset the banner above the bottom nav when present, so the two fixed-bottom
   // elements never overlap (the nav tabs would otherwise be covered by this z-9999
   // banner if a nav screen renders before consent is given).
@@ -111,7 +120,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
             overflow: 'hidden',
             transition: 'max-height 0.25s ease',
           }}
-          className="bg-slate-800/95 backdrop-blur-md px-4 py-3 border-b border-slate-700 space-y-2"
+          className={`backdrop-blur-md px-4 py-3 border-b space-y-2 ${isDark ? 'bg-slate-800/95 border-slate-700' : 'bg-gray-50/95 border-gray-200'}`}
         >
           {[
             { label: 'Essential', desc: 'Auth, security, session — always on', locked: true },
@@ -120,8 +129,8 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           ].map(item => (
             <div key={item.label} className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-medium text-slate-200">{item.label}</p>
-                <p className="text-[10px] text-[#5A6B7A]">{item.desc}</p>
+                <p className={`text-[11px] font-medium ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>{item.label}</p>
+                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{item.desc}</p>
               </div>
               {item.locked
                 ? <span className="text-[10px] font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>
@@ -132,9 +141,9 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
         </div>
       )}
 
-      <div className="bg-slate-900/95 backdrop-blur-md px-4 py-2.5 flex items-center gap-3" style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.3)', flexWrap: 'wrap', rowGap: '8px' }}>
+      <div className={`backdrop-blur-md px-4 py-2.5 flex items-center gap-3 ${isDark ? 'bg-slate-900/95' : 'bg-white/95'}`} style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.15)', flexWrap: 'wrap', rowGap: '8px' }}>
         <Cookie className="w-3.5 h-3.5 flex-shrink-0 text-primary" />
-        <p className="flex-1 text-[11px] leading-4 text-slate-300" style={{ minWidth: '150px' }}>
+        <p className={`flex-1 text-[11px] leading-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{ minWidth: '150px' }}>
           We use cookies for functionality &amp; analytics.
         </p>
         <div className="flex items-center gap-1.5 flex-shrink-0" style={{ marginLeft: 'auto' }}>
@@ -147,7 +156,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           <button
             onClick={handleDecline}
             style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
-            className="rounded-md text-[11px] font-medium text-slate-300 border border-slate-700 hover:border-slate-500 transition-colors"
+            className={`rounded-md text-[11px] font-medium border transition-colors ${isDark ? 'text-slate-300 border-slate-700 hover:border-slate-500' : 'text-gray-600 border-gray-300 hover:border-gray-400'}`}
           >
             Essential only
           </button>
