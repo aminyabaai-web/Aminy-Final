@@ -63,15 +63,16 @@ const PAYER_TIMELINES: PayerTimeline[] = [
   },
   {
     payer: 'UnitedHealthcare',
-    aliases: ['united', 'uhc', 'unitedhealthcare', 'optum'],
+    aliases: ['united', 'uhc', 'unitedhealthcare', 'optum', 'uhccp'],
     assessmentNeedsPA: true,
     treatmentNeedsPA: true,
     estimatedDays: 5,
     phases: [
-      { label: 'Assessment + treatment auth', days: '3–5 business days' },
+      { label: 'Step 1 — Assessment auth (Optum 2-step)', days: '3–5 business days' },
+      { label: 'Step 2 — Treatment auth (after assessment)', days: '3–5 business days' },
     ],
     icdRequired: ['F84.0'],
-    notes: 'UHC has fastest turnaround but increased denial rate. Document medical necessity thoroughly.',
+    notes: 'UHC uses a 2-step authorization: assessment auth first, then treatment. Diagnostic eval must be within 5 years. Increased denial rate — document thoroughly.',
     cobEligible: false,
   },
   {
@@ -98,8 +99,8 @@ const PAYER_TIMELINES: PayerTimeline[] = [
       { label: 'Assessment (97151/97152) — no PA required', days: 'Start immediately' },
       { label: 'Treatment auth via MCO', days: '~5 business days' },
     ],
-    icdRequired: ['F84.0'],
-    notes: 'Assessment codes require no PA. Treatment PA submitted by ABA provider, not physician.',
+    icdRequired: ['F84.0', 'F84.3', 'F84.5', 'F84.8', 'F84.9'],
+    notes: 'Accepts F84.0–F84.9 range (per AMPM 320-S). Assessment codes require no PA. Treatment PA submitted by ABA provider, not physician.',
     cobEligible: true,
   },
 ];
