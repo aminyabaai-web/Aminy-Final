@@ -1,10 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import {
   calculateAppointmentFinancials,
+  calculateAppointmentSettlementBreakdown,
+  calculateScreenerBilling,
+  cashPayPriceForProviderNet,
+  cashPriceMatchingInsuredNet,
   createProviderSettlement,
   getDisplayPricingForProvider,
   getStripeVisitPrices,
   PARTNER_OPERATIONS_FEES_CENTS,
+  PLATFORM_TAKE_RATE,
+  SCREENER_CPT,
+  SCREENER_MAX_UNITS_PER_DAY,
 } from './telehealth-economics';
 
 describe('telehealth economics', () => {
@@ -175,5 +182,92 @@ describe('telehealth economics', () => {
   it('keeps partner operations fees explicit', () => {
     expect(PARTNER_OPERATIONS_FEES_CENTS.priorAuthPacket).toBe(4500);
     expect(PARTNER_OPERATIONS_FEES_CENTS.claimReadyValidatedVisit).toBe(1200);
+  });
+
+  describe('canonical platform take rates', () => {
+    it('pins cash 25% / insured 10% / aact 5%', () => {
+      expect(PLATFORM_TAKE_RATE.cashPay).toBe(0.25);
+      expect(PLATFORM_TAKE_RATE.insured).toBe(0.1);
+      expect(PLATFORM_TAKE_RATE.aactPilot).toBe(0.05);
+    });
+  });
+
+  describe('cash-pay pricing principle: provider nets same-or-better than insured', () => {
+    it('prices cash so the provider net meets the target at the 25% take', () => {
+      const r = cashPayPriceForProviderNet({ targetProviderNetCents: 12960 }); // $129.60 insured net
+      expect(r.takeRate).toBe(0.25);
+      // provider must net AT LEAST the target after integer-cent rounding
+      expect(r.providerNetCents).toBeGreaterThanOrEqual(12960);
+      // and the price = net + platform fee, exactly
+      expect(r.priceCents).toBe(r.providerNetCents + r.platformFeeCents);
+    });
+
+    it('matches a 90837 ($144) insured net so cash never pays the provider less', () => {
+      const r = cashPriceMatchingInsuredNet({ insuredReimbursementCents: 14400 });
+      // insured net = 144 − 10% = $129.60
+      expect(r.insuredProviderNetCents).toBe(12960);
+      // cash provider net is same-or-better despite Aminy's higher 25% cash take
+      expect(r.cashProviderNetCents).toBeGreaterThanOrEqual(r.insuredProviderNetCents);
+      // and the family pays a premium (cash price > insured reimbursement)
+      expect(r.cashPriceCents).toBeGreaterThan(14400);
+    });
+
+    it('handles a zero target without dividing by anything silly', () => {
+      const r = cashPayPriceForProviderNet({ targetProviderNetCents: 0 });
+      expect(r.priceCents).toBe(0);
+      expect(r.providerNetCents).toBe(0);
+    });
+  });
+
+  describe('screener billing (CPT 96127) — Aminy keeps its insured take', () => {
+    it('bills the screener CPT and keeps 10% on insurance', () => {
+      const r = calculateScreenerBilling({ units: 1 });
+      expect(r.cptCode).toBe(SCREENER_CPT);
+      expect(r.units).toBe(1);
+      expect(r.platformFeeCents).toBe(Math.round(r.reimbursementCents * PLATFORM_TAKE_RATE.insured));
+      expect(r.providerPayoutCents).toBe(r.reimbursementCents - r.platformFeeCents);
+    });
+
+    it('PHQ-9 + GAD-7 = 2 units, scaling the reimbursement', () => {
+      const one = calculateScreenerBilling({ units: 1 });
+      const two = calculateScreenerBilling({ units: 2 });
+      expect(two.reimbursementCents).toBe(one.reimbursementCents * 2);
+    });
+
+    it('caps at the payer daily unit limit', () => {
+      const r = calculateScreenerBilling({ units: 99 });
+      expect(r.units).toBe(SCREENER_MAX_UNITS_PER_DAY);
+    });
+  });
+
+  describe('provider no-show settlement — family never charged, provider earns $0', () => {
+    it('zeroes every line regardless of rail', () => {
+      const cashFinancials = calculateAppointmentFinancials({
+        rail: 'cash_pay_direct',
+        visitClass: 'standard_session',
+      });
+      const r = calculateAppointmentSettlementBreakdown({
+        financials: cashFinancials,
+        outcome: 'provider_no_show',
+      });
+      expect(r.appointmentStatus).toBe('provider_no_show');
+      expect(r.memberChargeCents).toBe(0);
+      expect(r.providerPayoutCents).toBe(0);
+      expect(r.platformFeeCents).toBe(0);
+    });
+
+    it('does not bill a partner visit fee on the insured rail', () => {
+      const partnerFinancials = calculateAppointmentFinancials({
+        rail: 'insured_partner_billed',
+        visitClass: 'standard_session',
+      });
+      const r = calculateAppointmentSettlementBreakdown({
+        financials: partnerFinancials,
+        outcome: 'provider_no_show',
+      });
+      expect(r.appointmentStatus).toBe('provider_no_show');
+      expect(r.partnerVisitFeeCents).toBeUndefined();
+      expect(r.platformFeeCents).toBe(0);
+    });
   });
 });

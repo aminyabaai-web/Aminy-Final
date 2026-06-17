@@ -17,6 +17,7 @@ export type AppointmentLifecycleStatus =
   | 'refunded'
   | 'failed_verification'
   | 'no_show'
+  | 'provider_no_show'
   | 'partner_followup_required';
 
 export type AppointmentPaymentStatus = 'pending' | 'completed' | 'refunded' | 'failed';
@@ -50,6 +51,8 @@ const LEGACY_STATUS_MAP: Record<string, AppointmentLifecycleStatus> = {
   'failed-verification': 'failed_verification',
   'no-show': 'no_show',
   no_show: 'no_show',
+  'provider-no-show': 'provider_no_show',
+  provider_no_show: 'provider_no_show',
   rescheduled: 'confirmed',
   partner_followup_required: 'partner_followup_required',
 };
@@ -57,8 +60,8 @@ const LEGACY_STATUS_MAP: Record<string, AppointmentLifecycleStatus> = {
 const ALLOWED_TRANSITIONS: Record<AppointmentLifecycleStatus, AppointmentLifecycleStatus[]> = {
   draft: ['pending_payment_or_verification', 'confirmed', 'cancelled'],
   pending_payment_or_verification: ['confirmed', 'failed_verification', 'cancelled'],
-  confirmed: ['ready_to_join', 'in_progress', 'cancelled', 'no_show', 'partner_followup_required'],
-  ready_to_join: ['in_progress', 'cancelled', 'no_show', 'partner_followup_required'],
+  confirmed: ['ready_to_join', 'in_progress', 'cancelled', 'no_show', 'provider_no_show', 'partner_followup_required'],
+  ready_to_join: ['in_progress', 'cancelled', 'no_show', 'provider_no_show', 'partner_followup_required'],
   in_progress: ['completed', 'cancelled', 'partner_followup_required'],
   completed: ['settled', 'partner_followup_required'],
   settled: [],
@@ -66,6 +69,10 @@ const ALLOWED_TRANSITIONS: Record<AppointmentLifecycleStatus, AppointmentLifecyc
   refunded: [],
   failed_verification: [],
   no_show: ['settled'],
+  // Provider no-show: family is never charged. Recovery = reschedule with the
+  // same provider (→ confirmed), reassign to a new provider (→ cancelled, a
+  // fresh appointment is created), or the family drops (→ cancelled).
+  provider_no_show: ['confirmed', 'cancelled'],
   partner_followup_required: ['confirmed', 'ready_to_join', 'settled', 'cancelled'],
 };
 
@@ -106,7 +113,7 @@ export function isActiveAppointmentStatus(status?: string | null): boolean {
 
 export function isTerminalAppointmentStatus(status?: string | null): boolean {
   const normalized = normalizeAppointmentLifecycleStatus(status);
-  return ['settled', 'refunded', 'cancelled', 'failed_verification', 'no_show'].includes(normalized);
+  return ['settled', 'refunded', 'cancelled', 'failed_verification', 'no_show', 'provider_no_show'].includes(normalized);
 }
 
 export function deriveAppointmentLifecycleOutcome(options: {
@@ -135,6 +142,16 @@ export function deriveAppointmentLifecycleOutcome(options: {
       status,
       paymentStatus: paymentStatus === 'completed' ? 'refunded' : paymentStatus,
       settlementStatus: paymentStatus === 'completed' ? 'settled' : 'blocked',
+    };
+  }
+
+  // Provider no-show: the family is fully refunded (or never charged) and the
+  // provider earns nothing. Nothing to settle — recovery happens via rebooking.
+  if (status === 'provider_no_show') {
+    return {
+      status,
+      paymentStatus: paymentStatus === 'completed' ? 'refunded' : paymentStatus,
+      settlementStatus: 'pending',
     };
   }
 
@@ -170,6 +187,8 @@ export function getStatusLabel(status?: string | null): string {
       return 'Verification Failed';
     case 'no_show':
       return 'No Show';
+    case 'provider_no_show':
+      return 'Provider No-Show';
     case 'partner_followup_required':
       return 'Partner Follow-up Required';
     default:
