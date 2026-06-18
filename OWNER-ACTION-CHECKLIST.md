@@ -62,7 +62,8 @@ This activates: subscription checkout, tier upgrades, telehealth payments, org b
 
 ### 7. Register Daily.co Webhook
 - Go to: daily.co Dashboard → Developers → Webhooks → Add webhook
-- URL: `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548/daily-webhook`
+- URL: `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/daily-webhook`
+  _(Note: deployed as a standalone function `daily-webhook` — not a sub-route of make-server-8a022548)_
 - Events: `participant-joined`, `meeting-ended`
 - Copy the shared secret → add to Supabase secrets as `DAILY_WEBHOOK_SECRET`
 
