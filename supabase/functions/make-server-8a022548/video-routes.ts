@@ -187,11 +187,13 @@ export async function getMeetingToken(req: Request): Promise<Response> {
     // Token expires in 2 hours
     const expiryTime = Math.floor(Date.now() / 1000) + 7200;
 
-    // Create meeting token via Daily API
+    // Create meeting token via Daily API.
+    // Provider tokens carry "provider:<userId>" as user_id so the Daily.co
+    // participant-joined webhook can detect provider arrival for no-show tracking.
     const tokenResponse = await dailyRequest('/meeting-tokens', 'POST', {
       properties: {
         room_name: roomName,
-        user_id: userId,
+        user_id: isProvider ? `provider:${userId}` : userId,
         user_name: userName,
         exp: expiryTime,
         is_owner: isProvider, // Providers get owner privileges
