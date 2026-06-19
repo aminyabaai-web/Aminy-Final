@@ -212,6 +212,38 @@ export const DEFAULT_CONCERNS: Concern[] = [
     recommendedProviderRoles: ['parent-coach', 'bcba'],
     recommendedVisitType: 'consult',
     urgencyLevel: 'routine'
+  },
+
+  // Additional bridging entries: therapy + ABA integration
+  {
+    id: 'child-depression-mood',
+    name: 'Child depression / mood',
+    description: 'Persistent sadness, withdrawal, or mood changes in your child',
+    category: 'most-common',
+    icon: '💙',
+    recommendedProviderRoles: ['therapist'],
+    recommendedVisitType: 'deep-review',
+    urgencyLevel: 'soon'
+  },
+  {
+    id: 'autism-anxiety-cooccurring',
+    name: 'Autism + anxiety (co-occurring)',
+    description: 'Managing anxiety alongside an autism diagnosis',
+    category: 'autism-neurodivergence',
+    icon: '🧩',
+    recommendedProviderRoles: ['therapist', 'bcba'],
+    recommendedVisitType: 'deep-review',
+    urgencyLevel: 'soon'
+  },
+  {
+    id: 'caregiver-anxiety-depression',
+    name: 'Caregiver anxiety / depression',
+    description: 'Support for your own mental health as a caregiver',
+    category: 'caregiver-family',
+    icon: '🤲',
+    recommendedProviderRoles: ['therapist'],
+    recommendedVisitType: 'consult',
+    urgencyLevel: 'routine'
   }
 ];
 

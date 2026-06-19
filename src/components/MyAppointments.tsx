@@ -36,6 +36,7 @@ import {
 import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import { EmptyState } from './EmptyState';
+import { ProviderNoShowRecovery } from './ProviderNoShowRecovery';
 
 // Types
 export interface Appointment {
@@ -50,7 +51,7 @@ export interface Appointment {
   scheduledAt: Date;
   duration: number; // minutes
   sessionType: string;
-  status: 'upcoming' | 'in-progress' | 'completed' | 'cancelled' | 'no-show';
+  status: 'upcoming' | 'in-progress' | 'completed' | 'cancelled' | 'no-show' | 'provider-no-show';
   visitType: 'video' | 'phone' | 'in-person';
   videoCallUrl?: string;
   concern?: string;
@@ -287,6 +288,7 @@ function StatusBadge({ status }: { status: Appointment['status'] }) {
     completed: 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]',
     cancelled: 'bg-red-50 text-red-600 border-red-200',
     'no-show': 'bg-amber-50 text-amber-600 border-amber-200',
+    'provider-no-show': 'bg-rose-50 text-rose-600 border-rose-200',
   };
 
   const labels = {
@@ -295,6 +297,7 @@ function StatusBadge({ status }: { status: Appointment['status'] }) {
     completed: 'Completed',
     cancelled: 'Cancelled',
     'no-show': 'No Show',
+    'provider-no-show': 'Provider No-Show',
   };
 
   return (
@@ -382,6 +385,19 @@ function AppointmentCard({
           <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
             <p className="text-xs font-medium text-[#5A6B7A] mb-1">Session Notes</p>
             <p className="text-sm text-[#3A4A57]">{appointment.sessionNotes}</p>
+          </div>
+        )}
+
+        {/* Provider no-show recovery — apology + reschedule/reassign. Family is never charged. */}
+        {appointment.status === 'provider-no-show' && (
+          <div className="mt-3">
+            <ProviderNoShowRecovery
+              appointmentId={appointment.id}
+              providerName={appointment.provider.name}
+              serviceLabel={appointment.sessionType}
+              onRescheduleSame={() => onReschedule?.(appointment)}
+              onReassign={() => onBookAgain?.(appointment)}
+            />
           </div>
         )}
       </div>
@@ -509,7 +525,9 @@ export function MyAppointments({
   });
 
   const upcomingAppointments = appointments_
-    .filter(a => a.status === 'upcoming' || a.status === 'in-progress')
+    // provider-no-show needs immediate family action (reschedule/reassign), so it
+    // surfaces in the actionable tab rather than being buried in past history.
+    .filter(a => a.status === 'upcoming' || a.status === 'in-progress' || a.status === 'provider-no-show')
     .sort((a, b) => a.scheduledAt.getTime() - b.scheduledAt.getTime());
 
   const pastAppointments = appointments_

@@ -108,9 +108,21 @@ _Last updated 2026-06-05. Deep-dive audit by Claude Code. Companion to HANDOFF.m
 ---
 
 ## Marketplace Economics
-- `PLATFORM_FEE_RATES`: cash_pay 25% / insured 10% / aact_pilot 5% (cash-pay lowered from 35% June 2026 — competitive for solo BCBAs, still strong margin). Provider payout is fixed; platform take = remainder.
+- **Canonical take rates** live in `PLATFORM_TAKE_RATE` (`telehealth-economics.ts`); `stripe-connect.ts` `PLATFORM_FEE_RATES` imports them (single source of truth, drift-guarded): cash_pay 25% / insured 10% / aact_pilot 5%.
 - **Session discounts are PLATFORM-ABSORBED** (provider always paid full) and **cash-pay ONLY**.
 - Worked example: Standard $149 session, provider payout $95. Family Plan 30% discount → family pays $106.92, platform keeps $11.92 (≥ $5 floor), provider gets $95.
+
+### Cash-pay pricing PRINCIPLE (owner decision, June 2026)
+- **We keep a HIGHER take on cash (25%) than insured (10%) — and that's fine — because we price cash sessions so the provider nets the SAME OR BETTER than they would on the equivalent insured session.** The patient pays a modest convenience premium; the provider is never worse off choosing cash, so there's no reason for a provider to balk at the 25%.
+- Helper: `cashPayPriceForProviderNet()` / `cashPriceMatchingInsuredNet()` — given an insured reimbursement, returns the cash price that floors the provider's net at their insured net.
+- Why 25% (not 20%): on cash there's no insurance spread to earn from, so the take IS our revenue; we generate the demand + run the whole funnel; and provider acceptance is solved by the pricing principle (not by undercutting the take). Competitive noise vs. Headway (~0% cash) / Grow (5% cash) is a non-issue — those are insurance-spread businesses using cash as a loss-leader.
+- **Screeners (CPT 96127 — PHQ-9/PHQ-A/GAD-7):** for **insured** patients Aminy bills 96127 (up to 4 units/day) and **keeps its insured-rail 10% take**; remainder to the supervising provider (`calculateScreenerBilling()`). For **cash** patients the screener is bundled into the visit price (not billed separately).
+
+### Provider no-show policy (owner decision, June 2026)
+- **We do NOT pay families a cash credit for a provider no-show** (we can't absorb provider failures as cash). Instead: a fast, accountable recovery flow.
+- Flow (`provider-no-show.ts` + `ProviderNoShowRecovery.tsx`): after a 10-min join grace window the session is flagged `provider_no_show` → family gets a sincere apology + one-tap **reschedule (priority slot)** or **reassign (new provider)**; the provider is **copied** on the apology; if the provider doesn't respond within 30 min we auto-offer reassignment so the family is never stuck.
+- Family is **never charged**; provider earns **$0** on a no-show (`calculateAppointmentSettlementBreakdown` zeroes every line for `provider_no_show`).
+- **Repeat offenders escalate** on a rolling 90-day window: 1 = warning (private nudge, still matchable) → 2 = probation (deprioritized in matching + ops check-in) → 3+ = suspended (removed from matching pending review). Tracked in `provider_no_show_events`.
 
 ---
 
@@ -137,6 +149,9 @@ For investors, state each lane's CAC, ARPU, gross margin, and stage:
 Say: *"We have a working prototype partnership framework and active conversations with AACT/Rise. The deal is not signed. Our go-to-market does NOT depend on it — we have a path to $300K MRR with independent providers and direct B2C before any partner deal closes."*
 
 ---
+
+## Clinical / advisory arrangements
+- **Dr. Melmed (retired):** structured as a **management / program-development agreement with the owner — NOT a referral or per-patient fee arrangement.** He helps develop the clinical program (diagnosis pathway, protocols, screening + measurement-based-care design); he does **not** perform the appointments. This deliberately avoids Anti-Kickback Statute (AKS) exposure that a referral/revenue-per-patient split with a diagnosing physician would create, especially where downstream care is AHCCCS/Medicaid-billed. Compensation = flat management fee for program-development work (put in a written agreement; have counsel review before signing).
 
 ## Open decisions / tasks
 - (#11) Practice-in-a-box → reframed to demand/engagement/utilization layer; gated on a real AACT deal.

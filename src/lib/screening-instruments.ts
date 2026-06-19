@@ -22,7 +22,7 @@ import { syncEncryptedStorage } from './security/encrypted-storage';
 // TYPES
 // ============================================
 
-export type ScreeningType = 'mchat' | 'vanderbilt' | 'scared' | 'phq-a' | 'psc' | 'csbs';
+export type ScreeningType = 'mchat' | 'vanderbilt' | 'scared' | 'phq-a' | 'phq-9' | 'psc' | 'csbs';
 
 export type RiskLevel = 'low' | 'moderate' | 'high';
 
@@ -318,6 +318,69 @@ export const SCREENING_INSTRUMENTS: Record<ScreeningType, ScreeningInstrument> =
     score: () => ({ total: 0, risk: 'low' as RiskLevel }),
     interpret: () => ({ summary: 'Coming soon', nextSteps: [], providers: [] }),
   },
+  'phq-9': {
+    id: 'phq-9',
+    name: 'PHQ-9',
+    shortName: 'Caregiver Wellbeing',
+    description: 'Patient Health Questionnaire-9 — the gold-standard adult depression screener. For caregivers and parents.',
+    screenFor: 'Caregiver Depression',
+    ageRange: { min: 216, max: 1200 },
+    estimatedMinutes: 3,
+    questions: [
+      { id: 'p1', text: 'Little interest or pleasure in doing things?' },
+      { id: 'p2', text: 'Feeling down, depressed, or hopeless?' },
+      { id: 'p3', text: 'Trouble falling or staying asleep, or sleeping too much?' },
+      { id: 'p4', text: 'Feeling tired or having little energy?' },
+      { id: 'p5', text: 'Poor appetite or overeating?' },
+      { id: 'p6', text: 'Feeling bad about yourself — or that you\'ve let your family down?' },
+      { id: 'p7', text: 'Trouble concentrating on things like reading or watching TV?' },
+      { id: 'p8', text: 'Moving or speaking slowly — or being unusually fidgety or restless?' },
+      { id: 'p9', text: 'Thoughts that you would be better off dead, or of hurting yourself?', helpText: 'If yes, please reach out to 988 (Suicide & Crisis Lifeline) or tell your care team.' },
+    ],
+    score: (answers: Record<string, boolean>) => {
+      let total = 0;
+      for (const key of Object.keys(answers)) {
+        if (answers[key]) total++;
+      }
+      const risk: RiskLevel = total >= 5 ? (total >= 10 ? 'high' : 'moderate') : 'low';
+      return { total, risk };
+    },
+    interpret: (score: number, risk: RiskLevel) => {
+      if (risk === 'low') {
+        return {
+          summary: `Your score (${score}/9) suggests minimal depressive symptoms. Caregiving for a neurodivergent child is demanding — checking in with yourself matters.`,
+          nextSteps: [
+            'Continue monitoring your wellbeing',
+            'Connect with Aminy\'s parent support community',
+            'Explore respite care options if you need a break',
+          ],
+          providers: ['Parent Coach'],
+        };
+      }
+      if (risk === 'moderate') {
+        return {
+          summary: `Your score (${score}/9) suggests some depressive symptoms that are worth addressing. Many autism parents experience this — you\'re not alone, and support is available.`,
+          nextSteps: [
+            'Consider speaking with a therapist who works with caregivers',
+            'Talk to your primary care doctor about how you\'re feeling',
+            'Look into respite services to get regular breaks',
+            'Connect with other autism families for peer support',
+          ],
+          providers: ['Therapist (LCSW/LPC)', 'Primary Care Provider'],
+        };
+      }
+      return {
+        summary: `Your score (${score}/9) indicates significant depressive symptoms. Please reach out for support — taking care of yourself is essential to caring for your child.`,
+        nextSteps: [
+          'Contact a mental health professional as soon as possible',
+          'If you\'re in crisis, call or text 988 (Suicide & Crisis Lifeline)',
+          'Talk to your doctor this week',
+          'Ask a trusted person for help with caregiving responsibilities right now',
+        ],
+        providers: ['Therapist (LCSW/LPC)', 'Psychiatrist', 'Primary Care Provider'],
+      };
+    },
+  },
   csbs: {
     id: 'csbs',
     name: 'CSBS DP',
@@ -375,6 +438,12 @@ export const CONCERN_ROUTES: ConcernRoute[] = [
     concern: 'Behavioral Concerns',
     keywords: ['behavior', 'meltdown', 'aggression', 'tantrum', 'defiant', 'oppositional', 'hitting', 'biting'],
     recommendedScreeners: ['psc'],
+  },
+  {
+    concern: 'Caregiver / Parent Mental Health',
+    keywords: ['burnout', 'overwhelmed', 'exhausted', 'anxious', 'depressed', 'stress', 'caregiver', 'parent mental health', 'my anxiety', 'my depression', 'myself', 'i need help'],
+    recommendedScreeners: ['phq-9'],
+    urgencyNote: 'Your mental health matters as much as your child\'s. Taking care of yourself makes you a better caregiver.',
   },
 ];
 

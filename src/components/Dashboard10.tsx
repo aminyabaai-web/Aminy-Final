@@ -1126,15 +1126,15 @@ export function Dashboard10({
             </div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
-                <p className="text-2xl font-bold text-[#2A7D99]">{dashboardData.routineAdherence}%</p>
+                <p className="text-2xl font-bold text-[#2A7D99] dark:text-teal-300">{dashboardData.routineAdherence}%</p>
                 <p className="text-sm text-muted-foreground">Routine</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-amber-600">{dashboardData.streak || streakDays}</p>
+                <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{dashboardData.streak || streakDays}</p>
                 <p className="text-sm text-muted-foreground">Day Streak</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {dashboardData.activeGoals?.filter(g => g.progress >= 100).length || 0}/{dashboardData.activeGoals?.length || 0}
                 </p>
                 <p className="text-sm text-muted-foreground">Goals Met</p>
@@ -1212,7 +1212,7 @@ export function Dashboard10({
                 {currentRoutine.icon}
                 {currentRoutine.label}
               </h2>
-              <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-300">
                 {completedTasks}/{totalTasks} complete
               </span>
             </div>
@@ -1239,10 +1239,10 @@ export function Dashboard10({
                     <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#1B2733] dark:text-white'}`}>
                       {task.title}
                     </div>
-                    <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{task.description}</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{task.description}</div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-[#8A9BA8]">{task.timeEstimate}</span>
+                    <span className="text-sm text-[#8A9BA8] dark:text-slate-400">{task.timeEstimate}</span>
                     {task.completed ? (
                       <CheckCircle2 className="w-6 h-6 text-green-500" />
                     ) : (
@@ -1571,7 +1571,7 @@ export function Dashboard10({
                 <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-700 dark:to-slate-600 rounded-xl p-3 text-sm shadow-sm mr-8">
                   <div className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-[#2A7D99]" />
-                    <span className="text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
+                    <span className="text-[#5A6B7A] dark:text-slate-300">Aminy is thinking...</span>
                   </div>
                 </div>
               )}

@@ -118,7 +118,7 @@ export interface PartnerInvoice {
 }
 
 export interface AppointmentSettlementBreakdown {
-  appointmentStatus: 'settled' | 'cancelled' | 'refunded' | 'no_show';
+  appointmentStatus: 'settled' | 'cancelled' | 'refunded' | 'no_show' | 'provider_no_show';
   memberChargeCents: number;
   providerPayoutCents: number;
   platformFeeCents: number;
@@ -442,9 +442,21 @@ export function createPartnerInvoice(options: {
 export function calculateAppointmentSettlementBreakdown(options: {
   financials: AppointmentFinancials;
   hoursBeforeStart?: number;
-  outcome: 'completed' | 'cancelled' | 'no_show';
+  outcome: 'completed' | 'cancelled' | 'no_show' | 'provider_no_show';
 }): AppointmentSettlementBreakdown {
   const { financials, hoursBeforeStart = 999, outcome } = options;
+
+  // Provider no-show: family is never charged, provider earns nothing, and no
+  // partner visit fee is billed (the visit didn't happen). Recovery is a
+  // reschedule/reassign, not a settlement. Same on every rail.
+  if (outcome === 'provider_no_show') {
+    return {
+      appointmentStatus: 'provider_no_show',
+      memberChargeCents: 0,
+      providerPayoutCents: 0,
+      platformFeeCents: 0,
+    };
+  }
 
   if (financials.rail === 'insured_partner_billed') {
     return {
@@ -514,6 +526,7 @@ export const ESTIMATED_REIMBURSEMENT_CENTS: Record<string, { inPerson: number; m
   '90834': { inPerson: 10800, modifier95: 10800, modifierGT: 10260 }, // Psychotherapy 45 min (GT = 95% in some plans)
   '90837': { inPerson: 14400, modifier95: 14400, modifierGT: 13680 }, // Psychotherapy 60 min
   '92507': { inPerson: 7200, modifier95: 7200, modifierGT: 7200 },   // SLP Treatment
+  '96127': { inPerson: 500, modifier95: 500, modifierGT: 500 },      // Brief emotional/behavioral assessment (PHQ-9, GAD-7, etc.) — per instrument, up to 4 units/day
 };
 
 export interface TelehealthMarginAnalysis {
@@ -570,5 +583,137 @@ export function calculateTelehealthMargin(options: {
     platformFeeCents,
     netMarginCents,
     marginPercent,
+  };
+}
+
+// ============================================================================
+// Canonical platform take rates (single source of truth)
+// ============================================================================
+
+/**
+ * Platform take rate by rail. SINGLE SOURCE OF TRUTH — src/lib/stripe-connect.ts
+ * imports these so the payout math and the pricing math can never drift.
+ *
+ * Owner decision (June 2026):
+ *  - cashPay 25%  — Aminy generates the demand + runs the whole funnel, and on
+ *                   cash there's no insurance spread to earn from, so the take
+ *                   IS our revenue. Competitive vs. talk-therapy marketplaces
+ *                   (Headway ~0%, Grow 5%) is a non-issue because we price cash
+ *                   sessions so the provider nets the SAME OR BETTER than they'd
+ *                   net on an insured session (see cashPayPriceForProviderNet).
+ *  - insured 10%  — payer does the heavy lifting; lighter touch.
+ *  - aactPilot 5% — partner discount for AACT/Rise-affiliated providers.
+ */
+export const PLATFORM_TAKE_RATE = {
+  cashPay: 0.25,
+  insured: 0.1,
+  aactPilot: 0.05,
+} as const;
+
+/**
+ * Cash-pay pricing PRINCIPLE (owner decision, June 2026):
+ * The cash price is set so the provider nets AT LEAST what they'd net on the
+ * equivalent insured session — even though Aminy's cash take (25%) is higher
+ * than its insured take (10%). The patient pays a modest convenience premium;
+ * the provider is never worse off choosing cash, which removes any reason for a
+ * provider to balk at the higher cash take.
+ *
+ * Given the provider's target net, returns the cash price the family pays so
+ *   providerNet = price − round(price × cashTake) ≥ target.
+ */
+export function cashPayPriceForProviderNet(options: {
+  targetProviderNetCents: number;
+  cashTakeRate?: number;
+}): {
+  priceCents: number;
+  providerNetCents: number;
+  platformFeeCents: number;
+  takeRate: number;
+} {
+  const takeRate = options.cashTakeRate ?? PLATFORM_TAKE_RATE.cashPay;
+  const target = Math.max(0, Math.round(options.targetProviderNetCents));
+  // ceil keeps the provider net at-or-above target after integer-cent rounding.
+  let priceCents = Math.ceil(target / (1 - takeRate));
+  let providerNetCents = priceCents - Math.round(priceCents * takeRate);
+  // Rounding can leave net 1c short; nudge price up until the floor is met.
+  while (providerNetCents < target) {
+    priceCents += 1;
+    providerNetCents = priceCents - Math.round(priceCents * takeRate);
+  }
+  return {
+    priceCents,
+    providerNetCents,
+    platformFeeCents: priceCents - providerNetCents,
+    takeRate,
+  };
+}
+
+/**
+ * Convenience: given an insured CPT reimbursement, compute the cash price that
+ * makes the provider net at least their insured net, using the canonical
+ * insured (10%) and cash (25%) take rates.
+ */
+export function cashPriceMatchingInsuredNet(options: {
+  insuredReimbursementCents: number;
+}): {
+  insuredProviderNetCents: number;
+  cashPriceCents: number;
+  cashProviderNetCents: number;
+} {
+  const insuredProviderNetCents =
+    options.insuredReimbursementCents -
+    Math.round(options.insuredReimbursementCents * PLATFORM_TAKE_RATE.insured);
+  const cash = cashPayPriceForProviderNet({
+    targetProviderNetCents: insuredProviderNetCents,
+  });
+  return {
+    insuredProviderNetCents,
+    cashPriceCents: cash.priceCents,
+    cashProviderNetCents: cash.providerNetCents,
+  };
+}
+
+// ============================================================================
+// Screener billing (CPT 96127 — Brief emotional/behavioral assessment)
+// ============================================================================
+
+/** CPT code billed for validated screeners (PHQ-9, PHQ-A, GAD-7, SCARED, etc.). */
+export const SCREENER_CPT = '96127';
+/** Payers reimburse up to 4 units of 96127 per patient per day. */
+export const SCREENER_MAX_UNITS_PER_DAY = 4;
+
+/**
+ * Insurance-billed screener economics. Aminy auto-administers validated
+ * screeners through the platform (e.g. PHQ-9 sent 24h before a first session),
+ * bills CPT 96127 to the payer, and KEEPS ITS INSURED-RAIL TAKE (10%) on the
+ * reimbursement — the remainder flows to the supervising provider. For cash-pay
+ * visits the screener is bundled into the visit price (not billed separately).
+ *
+ * @param units number of instruments administered (PHQ-9 + GAD-7 = 2), capped at 4.
+ */
+export function calculateScreenerBilling(options: {
+  units?: number;
+  takeRate?: number;
+}): {
+  cptCode: string;
+  units: number;
+  reimbursementCents: number;
+  platformFeeCents: number;
+  providerPayoutCents: number;
+} {
+  const units = Math.min(
+    Math.max(1, Math.round(options.units ?? 1)),
+    SCREENER_MAX_UNITS_PER_DAY,
+  );
+  const perUnit = ESTIMATED_REIMBURSEMENT_CENTS[SCREENER_CPT].modifier95;
+  const reimbursementCents = perUnit * units;
+  const takeRate = options.takeRate ?? PLATFORM_TAKE_RATE.insured;
+  const platformFeeCents = Math.round(reimbursementCents * takeRate);
+  return {
+    cptCode: SCREENER_CPT,
+    units,
+    reimbursementCents,
+    platformFeeCents,
+    providerPayoutCents: reimbursementCents - platformFeeCents,
   };
 }

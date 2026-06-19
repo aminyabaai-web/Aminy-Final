@@ -38,6 +38,7 @@ import { SESSION_PRICING } from '../lib/pricing';
 import { checkEligibility, type EligibilityResult } from '../lib/benefits-service';
 import { createOneTimePayment } from '../lib/stripe-service';
 import { Shield, FileText, DollarSign } from 'lucide-react';
+import { PriorAuthBadge } from './PriorAuthTracker';
 
 // Types
 type BookingStep = 'concern' | 'history' | 'provider-pref' | 'insurance-check' | 'time-select' | 'details' | 'confirm';
@@ -896,6 +897,22 @@ export function ConversationalBooking({
                   </div>
                 )}
               </ChatMessage>
+
+              {/* Prior Auth tracker for ABA concerns */}
+              {state.concern?.mapsTo === 'bcba' && (
+                <div className="ml-11">
+                  <PriorAuthBadge
+                    payerName={insuranceResult?.programs?.[0]?.name}
+                    status="not-started"
+                    hasSecondaryMedicaid={
+                      insuranceResult?.programs?.some(p =>
+                        p.name?.toLowerCase().includes('medicaid') ||
+                        p.name?.toLowerCase().includes('ahcccs')
+                      ) ?? false
+                    }
+                  />
+                </div>
+              )}
 
               {state.step === 'insurance-check' && (
                 <div className="ml-11">

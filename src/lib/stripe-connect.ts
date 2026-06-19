@@ -10,6 +10,7 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { PLATFORM_TAKE_RATE } from './telehealth-economics';
 
 // ============================================================================
 // Types
@@ -71,14 +72,14 @@ export interface OnboardingLinkResult {
 // ============================================================================
 
 /**
- * Take-rate by rail. Single source of truth — change here, propagates everywhere.
- * Cash-pay 25% matches the implicit rate baked into CASH_PAY_VISITS.providerPayoutCents
- * in src/lib/telehealth-economics.ts.
+ * Take-rate by rail. The numeric rates live in PLATFORM_TAKE_RATE in
+ * src/lib/telehealth-economics.ts (single source of truth) — this just maps the
+ * payout-rail names onto them so payout math and pricing math can never drift.
  */
 export const PLATFORM_FEE_RATES: Record<PayoutRail, number> = {
-  cash_pay: 0.25,
-  insured: 0.10,
-  aact_pilot: 0.05,
+  cash_pay: PLATFORM_TAKE_RATE.cashPay,
+  insured: PLATFORM_TAKE_RATE.insured,
+  aact_pilot: PLATFORM_TAKE_RATE.aactPilot,
 };
 
 export function getPlatformFeeRate(rail: PayoutRail): number {

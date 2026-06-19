@@ -2208,6 +2208,124 @@ app.post("/make-server-8a022548/video/room/:roomName/record/stop", async (c) => 
 });
 
 // ============================================================================
+// DAILY.CO WEBHOOK — provider join/no-show detection
+// Requires DAILY_WEBHOOK_SECRET in Supabase secrets (set in Daily.co dashboard
+// under Settings → Webhooks → Shared Secret).
+// Route: POST /make-server-8a022548/daily-webhook
+// Events handled:
+//   participant-joined  → if user_id starts with "provider:", stamp provider_joined_at
+//   meeting-ended       → if provider never joined, mark appointment provider_no_show
+// ============================================================================
+
+app.post("/make-server-8a022548/daily-webhook", async (c) => {
+  const DAILY_WEBHOOK_SECRET = Deno.env.get('DAILY_WEBHOOK_SECRET');
+  const body = await c.req.text();
+
+  // Verify Daily.co HMAC-SHA256 signature when secret is configured
+  if (DAILY_WEBHOOK_SECRET) {
+    const signature = c.req.header('x-daily-signature') || '';
+    try {
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        'raw', encoder.encode(DAILY_WEBHOOK_SECRET),
+        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+      );
+      const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+      const expected = 'sha256=' + Array.from(new Uint8Array(sig))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+      if (signature !== expected) {
+        console.warn('[Daily webhook] Invalid signature — rejected');
+        return c.json({ error: 'Invalid signature' }, 401);
+      }
+    } catch (err) {
+      console.error('[Daily webhook] Signature verification error:', err);
+      return c.json({ error: 'Signature error' }, 500);
+    }
+  }
+
+  let event: Record<string, unknown>;
+  try {
+    event = JSON.parse(body);
+  } catch {
+    return c.json({ error: 'Invalid JSON' }, 400);
+  }
+
+  const { createClient } = await import('jsr:@supabase/supabase-js@2');
+  const supabaseAdmin = createClient(
+    Deno.env.get('SUPABASE_URL')!,
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+  );
+
+  const action = event.action as string;
+  const roomName = event.room as string;
+
+  // Room name convention: "aminy-<appointmentId>" — extract ID without a DB lookup
+  const appointmentId = roomName?.startsWith('aminy-') ? roomName.slice(6) : null;
+  if (!appointmentId) {
+    // Room doesn't belong to Aminy (e.g. a test room) — ignore silently
+    return c.json({ received: true });
+  }
+
+  if (action === 'participant-joined') {
+    const props = event.properties as Record<string, unknown> | undefined;
+    const userId = props?.user_id as string | undefined;
+    const joinTime = new Date((event.timeStamp as number) * 1000).toISOString();
+
+    // Provider meeting tokens are minted with user_id = "provider:<provider_id>"
+    if (userId?.startsWith('provider:')) {
+      const { error } = await supabaseAdmin
+        .from('telehealth_appointments')
+        .update({ provider_joined_at: joinTime, updated_at: new Date().toISOString() })
+        .eq('id', appointmentId)
+        .is('provider_joined_at', null);
+
+      if (error) {
+        console.error('[Daily webhook] Failed to stamp provider_joined_at:', error);
+      } else {
+        console.log(`[Daily webhook] Provider joined appt ${appointmentId} at ${joinTime}`);
+      }
+    }
+  }
+
+  if (action === 'meeting-ended') {
+    const { data: appointment, error: fetchErr } = await supabaseAdmin
+      .from('telehealth_appointments')
+      .select('id, status, provider_joined_at, scheduled_at')
+      .eq('id', appointmentId)
+      .in('status', ['confirmed', 'ready_to_join'])
+      .maybeSingle();
+
+    if (fetchErr) {
+      console.error('[Daily webhook] Appointment lookup error:', fetchErr);
+    } else if (appointment && !appointment.provider_joined_at) {
+      // Only flag no-show if the 10-minute grace window has elapsed
+      const GRACE_MS = 10 * 60 * 1000;
+      const scheduledAt = appointment.scheduled_at as string;
+      const elapsed = Date.now() - Date.parse(scheduledAt);
+      if (elapsed >= GRACE_MS) {
+        const { error: updateErr } = await supabaseAdmin
+          .from('telehealth_appointments')
+          .update({ status: 'provider_no_show', updated_at: new Date().toISOString() })
+          .eq('id', appointmentId);
+
+        if (updateErr) {
+          console.error('[Daily webhook] Failed to mark provider_no_show:', updateErr);
+        } else {
+          console.log(`[Daily webhook] Appointment ${appointmentId} marked provider_no_show`);
+          await supabaseAdmin.from('provider_no_show_events').insert({
+            appointment_id: appointmentId,
+            scheduled_start: scheduledAt,
+            declared_at: new Date().toISOString(),
+          });
+        }
+      }
+    }
+  }
+
+  return c.json({ received: true });
+});
+
+// ============================================================================
 // PROVIDER ENDPOINTS - Production-ready provider management
 // ============================================================================
 
