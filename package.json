@@ -60,7 +60,7 @@
     "i18next": "^26.3.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "input-otp": "^1.4.2",
-    "jotai": "^2.20.0",
+    "jotai": "^2.20.1",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.16.0",
     "motion": "^12.40.0",
