@@ -1314,6 +1314,48 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               </div>
             </div>
 
+            {/* Journey Roadmap */}
+            <div
+              style={{
+                background: '#fff',
+                border: '1px solid #E8E4DF',
+                borderRadius: 18,
+                padding: '18px 18px',
+                marginBottom: 24,
+              }}
+            >
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2733', marginBottom: 14, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+                Your Journey — 6 Steps
+              </div>
+              {[
+                { step: 1, label: 'Get a formal evaluation', screen: 'developmental-screener', icon: '🔍' },
+                { step: 2, label: 'Request school IEP evaluation', screen: 'resource-library', icon: '🏫' },
+                { step: 3, label: 'Start ABA therapy', screen: 'booking', icon: '🎯' },
+                { step: 4, label: 'Set up medication tracking', screen: 'medications', icon: '💊' },
+                { step: 5, label: 'Understand your coverage', screen: 'benefits', icon: '🛡️' },
+                { step: 6, label: 'Connect with other families', screen: 'community-hub', icon: '👨‍👩‍👧' },
+              ].map(({ step, label, screen: _screen, icon }) => (
+                <div
+                  key={step}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    paddingBottom: step < 6 ? 12 : 0,
+                    marginBottom: step < 6 ? 12 : 0,
+                    borderBottom: step < 6 ? '1px solid #F0EDE8' : 'none',
+                  }}
+                >
+                  <div style={{ fontSize: 18, width: 28, textAlign: 'center', flexShrink: 0 }}>{icon}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, color: '#8A9BA8', fontWeight: 600 }}>Step {step}</div>
+                    <div style={{ fontSize: 14, color: '#1B2733', fontWeight: 500 }}>{label}</div>
+                  </div>
+                  <ChevronRight size={16} color="#C0CDD4" />
+                </div>
+              ))}
+            </div>
+
             <button
               onClick={handleContinue}
               style={{

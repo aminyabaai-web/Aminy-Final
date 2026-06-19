@@ -34,6 +34,7 @@ import { supabase } from '../utils/supabase/client';
 import { updateUserContext } from '../ai/contextLayer';
 
 import { renderRichMarkdown } from '../lib/chat-markdown';
+import { getProactiveNudges, formatNudgesForAI } from '../lib/ai-proactive-nudges';
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
@@ -42,7 +43,8 @@ type SmartAction =
   | { type: 'SET_CALM_CUE'; payload: { cue: string } }
   | { type: 'ADD_WIN'; payload: { win: string } }
   | { type: 'ADD_STRUGGLE'; payload: { struggle: string } }
-  | { type: 'ADD_APPOINTMENT'; payload: { title: string; provider?: string; service_type?: string; start_iso: string; duration_minutes?: number; location?: string; notes?: string } };
+  | { type: 'ADD_APPOINTMENT'; payload: { title: string; provider?: string; service_type?: string; start_iso: string; duration_minutes?: number; location?: string; notes?: string } }
+  | { type: 'NAVIGATE'; payload: { screen: string; tab?: string } };
 
 function parseSmartActions(text: string): { cleanText: string; actions: SmartAction[] } {
   const actions: SmartAction[] = [];
@@ -133,6 +135,9 @@ async function executeSmartAction(action: SmartAction, userId: string): Promise<
       });
       return `✓ Appointment saved: **${title}** — ${friendlyTime}${provider ? ` with ${provider}` : ''}.\n[CALENDAR:${calendarPayload}]`;
     }
+    case 'NAVIGATE':
+      // Handled by the component via onNavigate prop — return a navigate marker
+      return `[NAVIGATE:${JSON.stringify(action.payload)}]`;
     default:
       return '';
   }
@@ -306,6 +311,8 @@ interface BevelChatOverlayProps {
   initialPrompt?: string;
   userTier?: string;
   onUpgrade?: () => void;
+  onNavigate?: (screen: string, options?: { tab?: string }) => void;
+  userType?: 'parent' | 'provider';
 }
 
 const FREE_DAILY_LIMIT = 3;
@@ -331,6 +338,8 @@ export function BevelChatOverlay({
   initialPrompt,
   userTier,
   onUpgrade,
+  onNavigate,
+  userType = 'parent',
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -436,6 +445,23 @@ export function BevelChatOverlay({
   ) => {
     setIsProactiveLoading(true);
     try {
+      // Load nudges first — if any exist, surface them without making an AI call
+      const nudges = userId && userId !== 'dev-preview-user'
+        ? await getProactiveNudges(userId, userType).catch(() => [])
+        : [];
+
+      if (nudges.length > 0) {
+        const nudgeText = formatNudgesForAI(nudges);
+        setMessages([{
+          id: 'proactive-nudges-' + Date.now(),
+          role: 'assistant',
+          content: nudgeText,
+          timestamp: new Date(),
+          chips: getFollowUpChips(context, currentPath, propChildName),
+        }]);
+        return;
+      }
+
       const proactivePrompt = buildProactivePrompt(context, current, propChildName);
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
@@ -1265,6 +1291,19 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 if (part.type === 'calendar') return (
                                   <div key={pi} className="my-2">
                                     <AddToCalendarButtons appointment={part.content} variant="inline" label="Add to your calendar" />
+                                  </div>
+                                );
+                                if (part.type === 'navigate') return (
+                                  <div key={pi} className="my-1.5">
+                                    <button
+                                      onClick={() => {
+                                        onNavigate?.(part.content.screen, { tab: part.content.tab });
+                                        onClose();
+                                      }}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 border border-[#6B9080]/20 transition-colors"
+                                    >
+                                      {part.content.label || 'Go →'}
+                                    </button>
                                   </div>
                                 );
                                 return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;

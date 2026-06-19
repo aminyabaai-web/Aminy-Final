@@ -4,7 +4,7 @@
  * BACB-compliant: 5% supervision, 2 contacts/month, 1 individual, 1 direct observation.
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft, Users, Calendar, AlertTriangle, CheckCircle2,
@@ -18,6 +18,7 @@ import {
   calculateSupervisionCompliance,
   getAllComplianceRisks,
   addSupervisionSession,
+  loadRBTDataFromSupabase,
   BACB_TASK_LIST_AREAS,
   getCompetencyAssessments,
   RATING_LABELS,
@@ -26,6 +27,7 @@ import {
   type SupervisionPeriod,
   type ComplianceRisk,
 } from '../../lib/rbt-supervision';
+import { supabase } from '../../utils/supabase/client';
 
 interface SupervisionDashboardProps {
   onBack: () => void;
@@ -40,6 +42,14 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
   const [showQuickLog, setShowQuickLog] = useState(false);
   const [selectedRBT, setSelectedRBT] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.id) {
+        loadRBTDataFromSupabase(data.user.id).then(() => setRefreshKey(k => k + 1));
+      }
+    });
+  }, []);
 
   const profiles = useMemo(() => getRBTProfiles(), [refreshKey]);
   const allSessions = useMemo(() => getSupervisionSessions(), [refreshKey]);

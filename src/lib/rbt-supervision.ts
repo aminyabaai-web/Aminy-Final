@@ -152,6 +152,7 @@ export const RATING_LABELS: Record<number, string> = {
 // ── localStorage Keys ───────────────────────────────────────────────
 
 import { isDemoMode } from './demo-seed';
+import { supabase } from '../utils/supabase/client';
 
 const STORAGE_KEYS = {
   rbtProfiles: 'aminy_rbt_profiles',
@@ -180,6 +181,104 @@ function saveToStorage<T>(key: string, data: T): void {
   }
 }
 
+// ── Supabase-backed in-memory cache (non-demo mode) ─────────────────
+
+let _sbProfiles: RBTProfile[] = [];
+let _sbSessions: SupervisionSession[] = [];
+let _sbAssessments: CompetencyAssessment[] = [];
+let _sbDirectHours: Record<string, Record<string, number>> = {};
+let _sbLoaded = false;
+
+/** Load RBT data from Supabase for the current BCBA user. Call from SupervisionDashboard on mount. */
+export async function loadRBTDataFromSupabase(currentBcbaId: string): Promise<void> {
+  if (isDemoMode()) return;
+
+  const [assignmentsRes, sessionsRes, assessmentsRes, hoursRes] = await Promise.allSettled([
+    supabase
+      .from('rbt_org_assignments')
+      .select('*, rbt:rbt_user_id(id, full_name, email, avatar_url)')
+      .eq('supervising_bcba_id', currentBcbaId)
+      .eq('status', 'active'),
+
+    supabase
+      .from('rbt_supervision_sessions')
+      .select('*')
+      .eq('bcba_id', currentBcbaId)
+      .order('date', { ascending: false })
+      .limit(500),
+
+    supabase
+      .from('rbt_competency_assessments')
+      .select('*')
+      .eq('bcba_id', currentBcbaId)
+      .order('date', { ascending: false }),
+
+    supabase
+      .from('rbt_direct_service_hours')
+      .select('rbt_id, month, hours'),
+  ]);
+
+  if (assignmentsRes.status === 'fulfilled' && assignmentsRes.value.data) {
+    _sbProfiles = assignmentsRes.value.data.map((row) => ({
+      id: row.rbt_user_id,
+      name: (row.rbt as { full_name?: string } | null)?.full_name || row.rbt_user_id,
+      email: (row.rbt as { email?: string } | null)?.email || '',
+      avatarUrl: (row.rbt as { avatar_url?: string } | null)?.avatar_url,
+      rbtNumber: row.rbt_certification_number || '',
+      certificationDate: row.certification_date || '',
+      renewalDate: row.renewal_date || '',
+      supervisingBCBAId: row.supervising_bcba_id,
+      supervisingBCBAName: '',
+      state: row.state || '',
+      hiredDate: row.hired_date || '',
+      status: row.status as RBTProfile['status'],
+    }));
+  }
+
+  if (sessionsRes.status === 'fulfilled' && sessionsRes.value.data) {
+    _sbSessions = sessionsRes.value.data.map((row) => ({
+      id: row.id,
+      rbtId: row.rbt_id,
+      bcbaId: row.bcba_id,
+      date: row.date,
+      durationMinutes: row.duration_minutes,
+      type: row.type as SupervisionSession['type'],
+      includesDirectObservation: row.includes_direct_observation,
+      topicsCovered: row.topics_covered || [],
+      competenciesAssessed: row.competencies_assessed || [],
+      bcbaNotes: row.bcba_notes || '',
+      rbtSignature: row.rbt_signed,
+      rbtSignatureDate: row.rbt_signed_at,
+      bcbaSignature: row.bcba_signed,
+      bcbaSignatureDate: row.bcba_signed_at,
+      status: row.status as SupervisionSession['status'],
+      clientId: row.client_id,
+    }));
+  }
+
+  if (assessmentsRes.status === 'fulfilled' && assessmentsRes.value.data) {
+    _sbAssessments = assessmentsRes.value.data.map((row) => ({
+      id: row.id,
+      rbtId: row.rbt_id,
+      bcbaId: row.bcba_id,
+      date: row.date,
+      ratings: row.ratings || [],
+      overallNotes: row.overall_notes || '',
+      developmentPlan: row.development_plan || [],
+    }));
+  }
+
+  if (hoursRes.status === 'fulfilled' && hoursRes.value.data) {
+    _sbDirectHours = {};
+    for (const row of hoursRes.value.data) {
+      if (!_sbDirectHours[row.rbt_id]) _sbDirectHours[row.rbt_id] = {};
+      _sbDirectHours[row.rbt_id][row.month] = Number(row.hours);
+    }
+  }
+
+  _sbLoaded = true;
+}
+
 // ── Demo Data ───────────────────────────────────────────────────────
 
 function getOrInitDemoData(): {
@@ -188,6 +287,16 @@ function getOrInitDemoData(): {
   assessments: CompetencyAssessment[];
   directHours: Record<string, Record<string, number>>;
 } {
+  // Non-demo mode: return Supabase-backed cache (populated by loadRBTDataFromSupabase)
+  if (!isDemoMode()) {
+    return {
+      profiles: _sbProfiles,
+      sessions: _sbSessions,
+      assessments: _sbAssessments,
+      directHours: _sbDirectHours,
+    };
+  }
+
   const existing = loadFromStorage<RBTProfile[]>(STORAGE_KEYS.rbtProfiles, []);
   if (existing.length > 0) {
     return {
@@ -198,8 +307,7 @@ function getOrInitDemoData(): {
     };
   }
 
-  // Real BCBAs start with an empty roster — never seed fabricated RBTs
-  // (Lisa Park, etc.). The sample supervision dataset is demo-mode only.
+  // Demo mode: seed fabricated RBTs if localStorage is empty
   if (!isDemoMode()) {
     return { profiles: [], sessions: [], assessments: [], directHours: {} };
   }
@@ -618,27 +726,79 @@ export function getCompetencyGaps(rbtId: string): {
 // ── Mutation Helpers ────────────────────────────────────────────────
 
 export function addSupervisionSession(session: SupervisionSession): void {
+  if (!isDemoMode()) {
+    // Write to Supabase and update in-memory cache
+    supabase.from('rbt_supervision_sessions').insert({
+      id: session.id,
+      rbt_id: session.rbtId,
+      bcba_id: session.bcbaId,
+      date: session.date,
+      duration_minutes: session.durationMinutes,
+      type: session.type,
+      includes_direct_observation: session.includesDirectObservation,
+      topics_covered: session.topicsCovered,
+      competencies_assessed: session.competenciesAssessed,
+      bcba_notes: session.bcbaNotes,
+      rbt_signed: session.rbtSignature,
+      rbt_signed_at: session.rbtSignatureDate || null,
+      bcba_signed: session.bcbaSignature,
+      bcba_signed_at: session.bcbaSignatureDate || null,
+      status: session.status,
+      client_id: session.clientId || null,
+    }).then(() => {
+      _sbSessions.push(session);
+    });
+    return;
+  }
   const sessions = loadFromStorage<SupervisionSession[]>(STORAGE_KEYS.supervisionSessions, []);
   sessions.push(session);
   saveToStorage(STORAGE_KEYS.supervisionSessions, sessions);
 }
 
 export function addCompetencyAssessment(assessment: CompetencyAssessment): void {
+  if (!isDemoMode()) {
+    supabase.from('rbt_competency_assessments').insert({
+      id: assessment.id,
+      rbt_id: assessment.rbtId,
+      bcba_id: assessment.bcbaId,
+      date: assessment.date,
+      ratings: assessment.ratings,
+      overall_notes: assessment.overallNotes,
+      development_plan: assessment.developmentPlan,
+    }).then(() => {
+      _sbAssessments.push(assessment);
+    });
+    return;
+  }
   const assessments = loadFromStorage<CompetencyAssessment[]>(STORAGE_KEYS.competencyAssessments, []);
   assessments.push(assessment);
   saveToStorage(STORAGE_KEYS.competencyAssessments, assessments);
 }
 
 export function addRBTDirectSession(session: RBTDirectSession): void {
+  const month = session.date.substring(0, 7);
+  const addedHours = session.durationMinutes / 60;
+
+  if (!isDemoMode()) {
+    // Upsert monthly hours in Supabase
+    supabase.rpc('increment_rbt_hours', {
+      p_rbt_id: session.rbtId,
+      p_month: month,
+      p_hours: addedHours,
+    }).then(() => {
+      if (!_sbDirectHours[session.rbtId]) _sbDirectHours[session.rbtId] = {};
+      _sbDirectHours[session.rbtId][month] = (_sbDirectHours[session.rbtId][month] ?? 0) + addedHours;
+    });
+    return;
+  }
+
   const sessions = loadFromStorage<RBTDirectSession[]>(STORAGE_KEYS.rbtSessionLogs, []);
   sessions.push(session);
   saveToStorage(STORAGE_KEYS.rbtSessionLogs, sessions);
 
-  // Update direct hours
-  const month = session.date.substring(0, 7);
   const hours = loadFromStorage<Record<string, Record<string, number>>>(STORAGE_KEYS.directServiceHours, {});
   if (!hours[session.rbtId]) hours[session.rbtId] = {};
-  hours[session.rbtId][month] = (hours[session.rbtId][month] ?? 0) + session.durationMinutes / 60;
+  hours[session.rbtId][month] = (hours[session.rbtId][month] ?? 0) + addedHours;
   saveToStorage(STORAGE_KEYS.directServiceHours, hours);
 }
 
@@ -648,6 +808,16 @@ export function getRBTDirectSessions(rbtId: string): RBTDirectSession[] {
 }
 
 export function updateSessionBCBAReview(sessionId: string, status: 'reviewed' | 'flagged', reason?: string): void {
+  if (!isDemoMode()) {
+    supabase.from('rbt_supervision_sessions')
+      .update({ bcba_notes: reason })
+      .eq('id', sessionId)
+      .then(() => {
+        const idx = _sbSessions.findIndex((s) => s.id === sessionId);
+        if (idx !== -1 && reason) _sbSessions[idx].bcbaNotes = reason;
+      });
+    return;
+  }
   const sessions = loadFromStorage<RBTDirectSession[]>(STORAGE_KEYS.rbtSessionLogs, []);
   const idx = sessions.findIndex((s) => s.id === sessionId);
   if (idx !== -1) {
