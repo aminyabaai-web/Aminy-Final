@@ -1847,7 +1847,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           {motivationGoal.emoji}
                         </div>
                         <div>
-                          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-400">Reward snapshot</div>
+                          <div className="text-[12px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-400">Reward snapshot</div>
                           <p className="mt-1 text-sm font-medium text-amber-950 dark:text-amber-200">{motivationGoal.celebrationLabel}</p>
                           <p className="text-xs text-amber-800 dark:text-amber-300">Keep the prize visible so the next yes feels easier.</p>
                         </div>

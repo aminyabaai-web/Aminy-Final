@@ -9054,7 +9054,7 @@ html {
   letter-spacing: .025em;
   border-radius: 6px;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
 }
 
@@ -9605,7 +9605,7 @@ html {
 
   .segmented-control-label {
     text-align: center;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     line-height: 1.2;
   }
@@ -10524,7 +10524,7 @@ html {
 
 @container (width <= 320px) {
   .segmented-control-label {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
@@ -11402,7 +11402,7 @@ html {
   .aminy-ai-card .flex-wrap button {
     min-height: 28px !important;
     padding: 4px 8px !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
   }
 }
 
@@ -11852,7 +11852,7 @@ html {
 
   .hero-trust-badge {
     padding: 7px 11px;
-    font-size: 11px;
+    font-size: 12px;
     line-height: 15px;
   }
 
@@ -12055,7 +12055,7 @@ html {
 @media (width <= 380px) {
   .segmented-control-container + p {
     margin-top: 20px;
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
@@ -12219,7 +12219,7 @@ html {
   text-align: center;
   opacity: .8;
   margin: 0;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
@@ -12240,7 +12240,7 @@ html {
   }
 
   .connector-label {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .connector-sublabel {
@@ -12614,7 +12614,7 @@ html {
   }
 
   .connector-status-container .text-xs {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
@@ -12842,7 +12842,7 @@ html {
   }
 
   .connector-state {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 14px;
   }
 }
@@ -13042,7 +13042,7 @@ html {
   .benefits-status-chip {
     min-height: 42px;
     padding: 8px 12px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .benefits-status-chip-group {
@@ -14072,7 +14072,7 @@ html {
   .help-footer__link {
     gap: 4px;
     padding: 6px 12px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .help-footer__link svg {
@@ -16128,7 +16128,8 @@ body.mobile-optimized {
 
 /* AccountSettingsPremium — additional arbitrary-value utilities */
 .text-\[13px\] { font-size: 13px; }
-.text-\[11px\] { font-size: 11px; }
+.text-\[11px\] { font-size: 12px; }
+.text-\[12px\] { font-size: 12px; }
 .text-\[20px\] { font-size: 20px; }
 .rounded-\[10px\] { border-radius: 10px; }
 .rounded-\[12px\] { border-radius: 12px; }
@@ -17529,7 +17530,7 @@ button, a, [role="button"] {
 
 /* Badge refinement: pill shape for secondary badges */
 [data-slot="badge"] {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.01em;
 }
 
