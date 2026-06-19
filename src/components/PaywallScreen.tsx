@@ -276,7 +276,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Insured families — softened wall: lead with coverage tools, honest "may/check" language */}
         {isInsured && (
-          <Card className="p-5 mb-6 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+          <Card className="p-5 mb-6 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
                 <ClipboardCheck className="w-6 h-6 text-blue-600" />
@@ -589,7 +589,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
         {/* HSA/FSA Eligible Badge */}
         <div className="mt-8">
-          <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+          <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
             <div className="flex items-center justify-center gap-3">
               <div className="p-2 bg-blue-100 rounded-full">
                 <Shield className="w-5 h-5 text-blue-600" />
