@@ -40,21 +40,23 @@ RESEND_API_KEY          = re_...           (from resend.com → API Keys)
 
 ### 5. Register the Stripe Webhook Endpoint
 - Go to: Stripe Dashboard → Developers → Webhooks → Add endpoint
-- URL: `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548/stripe/webhook`
+- URL: `https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/stripe-webhook`
+  _(standalone function — already deployed ACTIVE v2; the /payments/webhook route inside make-server-8a022548 is blocked by the Supabase JWT gateway and unreachable by Stripe)_
 - Events to listen for:
   - `checkout.session.completed`
   - `customer.subscription.updated`
   - `customer.subscription.deleted`
-  - `customer.subscription.trial_will_end`
-  - `invoice.payment_succeeded`
-  - `invoice.payment_failed`
-- Copy the webhook signing secret → paste as `STRIPE_WEBHOOK_SECRET` above
+- Copy the webhook signing secret → paste as `STRIPE_WEBHOOK_SECRET` in step 4 above
 
-### 6. Deploy the Edge Function
-```bash
-supabase functions deploy make-server-8a022548
-```
-This activates: subscription checkout, tier upgrades, telehealth payments, org billing, email notifications.
+### 6. Edge Functions — Already Deployed
+All required functions are ACTIVE. No deploy commands needed:
+| Function | Version | Purpose |
+|----------|---------|---------|
+| `make-server-8a022548` | v146 | Main API (AI, bookings, provider management) |
+| `stripe-webhook` | v2 | Stripe payment events → tier updates |
+| `daily-webhook` | v1 | Daily.co events → provider no-show detection |
+| `chat` | v19 | AI chat (Claude claude-sonnet-4-6 primary) |
+| `telehealth` | v10 | Video session management |
 
 ---
 
