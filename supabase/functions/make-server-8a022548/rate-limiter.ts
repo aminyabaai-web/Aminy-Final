@@ -31,7 +31,7 @@ interface RateLimitConfig {
 // Daily message limits per tier
 // MUST match tier-utils.ts getAIMessageLimit()
 export const DAILY_MESSAGE_LIMITS: Record<string, number> = {
-  free: 5,        // 5 messages/day (matches tier-utils.ts)
+  free: 3,        // 3 messages/day (matches tier-utils.ts aiMessagesPerDay: 3)
   starter: 20,    // 20 messages/day (matches tier-utils.ts)
   core: 999999,   // Unlimited (null in tier-utils means no limit)
   pro: 999999,    // Unlimited (null in tier-utils means no limit)

@@ -647,6 +647,15 @@ export function ConversationalBooking({
   const stepOrder: BookingStep[] = ['concern', 'history', 'provider-pref', 'insurance-check', 'time-select', 'details', 'confirm'];
   const currentStepIndex = stepOrder.indexOf(state.step);
 
+  if (isLoading) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4">
+        <Loader2 className="h-8 w-8 animate-spin text-[#43AA8B]" />
+        <p className="text-sm text-[#5A6B7A]">Finding available providers…</p>
+      </div>
+    );
+  }
+
   return (
     <div
       className="flex h-full flex-col"

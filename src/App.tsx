@@ -1041,6 +1041,7 @@ type AppScreen =
   | "parent-calm-mode"
   | "token-rewards"
   | "memory-settings"
+  | "memory-viewer"
   | "caregiver-credentialing" // Caregiver credentialing wizard
   | "clinical-templates" // Provider clinical templates
   | "daily-video-room" // Daily.co video room
@@ -2991,7 +2992,7 @@ export default function App() {
             </Suspense>
           );
 
-        case "memory-settings":
+        case "memory-viewer":
           // Full-page memory viewer — what Aminy knows, with delete controls
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>

@@ -872,7 +872,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed inset-0 z-[101] flex flex-col bg-white overflow-hidden"
+            className="fixed inset-0 z-[101] flex flex-col bg-white dark:bg-slate-900 overflow-hidden"
             style={{ paddingTop: 'env(safe-area-inset-top)' }}
             onClick={e => e.stopPropagation()}
           >
@@ -933,11 +933,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                    className="absolute inset-0 z-10 bg-white flex flex-col"
+                    className="absolute inset-0 z-10 bg-white dark:bg-slate-900 flex flex-col"
                   >
                     {/* Drawer header */}
-                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] shrink-0">
-                      <p className="text-sm font-semibold text-[#1B2733]">Chat History</p>
+                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] dark:border-slate-700 shrink-0">
+                      <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Chat History</p>
                       <button
                         onClick={startNewChat}
                         className="flex items-center gap-1.5 text-xs text-[#6B9080] font-medium px-3 py-1.5 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
@@ -951,11 +951,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-3">
-                          <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center">
-                            <MessageSquare className="w-5 h-5 text-slate-400" />
+                          <div className="w-12 h-12 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center">
+                            <MessageSquare className="w-5 h-5 text-slate-400 dark:text-slate-300" />
                           </div>
-                          <p className="text-sm text-[#5A6B7A]">No previous chats yet.</p>
-                          <p className="text-xs text-slate-400">Your conversations will appear here after you close the chat.</p>
+                          <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No previous chats yet.</p>
+                          <p className="text-xs text-slate-400 dark:text-slate-400">Your conversations will appear here after you close the chat.</p>
                         </div>
                       ) : (
                         <div className="divide-y divide-slate-100">
@@ -973,7 +973,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm text-[#1B2733] leading-snug line-clamp-2">{session.preview}</p>
-                                <p className="text-xs text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
+                                <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
                               </div>
                               <button
                                 onClick={(e) => handleDeleteSession(session.id, e)}
@@ -998,14 +998,14 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     animate={{ x: 0 }}
                     exit={{ x: '100%' }}
                     transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                    className="absolute inset-0 z-10 bg-white flex flex-col"
+                    className="absolute inset-0 z-10 bg-white dark:bg-slate-900 flex flex-col"
                   >
                     {/* Panel header */}
-                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] shrink-0">
-                      <p className="text-sm font-semibold text-[#1B2733]">Aminy Settings</p>
+                    <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] dark:border-slate-700 shrink-0">
+                      <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Aminy Settings</p>
                       <button
                         onClick={() => setShowSettings(false)}
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8] transition-colors"
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -1047,15 +1047,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="flex gap-3 mt-3 pt-3 border-t border-[#6B9080]/20">
                             <div className="text-center flex-1">
                               <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.sessionsCompleted}</p>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wide">Sessions</p>
+                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Sessions</p>
                             </div>
                             <div className="text-center flex-1">
                               <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.calmMoments}</p>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wide">Calm moments</p>
+                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Calm moments</p>
                             </div>
                             <div className="text-center flex-1">
                               <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.newStrategies}</p>
-                              <p className="text-[10px] text-slate-400 uppercase tracking-wide">Strategies</p>
+                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Strategies</p>
                             </div>
                           </div>
                         )}
@@ -1161,13 +1161,13 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       {userContext && (
                         <div className="px-4 mt-5">
                           <div className="flex items-center gap-1.5 mb-2">
-                            <Brain className="w-3.5 h-3.5 text-slate-400" />
-                            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">What Aminy Knows</p>
+                            <Brain className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" />
+                            <p className="text-xs font-semibold text-[#5A6B7A] dark:text-slate-300 uppercase tracking-wide">What Aminy Knows</p>
                           </div>
-                          <div className="rounded-xl border border-[#E8E4DF] divide-y divide-slate-100 overflow-hidden">
+                          <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-700 overflow-hidden">
                             {userContext.strugglingWith && userContext.strugglingWith.length > 0 && (
                               <div className="px-3 py-2.5">
-                                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Working on</p>
+                                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Working on</p>
                                 <div className="flex flex-wrap gap-1.5">
                                   {userContext.strugglingWith.map((s, i) => (
                                     <span key={i} className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full">{s}</span>
@@ -1177,7 +1177,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             )}
                             {userContext.celebratingWins && userContext.celebratingWins.length > 0 && (
                               <div className="px-3 py-2.5">
-                                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1">Wins</p>
+                                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Wins</p>
                                 <div className="flex flex-wrap gap-1.5">
                                   {userContext.celebratingWins.map((w, i) => (
                                     <span key={i} className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full">{w}</span>
@@ -1333,7 +1333,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
             {/* Input area */}
             <div
-              className="shrink-0 px-4 pt-3 pb-4 bg-white border-t border-[#E8E4DF]"
+              className="shrink-0 px-4 pt-3 pb-4 bg-white dark:bg-slate-900 border-t border-[#E8E4DF] dark:border-slate-700"
               style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
             >
               {/* Image preview strip */}
@@ -1407,7 +1407,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask Aminy anything…"
-                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm placeholder:text-slate-400"
+                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm text-[#1B2733] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     style={{ minHeight: '48px', maxHeight: '120px' }}
                     rows={1}
                   />
