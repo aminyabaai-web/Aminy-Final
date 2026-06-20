@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2 } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -35,6 +35,12 @@ import { updateUserContext } from '../ai/contextLayer';
 
 import { renderRichMarkdown } from '../lib/chat-markdown';
 import { getProactiveNudges, formatNudgesForAI } from '../lib/ai-proactive-nudges';
+import { sendLocalNotification } from '../lib/push-notifications';
+import { Switch } from './ui/switch';
+import { UsageMeter } from './UsageMeter';
+import { useRateLimitStore } from '../lib/rate-limit-store';
+import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
+import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
@@ -360,6 +366,18 @@ export function BevelChatOverlay({
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const [showActionSheet, setShowActionSheet] = useState(false);
+  const [pendingScreenContext, setPendingScreenContext] = useState<string | null>(null);
+  const [showThinkingSteps, setShowThinkingSteps] = useState<boolean>(() => {
+    try { return localStorage.getItem('aminy-show-thinking') !== 'false'; } catch { return true; }
+  });
+  const [showFollowUps, setShowFollowUps] = useState<boolean>(() => {
+    try { return localStorage.getItem('aminy-show-followups') !== 'false'; } catch { return true; }
+  });
+  const [activeThinkingSteps, setActiveThinkingSteps] = useState<ThinkingStep[]>([]);
+  const { dailyUsage, fetchUsage } = useRateLimitStore();
+  const [memoryFacts, setMemoryFacts] = useState<MemoryFact[]>([]);
+  const [memoryLoading, setMemoryLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -404,6 +422,7 @@ export function BevelChatOverlay({
   useEffect(() => {
     if (isOpen && userId) {
       loadContextAndOpenChat();
+      fetchUsage();
     }
   }, [isOpen, userId, currentPath]);
 
@@ -677,7 +696,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         setInput('');
         return;
       }
-      incrementFreeDailyCount(userId);
+      const newCount = incrementFreeDailyCount(userId);
+      const remaining = FREE_DAILY_LIMIT - newCount;
+      if (remaining === 1 && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        sendLocalNotification(
+          '1 AI message left today',
+          'Upgrade to Aminy Core for unlimited daily messages.',
+          { route: '/upgrade' }
+        );
+      }
     }
 
     const img = imageData || attachedImage;
@@ -695,6 +722,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
     setInput('');
     setHasInteracted(true);
     setIsLoading(true);
+    if (showThinkingSteps) {
+      setActiveThinkingSteps(generateThinkingSteps(text));
+    }
+
+    // Inject pending screen context into message text
+    if (pendingScreenContext) {
+      text = `[Screen context: ${pendingScreenContext}]\n\n${text}`;
+      setPendingScreenContext(null);
+    }
 
     try {
       const systemPrompt = buildSystemPrompt(userContext, currentContext, personality);
@@ -758,8 +794,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
       toast.error('Connection hiccup — try again?');
     } finally {
       setIsLoading(false);
+      setActiveThinkingSteps([]);
     }
-  }, [input, isLoading, messages, userContext, currentContext, currentPath, userId, personality, attachedImage]);
+  }, [input, isLoading, messages, userContext, currentContext, currentPath, userId, personality, attachedImage, showThinkingSteps]);
 
   // ─── Voice input ──────────────────────────────────────────────────────────
   // Tap mic → records audio → on stop, sends to /ai/transcribe → fills input.
@@ -973,6 +1010,24 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       </button>
                     </div>
 
+                    {/* Pinned navigation */}
+                    <div className="border-b border-[#E8E4DF] dark:border-slate-700">
+                      {[
+                        { icon: Folder, label: 'Records Vault', screen: 'records-vault' },
+                        { icon: Bell, label: 'Check-ins', screen: 'notifications' },
+                      ].map(item => (
+                        <button
+                          key={item.screen}
+                          onClick={() => { setShowHistory(false); onNavigate?.(item.screen); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                        >
+                          <item.icon className="w-4 h-4 text-[#6B9080]" />
+                          <span className="text-sm text-[#1B2733] dark:text-slate-100">{item.label}</span>
+                          <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                        </button>
+                      ))}
+                    </div>
+
                     {/* Sessions list */}
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
@@ -1120,6 +1175,52 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         </div>
                       </div>
 
+                      {/* ── Usage ── */}
+                      <div className="px-4 mt-5">
+                        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-3">Usage</p>
+                        <UsageMeter
+                          variant="full"
+                          tier={userTier || 'free'}
+                          messagesUsedToday={dailyUsage?.used ?? 0}
+                          documentsUploaded={0}
+                          memoryFactsStored={0}
+                          onUpgrade={onUpgrade}
+                        />
+                      </div>
+
+                      {/* ── Customization ── */}
+                      <div className="px-4 mt-5">
+                        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-3">Customization</p>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="pr-4">
+                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Show thinking steps</p>
+                              <p className="text-xs text-[#5A6B7A] leading-tight">Display reasoning steps while processing</p>
+                            </div>
+                            <Switch
+                              checked={showThinkingSteps}
+                              onCheckedChange={(v) => {
+                                setShowThinkingSteps(v);
+                                try { localStorage.setItem('aminy-show-thinking', String(v)); } catch {}
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="pr-4">
+                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Suggested follow-ups</p>
+                              <p className="text-xs text-[#5A6B7A] leading-tight">Show quick questions after each response</p>
+                            </div>
+                            <Switch
+                              checked={showFollowUps}
+                              onCheckedChange={(v) => {
+                                setShowFollowUps(v);
+                                try { localStorage.setItem('aminy-show-followups', String(v)); } catch {}
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
                       {/* ── Custom Instructions ── */}
                       <div className="px-4 mt-5">
                         <div className="flex items-center justify-between mb-2">
@@ -1231,6 +1332,80 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         </div>
                       )}
 
+                      {/* ── Memory Browser ── */}
+                      <div className="px-4 mt-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-1.5">
+                            <Brain className="w-3.5 h-3.5 text-slate-400" />
+                            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Memory</p>
+                          </div>
+                          <button
+                            onClick={async () => {
+                              if (!userId || memoryLoading) return;
+                              setMemoryLoading(true);
+                              const facts = await getUserMemoryFacts(userId);
+                              setMemoryFacts(facts);
+                              setMemoryLoading(false);
+                            }}
+                            className="text-[10px] text-[#6B9080] hover:underline font-medium"
+                          >
+                            {memoryLoading ? 'Loading…' : memoryFacts.length === 0 ? 'Load' : 'Refresh'}
+                          </button>
+                        </div>
+                        {memoryFacts.length > 0 ? (
+                          <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 overflow-hidden divide-y divide-slate-100 dark:divide-slate-700">
+                            {(() => {
+                              const grouped = memoryFacts.reduce<Record<string, MemoryFact[]>>((acc, f) => {
+                                (acc[f.category] = acc[f.category] || []).push(f);
+                                return acc;
+                              }, {});
+                              return Object.entries(grouped).map(([cat, facts]) => (
+                                <div key={cat} className="px-3 py-2.5">
+                                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5 capitalize">{cat.replace(/_/g, ' ')}</p>
+                                  <div className="space-y-1.5">
+                                    {facts.map(fact => (
+                                      <div key={fact.id} className="flex items-start justify-between gap-2">
+                                        <div className="min-w-0">
+                                          <span className="text-xs text-[#5A6B7A] font-medium">{fact.key.replace(/_/g, ' ')}: </span>
+                                          <span className="text-xs text-[#1B2733] dark:text-slate-100">{fact.value}</span>
+                                        </div>
+                                        <button
+                                          onClick={async () => {
+                                            await deleteFact(fact.id);
+                                            setMemoryFacts(prev => prev.filter(f => f.id !== fact.id));
+                                          }}
+                                          className="shrink-0 w-5 h-5 rounded flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors"
+                                          aria-label="Delete memory"
+                                        >
+                                          <Trash2 className="w-3 h-3" />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ));
+                            })()}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-slate-400 py-2">
+                            {memoryLoading ? 'Loading memories…' : 'Tap Load to view saved memories'}
+                          </p>
+                        )}
+                        {memoryFacts.length > 0 && (
+                          <button
+                            onClick={async () => {
+                              if (!userId || !window.confirm('Delete all memories? This cannot be undone.')) return;
+                              const { clearMemory } = await import('../lib/ai-memory-engine');
+                              await clearMemory(userId);
+                              setMemoryFacts([]);
+                            }}
+                            className="mt-2 w-full text-xs text-red-400 hover:text-red-500 py-1.5 text-center font-medium"
+                          >
+                            Delete all memories
+                          </button>
+                        )}
+                      </div>
+
                       {/* ── Actions ── */}
                       <div className="px-4 mt-5 mb-6 space-y-2">
                         <button
@@ -1325,7 +1500,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       </div>
                     </div>
 
-                    {msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !isLoading && (
+                    {showFollowUps && msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !isLoading && (
                       <div className="ml-8 mt-2 space-y-1.5">
                         {msg.chips.map((chip, i) => (
                           <button
@@ -1351,18 +1526,24 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     >
                       ✦
                     </div>
-                    <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
-                      <div className="flex gap-1.5 items-center">
-                        {[0, 0.15, 0.3].map((delay, i) => (
-                          <motion.div
-                            key={i}
-                            className="w-2 h-2 bg-slate-400 rounded-full"
-                            animate={{ y: [0, -4, 0] }}
-                            transition={{ duration: 0.8, repeat: Infinity, delay }}
-                          />
-                        ))}
+                    {showThinkingSteps && activeThinkingSteps.length > 0 ? (
+                      <div className="flex-1">
+                        <ThinkingStepsDisplay steps={activeThinkingSteps} isExpanded={true} />
                       </div>
-                    </div>
+                    ) : (
+                      <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
+                        <div className="flex gap-1.5 items-center">
+                          {[0, 0.15, 0.3].map((delay, i) => (
+                            <motion.div
+                              key={i}
+                              className="w-2 h-2 bg-slate-400 rounded-full"
+                              animate={{ y: [0, -4, 0] }}
+                              transition={{ duration: 0.8, repeat: Infinity, delay }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1395,38 +1576,90 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 </div>
               )}
 
-              {/* Smart action chips — show only when conversation is empty and user hasn't interacted */}
+              {/* Empty-state suggestion chips — scrollable action starters */}
               {!hasInteracted && messages.length === 0 && (
                 <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
                   {[
-                    { emoji: '📊', label: 'Log a behavior', starter: 'Log behavior: ' },
-                    { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
-                    { emoji: '📅', label: 'Book appointment', starter: 'Book appointment: ' },
-                    { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
+                    {
+                      icon: BarChart2,
+                      label: 'Behavior patterns',
+                      sub: "This week's trends",
+                      prompt: `What behavior patterns do you see this week for ${userContext?.childName || propChildName || 'my child'}?`,
+                    },
+                    {
+                      icon: Brain,
+                      label: 'ABA strategies',
+                      sub: 'Tips for right now',
+                      prompt: `What ABA strategy should I use right now with ${userContext?.childName || propChildName || 'my child'}?`,
+                    },
+                    {
+                      icon: TrendingUp,
+                      label: 'Progress report',
+                      sub: 'How are we doing?',
+                      prompt: `Give me a progress update on ${userContext?.childName || propChildName || 'my child'}'s ABA goals.`,
+                    },
+                    {
+                      icon: Calendar,
+                      label: 'Book session',
+                      sub: 'Schedule ABA therapy',
+                      navigate: 'booking' as const,
+                    },
+                    {
+                      icon: FileText,
+                      label: 'Log behavior',
+                      sub: 'Track what happened',
+                      navigate: 'behavior-log' as const,
+                    },
+                    {
+                      icon: BookOpen,
+                      label: 'Find resources',
+                      sub: 'Articles & guides',
+                      navigate: 'resource-library' as const,
+                    },
                   ].map(chip => (
                     <button
                       key={chip.label}
                       onClick={() => {
                         HAPTICS.light();
-                        setInput(chip.starter);
-                        setHasInteracted(true);
-                        setTimeout(() => inputRef.current?.focus(), 50);
+                        if ('navigate' in chip && chip.navigate) {
+                          onNavigate?.(chip.navigate);
+                          handleClose();
+                        } else if ('prompt' in chip && chip.prompt) {
+                          setInput(chip.prompt);
+                          setHasInteracted(true);
+                          setTimeout(() => inputRef.current?.focus(), 50);
+                        }
                       }}
-                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm whitespace-nowrap border border-cyan-200 dark:border-cyan-700 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-colors"
+                      className="flex-shrink-0 flex items-start gap-2.5 px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left hover:bg-[#FAF7F2] dark:hover:bg-slate-700 hover:border-slate-400 transition-colors"
+                      style={{ minWidth: '140px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                     >
-                      <span>{chip.emoji}</span>
-                      <span>{chip.label}</span>
+                      <chip.icon className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">{chip.label}</p>
+                        <p className="text-[10px] text-[#5A6B7A] leading-tight mt-0.5">{chip.sub}</p>
+                      </div>
                     </button>
                   ))}
                 </div>
               )}
 
+              {/* Screen context chip — shows when screen context is attached */}
+              {pendingScreenContext && (
+                <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl">
+                  <Monitor className="w-3.5 h-3.5 text-[#6B9080]" />
+                  <span className="text-xs text-[#6B9080] font-medium flex-1">Screen context attached</span>
+                  <button onClick={() => setPendingScreenContext(null)} className="text-[#6B9080]/60 hover:text-[#6B9080]">
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               <div className="flex items-end gap-2">
-                {/* Attachment button */}
+                {/* Action sheet button */}
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => setShowActionSheet(true)}
                   className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] hover:bg-[#E8E4DF] transition-colors shrink-0 mb-0.5"
-                  aria-label="Attach image"
+                  aria-label="More actions"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -1486,6 +1719,114 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               </div>
             </div>
           </motion.div>
+
+          {/* ── Action Sheet ── */}
+          <AnimatePresence>
+            {showActionSheet && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[9998] bg-black/40"
+                  onClick={() => setShowActionSheet(false)}
+                />
+                <motion.div
+                  initial={{ y: '100%' }}
+                  animate={{ y: 0 }}
+                  exit={{ y: '100%' }}
+                  transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[9999] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl pb-safe"
+                >
+                  <div className="flex items-center justify-between px-4 pt-4 pb-2">
+                    <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Add to message</p>
+                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center">
+                      <X className="w-4 h-4 text-[#5A6B7A]" />
+                    </button>
+                  </div>
+                  <div className="px-2 pb-6">
+                    {[
+                      {
+                        icon: ImageIcon,
+                        label: 'Add files or photo',
+                        desc: 'Share an image or document',
+                        action: () => { fileInputRef.current?.click(); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Monitor,
+                        label: 'Screen context',
+                        desc: 'Attach current screen state to your message',
+                        action: () => {
+                          setPendingScreenContext(buildScreenStateBlock());
+                          setShowActionSheet(false);
+                        },
+                      },
+                      {
+                        icon: FileText,
+                        label: 'Log behavior',
+                        desc: 'Track a behavior that just happened',
+                        action: () => { onNavigate?.('behavior-log'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Calendar,
+                        label: 'Book appointment',
+                        desc: 'Schedule an ABA therapy session',
+                        action: () => { onNavigate?.('booking'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Pill,
+                        label: 'Medications',
+                        desc: 'View or update medication list',
+                        action: () => { onNavigate?.('medications'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Bell,
+                        label: 'Create check-in',
+                        desc: 'Schedule a recurring AI check-in',
+                        action: () => { onNavigate?.('notifications'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: BarChart2,
+                        label: 'Impact analysis',
+                        desc: 'What is affecting behavior patterns',
+                        action: () => {
+                          const childName = userContext?.childName || propChildName || 'my child';
+                          setInput(`What is impacting ${childName}'s behavior patterns this week?`);
+                          setShowActionSheet(false);
+                          setTimeout(() => inputRef.current?.focus(), 100);
+                        },
+                      },
+                      {
+                        icon: TrendingUp,
+                        label: 'Predictive modeling',
+                        desc: 'Forecast ABA progress over 4 weeks',
+                        action: () => {
+                          const childName2 = userContext?.childName || propChildName || 'my child';
+                          setInput(`Based on current ABA progress, what outcomes can we expect for ${childName2} over the next 4 weeks?`);
+                          setShowActionSheet(false);
+                          setTimeout(() => inputRef.current?.focus(), 100);
+                        },
+                      },
+                    ].map(item => (
+                      <button
+                        key={item.label}
+                        onClick={item.action}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                          <item.icon className="w-4 h-4 text-[#6B9080]" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100 leading-tight">{item.label}</p>
+                          <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5">{item.desc}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>,

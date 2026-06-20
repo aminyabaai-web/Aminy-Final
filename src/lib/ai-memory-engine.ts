@@ -847,4 +847,8 @@ export const aiMemoryEngine = {
   clearMemory,
 };
 
+export async function getUserMemoryFacts(userId: string): Promise<MemoryFact[]> {
+  return getFacts(userId);
+}
+
 export default aiMemoryEngine;
