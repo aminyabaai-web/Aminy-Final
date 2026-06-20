@@ -423,7 +423,7 @@ export function BookVisitScreen({
           >
             <Building2 className="w-4 h-4" />
             In Office
-            <span className="rounded-full bg-[#F0EDE8] px-2 py-0.5 text-[11px] font-semibold tracking-[0.02em] text-[#5A6B7A]">Soon</span>
+            <span className="rounded-full bg-[#F0EDE8] px-2 py-0.5 text-xs font-semibold tracking-[0.02em] text-[#5A6B7A]">Soon</span>
           </button>
         </div>
 

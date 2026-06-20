@@ -1068,7 +1068,7 @@ function CAQHTab() {
             {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
           <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700 opacity-60" disabled title="Coming soon">
-            Re-run QA Check <span className="ml-1 text-[10px] text-slate-400 font-normal">Soon</span>
+            Re-run QA Check <span className="ml-1 text-xs text-slate-400 font-normal">Soon</span>
           </Button>
         </div>
       </Card>
@@ -1235,7 +1235,7 @@ function EnrollmentTab() {
 
           <Button size="sm" className="mt-4 w-full opacity-60" disabled title="Coming soon">
             <Plus className="w-3 h-3 mr-1" /> Begin {activeWorkflow.payerName} Application
-            <span className="ml-auto text-[10px] text-white/80 font-normal">Coming soon</span>
+            <span className="ml-auto text-xs text-white/80 font-normal">Coming soon</span>
           </Button>
         </Card>
       </div>
@@ -2109,7 +2109,7 @@ function DenialOpsTab() {
                             title="Coming soon"
                           >
                             <TrendingUp className="w-3 h-3 mr-1" /> Check Appeal Status
-                            <span className="ml-auto text-[10px] text-slate-400 font-normal">Soon</span>
+                            <span className="ml-auto text-xs text-slate-400 font-normal">Soon</span>
                           </Button>
                         )}
                       </div>
@@ -2419,7 +2419,7 @@ function HelpTab() {
             title="Coming soon"
           >
             <BookOpen className="w-3 h-3 mr-2" /> Credentialing Knowledge Base
-            <span className="ml-auto text-[10px] text-slate-400 font-normal">Coming soon</span>
+            <span className="ml-auto text-xs text-slate-400 font-normal">Coming soon</span>
           </Button>
           <Button
             variant="outline"
@@ -2429,7 +2429,7 @@ function HelpTab() {
             title="Coming soon"
           >
             <FileText className="w-3 h-3 mr-2" /> Download Payer Requirements Guide
-            <span className="ml-auto text-[10px] text-slate-400 font-normal">Coming soon</span>
+            <span className="ml-auto text-xs text-slate-400 font-normal">Coming soon</span>
           </Button>
         </div>
       </Card>
@@ -2504,7 +2504,7 @@ export default function CredentialingSupportCenter({
                 {tab.label}
                 {badge != null && badge > 0 && (
                   <span
-                    className={`ml-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center ${
+                    className={`ml-1 w-4 h-4 rounded-full text-xs font-bold flex items-center justify-center ${
                       isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
                     }`}
                   >

@@ -309,7 +309,7 @@ function DateSelector({
                 {formatDayNumber(day.date)}
               </div>
               {hasAvailability && (
-                <div className={`text-[10px] ${isSelected ? 'text-teal-100' : 'text-[#6B9080]'}`}>
+                <div className={`text-xs ${isSelected ? 'text-teal-100' : 'text-[#6B9080]'}`}>
                   {availableCount} slots
                 </div>
               )}

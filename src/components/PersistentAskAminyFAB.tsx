@@ -307,12 +307,12 @@ export function PersistentAskAminyFAB({
                   <span>I remember {childName}'s journey</span>
                 </p>
                 {tier === 'free' && (
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {messagesLeft} messages left
                   </p>
                 )}
                 {tier !== 'free' && (
-                  <Badge variant="outline" className="text-[10px] mt-0.5 bg-accent/10 text-accent border-accent/20">
+                  <Badge variant="outline" className="text-xs mt-0.5 bg-accent/10 text-accent border-accent/20">
                     Unlimited
                   </Badge>
                 )}

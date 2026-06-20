@@ -195,14 +195,14 @@ function KPITile({
         </div>
       </div>
 
-      <p className={`${compact ? 'text-[11px]' : 'text-xs'} text-[#5A6B7A] font-medium`}>
+      <p className={`${compact ? 'text-xs' : 'text-xs'} text-[#5A6B7A] font-medium`}>
         {kpi.interpretation}
       </p>
 
       {!compact && (
         <div className="mt-3 flex items-center gap-1.5">
           <span className="text-xs">{getStatusIcon(kpi.status)}</span>
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{kpi.status.replace('_', ' ')}</span>
+          <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{kpi.status.replace('_', ' ')}</span>
         </div>
       )}
     </Card>

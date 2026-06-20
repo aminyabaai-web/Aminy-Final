@@ -175,31 +175,31 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
           <div className="grid grid-cols-2 gap-1.5 pt-1">
             {parsed.trigger && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Trigger</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wide">Trigger</p>
                 <p className="text-xs font-medium text-[#3A4A57]">{parsed.trigger}</p>
               </div>
             )}
             {parsed.intensity && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Intensity</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wide">Intensity</p>
                 <p className="text-xs font-medium text-[#3A4A57]">{parsed.intensity}/5 · {intensityLabel(parsed.intensity)}</p>
               </div>
             )}
             {parsed.duration_minutes && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Duration</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wide">Duration</p>
                 <p className="text-xs font-medium text-[#3A4A57]">{parsed.duration_minutes}m</p>
               </div>
             )}
             {parsed.location && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Location</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wide">Location</p>
                 <p className="text-xs font-medium text-[#3A4A57]">{parsed.location}</p>
               </div>
             )}
             {parsed.antecedent && (
               <div className="bg-white rounded-lg px-2.5 py-1.5 col-span-2">
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">Antecedent</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wide">Antecedent</p>
                 <p className="text-xs font-medium text-[#3A4A57]">{parsed.antecedent}</p>
               </div>
             )}

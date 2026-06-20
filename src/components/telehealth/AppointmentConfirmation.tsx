@@ -626,9 +626,9 @@ export function AppointmentConfirmationScreen({
 
             <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
               <div className="flex -space-x-1">
-                <div className="w-8 h-5 bg-blue-600 rounded text-white text-[10px] flex items-center justify-center font-bold">VISA</div>
-                <div className="w-8 h-5 bg-red-500 rounded text-white text-[10px] flex items-center justify-center font-bold">MC</div>
-                <div className="w-8 h-5 bg-blue-400 rounded text-white text-[10px] flex items-center justify-center font-bold">AMEX</div>
+                <div className="w-8 h-5 bg-blue-600 rounded text-white text-xs flex items-center justify-center font-bold">VISA</div>
+                <div className="w-8 h-5 bg-red-500 rounded text-white text-xs flex items-center justify-center font-bold">MC</div>
+                <div className="w-8 h-5 bg-blue-400 rounded text-white text-xs flex items-center justify-center font-bold">AMEX</div>
               </div>
               <span>and more</span>
             </div>

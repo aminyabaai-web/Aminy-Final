@@ -403,6 +403,19 @@ const PRICE_IDS: Record<string, string> = {
   proplus_annual: Deno.env.get('STRIPE_PRICE_PROPLUS_ANNUAL') || 'price_1TgUiGQaCBrUl24Be9NyZWCn',   // $479/yr
 };
 
+// Surface a misconfigured prod deploy: if the live price-ID env vars are absent we silently
+// fall back to the baked IDs above, which can charge the wrong amount. Warn so it's observable.
+{
+  const missingPriceEnv = [
+    'STRIPE_PRICE_CORE_MONTHLY', 'STRIPE_PRICE_CORE_ANNUAL',
+    'STRIPE_PRICE_PRO_MONTHLY', 'STRIPE_PRICE_PRO_ANNUAL',
+    'STRIPE_PRICE_PROPLUS_MONTHLY', 'STRIPE_PRICE_PROPLUS_ANNUAL',
+  ].filter((k) => !Deno.env.get(k));
+  if (missingPriceEnv.length > 0) {
+    console.warn(`[stripe] Missing price-ID env vars, using baked fallbacks: ${missingPriceEnv.join(', ')}`);
+  }
+}
+
 // ============================================================================
 // SECURE PROMO CODE HANDLING (Server-Side Only - Database-Backed)
 // ============================================================================

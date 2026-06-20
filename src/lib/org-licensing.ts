@@ -77,6 +77,7 @@ export interface OrgMember {
   userId: string | null;
   email: string;
   role: 'owner' | 'admin' | 'manager' | 'member';
+  clinicalRole?: 'clinical_director' | 'bcba' | 'rbt' | 'billing' | 'admin';
   status: 'invited' | 'active' | 'deactivated' | 'removed';
   joinedAt: string | null;
   invitedAt: string;

@@ -220,7 +220,7 @@ export function AskAminyWithBrain({
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold">Aminy</h3>
-                  <Badge variant="outline" className="text-[10px] px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
+                  <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200">
                     <Sparkles className="w-2.5 h-2.5 mr-1" />
                     Context-Aware AI
                   </Badge>
@@ -258,10 +258,10 @@ export function AskAminyWithBrain({
           {showContext && aiContext && (
             <div className="p-3 border-b bg-[#FAF7F2] text-xs space-y-2">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-[10px]">Context Loaded</Badge>
+                <Badge variant="outline" className="text-xs">Context Loaded</Badge>
                 <span className="text-muted-foreground">AI knows:</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 <div className="flex items-center gap-1">
                   <span className="text-green-600">✓</span>
                   <span>{aiContext.child.name}, age {aiContext.child.age}</span>
@@ -302,7 +302,7 @@ export function AskAminyWithBrain({
                     )}
                   >
                     {message.contextAware && (
-                      <div className="flex items-center gap-1 mb-1 text-[10px] opacity-70">
+                      <div className="flex items-center gap-1 mb-1 text-xs opacity-70">
                         <Brain className="w-3 h-3" />
                         <span>Context-aware response</span>
                       </div>
@@ -387,7 +387,7 @@ export function AskAminyWithBrain({
                 )}
               </Button>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2 text-center">
+            <p className="text-xs text-muted-foreground mt-2 text-center">
               AI has full context about {userData.childName} • Press Enter to send
             </p>
             <p className="text-[9px] text-muted-foreground/70 mt-1 text-center">

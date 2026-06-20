@@ -322,27 +322,27 @@ export function JuniorReportCard({
           <div className="grid grid-cols-4 gap-2 mb-4">
             <div className="text-center p-2 rounded-xl bg-[#EEF4F8]">
               <div className="text-lg font-bold text-blue-700">{data.sessionsCompleted}</div>
-              <div className="text-[10px] text-blue-500">Sessions</div>
+              <div className="text-xs text-blue-500">Sessions</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-green-50">
               <div className={`text-lg font-bold ${accuracyColor(data.avgAccuracy)}`}>
                 {data.avgAccuracy}%
               </div>
-              <div className="text-[10px] text-green-500">Accuracy</div>
+              <div className="text-xs text-green-500">Accuracy</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-orange-50">
               <div className="flex items-center justify-center gap-0.5">
                 <Flame className="w-3.5 h-3.5 text-orange-500" />
                 <span className="text-lg font-bold text-orange-700">{data.streak}</span>
               </div>
-              <div className="text-[10px] text-orange-500">Streak</div>
+              <div className="text-xs text-orange-500">Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-purple-50">
               <div className="flex items-center justify-center gap-0.5">
                 <Clock className="w-3.5 h-3.5 text-purple-500" />
                 <span className="text-lg font-bold text-purple-700">{data.totalMinutes}</span>
               </div>
-              <div className="text-[10px] text-purple-500">Minutes</div>
+              <div className="text-xs text-purple-500">Minutes</div>
             </div>
           </div>
 
@@ -408,7 +408,7 @@ export function JuniorReportCard({
           </div>
 
           {/* Privacy note */}
-          <p className="text-[10px] text-[#8A9BA8] text-center mt-3">
+          <p className="text-xs text-[#8A9BA8] text-center mt-3">
             Aminy Ease | Privacy-first: initials only, no PII shared
           </p>
         </div>

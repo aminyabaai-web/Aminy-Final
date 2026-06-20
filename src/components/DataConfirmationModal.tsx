@@ -126,7 +126,7 @@ export function DataConfirmationModal({
             {/* Header */}
             <div className="px-5 pt-2 pb-4 flex items-start justify-between border-b border-[#F0EDE8]">
               <div className="flex-1 min-w-0">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] text-[10px] font-semibold tracking-wider uppercase mb-1.5">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] text-xs font-semibold tracking-wider uppercase mb-1.5">
                   <Sparkles className="w-3 h-3" />
                   Ready for review
                 </div>
@@ -244,7 +244,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
           <div className="flex items-center gap-2 flex-wrap">
             <p className="text-sm font-semibold text-[#1B2733]">{style.label}</p>
             <span
-              className="text-[10px] font-medium px-1.5 py-0.5 rounded-full"
+              className="text-xs font-medium px-1.5 py-0.5 rounded-full"
               style={{ background: `${confidenceColor}15`, color: confidenceColor }}
             >
               {confidenceLabel}
@@ -263,7 +263,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
         <div className="px-3 pb-3 border-t border-[#F0EDE8] space-y-3 pt-3">
           {/* Quote of raw text */}
           <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
-            <p className="text-[10px] font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1">
+            <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1">
               You said
             </p>
             <p className="text-sm text-[#1B2733] leading-snug italic">
@@ -274,13 +274,13 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
           {/* Structured data preview */}
           {previewEntries.length > 0 && (
             <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
-              <p className="text-[10px] font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1.5">
+              <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1.5">
                 What we'll save
               </p>
               <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5">
                 {previewEntries.map(([key, value]) => (
                   <div key={key} className="min-w-0">
-                    <dt className="text-[10px] text-[#8E9BAA] capitalize truncate">
+                    <dt className="text-xs text-[#8E9BAA] capitalize truncate">
                       {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                     </dt>
                     <dd className="text-xs font-medium text-[#1B2733] truncate">

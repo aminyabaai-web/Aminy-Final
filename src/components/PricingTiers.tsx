@@ -397,7 +397,7 @@ function TierCardView({
     >
       {/* Featured badge */}
       {tier.promoBadge && (
-        <span className="absolute top-4 right-4 text-[10px] font-bold text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase tracking-wider">
+        <span className="absolute top-4 right-4 text-xs font-bold text-violet-600 bg-violet-100 px-2 py-1 rounded-full uppercase tracking-wider">
           {tier.promoBadge}
         </span>
       )}
@@ -494,7 +494,7 @@ function TierCardView({
 
       {/* Promo footer */}
       {tier.promoFooter && (
-        <p className="text-[11px] text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
+        <p className="text-xs text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
           <span className="font-medium underline underline-offset-2">Promo terms apply.</span> {tier.promoFooter}
         </p>
       )}

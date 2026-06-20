@@ -129,11 +129,11 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           ].map(item => (
             <div key={item.label} className="flex items-center justify-between">
               <div>
-                <p className={`text-[11px] font-medium ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>{item.label}</p>
-                <p className={`text-[10px] ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{item.desc}</p>
+                <p className={`text-xs font-medium ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>{item.label}</p>
+                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{item.desc}</p>
               </div>
               {item.locked
-                ? <span className="text-[10px] font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>
+                ? <span className="text-xs font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>
                 : <input type="checkbox" checked={item.value} onChange={e => item.set!(e.target.checked)} aria-label={`${item.label} cookies`} className="h-3.5 w-3.5 rounded border-slate-600 text-[#6B9080]" />
               }
             </div>
@@ -143,27 +143,27 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
 
       <div className={`backdrop-blur-md px-4 py-2.5 flex items-center gap-3 ${isDark ? 'bg-slate-900/95' : 'bg-white/95'}`} style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.15)', flexWrap: 'wrap', rowGap: '8px' }}>
         <Cookie className="w-3.5 h-3.5 flex-shrink-0 text-primary" />
-        <p className={`flex-1 text-[11px] leading-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{ minWidth: '150px' }}>
+        <p className={`flex-1 text-xs leading-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{ minWidth: '150px' }}>
           We use cookies for functionality &amp; analytics.
         </p>
         <div className="flex items-center gap-1.5 flex-shrink-0" style={{ marginLeft: 'auto' }}>
           <button
             onClick={() => setShowDetails(d => !d)}
-            className="px-2.5 py-1 text-[11px] font-medium text-primary underline"
+            className="px-2.5 py-1 text-xs font-medium text-primary underline"
           >
             {showDetails ? 'Hide' : 'Customize'}
           </button>
           <button
             onClick={handleDecline}
             style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
-            className={`rounded-md text-[11px] font-medium border transition-colors ${isDark ? 'text-slate-300 border-slate-700 hover:border-slate-500' : 'text-gray-600 border-gray-300 hover:border-gray-400'}`}
+            className={`rounded-md text-xs font-medium border transition-colors ${isDark ? 'text-slate-300 border-slate-700 hover:border-slate-500' : 'text-gray-600 border-gray-300 hover:border-gray-400'}`}
           >
             Essential only
           </button>
           <button
             onClick={showDetails ? handleAcceptSelected : handleAcceptAll}
             style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
-            className="rounded-md text-[11px] font-medium bg-primary text-white hover:bg-primary transition-colors"
+            className="rounded-md text-xs font-medium bg-primary text-white hover:bg-primary transition-colors"
           >
             {showDetails ? 'Save' : 'Accept all'}
           </button>

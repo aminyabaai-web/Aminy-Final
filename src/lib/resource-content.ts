@@ -37,6 +37,7 @@ export const RESOURCE_CATEGORIES = [
   { id: 'communication', label: 'AAC & Communication', emoji: '💬' },
   { id: 'behavior', label: 'Behavior Basics', emoji: '🎯' },
   { id: 'tools', label: 'Tools & Visuals', emoji: '🛠️' },
+  { id: 'family', label: 'Family', emoji: '👨‍👩‍👧' },
 ];
 
 export const RESOURCES: Resource[] = [
@@ -1012,6 +1013,141 @@ Several waitlists are months-to-years long. Getting ON them costs nothing:
 Thousands of parents will tell you the same thing: the diagnosis day felt like an ending, and it was actually the day the right help became possible. Your child just became eligible for every support in this library.`,
     relatedQuestions: ['We just got the diagnosis, what do I do first?', 'How long are ABA waitlists?'],
     relatedGroupTopics: ['new-diagnosis', 'support'],
+  },
+
+  // ── SCHOOL & IEP ──────────────────────────────────────────────────────────────
+  {
+    id: 'how-to-request-iep-evaluation',
+    title: 'How to Request a School IEP Evaluation',
+    subtitle: 'A parent-written letter triggers federal timelines — here is exactly how to do it',
+    category: 'school',
+    tags: ['IEP', 'school', 'evaluation', 'special education', 'IDEA', 'legal rights'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Under the Individuals with Disabilities Education Act (IDEA), your child has the right to a free, appropriate public school evaluation. The school must respond within 60 days of receiving your written request (timelines vary slightly by state).
+
+**Step 1: Write the request letter (today)**
+Address it to the school principal AND the special education director. Keep it short:
+
+*"I am formally requesting a full and individual evaluation for my child [Name], grade [X], to determine if they qualify for special education services and an Individualized Education Program (IEP). I understand the school has 60 days to complete this evaluation under IDEA. Please contact me to schedule the consent meeting."*
+
+Date and sign it. Send it via email AND certified mail (keep both copies).
+
+**Step 2: What happens next**
+- Within 15 school days, the school must respond with a "prior written notice"
+- They will schedule a meeting to discuss what the evaluation will cover
+- You sign consent forms for the evaluation to begin
+- A multidisciplinary team evaluates your child (psychological, educational, speech, OT as needed)
+- Results meeting held — if eligible, IEP is developed within 30 days
+
+**If the school refuses:** They must give you written notice explaining why. You have the right to request mediation or a due process hearing. Contact your state's Parent Training and Information Center (PTI) — it is free.
+
+**Key parent rights:**
+- You must consent to each evaluation
+- You can request an Independent Educational Evaluation (IEE) if you disagree with the school's findings
+- You are a full member of the IEP team — your input is required, not optional
+- The IEP must be reviewed at least annually`,
+    relatedQuestions: ['How do I get my child an IEP?', 'What if the school says my child does not qualify?'],
+    relatedGroupTopics: ['school', 'new-diagnosis'],
+  },
+
+  {
+    id: 'first-iep-meeting-what-to-expect',
+    title: 'What to Expect at Your First IEP Meeting',
+    subtitle: 'Walk in knowing the process, your rights, and the questions that matter most',
+    category: 'school',
+    tags: ['IEP', 'school', 'meeting', 'special education', 'goals', 'services'],
+    type: 'guide',
+    readTimeMinutes: 6,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `An IEP meeting can feel overwhelming — you are sitting across from 6-8 school professionals. Here is what to expect and how to show up prepared.
+
+**Who will be in the room**
+- General education teacher
+- Special education teacher
+- School psychologist or evaluator
+- Related service providers (speech, OT, PT — as applicable)
+- School administrator (required by law)
+- You (the parent — a required team member, not a guest)
+- Your child (if 16 or older; younger is optional)
+
+You may also bring: a support person, an advocate, or a recording device (check state law first, but federal law says you can bring whoever you need).
+
+**The meeting structure**
+1. Present levels of performance — what the evaluation found
+2. Goals development — what your child will work on this year (must be measurable)
+3. Services discussion — how many minutes/week of each support
+4. Placement decision — where services are delivered (least restrictive environment)
+5. Parent consent — you sign at the end (or take it home to review)
+
+**Questions to ask**
+- "How was this goal chosen over other areas?"
+- "How will progress be measured and how often will I receive updates?"
+- "What does 'least restrictive environment' look like for my child specifically?"
+- "What happens if my child is not making expected progress?"
+- "Can I see the data from the evaluation that supports this recommendation?"
+
+**You do not have to sign at the meeting.** You can take the IEP home, review it, and sign later. The school cannot implement the IEP until you sign. If you have questions, ask them — or request another meeting.
+
+**After the meeting**
+Keep your copy. Track progress reports. Request a review meeting any time you have concerns — annually is the minimum, but you can request one whenever needed.`,
+    relatedQuestions: ['What do I say at my first IEP meeting?', 'Can I bring someone with me to an IEP?'],
+    relatedGroupTopics: ['school'],
+  },
+
+  // ── FAMILY ────────────────────────────────────────────────────────────────────
+  {
+    id: 'supporting-neurotypical-siblings',
+    title: 'Supporting Neurotypical Siblings',
+    subtitle: 'How to help your other children thrive when the family focus has shifted',
+    category: 'family',
+    tags: ['siblings', 'family', 'neurotypical', 'ASD', 'emotion regulation', 'equity'],
+    type: 'guide',
+    readTimeMinutes: 5,
+    isPremium: false,
+    author: 'Aminy BCBA Team',
+    authorCredentials: 'BCBA',
+    body: `Siblings of autistic children carry a unique emotional load that often goes unaddressed. They love their sibling, and they also feel overlooked, confused, and sometimes resentful — all at the same time. That is not a character flaw. It is a normal response to a changed family dynamic.
+
+**What siblings actually experience**
+- "Why does [sibling] get all the attention?"
+- Confusion about what autism is and whether it is "catching"
+- Fear during meltdowns they don't understand
+- Pride in their sibling alongside frustration with them
+- Embarrassment in social situations
+- Worry about their parents' stress
+
+**What they need from you**
+
+**1. Age-appropriate explanations**
+Children can handle the truth when it is framed simply: "Your brother's brain works differently. He needs extra help learning some things. It does not mean he loves you less, and it does not mean you will get less from us — it means we have to work at it."
+
+**2. Protected 1:1 time**
+Schedule it. Even 20 minutes without phones, without the sibling present, completely focused on them. Predictable and protected.
+
+**3. Permission to have mixed feelings**
+"It's okay to feel frustrated that we had to leave early. That makes sense. You're allowed to feel that." Do not require positivity or guilt them about normal feelings.
+
+**4. Their own language for it**
+Let them decide how (or if) they explain it to friends. Give them simple, true sentences they can use if they want: "My sister has autism — she has a hard time with loud sounds." Then step back.
+
+**5. A trusted adult who is just theirs**
+A therapist, school counselor, coach, or aunt/uncle who is reliably available just for them — not pulled into the autism journey. Siblings of kids with disabilities have higher rates of anxiety; this relationship can make a real difference.
+
+**Signs to watch for**
+- Consistent withdrawal or irritability at home
+- School performance dropping
+- Refusal to participate in family activities
+- Expressions of wishing the sibling "wasn't there"
+
+These are signals to get support — not evidence of a bad sibling relationship. Sibling support groups (Sibshops is a national program) can help them find community with kids who get it.`,
+    relatedQuestions: ['How do I explain autism to my other kids?', 'My other child says it is not fair — how do I respond?'],
+    relatedGroupTopics: ['family', 'support'],
   },
 ];
 

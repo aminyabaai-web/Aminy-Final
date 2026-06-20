@@ -447,7 +447,7 @@ export function EnhancedChatInput({
                   ) : (
                     <div className="w-16 h-16 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 flex flex-col items-center justify-center p-1">
                       <FileText className="w-6 h-6 text-[#8A9BA8]" />
-                      <span className="text-[10px] text-[#5A6B7A] truncate w-full text-center mt-1">
+                      <span className="text-xs text-[#5A6B7A] truncate w-full text-center mt-1">
                         {attachment.name.split('.').pop()?.toUpperCase()}
                       </span>
                     </div>

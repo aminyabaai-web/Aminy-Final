@@ -73,7 +73,7 @@ function PriorityBadge({ priority }: { priority: 'high' | 'medium' | 'low' }) {
     low: 'bg-[#F0EDE8] text-[#5A6B7A]',
   };
   return (
-    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${styles[priority]}`}>
+    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wider ${styles[priority]}`}>
       {priority}
     </span>
   );
@@ -164,7 +164,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                           {focus.easeActivities.map((act) => (
                             <span
                               key={act}
-                              className="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-[#3A4A57] shadow-sm"
+                              className="rounded-full bg-white/70 px-2.5 py-1 text-xs font-medium text-[#3A4A57] shadow-sm"
                             >
                               {act}
                             </span>
@@ -404,7 +404,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   {action.dueDate && (
                     <div className="mt-1 flex items-center gap-1">
                       <Calendar className="h-3 w-3 text-[#8A9BA8]" />
-                      <span className="text-[10px] text-[#5A6B7A]">
+                      <span className="text-xs text-[#5A6B7A]">
                         Due {formatDate(action.dueDate)}
                       </span>
                     </div>
@@ -430,7 +430,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
             <Sparkles className="h-5 w-5" />
             Ask Aminy AI about this plan
           </button>
-          <p className="mt-2 text-center text-[11px] text-[#8A9BA8]">
+          <p className="mt-2 text-center text-xs text-[#8A9BA8]">
             Get personalized answers about your child's care plan
           </p>
         </motion.div>

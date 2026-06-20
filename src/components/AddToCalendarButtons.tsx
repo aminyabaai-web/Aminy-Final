@@ -171,7 +171,7 @@ export function AddToCalendarButtons({
             aria-label={`Add to ${b.label} Calendar`}
           >
             <span className="w-6 h-6 flex items-center justify-center">{b.icon}</span>
-            <span className="text-[10px] font-medium text-[#5A6B7A]">{b.label}</span>
+            <span className="text-xs font-medium text-[#5A6B7A]">{b.label}</span>
           </a>
         ))}
       </div>

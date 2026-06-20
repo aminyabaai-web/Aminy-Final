@@ -297,7 +297,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
           const isToday = i === todayIdx;
           return (
             <div key={i} className="flex flex-col items-center flex-1 gap-1">
-              {day.stars > 0 && <span className="text-[10px] font-bold text-[#5A6B7A]">{day.stars}</span>}
+              {day.stars > 0 && <span className="text-xs font-bold text-[#5A6B7A]">{day.stars}</span>}
               <motion.div
                 initial={{ height: 4 }}
                 animate={{ height }}
@@ -312,7 +312,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
                   minHeight: 4,
                 }}
               />
-              <span className={`text-[10px] font-semibold ${isToday ? 'text-amber-600' : 'text-[#8A9BA8]'}`}>
+              <span className={`text-xs font-semibold ${isToday ? 'text-amber-600' : 'text-[#8A9BA8]'}`}>
                 {dayLabels[i]}
               </span>
             </div>
@@ -593,7 +593,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                               {!reward.redeemed && (
                                 <div className="absolute inset-0 flex items-end justify-center pb-2">
                                   <div className="rounded-full px-2 py-0.5" style={{ background: 'rgba(0,0,0,0.4)' }}>
-                                    <span className="text-white text-[10px] font-bold">
+                                    <span className="text-white text-xs font-bold">
                                       {Math.round(progress * 100)}%
                                     </span>
                                   </div>
@@ -603,7 +603,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                           ) : (
                             <div className="flex flex-col items-center gap-2 text-[#8A9BA8]">
                               <Camera className="w-8 h-8" />
-                              <span className="text-[10px] font-medium text-center px-2">Tap to add reward photo</span>
+                              <span className="text-xs font-medium text-center px-2">Tap to add reward photo</span>
                             </div>
                           )}
 
@@ -677,7 +677,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
                               <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                              <span className="text-[11px] font-bold text-amber-700">{rewards.totalStars}/{reward.starCost}</span>
+                              <span className="text-xs font-bold text-amber-700">{rewards.totalStars}/{reward.starCost}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               {/* Star cost adjustment */}
@@ -699,7 +699,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                                 <motion.button
                                   whileTap={{ scale: 0.9 }}
                                   onClick={() => handleRedeem(reward.id)}
-                                  className="text-[10px] font-bold text-white px-2 py-0.5 rounded-full shadow-sm"
+                                  className="text-xs font-bold text-white px-2 py-0.5 rounded-full shadow-sm"
                                   style={{ background: 'linear-gradient(135deg, #F59E0B, #D97706)' }}
                                 >
                                   Unlock!

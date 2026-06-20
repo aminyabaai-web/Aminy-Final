@@ -438,7 +438,7 @@ export function SessionScheduler({
                               : 'hover:bg-[#FAF7F2] text-[#3A4A57]'
                       }`}
                     >
-                      <span className="text-[10px] uppercase opacity-60">
+                      <span className="text-xs uppercase opacity-60">
                         {day.toLocaleDateString('en-US', { weekday: 'narrow' })}
                       </span>
                       <span className="text-sm font-semibold mt-1">

@@ -36,6 +36,7 @@ import {
   AlertOctagon,
   Zap,
 } from 'lucide-react';
+import { supabase } from '../utils/supabase/client';
 import { syncScheduler } from '../lib/centralreach-sync-scheduler';
 import { buildCentralReachClinicWorkflowSummary, buildCentralReachSyncJobs } from '../lib/centralreach-operator';
 import type {
@@ -424,27 +425,27 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
 export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
   const [activeTab, setActiveTab] = useState<TabView>('status');
 
-  const storedUserId = (() => {
+  // Resolve userId without parsing the raw Supabase auth token out of localStorage
+  // (that pattern exposes the JWT to any XSS). Use the SDK's session instead.
+  const [storedUserId, setStoredUserId] = useState<string>(() => {
     if (typeof window === 'undefined') return '';
     try {
       const stored = JSON.parse(window.localStorage.getItem('aminy-user') || '{}') as { id?: string; userId?: string };
-      if (stored.id || stored.userId) {
-        return stored.id || stored.userId || '';
-      }
-
-      const authKey = Object.keys(window.localStorage).find((key) => key.startsWith('sb-') && key.endsWith('-auth-token'));
-      const authRaw = authKey ? window.localStorage.getItem(authKey) : null;
-      const auth = authRaw ? JSON.parse(authRaw) as { access_token?: string } : null;
-      const token = auth?.access_token;
-      if (!token) return '';
-      const [, payload] = token.split('.');
-      if (!payload) return '';
-      const decoded = JSON.parse(window.atob(payload.replace(/-/g, '+').replace(/_/g, '/'))) as { sub?: string };
-      return decoded.sub || '';
+      return stored.id || stored.userId || '';
     } catch {
       return '';
     }
-  })();
+  });
+
+  useEffect(() => {
+    if (userId || storedUserId) return;
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      const sub = data.session?.user?.id;
+      if (active && sub) setStoredUserId(sub);
+    });
+    return () => { active = false; };
+  }, [userId, storedUserId]);
 
   const effectiveUserId = userId || storedUserId;
   const [syncRecords, setSyncRecords] = useState<SyncRecord[]>([]);

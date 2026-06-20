@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2 } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -34,6 +34,13 @@ import { supabase } from '../utils/supabase/client';
 import { updateUserContext } from '../ai/contextLayer';
 
 import { renderRichMarkdown } from '../lib/chat-markdown';
+import { getProactiveNudges, formatNudgesForAI } from '../lib/ai-proactive-nudges';
+import { sendLocalNotification } from '../lib/push-notifications';
+import { Switch } from './ui/switch';
+import { UsageMeter } from './UsageMeter';
+import { useRateLimitStore } from '../lib/rate-limit-store';
+import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
+import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
@@ -42,7 +49,8 @@ type SmartAction =
   | { type: 'SET_CALM_CUE'; payload: { cue: string } }
   | { type: 'ADD_WIN'; payload: { win: string } }
   | { type: 'ADD_STRUGGLE'; payload: { struggle: string } }
-  | { type: 'ADD_APPOINTMENT'; payload: { title: string; provider?: string; service_type?: string; start_iso: string; duration_minutes?: number; location?: string; notes?: string } };
+  | { type: 'ADD_APPOINTMENT'; payload: { title: string; provider?: string; service_type?: string; start_iso: string; duration_minutes?: number; location?: string; notes?: string } }
+  | { type: 'NAVIGATE'; payload: { screen: string; tab?: string } };
 
 function parseSmartActions(text: string): { cleanText: string; actions: SmartAction[] } {
   const actions: SmartAction[] = [];
@@ -133,6 +141,9 @@ async function executeSmartAction(action: SmartAction, userId: string): Promise<
       });
       return `✓ Appointment saved: **${title}** — ${friendlyTime}${provider ? ` with ${provider}` : ''}.\n[CALENDAR:${calendarPayload}]`;
     }
+    case 'NAVIGATE':
+      // Handled by the component via onNavigate prop — return a navigate marker
+      return `[NAVIGATE:${JSON.stringify(action.payload)}]`;
     default:
       return '';
   }
@@ -306,6 +317,8 @@ interface BevelChatOverlayProps {
   initialPrompt?: string;
   userTier?: string;
   onUpgrade?: () => void;
+  onNavigate?: (screen: string, options?: { tab?: string }) => void;
+  userType?: 'parent' | 'provider';
 }
 
 const FREE_DAILY_LIMIT = 3;
@@ -322,6 +335,55 @@ function incrementFreeDailyCount(userId: string): number {
   return next;
 }
 
+// Reads a `text/event-stream` response from /ai/brain and drives progressive
+// message rendering. Calls `onToken(accumulated, isFirst)` for each streamed
+// token — `isFirst=true` on the very first token so callers can add the message
+// bubble only once it has content. Returns the full accumulated text.
+// Falls back to JSON parsing when the response is not SSE (e.g. OpenAI path).
+async function readBrainStream(
+  response: Response,
+  onToken: (accumulated: string, isFirst: boolean) => void,
+  onFirstToken: () => void
+): Promise<string> {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('text/event-stream')) {
+    const data = await response.json();
+    const text = data.message || data.response || '';
+    onFirstToken();
+    onToken(text, true);
+    return text;
+  }
+
+  const reader = response.body!.getReader();
+  const decoder = new TextDecoder();
+  let accumulated = '';
+  let buffer = '';
+  let isFirst = true;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const raw = line.slice(6).trim();
+      if (!raw) continue;
+      try {
+        const payload = JSON.parse(raw);
+        if (payload.token) {
+          if (isFirst) onFirstToken();
+          accumulated += payload.token;
+          onToken(accumulated, isFirst);
+          isFirst = false;
+        }
+      } catch { /* ignore malformed lines */ }
+    }
+  }
+  return accumulated;
+}
+
 export function BevelChatOverlay({
   isOpen,
   onClose,
@@ -331,6 +393,8 @@ export function BevelChatOverlay({
   initialPrompt,
   userTier,
   onUpgrade,
+  onNavigate,
+  userType = 'parent',
 }: BevelChatOverlayProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -351,6 +415,18 @@ export function BevelChatOverlay({
   const [isTranscribing, setIsTranscribing] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
+  const [showActionSheet, setShowActionSheet] = useState(false);
+  const [pendingScreenContext, setPendingScreenContext] = useState<string | null>(null);
+  const [showThinkingSteps, setShowThinkingSteps] = useState<boolean>(() => {
+    try { return localStorage.getItem('aminy-show-thinking') !== 'false'; } catch { return true; }
+  });
+  const [showFollowUps, setShowFollowUps] = useState<boolean>(() => {
+    try { return localStorage.getItem('aminy-show-followups') !== 'false'; } catch { return true; }
+  });
+  const [activeThinkingSteps, setActiveThinkingSteps] = useState<ThinkingStep[]>([]);
+  const { dailyUsage, fetchUsage } = useRateLimitStore();
+  const [memoryFacts, setMemoryFacts] = useState<MemoryFact[]>([]);
+  const [memoryLoading, setMemoryLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -395,6 +471,7 @@ export function BevelChatOverlay({
   useEffect(() => {
     if (isOpen && userId) {
       loadContextAndOpenChat();
+      fetchUsage();
     }
   }, [isOpen, userId, currentPath]);
 
@@ -436,6 +513,23 @@ export function BevelChatOverlay({
   ) => {
     setIsProactiveLoading(true);
     try {
+      // Load nudges first — if any exist, surface them without making an AI call
+      const nudges = userId && userId !== 'dev-preview-user'
+        ? await getProactiveNudges(userId, userType).catch(() => [])
+        : [];
+
+      if (nudges.length > 0) {
+        const nudgeText = formatNudgesForAI(nudges);
+        setMessages([{
+          id: 'proactive-nudges-' + Date.now(),
+          role: 'assistant',
+          content: nudgeText,
+          timestamp: new Date(),
+          chips: getFollowUpChips(context, currentPath, propChildName),
+        }]);
+        return;
+      }
+
       const proactivePrompt = buildProactivePrompt(context, current, propChildName);
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
@@ -587,6 +681,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
     try {
       const systemPrompt = buildSystemPrompt(ctxUser, ctxCurrent);
+      const assistantId = (Date.now() + 1).toString();
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
@@ -595,29 +691,34 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           body: JSON.stringify({
             userMessage: text,
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
-            systemPrompt
+            systemPrompt,
+            stream: true,
           })
         }
       );
       if (!response.ok) throw new Error('AI connection hiccup');
-      const data = await response.json();
-      const rawText = data.message || data.response || '';
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
-      const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: aiText,
-        timestamp: new Date(),
-        chips: getFollowUpChips(ctxUser, currentPath, propChildName)
-      };
-      setMessages(prev => [...prev, aiMsg]);
+      const rawText = await readBrainStream(
+        response,
+        (accumulated, isFirst) => {
+          if (isFirst) {
+            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
+          } else {
+            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
+          }
+        },
+        () => setIsLoading(false)
+      );
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
+      setMessages(prev => prev.map(m =>
+        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(ctxUser, currentPath, propChildName) } : m
+      ));
 
       for (const action of actions) {
         try {
           const confirmation = await executeSmartAction(action, userId);
           if (confirmation) {
-            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant', content: confirmation, timestamp: new Date() }]);
+            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
           }
         } catch { toast.error('Could not save — try again?'); }
       }
@@ -651,7 +752,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         setInput('');
         return;
       }
-      incrementFreeDailyCount(userId);
+      const newCount = incrementFreeDailyCount(userId);
+      const remaining = FREE_DAILY_LIMIT - newCount;
+      if (remaining === 1 && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        sendLocalNotification(
+          '1 AI message left today',
+          'Upgrade to Aminy Core for unlimited daily messages.',
+          { route: '/upgrade' }
+        );
+      }
     }
 
     const img = imageData || attachedImage;
@@ -669,6 +778,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
     setInput('');
     setHasInteracted(true);
     setIsLoading(true);
+    if (showThinkingSteps) {
+      setActiveThinkingSteps(generateThinkingSteps(text));
+    }
+
+    // Inject pending screen context into message text
+    if (pendingScreenContext) {
+      text = `[Screen context: ${pendingScreenContext}]\n\n${text}`;
+      setPendingScreenContext(null);
+    }
 
     try {
       const systemPrompt = buildSystemPrompt(userContext, currentContext, personality);
@@ -690,6 +808,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         messagePayload = text;
       }
 
+      const assistantId = (Date.now() + 1).toString();
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
@@ -698,29 +818,34 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           body: JSON.stringify({
             userMessage: messagePayload,
             conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
-            systemPrompt
+            systemPrompt,
+            stream: !img, // vision payloads fall back to synchronous path on the edge fn
           })
         }
       );
       if (!response.ok) throw new Error('AI connection hiccup');
-      const data = await response.json();
-      const rawText = data.message || data.response || '';
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
-      const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: aiText,
-        timestamp: new Date(),
-        chips: getFollowUpChips(userContext, currentPath, propChildName)
-      };
-      setMessages(prev => [...prev, aiMsg]);
+      const rawText = await readBrainStream(
+        response,
+        (accumulated, isFirst) => {
+          if (isFirst) {
+            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
+          } else {
+            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
+          }
+        },
+        () => { setIsLoading(false); setActiveThinkingSteps([]); }
+      );
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
+      setMessages(prev => prev.map(m =>
+        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(userContext, currentPath, propChildName) } : m
+      ));
 
       for (const action of actions) {
         try {
           const confirmation = await executeSmartAction(action, userId);
           if (confirmation) {
-            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant', content: confirmation, timestamp: new Date() }]);
+            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
           }
         } catch { toast.error('Could not save — try again?'); }
       }
@@ -732,8 +857,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
       toast.error('Connection hiccup — try again?');
     } finally {
       setIsLoading(false);
+      setActiveThinkingSteps([]);
     }
-  }, [input, isLoading, messages, userContext, currentContext, currentPath, userId, personality, attachedImage]);
+  }, [input, isLoading, messages, userContext, currentContext, currentPath, userId, personality, attachedImage, showThinkingSteps]);
 
   // ─── Voice input ──────────────────────────────────────────────────────────
   // Tap mic → records audio → on stop, sends to /ai/transcribe → fills input.
@@ -896,7 +1022,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   ✦
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-[#1B2733] leading-tight truncate">Aminy AI</p>
+                  <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
                   <p className="text-xs text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
                     <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
@@ -947,6 +1073,24 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       </button>
                     </div>
 
+                    {/* Pinned navigation */}
+                    <div className="border-b border-[#E8E4DF] dark:border-slate-700">
+                      {[
+                        { icon: Folder, label: 'Records Vault', screen: 'records-vault' },
+                        { icon: Bell, label: 'Check-ins', screen: 'notifications' },
+                      ].map(item => (
+                        <button
+                          key={item.screen}
+                          onClick={() => { setShowHistory(false); onNavigate?.(item.screen); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                        >
+                          <item.icon className="w-4 h-4 text-[#6B9080]" />
+                          <span className="text-sm text-[#1B2733] dark:text-slate-100">{item.label}</span>
+                          <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
+                        </button>
+                      ))}
+                    </div>
+
                     {/* Sessions list */}
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
@@ -972,7 +1116,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 ✦
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-[#1B2733] leading-snug line-clamp-2">{session.preview}</p>
+                                <p className="text-sm text-[#1B2733] dark:text-slate-200 leading-snug line-clamp-2">{session.preview}</p>
                                 <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
                               </div>
                               <button
@@ -1024,7 +1168,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {(userContext?.childName || propChildName || '?')[0].toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-[#1B2733] leading-tight">
+                            <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">
                               {userContext?.childName || propChildName || 'Your child'}
                             </p>
                             {userContext?.childAge && (
@@ -1046,16 +1190,16 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         {(userContext?.progressThisWeek?.sessionsCompleted ?? 0) > 0 && (
                           <div className="flex gap-3 mt-3 pt-3 border-t border-[#6B9080]/20">
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.sessionsCompleted}</p>
-                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Sessions</p>
+                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.sessionsCompleted}</p>
+                              <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Sessions</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.calmMoments}</p>
-                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Calm moments</p>
+                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.calmMoments}</p>
+                              <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Calm moments</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733]">{userContext?.progressThisWeek?.newStrategies}</p>
-                              <p className="text-[10px] text-slate-400 dark:text-slate-400 uppercase tracking-wide">Strategies</p>
+                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.newStrategies}</p>
+                              <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Strategies</p>
                             </div>
                           </div>
                         )}
@@ -1084,13 +1228,59 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-xs font-semibold text-[#1B2733]">{p.name}</p>
+                                  <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">{p.name}</p>
                                   {personality === p.id && <Check className="w-3 h-3 text-[#6B9080] shrink-0" />}
                                 </div>
-                                <p className="text-[10px] text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
+                                <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
                               </div>
                             </button>
                           ))}
+                        </div>
+                      </div>
+
+                      {/* ── Usage ── */}
+                      <div className="px-4 mt-5">
+                        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-3">Usage</p>
+                        <UsageMeter
+                          variant="full"
+                          tier={userTier || 'free'}
+                          messagesUsedToday={dailyUsage?.used ?? 0}
+                          documentsUploaded={0}
+                          memoryFactsStored={0}
+                          onUpgrade={() => onUpgrade?.()}
+                        />
+                      </div>
+
+                      {/* ── Customization ── */}
+                      <div className="px-4 mt-5">
+                        <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-3">Customization</p>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="pr-4">
+                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Show thinking steps</p>
+                              <p className="text-xs text-[#5A6B7A] leading-tight">Display reasoning steps while processing</p>
+                            </div>
+                            <Switch
+                              checked={showThinkingSteps}
+                              onCheckedChange={(v) => {
+                                setShowThinkingSteps(v);
+                                try { localStorage.setItem('aminy-show-thinking', String(v)); } catch {}
+                              }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div className="pr-4">
+                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Suggested follow-ups</p>
+                              <p className="text-xs text-[#5A6B7A] leading-tight">Show quick questions after each response</p>
+                            </div>
+                            <Switch
+                              checked={showFollowUps}
+                              onCheckedChange={(v) => {
+                                setShowFollowUps(v);
+                                try { localStorage.setItem('aminy-show-followups', String(v)); } catch {}
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
 
@@ -1129,7 +1319,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
-                              className="w-full text-sm text-[#1B2733] placeholder-slate-400 border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#1B2733] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={4}
                             />
                           </div>
@@ -1150,7 +1340,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."
-                              className="w-full text-sm text-[#1B2733] placeholder-slate-400 border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#1B2733] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={3}
                             />
                           </div>
@@ -1167,7 +1357,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 divide-y divide-slate-100 dark:divide-slate-700 overflow-hidden">
                             {userContext.strugglingWith && userContext.strugglingWith.length > 0 && (
                               <div className="px-3 py-2.5">
-                                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Working on</p>
+                                <p className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Working on</p>
                                 <div className="flex flex-wrap gap-1.5">
                                   {userContext.strugglingWith.map((s, i) => (
                                     <span key={i} className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full">{s}</span>
@@ -1177,7 +1367,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             )}
                             {userContext.celebratingWins && userContext.celebratingWins.length > 0 && (
                               <div className="px-3 py-2.5">
-                                <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Wins</p>
+                                <p className="text-xs font-semibold text-slate-400 dark:text-slate-400 uppercase tracking-wide mb-1">Wins</p>
                                 <div className="flex flex-wrap gap-1.5">
                                   {userContext.celebratingWins.map((w, i) => (
                                     <span key={i} className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full">{w}</span>
@@ -1188,12 +1378,12 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {userContext.lastCalmCue && (
                               <div className="px-3 py-2.5 flex items-center gap-2">
                                 <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-                                <p className="text-xs text-[#5A6B7A]">Last calm cue: <span className="font-medium text-[#1B2733]">{userContext.lastCalmCue}</span></p>
+                                <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Last calm cue: <span className="font-medium text-[#1B2733] dark:text-slate-100">{userContext.lastCalmCue}</span></p>
                               </div>
                             )}
                             {userContext.bestTimeOfDay && (
                               <div className="px-3 py-2.5">
-                                <p className="text-xs text-[#5A6B7A]">Best time of day: <span className="font-medium text-[#1B2733] capitalize">{userContext.bestTimeOfDay}</span></p>
+                                <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Best time of day: <span className="font-medium text-[#1B2733] dark:text-slate-100 capitalize">{userContext.bestTimeOfDay}</span></p>
                               </div>
                             )}
                             {!userContext.strugglingWith?.length && !userContext.celebratingWins?.length && !userContext.lastCalmCue && !userContext.bestTimeOfDay && (
@@ -1204,6 +1394,80 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           </div>
                         </div>
                       )}
+
+                      {/* ── Memory Browser ── */}
+                      <div className="px-4 mt-5">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-1.5">
+                            <Brain className="w-3.5 h-3.5 text-slate-400" />
+                            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Memory</p>
+                          </div>
+                          <button
+                            onClick={async () => {
+                              if (!userId || memoryLoading) return;
+                              setMemoryLoading(true);
+                              const facts = await getUserMemoryFacts(userId);
+                              setMemoryFacts(facts);
+                              setMemoryLoading(false);
+                            }}
+                            className="text-xs text-[#6B9080] hover:underline font-medium"
+                          >
+                            {memoryLoading ? 'Loading…' : memoryFacts.length === 0 ? 'Load' : 'Refresh'}
+                          </button>
+                        </div>
+                        {memoryFacts.length > 0 ? (
+                          <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 overflow-hidden divide-y divide-slate-100 dark:divide-slate-700">
+                            {(() => {
+                              const grouped = memoryFacts.reduce<Record<string, MemoryFact[]>>((acc, f) => {
+                                (acc[f.category] = acc[f.category] || []).push(f);
+                                return acc;
+                              }, {});
+                              return Object.entries(grouped).map(([cat, facts]) => (
+                                <div key={cat} className="px-3 py-2.5">
+                                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1.5 capitalize">{cat.replace(/_/g, ' ')}</p>
+                                  <div className="space-y-1.5">
+                                    {facts.map(fact => (
+                                      <div key={fact.id} className="flex items-start justify-between gap-2">
+                                        <div className="min-w-0">
+                                          <span className="text-xs text-[#5A6B7A] font-medium">{fact.key.replace(/_/g, ' ')}: </span>
+                                          <span className="text-xs text-[#1B2733] dark:text-slate-100">{fact.value}</span>
+                                        </div>
+                                        <button
+                                          onClick={async () => {
+                                            await deleteFact(fact.id);
+                                            setMemoryFacts(prev => prev.filter(f => f.id !== fact.id));
+                                          }}
+                                          className="shrink-0 w-5 h-5 rounded flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors"
+                                          aria-label="Delete memory"
+                                        >
+                                          <Trash2 className="w-3 h-3" />
+                                        </button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ));
+                            })()}
+                          </div>
+                        ) : (
+                          <p className="text-xs text-slate-400 py-2">
+                            {memoryLoading ? 'Loading memories…' : 'Tap Load to view saved memories'}
+                          </p>
+                        )}
+                        {memoryFacts.length > 0 && (
+                          <button
+                            onClick={async () => {
+                              if (!userId || !window.confirm('Delete all memories? This cannot be undone.')) return;
+                              const { clearMemory } = await import('../lib/ai-memory-engine');
+                              await clearMemory(userId);
+                              setMemoryFacts([]);
+                            }}
+                            className="mt-2 w-full text-xs text-red-400 hover:text-red-500 py-1.5 text-center font-medium"
+                          >
+                            Delete all memories
+                          </button>
+                        )}
+                      </div>
 
                       {/* ── Actions ── */}
                       <div className="px-4 mt-5 mb-6 space-y-2">
@@ -1246,7 +1510,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         className={`max-w-[78%] rounded-2xl text-sm leading-relaxed overflow-hidden ${
                           msg.role === 'user'
                             ? 'bg-slate-900 text-white rounded-br-md'
-                            : 'bg-[#FAF7F2] text-[#1B2733] rounded-bl-md border border-[#E8E4DF]'
+                            : 'bg-[#FAF7F2] dark:bg-slate-800 text-[#1B2733] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
                         }`}
                       >
                         {/* Attached image */}
@@ -1265,6 +1529,19 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 if (part.type === 'calendar') return (
                                   <div key={pi} className="my-2">
                                     <AddToCalendarButtons appointment={part.content} variant="inline" label="Add to your calendar" />
+                                  </div>
+                                );
+                                if (part.type === 'navigate') return (
+                                  <div key={pi} className="my-1.5">
+                                    <button
+                                      onClick={() => {
+                                        onNavigate?.(part.content.screen, { tab: part.content.tab });
+                                        onClose();
+                                      }}
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 border border-[#6B9080]/20 transition-colors"
+                                    >
+                                      {part.content.label || 'Go →'}
+                                    </button>
                                   </div>
                                 );
                                 return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;
@@ -1286,7 +1563,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       </div>
                     </div>
 
-                    {msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !isLoading && (
+                    {showFollowUps && msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !isLoading && (
                       <div className="ml-8 mt-2 space-y-1.5">
                         {msg.chips.map((chip, i) => (
                           <button
@@ -1312,18 +1589,24 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     >
                       ✦
                     </div>
-                    <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
-                      <div className="flex gap-1.5 items-center">
-                        {[0, 0.15, 0.3].map((delay, i) => (
-                          <motion.div
-                            key={i}
-                            className="w-2 h-2 bg-slate-400 rounded-full"
-                            animate={{ y: [0, -4, 0] }}
-                            transition={{ duration: 0.8, repeat: Infinity, delay }}
-                          />
-                        ))}
+                    {showThinkingSteps && activeThinkingSteps.length > 0 ? (
+                      <div className="flex-1">
+                        <ThinkingStepsDisplay steps={activeThinkingSteps} isExpanded={true} />
                       </div>
-                    </div>
+                    ) : (
+                      <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
+                        <div className="flex gap-1.5 items-center">
+                          {[0, 0.15, 0.3].map((delay, i) => (
+                            <motion.div
+                              key={i}
+                              className="w-2 h-2 bg-slate-400 rounded-full"
+                              animate={{ y: [0, -4, 0] }}
+                              transition={{ duration: 0.8, repeat: Infinity, delay }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1356,38 +1639,90 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 </div>
               )}
 
-              {/* Smart action chips — show only when conversation is empty and user hasn't interacted */}
+              {/* Empty-state suggestion chips — scrollable action starters */}
               {!hasInteracted && messages.length === 0 && (
                 <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
                   {[
-                    { emoji: '📊', label: 'Log a behavior', starter: 'Log behavior: ' },
-                    { emoji: '🎯', label: 'Log a win', starter: 'Log a win: ' },
-                    { emoji: '📅', label: 'Book appointment', starter: 'Book appointment: ' },
-                    { emoji: '😌', label: 'Set calm cue', starter: 'Set calm cue: ' },
+                    {
+                      icon: BarChart2,
+                      label: 'Behavior patterns',
+                      sub: "This week's trends",
+                      prompt: `What behavior patterns do you see this week for ${userContext?.childName || propChildName || 'my child'}?`,
+                    },
+                    {
+                      icon: Brain,
+                      label: 'ABA strategies',
+                      sub: 'Tips for right now',
+                      prompt: `What ABA strategy should I use right now with ${userContext?.childName || propChildName || 'my child'}?`,
+                    },
+                    {
+                      icon: TrendingUp,
+                      label: 'Progress report',
+                      sub: 'How are we doing?',
+                      prompt: `Give me a progress update on ${userContext?.childName || propChildName || 'my child'}'s ABA goals.`,
+                    },
+                    {
+                      icon: Calendar,
+                      label: 'Book session',
+                      sub: 'Schedule ABA therapy',
+                      navigate: 'booking' as const,
+                    },
+                    {
+                      icon: FileText,
+                      label: 'Log behavior',
+                      sub: 'Track what happened',
+                      navigate: 'behavior-log' as const,
+                    },
+                    {
+                      icon: BookOpen,
+                      label: 'Find resources',
+                      sub: 'Articles & guides',
+                      navigate: 'resource-library' as const,
+                    },
                   ].map(chip => (
                     <button
                       key={chip.label}
                       onClick={() => {
                         HAPTICS.light();
-                        setInput(chip.starter);
-                        setHasInteracted(true);
-                        setTimeout(() => inputRef.current?.focus(), 50);
+                        if ('navigate' in chip && chip.navigate) {
+                          onNavigate?.(chip.navigate);
+                          handleClose();
+                        } else if ('prompt' in chip && chip.prompt) {
+                          setInput(chip.prompt);
+                          setHasInteracted(true);
+                          setTimeout(() => inputRef.current?.focus(), 50);
+                        }
                       }}
-                      className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm whitespace-nowrap border border-cyan-200 dark:border-cyan-700 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 transition-colors"
+                      className="flex-shrink-0 flex items-start gap-2.5 px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left hover:bg-[#FAF7F2] dark:hover:bg-slate-700 hover:border-slate-400 transition-colors"
+                      style={{ minWidth: '140px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                     >
-                      <span>{chip.emoji}</span>
-                      <span>{chip.label}</span>
+                      <chip.icon className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">{chip.label}</p>
+                        <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5">{chip.sub}</p>
+                      </div>
                     </button>
                   ))}
                 </div>
               )}
 
+              {/* Screen context chip — shows when screen context is attached */}
+              {pendingScreenContext && (
+                <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl">
+                  <Monitor className="w-3.5 h-3.5 text-[#6B9080]" />
+                  <span className="text-xs text-[#6B9080] font-medium flex-1">Screen context attached</span>
+                  <button onClick={() => setPendingScreenContext(null)} className="text-[#6B9080]/60 hover:text-[#6B9080]">
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               <div className="flex items-end gap-2">
-                {/* Attachment button */}
+                {/* Action sheet button */}
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => setShowActionSheet(true)}
                   className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] hover:bg-[#E8E4DF] transition-colors shrink-0 mb-0.5"
-                  aria-label="Attach image"
+                  aria-label="More actions"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -1447,6 +1782,114 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               </div>
             </div>
           </motion.div>
+
+          {/* ── Action Sheet ── */}
+          <AnimatePresence>
+            {showActionSheet && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[9998] bg-black/40"
+                  onClick={() => setShowActionSheet(false)}
+                />
+                <motion.div
+                  initial={{ y: '100%' }}
+                  animate={{ y: 0 }}
+                  exit={{ y: '100%' }}
+                  transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[9999] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl pb-safe"
+                >
+                  <div className="flex items-center justify-between px-4 pt-4 pb-2">
+                    <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Add to message</p>
+                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center">
+                      <X className="w-4 h-4 text-[#5A6B7A]" />
+                    </button>
+                  </div>
+                  <div className="px-2 pb-6">
+                    {[
+                      {
+                        icon: ImageIcon,
+                        label: 'Add files or photo',
+                        desc: 'Share an image or document',
+                        action: () => { fileInputRef.current?.click(); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Monitor,
+                        label: 'Screen context',
+                        desc: 'Attach current screen state to your message',
+                        action: () => {
+                          setPendingScreenContext(buildScreenStateBlock());
+                          setShowActionSheet(false);
+                        },
+                      },
+                      {
+                        icon: FileText,
+                        label: 'Log behavior',
+                        desc: 'Track a behavior that just happened',
+                        action: () => { onNavigate?.('behavior-log'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Calendar,
+                        label: 'Book appointment',
+                        desc: 'Schedule an ABA therapy session',
+                        action: () => { onNavigate?.('booking'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Pill,
+                        label: 'Medications',
+                        desc: 'View or update medication list',
+                        action: () => { onNavigate?.('medications'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: Bell,
+                        label: 'Create check-in',
+                        desc: 'Schedule a recurring AI check-in',
+                        action: () => { onNavigate?.('notifications'); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: BarChart2,
+                        label: 'Impact analysis',
+                        desc: 'What is affecting behavior patterns',
+                        action: () => {
+                          const childName = userContext?.childName || propChildName || 'my child';
+                          setInput(`What is impacting ${childName}'s behavior patterns this week?`);
+                          setShowActionSheet(false);
+                          setTimeout(() => inputRef.current?.focus(), 100);
+                        },
+                      },
+                      {
+                        icon: TrendingUp,
+                        label: 'Predictive modeling',
+                        desc: 'Forecast ABA progress over 4 weeks',
+                        action: () => {
+                          const childName2 = userContext?.childName || propChildName || 'my child';
+                          setInput(`Based on current ABA progress, what outcomes can we expect for ${childName2} over the next 4 weeks?`);
+                          setShowActionSheet(false);
+                          setTimeout(() => inputRef.current?.focus(), 100);
+                        },
+                      },
+                    ].map(item => (
+                      <button
+                        key={item.label}
+                        onClick={item.action}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center shrink-0">
+                          <item.icon className="w-4 h-4 text-[#6B9080]" />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100 leading-tight">{item.label}</p>
+                          <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5">{item.desc}</p>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </>
       )}
     </AnimatePresence>,

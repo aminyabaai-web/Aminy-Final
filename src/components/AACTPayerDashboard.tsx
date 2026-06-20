@@ -211,13 +211,13 @@ function KPICard({
               </>
             )}
           </div>
-          <p className="text-[10px] text-[#5A6B7A] mt-0.5">
+          <p className="text-xs text-[#5A6B7A] mt-0.5">
             Target: {metric.higherIsBetter ? '≥' : '≤'}{metric.target}{metric.unit === '/5.0' ? '/5.0' : metric.unit === 'ratio' ? '' : metric.unit}
           </p>
           {metric.trendValue && (
             <div className="flex items-center gap-1 mt-1">
               <TrendIcon dir={metric.trend} />
-              <span className="text-[10px] text-[#5A6B7A]">{metric.trendValue} vs last period</span>
+              <span className="text-xs text-[#5A6B7A]">{metric.trendValue} vs last period</span>
             </div>
           )}
         </div>
@@ -233,7 +233,7 @@ function KPICard({
         )}
       </div>
       {metric.note && (
-        <p className="mt-2 text-[10px] text-[#8A9BA8] italic border-t border-[#E8E4DF] pt-1.5">{metric.note}</p>
+        <p className="mt-2 text-xs text-[#8A9BA8] italic border-t border-[#E8E4DF] pt-1.5">{metric.note}</p>
       )}
     </Card>
   );
@@ -257,19 +257,19 @@ function ScorecardSummaryBar({ categories }: { categories: KPICategory[] }) {
         <div className="flex gap-4">
           <div className="text-center">
             <p className="text-xl font-bold text-emerald-400">{green}</p>
-            <p className="text-[10px] text-slate-400">On target</p>
+            <p className="text-xs text-slate-400">On target</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-amber-400">{yellow}</p>
-            <p className="text-[10px] text-slate-400">At risk</p>
+            <p className="text-xs text-slate-400">At risk</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-red-400">{red}</p>
-            <p className="text-[10px] text-slate-400">Off target</p>
+            <p className="text-xs text-slate-400">Off target</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-slate-400">{total - entered.length}</p>
-            <p className="text-[10px] text-slate-400">Not entered</p>
+            <p className="text-xs text-slate-400">Not entered</p>
           </div>
         </div>
       </div>
@@ -389,7 +389,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-bold">AACT Payer Scorecard</h1>
-                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-[10px]">Arizona</Badge>
+                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-xs">Arizona</Badge>
               </div>
               <p className="text-sm text-slate-400 mt-0.5">Rate negotiation · Network adequacy · MCO reporting</p>
             </div>
@@ -415,7 +415,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
               Export Scorecard
             </Button>
             {lastSaved && (
-              <span className="text-[11px] text-slate-400">Saved {lastSaved}</span>
+              <span className="text-xs text-slate-400">Saved {lastSaved}</span>
             )}
           </div>
         </div>
@@ -436,7 +436,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
           ].map(badge => (
             <div key={badge.label} className={`flex-1 min-w-[160px] border rounded-xl p-3 ${badge.color}`}>
               <p className="text-xs font-semibold">{badge.label}</p>
-              <p className="text-[10px] mt-0.5 opacity-70">{badge.sublabel}</p>
+              <p className="text-xs mt-0.5 opacity-70">{badge.sublabel}</p>
             </div>
           ))}
         </div>
@@ -462,7 +462,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                 <Icon className="w-4 h-4" />
                 <span className="hidden sm:inline">{cat.label}</span>
                 {offTarget > 0 && (
-                  <span className="w-4 h-4 text-[10px] font-bold bg-red-500 text-white rounded-full flex items-center justify-center">{offTarget}</span>
+                  <span className="w-4 h-4 text-xs font-bold bg-red-500 text-white rounded-full flex items-center justify-center">{offTarget}</span>
                 )}
               </button>
             );
@@ -476,7 +476,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
           <h2 className="text-sm font-semibold text-[#3A4A57]">
             {activeCategory.label} — {activeCategory.metrics.length} metrics
           </h2>
-          <div className="flex items-center gap-2 text-[11px] text-[#8A9BA8]">
+          <div className="flex items-center gap-2 text-xs text-[#8A9BA8]">
             <Edit3 className="w-3 h-3" />
             <span>Tap pencil to enter values</span>
           </div>
@@ -497,7 +497,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
             <FileText className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-xs font-semibold text-[#3A4A57]">Payer Scorecard Export</p>
-              <p className="text-[11px] text-[#5A6B7A] mt-0.5">
+              <p className="text-xs text-[#5A6B7A] mt-0.5">
                 "Export Scorecard" generates a payer-facing summary of all marked metrics for use in rate letters, MCO renegotiations, and AHCCCS contract renewals.
                 {' '}Metrics flagged as payer-facing are the subset MCOs and commercial payers actively evaluate.
               </p>

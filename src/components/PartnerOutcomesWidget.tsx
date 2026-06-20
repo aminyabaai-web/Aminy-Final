@@ -179,7 +179,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
                   colors: ['#577590', '#43AA8B', '#E07A5F'],
                 }}
               />
-              <p className="text-[10px] text-slate-400 text-center mt-1">
+              <p className="text-xs text-slate-400 text-center mt-1">
                 Lower scores = improvement. Trend down is the desired direction.
               </p>
             </div>
@@ -200,15 +200,15 @@ function OutcomeSummaryCard({ summary }: { summary: OutcomeSummary }) {
 
   return (
     <div className="rounded-xl p-3" style={{ background: `${color}10`, border: `1px solid ${color}30` }}>
-      <p className="text-[10px] font-semibold text-[#5A6B7A] uppercase tracking-wide">{measureName}</p>
+      <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">{measureName}</p>
       <p className="text-2xl font-bold mt-1" style={{ color }}>{avg ?? '—'}</p>
       <div className="flex items-center gap-1 mt-1">
         <Icon className="w-3 h-3" style={{ color }} />
-        <p className="text-[11px] font-medium" style={{ color }}>
+        <p className="text-xs font-medium" style={{ color }}>
           {deltaPct == null ? 'No prior data' : `${deltaPct > 0 ? '+' : ''}${deltaPct}% vs last wk`}
         </p>
       </div>
-      <p className="text-[10px] text-slate-400 mt-1">{submissionsCount} submissions</p>
+      <p className="text-xs text-slate-400 mt-1">{submissionsCount} submissions</p>
     </div>
   );
 }

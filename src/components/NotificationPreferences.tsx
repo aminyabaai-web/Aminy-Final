@@ -4,7 +4,7 @@
 // See LICENSE file for details.
 
 import React, { useState } from 'react';
-import { Bell, Mail, MessageSquare, Calendar } from 'lucide-react';
+import { Bell, Mail, MessageSquare, Calendar, Brain } from 'lucide-react';
 import { Card } from './ui/card';
 import { Switch } from './ui/switch';
 import { Label } from './ui/label';
@@ -28,7 +28,12 @@ export function NotificationPreferences() {
       sessionReminders: false,
       urgentAlerts: true,
       appointmentConfirm: false
-    }
+    },
+    ai: {
+      checkinReminders: true,
+      sessionNotesReady: true,
+      weeklyDigest: false,
+    },
   });
 
   const updatePreference = (category: keyof typeof preferences, key: string, value: boolean) => {
@@ -157,6 +162,46 @@ export function NotificationPreferences() {
             <Switch
               checked={preferences.sms.appointmentConfirm}
               onCheckedChange={(value) => updatePreference('sms', 'appointmentConfirm', value)}
+            />
+          </div>
+        </div>
+      </Card>
+
+      {/* Aminy AI Notifications */}
+      <Card className="p-3 sm:p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Brain className="w-4 h-4 text-[#43AA8B]" />
+          <h3 className="font-semibold">Aminy AI</h3>
+        </div>
+        <div className="space-y-3 sm:space-y-4">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <Label>Check-in reminders</Label>
+              <p className="text-xs text-muted-foreground mt-0.5">Alert when a scheduled AI check-in is due</p>
+            </div>
+            <Switch
+              checked={preferences.ai.checkinReminders}
+              onCheckedChange={(value) => updatePreference('ai', 'checkinReminders', value)}
+            />
+          </div>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <Label>Session notes ready</Label>
+              <p className="text-xs text-muted-foreground mt-0.5">When AI finishes analyzing a therapy session note</p>
+            </div>
+            <Switch
+              checked={preferences.ai.sessionNotesReady}
+              onCheckedChange={(value) => updatePreference('ai', 'sessionNotesReady', value)}
+            />
+          </div>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <Label>Weekly AI digest</Label>
+              <p className="text-xs text-muted-foreground mt-0.5">Summary of AI insights from the past week</p>
+            </div>
+            <Switch
+              checked={preferences.ai.weeklyDigest}
+              onCheckedChange={(value) => updatePreference('ai', 'weeklyDigest', value)}
             />
           </div>
         </div>

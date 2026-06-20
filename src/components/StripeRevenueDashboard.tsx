@@ -431,7 +431,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
 
           {/* LTV Calculation Breakdown */}
           <div className="border-t border-[#E8E4DF] pt-3 space-y-1.5">
-            <p className="text-[10px] font-semibold text-[#5A6B7A] uppercase tracking-wider">LTV Breakdown</p>
+            <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider">LTV Breakdown</p>
             <div className="flex items-center justify-between text-xs">
               <span className="text-[#5A6B7A]">Avg Revenue / User (monthly)</span>
               <span className="font-medium text-[#1B2733]">
@@ -489,13 +489,13 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               <p className="text-sm font-bold text-[#1B2733]">
                 {customers.activeCustomers || 0}
               </p>
-              <p className="text-[10px] text-[#5A6B7A]">Active</p>
+              <p className="text-xs text-[#5A6B7A]">Active</p>
             </div>
             <div>
               <p className="text-sm font-bold text-red-600">
                 {customers.churnedCustomers || 0}
               </p>
-              <p className="text-[10px] text-[#5A6B7A]">Churned</p>
+              <p className="text-xs text-[#5A6B7A]">Churned</p>
             </div>
             <div>
               <p className={`text-sm font-bold ${
@@ -504,10 +504,10 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               }`}>
                 {(customers.churnRate || 0).toFixed(1)}%
               </p>
-              <p className="text-[10px] text-[#5A6B7A]">Churn Rate</p>
+              <p className="text-xs text-[#5A6B7A]">Churn Rate</p>
             </div>
           </div>
-          <p className="text-[10px] text-[#8A9BA8]">
+          <p className="text-xs text-[#8A9BA8]">
             {(customers.churnRate || 0) <= 3
               ? 'Healthy churn rate. Below SaaS industry average.'
               : (customers.churnRate || 0) <= 5
@@ -553,7 +553,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             const prev = subscriberGrowth[subscriberGrowth.length - 2].count;
             const delta = prev > 0 ? ((latest - prev) / prev) * 100 : 0;
             return (
-              <p className="text-[10px] text-[#5A6B7A]">
+              <p className="text-xs text-[#5A6B7A]">
                 Month-over-month: <span className={delta >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
                   {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
                 </span>
@@ -676,7 +676,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               return (
                 <div key={event.id} className="flex items-center justify-between text-xs">
                   <div className="flex items-center gap-2">
-                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${meta.color}`}>
+                    <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${meta.color}`}>
                       {meta.label}
                     </span>
                     <span className="text-[#5A6B7A] truncate max-w-[140px]">

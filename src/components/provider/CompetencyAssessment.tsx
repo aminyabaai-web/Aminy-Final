@@ -211,7 +211,7 @@ function AssessmentForm({
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-violet-700">{avgRating.toFixed(1)}</div>
-          <div className="text-[10px] text-slate-400">avg score</div>
+          <div className="text-xs text-slate-400">avg score</div>
         </div>
       </div>
 
@@ -267,7 +267,7 @@ function AssessmentForm({
                               </button>
                             ))}
                           </div>
-                          <div className="text-[10px] text-slate-400 text-center">
+                          <div className="text-xs text-slate-400 text-center">
                             {RATING_LABELS[r.rating]}
                           </div>
                           {/* Notes */}
@@ -368,7 +368,7 @@ function HistoryView({
               const height = (avg / 5) * 100;
               return (
                 <div key={a.id} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="text-[10px] font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
+                  <div className="text-xs font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
                   <div className="w-full bg-violet-100 rounded-t-sm overflow-hidden" style={{ height: '100%' }}>
                     <div
                       className="w-full bg-violet-500 rounded-t-sm mt-auto"
@@ -424,9 +424,9 @@ function HistoryView({
                         'bg-red-100 text-red-700';
                       return (
                         <div key={r.areaId} className="flex items-center gap-2">
-                          <span className="text-[10px] text-slate-400 w-4">{r.areaId}</span>
+                          <span className="text-xs text-slate-400 w-4">{r.areaId}</span>
                           <span className="flex-1 text-xs text-[#5A6B7A] truncate">{r.areaName}</span>
-                          <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${color}`}>
+                          <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${color}`}>
                             {r.rating}/5
                           </span>
                         </div>
@@ -547,7 +547,7 @@ function DevelopmentPlanView({
           <div className="space-y-2">
             {latest.developmentPlan.map((item, i) => (
               <div key={i} className="flex items-start gap-2">
-                <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>
                 <p className="text-xs text-[#3A4A57]">{item}</p>

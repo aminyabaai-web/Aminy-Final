@@ -615,7 +615,7 @@ export function PostSessionNotes({
                           key={q}
                           type="button"
                           onClick={() => { setBillingQuestion(q); }}
-                          className="text-[11px] px-2 py-1 bg-[#EEF4F8] text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
+                          className="text-xs px-2 py-1 bg-[#EEF4F8] text-blue-600 rounded-md hover:bg-blue-100 transition-colors"
                         >
                           {q}
                         </button>

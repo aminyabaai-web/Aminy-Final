@@ -172,13 +172,13 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-[#1B2733] leading-snug">{fact.content}</p>
                     <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: meta.color }}>
+                      <span className="text-xs uppercase tracking-wide font-semibold" style={{ color: meta.color }}>
                         {meta.label}
                       </span>
-                      <span className="text-[10px] text-slate-400">·</span>
-                      <span className="text-[10px] text-slate-400 capitalize">{fact.source}</span>
-                      <span className="text-[10px] text-slate-400">·</span>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-xs text-slate-400">·</span>
+                      <span className="text-xs text-slate-400 capitalize">{fact.source}</span>
+                      <span className="text-xs text-slate-400">·</span>
+                      <span className="text-xs text-slate-400">
                         {new Date(fact.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
@@ -209,7 +209,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             {isWiping ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             Forget everything about {childName || 'this child'}
           </button>
-          <p className="text-[11px] text-slate-400 text-center mt-2">
+          <p className="text-xs text-slate-400 text-center mt-2">
             Aminy will start fresh on the next conversation. Cannot be undone.
           </p>
         </div>

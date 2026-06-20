@@ -294,6 +294,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     signed: boolean;
     locked: boolean;
     cptCode?: string;
+    cosignRequired?: boolean;
+    cosignedAt?: string | null;
+    modality?: string;
   }>>([]);
   const [showNoteEditor, setShowNoteEditor] = useState(false);
   const [editingNote, setEditingNote] = useState<{
@@ -857,6 +860,29 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     setClinicalNotes(prev => prev.map(n =>
       n.id === noteId ? { ...n, signed: true, locked: true } : n
     ));
+  };
+
+  const handleCosignNote = async (noteId: string) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const now = new Date().toISOString();
+    const note = clinicalNotes.find(n => n.id === noteId);
+    if (!note) return;
+    const contentStr = JSON.stringify(note.content) + user.id + now;
+    const hash = Array.from(
+      new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(contentStr)))
+    ).map(b => b.toString(16).padStart(2, '0')).join('');
+
+    await supabase.from('session_notes').update({
+      cosigned_by: user.id,
+      cosigned_at: now,
+      cosign_hash: hash,
+    }).eq('id', noteId);
+
+    setClinicalNotes(prev => prev.map(n =>
+      n.id === noteId ? { ...n, cosignedAt: now } : n
+    ));
+    toast.success('Note co-signed successfully');
   };
 
   const handleExportNotePDF = (noteId: string) => {
@@ -2049,7 +2075,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}
@@ -2392,6 +2418,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                             <Lock className="w-3 h-3 mr-1" /> Signed & Locked
                           </Badge>
                         )}
+                        {note.cosignRequired && !note.cosignedAt && (
+                          <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                            <ShieldCheck className="w-3 h-3 mr-1" /> Needs Co-Signature
+                          </Badge>
+                        )}
+                        {note.cosignRequired && note.cosignedAt && (
+                          <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                            <ShieldCheck className="w-3 h-3 mr-1" /> Co-Signed
+                          </Badge>
+                        )}
                       </div>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">{note.date}</p>
                     </div>
@@ -2415,6 +2451,18 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           title="Sign & Lock"
                         >
                           <CheckCircle className="w-4 h-4 text-green-600" />
+                        </Button>
+                      )}
+                      {note.cosignRequired && !note.cosignedAt && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleCosignNote(note.id)}
+                          aria-label={`Co-sign note for ${note.patientName}`}
+                          title="BCBA Co-Sign"
+                          className="text-amber-600 hover:text-amber-700 hover:bg-amber-50"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
                         </Button>
                       )}
                       <Button

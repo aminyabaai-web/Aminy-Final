@@ -170,9 +170,9 @@ function WeeklyGrid({ weeklyGrid }: { weeklyGrid: { date: string; completed: boo
               }}
             >
               {day.completed ? (
-                <span className="text-white text-[10px]">✓</span>
+                <span className="text-white text-xs">✓</span>
               ) : day.isToday ? (
-                <span className="text-indigo-400 text-[10px]">·</span>
+                <span className="text-indigo-400 text-xs">·</span>
               ) : null}
             </div>
             <span className="text-[9px] text-[#8A9BA8] font-medium">{days[i]}</span>
@@ -208,13 +208,13 @@ function StreakDisplay({ streak }: { streak: number }) {
           {streak} day streak!
         </span>
         {nextMilestone && (
-          <p className="text-[10px] text-[#8A9BA8]">{nextMilestone - streak} days to {nextMilestone}🏆</p>
+          <p className="text-xs text-[#8A9BA8]">{nextMilestone - streak} days to {nextMilestone}🏆</p>
         )}
         {atMilestone && (
           <motion.p
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-[10px] font-bold text-amber-600"
+            className="text-xs font-bold text-amber-600"
           >
             🎉 {streak}-day milestone unlocked!
           </motion.p>

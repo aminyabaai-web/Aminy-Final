@@ -61,6 +61,8 @@ import { supabase } from '../utils/supabase/client';
 import { TierType, getTierDisplayName } from '../lib/tier-utils';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { isDemoMode } from '../lib/demo-seed';
+import { UsageMeter } from './UsageMeter';
+import { useRateLimitStore } from '../lib/rate-limit-store';
 
 // Derive an honest label for the current device from the browser user-agent.
 // No fabricated IP/location — we only know what the client tells us.
@@ -211,6 +213,10 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
 
   // Login sessions
   const [sessions, setSessions] = useState<LoginSession[]>([]);
+
+  // AI usage from rate-limit store
+  const { dailyUsage, fetchUsage } = useRateLimitStore();
+  useEffect(() => { fetchUsage(); }, []);
 
   // Load profile data
   useEffect(() => {
@@ -781,6 +787,18 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 </div>
               </div>
             </Card>
+
+            {/* AI Usage — full width in 2-col grid */}
+            <div className="lg:col-span-2">
+              <UsageMeter
+                variant="full"
+                tier={userTier}
+                messagesUsedToday={dailyUsage?.used ?? 0}
+                documentsUploaded={0}
+                memoryFactsStored={0}
+                onUpgrade={() => onNavigate?.('upgrade')}
+              />
+            </div>
 
             {/* Connected Accounts */}
             <Card className="p-6">

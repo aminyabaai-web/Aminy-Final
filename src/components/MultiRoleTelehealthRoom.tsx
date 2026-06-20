@@ -311,10 +311,10 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
                         {isVideoOff && (
                             <div style={{ position: 'absolute', inset: 0, backgroundColor: '#111827', display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center', justifyContent: 'center' }}>
                                 <VideoOffIcon size={28} color="rgba(255,255,255,0.5)" />
-                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '11px', fontWeight: 500 }}>Camera off</span>
+                                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '12px', fontWeight: 500 }}>Camera off</span>
                             </div>
                         )}
-                        <div style={{ position: 'absolute', bottom: '8px', left: '8px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px 8px', borderRadius: '8px', color: '#FFF', fontSize: '11px', fontWeight: 500 }}>
+                        <div style={{ position: 'absolute', bottom: '8px', left: '8px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px 8px', borderRadius: '8px', color: '#FFF', fontSize: '12px', fontWeight: 500 }}>
                             You ({role})
                         </div>
                         {isMicMuted && (

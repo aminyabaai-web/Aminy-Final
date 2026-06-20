@@ -193,16 +193,20 @@ function findRichBlocks(text: string, tag: string): Array<{ start: number; end: 
   return results;
 }
 
+export type NavigateSpec = { screen: string; tab?: string; label?: string };
+
 export type AIResponsePart =
   | { type: 'text'; content: string }
   | { type: 'chart'; content: AIChartSpec }
-  | { type: 'calendar'; content: CalendarSpec };
+  | { type: 'calendar'; content: CalendarSpec }
+  | { type: 'navigate'; content: NavigateSpec };
 
 export function parseAIResponseParts(text: string): AIResponsePart[] {
-  // Find chart + calendar blocks, sorted by position, then carve text between them.
+  // Find chart + calendar + navigate blocks, sorted by position, then carve text between them.
   const chartBlocks = findRichBlocks(text, 'CHART').map(b => ({ ...b, kind: 'chart' as const }));
   const calendarBlocks = findRichBlocks(text, 'CALENDAR').map(b => ({ ...b, kind: 'calendar' as const }));
-  const blocks = [...chartBlocks, ...calendarBlocks].sort((a, b) => a.start - b.start);
+  const navigateBlocks = findRichBlocks(text, 'NAVIGATE').map(b => ({ ...b, kind: 'navigate' as const }));
+  const blocks = [...chartBlocks, ...calendarBlocks, ...navigateBlocks].sort((a, b) => a.start - b.start);
 
   const parts: AIResponsePart[] = [];
   let cursor = 0;
@@ -217,6 +221,11 @@ export function parseAIResponseParts(text: string): AIResponsePart[] {
         const spec = JSON.parse(block.json) as AIChartSpec;
         if (spec.data && Array.isArray(spec.data)) {
           parts.push({ type: 'chart', content: spec });
+        }
+      } else if (block.kind === 'navigate') {
+        const spec = JSON.parse(block.json) as NavigateSpec;
+        if (spec.screen) {
+          parts.push({ type: 'navigate', content: spec });
         }
       } else {
         const spec = JSON.parse(block.json) as CalendarSpec;

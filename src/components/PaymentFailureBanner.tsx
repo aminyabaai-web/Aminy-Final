@@ -273,7 +273,7 @@ export function PaymentFailureBanner({
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {/* Attempt count */}
               {info.attemptCount !== undefined && info.attemptCount > 0 && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-[#5A6B7A]">
+                <span className="inline-flex items-center gap-1 text-xs text-[#5A6B7A]">
                   <RotateCw size={10} />
                   Attempt {info.attemptCount} of {MAX_RETRY_ATTEMPTS}
                 </span>
@@ -281,7 +281,7 @@ export function PaymentFailureBanner({
 
               {/* Next retry date */}
               {info.nextRetryAt && info.status === 'retry-pending' && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-[#5A6B7A]">
+                <span className="inline-flex items-center gap-1 text-xs text-[#5A6B7A]">
                   <CalendarClock size={10} />
                   Next retry: {formatShortDate(info.nextRetryAt)}
                 </span>
@@ -289,7 +289,7 @@ export function PaymentFailureBanner({
 
               {/* Grace period countdown */}
               {info.gracePeriodEndsAt && info.status === 'grace-period' && (
-                <span className="inline-flex items-center gap-1 text-[11px] text-red-600 font-medium">
+                <span className="inline-flex items-center gap-1 text-xs text-red-600 font-medium">
                   <Clock size={10} />
                   Cancels {formatTimeRemaining(info.gracePeriodEndsAt)}
                 </span>

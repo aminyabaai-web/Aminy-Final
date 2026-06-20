@@ -304,7 +304,7 @@ function DenialInbox({
           <button
             key={s}
             onClick={() => setFilterStatus(s)}
-            className={`px-2 py-0.5 rounded text-[10px] font-medium whitespace-nowrap transition-colors ${
+            className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
               filterStatus === s
                 ? 'bg-slate-700 text-white'
                 : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#FAF7F2]'
@@ -337,13 +337,13 @@ function DenialInbox({
                       <span className="text-sm font-semibold text-[#1B2733]">{denial.patientName}</span>
                     </div>
                   </div>
-                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${sc.color}`}>
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${sc.color}`}>
                     {sc.icon} {sc.label}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
-                  <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${categoryColor(denial.category)}`}>
+                  <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${categoryColor(denial.category)}`}>
                     {categoryLabel(denial.category)}
                   </span>
                   <span className="text-xs text-[#5A6B7A]">{denial.carcCode}</span>
@@ -797,7 +797,7 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
                   <p className="text-sm font-medium text-[#3A4A57]">{denial.patientName}</p>
                   <p className="text-xs text-slate-400">{denial.claimId}</p>
                 </div>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${categoryColor(denial.category)}`}>
+                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryColor(denial.category)}`}>
                   {categoryLabel(denial.category)}
                 </span>
               </div>
@@ -808,16 +808,16 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
                 </span>
                 <div className="flex gap-1">
                   {denial.category === 'missing-info' && (
-                    <Button variant="outline" size="sm" className="h-6 text-[10px]">
+                    <Button variant="outline" size="sm" className="h-6 text-xs">
                       <Edit3 className="w-2.5 h-2.5 mr-0.5" /> Fix
                     </Button>
                   )}
                   {denial.category === 'coding' && (
-                    <Button variant="outline" size="sm" className="h-6 text-[10px]">
+                    <Button variant="outline" size="sm" className="h-6 text-xs">
                       <Sparkles className="w-2.5 h-2.5 mr-0.5" /> Recode
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" className="h-6 text-[10px]">
+                  <Button variant="outline" size="sm" className="h-6 text-xs">
                     <Send className="w-2.5 h-2.5 mr-0.5" /> Resubmit
                   </Button>
                 </div>
@@ -893,7 +893,7 @@ export default function DenialWorkbench({
                   {v.label}
                   {v.badge != null && v.badge > 0 && (
                     <span
-                      className={`ml-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center ${
+                      className={`ml-1 w-4 h-4 rounded-full text-xs font-bold flex items-center justify-center ${
                         isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
                       }`}
                     >

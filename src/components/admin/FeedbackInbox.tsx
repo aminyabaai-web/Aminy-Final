@@ -211,11 +211,11 @@ export function FeedbackInbox() {
                       <div className="flex items-center gap-2 flex-wrap">
                         {mood && <span className="text-xs font-semibold text-[#1B2733] dark:text-white">{mood.label}</span>}
                         {item.context && (
-                          <span className="text-[10px] px-2 py-0.5 bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
+                          <span className="text-xs px-2 py-0.5 bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
                             {item.context}
                           </span>
                         )}
-                        <span className="text-[10px] text-slate-400">
+                        <span className="text-xs text-slate-400">
                           {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                         </span>
                       </div>
@@ -228,7 +228,7 @@ export function FeedbackInbox() {
                       )}
                       {item.admin_response && (
                         <div className="mt-2 px-3 py-2 bg-[#EDF6FA] dark:bg-slate-800 rounded-xl">
-                          <p className="text-[10px] font-semibold text-[#2A7D99] uppercase tracking-wide mb-0.5">Your reply</p>
+                          <p className="text-xs font-semibold text-[#2A7D99] uppercase tracking-wide mb-0.5">Your reply</p>
                           <p className="text-xs text-[#3A4A57] dark:text-slate-300">{item.admin_response}</p>
                         </div>
                       )}
@@ -253,7 +253,7 @@ export function FeedbackInbox() {
                     </div>
                   )}
                   {item.status === 'responded' && (
-                    <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 flex-shrink-0">
+                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 flex-shrink-0">
                       <Check className="w-3.5 h-3.5" /> Responded
                     </span>
                   )}
