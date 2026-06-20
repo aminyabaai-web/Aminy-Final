@@ -335,6 +335,55 @@ function incrementFreeDailyCount(userId: string): number {
   return next;
 }
 
+// Reads a `text/event-stream` response from /ai/brain and drives progressive
+// message rendering. Calls `onToken(accumulated, isFirst)` for each streamed
+// token — `isFirst=true` on the very first token so callers can add the message
+// bubble only once it has content. Returns the full accumulated text.
+// Falls back to JSON parsing when the response is not SSE (e.g. OpenAI path).
+async function readBrainStream(
+  response: Response,
+  onToken: (accumulated: string, isFirst: boolean) => void,
+  onFirstToken: () => void
+): Promise<string> {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('text/event-stream')) {
+    const data = await response.json();
+    const text = data.message || data.response || '';
+    onFirstToken();
+    onToken(text, true);
+    return text;
+  }
+
+  const reader = response.body!.getReader();
+  const decoder = new TextDecoder();
+  let accumulated = '';
+  let buffer = '';
+  let isFirst = true;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const raw = line.slice(6).trim();
+      if (!raw) continue;
+      try {
+        const payload = JSON.parse(raw);
+        if (payload.token) {
+          if (isFirst) onFirstToken();
+          accumulated += payload.token;
+          onToken(accumulated, isFirst);
+          isFirst = false;
+        }
+      } catch { /* ignore malformed lines */ }
+    }
+  }
+  return accumulated;
+}
+
 export function BevelChatOverlay({
   isOpen,
   onClose,
@@ -632,6 +681,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
     try {
       const systemPrompt = buildSystemPrompt(ctxUser, ctxCurrent);
+      const assistantId = (Date.now() + 1).toString();
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
@@ -640,29 +691,34 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           body: JSON.stringify({
             userMessage: text,
             conversationHistory: history.map(m => ({ role: m.role, content: m.content })),
-            systemPrompt
+            systemPrompt,
+            stream: true,
           })
         }
       );
       if (!response.ok) throw new Error('AI connection hiccup');
-      const data = await response.json();
-      const rawText = data.message || data.response || '';
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
-      const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: aiText,
-        timestamp: new Date(),
-        chips: getFollowUpChips(ctxUser, currentPath, propChildName)
-      };
-      setMessages(prev => [...prev, aiMsg]);
+      const rawText = await readBrainStream(
+        response,
+        (accumulated, isFirst) => {
+          if (isFirst) {
+            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
+          } else {
+            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
+          }
+        },
+        () => setIsLoading(false)
+      );
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
+      setMessages(prev => prev.map(m =>
+        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(ctxUser, currentPath, propChildName) } : m
+      ));
 
       for (const action of actions) {
         try {
           const confirmation = await executeSmartAction(action, userId);
           if (confirmation) {
-            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant', content: confirmation, timestamp: new Date() }]);
+            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
           }
         } catch { toast.error('Could not save — try again?'); }
       }
@@ -752,6 +808,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
         messagePayload = text;
       }
 
+      const assistantId = (Date.now() + 1).toString();
+
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/brain`,
         {
@@ -760,29 +818,34 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           body: JSON.stringify({
             userMessage: messagePayload,
             conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
-            systemPrompt
+            systemPrompt,
+            stream: !img, // vision payloads fall back to synchronous path on the edge fn
           })
         }
       );
       if (!response.ok) throw new Error('AI connection hiccup');
-      const data = await response.json();
-      const rawText = data.message || data.response || '';
-      const { cleanText: aiText, actions } = parseSmartActions(rawText);
 
-      const aiMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: aiText,
-        timestamp: new Date(),
-        chips: getFollowUpChips(userContext, currentPath, propChildName)
-      };
-      setMessages(prev => [...prev, aiMsg]);
+      const rawText = await readBrainStream(
+        response,
+        (accumulated, isFirst) => {
+          if (isFirst) {
+            setMessages(prev => [...prev, { id: assistantId, role: 'assistant' as const, content: accumulated, timestamp: new Date() }]);
+          } else {
+            setMessages(prev => prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m));
+          }
+        },
+        () => { setIsLoading(false); setActiveThinkingSteps([]); }
+      );
+      const { cleanText: aiText, actions } = parseSmartActions(rawText);
+      setMessages(prev => prev.map(m =>
+        m.id === assistantId ? { ...m, content: aiText, chips: getFollowUpChips(userContext, currentPath, propChildName) } : m
+      ));
 
       for (const action of actions) {
         try {
           const confirmation = await executeSmartAction(action, userId);
           if (confirmation) {
-            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant', content: confirmation, timestamp: new Date() }]);
+            setMessages(prev => [...prev, { id: Date.now().toString() + '-action', role: 'assistant' as const, content: confirmation, timestamp: new Date() }]);
           }
         } catch { toast.error('Could not save — try again?'); }
       }

@@ -515,6 +515,82 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
       { role: 'user', content: normalizedUserMessage }
     ];
 
+    // ── Streaming path (Anthropic only, non-vision) ───────────────────────────
+    // When the frontend sends stream:true, pipe Anthropic's SSE response
+    // directly to the client as simplified { token } events.
+    // Vision payloads and OpenAI fallback always go through the synchronous path.
+    const streamRequested = body.stream === true && !isVisionPayload && aiConfig.provider === 'anthropic';
+    if (streamRequested) {
+      const filteredMsgs = messages.filter((m: { role: string }) => m.role !== 'system');
+      const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': aiConfig.apiKey,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 500,
+          temperature: 0.8,
+          system: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+          messages: filteredMsgs,
+          stream: true,
+        }),
+      });
+      if (!anthropicRes.ok) {
+        const errText = await anthropicRes.text();
+        throw new Error(`Claude API error: ${anthropicRes.status} — ${errText.slice(0, 200)}`);
+      }
+
+      const enc = new TextEncoder();
+      const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>();
+      const writer = writable.getWriter();
+
+      // Parse Anthropic SSE in background and forward simplified tokens
+      (async () => {
+        const reader = anthropicRes.body!.getReader();
+        const dec = new TextDecoder();
+        let buf = '';
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buf += dec.decode(value, { stream: true });
+            const lines = buf.split('\n');
+            buf = lines.pop() ?? '';
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const raw = line.slice(6).trim();
+              if (!raw || raw === '[DONE]') continue;
+              try {
+                const ev = JSON.parse(raw);
+                if (ev.type === 'content_block_delta' && ev.delta?.type === 'text_delta') {
+                  await writer.write(enc.encode(`data: ${JSON.stringify({ token: ev.delta.text })}\n\n`));
+                }
+              } catch { /* ignore malformed lines */ }
+            }
+          }
+        } catch { /* stream error — client will handle incomplete response */ } finally {
+          try { await writer.write(enc.encode('data: {"done":true}\n\n')); } catch { /* ignore */ }
+          try { await writer.close(); } catch { /* ignore */ }
+        }
+      })();
+
+      const origin = c.req.header('Origin') || c.req.header('origin') || 'https://aminy.ai';
+      return new Response(readable, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'X-Accel-Buffering': 'no',
+          'Access-Control-Allow-Origin': allowedOrigins.includes(origin) || origin.includes('localhost') ? origin : 'https://aminy.ai',
+          'Access-Control-Allow-Credentials': 'true',
+        },
+      });
+    }
+    // ── End streaming path ────────────────────────────────────────────────────
+
     // Try the preferred provider (Anthropic) first. If it fails with a billing,
     // auth, or rate-limit error, transparently retry against OpenAI so the
     // parent's chat never visibly breaks just because Claude credits ran out.
