@@ -886,7 +886,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 </span>
                 <ExternalLink aria-hidden="true" className="w-3.5 h-3.5 text-muted-foreground" />
               </Button>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Update payment method, switch plans, view invoices, or cancel
               </p>
             </div>
@@ -1108,13 +1108,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                 }`}
                               >
                                 <p className="text-xs font-medium">{opt.label}</p>
-                                <p className="text-[10px] text-slate-400 mt-0.5">{opt.sub}</p>
+                                <p className="text-xs text-slate-400 mt-0.5">{opt.sub}</p>
                               </button>
                             ))}
                           </div>
                         </div>
 
-                        <p className="text-[10px] text-slate-400 leading-relaxed">
+                        <p className="text-xs text-slate-400 leading-relaxed">
                           Aminy will send a personalized insight based on recent sessions, goals, and behavior patterns — at your chosen time.
                         </p>
                       </div>

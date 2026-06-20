@@ -122,7 +122,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             {/* Provider card — illustrative sample, hidden on small mobile */}
             <div className="relative hidden sm:block">
               <Card className="p-5 sm:p-6 bg-white dark:bg-slate-800 shadow-xl">
-                <Badge className="bg-neutral-100 text-neutral-600 dark:bg-slate-700 dark:text-slate-300 mb-3 sm:mb-4 text-[10px] sm:text-xs">
+                <Badge className="bg-neutral-100 text-neutral-600 dark:bg-slate-700 dark:text-slate-300 mb-3 sm:mb-4 text-xs sm:text-xs">
                   Sample profile — illustrative only
                 </Badge>
                 <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
@@ -142,15 +142,15 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">42</p>
-                    <p className="text-[10px] sm:text-xs text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
+                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">$8.2k</p>
-                    <p className="text-[10px] sm:text-xs text-[#5A6B7A] dark:text-slate-400">This Month</p>
+                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">This Month</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">98%</p>
-                    <p className="text-[10px] sm:text-xs text-[#5A6B7A] dark:text-slate-400">Satisfaction</p>
+                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">Satisfaction</p>
                   </div>
                 </div>
                 <Badge className="bg-green-100 text-green-700 w-full justify-center py-2 text-xs sm:text-sm">
@@ -372,7 +372,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <p className="text-center text-[#5A6B7A] dark:text-slate-400 text-xs sm:text-sm">
                 = $9,000/month or $108,000/year
               </p>
-              <p className="text-center text-neutral-400 dark:text-[#5A6B7A] text-[10px] sm:text-xs italic">
+              <p className="text-center text-neutral-400 dark:text-[#5A6B7A] text-xs sm:text-xs italic">
                 Hypothetical illustration. Example only — actual earnings vary by caseload, credential, and availability.
               </p>
             </div>

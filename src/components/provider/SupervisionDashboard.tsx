@@ -100,15 +100,15 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{profiles.length}</div>
-            <div className="text-[10px] text-white/80">Active RBTs</div>
+            <div className="text-xs text-white/80">Active RBTs</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{allSessions.filter((s) => s.date.startsWith(thisMonth) && s.status === 'completed').length}</div>
-            <div className="text-[10px] text-white/80">Sessions This Mo</div>
+            <div className="text-xs text-white/80">Sessions This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold text-amber-300">{criticalRisks.length}</div>
-            <div className="text-[10px] text-white/80">Critical Alerts</div>
+            <div className="text-xs text-white/80">Critical Alerts</div>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
             {tab.icon}
             {tab.label}
             {tab.id === 'alerts' && criticalRisks.length > 0 && (
-              <span className="ml-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center">
+              <span className="ml-0.5 w-4 h-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
                 {criticalRisks.length}
               </span>
             )}
@@ -222,11 +222,11 @@ function RosterView({
               </div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-[#3A4A57]">{c?.compliancePercent.toFixed(1)}%</div>
-                <div className="text-[10px] text-slate-400">supervision</div>
+                <div className="text-xs text-slate-400">supervision</div>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-2 flex gap-3 text-[10px] text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{c?.directServiceHours}h direct</span>
               <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{c?.directObservationCount} obs</span>
               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{c?.individualSessionCount}i / {c?.groupSessionCount}g</span>
@@ -352,7 +352,7 @@ function CalendarView({
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-0.5 text-center">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-          <div key={d} className="text-[10px] font-medium text-slate-400 py-1">{d}</div>
+          <div key={d} className="text-xs font-medium text-slate-400 py-1">{d}</div>
         ))}
         {days.map((day, i) => {
           const daySessions = day ? sessionsByDay[day] : undefined;
@@ -407,12 +407,12 @@ function CalendarView({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-[#1B2733]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
-                <div className="text-[10px] text-[#5A6B7A]">
+                <div className="text-xs text-[#5A6B7A]">
                   {s.date} &middot; {s.durationMinutes}min &middot; {s.type}
                   {s.includesDirectObservation && ' + observation'}
                 </div>
               </div>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                 s.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
                 s.status === 'pending-signatures' ? 'bg-amber-100 text-amber-700' :
                 s.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
@@ -425,7 +425,7 @@ function CalendarView({
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 justify-center text-[10px] text-[#5A6B7A] mt-2">
+      <div className="flex gap-4 justify-center text-xs text-[#5A6B7A] mt-2">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" />Individual</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" />Group</span>
       </div>
@@ -465,7 +465,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
       <p className="text-xs text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
 
       {/* Legend */}
-      <div className="flex gap-1 text-[10px]">
+      <div className="flex gap-1 text-xs">
         {[1, 2, 3, 4, 5].map((r) => (
           <div key={r} className={`px-2 py-0.5 rounded ${ratingColor(r)}`}>
             {r} {RATING_LABELS[r]}
@@ -479,7 +479,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
           <div className="flex gap-0.5 mb-1">
             <div className="w-28 shrink-0" />
             {profiles.map((p) => (
-              <div key={p.id} className="flex-1 text-center text-[10px] font-medium text-[#5A6B7A] truncate px-0.5">
+              <div key={p.id} className="flex-1 text-center text-xs font-medium text-[#5A6B7A] truncate px-0.5">
                 {p.name.split(' ')[0]}
               </div>
             ))}
@@ -496,7 +496,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
                 return (
                   <div
                     key={p.id}
-                    className={`flex-1 text-center text-[10px] font-medium rounded leading-5 ${
+                    className={`flex-1 text-center text-xs font-medium rounded leading-5 ${
                       rating ? ratingColor(rating) : 'bg-[#F0EDE8] text-slate-400'
                     }`}
                   >
@@ -549,7 +549,7 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-[#1B2733]">{risk.rbtName}</span>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   risk.severity === 'critical' ? 'bg-red-200 text-red-800' : 'bg-amber-200 text-amber-800'
                 }`}>
                   {risk.severity}
@@ -557,7 +557,7 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
               </div>
               <p className="text-xs text-[#5A6B7A] mt-0.5">{risk.message}</p>
               {risk.daysRemaining !== undefined && (
-                <p className="text-[10px] text-slate-400 mt-1">
+                <p className="text-xs text-slate-400 mt-1">
                   {risk.daysRemaining} days remaining
                 </p>
               )}

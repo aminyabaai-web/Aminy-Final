@@ -128,7 +128,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             >
               Begin assessment
             </button>
-            <p className="text-[11px] text-slate-400 mt-3">
+            <p className="text-xs text-slate-400 mt-3">
               {measure.shortName} · {measure.citation.split('.')[0]}
             </p>
           </div>

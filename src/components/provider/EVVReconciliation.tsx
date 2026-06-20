@@ -237,7 +237,7 @@ export default function EVVReconciliation({
             >
               {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
               {status === 'discrepancy' && discrepancyCount > 0 && (
-                <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
+                <span className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                   {discrepancyCount}
                 </span>
               )}
@@ -286,7 +286,7 @@ export default function EVVReconciliation({
                           {new Date(visit.serviceDate).toLocaleDateString()} | {visit.serviceCode} | {visit.providerName}
                         </p>
                         {visit.discrepancyType && (
-                          <span className="mt-1 inline-block rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+                          <span className="mt-1 inline-block rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                             {DISCREPANCY_LABELS[visit.discrepancyType]}
                           </span>
                         )}

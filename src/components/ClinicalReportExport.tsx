@@ -266,7 +266,7 @@ export function ClinicalReportExport({
                         {toggle.label}
                       </span>
                       {toggle.locked && (
-                        <span className="text-[10px] bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
+                        <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
                       )}
                     </div>
                     <p className="text-xs text-[#8A9BA8] truncate">{toggle.description}</p>

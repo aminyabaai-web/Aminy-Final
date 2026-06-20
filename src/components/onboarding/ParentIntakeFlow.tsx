@@ -190,7 +190,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                 )}
               </div>
               <span
-                className={`text-[10px] font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
+                className={`text-xs font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
                 style={active ? { color: EMERALD } : undefined}
               >
                 {step.label}
@@ -627,7 +627,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                 style={{ backgroundColor: '#FEF9C3', borderColor: '#FDE68A', color: '#92400E' }}
               >
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wide rounded-full px-2 py-0.5"
+                  className="text-xs font-bold uppercase tracking-wide rounded-full px-2 py-0.5"
                   style={{ backgroundColor: '#FDE68A', color: '#92400E' }}
                 >
                   Sample
@@ -658,7 +658,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                     </div>
                     {prov.accepting && (
                       <span
-                        className="text-[10px] font-bold text-emerald-600 border rounded-full px-2 py-0.5 ml-2 shrink-0"
+                        className="text-xs font-bold text-emerald-600 border rounded-full px-2 py-0.5 ml-2 shrink-0"
                         style={{ backgroundColor: '#ecfdf5', borderColor: '#a7f3d0' }}
                       >
                         Accepting
@@ -677,7 +677,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
                   <div className="flex flex-wrap gap-1.5">
                     {prov.specialties.map(s => (
-                      <span key={s} className="text-[10px] bg-[#FAF7F2] border border-[#E8E4DF] text-[#5A6B7A] rounded-full px-2 py-0.5">{s}</span>
+                      <span key={s} className="text-xs bg-[#FAF7F2] border border-[#E8E4DF] text-[#5A6B7A] rounded-full px-2 py-0.5">{s}</span>
                     ))}
                   </div>
 

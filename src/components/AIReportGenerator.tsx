@@ -301,12 +301,12 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-medium">{option.title}</h4>
                     {!hasAccess && (
-                      <Badge variant="outline" className="text-[10px]">
+                      <Badge variant="outline" className="text-xs">
                         {option.tierRequired === 'pro' ? 'Plus' : 'Core'}+ only
                       </Badge>
                     )}
                     {isGenerated && (
-                      <Badge variant="outline" className="text-[10px] bg-green-50 text-green-700 border-green-200">
+                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
                         <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
                         Generated
                       </Badge>

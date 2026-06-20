@@ -95,12 +95,12 @@ export function CalendarConnectionCard() {
           </p>
         </div>
         {activeProvider && (
-          <span className="text-[11px] bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
+          <span className="text-xs bg-[#6B9080]/10 text-[#6B9080] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
             <Check className="w-3 h-3" />Active
           </span>
         )}
         {connection && (connection.status === 'expired' || connection.status === 'error') && (
-          <span className="text-[11px] bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
+          <span className="text-xs bg-orange-50 text-orange-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shrink-0">
             <AlertCircle className="w-3 h-3" />Reconnect needed
           </span>
         )}
@@ -110,7 +110,7 @@ export function CalendarConnectionCard() {
       {activeProvider && (
         <div className="rounded-xl bg-[#FAF7F2] px-3 py-2.5">
           <p className="text-xs font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
-          <p className="text-[11px] text-[#5A6B7A] mt-0.5">
+          <p className="text-xs text-[#5A6B7A] mt-0.5">
             New appointments auto-push to your {PROVIDER_META[activeProvider].label}
             {connection?.lastSyncedAt ? ` · last synced ${new Date(connection.lastSyncedAt).toLocaleString()}` : ''}
           </p>
@@ -157,7 +157,7 @@ export function CalendarConnectionCard() {
         />
       </div>
 
-      <p className="text-[11px] text-slate-400 leading-relaxed">
+      <p className="text-xs text-slate-400 leading-relaxed">
         Apple/iCloud doesn't allow third-party OAuth, so we use universal .ics files — tap "Add to Calendar" on any appointment to open it in Apple Calendar, Outlook, or your default app.
       </p>
     </div>
@@ -190,7 +190,7 @@ function ProviderButton({
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1B2733]">{title}</p>
-        <p className="text-[11px] text-[#5A6B7A] truncate">{hint}</p>
+        <p className="text-xs text-[#5A6B7A] truncate">{hint}</p>
       </div>
       <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>
         {isPassive ? <FileDown className="w-3.5 h-3.5 inline" /> : null} {cta}

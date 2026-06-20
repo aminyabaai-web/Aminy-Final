@@ -317,7 +317,7 @@ function TierSelector({ tier, onSelect }: TierSelectorProps) {
         >
           <div>{getTierLabel(m.tier)}</div>
           {m.monthlyPrice > 0 && (
-            <div className="text-[10px] text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
+            <div className="text-xs text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
           )}
         </button>
       ))}

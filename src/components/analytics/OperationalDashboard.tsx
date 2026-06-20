@@ -300,7 +300,7 @@ export default function OperationalDashboard({
             </div>
             <p className="text-xs text-[#5A6B7A]">{data.dateRange.label}</p>
             {lastUpdatedAt && (
-              <p className="text-[10px] text-[#8A9BA8] mt-0.5">
+              <p className="text-xs text-[#8A9BA8] mt-0.5">
                 Last updated: {new Date(lastUpdatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             )}

@@ -49,7 +49,7 @@ export function AIStatusIndicator() {
 
   if (isChecking) {
     return (
-      <Badge variant="outline" className="text-[10px] px-1.5 py-0.5 bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]">
+      <Badge variant="outline" className="text-xs px-1.5 py-0.5 bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]">
         <Loader2 className="w-2.5 h-2.5 mr-1 animate-spin" />
         Checking...
       </Badge>
@@ -63,7 +63,7 @@ export function AIStatusIndicator() {
           <TooltipTrigger asChild>
             <Badge 
               variant="outline" 
-              className="text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-700 border-amber-200 cursor-help"
+              className="text-xs px-1.5 py-0.5 bg-amber-50 text-amber-700 border-amber-200 cursor-help"
             >
               <AlertCircle className="w-2.5 h-2.5 mr-1" />
               Fallback
@@ -83,7 +83,7 @@ export function AIStatusIndicator() {
         <TooltipTrigger asChild>
           <Badge 
             variant="outline" 
-            className="text-[10px] px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200 cursor-help"
+            className="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 border-green-200 cursor-help"
           >
             <Sparkles className="w-2.5 h-2.5 mr-1" />
             AI

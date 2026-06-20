@@ -261,7 +261,7 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
   return (
     <div className="text-center">
       <p className="text-2xl font-bold" style={{ color: accent ? '#E07A5F' : '#0D1B2A' }}>{value}</p>
-      <p className="text-[10px] text-[#5A6B7A] uppercase tracking-wide">{label}</p>
+      <p className="text-xs text-[#5A6B7A] uppercase tracking-wide">{label}</p>
     </div>
   );
 }
@@ -282,7 +282,7 @@ function AuthBadge({ status, expiresAt }: { status: AuthStatus; expiresAt?: stri
     labelText = `Expires in ${days}d`;
   }
   return (
-    <span className={`flex items-center gap-1 text-[11px] ${s.bg} ${s.text} px-2 py-0.5 rounded-full font-medium whitespace-nowrap`}>
+    <span className={`flex items-center gap-1 text-xs ${s.bg} ${s.text} px-2 py-0.5 rounded-full font-medium whitespace-nowrap`}>
       {s.icon}{labelText}
     </span>
   );
@@ -310,12 +310,12 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
             )}
             <div className="flex items-center gap-3 mt-1.5 flex-wrap">
               {row.siteOfCare && SiteIcon && (
-                <span className="flex items-center gap-1 text-[11px] text-[#5A6B7A]">
+                <span className="flex items-center gap-1 text-xs text-[#5A6B7A]">
                   <SiteIcon className="w-3 h-3" />{SITE_META[row.siteOfCare].label}
                 </span>
               )}
               {typeof row.sessionsThisMonth === 'number' && row.sessionsThisMonth > 0 && (
-                <span className="text-[11px] text-[#5A6B7A]">{row.sessionsThisMonth} sessions this month</span>
+                <span className="text-xs text-[#5A6B7A]">{row.sessionsThisMonth} sessions this month</span>
               )}
             </div>
           </div>

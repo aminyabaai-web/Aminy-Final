@@ -484,11 +484,11 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               <div className="grid grid-cols-2 gap-3 text-center">
                 <div>
                   <div className="text-lg font-bold text-amber-600">{records.length}</div>
-                  <div className="text-[10px] text-slate-400">Scenarios explored</div>
+                  <div className="text-xs text-slate-400">Scenarios explored</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-green-600">{records.filter(r => r.copingUsed).length}</div>
-                  <div className="text-[10px] text-slate-400">Coping strategies used</div>
+                  <div className="text-xs text-slate-400">Coping strategies used</div>
                 </div>
               </div>
             </div>

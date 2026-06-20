@@ -90,17 +90,17 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthHours.toFixed(1)}</div>
-            <div className="text-[10px] text-white/80">Hours This Mo</div>
+            <div className="text-xs text-white/80">Hours This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthSessions.length}</div>
-            <div className="text-[10px] text-white/80">Sessions</div>
+            <div className="text-xs text-white/80">Sessions</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className={`text-lg font-bold ${compliance.compliancePercent >= 5 ? 'text-emerald-300' : 'text-amber-300'}`}>
               {compliance.compliancePercent.toFixed(1)}%
             </div>
-            <div className="text-[10px] text-white/80">Supervision</div>
+            <div className="text-xs text-white/80">Supervision</div>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
           >
             {v.label}
             {v.count !== undefined && v.count > 0 && (
-              <span className="ml-0.5 w-4 h-4 rounded-full bg-amber-500 text-white text-[10px] flex items-center justify-center">
+              <span className="ml-0.5 w-4 h-4 rounded-full bg-amber-500 text-white text-xs flex items-center justify-center">
                 {v.count}
               </span>
             )}
@@ -196,7 +196,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
             </div>
             <div className="text-right">
               <div className="text-sm font-bold text-[#3A4A57]">{s.durationMinutes}m</div>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                 s.bcbaReviewStatus === 'reviewed' ? 'bg-emerald-100 text-emerald-700' :
                 s.bcbaReviewStatus === 'flagged' ? 'bg-red-100 text-red-700' :
                 'bg-amber-100 text-amber-700'
@@ -210,7 +210,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
           {s.goalsTargeted.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
               {s.goalsTargeted.map((g, i) => (
-                <span key={i} className="text-[10px] bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
+                <span key={i} className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
                   {g.goalName}
                 </span>
               ))}
@@ -219,7 +219,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
 
           {/* Data collected */}
           {s.dataCollected.length > 0 && (
-            <div className="mt-2 flex gap-3 text-[10px] text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
               {s.dataCollected.map((d, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <BarChart3 className="w-3 h-3" />
@@ -295,7 +295,7 @@ function ReviewQueue({
                 <div className="text-sm font-medium text-[#1B2733]">{s.clientName}</div>
                 <div className="text-xs text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
                 Pending
               </span>
             </div>
@@ -363,7 +363,7 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-bold text-[#1B2733]">{(data.minutes / 60).toFixed(1)}h</div>
-                  <div className="text-[10px] text-slate-400">{data.minutes}min</div>
+                  <div className="text-xs text-slate-400">{data.minutes}min</div>
                 </div>
               </div>
             );

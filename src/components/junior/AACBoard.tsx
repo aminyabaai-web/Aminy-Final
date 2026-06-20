@@ -391,7 +391,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   className={`flex-shrink-0 flex flex-col items-center justify-center px-2 py-1 rounded-lg ${CATEGORY_META[s.category].bgClass} min-w-[48px]`}
                 >
                   <span className="text-xl leading-none">{s.emoji}</span>
-                  <span className="text-[10px] font-medium text-white mt-0.5 truncate max-w-[56px]">
+                  <span className="text-xs font-medium text-white mt-0.5 truncate max-w-[56px]">
                     {s.label}
                   </span>
                 </div>

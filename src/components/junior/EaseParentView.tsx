@@ -442,7 +442,7 @@ export function EaseParentView({
                   <span className="text-2xl">{lastToolEmoji}</span>
                   <div>
                     <p className="text-xs font-bold text-[#3A4A57] capitalize">{lastToolUsed}</p>
-                    <p className="text-[10px] text-[#8A9BA8]">Last used</p>
+                    <p className="text-xs text-[#8A9BA8]">Last used</p>
                   </div>
                 </div>
               )}

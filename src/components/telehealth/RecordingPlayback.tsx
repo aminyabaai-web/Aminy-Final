@@ -445,7 +445,7 @@ export function RecordingPlayback({
                   {formatDate(rec.createdAt)}
                 </span>
                 {rec.durationSeconds && (
-                  <span className="block text-[10px] text-[#8A9BA8] mt-0.5">
+                  <span className="block text-xs text-[#8A9BA8] mt-0.5">
                     {formatDuration(rec.durationSeconds)}
                   </span>
                 )}
@@ -492,7 +492,7 @@ export function RecordingPlayback({
                 playsInline
               />
               {/* HIPAA overlay */}
-              <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 rounded-full px-2.5 py-1 text-[10px] text-white/70">
+              <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 rounded-full px-2.5 py-1 text-xs text-white/70">
                 <Shield size={10} />
                 HIPAA Protected
               </div>
@@ -510,7 +510,7 @@ export function RecordingPlayback({
                 onChange={handleSeek}
                 className="w-full h-1.5 bg-[#E8E4DF] rounded-full appearance-none cursor-pointer accent-teal-600"
               />
-              <div className="flex justify-between text-[10px] text-[#8A9BA8]">
+              <div className="flex justify-between text-xs text-[#8A9BA8]">
                 <span>{formatDuration(currentTime)}</span>
                 <span>{formatDuration(duration)}</span>
               </div>
@@ -645,7 +645,7 @@ export function RecordingPlayback({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[10px] text-[#8A9BA8] text-center py-2">
+                  <p className="text-xs text-[#8A9BA8] text-center py-2">
                     No bookmarks yet. Add one to mark a key moment.
                   </p>
                 )}
@@ -675,7 +675,7 @@ export function RecordingPlayback({
                   )}
                   <div>
                     <span className="text-[#8A9BA8]">Session ID</span>
-                    <p className="text-[#3A4A57] font-mono text-[10px]">{selectedRecording.sessionId.slice(0, 12)}...</p>
+                    <p className="text-[#3A4A57] font-mono text-xs">{selectedRecording.sessionId.slice(0, 12)}...</p>
                   </div>
                 </div>
                 {providerNotes && (

@@ -319,13 +319,13 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                       </div>
 
                       {/* Running balance */}
-                      <p className="text-[10px] text-[#8A9BA8] mt-1">
+                      <p className="text-xs text-[#8A9BA8] mt-1">
                         Balance after: {txn.consultCreditsAfter} consult, {txn.deepReviewCreditsAfter} deep review
                       </p>
 
                       {/* Expiry info for purchases */}
                       {txn.expiresAt && txn.type === 'purchase' && (
-                        <p className="text-[10px] text-[#8A9BA8] mt-0.5">
+                        <p className="text-xs text-[#8A9BA8] mt-0.5">
                           Expires: {formatDateShort(new Date(txn.expiresAt))}
                         </p>
                       )}

@@ -525,15 +525,15 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
                 <div className="text-lg font-bold text-violet-600">{activeWorries.length}</div>
-                <div className="text-[10px] text-slate-400">Active</div>
+                <div className="text-xs text-slate-400">Active</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-green-600">{releasedCount}</div>
-                <div className="text-[10px] text-slate-400">Released</div>
+                <div className="text-xs text-slate-400">Released</div>
               </div>
               <div>
                 <div className="text-lg font-bold text-blue-600">{worries.filter(w => w.shrunk).length}</div>
-                <div className="text-[10px] text-slate-400">Shrunk</div>
+                <div className="text-xs text-slate-400">Shrunk</div>
               </div>
             </div>
           </div>

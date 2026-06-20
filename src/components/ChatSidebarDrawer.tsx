@@ -170,7 +170,7 @@ export function ChatSidebarDrawer({
                 <div className="space-y-4 px-2">
                   {grouped.map((g) => (
                     <div key={g.label}>
-                      <div className="px-2 pb-1.5 pt-1 text-[10px] font-semibold tracking-wider text-[#8E9BAA] uppercase">
+                      <div className="px-2 pb-1.5 pt-1 text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase">
                         {g.label}
                       </div>
                       <div className="space-y-1">

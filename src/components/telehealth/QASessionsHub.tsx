@@ -563,7 +563,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
             {session.hosts.map((host, idx) => (
               <div
                 key={idx}
-                className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-600 to-[#466379] flex items-center justify-center text-white text-[10px] font-medium border-2 border-white"
+                className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-600 to-[#466379] flex items-center justify-center text-white text-xs font-medium border-2 border-white"
               >
                 {host.name.split(' ').map(n => n[0]).join('')}
               </div>

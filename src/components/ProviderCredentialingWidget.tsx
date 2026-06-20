@@ -161,12 +161,12 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
-                <p className="text-[11px] text-[#5A6B7A] truncate">{meta.description}</p>
+                <p className="text-xs text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
-                  <p className="text-[11px] text-red-600 mt-0.5">{row.check.failureReason}</p>
+                  <p className="text-xs text-red-600 mt-0.5">{row.check.failureReason}</p>
                 )}
               </div>
-              <span className={`text-[11px] ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
+              <span className={`text-xs ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
                 {statusStyle.label}
               </span>

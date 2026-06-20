@@ -19,7 +19,7 @@ export function DisclaimerFooter({ className = '', variant = 'subtle' }: Disclai
     default: "text-xs leading-relaxed",
     compact: "text-xs leading-tight",
     card: "text-xs leading-relaxed p-3 bg-muted/50 border border-muted rounded-lg",
-    subtle: "text-[10px] leading-tight",
+    subtle: "text-xs leading-tight",
   };
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${className}`;
@@ -56,7 +56,7 @@ function SubtleDisclaimer({ className }: { className?: string }) {
     <div className={`flex justify-center ${className || ''}`}>
       <button
         onClick={() => setExpanded(v => !v)}
-        className="inline-flex items-center gap-1 text-[10px] text-slate-400 hover:text-[#5A6B7A] px-2 py-1 rounded-full transition-colors"
+        className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-[#5A6B7A] px-2 py-1 rounded-full transition-colors"
         aria-label="View educational guidance disclaimer"
       >
         <Info className="w-2.5 h-2.5" />

@@ -133,7 +133,7 @@ export function AIContextViewer() {
             context.child.currentGoals.map((goal, idx) => (
               <div key={idx} className="p-3 bg-[#FAF7F2] rounded-lg text-sm">
                 <div className="flex items-center justify-between mb-1">
-                  <Badge variant="outline" className="text-[10px]">
+                  <Badge variant="outline" className="text-xs">
                     {goal.area}
                   </Badge>
                   <span className="text-xs text-muted-foreground">{goal.progress}% complete</span>

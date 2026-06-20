@@ -192,7 +192,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                     <ol className="space-y-1">
                       {a.steps.map((step, si) => (
                         <li key={si} className="flex gap-2 text-xs text-[#5A6B7A]">
-                          <span className="w-4 h-4 rounded-full bg-[#6B9080]/10 text-[#6B9080] flex items-center justify-center shrink-0 font-medium text-[10px]">{si + 1}</span>
+                          <span className="w-4 h-4 rounded-full bg-[#6B9080]/10 text-[#6B9080] flex items-center justify-center shrink-0 font-medium text-xs">{si + 1}</span>
                           {step}
                         </li>
                       ))}
