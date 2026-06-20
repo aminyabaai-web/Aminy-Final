@@ -1184,7 +1184,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           messagesUsedToday={dailyUsage?.used ?? 0}
                           documentsUploaded={0}
                           memoryFactsStored={0}
-                          onUpgrade={onUpgrade}
+                          onUpgrade={() => onUpgrade?.()}
                         />
                       </div>
 
