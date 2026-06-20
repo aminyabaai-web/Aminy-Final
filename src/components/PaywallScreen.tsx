@@ -3,7 +3,7 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { DisclaimerFooter } from './DisclaimerFooter';
 import { Button } from './ui/button';
@@ -36,6 +36,7 @@ import { openSubscriptionCheckout } from '../lib/platform-purchase';
 import { HAPTICS } from '../lib/mobile-experience-enhancer';
 import { supabase } from '../utils/supabase/client';
 import { addBreadcrumb, captureError } from '../lib/sentry';
+import { getOrCreateReferralCode } from '../lib/referral-program';
 
 interface PaywallScreenProps {
   onSubscribe: (tier: TierType) => void;
@@ -63,6 +64,17 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
   // Default to yearly for higher ARPU — users can switch to monthly
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('yearly');
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [referralCode, setReferralCode] = useState<string>('');
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.id) {
+        getOrCreateReferralCode(data.user.id)
+          .then(rc => setReferralCode(rc.code))
+          .catch(() => { /* non-critical */ });
+      }
+    });
+  }, []);
 
   // Promo code — read from URL (?promo=CODE) then localStorage
   const [promoCode] = useState<string | null>(() => {
@@ -676,7 +688,8 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 size="sm"
                 className="border-violet-300 text-violet-700 hover:bg-violet-100 dark:border-violet-700 dark:text-violet-300 dark:hover:bg-violet-900/50"
                 onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/join?ref=AMINY`);
+                  const code = referralCode || 'AMINY';
+                  navigator.clipboard.writeText(`${window.location.origin}/join?ref=${code}`);
                   toast.success('Referral link copied!');
                 }}
               >

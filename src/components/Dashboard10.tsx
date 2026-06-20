@@ -915,6 +915,7 @@ export function Dashboard10({
           <TrialCountdown
             trialStartDate={new Date(Date.now() - (7 - trialDaysRemaining) * 24 * 60 * 60 * 1000).toISOString()}
             onUpgrade={() => onNavigate?.('paywall')}
+            onInvite={() => onNavigate?.('referral-dashboard')}
             currentTier={userTier}
             dismissible={true}
           />

@@ -20,6 +20,7 @@ interface TrialCountdownProps {
   trialStartDate: Date | string;
   trialDays?: number; // Default 7 days
   onUpgrade: () => void;
+  onInvite?: () => void; // Optional: navigate to referral dashboard as a trial-extension path
   currentTier?: string;
   compact?: boolean; // For navbar display
   dismissible?: boolean;
@@ -29,6 +30,7 @@ export function TrialCountdown({
   trialStartDate,
   trialDays = 7,
   onUpgrade,
+  onInvite,
   currentTier = 'free',
   compact = false,
   dismissible = true,
@@ -157,7 +159,7 @@ export function TrialCountdown({
           </div>
 
           {/* CTA Button */}
-          <div className="sm:ml-auto">
+          <div className="sm:ml-auto flex flex-col items-center gap-2">
             <Button
               onClick={onUpgrade}
               className={`w-full sm:w-auto bg-gradient-to-r ${gradients[urgencyLevel]} text-white hover:opacity-90 transition-opacity`}
@@ -166,6 +168,14 @@ export function TrialCountdown({
               {urgencyLevel === 'critical' ? 'Subscribe Now' : 'See Plans'}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
+            {onInvite && (urgencyLevel === 'critical' || urgencyLevel === 'high') && (
+              <button
+                onClick={onInvite}
+                className="text-xs text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#43AA8B] transition-colors"
+              >
+                Or invite a friend → get 7 more days free
+              </button>
+            )}
           </div>
         </div>
 

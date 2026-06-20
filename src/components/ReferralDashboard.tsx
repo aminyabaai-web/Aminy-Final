@@ -41,6 +41,7 @@ import { useReferralData } from '../hooks/useReferralData';
 import { EmptyReferrals } from './ui/empty-state';
 import { toast } from 'sonner';
 import { trackReferralShare, getShareText, getReferralUrl } from '../lib/viral-analytics';
+import { InviteFlow } from './InviteFlow';
 
 interface ReferralDashboardProps {
   userId: string;
@@ -67,6 +68,7 @@ export function ReferralDashboard({
   const [copied, setCopied] = useState(false);
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [showAllReferrals, setShowAllReferrals] = useState(false);
+  const [showInviteFlow, setShowInviteFlow] = useState(false);
 
   // Auto-create referral code on mount if not present
   useEffect(() => {
@@ -308,6 +310,29 @@ export function ReferralDashboard({
                 More sharing options
               </button>
             )}
+            {/* Invite from contacts — Contact Picker API + manual SMS/email */}
+            <button
+              onClick={() => setShowInviteFlow(true)}
+              className="w-full mt-2 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
+            >
+              <Users className="w-4 h-4" />
+              Invite from contacts
+            </button>
+          </motion.div>
+        )}
+
+        {/* InviteFlow — contact picker + SMS/email with real referral code */}
+        {showInviteFlow && referralCode && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mt-4"
+          >
+            <InviteFlow
+              userId={userId}
+              userName={userName}
+              onClose={() => setShowInviteFlow(false)}
+            />
           </motion.div>
         )}
 
