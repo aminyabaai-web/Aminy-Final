@@ -57,6 +57,7 @@ import {
   type AuthUser,
   type TierType,
 } from "./auth-middleware.ts";
+import { handleAuthSendEmail } from "./auth-email-routes.ts";
 
 const app = new Hono();
 
@@ -4400,5 +4401,13 @@ app.get("/make-server-8a022548/retention/profile/:userId", async (c) => {
     return c.json({ error: 'Failed to get profile' }, 500);
   }
 });
+
+// ============================================================================
+// AUTH EMAIL HOOK — Supabase calls this instead of sending auth emails itself
+// Configure in: Supabase Dashboard → Authentication → Hooks → Send Email hook
+// URL: https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548/auth/send-email
+// ============================================================================
+
+app.post("/make-server-8a022548/auth/send-email", handleAuthSendEmail);
 
 Deno.serve(app.fetch);
