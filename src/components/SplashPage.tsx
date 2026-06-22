@@ -165,7 +165,7 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
             >
-              ABA-Based · Clinically Grounded · Built for Families
+              ABA · TeleABA · Speech · Mental Health — All in One
             </span>
           </motion.div>
 
@@ -232,7 +232,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            One place for every kind of care your child needs — ABA, speech, OT, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
+            One place for every kind of care your child needs — ABA, teleABA, speech, OT, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
           </motion.p>
 
           {/* Primary CTA */}
