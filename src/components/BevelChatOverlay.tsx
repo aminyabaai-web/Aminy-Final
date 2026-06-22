@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -1562,6 +1562,23 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         </div>
                       </div>
                     </div>
+
+                    {msg.role === 'assistant' && msg.content && !isLoading && (
+                      <div className="ml-8 mt-1 flex items-center gap-1">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(msg.content).then(() => {
+                              toast.success('Copied to clipboard', { duration: 1500 });
+                            });
+                          }}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          title="Copy message"
+                        >
+                          <Copy className="w-3 h-3" />
+                          <span>Copy</span>
+                        </button>
+                      </div>
+                    )}
 
                     {showFollowUps && msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && !isLoading && (
                       <div className="ml-8 mt-2 space-y-1.5">

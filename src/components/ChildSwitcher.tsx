@@ -47,7 +47,7 @@ export function ChildSwitcher({
   const getUpgradeTierForChildren = (): TierType | null => {
     if (tier === 'proplus') return null;
     if (tier === 'pro') return 'proplus';
-    if (tier === 'core') return 'proplus'; // Core has 3, Pro+ has unlimited
+    if (tier === 'core') return 'proplus'; // Core is unlimited; proplus adds storage/features
     if (tier === 'starter' || tier === 'free') return 'core';
     return 'core';
   };

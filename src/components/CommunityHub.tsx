@@ -330,6 +330,7 @@ export function CommunityHub({
   const [threadLoading, setThreadLoading] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [postingComment, setPostingComment] = useState(false);
+  const [othersTyping, setOthersTyping] = useState(false);
   // Upcoming BCBA group sessions for the "Live group sessions" strip.
   const [groupSessions, setGroupSessions] = useState<LiveGroupSession[]>([]);
 
@@ -508,6 +509,40 @@ export function CommunityHub({
     }
     loadGroupSessions();
   }, []);
+
+  // Typing indicator: broadcast when user types, subscribe to others' broadcasts
+  useEffect(() => {
+    if (!activeThread) return;
+    const channelName = `community:thread:${activeThread.id}`;
+    const channel = supabase.channel(channelName);
+    let clearTimer: ReturnType<typeof setTimeout>;
+
+    channel
+      .on('broadcast', { event: 'typing' }, (payload: { payload?: { userId?: string } }) => {
+        if (payload?.payload?.userId === userId) return;
+        setOthersTyping(true);
+        clearTimeout(clearTimer);
+        clearTimer = setTimeout(() => setOthersTyping(false), 3000);
+      })
+      .subscribe();
+
+    return () => {
+      clearTimeout(clearTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [activeThread, userId]);
+
+  // Broadcast typing event (debounced to avoid flooding)
+  const typingTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const broadcastTyping = useCallback(() => {
+    if (!activeThread) return;
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      supabase.channel(`community:thread:${activeThread.id}`)
+        .send({ type: 'broadcast', event: 'typing', payload: { userId } })
+        .catch(() => { /* non-fatal */ });
+    }, 300);
+  }, [activeThread, userId]);
 
   // "Parents like you" suggestion — pure client-side matching of the user's own
   // pre-signup screening answers (localStorage `aminy_screening_results`) against
@@ -1428,17 +1463,29 @@ export function CommunityHub({
                 </div>
               </div>
               <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex items-center gap-2">
-                <Input
-                  placeholder="Add a comment…"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleAddComment();
-                    }
-                  }}
-                />
+                <div className="flex-1 flex flex-col gap-1">
+                  {othersTyping && (
+                    <div className="flex items-center gap-1.5 text-xs text-slate-400 px-1">
+                      <span className="flex gap-0.5">
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </span>
+                      <span>Someone is typing…</span>
+                    </div>
+                  )}
+                  <Input
+                    placeholder="Add a comment…"
+                    value={newComment}
+                    onChange={(e) => { setNewComment(e.target.value); broadcastTyping(); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleAddComment();
+                      }
+                    }}
+                  />
+                </div>
                 <Button
                   onClick={handleAddComment}
                   disabled={postingComment || !newComment.trim()}

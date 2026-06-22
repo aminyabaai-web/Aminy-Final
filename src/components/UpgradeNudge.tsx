@@ -247,7 +247,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
       id: 'core' as TierType,
       name: 'Core',
       price: `$${tierPricing.core.monthly}/mo`,
-      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP & document scanning', 'Full calm toolkit', '2 children'],
+      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP & document scanning', 'Full calm toolkit', 'Unlimited children'],
       highlight: currentTier === 'free',
       popular: true
     },
@@ -255,7 +255,7 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
       id: 'pro' as TierType,
       name: 'Pro',
       price: `$${tierPricing.pro.monthly}/mo`,
-      features: ['AI memory: 15,000 facts', 'IEP-ready progress reports', 'Provider sharing portal', '3 children', '20% off sessions'],
+      features: ['AI memory: 15,000 facts', 'IEP-ready progress reports', 'Provider sharing portal', 'Unlimited children', '20% off sessions'],
       highlight: currentTier === 'core' || currentTier === 'starter'
     },
     {

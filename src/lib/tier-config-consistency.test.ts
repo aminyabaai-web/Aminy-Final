@@ -122,22 +122,22 @@ describe('tier-config consistency: pinned CANONICAL FACTS', () => {
     expect(getTierLimits('free').memoryFacts).toBe(50);
   });
 
-  it('CORE: $14.99/mo, $129/yr, unlimited (fair-use 100), 2 children, 10% discount, 5000 memory facts', () => {
+  it('CORE: $14.99/mo, $129/yr, unlimited (fair-use 100), unlimited children, 10% discount, 5000 memory facts', () => {
     expect(tierPricing.core.monthly).toBe(14.99);
     expect(tierPricing.core.yearly).toBe(129);
     expect(getAIMessageLimit('core')).toBeNull(); // displayed "Unlimited"
     expect(getEnforcedAIMessageLimit('core')).toBe(100);
-    expect(getMaxChildren('core')).toBe(2);
+    expect(getMaxChildren('core')).toBeNull(); // unlimited — no per-child pricing penalty
     expect(getMarketplaceDiscount('core')).toBe(10);
     expect(getTierLimits('core').memoryFacts).toBe(5000);
   });
 
-  it('PRO: $29.99/mo, $279/yr, unlimited (fair-use 100), 3 children, 20% discount, 15000 memory facts', () => {
+  it('PRO: $29.99/mo, $279/yr, unlimited (fair-use 100), unlimited children, 20% discount, 15000 memory facts', () => {
     expect(tierPricing.pro.monthly).toBe(29.99);
     expect(tierPricing.pro.yearly).toBe(279);
     expect(getAIMessageLimit('pro')).toBeNull();
     expect(getEnforcedAIMessageLimit('pro')).toBe(100);
-    expect(getMaxChildren('pro')).toBe(3);
+    expect(getMaxChildren('pro')).toBeNull(); // unlimited — no per-child pricing penalty
     expect(getMarketplaceDiscount('pro')).toBe(20);
     expect(getTierLimits('pro').memoryFacts).toBe(15000);
   });

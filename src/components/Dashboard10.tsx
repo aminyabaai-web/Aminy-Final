@@ -86,6 +86,8 @@ import { useNudgeEngine } from '../hooks/useNudgeEngine';
 import { subscribeToPush, isPushSupported, getNotificationPermission } from '../lib/push-notifications';
 import { triggerHaptic } from '../lib/haptics';
 import { fireConfetti } from '../lib/confetti';
+import { WeeklyOutcomeCheckIn, shouldShowWeeklyCheckIn } from './WeeklyOutcomeCheckIn';
+import { BaselineAssessment, needsBaseline } from './BaselineAssessment';
 
 // Types
 interface ChildProfile {
@@ -215,6 +217,8 @@ export function Dashboard10({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [showTaskCelebration, setShowTaskCelebration] = useState(false);
   const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(99);
+  const [showWeeklyCheckIn, setShowWeeklyCheckIn] = useState(false);
+  const [showBaselineAssessment, setShowBaselineAssessment] = useState(false);
 
   // Get conversation context for sending messages
   const { messages: chatMessages, sendMessage, createConversation, setChildContext, currentConversation } = useConversation();
@@ -560,6 +564,59 @@ export function Dashboard10({
       return () => clearTimeout(timer);
     }
   }, [streakDays]);
+
+  // Variable / intermittent reward — fires on unexpected behavioral patterns,
+  // not just predictable day counts. The surprise is what makes it stick.
+  useEffect(() => {
+    if (!userId || dashboardData.isLoading) return;
+    const today = new Date().toDateString();
+    const storageKey = `aminy_pattern_reward_${userId}`;
+    const lastFired = localStorage.getItem(storageKey);
+    if (lastFired === today) return; // once per day max
+
+    const PATTERN_INSIGHTS: Array<{ condition: boolean; message: string }> = [
+      {
+        condition: dashboardData.routineAdherence >= 80 && streakDays >= 3 && streakDays % 5 !== 0,
+        message: `${streakDays} days in a row. Consistency like this is how real change happens. 🌱`,
+      },
+      {
+        condition: safeTodaysRoutines.some(r => r.completedCount > 0 && r.completedCount === r.totalCount),
+        message: 'Perfect routine today — every step done. That\'s a big win.',
+      },
+      {
+        condition: dashboardData.activeGoals.some(g => g.progress >= 50 && g.progress < 100),
+        message: 'More than halfway to a goal. Keep going — you\'re closer than it feels.',
+      },
+    ];
+
+    const triggered = PATTERN_INSIGHTS.find(p => p.condition);
+    if (!triggered) return;
+
+    // 60% chance of firing on any given qualifying day — keeps it unpredictable
+    if (Math.random() > 0.6) return;
+
+    localStorage.setItem(storageKey, today);
+    setTimeout(() => {
+      fireConfetti('goal');
+      toast.success(triggered.message, {
+        duration: 5000,
+        style: { background: '#F6FBFB', border: '1px solid #43AA8B', color: '#1B2733' },
+      });
+    }, 2500); // slight delay — feels like a surprise, not an alert
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, dashboardData.isLoading, dashboardData.routineAdherence, streakDays]);
+
+  // Show weekly check-in and baseline assessment after data loads
+  useEffect(() => {
+    if (!userId || dashboardData.isLoading) return;
+    // Baseline takes priority over weekly check-in
+    if (needsBaseline(userId)) {
+      setTimeout(() => setShowBaselineAssessment(true), 1500);
+    } else if (shouldShowWeeklyCheckIn()) {
+      setTimeout(() => setShowWeeklyCheckIn(true), 2000);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, dashboardData.isLoading]);
 
   // Quick actions
   const quickActions = [
@@ -1267,6 +1324,21 @@ export function Dashboard10({
         </motion.section>
 
         {/* ========================================
+            WEEKLY CHECK-IN — Subtle outcome data capture
+            3 questions, dismissed after completion
+            ======================================== */}
+        <AnimatePresence>
+          {showWeeklyCheckIn && (
+            <WeeklyOutcomeCheckIn
+              userId={userId || ''}
+              childId={child?.id}
+              childName={child?.name || userData?.childName}
+              onDismiss={() => setShowWeeklyCheckIn(false)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* ========================================
             3. OUTCOMES DASHBOARD - Measurable Progress
             Shows real value that makes subscription essential
             ======================================== */}
@@ -1692,6 +1764,20 @@ export function Dashboard10({
       {/* ========================================
           TRIAL MODALS - Soft nudge & hard paywall
           ======================================== */}
+
+      {/* Baseline assessment — modal overlay, shown once per user */}
+      <AnimatePresence>
+        {showBaselineAssessment && (
+          <BaselineAssessment
+            userId={userId || ''}
+            childId={child?.id}
+            childName={child?.name || userData?.childName}
+            onComplete={() => setShowBaselineAssessment(false)}
+            onSkip={() => setShowBaselineAssessment(false)}
+          />
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {showSoftNudge && (
           <SoftNudgeModal

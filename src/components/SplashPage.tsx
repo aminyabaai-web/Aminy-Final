@@ -44,7 +44,7 @@ export function SplashPage({
 }: SplashPageProps) {
 
   useEffect(() => {
-    document.title = "Aminy — ABA for Everyday Life";
+    document.title = "Aminy — AI-Powered ABA Support";
 
     // Set meta description
     let metaDesc = document.querySelector('meta[name="description"]');
@@ -53,7 +53,7 @@ export function SplashPage({
       metaDesc.setAttribute('name', 'description');
       document.head.appendChild(metaDesc);
     }
-    metaDesc.setAttribute('content', 'Gentle, always-there support grounded in ABA—routines, guidance, and progress tools for neurodivergent family life.');
+    metaDesc.setAttribute('content', 'AI-powered ABA support for neurodivergent families. BCBA-designed techniques, insurance navigation, and a 24/7 AI coach — in your pocket.');
   }, []);
 
   return (
@@ -165,7 +165,7 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
             >
-              BCBA-supervised · Insurance-ready · Powered by AI
+              TeleABA · Takes insurance · AI-powered
             </span>
           </motion.div>
 

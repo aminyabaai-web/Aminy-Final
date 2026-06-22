@@ -108,7 +108,7 @@ const TIERS: TierCard[] = [
       { icon: <Spark />, text: 'Advanced clinical reasoning' },
       { icon: <Spark />, text: 'Higher message + upload limits' },
       { icon: <Spark />, text: 'Advanced image analysis (IEPs, scans, photos)' },
-      { icon: <Spark />, text: 'Multi-child support (up to 3)' },
+      { icon: <Spark />, text: 'Unlimited children profiles' },
       { icon: <Spark />, text: 'Custom AI personalities' },
       { icon: <Spark />, text: 'Outcomes tracking with validated measures' },
     ],
