@@ -124,7 +124,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               <Users size={18} className="text-[#6B9080]" />
               Roster Manager
             </h1>
-            <p className="text-xs text-[#5A6B7A]">Active rosters · {rosterEntries.length} payers</p>
+            <p className="text-sm text-[#5A6B7A]">Active rosters · {rosterEntries.length} payers</p>
           </div>
           <button
             onClick={() => setShowAddFlow(true)}
@@ -144,7 +144,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
             <div className="bg-white rounded-2xl p-6 text-center border border-[#E8E4DF]">
               <Shield size={32} className="text-[#8A9BA8] mx-auto mb-2" />
               <p className="text-sm text-[#5A6B7A]">No active roster entries yet.</p>
-              <p className="text-xs text-[#8A9BA8] mt-1">Complete credentialing with a payer to appear on their roster.</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">Complete credentialing with a payer to appear on their roster.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -153,7 +153,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                     <div>
                       <p className="text-sm font-semibold text-[#1B2733]">{entry.payer}</p>
-                      <p className="text-xs text-[#5A6B7A]">Effective {entry.effectiveDate}</p>
+                      <p className="text-sm text-[#5A6B7A]">Effective {entry.effectiveDate}</p>
                     </div>
                     <span className="text-xs font-medium text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
                       In-Network
@@ -164,16 +164,16 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <div className="px-4 py-3">
                     <div className="flex items-center gap-1.5 mb-2">
                       <DollarSign size={13} className="text-[#8A9BA8]" />
-                      <p className="text-xs font-medium text-[#5A6B7A]">Contracted Rates</p>
+                      <p className="text-sm font-medium text-[#5A6B7A]">Contracted Rates</p>
                     </div>
                     <div className="space-y-1.5">
                       {entry.contractedRates.map(rate => (
                         <div key={rate.cptCode} className="flex items-center justify-between">
                           <div>
                             <span className="text-xs font-mono font-medium text-[#3A4A57]">{rate.cptCode}</span>
-                            <span className="text-xs text-[#5A6B7A] ml-2">{rate.description}</span>
+                            <span className="text-sm text-[#5A6B7A] ml-2">{rate.description}</span>
                           </div>
-                          <span className="text-xs font-semibold text-[#1B2733]">
+                          <span className="text-sm font-semibold text-[#1B2733]">
                             ${rate.rate.toFixed(2)}/unit
                           </span>
                         </div>
@@ -222,14 +222,14 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{typeLabels[req.type]}</p>
-                        <p className="text-xs text-[#5A6B7A]">{req.payer} · Submitted {req.submittedDate}</p>
+                        <p className="text-sm text-[#5A6B7A]">{req.payer} · Submitted {req.submittedDate}</p>
                       </div>
                       <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${statusCfg.bg} ${statusCfg.color}`}>
                         {statusCfg.icon}
                         {statusCfg.label}
                       </div>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mb-2">{req.description}</p>
+                    <p className="text-sm text-[#5A6B7A] mb-2">{req.description}</p>
                     <div className="flex items-center gap-1.5 text-xs text-[#8A9BA8]">
                       <Calendar size={11} />
                       <span>Effective: {req.effectiveDate}</span>

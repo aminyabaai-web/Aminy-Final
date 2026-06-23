@@ -968,8 +968,8 @@ export function CommunityForYou({
       {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
-          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
-          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community preview — sample data shown. Live groups and events launching this summer.</span>
+          <span className="text-amber-600 dark:text-amber-400 text-sm font-medium">Preview</span>
+          <span className="text-amber-700/70 dark:text-amber-300/70 text-sm">Community preview — sample data shown. Live groups and events launching this summer.</span>
         </div>
       )}
       {/* Header */}
