@@ -216,7 +216,7 @@ function StreakFlame({ streak }: { streak: number }) {
           style={{ color: intensity > 0.7 ? '#EF4444' : intensity > 0.4 ? '#F97316' : '#F59E0B' }}>
           {streak}
         </span>
-        <span className="text-xs font-semibold text-[#5A6B7A]">day streak</span>
+        <span className="text-sm font-semibold text-[#5A6B7A]">day streak</span>
       </div>
       {milestone && (
         <motion.div
@@ -265,7 +265,7 @@ function StarEarner({ onEarn }: { onEarn: (stars: StarValue) => void }) {
                 <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
               ))}
             </div>
-            <span className="text-xs font-bold text-amber-700">
+            <span className="text-sm font-bold text-amber-700">
               {val === 1 ? 'Small task' : val === 3 ? 'Hard task' : 'Exceptional!'}
             </span>
           </motion.button>

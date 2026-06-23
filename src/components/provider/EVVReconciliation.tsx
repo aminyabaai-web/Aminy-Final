@@ -182,17 +182,17 @@ export default function EVVReconciliation({
               >
                 <div className="flex items-center gap-2 mb-1">
                   <div className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-                  <span className="text-xs font-semibold text-[#1B2733]">{cycle.label}</span>
+                  <span className="text-sm font-semibold text-[#1B2733]">{cycle.label}</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {new Date(cycle.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} -{' '}
                   {new Date(cycle.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
                   <span className="text-lg font-bold text-[#1B2733]">{cycle.cleanRate}%</span>
-                  <span className="text-xs text-[#5A6B7A]">clean</span>
+                  <span className="text-sm text-[#5A6B7A]">clean</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {cycle.reconciled}/{cycle.totalVisits} visits | {cycle.discrepancies} issues
                 </p>
               </button>
@@ -206,19 +206,19 @@ export default function EVVReconciliation({
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <CheckCircle className="mx-auto h-5 w-5 text-green-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">{currentCycle.reconciled}</p>
-              <p className="text-xs text-[#5A6B7A]">Verified</p>
+              <p className="text-sm text-[#5A6B7A]">Verified</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <AlertTriangle className="mx-auto h-5 w-5 text-amber-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">{discrepancyCount}</p>
-              <p className="text-xs text-[#5A6B7A]">Discrepancies</p>
+              <p className="text-sm text-[#5A6B7A]">Discrepancies</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <Clock className="mx-auto h-5 w-5 text-blue-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">
                 {currentCycle.totalVisits - currentCycle.reconciled - discrepancyCount}
               </p>
-              <p className="text-xs text-[#5A6B7A]">Pending</p>
+              <p className="text-sm text-[#5A6B7A]">Pending</p>
             </div>
           </div>
         )}
@@ -282,7 +282,7 @@ export default function EVVReconciliation({
                           {visit.reconciliationStatus === 'resolved' && <CheckCircle className="h-4 w-4 text-blue-500" />}
                           <span className="text-sm font-semibold text-[#1B2733] truncate">{visit.clientName}</span>
                         </div>
-                        <p className="text-xs text-[#5A6B7A] mt-0.5">
+                        <p className="text-sm text-[#5A6B7A] mt-0.5">
                           {new Date(visit.serviceDate).toLocaleDateString()} | {visit.serviceCode} | {visit.providerName}
                         </p>
                         {visit.discrepancyType && (
