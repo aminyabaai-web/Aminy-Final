@@ -356,7 +356,7 @@ export function ClinicalReportExport({
             {goals.map(goal => (
               <div key={goal.id} className="flex items-center gap-2 py-1.5">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
+                  <p className="text-sm font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
                   <div className="w-full bg-[#F0EDE8] rounded-full h-1.5 mt-1">
                     <div
                       className={`h-1.5 rounded-full ${
@@ -366,7 +366,7 @@ export function ClinicalReportExport({
                     />
                   </div>
                 </div>
-                <span className="text-xs font-medium text-[#5A6B7A] w-10 text-right">{goal.current}%</span>
+                <span className="text-sm font-medium text-[#5A6B7A] w-10 text-right">{goal.current}%</span>
               </div>
             ))}
           </div>
@@ -377,8 +377,8 @@ export function ClinicalReportExport({
               <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Assessments ({reportData.assessments.length})</h3>
               {reportData.assessments.map(a => (
                 <div key={a.type} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                  <span className="text-xs text-[#5A6B7A]">{a.name}</span>
-                  <span className={`text-xs font-medium ${
+                  <span className="text-sm text-[#5A6B7A]">{a.name}</span>
+                  <span className={`text-sm font-medium ${
                     (a.change ?? 0) < 0 ? 'text-green-700' : (a.change ?? 0) > 0 ? 'text-orange-600' : 'text-[#5A6B7A]'
                   }`}>
                     {a.score} {a.change != null ? `(${a.change > 0 ? '+' : ''}${a.change})` : ''}
