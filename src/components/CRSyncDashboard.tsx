@@ -171,7 +171,7 @@ function SyncRecordCard({
               </p>
               <StatusBadge status={record.status} />
             </div>
-            <p className="text-xs text-[#5A6B7A] mt-0.5">
+            <p className="text-sm text-[#5A6B7A] mt-0.5">
               {record.recordsSynced > 0
                 ? `${record.recordsSynced} records synced`
                 : 'No data synced yet'}
@@ -207,32 +207,32 @@ function SyncRecordCard({
       {expanded && (
         <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Direction</span>
               <p className="font-medium text-[#1B2733] capitalize">{record.direction}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Records</span>
               <p className="font-medium text-[#1B2733]">{record.recordsSynced}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Last Sync</span>
               <p className="font-medium text-[#1B2733]">{timeAgo(record.lastSyncAt)}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Next Sync</span>
               <p className="font-medium text-[#1B2733]">{timeAgo(record.nextSyncAt)}</p>
             </div>
           </div>
 
           {record.lastError && (
-            <div className="text-xs bg-red-50 text-red-700 rounded p-2">
+            <div className="text-sm bg-red-50 text-red-700 rounded p-2">
               <span className="font-medium">Last Error:</span> {record.lastError}
             </div>
           )}
 
           {record.consecutiveFailures > 0 && (
-            <div className="text-xs bg-amber-50 text-amber-700 rounded p-2">
+            <div className="text-sm bg-amber-50 text-amber-700 rounded p-2">
               <span className="font-medium">Consecutive Failures:</span>{' '}
               {record.consecutiveFailures}
             </div>
@@ -267,7 +267,7 @@ function ErrorCard({
             <p className="text-sm font-medium text-[#1B2733] truncate">
               {DATA_TYPE_LABELS[error.data_type] || error.data_type} ({error.direction})
             </p>
-            <p className="text-xs text-red-600 mt-0.5 truncate">
+            <p className="text-sm text-red-600 mt-0.5 truncate">
               {error.error_message}
             </p>
           </div>
@@ -279,7 +279,7 @@ function ErrorCard({
               onRetry();
             }}
             disabled={retrying}
-            className="min-h-11 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
+            className="min-h-11 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
           >
             {retrying ? (
               <Loader2 size={10} className="animate-spin" />

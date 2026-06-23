@@ -607,6 +607,140 @@ export async function sendChurnPreventionEmail(
   });
 }
 
+/**
+ * Send email to parent when a BCBA answers their question
+ */
+export async function sendBCBAResponseEmail(
+  to: string,
+  childName: string,
+  questionPreview: string,
+): Promise<boolean> {
+  const subject = `Your Aminy behaviorist replied about ${childName}`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
+    .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+    .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
+    .preview-box { background: #f8fafc; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; color: #475569; font-style: italic; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Aminy</h1>
+  </div>
+
+  <div class="content">
+    <p>Great news!</p>
+
+    <p>A behaviorist on the Aminy team has reviewed and replied to your question about <strong>${childName}</strong>:</p>
+
+    <div class="preview-box">"${questionPreview}"</div>
+
+    <p>Open Aminy to read the full response and take next steps.</p>
+
+    <center>
+      <a href="https://aminy.ai/ask-bcba" class="button">View the Answer</a>
+    </center>
+
+    <p style="font-size: 14px; color: #64748b;">If you have follow-up questions, you can reply directly within the app.</p>
+
+    <p>– The Aminy Team</p>
+  </div>
+
+  <div class="footer">
+    <p>You're receiving this because you submitted a question through Ask a Behaviorist in Aminy.</p>
+    <p>&copy; ${new Date().getFullYear()} Aminy LLC. All rights reserved.</p>
+  </div>
+</body>
+</html>
+  `;
+
+  return sendEmail({
+    to,
+    subject,
+    html,
+    from: 'Aminy <support@aminy.ai>',
+    replyTo: 'aminyaba.ai@gmail.com',
+  });
+}
+
+/**
+ * Send email to parent when session notes are ready to view
+ */
+export async function sendSessionNotesEmail(
+  to: string,
+  childName: string,
+  sessionDate: string,
+  providerName: string,
+): Promise<boolean> {
+  const subject = `${childName}'s session notes are ready`;
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
+    .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+    .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
+    .session-info { background: #f0fdfa; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .session-info p { margin: 4px 0; font-size: 14px; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Aminy</h1>
+  </div>
+
+  <div class="content">
+    <p>Hi there,</p>
+
+    <p>The session notes for <strong>${childName}</strong>'s appointment are now available in Aminy.</p>
+
+    <div class="session-info">
+      <p><strong>Child:</strong> ${childName}</p>
+      <p><strong>Session date:</strong> ${sessionDate}</p>
+      <p><strong>Provider:</strong> ${providerName}</p>
+    </div>
+
+    <p>Review the notes, track progress, and find any recommendations your provider shared — all in one place.</p>
+
+    <center>
+      <a href="https://aminy.ai/records" class="button">Open Session Notes</a>
+    </center>
+
+    <p style="font-size: 14px; color: #64748b;">Questions about the session? Reply to your provider directly through the Aminy app.</p>
+
+    <p>– The Aminy Team</p>
+  </div>
+
+  <div class="footer">
+    <p>You're receiving this because session notes were added to ${childName}'s Aminy profile.</p>
+    <p>&copy; ${new Date().getFullYear()} Aminy LLC. All rights reserved.</p>
+  </div>
+</body>
+</html>
+  `;
+
+  return sendEmail({
+    to,
+    subject,
+    html,
+    from: 'Aminy <support@aminy.ai>',
+    replyTo: 'aminyaba.ai@gmail.com',
+  });
+}
+
 export async function sendTrialExpirationEmail(
   userEmail: string,
   userName: string,
