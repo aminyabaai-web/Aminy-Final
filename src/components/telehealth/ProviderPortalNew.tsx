@@ -752,7 +752,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
               <div className="flex-1">
                 <p className="font-medium text-[#1B2733]">{apt.visitReason}</p>
                 <p className="text-sm text-[#5A6B7A]">{formatDateTime(apt.scheduledAt)}</p>
-                <p className="text-xs text-[#8A9BA8] mt-1">
+                <p className="text-sm text-[#8A9BA8] mt-1">
                   {apt.visitType === 'consult' ? '25-min Consult' : '50-min Deep Review'} • ${apt.price}
                 </p>
               </div>

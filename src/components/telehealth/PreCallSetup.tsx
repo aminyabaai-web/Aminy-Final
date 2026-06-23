@@ -547,7 +547,7 @@ export function PreCallSetup({
                   <button
                     onClick={testSpeaker}
                     disabled={testingAudio}
-                    className="text-xs text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
+                    className="text-sm text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
                   >
                     {testingAudio ? 'Playing...' : 'Test'}
                   </button>
@@ -579,7 +579,7 @@ export function PreCallSetup({
                       {getStatusText(status.network, 'Network')}
                     </p>
                     {networkTestResult && status.network !== 'checking' && (
-                      <p className="text-xs text-[#8A9BA8] dark:text-[#5A6B7A] mt-0.5">
+                      <p className="text-sm text-[#8A9BA8] dark:text-[#5A6B7A] mt-0.5">
                         {networkTestResult.latencyMs}ms latency
                         {networkTestResult.downloadMbps > 0 && (
                           <> &middot; {networkTestResult.downloadMbps} Mbps down</>
@@ -598,7 +598,7 @@ export function PreCallSetup({
                   <button
                     onClick={checkNetworkQuality}
                     disabled={status.network === 'checking'}
-                    className="text-xs text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
+                    className="text-sm text-[#6B9080] dark:text-primary hover:underline disabled:opacity-50"
                   >
                     {status.network === 'checking' ? 'Testing...' : 'Retest'}
                   </button>

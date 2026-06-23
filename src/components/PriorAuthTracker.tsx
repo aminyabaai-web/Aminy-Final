@@ -367,7 +367,7 @@ export function PriorAuthBadge({
       {hasSecondaryMedicaid && (
         <div className="flex items-center gap-1.5 mb-1">
           <Shield className="w-3.5 h-3.5 text-emerald-500" />
-          <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+          <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
             Dual coverage detected — estimated $0 out-of-pocket
           </span>
         </div>
@@ -375,16 +375,16 @@ export function PriorAuthBadge({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#6B9080]" />
-          <span className="text-xs text-[#5A6B7A] dark:text-slate-300">
+          <span className="text-sm text-[#5A6B7A] dark:text-slate-300">
             Prior auth · {timeline?.payer ?? payerName ?? 'Your plan'}
           </span>
         </div>
-        <span className={`text-xs font-medium ${statusColor(status)}`}>
+        <span className={`text-sm font-medium ${statusColor(status)}`}>
           {statusLabel(status)}
         </span>
       </div>
       {timeline && status === 'not-started' && (
-        <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
           Typical timeline: ~{timeline.estimatedDays} days
           {!timeline.assessmentNeedsPA && ' · Assessment can start now (no PA needed)'}
         </p>
