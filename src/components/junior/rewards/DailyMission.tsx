@@ -208,7 +208,7 @@ function StreakDisplay({ streak }: { streak: number }) {
           {streak} day streak!
         </span>
         {nextMilestone && (
-          <p className="text-xs text-[#8A9BA8]">{nextMilestone - streak} days to {nextMilestone}🏆</p>
+          <p className="text-sm text-[#8A9BA8]">{nextMilestone - streak} days to {nextMilestone}🏆</p>
         )}
         {atMilestone && (
           <motion.p
@@ -254,11 +254,11 @@ function MissionCard({
         <span className="text-2xl flex-shrink-0">{isCompleted ? '✅' : mission.emoji}</span>
         <div className="flex-1 min-w-0">
           <p className="font-bold text-[#1B2733] text-sm">{mission.title}</p>
-          <p className="text-xs text-[#5A6B7A] truncate">{mission.description}</p>
+          <p className="text-sm text-[#5A6B7A] truncate">{mission.description}</p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
           <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-          <span className="text-xs font-bold text-amber-700">{mission.starsReward}</span>
+          <span className="text-sm font-bold text-amber-700">{mission.starsReward}</span>
         </div>
       </div>
       {!isCompleted && (
@@ -409,7 +409,7 @@ export function DailyMission({ completedSteps = 0, onStartMission }: DailyMissio
               <h3 className="font-black text-[#1B2733] text-sm">
                 {allComplete ? 'All missions done!' : "Today's Missions"}
               </h3>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 {state.completedIds.length}/{state.missions.length} complete
                 {' · '}
                 <Star className="w-3 h-3 text-amber-500 fill-amber-500 inline" />
@@ -486,7 +486,7 @@ export function DailyMission({ completedSteps = 0, onStartMission }: DailyMissio
                 animate={{ opacity: 1, scale: 1 }}
                 className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-3 text-center border border-amber-100"
               >
-                <p className="text-xs text-amber-700 font-bold mb-1">Avatar accessories unlocked!</p>
+                <p className="text-sm text-amber-700 font-bold mb-1">Avatar accessories unlocked!</p>
                 <div className="flex justify-center gap-2">
                   {state.avatarAccessories.map(acc => (
                     <span key={acc} className="text-2xl">
@@ -500,7 +500,7 @@ export function DailyMission({ completedSteps = 0, onStartMission }: DailyMissio
             {/* Evening check-in reminder */}
             <div className="bg-white/50 rounded-2xl p-3 flex items-start gap-2">
               <Calendar className="w-4 h-4 text-indigo-400 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 <span className="font-semibold text-[#5A6B7A]">Parent check-in: </span>
                 Did your child complete today's missions? Tap any mission to mark it done.
               </p>

@@ -755,7 +755,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
           <DollarSign className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
           <div>
             <h3 className="text-sm font-semibold text-[#4A6478]">Revenue Impact</h3>
-            <p className="text-xs text-blue-600 mt-1">
+            <p className="text-sm text-blue-600 mt-1">
               At your current denial rate of {denialRate}%, approximately ${Math.round(totalDenied * 12 / denials.length * 30).toLocaleString()} in
               annual revenue is at risk. Reducing denials by 3% would recover an estimated
               ${Math.round(totalDenied * 0.25).toLocaleString()} per quarter.
@@ -795,15 +795,15 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <p className="text-sm font-medium text-[#3A4A57]">{denial.patientName}</p>
-                  <p className="text-xs text-slate-400">{denial.claimId}</p>
+                  <p className="text-sm text-slate-400">{denial.claimId}</p>
                 </div>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryColor(denial.category)}`}>
                   {categoryLabel(denial.category)}
                 </span>
               </div>
-              <p className="text-xs text-[#5A6B7A] mb-2">{denial.suggestedAction}</p>
+              <p className="text-sm text-[#5A6B7A] mb-2">{denial.suggestedAction}</p>
               <div className="flex items-center justify-between">
-                <span className={`text-xs font-medium ${denial.daysUntilDeadline <= 7 ? 'text-red-600' : 'text-amber-600'}`}>
+                <span className={`text-sm font-medium ${denial.daysUntilDeadline <= 7 ? 'text-red-600' : 'text-amber-600'}`}>
                   {denial.daysUntilDeadline <= 0 ? 'OVERDUE' : `${denial.daysUntilDeadline}d remaining`}
                 </span>
                 <div className="flex gap-1">
@@ -868,7 +868,7 @@ export default function DenialWorkbench({
           )}
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">Denial Workbench</h1>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               {urgentCount} urgent &middot; ${totalAtRisk.toLocaleString()} at risk
             </p>
           </div>

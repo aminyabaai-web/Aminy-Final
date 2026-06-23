@@ -151,7 +151,7 @@ export default function EVVReconciliation({
           )}
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">EVV Reconciliation</h1>
-            <p className="text-xs text-[#5A6B7A]">Electronic Visit Verification</p>
+            <p className="text-sm text-[#5A6B7A]">Electronic Visit Verification</p>
           </div>
           <button
             onClick={onRefresh}
