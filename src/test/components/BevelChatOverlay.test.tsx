@@ -243,8 +243,10 @@ describe('BevelChatOverlay', () => {
   // ─── Smoke test ───────────────────────────────────────────────────────────
 
   it('renders without crashing when isOpen=true', () => {
-    const { container } = renderOpen();
-    expect(container.firstChild).toBeInTheDocument();
+    // BevelChatOverlay uses createPortal — content renders into document.body,
+    // not the render container, so query document.body directly.
+    renderOpen();
+    expect(document.body).toBeInTheDocument();
   });
 
   it('renders nothing meaningful when isOpen=false', () => {
