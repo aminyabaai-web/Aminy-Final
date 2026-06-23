@@ -135,7 +135,7 @@ export function DataConfirmationModal({
                     ? 'Aminy heard something — want to save it?'
                     : `Aminy heard ${pending.length} things — want to save them?`}
                 </h2>
-                <p className="mt-1 text-xs text-[#8E9BAA] leading-relaxed">
+                <p className="mt-1 text-sm text-[#8E9BAA] leading-relaxed">
                   Confirm what's accurate. We'll only save what you approve.
                 </p>
               </div>
@@ -156,7 +156,7 @@ export function DataConfirmationModal({
                     <Check className="w-5 h-5 text-[#43AA8B]" />
                   </div>
                   <p className="text-sm font-medium text-[#1B2733]">All caught up</p>
-                  <p className="mt-1 text-xs text-[#8E9BAA]">Nothing waiting on your review.</p>
+                  <p className="mt-1 text-sm text-[#8E9BAA]">Nothing waiting on your review.</p>
                 </div>
               ) : (
                 pending.map((item, i) => (
@@ -280,10 +280,10 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
               <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5">
                 {previewEntries.map(([key, value]) => (
                   <div key={key} className="min-w-0">
-                    <dt className="text-xs text-[#8E9BAA] capitalize truncate">
+                    <dt className="text-sm text-[#8E9BAA] capitalize truncate">
                       {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                     </dt>
-                    <dd className="text-xs font-medium text-[#1B2733] truncate">
+                    <dd className="text-sm font-medium text-[#1B2733] truncate">
                       {String(value)}
                     </dd>
                   </div>

@@ -447,7 +447,7 @@ export function EnhancedChatInput({
                   ) : (
                     <div className="w-16 h-16 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 flex flex-col items-center justify-center p-1">
                       <FileText className="w-6 h-6 text-[#8A9BA8]" />
-                      <span className="text-xs text-[#5A6B7A] truncate w-full text-center mt-1">
+                      <span className="text-sm text-[#5A6B7A] truncate w-full text-center mt-1">
                         {attachment.name.split('.').pop()?.toUpperCase()}
                       </span>
                     </div>
@@ -500,7 +500,7 @@ export function EnhancedChatInput({
               <span className="text-sm text-[#6B9080] dark:text-[#7BA7BC] flex-1">
                 {transcript || 'Listening...'}
               </span>
-              <span className="text-xs text-[#6B9080] dark:text-primary">
+              <span className="text-sm text-[#6B9080] dark:text-primary">
                 {formatTime(recordingTime)}
               </span>
             </div>
@@ -609,7 +609,7 @@ export function EnhancedChatInput({
       {/* Attachment count hint */}
       {attachments.length > 0 && (
         <div className="px-4 pb-2">
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             {attachments.length} of {maxAttachments} attachments • {formatSize(attachments.reduce((sum, a) => sum + a.size, 0))}
           </p>
         </div>

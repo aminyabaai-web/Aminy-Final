@@ -209,27 +209,27 @@ export function FeedbackInbox() {
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        {mood && <span className="text-xs font-semibold text-[#1B2733] dark:text-white">{mood.label}</span>}
+                        {mood && <span className="text-sm font-semibold text-[#1B2733] dark:text-white">{mood.label}</span>}
                         {item.context && (
                           <span className="text-xs px-2 py-0.5 bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
                             {item.context}
                           </span>
                         )}
-                        <span className="text-xs text-slate-400">
+                        <span className="text-sm text-slate-400">
                           {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                         </span>
                       </div>
                       {item.message && <p className="mt-1 text-sm text-[#3A4A57] dark:text-slate-300">{item.message}</p>}
                       {item.what_felt_easiest && (
-                        <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-400">😌 Easiest: {item.what_felt_easiest}</p>
+                        <p className="mt-1 text-sm text-emerald-700 dark:text-emerald-400">😌 Easiest: {item.what_felt_easiest}</p>
                       )}
                       {item.what_could_be_calmer && (
-                        <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">🌊 Could be calmer: {item.what_could_be_calmer}</p>
+                        <p className="mt-1 text-sm text-amber-700 dark:text-amber-400">🌊 Could be calmer: {item.what_could_be_calmer}</p>
                       )}
                       {item.admin_response && (
                         <div className="mt-2 px-3 py-2 bg-[#EDF6FA] dark:bg-slate-800 rounded-xl">
                           <p className="text-xs font-semibold text-[#2A7D99] uppercase tracking-wide mb-0.5">Your reply</p>
-                          <p className="text-xs text-[#3A4A57] dark:text-slate-300">{item.admin_response}</p>
+                          <p className="text-sm text-[#3A4A57] dark:text-slate-300">{item.admin_response}</p>
                         </div>
                       )}
                     </div>

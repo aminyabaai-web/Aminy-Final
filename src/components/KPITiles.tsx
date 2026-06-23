@@ -195,7 +195,7 @@ function KPITile({
         </div>
       </div>
 
-      <p className={`${compact ? 'text-xs' : 'text-xs'} text-[#5A6B7A] font-medium`}>
+      <p className={`${compact ? 'text-xs' : 'text-sm'} text-[#5A6B7A] font-medium`}>
         {kpi.interpretation}
       </p>
 
@@ -252,7 +252,7 @@ function KPIExplainerModal({
           </div>
 
           <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-3">
-            <p className="text-xs text-blue-900">
+            <p className="text-sm text-blue-900">
               <strong>Important:</strong> {explanation.disclaimer}
             </p>
           </div>
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-xs text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
+      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>
@@ -325,9 +325,9 @@ function SummaryMetric({ label, value, status }: {
 }) {
   return (
     <div className={`${getStatusColor(status)} border rounded-lg p-2`}>
-      <div className="text-xs opacity-80 mb-1">{label}</div>
+      <div className="text-sm opacity-80 mb-1">{label}</div>
       <div className="text-sm font-semibold">{value}</div>
-      <div className="text-xs opacity-70 mt-1 capitalize">{status.replace('_', ' ')}</div>
+      <div className="text-sm opacity-70 mt-1 capitalize">{status.replace('_', ' ')}</div>
     </div>
   );
 }

@@ -142,15 +142,15 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">42</p>
-                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
+                    <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">$8.2k</p>
-                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">This Month</p>
+                    <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">This Month</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
                     <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">98%</p>
-                    <p className="text-xs sm:text-xs text-[#5A6B7A] dark:text-slate-400">Satisfaction</p>
+                    <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">Satisfaction</p>
                   </div>
                 </div>
                 <Badge className="bg-green-100 text-green-700 w-full justify-center py-2 text-xs sm:text-sm">

@@ -97,7 +97,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-[#1B2733]">What Aminy knows</h1>
-            <p className="text-xs text-[#5A6B7A] mt-0.5">
+            <p className="text-sm text-[#5A6B7A] mt-0.5">
               {childName ? `Everything Aminy remembers about ${childName}` : 'Your family memory'}
             </p>
           </div>
@@ -118,7 +118,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             <p className="text-3xl font-bold text-[#1B2733]">{facts.length}</p>
             <p className="text-sm text-[#5A6B7A]">things remembered</p>
           </div>
-          <p className="text-xs text-[#5A6B7A] mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Aminy builds memory from your conversations, the documents you've shared, and what you've explicitly told her to remember.
           </p>
         </div>
@@ -150,7 +150,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             <p className="text-sm font-medium text-[#3A4A57] mb-1">
               {facts.length === 0 ? 'No memories yet' : 'No memories in this category'}
             </p>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               {facts.length === 0
                 ? 'Chat with Aminy and she\'ll start remembering what matters to your family.'
                 : 'Switch categories above or chat with Aminy to add more.'}
@@ -176,9 +176,9 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
                         {meta.label}
                       </span>
                       <span className="text-xs text-slate-400">·</span>
-                      <span className="text-xs text-slate-400 capitalize">{fact.source}</span>
+                      <span className="text-sm text-slate-400 capitalize">{fact.source}</span>
                       <span className="text-xs text-slate-400">·</span>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-sm text-slate-400">
                         {new Date(fact.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
@@ -209,7 +209,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             {isWiping ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             Forget everything about {childName || 'this child'}
           </button>
-          <p className="text-xs text-slate-400 text-center mt-2">
+          <p className="text-sm text-slate-400 text-center mt-2">
             Aminy will start fresh on the next conversation. Cannot be undone.
           </p>
         </div>

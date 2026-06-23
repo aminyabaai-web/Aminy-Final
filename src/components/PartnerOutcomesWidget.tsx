@@ -155,7 +155,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
       {!hasAnyData ? (
         <div className="px-4 pb-5 flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             No outcome submissions yet. Once families start completing PHQ-9, GAD-7, or ABC-I assessments, trends will appear here.
           </p>
         </div>
@@ -179,7 +179,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
                   colors: ['#577590', '#43AA8B', '#E07A5F'],
                 }}
               />
-              <p className="text-xs text-slate-400 text-center mt-1">
+              <p className="text-sm text-slate-400 text-center mt-1">
                 Lower scores = improvement. Trend down is the desired direction.
               </p>
             </div>

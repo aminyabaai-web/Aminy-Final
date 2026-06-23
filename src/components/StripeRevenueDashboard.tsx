@@ -338,7 +338,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <p className="text-2xl font-bold text-[#1B2733]">
             {customers?.payingCustomers || 0}
           </p>
-          <p className="text-xs text-[#5A6B7A] mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             {customers?.trialingCustomers || 0} trialing
           </p>
         </div>
@@ -355,7 +355,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           }`}>
             {(customers?.churnRate || 0).toFixed(1)}%
           </p>
-          <p className="text-xs text-[#5A6B7A] mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             {customers?.churnedCustomers || 0} total churned
           </p>
         </div>
@@ -417,15 +417,15 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <div className="grid grid-cols-3 gap-3">
             <div className="text-center">
               <p className="text-lg font-bold text-[#1B2733]">{formatCurrency(customers.ltv)}</p>
-              <p className="text-xs text-[#5A6B7A]">LTV</p>
+              <p className="text-sm text-[#5A6B7A]">LTV</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-[#1B2733]">{formatCurrency(customers.averageRevenue)}</p>
-              <p className="text-xs text-[#5A6B7A]">ARPU</p>
+              <p className="text-sm text-[#5A6B7A]">ARPU</p>
             </div>
             <div className="text-center">
               <p className="text-lg font-bold text-[#1B2733]">{customers.conversionRate.toFixed(1)}%</p>
-              <p className="text-xs text-[#5A6B7A]">Free &rarr; Paid</p>
+              <p className="text-sm text-[#5A6B7A]">Free &rarr; Paid</p>
             </div>
           </div>
 
@@ -489,13 +489,13 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               <p className="text-sm font-bold text-[#1B2733]">
                 {customers.activeCustomers || 0}
               </p>
-              <p className="text-xs text-[#5A6B7A]">Active</p>
+              <p className="text-sm text-[#5A6B7A]">Active</p>
             </div>
             <div>
               <p className="text-sm font-bold text-red-600">
                 {customers.churnedCustomers || 0}
               </p>
-              <p className="text-xs text-[#5A6B7A]">Churned</p>
+              <p className="text-sm text-[#5A6B7A]">Churned</p>
             </div>
             <div>
               <p className={`text-sm font-bold ${
@@ -504,10 +504,10 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               }`}>
                 {(customers.churnRate || 0).toFixed(1)}%
               </p>
-              <p className="text-xs text-[#5A6B7A]">Churn Rate</p>
+              <p className="text-sm text-[#5A6B7A]">Churn Rate</p>
             </div>
           </div>
-          <p className="text-xs text-[#8A9BA8]">
+          <p className="text-sm text-[#8A9BA8]">
             {(customers.churnRate || 0) <= 3
               ? 'Healthy churn rate. Below SaaS industry average.'
               : (customers.churnRate || 0) <= 5
@@ -553,7 +553,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             const prev = subscriberGrowth[subscriberGrowth.length - 2].count;
             const delta = prev > 0 ? ((latest - prev) / prev) * 100 : 0;
             return (
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Month-over-month: <span className={delta >= 0 ? 'text-green-600 font-medium' : 'text-red-600 font-medium'}>
                   {delta >= 0 ? '+' : ''}{delta.toFixed(1)}%
                 </span>
@@ -656,7 +656,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           </div>
 
           {totalPlanSubscribers === 0 && (
-            <p className="text-xs text-[#8A9BA8] text-center py-2">
+            <p className="text-sm text-[#8A9BA8] text-center py-2">
               No active subscriptions yet. Create Stripe products to start.
             </p>
           )}
@@ -700,7 +700,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             })}
           </div>
         ) : (
-          <p className="text-xs text-[#8A9BA8] text-center py-4">
+          <p className="text-sm text-[#8A9BA8] text-center py-4">
             No revenue events recorded yet. Events will appear after Stripe products are configured.
           </p>
         )}
@@ -711,8 +711,8 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
         <div className="flex items-start gap-3">
           <AlertTriangle size={16} className="text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-xs font-medium text-amber-800">Stripe Setup Required</p>
-            <p className="text-xs text-amber-600 mt-0.5">
+            <p className="text-sm font-medium text-amber-800">Stripe Setup Required</p>
+            <p className="text-sm text-amber-600 mt-0.5">
               Create 4 Stripe products (Core, Pro, Family Plan — monthly + yearly) and add price IDs
               to your .env file. Revenue tracking will populate automatically from webhook events.
             </p>
@@ -721,7 +721,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-[#8A9BA8] text-center">
+      <p className="text-sm text-[#8A9BA8] text-center">
         Data sourced from Stripe via webhook events. Metrics update in real-time.
       </p>
     </div>

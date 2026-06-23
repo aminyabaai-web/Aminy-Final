@@ -511,8 +511,8 @@ function DevelopmentPlanView({
           <div className="space-y-1">
             {midAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
-                <span className="text-xs font-medium text-amber-600">{r.rating}/5</span>
+                <span className="text-sm text-[#3A4A57]">{r.areaName}</span>
+                <span className="text-sm font-medium text-amber-600">{r.rating}/5</span>
               </div>
             ))}
           </div>
@@ -522,15 +522,15 @@ function DevelopmentPlanView({
       {/* Strong areas */}
       {strongAreas.length > 0 && (
         <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-200">
-          <h3 className="text-xs font-semibold text-emerald-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-emerald-700 mb-2 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" />
             Strengths ({strongAreas.length})
           </h3>
           <div className="space-y-1">
             {strongAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
-                <span className="text-xs font-medium text-emerald-600">{r.rating}/5</span>
+                <span className="text-sm text-[#3A4A57]">{r.areaName}</span>
+                <span className="text-sm font-medium text-emerald-600">{r.rating}/5</span>
               </div>
             ))}
           </div>
@@ -540,7 +540,7 @@ function DevelopmentPlanView({
       {/* Auto-generated plan items */}
       {latest.developmentPlan.length > 0 && (
         <div className="bg-white rounded-xl p-3 border border-violet-200">
-          <h3 className="text-xs font-semibold text-violet-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-violet-700 mb-2 flex items-center gap-1">
             <FileText className="w-3.5 h-3.5" />
             Action Items
           </h3>
@@ -561,7 +561,7 @@ function DevelopmentPlanView({
         <div className="text-center py-4">
           <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
           <p className="text-sm text-[#5A6B7A] font-medium">No critical development areas</p>
-          <p className="text-xs text-slate-400">All competencies rated 3 or above</p>
+          <p className="text-sm text-slate-400">All competencies rated 3 or above</p>
         </div>
       )}
     </div>
