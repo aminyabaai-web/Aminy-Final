@@ -32,6 +32,7 @@ const CRON_SECRET = Deno.env.get('CRON_SHARED_SECRET');
 interface AppointmentRow {
   id: string;
   user_id: string;
+  provider_id: string | null;
   title: string;
   provider_name: string | null;
   service_type: string | null;
@@ -69,14 +70,14 @@ async function sendSms(to: string, body: string): Promise<{ ok: boolean; error?:
   return { ok: true };
 }
 
-function buildMessage(apt: AppointmentRow, kind: '24h' | '1h'): string {
+function buildMessage(apt: AppointmentRow, kind: '24h' | '1h', userTimezone: string): string {
   const friendly = new Date(apt.start_at).toLocaleString('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
-    timeZone: 'America/Phoenix',  // TODO: per-user TZ
+    timeZone: userTimezone,
   });
   const provider = apt.provider_name ? ` with ${apt.provider_name}` : '';
   const where = apt.location ? ` (${apt.location})` : '';
@@ -86,6 +87,27 @@ function buildMessage(apt: AppointmentRow, kind: '24h' | '1h'): string {
   }
   return `Aminy: Starting in ~1 hour — ${apt.title}${provider} at ${friendly}${where}.`;
 }
+
+function buildProviderMessage(apt: AppointmentRow, patientName: string, userTimezone: string): string {
+  const friendly = new Date(apt.start_at).toLocaleString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: userTimezone,
+  });
+  return `Aminy: Reminder — you have a session with ${patientName} at ${friendly}. — Aminy Team`;
+}
+
+// NOTE: Cancellation SMS — this function is cron-triggered and scans for upcoming appointments;
+// it does not receive appointment status-change events. To send an SMS when an appointment is
+// cancelled, wire up a Supabase Database Webhook on the `appointments` table filtered to
+// status = 'cancelled' (INSERT/UPDATE) pointing at a dedicated edge function (e.g.
+// `appointment-cancelled`). The cancellation path today lives in
+// supabase/functions/telehealth/index.ts → POST /appointments/:id/cancel and returns immediately
+// after updating status — there is no SMS sent there either. Until that webhook exists, no
+// cancellation SMS will be sent.
 
 Deno.serve(async (req: Request): Promise<Response> => {
   // Optional shared-secret gate: if CRON_SHARED_SECRET is set, require it in the header

@@ -299,26 +299,26 @@ function ErrorCard({
         <div className="px-3 pb-3 border-t border-red-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
             {error.error_code && (
-              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Error Code</span>
                 <p className="font-mono font-medium text-[#1B2733]">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
-              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Record ID</span>
                 <p className="font-mono font-medium text-[#1B2733] truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Retries</span>
               <p className="font-medium text-[#1B2733]">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Created</span>
               <p className="font-medium text-[#1B2733]">
                 {formatDate(error.created_at)}
@@ -326,13 +326,13 @@ function ErrorCard({
             </div>
           </div>
 
-          <div className="text-xs bg-red-50 text-red-700 rounded p-2">
+          <div className="text-sm bg-red-50 text-red-700 rounded p-2">
             <span className="font-medium">Full Error:</span>
             <p className="mt-1 break-words">{error.error_message}</p>
           </div>
 
           {error.next_retry_at && (
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Next automatic retry: {formatDate(error.next_retry_at)}
             </p>
           )}
@@ -375,11 +375,11 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
                 <p className="text-sm font-medium text-[#1B2733]">
                   {DATA_TYPE_LABELS[entry.data_type] || entry.data_type}
                 </p>
-                <span className="text-xs text-[#8A9BA8]">
+                <span className="text-sm text-[#8A9BA8]">
                   {formatDate(entry.started_at)}
                 </span>
               </div>
-              <div className="flex items-center gap-3 mt-1 text-xs text-[#5A6B7A]">
+              <div className="flex items-center gap-3 mt-1 text-sm text-[#5A6B7A]">
                 <span className="flex items-center gap-1">
                   {entry.direction === 'pull' ? (
                     <ArrowDown size={10} className="text-blue-500" />
@@ -406,7 +406,7 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
                 )}
               </div>
               {entry.error_message && (
-                <p className="text-xs text-red-600 mt-1 truncate">
+                <p className="text-sm text-red-600 mt-1 truncate">
                   {entry.error_message}
                 </p>
               )}
@@ -641,14 +641,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <p className="text-lg font-bold text-[#1B2733]">
               {history.totalSyncs}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Total Syncs</p>
+            <p className="text-sm text-[#5A6B7A]">Total Syncs</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Zap size={16} className="text-green-500 mx-auto mb-1" />
             <p className="text-lg font-bold text-[#1B2733]">
               {history.totalRecordsProcessed}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Records</p>
+            <p className="text-sm text-[#5A6B7A]">Records</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <XCircle
@@ -660,7 +660,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             >
               {errorCount}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Open Errors</p>
+            <p className="text-sm text-[#5A6B7A]">Open Errors</p>
           </div>
         </div>
       )}
