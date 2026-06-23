@@ -245,7 +245,7 @@ export function PriorAuthTracker({
                     </div>
                     <div className="flex-1">
                       <p className="text-sm text-[#1B2733] dark:text-slate-200">{phase.label}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{phase.days}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">{phase.days}</p>
                     </div>
                   </div>
                 ))}
@@ -254,7 +254,7 @@ export function PriorAuthTracker({
               {/* ICD-10 requirement note */}
               {timeline.icdRequired.length > 0 && (
                 <div className="mt-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 px-3 py-2">
-                  <p className="text-xs text-slate-600 dark:text-slate-300">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     <span className="font-medium">ICD-10 required:</span>{' '}
                     {timeline.icdRequired.join(', ')} · {timeline.notes}
                   </p>
