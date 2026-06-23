@@ -458,7 +458,7 @@ export function OnDemandTelehealth({
             <Shield className="w-5 h-5 text-green-600" />
             <div>
               <p className="text-sm font-medium text-green-900">HIPAA-Conscious Video Sessions</p>
-              <p className="text-xs text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
+              <p className="text-sm text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
             </div>
           </div>
         </div>
@@ -467,7 +467,7 @@ export function OnDemandTelehealth({
           <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-2">
             <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
             {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} /> : null}
-            <p className="text-xs text-sky-700">{launchConfig.message}</p>
+            <p className="text-sm text-sky-700">{launchConfig.message}</p>
           </div>
         </div>
 
@@ -655,7 +655,7 @@ export function OnDemandTelehealth({
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 15)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Quick check-in</p>
+                <p className="text-sm text-[#5A6B7A]">Quick check-in</p>
               </button>
 
               <button
