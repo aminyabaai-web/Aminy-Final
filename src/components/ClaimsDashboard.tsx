@@ -376,7 +376,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                       <p className="text-sm font-medium text-[#1B2733]">
                         {denial.payerName}
                       </p>
-                      <p className="text-xs text-[#5A6B7A]">
+                      <p className="text-sm text-[#5A6B7A]">
                         Service: {denial.dateOfService} &middot; {categoryLabels[denial.category] || denial.category}
                       </p>
                     </div>
@@ -531,28 +531,28 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
         {demo ? (
           <div className="space-y-3">
             <div>
-              <div className="flex justify-between text-xs mb-1">
+              <div className="flex justify-between text-sm mb-1">
                 <span className="text-[#5A6B7A]">Individual Deductible</span>
                 <span className="font-medium text-[#1B2733]">$450 / $1,500</span>
               </div>
               <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div className="h-full bg-primary rounded-full" style={{ width: '30%' }} />
               </div>
-              <p className="text-xs text-[#8A9BA8] mt-0.5">$1,050 remaining until deductible is met</p>
+              <p className="text-sm text-[#8A9BA8] mt-0.5">$1,050 remaining until deductible is met</p>
             </div>
             <div>
-              <div className="flex justify-between text-xs mb-1">
+              <div className="flex justify-between text-sm mb-1">
                 <span className="text-[#5A6B7A]">Out-of-Pocket Maximum</span>
                 <span className="font-medium text-[#1B2733]">$470 / $6,000</span>
               </div>
               <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
               </div>
-              <p className="text-xs text-[#8A9BA8] mt-0.5">After this, insurance covers 100%</p>
+              <p className="text-sm text-[#8A9BA8] mt-0.5">After this, insurance covers 100%</p>
             </div>
           </div>
         ) : (
-          <p className="text-xs text-[#5A6B7A] leading-relaxed">
+          <p className="text-sm text-[#5A6B7A] leading-relaxed">
             Connect your insurance plan to track your deductible and out-of-pocket
             maximum here. Ask Aminy AI to help you read your plan summary, or enter
             your details in Settings.
@@ -740,7 +740,7 @@ export default function ClaimsDashboard({
             <h1 className="text-lg font-bold">Costs &amp; Coverage</h1>
             <h2 className="sr-only">Coverage overview</h2>
             <h3 className="sr-only">Claims, benefits, and next steps</h3>
-            <p className="text-xs text-white/70">
+            <p className="text-sm text-white/70">
               {childName}&apos;s insurance &amp; expenses
             </p>
           </div>
@@ -759,7 +759,7 @@ export default function ClaimsDashboard({
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-xs font-medium transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeTab === tab.id
                   ? 'bg-white text-[#6B9080] shadow-sm'
                   : 'text-white/70 hover:text-white hover:bg-white/10'
@@ -791,8 +791,8 @@ export default function ClaimsDashboard({
               <div className="flex items-start gap-2 p-3 bg-[#6B9080]/10 rounded-xl border border-[#E8E4DF]">
                 <Info className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-xs font-medium text-[#6B9080]">What&apos;s a superbill?</p>
-                  <p className="text-xs text-[#6B9080] mt-0.5">
+                  <p className="text-sm font-medium text-[#6B9080]">What&apos;s a superbill?</p>
+                  <p className="text-sm text-[#6B9080] mt-0.5">
                     A superbill is a detailed receipt from your provider. If you pay out-of-pocket,
                     you can submit this to your insurance company to request reimbursement.
                   </p>

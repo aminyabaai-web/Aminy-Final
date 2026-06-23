@@ -439,7 +439,7 @@ export default function EVVDashboard({
                 <Shield className="w-5 h-5 text-primary" />
                 Visit Verification
               </h1>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Arizona DDD Pilot &bull; Shadow EVV Export &bull; {childName}
               </p>
             </div>
@@ -466,7 +466,7 @@ export default function EVVDashboard({
       <div className="max-w-2xl mx-auto px-4 pt-3">
         <div className="flex items-start gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg">
           <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-amber-800 leading-relaxed">
+          <p className="text-sm text-amber-800 leading-relaxed">
             Aminy captures Arizona pilot EVV records in shadow mode for reconciliation. Confirm payroll-critical submissions in SpokChoice today and treat DCI as the transition path until your agency changes systems.
           </p>
         </div>
@@ -486,19 +486,19 @@ export default function EVVDashboard({
             </div>
             <div className="grid grid-cols-2 gap-3 min-w-[220px]">
               <div>
-                <p className="text-xs text-[#5A6B7A]">Cycles</p>
+                <p className="text-sm text-[#5A6B7A]">Cycles</p>
                 <p className="text-2xl font-semibold text-[#1B2733]">{cutoverSummary.cyclesCompleted}</p>
               </div>
               <div>
-                <p className="text-xs text-[#5A6B7A]">Clean streak</p>
+                <p className="text-sm text-[#5A6B7A]">Clean streak</p>
                 <p className="text-2xl font-semibold text-emerald-600">{cutoverSummary.consecutiveCleanCycles}</p>
               </div>
               <div>
-                <p className="text-xs text-[#5A6B7A]">Recent accuracy</p>
+                <p className="text-sm text-[#5A6B7A]">Recent accuracy</p>
                 <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.trailingWindowAccuracy}%</p>
               </div>
               <div>
-                <p className="text-xs text-[#5A6B7A]">Critical exceptions</p>
+                <p className="text-sm text-[#5A6B7A]">Critical exceptions</p>
                 <p className="text-2xl font-semibold text-rose-600">{cutoverSummary.unresolvedCriticalExceptions}</p>
               </div>
             </div>
@@ -541,7 +541,7 @@ export default function EVVDashboard({
               type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`min-h-11 flex-1 flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-medium transition-all ${
+              className={`min-h-11 flex-1 flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-sm font-medium transition-all ${
                 activeTab === tab.id
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#6B9080]/10'
@@ -639,15 +639,15 @@ function ClockTab({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium text-sm text-[#1B2733]">{auth.serviceName}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">
                       {auth.serviceCode} &bull; Auth #{auth.authorizationNumber}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-medium text-[#6B9080]">
+                    <p className="text-sm font-medium text-[#6B9080]">
                       {auth.remainingUnits} units left
                     </p>
-                    <p className="text-xs text-[#8A9BA8]">
+                    <p className="text-sm text-[#8A9BA8]">
                       of {auth.authorizedUnits}
                     </p>
                   </div>
@@ -679,7 +679,7 @@ function ClockTab({
               <Square className="w-5 h-5" />
               Clock Out
             </button>
-            <p className="text-xs text-[#8A9BA8] mt-3">
+            <p className="text-sm text-[#8A9BA8] mt-3">
               Service: {activeSession.serviceCode} &bull; {
                 Math.ceil(elapsedSeconds / 900)
               } units so far
@@ -710,7 +710,7 @@ function ClockTab({
                 </>
               )}
             </button>
-            <p className="text-xs text-[#8A9BA8] mt-3 flex items-center justify-center gap-1">
+            <p className="text-sm text-[#8A9BA8] mt-3 flex items-center justify-center gap-1">
               <MapPin className="w-3.5 h-3.5" />
               GPS location will be recorded for EVV compliance
             </p>
@@ -745,7 +745,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
     >
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-semibold text-[#3A4A57]">Visit Records</h2>
-        <span className="text-xs text-[#5A6B7A]">{records.length} total</span>
+        <span className="text-sm text-[#5A6B7A]">{records.length} total</span>
       </div>
 
       {records.length === 0 ? (
@@ -760,7 +760,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
             <div className="flex items-start justify-between mb-2">
               <div>
                 <p className="font-medium text-sm text-[#1B2733]">{record.providerName}</p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {new Date(record.serviceDate).toLocaleDateString('en-US', {
                     weekday: 'short', month: 'short', day: 'numeric'
                   })}
@@ -771,7 +771,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-3 gap-3 text-sm">
               <div>
                 <p className="text-[#8A9BA8]">Clock In</p>
                 <p className="font-medium text-[#3A4A57]">

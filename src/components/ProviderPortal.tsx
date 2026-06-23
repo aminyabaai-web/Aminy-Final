@@ -1116,7 +1116,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       <VerifiedBadge status={provider.verificationStatus} />
                     )}
                   </div>
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">{provider.credentials}</p>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{provider.credentials}</p>
                 </div>
               </div>
             </div>
@@ -2733,15 +2733,15 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                     <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
                       <div className="rounded-xl bg-emerald-50 dark:bg-emerald-900/20 p-2">
-                        <p className="text-xs text-emerald-700 dark:text-emerald-300">Ready</p>
+                        <p className="text-sm text-emerald-700 dark:text-emerald-300">Ready</p>
                         <p className="font-semibold text-emerald-700 dark:text-emerald-300">{practiceClaimQueueSummary.readyForBiller}</p>
                       </div>
                       <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-2">
-                        <p className="text-xs text-amber-700 dark:text-amber-300">Blocked</p>
+                        <p className="text-sm text-amber-700 dark:text-amber-300">Blocked</p>
                         <p className="font-semibold text-amber-700 dark:text-amber-300">{practiceClaimQueueSummary.blocked}</p>
                       </div>
                       <div className="rounded-xl bg-[#EEF4F8] dark:bg-blue-900/20 p-2">
-                        <p className="text-xs text-blue-700 dark:text-blue-300">Submitted</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">Submitted</p>
                         <p className="font-semibold text-blue-700 dark:text-blue-300">{practiceClaimQueueSummary.submitted}</p>
                       </div>
                     </div>
