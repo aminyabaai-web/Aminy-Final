@@ -136,7 +136,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   // External appointments captured in chat get calendar entries but no SMS.
   const { data: due24h } = await supabase
     .from('appointments')
-    .select('id, user_id, title, provider_name, service_type, start_at, location, reminder_24h_sent, reminder_1h_sent')
+    .select('id, user_id, provider_id, title, provider_name, service_type, start_at, location, reminder_24h_sent, reminder_1h_sent')
     .gte('start_at', in23h)
     .lte('start_at', in25h)
     .eq('status', 'scheduled')
@@ -145,10 +145,10 @@ Deno.serve(async (req: Request): Promise<Response> => {
     .limit(200);
 
   for (const apt of (due24h || []) as AppointmentRow[]) {
-    // Fetch user's SMS phone (if they have one + opted in)
+    // Fetch user's SMS phone, opt-in flag, timezone, and name
     const { data: profile } = await supabase
       .from('profiles')
-      .select('phone_number, sms_reminders_enabled')
+      .select('phone_number, sms_reminders_enabled, timezone, full_name')
       .eq('id', apt.user_id)
       .maybeSingle();
 
@@ -159,19 +159,41 @@ Deno.serve(async (req: Request): Promise<Response> => {
       continue;
     }
 
-    const res = await sendSms(profile.phone_number, buildMessage(apt, '24h'));
+    const userTimezone = profile.timezone || 'America/Phoenix';
+    const res = await sendSms(profile.phone_number, buildMessage(apt, '24h', userTimezone));
     if (res.ok) {
       await supabase.from('appointments').update({ reminder_24h_sent: true }).eq('id', apt.id);
       results.sent_24h++;
     } else {
       results.errors.push(`24h apt ${apt.id}: ${res.error}`);
     }
+
+    // Provider reminder — best-effort, must not break patient SMS
+    if (apt.provider_id) {
+      try {
+        const { data: providerProfile } = await supabase
+          .from('profiles')
+          .select('phone_number, timezone')
+          .eq('id', apt.provider_id)
+          .maybeSingle();
+        if (providerProfile?.phone_number) {
+          const providerTz = providerProfile.timezone || 'America/Phoenix';
+          const patientName = profile.full_name || 'a patient';
+          await sendSms(
+            providerProfile.phone_number,
+            buildProviderMessage(apt, patientName, providerTz),
+          );
+        }
+      } catch (err) {
+        results.errors.push(`24h provider reminder apt ${apt.id}: ${(err as Error).message}`);
+      }
+    }
   }
 
   // Fetch + send 1h reminders — same telehealth-only scope as 24h
   const { data: due1h } = await supabase
     .from('appointments')
-    .select('id, user_id, title, provider_name, service_type, start_at, location, reminder_24h_sent, reminder_1h_sent')
+    .select('id, user_id, provider_id, title, provider_name, service_type, start_at, location, reminder_24h_sent, reminder_1h_sent')
     .gte('start_at', in45m)
     .lte('start_at', in75m)
     .eq('status', 'scheduled')
@@ -182,7 +204,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   for (const apt of (due1h || []) as AppointmentRow[]) {
     const { data: profile } = await supabase
       .from('profiles')
-      .select('phone_number, sms_reminders_enabled')
+      .select('phone_number, sms_reminders_enabled, timezone, full_name')
       .eq('id', apt.user_id)
       .maybeSingle();
 
@@ -192,12 +214,34 @@ Deno.serve(async (req: Request): Promise<Response> => {
       continue;
     }
 
-    const res = await sendSms(profile.phone_number, buildMessage(apt, '1h'));
+    const userTimezone = profile.timezone || 'America/Phoenix';
+    const res = await sendSms(profile.phone_number, buildMessage(apt, '1h', userTimezone));
     if (res.ok) {
       await supabase.from('appointments').update({ reminder_1h_sent: true }).eq('id', apt.id);
       results.sent_1h++;
     } else {
       results.errors.push(`1h apt ${apt.id}: ${res.error}`);
+    }
+
+    // Provider reminder — best-effort, must not break patient SMS
+    if (apt.provider_id) {
+      try {
+        const { data: providerProfile } = await supabase
+          .from('profiles')
+          .select('phone_number, timezone')
+          .eq('id', apt.provider_id)
+          .maybeSingle();
+        if (providerProfile?.phone_number) {
+          const providerTz = providerProfile.timezone || 'America/Phoenix';
+          const patientName = profile.full_name || 'a patient';
+          await sendSms(
+            providerProfile.phone_number,
+            buildProviderMessage(apt, patientName, providerTz),
+          );
+        }
+      } catch (err) {
+        results.errors.push(`1h provider reminder apt ${apt.id}: ${(err as Error).message}`);
+      }
     }
   }
 

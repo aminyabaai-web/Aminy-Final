@@ -695,7 +695,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Clinic Workflow Proof</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   This is the operational read on whether your clinic can trust the current CentralReach pull/export workflow in daily use.
                 </p>
               </div>
@@ -737,7 +737,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-[#1B2733]">{lane.label}</p>
-                      <p className="mt-0.5 text-xs text-[#5A6B7A]">{lane.operatorMessage}</p>
+                      <p className="mt-0.5 text-sm text-[#5A6B7A]">{lane.operatorMessage}</p>
                     </div>
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                       lane.state === 'healthy'
@@ -753,7 +753,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               ))}
             </div>
             {clinicWorkflow.blockedReasons.length > 0 ? (
-              <ul className="mt-4 space-y-1 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
+              <ul className="mt-4 space-y-1 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                 {clinicWorkflow.blockedReasons.slice(0, 4).map((reason) => (
                   <li key={reason} className="flex items-start gap-2">
                     <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
@@ -767,7 +767,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Operator Reconciliation Queue</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
+                <p className="text-sm text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
               </div>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${attentionJobs.length > 0 ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
                 {attentionJobs.length > 0 ? `${attentionJobs.length} jobs need review` : 'All tracked jobs healthy'}
