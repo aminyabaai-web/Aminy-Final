@@ -1048,10 +1048,10 @@ export function ConversationalBooking({
                   {generateSuperbill && (
                     <div className="flex items-center gap-2 mt-1">
                       <FileText className="w-4 h-4 text-primary" />
-                      <span className="text-xs text-[#6B9080]">Superbill will be prepared after the session</span>
+                      <span className="text-sm text-[#6B9080]">Superbill will be prepared after the session</span>
                     </div>
                   )}
-                  <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-xs text-[#5A6B7A]">
+                  <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-sm text-[#5A6B7A]">
                     Free changes at least 24 hours ahead. Late changes and no-shows can reduce the refund amount.
                   </div>
                 </div>
@@ -1068,7 +1068,7 @@ export function ConversationalBooking({
                   Confirm Booking
                 </motion.button>
 
-                <p className="mt-3 text-center text-xs text-[#5A6B7A]">
+                <p className="mt-3 text-center text-sm text-[#5A6B7A]">
                   You will receive a confirmation email, reminder, and secure video-room link.
                 </p>
               </div>

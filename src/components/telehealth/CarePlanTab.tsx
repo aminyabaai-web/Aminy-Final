@@ -641,7 +641,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
               {categoryLabel}
             </span>
             {goal.targetFrequency && (
-              <span className="text-xs text-[#8A9BA8]">{goal.targetFrequency}</span>
+              <span className="text-sm text-[#8A9BA8]">{goal.targetFrequency}</span>
             )}
           </div>
           <h4 className={`font-medium ${isCompleted ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
@@ -656,10 +656,10 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
       {/* Progress bar */}
       <div className="mt-3">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-[#5A6B7A]">
+          <span className="text-sm text-[#5A6B7A]">
             {goal.currentProgress}/{goal.targetProgress} {goal.unit || 'completed'}
           </span>
-          <span className="text-xs font-medium text-[#3A4A57]">{progressPercent}%</span>
+          <span className="text-sm font-medium text-[#3A4A57]">{progressPercent}%</span>
         </div>
         <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
           <div
@@ -746,7 +746,7 @@ function EmptyGoals() {
       <p className="text-[#5A6B7A] mb-2 max-w-xs mx-auto">
         Goals help track progress on specific developmental milestones. Ask your provider to set up SMART goals during your next visit.
       </p>
-      <p className="text-xs text-[#8A9BA8] max-w-xs mx-auto">
+      <p className="text-sm text-[#8A9BA8] max-w-xs mx-auto">
         Goals can also be created from your Aminy AI care plan suggestions.
       </p>
     </div>
