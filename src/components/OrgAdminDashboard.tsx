@@ -396,7 +396,7 @@ function Row({ label, value, subtitle }: { label: string; value: string; subtitl
     <div className="flex items-baseline justify-between">
       <div>
         <p className="text-sm text-[#1B2733]">{label}</p>
-        {subtitle && <p className="text-xs text-slate-400">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-slate-400">{subtitle}</p>}
       </div>
       <p className="text-sm font-semibold text-[#1B2733]">{value}</p>
     </div>

@@ -636,7 +636,7 @@ export function ProviderMarketplace({
                   </span>
                 ))}
                 {(provider.insuranceAccepted?.length || 0) > 3 && (
-                  <span className="text-xs text-[#5A6B7A]">
+                  <span className="text-sm text-[#5A6B7A]">
                     +{provider.insuranceAccepted.length - 3} more
                   </span>
                 )}
@@ -771,7 +771,7 @@ export function ProviderMarketplace({
               </div>
               <div>
                 <p className="text-sm font-medium text-emerald-800">Recommended for You</p>
-                <p className="text-xs text-emerald-600 mt-0.5">{screeningBanner}</p>
+                <p className="text-sm text-emerald-600 mt-0.5">{screeningBanner}</p>
               </div>
               <button
                 onClick={() => setScreeningBanner(null)}
@@ -962,7 +962,7 @@ export function ProviderMarketplace({
                   onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}
                   className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-teal-600"
                 />
-                <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
+                <div className="flex justify-between text-sm text-[#8A9BA8] mt-1">
                   <span>$25</span>
                   <span>$500+</span>
                 </div>
