@@ -346,7 +346,7 @@ function HistoryView({
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No assessments yet for {rbtName}</p>
-        <p className="text-xs text-slate-400 mt-1">Create a new assessment to start tracking</p>
+        <p className="text-sm text-slate-400 mt-1">Create a new assessment to start tracking</p>
       </div>
     );
   }
@@ -358,7 +358,7 @@ function HistoryView({
       {/* Progress chart */}
       {assessments.length >= 2 && (
         <div className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
-          <div className="flex items-center gap-1 text-xs font-semibold text-[#5A6B7A] mb-2">
+          <div className="flex items-center gap-1 text-sm font-semibold text-[#5A6B7A] mb-2">
             <TrendingUp className="w-3.5 h-3.5" />
             Progress Over Time
           </div>
@@ -368,7 +368,7 @@ function HistoryView({
               const height = (avg / 5) * 100;
               return (
                 <div key={a.id} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="text-xs font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
+                  <div className="text-sm font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
                   <div className="w-full bg-violet-100 rounded-t-sm overflow-hidden" style={{ height: '100%' }}>
                     <div
                       className="w-full bg-violet-500 rounded-t-sm mt-auto"
@@ -401,7 +401,7 @@ function HistoryView({
               </div>
               <div className="flex-1">
                 <div className="text-sm font-semibold text-[#1B2733]">{a.date}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   Avg: {avg.toFixed(1)} &middot; {highCount} strong &middot; {lowCount} needs work
                 </div>
               </div>
@@ -424,8 +424,8 @@ function HistoryView({
                         'bg-red-100 text-red-700';
                       return (
                         <div key={r.areaId} className="flex items-center gap-2">
-                          <span className="text-xs text-slate-400 w-4">{r.areaId}</span>
-                          <span className="flex-1 text-xs text-[#5A6B7A] truncate">{r.areaName}</span>
+                          <span className="text-sm text-slate-400 w-4">{r.areaId}</span>
+                          <span className="flex-1 text-sm text-[#5A6B7A] truncate">{r.areaName}</span>
                           <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${color}`}>
                             {r.rating}/5
                           </span>

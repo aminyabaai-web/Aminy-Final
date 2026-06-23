@@ -555,9 +555,9 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
                   {risk.severity}
                 </span>
               </div>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">{risk.message}</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">{risk.message}</p>
               {risk.daysRemaining !== undefined && (
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   {risk.daysRemaining} days remaining
                 </p>
               )}
@@ -639,7 +639,7 @@ function QuickLogModal({
         <div className="space-y-3">
           {/* RBT Select */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">RBT</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">RBT</label>
             <select
               value={rbtId}
               onChange={(e) => setRbtId(e.target.value)}
@@ -653,7 +653,7 @@ function QuickLogModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input
               type="date"
               value={date}
@@ -664,7 +664,7 @@ function QuickLogModal({
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Duration (minutes)</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Duration (minutes)</label>
             <input
               type="number"
               value={duration}
@@ -677,7 +677,7 @@ function QuickLogModal({
 
           {/* Type */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Type</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Type</label>
             <div className="flex gap-2">
               {(['individual', 'group'] as const).map((t) => (
                 <button
@@ -708,7 +708,7 @@ function QuickLogModal({
 
           {/* Topics */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Topics (comma-separated)</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Topics (comma-separated)</label>
             <input
               type="text"
               value={topics}
@@ -720,7 +720,7 @@ function QuickLogModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">BCBA Notes</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">BCBA Notes</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

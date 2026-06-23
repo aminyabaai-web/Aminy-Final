@@ -518,7 +518,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                 <p className="text-[#5A6B7A] text-sm">
                   No favorite words yet.
                 </p>
-                <p className="text-[#8A9BA8] text-xs mt-1">
+                <p className="text-[#8A9BA8] text-sm mt-1">
                   Long-press any symbol to add it to My Words
                 </p>
               </>

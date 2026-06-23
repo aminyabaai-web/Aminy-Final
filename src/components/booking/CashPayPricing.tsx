@@ -419,7 +419,7 @@ export default function CashPayPricing({
 
       {/* Footer trust badges */}
       <div className="px-5 mt-8">
-        <div className="flex items-center justify-center gap-6 text-slate-400 text-xs">
+        <div className="flex items-center justify-center gap-6 text-slate-400 text-sm">
           <span className="flex items-center gap-1.5">
             <Shield className="w-4 h-4" />
             HIPAA-Conscious
