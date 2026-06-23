@@ -170,37 +170,37 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
             {parsed.is_positive ? '🎉' : '📋'} {parsed.behavior_type}
           </p>
 
-          <p className="text-xs text-[#5A6B7A] leading-relaxed">{parsed.notes}</p>
+          <p className="text-sm text-[#5A6B7A] leading-relaxed">{parsed.notes}</p>
 
           <div className="grid grid-cols-2 gap-1.5 pt-1">
             {parsed.trigger && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">Trigger</p>
-                <p className="text-xs font-medium text-[#3A4A57]">{parsed.trigger}</p>
+                <p className="text-sm font-medium text-[#3A4A57]">{parsed.trigger}</p>
               </div>
             )}
             {parsed.intensity && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">Intensity</p>
-                <p className="text-xs font-medium text-[#3A4A57]">{parsed.intensity}/5 · {intensityLabel(parsed.intensity)}</p>
+                <p className="text-sm font-medium text-[#3A4A57]">{parsed.intensity}/5 · {intensityLabel(parsed.intensity)}</p>
               </div>
             )}
             {parsed.duration_minutes && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">Duration</p>
-                <p className="text-xs font-medium text-[#3A4A57]">{parsed.duration_minutes}m</p>
+                <p className="text-sm font-medium text-[#3A4A57]">{parsed.duration_minutes}m</p>
               </div>
             )}
             {parsed.location && (
               <div className="bg-white rounded-lg px-2.5 py-1.5">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">Location</p>
-                <p className="text-xs font-medium text-[#3A4A57]">{parsed.location}</p>
+                <p className="text-sm font-medium text-[#3A4A57]">{parsed.location}</p>
               </div>
             )}
             {parsed.antecedent && (
               <div className="bg-white rounded-lg px-2.5 py-1.5 col-span-2">
                 <p className="text-xs text-slate-400 uppercase tracking-wide">Antecedent</p>
-                <p className="text-xs font-medium text-[#3A4A57]">{parsed.antecedent}</p>
+                <p className="text-sm font-medium text-[#3A4A57]">{parsed.antecedent}</p>
               </div>
             )}
           </div>

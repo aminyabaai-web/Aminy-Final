@@ -214,7 +214,7 @@ function TimePeriodSection({
       <div className="flex items-center gap-2 mb-2 text-[#5A6B7A]">
         {icons[period]}
         <span className="text-sm font-medium">{labels[period]}</span>
-        <span className="text-xs text-[#8A9BA8]">
+        <span className="text-sm text-[#8A9BA8]">
           ({availableSlots.length} available)
         </span>
       </div>

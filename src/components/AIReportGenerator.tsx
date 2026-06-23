@@ -354,7 +354,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
               {/* Preview if generated */}
               {isGenerated && (
                 <div className="mt-4 pt-4 border-t">
-                  <div className="text-xs text-muted-foreground bg-[#FAF7F2] p-3 rounded max-h-32 overflow-y-auto">
+                  <div className="text-sm text-muted-foreground bg-[#FAF7F2] p-3 rounded max-h-32 overflow-y-auto">
                     {generatedReports.get(option.type)?.substring(0, 300)}...
                   </div>
                 </div>

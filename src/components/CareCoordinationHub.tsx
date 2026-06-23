@@ -208,7 +208,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
-                    <p className="text-xs text-[#5A6B7A] truncate">{meta.description}</p>
+                    <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                   </div>
                   <Plus className="w-4 h-4 text-slate-400 shrink-0" />
                 </button>
@@ -232,7 +232,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
             return (
               <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#FAF7F2]">
                 <Icon className="w-4 h-4 text-[#5A6B7A] shrink-0" />
-                <span className="text-xs text-[#3A4A57]">{meta.label}</span>
+                <span className="text-sm text-[#3A4A57]">{meta.label}</span>
               </div>
             );
           })}
@@ -306,16 +306,16 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
               <AuthBadge status={row.authStatus} expiresAt={row.authExpiresAt} />
             </div>
             {row.providerName && (
-              <p className="text-xs text-[#5A6B7A] truncate mt-0.5">{row.providerName}</p>
+              <p className="text-sm text-[#5A6B7A] truncate mt-0.5">{row.providerName}</p>
             )}
             <div className="flex items-center gap-3 mt-1.5 flex-wrap">
               {row.siteOfCare && SiteIcon && (
-                <span className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+                <span className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                   <SiteIcon className="w-3 h-3" />{SITE_META[row.siteOfCare].label}
                 </span>
               )}
               {typeof row.sessionsThisMonth === 'number' && row.sessionsThisMonth > 0 && (
-                <span className="text-xs text-[#5A6B7A]">{row.sessionsThisMonth} sessions this month</span>
+                <span className="text-sm text-[#5A6B7A]">{row.sessionsThisMonth} sessions this month</span>
               )}
             </div>
           </div>
@@ -326,7 +326,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
           <div className="mt-3 px-3 py-2 rounded-xl space-y-2" style={{ background: `${meta.color}10` }}>
             <div className="flex items-center gap-2">
               <Calendar className="w-3.5 h-3.5 shrink-0" style={{ color: meta.color }} />
-              <p className="text-xs flex-1" style={{ color: meta.color }}>
+              <p className="text-sm flex-1" style={{ color: meta.color }}>
                 <span className="font-semibold">Next:</span>{' '}
                 {new Date(row.nextAppointmentAt).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
               </p>

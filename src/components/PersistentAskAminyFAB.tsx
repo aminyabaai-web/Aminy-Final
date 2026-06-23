@@ -303,11 +303,11 @@ export function PersistentAskAminyFAB({
               </div>
               <div>
                 <h3 className="font-semibold dark:text-white">Aminy</h3>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <span>I remember {childName}'s journey</span>
                 </p>
                 {tier === 'free' && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {messagesLeft} messages left
                   </p>
                 )}
@@ -426,7 +426,7 @@ export function PersistentAskAminyFAB({
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-            <p className="text-xs text-center text-muted-foreground mt-2">
+            <p className="text-sm text-center text-muted-foreground mt-2">
               Expert-quality guidance, always available
             </p>
           </div>

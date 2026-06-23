@@ -136,7 +136,7 @@ export function AIContextViewer() {
                   <Badge variant="outline" className="text-xs">
                     {goal.area}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">{goal.progress}% complete</span>
+                  <span className="text-sm text-muted-foreground">{goal.progress}% complete</span>
                 </div>
                 <p>{goal.description}</p>
                 <div className="w-full bg-[#E8E4DF] rounded-full h-1.5 mt-2">

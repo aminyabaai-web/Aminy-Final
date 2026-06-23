@@ -225,7 +225,7 @@ export function AskAminyWithBrain({
                     Context-Aware AI
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                <p className="text-sm text-muted-foreground flex items-center gap-1">
                   <Brain className="w-3 h-3 text-accent" />
                   <span>I remember {userData.childName}'s journey</span>
                 </p>
@@ -302,7 +302,7 @@ export function AskAminyWithBrain({
                     )}
                   >
                     {message.contextAware && (
-                      <div className="flex items-center gap-1 mb-1 text-xs opacity-70">
+                      <div className="flex items-center gap-1 mb-1 text-sm opacity-70">
                         <Brain className="w-3 h-3" />
                         <span>Context-aware response</span>
                       </div>
@@ -330,7 +330,7 @@ export function AskAminyWithBrain({
               {/* Quick actions for first message */}
               {messages.length <= 1 && !isThinking && (
                 <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground text-center">
+                  <p className="text-sm text-muted-foreground text-center">
                     Try asking about:
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center">
@@ -353,7 +353,7 @@ export function AskAminyWithBrain({
 
           {/* Tier indicator for free users */}
           {userTier === 'free' && (
-            <div className="px-4 py-2 bg-amber-50 border-t border-amber-100 text-xs text-center text-amber-800">
+            <div className="px-4 py-2 bg-amber-50 border-t border-amber-100 text-sm text-center text-amber-800">
               {Math.max(0, 10 - messages.length)} questions remaining on free tier
             </div>
           )}
@@ -387,7 +387,7 @@ export function AskAminyWithBrain({
                 )}
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
+            <p className="text-sm text-muted-foreground mt-2 text-center">
               AI has full context about {userData.childName} • Press Enter to send
             </p>
             <p className="text-[9px] text-muted-foreground/70 mt-1 text-center">

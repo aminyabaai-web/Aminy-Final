@@ -204,7 +204,7 @@ export function ChatSidebarDrawer({
                                     {c.title}
                                   </p>
                                 </div>
-                                <p className="mt-0.5 text-xs text-[#8E9BAA] truncate pl-5">
+                                <p className="mt-0.5 text-sm text-[#8E9BAA] truncate pl-5">
                                   {c.preview}
                                 </p>
                               </button>
@@ -240,7 +240,7 @@ function EmptyDrawer({ query }: { query: string }) {
       <p className="text-sm font-medium text-[#1B2733] mb-1">
         {query ? 'No matches' : 'No conversations yet'}
       </p>
-      <p className="text-xs text-[#8E9BAA] leading-relaxed">
+      <p className="text-sm text-[#8E9BAA] leading-relaxed">
         {query
           ? `Nothing matches "${query}". Try another search.`
           : 'Your chats with Aminy will appear here.'}
