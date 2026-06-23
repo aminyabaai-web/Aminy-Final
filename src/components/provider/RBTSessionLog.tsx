@@ -75,7 +75,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">Session Log</h1>
-            <p className="text-xs text-white/80">RBT Direct Service Documentation</p>
+            <p className="text-sm text-white/80">RBT Direct Service Documentation</p>
           </div>
           <button
             onClick={() => setShowNewSession(true)}
@@ -90,17 +90,17 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthHours.toFixed(1)}</div>
-            <div className="text-xs text-white/80">Hours This Mo</div>
+            <div className="text-sm text-white/80">Hours This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthSessions.length}</div>
-            <div className="text-xs text-white/80">Sessions</div>
+            <div className="text-sm text-white/80">Sessions</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className={`text-lg font-bold ${compliance.compliancePercent >= 5 ? 'text-emerald-300' : 'text-amber-300'}`}>
               {compliance.compliancePercent.toFixed(1)}%
             </div>
-            <div className="text-xs text-white/80">Supervision</div>
+            <div className="text-sm text-white/80">Supervision</div>
           </div>
         </div>
       </div>

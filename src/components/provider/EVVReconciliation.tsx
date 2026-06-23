@@ -355,7 +355,7 @@ export default function EVVReconciliation({
 
                           {/* Timesheet Match */}
                           <div>
-                            <p className="text-xs font-medium text-[#5A6B7A]">Timesheet</p>
+                            <p className="text-sm font-medium text-[#5A6B7A]">Timesheet</p>
                             <span className={`inline-flex items-center gap-1 text-sm ${
                               visit.timesheetMatch === 'match' ? 'text-green-700' :
                               visit.timesheetMatch === 'minor-variance' ? 'text-amber-700' :
@@ -370,7 +370,7 @@ export default function EVVReconciliation({
 
                           {/* Fiscal Agent Confidence */}
                           <div>
-                            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
+                            <p className="text-sm font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
                             <div className="flex items-center gap-2">
                               <div className="flex-1 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                                 <div
@@ -390,9 +390,9 @@ export default function EVVReconciliation({
                           {/* Resolution Queue */}
                           {visit.reconciliationStatus === 'discrepancy' && (
                             <div className="rounded-lg bg-red-50 p-3">
-                              <p className="text-xs font-semibold text-red-800 mb-2">Resolution Required</p>
+                              <p className="text-sm font-semibold text-red-800 mb-2">Resolution Required</p>
                               {visit.discrepancyNote && (
-                                <p className="text-xs text-red-700 mb-2">{visit.discrepancyNote}</p>
+                                <p className="text-sm text-red-700 mb-2">{visit.discrepancyNote}</p>
                               )}
                               <textarea
                                 value={resolutionNote}

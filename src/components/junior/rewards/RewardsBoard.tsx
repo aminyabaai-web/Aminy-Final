@@ -366,7 +366,7 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
 
       <WeeklyStarChart weeklyData={weeklyData} />
 
-      <p className="text-center text-xs text-[#8A9BA8]">Stars are earned by completing activities and missions</p>
+      <p className="text-center text-sm text-[#8A9BA8]">Stars are earned by completing activities and missions</p>
     </div>
   );
 }
@@ -487,7 +487,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
           </motion.button>
           <div>
             <h1 className="text-lg font-bold text-amber-800">Rewards</h1>
-            <p className="text-xs text-amber-600">Earn stars, unlock prizes!</p>
+            <p className="text-sm text-amber-600">Earn stars, unlock prizes!</p>
           </div>
         </div>
 
@@ -655,7 +655,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
 
                         {/* Reward info */}
                         <div className="p-2.5">
-                          <p className="text-xs font-bold text-[#3A4A57] truncate">{reward.label}</p>
+                          <p className="text-sm font-bold text-[#3A4A57] truncate">{reward.label}</p>
 
                           {/* Progress bar toward photo */}
                           {!reward.redeemed && (
@@ -677,7 +677,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-1">
                               <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                              <span className="text-xs font-bold text-amber-700">{rewards.totalStars}/{reward.starCost}</span>
+                              <span className="text-sm font-bold text-amber-700">{rewards.totalStars}/{reward.starCost}</span>
                             </div>
                             <div className="flex items-center gap-1">
                               {/* Star cost adjustment */}

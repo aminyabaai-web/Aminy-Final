@@ -410,8 +410,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
           <ArrowLeft className="w-4 h-4" />
           {step > 1 ? 'Back' : 'Skip'}
         </button>
-        <span className="text-xs text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
-        <button onClick={onSkip} className="text-xs text-slate-400 hover:text-[#5A6B7A] transition-colors">
+        <span className="text-sm text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
+        <button onClick={onSkip} className="text-sm text-slate-400 hover:text-[#5A6B7A] transition-colors">
           Skip setup
         </button>
       </div>
