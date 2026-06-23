@@ -8,12 +8,17 @@
  * Supabase calls POST /auth/send-email instead of sending emails itself,
  * giving us full control: Aminy branding, support@aminy.ai sender, Resend delivery.
  *
- * Hook setup (owner action — Supabase Dashboard):
- *   Authentication → Hooks → Send Email hook → HTTP hook
+ * Hook setup (Supabase Dashboard):
+ *   Authentication → Hooks → Send Email hook → HTTPS endpoint
  *   URL: https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548/auth/send-email
- *   Authorization: Bearer <SERVICE_ROLE_KEY>
+ *   Secret: generate in the dialog → copy → store as Supabase secret SEND_EMAIL_HOOK_SECRET
+ *
+ * Supabase signs hook requests using Standard Webhooks (https://www.standardwebhooks.com/).
+ * The secret value has format "v1,whsec_BASE64..." — we strip the "v1," prefix before
+ * passing to the Webhook constructor.
  */
 
+import { Webhook } from 'https://esm.sh/standardwebhooks@1.0.0';
 import { sendEmail } from './email-service.ts';
 
 // Supabase Send Email hook payload
@@ -147,15 +152,32 @@ function inviteHtml(actionUrl: string): string {
 
 export async function handleAuthSendEmail(c: any): Promise<Response> {
   try {
-    // Supabase signs hook requests with the service role key in Authorization header.
-    // The Hono app already allows Authorization passthrough — no extra check needed
-    // because the hook URL is only known by Supabase infra. But log if missing.
-    const authHeader = c.req.header('Authorization');
-    if (!authHeader) {
-      console.warn('[AuthEmail] Missing Authorization header on auth hook call');
+    // Read body as text first so we can verify the signature before parsing.
+    const rawBody = await c.req.text();
+
+    // Verify Standard Webhooks signature from Supabase.
+    // Secret stored as Supabase env var SEND_EMAIL_HOOK_SECRET, format "v1,whsec_BASE64...".
+    // Strip the "v1," prefix — the Webhook constructor expects just the "whsec_..." part.
+    const hookSecret = Deno.env.get('SEND_EMAIL_HOOK_SECRET') ?? '';
+    if (hookSecret) {
+      const signingSecret = hookSecret.startsWith('v1,') ? hookSecret.slice(3) : hookSecret;
+      const wh = new Webhook(signingSecret);
+      const webhookHeaders = {
+        'webhook-id': c.req.header('webhook-id') ?? '',
+        'webhook-timestamp': c.req.header('webhook-timestamp') ?? '',
+        'webhook-signature': c.req.header('webhook-signature') ?? '',
+      };
+      try {
+        wh.verify(rawBody, webhookHeaders);
+      } catch {
+        console.warn('[AuthEmail] Invalid webhook signature — rejecting request');
+        return c.json({ error: 'Invalid signature' }, 401);
+      }
+    } else {
+      console.warn('[AuthEmail] SEND_EMAIL_HOOK_SECRET not set — skipping signature verification');
     }
 
-    const payload: AuthHookPayload = await c.req.json();
+    const payload: AuthHookPayload = JSON.parse(rawBody);
     const { user, email_data } = payload;
 
     if (!user?.email || !email_data) {
@@ -164,7 +186,6 @@ export async function handleAuthSendEmail(c: any): Promise<Response> {
 
     const { email_action_type, token_hash, redirect_to, site_url, new_email } = email_data;
 
-    // Construct the verification link that Supabase uses to verify tokens
     const actionUrl = buildVerifyUrl(
       site_url || 'https://aminy.ai',
       token_hash,
@@ -203,7 +224,7 @@ export async function handleAuthSendEmail(c: any): Promise<Response> {
         break;
       default:
         subject = 'Action required for your Aminy account';
-        html = passwordResetHtml(actionUrl); // safe fallback
+        html = passwordResetHtml(actionUrl);
     }
 
     await sendEmail({
@@ -216,11 +237,9 @@ export async function handleAuthSendEmail(c: any): Promise<Response> {
 
     console.log(`[AuthEmail] Sent ${email_action_type} email to ${user.email}`);
 
-    // Supabase expects a 200 with empty body (or a body it ignores) to confirm delivery
     return c.json({ message: 'Email sent' }, 200);
   } catch (error) {
     console.error('[AuthEmail] Failed to send auth email:', error);
-    // Return 500 so Supabase knows delivery failed and can retry / fall back
     return c.json({ error: 'Email delivery failed' }, 500);
   }
 }
