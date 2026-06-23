@@ -185,7 +185,7 @@ function KPICard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 mb-1">
             <StatusIcon status={status} />
-            <p className="text-xs font-medium text-[#3A4A57] truncate">{metric.label}</p>
+            <p className="text-sm font-medium text-[#3A4A57] truncate">{metric.label}</p>
           </div>
           <div className="flex items-baseline gap-1.5">
             {editing ? (
@@ -207,11 +207,11 @@ function KPICard({
                 <span className={`text-xl font-bold ${status === 'red' ? 'text-red-600' : status === 'yellow' ? 'text-amber-600' : status === 'green' ? 'text-emerald-700' : 'text-[#8A9BA8]'}`}>
                   {formatValue(metric)}
                 </span>
-                <span className="text-xs text-[#8A9BA8]">{metric.unit}</span>
+                <span className="text-sm text-[#8A9BA8]">{metric.unit}</span>
               </>
             )}
           </div>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">
+          <p className="text-sm text-[#5A6B7A] mt-0.5">
             Target: {metric.higherIsBetter ? '≥' : '≤'}{metric.target}{metric.unit === '/5.0' ? '/5.0' : metric.unit === 'ratio' ? '' : metric.unit}
           </p>
           {metric.trendValue && (
