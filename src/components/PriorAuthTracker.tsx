@@ -186,7 +186,7 @@ export function PriorAuthTracker({
             <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
               You may owe $0 out-of-pocket
             </p>
-            <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-0.5">
+            <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-0.5">
               AHCCCS (your secondary coverage) pays the gap your commercial plan leaves behind for ABA services. Your family pays nothing.
             </p>
           </div>
@@ -204,13 +204,13 @@ export function PriorAuthTracker({
             Prior Authorization Status
           </span>
           {timeline && (
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-sm text-slate-500 dark:text-slate-400">
               · {timeline.payer}
             </span>
           )}
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-xs font-medium ${statusColor(status)}`}>
+          <span className={`text-sm font-medium ${statusColor(status)}`}>
             {statusLabel(status)}
           </span>
           {expanded ? (
