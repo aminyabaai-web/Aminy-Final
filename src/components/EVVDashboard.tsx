@@ -898,7 +898,7 @@ function BudgetTab({
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
           <DollarSign className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
           <p className="text-[#5A6B7A] text-sm">No active authorizations</p>
-          <p className="text-[#8A9BA8] text-xs mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
+          <p className="text-[#8A9BA8] text-sm mt-1">Confirm authorizations in your external EVV system while the Arizona pilot workflow is being validated.</p>
         </div>
       )}
     </motion.div>
@@ -979,7 +979,7 @@ function TimesheetsTab({
                 <p className="font-medium text-sm text-[#1B2733]">
                   Week of {weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {weekRecords.length} visits &bull; {Math.floor(totalMinutes / 60)}h {totalMinutes % 60}m &bull; {totalUnits} units
                 </p>
               </div>
@@ -995,7 +995,7 @@ function TimesheetsTab({
                 type="button"
                 onClick={() => handleGenerateTimesheet(weekKey)}
                 disabled={generating}
-                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1B2733] py-2 text-xs font-medium text-white transition-colors hover:bg-[#0D1B2A]"
+                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1B2733] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0D1B2A]"
               >
                 {generating ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
