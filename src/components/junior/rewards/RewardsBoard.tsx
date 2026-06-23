@@ -297,7 +297,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
           const isToday = i === todayIdx;
           return (
             <div key={i} className="flex flex-col items-center flex-1 gap-1">
-              {day.stars > 0 && <span className="text-xs font-bold text-[#5A6B7A]">{day.stars}</span>}
+              {day.stars > 0 && <span className="text-sm font-bold text-[#5A6B7A]">{day.stars}</span>}
               <motion.div
                 initial={{ height: 4 }}
                 animate={{ height }}
@@ -342,19 +342,19 @@ function HistoryTab({ weeklyData, totalStars }: { weeklyData: { date: string; st
           <Star className="w-7 h-7 text-amber-500 fill-amber-500" />
           <span className="text-4xl font-black text-amber-700">{monthTotal}</span>
         </div>
-        <p className="text-xs text-amber-600 mt-1">Amazing work! Keep it up!</p>
+        <p className="text-sm text-amber-600 mt-1">Amazing work! Keep it up!</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white/70 rounded-2xl p-3 text-center">
-          <p className="text-xs text-[#5A6B7A] mb-1">Daily avg</p>
+          <p className="text-sm text-[#5A6B7A] mb-1">Daily avg</p>
           <div className="flex items-center justify-center gap-1">
             <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
             <span className="text-xl font-bold text-[#3A4A57]">{dailyAvg}</span>
           </div>
         </div>
         <div className="bg-white/70 rounded-2xl p-3 text-center">
-          <p className="text-xs text-[#5A6B7A] mb-1">This week</p>
+          <p className="text-sm text-[#5A6B7A] mb-1">This week</p>
           <div className="flex items-center justify-center gap-1">
             <Flame className="w-4 h-4 text-orange-400" />
             <span className="text-xl font-bold text-[#3A4A57]">

@@ -292,7 +292,7 @@ export default function EVVReconciliation({
                         )}
                       </div>
                       <div className="flex items-center gap-2 ml-2">
-                        <span className={`text-xs font-bold ${confidenceColor}`}>
+                        <span className={`text-sm font-bold ${confidenceColor}`}>
                           {visit.fiscalAgentConfidence}%
                         </span>
                         {isExpanded ? <ChevronUp className="h-4 w-4 text-[#8A9BA8]" /> : <ChevronDown className="h-4 w-4 text-[#8A9BA8]" />}
@@ -312,11 +312,11 @@ export default function EVVReconciliation({
                           {/* Time Comparison */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">Scheduled</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">Scheduled</p>
                               <p className="text-sm text-[#1B2733]">{visit.scheduledStart} - {visit.scheduledEnd}</p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">Actual</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">Actual</p>
                               <p className="text-sm text-[#1B2733]">
                                 {visit.actualStart ?? '—'} - {visit.actualEnd ?? '—'}
                               </p>
@@ -326,7 +326,7 @@ export default function EVVReconciliation({
                           {/* GPS */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-In</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">GPS Check-In</p>
                               {visit.gpsCheckIn ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckIn.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
@@ -339,7 +339,7 @@ export default function EVVReconciliation({
                               )}
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-Out</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">GPS Check-Out</p>
                               {visit.gpsCheckOut ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckOut.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
