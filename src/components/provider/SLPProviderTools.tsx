@@ -307,8 +307,8 @@ function LanguageSampleAnalysis() {
               <span className="text-sm text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
-              <p className="text-xs text-[#5A6B7A]">{entry.date}</p>
-              {entry.notes && <p className="text-xs text-[#8A9BA8]">{entry.notes}</p>}
+              <p className="text-sm text-[#5A6B7A]">{entry.date}</p>
+              {entry.notes && <p className="text-sm text-[#8A9BA8]">{entry.notes}</p>}
             </div>
           </div>
         ))}
@@ -438,7 +438,7 @@ function FluencyTracker() {
             <p className="text-3xl font-bold text-blue-700">{latest.wpm}</p>
             <p className="text-sm text-blue-600 mt-1">Words per minute</p>
             {prev && (
-              <p className={`text-xs mt-1 ${latest.wpm > prev.wpm ? 'text-green-600' : 'text-red-500'}`}>
+              <p className={`text-sm mt-1 ${latest.wpm > prev.wpm ? 'text-green-600' : 'text-red-500'}`}>
                 {latest.wpm > prev.wpm ? '+' : ''}{latest.wpm - prev.wpm} vs prior
               </p>
             )}
@@ -447,7 +447,7 @@ function FluencyTracker() {
             <p className="text-3xl font-bold text-orange-700">{latest.stutteringFreqPct}%</p>
             <p className="text-sm text-orange-600 mt-1">Stuttering frequency</p>
             {prev && (
-              <p className={`text-xs mt-1 ${latest.stutteringFreqPct < prev.stutteringFreqPct ? 'text-green-600' : 'text-red-500'}`}>
+              <p className={`text-sm mt-1 ${latest.stutteringFreqPct < prev.stutteringFreqPct ? 'text-green-600' : 'text-red-500'}`}>
                 {latest.stutteringFreqPct < prev.stutteringFreqPct ? '-' : '+'}{Math.abs(latest.stutteringFreqPct - prev.stutteringFreqPct)}% vs prior
               </p>
             )}
@@ -457,7 +457,7 @@ function FluencyTracker() {
 
       {latest?.avoidanceBehaviors?.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-          <p className="text-xs font-medium text-amber-700 mb-1">Avoidance behaviors noted:</p>
+          <p className="text-sm font-medium text-amber-700 mb-1">Avoidance behaviors noted:</p>
           <div className="flex flex-wrap gap-1">
             {latest.avoidanceBehaviors.map(b => (
               <span key={b} className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{b}</span>
