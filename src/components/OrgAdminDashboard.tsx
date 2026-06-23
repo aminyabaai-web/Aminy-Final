@@ -240,11 +240,11 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Seats</p>
             </div>
             {!seatEditMode ? (
-              <button onClick={() => setSeatEditMode(true)} className="text-xs text-[#6B9080] font-semibold">Edit</button>
+              <button onClick={() => setSeatEditMode(true)} className="text-sm text-[#6B9080] font-semibold">Edit</button>
             ) : (
               <div className="flex gap-2">
-                <button onClick={() => { setSeatEditMode(false); setNewSeatCount(org.seatCount); }} className="text-xs text-[#5A6B7A] font-medium">Cancel</button>
-                <button onClick={handleSaveSeats} className="text-xs text-[#6B9080] font-semibold">Save</button>
+                <button onClick={() => { setSeatEditMode(false); setNewSeatCount(org.seatCount); }} className="text-sm text-[#5A6B7A] font-medium">Cancel</button>
+                <button onClick={handleSaveSeats} className="text-sm text-[#6B9080] font-semibold">Save</button>
               </div>
             )}
           </div>
@@ -263,7 +263,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                   seats × {formatCents(effectiveSeatPriceCents(Math.max(MIN_SEATS, newSeatCount)))}/seat
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-2">Volume pricing: {ladderHint}</p>
+              <p className="text-sm text-slate-400 mt-2">Volume pricing: {ladderHint}</p>
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
@@ -282,7 +282,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             />
           </div>
           {usage.seatsAvailable === 0 && (
-            <p className="text-xs text-orange-600 mt-2">All seats used — add seats above to invite more members.</p>
+            <p className="text-sm text-orange-600 mt-2">All seats used — add seats above to invite more members.</p>
           )}
         </div>
       )}

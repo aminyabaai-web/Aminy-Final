@@ -322,7 +322,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   Upgrade to Pro+ for unlimited access
                 </button>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm text-slate-400">
                 Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} behaviorist questions/month, no session required — with instant AI drafts while you wait. Want a BCBA? Book a telehealth session.
               </p>
             </div>
@@ -424,7 +424,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   <p className="text-sm text-[#1B2733] line-clamp-2 flex-1">{t.question}</p>
                   <StatusPill status={t.status} />
                 </div>
-                <div className="flex items-center gap-3 text-xs text-slate-400">
+                <div className="flex items-center gap-3 text-sm text-slate-400">
                   <span>{relativeTime(t.created_at)}</span>
                   {t.category && <span className="capitalize">· {t.category}</span>}
                   {t.parent_rating && (
@@ -525,10 +525,10 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           </div>
           <p className="text-sm text-[#1B2733] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (
-            <p className="text-xs text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
+            <p className="text-sm text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
           )}
           {thread.bcba_responded_at && (
-            <p className="text-xs text-slate-400 mt-1">{new Date(thread.bcba_responded_at).toLocaleString()}</p>
+            <p className="text-sm text-slate-400 mt-1">{new Date(thread.bcba_responded_at).toLocaleString()}</p>
           )}
         </div>
       ) : (
@@ -537,7 +537,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           <div className="flex-1">
             <p className="text-sm font-medium text-[#1B2733]">Awaiting behaviorist review</p>
             {thread.target_response_at && (
-              <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
+              <p className="text-sm text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
           </div>
         </div>
