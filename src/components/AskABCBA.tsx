@@ -334,7 +334,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             >
               <Plus className="w-5 h-5" />
               Ask your behaviorist team
-              {isProPlus && <span className="ml-auto text-xs font-normal opacity-80">Pro+ · 10/mo</span>}
+              {isProPlus && <span className="ml-auto text-sm font-normal opacity-80">Pro+ · 10/mo</span>}
             </button>
           )}
         </div>
@@ -352,7 +352,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
 
           {isPartnerOrg && (
             <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
-              <p className="text-xs text-[#3A4A57]">
+              <p className="text-sm text-[#3A4A57]">
                 Your question goes to <span className="font-semibold">your care team</span> — included with your organization's program at no charge.
               </p>
             </div>
@@ -370,7 +370,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           />
 
           <div>
-            <p className="text-xs text-[#5A6B7A] mb-2">Category (helps the BCBA route)</p>
+            <p className="text-sm text-[#5A6B7A] mb-2">Category (helps the BCBA route)</p>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map(c => (
                 <button
@@ -397,7 +397,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             {isSubmitting ? 'Sending…' : 'Send to your behaviorist'}
           </button>
 
-          <p className="text-xs text-slate-400 text-center">AI drafts instantly · behaviorist review, typically within 24 hours (3 business days max)</p>
+          <p className="text-sm text-slate-400 text-center">AI drafts instantly · behaviorist review, typically within 24 hours (3 business days max)</p>
         </div>
       )}
 

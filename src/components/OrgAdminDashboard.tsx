@@ -172,7 +172,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             </div>
             <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
             <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for solo BCBAs, clinics, schools, agencies, and AACT-style pilots — from a single seat to enterprise, under one billing account.</p>
-            <p className="text-xs text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
+            <p className="text-sm text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
         </div>
       </div>
@@ -225,7 +225,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           {org.subscriptionStatus === 'past_due' && (
             <div className="mt-3 flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-xl px-3 py-2">
               <AlertCircle className="w-4 h-4 text-orange-600 shrink-0" />
-              <p className="text-xs text-orange-700">Payment past due — update billing to avoid suspension</p>
+              <p className="text-sm text-orange-700">Payment past due — update billing to avoid suspension</p>
             </div>
           )}
         </div>

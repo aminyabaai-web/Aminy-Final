@@ -1114,7 +1114,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           </div>
                         </div>
 
-                        <p className="text-xs text-slate-400 leading-relaxed">
+                        <p className="text-sm text-slate-400 leading-relaxed">
                           Aminy will send a personalized insight based on recent sessions, goals, and behavior patterns — at your chosen time.
                         </p>
                       </div>
@@ -1334,7 +1334,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           </>
                         )}
                       </Button>
-                      <p className="text-xs text-muted-foreground mt-3">
+                      <p className="text-sm text-muted-foreground mt-3">
                         We only access your calendar to create and read events. We never modify or delete your existing events.
                       </p>
                     </div>
@@ -1353,7 +1353,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-green-800 dark:text-green-300 text-sm">Google Calendar</p>
-                          <p className="text-xs text-green-600 dark:text-green-400">
+                          <p className="text-sm text-green-600 dark:text-green-400">
                             {calendarIntegration?.last_sync_at
                               ? `Last synced ${new Date(calendarIntegration.last_sync_at).toLocaleString()}`
                               : 'Connected — not yet synced'}
@@ -1631,7 +1631,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         )}
 
         {/* App Version — sourced from the shared app config so it stays in sync across screens */}
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-sm text-muted-foreground">
           Aminy v{appConfig.version} • Made with care
         </p>
         </div>{/* end settings content cards wrapper */}
@@ -1684,7 +1684,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Must contain uppercase letter and number
               </p>
             </div>

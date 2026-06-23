@@ -1183,7 +1183,7 @@ export function CommunityHub({
                         )}
                       </div>
                       <p className="text-sm text-[#5A6B7A] mt-1">{group.description}</p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-slate-400">
+                      <div className="flex items-center gap-4 mt-2 text-sm text-slate-400">
                         <span className="flex items-center gap-1">
                           <Users className="w-3 h-3" />
                           {group.memberCount.toLocaleString()} members
@@ -1452,7 +1452,7 @@ export function CommunityHub({
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-[#1B2733] dark:text-white">{c.displayName}</span>
-                              <span className="text-xs text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
+                              <span className="text-sm text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
                             </div>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>
                           </div>
@@ -1465,7 +1465,7 @@ export function CommunityHub({
               <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex items-center gap-2">
                 <div className="flex-1 flex flex-col gap-1">
                   {othersTyping && (
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400 px-1">
+                    <div className="flex items-center gap-1.5 text-sm text-slate-400 px-1">
                       <span className="flex gap-0.5">
                         <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }} />
