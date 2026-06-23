@@ -1134,28 +1134,28 @@ export function ProviderMarketplace({
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Specialist Consultation</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min with a BCBA</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min with a BCBA</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Assessment</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 90 min comprehensive review</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 90 min comprehensive review</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$269</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Coaching Session</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 30 min skill-building</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 30 min skill-building</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$49</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Extended Coaching</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min deeper practice</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min deeper practice</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$89</span>
                 </div>
@@ -1174,28 +1174,28 @@ export function ProviderMarketplace({
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Family Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
                   </div>
                   <span className="font-semibold text-violet-600">$129</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Extended Therapy Session</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min for complex needs</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min for complex needs</p>
                   </div>
                   <span className="font-semibold text-violet-600">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Speech Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min communication support</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min communication support</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Occupational Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
@@ -1211,7 +1211,7 @@ export function ProviderMarketplace({
               </div>
               <div>
                 <h4 className="font-medium text-[#1B2733]">Diagnostic Evaluations</h4>
-                <p className="text-xs text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
+                <p className="text-sm text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
