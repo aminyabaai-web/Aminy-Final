@@ -348,7 +348,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         )}
         {audience === 'provider' && (
           <div className="text-center mt-8 px-4">
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Looking for personal use?{' '}
               <button
                 onClick={() => setAudience('individual')}
@@ -405,7 +405,7 @@ function TierCardView({
       {/* Name + tagline */}
       <div className="mb-4">
         <h2 className="text-2xl font-bold text-[#1B2733] mb-1">{tier.name}</h2>
-        <p className="text-xs text-[#5A6B7A] leading-snug">{tier.tagline}</p>
+        <p className="text-sm text-[#5A6B7A] leading-snug">{tier.tagline}</p>
       </div>
 
       {/* Price */}
@@ -423,7 +423,7 @@ function TierCardView({
             </span>
           </div>
         )}
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-sm text-slate-400 mt-1">
           {hasPromo
             ? billing === 'annual'
               ? 'free to start, then billed annually'
@@ -462,7 +462,7 @@ function TierCardView({
       {/* Volume pricing table */}
       {tier.pricingTable && tier.pricingTable.length > 0 && (
         <div className="mb-5">
-          <p className="text-xs font-semibold text-[#1B2733] mb-2">Volume pricing</p>
+          <p className="text-sm font-semibold text-[#1B2733] mb-2">Volume pricing</p>
           <div className="rounded-xl border border-[#E8E4DF] overflow-hidden">
             {tier.pricingTable.map((row, i) => (
               <div
