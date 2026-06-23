@@ -216,7 +216,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
           <div className="text-left">
             <div className={`text-sm ${accent ? 'text-teal-800 dark:text-teal-200 font-medium' : 'text-[#1B2733] dark:text-slate-100'}`}>{item.label}</div>
-            <div className={`text-xs ${accent ? 'text-teal-600 dark:text-teal-400' : 'text-[#5A6B7A] dark:text-slate-400'}`}>{item.sublabel}</div>
+            <div className={`text-sm ${accent ? 'text-teal-600 dark:text-teal-400' : 'text-[#5A6B7A] dark:text-slate-400'}`}>{item.sublabel}</div>
           </div>
         </div>
 
@@ -282,7 +282,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
 
         {/* App Info */}
         <div className="mt-12 pt-8 border-t border-[#E8E4DF] dark:border-slate-600">
-          <div className="text-center text-xs text-[#5A6B7A] dark:text-slate-400 space-y-1">
+          <div className="text-center text-sm text-[#5A6B7A] dark:text-slate-400 space-y-1">
             <p>Aminy Version 1.0.0</p>
             <p>© {new Date().getFullYear()} Aminy, LLC All rights reserved.</p>
           </div>

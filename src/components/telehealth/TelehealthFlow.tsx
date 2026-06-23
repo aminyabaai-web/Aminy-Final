@@ -483,7 +483,7 @@ export function TelehealthFlow({
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-[#1B2733]">Verify Insurance</h1>
-                <p className="text-xs text-[#5A6B7A]">We'll check your coverage before matching providers</p>
+                <p className="text-sm text-[#5A6B7A]">We'll check your coverage before matching providers</p>
               </div>
             </div>
           </header>
@@ -495,7 +495,7 @@ export function TelehealthFlow({
                 </div>
                 <div>
                   <h3 className="font-semibold text-[#1B2733]">Insurance Eligibility Check</h3>
-                  <p className="text-xs text-[#5A6B7A]">Takes about 30 seconds</p>
+                  <p className="text-sm text-[#5A6B7A]">Takes about 30 seconds</p>
                 </div>
               </div>
               <p className="text-sm text-[#5A6B7A]">

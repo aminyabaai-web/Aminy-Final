@@ -463,13 +463,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-[#5A6B7A]">
+                    <span className="text-sm text-[#5A6B7A]">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 </div>
               )}
-              
+
               <div className={`rounded-lg px-4 py-3 ${
                 message.from === 'parent'
                   ? 'bg-accent text-white'
@@ -486,7 +486,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                         ) : (
                           <FileText className="w-4 h-4" />
                         )}
-                        <span className="text-xs font-medium">{attachment}</span>
+                        <span className="text-sm font-medium">{attachment}</span>
                         <Button size="sm" variant="ghost" className="h-6 w-6 p-0 ml-auto">
                           <Play className="w-3 h-3" />
                         </Button>
