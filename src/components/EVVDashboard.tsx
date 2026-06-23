@@ -752,7 +752,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
           <ClipboardList className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
           <p className="text-[#5A6B7A] text-sm">No EVV records yet</p>
-          <p className="text-[#8A9BA8] text-xs mt-1">Clock in to start your first visit</p>
+          <p className="text-[#8A9BA8] text-sm mt-1">Clock in to start your first visit</p>
         </div>
       ) : (
         records.map(record => (
@@ -1009,7 +1009,7 @@ function TimesheetsTab({
                 onClick={() => handleGenerateTimesheet(weekKey, true)}
                 disabled={generating}
                 aria-label="Download timesheet"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-xs font-medium text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF
@@ -1023,7 +1023,7 @@ function TimesheetsTab({
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-8 text-center">
           <FileText className="w-10 h-10 mx-auto text-[#8A9BA8] mb-3" />
           <p className="text-[#5A6B7A] text-sm">No visits to submit</p>
-          <p className="text-[#8A9BA8] text-xs mt-1">Complete some visits first to generate timesheets</p>
+          <p className="text-[#8A9BA8] text-sm mt-1">Complete some visits first to generate timesheets</p>
         </div>
       )}
     </motion.div>
