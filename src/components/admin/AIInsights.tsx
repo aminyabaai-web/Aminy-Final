@@ -658,7 +658,7 @@ export function AIInsights() {
                       ].map(s => (
                         <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
                           <div className="text-xl font-bold">{s.count}</div>
-                          <div className="text-xs">{s.label}</div>
+                          <div className="text-sm">{s.label}</div>
                         </div>
                       ))}
                     </div>
@@ -721,7 +721,7 @@ export function AIInsights() {
                     ].map(s => (
                       <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
                         <div className="text-xl font-bold">{s.count}</div>
-                        <div className="text-xs">{s.label}</div>
+                        <div className="text-sm">{s.label}</div>
                       </div>
                     ))}
                   </div>

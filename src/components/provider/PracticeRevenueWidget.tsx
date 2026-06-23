@@ -126,11 +126,11 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
           </div>
           <div className="text-right">
             <p className="text-base font-bold text-emerald-900">{fmt(data.thisWeekBilled)}</p>
-            <p className="text-xs text-emerald-600">{fmt(data.thisWeekPaid)} paid</p>
+            <p className="text-sm text-emerald-600">{fmt(data.thisWeekPaid)} paid</p>
           </div>
         </div>
         {data.nextDepositAmount > 0 && (
-          <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-700">
+          <div className="mt-2 flex items-center gap-1.5 text-sm text-emerald-700">
             <Clock className="w-3 h-3" />
             <span>Next deposit {data.nextDepositDate}: {fmt(data.nextDepositAmount)}</span>
           </div>
@@ -156,7 +156,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
         {onViewDetails && (
           <button
             onClick={onViewDetails}
-            className="flex items-center gap-1 text-xs text-[#6B9080] font-medium hover:text-[#6B9080]"
+            className="flex items-center gap-1 text-sm text-[#6B9080] font-medium hover:text-[#6B9080]"
           >
             Details
             <ArrowRight className="w-3.5 h-3.5" />

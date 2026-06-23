@@ -499,13 +499,13 @@ function BehaviorMode({
             {incidents.map((incident, idx) => (
               <div key={incident.id} className="bg-white border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#5A6B7A]">Incident {idx + 1}</span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-sm font-semibold text-[#5A6B7A]">Incident {idx + 1}</span>
+                  <span className="text-sm text-slate-400">
                     {new Date(incident.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 <div>
-                  <label className="text-xs text-amber-700 font-medium">Antecedent (A)</label>
+                  <label className="text-sm text-amber-700 font-medium">Antecedent (A)</label>
                   <input
                     type="text"
                     value={incident.antecedent}

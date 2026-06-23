@@ -165,7 +165,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
               {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <p className="mt-2 text-xs text-[#5A6B7A]">Code: <span className="font-mono font-bold">{referral.code}</span></p>
+          <p className="mt-2 text-sm text-[#5A6B7A]">Code: <span className="font-mono font-bold">{referral.code}</span></p>
         </div>
 
         {/* Invite Methods */}
@@ -242,10 +242,10 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                   <p className={`text-sm font-medium ${m.reached ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>
                     {m.count} referral{m.count > 1 ? 's' : ''}
                   </p>
-                  <p className="text-xs text-[#5A6B7A]">{m.reward}</p>
+                  <p className="text-sm text-[#5A6B7A]">{m.reward}</p>
                 </div>
                 {m.reached && (
-                  <span className="text-xs font-semibold text-[#6B9080]">Earned</span>
+                  <span className="text-sm font-semibold text-[#6B9080]">Earned</span>
                 )}
               </div>
             ))}
@@ -261,7 +261,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                 <div key={reward.id} className="flex items-center justify-between rounded-lg bg-amber-50 p-3">
                   <div>
                     <p className="text-sm font-medium text-amber-900">{reward.label}</p>
-                    <p className="text-xs text-amber-700">{reward.description}</p>
+                    <p className="text-sm text-amber-700">{reward.description}</p>
                   </div>
                   {reward.redeemed ? (
                     <span className="text-xs text-[#8A9BA8]">Redeemed</span>

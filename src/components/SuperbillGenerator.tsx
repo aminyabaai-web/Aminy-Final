@@ -571,7 +571,7 @@ export function SuperbillGenerator({
           {/* Diagnosis Codes */}
           <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-[#1B2733] mb-4">Diagnosis Codes (ICD-10)</h3>
-            <p className="text-xs text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
+            <p className="text-sm text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {COMMON_DIAGNOSIS_CODES.map(diagnosis => (
                 <label
@@ -599,7 +599,7 @@ export function SuperbillGenerator({
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-xs font-mono text-[#5A6B7A]">{diagnosis.code}</span>
-                    <p className="text-xs text-[#3A4A57] truncate">{diagnosis.description}</p>
+                    <p className="text-sm text-[#3A4A57] truncate">{diagnosis.description}</p>
                   </div>
                 </label>
               ))}
@@ -609,7 +609,7 @@ export function SuperbillGenerator({
           {/* CPT Codes by Category */}
           <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-[#1B2733] mb-4">Service Codes (CPT)</h3>
-            <p className="text-xs text-[#5A6B7A] mb-3">Select the services rendered</p>
+            <p className="text-sm text-[#5A6B7A] mb-3">Select the services rendered</p>
             <div className="space-y-2">
               {CPT_CATEGORIES.filter(cat => cat !== 'Modifier').map(category => {
                 const codes = getCPTCodesByCategory(category);

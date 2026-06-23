@@ -238,7 +238,7 @@ export function PayerOutcomesDashboard({
                 Coverage routing, claim-ready operations, and payer trust signals for the {marketLabel} supported lane.
               </p>
               {!providedMetrics ? (
-                <p className="mt-2 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                <p className="mt-2 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
                   This dashboard is using clearly labeled pilot sample metrics until live payer and claims data is connected for the {marketLabel} lane.
                 </p>
               ) : null}
@@ -656,7 +656,7 @@ export function PayerOutcomesDashboard({
                       <p className="text-sm font-medium text-[#3A4A57] dark:text-slate-200">
                         No claim-ready cases for the {marketLabel} lane yet
                       </p>
-                      <p className="mt-1 text-xs text-[#5A6B7A] dark:text-slate-400">
+                      <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">
                         Validated visit packets will appear here once they are assembled for biller review.
                       </p>
                     </div>

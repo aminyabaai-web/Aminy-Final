@@ -248,12 +248,12 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
           {userState && !childAgeKnown && (
             <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
               <AlertCircle className="w-4 h-4 text-amber-700 flex-shrink-0" />
-              <p className="text-xs text-amber-800 flex-1">
+              <p className="text-sm text-amber-800 flex-1">
                 Based on age {childAge} (we don't have your child's birthdate on file).
                 Some programs have age limits — confirm the age for accurate results.
               </p>
               <div className="flex items-center gap-2">
-                <label htmlFor="benefits-child-age" className="text-xs font-medium text-amber-800">
+                <label htmlFor="benefits-child-age" className="text-sm font-medium text-amber-800">
                   Child's age:
                 </label>
                 <input
