@@ -120,7 +120,7 @@ export function ProviderNoShowRecovery({
               <p className="text-sm font-medium text-slate-900 dark:text-white">
                 Reschedule with {provider}
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Priority slot — you're seen first</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Priority slot — you're seen first</p>
             </div>
           </button>
 
@@ -133,14 +133,14 @@ export function ProviderNoShowRecovery({
               <p className="text-sm font-medium text-slate-900 dark:text-white">
                 Match me with someone new
               </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">We'll find an available provider</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">We'll find an available provider</p>
             </div>
           </button>
         </div>
 
         <button
           onClick={onContactSupport}
-          className="mt-3 flex items-center gap-1.5 text-xs text-rose-700 dark:text-rose-300 hover:underline"
+          className="mt-3 flex items-center gap-1.5 text-sm text-rose-700 dark:text-rose-300 hover:underline"
         >
           <Phone className="w-3.5 h-3.5" />
           Rather talk to a person? We'll call you.
