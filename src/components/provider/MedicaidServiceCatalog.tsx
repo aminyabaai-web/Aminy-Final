@@ -254,7 +254,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
           )}
           <div>
             <h1 className="text-lg font-bold text-[#1B2733]">Medicaid Service Catalog</h1>
-            <p className="text-xs text-[#5A6B7A]">HCBS / DDD Waiver — Arizona (Acumen/DCI compatible)</p>
+            <p className="text-sm text-[#5A6B7A]">HCBS / DDD Waiver — Arizona (Acumen/DCI compatible)</p>
           </div>
         </div>
 
@@ -289,7 +289,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
 
       {/* Summary bar */}
       <div className="mx-4 mt-4 p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-xl">
-        <p className="text-xs text-blue-700">
+        <p className="text-sm text-blue-700">
           <strong>{filtered.length} service codes</strong> — rates are AZ DDD estimates (FY2025-26).
           Verify with your AHCCCS provider agreement. EVV via DCI, Acumen, or Therap.
         </p>

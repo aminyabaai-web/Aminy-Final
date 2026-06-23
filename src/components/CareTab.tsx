@@ -498,7 +498,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               
               {message.from === 'parent' && (
                 <div className="text-right mt-1">
-                  <span className="text-xs text-[#5A6B7A]">
+                  <span className="text-sm text-[#5A6B7A]">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -563,7 +563,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <AlertCircle className="w-4 h-4 text-red-600" />
           <span className="font-medium text-red-900 text-sm">Not for emergencies</span>
         </div>
-        <p className="text-xs text-red-700 mt-1">
+        <p className="text-sm text-red-700 mt-1">
           For urgent concerns, contact your child's healthcare provider immediately.
         </p>
       </div>
@@ -587,7 +587,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="text-center">
               <div className="font-semibold text-lg">25 min</div>
               <div className="text-sm text-[#5A6B7A]">Quick check-in</div>
-              <div className="text-xs text-[#5A6B7A] mt-1">Focus session</div>
+              <div className="text-sm text-[#5A6B7A] mt-1">Focus session</div>
             </div>
           </button>
           <button
@@ -601,7 +601,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="text-center">
               <div className="font-semibold text-lg">50 min</div>
               <div className="text-sm text-[#5A6B7A]">Deep dive</div>
-              <div className="text-xs text-[#5A6B7A] mt-1">Strategy session</div>
+              <div className="text-sm text-[#5A6B7A] mt-1">Strategy session</div>
             </div>
           </button>
         </div>
