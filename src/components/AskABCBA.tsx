@@ -268,7 +268,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1B2733]">Your behaviorist team, on demand</p>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
                 {isProPlus ? '10 questions/month included with Pro+' : 'Included for 7 days after each 1:1 session · Unlimited on Pro+'}
               </p>
             </div>
@@ -276,15 +276,15 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           <div className="space-y-2">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Instant AI draft</span> — Aminy gives you an answer right away, informed by your family's context</p>
+              <p className="text-sm text-[#3A4A57]"><span className="font-medium">Instant AI draft</span> — Aminy gives you an answer right away, informed by your family's context</p>
             </div>
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — a behaviorist (RBT, BCBA-supervised) edits and signs the response, typically within 24 hours — clinical-plan questions escalate to a BCBA or a telehealth session</p>
+              <p className="text-sm text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — a behaviorist (RBT, BCBA-supervised) edits and signs the response, typically within 24 hours — clinical-plan questions escalate to a BCBA or a telehealth session</p>
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
+              <p className="text-sm text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
             </div>
           </div>
         </div>
@@ -301,7 +301,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   Behaviorist messaging is included for 7 days after each 1:1 telehealth session — or any time on Pro+ Family. Group sessions don't open the window.
                 </p>
               </div>

@@ -872,7 +872,7 @@ export function CommunityHub({
                 </Badge>
               )}
             </div>
-            <span className="text-xs text-[#5A6B7A]">{formatRelativeTime(post.createdAt)}</span>
+            <span className="text-sm text-[#5A6B7A]">{formatRelativeTime(post.createdAt)}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -904,7 +904,7 @@ export function CommunityHub({
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-xs text-[#5A6B7A] hover:text-[#6B9080] cursor-pointer">
+            <span key={tag} className="text-sm text-[#5A6B7A] hover:text-[#6B9080] cursor-pointer">
               #{tag}
             </span>
           ))}
@@ -961,7 +961,7 @@ export function CommunityHub({
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 flex items-center gap-1">
+          <span className="text-sm text-slate-400 flex items-center gap-1">
             <Eye className="w-3 h-3" />
             {post.views}
           </span>
@@ -1086,7 +1086,7 @@ export function CommunityHub({
                         <p className="font-medium text-sm text-[#1B2733] dark:text-white truncate">
                           {session.topic}
                         </p>
-                        <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
                           {session.sessionDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {' · '}
                           {session.sessionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
@@ -1095,7 +1095,7 @@ export function CommunityHub({
                           <span className="text-sm font-semibold text-[#6B9080] dark:text-teal-200">
                             ${Math.round(session.pricePerFamilyCents / 100)}/family
                           </span>
-                          <span className="text-xs text-[#5A6B7A] dark:text-slate-300">
+                          <span className="text-sm text-[#5A6B7A] dark:text-slate-300">
                             {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left
                           </span>
                         </div>
@@ -1130,7 +1130,7 @@ export function CommunityHub({
                             <p className="font-medium text-sm text-[#1B2733] dark:text-white">
                               Parents like you are in {suggestedGroup.name}
                             </p>
-                            <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                            <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
                               {suggestedGroup.memberCount.toLocaleString()} members supporting each other
                             </p>
                           </div>

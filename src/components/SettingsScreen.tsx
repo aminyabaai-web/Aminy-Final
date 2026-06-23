@@ -705,13 +705,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   <span className="text-xl">{p.emoji}</span>
                   <span className="text-sm font-semibold dark:text-white">{p.name}</span>
-                  <span className="text-xs text-muted-foreground leading-snug">{p.tagline}</span>
+                  <span className="text-sm text-muted-foreground leading-snug">{p.tagline}</span>
                 </button>
               );
             })}
           </div>
           {selectedPersonality && (
-            <p className="mt-3 text-xs text-[#5A6B7A] dark:text-slate-400 text-center">
+            <p className="mt-3 text-sm text-[#5A6B7A] dark:text-slate-400 text-center">
               {AI_PERSONALITIES[selectedPersonality].description}
             </p>
           )}
@@ -841,7 +841,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     {subscription.cancelAtPeriodEnd ? 'Cancels' : 'Renews'} {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-sm text-muted-foreground mt-0.5">
                   AI memory:{' '}
                   {subscription.tier === 'free' ? '50 facts' :
                    subscription.tier === 'core' ? '5,000 facts' :
@@ -886,7 +886,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 </span>
                 <ExternalLink aria-hidden="true" className="w-3.5 h-3.5 text-muted-foreground" />
               </Button>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Update payment method, switch plans, view invoices, or cancel
               </p>
             </div>
@@ -1028,7 +1028,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         </div>
                         <div>
                           <p className="font-medium text-[#1B2733] text-sm">AI Check-ins</p>
-                          <p className="text-xs text-muted-foreground">Proactive insights from Aminy</p>
+                          <p className="text-sm text-muted-foreground">Proactive insights from Aminy</p>
                         </div>
                       </div>
                       <Switch
