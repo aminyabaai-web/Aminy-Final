@@ -251,7 +251,7 @@ export function TelehealthSessionEngine({
                 } ${n === step ? 'w-6' : 'w-3'}`}
               />
             ))}
-            <span className="ml-2 text-xs text-slate-400">Step {step} of 3</span>
+            <span className="ml-2 text-sm text-slate-400">Step {step} of 3</span>
           </div>
         </div>
       </div>
@@ -307,7 +307,7 @@ export function TelehealthSessionEngine({
                         </div>
 
                         {/* Description */}
-                        <p className="text-xs text-[#5A6B7A] mt-1 leading-relaxed">{modality.description}</p>
+                        <p className="text-sm text-[#5A6B7A] mt-1 leading-relaxed">{modality.description}</p>
 
                         {/* Participants */}
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">

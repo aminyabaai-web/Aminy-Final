@@ -483,20 +483,20 @@ function FluencyTracker() {
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">WPM</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">WPM</label>
                 <input type="number" value={form.wpm} onChange={e => setForm(f => ({ ...f, wpm: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Stutter % </label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Stutter % </label>
                 <input type="number" step="0.5" value={form.stutter} onChange={e => setForm(f => ({ ...f, stutter: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Avoidance behaviors (comma-separated)</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Avoidance behaviors (comma-separated)</label>
               <input value={form.avoidance} onChange={e => setForm(f => ({ ...f, avoidance: e.target.value }))} placeholder="word substitution, circumlocution..." className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Notes</label>
               <input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <button onClick={addEntry} disabled={!form.wpm} className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Save</button>
@@ -644,7 +644,7 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
           )}
           <div>
             <h1 className="text-lg font-bold text-[#1B2733]">SLP Clinical Tools</h1>
-            <p className="text-xs text-[#5A6B7A]">Speech-Language Pathology</p>
+            <p className="text-sm text-[#5A6B7A]">Speech-Language Pathology</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">
             CCC-SLP
