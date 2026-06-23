@@ -243,7 +243,7 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
           ))}
         </div>
 
-        <p className="text-xs text-slate-400 text-center mt-4">
+        <p className="text-sm text-slate-400 text-center mt-4">
           Package discounts stack with your membership discount
         </p>
 
@@ -286,7 +286,7 @@ function SavingsBanner({ tier, category }: SavingsBannerProps) {
         <p className="text-sm font-semibold text-[#6B9080]">
           As a {getTierLabel(tier)} member, you save ${savings.monthlySavings.toFixed(2)}/month
         </p>
-        <p className="text-xs text-[#6B9080] mt-0.5">
+        <p className="text-sm text-[#6B9080] mt-0.5">
           Based on {savings.sessionsPerMonth} sessions of {primaryService.name} per month.
           That is ${savings.annualSavings.toFixed(2)} saved per year.
         </p>
@@ -317,7 +317,7 @@ function TierSelector({ tier, onSelect }: TierSelectorProps) {
         >
           <div>{getTierLabel(m.tier)}</div>
           {m.monthlyPrice > 0 && (
-            <div className="text-xs text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
+            <div className="text-sm text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
           )}
         </button>
       ))}
@@ -359,7 +359,7 @@ export default function CashPayPricing({
         <p className="text-sm text-[#5A6B7A] mt-1">
           No insurance needed. No surprise bills. Just clear, honest pricing for your family.
         </p>
-        <p className="text-xs text-[#6B9080] mt-2 font-medium">
+        <p className="text-sm text-[#6B9080] mt-2 font-medium">
           All prices include telehealth platform, Ease activities, and superbill for out-of-network reimbursement.
         </p>
       </div>

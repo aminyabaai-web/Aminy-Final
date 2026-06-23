@@ -218,11 +218,11 @@ function RosterView({
                   <span className="font-semibold text-sm text-[#1B2733] truncate">{rbt.name}</span>
                   <span className={`w-2 h-2 rounded-full ${statusColor}`} />
                 </div>
-                <div className="text-xs text-[#5A6B7A]">{rbt.rbtNumber}</div>
+                <div className="text-sm text-[#5A6B7A]">{rbt.rbtNumber}</div>
               </div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-[#3A4A57]">{c?.compliancePercent.toFixed(1)}%</div>
-                <div className="text-xs text-slate-400">supervision</div>
+                <div className="text-sm text-slate-400">supervision</div>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
@@ -390,7 +390,7 @@ function CalendarView({
       <div className="space-y-2 mt-4">
         <h3 className="text-xs font-semibold text-[#5A6B7A] uppercase">Sessions This Month</h3>
         {monthSessions.length === 0 && (
-          <p className="text-xs text-slate-400 text-center py-4">No sessions logged yet</p>
+          <p className="text-sm text-slate-400 text-center py-4">No sessions logged yet</p>
         )}
         {monthSessions
           .sort((a, b) => a.date.localeCompare(b.date))
@@ -407,7 +407,7 @@ function CalendarView({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-[#1B2733]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {s.date} &middot; {s.durationMinutes}min &middot; {s.type}
                   {s.includesDirectObservation && ' + observation'}
                 </div>
@@ -462,7 +462,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
   return (
     <div className="space-y-3">
       <h2 className="text-sm font-semibold text-[#3A4A57]">Competency Heatmap</h2>
-      <p className="text-xs text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
+      <p className="text-sm text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
 
       {/* Legend */}
       <div className="flex gap-1 text-xs">
@@ -527,7 +527,7 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
         <div className="text-center py-8">
           <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
           <p className="text-sm text-[#5A6B7A] font-medium">All clear</p>
-          <p className="text-xs text-slate-400">No compliance risks detected</p>
+          <p className="text-sm text-slate-400">No compliance risks detected</p>
         </div>
       )}
       {sorted.map((risk, i) => (

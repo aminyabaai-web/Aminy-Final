@@ -211,7 +211,7 @@ function AssessmentForm({
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-violet-700">{avgRating.toFixed(1)}</div>
-          <div className="text-xs text-slate-400">avg score</div>
+          <div className="text-sm text-slate-400">avg score</div>
         </div>
       </div>
 
@@ -234,7 +234,7 @@ function AssessmentForm({
                     onClick={() => setExpandedArea(isExpanded ? null : area.id)}
                     className="w-full px-3 py-2.5 flex items-center gap-2 text-left"
                   >
-                    <span className="text-xs text-slate-400 w-5">{area.id}.</span>
+                    <span className="text-sm text-slate-400 w-5">{area.id}.</span>
                     <span className="flex-1 text-sm text-[#3A4A57] truncate">{area.name}</span>
                     <span className={`text-sm font-bold ${ratingColor} w-6 text-center`}>{r.rating}</span>
                     {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
@@ -267,7 +267,7 @@ function AssessmentForm({
                               </button>
                             ))}
                           </div>
-                          <div className="text-xs text-slate-400 text-center">
+                          <div className="text-sm text-slate-400 text-center">
                             {RATING_LABELS[r.rating]}
                           </div>
                           {/* Notes */}
@@ -290,7 +290,7 @@ function AssessmentForm({
 
       {/* Overall notes */}
       <div>
-        <label className="text-xs font-semibold text-[#5A6B7A] mb-1 block">Overall Notes</label>
+        <label className="text-sm font-semibold text-[#5A6B7A] mb-1 block">Overall Notes</label>
         <textarea
           value={overallNotes}
           onChange={(e) => setOverallNotes(e.target.value)}
@@ -302,7 +302,7 @@ function AssessmentForm({
       {/* Low-area preview */}
       {Object.values(ratings).some((r) => r.rating <= 2) && (
         <div className="bg-amber-50 rounded-xl p-3 border border-amber-200">
-          <div className="flex items-center gap-1 text-xs font-semibold text-amber-700 mb-2">
+          <div className="flex items-center gap-1 text-sm font-semibold text-amber-700 mb-2">
             <AlertTriangle className="w-3.5 h-3.5" />
             Development Areas Flagged
           </div>
@@ -310,7 +310,7 @@ function AssessmentForm({
             {BACB_TASK_LIST_AREAS
               .filter((a) => ratings[a.id].rating <= 2)
               .map((a) => (
-                <div key={a.id} className="text-xs text-amber-800">
+                <div key={a.id} className="text-sm text-amber-800">
                   &bull; {a.name} (rated {ratings[a.id].rating}/5)
                 </div>
               ))}
