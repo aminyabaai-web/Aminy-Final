@@ -1981,7 +1981,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             <ChevronRight className="h-4 w-4 text-[#5A6B7A] dark:text-slate-300" />
                           </div>
                           {activity.whyToday && (
-                            <p className="mt-3 text-xs leading-5 text-[#3A4A57] dark:text-slate-300">{activity.whyToday}</p>
+                            <p className="mt-3 text-sm leading-5 text-[#3A4A57] dark:text-slate-300">{activity.whyToday}</p>
                           )}
                         </button>
                       ))}
@@ -2113,7 +2113,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       {!useTextInput && (
                         <button
                           onClick={() => setUseTextInput(true)}
-                          className="mt-2 block mx-auto px-4 py-1.5 bg-amber-500 text-white rounded-lg text-xs font-medium hover:bg-amber-600 transition-colors"
+                          className="mt-2 block mx-auto px-4 py-1.5 bg-amber-500 text-white rounded-lg text-sm font-medium hover:bg-amber-600 transition-colors"
                         >
                           Switch to Text Input
                         </button>
@@ -2126,7 +2126,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     <div className="mb-3 flex justify-end">
                       <button
                         onClick={() => setUseTextInput(!useTextInput)}
-                        className="text-xs text-[#5A6B7A] hover:text-[#3A4A57] dark:text-slate-300 dark:hover:text-slate-200 flex items-center gap-1"
+                        className="text-sm text-[#5A6B7A] hover:text-[#3A4A57] dark:text-slate-300 dark:hover:text-slate-200 flex items-center gap-1"
                       >
                         {useTextInput ? <Mic className="w-3 h-3" /> : <MessageSquare className="w-3 h-3" />}
                         {useTextInput ? 'Switch to Voice' : 'Use Text Input'}
