@@ -351,19 +351,19 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">47%</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">fewer meltdowns in 30 days</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">fewer meltdowns in 30 days</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">89%</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">parents feel more confident</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">parents feel more confident</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">24/7</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">AI coach on call</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">AI coach on call</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">HSA/FSA</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">eligible with receipt</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">eligible with receipt</p>
           </div>
         </div>
 
@@ -399,9 +399,9 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="border-t border-[#E8E4DF] pt-2">
-                <p className="text-xs font-semibold text-[#1B2733]">{t.name}</p>
-                <p className="text-xs text-[#5A6B7A]">{t.role}</p>
-                <p className="text-xs text-[#43AA8B] font-medium mt-1">✓ {t.outcome}</p>
+                <p className="text-sm font-semibold text-[#1B2733]">{t.name}</p>
+                <p className="text-sm text-[#5A6B7A]">{t.role}</p>
+                <p className="text-sm text-[#43AA8B] font-medium mt-1">✓ {t.outcome}</p>
               </div>
             </div>
           ))}
@@ -414,7 +414,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#1B2733]">Give a month, get a month</p>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Refer a friend — you both get Core free for 30 days when they join.
             </p>
           </div>
@@ -546,7 +546,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                         </div>
                       ))}
                       {features.length > 4 && (
-                        <p className="text-xs text-[#8A9BA8] pl-6">
+                        <p className="text-sm text-[#8A9BA8] pl-6">
                           +{features.length - 4} more features
                         </p>
                       )}

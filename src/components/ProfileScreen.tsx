@@ -748,7 +748,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     Email
                   </Label>
                   <p className="font-medium dark:text-white">{profile.email}</p>
-                  <p className="text-xs text-muted-foreground">Email cannot be changed here</p>
+                  <p className="text-sm text-muted-foreground">Email cannot be changed here</p>
                 </div>
 
                 <div>
@@ -1023,7 +1023,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                         <p className="text-sm text-muted-foreground">
                           {[session.browser, session.location].filter(Boolean).join(' • ')}
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           Last active: {new Date(session.lastActive).toLocaleString()}
                         </p>
                       </div>
@@ -1152,7 +1152,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             {/* Diagnoses */}
             <div>
               <Label>Diagnosis (optional)</Label>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 Select all that apply
               </p>
               <div className="flex flex-wrap gap-2">
@@ -1196,7 +1196,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             {/* Concerns */}
             <div>
               <Label>Main Concerns (optional)</Label>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 What are your biggest challenges?
               </p>
               <div className="flex flex-wrap gap-2">

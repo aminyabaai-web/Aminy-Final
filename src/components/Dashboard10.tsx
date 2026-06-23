@@ -1069,7 +1069,7 @@ export function Dashboard10({
                   </span>
                   <div className="text-left">
                     <div className="text-sm font-medium text-[#1B2733] dark:text-slate-100">{event.title}</div>
-                    <div className="text-xs text-[#5A6B7A] dark:text-slate-300">{event.time}</div>
+                    <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{event.time}</div>
                   </div>
                 </button>
               ))
@@ -1129,7 +1129,7 @@ export function Dashboard10({
                 <p className="text-sm font-semibold text-violet-800 dark:text-violet-200">
                   {pendingReviews.length === 1 ? 'Session summary ready for review' : `${pendingReviews.length} session summaries to review`}
                 </p>
-                <p className="text-xs text-violet-600 dark:text-violet-400">
+                <p className="text-sm text-violet-600 dark:text-violet-400">
                   Your provider shared notes from {pendingReviews[0].childName}'s session
                 </p>
               </div>
