@@ -780,13 +780,13 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
-                        <p className="text-xs text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
+                        <p className="text-sm text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
                       </div>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${job.reconciliationState === 'healthy' ? 'bg-emerald-50 text-emerald-700' : job.reconciliationState === 'retry_required' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
                         {job.reconciliationState === 'healthy' ? 'Healthy' : job.reconciliationState === 'retry_required' ? 'Retry required' : 'Attention needed'}
                       </span>
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#5A6B7A]">
+                    <div className="mt-2 flex flex-wrap gap-3 text-sm text-[#5A6B7A]">
                       <span>{job.recordsProcessed} processed</span>
                       <span>{job.recordsFailed} failed</span>
                       <span>{job.lastAttemptAt ? `${timeAgo(job.lastAttemptAt)} last attempt` : 'No completed attempt yet'}</span>
@@ -852,7 +852,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               <button
                 onClick={handleRetryAll}
                 disabled={bulkRetrying}
-                className="flex min-h-11 items-center gap-1.5 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
+                className="flex min-h-11 items-center gap-1.5 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
               >
                 {bulkRetrying ? (
                   <Loader2 size={12} className="animate-spin" />
@@ -868,7 +868,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="text-center py-8">
               <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
               <p className="text-sm text-[#5A6B7A]">No sync errors</p>
-              <p className="text-xs text-[#8A9BA8] mt-1">
+              <p className="text-sm text-[#8A9BA8] mt-1">
                 All data is syncing successfully
               </p>
             </div>
@@ -896,25 +896,25 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 <p className="text-sm font-bold text-green-700">
                   {history.successCount}
                 </p>
-                <p className="text-xs text-green-600">Success</p>
+                <p className="text-sm text-green-600">Success</p>
               </div>
               <div className="text-center bg-red-50 rounded-lg p-2">
                 <p className="text-sm font-bold text-red-700">
                   {history.errorCount}
                 </p>
-                <p className="text-xs text-red-600">Errors</p>
+                <p className="text-sm text-red-600">Errors</p>
               </div>
               <div className="text-center bg-amber-50 rounded-lg p-2">
                 <p className="text-sm font-bold text-amber-700">
                   {history.partialCount}
                 </p>
-                <p className="text-xs text-amber-600">Partial</p>
+                <p className="text-sm text-amber-600">Partial</p>
               </div>
               <div className="text-center bg-[#FAF7F2] rounded-lg p-2">
                 <p className="text-sm font-bold text-[#3A4A57]">
                   {formatDuration(history.avgDurationMs)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Avg Time</p>
+                <p className="text-sm text-[#5A6B7A]">Avg Time</p>
               </div>
             </div>
           )}

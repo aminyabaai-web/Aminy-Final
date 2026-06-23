@@ -1063,7 +1063,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                 </div>
                                 <div>
                                   <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} unsigned note{unsignedNoteCount > 1 ? 's' : ''}</p>
-                                  <p className="text-xs text-[#5A6B7A]">Sign to submit for billing</p>
+                                  <p className="text-sm text-[#5A6B7A]">Sign to submit for billing</p>
                                 </div>
                               </div>
                             </button>
@@ -1080,8 +1080,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium text-[#1B2733]">Family Q awaiting review</p>
-                                  <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
-                                  {thread.child_name && <p className="text-xs text-[#5A6B7A]">Re: {thread.child_name}</p>}
+                                  <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
+                                  {thread.child_name && <p className="text-sm text-[#5A6B7A]">Re: {thread.child_name}</p>}
                                 </div>
                               </div>
                             </button>
@@ -1092,7 +1092,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     {notificationCount > 0 && (
                       <div className="p-3 border-t border-[#E8E4DF]">
                         <button
-                          className="w-full text-center text-xs text-[#6B9080] font-medium"
+                          className="w-full text-center text-sm text-[#6B9080] font-medium"
                           onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
                         >
                           View all pending reviews →
@@ -1421,7 +1421,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} note{unsignedNoteCount > 1 ? 's' : ''} need your signature</p>
-                        <p className="text-xs text-[#5A6B7A]">Sign to unlock billing & share with families</p>
+                        <p className="text-sm text-[#5A6B7A]">Sign to unlock billing & share with families</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                     </button>
@@ -1439,7 +1439,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <p className="text-sm font-medium text-[#1B2733]">
                           {thread.child_name ? `${thread.child_name}'s family` : thread.parent_name || 'Family'} has a question
                         </p>
-                        <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
+                        <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                     </button>
@@ -1513,15 +1513,15 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <div className="grid grid-cols-3 gap-3 p-4 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[#1B2733]">{pendingIntake.length}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Pending first session</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Pending first session</p>
                   </div>
                   <div className="text-center border-x border-[#E8E4DF]">
                     <p className="text-2xl font-bold text-[#1B2733]">{avgDays !== null ? `${avgDays}d` : '—'}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
                   </div>
                   <div className="text-center">
                     <p className={`text-2xl font-bold ${atRisk.length > 0 ? 'text-amber-600' : 'text-green-600'}`}>{atRisk.length}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Drop-off risk (&gt;48h)</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Drop-off risk (&gt;48h)</p>
                   </div>
                 </div>
               );
@@ -2020,7 +2020,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     onChange={e => setBrandingForm(prev => ({ ...prev, logoUrl: e.target.value }))}
                     placeholder="https://yoursite.com/logo.png"
                   />
-                  <p className="text-xs text-neutral-400 mt-1">Square image recommended (128×128 or larger)</p>
+                  <p className="text-sm text-neutral-400 mt-1">Square image recommended (128×128 or larger)</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1">Brand Color</label>
@@ -2070,7 +2070,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 {branding?.orgName && (
                   <div className="mt-3 p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-2">Preview:</p>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">Preview:</p>
                     <div className="flex items-center gap-2">
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
@@ -2303,7 +2303,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/40 rounded-lg">
                         <div className="flex items-start gap-2">
                           <Sparkles className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                          <div className="text-xs">
+                          <div className="text-sm">
                             <p className="font-semibold text-amber-800 dark:text-amber-300">{cpt.code} — {cpt.description}</p>
                             <p className="text-amber-700 dark:text-amber-400 mt-1">{cpt.billingTip}</p>
                             <p className="text-amber-600 dark:text-amber-500 mt-1">Duration: {cpt.typicalDuration} • Modifiers: {cpt.commonModifiers.join(', ') || 'none'}</p>
@@ -2316,7 +2316,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {/* Note Type (auto-selected by CPT, but can be overridden) */}
                   <div>
                     <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
-                      Note Template {editingNote.cptCode ? <span className="text-xs text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
+                      Note Template {editingNote.cptCode ? <span className="text-sm text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
                     </label>
                     <select
                       className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
@@ -2357,7 +2357,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     const validation = validateNoteForCPT(editingNote.cptCode, editingNote.content);
                     if (validation.valid && validation.warnings.length === 0) return null;
                     return (
-                      <div className={`p-3 rounded-lg text-xs ${validation.valid ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60' : 'bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60'}`}>
+                      <div className={`p-3 rounded-lg text-sm ${validation.valid ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60' : 'bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60'}`}>
                         {!validation.valid && (
                           <p className="font-medium text-rose-700 dark:text-rose-300 mb-1">
                             <AlertCircle className="w-3.5 h-3.5 inline mr-1" />

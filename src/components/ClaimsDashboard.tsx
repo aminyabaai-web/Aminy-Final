@@ -276,7 +276,7 @@ function EmptyExpenseState() {
       <h3 className="text-sm font-semibold text-[#1B2733] mb-2">
         No expenses tracked yet
       </h3>
-      <p className="text-xs text-[#5A6B7A] max-w-[260px] mx-auto leading-relaxed">
+      <p className="text-sm text-[#5A6B7A] max-w-[260px] mx-auto leading-relaxed">
         After your first telehealth session, your superbill will appear here
         automatically. You can also generate one from the Superbill tab.
       </p>
@@ -332,19 +332,19 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
         </h3>
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-emerald-50 rounded-lg p-3">
-            <p className="text-xs text-emerald-600 font-medium">Insurance Covered</p>
+            <p className="text-sm text-emerald-600 font-medium">Insurance Covered</p>
             <p className="text-lg font-bold text-emerald-800">{formatCurrency(insurancePaid)}</p>
           </div>
           <div className="bg-orange-50 rounded-lg p-3">
-            <p className="text-xs text-orange-600 font-medium">Your Out-of-Pocket</p>
+            <p className="text-sm text-orange-600 font-medium">Your Out-of-Pocket</p>
             <p className="text-lg font-bold text-orange-800">{formatCurrency(youPaid)}</p>
           </div>
           <div className="bg-[#EEF4F8] rounded-lg p-3">
-            <p className="text-xs text-blue-600 font-medium">Pending Claims</p>
+            <p className="text-sm text-blue-600 font-medium">Pending Claims</p>
             <p className="text-lg font-bold text-[#4A6478]">{formatCurrency(pendingAmount)}</p>
           </div>
           <div className="bg-[#FAF7F2] rounded-lg p-3">
-            <p className="text-xs text-[#5A6B7A] font-medium">Total Billed</p>
+            <p className="text-sm text-[#5A6B7A] font-medium">Total Billed</p>
             <p className="text-lg font-bold text-[#1B2733]">{formatCurrency(totalCharged)}</p>
           </div>
         </div>
@@ -357,7 +357,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
             <AlertCircle className="w-4 h-4 text-red-500" />
             Denied Claims ({activeDenials.length})
           </h3>
-          <p className="text-xs text-[#5A6B7A] mb-3">
+          <p className="text-sm text-[#5A6B7A] mb-3">
             {formatCurrency(totalDeniedAmount)} in claims need attention
           </p>
 
@@ -464,14 +464,14 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                 <div className="flex items-start justify-between mb-1.5">
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-[#1B2733] truncate">{exp.service}</p>
-                    <p className="text-xs text-[#5A6B7A]">{exp.provider}</p>
+                    <p className="text-sm text-[#5A6B7A]">{exp.provider}</p>
                   </div>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ml-2 flex-shrink-0 ${statusConfig.color}`}>
                     {statusConfig.icon}
                     {statusConfig.label}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs text-[#8A9BA8]">
+                <div className="flex items-center justify-between text-sm text-[#8A9BA8]">
                   <span>{exp.date}</span>
                   <div className="flex items-center gap-3">
                     {exp.insurancePaid > 0 && (

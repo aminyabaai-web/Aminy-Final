@@ -52,6 +52,7 @@ import {
   Send,
   Stethoscope,
   Camera,
+  Download,
 } from 'lucide-react';
 import { useConversation } from '../context/ConversationContext';
 import { useAuditedAction } from '../hooks/useAuditedAction';
@@ -219,6 +220,14 @@ export function Dashboard10({
   const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(99);
   const [showWeeklyCheckIn, setShowWeeklyCheckIn] = useState(false);
   const [showBaselineAssessment, setShowBaselineAssessment] = useState(false);
+
+  // 4-week outcome trend data
+  interface TrendPoint {
+    rating: number;
+    recordedAt: string;
+  }
+  const [trendData, setTrendData] = useState<TrendPoint[]>([]);
+  const [trendLoaded, setTrendLoaded] = useState(false);
 
   // Get conversation context for sending messages
   const { messages: chatMessages, sendMessage, createConversation, setChildContext, currentConversation } = useConversation();
@@ -617,6 +626,113 @@ export function Dashboard10({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, dashboardData.isLoading]);
+
+  // Fetch last 4 weekly check-in outcome ratings for trend view
+  useEffect(() => {
+    if (!userId) return;
+    supabase
+      .from('outcome_events')
+      .select('payload, recorded_at, created_at')
+      .eq('user_id', userId)
+      .eq('event_type', 'weekly_parent_checkin')
+      .order('created_at', { ascending: false })
+      .limit(4)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          // Reverse so oldest is first (left side of trend)
+          const points = data.reverse().map((row) => ({
+            rating: (row.payload as Record<string, number>)?.goal_progress_rating ?? 0,
+            recordedAt: row.recorded_at || row.created_at || '',
+          }));
+          setTrendData(points);
+        }
+        setTrendLoaded(true);
+      })
+      .catch(() => setTrendLoaded(true));
+  }, [userId]);
+
+  // Export progress report
+  const handleExportProgress = async () => {
+    const parentName = userData.parentName || 'Parent';
+    const childName = child?.name || userData.childName || 'Your Child';
+    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    // Try the backend endpoint first
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.access_token) {
+        const resp = await fetch('/reports/generate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ userId, childId: child?.id, childName }),
+        });
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `aminy-progress-${childName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().slice(0, 10)}.html`;
+          a.click();
+          URL.revokeObjectURL(url);
+          toast.success('Progress report downloaded!');
+          return;
+        }
+      }
+    } catch {
+      // Fall through to client-side generation
+    }
+
+    // Client-side HTML generation fallback
+    const trendRows = trendData.length > 0
+      ? trendData.map((pt, i) => {
+          const weekLabel = pt.recordedAt
+            ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            : `Week ${i + 1}`;
+          const color = pt.rating >= 4 ? '#43AA8B' : pt.rating === 3 ? '#F59E0B' : '#E07A5F';
+          return `<tr><td style="padding:6px 12px;">${weekLabel}</td><td style="padding:6px 12px;"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${color};vertical-align:middle;margin-right:6px;"></span>${pt.rating}/5</td></tr>`;
+        }).join('')
+      : '<tr><td colspan="2" style="padding:6px 12px;color:#888;">No check-in data yet</td></tr>';
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Aminy Progress Report — ${childName}</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #1B2733; }
+  h1 { color: #0D1B2A; font-size: 1.5rem; margin-bottom: 4px; }
+  .subtitle { color: #5A6B7A; font-size: 0.9rem; margin-bottom: 32px; }
+  h2 { font-size: 1rem; color: #2A7D99; margin-bottom: 8px; }
+  table { border-collapse: collapse; width: 100%; }
+  th { text-align: left; padding: 6px 12px; background: #F0F4F8; color: #3A4A57; font-size: 0.85rem; }
+  td { border-bottom: 1px solid #E8E4DF; font-size: 0.9rem; }
+  .footer { margin-top: 40px; font-size: 0.75rem; color: #8A9BA8; }
+</style>
+</head>
+<body>
+<h1>Progress Report — ${childName}</h1>
+<p class="subtitle">Prepared for ${parentName} &bull; ${dateStr} &bull; Aminy Behavioral Wellness</p>
+<h2>4-Week Check-In Trend (Goal Progress Rating 1–5)</h2>
+<table>
+  <thead><tr><th>Week</th><th>Rating</th></tr></thead>
+  <tbody>${trendRows}</tbody>
+</table>
+<p class="footer">Generated by Aminy &bull; app.aminy.ai &bull; For clinical use, share with your care team.</p>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `aminy-progress-${childName.replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().slice(0, 10)}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success('Progress report downloaded!');
+  };
 
   // Quick actions
   const quickActions = [
@@ -1339,6 +1455,105 @@ export function Dashboard10({
         </AnimatePresence>
 
         {/* ========================================
+            4-WEEK OUTCOME TREND CARD
+            Mini trend view from weekly check-in data
+            ======================================== */}
+        {trendLoaded && (
+          <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">4-week trend</p>
+                {trendData.length >= 2 && (
+                  <p className="text-sm text-[#8A9BA8] dark:text-slate-400 mt-0.5">
+                    {new Date(trendData[0].recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {' – '}
+                    {new Date(trendData[trendData.length - 1].recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={handleExportProgress}
+                className="flex items-center gap-1.5 text-sm text-[#2A7D99] dark:text-teal-300 hover:text-[#1F6080] dark:hover:text-teal-200 transition-colors px-2 py-1 rounded-lg hover:bg-[#2A7D99]/8"
+                title="Export progress report"
+              >
+                <Download className="w-4 h-4" />
+                <span className="text-sm">Export</span>
+              </button>
+            </div>
+
+            {trendData.length === 0 ? (
+              <div className="flex flex-col items-center gap-2 py-3 text-center">
+                <div className="flex items-center gap-2">
+                  {[0, 1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="w-4 h-4 rounded-full bg-[#E8E4DF] dark:bg-slate-600"
+                    />
+                  ))}
+                </div>
+                <p className="text-sm text-[#8A9BA8] dark:text-slate-400">
+                  Complete your first check-in to see trends
+                </p>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {trendData.map((pt, i) => {
+                  const dotColor =
+                    pt.rating >= 4
+                      ? 'bg-[#43AA8B]'
+                      : pt.rating === 3
+                      ? 'bg-amber-400'
+                      : 'bg-[#E07A5F]';
+                  const arrow =
+                    i > 0
+                      ? trendData[i].rating > trendData[i - 1].rating
+                        ? '↑'
+                        : trendData[i].rating < trendData[i - 1].rating
+                        ? '↓'
+                        : '→'
+                      : null;
+                  const arrowColor =
+                    arrow === '↑'
+                      ? 'text-[#43AA8B]'
+                      : arrow === '↓'
+                      ? 'text-[#E07A5F]'
+                      : 'text-[#8A9BA8]';
+                  const weekLabel = pt.recordedAt
+                    ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                    : `Wk ${i + 1}`;
+                  return (
+                    <React.Fragment key={i}>
+                      {arrow && (
+                        <span className={`text-sm font-medium ${arrowColor}`}>{arrow}</span>
+                      )}
+                      <div className="flex flex-col items-center gap-1">
+                        <div
+                          className={`w-5 h-5 rounded-full ${dotColor} shadow-sm`}
+                          title={`${weekLabel}: ${pt.rating}/5`}
+                        />
+                        <span className="text-sm text-[#8A9BA8] dark:text-slate-400 whitespace-nowrap">{weekLabel}</span>
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+                {/* Pad to 4 dots if fewer results */}
+                {trendData.length < 4 && Array.from({ length: 4 - trendData.length }).map((_, i) => (
+                  <React.Fragment key={`pad-${i}`}>
+                    {(trendData.length + i) > 0 && (
+                      <span className="text-sm text-[#E8E4DF] dark:text-slate-600">→</span>
+                    )}
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="w-5 h-5 rounded-full bg-[#E8E4DF] dark:bg-slate-600" />
+                      <span className="text-sm text-[#E8E4DF] dark:text-slate-600">—</span>
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================
             3. OUTCOMES DASHBOARD - Measurable Progress
             Shows real value that makes subscription essential
             ======================================== */}
@@ -1355,6 +1570,17 @@ export function Dashboard10({
               />
             </div>
           </section>
+        )}
+
+        {/* Export progress report button — shown when there's outcome data or established usage */}
+        {(trendLoaded && (trendData.length > 0 || hasEstablishedUsage)) && (
+          <button
+            onClick={handleExportProgress}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-[#2A7D99]/30 dark:border-teal-700 bg-white dark:bg-slate-800 text-[#2A7D99] dark:text-teal-300 text-sm font-medium hover:bg-[#2A7D99]/5 dark:hover:bg-teal-900/20 transition-colors shadow-sm"
+          >
+            <Download className="w-4 h-4" />
+            Export progress report
+          </button>
         )}
 
         {/* ========================================
