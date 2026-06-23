@@ -418,7 +418,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                       ))}
                     </>
                   )}
-                  <span className="text-xs font-bold text-white">{worry.rating}</span>
+                  <span className="text-sm font-bold text-white">{worry.rating}</span>
                 </motion.button>
               ))}
             </AnimatePresence>

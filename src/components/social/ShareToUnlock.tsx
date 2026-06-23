@@ -397,28 +397,28 @@ export function ShareToUnlock({
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-green-600 mb-1" />
-                        <span className="text-xs text-[#5A6B7A]">Text</span>
+                        <span className="text-sm text-[#5A6B7A]">Text</span>
                       </button>
                       <button
                         onClick={() => handleShare('email')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <Mail className="w-5 h-5 text-blue-600 mb-1" />
-                        <span className="text-xs text-[#5A6B7A]">Email</span>
+                        <span className="text-sm text-[#5A6B7A]">Email</span>
                       </button>
                       <button
                         onClick={() => handleShare('whatsapp')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <MessageCircle className="w-5 h-5 text-emerald-600 mb-1" />
-                        <span className="text-xs text-[#5A6B7A]">WhatsApp</span>
+                        <span className="text-sm text-[#5A6B7A]">WhatsApp</span>
                       </button>
                       <button
                         onClick={() => handleShare('copy')}
                         className="flex flex-col items-center p-2.5 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                       >
                         <Copy className="w-5 h-5 text-[#5A6B7A] mb-1" />
-                        <span className="text-xs text-[#5A6B7A]">Copy</span>
+                        <span className="text-sm text-[#5A6B7A]">Copy</span>
                       </button>
                     </div>
                   </div>

@@ -165,7 +165,7 @@ function TrialRow({ trial, index }: { trial: Trial; index: number }) {
   const cfg = RESPONSE_CONFIG[trial.response];
   return (
     <div className="flex items-center gap-3 py-2 border-b border-[#E8E4DF] last:border-0">
-      <span className="text-xs text-slate-400 w-6 text-right">{index + 1}</span>
+      <span className="text-sm text-slate-400 w-6 text-right">{index + 1}</span>
       <span className={`font-bold text-sm px-2 py-0.5 rounded ${cfg.bgColor} ${cfg.color}`}>
         {cfg.shortLabel}
       </span>
@@ -252,7 +252,7 @@ function DTTMode({
             <button
               key={pl.value}
               onClick={() => onSelectPromptLevel(pl.value)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              className={`text-sm px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-[#3A4A57] border-slate-300'
@@ -373,7 +373,7 @@ function NETMode({
             <button
               key={pl.value}
               onClick={() => onSelectPromptLevel(pl.value)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              className={`text-sm px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-[#3A4A57] border-slate-300'
@@ -644,7 +644,7 @@ function BehaviorMode({
               {intervalCells.map(cell => (
                 <div
                   key={cell.intervalIndex}
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold border-2 ${
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold border-2 ${
                     cell.occurred === null
                       ? 'bg-[#F0EDE8] border-[#E8E4DF] text-slate-400'
                       : cell.occurred
@@ -1125,7 +1125,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               </div>
               <button
                 onClick={handleExport}
-                className="flex items-center gap-1 text-xs text-[#5A6B7A] hover:text-[#3A4A57] px-2 py-1 rounded-lg border border-[#E8E4DF]"
+                className="flex items-center gap-1 text-sm text-[#5A6B7A] hover:text-[#3A4A57] px-2 py-1 rounded-lg border border-[#E8E4DF]"
               >
                 <Download className="w-3.5 h-3.5" />
                 Export
@@ -1201,23 +1201,23 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <div>
                     <p className="text-2xl font-bold text-white">{sessionSummary.total}</p>
-                    <p className="text-xs text-slate-400">Trials</p>
+                    <p className="text-sm text-slate-400">Trials</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-emerald-500">{sessionSummary.correct}</p>
-                    <p className="text-xs text-slate-400">Correct</p>
+                    <p className="text-sm text-slate-400">Correct</p>
                   </div>
                   <div>
                     <p className={`text-2xl font-bold ${sessionSummary.pct >= MASTERY_THRESHOLD ? 'text-green-400' : 'text-white'}`}>
                       {sessionSummary.pct}%
                     </p>
-                    <p className="text-xs text-slate-400">% Correct</p>
+                    <p className="text-sm text-slate-400">% Correct</p>
                   </div>
                 </div>
                 {sessionSummary.pct >= MASTERY_THRESHOLD && (
                   <div className="mt-3 bg-green-900/30 rounded-lg p-2 flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-green-400" />
-                    <p className="text-xs text-green-300">
+                    <p className="text-sm text-green-300">
                       Mastery threshold met — verify across {MASTERY_CONSECUTIVE_SESSIONS} sessions
                     </p>
                   </div>
@@ -1255,7 +1255,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               </button>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-400 justify-center pb-4">
+            <div className="flex items-center gap-2 text-sm text-slate-400 justify-center pb-4">
               <Timer className="w-3.5 h-3.5" />
               Session started {new Date(startTime).toLocaleTimeString()} · {formatSeconds(elapsedSeconds)} elapsed
             </div>

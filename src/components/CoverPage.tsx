@@ -207,7 +207,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
           <div className="text-center text-sm text-[#5A6B7A]">
             <p className="mb-2">Designed for viral growth and user delight</p>
             <p>Built with React, TypeScript, and Tailwind CSS</p>
-            <p className="mt-4 text-xs text-[#8A9BA8]">
+            <p className="mt-4 text-sm text-[#8A9BA8]">
               © {new Date().getFullYear()} Aminy, LLC All rights reserved.
             </p>
           </div>

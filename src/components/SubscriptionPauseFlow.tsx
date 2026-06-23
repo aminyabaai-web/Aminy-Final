@@ -167,7 +167,7 @@ export function SubscriptionPauseFlow({
         {error && (
           <div className="flex items-start gap-2 p-3 bg-red-50 rounded-lg">
             <AlertTriangle size={14} className="text-red-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-red-700">{error}</p>
+            <p className="text-sm text-red-700">{error}</p>
           </div>
         )}
 
@@ -209,11 +209,11 @@ export function SubscriptionPauseFlow({
                       </div>
                       <div className="text-left">
                         <p className="text-sm font-medium text-[#1B2733]">{opt.label}</p>
-                        <p className="text-xs text-[#5A6B7A]">{opt.description}</p>
+                        <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-[#8A9BA8]">
+                      <p className="text-sm text-[#8A9BA8]">
                         Resumes {resumeDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
                     </div>
@@ -240,7 +240,7 @@ export function SubscriptionPauseFlow({
                   <p className="text-sm font-medium text-amber-800">
                     Confirm Pause for {selectedDuration} {selectedDuration === 1 ? 'Month' : 'Months'}
                   </p>
-                  <ul className="text-xs text-amber-700 mt-1.5 space-y-1 list-disc list-inside">
+                  <ul className="text-sm text-amber-700 mt-1.5 space-y-1 list-disc list-inside">
                     <li>Billing will stop during the pause</li>
                     <li>Premium features will be unavailable</li>
                     <li>Your data and settings will be preserved</li>
@@ -281,12 +281,12 @@ export function SubscriptionPauseFlow({
                 <p className="text-sm font-semibold text-amber-800">
                   Your subscription is paused
                 </p>
-                <p className="text-xs text-amber-600 mt-1">
+                <p className="text-sm text-amber-600 mt-1">
                   No charges during pause. Premium features are unavailable.
                 </p>
               </div>
               <div className="bg-white rounded-lg p-3 space-y-1.5">
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-[#5A6B7A]">
                     <Calendar size={12} />
                     Resumes on
@@ -295,7 +295,7 @@ export function SubscriptionPauseFlow({
                     {formatResumeDate(pauseStatus.resumeDate)}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-1.5 text-[#5A6B7A]">
                     <Clock size={12} />
                     Days remaining
@@ -334,7 +334,7 @@ export function SubscriptionPauseFlow({
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1B2733]">Subscription Resumed!</p>
-              <p className="text-xs text-[#5A6B7A] mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 Your premium features are now active again.
               </p>
             </div>

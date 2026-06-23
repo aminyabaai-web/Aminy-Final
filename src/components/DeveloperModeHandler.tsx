@@ -128,35 +128,35 @@ export function DeveloperModeHandler({ onNavigate, onTierChange }: DeveloperMode
         
         <div className="p-4 pt-3 border-t bg-[#FAF7F2] space-y-2 shrink-0">
           <div className="p-2 bg-white border rounded-lg">
-            <h4 className="text-xs font-semibold mb-1.5">Keyboard Shortcuts</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-1 text-xs">
+            <h4 className="text-sm font-semibold mb-1.5">Keyboard Shortcuts</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-1 text-sm">
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-[#F0EDE8] rounded text-xs">Shift+D</kbd>
-                <span className="text-muted-foreground text-xs">Toggle</span>
+                <span className="text-muted-foreground text-sm">Toggle</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-[#F0EDE8] rounded text-xs">Shift+H</kbd>
-                <span className="text-muted-foreground text-xs">Home</span>
+                <span className="text-muted-foreground text-sm">Home</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-[#F0EDE8] rounded text-xs">Shift+C</kbd>
-                <span className="text-muted-foreground text-xs">Care</span>
+                <span className="text-muted-foreground text-sm">Care</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-[#F0EDE8] rounded text-xs">Shift+R</kbd>
-                <span className="text-muted-foreground text-xs">Reports</span>
+                <span className="text-muted-foreground text-sm">Reports</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-purple-100 rounded text-xs">Shift+2</kbd>
-                <span className="text-muted-foreground text-xs">Phase 2</span>
+                <span className="text-muted-foreground text-sm">Phase 2</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-purple-100 rounded text-xs">Shift+P</kbd>
-                <span className="text-muted-foreground text-xs">BCBA</span>
+                <span className="text-muted-foreground text-sm">BCBA</span>
               </div>
               <div className="flex items-center justify-between">
                 <kbd className="px-1.5 py-0.5 bg-purple-100 rounded text-xs">Shift+A</kbd>
-                <span className="text-muted-foreground text-xs">Analytics</span>
+                <span className="text-muted-foreground text-sm">Analytics</span>
               </div>
             </div>
           </div>

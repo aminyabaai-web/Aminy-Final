@@ -343,8 +343,8 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
           </div>
           <div>
             <h3 className="text-sm font-bold text-[#1B2733]">{achievement.title}</h3>
-            <p className="text-xs text-[#5A6B7A]">{achievement.description}</p>
-            <p className="mt-1 text-xs text-[#8A9BA8]">
+            <p className="text-sm text-[#5A6B7A]">{achievement.description}</p>
+            <p className="mt-1 text-sm text-[#8A9BA8]">
               Earned {new Date(achievement.earnedAt).toLocaleDateString()}
             </p>
           </div>
@@ -352,7 +352,7 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
         {achievement.shareable && (
           <button
             onClick={() => onShare(achievement)}
-            className="flex items-center gap-1 rounded-lg bg-amber-200 px-2.5 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-300"
+            className="flex items-center gap-1 rounded-lg bg-amber-200 px-2.5 py-1.5 text-sm font-semibold text-amber-800 hover:bg-amber-300"
           >
             <Share2 className="h-3.5 w-3.5" />
             Share
@@ -409,15 +409,15 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                   {typeIcons[challenge.type]}
                   <span className="text-xs font-medium text-[#5A6B7A] uppercase">{challenge.type}</span>
                 </div>
-                <span className="text-xs text-[#8A9BA8]">{daysLeft}d left</span>
+                <span className="text-sm text-[#8A9BA8]">{daysLeft}d left</span>
               </div>
 
               <h3 className="text-sm font-bold text-[#1B2733]">{challenge.title}</h3>
-              <p className="mt-1 text-xs text-[#5A6B7A]">{challenge.description}</p>
+              <p className="mt-1 text-sm text-[#5A6B7A]">{challenge.description}</p>
 
               {/* Progress Bar */}
               <div className="mt-3">
-                <div className="flex items-center justify-between text-xs text-[#5A6B7A] mb-1">
+                <div className="flex items-center justify-between text-sm text-[#5A6B7A] mb-1">
                   <span>{challenge.progress}/{challenge.goal}</span>
                   <span>{progressPct}%</span>
                 </div>
@@ -432,12 +432,12 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
               </div>
 
               <div className="mt-3 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A]">
+                <div className="flex items-center gap-1.5 text-sm text-[#5A6B7A]">
                   <Users className="h-3.5 w-3.5" />
                   <span>{challenge.participants} participants</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="flex items-center gap-1 text-xs text-amber-600">
+                  <span className="flex items-center gap-1 text-sm text-amber-600">
                     <Gift className="h-3.5 w-3.5" />
                     {challenge.reward}
                   </span>
@@ -484,7 +484,7 @@ export function ShareGateOverlay({ gate, onShare }: ShareGateProps) {
     <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#6B9080]/30 bg-[#6B9080]/10/50 p-6 text-center">
       <Heart className="h-10 w-10 text-primary mb-3" />
       <h3 className="text-sm font-bold text-[#1B2733]">{gate.feature}</h3>
-      <p className="mt-1 text-xs text-[#5A6B7A]">{gate.description}</p>
+      <p className="mt-1 text-sm text-[#5A6B7A]">{gate.description}</p>
       <button
         onClick={onShare}
         className="mt-4 flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#6B9080]"

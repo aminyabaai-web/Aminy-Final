@@ -371,7 +371,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               onChange={e => { setIntensity(Number(e.target.value)); haptic(10); }}
               className="w-full accent-amber-500"
             />
-            <div className="flex justify-between text-xs text-slate-400 px-1">
+            <div className="flex justify-between text-sm text-slate-400 px-1">
               <span>Tiny</span>
               <span>HUGE</span>
             </div>

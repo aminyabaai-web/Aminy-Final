@@ -175,7 +175,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                         ${displayPrice}
                       </div>
                       {isProUser && (
-                        <div className="text-xs text-[#8A9BA8] line-through">
+                        <div className="text-sm text-[#8A9BA8] line-through">
                           ${session.price}
                         </div>
                       )}
@@ -186,7 +186,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                     {session.description}
                   </p>
 
-                  <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+                  <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                     <Check className="w-3 h-3 text-green-500" />
                     <span>Best for: {session.bestFor}</span>
                   </div>
@@ -214,7 +214,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
 
       {/* Trust Badge */}
       <div className="text-center pt-4 border-t border-[#E8E4DF]">
-        <div className="flex items-center justify-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
+        <div className="flex items-center justify-center gap-3 sm:gap-4 text-sm text-[#5A6B7A]">
           <span className="flex items-center gap-1">
             <Check className="w-3 h-3 text-green-500" />
             BHCOE Accredited
@@ -231,7 +231,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
       </div>
 
       {/* Legal Disclaimers */}
-      <div className="text-xs text-[#8A9BA8] text-center space-y-2 pt-2">
+      <div className="text-sm text-[#8A9BA8] text-center space-y-2 pt-2">
         <p>
           Cash-pay sessions are parent coaching and wellness support, not medical treatment or therapy.
           Sessions are conducted by independently licensed providers via encrypted, secure video.

@@ -2503,21 +2503,21 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <p className="text-sm opacity-70 mb-2 line-clamp-2">{activity.description}</p>
 
                       <div className="flex flex-wrap gap-1">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-sm">
                           Level {activity.level}
                         </Badge>
                         {activity.regulationFriendly && (
-                          <Badge variant="outline" className="text-xs bg-green-50">
+                          <Badge variant="outline" className="text-sm bg-green-50">
                             Calm-friendly
                           </Badge>
                         )}
                         {activity.prosodyFocus && (
-                          <Badge variant="outline" className="text-xs bg-[#2A7D99]/10 text-[#2A7D99]">
+                          <Badge variant="outline" className="text-sm bg-[#2A7D99]/10 text-[#2A7D99]">
                             Prosody
                           </Badge>
                         )}
                         {activity.multilingual && (
-                          <Badge variant="outline" className="text-xs bg-purple-50">
+                          <Badge variant="outline" className="text-sm bg-purple-50">
                             Multilingual
                           </Badge>
                         )}

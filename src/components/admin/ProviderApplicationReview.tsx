@@ -219,7 +219,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.pending}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Pending</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Pending</p>
             </div>
           </div>
         </Card>
@@ -230,7 +230,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.underReview}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Under Review</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Under Review</p>
             </div>
           </div>
         </Card>
@@ -241,7 +241,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.approved}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Approved</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Approved</p>
             </div>
           </div>
         </Card>
@@ -252,7 +252,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.rejected}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Rejected</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Rejected</p>
             </div>
           </div>
         </Card>
@@ -345,7 +345,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                           : 'bg-red-100 text-red-700'
                       }`}>
                         <Sparkles className="w-3 h-3" />
-                        <span className="text-xs font-medium">
+                        <span className="text-sm font-medium">
                           {Math.round(app.ai_verification_result.confidence_score * 100)}% confidence
                         </span>
                       </div>

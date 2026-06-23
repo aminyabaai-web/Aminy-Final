@@ -179,7 +179,7 @@ export function UpgradeNudge({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <p className="font-medium text-[#1B2733]">AI Memory</p>
-                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">Core+</Badge>
+                <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">Core+</Badge>
               </div>
               <p className="text-sm text-[#5A6B7A]">
                 Upgrade and Aminy stores up to 5,000 facts about your family — triggers, what strategies work, milestones, and more. Pro stores 15,000; Pro+ Family stores everything, forever.

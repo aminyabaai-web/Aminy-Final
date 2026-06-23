@@ -190,7 +190,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                 )}
               </div>
               <span
-                className={`text-xs font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
+                className={`text-sm font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
                 style={active ? { color: EMERALD } : undefined}
               >
                 {step.label}
@@ -623,7 +623,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
             {usingSampleProviders && providers.length > 0 && (
               <div
-                className="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium"
+                className="flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium"
                 style={{ backgroundColor: '#FEF9C3', borderColor: '#FDE68A', color: '#92400E' }}
               >
                 <span
@@ -684,7 +684,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   {isSel && (
                     <div className="mt-3 pt-3 border-t border-emerald-500/20">
                       <span
-                        className="text-xs font-semibold flex items-center gap-1"
+                        className="text-sm font-semibold flex items-center gap-1"
                         style={{ color: EMERALD }}
                       >
                         <CheckCircle className="w-3 h-3" />

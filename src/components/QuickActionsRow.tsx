@@ -41,7 +41,7 @@ export function QuickActionsRow({
               className="flex flex-col items-center gap-1 h-auto py-2 min-h-[44px]"
             >
               <Icon className="w-4 h-4" />
-              <span className="text-xs">{action.label}</span>
+              <span className="text-sm">{action.label}</span>
             </Button>
           );
         })}

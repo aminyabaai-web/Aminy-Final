@@ -274,9 +274,9 @@ export function ShareInsight({
                 <div className="flex items-center justify-between pt-4 border-t border-white/20">
                   <div className="flex items-center gap-2">
                     <Heart className="w-4 h-4 text-pink-300" />
-                    <span className="text-xs text-white/70">Shared with love</span>
+                    <span className="text-sm text-white/70">Shared with love</span>
                   </div>
-                  <span className="text-xs font-medium">aminy.ai</span>
+                  <span className="text-sm font-medium">aminy.ai</span>
                 </div>
               </div>
 
@@ -291,28 +291,28 @@ export function ShareInsight({
                     className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
                   >
                     {copied ? <Check className="w-6 h-6 text-green-500" /> : <Copy className="w-6 h-6 text-[#5A6B7A]" />}
-                    <span className="text-xs text-[#5A6B7A]">{copied ? 'Copied!' : 'Copy'}</span>
+                    <span className="text-sm text-[#5A6B7A]">{copied ? 'Copied!' : 'Copy'}</span>
                   </button>
                   <button
                     onClick={handleTwitterShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
                   >
                     <X className="w-6 h-6 text-[#1B2733]" />
-                    <span className="text-xs text-[#5A6B7A]">X</span>
+                    <span className="text-sm text-[#5A6B7A]">X</span>
                   </button>
                   <button
                     onClick={handleWhatsAppShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
                   >
                     <MessageCircle className="w-6 h-6 text-green-500" />
-                    <span className="text-xs text-[#5A6B7A]">WhatsApp</span>
+                    <span className="text-sm text-[#5A6B7A]">WhatsApp</span>
                   </button>
                   <button
                     onClick={handleFacebookShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
                   >
                     <Share2 className="w-6 h-6 text-blue-600" />
-                    <span className="text-xs text-[#5A6B7A]">Facebook</span>
+                    <span className="text-sm text-[#5A6B7A]">Facebook</span>
                   </button>
                 </div>
 

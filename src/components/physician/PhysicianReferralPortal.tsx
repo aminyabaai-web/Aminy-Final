@@ -231,7 +231,7 @@ function TextField({
         placeholder={placeholder}
         className="w-full rounded-xl border border-[#E8E4DF] px-4 py-3 text-sm text-[#1B2733] focus:border-[#6B9080] focus:outline-none"
       />
-      {hint && <p className="mt-1 text-xs text-[#5A6B7A]">{hint}</p>}
+      {hint && <p className="mt-1 text-sm text-[#5A6B7A]">{hint}</p>}
     </div>
   );
 }
@@ -597,7 +597,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
           </div>
         </div>
 
-        <p className="text-center text-xs text-[#8A9BA8] pb-4">
+        <p className="text-center text-sm text-[#8A9BA8] pb-4">
           Questions? Contact <a href="mailto:providers@aminy.com" className="underline">providers@aminy.com</a>
         </p>
       </div>

@@ -256,7 +256,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
                 <p className="text-sm font-medium text-[#1B2733] mb-1">
                   Reassuring & Expert, Non-Bureaucratic
                 </p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   I'll walk you through this step-by-step. No complicated insurance jargon — just clear answers.
                 </p>
               </div>
@@ -277,7 +277,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
                 {currentStep === 'needs' && 'Step 4 of 4: Support Needs'}
                 {currentStep === 'confirmation' && 'Review & Confirm'}
               </span>
-              <span className="text-xs text-[#5A6B7A]">
+              <span className="text-sm text-[#5A6B7A]">
                 {currentStep === 'provider' && '25%'}
                 {currentStep === 'plan-type' && '50%'}
                 {currentStep === 'state' && '75%'}
@@ -438,7 +438,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
               <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm font-medium text-blue-900 mb-2">ABA Benefits Explained Simply</p>
-                <p className="text-xs text-blue-700 leading-relaxed">
+                <p className="text-sm text-blue-700 leading-relaxed">
                   Applied Behavior Analysis (ABA) is a proven approach for helping children with developmental needs. 
                   Most insurance plans cover ABA when it's medically necessary. Your state may have additional protections 
                   that require coverage.

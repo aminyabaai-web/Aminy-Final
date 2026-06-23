@@ -102,7 +102,7 @@ export default function ToggleSwitches({ onBack, onComplete }: FidgetProps) {
       <div className="flex-1 flex flex-col items-center justify-center gap-8 px-6">
         {/* Row 1: iOS toggles */}
         <div>
-          <p className="text-xs font-semibold text-center mb-3" style={{ color: '#888' }}>SLIDE</p>
+          <p className="text-sm font-semibold text-center mb-3" style={{ color: '#888' }}>SLIDE</p>
           <div className="flex gap-4">
             {IOS_COLORS.map((color, i) => {
               const on = states[i];
@@ -134,7 +134,7 @@ export default function ToggleSwitches({ onBack, onComplete }: FidgetProps) {
 
         {/* Row 2: Slider bars */}
         <div>
-          <p className="text-xs font-semibold text-center mb-3" style={{ color: '#888' }}>DRAG</p>
+          <p className="text-sm font-semibold text-center mb-3" style={{ color: '#888' }}>DRAG</p>
           <div className="flex gap-4">
             {SLIDER_COLORS.map((color, i) => {
               const idx = 4 + i;
@@ -171,7 +171,7 @@ export default function ToggleSwitches({ onBack, onComplete }: FidgetProps) {
 
         {/* Row 3: Rocker switches */}
         <div>
-          <p className="text-xs font-semibold text-center mb-3" style={{ color: '#888' }}>CLICK</p>
+          <p className="text-sm font-semibold text-center mb-3" style={{ color: '#888' }}>CLICK</p>
           <div className="flex gap-4">
             {ROCKER_COLORS.map((color, i) => {
               const idx = 8 + i;

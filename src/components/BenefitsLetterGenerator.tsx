@@ -138,7 +138,7 @@ export function BenefitsLetterGenerator({ onGenerate, userState = '', childName 
         </div>
 
         <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-          <p className="text-xs text-amber-800">
+          <p className="text-sm text-amber-800">
             <strong>Tip:</strong> Review the letter carefully and personalize it with specific details about your child's needs. Consider having your child's provider co-sign the letter for added weight.
           </p>
         </div>
@@ -246,7 +246,7 @@ export function BenefitsLetterGenerator({ onGenerate, userState = '', childName 
       </Button>
 
       {userState && (
-        <p className="text-xs text-center text-muted-foreground">
+        <p className="text-sm text-center text-muted-foreground">
           Will include {userState} state-specific legal citations and mandates
         </p>
       )}

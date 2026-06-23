@@ -416,7 +416,7 @@ export default function TransitionRoutine({
               }}
             >
               <span className="text-2xl">{r === 'great' ? '😊' : r === 'ok' ? '😐' : '😤'}</span>
-              <span className="text-white text-xs font-semibold capitalize">{r}</span>
+              <span className="text-white text-sm font-semibold capitalize">{r}</span>
             </motion.button>
           ))}
         </div>
@@ -588,7 +588,7 @@ export default function TransitionRoutine({
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-white text-4xl font-bold font-mono">{formatTime(remaining)}</span>
-          <span className="text-white/40 text-xs mt-1">remaining</span>
+          <span className="text-white/40 text-sm mt-1">remaining</span>
         </div>
         {/* Pulsing glow when urgent */}
         {warningLevel === 'high' && (
@@ -659,7 +659,7 @@ export default function TransitionRoutine({
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowSoundPicker(p => !p)}
-        className="flex items-center gap-2 text-white/50 text-xs mb-3"
+        className="flex items-center gap-2 text-white/50 text-sm mb-3"
       >
         <Music size={14} />
         Transition sound

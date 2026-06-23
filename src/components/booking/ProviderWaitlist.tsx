@@ -226,7 +226,7 @@ export function ProviderWaitlist({
                     12 families found a match last week
                   </span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   Our average match time in Phoenix is 3.2 days. We prioritize
                   urgent cases.
                 </p>
@@ -246,10 +246,10 @@ export function ProviderWaitlist({
                     className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-[#E8E4DF] text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
                   >
                     <item.icon className="w-4 h-4 text-[#6B9080]" />
-                    <span className="text-xs font-semibold text-[#1B2733]">
+                    <span className="text-sm font-semibold text-[#1B2733]">
                       {item.label}
                     </span>
-                    <span className="text-xs text-slate-400">{item.desc}</span>
+                    <span className="text-sm text-slate-400">{item.desc}</span>
                   </button>
                 ))}
               </div>
@@ -281,7 +281,7 @@ export function ProviderWaitlist({
               <h1 className="text-base font-semibold text-[#1B2733]">
                 Join Provider Waitlist
               </h1>
-              <p className="text-xs text-slate-400">We'll find your match</p>
+              <p className="text-sm text-slate-400">We'll find your match</p>
             </div>
           </div>
         </div>
@@ -322,15 +322,15 @@ export function ProviderWaitlist({
                 className="flex-1 bg-white rounded-xl border border-[#E8E4DF] p-2.5 text-center"
               >
                 <stat.icon className="w-4 h-4 text-primary mx-auto mb-1" />
-                <p className="text-xs font-bold text-[#1B2733]">{stat.label}</p>
-                <p className="text-xs text-slate-400">{stat.sub}</p>
+                <p className="text-sm font-bold text-[#1B2733]">{stat.label}</p>
+                <p className="text-sm text-slate-400">{stat.sub}</p>
               </div>
             ))}
           </div>
         ) : (
           <div className="flex items-center gap-2.5 bg-white rounded-xl border border-[#E8E4DF] p-3 mb-6">
             <Heart className="w-4 h-4 text-primary flex-shrink-0" />
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               We match families with vetted providers as soon as availability opens
               in your area — and prioritize urgent cases.
             </p>
@@ -395,7 +395,7 @@ export function ProviderWaitlist({
                     <p className="text-sm font-semibold text-[#1B2733]">
                       {svc.label}
                     </p>
-                    <p className="text-xs text-slate-400">{svc.desc}</p>
+                    <p className="text-sm text-slate-400">{svc.desc}</p>
                   </div>
                 </button>
               ))}
@@ -487,7 +487,7 @@ export function ProviderWaitlist({
                   key={opt.id}
                   type="button"
                   onClick={() => setForm((prev) => ({ ...prev, payType: opt.id }))}
-                  className={`px-2 py-2 rounded-xl text-xs font-medium border transition-colors ${
+                  className={`px-2 py-2 rounded-xl text-sm font-medium border transition-colors ${
                     form.payType === opt.id
                       ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
                       : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-[#6B9080]/20'
@@ -538,7 +538,7 @@ export function ProviderWaitlist({
             {isSubmitting ? 'Joining...' : 'Join Waitlist'}
           </Button>
 
-          <p className="text-xs text-center text-slate-400">
+          <p className="text-sm text-center text-slate-400">
             We'll reach out within 24–48 hours when a match opens up. No spam.
           </p>
         </form>
@@ -557,10 +557,10 @@ export function ProviderWaitlist({
                 className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-[#E8E4DF] text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
               >
                 <item.icon className="w-4 h-4 text-[#6B9080]" />
-                <span className="text-xs font-semibold text-[#1B2733]">
+                <span className="text-sm font-semibold text-[#1B2733]">
                   {item.label}
                 </span>
-                <span className="text-xs text-slate-400">{item.desc}</span>
+                <span className="text-sm text-slate-400">{item.desc}</span>
               </button>
             ))}
           </div>

@@ -65,14 +65,14 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
           
           <div className="text-left">
             <div className="text-sm text-[#1B2733] dark:text-slate-100">Appearance</div>
-            <div className="text-xs text-[#5A6B7A] dark:text-slate-400">
+            <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
               {currentTheme?.description}
             </div>
           </div>
         </div>
 
         <div className="flex items-center space-x-2">
-          <span className="text-xs text-[#5A6B7A] dark:text-slate-400 capitalize">
+          <span className="text-sm text-[#5A6B7A] dark:text-slate-400 capitalize">
             {theme}
           </span>
           <svg 
@@ -129,7 +129,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
                       }`} />
                       <div className="text-left">
                         <div className="font-medium">{themeOption.label}</div>
-                        <div className={`text-xs ${
+                        <div className={`text-sm ${
                           isSelected 
                             ? 'text-[#6B9080] dark:text-primary' 
                             : 'text-[#5A6B7A] dark:text-slate-400'
@@ -148,7 +148,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
             </div>
             
             <div className="border-t border-[#E8E4DF] dark:border-slate-600 p-3">
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 System setting follows your device's appearance preference
               </p>
             </div>

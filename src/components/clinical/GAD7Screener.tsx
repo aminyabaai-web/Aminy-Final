@@ -409,7 +409,7 @@ export function GAD7Screener({
                 style={{ width: `${(result.totalScore / 21) * 100}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+            <div className="flex justify-between text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
               <span>Minimal (0-4)</span>
               <span>Mild (5-9)</span>
               <span>Moderate (10-14)</span>
@@ -471,7 +471,7 @@ export function GAD7Screener({
         </div>
 
         {/* Disclaimer */}
-        <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-4 sm:mt-6 text-center">
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-4 sm:mt-6 text-center">
           The GAD-7 is a screening tool, not a diagnostic instrument. Please consult with a qualified
           healthcare provider for proper diagnosis and treatment recommendations.
         </p>

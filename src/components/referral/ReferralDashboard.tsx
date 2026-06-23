@@ -258,7 +258,7 @@ export function EnhancedReferralDashboard({
                       className="w-full p-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center justify-between"
                     >
                       <div>
-                        <Badge variant="secondary" className="mb-1 text-xs">
+                        <Badge variant="secondary" className="mb-1 text-sm">
                           {msg.label}
                         </Badge>
                         <p className="text-sm text-[#5A6B7A] line-clamp-2">{msg.body.slice(0, 80)}...</p>
@@ -284,28 +284,28 @@ export function EnhancedReferralDashboard({
                                 className="flex flex-col items-center p-2 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
                               >
                                 <MessageCircle className="w-4 h-4 text-green-600 mb-0.5" />
-                                <span className="text-xs text-green-700">Text</span>
+                                <span className="text-sm text-green-700">Text</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'email')}
                                 className="flex flex-col items-center p-2 bg-[#EEF4F8] rounded-lg hover:bg-blue-100 transition-colors"
                               >
                                 <Mail className="w-4 h-4 text-blue-600 mb-0.5" />
-                                <span className="text-xs text-blue-700">Email</span>
+                                <span className="text-sm text-blue-700">Email</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'whatsapp')}
                                 className="flex flex-col items-center p-2 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
                               >
                                 <MessageCircle className="w-4 h-4 text-emerald-600 mb-0.5" />
-                                <span className="text-xs text-emerald-700">WhatsApp</span>
+                                <span className="text-sm text-emerald-700">WhatsApp</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'copy')}
                                 className="flex flex-col items-center p-2 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
                               >
                                 <Copy className="w-4 h-4 text-[#5A6B7A] mb-0.5" />
-                                <span className="text-xs text-[#3A4A57]">Copy</span>
+                                <span className="text-sm text-[#3A4A57]">Copy</span>
                               </button>
                             </div>
                           </div>

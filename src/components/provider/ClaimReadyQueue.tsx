@@ -144,7 +144,7 @@ function ClaimCard({
           {item.status === 'blocked' && onFixNow && (
             <button
               onClick={onFixNow}
-              className="ml-auto flex items-center gap-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors"
+              className="ml-auto flex items-center gap-1.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors"
             >
               <Zap size={12} />
               Fix Now
@@ -334,7 +334,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           <div className="bg-red-50 border border-red-100 rounded-2xl p-3">
             <p className="text-sm font-semibold text-red-700 mb-2">Most common block reasons:</p>
             {summary.blockedReasons.map(r => (
-              <div key={r.reason} className="flex items-center gap-2 text-xs text-red-600">
+              <div key={r.reason} className="flex items-center gap-2 text-sm text-red-600">
                 <span className="font-mono font-bold">{r.count}×</span>
                 <span>{r.reason}</span>
               </div>
@@ -420,7 +420,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
 
               <div className="bg-[#FAF7F2] rounded-xl p-3 mb-4 space-y-1">
                 {selectedClaims.map(c => (
-                  <div key={c.id} className="flex items-center justify-between text-xs">
+                  <div key={c.id} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">{c.clientName} · {c.cptCode}</span>
                     <span className="font-medium text-[#1B2733]">${c.billedAmount.toFixed(2)}</span>
                   </div>

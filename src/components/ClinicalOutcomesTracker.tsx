@@ -674,7 +674,7 @@ export function ClinicalOutcomesTracker({
                         </div>
                         <div>
                           <p className="text-sm font-medium text-[#1B2733]">{config.name}</p>
-                          <p className="text-xs text-[#5A6B7A] line-clamp-1">{config.description}</p>
+                          <p className="text-sm text-[#5A6B7A] line-clamp-1">{config.description}</p>
                         </div>
                       </button>
                     );

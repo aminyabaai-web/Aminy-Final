@@ -228,7 +228,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
           )}
         </div>
         <Progress value={progress} className="h-1.5 bg-white/20" />
-        <p className="text-xs text-white/70 mt-2">
+        <p className="text-sm text-white/70 mt-2">
           {currentQuestion < 9
             ? `Question ${currentQuestion + 1} of 9`
             : 'Final question'}
@@ -266,7 +266,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                   <Phone className="w-5 h-5 text-red-600" />
                   <div>
                     <p className="font-medium text-red-700">Call 988</p>
-                    <p className="text-xs text-red-600">Suicide & Crisis Lifeline</p>
+                    <p className="text-sm text-red-600">Suicide & Crisis Lifeline</p>
                   </div>
                 </a>
                 <a
@@ -276,7 +276,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                   <MessageCircle className="w-5 h-5 text-blue-600" />
                   <div>
                     <p className="font-medium text-blue-700">Text HOME to 741741</p>
-                    <p className="text-xs text-blue-600">Crisis Text Line</p>
+                    <p className="text-sm text-blue-600">Crisis Text Line</p>
                   </div>
                 </a>
               </div>
@@ -322,7 +322,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                   {question.text}
                 </p>
                 {question.isCritical && (
-                  <p className="text-xs text-[#5A6B7A] mt-2 flex items-center gap-1">
+                  <p className="text-sm text-[#5A6B7A] mt-2 flex items-center gap-1">
                     <Info className="w-3 h-3" />
                     This is an important question - please answer honestly
                   </p>
@@ -492,7 +492,7 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
         )}
       </div>
 
-      <p className="text-xs text-[#8A9BA8] text-center mt-4">
+      <p className="text-sm text-[#8A9BA8] text-center mt-4">
         This screening tool is not a diagnosis. Please consult a healthcare provider for professional advice.
       </p>
     </Card>

@@ -29,8 +29,8 @@ export function ChildProfileChip({
   const sizeClasses = {
     sm: {
       container: 'w-8 h-8',
-      text: 'text-xs',
-      nameText: 'text-xs ml-2'
+      text: 'text-sm',
+      nameText: 'text-sm ml-2'
     },
     md: {
       container: 'w-10 h-10',

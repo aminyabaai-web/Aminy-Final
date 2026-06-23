@@ -183,7 +183,7 @@ export function MFAVerification({
             <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
               <Lock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#6B9080' }} />
               <div>
-                <p className="text-xs" style={{ color: '#0D1B2A', opacity: 0.7 }}>
+                <p className="text-sm" style={{ color: '#0D1B2A', opacity: 0.7 }}>
                   Open your authenticator app (Google Authenticator, Authy, or 1Password)
                   and enter the code for Aminy.
                 </p>

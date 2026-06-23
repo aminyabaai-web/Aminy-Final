@@ -315,7 +315,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               </button>
             </div>
             {copied && (
-              <p className="text-xs text-[#6B9080] mt-1.5 animate-in fade-in">
+              <p className="text-sm text-[#6B9080] mt-1.5 animate-in fade-in">
                 Link copied to clipboard
               </p>
             )}
@@ -338,7 +338,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               </div>
               <div className="flex-1 text-left">
                 <p className="text-sm font-medium text-[#1B2733]">Text Message</p>
-                <p className="text-xs text-[#5A6B7A]">Send a pre-filled SMS invite</p>
+                <p className="text-sm text-[#5A6B7A]">Send a pre-filled SMS invite</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
             </button>
@@ -354,7 +354,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               </div>
               <div className="flex-1 text-left">
                 <p className="text-sm font-medium text-[#1B2733]">Email</p>
-                <p className="text-xs text-[#5A6B7A]">Share via your email app</p>
+                <p className="text-sm text-[#5A6B7A]">Share via your email app</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
             </button>
@@ -371,7 +371,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-sm font-medium text-[#1B2733]">More Options</p>
-                  <p className="text-xs text-[#5A6B7A]">WhatsApp, Messenger, and more</p>
+                  <p className="text-sm text-[#5A6B7A]">WhatsApp, Messenger, and more</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
               </button>
@@ -388,7 +388,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 </div>
                 <div className="flex-1 text-left">
                   <p className="text-sm font-medium text-[#1B2733]">Choose from Contacts</p>
-                  <p className="text-xs text-[#5A6B7A]">Pick friends directly from your address book</p>
+                  <p className="text-sm text-[#5A6B7A]">Pick friends directly from your address book</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
               </button>
@@ -410,7 +410,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                     <span className="text-sm text-[#3A4A57] truncate">
                       {contact.name}
                       {contact.email && (
-                        <span className="text-[#8A9BA8] text-xs ml-1">({contact.email})</span>
+                        <span className="text-[#8A9BA8] text-sm ml-1">({contact.email})</span>
                       )}
                     </span>
                     <button
@@ -418,7 +418,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                         if (contact.email) handleEmail(contact.email);
                         else if (contact.phone) handleSMS(contact.phone);
                       }}
-                      className="text-xs text-[#6B9080] font-medium hover:text-[#6B9080]"
+                      className="text-sm text-[#6B9080] font-medium hover:text-[#6B9080]"
                     >
                       <Send size={14} />
                     </button>

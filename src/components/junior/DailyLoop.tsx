@@ -268,7 +268,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
             <Star size={20} className="text-yellow-300" fill="currentColor" />
             <span className="text-white text-2xl font-bold">{state.stars}</span>
           </div>
-          <p className="text-white/60 text-xs mt-1">Total Stars</p>
+          <p className="text-white/60 text-sm mt-1">Total Stars</p>
         </div>
       </div>
 
@@ -289,7 +289,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
                 >
                   {dot.active && <Star size={14} className="text-white" fill="currentColor" />}
                 </div>
-                <span className="text-white/40 text-xs">{dayLabel}</span>
+                <span className="text-white/40 text-sm">{dayLabel}</span>
               </div>
             );
           })}

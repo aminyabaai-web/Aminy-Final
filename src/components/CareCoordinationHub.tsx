@@ -349,14 +349,14 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
         <div className="mt-3 flex gap-2">
           <button
             onClick={() => onNavigate?.('marketplace')}
-            className="flex-1 text-xs font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex-1 text-sm font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]"
           >
             Book
           </button>
           {row.authStatus === 'denied' || row.authStatus === 'expiring' || row.authStatus === 'none' ? (
             <button
               onClick={() => onNavigate?.('prior-auth')}
-              className="flex-1 text-xs font-medium px-3 py-2 rounded-xl text-white"
+              className="flex-1 text-sm font-medium px-3 py-2 rounded-xl text-white"
               style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
             >
               {row.authStatus === 'denied' ? 'Appeal' : 'Request auth'}

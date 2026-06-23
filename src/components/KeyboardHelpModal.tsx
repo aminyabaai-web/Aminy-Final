@@ -162,7 +162,7 @@ export function KeyboardHelpModal() {
                           <React.Fragment key={keyIndex}>
                             <KeyboardKey>{key}</KeyboardKey>
                             {keyIndex < shortcut.keys.length - 1 && (
-                              <span className="text-[#8A9BA8] dark:text-[#5A6B7A] text-xs">
+                              <span className="text-[#8A9BA8] dark:text-[#5A6B7A] text-sm">
                                 +
                               </span>
                             )}
@@ -192,7 +192,7 @@ export function KeyboardHelpModal() {
 
         {/* Footer */}
         <div className="px-6 py-4 border-t border-[#E8E4DF] dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-900">
-          <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] text-center">
+          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] text-center">
             Press <KeyboardKey>Esc</KeyboardKey> to close this dialog
           </p>
         </div>

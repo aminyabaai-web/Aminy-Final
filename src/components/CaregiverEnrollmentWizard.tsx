@@ -769,7 +769,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
 
               <div className="bg-[#FAF7F2] rounded-xl p-3 flex gap-2">
                 <Info className="w-4 h-4 text-[#8A9BA8] shrink-0 mt-0.5" />
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   A fiscal agent (also called fiscal intermediary) processes your payroll,
                   handles tax withholding, and ensures Medicaid compliance. They're required
                   for self-directed programs.
@@ -815,10 +815,10 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                         <div>
                           <p className="font-medium text-[#1B2733] text-sm">{doc.label}</p>
                           {doc.required && !doc.uploaded && (
-                            <span className="text-xs text-red-500">Required</span>
+                            <span className="text-sm text-red-500">Required</span>
                           )}
                           {doc.uploaded && doc.capturedAt && (
-                            <span className="text-xs text-green-600">
+                            <span className="text-sm text-green-600">
                               Marked ready {new Date(doc.capturedAt).toLocaleDateString()}
                             </span>
                           )}
@@ -832,7 +832,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                           <CheckCircle2 className="w-3.5 h-3.5" /> Mark ready
                         </button>
                       ) : (
-                        <span className="text-xs font-medium text-emerald-600">Ready</span>
+                        <span className="text-sm font-medium text-emerald-600">Ready</span>
                       )}
                     </div>
                   </div>

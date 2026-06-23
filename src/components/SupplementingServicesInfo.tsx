@@ -243,7 +243,7 @@ export function SupplementingServicesInfo({
                   {area.description}
                 </p>
                 <div className="bg-[#FAF7F2] rounded-lg p-3">
-                  <p className="text-xs text-[#5A6B7A] mb-1">Example:</p>
+                  <p className="text-sm text-[#5A6B7A] mb-1">Example:</p>
                   <p className="text-sm text-[#3A4A57] italic">
                     "{area.example}"
                   </p>
@@ -265,7 +265,7 @@ export function SupplementingServicesInfo({
           <div className="space-y-3">
             <div className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-amber-800 text-xs font-bold">×</span>
+                <span className="text-amber-800 text-sm font-bold">×</span>
               </div>
               <p className="text-amber-800">
                 <strong>Not ABA therapy.</strong> We don't replace the clinical interventions
@@ -274,7 +274,7 @@ export function SupplementingServicesInfo({
             </div>
             <div className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-amber-800 text-xs font-bold">×</span>
+                <span className="text-amber-800 text-sm font-bold">×</span>
               </div>
               <p className="text-amber-800">
                 <strong>Not medical advice.</strong> Always consult your pediatrician,
@@ -283,7 +283,7 @@ export function SupplementingServicesInfo({
             </div>
             <div className="flex items-start gap-3">
               <div className="w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span className="text-amber-800 text-xs font-bold">×</span>
+                <span className="text-amber-800 text-sm font-bold">×</span>
               </div>
               <p className="text-amber-800">
                 <strong>Not a diagnosis tool.</strong> If you suspect autism or need assessment,

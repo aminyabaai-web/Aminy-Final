@@ -391,7 +391,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                   className={`flex-shrink-0 flex flex-col items-center justify-center px-2 py-1 rounded-lg ${CATEGORY_META[s.category].bgClass} min-w-[48px]`}
                 >
                   <span className="text-xl leading-none">{s.emoji}</span>
-                  <span className="text-xs font-medium text-white mt-0.5 truncate max-w-[56px]">
+                  <span className="text-sm font-medium text-white mt-0.5 truncate max-w-[56px]">
                     {s.label}
                   </span>
                 </div>
@@ -577,7 +577,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       {symbol.emoji}
                     </span>
                   )}
-                  <span className="text-xs font-semibold text-[#1B2733] mt-1 leading-tight text-center truncate w-full">
+                  <span className="text-sm font-semibold text-[#1B2733] mt-1 leading-tight text-center truncate w-full">
                     {symbol.label}
                   </span>
                 </button>
@@ -708,7 +708,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       <button
                         key={cat}
                         onClick={() => setCustomCategory(cat)}
-                        className={`px-2 py-1.5 rounded-lg text-xs font-medium ${
+                        className={`px-2 py-1.5 rounded-lg text-sm font-medium ${
                           customCategory === cat
                             ? `${meta.bgClass} text-white`
                             : 'bg-[#F0EDE8] text-[#5A6B7A]'

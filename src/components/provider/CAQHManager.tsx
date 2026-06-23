@@ -58,7 +58,7 @@ function RingChart({ percent, size = 56, label }: { percent: number; size?: numb
           {percent}%
         </text>
       </svg>
-      <p className="text-xs text-[#5A6B7A] text-center leading-tight max-w-[64px]">{label}</p>
+      <p className="text-sm text-[#5A6B7A] text-center leading-tight max-w-[64px]">{label}</p>
     </div>
   );
 }
@@ -90,7 +90,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                 <Shield size={18} className="text-blue-600" />
                 CAQH ProView Manager
               </h1>
-              <p className="text-xs text-[#5A6B7A]">Universal credentialing profile</p>
+              <p className="text-sm text-[#5A6B7A]">Universal credentialing profile</p>
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                   : `Re-attestation due in ${caqhProfile.daysUntilReAttestation} days`}
               </p>
             </div>
-            <p className={`text-xs ${isOverdue ? 'text-red-600' : 'text-amber-600'} mb-2`}>
+            <p className={`text-sm ${isOverdue ? 'text-red-600' : 'text-amber-600'} mb-2`}>
               Incomplete CAQH is the #1 cause of credentialing delays. Payers auto-reject applications when CAQH is not re-attested within 120 days.
             </p>
             <div className="flex gap-2">
@@ -167,13 +167,13 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                 href="https://proview.caqh.org"
                 target="_blank"
                 rel="noreferrer"
-                className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg ${
+                className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg ${
                   isOverdue ? 'bg-red-600 text-white' : 'bg-amber-600 text-white'
                 }`}
               >
                 Re-attest now <ExternalLink size={11} />
               </a>
-              <button className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-[#E8E4DF] bg-white text-[#3A4A57]">
+              <button className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg border border-[#E8E4DF] bg-white text-[#3A4A57]">
                 <Bell size={11} />
                 Set reminder
               </button>
@@ -186,19 +186,19 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-2xl font-bold text-[#1B2733]">{caqhProfile.completionPercent}%</p>
-              <p className="text-xs text-[#5A6B7A]">Overall Completion</p>
+              <p className="text-sm text-[#5A6B7A]">Overall Completion</p>
             </div>
             <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
               <p className="text-lg font-bold text-[#1B2733]">{caqhProfile.nextAttestationDue}</p>
-              <p className="text-xs text-[#5A6B7A]">Next Due Date</p>
+              <p className="text-sm text-[#5A6B7A]">Next Due Date</p>
             </div>
             <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
               <p className={`text-lg font-bold ${isOverdue ? 'text-red-600' : isDueSoon ? 'text-amber-600' : 'text-green-600'}`}>
                 {Math.abs(caqhProfile.daysUntilReAttestation)}d
               </p>
-              <p className="text-xs text-[#5A6B7A]">{isOverdue ? 'Overdue' : 'Remaining'}</p>
+              <p className="text-sm text-[#5A6B7A]">{isOverdue ? 'Overdue' : 'Remaining'}</p>
             </div>
           </div>
 
@@ -267,7 +267,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
         {/* Tip */}
         <div className="flex items-start gap-2 bg-[#EEF4F8] rounded-xl p-3 border border-blue-100">
           <Info size={14} className="text-blue-600 shrink-0 mt-0.5" />
-          <p className="text-xs text-blue-700">
+          <p className="text-sm text-blue-700">
             <strong>Tip:</strong> Syncing imports your CAQH data to pre-fill your Aminy provider profile, saving 20+ hours of manual data entry per payer application.
           </p>
         </div>
@@ -294,7 +294,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                     </div>
                     <div className="text-left">
                       <p className="text-sm font-medium text-[#1B2733]">{cat.name}</p>
-                      <p className="text-xs text-[#8A9BA8]">{cat.completedFields}/{cat.totalFields} fields</p>
+                      <p className="text-sm text-[#8A9BA8]">{cat.completedFields}/{cat.totalFields} fields</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                             {!field.completed && (
                               <div className="flex items-center gap-1">
                                 {field.required && (
-                                  <span className="text-xs text-red-500 font-medium">Required</span>
+                                  <span className="text-sm text-red-500 font-medium">Required</span>
                                 )}
                                 <button className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center rounded hover:bg-[#F0EDE8]">
                                   <Upload size={12} className="text-[#8A9BA8]" />

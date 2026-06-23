@@ -674,7 +674,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-3 flex items-center gap-2">
           <button
             onClick={() => onProgressUpdate(Math.min(goal.currentProgress + 1, goal.targetProgress))}
-            className="flex-1 py-2 text-xs font-medium text-[#6B9080] bg-[#6B9080]/5 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
+            className="flex-1 py-2 text-sm font-medium text-[#6B9080] bg-[#6B9080]/5 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             + Log Progress
           </button>
@@ -695,14 +695,14 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-2 pt-2 border-t border-[#E8E4DF] flex flex-wrap gap-2">
           <button
             onClick={() => { onStatusChange('completed'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
           >
             <CheckCircle className="w-3.5 h-3.5" />
             Mark Complete
           </button>
           <button
             onClick={() => { onStatusChange(goal.status === 'paused' ? 'active' : 'paused'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
           >
             {goal.status === 'paused' ? (
               <><Play className="w-3.5 h-3.5" /> Resume</>
@@ -715,7 +715,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Completed badge */}
       {isCompleted && goal.completedAt && (
-        <div className="mt-3 pt-2 border-t border-green-100 flex items-center gap-2 text-xs text-green-600">
+        <div className="mt-3 pt-2 border-t border-green-100 flex items-center gap-2 text-sm text-green-600">
           <Award className="w-4 h-4" />
           Completed {new Date(goal.completedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </div>
@@ -723,7 +723,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Timeline */}
       {!isCompleted && (
-        <div className="mt-2 flex items-center gap-1 text-xs text-[#8A9BA8]">
+        <div className="mt-2 flex items-center gap-1 text-sm text-[#8A9BA8]">
           <Clock className="w-3 h-3" />
           Started {new Date(goal.startedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </div>

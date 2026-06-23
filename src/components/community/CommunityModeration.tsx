@@ -259,7 +259,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
           <Shield className="h-6 w-6 text-[#6B9080]" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">Moderation Queue</h1>
-            <p className="text-xs text-[#5A6B7A]">{pendingCount} pending reports</p>
+            <p className="text-sm text-[#5A6B7A]">{pendingCount} pending reports</p>
           </div>
         </div>
 
@@ -277,7 +277,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
           </div>
           <button
             onClick={() => setFilterStatus(filterStatus === 'pending' ? 'all' : 'pending')}
-            className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium ${
+            className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium ${
               filterStatus === 'pending'
                 ? 'border-[#6B9080]/20 bg-[#6B9080]/10 text-[#6B9080]'
                 : 'border-[#E8E4DF] bg-white text-[#5A6B7A]'
@@ -314,13 +314,13 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               >
                 {/* Priority badge */}
                 {report.reason === 'self-harm' && (
-                  <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-red-700">
+                  <div className="mb-2 flex items-center gap-1.5 text-sm font-bold text-red-700">
                     <AlertTriangle className="h-3.5 w-3.5" />
                     PRIORITY: Self-Harm Report
                   </div>
                 )}
                 {isAutoHidden && (
-                  <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-amber-700">
+                  <div className="mb-2 flex items-center gap-1.5 text-sm font-bold text-amber-700">
                     <EyeOff className="h-3.5 w-3.5" />
                     Auto-hidden ({flagCount} flags)
                   </div>
@@ -337,7 +337,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                       </span>
                     </div>
                     <p className="text-sm text-[#1B2733] line-clamp-2">&quot;{report.contentPreview}&quot;</p>
-                    <div className="mt-2 flex items-center gap-3 text-xs text-[#5A6B7A]">
+                    <div className="mt-2 flex items-center gap-3 text-sm text-[#5A6B7A]">
                       <span>By: {report.authorName}</span>
                       <span>Reported by: {report.reporterName}</span>
                       <span>{new Date(report.createdAt).toLocaleDateString()}</span>
@@ -345,7 +345,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                   </div>
                   <button
                     onClick={() => setActiveReport(report)}
-                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#6B9080]"
+                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#6B9080]"
                   >
                     Review
                   </button>
@@ -353,7 +353,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
 
                 {/* Status indicator */}
                 {report.status !== 'pending' && (
-                  <div className="mt-2 flex items-center gap-1.5 text-xs">
+                  <div className="mt-2 flex items-center gap-1.5 text-sm">
                     {report.status === 'actioned' && <CheckCircle className="h-3.5 w-3.5 text-green-600" />}
                     {report.status === 'dismissed' && <XCircle className="h-3.5 w-3.5 text-[#8A9BA8]" />}
                     {report.status === 'reviewed' && <Eye className="h-3.5 w-3.5 text-blue-500" />}
@@ -533,7 +533,7 @@ export function UserBadges({ reputation }: UserBadgesProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className={`text-xs font-semibold ${level.color}`}>
+      <span className={`text-sm font-semibold ${level.color}`}>
         {level.label}
       </span>
       {reputation.badges.slice(0, 3).map(badge => (
@@ -547,7 +547,7 @@ export function UserBadges({ reputation }: UserBadgesProps) {
         </span>
       ))}
       {reputation.badges.length > 3 && (
-        <span className="text-xs text-[#8A9BA8]">+{reputation.badges.length - 3}</span>
+        <span className="text-sm text-[#8A9BA8]">+{reputation.badges.length - 3}</span>
       )}
     </div>
   );

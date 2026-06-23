@@ -205,7 +205,7 @@ export default function COPPAConsentGate({
 
           {/* COPPA rights reminder */}
           <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4">
-            <p className="text-xs text-[#6B9080] leading-relaxed">
+            <p className="text-sm text-[#6B9080] leading-relaxed">
               <strong>Your rights under COPPA:</strong> You may review, update, or request deletion of your
               child&apos;s information at any time by contacting us at{' '}
               <a href="mailto:privacy@aminy.com" className="underline">

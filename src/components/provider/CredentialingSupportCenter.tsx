@@ -1067,8 +1067,8 @@ function CAQHTab() {
           <div className="text-sm text-violet-700">
             {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
-          <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700 opacity-60" disabled title="Coming soon">
-            Re-run QA Check <span className="ml-1 text-xs text-slate-400 font-normal">Soon</span>
+          <Button variant="outline" size="sm" className="h-7 text-sm border-violet-300 text-violet-700 opacity-60" disabled title="Coming soon">
+            Re-run QA Check <span className="ml-1 text-sm text-slate-400 font-normal">Soon</span>
           </Button>
         </div>
       </Card>
@@ -1082,17 +1082,17 @@ function CAQHTab() {
           </h3>
           <div className="space-y-2">
             {expiringDocs.map((d) => (
-              <div key={d.id} className="flex items-center justify-between text-xs">
+              <div key={d.id} className="flex items-center justify-between text-sm">
                 <span className="text-amber-700">{d.name} expires {d.expiresAt}</span>
-                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700 opacity-60" disabled title="Coming soon">
+                <Button variant="ghost" size="sm" className="h-6 text-sm text-amber-700 opacity-60" disabled title="Coming soon">
                   Renew <ArrowRight className="w-3 h-3 ml-1" />
                 </Button>
               </div>
             ))}
             {missingDocs.map((d) => (
-              <div key={d.id} className="flex items-center justify-between text-xs">
+              <div key={d.id} className="flex items-center justify-between text-sm">
                 <span className="text-amber-700">{d.name} — required, not uploaded</span>
-                <Button variant="ghost" size="sm" className="h-6 text-xs text-amber-700 opacity-60" disabled title="Coming soon">
+                <Button variant="ghost" size="sm" className="h-6 text-sm text-amber-700 opacity-60" disabled title="Coming soon">
                   Upload <Upload className="w-3 h-3 ml-1" />
                 </Button>
               </div>
@@ -1173,7 +1173,7 @@ function EnrollmentTab() {
           variant="ghost"
           size="sm"
           onClick={() => setWizardPayer(null)}
-          className="text-xs text-[#5A6B7A]"
+          className="text-sm text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Enrollment
         </Button>
@@ -1246,7 +1246,7 @@ function EnrollmentTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-[#1B2733]">Payer Enrollment Pipeline</h3>
-        <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
+        <Button variant="outline" size="sm" className="h-7 text-sm opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Start New Enrollment
         </Button>
       </div>
@@ -1260,7 +1260,7 @@ function EnrollmentTab() {
               key={wf.payerId}
               variant="outline"
               size="sm"
-              className="h-7 text-xs border-blue-300 text-blue-700"
+              className="h-7 text-sm border-blue-300 text-blue-700"
               onClick={() => setWizardPayer(wf.payerId)}
             >
               <Sparkles className="w-3 h-3 mr-1" /> {wf.payerName}
@@ -1346,7 +1346,7 @@ function EnrollmentTab() {
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-2 h-7 text-xs text-red-700 border-red-300"
+                className="mt-2 h-7 text-sm text-red-700 border-red-300"
                 onClick={() =>
                   openAI(
                     `My ${enrollment.payerName} provider enrollment was denied` +
@@ -1376,14 +1376,14 @@ function RosterTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-[#1B2733]">Active Payer Roster</h3>
-        <Button variant="outline" size="sm" className="h-7 text-xs opacity-60" disabled title="Coming soon">
+        <Button variant="outline" size="sm" className="h-7 text-sm opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Add Payer
         </Button>
       </div>
 
       <Card className="overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-xs">
+          <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[#E8E4DF] bg-[#FAF7F2]">
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Payer</th>
@@ -1437,7 +1437,7 @@ function RosterTab() {
                     <p className="text-sm text-amber-600">Due: {entry.recredentialingDate}</p>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
+                <Button variant="outline" size="sm" className="h-7 text-sm border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
                   Start Renewal
                 </Button>
               </div>
@@ -1544,7 +1544,7 @@ function AIPlaybooksTab() {
             setActivePlaybook(null);
             setCurrentNode('start');
           }}
-          className="text-xs text-[#5A6B7A]"
+          className="text-sm text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
@@ -1612,7 +1612,7 @@ function AIPlaybooksTab() {
               <Button
                 variant="outline"
                 size="sm"
-                className="mt-3 text-xs"
+                className="mt-3 text-sm"
                 onClick={() =>
                   openAI(
                     `Help me with this credentialing/billing scenario: ${node.text}. ` +
@@ -1630,7 +1630,7 @@ function AIPlaybooksTab() {
                 variant="ghost"
                 size="sm"
                 onClick={() => setCurrentNode('start')}
-                className="mt-2 text-xs text-slate-400"
+                className="mt-2 text-sm text-slate-400"
               >
                 <ArrowLeft className="w-3 h-3 mr-1" /> Start Over
               </Button>
@@ -1648,7 +1648,7 @@ function AIPlaybooksTab() {
           variant="ghost"
           size="sm"
           onClick={() => setActivePlaybook(null)}
-          className="text-xs text-[#5A6B7A]"
+          className="text-sm text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
@@ -1691,7 +1691,7 @@ function AIPlaybooksTab() {
           variant="ghost"
           size="sm"
           onClick={() => setActivePlaybook(null)}
-          className="text-xs text-[#5A6B7A]"
+          className="text-sm text-[#5A6B7A]"
         >
           <ArrowLeft className="w-3 h-3 mr-1" /> Back to Playbooks
         </Button>
@@ -1811,12 +1811,12 @@ function ClaimQueueTab() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={selectAllReady}>
+          <Button variant="ghost" size="sm" className="h-7 text-sm" onClick={selectAllReady}>
             Select Ready
           </Button>
           <Button
             size="sm"
-            className="h-7 text-xs opacity-60"
+            className="h-7 text-sm opacity-60"
             disabled
             title="Claim submission coming soon"
           >
@@ -2030,7 +2030,7 @@ function DenialOpsTab() {
                   >
                     <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-3 space-y-3">
                       {/* Details */}
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="grid grid-cols-2 gap-2 text-sm">
                         <div>
                           <p className="text-slate-400">Claim ID</p>
                           <p className="text-[#3A4A57] font-medium">{denial.claimId}</p>
@@ -2073,7 +2073,7 @@ function DenialOpsTab() {
                         {denial.status === 'new' && (
                           <Button
                             size="sm"
-                            className="h-7 text-xs flex-1"
+                            className="h-7 text-sm flex-1"
                             onClick={() =>
                               openAI(
                                 `Draft an insurance appeal letter for a denied behavioral health claim. ` +
@@ -2090,7 +2090,7 @@ function DenialOpsTab() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 text-xs"
+                            className="h-7 text-sm"
                             onClick={() => copyDenialCode(denial.denialCode)}
                           >
                             {copiedCode === denial.denialCode ? (
@@ -2104,7 +2104,7 @@ function DenialOpsTab() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-7 text-xs flex-1 opacity-60"
+                            className="h-7 text-sm flex-1 opacity-60"
                             disabled
                             title="Coming soon"
                           >
@@ -2171,9 +2171,9 @@ function StatusDashboardTab() {
             {entries
               .filter(e => e.missingDocuments.length > 0)
               .map(e => (
-                <div key={e.id} className="flex items-center justify-between text-xs">
+                <div key={e.id} className="flex items-center justify-between text-sm">
                   <span className="text-amber-700">{e.payerName}: {e.missingDocuments.join(', ')}</span>
-                  <Button variant="ghost" size="sm" className="h-5 text-xs text-amber-700 px-2 opacity-60" disabled title="Coming soon">
+                  <Button variant="ghost" size="sm" className="h-5 text-sm text-amber-700 px-2 opacity-60" disabled title="Coming soon">
                     Fix
                   </Button>
                 </div>
@@ -2204,7 +2204,7 @@ function StatusDashboardTab() {
               {statusBadge(entry.enrollmentStatus)}
             </div>
 
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-400">Days since submission:</span>
                 <span className="text-[#3A4A57] font-medium">{entry.daysSinceSubmission}d</span>
@@ -2266,7 +2266,7 @@ function StatusDashboardTab() {
                   </div>
                 </div>
                 {entry.enrollmentStatus === 're-credentialing-due' && (
-                  <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
+                  <Button variant="outline" size="sm" className="h-7 text-sm border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
                     Start Renewal
                   </Button>
                 )}
@@ -2382,7 +2382,7 @@ function HelpTab() {
             <Button
               variant="ghost"
               size="sm"
-              className="mt-1 h-7 text-xs text-violet-600"
+              className="mt-1 h-7 text-sm text-violet-600"
               onClick={() => {
                 openAI(
                   `I'm a provider with a credentialing, billing, or enrollment question: ${faqSearch}`
@@ -2402,7 +2402,7 @@ function HelpTab() {
           <Button
             variant="outline"
             size="sm"
-            className="w-full justify-start text-xs h-8"
+            className="w-full justify-start text-sm h-8"
             onClick={() =>
               openAI(
                 'I need help from the Aminy credentialing support team. Can you assist or connect me?'
@@ -2414,7 +2414,7 @@ function HelpTab() {
           <Button
             variant="outline"
             size="sm"
-            className="w-full justify-start text-xs h-8 opacity-60"
+            className="w-full justify-start text-sm h-8 opacity-60"
             disabled
             title="Coming soon"
           >
@@ -2424,7 +2424,7 @@ function HelpTab() {
           <Button
             variant="outline"
             size="sm"
-            className="w-full justify-start text-xs h-8 opacity-60"
+            className="w-full justify-start text-sm h-8 opacity-60"
             disabled
             title="Coming soon"
           >

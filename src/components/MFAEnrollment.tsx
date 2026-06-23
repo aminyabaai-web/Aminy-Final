@@ -168,7 +168,7 @@ export function MFAEnrollment({
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Use an authenticator app
                   </p>
-                  <p className="text-xs mt-1" style={{ color: '#0D1B2A', opacity: 0.6 }}>
+                  <p className="text-sm mt-1" style={{ color: '#0D1B2A', opacity: 0.6 }}>
                     Google Authenticator, Authy, or 1Password
                   </p>
                 </div>
@@ -180,7 +180,7 @@ export function MFAEnrollment({
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Scan a QR code
                   </p>
-                  <p className="text-xs mt-1" style={{ color: '#0D1B2A', opacity: 0.6 }}>
+                  <p className="text-sm mt-1" style={{ color: '#0D1B2A', opacity: 0.6 }}>
                     Quick and secure setup in seconds
                   </p>
                 </div>
@@ -265,7 +265,7 @@ export function MFAEnrollment({
 
             {/* Manual entry option */}
             <div className="mb-6">
-              <p className="text-xs text-center mb-2" style={{ color: '#0D1B2A', opacity: 0.5 }}>
+              <p className="text-sm text-center mb-2" style={{ color: '#0D1B2A', opacity: 0.5 }}>
                 Can't scan? Enter this code manually:
               </p>
               <div
@@ -403,7 +403,7 @@ export function MFAEnrollment({
               <p className="text-sm font-medium" style={{ color: '#F57C00' }}>
                 Important: Save your backup codes
               </p>
-              <p className="text-xs mt-1" style={{ color: '#F57C00', opacity: 0.8 }}>
+              <p className="text-sm mt-1" style={{ color: '#F57C00', opacity: 0.8 }}>
                 If you lose access to your authenticator app, you'll need backup codes
                 to sign in. Go to Settings {'>'} Security to view and save them.
               </p>

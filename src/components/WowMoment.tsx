@@ -258,7 +258,7 @@ export function TransformationSection() {
                 <div className="p-6 border-b md:border-b-0 md:border-r border-[#E8E4DF]">
                   <div className="flex items-center gap-2 text-rose-500 mb-3">
                     <div className="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center">
-                      <span className="text-xs font-bold">X</span>
+                      <span className="text-sm font-bold">X</span>
                     </div>
                     <span className="text-sm font-medium">BEFORE</span>
                   </div>
@@ -386,7 +386,7 @@ export function DemoTeaser({ onTryDemo }: { onTryDemo?: () => void }) {
                   <div className="bg-white border border-[#E8E4DF] px-4 py-3 rounded-2xl rounded-bl-md max-w-[90%] shadow-sm">
                     <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#E8E4DF]">
                       <Sparkles className="w-4 h-4 text-accent" />
-                      <span className="text-xs font-semibold text-accent">Aminy</span>
+                      <span className="text-sm font-semibold text-accent">Aminy</span>
                     </div>
                     <p className="text-sm text-primary whitespace-pre-line">{demoResponse}</p>
                   </div>

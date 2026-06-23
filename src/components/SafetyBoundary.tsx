@@ -91,7 +91,7 @@ export class SafetyBoundary extends Component<Props, State> {
           </p>
           <button
             onClick={this.handleRetry}
-            className="inline-flex items-center gap-2 px-3 py-1.5 text-xs bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
           >
             <RefreshCw className="w-3 h-3" />
             Try again

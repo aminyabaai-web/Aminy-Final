@@ -454,7 +454,7 @@ NPI: [Your NPI]
 
   return (
     <div className="space-y-4">
-      <Button variant="ghost" size="sm" onClick={onBack} className="text-xs text-[#5A6B7A]">
+      <Button variant="ghost" size="sm" onClick={onBack} className="text-sm text-[#5A6B7A]">
         <ArrowLeft className="w-3 h-3 mr-1" /> Back to Inbox
       </Button>
 
@@ -470,7 +470,7 @@ NPI: [Your NPI]
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-xs">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
             <span className="text-slate-400">Payer</span>
             <p className="font-medium text-[#3A4A57]">{denial.payer}</p>
@@ -520,32 +520,32 @@ NPI: [Your NPI]
       {/* One-Click Actions */}
       <div className="grid grid-cols-2 gap-2">
         {denial.category === 'missing-info' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <Edit3 className="w-3 h-3 mr-1.5" /> Correction Form
           </Button>
         )}
         {denial.category === 'auth' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <RefreshCw className="w-3 h-3 mr-1.5" /> Request Retro-Auth
           </Button>
         )}
         {denial.category === 'coding' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <Sparkles className="w-3 h-3 mr-1.5" /> Suggest Correct Code
           </Button>
         )}
         <Button
           variant="outline"
           size="sm"
-          className="h-9 text-xs justify-start"
+          className="h-9 text-sm justify-start"
           onClick={() => setShowAppealLetter(!showAppealLetter)}
         >
           <FileText className="w-3 h-3 mr-1.5" /> {showAppealLetter ? 'Hide' : 'Generate'} Appeal Letter
         </Button>
-        <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+        <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
           <Send className="w-3 h-3 mr-1.5" /> Resubmit Claim
         </Button>
-        <Button variant="outline" size="sm" className="h-9 text-xs justify-start text-red-600 border-red-200">
+        <Button variant="outline" size="sm" className="h-9 text-sm justify-start text-red-600 border-red-200">
           <XCircle className="w-3 h-3 mr-1.5" /> Write Off
         </Button>
       </div>
@@ -565,18 +565,18 @@ NPI: [Your NPI]
                   <Sparkles className="w-4 h-4 text-violet-500" />
                   Generated Appeal Letter
                 </h3>
-                <Button variant="ghost" size="sm" className="h-6 text-xs">
+                <Button variant="ghost" size="sm" className="h-6 text-sm">
                   <Copy className="w-3 h-3 mr-1" /> Copy
                 </Button>
               </div>
-              <pre className="text-xs text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
+              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
                 {appealLetterTemplate}
               </pre>
               <div className="flex gap-2 mt-3">
-                <Button size="sm" className="text-xs flex-1">
+                <Button size="sm" className="text-sm flex-1">
                   <Download className="w-3 h-3 mr-1" /> Download PDF
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs flex-1">
+                <Button variant="outline" size="sm" className="text-sm flex-1">
                   <Edit3 className="w-3 h-3 mr-1" /> Edit Letter
                 </Button>
               </div>
@@ -713,7 +713,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
             const pct = Math.round((count / maxReasonCount) * 100);
             return (
               <div key={cat}>
-                <div className="flex items-center justify-between text-xs mb-1">
+                <div className="flex items-center justify-between text-sm mb-1">
                   <span className="font-medium text-[#3A4A57]">{categoryLabel(cat as Denial['category'])}</span>
                   <span className="text-[#5A6B7A]">{count} ({Math.round((count / denials.length) * 100)}%)</span>
                 </div>
@@ -778,7 +778,7 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-[#1B2733]">Claims Needing Correction</h3>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-sm">
           {reworkItems.length} items
         </Badge>
       </div>
@@ -808,16 +808,16 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
                 </span>
                 <div className="flex gap-1">
                   {denial.category === 'missing-info' && (
-                    <Button variant="outline" size="sm" className="h-6 text-xs">
+                    <Button variant="outline" size="sm" className="h-6 text-sm">
                       <Edit3 className="w-2.5 h-2.5 mr-0.5" /> Fix
                     </Button>
                   )}
                   {denial.category === 'coding' && (
-                    <Button variant="outline" size="sm" className="h-6 text-xs">
+                    <Button variant="outline" size="sm" className="h-6 text-sm">
                       <Sparkles className="w-2.5 h-2.5 mr-0.5" /> Recode
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" className="h-6 text-xs">
+                  <Button variant="outline" size="sm" className="h-6 text-sm">
                     <Send className="w-2.5 h-2.5 mr-0.5" /> Resubmit
                   </Button>
                 </div>

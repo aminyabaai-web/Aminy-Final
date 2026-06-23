@@ -389,7 +389,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-bold">AACT Payer Scorecard</h1>
-                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-xs">Arizona</Badge>
+                <Badge className="bg-primary/20 text-[#7BA7BC] border border-[#6B9080]/30 text-sm">Arizona</Badge>
               </div>
               <p className="text-sm text-slate-400 mt-0.5">Rate negotiation · Network adequacy · MCO reporting</p>
             </div>

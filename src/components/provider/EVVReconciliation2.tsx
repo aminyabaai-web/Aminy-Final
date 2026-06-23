@@ -58,7 +58,7 @@ function MiniBarChart({ data }: { data: { period: string; rate: number }[] }) {
             className={`w-full rounded-t transition-all ${d.rate >= 90 ? 'bg-green-500' : d.rate >= 80 ? 'bg-amber-400' : 'bg-red-400'}`}
             style={{ height: `${(d.rate / max) * 48}px` }}
           />
-          <span className="text-xs text-[#8A9BA8] leading-none" style={{ fontSize: '9px' }}>
+          <span className="text-sm text-[#8A9BA8] leading-none" style={{ fontSize: '9px' }}>
             {d.period.split(' ')[0]}
           </span>
         </div>
@@ -128,21 +128,21 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
                     <span className={`text-xs font-bold uppercase tracking-wide ${severityColor.split(' ')[0]}`}>
                       {d.severity}
                     </span>
-                    <span className="text-xs text-[#5A6B7A]">{d.description}</span>
+                    <span className="text-sm text-[#5A6B7A]">{d.description}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-2">
                     <div className="bg-white rounded-lg p-2">
-                      <p className="text-xs text-[#8A9BA8] mb-0.5">Scheduled</p>
-                      <p className="text-xs font-medium text-[#3A4A57] break-all">{d.scheduledValue}</p>
+                      <p className="text-sm text-[#8A9BA8] mb-0.5">Scheduled</p>
+                      <p className="text-sm font-medium text-[#3A4A57] break-all">{d.scheduledValue}</p>
                     </div>
                     <div className="bg-white rounded-lg p-2">
-                      <p className="text-xs text-[#8A9BA8] mb-0.5">Actual</p>
-                      <p className="text-xs font-medium text-[#3A4A57] break-all">{d.actualValue}</p>
+                      <p className="text-sm text-[#8A9BA8] mb-0.5">Actual</p>
+                      <p className="text-sm font-medium text-[#3A4A57] break-all">{d.actualValue}</p>
                     </div>
                   </div>
-                  <p className="text-xs text-[#5A6B7A] italic">{d.correctionNote}</p>
+                  <p className="text-sm text-[#5A6B7A] italic">{d.correctionNote}</p>
                   {d.requiresCorrection && (
-                    <button className="mt-2 flex items-center gap-1.5 text-xs font-medium text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors">
+                    <button className="mt-2 flex items-center gap-1.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 px-3 py-1.5 rounded-lg transition-colors">
                       <RefreshCw size={11} />
                       Fix &amp; Resubmit
                     </button>
@@ -200,7 +200,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             )}
             <div>
               <h1 className="text-lg font-bold">EVV Reconciliation</h1>
-              <p className="text-xs text-white/60">Clean cycles &amp; fiscal agent submission</p>
+              <p className="text-sm text-white/60">Clean cycles &amp; fiscal agent submission</p>
             </div>
           </div>
         </div>
@@ -229,7 +229,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           )}
           <div>
             <h1 className="text-lg font-bold">EVV Reconciliation</h1>
-            <p className="text-xs text-white/60">March 2026 billing period</p>
+            <p className="text-sm text-white/60">March 2026 billing period</p>
           </div>
         </div>
 
@@ -239,7 +239,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             <p className="text-3xl font-bold">
               {report.cleanCyclePercent}%
             </p>
-            <p className="text-xs text-white/70">Clean Cycles</p>
+            <p className="text-sm text-white/70">Clean Cycles</p>
           </div>
           <div className="h-12 w-px bg-white/20" />
           <div className="flex-1">
@@ -253,7 +253,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                 {report.cleanCycles}/{report.totalRecords} records clean
               </span>
             </div>
-            <p className="text-xs text-white/60">
+            <p className="text-sm text-white/60">
               {report.discrepancies.length > 0
                 ? `${discrepancyGroups.length} record${discrepancyGroups.length > 1 ? 's' : ''} need${discrepancyGroups.length === 1 ? 's' : ''} attention`
                 : 'All records clean — ready for fiscal agent'}
@@ -296,7 +296,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                   Historical Clean Rate Trend
                 </h2>
                 <MiniBarChart data={report.historicalCleanRates} />
-                <div className="flex items-center gap-3 mt-3 text-xs text-[#8A9BA8]">
+                <div className="flex items-center gap-3 mt-3 text-sm text-[#8A9BA8]">
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-green-500 rounded" /> ≥90%</div>
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-amber-400 rounded" /> 80-89%</div>
                   <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-red-400 rounded" /> &lt;80%</div>
@@ -313,7 +313,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                 ].map(stat => (
                   <div key={stat.label} className="bg-white rounded-2xl p-4 border border-[#E8E4DF] shadow-sm text-center">
                     <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">{stat.label}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -330,7 +330,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                 </div>
               ) : (
                 <>
-                  <p className="text-xs text-[#5A6B7A]">{discrepancyGroups.length} records need attention before fiscal agent submission</p>
+                  <p className="text-sm text-[#5A6B7A]">{discrepancyGroups.length} records need attention before fiscal agent submission</p>
                   {discrepancyGroups.map(({ record, discrepancies }) => (
                     <DiscrepancyRow key={record.id} record={record} discrepancies={discrepancies} />
                   ))}
@@ -374,7 +374,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                     </p>
                   </div>
                   {!checklistComplete && (
-                    <p className="text-xs text-amber-600 mt-1">
+                    <p className="text-sm text-amber-600 mt-1">
                       AHCCCS may reject EVV submissions with unresolved discrepancies. Fix issues in the Discrepancies tab first.
                     </p>
                   )}
@@ -398,7 +398,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                   ].map(row => (
                     <div key={row.label} className="flex items-center justify-between py-1 border-b border-gray-50">
                       <span className="text-[#5A6B7A]">{row.label}</span>
-                      <span className="font-medium text-[#1B2733] text-xs">{row.value}</span>
+                      <span className="font-medium text-[#1B2733] text-sm">{row.value}</span>
                     </div>
                   ))}
                 </div>
@@ -427,9 +427,9 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
 
               {!fiscalExport.readyForSubmission && fiscalExport.blockingIssues.length > 0 && (
                 <div className="bg-red-50 rounded-xl p-3 border border-red-100">
-                  <p className="text-xs font-semibold text-red-700 mb-1">Cannot export — resolve first:</p>
+                  <p className="text-sm font-semibold text-red-700 mb-1">Cannot export — resolve first:</p>
                   {fiscalExport.blockingIssues.map((issue, i) => (
-                    <p key={i} className="text-xs text-red-600">• {issue}</p>
+                    <p key={i} className="text-sm text-red-600">• {issue}</p>
                   ))}
                 </div>
               )}

@@ -88,7 +88,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
     if (value === false) {
       return <X className="w-4 h-4 text-[#8A9BA8] mx-auto" />;
     }
-    return <span className="text-xs text-center text-primary font-medium">{value}</span>;
+    return <span className="text-sm text-center text-primary font-medium">{value}</span>;
   };
 
   if (compact) {
@@ -97,7 +97,7 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
         <div className="text-sm font-semibold text-primary mb-3 text-center">
           Quick Comparison
         </div>
-        <table className="w-full text-xs">
+        <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-[#E8E4DF]">
               <th className="text-left py-2 font-medium text-muted-foreground">Feature</th>
@@ -160,20 +160,20 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Core</div>
                 <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.core.monthly}</div>
-                <div className="text-xs text-muted-foreground">/month</div>
+                <div className="text-sm text-muted-foreground">/month</div>
               </th>
               <th className="text-center py-4 px-4 bg-[#6B9080]/10/50 relative">
-                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white text-xs">
+                <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary text-white text-sm">
                   Most Popular
                 </Badge>
                 <div className="font-semibold text-[#6B9080] mt-2">Pro</div>
                 <div className="text-xl sm:text-2xl font-bold text-[#6B9080] mt-1">${tierPricing.pro.monthly}</div>
-                <div className="text-xs text-[#6B9080]">/month</div>
+                <div className="text-sm text-[#6B9080]">/month</div>
               </th>
               <th className="text-center py-4 px-4">
                 <div className="font-semibold text-primary">Family</div>
                 <div className="text-xl sm:text-2xl font-bold text-primary mt-1">${tierPricing.proplus.monthly}</div>
-                <div className="text-xs text-muted-foreground">/month</div>
+                <div className="text-sm text-muted-foreground">/month</div>
               </th>
             </tr>
           </thead>

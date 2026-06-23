@@ -253,7 +253,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
     <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">Schedule with {currentProvider?.name}</h3>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-sm">
           {insuranceStatus.verified ? '✓ Verified' : '⚠ Pending'}
         </Badge>
       </div>
@@ -353,7 +353,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                           {item.text}
                         </span>
                         {item.required && (
-                          <Badge variant="secondary" className="ml-2 text-xs">Required</Badge>
+                          <Badge variant="secondary" className="ml-2 text-sm">Required</Badge>
                         )}
                       </div>
                     </label>
@@ -449,7 +449,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
               <label htmlFor="session-file-upload" className="cursor-pointer">
                 <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-sm text-[#5A6B7A] mb-1">Upload photos, videos, or documents</p>
-                <p className="text-xs text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
+                <p className="text-sm text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
               </label>
             </div>
             
@@ -499,13 +499,13 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             <h3 className="font-semibold text-[#6B9080]">{currentProvider?.name || 'Sarah Miller'}</h3>
             <div className="flex items-center gap-2 mb-1">
               {(currentProvider?.credentials || ['RBT']).map((credential) => (
-                <Badge key={credential} variant="secondary" className="text-xs">
+                <Badge key={credential} variant="secondary" className="text-sm">
                   {credential}
                 </Badge>
               ))}
             </div>
             <p className="text-sm text-[#6B9080]">{currentProvider?.specialty || 'Registered Behavior Technician'}</p>
-            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-[#6B9080]">
+            <div className="flex items-center gap-3 sm:gap-4 mt-2 text-sm text-[#6B9080]">
               <span className="flex items-center gap-1">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
                 Available today
@@ -540,7 +540,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             size="sm"
             variant="outline"
             onClick={() => setMessageTemplate(reply)}
-            className="text-xs"
+            className="text-sm"
           >
             {reply}
           </Button>
@@ -561,7 +561,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           {uploadedFiles.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-[#F0EDE8] rounded text-xs">
+                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-[#F0EDE8] rounded text-sm">
                   <Paperclip className="h-3 w-3" />
                   <span>{file.name}</span>
                   <button

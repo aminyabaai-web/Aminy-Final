@@ -296,7 +296,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
             )}
             <div>
               <h1 className="text-base font-semibold text-[#1B2733]">Document Vault</h1>
-              <div className="flex items-center gap-1 text-xs text-slate-400">
+              <div className="flex items-center gap-1 text-sm text-slate-400">
                 <Lock className="w-3 h-3" />
                 <span>Encrypted · HIPAA-conscious</span>
               </div>
@@ -316,7 +316,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
       <div className="max-w-lg mx-auto px-4 py-5 pb-16 space-y-4">
 
         {/* Storage indicator */}
-        <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
+        <div className="flex items-center justify-between text-sm text-[#5A6B7A]">
           <div className="flex items-center gap-1.5">
             <HardDrive className="w-3.5 h-3.5" />
             <span>{storageLabel} GB of unlimited storage used</span>
@@ -338,7 +338,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
             <div className="min-w-0">
               <p className="text-sm font-semibold text-amber-800">Authorization expiring soon</p>
               {expiringDocs.map((d) => (
-                <p key={d.id} className="text-xs text-amber-700 mt-0.5">
+                <p key={d.id} className="text-sm text-amber-700 mt-0.5">
                   {d.name} — expires in {d.expiresInDays} days.{' '}
                   <button className="underline font-medium" onClick={() => toast.info('Opening renewal flow...')}>
                     Renew now
@@ -352,7 +352,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         {/* OCR hint */}
         <div className="flex items-center gap-3 p-3 bg-[#EEF4F8] border border-blue-100 rounded-xl">
           <Camera className="w-4 h-4 text-blue-600 flex-shrink-0" />
-          <p className="text-xs text-blue-700">
+          <p className="text-sm text-blue-700">
             <strong>Scan your insurance card</strong> and we'll read it and pre-fill your coverage info automatically.
           </p>
           <input
@@ -367,7 +367,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
             }}
           />
           <button
-            className="ml-auto text-xs text-blue-600 font-semibold shrink-0"
+            className="ml-auto text-sm text-blue-600 font-semibold shrink-0"
             onClick={() => cameraInputRef.current?.click()}
           >
             Scan →
@@ -438,11 +438,11 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-[#1B2733] leading-snug truncate">{doc.name}</p>
-                          <p className="text-xs text-slate-400 mt-0.5">{doc.source}</p>
+                          <p className="text-sm text-slate-400 mt-0.5">{doc.source}</p>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className="text-xs text-slate-400">{formatDate(doc.dateUploaded)}</span>
+                            <span className="text-sm text-slate-400">{formatDate(doc.dateUploaded)}</span>
                             <span className="text-xs text-slate-400">·</span>
-                            <span className="text-xs text-slate-400">{formatSize(doc.sizeKB)}</span>
+                            <span className="text-sm text-slate-400">{formatSize(doc.sizeKB)}</span>
                             <span className="text-xs font-medium text-[#5A6B7A] uppercase">{doc.fileType}</span>
                           </div>
                         </div>
@@ -450,12 +450,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                         {/* Badges */}
                         <div className="flex flex-col items-end gap-1 flex-shrink-0">
                           {doc.isExpiring && (
-                            <Badge className="bg-amber-100 text-amber-700 text-xs px-1.5 py-0 border-0">
+                            <Badge className="bg-amber-100 text-amber-700 text-sm px-1.5 py-0 border-0">
                               Expiring
                             </Badge>
                           )}
                           {doc.isShared && (
-                            <Badge className="bg-blue-100 text-blue-700 text-xs px-1.5 py-0 border-0 flex items-center gap-0.5">
+                            <Badge className="bg-blue-100 text-blue-700 text-sm px-1.5 py-0 border-0 flex items-center gap-0.5">
                               <Users className="w-2.5 h-2.5" />
                               Shared
                             </Badge>
@@ -467,21 +467,21 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <button
                           onClick={() => toast.info('Opening document preview...')}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           Preview
                         </button>
                         <button
                           onClick={() => setShareModal(doc)}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#6B9080] bg-[#6B9080]/10 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#6B9080] bg-[#6B9080]/10 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
                         >
                           <Share2 className="w-3 h-3" />
                           Share
                         </button>
                         <button
                           onClick={() => toast.success('Download started!')}
-                          className="flex items-center gap-1 px-2 py-1 text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Download className="w-3 h-3" />
                           Download
@@ -490,7 +490,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
 
                       {/* Shared with */}
                       {doc.isShared && doc.sharedWith && doc.sharedWith.length > 0 && (
-                        <p className="text-xs text-blue-500 mt-1.5 flex items-center gap-1">
+                        <p className="text-sm text-blue-500 mt-1.5 flex items-center gap-1">
                           <CheckCircle className="w-3 h-3" />
                           Shared with: {doc.sharedWith.join(', ')}
                         </p>
@@ -529,7 +529,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
 
               <div className="space-y-3 mb-4">
                 <div>
-                  <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Document name</label>
+                  <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Document name</label>
                   <input
                     type="text"
                     placeholder="e.g. Behavioral Assessment Report"
@@ -539,7 +539,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   />
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Category</label>
+                  <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Category</label>
                   <select
                     value={uploadCategory}
                     onChange={(e) => setUploadCategory(e.target.value as Exclude<DocCategory, 'all'>)}
@@ -573,12 +573,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   {selectedFile ? (
                     <>
                       <p className="text-sm text-[#6B9080] font-medium">{selectedFile.name}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{(selectedFile.size / 1024).toFixed(0)} KB — tap to change</p>
+                      <p className="text-sm text-slate-400 mt-0.5">{(selectedFile.size / 1024).toFixed(0)} KB — tap to change</p>
                     </>
                   ) : (
                     <>
                       <p className="text-sm text-[#5A6B7A]">Tap to select file</p>
-                      <p className="text-xs text-slate-400 mt-0.5">PDF, images, Word documents</p>
+                      <p className="text-sm text-slate-400 mt-0.5">PDF, images, Word documents</p>
                     </>
                   )}
                 </div>
@@ -622,14 +622,14 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
               </div>
-              <p className="text-xs text-slate-400 mb-4">{shareModal.name}</p>
+              <p className="text-sm text-slate-400 mb-4">{shareModal.name}</p>
 
               <div className="space-y-2 mb-4">
                 {careTeam.length === 0 ? (
                   <div className="text-center py-6">
                     <Users className="w-8 h-8 mx-auto mb-2 text-slate-300" />
                     <p className="text-sm text-[#5A6B7A]">No care team members yet</p>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-sm text-slate-400 mt-0.5">
                       Add a provider to your care team to share documents.
                     </p>
                   </div>
@@ -645,7 +645,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       }`}
                     >
                       <div className="w-8 h-8 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                        <span className="text-xs font-bold text-[#6B9080]">{provider.charAt(0)}</span>
+                        <span className="text-sm font-bold text-[#6B9080]">{provider.charAt(0)}</span>
                       </div>
                       <span className="text-sm text-[#1B2733]">{provider}</span>
                       {selectedProvider === provider && (

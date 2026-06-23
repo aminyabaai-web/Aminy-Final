@@ -620,7 +620,7 @@ function MedicaidWaiverSection() {
               <p className="text-sm font-medium text-[#5A6B7A] mb-2">Services Covered</p>
               <div className="flex flex-wrap gap-2">
                 {waiver.services.map((service, sIdx) => (
-                  <Badge key={sIdx} variant="secondary" className="text-xs">
+                  <Badge key={sIdx} variant="secondary" className="text-sm">
                     {service}
                   </Badge>
                 ))}
@@ -740,7 +740,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400" />
                 <span className="font-medium text-[#1B2733]">{state}</span>
-                <Badge variant="outline" className="text-xs">{data.waivers.length} waivers</Badge>
+                <Badge variant="outline" className="text-sm">{data.waivers.length} waivers</Badge>
               </div>
               {isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
             </button>
@@ -750,7 +750,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
                 <div className="mt-3 space-y-3">
                   <div className="flex flex-wrap gap-2">
                     {data.waivers.map((waiver, idx) => (
-                      <Badge key={idx} variant="secondary" className="text-xs">
+                      <Badge key={idx} variant="secondary" className="text-sm">
                         {waiver}
                       </Badge>
                     ))}

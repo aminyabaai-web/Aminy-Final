@@ -758,13 +758,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 <>
                   {aiMemory.childName && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">Child</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">Child</span>
                       <span className="text-sm dark:text-white">{aiMemory.childName}{aiMemory.childAge ? `, age ${aiMemory.childAge}` : ''}{aiMemory.diagnosis ? ` · ${aiMemory.diagnosis}` : ''}</span>
                     </div>
                   )}
                   {(aiMemory.activeGoals?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Goals</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Goals</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.activeGoals!.map((g, i) => (
                           <span key={i} className="text-xs bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20 rounded-full px-2 py-0.5">{g}</span>
@@ -774,13 +774,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {aiMemory.lastCalmCue && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">Calm cue</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">Calm cue</span>
                       <span className="text-sm dark:text-white">"{aiMemory.lastCalmCue}"</span>
                     </div>
                   )}
                   {(aiMemory.celebratingWins?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Wins</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Wins</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.celebratingWins!.map((w, i) => (
                           <span key={i} className="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-2 py-0.5">{w}</span>
@@ -790,7 +790,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {(aiMemory.strugglingWith?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Working on</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Working on</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.strugglingWith!.map((s, i) => (
                           <span key={i} className="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5">{s}</span>
@@ -800,7 +800,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {aiMemory.progressThisWeek && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">This week</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">This week</span>
                       <span className="text-sm dark:text-white">{aiMemory.progressThisWeek.sessionsCompleted} sessions · {aiMemory.progressThisWeek.calmMoments} calm moments</span>
                     </div>
                   )}
@@ -1052,7 +1052,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <div className="px-4 py-3 space-y-3 border-t border-[#E8E4DF] bg-white">
                         {/* Frequency chips */}
                         <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">Frequency</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-2">Frequency</p>
                           <div className="flex gap-2 flex-wrap">
                             {([
                               { id: 'daily', label: 'Daily' },
@@ -1085,7 +1085,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
                         {/* Time chips */}
                         <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">Best time</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-2">Best time</p>
                           <div className="flex gap-2">
                             {([
                               { id: 'morning', label: '☀️ Morning', sub: '7–9 am' },
@@ -1107,8 +1107,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                     : 'border-[#E8E4DF] bg-[#FAF7F2] text-foreground hover:border-[#6B9080]'
                                 }`}
                               >
-                                <p className="text-xs font-medium">{opt.label}</p>
-                                <p className="text-xs text-slate-400 mt-0.5">{opt.sub}</p>
+                                <p className="text-sm font-medium">{opt.label}</p>
+                                <p className="text-sm text-slate-400 mt-0.5">{opt.sub}</p>
                               </button>
                             ))}
                           </div>

@@ -664,15 +664,15 @@ export function ModerationDashboard() {
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{userHistory.totalFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Total Flags</p>
+                  <p className="text-sm text-[#5A6B7A]">Total Flags</p>
                 </div>
                 <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-emerald-600">{userHistory.approvedFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Approved</p>
+                  <p className="text-sm text-[#5A6B7A]">Approved</p>
                 </div>
                 <div className="text-center p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-rose-600">{userHistory.rejectedFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Rejected</p>
+                  <p className="text-sm text-[#5A6B7A]">Rejected</p>
                 </div>
               </div>
 

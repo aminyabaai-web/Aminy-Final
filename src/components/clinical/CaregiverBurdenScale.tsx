@@ -247,7 +247,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
           )}
         </div>
         <Progress value={progress} className="h-1.5 bg-white/20" />
-        <p className="text-xs text-white/70 mt-2">
+        <p className="text-sm text-white/70 mt-2">
           Question {currentQuestion + 1} of 12
         </p>
       </div>
@@ -429,7 +429,7 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
         )}
       </div>
 
-      <p className="text-xs text-[#8A9BA8] text-center mt-4">
+      <p className="text-sm text-[#8A9BA8] text-center mt-4">
         Based on the Zarit Burden Interview short form. This is a screening tool, not a diagnosis.
       </p>
     </Card>

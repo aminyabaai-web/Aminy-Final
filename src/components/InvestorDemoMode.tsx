@@ -164,7 +164,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
       >
         <Sparkles className="w-4 h-4" />
         <span className="text-sm font-semibold">Investor Demo</span>
-        <span className="text-xs opacity-80">
+        <span className="text-sm opacity-80">
           {stepIndex + 1}/{DEMO_STEPS.length}
         </span>
       </motion.button>
@@ -183,14 +183,14 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-semibold">INVESTOR DEMO MODE</span>
-            <span className="text-xs opacity-80">
+            <span className="text-sm opacity-80">
               {stepIndex + 1} of {DEMO_STEPS.length}
             </span>
           </div>
           <div className="flex items-center gap-1">
             <button
               onClick={() => setMinimized(true)}
-              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-xs"
+              className="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-sm"
               title="Minimize"
               aria-label="Minimize investor demo"
             >
@@ -249,7 +249,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
             </div>
 
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 <strong>Highlight:</strong> {currentStep.highlight}
               </p>
             </div>

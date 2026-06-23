@@ -1024,7 +1024,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
-                  <p className="text-xs text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
+                  <p className="text-sm text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
                     <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
                   </p>
@@ -1101,7 +1101,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             <MessageSquare className="w-5 h-5 text-slate-400 dark:text-slate-300" />
                           </div>
                           <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No previous chats yet.</p>
-                          <p className="text-xs text-slate-400 dark:text-slate-400">Your conversations will appear here after you close the chat.</p>
+                          <p className="text-sm text-slate-400 dark:text-slate-400">Your conversations will appear here after you close the chat.</p>
                         </div>
                       ) : (
                         <div className="divide-y divide-slate-100">
@@ -1119,7 +1119,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm text-[#1B2733] dark:text-slate-200 leading-snug line-clamp-2">{session.preview}</p>
-                                <p className="text-xs text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
+                                <p className="text-sm text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
                               </div>
                               <button
                                 onClick={(e) => handleDeleteSession(session.id, e)}
@@ -1174,10 +1174,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               {userContext?.childName || propChildName || 'Your child'}
                             </p>
                             {userContext?.childAge && (
-                              <p className="text-xs text-[#5A6B7A]">{userContext.childAge}</p>
+                              <p className="text-sm text-[#5A6B7A]">{userContext.childAge}</p>
                             )}
                             {userContext?.diagnosis && (
-                              <p className="text-xs text-[#6B9080] font-medium mt-0.5">{userContext.diagnosis}</p>
+                              <p className="text-sm text-[#6B9080] font-medium mt-0.5">{userContext.diagnosis}</p>
                             )}
                           </div>
                           <div className="ml-auto shrink-0 text-right">
@@ -1230,10 +1230,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">{p.name}</p>
+                                  <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">{p.name}</p>
                                   {personality === p.id && <Check className="w-3 h-3 text-[#6B9080] shrink-0" />}
                                 </div>
-                                <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
+                                <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
                               </div>
                             </button>
                           ))}
@@ -1260,7 +1260,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="flex items-center justify-between">
                             <div className="pr-4">
                               <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Show thinking steps</p>
-                              <p className="text-xs text-[#5A6B7A] leading-tight">Display reasoning steps while processing</p>
+                              <p className="text-sm text-[#5A6B7A] leading-tight">Display reasoning steps while processing</p>
                             </div>
                             <Switch
                               checked={showThinkingSteps}
@@ -1273,7 +1273,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="flex items-center justify-between">
                             <div className="pr-4">
                               <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Suggested follow-ups</p>
-                              <p className="text-xs text-[#5A6B7A] leading-tight">Show quick questions after each response</p>
+                              <p className="text-sm text-[#5A6B7A] leading-tight">Show quick questions after each response</p>
                             </div>
                             <Switch
                               checked={showFollowUps}
@@ -1306,7 +1306,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
                         <div className="space-y-3">
                           <div>
-                            <label className="text-xs text-[#5A6B7A] mb-1.5 block">What Aminy should know about you and your family</label>
+                            <label className="text-sm text-[#5A6B7A] mb-1.5 block">What Aminy should know about you and your family</label>
                             <textarea
                               value={customInstructions.aboutMe}
                               onChange={e => {
@@ -1327,7 +1327,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           </div>
 
                           <div>
-                            <label className="text-xs text-[#5A6B7A] mb-1.5 block">How Aminy should communicate with you</label>
+                            <label className="text-sm text-[#5A6B7A] mb-1.5 block">How Aminy should communicate with you</label>
                             <textarea
                               value={customInstructions.responseStyle}
                               onChange={e => {
@@ -1380,17 +1380,17 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {userContext.lastCalmCue && (
                               <div className="px-3 py-2.5 flex items-center gap-2">
                                 <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-                                <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Last calm cue: <span className="font-medium text-[#1B2733] dark:text-slate-100">{userContext.lastCalmCue}</span></p>
+                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Last calm cue: <span className="font-medium text-[#1B2733] dark:text-slate-100">{userContext.lastCalmCue}</span></p>
                               </div>
                             )}
                             {userContext.bestTimeOfDay && (
                               <div className="px-3 py-2.5">
-                                <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Best time of day: <span className="font-medium text-[#1B2733] dark:text-slate-100 capitalize">{userContext.bestTimeOfDay}</span></p>
+                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Best time of day: <span className="font-medium text-[#1B2733] dark:text-slate-100 capitalize">{userContext.bestTimeOfDay}</span></p>
                               </div>
                             )}
                             {!userContext.strugglingWith?.length && !userContext.celebratingWins?.length && !userContext.lastCalmCue && !userContext.bestTimeOfDay && (
                               <div className="px-3 py-3 text-center">
-                                <p className="text-xs text-slate-400">Chat with Aminy to build your family's memory</p>
+                                <p className="text-sm text-slate-400">Chat with Aminy to build your family's memory</p>
                               </div>
                             )}
                           </div>
@@ -1412,7 +1412,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               setMemoryFacts(facts);
                               setMemoryLoading(false);
                             }}
-                            className="text-xs text-[#6B9080] hover:underline font-medium"
+                            className="text-sm text-[#6B9080] hover:underline font-medium"
                           >
                             {memoryLoading ? 'Loading…' : memoryFacts.length === 0 ? 'Load' : 'Refresh'}
                           </button>
@@ -1431,8 +1431,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                     {facts.map(fact => (
                                       <div key={fact.id} className="flex items-start justify-between gap-2">
                                         <div className="min-w-0">
-                                          <span className="text-xs text-[#5A6B7A] font-medium">{fact.key.replace(/_/g, ' ')}: </span>
-                                          <span className="text-xs text-[#1B2733] dark:text-slate-100">{fact.value}</span>
+                                          <span className="text-sm text-[#5A6B7A] font-medium">{fact.key.replace(/_/g, ' ')}: </span>
+                                          <span className="text-sm text-[#1B2733] dark:text-slate-100">{fact.value}</span>
                                         </div>
                                         <button
                                           onClick={async () => {
@@ -1452,7 +1452,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             })()}
                           </div>
                         ) : (
-                          <p className="text-xs text-slate-400 py-2">
+                          <p className="text-sm text-slate-400 py-2">
                             {memoryLoading ? 'Loading memories…' : 'Tap Load to view saved memories'}
                           </p>
                         )}
@@ -1464,7 +1464,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               await clearMemory(userId);
                               setMemoryFacts([]);
                             }}
-                            className="mt-2 w-full text-xs text-red-400 hover:text-red-500 py-1.5 text-center font-medium"
+                            className="mt-2 w-full text-sm text-red-400 hover:text-red-500 py-1.5 text-center font-medium"
                           >
                             Delete all memories
                           </button>
@@ -1540,7 +1540,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                         onNavigate?.(part.content.screen, { tab: part.content.tab });
                                         onClose();
                                       }}
-                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 border border-[#6B9080]/20 transition-colors"
+                                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20 border border-[#6B9080]/20 transition-colors"
                                     >
                                       {part.content.label || 'Go →'}
                                     </button>
@@ -1574,7 +1574,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               toast.success('Copied to clipboard', { duration: 1500 });
                             });
                           }}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-sm text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           title="Copy message"
                           aria-label="Copy message to clipboard"
                         >
@@ -1694,7 +1694,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <X className="w-3 h-3" />
                     </button>
                   </div>
-                  <p className="text-xs text-[#5A6B7A] truncate">{attachedImage.name}</p>
+                  <p className="text-sm text-[#5A6B7A] truncate">{attachedImage.name}</p>
                 </div>
               )}
 
@@ -1757,8 +1757,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     >
                       <chip.icon className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">{chip.label}</p>
-                        <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5">{chip.sub}</p>
+                        <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">{chip.label}</p>
+                        <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5">{chip.sub}</p>
                       </div>
                     </button>
                   ))}
@@ -1769,7 +1769,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {pendingScreenContext && (
                 <div className="mb-2 flex items-center gap-2 px-3 py-1.5 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl">
                   <Monitor className="w-3.5 h-3.5 text-[#6B9080]" />
-                  <span className="text-xs text-[#6B9080] font-medium flex-1">Screen context attached</span>
+                  <span className="text-sm text-[#6B9080] font-medium flex-1">Screen context attached</span>
                   <button onClick={() => setPendingScreenContext(null)} className="text-[#6B9080]/60 hover:text-[#6B9080]">
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -1940,7 +1940,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100 leading-tight">{item.label}</p>
-                          <p className="text-xs text-[#5A6B7A] leading-tight mt-0.5">{item.desc}</p>
+                          <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5">{item.desc}</p>
                         </div>
                       </button>
                     ))}

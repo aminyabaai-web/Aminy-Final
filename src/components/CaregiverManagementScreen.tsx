@@ -132,7 +132,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               <Shield className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-sm">Owner</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Full access: Edit plans, manage caregivers, billing
                 </p>
               </div>
@@ -141,7 +141,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-sm">Caregiver</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Can edit plans, log activities, view reports
                 </p>
               </div>
@@ -150,7 +150,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               <Shield className="w-5 h-5 text-[#5A6B7A] flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-sm">Read-only</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   View-only access to plans and progress
                 </p>
               </div>
@@ -183,7 +183,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
               <p className="text-sm font-medium text-[#3A4A57] mb-1">Build your care team</p>
-              <p className="text-xs text-[#5A6B7A]">Invite your partner, a grandparent, or anyone who helps care for your child. They'll get their own secure access.</p>
+              <p className="text-sm text-[#5A6B7A]">Invite your partner, a grandparent, or anyone who helps care for your child. They'll get their own secure access.</p>
             </Card>
           )}
           <div className="space-y-3">
@@ -213,7 +213,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
                         {caregiver.status === 'pending' && 'Pending'}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Added: {new Date(caregiver.addedDate).toLocaleDateString()}
                     </p>
                   </div>
@@ -291,7 +291,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
 
         {/* Privacy Notice */}
         <div className="p-4 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
-          <p className="text-xs text-blue-700">
+          <p className="text-sm text-blue-700">
             <strong>Privacy & Security:</strong> All caregivers must accept an invitation
             and verify their email before gaining access. You can revoke access at any time.
             Changes take effect immediately.

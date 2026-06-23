@@ -219,7 +219,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
 
           {/* Data collected */}
           {s.dataCollected.length > 0 && (
-            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-sm text-[#5A6B7A]">
               {s.dataCollected.map((d, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <BarChart3 className="w-3 h-3" />

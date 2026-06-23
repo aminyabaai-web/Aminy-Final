@@ -86,7 +86,7 @@ function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
                 }`}
               >
                 <div className="font-semibold text-sm mb-1">{tone.label}</div>
-                <div className="text-xs text-muted-foreground">{tone.description}</div>
+                <div className="text-sm text-muted-foreground">{tone.description}</div>
               </button>
             );
           })}
@@ -116,14 +116,14 @@ function PreferencesStep({ formData, setFormData }: PreferencesStepProps) {
             );
           })}
         </div>
-        <p className="text-xs text-center text-muted-foreground mt-3">
+        <p className="text-sm text-center text-muted-foreground mt-3">
           We'll suggest the right steps at the right times.
         </p>
       </div>
 
       {/* Supportive microcopy at bottom */}
       <div className="pt-4 border-t border-[#E8E4DF]">
-        <p className="text-xs text-center text-muted-foreground leading-relaxed">
+        <p className="text-sm text-center text-muted-foreground leading-relaxed">
           These preferences help Aminy personalize your experience and suggest activities when they'll be most helpful.
         </p>
       </div>

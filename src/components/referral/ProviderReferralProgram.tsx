@@ -263,21 +263,21 @@ export function ProviderReferralProgram({
                   className="flex flex-col items-center p-3 bg-[#EEF4F8] rounded-xl hover:bg-blue-100 transition-colors"
                 >
                   <Mail className="w-5 h-5 text-blue-600 mb-1" />
-                  <span className="text-xs text-blue-700">Email</span>
+                  <span className="text-sm text-blue-700">Email</span>
                 </button>
                 <button
                   onClick={() => handleShare('sms')}
                   className="flex flex-col items-center p-3 bg-green-50 rounded-xl hover:bg-green-100 transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-green-600 mb-1" />
-                  <span className="text-xs text-green-700">Text</span>
+                  <span className="text-sm text-green-700">Text</span>
                 </button>
                 <button
                   onClick={() => handleShare('copy')}
                   className="flex flex-col items-center p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
                 >
                   <Link2 className="w-5 h-5 text-[#5A6B7A] mb-1" />
-                  <span className="text-xs text-[#3A4A57]">Copy Link</span>
+                  <span className="text-sm text-[#3A4A57]">Copy Link</span>
                 </button>
               </div>
             </Card>

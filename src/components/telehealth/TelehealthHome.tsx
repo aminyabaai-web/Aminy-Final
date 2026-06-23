@@ -408,12 +408,12 @@ export function TelehealthHome({
                       <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
                       <div className="flex items-center gap-2 mt-1">
                         {provider.rating && (
-                          <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+                          <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                             <Star className="w-3 h-3 text-amber-400 fill-current" />
                             {provider.rating}
                           </div>
                         )}
-                        <span className="text-xs text-[#8A9BA8]">•</span>
+                        <span className="text-sm text-[#8A9BA8]">•</span>
                         <span className="text-sm text-[#5A6B7A]">
                           From ${provider.consultPrice}
                         </span>

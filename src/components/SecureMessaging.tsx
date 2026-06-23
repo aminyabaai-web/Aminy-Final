@@ -439,7 +439,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
 
         {/* HIPAA Notice */}
         <div className="px-4 py-2 bg-[#6B9080]/10 border-b border-[#E8E4DF]">
-          <div className="flex items-center gap-2 text-xs text-[#6B9080]">
+          <div className="flex items-center gap-2 text-sm text-[#6B9080]">
             <Shield className="w-3.5 h-3.5" />
             <span>Encrypted, private messaging</span>
           </div>
@@ -479,7 +479,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                         {userType === 'parent' ? thread.providerName : thread.parentName}
                       </span>
                       {thread.lastMessage && (
-                        <span className="text-xs text-neutral-400">
+                        <span className="text-sm text-neutral-400">
                           {formatTime(thread.lastMessage.createdAt)}
                         </span>
                       )}
@@ -603,7 +603,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                       )}
                     </div>
 
-                    <div className={`flex items-center gap-1 mt-1 text-xs text-neutral-400 ${
+                    <div className={`flex items-center gap-1 mt-1 text-sm text-neutral-400 ${
                       isOwn ? 'justify-end' : 'justify-start'
                     }`}>
                       <span>{formatTime(message.createdAt)}</span>
@@ -626,7 +626,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
           {showQuickReplies && (
             <div className="px-4 py-2 bg-neutral-50 border-t border-neutral-200">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-[#5A6B7A]">Quick Replies</span>
+                <span className="text-sm font-medium text-[#5A6B7A]">Quick Replies</span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -664,7 +664,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                   >
                     <FileText className="w-4 h-4 text-neutral-400" />
                     <span className="text-sm truncate max-w-[150px]">{file.name}</span>
-                    <span className="text-xs text-neutral-400">{formatFileSize(file.size)}</span>
+                    <span className="text-sm text-neutral-400">{formatFileSize(file.size)}</span>
                     <button
                       onClick={() => removeAttachment(i)}
                       className="text-neutral-400 hover:text-red-500"

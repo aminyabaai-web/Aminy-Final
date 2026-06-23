@@ -450,10 +450,10 @@ export function TherapyGoalTemplates({
                               {template.name}
                             </h4>
                             {template.iepAligned && (
-                              <Badge className="bg-blue-100 text-blue-700 text-xs">IEP Aligned</Badge>
+                              <Badge className="bg-blue-100 text-blue-700 text-sm">IEP Aligned</Badge>
                             )}
                             {template.evidenceBased && (
-                              <Badge className="bg-green-100 text-green-700 text-xs">Evidence-Based</Badge>
+                              <Badge className="bg-green-100 text-green-700 text-sm">Evidence-Based</Badge>
                             )}
                           </div>
                           <p className="text-sm text-[#5A6B7A] dark:text-neutral-400 mt-1">
@@ -461,7 +461,7 @@ export function TherapyGoalTemplates({
                           </p>
                         </div>
                         <div className="flex items-center gap-2 ml-4">
-                          <div className="text-xs text-neutral-400 flex items-center gap-1">
+                          <div className="text-sm text-neutral-400 flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {template.suggestedDuration}
                           </div>

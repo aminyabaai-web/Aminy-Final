@@ -170,11 +170,11 @@ function ServiceCard({ service }: { service: ServiceCode }) {
             {expanded ? <ChevronUp className="w-5 h-5 text-[#8A9BA8] flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-5 h-5 text-[#8A9BA8] flex-shrink-0 mt-0.5" />}
           </div>
           <div className="flex items-center gap-4 mt-2">
-            <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
               <DollarSign className="w-3.5 h-3.5" />
               <span className="font-medium text-[#3A4A57]">{service.rateRangeAZ}</span>
             </div>
-            <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
               <Clock className="w-3.5 h-3.5" />
               <span>{service.typicalDuration}</span>
             </div>

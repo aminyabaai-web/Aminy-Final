@@ -408,7 +408,7 @@ export function InsightNavigator({
                     </ul>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 text-xs text-[#5A6B7A] dark:text-slate-400">
+                  <div className="flex items-center justify-between pt-3 text-sm text-[#5A6B7A] dark:text-slate-400">
                     <span>Updated {insight.lastUpdated}</span>
                   </div>
                 </div>

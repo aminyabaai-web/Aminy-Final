@@ -131,7 +131,7 @@ export function AskAminyPromotion({
             <Sparkles className="w-4 h-4 text-accent" />
             <span className="text-sm font-medium text-accent">Enhanced Features Active:</span>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs">
+          <div className="flex flex-wrap gap-2 text-sm">
             {hasAdvancedFeatures && (
               <span className="bg-accent/10 text-accent px-2 py-1 rounded-full">Real-time streaming</span>
             )}

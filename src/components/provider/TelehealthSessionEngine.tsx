@@ -294,13 +294,13 @@ export function TelehealthSessionEngine({
                             </Badge>
                           ))}
                           {modality.payerRestricted && (
-                            <Badge variant="outline" className="text-xs border-amber-300 text-amber-700 bg-amber-50 gap-1">
+                            <Badge variant="outline" className="text-sm border-amber-300 text-amber-700 bg-amber-50 gap-1">
                               <AlertTriangle className="w-2.5 h-2.5" />
                               Payer restricted
                             </Badge>
                           )}
                           {modality.requiresBcbaSignoff && (
-                            <Badge variant="outline" className="text-xs border-violet-300 text-violet-700 bg-violet-50">
+                            <Badge variant="outline" className="text-sm border-violet-300 text-violet-700 bg-violet-50">
                               BCBA sign-off required
                             </Badge>
                           )}
@@ -320,20 +320,20 @@ export function TelehealthSessionEngine({
                         {/* OMO note */}
                         {modality.omoNote && (
                           <div className="mt-2 px-3 py-2 bg-violet-50 rounded-lg border border-violet-100">
-                            <p className="text-xs text-violet-700">{modality.omoNote}</p>
+                            <p className="text-sm text-violet-700">{modality.omoNote}</p>
                           </div>
                         )}
 
                         {/* Billing note */}
                         <div className="mt-2 flex items-start gap-1.5">
                           <CheckCircle2 className="w-3 h-3 text-primary mt-0.5 shrink-0" />
-                          <p className="text-xs text-[#5A6B7A]">{modality.billingNote}</p>
+                          <p className="text-sm text-[#5A6B7A]">{modality.billingNote}</p>
                         </div>
 
                         {/* AI doc targets */}
                         <div className="mt-2 flex items-center gap-1.5 flex-wrap">
                           <Sparkles className="w-3 h-3 text-violet-400 shrink-0" />
-                          <span className="text-xs text-violet-600 font-medium">AI will capture:</span>
+                          <span className="text-sm text-violet-600 font-medium">AI will capture:</span>
                           {modality.aiDocTargets.map(target => (
                             <span key={target} className="text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded px-1.5 py-0.5">
                               {target.replace(/_/g, ' ')}
@@ -375,7 +375,7 @@ export function TelehealthSessionEngine({
                 </div>
               </div>
               <Clock className="w-4 h-4 text-primary" />
-              <span className="text-xs text-[#6B9080]">{selectedModality.estimatedMinutes} min</span>
+              <span className="text-sm text-[#6B9080]">{selectedModality.estimatedMinutes} min</span>
             </Card>
 
             <div className="space-y-2">
@@ -396,7 +396,7 @@ export function TelehealthSessionEngine({
                       </div>
                       <div className="flex-1">
                         <p className="font-semibold text-[#1B2733] text-sm">{patient.name}</p>
-                        <p className="text-xs text-[#5A6B7A]">{patient.insurancePayer}</p>
+                        <p className="text-sm text-[#5A6B7A]">{patient.insurancePayer}</p>
                       </div>
                       {selectedClientId === patient.id && (
                         <CheckCircle2 className="w-5 h-5 text-primary" />
@@ -422,7 +422,7 @@ export function TelehealthSessionEngine({
                     </div>
                     <div className="flex-1">
                       <p className="font-medium text-[#3A4A57] text-sm">New Client</p>
-                      <p className="text-xs text-slate-400">Add client details before starting</p>
+                      <p className="text-sm text-slate-400">Add client details before starting</p>
                     </div>
                     {selectedClientId === 'new' && (
                       <CheckCircle2 className="w-5 h-5 text-primary" />
@@ -475,7 +475,7 @@ export function TelehealthSessionEngine({
                   <p className="text-[#1B2733] font-medium mt-0.5">
                     {selectedClientId === 'new' ? 'New Client' : selectedClient?.name || '—'}
                   </p>
-                  {selectedClient && <p className="text-xs text-slate-400">{selectedClient.insurancePayer}</p>}
+                  {selectedClient && <p className="text-sm text-slate-400">{selectedClient.insurancePayer}</p>}
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Duration</p>
@@ -485,7 +485,7 @@ export function TelehealthSessionEngine({
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Participants</p>
                   <div className="mt-0.5 space-y-0.5">
                     {selectedModality.participants.map((p, i) => (
-                      <p key={i} className="text-xs text-[#5A6B7A]">{p}</p>
+                      <p key={i} className="text-sm text-[#5A6B7A]">{p}</p>
                     ))}
                   </div>
                 </div>
@@ -493,18 +493,18 @@ export function TelehealthSessionEngine({
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Flags</p>
                   <div className="mt-0.5 space-y-1">
                     {selectedModality.requiresBcbaSignoff && (
-                      <Badge variant="outline" className="text-xs border-violet-300 text-violet-700 bg-violet-50 block w-fit">
+                      <Badge variant="outline" className="text-sm border-violet-300 text-violet-700 bg-violet-50 block w-fit">
                         BCBA sign-off
                       </Badge>
                     )}
                     {selectedModality.payerRestricted && (
-                      <Badge variant="outline" className="text-xs border-amber-300 text-amber-700 bg-amber-50 gap-1 flex w-fit items-center">
+                      <Badge variant="outline" className="text-sm border-amber-300 text-amber-700 bg-amber-50 gap-1 flex w-fit items-center">
                         <AlertTriangle className="w-2.5 h-2.5" />
                         Payer restricted
                       </Badge>
                     )}
                     {!selectedModality.requiresBcbaSignoff && !selectedModality.payerRestricted && (
-                      <span className="text-xs text-slate-400">None</span>
+                      <span className="text-sm text-slate-400">None</span>
                     )}
                   </div>
                 </div>
@@ -514,7 +514,7 @@ export function TelehealthSessionEngine({
               <div className="border-t border-[#E8E4DF] pt-3">
                 <div className="flex items-center gap-1.5 mb-2">
                   <Sparkles className="w-3.5 h-3.5 text-violet-500" />
-                  <p className="text-xs font-semibold text-violet-700">AI will auto-generate</p>
+                  <p className="text-sm font-semibold text-violet-700">AI will auto-generate</p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {selectedModality.aiDocTargets.map(target => (
@@ -576,7 +576,7 @@ export function TelehealthSessionEngine({
             </Button>
 
             {!allChecked && (
-              <p className="text-center text-xs text-slate-400">
+              <p className="text-center text-sm text-slate-400">
                 Complete all checklist items to start
               </p>
             )}

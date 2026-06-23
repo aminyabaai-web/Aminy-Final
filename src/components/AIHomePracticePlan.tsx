@@ -172,7 +172,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
               onClick={() => setExpandedDay(expandedDay === day.day ? null : day.day)}
             >
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">{day.label}</Badge>
+                <Badge variant="outline" className="text-sm">{day.label}</Badge>
                 <span className="text-sm text-[#5A6B7A]">{day.activities.map(a => a.title).join(' · ')}</span>
               </div>
               {expandedDay === day.day ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
@@ -186,7 +186,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                       <span className="text-sm font-semibold text-[#1B2733]">{a.title}</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm text-slate-400">{a.time}</span>
-                        <Badge variant="outline" className="text-xs">{a.durationMinutes}m</Badge>
+                        <Badge variant="outline" className="text-sm">{a.durationMinutes}m</Badge>
                       </div>
                     </div>
                     <ol className="space-y-1">

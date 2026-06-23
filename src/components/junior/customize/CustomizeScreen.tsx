@@ -224,7 +224,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                     >
                       {prefs.themeColor === c.value && <Check size={20} color="white" />}
                     </div>
-                    <span className="text-xs font-medium" style={{ color: '#555' }}>{c.name}</span>
+                    <span className="text-sm font-medium" style={{ color: '#555' }}>{c.name}</span>
                   </button>
                 ))}
               </div>
@@ -266,12 +266,12 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                           {outfit.label}
                         </p>
                         {outfit.starCost > 0 && (
-                          <p className="text-xs" style={{ color: locked ? '#999' : '#43AA8B' }}>
+                          <p className="text-sm" style={{ color: locked ? '#999' : '#43AA8B' }}>
                             {locked ? <><Lock size={10} className="inline" /> {outfit.starCost} ⭐</> : 'Unlocked!'}
                           </p>
                         )}
                         {outfit.starCost === 0 && outfit.id !== 'none' && (
-                          <p className="text-xs" style={{ color: '#43AA8B' }}>Free!</p>
+                          <p className="text-sm" style={{ color: '#43AA8B' }}>Free!</p>
                         )}
                       </div>
                       {equipped && <Check size={18} color="#43AA8B" />}

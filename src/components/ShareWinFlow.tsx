@@ -204,7 +204,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                     <Heart className="w-5 h-5 text-[#2A7D99]" />
                     <span className="font-semibold text-[#1B2733]">Aminy</span>
                   </div>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     {new Date(win.date).toLocaleDateString()}
                   </Badge>
                 </div>
@@ -246,7 +246,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                   onClick={handleShareTwitter}
                 >
                   <X className="w-5 h-5 text-[#1B2733]" />
-                  <span className="text-xs">X</span>
+                  <span className="text-sm">X</span>
                 </Button>
 
                 <Button
@@ -255,7 +255,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                   onClick={handleShareFacebook}
                 >
                   <Share2 className="w-5 h-5 text-blue-600" />
-                  <span className="text-xs">Facebook</span>
+                  <span className="text-sm">Facebook</span>
                 </Button>
 
                 <Button
@@ -269,7 +269,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                   ) : (
                     <Camera className="w-5 h-5 text-pink-500" />
                   )}
-                  <span className="text-xs">Instagram</span>
+                  <span className="text-sm">Instagram</span>
                 </Button>
 
                 <Button
@@ -282,7 +282,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                   ) : (
                     <Copy className="w-5 h-5 text-[#5A6B7A]" />
                   )}
-                  <span className="text-xs">Copy</span>
+                  <span className="text-sm">Copy</span>
                 </Button>
               </div>
 

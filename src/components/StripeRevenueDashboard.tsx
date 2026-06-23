@@ -276,7 +276,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <button
             key={range}
             onClick={() => setTimeRange(range)}
-            className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
+            className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-colors ${
               _timeRange === range
                 ? 'bg-white text-[#1B2733] shadow-sm'
                 : 'text-[#5A6B7A] hover:text-[#3A4A57]'
@@ -291,7 +291,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       <div className="grid grid-cols-2 gap-3">
         {/* MRR */}
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-1">
             <DollarSign size={12} />
             <span>MRR</span>
           </div>
@@ -317,7 +317,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
 
         {/* ARR */}
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-1">
             <TrendingUp size={12} />
             <span>ARR</span>
           </div>
@@ -331,7 +331,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
 
         {/* Active customers */}
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-1">
             <Users size={12} />
             <span>Paying Customers</span>
           </div>
@@ -345,7 +345,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
 
         {/* Churn Rate */}
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-1">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-1">
             <UserMinus size={12} />
             <span>Monthly Churn</span>
           </div>
@@ -369,35 +369,35 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             MRR Breakdown
           </h3>
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-[#5A6B7A]">
                 <UserPlus size={12} className="text-green-500" />
                 New MRR
               </span>
               <span className="font-medium text-green-600">{formatCurrencyDetailed(mrr.newMRR)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-[#5A6B7A]">
                 <TrendingUp size={12} className="text-blue-500" />
                 Expansion
               </span>
               <span className="font-medium text-blue-600">{formatCurrencyDetailed(mrr.expansionMRR)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-[#5A6B7A]">
                 <TrendingDown size={12} className="text-amber-500" />
                 Contraction
               </span>
               <span className="font-medium text-amber-600">-{formatCurrencyDetailed(mrr.contractionMRR)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 text-[#5A6B7A]">
                 <UserMinus size={12} className="text-red-500" />
                 Churned
               </span>
               <span className="font-medium text-red-600">-{formatCurrencyDetailed(mrr.churnedMRR)}</span>
             </div>
-            <div className="border-t border-[#E8E4DF] pt-2 flex items-center justify-between text-xs">
+            <div className="border-t border-[#E8E4DF] pt-2 flex items-center justify-between text-sm">
               <span className="font-semibold text-[#1B2733]">Net New MRR</span>
               <span className={`font-bold ${mrr.netNewMRR >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 {mrr.netNewMRR >= 0 ? '+' : ''}{formatCurrencyDetailed(mrr.netNewMRR)}
@@ -432,19 +432,19 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           {/* LTV Calculation Breakdown */}
           <div className="border-t border-[#E8E4DF] pt-3 space-y-1.5">
             <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider">LTV Breakdown</p>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-[#5A6B7A]">Avg Revenue / User (monthly)</span>
               <span className="font-medium text-[#1B2733]">
                 {formatCurrencyDetailed(customers.averageRevenue)}
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-[#5A6B7A]">Monthly Churn Rate</span>
               <span className="font-medium text-[#1B2733]">
                 {(customers.churnRate || 0).toFixed(2)}%
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className="text-[#5A6B7A]">Est. Customer Lifetime</span>
               <span className="font-medium text-[#1B2733]">
                 {customers.churnRate > 0
@@ -452,7 +452,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
                   : '∞'}
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs border-t border-[#E8E4DF] pt-1.5">
+            <div className="flex items-center justify-between text-sm border-t border-[#E8E4DF] pt-1.5">
               <span className="font-semibold text-[#3A4A57]">Estimated LTV</span>
               <span className="font-bold text-green-600">
                 {customers.churnRate > 0
@@ -598,7 +598,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
               {Object.entries(byPlan)
                 .sort((a, b) => b[1].count - a[1].count)
                 .map(([plan, data]) => (
-                  <div key={plan} className="flex items-center justify-between text-xs">
+                  <div key={plan} className="flex items-center justify-between text-sm">
                     <div className="flex items-center gap-1.5">
                       <div className={`w-2 h-2 rounded-full ${PLAN_COLORS[plan] || 'bg-gray-400'}`} />
                       <span className="text-[#3A4A57]">{tierDisplayNames[plan as TierType] || plan}</span>
@@ -635,7 +635,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             {Object.entries(byPlan)
               .sort((a, b) => b[1].mrr - a[1].mrr)
               .map(([plan, data]) => (
-                <div key={plan} className="flex items-center justify-between text-xs">
+                <div key={plan} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <div className={`w-2.5 h-2.5 rounded-full ${PLAN_COLORS[plan] || 'bg-gray-400'}`} />
                     <span className="text-[#3A4A57] font-medium">
@@ -674,7 +674,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             {recentEvents.slice(0, 10).map((event) => {
               const meta = EVENT_TYPE_LABELS[event.type] || { label: event.type, color: 'text-[#5A6B7A] bg-[#FAF7F2]' };
               return (
-                <div key={event.id} className="flex items-center justify-between text-xs">
+                <div key={event.id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${meta.color}`}>
                       {meta.label}

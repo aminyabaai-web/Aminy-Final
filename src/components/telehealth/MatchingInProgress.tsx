@@ -217,7 +217,7 @@ export function MatchingInProgress({
             </div>
             <div>
               <h2 className="text-base font-bold text-[#1B2733]">Matching in Progress</h2>
-              <p className="text-xs text-[#6B9080] mt-0.5">You'll hear from us within 24-48 hours</p>
+              <p className="text-sm text-[#6B9080] mt-0.5">You'll hear from us within 24-48 hours</p>
             </div>
           </div>
 
@@ -229,7 +229,7 @@ export function MatchingInProgress({
           <MatchingProgress />
 
           <div className="rounded-xl bg-[#6B9080]/10/60 border border-[#6B9080]/20 px-3 py-2">
-            <p className="text-xs text-[#6B9080] font-medium">
+            <p className="text-sm text-[#6B9080] font-medium">
               You'll get a text or email as soon as a match is confirmed — usually within 24-48 hours.
             </p>
           </div>
@@ -257,7 +257,7 @@ export function MatchingInProgress({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-[#1B2733]">{card.title}</p>
-                  <p className="text-xs text-[#5A6B7A] mt-0.5 line-clamp-2">{card.description}</p>
+                  <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{card.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
               </motion.button>
@@ -335,10 +335,10 @@ export function MatchingInProgress({
           transition={{ delay: 0.5 }}
           className="text-center space-y-1"
         >
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             Most families receive a confirmed match within <strong>24-48 hours</strong>.
           </p>
-          <p className="text-xs text-[#8A9BA8]">
+          <p className="text-sm text-[#8A9BA8]">
             In the meantime, Aminy's tools and community are available 24/7.
           </p>
         </motion.div>

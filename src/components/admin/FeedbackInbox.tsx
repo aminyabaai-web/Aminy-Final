@@ -253,7 +253,7 @@ export function FeedbackInbox() {
                     </div>
                   )}
                   {item.status === 'responded' && (
-                    <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 flex-shrink-0">
+                    <span className="flex items-center gap-1 text-sm font-semibold text-emerald-600 flex-shrink-0">
                       <Check className="w-3.5 h-3.5" /> Responded
                     </span>
                   )}
@@ -278,7 +278,7 @@ export function FeedbackInbox() {
                         <div className="flex items-center justify-end gap-2 mt-2">
                           <button
                             onClick={() => { setDraftFor(null); setDraftText(''); }}
-                            className="px-3 py-1.5 text-xs text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
+                            className="px-3 py-1.5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
                           >
                             Cancel
                           </button>

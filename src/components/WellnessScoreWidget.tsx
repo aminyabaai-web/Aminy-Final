@@ -50,7 +50,7 @@ export function WellnessScoreWidget({
             <Sparkles className="w-3.5 h-3.5 text-[#6B9080]" />
             Wellness Score
           </div>
-          <p className="mt-1 text-xs text-[#8E9BAA]">
+          <p className="mt-1 text-sm text-[#8E9BAA]">
             {childName ? `${childName}'s weekly progress` : 'Your child\'s weekly progress'}
           </p>
         </div>
@@ -76,8 +76,8 @@ export function WellnessScoreWidget({
       {/* Confidence bar */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-[#8E9BAA]">{score.confidenceLabel}</span>
-          <span className="text-xs font-medium text-[#5A6B7A]">{score.confidence}%</span>
+          <span className="text-sm text-[#8E9BAA]">{score.confidenceLabel}</span>
+          <span className="text-sm font-medium text-[#5A6B7A]">{score.confidence}%</span>
         </div>
         <div className="h-1.5 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
           <motion.div
@@ -118,7 +118,7 @@ export function WellnessScoreWidget({
       )}
 
       {/* Footer */}
-      <p className="mt-3 text-xs text-[#8E9BAA]">
+      <p className="mt-3 text-sm text-[#8E9BAA]">
         Updates in {score.nextUpdate}
       </p>
     </motion.button>

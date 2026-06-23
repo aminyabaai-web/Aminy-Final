@@ -165,7 +165,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               'Parent training session logs',
               'Billing-ready CPT codes + diagnosis codes',
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+              <div key={i} className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                 <CheckCircle size={13} className="text-green-500 shrink-0" />
                 {item}
               </div>

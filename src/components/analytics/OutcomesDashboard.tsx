@@ -278,7 +278,7 @@ function KPITile({
         {value}
         {unit && <span className="text-base font-medium text-[#5A6B7A] ml-1">{unit}</span>}
       </p>
-      {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
+      {sub && <p className="text-sm text-slate-400 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -303,7 +303,7 @@ function EmptyPanel({ message }: { message: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       <BarChart3 className="w-7 h-7 text-slate-300 mb-2" aria-hidden="true" />
-      <p className="text-xs text-slate-400 max-w-[16rem]">{message}</p>
+      <p className="text-sm text-slate-400 max-w-[16rem]">{message}</p>
     </div>
   );
 }
@@ -417,7 +417,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
           <button
             onClick={fetchData}
             disabled={loading}
-            className="flex items-center gap-1 text-slate-400 hover:text-[#5A6B7A] text-xs transition-colors"
+            className="flex items-center gap-1 text-slate-400 hover:text-[#5A6B7A] text-sm transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -428,7 +428,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
       <div className="px-4 py-5 max-w-2xl mx-auto space-y-6">
 
         {/* Last updated */}
-        <p className="text-xs text-slate-400 text-right">
+        <p className="text-sm text-slate-400 text-right">
           Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </p>
 
@@ -470,7 +470,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-sm font-bold text-[#1B2733]">Goal Mastery Trend</h2>
-              <p className="text-xs text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
+              <p className="text-sm text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
             </div>
             {weekly.length > 1 && (
               <span className="flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2.5 py-1">
@@ -488,7 +488,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="mb-4">
             <h2 className="text-sm font-bold text-[#1B2733]">Session Frequency Distribution</h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-sm text-slate-400 mt-0.5">
               {frequency.length > 0 && kpi.activeClients > 0
                 ? `Sessions per week across ${kpi.activeClients} active clients`
                 : 'Sessions per week across active clients'}
@@ -500,8 +500,8 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               <div className="flex justify-around mt-3">
                 {frequency.map(b => (
                   <div key={b.label} className="text-center">
-                    <p className="text-xs font-medium text-[#5A6B7A]">{b.label}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-sm font-medium text-[#5A6B7A]">{b.label}</p>
+                    <p className="text-sm text-slate-400">
                       {kpi.activeClients > 0 ? `${Math.round((b.count / kpi.activeClients) * 100)}%` : '—'}
                     </p>
                   </div>
@@ -517,7 +517,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#E8E4DF]">
             <h2 className="text-sm font-bold text-[#1B2733]">Top Programs by Mastery Rate</h2>
-            <p className="text-xs text-slate-400 mt-0.5">Across all active treatment plans</p>
+            <p className="text-sm text-slate-400 mt-0.5">Across all active treatment plans</p>
           </div>
           {programs.length > 0 ? (
             <div className="overflow-x-auto">
@@ -558,7 +558,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
           <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
             <div className="px-5 py-4 border-b border-[#E8E4DF]">
               <h2 className="text-sm font-bold text-[#1B2733]">Provider Performance</h2>
-              <p className="text-xs text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
+              <p className="text-sm text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
             </div>
             {providers.length > 0 ? (
               <div className="overflow-x-auto">
@@ -583,7 +583,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
                           <span className={`font-bold ${row.outcomesScore >= 9 ? 'text-emerald-600' : 'text-amber-600'}`}>
                             {row.outcomesScore.toFixed(1)}
                           </span>
-                          <span className="text-xs text-slate-400">/10</span>
+                          <span className="text-sm text-slate-400">/10</span>
                         </td>
                       </tr>
                     ))}
@@ -598,7 +598,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
 
         {/* Footer */}
         <div className="text-center pb-6">
-          <p className="text-xs text-slate-400">
+          <p className="text-sm text-slate-400">
             {kpi.sessionsThisMonth > 0
               ? `Data reflects ${kpi.sessionsThisMonth} sessions in the last 30 days`
               : 'Outcomes update automatically as sessions and goals are logged'}

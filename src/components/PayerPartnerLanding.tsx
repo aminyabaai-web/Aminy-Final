@@ -161,7 +161,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             </span>
           </div>
           <div className="ml-auto">
-            <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20 text-xs">
+            <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20 text-sm">
               Payer Partnerships
             </Badge>
           </div>
@@ -176,7 +176,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           transition={{ duration: 0.45 }}
           className="pt-10 pb-8 text-center"
         >
-          <Badge className="bg-slate-900 text-white border-transparent mb-4 text-xs px-3 py-1">
+          <Badge className="bg-slate-900 text-white border-transparent mb-4 text-sm px-3 py-1">
             Behavioral Health Network
           </Badge>
           <h1 className="text-2xl font-bold text-[#1B2733] mb-3 leading-tight">
@@ -211,8 +211,8 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           {STATS.map((stat) => (
             <Card key={stat.label} className="p-4 text-center border border-[#E8E4DF]">
               <p className="text-2xl font-bold text-[#6B9080] mb-0.5">{stat.value}</p>
-              <p className="text-xs text-[#5A6B7A] font-medium mb-1">{stat.label}</p>
-              <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-xs">
+              <p className="text-sm text-[#5A6B7A] font-medium mb-1">{stat.label}</p>
+              <Badge className="bg-amber-50 text-amber-600 border-amber-200 text-sm">
                 {stat.note}
               </Badge>
             </Card>
@@ -235,7 +235,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                 </div>
                 <div>
                   <p className="text-sm font-bold text-[#1B2733] mb-1">{vp.headline}</p>
-                  <p className="text-xs text-[#5A6B7A] leading-relaxed">{vp.body}</p>
+                  <p className="text-sm text-[#5A6B7A] leading-relaxed">{vp.body}</p>
                 </div>
               </div>
             </Card>
@@ -298,7 +298,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                 <form onSubmit={handleSubmit} className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                         Name <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -312,7 +312,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                         Organization <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -331,7 +331,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                    <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                       Payer type
                     </label>
                     <div className="grid grid-cols-4 gap-1.5">
@@ -349,7 +349,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           onClick={() =>
                             setForm((prev) => ({ ...prev, payerType: opt.id }))
                           }
-                          className={`py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+                          className={`py-1.5 rounded-lg text-sm font-medium border transition-colors ${
                             form.payerType === opt.id
                               ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#6B9080]'
                               : 'border-[#E8E4DF] bg-white text-[#5A6B7A] hover:border-[#6B9080]/20'
@@ -363,7 +363,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                         Email <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -377,7 +377,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                      <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                         Phone
                       </label>
                       <input
@@ -393,7 +393,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-[#3A4A57] mb-1">
+                    <label className="block text-sm font-medium text-[#3A4A57] mb-1">
                       Notes (optional)
                     </label>
                     <textarea
@@ -422,7 +422,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
         </motion.div>
 
         {/* Footer note */}
-        <div className="mt-8 flex items-start gap-2 text-xs text-slate-400">
+        <div className="mt-8 flex items-start gap-2 text-sm text-slate-400">
           <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
           <p>
             Currently accepting network partnerships in Arizona. Expansion to Colorado, Texas,

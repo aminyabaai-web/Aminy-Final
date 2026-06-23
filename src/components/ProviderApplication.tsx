@@ -502,7 +502,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                       className="pl-10"
                     />
                   </div>
-                  <p className="text-xs text-[#5A6B7A] mt-1">As it appears on your license</p>
+                  <p className="text-sm text-[#5A6B7A] mt-1">As it appears on your license</p>
                 </div>
 
                 <div>
@@ -586,7 +586,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                         }`}
                       >
                         <p className="font-medium text-[#1B2733] dark:text-white">{type.label}</p>
-                        <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-0.5">{type.description}</p>
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">{type.description}</p>
                       </button>
                     ))}
                   </div>
@@ -770,7 +770,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                   <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-2">
                     Areas of Specialty <span className="text-red-500">*</span>
                   </label>
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-3">Select all that apply</p>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">Select all that apply</p>
                   <div className="flex flex-wrap gap-2">
                     {SPECIALTIES.map((specialty) => (
                       <button
@@ -815,7 +815,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                     placeholder="Tell families about your approach, experience, and what makes you passionate about working with children..."
                     rows={4}
                   />
-                  <p className="text-xs text-[#5A6B7A] mt-1">
+                  <p className="text-sm text-[#5A6B7A] mt-1">
                     This will be displayed on your marketplace profile
                   </p>
                 </div>
@@ -956,7 +956,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                           className="pl-7"
                         />
                       </div>
-                      <p className="text-xs text-[#5A6B7A] mt-1">
+                      <p className="text-sm text-[#5A6B7A] mt-1">
                         On self-pay sessions Aminy takes a {CASH_PAY_FEE_PCT}% platform fee, so you'll earn ${Math.round(formData.hourly_rate * CASH_PAY_PROVIDER_SHARE)} per session. Insured ({INSURED_FEE_PCT}%) and AACT pilot ({AACT_PILOT_FEE_PCT}%) sessions have lower fees.
                       </p>
                     </div>
@@ -984,7 +984,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                           placeholder="Tax ID (optional)"
                         />
                       </div>
-                      <p className="text-xs text-[#5A6B7A] mt-1">
+                      <p className="text-sm text-[#5A6B7A] mt-1">
                         Groups can set up centralized billing after individual providers are approved.
                       </p>
                     </div>

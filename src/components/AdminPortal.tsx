@@ -651,7 +651,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   )}
                 </p>
                 {/* Data quality note for transparency */}
-                <p className="text-xs text-amber-600 dark:text-amber-400 mt-0.5">
+                <p className="text-sm text-amber-600 dark:text-amber-400 mt-0.5">
                   ℹ️ Live metrics come from the database. Sections tagged "Illustrative" are placeholder examples, not live data.
                 </p>
               </div>
@@ -802,7 +802,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   <div key={tier} className="text-center">
                     <div className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">{count}</div>
                     <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] capitalize">{tier}</div>
-                    <div className="text-xs text-[#8A9BA8]">
+                    <div className="text-sm text-[#8A9BA8]">
                       {pilotData.overview.totalFamilies > 0 ? ((count / pilotData.overview.totalFamilies) * 100).toFixed(1) : '0.0'}%
                     </div>
                   </div>
@@ -826,7 +826,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   style={{ width: `${(pilotData.tierDistribution.pro / 150) * 100}%` }}
                 />
               </div>
-              <div className="mt-2 flex justify-center gap-3 sm:gap-4 text-xs">
+              <div className="mt-2 flex justify-center gap-3 sm:gap-4 text-sm">
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-gray-400 rounded" /> Free</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-blue-400 rounded" /> Starter</span>
                 <span className="flex items-center gap-1"><span className="w-2 h-2 bg-accent rounded" /> Core</span>
@@ -869,7 +869,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                     );
                   })()}
                 </div>
-                <p className="text-xs text-[#5A6B7A] mt-4 text-center">
+                <p className="text-sm text-[#5A6B7A] mt-4 text-center">
                   Response rate: {pilotData.nps.responseRate}% ({pilotData.nps.promoters + pilotData.nps.passives + pilotData.nps.detractors} responses)
                 </p>
               </div>
@@ -914,7 +914,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Engagement Funnel */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Engagement Funnel <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Engagement Funnel <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="space-y-3 sm:space-y-4">
                 <FunnelStep step="1" label="Signed Up" value={150} percentage={100} />
                 <FunnelStep step="2" label="Completed Onboarding" value={127} percentage={84.7} />
@@ -988,7 +988,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Memory System Stats */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">AI Memory System <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">AI Memory System <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                 <div>
                   <div className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">2,847</div>
@@ -1044,7 +1044,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Outcomes Tracking */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Outcomes Tracking <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Outcomes Tracking <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-2xl sm:text-3xl font-bold text-accent dark:text-accent">{pilotData.clinical.outcomeTrackingEntries.toLocaleString()}</div>
@@ -1067,7 +1067,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Condition Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">By Primary Condition <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">By Primary Condition <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                 <ConditionCard condition="Autism" families={78} adherence={75.2} improvement={4.3} />
                 <ConditionCard condition="ADHD" families={52} adherence={71.8} improvement={4.1} />
@@ -1127,7 +1127,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Revenue Breakdown */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Revenue Breakdown <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Revenue Breakdown <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6 text-center">
                 <div>
                   <div className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">$100</div>
@@ -1175,7 +1175,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* B2B Trojan Horse Metrics */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] mb-2">B2B "Trojan Horse" Strategy <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] mb-2">B2B "Trojan Horse" Strategy <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <p className="text-sm text-[#5A6B7A] mb-4 sm:mb-6">Families bringing Aminy into their clinics</p>
 
               <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
@@ -1196,7 +1196,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
 
             {/* Clinic Pipeline */}
             <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Clinic Pipeline <span className="text-xs font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
+              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">Clinic Pipeline <span className="text-sm font-normal text-amber-600 dark:text-amber-400">(Illustrative)</span></h3>
               <div className="space-y-3">
                 <PipelineRow stage="Awareness" count={24} />
                 <PipelineRow stage="Interest" count={12} />
@@ -1267,12 +1267,12 @@ function MetricCard({ label, value, icon: Icon, target, current, total, trend, s
         {value}
         {total && <span className="text-sm font-normal text-[#8A9BA8] dark:text-[#5A6B7A]">/{total}</span>}
       </div>
-      {trend && <p className="text-xs text-green-600 dark:text-green-400 mt-1">{trend}</p>}
-      {subtitle && <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">{subtitle}</p>}
+      {trend && <p className="text-sm text-green-600 dark:text-green-400 mt-1">{trend}</p>}
+      {subtitle && <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">{subtitle}</p>}
       {target && current && (
         <div className="flex items-center gap-1 mt-1">
           {getStatusIcon(current, target)}
-          <span className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Target: {target}{isPercentage ? '%' : ''}</span>
+          <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Target: {target}{isPercentage ? '%' : ''}</span>
         </div>
       )}
     </div>
@@ -1292,7 +1292,7 @@ function KPIRow({ label, value, target }: { label: string; value: number; target
           <span className={`text-sm font-medium ${isOnTrack ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'}`}>
             {value}%
           </span>
-          <span className="text-xs text-[#8A9BA8] dark:text-[#5A6B7A]">/ {target}%</span>
+          <span className="text-sm text-[#8A9BA8] dark:text-[#5A6B7A]">/ {target}%</span>
         </div>
       </div>
       <div className="h-2 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
@@ -1386,7 +1386,7 @@ function PipelineRow({ stage, count }: { stage: string; count: number }) {
           className="h-full bg-accent/70 flex items-center justify-end px-2"
           style={{ width: `${percentage}%` }}
         >
-          <span className="text-xs font-medium text-white">{count}</span>
+          <span className="text-sm font-medium text-white">{count}</span>
         </div>
       </div>
     </div>

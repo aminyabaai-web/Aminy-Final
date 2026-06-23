@@ -399,10 +399,10 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
               maxLength={CHARACTER_LIMIT}
             />
             <div className="flex items-center justify-between mt-1">
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Add context: age, setting, what you tried
               </p>
-              <p className={`text-xs font-medium ${
+              <p className={`text-sm font-medium ${
                 isOverLimit ? 'text-red-600' : 
                 charactersRemaining < 50 ? 'text-amber-600' : 
                 'text-[#5A6B7A]'
@@ -435,7 +435,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
               ))}
             </div>
             {selectedTags.length > 0 && (
-              <p className="text-xs text-[#5A6B7A] mt-2">
+              <p className="text-sm text-[#5A6B7A] mt-2">
                 {selectedTags.length}/3 tags selected
               </p>
             )}
@@ -449,11 +449,11 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
                   <Label htmlFor="remove-names" className="text-sm font-medium text-blue-900 cursor-pointer">
                     Remove names/PHI
                   </Label>
-                  <Badge variant="secondary" className="text-xs bg-blue-100 text-[#4A6478]">
+                  <Badge variant="secondary" className="text-sm bg-blue-100 text-[#4A6478]">
                     Recommended
                   </Badge>
                 </div>
-                <p className="text-xs text-blue-700">
+                <p className="text-sm text-blue-700">
                   Automatically removes names and personal health information for privacy
                 </p>
               </div>
@@ -560,7 +560,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
                 {images.length > 0 ? 'Add more' : 'Add images'}
               </Button>
               {images.length > 0 && (
-                <span className="text-xs text-[#5A6B7A] self-center">
+                <span className="text-sm text-[#5A6B7A] self-center">
                   {MAX_IMAGES - images.length} remaining
                 </span>
               )}

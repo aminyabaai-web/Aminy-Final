@@ -104,13 +104,13 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
           <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-amber-900">Verify your insurance first</p>
-            <p className="text-xs text-amber-800 mt-0.5">
+            <p className="text-sm text-amber-800 mt-0.5">
               See what services your plan covers, your copay, and which require prior authorization — takes 30 seconds.
             </p>
           </div>
           <button
             onClick={onVerifyClick}
-            className="shrink-0 text-xs font-semibold px-3 py-2 rounded-xl text-white whitespace-nowrap"
+            className="shrink-0 text-sm font-semibold px-3 py-2 rounded-xl text-white whitespace-nowrap"
             style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
           >
             Verify <ChevronRight className="w-3 h-3 inline" />
@@ -137,9 +137,9 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
 
       <div className="space-y-1.5">
         {relevantServices.length === 0 ? (
-          <p className="text-xs text-[#5A6B7A]">No coverage details available yet — verify again to refresh.</p>
+          <p className="text-sm text-[#5A6B7A]">No coverage details available yet — verify again to refresh.</p>
         ) : relevantServices.map((s, i) => (
-          <div key={i} className="flex items-center gap-2 text-xs">
+          <div key={i} className="flex items-center gap-2 text-sm">
             {s.status === 'covered' && <Check className="w-3.5 h-3.5 text-[#6B9080] shrink-0" />}
             {s.status === 'prior_auth_required' && <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
             {s.status === 'not_covered' && <X className="w-3.5 h-3.5 text-red-500 shrink-0" />}
@@ -166,7 +166,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
       </div>
 
       {coverage.outOfPocketRemaining != null && (
-        <div className="mt-3 pt-3 border-t border-[#6B9080]/20 flex items-center justify-between text-xs">
+        <div className="mt-3 pt-3 border-t border-[#6B9080]/20 flex items-center justify-between text-sm">
           <span className="text-[#5A6B7A]">Out-of-pocket remaining this year:</span>
           <span className="font-semibold text-[#1B2733]">
             ${(coverage.outOfPocketRemaining / 100).toFixed(0)}
@@ -177,7 +177,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
       {onVerifyClick && (
         <button
           onClick={onVerifyClick}
-          className="mt-2 text-xs text-[#6B9080] font-medium hover:underline"
+          className="mt-2 text-sm text-[#6B9080] font-medium hover:underline"
         >
           Re-verify benefits
         </button>

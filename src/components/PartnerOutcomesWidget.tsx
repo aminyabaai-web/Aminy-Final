@@ -204,11 +204,11 @@ function OutcomeSummaryCard({ summary }: { summary: OutcomeSummary }) {
       <p className="text-2xl font-bold mt-1" style={{ color }}>{avg ?? '—'}</p>
       <div className="flex items-center gap-1 mt-1">
         <Icon className="w-3 h-3" style={{ color }} />
-        <p className="text-xs font-medium" style={{ color }}>
+        <p className="text-sm font-medium" style={{ color }}>
           {deltaPct == null ? 'No prior data' : `${deltaPct > 0 ? '+' : ''}${deltaPct}% vs last wk`}
         </p>
       </div>
-      <p className="text-xs text-slate-400 mt-1">{submissionsCount} submissions</p>
+      <p className="text-sm text-slate-400 mt-1">{submissionsCount} submissions</p>
     </div>
   );
 }

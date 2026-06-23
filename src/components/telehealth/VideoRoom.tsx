@@ -507,7 +507,7 @@ export function VideoRoom({
             {isRecording && (
               <div className="flex items-center gap-1.5 bg-red-500/80 px-2 py-0.5 rounded-full">
                 <Circle className="w-2.5 h-2.5 text-white fill-white animate-pulse" />
-                <span className="text-white text-xs font-medium">REC</span>
+                <span className="text-white text-sm font-medium">REC</span>
               </div>
             )}
             {scheduledEndTime && (
@@ -587,7 +587,7 @@ export function VideoRoom({
                     {userName[0]?.toUpperCase() || 'Y'}
                   </span>
                 </div>
-                <p className="text-white/60 text-xs mt-2">Camera off</p>
+                <p className="text-white/60 text-sm mt-2">Camera off</p>
               </div>
             </div>
           ) : (
@@ -733,7 +733,7 @@ export function VideoRoom({
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[#1B2733]">Recording Consent Required</h3>
-                <p className="text-xs text-[#5A6B7A]">HIPAA §164.508(a) Authorization</p>
+                <p className="text-sm text-[#5A6B7A]">HIPAA §164.508(a) Authorization</p>
               </div>
             </div>
 
@@ -742,7 +742,7 @@ export function VideoRoom({
               <p className="text-sm text-amber-800 font-medium mb-1">
                 This session will be recorded
               </p>
-              <p className="text-xs text-amber-700">
+              <p className="text-sm text-amber-700">
                 All participants will be notified that recording is active.
                 The recording will include audio and video from all participants.
               </p>
@@ -824,7 +824,7 @@ export function VideoRoom({
             <p className="text-sm text-white/60 mt-2">
               Connection was interrupted. Attempting to rejoin.
             </p>
-            <p className="text-xs text-white/40 mt-3">
+            <p className="text-sm text-white/40 mt-3">
               Attempt {reconnect.attemptCount} &middot; {reconnect.secondsRemaining}s remaining
             </p>
             <button

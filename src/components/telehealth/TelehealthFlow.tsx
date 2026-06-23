@@ -389,15 +389,15 @@ export function TelehealthFlow({
                       Book a session right away — no insurance needed. Perfect for one-time questions or ongoing self-pay.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Clock className="w-3.5 h-3.5" />
                         <span>Book as soon as today</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>{publicCashPayRange} across {cashPayMenuSummary}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Verified experts in supported telehealth states</span>
                       </div>
@@ -424,15 +424,15 @@ export function TelehealthFlow({
                       Use your insurance where Aminy has a supported lane. We'll verify coverage, explain any authorization steps, and route you to the right next step.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Shield className="w-3.5 h-3.5" />
                         <span>Insurance eligibility verified before booking</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Matched to supported in-network or partner-billed lanes</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>Intake and claim-ready context built from your Aminy profile</span>
                       </div>

@@ -380,7 +380,7 @@ export function SessionScheduler({
                     <button
                       key={d}
                       onClick={() => setDuration(d)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                         duration === d
                           ? 'bg-primary text-white'
                           : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
@@ -428,7 +428,7 @@ export function SessionScheduler({
                         }
                       }}
                       disabled={disabled}
-                      className={`flex flex-col items-center py-3 rounded-xl text-xs transition-all ${
+                      className={`flex flex-col items-center py-3 rounded-xl text-sm transition-all ${
                         disabled
                           ? 'opacity-30 cursor-not-allowed'
                           : selected

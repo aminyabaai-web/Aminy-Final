@@ -312,7 +312,7 @@ export function PersistentAskAminyFAB({
                   </p>
                 )}
                 {tier !== 'free' && (
-                  <Badge variant="outline" className="text-xs mt-0.5 bg-accent/10 text-accent border-accent/20">
+                  <Badge variant="outline" className="text-sm mt-0.5 bg-accent/10 text-accent border-accent/20">
                     Unlimited
                   </Badge>
                 )}
@@ -369,7 +369,7 @@ export function PersistentAskAminyFAB({
                       onNavigate(message.cta!.screen);
                       setIsOpen(false);
                     }}
-                    className={`mt-2 flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${CTA_COLORS[message.cta.type]}`}
+                    className={`mt-2 flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-colors ${CTA_COLORS[message.cta.type]}`}
                   >
                     {CTA_ICONS[message.cta.type]}
                     <div className="text-left">

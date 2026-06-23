@@ -340,7 +340,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
             <div className="w-16 h-16 mx-auto bg-blue-200 rounded-full animate-pulse flex items-center justify-center">
               <Wind className="w-8 h-8 text-blue-600" />
             </div>
-            <p className="text-xs text-blue-600 mt-2">Breathe in... and out...</p>
+            <p className="text-sm text-blue-600 mt-2">Breathe in... and out...</p>
           </div>
           
           <Button 
@@ -373,11 +373,11 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div className="text-center p-3 bg-white/60 rounded-lg">
               <div className="text-lg font-bold text-green-700">{activitiesCompleted}</div>
-              <div className="text-xs text-green-600">Activities</div>
+              <div className="text-sm text-green-600">Activities</div>
             </div>
             <div className="text-center p-3 bg-white/60 rounded-lg">
               <div className="text-lg font-bold text-green-700">{accuracy}%</div>
-              <div className="text-xs text-green-600">Accuracy</div>
+              <div className="text-sm text-green-600">Accuracy</div>
             </div>
           </div>
           
@@ -389,10 +389,10 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
                   <div className={`p-1 rounded border ${getSkillColor(target.skill)}`}>
                     {getSkillIcon(target.skill)}
                   </div>
-                  <span className="text-xs text-green-700">{target.description}</span>
+                  <span className="text-sm text-green-700">{target.description}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold text-green-700">
+                  <span className="text-sm font-semibold text-green-700">
                     {target.successes}/{target.attempts}
                   </span>
                   {target.mastered && <Star className="w-3 h-3 text-yellow-500" />}
@@ -447,7 +447,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
                     <div className="text-[#6B9080]">{activity.icon}</div>
                     <div className="flex-1 text-left">
                       <div className="text-sm font-medium text-primary">{activity.title}</div>
-                      <div className="text-xs text-muted-foreground">{activity.expectedDuration}s</div>
+                      <div className="text-sm text-muted-foreground">{activity.expectedDuration}s</div>
                     </div>
                     <div className="flex gap-1">
                       {activity.targetSkills.map(skill => (
@@ -471,7 +471,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
                 >
                   {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
                 </Button>
-                <span className="text-xs text-muted-foreground">
+                <span className="text-sm text-muted-foreground">
                   Sound {soundEnabled ? 'On' : 'Off'}
                 </span>
               </div>
@@ -503,7 +503,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
             <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]">
               Session Active
             </Badge>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Clock className="w-3 h-3" />
               {getSessionDuration()}m
             </div>
@@ -529,7 +529,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
         </div>
         
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Progress</span>
             <span className="font-medium">{currentActivity + 1} of {activities.length}</span>
           </div>
@@ -576,7 +576,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               variant="ghost"
               size="sm"
               onClick={() => recordFatigueEvent('slow_response')}
-              className="text-xs text-muted-foreground"
+              className="text-sm text-muted-foreground"
             >
               <Timer className="w-3 h-3 mr-1" />
               Slow
@@ -585,7 +585,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               variant="ghost"
               size="sm"
               onClick={() => recordFatigueEvent('no_response')}
-              className="text-xs text-muted-foreground"
+              className="text-sm text-muted-foreground"
             >
               <Meh className="w-3 h-3 mr-1" />
               No Response
@@ -594,7 +594,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               variant="ghost"
               size="sm"
               onClick={() => recordFatigueEvent('frustration_indicator')}
-              className="text-xs text-muted-foreground"
+              className="text-sm text-muted-foreground"
             >
               <Frown className="w-3 h-3 mr-1" />
               Frustrated
@@ -630,10 +630,10 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
                   <div className={`p-1 rounded border ${getSkillColor(target.skill)}`}>
                     {getSkillIcon(target.skill)}
                   </div>
-                  <span className="text-xs text-primary">{target.description}</span>
+                  <span className="text-sm text-primary">{target.description}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-xs font-medium">
+                  <span className="text-sm font-medium">
                     {target.attempts > 0 ? `${Math.round(successRate)}%` : '—'}
                   </span>
                   {target.mastered && <Star className="w-3 h-3 text-yellow-500" />}
@@ -648,7 +648,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       {fatigueEvents.length > 0 && (
         <Card className="p-3 sm:p-4">
           <h4 className="text-sm font-semibold text-primary mb-2">Session Notes</h4>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-sm text-muted-foreground">
             {fatigueEvents.length} attention event{fatigueEvents.length !== 1 ? 's' : ''} recorded
             {fatigueEvents.length >= 2 && (
               <div className="mt-1 p-2 bg-[#EEF4F8] rounded text-blue-600">

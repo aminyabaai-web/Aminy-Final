@@ -159,7 +159,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 <Sparkles className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Early access perks</p>
-                  <p className="text-xs text-[#5A6B7A]">50% off your first year</p>
+                  <p className="text-sm text-[#5A6B7A]">50% off your first year</p>
                 </div>
               </div>
 
@@ -167,7 +167,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 <MessageCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Shape the product</p>
-                  <p className="text-xs text-[#5A6B7A]">Your feedback builds what we make</p>
+                  <p className="text-sm text-[#5A6B7A]">Your feedback builds what we make</p>
                 </div>
               </div>
             </div>

@@ -229,7 +229,7 @@ function ReviewCard({
       </div>
 
       {/* Meta */}
-      <div className="flex items-center gap-3 text-xs text-[#5A6B7A] mb-2">
+      <div className="flex items-center gap-3 text-sm text-[#5A6B7A] mb-2">
         <span className="flex items-center gap-1">
           <User className="w-3 h-3" />
           {review.author.displayName}
@@ -279,7 +279,7 @@ function ReviewCard({
               >
                 <div className="mt-2 ml-6 p-3 bg-[#FAF7F2] rounded-lg border-l-2 border-[#6B9080]">
                   <p className="text-sm text-[#3A4A57]">{review.providerResponse.content}</p>
-                  <p className="text-xs text-[#5A6B7A] mt-2">
+                  <p className="text-sm text-[#5A6B7A] mt-2">
                     Responded on {formatDate(review.providerResponse.respondedAt)}
                   </p>
                 </div>

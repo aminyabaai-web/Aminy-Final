@@ -160,7 +160,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
 
             {referralCode && (
               <div className="bg-[#FAF7F2] rounded-lg p-3 text-center">
-                <p className="text-xs text-[#5A6B7A] mb-1">Your referral code</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Your referral code</p>
                 <p className="font-mono font-semibold text-[#6B9080]">{referralCode}</p>
               </div>
             )}
@@ -233,7 +233,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
 
       {/* Footer Note */}
       <div className="px-6 pb-8">
-        <p className="text-xs text-center text-[#5A6B7A]">
+        <p className="text-sm text-center text-[#5A6B7A]">
           Credit applies to marketplace sessions. Referral rewards subject to{' '}
           <span className="text-[#6B9080]">program terms</span>.
         </p>

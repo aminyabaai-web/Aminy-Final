@@ -235,19 +235,19 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                     <div className="text-3xl">{typeInfo.icon}</div>
                     <div>
                       <h4 className="font-semibold text-primary">{typeInfo.name}</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-sm text-muted-foreground mt-0.5">
                         {typeInfo.description}
                       </p>
                     </div>
                   </div>
                   {isExpired && (
-                    <Badge variant="destructive" className="text-xs">
+                    <Badge variant="destructive" className="text-sm">
                       Expired
                     </Badge>
                   )}
                 </div>
 
-                <div className="space-y-2 mb-4 text-xs text-muted-foreground">
+                <div className="space-y-2 mb-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3 h-3" />
                     <span>Generated {new Date(report.generatedAt ?? report.createdAt).toLocaleDateString()}</span>
@@ -340,7 +340,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                         {isLocked && <Sparkles className="w-3 h-3 text-[#8A9BA8]" />}
                       </div>
                       <div className="font-medium text-sm text-primary">{info.name}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{info.description}</div>
+                      <div className="text-sm text-muted-foreground mt-1">{info.description}</div>
                     </button>
                   );
                 })}
@@ -350,7 +350,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
             {/* Date Range */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs">Start Date</Label>
+                <Label className="text-sm">Start Date</Label>
                 <Input
                   type="date"
                   value={dateRange.start}
@@ -359,7 +359,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
                 />
               </div>
               <div>
-                <Label className="text-xs">End Date</Label>
+                <Label className="text-sm">End Date</Label>
                 <Input
                   type="date"
                   value={dateRange.end}
@@ -400,7 +400,7 @@ export function ReportsHub({ childId, childName, accessToken, userTier = 'free' 
               )}
             </Button>
 
-            <p className="text-xs text-muted-foreground text-center italic">
+            <p className="text-sm text-muted-foreground text-center italic">
               Reports expire after 7 days for your privacy and security
             </p>
           </div>

@@ -103,7 +103,7 @@ function TrendBadge({ trend }: { trend: 'improving' | 'steady' | 'needs-focus' |
     declining: { label: 'Needs Support', className: 'bg-red-50 text-red-700 border-red-200' },
   };
   const c = config[trend];
-  return <Badge variant="outline" className={`text-xs ${c.className}`}>{c.label}</Badge>;
+  return <Badge variant="outline" className={`text-sm ${c.className}`}>{c.label}</Badge>;
 }
 
 function MoodEmoji({ value }: { value: number }) {
@@ -141,7 +141,7 @@ export function WeeklyProgressDigest({
         <div className="flex items-center justify-between mb-1">
           <Sparkles size={20} className="text-teal-200" />
           {onShare && (
-            <button onClick={onShare} className="flex items-center gap-1 text-teal-200 text-xs">
+            <button onClick={onShare} className="flex items-center gap-1 text-teal-200 text-sm">
               <Share2 size={14} /> Share
             </button>
           )}
@@ -153,23 +153,23 @@ export function WeeklyProgressDigest({
         <div className="flex gap-3 mt-5">
           <div className="flex-1 bg-white/10 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold">{easeEngagement.totalSessions}</div>
-            <div className="text-xs text-teal-200">Activities</div>
+            <div className="text-sm text-teal-200">Activities</div>
           </div>
           <div className="flex-1 bg-white/10 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold">{easeEngagement.totalMinutes}</div>
-            <div className="text-xs text-teal-200">Minutes</div>
+            <div className="text-sm text-teal-200">Minutes</div>
           </div>
           <div className="flex-1 bg-white/10 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold flex items-center justify-center gap-1">
               {easeEngagement.streakDays}<Flame size={16} className="text-amber-400" />
             </div>
-            <div className="text-xs text-teal-200">Day Streak</div>
+            <div className="text-sm text-teal-200">Day Streak</div>
           </div>
           <div className="flex-1 bg-white/10 rounded-xl p-3 text-center">
             <div className="text-2xl font-bold flex items-center justify-center gap-1">
               {easeEngagement.starsEarned}<Star size={16} className="text-amber-400" />
             </div>
-            <div className="text-xs text-teal-200">Stars</div>
+            <div className="text-sm text-teal-200">Stars</div>
           </div>
         </div>
       </div>
@@ -222,9 +222,9 @@ export function WeeklyProgressDigest({
               <div key={i} className="mb-3 last:mb-0 pb-3 last:pb-0 border-b last:border-0 border-[#E8E4DF]">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-[#1B2733]">{session.type}</span>
-                  <span className="text-xs text-[#5A6B7A]">{session.date}</span>
+                  <span className="text-sm text-[#5A6B7A]">{session.date}</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A] mb-1.5">with {session.provider}</p>
+                <p className="text-sm text-[#5A6B7A] mb-1.5">with {session.provider}</p>
                 {session.highlights.map((h, j) => (
                   <div key={j} className="flex items-start gap-1.5 mb-1">
                     <CheckCircle size={12} className="text-green-500 mt-0.5 flex-shrink-0" />
@@ -259,7 +259,7 @@ export function WeeklyProgressDigest({
               {goal.currentPct > goal.previousPct && (
                 <div className="flex items-center gap-1 mt-1">
                   <TrendingUp size={12} className="text-green-500" />
-                  <span className="text-xs text-green-600">+{goal.currentPct - goal.previousPct}% from last week</span>
+                  <span className="text-sm text-green-600">+{goal.currentPct - goal.previousPct}% from last week</span>
                 </div>
               )}
             </div>
@@ -291,7 +291,7 @@ export function WeeklyProgressDigest({
               <div className="text-sm font-medium text-[#1B2733]">
                 Average: {moodTrend.avgMood.toFixed(1)}/5
               </div>
-              <div className="text-xs text-[#5A6B7A]">
+              <div className="text-sm text-[#5A6B7A]">
                 Best day: {moodTrend.bestDay}
                 {moodTrend.toughestDay && ` · Toughest: ${moodTrend.toughestDay}`}
               </div>

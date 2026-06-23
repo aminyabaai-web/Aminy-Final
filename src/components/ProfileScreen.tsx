@@ -920,12 +920,12 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     {child.diagnoses.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-2">
                         {child.diagnoses.slice(0, 2).map(d => (
-                          <Badge key={d} variant="outline" className="text-xs">
+                          <Badge key={d} variant="outline" className="text-sm">
                             {d}
                           </Badge>
                         ))}
                         {child.diagnoses.length > 2 && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-sm">
                             +{child.diagnoses.length - 2} more
                           </Badge>
                         )}
@@ -1015,7 +1015,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                         <div className="flex items-center gap-2">
                           <p className="font-medium dark:text-white">{session.device}</p>
                           {session.isCurrent && (
-                            <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
+                            <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">
                               Current
                             </Badge>
                           )}

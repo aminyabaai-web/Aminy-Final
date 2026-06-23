@@ -491,11 +491,11 @@ export function TreatmentPlanEditor({
                         {plan.status}
                       </Badge>
                     </div>
-                    <p className="text-xs text-[#5A6B7A]">
+                    <p className="text-sm text-[#5A6B7A]">
                       {plan.goals.length} goals • {plan.goals.filter(g => g.status === 'mastered').length} mastered
                     </p>
                     {plan.providerName && (
-                      <p className="text-xs text-[#6B9080] mt-1">
+                      <p className="text-sm text-[#6B9080] mt-1">
                         By {plan.providerName}
                       </p>
                     )}
@@ -609,7 +609,7 @@ export function TreatmentPlanEditor({
                                 style={{ width: `${avgProgress}%` }}
                               />
                             </div>
-                            <p className="text-xs text-[#5A6B7A] mt-1">
+                            <p className="text-sm text-[#5A6B7A] mt-1">
                               {domainGoals.length} goals • {Math.round(avgProgress)}% avg
                             </p>
                           </div>
@@ -699,7 +699,7 @@ export function TreatmentPlanEditor({
                                 <button
                                   key={status.value}
                                   onClick={() => handleUpdateGoalStatus(goal.id, status.value)}
-                                  className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                                  className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                                     goal.status === status.value
                                       ? status.color + ' font-medium'
                                       : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50'

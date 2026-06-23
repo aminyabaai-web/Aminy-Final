@@ -194,7 +194,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Vault Storage</h3>
-                  <p className="text-xs text-[#5A6B7A]">{userTier || 'Starter'} Plan</p>
+                  <p className="text-sm text-[#5A6B7A]">{userTier || 'Starter'} Plan</p>
                 </div>
               </div>
               
@@ -267,11 +267,11 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Aminy</h3>
-                  <p className="text-xs text-[#5A6B7A]">Search your records</p>
+                  <p className="text-sm text-[#5A6B7A]">Search your records</p>
                 </div>
               </div>
               
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-3">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">
                 {stats.aiSearchEnabled 
                   ? "Ask questions about your uploaded documents"
                   : "Upgrade to Pro for AI-powered document search"

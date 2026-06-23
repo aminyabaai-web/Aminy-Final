@@ -222,7 +222,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
         <h3 className="font-semibold text-[#1B2733] dark:text-white">
           Cohort Retention Analysis
         </h3>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-sm">
           {period === 'weekly' ? 'Weekly' : 'Monthly'} Cohorts
         </Badge>
       </div>
@@ -283,7 +283,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A] dark:text-slate-400">
+      <div className="mt-4 flex items-center gap-3 sm:gap-4 text-sm text-[#5A6B7A] dark:text-slate-400">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 rounded bg-green-100 dark:bg-green-900/30" />
           <span>&gt;60%</span>

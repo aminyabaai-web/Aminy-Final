@@ -188,7 +188,7 @@ export function DocumentUploader({
       >
         <Upload className="w-12 h-12 mx-auto mb-4 text-[#8A9BA8]" />
         <p className="text-sm font-medium mb-1">Click to upload or drag and drop</p>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {acceptedTypes.join(', ')} (max {maxSize}MB)
         </p>
         <input
@@ -218,7 +218,7 @@ export function DocumentUploader({
                 <File className="w-4 h-4 text-[#5A6B7A]" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{file.name}</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {(file.size / 1024 / 1024).toFixed(2)} MB
                   </p>
                 </div>
@@ -262,7 +262,7 @@ export function DocumentUploader({
 
       {/* Storage Info */}
       {!useRealStorage && (
-        <p className="text-xs text-center text-muted-foreground">
+        <p className="text-sm text-center text-muted-foreground">
           Demo mode: Files are not persisted. Enable real storage for production.
         </p>
       )}

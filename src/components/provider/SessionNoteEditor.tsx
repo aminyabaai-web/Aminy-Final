@@ -81,7 +81,7 @@ function computeDiff(original: string, edited: string): React.ReactNode {
 
   if (changedLines.length === 0 && origWords.length !== editWords.length) {
     return (
-      <p className="text-xs text-[#5A6B7A]">
+      <p className="text-sm text-[#5A6B7A]">
         {editWords.length > origWords.length
           ? `+${editWords.length - origWords.length} words added`
           : `${origWords.length - editWords.length} words removed`}
@@ -91,10 +91,10 @@ function computeDiff(original: string, edited: string): React.ReactNode {
 
   return (
     <div className="space-y-1">
-      <div className="bg-red-50 border-l-2 border-red-400 px-2 py-1 rounded-r text-xs text-red-700 line-through">
+      <div className="bg-red-50 border-l-2 border-red-400 px-2 py-1 rounded-r text-sm text-red-700 line-through">
         {original.substring(0, 120)}{original.length > 120 ? '...' : ''}
       </div>
-      <div className="bg-green-50 border-l-2 border-green-400 px-2 py-1 rounded-r text-xs text-green-700">
+      <div className="bg-green-50 border-l-2 border-green-400 px-2 py-1 rounded-r text-sm text-green-700">
         {edited.substring(0, 120)}{edited.length > 120 ? '...' : ''}
       </div>
     </div>
@@ -210,7 +210,7 @@ export function SessionNoteEditor({
           {editCount > 0 && (
             <button
               onClick={() => setShowDiff(!showDiff)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 text-xs font-medium hover:bg-amber-100 transition-colors border border-amber-200"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 text-sm font-medium hover:bg-amber-100 transition-colors border border-amber-200"
             >
               <GitCompare className="w-3 h-3" />
               {editCount} change{editCount !== 1 ? 's' : ''} from AI
@@ -231,7 +231,7 @@ export function SessionNoteEditor({
 
       {/* Status Lifecycle */}
       <Card className="p-3 bg-[#FAF7F2]">
-        <div className="flex items-center justify-between gap-1 text-xs">
+        <div className="flex items-center justify-between gap-1 text-sm">
           {Object.entries(STATUS_CONFIG).map(([key, cfg], idx) => {
             const isActive = key === status;
             const isPast =
@@ -282,25 +282,25 @@ export function SessionNoteEditor({
               <div className="space-y-3">
                 {changedFields.subjective && (
                   <div>
-                    <p className="text-xs font-semibold text-amber-800 mb-1">Subjective</p>
+                    <p className="text-sm font-semibold text-amber-800 mb-1">Subjective</p>
                     {computeDiff(note.soapNote.subjective, subjective)}
                   </div>
                 )}
                 {changedFields.objective && (
                   <div>
-                    <p className="text-xs font-semibold text-amber-800 mb-1">Objective</p>
+                    <p className="text-sm font-semibold text-amber-800 mb-1">Objective</p>
                     {computeDiff(note.soapNote.objective, objective)}
                   </div>
                 )}
                 {changedFields.assessment && (
                   <div>
-                    <p className="text-xs font-semibold text-amber-800 mb-1">Assessment</p>
+                    <p className="text-sm font-semibold text-amber-800 mb-1">Assessment</p>
                     {computeDiff(note.soapNote.assessment, assessment)}
                   </div>
                 )}
                 {changedFields.plan && (
                   <div>
-                    <p className="text-xs font-semibold text-amber-800 mb-1">Plan</p>
+                    <p className="text-sm font-semibold text-amber-800 mb-1">Plan</p>
                     {computeDiff(note.soapNote.plan, plan)}
                   </div>
                 )}
@@ -420,7 +420,7 @@ export function SessionNoteEditor({
                 <User className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-900">Parent Approval Flow</p>
-                  <p className="text-xs text-blue-700 mt-0.5 leading-relaxed">
+                  <p className="text-sm text-blue-700 mt-0.5 leading-relaxed">
                     After you approve, the parent receives a plain-English summary to review and sign digitally. Their signature is required for insurance claims.
                   </p>
                 </div>
@@ -474,7 +474,7 @@ export function SessionNoteEditor({
       )}
 
       {/* Generated timestamp */}
-      <p className="text-xs text-slate-400 flex items-center gap-1">
+      <p className="text-sm text-slate-400 flex items-center gap-1">
         <Clock className="w-3 h-3" />
         AI-generated {new Date(note.generatedAt).toLocaleString()} — review before sending
       </p>
@@ -515,10 +515,10 @@ function SOAPSection({
       <div className="mb-2 flex items-start justify-between gap-2">
         <div>
           <h3 className="font-medium text-[#1B2733] text-sm">{label}</h3>
-          <p className="text-xs text-[#5A6B7A]">{sublabel}</p>
+          <p className="text-sm text-[#5A6B7A]">{sublabel}</p>
         </div>
         {isEdited && (
-          <Badge className="bg-amber-100 text-amber-700 text-xs px-2 py-0.5 shrink-0">
+          <Badge className="bg-amber-100 text-amber-700 text-sm px-2 py-0.5 shrink-0">
             Edited
           </Badge>
         )}
@@ -569,11 +569,11 @@ function CPTRow({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-mono text-sm font-medium text-[#1B2733]">{cpt.code}</span>
-          <span className="text-xs text-[#5A6B7A] truncate">{cpt.description}</span>
+          <span className="text-sm text-[#5A6B7A] truncate">{cpt.description}</span>
         </div>
-        <span className="text-xs text-[#5A6B7A]">{cpt.units} unit{cpt.units !== 1 ? 's' : ''}</span>
+        <span className="text-sm text-[#5A6B7A]">{cpt.units} unit{cpt.units !== 1 ? 's' : ''}</span>
       </div>
-      <Badge className={`text-xs ${confidenceColor}`}>
+      <Badge className={`text-sm ${confidenceColor}`}>
         {Math.round(cpt.confidence * 100)}%
       </Badge>
     </label>

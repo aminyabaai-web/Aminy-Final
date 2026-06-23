@@ -424,15 +424,15 @@ export function HomeProgramTracker({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalActivities}</p>
-          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Active Activities</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">Active Activities</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-[#6B9080]">{stats.sessionsThisWeek}</p>
-          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Sessions This Week</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">Sessions This Week</p>
         </Card>
         <Card className="p-4 text-center">
           <p className="text-2xl font-bold text-blue-600">{stats.minutesThisWeek}m</p>
-          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Practice Time</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">Practice Time</p>
         </Card>
         <Card className="p-4 text-center">
           <p className={`text-2xl font-bold ${
@@ -441,7 +441,7 @@ export function HomeProgramTracker({
           }`}>
             {stats.avgCompletion}%
           </p>
-          <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">Completion Rate</p>
+          <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">Completion Rate</p>
         </Card>
       </div>
 
@@ -493,7 +493,7 @@ export function HomeProgramTracker({
                         {activity.durationMinutes}m
                       </span>
                       <span>{FREQUENCY_LABELS[activity.frequency]}</span>
-                      <span className="text-xs">by {activity.assignedByName}</span>
+                      <span className="text-sm">by {activity.assignedByName}</span>
                     </div>
                   </div>
 
@@ -505,7 +505,7 @@ export function HomeProgramTracker({
                     }`}>
                       {completionRate}%
                     </p>
-                    <p className="text-xs text-neutral-400">this week</p>
+                    <p className="text-sm text-neutral-400">this week</p>
                   </div>
 
                   {/* Expand */}
@@ -594,7 +594,7 @@ export function HomeProgramTracker({
 
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-xs text-[#5A6B7A] mb-1 block">Duration</label>
+                              <label className="text-sm text-[#5A6B7A] mb-1 block">Duration</label>
                               <Input
                                 type="number"
                                 value={practiceLog.durationMinutes}
@@ -604,7 +604,7 @@ export function HomeProgramTracker({
                               />
                             </div>
                             <div>
-                              <label className="text-xs text-[#5A6B7A] mb-1 block">Difficulty</label>
+                              <label className="text-sm text-[#5A6B7A] mb-1 block">Difficulty</label>
                               <select
                                 value={practiceLog.difficulty}
                                 onChange={(e) => setPracticeLog({ ...practiceLog, difficulty: e.target.value as PracticeLog['difficulty'] })}
@@ -620,7 +620,7 @@ export function HomeProgramTracker({
                           </div>
 
                           <div>
-                            <label className="text-xs text-[#5A6B7A] mb-1 block">Child Engagement (1-5 stars)</label>
+                            <label className="text-sm text-[#5A6B7A] mb-1 block">Child Engagement (1-5 stars)</label>
                             <div className="flex gap-1">
                               {[1, 2, 3, 4, 5].map(star => (
                                 <button
@@ -641,7 +641,7 @@ export function HomeProgramTracker({
                           </div>
 
                           <div>
-                            <label className="text-xs text-[#5A6B7A] mb-1 block">Notes (optional)</label>
+                            <label className="text-sm text-[#5A6B7A] mb-1 block">Notes (optional)</label>
                             <Textarea
                               placeholder="How did it go? Any observations?"
                               value={practiceLog.notes}

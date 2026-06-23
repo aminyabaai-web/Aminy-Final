@@ -312,7 +312,7 @@ function WeeklyStarChart({ weeklyData }: { weeklyData: { date: string; stars: nu
                   minHeight: 4,
                 }}
               />
-              <span className={`text-xs font-semibold ${isToday ? 'text-amber-600' : 'text-[#8A9BA8]'}`}>
+              <span className={`text-sm font-semibold ${isToday ? 'text-amber-600' : 'text-[#8A9BA8]'}`}>
                 {dayLabels[i]}
               </span>
             </div>
@@ -593,7 +593,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                               {!reward.redeemed && (
                                 <div className="absolute inset-0 flex items-end justify-center pb-2">
                                   <div className="rounded-full px-2 py-0.5" style={{ background: 'rgba(0,0,0,0.4)' }}>
-                                    <span className="text-white text-xs font-bold">
+                                    <span className="text-white text-sm font-bold">
                                       {Math.round(progress * 100)}%
                                     </span>
                                   </div>
@@ -603,7 +603,7 @@ export function RewardsBoard({ onBack, onNavigateToActivity, dailyMissionSteps =
                           ) : (
                             <div className="flex flex-col items-center gap-2 text-[#8A9BA8]">
                               <Camera className="w-8 h-8" />
-                              <span className="text-xs font-medium text-center px-2">Tap to add reward photo</span>
+                              <span className="text-sm font-medium text-center px-2">Tap to add reward photo</span>
                             </div>
                           )}
 

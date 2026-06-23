@@ -267,7 +267,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </button>
                     </div>
-                    <p className="text-xs text-green-600 mt-2">
+                    <p className="text-sm text-green-600 mt-2">
                       Expires in {formatExpiry(newLink.expiresAt)}
                       {newLink.accessCode && ' - PIN protected'}
                     </p>
@@ -413,7 +413,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                 placeholder="provider@clinic.com"
                 className="w-full border rounded-lg px-3 py-2"
               />
-              <p className="text-xs text-[#5A6B7A] mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 We'll send them a notification when you create the link
               </p>
             </div>
@@ -484,7 +484,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                         </button>
                       </div>
                     </div>
-                    <div className="mt-2 flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
+                    <div className="mt-2 flex items-center gap-3 sm:gap-4 text-sm text-[#5A6B7A]">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         Expires in {formatExpiry(link.expiresAt)}
@@ -497,7 +497,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                       )}
                     </div>
                     {link.lastAccessedAt && (
-                      <p className="text-xs text-[#8A9BA8] mt-1">
+                      <p className="text-sm text-[#8A9BA8] mt-1">
                         Last accessed: {new Date(link.lastAccessedAt).toLocaleDateString()}
                       </p>
                     )}
@@ -621,7 +621,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
 
       {/* Footer */}
       <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-[#FAF7F2]">
-        <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+        <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
           <Shield className="w-4 h-4" />
           <span>
             All shared data is encrypted and access is logged. You can revoke access at any time.

@@ -110,7 +110,7 @@ export function HIPAAComplianceToggle({
               <p className="text-sm text-[#1B2733] mb-1">
                 HIPAA-Conscious protections are active
               </p>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Your family's health information is protected with industry-standard security measures.
               </p>
             </div>
@@ -126,7 +126,7 @@ export function HIPAAComplianceToggle({
               <p className="text-sm text-[#1B2733] mb-1">
                 HIPAA protections are disabled
               </p>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 We recommend keeping these protections enabled to ensure data privacy.
               </p>
             </div>
@@ -167,7 +167,7 @@ export function HIPAAComplianceToggle({
               </div>
               <div>
                 <div className="text-sm text-[#1B2733]">{feature.name}</div>
-                <div className="text-xs text-[#5A6B7A]">{feature.description}</div>
+                <div className="text-sm text-[#5A6B7A]">{feature.description}</div>
               </div>
             </div>
           ))}
@@ -182,7 +182,7 @@ export function HIPAAComplianceToggle({
       )}
 
       <div className="mt-4 pt-4 border-t border-[#E8E4DF]">
-        <p className="text-xs text-[#5A6B7A] leading-relaxed">
+        <p className="text-sm text-[#5A6B7A] leading-relaxed">
           <strong>Note:</strong> While Aminy implements HIPAA-conscious security practices, 
           this app is designed for personal family use and is not a substitute for clinical care. 
           For complete HIPAA compliance, please consult with your healthcare provider.

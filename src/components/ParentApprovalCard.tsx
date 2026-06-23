@@ -162,7 +162,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
                 Suggested by <strong>{suggestion.providerName}</strong>
                 <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
               </p>
-              <p className="text-xs text-[#5A6B7A] mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 {new Date(suggestion.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -185,7 +185,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
               {suggestion.rationale}
             </p>
             <div className="bg-white rounded-lg p-3 border border-[#E8E4DF]">
-              <p className="text-xs text-[#5A6B7A] mb-1">Expected outcome:</p>
+              <p className="text-sm text-[#5A6B7A] mb-1">Expected outcome:</p>
               <p className="text-sm text-[#1B2733]">{suggestion.expectedOutcome}</p>
             </div>
           </div>
@@ -238,7 +238,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
             >
               <button
                 onClick={handleUndo}
-                className="text-xs text-orange-600 hover:text-orange-700 flex items-center gap-1 mx-auto"
+                className="text-sm text-orange-600 hover:text-orange-700 flex items-center gap-1 mx-auto"
               >
                 <Undo className="w-3 h-3" />
                 Undo this change (available for 24 hours)
@@ -302,7 +302,7 @@ function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
   return (
     <div className="space-y-2">
       {changes.map((change, idx) => (
-        <div key={`${change.field}-${idx}`} className="bg-white rounded p-2 border border-[#E8E4DF] text-xs">
+        <div key={`${change.field}-${idx}`} className="bg-white rounded p-2 border border-[#E8E4DF] text-sm">
           <div className="text-[#5A6B7A] mb-1 capitalize">{change.field.replace('_', ' ')}:</div>
           <div className="grid grid-cols-2 gap-2">
             <div>
@@ -325,11 +325,11 @@ function GoalAdjustmentPreview({ payload }: { payload: GoalAdjustmentPayload }) 
     <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <div className="text-[#5A6B7A] mb-1 text-xs">Current:</div>
+          <div className="text-[#5A6B7A] mb-1 text-sm">Current:</div>
           <div className="text-[#3A4A57] line-through">{payload.before}</div>
         </div>
         <div>
-          <div className="text-green-600 mb-1 text-xs">New:</div>
+          <div className="text-green-600 mb-1 text-sm">New:</div>
           <div className="text-[#1B2733] font-medium">{payload.after}</div>
         </div>
       </div>
@@ -348,7 +348,7 @@ function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
         "{payload.script ?? ''}"
       </div>
       {payload.whenToUse && (
-        <div className="mt-2 text-xs text-[#5A6B7A]">
+        <div className="mt-2 text-sm text-[#5A6B7A]">
           Use when: {payload.whenToUse}
         </div>
       )}
@@ -367,7 +367,7 @@ function ReinforcementPreview({ payload }: { payload: ReinforcementPayload }) {
         <span className="text-[#5A6B7A]">With: </span>
         <span className="text-green-600 font-medium">{payload.reinforcer}</span>
       </div>
-      <div className="text-xs text-[#5A6B7A]">
+      <div className="text-sm text-[#5A6B7A]">
         Schedule: {(payload.schedule ?? '').replace('_', ' ')}
       </div>
     </div>
@@ -397,7 +397,7 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
       </div>
 
       <div className="bg-[#FDF9F0] border border-[#F0EDE8] rounded-lg p-3">
-        <p className="text-xs text-yellow-900">
+        <p className="text-sm text-yellow-900">
           <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName ?? 'your child'}. You can undo within 24 hours if needed.
         </p>
       </div>

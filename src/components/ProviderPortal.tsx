@@ -2078,7 +2078,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}

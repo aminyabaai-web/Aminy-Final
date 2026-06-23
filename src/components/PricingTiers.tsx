@@ -467,7 +467,7 @@ function TierCardView({
             {tier.pricingTable.map((row, i) => (
               <div
                 key={i}
-                className={`flex items-center justify-between px-3 py-1.5 text-xs ${
+                className={`flex items-center justify-between px-3 py-1.5 text-sm ${
                   i < tier.pricingTable!.length - 1 ? 'border-b border-[#E8E4DF]' : ''
                 } ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'}`}
               >

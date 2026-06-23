@@ -284,7 +284,7 @@ export function BCBASessionBriefing({
         </div>
         <span className="font-medium text-[#1B2733]">{title}</span>
         {count !== undefined && (
-          <Badge variant="outline" className="text-xs">{count}</Badge>
+          <Badge variant="outline" className="text-sm">{count}</Badge>
         )}
       </div>
       {expandedSections.has(id) ? (
@@ -404,7 +404,7 @@ export function BCBASessionBriefing({
             </span>
           </div>
           {briefing.parentMood === 'stressed' && (
-            <p className="text-xs text-amber-600 mt-1 ml-6">
+            <p className="text-sm text-amber-600 mt-1 ml-6">
               Consider starting with emotional check-in and validation
             </p>
           )}
@@ -438,7 +438,7 @@ export function BCBASessionBriefing({
                 {item.trend === 'stable' && <span className="w-4 h-4 text-[#8A9BA8]">—</span>}
                 <span className="font-medium text-sm">{item.area}</span>
               </div>
-              <p className="text-xs text-[#5A6B7A]">{item.detail}</p>
+              <p className="text-sm text-[#5A6B7A]">{item.detail}</p>
             </div>
           ))}
         </div>

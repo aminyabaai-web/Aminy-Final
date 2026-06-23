@@ -500,7 +500,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 <button
                   onClick={() => aiQuery.trim() && handleAIQuery(aiQuery)}
                   disabled={!aiQuery.trim() || aiLoading}
-                  className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-4 py-2 rounded-xl disabled:opacity-40 hover:bg-[#6B9080] transition-colors"
+                  className="flex items-center gap-1.5 bg-primary text-white text-sm font-medium px-4 py-2 rounded-xl disabled:opacity-40 hover:bg-[#6B9080] transition-colors"
                 >
                   {aiLoading ? <span className="animate-spin">⏳</span> : <Send size={13} />}
                   {aiLoading ? 'Thinking…' : 'Ask'}
@@ -594,7 +594,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                                 <p className="text-sm font-medium text-[#1B2733]">{faq.videoTitle}</p>
                                 <p className="text-sm text-[#8A9BA8]">{faq.videoDuration} explainer</p>
                               </div>
-                              <button className="ml-auto text-xs text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
+                              <button className="ml-auto text-sm text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
                                 Watch
                               </button>
                             </div>

@@ -309,7 +309,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <p className="text-sm text-slate-400">Hours logged this billing period</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-xs font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
+              <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-sm font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
               <p className="text-sm text-slate-400">2h/seat/mo</p>
             </div>
           </div>

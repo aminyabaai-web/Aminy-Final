@@ -627,7 +627,7 @@ export function SuperbillGenerator({
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#1B2733]">{category}</span>
                         {selectedCount > 0 && (
-                          <Badge className="bg-accent text-white text-xs">
+                          <Badge className="bg-accent text-white text-sm">
                             {selectedCount} selected
                           </Badge>
                         )}
@@ -749,7 +749,7 @@ export function SuperbillGenerator({
                 {formData.diagnosisCodes.map(code => {
                   const diagnosis = COMMON_DIAGNOSIS_CODES.find(d => d.code === code);
                   return (
-                    <Badge key={code} variant="outline" className="text-xs">
+                    <Badge key={code} variant="outline" className="text-sm">
                       {code} - {diagnosis?.description}
                     </Badge>
                   );
@@ -888,7 +888,7 @@ export function SuperbillGenerator({
                 <p><span className="text-[#5A6B7A]">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>
               </div>
               {claimResponse.warnings && claimResponse.warnings.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-xs mb-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-sm mb-4">
                   {claimResponse.warnings.map((w, i) => (
                     <p key={i} className="text-amber-700"><span className="font-medium">{w.code}:</span> {w.message}</p>
                   ))}
@@ -911,7 +911,7 @@ export function SuperbillGenerator({
                 {claimError || 'Your claim has been queued and will be retried automatically.'}
               </p>
               {claimResponse && claimResponse.errors && claimResponse.errors.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-left text-xs mb-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-left text-sm mb-4">
                   {claimResponse.errors.map((e, i) => (
                     <p key={i} className="text-red-700"><span className="font-medium">{e.code}:</span> {e.message}</p>
                   ))}

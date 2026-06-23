@@ -309,7 +309,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                       <Badge className="bg-accent/10 text-accent border-accent/20">
                         {tip.category}
                       </Badge>
-                      <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                         <Clock className="w-3 h-3" />
                         {tip.readTime}
                       </div>
@@ -352,7 +352,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   <p className="text-sm font-medium text-blue-900 mb-1">
                     Safe, Gentle Community
                   </p>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-sm text-blue-700">
                     Encourage, don't compare. Share wins and struggles. All posts are moderated for kindness.
                   </p>
                 </div>
@@ -368,7 +368,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium text-[#1B2733]">{story.author}</span>
-                      <span className="text-xs text-[#5A6B7A]">{story.timestamp}</span>
+                      <span className="text-sm text-[#5A6B7A]">{story.timestamp}</span>
                     </div>
                     <p className="text-sm text-[#3A4A57] leading-relaxed mb-3">
                       {story.content}
@@ -377,7 +377,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                     {story.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-3">
                         {story.tags.map((tag, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
+                          <Badge key={idx} variant="outline" className="text-sm">
                             {tag}
                           </Badge>
                         ))}
@@ -491,7 +491,7 @@ function ResourceCard({
           </div>
 
           <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-3 text-sm text-[#5A6B7A]">
               <Badge variant="outline" className="capitalize">
                 {resource.type}
               </Badge>

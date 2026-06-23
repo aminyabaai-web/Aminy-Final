@@ -164,7 +164,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
                 <div>
                   <p className="text-sm font-bold text-red-900 mb-1">Same-day clinical contact recommended</p>
                   <p className="text-sm text-red-800 mb-2">You noted thoughts of self-harm. You're not alone.</p>
-                  <a href="tel:988" className="inline-flex items-center gap-1 text-xs font-bold text-white px-3 py-2 rounded-lg" style={{ background: '#dc2626' }}>
+                  <a href="tel:988" className="inline-flex items-center gap-1 text-sm font-bold text-white px-3 py-2 rounded-lg" style={{ background: '#dc2626' }}>
                     Call 988 — Suicide & Crisis Lifeline
                   </a>
                 </div>

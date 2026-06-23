@@ -257,7 +257,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   </div>
                   <div>
                     <div className="font-semibold text-[#1B2733] text-sm">Yes, I believe so</div>
-                    <div className="text-xs text-slate-400 mt-0.5">Let's maximize your benefits</div>
+                    <div className="text-sm text-slate-400 mt-0.5">Let's maximize your benefits</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-primary transition-colors" />
                 </div>
@@ -273,7 +273,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   </div>
                   <div>
                     <div className="font-semibold text-[#1B2733] text-sm">No, it doesn't</div>
-                    <div className="text-xs text-slate-400 mt-0.5">Let's explore your options</div>
+                    <div className="text-sm text-slate-400 mt-0.5">Let's explore your options</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-orange-400 transition-colors" />
                 </div>
@@ -289,7 +289,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   </div>
                   <div>
                     <div className="font-semibold text-[#1B2733] text-sm">I'm not sure</div>
-                    <div className="text-xs text-slate-400 mt-0.5">We'll help you find out in 3 minutes</div>
+                    <div className="text-sm text-slate-400 mt-0.5">We'll help you find out in 3 minutes</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-blue-400 transition-colors" />
                 </div>
@@ -300,8 +300,8 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             <Card className="p-4 border-dashed border-[#E8E4DF] bg-white text-center">
               <Camera className="w-8 h-8 text-slate-400 mx-auto mb-2" />
               <p className="text-sm font-medium text-[#5A6B7A] mb-1">Scan your insurance card</p>
-              <p className="text-xs text-slate-400 mb-3">We'll pre-fill your plan details automatically</p>
-              <Button variant="outline" size="sm" className="text-xs" onClick={() => toast.info('Camera access coming soon')}>
+              <p className="text-sm text-slate-400 mb-3">We'll pre-fill your plan details automatically</p>
+              <Button variant="outline" size="sm" className="text-sm" onClick={() => toast.info('Camera access coming soon')}>
                 <Camera className="w-3.5 h-3.5 mr-1.5" />
                 Open Camera
               </Button>
@@ -411,7 +411,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       <Card className="p-4 bg-white border-[#E8E4DF]">
                         <div className="space-y-3 mb-4">
                           <div>
-                            <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Deductible already met? ($)</label>
+                            <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Deductible already met? ($)</label>
                             <input
                               type="number"
                               placeholder="e.g. 1500"
@@ -421,7 +421,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             />
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Your copay per session ($)</label>
+                            <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Your copay per session ($)</label>
                             <input
                               type="number"
                               placeholder="e.g. 30"
@@ -431,7 +431,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             />
                           </div>
                           <div>
-                            <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Sessions per month</label>
+                            <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Sessions per month</label>
                             <input
                               type="number"
                               value={oopCalc.sessionsPerMonth}
@@ -450,9 +450,9 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             animate={{ opacity: 1, y: 0 }}
                             className="mt-3 p-3 bg-[#6B9080]/10 rounded-lg text-center"
                           >
-                            <p className="text-xs text-[#6B9080] mb-1">Estimated monthly out-of-pocket</p>
+                            <p className="text-sm text-[#6B9080] mb-1">Estimated monthly out-of-pocket</p>
                             <p className="text-2xl font-bold text-[#6B9080]">${calcResult.toFixed(2)}</p>
-                            <p className="text-xs text-primary mt-1">Based on your inputs. Actual costs may vary.</p>
+                            <p className="text-sm text-primary mt-1">Based on your inputs. Actual costs may vary.</p>
                           </motion.div>
                         )}
                       </Card>
@@ -530,7 +530,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       </div>
                       <div>
                         <p className="font-semibold text-[#1B2733] text-sm mb-0.5">{option.title}</p>
-                        <p className="text-xs text-[#5A6B7A] leading-relaxed">{option.desc}</p>
+                        <p className="text-sm text-[#5A6B7A] leading-relaxed">{option.desc}</p>
                       </div>
                     </div>
                   </Card>
@@ -595,7 +595,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       </div>
                       <div>
                         <p className="font-semibold text-[#1B2733] text-sm mb-0.5">{item.title}</p>
-                        <p className="text-xs text-[#5A6B7A] leading-relaxed">{item.desc}</p>
+                        <p className="text-sm text-[#5A6B7A] leading-relaxed">{item.desc}</p>
                       </div>
                     </div>
                   </Card>
@@ -613,7 +613,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     navigator.clipboard.writeText("Hi, I'm calling to ask about behavioral health benefits for my child. Do you cover Applied Behavior Analysis (ABA) therapy? What CPT codes are approved, and is prior authorization required?");
                     toast.success('Script copied to clipboard!');
                   }}
-                  className="mt-3 text-xs text-primary hover:text-[#7BA7BC] transition-colors"
+                  className="mt-3 text-sm text-primary hover:text-[#7BA7BC] transition-colors"
                 >
                   Copy script →
                 </button>
@@ -661,7 +661,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   >
                     <div>
                       <p className="font-semibold text-[#1B2733] text-sm">{waiver.name}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">Wait: {waiver.waitlistMonths}</p>
+                      <p className="text-sm text-slate-400 mt-0.5">Wait: {waiver.waitlistMonths}</p>
                     </div>
                     <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expandedWaiver === waiver.code ? 'rotate-90' : ''}`} />
                   </button>
@@ -680,7 +680,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-1">Eligibility</p>
                             <ul className="space-y-1">
                               {waiver.eligibility.map((e, i) => (
-                                <li key={i} className="flex items-start gap-2 text-xs text-[#5A6B7A]">
+                                <li key={i} className="flex items-start gap-2 text-sm text-[#5A6B7A]">
                                   <CheckCircle className="w-3.5 h-3.5 text-green-500 flex-shrink-0 mt-0.5" />
                                   {e}
                                 </li>
@@ -696,7 +696,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                             </div>
                           </div>
                           <div className="p-3 bg-amber-50 rounded-lg">
-                            <p className="text-xs text-amber-800"><strong>Tip:</strong> {waiver.tip}</p>
+                            <p className="text-sm text-amber-800"><strong>Tip:</strong> {waiver.tip}</p>
                           </div>
                         </div>
                       </motion.div>
@@ -755,10 +755,10 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     </div>
                     <div className="flex-1">
                       <p className="font-semibold text-[#1B2733] text-sm">{item.service}</p>
-                      <p className="text-xs text-[#5A6B7A] mt-1 leading-relaxed">{item.notes}</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1 leading-relaxed">{item.notes}</p>
                       {item.cptCodes.length > 0 && (
                         <div className="flex items-center gap-1.5 mt-2">
-                          <span className="text-xs text-slate-400">CPT:</span>
+                          <span className="text-sm text-slate-400">CPT:</span>
                           {item.cptCodes.map(code => (
                             <span key={code} className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded font-mono">{code}</span>
                           ))}
@@ -767,7 +767,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       {item.authRequired && (
                         <div className="flex items-center gap-1 mt-1.5">
                           <AlertCircle className="w-3 h-3 text-amber-500" />
-                          <span className="text-xs text-amber-600 font-medium">Prior auth required</span>
+                          <span className="text-sm text-amber-600 font-medium">Prior auth required</span>
                         </div>
                       )}
                     </div>
@@ -776,7 +776,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               ))}
             </div>
 
-            <p className="text-xs text-slate-400 text-center mb-4">
+            <p className="text-sm text-slate-400 text-center mb-4">
               Coverage varies by plan. Always verify with your insurance company.
             </p>
           </motion.div>
@@ -794,13 +794,13 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             <div className="grid grid-cols-2 gap-2">
               <button onClick={() => setStep('lookup')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-[#6B9080]/30 transition-all text-left">
                 <HelpCircle className="w-5 h-5 text-primary mb-1.5" />
-                <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">Is This Covered?</p>
-                <p className="text-xs text-slate-400 dark:text-slate-400">Service lookup</p>
+                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Is This Covered?</p>
+                <p className="text-sm text-slate-400 dark:text-slate-400">Service lookup</p>
               </button>
               <button onClick={() => setStep('waiver')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-violet-300 transition-all text-left">
                 <Shield className="w-5 h-5 text-violet-500 mb-1.5" />
-                <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-100">Medicaid Waivers</p>
-                <p className="text-xs text-slate-400 dark:text-slate-400">AZ programs</p>
+                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Medicaid Waivers</p>
+                <p className="text-sm text-slate-400 dark:text-slate-400">AZ programs</p>
               </button>
             </div>
           </motion.div>

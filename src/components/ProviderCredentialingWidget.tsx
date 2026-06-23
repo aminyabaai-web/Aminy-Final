@@ -174,7 +174,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <button
                   onClick={row.onAction}
                   disabled={working === row.key}
-                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                  className="shrink-0 text-sm font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
                 >
                   {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
                 </button>

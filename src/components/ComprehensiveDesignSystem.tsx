@@ -99,7 +99,7 @@ export function ComprehensiveDesignSystem() {
           placeholder="Enter text here..."
           className="w-full min-h-[44px] px-3 py-2 border border-[#E8E4DF] rounded-lg focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
         />
-        <p className="text-xs text-[#5A6B7A]">Helper text goes here</p>
+        <p className="text-sm text-[#5A6B7A]">Helper text goes here</p>
       </div>
 
       {/* Text Input with Validation */}
@@ -115,7 +115,7 @@ export function ComprehensiveDesignSystem() {
           />
           <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-green-500" />
         </div>
-        <p className="text-xs text-green-600">✓ Valid email address</p>
+        <p className="text-sm text-green-600">✓ Valid email address</p>
       </div>
 
       {/* Select Dropdown */}
@@ -200,7 +200,7 @@ export function ComprehensiveDesignSystem() {
           <span className="bg-accent text-white text-xs font-medium px-2 py-1 rounded-full">5 min</span>
         </div>
         <p className="text-sm text-[#5A6B7A] mb-3">Create a simple picture schedule for the day</p>
-        <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-4">
+        <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-4">
           <Sparkles className="w-4 h-4" />
           <span>Materials: Paper & markers</span>
         </div>
@@ -217,19 +217,19 @@ export function ComprehensiveDesignSystem() {
           </div>
           <div>
             <h4 className="text-base font-semibold">Weekly Progress</h4>
-            <p className="text-xs text-[#5A6B7A]">Last 7 days</p>
+            <p className="text-sm text-[#5A6B7A]">Last 7 days</p>
           </div>
         </div>
         
         {/* Chart Placeholder */}
         <div className="h-32 bg-[#FAF7F2] rounded-lg mb-3 flex items-center justify-center">
-          <span className="text-xs text-[#8A9BA8]">Chart visualization</span>
+          <span className="text-sm text-[#8A9BA8]">Chart visualization</span>
         </div>
         
         {/* AI Narrative */}
         <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-3 flex gap-2">
           <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
-          <p className="text-xs text-blue-900">
+          <p className="text-sm text-blue-900">
             This week, Eddie tried 3 new activities. They seemed most engaged with turn-taking games.
           </p>
         </div>
@@ -242,7 +242,7 @@ export function ComprehensiveDesignSystem() {
             <Clock className="w-5 h-5 text-[#8A9BA8]" />
             <div>
               <p className="text-sm font-medium">Turn-Taking Game</p>
-              <p className="text-xs text-[#5A6B7A]">10 min • Any toy</p>
+              <p className="text-sm text-[#5A6B7A]">10 min • Any toy</p>
             </div>
           </div>
           <button className="text-accent text-sm font-medium hover:underline">
@@ -329,7 +329,7 @@ export function ComprehensiveDesignSystem() {
               }`}
             >
               <item.icon className="w-5 h-5" />
-              <span className="text-xs font-medium">{item.label}</span>
+              <span className="text-sm font-medium">{item.label}</span>
             </button>
           ))}
         </div>
@@ -438,8 +438,8 @@ export function ComprehensiveDesignSystem() {
             <div key={color.name} className="space-y-2">
               <div className={`h-16 rounded-lg ${color.class}`}></div>
               <div>
-                <p className="text-xs font-medium">{color.name}</p>
-                <p className="text-xs text-[#5A6B7A]">{color.value}</p>
+                <p className="text-sm font-medium">{color.name}</p>
+                <p className="text-sm text-[#5A6B7A]">{color.value}</p>
               </div>
             </div>
           ))}
@@ -452,23 +452,23 @@ export function ComprehensiveDesignSystem() {
         <div className="space-y-3 sm:space-y-4">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-1">H1: 28-32px / Bold</h1>
-            <p className="text-xs text-[#5A6B7A]">Large headings</p>
+            <p className="text-sm text-[#5A6B7A]">Large headings</p>
           </div>
           <div>
             <h2 className="text-2xl font-semibold mb-1">H2: 22-24px / Semibold</h2>
-            <p className="text-xs text-[#5A6B7A]">Section headings</p>
+            <p className="text-sm text-[#5A6B7A]">Section headings</p>
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-semibold mb-1">H3: 18-20px / Semibold</h3>
-            <p className="text-xs text-[#5A6B7A]">Subsection headings</p>
+            <p className="text-sm text-[#5A6B7A]">Subsection headings</p>
           </div>
           <div>
             <p className="text-base mb-1">Body: 16px / Regular</p>
-            <p className="text-xs text-[#5A6B7A]">Body text</p>
+            <p className="text-sm text-[#5A6B7A]">Body text</p>
           </div>
           <div>
             <p className="text-sm mb-1">Caption: 14px / Regular</p>
-            <p className="text-xs text-[#5A6B7A]">Helper text</p>
+            <p className="text-sm text-[#5A6B7A]">Helper text</p>
           </div>
         </div>
       </div>
@@ -487,7 +487,7 @@ export function ComprehensiveDesignSystem() {
           ].map((space) => (
             <div key={space.name} className="flex items-center gap-3">
               <div className={`${space.size} h-4 bg-accent rounded`}></div>
-              <span className="text-xs text-[#5A6B7A]">{space.name}</span>
+              <span className="text-sm text-[#5A6B7A]">{space.name}</span>
             </div>
           ))}
         </div>
@@ -505,7 +505,7 @@ export function ComprehensiveDesignSystem() {
           ].map((radius) => (
             <div key={radius.name} className="text-center">
               <div className={`w-16 h-16 bg-accent/20 border-2 border-accent ${radius.class} mb-1`}></div>
-              <p className="text-xs text-[#5A6B7A]">{radius.name}</p>
+              <p className="text-sm text-[#5A6B7A]">{radius.name}</p>
             </div>
           ))}
         </div>
@@ -516,13 +516,13 @@ export function ComprehensiveDesignSystem() {
         <h4 className="text-sm font-medium text-muted-foreground">Shadows</h4>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <div className="bg-white p-4 rounded-lg shadow-sm border border-[#E8E4DF]">
-            <p className="text-xs font-medium">Small</p>
+            <p className="text-sm font-medium">Small</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
-            <p className="text-xs font-medium">Medium</p>
+            <p className="text-sm font-medium">Medium</p>
           </div>
           <div className="bg-white p-4 rounded-lg shadow-lg">
-            <p className="text-xs font-medium">Large</p>
+            <p className="text-sm font-medium">Large</p>
           </div>
         </div>
       </div>
@@ -555,7 +555,7 @@ export function ComprehensiveDesignSystem() {
                 <h1 className="text-lg sm:text-xl font-semibold text-primary">
                   Aminy Design System
                 </h1>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   Complete Component Library v1.0
                 </p>
               </div>

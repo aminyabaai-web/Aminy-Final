@@ -321,7 +321,7 @@ export function WaitingRoom({
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 flex flex-col items-center overflow-y-auto z-50 p-4">
       {/* HIPAA indicator */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 text-xs text-white/60">
+      <div className="absolute top-4 left-4 flex items-center gap-2 text-sm text-white/60">
         <Shield size={14} />
         <span>HIPAA-conscious, encrypted in transit</span>
       </div>
@@ -358,10 +358,10 @@ export function WaitingRoom({
             <div className="flex-1 min-w-0">
               <h3 className="text-white font-semibold text-base truncate">{displayName}</h3>
               {displayTitle && (
-                <p className="text-white/50 text-xs truncate">{displayTitle}</p>
+                <p className="text-white/50 text-sm truncate">{displayTitle}</p>
               )}
               {scheduledTime && (
-                <p className="text-[#7BA7BC]/80 text-xs mt-1 flex items-center gap-1.5">
+                <p className="text-[#7BA7BC]/80 text-sm mt-1 flex items-center gap-1.5">
                   <Clock size={11} />
                   {new Date(scheduledTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
@@ -527,7 +527,7 @@ export function WaitingRoom({
         )}
 
         {/* Connection info */}
-        <div className="flex items-center justify-center gap-4 text-xs text-white/40">
+        <div className="flex items-center justify-center gap-4 text-sm text-white/40">
           <div className="flex items-center gap-1.5">
             <Wifi size={12} />
             <span>Connected</span>

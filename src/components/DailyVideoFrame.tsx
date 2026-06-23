@@ -200,7 +200,7 @@ export const DailyVideoFrame = forwardRef<DailyVideoFrameRef, DailyVideoFramePro
             <div className="text-center">
               <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4" />
               <p className="text-white/80 text-sm">Setting up your secure video...</p>
-              <p className="text-white/50 text-xs mt-2">
+              <p className="text-white/50 text-sm mt-2">
                 Allow camera &amp; microphone access when prompted
               </p>
             </div>

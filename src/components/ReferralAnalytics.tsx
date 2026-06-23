@@ -199,19 +199,19 @@ export function ReferralAnalytics({
       {/* KPI cards */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] rounded-xl p-3.5 border border-blue-100">
-          <p className="text-xs text-blue-600 font-medium">Invites</p>
+          <p className="text-sm text-blue-600 font-medium">Invites</p>
           <p className="text-2xl font-bold text-blue-900 mt-0.5">
             {userStats?.totalInvites ?? 0}
           </p>
         </div>
         <div className="bg-gradient-to-br from-[#FAF7F2] to-emerald-50 rounded-xl p-3.5 border border-[#E8E4DF]">
-          <p className="text-xs text-[#6B9080] font-medium">Conversions</p>
+          <p className="text-sm text-[#6B9080] font-medium">Conversions</p>
           <p className="text-2xl font-bold text-[#6B9080] mt-0.5">
             {userStats?.converted ?? 0}
           </p>
         </div>
         <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3.5 border border-amber-100">
-          <p className="text-xs text-amber-600 font-medium">Rewards</p>
+          <p className="text-sm text-amber-600 font-medium">Rewards</p>
           <p className="text-2xl font-bold text-amber-900 mt-0.5">
             {summary?.totalRewardsEarned ?? 0}
             <span className="text-sm font-normal text-amber-600 ml-0.5">mo</span>
@@ -233,7 +233,7 @@ export function ReferralAnalytics({
               );
               return (
                 <div key={stage.label}>
-                  <div className="flex items-center justify-between text-xs mb-1">
+                  <div className="flex items-center justify-between text-sm mb-1">
                     <span className="flex items-center gap-1.5 text-[#5A6B7A] font-medium">
                       {stage.icon}
                       {stage.label}
@@ -259,7 +259,7 @@ export function ReferralAnalytics({
           {/* Conversion rate */}
           {userStats && userStats.totalInvites > 0 && (
             <div className="mt-3 pt-3 border-t border-[#E8E4DF] flex items-center justify-between">
-              <span className="text-xs text-[#5A6B7A]">Overall conversion</span>
+              <span className="text-sm text-[#5A6B7A]">Overall conversion</span>
               <span className="text-sm font-bold text-[#6B9080]">
                 {Math.round(
                   (userStats.converted / userStats.totalInvites) * 100
@@ -286,7 +286,7 @@ export function ReferralAnalytics({
             </span>
             {viralMetrics.weekOverWeekGrowth !== 0 && (
               <span
-                className={`text-xs font-medium mb-1 ${
+                className={`text-sm font-medium mb-1 ${
                   viralMetrics.weekOverWeekGrowth > 0
                     ? 'text-emerald-600'
                     : 'text-red-500'
@@ -298,7 +298,7 @@ export function ReferralAnalytics({
             )}
           </div>
           {kInterp && (
-            <p className={`text-xs ${kInterp.color}`}>{kInterp.message}</p>
+            <p className={`text-sm ${kInterp.color}`}>{kInterp.message}</p>
           )}
           {/* K-factor bar */}
           <div className="mt-3 relative">
@@ -323,7 +323,7 @@ export function ReferralAnalytics({
               className="absolute top-0 w-0.5 h-3 bg-gray-400"
               style={{ left: '100%', transform: 'translateX(-1px)' }}
             />
-            <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
+            <div className="flex justify-between text-sm text-[#8A9BA8] mt-1">
               <span>0</span>
               <span className="text-[#5A6B7A] font-medium">1.0 = Viral</span>
             </div>
@@ -349,7 +349,7 @@ export function ReferralAnalytics({
                 <p className="text-sm font-bold text-[#1B2733]">
                   {currentTier.name}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {summary.qualifiedReferrals} qualified referral
                   {summary.qualifiedReferrals !== 1 ? 's' : ''}
                 </p>
@@ -364,7 +364,7 @@ export function ReferralAnalytics({
           {/* Progress to next tier */}
           {nextTier && (
             <div>
-              <div className="flex items-center justify-between text-xs mb-1">
+              <div className="flex items-center justify-between text-sm mb-1">
                 <span className="text-[#5A6B7A]">
                   {summary.referralsToNextTier} more to{' '}
                   <span className="font-semibold">{nextTier.name}</span>

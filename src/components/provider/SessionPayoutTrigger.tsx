@@ -157,7 +157,7 @@ export function SessionPayoutTrigger({
 
             {isSample && (
               <div
-                className="px-5 py-2 flex items-center justify-center gap-1.5 text-xs font-semibold"
+                className="px-5 py-2 flex items-center justify-center gap-1.5 text-sm font-semibold"
                 style={{ backgroundColor: '#92400E', color: '#FFFBEB' }}
               >
                 <AlertCircle className="w-3.5 h-3.5" />

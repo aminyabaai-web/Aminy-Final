@@ -128,7 +128,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
           </div>
           <button
             onClick={() => setShowAddFlow(true)}
-            className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-[#6B9080] transition-colors"
+            className="flex items-center gap-1.5 bg-primary text-white text-sm font-medium px-3 py-2 rounded-xl hover:bg-[#6B9080] transition-colors"
           >
             <Plus size={14} />
             Add to Roster
@@ -189,7 +189,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                       ))}
                     </div>
 
-                    <button className="mt-3 w-full flex items-center justify-between py-2 border-t border-gray-50 text-xs text-[#5A6B7A] hover:text-[#3A4A57] transition-colors">
+                    <button className="mt-3 w-full flex items-center justify-between py-2 border-t border-gray-50 text-sm text-[#5A6B7A] hover:text-[#3A4A57] transition-colors">
                       <span>View full roster details</span>
                       <ChevronRight size={14} />
                     </button>
@@ -230,7 +230,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                       </div>
                     </div>
                     <p className="text-sm text-[#5A6B7A] mb-2">{req.description}</p>
-                    <div className="flex items-center gap-1.5 text-xs text-[#8A9BA8]">
+                    <div className="flex items-center gap-1.5 text-sm text-[#8A9BA8]">
                       <Calendar size={11} />
                       <span>Effective: {req.effectiveDate}</span>
                     </div>
@@ -255,7 +255,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         </React.Fragment>
                       ))}
                     </div>
-                    <div className="flex justify-between mt-1 text-xs text-[#8A9BA8] px-0.5">
+                    <div className="flex justify-between mt-1 text-sm text-[#8A9BA8] px-0.5">
                       <span>Submitted</span>
                       <span>Acknowledged</span>
                       <span>Confirmed</span>

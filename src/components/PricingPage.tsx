@@ -269,7 +269,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{tier.name}</h3>
                   </div>
 
-                  <p className="text-xs text-[#5A6B7A] mb-3">{tier.description}</p>
+                  <p className="text-sm text-[#5A6B7A] mb-3">{tier.description}</p>
 
                   <div className="flex items-baseline gap-1">
                     {tier.price === 0 ? (
@@ -284,7 +284,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
 
                   {/* Yearly savings */}
                   {tier.savings && tier.savings > 0 && (
-                    <p className="text-xs text-[#5A6B7A] mt-1">
+                    <p className="text-sm text-[#5A6B7A] mt-1">
                       or ${tier.yearlyPrice}/year (save {tier.savings}%)
                     </p>
                   )}
@@ -298,7 +298,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   )}
 
                   {tier.trialNote && tier.price > 0 && (
-                    <p className="text-xs text-[#5A6B7A] mt-2">
+                    <p className="text-sm text-[#5A6B7A] mt-2">
                       Then ${tier.price}/mo • Cancel anytime
                     </p>
                   )}
@@ -309,7 +309,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <Check className={`w-3 h-3 ${tier.accentColor} mt-1 flex-shrink-0`} />
-                      <span className="text-xs text-[#3A4A57]">{feature}</span>
+                      <span className="text-sm text-[#3A4A57]">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -342,7 +342,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                 </Button>
 
                 {tier.trialNote && !isCurrent && (
-                  <p className="text-xs text-center text-[#5A6B7A] mt-2">
+                  <p className="text-sm text-center text-[#5A6B7A] mt-2">
                     {tier.trialNote}
                   </p>
                 )}
@@ -374,7 +374,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     </div>
                     <div>
                       <h3 className="font-medium text-[#1B2733] text-sm">{item.feature}</h3>
-                      <p className="text-xs text-[#5A6B7A] mt-1">{item.description}</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">{item.description}</p>
                     </div>
                   </div>
                 </Card>
@@ -462,7 +462,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     <strong className="text-green-700">Yes!</strong> All Aminy plans are eligible for HSA/FSA reimbursement.
                     Aminy qualifies as a behavioral health and wellness expense under IRS guidelines.
                   </p>
-                  <ul className="text-xs text-[#5A6B7A] space-y-1">
+                  <ul className="text-sm text-[#5A6B7A] space-y-1">
                     <li>• Pay directly with your HSA/FSA debit card</li>
                     <li>• Or submit receipts for reimbursement</li>
                     <li>• We provide itemized receipts for all payments</li>

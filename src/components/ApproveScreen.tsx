@@ -118,7 +118,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
 
       {/* Output Note */}
       <div className="px-4 py-3 bg-[#EEF4F8] border-t border-[#C8DDE8]">
-        <p className="text-xs text-center text-blue-700">
+        <p className="text-sm text-center text-blue-700">
           Output: Diagnostic Prep Packet (not a diagnosis)
         </p>
       </div>

@@ -234,7 +234,7 @@ export function PWAInstallPrompt() {
             <h3 className="text-sm font-semibold text-white">
               Install Aminy
             </h3>
-            <p className="mt-0.5 text-xs text-white/80 leading-relaxed">
+            <p className="mt-0.5 text-sm text-white/80 leading-relaxed">
               Get the full app experience — quick access to your child's support tools, even offline.
             </p>
 

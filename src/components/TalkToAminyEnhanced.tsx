@@ -585,11 +585,11 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-primary">Aminy</h3>
-              <Badge className="text-xs badge">
+              <Badge className="text-sm badge">
                 {userTier === 'core' || userTier === 'pro' ? 'Unlimited' : 'Limited'}
               </Badge>
               {isStreaming && (
-                <Badge variant="secondary" className="text-xs animate-pulse">
+                <Badge variant="secondary" className="text-sm animate-pulse">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Thinking...
                 </Badge>
@@ -641,7 +641,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
             </Label>
           </div>
           {useRecords && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-sm">
               <CheckCircle className="w-3 h-3 mr-1" />
               Context enabled
             </Badge>
@@ -688,7 +688,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                       {message.contextUsed && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-sm">
                           <FileText className="w-2 h-2 mr-1" />
                           Records used
                         </Badge>
@@ -748,7 +748,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="h-auto p-2 text-xs bg-white/10 hover:bg-white/20 text-left w-full justify-start"
+                          className="h-auto p-2 text-sm bg-white/10 hover:bg-white/20 text-left w-full justify-start"
                           onClick={() => onRecordOpen(citation.recordId)}
                         >
                           <FileText className="w-3 h-3 mr-2 flex-shrink-0" />
@@ -781,7 +781,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
                       <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
-                    <span className="text-xs text-muted-foreground">Aminy is thinking...</span>
+                    <span className="text-sm text-muted-foreground">Aminy is thinking...</span>
                   </div>
                 </div>
               </div>
@@ -794,16 +794,16 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
       {/* Conversation Stats */}
       {messages.length > 0 && (
         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-4 p-2 bg-muted/30 rounded-lg">
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <MessageSquare className="w-3 h-3" />
             <span>{messages.length} messages</span>
           </div>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <Clock className="w-3 h-3" />
             <span>{lastActivity.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           </div>
           {useRecords && usableRecords.length > 0 && (
-            <div className="flex items-center gap-1 text-xs text-accent">
+            <div className="flex items-center gap-1 text-sm text-accent">
               <Shield className="w-3 h-3" />
               <span>Records active</span>
             </div>
@@ -923,7 +923,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
               {/* Enhanced Send Button */}
               <div className="flex items-center gap-2">
                 {inputValue.trim() && (
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     {inputValue.length}/2000
                   </span>
                 )}
@@ -951,7 +951,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
         
         {/* Enhanced Helper Text with Dynamic Content */}
         <div className="flex items-center justify-center gap-2 mt-2">
-          <p className="text-center text-[#5A6B7A] text-xs aminy-ai-helper-text">
+          <p className="text-center text-[#5A6B7A] text-sm aminy-ai-helper-text">
             {isListening ? (
               <span className="text-accent flex items-center gap-1">
                 <div className="w-1 h-1 bg-accent rounded-full animate-pulse" />
@@ -969,7 +969,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
           
           {/* Character count for mobile */}
           {inputValue.length > 100 && (
-            <span className={`text-xs ${
+            <span className={`text-sm ${
               inputValue.length > 1800 ? 'text-red-500' : 
               inputValue.length > 1500 ? 'text-amber-500' : 'text-muted-foreground'
             }`}>
@@ -985,7 +985,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
               variant="outline" 
               size="sm" 
               onClick={() => setInputValue("Can you elaborate on that?")}
-              className="text-xs"
+              className="text-sm"
             >
               Tell me more
             </Button>
@@ -993,7 +993,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
               variant="outline" 
               size="sm" 
               onClick={() => setInputValue("What should I do next?")}
-              className="text-xs"
+              className="text-sm"
             >
               Next steps
             </Button>
@@ -1001,7 +1001,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
               variant="outline" 
               size="sm" 
               onClick={() => setInputValue("How can I implement this at home?")}
-              className="text-xs"
+              className="text-sm"
             >
               How to implement
             </Button>

@@ -387,17 +387,17 @@ export function BookVisitScreen({
             <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
               <Check className="w-3 h-3 text-white" />
             </span>
-            <span className="text-xs font-medium text-green-600">Tell us more</span>
+            <span className="text-sm font-medium text-green-600">Tell us more</span>
           </div>
           <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
             <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold">2</span>
-            <span className="text-xs font-medium text-[#6B9080]">Choose provider</span>
+            <span className="text-sm font-medium text-[#6B9080]">Choose provider</span>
           </div>
           <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
           <div className="flex items-center gap-1.5">
             <span className="w-5 h-5 bg-[#E8E4DF] rounded-full flex items-center justify-center text-[#5A6B7A] text-xs font-bold">3</span>
-            <span className="text-xs text-[#8A9BA8]">Confirm</span>
+            <span className="text-sm text-[#8A9BA8]">Confirm</span>
           </div>
         </nav>
       </header>

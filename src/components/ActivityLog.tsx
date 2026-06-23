@@ -133,7 +133,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           )}
           <button
             onClick={() => setShowLogForm(v => !v)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-[#216982] transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#216982] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             Log behavior
@@ -144,7 +144,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       {showLogForm && (
         <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-800 space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-[#1B2733] dark:text-slate-200">Describe the behavior</p>
+            <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-200">Describe the behavior</p>
             <button onClick={() => { setShowLogForm(false); setLogText(''); }} className="text-slate-400 hover:text-slate-600">
               <X className="w-4 h-4" />
             </button>
@@ -181,9 +181,9 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
                   {activity.description}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-xs text-muted-foreground">{activity.user}</p>
-                  <span className="text-xs text-muted-foreground">•</span>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">{activity.user}</p>
+                  <span className="text-sm text-muted-foreground">•</span>
+                  <p className="text-sm text-muted-foreground">
                     {formatTime(activity.timestamp)}
                   </p>
                 </div>
@@ -196,7 +196,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           <div className="text-center py-8">
             <Clock className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
             <p className="text-sm text-muted-foreground">No incidents logged yet</p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               Tap "Log behavior" to record an incident.
             </p>
           </div>

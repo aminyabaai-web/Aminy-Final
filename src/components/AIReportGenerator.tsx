@@ -301,12 +301,12 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
                   <div className="flex items-center gap-2 mb-1">
                     <h4 className="font-medium">{option.title}</h4>
                     {!hasAccess && (
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-sm">
                         {option.tierRequired === 'pro' ? 'Plus' : 'Core'}+ only
                       </Badge>
                     )}
                     {isGenerated && (
-                      <Badge variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                      <Badge variant="outline" className="text-sm bg-green-50 text-green-700 border-green-200">
                         <CheckCircle2 className="w-2.5 h-2.5 mr-1" />
                         Generated
                       </Badge>
@@ -366,7 +366,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
 
       {/* Info footer */}
       <Card className="p-3 bg-accent/5 border-accent/20">
-        <div className="flex items-start gap-2 text-xs">
+        <div className="flex items-start gap-2 text-sm">
           <FileText className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
           <div className="flex-1">
             <p className="font-medium text-accent mb-1">AI-Powered Clinical Documents</p>

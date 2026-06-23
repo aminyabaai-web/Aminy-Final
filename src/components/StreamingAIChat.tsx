@@ -267,7 +267,7 @@ export function StreamingAIChat({
               <div className="w-16 h-16 bg-gradient-to-br from-[#6B9080]/20 to-[#7BA7BC]/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-[#6B9080]" />
               </div>
-              <p className="text-xs text-[#8E9BAA] mb-1">
+              <p className="text-sm text-[#8E9BAA] mb-1">
                 {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
               </p>
               <h3 className="text-xl font-semibold text-[#1B2733]">
@@ -299,7 +299,7 @@ export function StreamingAIChat({
                   >
                     <span className="text-2xl block mb-2">{card.icon}</span>
                     <p className="text-sm font-semibold text-[#1B2733] leading-tight">{card.title}</p>
-                    <p className="text-xs text-[#8E9BAA] mt-1 leading-tight">{card.subtitle}</p>
+                    <p className="text-sm text-[#8E9BAA] mt-1 leading-tight">{card.subtitle}</p>
                   </button>
                 ))}
               </div>
@@ -343,7 +343,7 @@ export function StreamingAIChat({
                 {message.content}
               </div>
               <div
-                className={`text-xs mt-1 ${
+                className={`text-sm mt-1 ${
                   message.role === 'user' ? 'text-white/70' : 'text-[#5A6B7A]'
                 }`}
               >
@@ -409,11 +409,11 @@ export function StreamingAIChat({
               <p className="text-sm font-semibold text-[#1B2733] leading-tight">
                 {pendingReview.length} {pendingReview.length === 1 ? 'thing' : 'things'} ready for review
               </p>
-              <p className="text-xs text-[#5A6B7A] truncate">
+              <p className="text-sm text-[#5A6B7A] truncate">
                 Aminy heard something — confirm what to save
               </p>
             </div>
-            <span className="text-xs font-semibold text-[#6B9080] flex-shrink-0">Review →</span>
+            <span className="text-sm font-semibold text-[#6B9080] flex-shrink-0">Review →</span>
           </button>
         </div>
       )}

@@ -290,7 +290,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
           </div>
           <div>
             <p className="font-semibold text-[#1B2733] text-sm">Aminy Support</p>
-            <p className="text-xs text-slate-400">Typically replies in under 2 hours</p>
+            <p className="text-sm text-slate-400">Typically replies in under 2 hours</p>
           </div>
         </div>
         <button onClick={onClose} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
@@ -390,13 +390,13 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
               </button>
               <div className="flex-1">
                 <h1 className="font-bold text-[#1B2733]">{category?.label}</h1>
-                <p className="text-xs text-[#5A6B7A]">{category?.faqs.length} topics</p>
+                <p className="text-sm text-[#5A6B7A]">{category?.faqs.length} topics</p>
               </div>
             </>
           ) : (
             <div className="flex-1">
               <h1 className="font-bold text-[#1B2733]">Help Center</h1>
-              <p className="text-xs text-[#5A6B7A]">Answers for {childName}'s care</p>
+              <p className="text-sm text-[#5A6B7A]">Answers for {childName}'s care</p>
             </div>
           )}
         </div>
@@ -424,7 +424,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                   <p className="p-4 text-sm text-[#5A6B7A] text-center">No results for "{searchQuery}"</p>
                 ) : (
                   <>
-                    <p className="px-4 pt-3 text-xs text-slate-400 font-medium">{filteredFAQs.length} result{filteredFAQs.length !== 1 ? 's' : ''}</p>
+                    <p className="px-4 pt-3 text-sm text-slate-400 font-medium">{filteredFAQs.length} result{filteredFAQs.length !== 1 ? 's' : ''}</p>
                     <FAQAccordion faqs={filteredFAQs} />
                   </>
                 )}
@@ -448,7 +448,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                       </div>
                       <div>
                         <p className="font-semibold text-[#1B2733] text-sm leading-tight">{cat.label}</p>
-                        <p className="text-xs text-slate-400 mt-0.5">{cat.faqs.length} topics</p>
+                        <p className="text-sm text-slate-400 mt-0.5">{cat.faqs.length} topics</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400" />
                     </motion.button>
@@ -470,7 +470,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                   </div>
                   <div className="flex-1 text-left">
                     <p className="font-semibold text-[#1B2733] text-sm">Talk to Aminy Support</p>
-                    <p className="text-xs text-slate-400">Typically responds in under 2 hours</p>
+                    <p className="text-sm text-slate-400">Typically responds in under 2 hours</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
@@ -489,7 +489,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                   </div>
                   <div className="flex-1 text-left">
                     <p className="font-semibold text-[#1B2733] text-sm">Get a Benefits Explanation Letter</p>
-                    <p className="text-xs text-slate-400">Letter explaining {memberPlan} coverage for employers or schools</p>
+                    <p className="text-sm text-slate-400">Letter explaining {memberPlan} coverage for employers or schools</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
                 </button>
@@ -512,7 +512,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
               <AlertTriangle className="w-5 h-5 text-red-500" />
               <h3 className="font-bold text-red-800 text-sm">Crisis Resources</h3>
             </div>
-            <p className="text-xs text-red-600 mt-0.5">Always available — free and confidential</p>
+            <p className="text-sm text-red-600 mt-0.5">Always available — free and confidential</p>
           </div>
           <div className="divide-y divide-red-100">
             {CRISIS_RESOURCES.map((resource) => (
@@ -521,7 +521,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <div className="flex-1">
                   <p className="font-semibold text-[#1B2733] text-sm">{resource.name}</p>
                   <p className={`text-sm font-bold ${resource.color}`}>{resource.number}</p>
-                  <p className="text-xs text-[#5A6B7A] mt-0.5">{resource.note}</p>
+                  <p className="text-sm text-[#5A6B7A] mt-0.5">{resource.note}</p>
                 </div>
                 <ExternalLink className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
               </div>

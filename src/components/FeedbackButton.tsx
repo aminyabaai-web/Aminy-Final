@@ -128,7 +128,7 @@ export function FeedbackButton() {
             />
 
             {/* Context info */}
-            <p className="text-xs text-[#8A9BA8] mb-4">
+            <p className="text-sm text-[#8A9BA8] mb-4">
               Your current page will be included to help us understand the context.
             </p>
 
@@ -143,7 +143,7 @@ export function FeedbackButton() {
             </Button>
 
             {/* Warm footer message */}
-            <p className="mt-3 text-center text-xs text-[#8A9BA8]">
+            <p className="mt-3 text-center text-sm text-[#8A9BA8]">
               We read every message. Thank you for helping us keep Aminy calmer and clearer.
             </p>
           </div>

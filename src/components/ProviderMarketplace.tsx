@@ -616,7 +616,7 @@ export function ProviderMarketplace({
             {/* Specialties */}
             <div className="flex flex-wrap gap-1.5 mb-2">
               {provider.specialties.slice(0, 3).map((spec, idx) => (
-                <Badge key={idx} variant="outline" className="text-xs">
+                <Badge key={idx} variant="outline" className="text-sm">
                   {spec}
                 </Badge>
               ))}

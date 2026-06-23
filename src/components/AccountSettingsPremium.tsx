@@ -454,7 +454,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                             <p className="text-sm font-medium text-[#1B2733]/90">HIPAA Data Privacy</p>
                                             <p className="text-[13px] text-[#1B2733]/50 mt-0.5">Your data is encrypted and handled under our HIPAA-conscious privacy program.</p>
                                         </div>
-                                        <span className="px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/10 text-[#6B9080] flex items-center gap-1">
+                                        <span className="px-2.5 py-1 rounded-lg text-sm font-medium bg-primary/10 text-[#6B9080] flex items-center gap-1">
                                             <Check size={12} /> Active
                                         </span>
                                     </div>

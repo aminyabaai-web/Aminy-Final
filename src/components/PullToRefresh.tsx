@@ -155,12 +155,12 @@ export function PullToRefresh({
             />
           </div>
           {canRefresh && (
-            <p className="text-xs font-medium text-[#5A6B7A]">
+            <p className="text-sm font-medium text-[#5A6B7A]">
               Release to refresh
             </p>
           )}
           {!canRefresh && pullDistance > 20 && (
-            <p className="text-xs font-medium text-[#8A9BA8]">
+            <p className="text-sm font-medium text-[#8A9BA8]">
               Pull to refresh
             </p>
           )}

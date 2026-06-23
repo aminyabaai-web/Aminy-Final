@@ -52,7 +52,7 @@ export function OutcomeSignatureTiles({
         </p>
         
         <h4 className="font-semibold mb-1">Minutes saved this week</h4>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Estimated from shorter routines and fewer retries.
         </p>
       </Card>
@@ -83,7 +83,7 @@ export function OutcomeSignatureTiles({
         </p>
         
         <h4 className="font-semibold mb-1">De-escalations shortened</h4>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Based on average time from trigger to calm.
         </p>
       </Card>

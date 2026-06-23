@@ -125,7 +125,7 @@ function MRRChart({ data }: { data: { month: string; mrr: number }[] }) {
               className="w-full bg-indigo-500 rounded-t transition-all duration-300"
               style={{ height: `${(d.mrr / maxMRR) * 100}%`, minHeight: d.mrr > 0 ? 4 : 0 }}
             />
-            <span className="text-xs text-[#5A6B7A] mt-2">{d.month}</span>
+            <span className="text-sm text-[#5A6B7A] mt-2">{d.month}</span>
           </div>
         ))}
       </div>
@@ -203,7 +203,7 @@ function CohortTable({ cohorts }: { cohorts: CohortData[] }) {
               {cohort.retained.map((retention, i) => (
                 <td key={i} className="text-center py-1 px-1">
                   <div
-                    className={`inline-block rounded px-2 py-1 text-xs font-medium text-white ${getRetentionColor(retention)}`}
+                    className={`inline-block rounded px-2 py-1 text-sm font-medium text-white ${getRetentionColor(retention)}`}
                   >
                     {retention}%
                   </div>
@@ -248,7 +248,7 @@ function PlanBreakdown({
               </div>
               <div className="text-right">
                 <span className="text-sm font-semibold text-[#1B2733]">{formatCurrency(data.mrr)}</span>
-                <span className="text-xs text-[#5A6B7A] ml-2">({data.count} customers)</span>
+                <span className="text-sm text-[#5A6B7A] ml-2">({data.count} customers)</span>
               </div>
             </div>
             <div className="w-full bg-[#F0EDE8] rounded-full h-2">
@@ -302,7 +302,7 @@ function RecentActivity({ events }: { events: RevenueEvent[] }) {
                 <p className="text-sm font-medium text-[#1B2733] truncate">
                   {formatEventType(event.type)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {event.createdAt.toLocaleDateString()} at{' '}
                   {event.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
@@ -356,9 +356,9 @@ function VCMetricsCard({
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {metrics.map(metric => (
           <div key={metric.label} className="bg-white/80 rounded-lg p-3">
-            <p className="text-xs text-[#5A6B7A] mb-1">{metric.label}</p>
+            <p className="text-sm text-[#5A6B7A] mb-1">{metric.label}</p>
             <p className="text-lg font-bold text-[#1B2733]">{metric.value}</p>
-            <p className={`text-xs ${metric.good !== undefined ? (metric.good ? 'text-green-600' : 'text-orange-600') : 'text-[#8A9BA8]'}`}>
+            <p className={`text-sm ${metric.good !== undefined ? (metric.good ? 'text-green-600' : 'text-orange-600') : 'text-[#8A9BA8]'}`}>
               Target: {metric.target}
             </p>
           </div>

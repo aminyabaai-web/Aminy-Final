@@ -191,7 +191,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
 
       {/* Disclaimer */}
       <Card className="p-4 bg-[#FDF9F0] border-[#F0EDE8]">
-        <p className="text-xs text-yellow-900">
+        <p className="text-sm text-yellow-900">
           <strong>Important:</strong> This report shows wellness coaching and support progress, not medical treatment outcomes. This is educational guidance only. Parents remain the decision authority for all care decisions. For clinical questions, consult your child's healthcare providers.
         </p>
       </Card>
@@ -225,11 +225,11 @@ function MetricCard({
 
   return (
     <Card className="p-3 bg-white">
-      <div className="text-xs text-[#5A6B7A] mb-2">{title}</div>
+      <div className="text-sm text-[#5A6B7A] mb-2">{title}</div>
       
       <div className="flex items-center justify-between mb-1">
         <div>
-          <div className="text-xs text-[#5A6B7A]">Before</div>
+          <div className="text-sm text-[#5A6B7A]">Before</div>
           <div className="text-lg font-semibold text-[#8A9BA8]">
             {before}{unit}
           </div>
@@ -240,14 +240,14 @@ function MetricCard({
       </div>
 
       <div className="mb-2">
-        <div className="text-xs text-[#5A6B7A]">Now</div>
+        <div className="text-sm text-[#5A6B7A]">Now</div>
         <div className="text-2xl font-bold text-[#1B2733]">
           {after}{unit}
         </div>
       </div>
 
       {displayChange > 0 && (
-        <div className={`text-xs ${showImproved ? 'text-green-600' : 'text-orange-600'} flex items-center gap-1`}>
+        <div className={`text-sm ${showImproved ? 'text-green-600' : 'text-orange-600'} flex items-center gap-1`}>
           {showImproved && <Check className="w-3 h-3" />}
           <span>{showImproved ? '+' : ''}{displayChange.toFixed(unit === '/10' ? 1 : 0)}{unit}</span>
         </div>
@@ -432,7 +432,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
               {summary.overwhelm.improved ? `↓ ${summary.overwhelm.change}` : `↑ ${Math.abs(summary.overwhelm.change)}`}
             </span>
           </div>
-          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.overwhelm.before}/10</div>
+          <div className="text-sm text-[#5A6B7A] mt-1">Was {summary.overwhelm.before}/10</div>
         </div>
 
         <div className="border border-[#E8E4DF] rounded p-3">
@@ -443,7 +443,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
               {summary.routineAdherence.improved ? `+${summary.routineAdherence.change}%` : `${summary.routineAdherence.change}%`}
             </span>
           </div>
-          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.routineAdherence.before}%</div>
+          <div className="text-sm text-[#5A6B7A] mt-1">Was {summary.routineAdherence.before}%</div>
         </div>
 
         <div className="border border-[#E8E4DF] rounded p-3">
@@ -454,7 +454,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
               {summary.toughMoments.improved ? `-${summary.toughMoments.change}` : `+${Math.abs(summary.toughMoments.change)}`}
             </span>
           </div>
-          <div className="text-xs text-[#5A6B7A] mt-1">Was {summary.toughMoments.before}/wk</div>
+          <div className="text-sm text-[#5A6B7A] mt-1">Was {summary.toughMoments.before}/wk</div>
         </div>
 
         <div className="border border-[#E8E4DF] rounded p-3">
@@ -465,11 +465,11 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
               {summary.goalProgress.improved ? `↑` : `→`}
             </span>
           </div>
-          <div className="text-xs text-[#5A6B7A] mt-1">GAS levels</div>
+          <div className="text-sm text-[#5A6B7A] mt-1">GAS levels</div>
         </div>
       </div>
 
-      <div className="text-xs text-[#5A6B7A] p-3 bg-[#FAF7F2] rounded border">
+      <div className="text-sm text-[#5A6B7A] p-3 bg-[#FAF7F2] rounded border">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress. This is educational guidance only. Parents remain decision authority. Consult healthcare providers for clinical questions.
       </div>
     </div>

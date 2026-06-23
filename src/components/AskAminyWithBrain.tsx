@@ -238,7 +238,7 @@ export function AskAminyWithBrain({
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowContext(!showContext)}
-                  className="h-8 text-xs"
+                  className="h-8 text-sm"
                 >
                   <ChevronDown className={cn("w-3 h-3", showContext && "rotate-180")} />
                 </Button>
@@ -256,12 +256,12 @@ export function AskAminyWithBrain({
 
           {/* Context Panel */}
           {showContext && aiContext && (
-            <div className="p-3 border-b bg-[#FAF7F2] text-xs space-y-2">
+            <div className="p-3 border-b bg-[#FAF7F2] text-sm space-y-2">
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">Context Loaded</Badge>
+                <Badge variant="outline" className="text-sm">Context Loaded</Badge>
                 <span className="text-muted-foreground">AI knows:</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-1">
                   <span className="text-green-600">✓</span>
                   <span>{aiContext.child.name}, age {aiContext.child.age}</span>
@@ -340,7 +340,7 @@ export function AskAminyWithBrain({
                         variant="outline"
                         size="sm"
                         onClick={() => handleQuickAction(action.query)}
-                        className="text-xs h-auto py-1.5 px-3"
+                        className="text-sm h-auto py-1.5 px-3"
                       >
                         {action.label}
                       </Button>

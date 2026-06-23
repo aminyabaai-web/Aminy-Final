@@ -197,10 +197,10 @@ const RecordRow: React.FC<RecordRowProps> = ({
                 {getFileIcon(record.files[0]?.type || '')}
                 <h3 className="font-medium text-foreground truncate">{record.title}</h3>
                 <div className="flex items-center gap-1">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-sm">
                     {record.type}
                   </Badge>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     {record.visibility === 'Private' ? (
                       <><Lock className="w-3 h-3 mr-1" />Private</>
                     ) : (
@@ -208,13 +208,13 @@ const RecordRow: React.FC<RecordRowProps> = ({
                     )}
                   </Badge>
                   {record.ocrStatus === 'Complete' && (
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-sm">
                       <CheckCircle2 className="w-3 h-3 mr-1 text-green-500" />
                       Searchable
                     </Badge>
                   )}
                   {userTier === 'pro' && record.extractedFields && (
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-sm">
                       AI Summary Available
                     </Badge>
                   )}
@@ -251,14 +251,14 @@ const RecordRow: React.FC<RecordRowProps> = ({
           
           {record.relatedTo.length > 0 && (
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs text-muted-foreground">Linked to:</span>
+              <span className="text-sm text-muted-foreground">Linked to:</span>
               {record.relatedTo.slice(0, 3).map((link) => (
-                <Badge key={link.id} variant="outline" className="text-xs">
+                <Badge key={link.id} variant="outline" className="text-sm">
                   {link.title}
                 </Badge>
               ))}
               {record.relatedTo.length > 3 && (
-                <span className="text-xs text-muted-foreground">+{record.relatedTo.length - 3} more</span>
+                <span className="text-sm text-muted-foreground">+{record.relatedTo.length - 3} more</span>
               )}
             </div>
           )}
@@ -364,7 +364,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ record, isOpen, onClose, userTi
           {shareLink && (
             <div className="p-3 bg-muted rounded-lg">
               <div className="flex items-center justify-between">
-                <code className="text-xs truncate flex-1 mr-2">{shareLink}</code>
+                <code className="text-sm truncate flex-1 mr-2">{shareLink}</code>
                 <Button 
                   size="sm" 
                   variant="outline" 
@@ -649,11 +649,11 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <h2 className="sr-only">Records overview</h2>
                 <h3 className="sr-only">Documents, uploads, and sharing controls</h3>
                 <AISparkleButton prompt="What documents should every ABA family keep organized, and how should I use the records vault effectively?" label="Ask Aminy" />
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-sm">
                   <Shield className="w-3 h-3 mr-1" />
                   PHI encrypted
                 </Badge>
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-sm">
                   Secure sharing
                 </Badge>
               </div>
@@ -762,13 +762,13 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                       <p className="text-sm text-muted-foreground mb-2">
                         Drop files here or click to browse
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         Supports PDF, images, and documents up to 50MB
                       </p>
                       {uploadingFile && (
                         <div className="mt-3">
                           <Progress value={uploadProgress} className="w-full h-2" />
-                          <p className="text-xs text-primary mt-1">Uploading... {uploadProgress}%</p>
+                          <p className="text-sm text-primary mt-1">Uploading... {uploadProgress}%</p>
                         </div>
                       )}
                     </div>
@@ -819,10 +819,10 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
             
             <div className="flex items-center gap-2">
               {capabilities.search?.fullText && (
-                <Badge variant="outline" className="text-xs">Full-text search, sharing links</Badge>
+                <Badge variant="outline" className="text-sm">Full-text search, sharing links</Badge>
               )}
               {capabilities.ai?.summary && (
-                <Badge variant="outline" className="text-xs">AI search, auto-summaries, report drop-in</Badge>
+                <Badge variant="outline" className="text-sm">AI search, auto-summaries, report drop-in</Badge>
               )}
             </div>
           </div>
@@ -994,7 +994,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                   <Label className="text-sm font-medium">Linked to</Label>
                   <div className="flex flex-wrap gap-2 mt-1">
                     {viewRecord.relatedTo.map((link) => (
-                      <Badge key={link.id} variant="outline" className="text-xs">
+                      <Badge key={link.id} variant="outline" className="text-sm">
                         {link.title}
                       </Badge>
                     ))}

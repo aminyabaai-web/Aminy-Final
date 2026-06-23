@@ -112,7 +112,7 @@ export function RateLimitBadge({
           />
         </div>
 
-        <div className="flex items-center justify-between text-xs text-[#5A6B7A] dark:text-slate-400">
+        <div className="flex items-center justify-between text-sm text-[#5A6B7A] dark:text-slate-400">
           <div className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
             <span>Resets in {timeUntilReset}</span>
@@ -169,11 +169,11 @@ export function RateLimitBadge({
                 ? "You're running low on messages"
                 : `${dailyUsage.remaining} of ${dailyUsage.limit} messages remaining`}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Resets in {timeUntilReset}
             </p>
             {(reachedLimit || runningLow) && (
-              <p className="text-xs text-accent">
+              <p className="text-sm text-accent">
                 Upgrade to Core or Pro for unlimited messages
               </p>
             )}
@@ -206,7 +206,7 @@ export function RateLimitInline({
   return (
     <div
       className={cn(
-        'text-xs text-center py-1',
+        'text-sm text-center py-1',
         reachedLimit
           ? 'text-red-600 dark:text-red-400'
           : runningLow

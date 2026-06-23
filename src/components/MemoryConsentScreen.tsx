@@ -113,7 +113,7 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
         </Button>
 
         {/* Fine Print */}
-        <p className="text-xs text-center text-[#5A6B7A] mt-6">
+        <p className="text-sm text-center text-[#5A6B7A] mt-6">
           <a href="/privacy" className="hover:text-[#1B2733]">Privacy Policy</a>
           {' · '}
           <a href="/terms" className="hover:text-[#1B2733]">Terms</a>

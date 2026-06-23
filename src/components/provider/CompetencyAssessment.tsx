@@ -255,7 +255,7 @@ function AssessmentForm({
                               <button
                                 key={val}
                                 onClick={() => updateRating(area.id, val)}
-                                className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                className={`flex-1 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                                   r.rating === val
                                     ? val >= 4 ? 'bg-emerald-600 text-white'
                                     : val >= 3 ? 'bg-amber-500 text-white'
@@ -275,7 +275,7 @@ function AssessmentForm({
                             value={r.notes}
                             onChange={(e) => updateNotes(area.id, e.target.value)}
                             placeholder="Notes for this competency..."
-                            className="w-full border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-xs h-16 resize-none"
+                            className="w-full border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm h-16 resize-none"
                           />
                         </div>
                       </motion.div>
@@ -550,7 +550,7 @@ function DevelopmentPlanView({
                 <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-xs text-[#3A4A57]">{item}</p>
+                <p className="text-sm text-[#3A4A57]">{item}</p>
               </div>
             ))}
           </div>

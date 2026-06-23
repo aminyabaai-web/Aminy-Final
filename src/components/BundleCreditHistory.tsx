@@ -232,7 +232,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         </div>
 
         {currentCredits.expiresAt && totalCurrentCredits > 0 && (
-          <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-lg ${
+          <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg ${
             (expiryDays ?? 0) <= 7
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30

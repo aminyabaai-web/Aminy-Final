@@ -170,7 +170,7 @@ function WeeklyGrid({ weeklyGrid }: { weeklyGrid: { date: string; completed: boo
               }}
             >
               {day.completed ? (
-                <span className="text-white text-xs">✓</span>
+                <span className="text-white text-sm">✓</span>
               ) : day.isToday ? (
                 <span className="text-indigo-400 text-xs">·</span>
               ) : null}
@@ -214,7 +214,7 @@ function StreakDisplay({ streak }: { streak: number }) {
           <motion.p
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-xs font-bold text-amber-600"
+            className="text-sm font-bold text-amber-600"
           >
             🎉 {streak}-day milestone unlocked!
           </motion.p>
@@ -265,7 +265,7 @@ function MissionCard({
         <motion.button
           whileTap={{ scale: 0.96 }}
           onClick={() => onStart(mission)}
-          className="mt-2.5 w-full py-2 rounded-xl font-semibold text-xs text-white"
+          className="mt-2.5 w-full py-2 rounded-xl font-semibold text-sm text-white"
           style={{ background: 'linear-gradient(135deg, #6366F1, #8B5CF6)' }}
         >
           <Zap className="w-3 h-3 inline mr-1" />

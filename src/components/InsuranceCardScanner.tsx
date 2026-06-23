@@ -327,7 +327,7 @@ export default function InsuranceCardScanner({
             <span className="text-sm font-medium text-blue-600">
               Tap to Take Photo
             </span>
-            <span className="text-xs text-[#8A9BA8]">or upload from gallery</span>
+            <span className="text-sm text-[#8A9BA8]">or upload from gallery</span>
           </>
         )}
       </button>
@@ -374,7 +374,7 @@ export default function InsuranceCardScanner({
         key={`${side}-${field}`}
         className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0"
       >
-        <span className="text-xs text-[#5A6B7A] w-28 flex-shrink-0">{label}</span>
+        <span className="text-sm text-[#5A6B7A] w-28 flex-shrink-0">{label}</span>
         {isEditing ? (
           <input
             type="text"
@@ -520,7 +520,7 @@ export default function InsuranceCardScanner({
           <h3 className="text-base font-semibold text-[#1B2733]">
             Review Insurance Details
           </h3>
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             Confirm the information below is correct before saving.
           </p>
         </div>
@@ -633,7 +633,7 @@ export default function InsuranceCardScanner({
       {/* Dev mode banner */}
       {import.meta.env.DEV && (
         <div className="px-4 py-2 bg-amber-50 border-t border-amber-200 text-center">
-          <span className="text-xs text-amber-700">
+          <span className="text-sm text-amber-700">
             DEV MODE — OCR returns mock data. Deploy edge function for real extraction.
           </span>
         </div>

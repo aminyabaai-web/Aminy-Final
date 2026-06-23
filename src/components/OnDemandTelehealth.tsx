@@ -558,7 +558,7 @@ export function OnDemandTelehealth({
                       {/* Specialties */}
                       <div className="flex flex-wrap gap-1 mt-2">
                         {provider.specialties.map((specialty) => (
-                          <Badge key={specialty} variant="outline" className="text-xs capitalize">
+                          <Badge key={specialty} variant="outline" className="text-sm capitalize">
                             {specialty}
                           </Badge>
                         ))}

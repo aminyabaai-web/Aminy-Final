@@ -105,7 +105,7 @@ export function BehaviorInsightsCard({ childId, childName, onOpenChat, onNavigat
           <TrendIcon className={`w-4 h-4 ${trendColor}`} />
           This Week's Pattern
         </h3>
-        <span className={`text-xs font-medium ${trendColor} flex items-center gap-1`}>
+        <span className={`text-sm font-medium ${trendColor} flex items-center gap-1`}>
           {trendLabel}
         </span>
       </div>
@@ -133,7 +133,7 @@ export function BehaviorInsightsCard({ childId, childName, onOpenChat, onNavigat
         onClick={() => onOpenChat ? onOpenChat(aiPrompt) : onNavigate?.('ask-aminy')}
         className="w-full flex items-center justify-between p-2.5 rounded-lg bg-[#6B9080]/10 hover:bg-[#6B9080]/15 transition-colors"
       >
-        <span className="text-xs text-[#6B9080] font-medium flex items-center gap-1.5">
+        <span className="text-sm text-[#6B9080] font-medium flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" />
           Ask Aminy what to try this week
         </span>

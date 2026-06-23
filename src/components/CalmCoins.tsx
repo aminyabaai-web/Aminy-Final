@@ -402,7 +402,7 @@ export function CalmCoins({
                       </span>
                     </div>
                     {!canAfford && (
-                      <div className="flex items-center justify-center gap-1 mt-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center justify-center gap-1 mt-2 text-sm text-[#5A6B7A]">
                         <Lock className="w-3 h-3" />
                         Need {reward.cost - currentBalance} more
                       </div>

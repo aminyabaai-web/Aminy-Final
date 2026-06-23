@@ -191,7 +191,7 @@ export function Caption({ className, children, ...props }: Omit<TextProps, 'size
   return (
     <p
       className={cn(
-        'text-xs font-medium leading-normal',
+        'text-sm font-medium leading-normal',
         'text-[#5A6B7A] dark:text-slate-400',
         className
       )}

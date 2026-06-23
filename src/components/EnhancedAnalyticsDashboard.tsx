@@ -281,7 +281,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                 <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
                 <DataProvenanceBadge provenance={analyticsProvenance} />
               </div>
-              <p className="mt-2 text-xs text-[#5A6B7A]">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
+              <p className="mt-2 text-sm text-[#5A6B7A]">Internal dashboard only. Do not use these metrics in customer-facing claims until they are live-data backed.</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleExport}>
@@ -520,7 +520,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
             {showSamples && (
               <Card className="p-6 bg-green-50 border-green-200">
                 <h4 className="text-[#1B2733] mb-1">Sample Success Stories</h4>
-                <p className="text-xs text-[#5A6B7A] mb-3">Illustrative examples for demos — not live customer data.</p>
+                <p className="text-sm text-[#5A6B7A] mb-3">Illustrative examples for demos — not live customer data.</p>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-start gap-2">
                     <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -623,14 +623,14 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                                 style={{ width: `${Math.max(widthPercent, 5)}%` }}
                               >
                                 {widthPercent > 15 && (
-                                  <span className="text-xs text-white font-medium">
+                                  <span className="text-sm text-white font-medium">
                                     {stage.conversionRate.toFixed(1)}%
                                   </span>
                                 )}
                               </div>
                             </div>
                             {!isLastStage && stage.dropOffRate > 0 && (
-                              <div className="flex items-center justify-between mt-1 text-xs">
+                              <div className="flex items-center justify-between mt-1 text-sm">
                                 <span className={`${dropOffCritical ? 'text-red-600 font-medium' : 'text-slate-400'}`}>
                                   {dropOffCritical && <AlertTriangle className="w-3 h-3 inline mr-1" />}
                                   {stage.dropOffRate.toFixed(1)}% drop-off
@@ -653,19 +653,19 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                         <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {funnelData.totalUsers.toLocaleString()}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Total Users</div>
+                        <div className="text-sm text-[#5A6B7A]">Total Users</div>
                       </div>
                       <div className="text-center">
                         <div className="text-xl sm:text-2xl font-bold text-green-600">
                           {funnelData.overallConversionRate.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Overall Conversion</div>
+                        <div className="text-sm text-[#5A6B7A]">Overall Conversion</div>
                       </div>
                       <div className="text-center">
                         <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {funnelData.stages[funnelData.stages.length - 1]?.count || 0}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Subscribers</div>
+                        <div className="text-sm text-[#5A6B7A]">Subscribers</div>
                       </div>
                     </div>
                   </div>
@@ -688,7 +688,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                         <div key={stage.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
                           <div>
                             <span className="text-sm font-medium text-red-900">{stage.name}</span>
-                            <p className="text-xs text-red-700 mt-1">
+                            <p className="text-sm text-red-700 mt-1">
                               {stage.dropOffRate > 50
                                 ? 'Critical bottleneck - requires immediate attention'
                                 : stage.dropOffRate > 30
@@ -729,25 +729,25 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                         <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD1.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">D1 Retention</div>
+                        <div className="text-sm text-[#5A6B7A]">D1 Retention</div>
                       </Card>
                       <Card className="p-4 bg-[#FAF7F2]">
                         <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD7.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">D7 Retention</div>
+                        <div className="text-sm text-[#5A6B7A]">D7 Retention</div>
                       </Card>
                       <Card className="p-4 bg-[#FAF7F2]">
                         <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
                           {retentionData.averageD30.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">D30 Retention</div>
+                        <div className="text-sm text-[#5A6B7A]">D30 Retention</div>
                       </Card>
                       <Card className="p-4 bg-red-50">
                         <div className="text-xl sm:text-2xl font-bold text-red-600">
                           {retentionData.churnRate.toFixed(1)}%
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Monthly Churn</div>
+                        <div className="text-sm text-[#5A6B7A]">Monthly Churn</div>
                       </Card>
                     </div>
 
@@ -757,19 +757,19 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                         <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.daily.toLocaleString()}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Daily Active Users (DAU)</div>
+                        <div className="text-sm text-[#5A6B7A]">Daily Active Users (DAU)</div>
                       </Card>
                       <Card className="p-4 border-l-4 border-l-blue-500">
                         <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.weekly.toLocaleString()}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Weekly Active Users (WAU)</div>
+                        <div className="text-sm text-[#5A6B7A]">Weekly Active Users (WAU)</div>
                       </Card>
                       <Card className="p-4 border-l-4 border-l-purple-500">
                         <div className="text-xl font-bold text-[#1B2733]">
                           {retentionData.rollingActiveUsers.monthly.toLocaleString()}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">Monthly Active Users (MAU)</div>
+                        <div className="text-sm text-[#5A6B7A]">Monthly Active Users (MAU)</div>
                       </Card>
                     </div>
 
@@ -837,7 +837,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                           <span className="ml-2 font-medium">10-20%</span>
                         </div>
                       </div>
-                      <p className="text-xs text-blue-700 mt-2">
+                      <p className="text-sm text-blue-700 mt-2">
                         Health & wellness apps typically see 25-40% D7 retention. Aminy's current metrics
                         {retentionData.averageD7 > 40 ? ' exceed' : retentionData.averageD7 > 25 ? ' meet' : ' are below'} industry benchmarks.
                       </p>

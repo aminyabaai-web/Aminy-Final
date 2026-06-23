@@ -92,7 +92,7 @@ export const SessionPrepModal = ({
                     {item.text}
                   </span>
                   {item.required && (
-                    <Badge variant="secondary" className="ml-2 text-xs">Required</Badge>
+                    <Badge variant="secondary" className="ml-2 text-sm">Required</Badge>
                   )}
                 </div>
               </label>
@@ -145,13 +145,13 @@ export const ProviderInfoCard = ({
           <h3 className="font-semibold text-[#6B9080]">{provider.name}</h3>
           <div className="flex items-center gap-2 mb-1">
             {provider.credentials.map((credential: string) => (
-              <Badge key={credential} variant="secondary" className="text-xs">
+              <Badge key={credential} variant="secondary" className="text-sm">
                 {credential}
               </Badge>
             ))}
           </div>
           <p className="text-sm text-[#6B9080]">{provider.specialty}</p>
-          <div className="flex items-center gap-3 sm:gap-4 mt-2 text-xs text-[#6B9080]">
+          <div className="flex items-center gap-3 sm:gap-4 mt-2 text-sm text-[#6B9080]">
             <span className="flex items-center gap-1">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
               {provider.availability}
@@ -357,7 +357,7 @@ export const PostSessionModal = ({
               <label htmlFor="session-file-upload" className="cursor-pointer">
                 <Upload className="h-8 w-8 text-slate-400 mx-auto mb-2" />
                 <p className="text-sm text-[#5A6B7A] mb-1">Upload photos, videos, or documents</p>
-                <p className="text-xs text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
+                <p className="text-sm text-[#5A6B7A]">PDF, DOC, JPG, PNG, MP4 up to 50MB</p>
               </label>
             </div>
             

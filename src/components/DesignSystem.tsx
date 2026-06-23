@@ -118,7 +118,7 @@ export function DesignSystem() {
       <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">
         {token.value}
       </div>
-      <div className="text-xs text-[#5A6B7A] dark:text-[#5A6B7A]">
+      <div className="text-sm text-[#5A6B7A] dark:text-[#5A6B7A]">
         {token.description}
       </div>
     </div>
@@ -247,7 +247,7 @@ export function DesignSystem() {
                   
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-sm">
                     {Array.from({ length: 4 }).map((_, i) => (
-                      <div key={i} className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-xs font-medium text-[#6B9080] dark:text-teal-200">
+                      <div key={i} className="bg-[#6B9080]/20 dark:bg-teal-700 h-8 rounded flex items-center justify-center text-sm font-medium text-[#6B9080] dark:text-teal-200">
                         {i + 1}
                       </div>
                     ))}
@@ -326,7 +326,7 @@ export function DesignSystem() {
                       <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">
                         Size: {token.value.split('/')[0]} / Line Height: {token.value.split('/')[1]} / Weight: {token.weight}
                       </div>
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -375,7 +375,7 @@ export function DesignSystem() {
                         </span>
                       </div>
                       
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -411,7 +411,7 @@ export function DesignSystem() {
                         </span>
                       </div>
                       
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {token.description}
                       </div>
                     </div>
@@ -632,19 +632,19 @@ export function DesignSystem() {
                           <div className="flex justify-around">
                             <button className="flex flex-col items-center p-2 text-[#6B9080] dark:text-primary">
                               <Home className="w-5 h-5 mb-1" />
-                              <span className="text-xs font-medium">Home</span>
+                              <span className="text-sm font-medium">Home</span>
                             </button>
                             <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <Calendar className="w-5 h-5 mb-1" />
-                              <span className="text-xs font-medium">Plan</span>
+                              <span className="text-sm font-medium">Plan</span>
                             </button>
                             <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <BarChart3 className="w-5 h-5 mb-1" />
-                              <span className="text-xs font-medium">Reports</span>
+                              <span className="text-sm font-medium">Reports</span>
                             </button>
                             <button className="flex flex-col items-center p-2 text-slate-400 dark:text-[#5A6B7A]">
                               <User className="w-5 h-5 mb-1" />
-                              <span className="text-xs font-medium">More</span>
+                              <span className="text-sm font-medium">More</span>
                             </button>
                           </div>
                         </div>

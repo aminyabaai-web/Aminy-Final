@@ -50,7 +50,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-6">
-        <p className="mb-2 text-xs text-[#5A6B7A]">Effective Date: {effectiveDate}</p>
+        <p className="mb-2 text-sm text-[#5A6B7A]">Effective Date: {effectiveDate}</p>
         <p className="mb-6 text-sm text-[#3A4A57]">
           Welcome to Aminy. These Terms of Service (&quot;Terms&quot;) govern your access to and use
           of the Aminy platform, including our website, mobile application, telehealth services,

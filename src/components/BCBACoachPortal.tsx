@@ -412,7 +412,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                     <div className="flex-1">
                       <h4 className="text-[#1B2733] mb-1">{goal.title}</h4>
                       <p className="text-sm text-[#5A6B7A] mb-2">{goal.description}</p>
-                      <div className="flex items-center gap-3 text-xs">
+                      <div className="flex items-center gap-3 text-sm">
                         <Badge variant="outline">{goal.category}</Badge>
                         <span className="text-[#5A6B7A]">Baseline: {goal.baseline}</span>
                         <span className="text-[#5A6B7A]">Target: {goal.target}</span>
@@ -495,7 +495,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   {note.tags.length > 0 && (
                     <div className="flex gap-2 mt-3">
                       {note.tags.map(tag => (
-                        <Badge key={tag} variant="outline" className="text-xs">
+                        <Badge key={tag} variant="outline" className="text-sm">
                           {tag}
                         </Badge>
                       ))}
@@ -590,7 +590,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 </div>
                 <div>
                   <p className="font-semibold text-[#1B2733] text-sm">Treatment Plan</p>
-                  <p className="text-xs text-[#5A6B7A]">Author · Finalize · Export</p>
+                  <p className="text-sm text-[#5A6B7A]">Author · Finalize · Export</p>
                 </div>
               </button>
             </div>

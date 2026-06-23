@@ -68,7 +68,7 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
     <div className="space-y-1.5">
       {items.map(item => (
         <div key={item.label}>
-          <div className="flex items-center justify-between text-xs mb-0.5">
+          <div className="flex items-center justify-between text-sm mb-0.5">
             <span className="text-[#5A6B7A]">{item.label}</span>
             <span className="text-[#1B2733] font-medium">{item.value}{item.unit || '%'}</span>
           </div>
@@ -112,15 +112,15 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-xl border p-3 ${statusColors[kpi.status]}`}
     >
-      <p className="text-xs font-medium text-[#5A6B7A] truncate">{kpi.label}</p>
+      <p className="text-sm font-medium text-[#5A6B7A] truncate">{kpi.label}</p>
       <div className="mt-1 flex items-end justify-between">
         <div className="flex items-baseline gap-0.5">
           <span className="text-xl font-bold text-[#1B2733]">
             {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
           </span>
-          {kpi.unit && <span className="text-xs text-[#5A6B7A]">{kpi.unit}</span>}
+          {kpi.unit && <span className="text-sm text-[#5A6B7A]">{kpi.unit}</span>}
         </div>
-        <div className={`flex items-center gap-0.5 text-xs font-medium ${trendColors[trendColorKey]}`}>
+        <div className={`flex items-center gap-0.5 text-sm font-medium ${trendColors[trendColorKey]}`}>
           {kpi.trend === 'up' && <TrendingUp className="h-3.5 w-3.5" />}
           {kpi.trend === 'down' && <TrendingDown className="h-3.5 w-3.5" />}
           {kpi.trend === 'flat' && <Minus className="h-3.5 w-3.5" />}
@@ -183,7 +183,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
           {config.icon}
           <div>
             <h3 className="text-sm font-bold text-[#1B2733]">Platform Health</h3>
-            <p className={`text-xs font-medium ${trendColors[health.trend]}`}>{trendLabels[health.trend]}</p>
+            <p className={`text-sm font-medium ${trendColors[health.trend]}`}>{trendLabels[health.trend]}</p>
           </div>
         </div>
         <div className="text-right">
@@ -200,8 +200,8 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
                 style={{ width: `${cat.score}%` }}
               />
             </div>
-            <p className="text-xs text-[#5A6B7A]">{cat.label}</p>
-            <p className="text-xs font-bold text-[#1B2733]">{cat.score}</p>
+            <p className="text-sm text-[#5A6B7A]">{cat.label}</p>
+            <p className="text-sm font-bold text-[#1B2733]">{cat.score}</p>
           </div>
         ))}
       </div>
@@ -216,7 +216,7 @@ function AlertsPanel({ alerts }: { alerts: OperationalAlert[] }) {
     return (
       <div className="mt-4 rounded-xl border border-green-200 bg-green-50/50 p-3 flex items-center gap-2">
         <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-        <p className="text-xs text-green-800 font-medium">All metrics within healthy thresholds</p>
+        <p className="text-sm text-green-800 font-medium">All metrics within healthy thresholds</p>
       </div>
     );
   }
@@ -233,7 +233,7 @@ function AlertsPanel({ alerts }: { alerts: OperationalAlert[] }) {
       {sorted.map(alert => (
         <div
           key={alert.id}
-          className={`rounded-lg border p-2.5 text-xs ${
+          className={`rounded-lg border p-2.5 text-sm ${
             alert.severity === 'critical'
               ? 'border-red-200 bg-red-50/60 text-red-800'
               : alert.severity === 'warning'
@@ -298,9 +298,9 @@ export default function OperationalDashboard({
                 {isLiveData ? 'Live' : 'Demo'}
               </span>
             </div>
-            <p className="text-xs text-[#5A6B7A]">{data.dateRange.label}</p>
+            <p className="text-sm text-[#5A6B7A]">{data.dateRange.label}</p>
             {lastUpdatedAt && (
-              <p className="text-xs text-[#8A9BA8] mt-0.5">
+              <p className="text-sm text-[#8A9BA8] mt-0.5">
                 Last updated: {new Date(lastUpdatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
             )}
@@ -319,7 +319,7 @@ export default function OperationalDashboard({
             )}
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-xs font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
             >
               <Download className="h-3.5 w-3.5" />
               Export
@@ -382,7 +382,7 @@ export default function OperationalDashboard({
 
         {/* Retention by Period */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Retention by Period</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Retention by Period</p>
           <div className="grid grid-cols-3 gap-3 text-center">
             {[
               { label: '30-Day', value: data.familyRetention.retention30Day },
@@ -391,7 +391,7 @@ export default function OperationalDashboard({
             ].map(p => (
               <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
                 <p className="text-lg font-bold text-[#1B2733]">{p.value}%</p>
-                <p className="text-xs text-[#5A6B7A]">{p.label}</p>
+                <p className="text-sm text-[#5A6B7A]">{p.label}</p>
               </div>
             ))}
           </div>
@@ -399,7 +399,7 @@ export default function OperationalDashboard({
 
         {/* Retention by Tier */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Retention by Tier</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Retention by Tier</p>
           <MiniBarChart
             colorClass="bg-teal-400"
             items={[
@@ -413,10 +413,10 @@ export default function OperationalDashboard({
         {/* Churn Reasons */}
         {data.familyRetention.churnReasons.length > 0 && (
           <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Churn Reasons</p>
+            <p className="text-sm font-semibold text-[#3A4A57] mb-2">Churn Reasons</p>
             <div className="space-y-1.5">
               {data.familyRetention.churnReasons.map(r => (
-                <div key={r.reason} className="flex items-center justify-between text-xs">
+                <div key={r.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] flex-1 truncate">{r.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
                     <div className="w-16 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
@@ -433,8 +433,8 @@ export default function OperationalDashboard({
         {/* Cohort Preview */}
         {data.familyRetention.cohortAnalysis.length > 0 && (
           <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3 overflow-x-auto">
-            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Cohort Retention</p>
-            <table className="w-full text-xs">
+            <p className="text-sm font-semibold text-[#3A4A57] mb-2">Cohort Retention</p>
+            <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#5A6B7A]">
                   <th className="text-left py-1 pr-2">Cohort</th>
@@ -484,26 +484,26 @@ export default function OperationalDashboard({
 
         {/* Hours Summary */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Weekly Hours</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Weekly Hours</p>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.availableHoursThisWeek}</p>
-              <p className="text-xs text-blue-600">Available</p>
+              <p className="text-sm text-blue-600">Available</p>
             </div>
             <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.bookedHoursThisWeek}</p>
-              <p className="text-xs text-blue-600">Booked</p>
+              <p className="text-sm text-blue-600">Booked</p>
             </div>
             <div className="rounded-lg bg-[#EEF4F8] p-2">
               <p className="text-lg font-bold text-blue-900">{data.telehealthLiquidity.averageWaitTimeDays}d</p>
-              <p className="text-xs text-blue-600">Avg Wait</p>
+              <p className="text-sm text-blue-600">Avg Wait</p>
             </div>
           </div>
         </div>
 
         {/* Fill Rate by Service Type */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Fill Rate by Service</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Fill Rate by Service</p>
           <MiniBarChart
             colorClass="bg-blue-400"
             items={[
@@ -512,7 +512,7 @@ export default function OperationalDashboard({
               { label: 'Speech', value: data.telehealthLiquidity.byServiceType.speech },
             ]}
           />
-          <p className="text-xs text-[#8A9BA8] mt-2">Peak hours: {data.telehealthLiquidity.peakHoursDescription}</p>
+          <p className="text-sm text-[#8A9BA8] mt-2">Peak hours: {data.telehealthLiquidity.peakHoursDescription}</p>
         </div>
 
         {/* ─── Provider Launch ─────────────────────────────────── */}
@@ -532,22 +532,22 @@ export default function OperationalDashboard({
 
         {/* Provider Summary Stats */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Provider Breakdown</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Provider Breakdown</p>
           <div className="grid grid-cols-3 gap-3 text-center mb-3">
             <div className="rounded-lg bg-purple-50 p-2">
               <p className="text-lg font-bold text-purple-900">{data.providerLaunch.byType.bcba}</p>
-              <p className="text-xs text-purple-600">BCBAs</p>
+              <p className="text-sm text-purple-600">BCBAs</p>
             </div>
             <div className="rounded-lg bg-purple-50 p-2">
               <p className="text-lg font-bold text-purple-900">{data.providerLaunch.byType.lcsw}</p>
-              <p className="text-xs text-purple-600">LCSWs</p>
+              <p className="text-sm text-purple-600">LCSWs</p>
             </div>
             <div className="rounded-lg bg-purple-50 p-2">
               <p className="text-lg font-bold text-purple-900">{data.providerLaunch.byType.slp}</p>
-              <p className="text-xs text-purple-600">SLPs</p>
+              <p className="text-sm text-purple-600">SLPs</p>
             </div>
           </div>
-          <div className="text-xs text-[#5A6B7A] space-y-1">
+          <div className="text-sm text-[#5A6B7A] space-y-1">
             <div className="flex justify-between">
               <span>Avg days to 1st session</span>
               <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysToFirstSession} days</span>
@@ -566,7 +566,7 @@ export default function OperationalDashboard({
         {/* Provider Funnel */}
         {data.providerLaunch.funnel.length > 0 && (
           <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Onboarding Funnel</p>
+            <p className="text-sm font-semibold text-[#3A4A57] mb-2">Onboarding Funnel</p>
             <div className="space-y-2">
               {data.providerLaunch.funnel.map((stage, i) => {
                 const widthPct = data.providerLaunch.funnel[0].count > 0
@@ -575,7 +575,7 @@ export default function OperationalDashboard({
 
                 return (
                   <div key={stage.stage}>
-                    <div className="flex items-center justify-between text-xs mb-0.5">
+                    <div className="flex items-center justify-between text-sm mb-0.5">
                       <span className="text-[#3A4A57]">{stage.stage}</span>
                       <span className="text-[#5A6B7A]">{stage.count} ({stage.conversionRate}%)</span>
                     </div>
@@ -611,19 +611,19 @@ export default function OperationalDashboard({
 
         {/* EVV / Compliance Stats */}
         <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-          <p className="text-xs font-semibold text-[#3A4A57] mb-2">Compliance Snapshot</p>
+          <p className="text-sm font-semibold text-[#3A4A57] mb-2">Compliance Snapshot</p>
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-lg bg-green-50 p-2">
               <p className="text-lg font-bold text-green-900">{data.payerEVV.evvMatchRate}%</p>
-              <p className="text-xs text-green-600">EVV Match</p>
+              <p className="text-sm text-green-600">EVV Match</p>
             </div>
             <div className="rounded-lg bg-green-50 p-2">
               <p className="text-lg font-bold text-green-900">{data.payerEVV.cleanCycles}</p>
-              <p className="text-xs text-green-600">Clean Cycles</p>
+              <p className="text-sm text-green-600">Clean Cycles</p>
             </div>
             <div className="rounded-lg bg-green-50 p-2">
               <p className="text-lg font-bold text-green-900">${(data.payerEVV.totalDollarsCollected / 1000).toFixed(0)}k</p>
-              <p className="text-xs text-green-600">Collected</p>
+              <p className="text-sm text-green-600">Collected</p>
             </div>
           </div>
         </div>
@@ -631,10 +631,10 @@ export default function OperationalDashboard({
         {/* Top Denial Reasons */}
         {data.payerEVV.topDenialReasons.length > 0 && (
           <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3">
-            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Top Denial Reasons</p>
+            <p className="text-sm font-semibold text-[#3A4A57] mb-2">Top Denial Reasons</p>
             <div className="space-y-1.5">
               {data.payerEVV.topDenialReasons.slice(0, 5).map(reason => (
-                <div key={reason.reason} className="flex items-center justify-between text-xs">
+                <div key={reason.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] truncate flex-1">{reason.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
                     <div className="w-20 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
@@ -654,8 +654,8 @@ export default function OperationalDashboard({
         {/* Payer Breakdown */}
         {data.payerEVV.payerBreakdown.length > 0 && (
           <div className="mt-3 rounded-xl border border-[#E8E4DF] bg-white p-3 overflow-x-auto">
-            <p className="text-xs font-semibold text-[#3A4A57] mb-2">Payer Breakdown</p>
-            <table className="w-full text-xs">
+            <p className="text-sm font-semibold text-[#3A4A57] mb-2">Payer Breakdown</p>
+            <table className="w-full text-sm">
               <thead>
                 <tr className="text-[#5A6B7A] border-b border-[#E8E4DF]">
                   <th className="text-left py-1">Payer</th>

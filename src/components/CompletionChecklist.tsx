@@ -129,7 +129,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
             </div>
             <div className="text-right">
               <div className="text-2xl sm:text-3xl font-bold text-accent">{overallProgress}%</div>
-              <p className="text-xs text-[#5A6B7A]">Overall Progress</p>
+              <p className="text-sm text-[#5A6B7A]">Overall Progress</p>
             </div>
           </div>
 
@@ -171,7 +171,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                     </div>
                     <div className="text-left">
                       <h3 className="font-semibold text-primary">{section.title}</h3>
-                      <p className="text-xs text-[#5A6B7A]">
+                      <p className="text-sm text-[#5A6B7A]">
                         {section.items.filter(i => i.complete).length} of {section.items.length} complete
                       </p>
                     </div>

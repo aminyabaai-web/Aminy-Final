@@ -403,7 +403,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         <Badge
           key={cred}
           variant="outline"
-          className={`text-xs ${
+          className={`text-sm ${
             isBCBA 
               ? 'bg-purple-50 text-purple-700 border-purple-200' 
               : isRBT 
@@ -660,7 +660,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-xs"
+                    className="text-sm"
                     onClick={() => handleSessionAction('reschedule', session.id)}
                   >
                     Reschedule
@@ -668,7 +668,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-xs"
+                    className="text-sm"
                     onClick={() => handleSessionAction('cancel', session.id)}
                   >
                     Cancel
@@ -763,7 +763,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="text-xl sm:text-2xl font-bold">50 min</div>
                 <div className="text-lg font-semibold text-accent">$89</div>
                 <div className="text-sm text-[#5A6B7A]">$1.78 per minute</div>
-                <Badge className="text-xs mt-1">Best Value</Badge>
+                <Badge className="text-sm mt-1">Best Value</Badge>
               </div>
               <Button
                 onClick={() => handleBuyMinutes('50')}
@@ -992,7 +992,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <Target className="w-5 h-5 text-purple-600" />
                 <h2 className="text-lg font-semibold text-[#1B2733]">Your Care Plan</h2>
                 {demo && (
-                  <Badge variant="outline" className="text-xs bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
+                  <Badge variant="outline" className="text-sm bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
                     Sample
                   </Badge>
                 )}

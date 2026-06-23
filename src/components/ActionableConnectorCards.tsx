@@ -91,7 +91,7 @@ export function ActionableConnectorCards({ cards = [] }: ActionableConnectorCard
                 <p className="text-sm text-[#5A6B7A] mb-3">{card.description}</p>
 
                 <div className="flex items-center justify-between">
-                  <Badge variant="secondary" className={`text-xs ${config.badge}`}>
+                  <Badge variant="secondary" className={`text-sm ${config.badge}`}>
                     {card.status === 'incomplete' && 'Incomplete'}
                     {card.status === 'pending' && 'Pending'}
                     {card.status === 'action-needed' && 'Action needed'}

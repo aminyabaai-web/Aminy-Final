@@ -250,7 +250,7 @@ export function B2BOrgSetup({
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-[#1B2733]">{adminEmail || 'You (Admin)'}</p>
-                    <p className="text-xs text-blue-600">Organization Admin</p>
+                    <p className="text-sm text-blue-600">Organization Admin</p>
                   </div>
                   <Crown className="w-4 h-4 text-blue-600" />
                 </div>
@@ -262,7 +262,7 @@ export function B2BOrgSetup({
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-[#1B2733]">{member.email}</p>
-                      <p className="text-xs text-[#5A6B7A] capitalize">{member.role}</p>
+                      <p className="text-sm text-[#5A6B7A] capitalize">{member.role}</p>
                     </div>
                     <button
                       onClick={() => removeTeamMember(member.email)}
@@ -330,7 +330,7 @@ export function B2BOrgSetup({
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Team Members</p>
                   <p className="font-semibold text-[#1B2733]">{teamMembers.length + 1} of {seatCount} seats filled</p>
                   {teamMembers.length > 0 && (
-                    <p className="text-xs text-[#5A6B7A] mt-1">
+                    <p className="text-sm text-[#5A6B7A] mt-1">
                       {teamMembers.map(m => m.email).join(', ')}
                     </p>
                   )}

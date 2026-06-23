@@ -255,7 +255,7 @@ function ParticipantTile({
         <div className="mt-3 pt-3 border-t border-[#E8E4DF] flex items-center gap-2">
           <button
             onClick={onPin}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               isPinned
                 ? 'bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
@@ -275,7 +275,7 @@ function ParticipantTile({
           {participant.audio && (
             <button
               onClick={onMute}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors"
             >
               <MicOff className="w-3.5 h-3.5" /> Mute
             </button>
@@ -283,7 +283,7 @@ function ParticipantTile({
 
           <button
             onClick={onRemove}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-red-100 text-red-600 hover:bg-red-200 transition-colors"
           >
             <X className="w-3.5 h-3.5" /> Remove
           </button>
@@ -493,7 +493,7 @@ export function ParticipantManager({
 
           <div className="flex items-center gap-2">
             {/* Quick stats */}
-            <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-1.5 text-sm text-[#5A6B7A]">
               <Mic className="w-3.5 h-3.5" />
               <span>{audioOnCount}</span>
               <Video className="w-3.5 h-3.5 ml-1" />

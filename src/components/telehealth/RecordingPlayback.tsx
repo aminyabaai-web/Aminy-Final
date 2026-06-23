@@ -434,7 +434,7 @@ export function RecordingPlayback({
               <button
                 key={rec.id}
                 onClick={() => setSelectedRecording(rec)}
-                className={`flex-shrink-0 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
+                className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedRecording?.id === rec.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
                     : 'bg-[#FAF7F2] text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F0EDE8]'
@@ -607,11 +607,11 @@ export function RecordingPlayback({
                     onChange={e => setBookmarkLabel(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && addBookmark()}
                     placeholder={`Bookmark at ${formatDuration(currentTime)}...`}
-                    className="flex-1 px-2.5 py-1.5 text-xs bg-white border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080]"
+                    className="flex-1 px-2.5 py-1.5 text-sm bg-white border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-[#6B9080]"
                   />
                   <button
                     onClick={addBookmark}
-                    className="px-3 py-1.5 text-xs font-medium bg-primary text-white rounded-lg hover:bg-[#6B9080] transition-colors"
+                    className="px-3 py-1.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-[#6B9080] transition-colors"
                   >
                     Add
                   </button>
@@ -656,7 +656,7 @@ export function RecordingPlayback({
             {showMetadata && selectedRecording && (
               <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <h4 className="text-sm font-semibold text-[#3A4A57]">Recording Details</h4>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                   <div>
                     <span className="text-[#8A9BA8]">Date</span>
                     <p className="text-[#3A4A57] font-medium">{formatDate(selectedRecording.createdAt)}</p>

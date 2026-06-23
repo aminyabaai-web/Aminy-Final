@@ -167,7 +167,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
         )}
         <div>
           <h1 className="text-lg font-bold text-[#1B2733]">Mental Health Progress</h1>
-          <p className="text-xs text-[#5A6B7A]">{childName} — plain-language summary</p>
+          <p className="text-sm text-[#5A6B7A]">{childName} — plain-language summary</p>
         </div>
         <Heart className="w-5 h-5 text-pink-400 ml-auto" />
       </div>

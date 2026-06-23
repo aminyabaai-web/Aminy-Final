@@ -201,18 +201,18 @@ export function GroupSessionCreator({
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-xl font-bold text-emerald-700">$50</p>
-            <p className="text-xs text-emerald-600 mt-0.5">per family</p>
+            <p className="text-sm text-emerald-600 mt-0.5">per family</p>
           </div>
           <div className="border-x border-emerald-200">
             <p className="text-xl font-bold text-emerald-700">$160</p>
-            <p className="text-xs text-emerald-600 mt-0.5">guaranteed min (4 families)</p>
+            <p className="text-sm text-emerald-600 mt-0.5">guaranteed min (4 families)</p>
           </div>
           <div>
             <p className="text-xl font-bold text-emerald-700">$200</p>
-            <p className="text-xs text-emerald-600 mt-0.5">full room (4 families)</p>
+            <p className="text-sm text-emerald-600 mt-0.5">full room (4 families)</p>
           </div>
         </div>
-        <p className="text-xs text-emerald-600 mt-3 text-center">
+        <p className="text-sm text-emerald-600 mt-3 text-center">
           Auto-cancelled with full refunds if minimum families not enrolled 24h before session
         </p>
       </Card>
@@ -239,8 +239,8 @@ export function GroupSessionCreator({
                     ? { background: '#43AA8B20', borderColor: '#43AA8B' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
-                  <p className="text-xs font-semibold text-[#1B2733]">Single session</p>
-                  <p className="text-xs text-[#5A6B7A]">One-off office hours, up to 4 families</p>
+                  <p className="text-sm font-semibold text-[#1B2733]">Single session</p>
+                  <p className="text-sm text-[#5A6B7A]">One-off office hours, up to 4 families</p>
                 </button>
                 <button
                   onClick={() => { setFormat('cohort'); setSessionCount(6); setMaxFamilies(10); setPricePerFamily(199); }}
@@ -249,13 +249,13 @@ export function GroupSessionCreator({
                     ? { background: '#43AA8B20', borderColor: '#43AA8B' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
-                  <p className="text-xs font-semibold text-[#1B2733]">Cohort program</p>
-                  <p className="text-xs text-[#5A6B7A]">Weekly group, 8–12 families, you moderate</p>
+                  <p className="text-sm font-semibold text-[#1B2733]">Cohort program</p>
+                  <p className="text-sm text-[#5A6B7A]">Weekly group, 8–12 families, you moderate</p>
                 </button>
               </div>
               {format === 'cohort' && (
                 <div className="mt-2 flex items-center gap-2">
-                  <label className="text-xs text-[#5A6B7A]">Weekly sessions:</label>
+                  <label className="text-sm text-[#5A6B7A]">Weekly sessions:</label>
                   <Input
                     type="number"
                     min={2}
@@ -264,7 +264,7 @@ export function GroupSessionCreator({
                     onChange={e => setSessionCount(Math.max(2, Math.min(12, Number(e.target.value) || 6)))}
                     className="w-20"
                   />
-                  <span className="text-xs text-slate-400">price below is for the whole program</span>
+                  <span className="text-sm text-slate-400">price below is for the whole program</span>
                 </div>
               )}
             </div>
@@ -384,7 +384,7 @@ export function GroupSessionCreator({
                 <span className="text-[#3A4A57]">Full room ({maxFamilies} families)</span>
                 <span className="font-bold text-[#6B9080]">${Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * maxFamilies}</span>
               </div>
-              <p className="text-xs text-slate-400 mt-1.5">Aminy takes 20% platform fee · cash pay only</p>
+              <p className="text-sm text-slate-400 mt-1.5">Aminy takes 20% platform fee · cash pay only</p>
             </div>
 
             <Button
@@ -482,7 +482,7 @@ function GroupSessionCard({
             </Badge>
           </div>
 
-          <div className="flex items-center gap-4 text-xs text-[#5A6B7A] mb-3">
+          <div className="flex items-center gap-4 text-sm text-[#5A6B7A] mb-3">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {sessionDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
@@ -499,7 +499,7 @@ function GroupSessionCard({
 
           {/* Enrollment bar */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-sm">
               <span className={meetsMinimum ? 'text-emerald-600 font-medium' : 'text-amber-600 font-medium'}>
                 {session.enrolled_count}/{session.max_families} enrolled
                 {!meetsMinimum && session.status === 'open' && ` · needs ${session.min_families - session.enrolled_count} more to run`}
@@ -528,12 +528,12 @@ function GroupSessionCard({
           <div className="shrink-0">
             {showConfirmCancel ? (
               <div className="flex flex-col gap-1.5">
-                <p className="text-xs text-red-600 font-medium">Cancel and refund all?</p>
+                <p className="text-sm text-red-600 font-medium">Cancel and refund all?</p>
                 <div className="flex gap-2">
                   <Button
                     size="sm"
                     variant="destructive"
-                    className="text-xs h-7"
+                    className="text-sm h-7"
                     onClick={() => { onCancel?.(); setShowConfirmCancel(false); }}
                   >
                     Yes, cancel
@@ -541,7 +541,7 @@ function GroupSessionCard({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="text-xs h-7"
+                    className="text-sm h-7"
                     onClick={() => setShowConfirmCancel(false)}
                   >
                     Keep

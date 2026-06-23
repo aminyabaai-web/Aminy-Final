@@ -214,18 +214,18 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                 </div>
                 <div>
                   <h3 className="font-semibold text-[#1B2733]">Calm Coins Balance</h3>
-                  <p className="text-xs text-[#5A6B7A]">Earn by completing activities</p>
+                  <p className="text-sm text-[#5A6B7A]">Earn by completing activities</p>
                 </div>
               </div>
               <div className="text-right">
                 <p className="text-4xl font-bold text-amber-600">{calmCoinsBalance}</p>
-                <p className="text-xs text-[#5A6B7A]">coins</p>
+                <p className="text-sm text-[#5A6B7A]">coins</p>
               </div>
             </div>
 
             {/* Recent Transactions */}
             <div className="mt-4 pt-4 border-t border-[#F0EDE8]">
-              <p className="text-xs font-medium text-[#3A4A57] mb-2">Recent Activity</p>
+              <p className="text-sm font-medium text-[#3A4A57] mb-2">Recent Activity</p>
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {transactions.slice(0, 3).map((tx, idx) => (
                   <div key={idx} className="flex items-center justify-between text-sm">
@@ -235,7 +235,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                       ) : (
                         <ShoppingCart className="w-3 h-3 text-blue-600" />
                       )}
-                      <span className="text-[#3A4A57] text-xs">{tx.activity}</span>
+                      <span className="text-[#3A4A57] text-sm">{tx.activity}</span>
                     </div>
                     <span className={`font-semibold ${tx.type === 'earned' ? 'text-green-600' : 'text-blue-600'}`}>
                       {tx.type === 'earned' ? '+' : ''}{tx.amount}
@@ -356,7 +356,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                   <p className="text-sm font-medium text-[#1B2733] mb-1">
                     Expand your child's Aminy Jr experience
                   </p>
-                  <p className="text-xs text-[#5A6B7A]">
+                  <p className="text-sm text-[#5A6B7A]">
                     Premium games and activities designed by behavior specialists
                   </p>
                 </div>
@@ -385,7 +385,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                   <p className="text-sm font-medium text-[#1B2733] mb-1">
                     Professional-grade tools and templates
                   </p>
-                  <p className="text-xs text-[#5A6B7A]">
+                  <p className="text-sm text-[#5A6B7A]">
                     Clinical documentation, IEP support, and provider-ready materials
                   </p>
                 </div>
@@ -473,7 +473,7 @@ function ShopItemCard({
       
       <div className="flex flex-wrap gap-1 mb-4">
         {item.tags.slice(0, 3).map((tag, idx) => (
-          <Badge key={idx} variant="outline" className="text-xs">
+          <Badge key={idx} variant="outline" className="text-sm">
             {tag}
           </Badge>
         ))}
@@ -562,7 +562,7 @@ function CheckoutModal({
                   <CreditCard className="w-5 h-5 text-[#3A4A57]" />
                   <div>
                     <p className="font-medium text-[#1B2733]">Credit Card</p>
-                    <p className="text-xs text-[#5A6B7A]">Stripe checkout</p>
+                    <p className="text-sm text-[#5A6B7A]">Stripe checkout</p>
                   </div>
                   {paymentMethod === 'card' && (
                     <CheckCircle className="w-5 h-5 text-accent ml-auto" />
@@ -583,7 +583,7 @@ function CheckoutModal({
                   <Sparkles className="w-5 h-5 text-yellow-600" />
                   <div>
                     <p className="font-medium text-[#1B2733]">Calm Coins</p>
-                    <p className="text-xs text-[#5A6B7A]">{calmCoinsBalance} available</p>
+                    <p className="text-sm text-[#5A6B7A]">{calmCoinsBalance} available</p>
                   </div>
                   {paymentMethod === 'coins' && canAffordWithCoins && (
                     <CheckCircle className="w-5 h-5 text-yellow-600 ml-auto" />
@@ -600,7 +600,7 @@ function CheckoutModal({
                 <CreditCard className="w-5 h-5 text-blue-600 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-blue-900 mb-1">Secure Stripe Checkout</p>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-sm text-blue-700">
                     You'll be redirected to our secure payment processor to complete your purchase.
                   </p>
                 </div>
@@ -629,7 +629,7 @@ function CheckoutModal({
           </Button>
 
           {/* Purchase Confirmation Note */}
-          <p className="text-xs text-[#5A6B7A] text-center">
+          <p className="text-sm text-[#5A6B7A] text-center">
             Digital products will be emailed to you immediately. Physical items ship within 2-3 business days.
           </p>
         </div>

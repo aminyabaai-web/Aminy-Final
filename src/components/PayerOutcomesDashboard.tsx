@@ -223,7 +223,7 @@ export function PayerOutcomesDashboard({
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <Building2 className="w-5 h-5 text-[#6B9080]" />
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-sm">
                   {getOrgTypeLabel()}
                 </Badge>
                 <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
@@ -798,7 +798,7 @@ export function PayerOutcomesDashboard({
                         </Badge>
                       </div>
                       {marketCoverage?.notes?.length ? (
-                        <ul className="mt-2 space-y-1 text-xs text-[#5A6B7A] dark:text-gray-300">
+                        <ul className="mt-2 space-y-1 text-sm text-[#5A6B7A] dark:text-gray-300">
                           {marketCoverage.notes.slice(0, 2).map((note: string) => (
                             <li key={note}>• {note}</li>
                           ))}
@@ -833,7 +833,7 @@ export function PayerOutcomesDashboard({
                         style={{ width: `${metrics.engagementRate}%` }}
                       />
                     </div>
-                    <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
+                    <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                       {metrics.engagementRate}% engagement rate
                     </p>
                   </div>
@@ -975,7 +975,7 @@ function MetricCard({
       <p className="text-2xl font-bold text-[#1B2733]">{value}</p>
       <p className="text-sm text-[#5A6B7A]">{label}</p>
       {subtext && (
-        <p className="mt-1 text-xs text-slate-400">{subtext}</p>
+        <p className="mt-1 text-sm text-slate-400">{subtext}</p>
       )}
     </Card>
   );
@@ -1044,7 +1044,7 @@ function SavingsRow({
       </div>
       <div className="text-right">
         <p className="font-semibold text-green-600">{formatCurrency(total)}</p>
-        <p className="text-xs text-[#8A9BA8]">
+        <p className="text-sm text-[#8A9BA8]">
           {formatNumber(count)} × {formatCurrency(avgCost)}
         </p>
       </div>

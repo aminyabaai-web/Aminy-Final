@@ -226,7 +226,7 @@ function RosterView({
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-sm text-[#5A6B7A]">
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{c?.directServiceHours}h direct</span>
               <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{c?.directObservationCount} obs</span>
               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{c?.individualSessionCount}i / {c?.groupSessionCount}g</span>
@@ -271,7 +271,7 @@ function ComplianceView({
               <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: `${barWidth}%` }} />
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Direct hours</span>
                 <span className="font-medium text-[#3A4A57]">{c.directServiceHours}h</span>
@@ -352,7 +352,7 @@ function CalendarView({
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-0.5 text-center">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-          <div key={d} className="text-xs font-medium text-slate-400 py-1">{d}</div>
+          <div key={d} className="text-sm font-medium text-slate-400 py-1">{d}</div>
         ))}
         {days.map((day, i) => {
           const daySessions = day ? sessionsByDay[day] : undefined;
@@ -360,7 +360,7 @@ function CalendarView({
           return (
             <div
               key={i}
-              className={`aspect-square flex flex-col items-center justify-center rounded-lg text-xs relative ${
+              className={`aspect-square flex flex-col items-center justify-center rounded-lg text-sm relative ${
                 isToday ? 'bg-indigo-50 ring-1 ring-indigo-300' : ''
               } ${day ? '' : ''}`}
             >
@@ -425,7 +425,7 @@ function CalendarView({
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 justify-center text-xs text-[#5A6B7A] mt-2">
+      <div className="flex gap-4 justify-center text-sm text-[#5A6B7A] mt-2">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" />Individual</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" />Group</span>
       </div>
@@ -465,7 +465,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
       <p className="text-sm text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
 
       {/* Legend */}
-      <div className="flex gap-1 text-xs">
+      <div className="flex gap-1 text-sm">
         {[1, 2, 3, 4, 5].map((r) => (
           <div key={r} className={`px-2 py-0.5 rounded ${ratingColor(r)}`}>
             {r} {RATING_LABELS[r]}
@@ -479,7 +479,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
           <div className="flex gap-0.5 mb-1">
             <div className="w-28 shrink-0" />
             {profiles.map((p) => (
-              <div key={p.id} className="flex-1 text-center text-xs font-medium text-[#5A6B7A] truncate px-0.5">
+              <div key={p.id} className="flex-1 text-center text-sm font-medium text-[#5A6B7A] truncate px-0.5">
                 {p.name.split(' ')[0]}
               </div>
             ))}
@@ -496,7 +496,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
                 return (
                   <div
                     key={p.id}
-                    className={`flex-1 text-center text-xs font-medium rounded leading-5 ${
+                    className={`flex-1 text-center text-sm font-medium rounded leading-5 ${
                       rating ? ratingColor(rating) : 'bg-[#F0EDE8] text-slate-400'
                     }`}
                   >

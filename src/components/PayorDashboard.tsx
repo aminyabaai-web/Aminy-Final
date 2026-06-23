@@ -274,7 +274,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   {data.utilization.activeMembers.toLocaleString()}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Members</p>
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-sm text-neutral-400 mt-1">
                   of {data.utilization.totalMembers.toLocaleString()} total
                 </p>
               </Card>
@@ -292,7 +292,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   {data.outcomes.goalAchievementRate}%
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Goal Achievement</p>
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-sm text-neutral-400 mt-1">
                   vs 45% industry avg
                 </p>
               </Card>
@@ -310,7 +310,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   ${data.costEffectiveness.avgCostPerImprovedOutcome}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Cost/Outcome</p>
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-sm text-neutral-400 mt-1">
                   vs $450 industry avg
                 </p>
               </Card>
@@ -326,7 +326,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   {data.outcomes.memberSatisfactionScore}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Member Satisfaction</p>
-                <p className="text-xs text-neutral-400 mt-1">
+                <p className="text-sm text-neutral-400 mt-1">
                   out of 5.0
                 </p>
               </Card>
@@ -388,7 +388,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                             : benchmark.aminyValue}
                           {benchmark.metric.includes('Rate') || benchmark.metric.includes('Achievement') ? '%' : ''}
                         </p>
-                        <p className="text-xs text-[#5A6B7A]">Aminy</p>
+                        <p className="text-sm text-[#5A6B7A]">Aminy</p>
                       </div>
                       <div className="text-right">
                         <p className="text-lg text-neutral-400">
@@ -397,7 +397,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                             : benchmark.industryAvg}
                           {benchmark.metric.includes('Rate') || benchmark.metric.includes('Achievement') ? '%' : ''}
                         </p>
-                        <p className="text-xs text-[#5A6B7A]">Industry Avg</p>
+                        <p className="text-sm text-[#5A6B7A]">Industry Avg</p>
                       </div>
                     </div>
                   </div>
@@ -516,7 +516,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                         style={{ width: `${metrics.avgProgress}%` }}
                       />
                     </div>
-                    <div className="flex justify-between text-xs text-[#5A6B7A]">
+                    <div className="flex justify-between text-sm text-[#5A6B7A]">
                       <span>{metrics.achieved} achieved</span>
                       <span>{metrics.goals} total</span>
                     </div>
@@ -585,7 +585,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                 <p className="text-3xl font-bold text-[#1B2733] dark:text-white">
                   {qualityMetrics.ncqaScore}
                 </p>
-                <p className="text-xs text-neutral-400">out of 5.0</p>
+                <p className="text-sm text-neutral-400">out of 5.0</p>
               </Card>
               <Card className="p-5 text-center">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Star Rating</p>
@@ -601,7 +601,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     />
                   ))}
                 </div>
-                <p className="text-xs text-neutral-400">{qualityMetrics.starRating} Stars</p>
+                <p className="text-sm text-neutral-400">{qualityMetrics.starRating} Stars</p>
               </Card>
               <Card className="p-5 text-center">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">HEDIS Measures</p>
@@ -609,7 +609,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   {qualityMetrics.hedisCompliance.filter(h => h.status === 'exceeds').length}/
                   {qualityMetrics.hedisCompliance.length}
                 </p>
-                <p className="text-xs text-neutral-400">exceeding benchmark</p>
+                <p className="text-sm text-neutral-400">exceeding benchmark</p>
               </Card>
             </div>
 

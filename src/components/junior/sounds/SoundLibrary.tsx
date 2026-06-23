@@ -202,7 +202,7 @@ export function SoundLibrary({ onBack }: SoundLibraryProps) {
         >
           <Timer size={20} />
           {sleepTimer && (
-            <span className="text-xs font-bold text-white">{sleepTimer}m</span>
+            <span className="text-sm font-bold text-white">{sleepTimer}m</span>
           )}
         </button>
       </div>
@@ -322,7 +322,7 @@ export function SoundLibrary({ onBack }: SoundLibraryProps) {
                               />
                             ))}
                           </div>
-                          <span className="text-xs text-white/70 ml-1">Playing</span>
+                          <span className="text-sm text-white/70 ml-1">Playing</span>
                         </div>
                       )}
                     </button>
@@ -386,7 +386,7 @@ export function SoundLibrary({ onBack }: SoundLibraryProps) {
                 {sleepTimer ? (
                   <button
                     onClick={cancelSleepTimer}
-                    className="flex items-center gap-1 text-xs text-white/60"
+                    className="flex items-center gap-1 text-sm text-white/60"
                   >
                     <Moon size={12} />
                     <span>Sleep in {sleepTimer}m</span>
@@ -395,7 +395,7 @@ export function SoundLibrary({ onBack }: SoundLibraryProps) {
                 ) : (
                   <button
                     onClick={() => setShowTimerPicker(true)}
-                    className="flex items-center gap-1 text-xs text-white/50"
+                    className="flex items-center gap-1 text-sm text-white/50"
                   >
                     <Moon size={12} />
                     <span>Sleep Timer</span>
@@ -403,7 +403,7 @@ export function SoundLibrary({ onBack }: SoundLibraryProps) {
                 )}
                 <button
                   onClick={stopAll}
-                  className="text-xs text-white/50 font-medium active:text-white/80"
+                  className="text-sm text-white/50 font-medium active:text-white/80"
                 >
                   Stop All
                 </button>

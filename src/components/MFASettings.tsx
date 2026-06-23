@@ -188,7 +188,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
                 <p className="font-medium text-sm" style={{ color: '#F44336' }}>
                   MFA Required
                 </p>
-                <p className="text-xs mt-1" style={{ color: '#F44336', opacity: 0.8 }}>
+                <p className="text-sm mt-1" style={{ color: '#F44336', opacity: 0.8 }}>
                   {requirement.reason}
                 </p>
               </div>
@@ -210,7 +210,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
                 <p className="font-medium text-sm" style={{ color: '#F57C00' }}>
                   MFA will be required soon
                 </p>
-                <p className="text-xs mt-1" style={{ color: '#F57C00', opacity: 0.8 }}>
+                <p className="text-sm mt-1" style={{ color: '#F57C00', opacity: 0.8 }}>
                   Set up MFA before {requirement.gracePeriodEnds.toLocaleDateString()} to avoid interruptions.
                 </p>
               </div>
@@ -235,7 +235,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Authenticator App
                   </p>
-                  <p className="text-xs" style={{ color: '#0D1B2A', opacity: 0.5 }}>
+                  <p className="text-sm" style={{ color: '#0D1B2A', opacity: 0.5 }}>
                     Configured and active
                   </p>
                 </div>

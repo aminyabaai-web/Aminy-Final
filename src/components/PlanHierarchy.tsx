@@ -338,7 +338,7 @@ export function PlanHierarchy({
               <div className="flex-1">
                 <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
                   AI Recommendations
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-sm">
                     {aiRecommendations.length} suggestions
                   </Badge>
                 </h3>
@@ -414,7 +414,7 @@ export function PlanHierarchy({
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-lg text-[#1B2733]">Vision</h2>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-sm">
                         {vision.timeframe}
                       </Badge>
                     </div>
@@ -464,7 +464,7 @@ export function PlanHierarchy({
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-lg text-[#1B2733]">This Month</h2>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-sm">
                         {monthlyGoals.length} goals
                       </Badge>
                     </div>
@@ -535,7 +535,7 @@ export function PlanHierarchy({
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       <h2 className="font-semibold text-lg text-[#1B2733]">This Week</h2>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-sm">
                         {weeklyFocus.length} focus areas
                       </Badge>
                     </div>
@@ -575,7 +575,7 @@ export function PlanHierarchy({
                           </div>
                           <p className="text-sm text-[#5A6B7A] ml-7">{week.description}</p>
                         </div>
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-sm">
                           {week.weekOf}
                         </Badge>
                       </div>
@@ -613,7 +613,7 @@ export function PlanHierarchy({
                                 {action.action}
                               </span>
                             </div>
-                            <Badge variant="outline" className="text-xs">
+                            <Badge variant="outline" className="text-sm">
                               {action.day}
                             </Badge>
                           </button>

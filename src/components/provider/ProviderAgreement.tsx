@@ -318,11 +318,11 @@ export default function ProviderAgreement({
           </div>
           <div>
             <h1 className="text-xl font-bold text-[#1B2733]">Provider Services Agreement</h1>
-            <p className="text-xs text-[#5A6B7A]">Aminy, Inc. — Effective Date: Upon Acceptance</p>
+            <p className="text-sm text-[#5A6B7A]">Aminy, Inc. — Effective Date: Upon Acceptance</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs text-slate-400">
+        <div className="flex items-center gap-4 text-sm text-slate-400">
           <span className="flex items-center gap-1">
             <FileText className="w-3.5 h-3.5" />
             11 Sections
@@ -371,7 +371,7 @@ export default function ProviderAgreement({
       {/* Acceptance Footer */}
       <div className="px-5 pt-4 pb-6 border-t border-[#E8E4DF] bg-white sticky bottom-0">
         {/* Checklist status */}
-        <div className="flex items-center gap-4 mb-4 text-xs">
+        <div className="flex items-center gap-4 mb-4 text-sm">
           {(['nonSolicitation', 'payment', 'liability'] as const).map((key) => (
             <span
               key={key}
@@ -392,7 +392,7 @@ export default function ProviderAgreement({
         </div>
 
         {/* E-Signature notice */}
-        <div className="flex items-start gap-2 mb-4 p-3 bg-[#FAF7F2] rounded-lg text-xs text-[#5A6B7A]">
+        <div className="flex items-start gap-2 mb-4 p-3 bg-[#FAF7F2] rounded-lg text-sm text-[#5A6B7A]">
           <Lock className="w-4 h-4 shrink-0 mt-0.5" />
           <span>
             By clicking "Accept Agreement," you are signing this agreement electronically.

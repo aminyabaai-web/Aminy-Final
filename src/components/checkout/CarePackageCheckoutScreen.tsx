@@ -96,7 +96,7 @@ function StripeBadge() {
   return (
     <div className="flex items-center gap-1 bg-white/10 rounded-full px-3 py-1">
       <Lock className="w-3 h-3 text-white" />
-      <span className="text-white text-xs font-medium">Stripe Secure</span>
+      <span className="text-white text-sm font-medium">Stripe Secure</span>
     </div>
   );
 }
@@ -219,7 +219,7 @@ export function CarePackageCheckoutScreen({
           </p>
           <button
             onClick={() => setShowCancelled(false)}
-            className="ml-auto text-amber-500 hover:text-amber-700 text-xs font-medium"
+            className="ml-auto text-amber-500 hover:text-amber-700 text-sm font-medium"
           >
             Dismiss
           </button>
@@ -294,7 +294,7 @@ export function CarePackageCheckoutScreen({
             </span>
           </div>
           {pkg.billingNote && (
-            <p className="text-xs text-slate-400 mt-1">{pkg.billingNote}</p>
+            <p className="text-sm text-slate-400 mt-1">{pkg.billingNote}</p>
           )}
         </div>
 
@@ -307,7 +307,7 @@ export function CarePackageCheckoutScreen({
             <p className="text-sm font-semibold text-[#6B9080]">
               Setting up care for {childName}
             </p>
-            <p className="text-xs text-[#6B9080]">Your care team will reach out within 24 hours.</p>
+            <p className="text-sm text-[#6B9080]">Your care team will reach out within 24 hours.</p>
           </div>
         </div>
 
@@ -315,16 +315,16 @@ export function CarePackageCheckoutScreen({
         <div className="flex items-center justify-around py-3">
           <div className="flex flex-col items-center gap-1 text-center">
             <Lock className="w-5 h-5 text-slate-400" />
-            <span className="text-xs text-[#5A6B7A] leading-tight">256-bit<br />encrypted</span>
+            <span className="text-sm text-[#5A6B7A] leading-tight">256-bit<br />encrypted</span>
           </div>
           <div className="flex flex-col items-center gap-1 text-center">
             <Shield className="w-5 h-5 text-slate-400" />
-            <span className="text-xs text-[#5A6B7A] leading-tight">HIPAA<br />compliant</span>
+            <span className="text-sm text-[#5A6B7A] leading-tight">HIPAA<br />compliant</span>
           </div>
           {pkg.recurring && (
             <div className="flex flex-col items-center gap-1 text-center">
               <RefreshCw className="w-5 h-5 text-slate-400" />
-              <span className="text-xs text-[#5A6B7A] leading-tight">Cancel<br />anytime</span>
+              <span className="text-sm text-[#5A6B7A] leading-tight">Cancel<br />anytime</span>
             </div>
           )}
         </div>
@@ -361,7 +361,7 @@ export function CarePackageCheckoutScreen({
             </>
           )}
         </button>
-        <p className="text-center text-xs text-slate-400 mt-3">
+        <p className="text-center text-sm text-slate-400 mt-3">
           Secured by Stripe. Your payment info is never stored on our servers.
         </p>
       </div>

@@ -75,7 +75,7 @@ export function InlinePaywallPromo({
             <p className="text-sm font-medium text-[#6B9080] mb-1">
               {reason || `Ready to unlock more for ${childName}?`}
             </p>
-            <p className="text-xs text-[#6B9080]">
+            <p className="text-sm text-[#6B9080]">
               Plans start at just ${tierPricing.core.monthly}/mo • No credit card required
             </p>
           </div>
@@ -129,8 +129,8 @@ export function InlinePaywallPromo({
                 <div className={`p-2 ${isHighlighted ? 'bg-[#6B9080]/10' : 'bg-[#F0EDE8]'} rounded-full mb-2`}>
                   <TierIcon className={`w-4 h-4 ${isHighlighted ? 'text-[#6B9080]' : 'text-[#5A6B7A]'}`} />
                 </div>
-                <div className="font-semibold text-xs text-primary mb-0.5">{tier.name}</div>
-                <div className="font-bold text-sm text-primary">${tier.price}<span className="text-xs text-muted-foreground">/mo</span></div>
+                <div className="font-semibold text-sm text-primary mb-0.5">{tier.name}</div>
+                <div className="font-bold text-sm text-primary">${tier.price}<span className="text-sm text-muted-foreground">/mo</span></div>
               </div>
             </div>
           );
@@ -157,7 +157,7 @@ export function InlinePaywallPromo({
       {/* No Risk Messaging */}
       <div className="flex items-center justify-center gap-2 mb-4 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
         <Shield className="w-4 h-4 text-green-600 flex-shrink-0" />
-        <span className="text-xs font-semibold text-green-700">
+        <span className="text-sm font-semibold text-green-700">
           No credit card required • Cancel anytime
         </span>
       </div>
@@ -172,7 +172,7 @@ export function InlinePaywallPromo({
         <ArrowRight className="w-4 h-4 ml-2" />
       </Button>
 
-      <p className="text-xs text-center text-muted-foreground mt-3">
+      <p className="text-sm text-center text-muted-foreground mt-3">
         Plans start at ${tierPricing.core.monthly}/mo • Try any tier free for 7 days
       </p>
     </Card>

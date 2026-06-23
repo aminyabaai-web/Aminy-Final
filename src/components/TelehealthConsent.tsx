@@ -539,7 +539,7 @@ export function TelehealthConsent({
           </Button>
         </div>
 
-        <p className="text-xs text-[#8A9BA8] text-center mt-4">
+        <p className="text-sm text-[#8A9BA8] text-center mt-4">
           By clicking "I Consent & Agree", you acknowledge that you have read, understood, and agree
           to all terms and conditions. A copy will be sent to your email.
         </p>
@@ -553,7 +553,7 @@ export function TelehealthConsent({
  */
 export function TelehealthMiniDisclaimer({ className = '' }: { className?: string }) {
   return (
-    <div className={`text-xs text-[#5A6B7A] ${className}`}>
+    <div className={`text-sm text-[#5A6B7A] ${className}`}>
       <p>
         Sessions are parent coaching, not medical treatment. Providers are independent professionals,
         not Aminy employees. By booking, you agree to our{' '}

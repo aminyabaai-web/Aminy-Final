@@ -302,7 +302,7 @@ export function ReferralLeaderboard({
             <button
               key={key}
               onClick={() => setRange(key)}
-              className={`flex-1 py-1.5 px-2 text-xs font-medium rounded-md transition-all ${
+              className={`flex-1 py-1.5 px-2 text-sm font-medium rounded-md transition-all ${
                 range === key
                   ? 'bg-white text-[#6B9080] shadow-sm'
                   : 'text-white/80 hover:text-white'
@@ -318,11 +318,11 @@ export function ReferralLeaderboard({
       {nextTierInfo && data.currentUserEntry && (
         <div className="mx-4 mt-3 p-3 rounded-xl bg-[#6B9080]/10 border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs font-medium text-[#6B9080]">
+            <span className="text-sm font-medium text-[#6B9080]">
               Next tier: {nextTierInfo.nextTier.badgeIcon}{' '}
               {nextTierInfo.nextTier.name}
             </span>
-            <span className="text-xs text-[#6B9080]">
+            <span className="text-sm text-[#6B9080]">
               {nextTierInfo.needed} more referral
               {nextTierInfo.needed !== 1 ? 's' : ''}
             </span>
@@ -399,7 +399,7 @@ export function ReferralLeaderboard({
                       />
                     </div>
                     {entry.tier && (
-                      <span className="text-xs text-[#5A6B7A]">
+                      <span className="text-sm text-[#5A6B7A]">
                         {entry.tier.badgeIcon} {entry.tier.name}
                       </span>
                     )}
@@ -410,7 +410,7 @@ export function ReferralLeaderboard({
                     <span className="font-bold text-sm text-[#1B2733]">
                       {entry.referralCount}
                     </span>
-                    <p className="text-xs text-[#8A9BA8]">
+                    <p className="text-sm text-[#8A9BA8]">
                       referral{entry.referralCount !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -440,7 +440,7 @@ export function ReferralLeaderboard({
                       <span className="font-bold text-sm text-[#1B2733]">
                         {data.currentUserEntry.referralCount}
                       </span>
-                      <p className="text-xs text-[#8A9BA8]">
+                      <p className="text-sm text-[#8A9BA8]">
                         referral
                         {data.currentUserEntry.referralCount !== 1 ? 's' : ''}
                       </p>

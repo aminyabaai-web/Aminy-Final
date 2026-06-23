@@ -577,12 +577,12 @@ export function CommunityForYou({
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{post.summary}</p>
-                <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-3 text-sm">
                   <span className="text-[#6B9080] dark:text-primary italic">
                     Why this for you: {post.whyForYou}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
                   {post.author && <span>By {post.author}</span>}
                   <span>{post.readTime} min read</span>
                 </div>
@@ -654,7 +654,7 @@ export function CommunityForYou({
                   {group.name}
                 </h4>
                 {group.isVirtual && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     <Video className="w-3 h-3 mr-1" />
                     Virtual
                   </Badge>
@@ -669,7 +669,7 @@ export function CommunityForYou({
               </div>
               <div className="flex flex-wrap gap-1 mb-3">
                 {group.topics.map((topic) => (
-                  <Badge key={topic} variant="secondary" className="text-xs">
+                  <Badge key={topic} variant="secondary" className="text-sm">
                     {topic}
                   </Badge>
                 ))}
@@ -754,7 +754,7 @@ export function CommunityForYou({
 
           <div className="flex flex-wrap gap-1 mb-3">
             {event.topics.map((topic) => (
-              <Badge key={topic} variant="outline" className="text-xs">
+              <Badge key={topic} variant="outline" className="text-sm">
                 {topic}
               </Badge>
             ))}
@@ -835,7 +835,7 @@ export function CommunityForYou({
           </div>
 
           <div className="flex items-center gap-2 mb-3">
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-sm">
               Strategy: {spotlight.strategyUsed}
             </Badge>
           </div>

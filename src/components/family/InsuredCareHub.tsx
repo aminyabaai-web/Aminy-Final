@@ -99,7 +99,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
           </div>
           <div className="flex-1">
             <p className="font-semibold text-[#1B2733] text-sm">Your Coverage</p>
-            <p className="text-xs text-[#5A6B7A]">{benefits.planName}</p>
+            <p className="text-sm text-[#5A6B7A]">{benefits.planName}</p>
           </div>
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
             benefits.networkStatus === 'in-network' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
@@ -115,8 +115,8 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
         {/* Deductible bar */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#5A6B7A]">Deductible</span>
-            <span className="text-xs text-[#5A6B7A]">
+            <span className="text-sm font-medium text-[#5A6B7A]">Deductible</span>
+            <span className="text-sm text-[#5A6B7A]">
               ${benefits.deductible.individualUsed.toLocaleString()} of ${benefits.deductible.individual.toLocaleString()} used
             </span>
           </div>
@@ -128,14 +128,14 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
               transition={{ duration: 0.8, ease: 'easeOut' }}
             />
           </div>
-          <p className="text-xs text-slate-400">${(benefits.deductible.individual - benefits.deductible.individualUsed).toLocaleString()} remaining before insurance pays more</p>
+          <p className="text-sm text-slate-400">${(benefits.deductible.individual - benefits.deductible.individualUsed).toLocaleString()} remaining before insurance pays more</p>
         </div>
 
         {/* Out-of-pocket bar */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-[#5A6B7A]">Out-of-Pocket Max</span>
-            <span className="text-xs text-[#5A6B7A]">
+            <span className="text-sm font-medium text-[#5A6B7A]">Out-of-Pocket Max</span>
+            <span className="text-sm text-[#5A6B7A]">
               ${benefits.outOfPocketMax.individualUsed.toLocaleString()} of ${benefits.outOfPocketMax.individual.toLocaleString()} used
             </span>
           </div>
@@ -184,7 +184,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
                           <AlertCircle className="w-3.5 h-3.5 text-red-400" />
                         )}
                       </div>
-                      <p className="text-xs text-[#5A6B7A] mt-0.5">
+                      <p className="text-sm text-[#5A6B7A] mt-0.5">
                         {item.data.covered
                           ? (() => {
                               const d = item.data as { covered: boolean; copay?: number; coinsurance?: number; requiresPriorAuth?: boolean };
@@ -220,7 +220,7 @@ function PriorAuthTracker() {
           </div>
           <div>
             <p className="font-semibold text-[#1B2733] text-sm">Prior Authorization — ABA Therapy</p>
-            <p className="text-xs text-[#5A6B7A]">Auth #PA-8X2K9M · 240 units approved</p>
+            <p className="text-sm text-[#5A6B7A]">Auth #PA-8X2K9M · 240 units approved</p>
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ function PriorAuthTracker() {
                     <p className={`text-sm font-medium ${isActive ? 'text-[#1B2733]' : isPast ? 'text-[#5A6B7A]' : 'text-slate-400'}`}>
                       {stage.label}
                     </p>
-                    <p className="text-xs text-slate-400">{stage.date}</p>
+                    <p className="text-sm text-slate-400">{stage.date}</p>
                   </div>
                   {isActive && (
                     <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Active</span>
@@ -269,7 +269,7 @@ function PriorAuthTracker() {
           <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mt-2">
             <div className="h-full rounded-full bg-emerald-500" style={{ width: '40%' }} />
           </div>
-          <p className="text-xs text-slate-400 mt-1.5">36 sessions remaining in this authorization period</p>
+          <p className="text-sm text-slate-400 mt-1.5">36 sessions remaining in this authorization period</p>
         </div>
       </div>
     </SectionCard>
@@ -286,7 +286,7 @@ function UpcomingSessionCosts() {
           </div>
           <div>
             <p className="font-semibold text-[#1B2733] text-sm">Upcoming Session Costs</p>
-            <p className="text-xs text-[#5A6B7A]">Estimated — final amounts may vary</p>
+            <p className="text-sm text-[#5A6B7A]">Estimated — final amounts may vary</p>
           </div>
         </div>
       </div>
@@ -298,12 +298,12 @@ function UpcomingSessionCosts() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-[#1B2733]">{session.type}</p>
-              <p className="text-xs text-[#5A6B7A]">{session.provider}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{session.date} at {session.time}</p>
+              <p className="text-sm text-[#5A6B7A]">{session.provider}</p>
+              <p className="text-sm text-slate-400 mt-0.5">{session.date} at {session.time}</p>
             </div>
             <div className="text-right shrink-0">
               <p className="text-base font-bold text-[#1B2733]">${session.estimatedCost}</p>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm text-slate-400">
                 {session.coinsurance ? session.coinsurance + ' coinsurance' : `$${session.copay} copay`}
               </p>
             </div>
@@ -330,7 +330,7 @@ function EOBTranslations() {
           </div>
           <div>
             <p className="font-semibold text-[#1B2733] text-sm">Recent Payments</p>
-            <p className="text-xs text-[#5A6B7A]">Plain-English EOB breakdown</p>
+            <p className="text-sm text-[#5A6B7A]">Plain-English EOB breakdown</p>
           </div>
         </div>
       </div>
@@ -340,17 +340,17 @@ function EOBTranslations() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-[#1B2733] capitalize">{item.service}</p>
-                <p className="text-xs text-slate-400">{item.date}</p>
+                <p className="text-sm text-slate-400">{item.date}</p>
               </div>
               <div className="text-right">
                 <p className="text-sm font-bold text-emerald-600">+${item.eraAmount}</p>
-                <p className="text-xs text-slate-400">insurance paid</p>
+                <p className="text-sm text-slate-400">insurance paid</p>
               </div>
             </div>
             <p className="text-sm text-[#5A6B7A] leading-relaxed">{item.translation.headline}</p>
-            <p className="text-xs text-[#5A6B7A]">{item.translation.detail}</p>
+            <p className="text-sm text-[#5A6B7A]">{item.translation.detail}</p>
             {item.translation.action && (
-              <p className="text-xs text-amber-600 font-medium">{item.translation.action}</p>
+              <p className="text-sm text-amber-600 font-medium">{item.translation.action}</p>
             )}
           </div>
         ))}
@@ -412,7 +412,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
           )}
           <div className="flex-1">
             <h1 className="font-bold text-[#1B2733]">Insurance Care Hub</h1>
-            <p className="text-xs text-[#5A6B7A]">{childName}'s benefits & coverage</p>
+            <p className="text-sm text-[#5A6B7A]">{childName}'s benefits & coverage</p>
           </div>
           {benefits && (
             <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
@@ -432,7 +432,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
+                className={`flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-semibold whitespace-nowrap transition-colors border-b-2 ${
                   activeTab === tab.id
                     ? 'border-[#6B9080] text-[#6B9080]'
                     : 'border-transparent text-slate-400 hover:text-[#5A6B7A]'

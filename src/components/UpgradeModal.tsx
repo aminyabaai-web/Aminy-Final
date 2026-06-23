@@ -106,7 +106,7 @@ export function UpgradeModal({
 
               {/* Value prop */}
               <div className="bg-[#6B9080]/10 rounded-xl px-3 py-2 mb-4">
-                <p className="text-xs font-medium text-[#6B9080]">
+                <p className="text-sm font-medium text-[#6B9080]">
                   {prompt.valueProp}
                 </p>
               </div>
@@ -123,7 +123,7 @@ export function UpgradeModal({
               {/* Maybe later */}
               <button
                 onClick={handleDismiss}
-                className="w-full text-center text-xs text-slate-400 mt-2.5 hover:text-[#5A6B7A] transition-colors py-1"
+                className="w-full text-center text-sm text-slate-400 mt-2.5 hover:text-[#5A6B7A] transition-colors py-1"
               >
                 Maybe later
               </button>

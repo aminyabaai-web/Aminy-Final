@@ -251,7 +251,7 @@ export function RoutineAdherenceTracker({
             <TrendingUp className="w-4 h-4 text-green-600" />
             <span className="text-xl sm:text-2xl font-bold text-green-600">{weeklyStats.adherence}%</span>
           </div>
-          <p className="text-xs text-[#5A6B7A]">This Week</p>
+          <p className="text-sm text-[#5A6B7A]">This Week</p>
         </Card>
 
         <Card className="p-4 text-center">
@@ -259,7 +259,7 @@ export function RoutineAdherenceTracker({
             <CheckCircle className="w-4 h-4 text-accent" />
             <span className="text-xl sm:text-2xl font-bold text-accent">{weeklyStats.completed}</span>
           </div>
-          <p className="text-xs text-[#5A6B7A]">Completed</p>
+          <p className="text-sm text-[#5A6B7A]">Completed</p>
         </Card>
 
         <Card className="p-4 text-center">
@@ -267,7 +267,7 @@ export function RoutineAdherenceTracker({
             <Flame className="w-4 h-4 text-orange-500" />
             <span className="text-xl sm:text-2xl font-bold text-orange-500">{weeklyStats.streak}</span>
           </div>
-          <p className="text-xs text-[#5A6B7A]">Day Streak</p>
+          <p className="text-sm text-[#5A6B7A]">Day Streak</p>
         </Card>
       </div>
 
@@ -279,7 +279,7 @@ export function RoutineAdherenceTracker({
         </div>
         <Progress value={weeklyStats.adherence} className="h-2" />
         {weeklyStats.adherence >= 80 && (
-          <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+          <p className="text-sm text-green-600 mt-2 flex items-center gap-1">
             <Flame className="w-3 h-3" />
             Amazing consistency! Keep it up!
           </p>
@@ -346,7 +346,7 @@ export function RoutineAdherenceTracker({
                               {routine.name}
                             </span>
                             {isCompleted && completion?.delay_minutes && completion.delay_minutes > 15 && (
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="secondary" className="text-sm">
                                 {completion.delay_minutes}m late
                               </Badge>
                             )}
@@ -363,7 +363,7 @@ export function RoutineAdherenceTracker({
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="text-xs"
+                              className="text-sm"
                               onClick={() => handleMarkComplete(routine, 'partial')}
                             >
                               Partial
@@ -371,7 +371,7 @@ export function RoutineAdherenceTracker({
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="text-xs text-slate-400"
+                              className="text-sm text-slate-400"
                               onClick={() => handleMarkComplete(routine, 'skipped')}
                             >
                               Skip

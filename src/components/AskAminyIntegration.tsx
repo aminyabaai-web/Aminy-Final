@@ -82,7 +82,7 @@ export function AskAminyComparison({
   return (
     <div className="fixed bottom-4 right-4 flex flex-col gap-3 sm:gap-4 z-30">
       <div className="relative">
-        <div className="absolute -top-8 right-0 text-xs bg-black text-white px-2 py-1 rounded">
+        <div className="absolute -top-8 right-0 text-sm bg-black text-white px-2 py-1 rounded">
           Enhanced
         </div>
         <FloatingAskAminyEnhanced
@@ -98,7 +98,7 @@ export function AskAminyComparison({
       </div>
       
       <div className="relative">
-        <div className="absolute -top-8 right-0 text-xs bg-gray-600 text-white px-2 py-1 rounded">
+        <div className="absolute -top-8 right-0 text-sm bg-gray-600 text-white px-2 py-1 rounded">
           Original
         </div>
         <FloatingAskAminy

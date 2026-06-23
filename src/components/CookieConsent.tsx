@@ -149,21 +149,21 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
         <div className="flex items-center gap-1.5 flex-shrink-0" style={{ marginLeft: 'auto' }}>
           <button
             onClick={() => setShowDetails(d => !d)}
-            className="px-2.5 py-1 text-xs font-medium text-primary underline"
+            className="px-2.5 py-1 text-sm font-medium text-primary underline"
           >
             {showDetails ? 'Hide' : 'Customize'}
           </button>
           <button
             onClick={handleDecline}
             style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
-            className={`rounded-md text-xs font-medium border transition-colors ${isDark ? 'text-slate-300 border-slate-700 hover:border-slate-500' : 'text-gray-600 border-gray-300 hover:border-gray-400'}`}
+            className={`rounded-md text-sm font-medium border transition-colors ${isDark ? 'text-slate-300 border-slate-700 hover:border-slate-500' : 'text-gray-600 border-gray-300 hover:border-gray-400'}`}
           >
             Essential only
           </button>
           <button
             onClick={showDetails ? handleAcceptSelected : handleAcceptAll}
             style={{ padding: '7px 16px', whiteSpace: 'nowrap' }}
-            className="rounded-md text-xs font-medium bg-primary text-white hover:bg-primary transition-colors"
+            className="rounded-md text-sm font-medium bg-primary text-white hover:bg-primary transition-colors"
           >
             {showDetails ? 'Save' : 'Accept all'}
           </button>

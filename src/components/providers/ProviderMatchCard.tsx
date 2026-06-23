@@ -47,24 +47,24 @@ export function ProviderMatchCard({ providers, onBookProvider }: ProviderMatchCa
                                 <h5 className="font-semibold text-[#1B2733] leading-tight">
                                     {provider.first_name} {provider.last_name}
                                 </h5>
-                                <p className="text-xs text-[#5A6B7A] font-medium">{provider.title}</p>
+                                <p className="text-sm text-[#5A6B7A] font-medium">{provider.title}</p>
                                 <div className="flex items-center gap-1 mt-1">
                                     <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                                    <span className="text-xs font-medium text-[#3A4A57]">{provider.rating.toFixed(1)}</span>
+                                    <span className="text-sm font-medium text-[#3A4A57]">{provider.rating.toFixed(1)}</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-2 mb-4">
-                            <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                                 <Video className="w-3.5 h-3.5 text-slate-400" />
                                 <span>Telehealth Available</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                                 <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
                                 <span>In-Network Match</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                            <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                                 <Calendar className="w-3.5 h-3.5 text-slate-400" />
                                 <span className="text-emerald-600 font-medium">Usually available in 24h</span>
                             </div>

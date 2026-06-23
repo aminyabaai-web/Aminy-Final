@@ -122,7 +122,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <DollarSign className="w-4 h-4 text-emerald-600" />
-            <span className="text-xs font-semibold text-emerald-800">This Week</span>
+            <span className="text-sm font-semibold text-emerald-800">This Week</span>
           </div>
           <div className="text-right">
             <p className="text-base font-bold text-emerald-900">{fmt(data.thisWeekBilled)}</p>
@@ -217,8 +217,8 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
         <div className="flex items-center gap-2 rounded-xl bg-[#EEF4F8] border border-blue-100 p-3">
           <Clock className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
           <div>
-            <p className="text-xs font-medium text-[#4A6478]">Expected next deposit</p>
-            <p className="text-xs text-blue-700">
+            <p className="text-sm font-medium text-[#4A6478]">Expected next deposit</p>
+            <p className="text-sm text-blue-700">
               {data.nextDepositDate} — {fmt(data.nextDepositAmount)} (pending clean claims)
             </p>
           </div>

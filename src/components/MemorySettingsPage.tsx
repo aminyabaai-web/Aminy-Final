@@ -290,18 +290,18 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
               </p>
 
               <div className="flex items-center gap-2 mt-2 ml-6 flex-wrap">
-                <Badge variant="outline" className={`text-xs ${getScopeColor(memory.scope)}`}>
+                <Badge variant="outline" className={`text-sm ${getScopeColor(memory.scope)}`}>
                   {memory.scope}
                 </Badge>
-                <Badge variant="outline" className={`text-xs ${confidenceBadge.color}`}>
+                <Badge variant="outline" className={`text-sm ${confidenceBadge.color}`}>
                   {confidenceBadge.label}
                 </Badge>
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                <span className="text-sm text-muted-foreground flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {formatDate(memory.last_used_at || memory.created_at)}
                 </span>
                 {memory.salience > 0.8 && (
-                  <Badge variant="outline" className="text-xs bg-accent/10 text-accent border-accent/20">
+                  <Badge variant="outline" className="text-sm bg-accent/10 text-accent border-accent/20">
                     <TrendingUp className="w-3 h-3 mr-1" />
                     High importance
                   </Badge>
@@ -345,7 +345,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
           <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
             {/* Why Saved */}
             <div>
-              <p className="text-xs font-medium text-muted-foreground mb-1 flex items-center gap-1">
+              <p className="text-sm font-medium text-muted-foreground mb-1 flex items-center gap-1">
                 <Info className="w-3 h-3" />
                 Why this was saved
               </p>
@@ -355,7 +355,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
             {/* Full Value (if editing) */}
             {isEditing ? (
               <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Edit value</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Edit value</p>
                 <Textarea
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
@@ -384,9 +384,9 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
               </div>
             ) : (
               <div>
-                <p className="text-xs font-medium text-muted-foreground mb-1">Full value</p>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Full value</p>
                 <div className="bg-white border border-[#E8E4DF] rounded p-2">
-                  <pre className="text-xs whitespace-pre-wrap">
+                  <pre className="text-sm whitespace-pre-wrap">
                     {typeof memory.value === 'string' 
                       ? memory.value 
                       : JSON.stringify(memory.value, null, 2)
@@ -397,7 +397,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
             )}
 
             {/* Metadata */}
-            <div className="grid grid-cols-2 gap-3 text-xs">
+            <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
                 <p className="text-muted-foreground">Created</p>
                 <p className="font-medium">{formatDate(memory.created_at)}</p>
@@ -458,7 +458,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
                   <p className="font-medium">
                     {memoryEnabled ? 'Memory saving is on' : 'Memory saving is paused'}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm text-muted-foreground">
                     {memoryEnabled 
                       ? 'Aminy is learning from your conversations'
                       : 'Aminy won\'t save new information until you turn this back on'
@@ -495,7 +495,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
                 >
                   {scope}
                   {scope !== 'all' && (
-                    <Badge variant="secondary" className="ml-2 text-xs">
+                    <Badge variant="secondary" className="ml-2 text-sm">
                       {groupedMemories[scope].length}
                     </Badge>
                   )}

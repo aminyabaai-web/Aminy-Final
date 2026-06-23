@@ -455,7 +455,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                           key={target.key}
                           type="button"
                           onClick={() => moveCard(card.id, target.key)}
-                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-xs text-[#5A6B7A] active:scale-95"
+                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-sm text-[#5A6B7A] active:scale-95"
                         >
                           {target.emoji}
                         </button>
@@ -463,7 +463,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                       <button
                         type="button"
                         onClick={() => removeCard(card.id)}
-                        className="ml-auto rounded-lg bg-red-50 px-2 py-0.5 text-xs text-red-400"
+                        className="ml-auto rounded-lg bg-red-50 px-2 py-0.5 text-sm text-red-400"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>

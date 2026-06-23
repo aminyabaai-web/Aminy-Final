@@ -220,7 +220,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
             </div>
             <div>
               <h1 className="text-sm font-semibold text-[#1B2733]">Setting up your profile</h1>
-              <p className="text-xs text-[#8E9BAA]">
+              <p className="text-sm text-[#8E9BAA]">
                 Step {Math.min(currentStep + 1, ONBOARDING_QUESTIONS.length)} of {ONBOARDING_QUESTIONS.length}
               </p>
             </div>

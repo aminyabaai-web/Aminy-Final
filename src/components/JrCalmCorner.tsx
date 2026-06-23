@@ -313,7 +313,7 @@ export function JrCalmCorner({
         <div>
           <h1 className="text-lg font-bold text-indigo-800">🫧 Calm Corner</h1>
           {autoTriggered && (
-            <p className="text-xs text-indigo-500">{buddyName} thinks you need a break</p>
+            <p className="text-sm text-indigo-500">{buddyName} thinks you need a break</p>
           )}
         </div>
       </div>
@@ -349,7 +349,7 @@ export function JrCalmCorner({
                     className={`${emotion.color} border-2 rounded-2xl p-3 flex flex-col items-center gap-1 transition-shadow hover:shadow-md`}
                   >
                     <span className="text-3xl">{emotion.emoji}</span>
-                    <span className="text-xs font-medium text-[#3A4A57]">{emotion.label}</span>
+                    <span className="text-sm font-medium text-[#3A4A57]">{emotion.label}</span>
                   </motion.button>
                 ))}
               </div>
@@ -379,7 +379,7 @@ export function JrCalmCorner({
                   >
                     <span className="text-3xl block mb-2">{activity.emoji}</span>
                     <p className="font-semibold text-[#1B2733] text-sm">{activity.label}</p>
-                    <p className="text-xs text-[#5A6B7A]">{activity.desc}</p>
+                    <p className="text-sm text-[#5A6B7A]">{activity.desc}</p>
                   </motion.button>
                 ))}
               </div>
@@ -697,7 +697,7 @@ export function JrCalmCorner({
                     className={`${emotion.color} border-2 rounded-2xl p-3 flex flex-col items-center gap-1 transition-shadow hover:shadow-md`}
                   >
                     <span className="text-3xl">{emotion.emoji}</span>
-                    <span className="text-xs font-medium text-[#3A4A57]">{emotion.label}</span>
+                    <span className="text-sm font-medium text-[#3A4A57]">{emotion.label}</span>
                   </motion.button>
                 ))}
               </div>

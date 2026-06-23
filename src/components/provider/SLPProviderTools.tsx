@@ -242,7 +242,7 @@ function LanguageSampleAnalysis() {
             </div>
           ))}
         </div>
-        <div className="flex justify-between text-xs text-[#5A6B7A] mt-2">
+        <div className="flex justify-between text-sm text-[#5A6B7A] mt-2">
           <span>Baseline</span>
           <span>Current MLU: <strong className="text-violet-700">{history[0]?.mlu ?? '—'}</strong></span>
         </div>
@@ -657,7 +657,7 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50'
                   : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'

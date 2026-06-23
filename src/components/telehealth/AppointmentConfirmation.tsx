@@ -316,14 +316,14 @@ export function AppointmentConfirmationScreen({
         <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </span>
-        <span className="text-xs font-medium text-green-600 hidden sm:inline">Tell us more</span>
+        <span className="text-sm font-medium text-green-600 hidden sm:inline">Tell us more</span>
       </div>
       <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
       <div className="flex items-center gap-1.5">
         <span className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
           <Check className="w-3 h-3 text-white" />
         </span>
-        <span className="text-xs font-medium text-green-600 hidden sm:inline">Choose provider</span>
+        <span className="text-sm font-medium text-green-600 hidden sm:inline">Choose provider</span>
       </div>
       <ChevronRight className="w-4 h-4 text-[#8A9BA8]" aria-hidden="true" />
       <div className="flex items-center gap-1.5">
@@ -334,7 +334,7 @@ export function AppointmentConfirmationScreen({
         }`}>
           {currentPhase === 'success' ? <Check className="w-3 h-3" /> : '3'}
         </span>
-        <span className={`text-xs font-medium ${
+        <span className={`text-sm font-medium ${
           currentPhase === 'success' ? 'text-green-600' : 'text-[#6B9080]'
         }`}>
           {currentPhase === 'confirm' ? 'Confirm' : currentPhase === 'payment' ? 'Payment' : 'Booked'}
@@ -626,9 +626,9 @@ export function AppointmentConfirmationScreen({
 
             <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
               <div className="flex -space-x-1">
-                <div className="w-8 h-5 bg-blue-600 rounded text-white text-xs flex items-center justify-center font-bold">VISA</div>
-                <div className="w-8 h-5 bg-red-500 rounded text-white text-xs flex items-center justify-center font-bold">MC</div>
-                <div className="w-8 h-5 bg-blue-400 rounded text-white text-xs flex items-center justify-center font-bold">AMEX</div>
+                <div className="w-8 h-5 bg-blue-600 rounded text-white text-sm flex items-center justify-center font-bold">VISA</div>
+                <div className="w-8 h-5 bg-red-500 rounded text-white text-sm flex items-center justify-center font-bold">MC</div>
+                <div className="w-8 h-5 bg-blue-400 rounded text-white text-sm flex items-center justify-center font-bold">AMEX</div>
               </div>
               <span>and more</span>
             </div>

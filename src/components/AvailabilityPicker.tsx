@@ -302,14 +302,14 @@ function DateSelector({
               }`}
               style={{ scrollSnapAlign: 'start' }}
             >
-              <div className={`text-xs font-medium ${isSelected ? 'text-teal-100' : 'text-[#5A6B7A]'}`}>
+              <div className={`text-sm font-medium ${isSelected ? 'text-teal-100' : 'text-[#5A6B7A]'}`}>
                 {isToday(day.date) ? 'Today' : isTomorrow(day.date) ? 'Tmrw' : formatDayOfWeek(day.date)}
               </div>
               <div className={`text-lg font-bold ${isSelected ? 'text-white' : hasAvailability ? 'text-[#1B2733]' : 'text-[#8A9BA8]'}`}>
                 {formatDayNumber(day.date)}
               </div>
               {hasAvailability && (
-                <div className={`text-xs ${isSelected ? 'text-teal-100' : 'text-[#6B9080]'}`}>
+                <div className={`text-sm ${isSelected ? 'text-teal-100' : 'text-[#6B9080]'}`}>
                   {availableCount} slots
                 </div>
               )}

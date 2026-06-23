@@ -269,35 +269,35 @@ export function ReferralDashboard({
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <Mail className="w-5 h-5 mb-1" />
-                <span className="text-xs">Email</span>
+                <span className="text-sm">Email</span>
               </button>
               <button
                 onClick={handleSmsShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <MessageCircle className="w-5 h-5 mb-1" />
-                <span className="text-xs">Text</span>
+                <span className="text-sm">Text</span>
               </button>
               <button
                 onClick={handleTwitterShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <X className="w-5 h-5 mb-1" />
-                <span className="text-xs">X</span>
+                <span className="text-sm">X</span>
               </button>
               <button
                 onClick={handleFacebookShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <Share2 className="w-5 h-5 mb-1" />
-                <span className="text-xs">Facebook</span>
+                <span className="text-sm">Facebook</span>
               </button>
               <button
                 onClick={handleQrShare}
                 className="flex flex-col items-center p-3 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
               >
                 <QrCode className="w-5 h-5 mb-1" />
-                <span className="text-xs">QR Code</span>
+                <span className="text-sm">QR Code</span>
               </button>
             </div>
             {/* Native share button for mobile */}
@@ -470,7 +470,7 @@ export function ReferralDashboard({
                     <span className="text-lg">{tier.badgeIcon}</span>
                     <span className="font-medium text-[#1B2733]">{tier.name}</span>
                     {isCurrentTier && (
-                      <Badge className="bg-primary text-white text-xs">Current</Badge>
+                      <Badge className="bg-primary text-white text-sm">Current</Badge>
                     )}
                     {isUnlocked && !isCurrentTier && (
                       <CheckCircle className="w-4 h-4 text-green-500" />

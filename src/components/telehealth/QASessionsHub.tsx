@@ -536,7 +536,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
           <Play className="w-6 h-6 text-white fill-current ml-1" />
         </button>
         {session.replayDuration && (
-          <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-white">
+          <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-sm text-white">
             {session.replayDuration} min
           </div>
         )}
@@ -585,7 +585,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
             </span>
           ))}
           {session.topics.length > 3 && (
-            <span className="px-2 py-0.5 text-[#8A9BA8] text-xs">
+            <span className="px-2 py-0.5 text-[#8A9BA8] text-sm">
               +{session.topics.length - 3} more
             </span>
           )}

@@ -474,7 +474,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                         </span>
                       )}
                     </div>
-                    <div className="grid grid-cols-3 gap-2 text-xs text-[#5A6B7A] mb-2">
+                    <div className="grid grid-cols-3 gap-2 text-sm text-[#5A6B7A] mb-2">
                       <div>
                         <p>Direct</p>
                         <p className="font-semibold text-[#1B2733]">{rbt.totalDirectHours.toFixed(1)}h</p>

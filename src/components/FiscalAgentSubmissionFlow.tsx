@@ -251,7 +251,7 @@ export function FiscalAgentSubmissionFlow({
           </div>
         </div>
         <Progress value={(step / 4) * 100} className="h-2" />
-        <div className="flex justify-between text-xs text-[#5A6B7A] mt-1">
+        <div className="flex justify-between text-sm text-[#5A6B7A] mt-1">
           <span>Select Hours</span>
           <span>Review</span>
           <span>Submit</span>
@@ -356,11 +356,11 @@ export function FiscalAgentSubmissionFlow({
                               <span className="font-medium text-[#1B2733]">
                                 {service.description}
                               </span>
-                              <Badge variant="outline" className="text-xs">
+                              <Badge variant="outline" className="text-sm">
                                 {formatDuration(hours)}
                               </Badge>
                             </div>
-                            <div className="text-xs text-[#5A6B7A]">
+                            <div className="text-sm text-[#5A6B7A]">
                               {new Date(entry.clockIn).toLocaleDateString()} •{' '}
                               {new Date(entry.clockIn).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
                               {entry.clockOut
@@ -471,13 +471,13 @@ export function FiscalAgentSubmissionFlow({
                       <div key={code} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
                         <div>
                           <div className="font-medium text-[#1B2733]">{service.description}</div>
-                          <div className="text-xs text-[#5A6B7A]">
+                          <div className="text-sm text-[#5A6B7A]">
                             Code: {service.code} • {data.count} entries
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-[#1B2733]">{formatDuration(data.hours)}</div>
-                          <div className="text-xs text-green-600">
+                          <div className="text-sm text-green-600">
                             ${minPay.toFixed(0)} - ${maxPay.toFixed(0)}
                           </div>
                         </div>
@@ -490,7 +490,7 @@ export function FiscalAgentSubmissionFlow({
                     <div className="font-semibold text-[#6B9080]">Total</div>
                     <div className="text-right">
                       <div className="font-bold text-[#6B9080]">{formatDuration(totalSelectedHours)}</div>
-                      <div className="text-xs text-[#6B9080]">
+                      <div className="text-sm text-[#6B9080]">
                         {selectedEntries.size} entries
                       </div>
                     </div>
@@ -514,7 +514,7 @@ export function FiscalAgentSubmissionFlow({
                       <div className="flex-1">
                         <div className="font-medium flex items-center gap-2 text-[#5A6B7A]">
                           Direct Electronic Submission
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">Coming soon</Badge>
+                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">Coming soon</Badge>
                         </div>
                         <div className="text-sm text-[#5A6B7A]">
                           Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
@@ -638,7 +638,7 @@ export function FiscalAgentSubmissionFlow({
                       <FileText className="w-5 h-5 text-red-500" />
                       <div className="text-left">
                         <div className="font-medium">Weekly Summary</div>
-                        <div className="text-xs text-[#5A6B7A]">
+                        <div className="text-sm text-[#5A6B7A]">
                           {formatDuration(totalSelectedHours)} • {selectedEntries.size} entries
                         </div>
                       </div>
@@ -654,7 +654,7 @@ export function FiscalAgentSubmissionFlow({
                       <FileText className="w-5 h-5 text-blue-500" />
                       <div className="text-left">
                         <div className="font-medium">Service Notes</div>
-                        <div className="text-xs text-[#5A6B7A]">
+                        <div className="text-sm text-[#5A6B7A]">
                           {serviceNotes.length} notes with caregiver signature
                         </div>
                       </div>
@@ -670,7 +670,7 @@ export function FiscalAgentSubmissionFlow({
                       <DollarSign className="w-5 h-5 text-green-500" />
                       <div className="text-left">
                         <div className="font-medium">Superbill (HSA/FSA)</div>
-                        <div className="text-xs text-[#5A6B7A]">
+                        <div className="text-sm text-[#5A6B7A]">
                           For reimbursement submissions
                         </div>
                       </div>

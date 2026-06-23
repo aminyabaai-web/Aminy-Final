@@ -226,7 +226,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Quality</h3>
-            <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
+            <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
               Verification status, satisfaction, and outcomes for payors
             </p>
           </div>
@@ -258,21 +258,21 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
                 <div className="text-2xl font-bold text-green-700 dark:text-green-300">
                   {verificationCounts.verified}
                 </div>
-                <div className="text-xs text-green-600 dark:text-green-400">Verified</div>
+                <div className="text-sm text-green-600 dark:text-green-400">Verified</div>
               </div>
               <div className="text-center p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                 <Clock className="w-5 h-5 text-amber-600 mx-auto mb-1" />
                 <div className="text-2xl font-bold text-amber-700 dark:text-amber-300">
                   {verificationCounts.pending}
                 </div>
-                <div className="text-xs text-amber-600 dark:text-amber-400">Pending</div>
+                <div className="text-sm text-amber-600 dark:text-amber-400">Pending</div>
               </div>
               <div className="text-center p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
                 <AlertTriangle className="w-5 h-5 text-rose-600 mx-auto mb-1" />
                 <div className="text-2xl font-bold text-rose-700 dark:text-rose-300">
                   {verificationCounts.rejected}
                 </div>
-                <div className="text-xs text-rose-600 dark:text-rose-400">Rejected</div>
+                <div className="text-sm text-rose-600 dark:text-rose-400">Rejected</div>
               </div>
             </div>
           </div>
@@ -283,7 +283,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
               <Star className="w-4 h-4 text-amber-500" />
               Provider Satisfaction NPS
               {providerNPSRows.length === 0 && (
-                <span className="text-xs font-normal text-[#8A9BA8] ml-1">(no responses yet)</span>
+                <span className="text-sm font-normal text-[#8A9BA8] ml-1">(no responses yet)</span>
               )}
             </h4>
             {providerNPSRows.length === 0 ? (
@@ -352,14 +352,14 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
                   <div className="text-2xl font-bold text-[#1B2733] dark:text-white">
                     {outcomes?.totalSessions ?? 0}
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Completed</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Completed</div>
                 </div>
                 <div className="text-center p-3 bg-[#EEF4F8] dark:bg-slate-800 rounded-lg">
                   <Target className="w-4 h-4 text-violet-600 mx-auto mb-1" />
                   <div className="text-2xl font-bold text-[#1B2733] dark:text-white">
                     {goalAttainmentRate !== null ? `${goalAttainmentRate}%` : '—'}
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Goal Attainment</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Goal Attainment</div>
                 </div>
                 <div className="text-center p-3 bg-[#EEF4F8] dark:bg-slate-800 rounded-lg">
                   <Star className="w-4 h-4 text-amber-500 mx-auto mb-1" />
@@ -368,7 +368,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
                       ? outcomes.consumerNPS
                       : '—'}
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Family NPS</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Family NPS</div>
                 </div>
               </div>
             )}
