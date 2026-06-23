@@ -157,7 +157,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       <div className="mt-0.5 text-2xl">{style.icon}</div>
                       <div className="flex-1">
                         <h3 className={`text-sm font-bold ${style.text}`}>{focus.title}</h3>
-                        <p className="mt-1 text-xs leading-relaxed text-[#5A6B7A]">
+                        <p className="mt-1 text-sm leading-relaxed text-[#5A6B7A]">
                           {focus.description}
                         </p>
                         <div className="mt-3 flex flex-wrap gap-1.5">

@@ -174,7 +174,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No sessions logged yet</p>
-        <p className="text-xs text-slate-400 mt-1">Tap + to log your first session</p>
+        <p className="text-sm text-slate-400 mt-1">Tap + to log your first session</p>
       </div>
     );
   }
@@ -190,7 +190,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-[#1B2733]">{s.clientName}</div>
-              <div className="text-xs text-[#5A6B7A]">
+              <div className="text-sm text-[#5A6B7A]">
                 {s.date} &middot; {s.startTime}-{s.endTime} &middot; {s.sessionType}
               </div>
             </div>
@@ -232,7 +232,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
           {/* Flag for BCBA */}
           {s.bcbaFlagReason && (
             <div className="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
-              <div className="flex items-center gap-1 text-xs text-amber-700">
+              <div className="flex items-center gap-1 text-sm text-amber-700">
                 <MessageSquare className="w-3 h-3" />
                 <span className="font-medium">Flagged:</span> {s.bcbaFlagReason}
               </div>
@@ -266,10 +266,10 @@ function ReviewQueue({
             <div key={s.id} className="bg-red-50 rounded-xl p-3 border border-red-200 mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-[#1B2733]">{s.clientName}</span>
-                <span className="text-xs text-[#5A6B7A]">{s.date}</span>
+                <span className="text-sm text-[#5A6B7A]">{s.date}</span>
               </div>
               {s.bcbaFlagReason && (
-                <p className="text-xs text-red-700 mt-1">{s.bcbaFlagReason}</p>
+                <p className="text-sm text-red-700 mt-1">{s.bcbaFlagReason}</p>
               )}
             </div>
           ))}
@@ -285,7 +285,7 @@ function ReviewQueue({
           <div className="text-center py-8">
             <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
             <p className="text-sm text-[#5A6B7A]">All caught up!</p>
-            <p className="text-xs text-slate-400">No sessions awaiting review</p>
+            <p className="text-sm text-slate-400">No sessions awaiting review</p>
           </div>
         )}
         {pending.map((s) => (
