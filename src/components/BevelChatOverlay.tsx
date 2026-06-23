@@ -1569,15 +1569,55 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <div className="ml-8 mt-1 flex items-center gap-1">
                         <button
                           onClick={() => {
-                            navigator.clipboard.writeText(msg.content).then(() => {
+                            const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '');
+                            navigator.clipboard.writeText(stripHtml(msg.content)).then(() => {
                               toast.success('Copied to clipboard', { duration: 1500 });
                             });
                           }}
                           className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           title="Copy message"
+                          aria-label="Copy message to clipboard"
                         >
                           <Copy className="w-3 h-3" />
                           <span>Copy</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            setMessageRatings(prev => ({ ...prev, [msg.id]: 'up' }));
+                            try {
+                              fetch('/ai/feedback', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ messageId: msg.id, rating: 'up' }),
+                              }).catch(() => {});
+                            } catch { /* ignore */ }
+                          }}
+                          className="inline-flex items-center justify-center w-6 h-6 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          aria-label="Rate this response as helpful"
+                        >
+                          <ThumbsUp
+                            className="w-3.5 h-3.5"
+                            style={messageRatings[msg.id] === 'up' ? { fill: '#43AA8B', color: '#43AA8B' } : undefined}
+                          />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setMessageRatings(prev => ({ ...prev, [msg.id]: 'down' }));
+                            try {
+                              fetch('/ai/feedback', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ messageId: msg.id, rating: 'down' }),
+                              }).catch(() => {});
+                            } catch { /* ignore */ }
+                          }}
+                          className="inline-flex items-center justify-center w-6 h-6 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          aria-label="Rate this response as unhelpful"
+                        >
+                          <ThumbsDown
+                            className="w-3.5 h-3.5"
+                            style={messageRatings[msg.id] === 'down' ? { fill: '#E07A5F', color: '#E07A5F' } : undefined}
+                          />
                         </button>
                       </div>
                     )}
