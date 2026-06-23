@@ -487,8 +487,8 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                     <div className="flex items-start gap-1.5">
                       <AlertCircle className="w-3.5 h-3.5 text-red-500 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-xs font-medium text-red-700">Claim denied by insurance</p>
-                        <p className="text-xs text-red-600 mt-0.5">Contact your provider to request a resubmission or appeal</p>
+                        <p className="text-sm font-medium text-red-700">Claim denied by insurance</p>
+                        <p className="text-sm text-red-600 mt-0.5">Contact your provider to request a resubmission or appeal</p>
                       </div>
                     </div>
                   </div>
@@ -503,8 +503,8 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       <div className="flex items-start gap-2 p-3 bg-[#6B9080]/10 rounded-xl border border-[#E8E4DF]">
         <Info className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
         <div>
-          <p className="text-xs font-medium text-[#6B9080]">Paying out-of-pocket?</p>
-          <p className="text-xs text-[#6B9080] mt-0.5">
+          <p className="text-sm font-medium text-[#6B9080]">Paying out-of-pocket?</p>
+          <p className="text-sm text-[#6B9080] mt-0.5">
             Use the Superbill tab to generate documentation you can submit to your insurance for reimbursement.
           </p>
         </div>

@@ -68,7 +68,8 @@ import {
   Briefcase,
   Download,
   Printer,
-  CreditCard
+  CreditCard,
+  Mail
 } from 'lucide-react';
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
@@ -102,6 +103,7 @@ import {
 } from '../lib/superbill-service';
 import type { Superbill } from '../types/telehealth';
 import { NPSSurveyModal } from './NPSSurveyModal';
+import { CommunicationTemplates } from './CommunicationTemplates';
 
 // Lazy-load the SuperbillGenerator for the provider-side superbill overlay
 const SuperbillGenerator = React.lazy(() => import('./SuperbillGenerator'));
@@ -2681,11 +2683,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <div className="grid grid-cols-2 gap-3 min-w-[220px]">
                     <div className="rounded-xl bg-[#6B9080]/10 dark:bg-[#6B9080]/10 p-3">
-                      <p className="text-xs text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
+                      <p className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
                       <p className="text-2xl font-semibold text-[#6B9080] dark:text-[#7BA7BC]">{practiceSummary.readinessScore}%</p>
                     </div>
                     <div className="rounded-xl bg-violet-50 dark:bg-violet-900/20 p-3">
-                      <p className="text-xs text-violet-700 dark:text-violet-300">Monthly range</p>
+                      <p className="text-sm text-violet-700 dark:text-violet-300">Monthly range</p>
                       <p className="text-sm font-semibold text-violet-700 dark:text-violet-300">${practiceSummary.monthlyRevenueRange.low.toLocaleString()} - ${practiceSummary.monthlyRevenueRange.high.toLocaleString()}</p>
                     </div>
                   </div>
