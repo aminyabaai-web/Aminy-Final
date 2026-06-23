@@ -580,7 +580,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             {/* Category & Evidence */}
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{CATEGORY_ICONS[playbook.category]}</span>
-              <span className="text-xs text-[#5A6B7A]">{CATEGORY_LABELS[playbook.category]}</span>
+              <span className="text-sm text-[#5A6B7A]">{CATEGORY_LABELS[playbook.category]}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full ${evidenceBadgeColors[playbook.evidenceLevel]}`}>
                 {evidenceLabels[playbook.evidenceLevel]}
               </span>
@@ -653,7 +653,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
         </button>
 
         {playbook.citations && playbook.citations.length > 0 && (
-          <span className="text-xs text-[#8A9BA8] flex items-center gap-1">
+          <span className="text-sm text-[#8A9BA8] flex items-center gap-1">
             <ExternalLink className="w-3 h-3" />
             {playbook.citations.length} citations
           </span>

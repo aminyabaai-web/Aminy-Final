@@ -276,7 +276,7 @@ export function PriorAuthTracker({
                 <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
                 <p className="text-sm font-medium text-red-800 dark:text-red-200">Appeal options</p>
               </div>
-              <ul className="text-xs text-red-700 dark:text-red-300 space-y-1 ml-6 list-disc">
+              <ul className="text-sm text-red-700 dark:text-red-300 space-y-1 ml-6 list-disc">
                 <li>Request a peer-to-peer review — BCBA speaks directly with plan's medical director</li>
                 <li>Submit updated clinical documentation (ADOS-2, Vineland-3)</li>
                 <li>File a formal appeal within 60 days of denial letter</li>
@@ -293,7 +293,7 @@ export function PriorAuthTracker({
                 <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
                   Ready to start ABA therapy!
                 </p>
-                <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-0.5">
+                <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-0.5">
                   Your prior authorization is approved. Contact your ABA provider to schedule the first session.
                 </p>
               </div>
@@ -309,7 +309,7 @@ export function PriorAuthTracker({
                   Don't wait {timeline ? `~${timeline.estimatedDays} days` : 'weeks'} — start today
                 </p>
               </div>
-              <p className="text-xs text-amber-700 dark:text-amber-300">
+              <p className="text-sm text-amber-700 dark:text-amber-300">
                 Many families pay cash for the first sessions while prior auth processes. Some payers allow retroactive billing once approved — ask your ABA provider.
               </p>
               {onStartCashPay && (
@@ -327,7 +327,7 @@ export function PriorAuthTracker({
           {onLearnMore && (
             <button
               onClick={onLearnMore}
-              className="text-xs text-[#6B9080] hover:underline"
+              className="text-sm text-[#6B9080] hover:underline"
             >
               Learn more about prior authorization →
             </button>

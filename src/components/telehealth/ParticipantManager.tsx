@@ -203,7 +203,7 @@ function ParticipantTile({
             </span>
 
             {participant.screenShare && (
-              <span className="inline-flex items-center text-xs text-emerald-600">
+              <span className="inline-flex items-center text-sm text-emerald-600">
                 <Monitor className="w-3 h-3 mr-0.5" />
                 Sharing
               </span>
@@ -211,7 +211,7 @@ function ParticipantTile({
           </div>
 
           {participant.joinedAt && (
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-sm text-slate-400 mt-0.5">
               Joined {formatJoinTime(participant.joinedAt)}
             </p>
           )}
@@ -421,7 +421,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
           {/* Info note */}
           <div className="flex items-start gap-2 p-3 bg-[#EEF4F8] rounded-lg">
             <Shield className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-            <p className="text-xs text-blue-700">
+            <p className="text-sm text-blue-700">
               Only invited participants with valid links can join this encrypted, secure
               session. Links expire when the session ends.
             </p>

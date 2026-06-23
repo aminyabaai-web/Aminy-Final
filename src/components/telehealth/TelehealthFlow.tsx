@@ -368,7 +368,7 @@ export function TelehealthFlow({
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
-                <p className="text-xs text-[#5A6B7A]">Choose how you'd like to get started</p>
+                <p className="text-sm text-[#5A6B7A]">Choose how you'd like to get started</p>
               </div>
             </div>
           </header>
@@ -446,7 +446,7 @@ export function TelehealthFlow({
             {/* Nudge for cash-pay users */}
             <div className="bg-amber-50 rounded-xl p-3 flex items-start gap-3">
               <Shield className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 <span className="font-medium">Not sure?</span> Start with a Quick Consult — you can always add insurance later. We'll even check if your plan covers the services you need.
               </p>
             </div>
