@@ -335,7 +335,7 @@ export function JuniorReportCard({
                 <Flame className="w-3.5 h-3.5 text-orange-500" />
                 <span className="text-lg font-bold text-orange-700">{data.streak}</span>
               </div>
-              <div className="text-xs text-orange-500">Streak</div>
+              <div className="text-sm text-orange-500">Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-purple-50">
               <div className="flex items-center justify-center gap-0.5">
