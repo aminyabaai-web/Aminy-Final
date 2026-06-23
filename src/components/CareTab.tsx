@@ -747,7 +747,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">25 min</div>
                 <div className="text-lg font-semibold text-accent">$49</div>
-                <div className="text-xs text-[#5A6B7A]">$1.96 per minute</div>
+                <div className="text-sm text-[#5A6B7A]">$1.96 per minute</div>
               </div>
               <Button
                 onClick={() => handleBuyMinutes('25')}
@@ -762,7 +762,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">50 min</div>
                 <div className="text-lg font-semibold text-accent">$89</div>
-                <div className="text-xs text-[#5A6B7A]">$1.78 per minute</div>
+                <div className="text-sm text-[#5A6B7A]">$1.78 per minute</div>
                 <Badge className="text-xs mt-1">Best Value</Badge>
               </div>
               <Button
@@ -786,13 +786,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E8E4DF]">
               <div>
                 <div className="font-medium text-sm">{usage.activity}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {usage.date.toLocaleDateString()}
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-semibold text-sm">-{usage.minutesUsed} min</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {usage.type === 'session' ? 'Coaching Session' : 'Consultation'}
                 </div>
               </div>
