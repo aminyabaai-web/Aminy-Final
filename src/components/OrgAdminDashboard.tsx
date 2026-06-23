@@ -297,7 +297,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-[#1B2733]">EVV sync</p>
-              <p className="text-xs text-slate-400">Electronic Visit Verification (DCI)</p>
+              <p className="text-sm text-slate-400">Electronic Visit Verification (DCI)</p>
             </div>
             <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A]">
               Not configured
@@ -306,17 +306,17 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-[#1B2733]">BCBA supervision</p>
-              <p className="text-xs text-slate-400">Hours logged this billing period</p>
+              <p className="text-sm text-slate-400">Hours logged this billing period</p>
             </div>
             <div className="text-right">
               <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-xs font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
-              <p className="text-xs text-slate-400">2h/seat/mo</p>
+              <p className="text-sm text-slate-400">2h/seat/mo</p>
             </div>
           </div>
         </div>
         <div className="mt-3 pt-3 border-t border-[#E8E4DF] flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-          <p className="text-xs text-[#5A6B7A]">EVV is required for AHCCCS/Medicaid reimbursement. Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to configure DCI sync for your agency.</p>
+          <p className="text-sm text-[#5A6B7A]">EVV is required for AHCCCS/Medicaid reimbursement. Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to configure DCI sync for your agency.</p>
         </div>
       </div>
 
@@ -376,7 +376,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <RoleIcon role={member.role} />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[#1B2733] truncate">{member.email}</p>
-                <p className="text-xs text-[#5A6B7A] capitalize">{member.role} · {member.status}</p>
+                <p className="text-sm text-[#5A6B7A] capitalize">{member.role} · {member.status}</p>
               </div>
               {member.role !== 'owner' && (
                 <button onClick={() => handleRemove(member.id, member.email)} className="w-8 h-8 rounded-full flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50">
