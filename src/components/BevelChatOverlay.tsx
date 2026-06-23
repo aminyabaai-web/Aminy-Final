@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -427,6 +427,7 @@ export function BevelChatOverlay({
   const { dailyUsage, fetchUsage } = useRateLimitStore();
   const [memoryFacts, setMemoryFacts] = useState<MemoryFact[]>([]);
   const [memoryLoading, setMemoryLoading] = useState(false);
+  const [messageRatings, setMessageRatings] = useState<Record<string, 'up' | 'down' | null>>({});
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -1043,6 +1044,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               <button
                 onClick={handleClose}
                 className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors shrink-0"
+                aria-label="Close chat"
               >
                 <X className="w-4 h-4 text-[#5A6B7A]" />
               </button>
