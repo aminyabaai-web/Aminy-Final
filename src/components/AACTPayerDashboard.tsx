@@ -217,7 +217,7 @@ function KPICard({
           {metric.trendValue && (
             <div className="flex items-center gap-1 mt-1">
               <TrendIcon dir={metric.trend} />
-              <span className="text-xs text-[#5A6B7A]">{metric.trendValue} vs last period</span>
+              <span className="text-sm text-[#5A6B7A]">{metric.trendValue} vs last period</span>
             </div>
           )}
         </div>
@@ -233,7 +233,7 @@ function KPICard({
         )}
       </div>
       {metric.note && (
-        <p className="mt-2 text-xs text-[#8A9BA8] italic border-t border-[#E8E4DF] pt-1.5">{metric.note}</p>
+        <p className="mt-2 text-sm text-[#8A9BA8] italic border-t border-[#E8E4DF] pt-1.5">{metric.note}</p>
       )}
     </Card>
   );
@@ -257,15 +257,15 @@ function ScorecardSummaryBar({ categories }: { categories: KPICategory[] }) {
         <div className="flex gap-4">
           <div className="text-center">
             <p className="text-xl font-bold text-emerald-400">{green}</p>
-            <p className="text-xs text-slate-400">On target</p>
+            <p className="text-sm text-slate-400">On target</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-amber-400">{yellow}</p>
-            <p className="text-xs text-slate-400">At risk</p>
+            <p className="text-sm text-slate-400">At risk</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-red-400">{red}</p>
-            <p className="text-xs text-slate-400">Off target</p>
+            <p className="text-sm text-slate-400">Off target</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-slate-400">{total - entered.length}</p>
