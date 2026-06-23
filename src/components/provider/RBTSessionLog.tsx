@@ -293,7 +293,7 @@ function ReviewQueue({
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-medium text-[#1B2733]">{s.clientName}</div>
-                <div className="text-xs text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
+                <div className="text-sm text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
               </div>
               <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
                 Pending
@@ -338,13 +338,13 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-[#6B9080]/10 rounded-lg">
             <div className="text-2xl font-bold text-[#6B9080]">{directHours.toFixed(1)}</div>
-            <div className="text-xs text-[#6B9080]">Direct Hours</div>
+            <div className="text-sm text-[#6B9080]">Direct Hours</div>
           </div>
           <div className="text-center p-3 bg-[#FAF7F2] rounded-lg">
             <div className="text-2xl font-bold text-[#3A4A57]">
               {sessions.filter((s) => s.date.startsWith(thisMonth)).length}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Sessions</div>
+            <div className="text-sm text-[#5A6B7A]">Sessions</div>
           </div>
         </div>
       </div>
@@ -359,11 +359,11 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
               <div key={month} className="bg-white rounded-lg p-3 border border-[#E8E4DF] flex items-center justify-between">
                 <div>
                   <div className="text-sm font-medium text-[#3A4A57]">{month}</div>
-                  <div className="text-xs text-[#5A6B7A]">{data.sessions} sessions</div>
+                  <div className="text-sm text-[#5A6B7A]">{data.sessions} sessions</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-bold text-[#1B2733]">{(data.minutes / 60).toFixed(1)}h</div>
-                  <div className="text-xs text-slate-400">{data.minutes}min</div>
+                  <div className="text-sm text-slate-400">{data.minutes}min</div>
                 </div>
               </div>
             );
@@ -482,7 +482,7 @@ function NewSessionModal({
         <div className="space-y-3">
           {/* Client */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Client Name *</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Client Name *</label>
             <input
               type="text"
               value={clientName}
@@ -494,7 +494,7 @@ function NewSessionModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
           </div>
@@ -502,12 +502,12 @@ function NewSessionModal({
           {/* Time */}
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Start</label>
+              <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Start</label>
               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">End</label>
+              <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">End</label>
               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
@@ -519,7 +519,7 @@ function NewSessionModal({
 
           {/* Session Type */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Type</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Session Type</label>
             <div className="flex gap-2">
               {(['1:1', 'group'] as const).map((t) => (
                 <button
@@ -539,7 +539,7 @@ function NewSessionModal({
 
           {/* Goal */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Goal Targeted</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Goal Targeted</label>
             <input type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)}
               placeholder="e.g. Manding for preferred items"
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
@@ -568,7 +568,7 @@ function NewSessionModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Notes</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Session Notes</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
               placeholder="Session observations, client response, etc."
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm h-20 resize-none" />

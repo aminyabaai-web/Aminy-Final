@@ -172,7 +172,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                         </div>
                         <div className="mt-3 flex items-center gap-2 rounded-xl bg-white/60 px-3 py-2">
                           <Heart className="h-3.5 w-3.5 text-pink-400 flex-shrink-0" />
-                          <span className="text-xs text-[#3A4A57]">
+                          <span className="text-sm text-[#3A4A57]">
                             <span className="font-medium">Home task:</span> {focus.homeTask}
                           </span>
                         </div>
@@ -206,17 +206,17 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-sm font-semibold text-[#1B2733]">{update.provider}</p>
-                      <p className="text-xs text-[#5A6B7A]">{formatDate(update.date)}</p>
+                      <p className="text-sm text-[#5A6B7A]">{formatDate(update.date)}</p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-[#8A9BA8]" />
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-[#5A6B7A]">{update.summary}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[#5A6B7A]">{update.summary}</p>
                   {update.wins.length > 0 && (
                     <div className="mt-3 space-y-1.5">
                       {update.wins.map((win, j) => (
                         <div key={j} className="flex items-start gap-2">
                           <Star className="mt-0.5 h-3 w-3 flex-shrink-0 text-amber-400" />
-                          <span className="text-xs text-[#3A4A57]">{win}</span>
+                          <span className="text-sm text-[#3A4A57]">{win}</span>
                         </div>
                       ))}
                     </div>
@@ -226,7 +226,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       {update.focusAreas.map((area, j) => (
                         <div key={j} className="flex items-start gap-2">
                           <Target className="mt-0.5 h-3 w-3 flex-shrink-0 text-primary" />
-                          <span className="text-xs text-[#3A4A57]">{area}</span>
+                          <span className="text-sm text-[#3A4A57]">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -266,7 +266,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                         <Minus className="h-4 w-4 text-[#8A9BA8]" />
                       )}
                       <span
-                        className={`text-xs font-semibold ${
+                        className={`text-sm font-semibold ${
                           goal.change > 0
                             ? 'text-green-600'
                             : goal.change < 0
@@ -279,7 +279,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                     </div>
                   </div>
                   <div className="mt-3">
-                    <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
+                    <div className="flex items-center justify-between text-sm text-[#5A6B7A]">
                       <span>{goal.currentPct}%</span>
                       <span>Target: 100%</span>
                     </div>
