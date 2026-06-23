@@ -642,7 +642,7 @@ export function CommunityForYou({
       {localGroups.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No local groups yet</p>
-          <p className="text-xs mt-1">We're building your community — check back soon.</p>
+          <p className="text-sm mt-1">We're building your community — check back soon.</p>
         </div>
       )}
       {localGroups.map((group) => (
@@ -706,9 +706,9 @@ export function CommunityForYou({
       {liveEvents.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No events scheduled yet</p>
-          <p className="text-xs mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          <p className="text-sm mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
           <button
-            className="mt-3 text-xs text-[#6B9080] font-semibold underline"
+            className="mt-3 text-sm text-[#6B9080] font-semibold underline"
             onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
           >
             Notify me when events launch →
