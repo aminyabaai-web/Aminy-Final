@@ -1679,7 +1679,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             <p className="text-sm text-blue-700 dark:text-blue-300">Time for a quick break? 🌬️</p>
             <button
               onClick={() => { setBreakReminderDismissed(true); setShowBreakReminder(false); }}
-              className="ml-3 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors dark:text-blue-400 dark:hover:text-blue-200"
+              className="ml-3 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors dark:text-blue-400 dark:hover:text-blue-200"
               aria-label="Dismiss break reminder"
             >
               Dismiss
@@ -2582,7 +2582,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     
                     {buddy.unlocked && (
                       <div className="space-y-2">
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-sm">
                           <span>Pace:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
@@ -2595,7 +2595,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             ))}
                           </div>
                         </div>
-                        <div className="flex justify-between text-xs">
+                        <div className="flex justify-between text-sm">
                           <span>Energy:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
