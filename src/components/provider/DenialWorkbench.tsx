@@ -346,21 +346,21 @@ function DenialInbox({
                   <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${categoryColor(denial.category)}`}>
                     {categoryLabel(denial.category)}
                   </span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.carcCode}</span>
-                  <span className="text-xs text-slate-400">&middot;</span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.payer}</span>
-                  <span className="text-xs text-slate-400">&middot;</span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.cptCode}</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.carcCode}</span>
+                  <span className="text-sm text-slate-400">&middot;</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.payer}</span>
+                  <span className="text-sm text-slate-400">&middot;</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.cptCode}</span>
                 </div>
 
-                <p className="text-xs text-[#5A6B7A] mb-2">{denial.reason}</p>
+                <p className="text-sm text-[#5A6B7A] mb-2">{denial.reason}</p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-semibold text-[#3A4A57]">${denial.deniedAmount}</span>
-                    <span className="text-xs text-slate-400">{denial.dateOfService}</span>
+                    <span className="text-sm font-semibold text-[#3A4A57]">${denial.deniedAmount}</span>
+                    <span className="text-sm text-slate-400">{denial.dateOfService}</span>
                   </div>
-                  <div className={`text-xs font-medium ${denial.daysUntilDeadline <= 0 ? 'text-red-600' : denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-[#5A6B7A]'}`}>
+                  <div className={`text-sm font-medium ${denial.daysUntilDeadline <= 0 ? 'text-red-600' : denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-[#5A6B7A]'}`}>
                     {denial.daysUntilDeadline <= 0
                       ? 'DEADLINE EXPIRED'
                       : `${denial.daysUntilDeadline}d to appeal`}
@@ -379,7 +379,7 @@ function DenialInbox({
             {denials.length === 0 ? (
               <>
                 <p className="text-sm font-semibold text-[#3A4A57]">No denials to work</p>
-                <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs mx-auto">
+                <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs mx-auto">
                   When a payer denies one of your claims, it will land here with the reason code and a suggested fix.
                 </p>
               </>
@@ -463,7 +463,7 @@ NPI: [Your NPI]
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-base font-bold text-[#1B2733]">{denial.patientName}</h3>
-            <p className="text-xs text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
+            <p className="text-sm text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
           </div>
           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${sc.color}`}>
             {sc.icon} {sc.label}
@@ -498,9 +498,9 @@ NPI: [Your NPI]
           <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-semibold text-red-800 mb-1">{denial.carcCode}: {categoryLabel(denial.category)}</p>
-            <p className="text-xs text-red-700">{denial.reason}</p>
+            <p className="text-sm text-red-700">{denial.reason}</p>
             {carcInfo && (
-              <p className="text-xs text-red-600 mt-1 italic">Standard: {carcInfo.reason}</p>
+              <p className="text-sm text-red-600 mt-1 italic">Standard: {carcInfo.reason}</p>
             )}
           </div>
         </div>
@@ -512,7 +512,7 @@ NPI: [Your NPI]
           <Zap className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-semibold text-emerald-800 mb-1">Suggested Action</p>
-            <p className="text-xs text-emerald-700">{denial.suggestedAction}</p>
+            <p className="text-sm text-emerald-700">{denial.suggestedAction}</p>
           </div>
         </div>
       </Card>
@@ -614,8 +614,8 @@ NPI: [Your NPI]
                 }`}>
                   {step.label}
                 </p>
-                {step.date && <p className="text-xs text-slate-400">{step.date}</p>}
-                {step.description && <p className="text-xs text-[#5A6B7A] mt-0.5">{step.description}</p>}
+                {step.date && <p className="text-sm text-slate-400">{step.date}</p>}
+                {step.description && <p className="text-sm text-[#5A6B7A] mt-0.5">{step.description}</p>}
               </div>
             </div>
           ))}
@@ -639,7 +639,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
           <BarChart3 className="w-6 h-6 text-slate-400" />
         </div>
         <p className="text-sm font-semibold text-[#3A4A57]">No denial analytics yet</p>
-        <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs mx-auto">
+        <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs mx-auto">
           Recovery rates, top denial reasons, and revenue-at-risk trends appear once you have denied claims to analyze.
         </p>
       </Card>
@@ -675,30 +675,30 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-2">
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Total Denied</p>
+          <p className="text-sm text-[#5A6B7A]">Total Denied</p>
           <p className="text-xl font-bold text-red-600">${totalDenied.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">{denials.length} claims</p>
+          <p className="text-sm text-slate-400">{denials.length} claims</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Recovered</p>
+          <p className="text-sm text-[#5A6B7A]">Recovered</p>
           <p className="text-xl font-bold text-emerald-600">${totalRecovered.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">{recovered.length} claims</p>
+          <p className="text-sm text-slate-400">{recovered.length} claims</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Denial Rate</p>
+          <p className="text-sm text-[#5A6B7A]">Denial Rate</p>
           <div className="flex items-center gap-1">
             <p className="text-xl font-bold text-[#1B2733]">{denialRate}%</p>
             <TrendingDown className="w-4 h-4 text-emerald-500" />
           </div>
-          <p className="text-xs text-emerald-500">-2% vs last month</p>
+          <p className="text-sm text-emerald-500">-2% vs last month</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Recovery Rate</p>
+          <p className="text-sm text-[#5A6B7A]">Recovery Rate</p>
           <div className="flex items-center gap-1">
             <p className="text-xl font-bold text-[#1B2733]">{recoveryRate}%</p>
             <TrendingUp className="w-4 h-4 text-emerald-500" />
           </div>
-          <p className="text-xs text-emerald-500">+5% vs last month</p>
+          <p className="text-sm text-emerald-500">+5% vs last month</p>
         </Card>
       </div>
 
@@ -741,7 +741,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
               <div key={payer} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
                 <div>
                   <p className="text-sm font-medium text-[#3A4A57]">{payer}</p>
-                  <p className="text-xs text-slate-400">{data.count} denials</p>
+                  <p className="text-sm text-slate-400">{data.count} denials</p>
                 </div>
                 <span className="text-sm font-semibold text-red-600">${data.amount.toLocaleString()}</span>
               </div>

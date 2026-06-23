@@ -386,7 +386,7 @@ export function PostSessionNotes({
               <h2 className="text-lg font-semibold text-[#1B2733]">
                 Session Notes
               </h2>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Document this visit for the care plan
               </p>
             </div>
@@ -402,7 +402,7 @@ export function PostSessionNotes({
 
         {/* Session metadata strip */}
         {(sessionDurationSeconds || wasRecorded) && (
-          <div className="px-5 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF] flex items-center gap-4 text-xs text-[#5A6B7A]">
+          <div className="px-5 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF] flex items-center gap-4 text-sm text-[#5A6B7A]">
             {sessionDurationSeconds !== undefined && (
               <span className="flex items-center gap-1">
                 <Clock size={12} />
@@ -450,7 +450,7 @@ export function PostSessionNotes({
           <section>
             <label className="block text-sm font-medium text-[#3A4A57] mb-1.5">
               Plan for Next 7 Days
-              <span className="text-xs text-[#8A9BA8] font-normal ml-1.5">
+              <span className="text-sm text-[#8A9BA8] font-normal ml-1.5">
                 (becomes action items)
               </span>
             </label>
@@ -506,7 +506,7 @@ export function PostSessionNotes({
               <label className="block text-sm font-semibold text-[#4A6478] mb-2">
                 Recommended CPT Code
               </label>
-              <p className="text-xs text-blue-600 mb-3">
+              <p className="text-sm text-blue-600 mb-3">
                 AI-selected based on provider type, session type, and duration. Choose the best fit for clean billing.
               </p>
               <div className="space-y-2">
@@ -527,8 +527,8 @@ export function PostSessionNotes({
                         <span className="text-sm font-semibold text-blue-900">{cpt.code} — {cpt.shortName}</span>
                         {isSelected && <CheckCircle size={16} className="text-blue-600" />}
                       </div>
-                      <p className="text-xs text-blue-700 mt-1">{cpt.description}</p>
-                      <p className="text-xs text-blue-500 mt-1 italic">{cpt.billingTip}</p>
+                      <p className="text-sm text-blue-700 mt-1">{cpt.description}</p>
+                      <p className="text-sm text-blue-500 mt-1 italic">{cpt.billingTip}</p>
                     </button>
                   );
                 })}
@@ -543,8 +543,8 @@ export function PostSessionNotes({
                   </p>
                   {cptValidation.missingFields.length > 0 && (
                     <div className="mb-2">
-                      <p className="text-xs font-medium text-amber-700">Required documentation missing:</p>
-                      <ul className="text-xs text-amber-600 mt-1 space-y-0.5">
+                      <p className="text-sm font-medium text-amber-700">Required documentation missing:</p>
+                      <ul className="text-sm text-amber-600 mt-1 space-y-0.5">
                         {cptValidation.missingFields.map(f => (
                           <li key={f}>• Add <strong>{f.replace(/_/g, ' ')}</strong> to your notes above</li>
                         ))}
@@ -552,12 +552,12 @@ export function PostSessionNotes({
                     </div>
                   )}
                   {cptValidation.warnings.map((w, i) => (
-                    <p key={i} className="text-xs text-amber-600">⚠ {w}</p>
+                    <p key={i} className="text-sm text-amber-600">⚠ {w}</p>
                   ))}
                   <button
                     type="button"
                     onClick={() => setShowBillingQuestions(false)}
-                    className="mt-2 text-xs text-amber-700 underline hover:no-underline"
+                    className="mt-2 text-sm text-amber-700 underline hover:no-underline"
                   >
                     I've updated my notes — re-check
                   </button>
@@ -568,7 +568,7 @@ export function PostSessionNotes({
               <button
                 type="button"
                 onClick={() => setShowBillingChat(!showBillingChat)}
-                className="mt-3 flex items-center gap-2 text-xs font-medium text-blue-600 hover:text-[#4A6478] transition-colors"
+                className="mt-3 flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-[#4A6478] transition-colors"
               >
                 <MessageSquare size={14} />
                 {showBillingChat ? 'Hide billing assistant' : 'Ask about billing & CPT codes'}
@@ -576,7 +576,7 @@ export function PostSessionNotes({
 
               {showBillingChat && (
                 <div className="mt-2 bg-white rounded-lg p-3 border border-[#C8DDE8]">
-                  <p className="text-xs text-blue-600 mb-2">
+                  <p className="text-sm text-blue-600 mb-2">
                     Ask about CPT selection, modifiers, documentation requirements, or split billing scenarios.
                   </p>
                   <div className="flex gap-2">
@@ -598,7 +598,7 @@ export function PostSessionNotes({
                     </button>
                   </div>
                   {billingAnswer && (
-                    <div className="mt-2 p-2.5 bg-[#EEF4F8] rounded-lg text-xs text-[#4A6478] leading-relaxed whitespace-pre-wrap">
+                    <div className="mt-2 p-2.5 bg-[#EEF4F8] rounded-lg text-sm text-[#4A6478] leading-relaxed whitespace-pre-wrap">
                       {billingAnswer}
                     </div>
                   )}
@@ -644,7 +644,7 @@ export function PostSessionNotes({
 
             {showGoalSection && (
               <div className="mt-3 p-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg">
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   Goal updates will be available after saving these notes.
                   You can update specific goals from the Care Plan tab.
                 </p>
@@ -657,7 +657,7 @@ export function PostSessionNotes({
         {saveError && (
           <div className="mx-5 mb-3 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
             <AlertCircle size={14} className="text-red-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-red-700">{saveError}</p>
+            <p className="text-sm text-red-700">{saveError}</p>
           </div>
         )}
 
@@ -775,7 +775,7 @@ export function PostSessionNotes({
             </button>
           </div>
           {selectedCPT && (
-            <p className="text-xs text-center text-[#5A6B7A]">
+            <p className="text-sm text-center text-[#5A6B7A]">
               Signing will lock notes, generate a superbill for <strong>{selectedCPT}</strong>, and queue for claim submission.
             </p>
           )}

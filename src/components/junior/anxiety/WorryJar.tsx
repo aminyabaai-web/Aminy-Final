@@ -263,7 +263,7 @@ function ShrinkExercise({ worry, onReframe, onClose }: {
           <X className="h-4 w-4" />
         </button>
       </div>
-      <div className="text-xs text-violet-600 italic">"{worry.text}"</div>
+      <div className="text-sm text-violet-600 italic">"{worry.text}"</div>
       <div className="flex items-start gap-2">
         <span className="text-lg">{prompt.emoji}</span>
         <p className="text-sm text-violet-700">{prompt.text}</p>
@@ -276,7 +276,7 @@ function ShrinkExercise({ worry, onReframe, onClose }: {
         className="w-full resize-none rounded-xl border border-violet-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-300"
       />
       <div className="flex items-center justify-between">
-        <div className="text-xs text-violet-400">
+        <div className="text-sm text-violet-400">
           {promptIndex + 1} / {REFRAME_PROMPTS.length}
         </div>
         <button
@@ -449,7 +449,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                 <div className="text-sm font-medium text-[#1B2733]">"{worry.text}"</div>
                 {/* Rating */}
                 <div>
-                  <div className="text-xs text-[#5A6B7A] mb-1">How big does it feel? (1-5)</div>
+                  <div className="text-sm text-[#5A6B7A] mb-1">How big does it feel? (1-5)</div>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map(n => (
                       <button
@@ -489,9 +489,9 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                 {/* Reframes */}
                 {worry.reframes.length > 0 && (
                   <div className="space-y-1">
-                    <div className="text-xs text-slate-400">Your reframes:</div>
+                    <div className="text-sm text-slate-400">Your reframes:</div>
                     {worry.reframes.map((r, i) => (
-                      <div key={i} className="text-xs text-[#5A6B7A] bg-[#FAF7F2] rounded-lg px-3 py-2">
+                      <div key={i} className="text-sm text-[#5A6B7A] bg-[#FAF7F2] rounded-lg px-3 py-2">
                         "{r}"
                       </div>
                     ))}

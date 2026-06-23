@@ -1016,7 +1016,7 @@ function CAQHTab() {
       <Card className="p-6 text-center">
         <Shield className="w-8 h-8 text-slate-300 mx-auto mb-2" />
         <p className="text-sm font-medium text-[#3A4A57]">No CAQH documents yet</p>
-        <p className="text-xs text-[#5A6B7A] mt-1">
+        <p className="text-sm text-[#5A6B7A] mt-1">
           Connect your CAQH ProView profile to track documents, expirations, and re-attestation here.
         </p>
       </Card>
@@ -1032,7 +1032,7 @@ function CAQHTab() {
           <span className="text-sm font-bold text-[#3A4A57]">{completionPct}%</span>
         </div>
         <Progress value={completionPct} className="h-2 mb-3" />
-        <p className="text-xs text-[#5A6B7A]">
+        <p className="text-sm text-[#5A6B7A]">
           {uploadedRequired} of {requiredDocs.length} required documents uploaded.
           {completionPct === 100
             ? ' Your profile is complete.'
@@ -1052,19 +1052,19 @@ function CAQHTab() {
               {statusIcon(item.status)}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-xs font-medium text-[#3A4A57]">{item.label}</p>
+                  <p className="text-sm font-medium text-[#3A4A57]">{item.label}</p>
                   {statusBadge(item.status)}
                 </div>
-                <p className="text-xs text-[#5A6B7A] mt-0.5">{item.detail}</p>
+                <p className="text-sm text-[#5A6B7A] mt-0.5">{item.detail}</p>
                 {item.actionRequired && (
-                  <p className="text-xs text-violet-600 font-medium mt-0.5">Action: {item.actionRequired}</p>
+                  <p className="text-sm text-violet-600 font-medium mt-0.5">Action: {item.actionRequired}</p>
                 )}
               </div>
             </div>
           ))}
         </div>
         <div className="mt-3 pt-3 border-t border-violet-200 flex items-center justify-between">
-          <div className="text-xs text-violet-700">
+          <div className="text-sm text-violet-700">
             {qaChecklist.filter(i => i.status === 'pass').length}/{qaChecklist.length} checks passing
           </div>
           <Button variant="outline" size="sm" className="h-7 text-xs border-violet-300 text-violet-700 opacity-60" disabled title="Coming soon">
@@ -1115,13 +1115,13 @@ function CAQHTab() {
                 <div>
                   <p className="text-sm text-[#3A4A57]">{doc.name}</p>
                   {doc.expiresAt && (
-                    <p className="text-xs text-slate-400">Expires: {doc.expiresAt}</p>
+                    <p className="text-sm text-slate-400">Expires: {doc.expiresAt}</p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 {doc.required && (
-                  <span className="text-xs text-slate-400 font-medium">Required</span>
+                  <span className="text-sm text-slate-400 font-medium">Required</span>
                 )}
                 {statusBadge(doc.status)}
               </div>
@@ -1136,7 +1136,7 @@ function CAQHTab() {
           <Calendar className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="text-sm font-semibold text-[#4A6478]">CAQH Re-Attestation</h3>
-            <p className="text-xs text-blue-600 mt-1">
+            <p className="text-sm text-blue-600 mt-1">
               CAQH requires re-attestation every 120 days. Your next attestation is due
               around <span className="font-semibold">June 15, 2026</span>. Aminy will remind
               you 30 days in advance.
@@ -1183,7 +1183,7 @@ function EnrollmentTab() {
             <Sparkles className="w-5 h-5 text-blue-500" />
             <h3 className="text-sm font-semibold text-[#1B2733]">{activeWorkflow.payerName} Enrollment</h3>
           </div>
-          <p className="text-xs text-[#5A6B7A] mb-4">
+          <p className="text-sm text-[#5A6B7A] mb-4">
             Estimated timeline: {activeWorkflow.totalEstimatedDays} days total
           </p>
 
@@ -1197,13 +1197,13 @@ function EnrollmentTab() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-semibold text-[#1B2733]">{step.title}</p>
-                      <span className="text-xs text-slate-400">~{step.estimatedDays}d</span>
+                      <span className="text-sm text-slate-400">~{step.estimatedDays}d</span>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mt-1 leading-relaxed">{step.description}</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1 leading-relaxed">{step.description}</p>
 
                     {step.requiredDocs.length > 0 && (
                       <div className="mt-2">
-                        <p className="text-xs font-medium text-[#5A6B7A] mb-1">Required Documents:</p>
+                        <p className="text-sm font-medium text-[#5A6B7A] mb-1">Required Documents:</p>
                         <div className="flex flex-wrap gap-1">
                           {step.requiredDocs.map((doc, di) => (
                             <span key={di} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-[#EEF4F8] text-blue-700">
@@ -1216,8 +1216,8 @@ function EnrollmentTab() {
 
                     {step.commonPitfalls.length > 0 && (
                       <div className="mt-2 p-2 rounded bg-amber-50 border border-amber-100">
-                        <p className="text-xs font-medium text-amber-700 mb-1">Common Pitfalls:</p>
-                        <ul className="text-xs text-amber-600 space-y-0.5">
+                        <p className="text-sm font-medium text-amber-700 mb-1">Common Pitfalls:</p>
+                        <ul className="text-sm text-amber-600 space-y-0.5">
                           {step.commonPitfalls.map((pitfall, pi) => (
                             <li key={pi} className="flex items-start gap-1">
                               <span className="shrink-0">-</span>
@@ -1235,7 +1235,7 @@ function EnrollmentTab() {
 
           <Button size="sm" className="mt-4 w-full opacity-60" disabled title="Coming soon">
             <Plus className="w-3 h-3 mr-1" /> Begin {activeWorkflow.payerName} Application
-            <span className="ml-auto text-xs text-white/80 font-normal">Coming soon</span>
+            <span className="ml-auto text-sm text-white/80 font-normal">Coming soon</span>
           </Button>
         </Card>
       </div>
@@ -1253,7 +1253,7 @@ function EnrollmentTab() {
 
       {/* AI Enrollment Wizard Links */}
       <Card className="p-3 bg-[#EEF4F8] border-[#C8DDE8]">
-        <p className="text-xs font-semibold text-[#4A6478] mb-2">AI-Guided Enrollment Wizards</p>
+        <p className="text-sm font-semibold text-[#4A6478] mb-2">AI-Guided Enrollment Wizards</p>
         <div className="flex flex-wrap gap-2">
           {PAYER_WORKFLOWS.map((wf) => (
             <Button
@@ -1273,7 +1273,7 @@ function EnrollmentTab() {
         <Card className="p-6 text-center">
           <Building2 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
           <p className="text-sm font-medium text-[#3A4A57]">No active enrollments</p>
-          <p className="text-xs text-[#5A6B7A] mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Start a payer application above and Aminy will track it through completion here.
           </p>
         </Card>
@@ -1324,7 +1324,7 @@ function EnrollmentTab() {
             )}
 
             {!isDenied && (
-              <div className="flex items-center justify-between text-xs text-[#5A6B7A]">
+              <div className="flex items-center justify-between text-sm text-[#5A6B7A]">
                 <div className="flex gap-4">
                   {ENROLLMENT_STAGES.map((stage) => (
                     <span key={stage} className="capitalize">{stage}</span>
@@ -1333,14 +1333,14 @@ function EnrollmentTab() {
               </div>
             )}
 
-            <div className="flex items-center justify-between mt-2 text-xs text-[#5A6B7A]">
+            <div className="flex items-center justify-between mt-2 text-sm text-[#5A6B7A]">
               <span>Submitted: {enrollment.submittedAt}</span>
               {enrollment.estimatedCompletion && (
                 <span>Est. completion: {enrollment.estimatedCompletion}</span>
               )}
             </div>
             {enrollment.notes && (
-              <p className="text-xs text-[#5A6B7A] mt-1 italic">{enrollment.notes}</p>
+              <p className="text-sm text-[#5A6B7A] mt-1 italic">{enrollment.notes}</p>
             )}
             {isDenied && (
               <Button
@@ -1434,7 +1434,7 @@ function RosterTab() {
                   <AlertTriangle className="w-4 h-4 text-amber-500" />
                   <div>
                     <p className="text-sm font-medium text-amber-800">{entry.payerName}</p>
-                    <p className="text-xs text-amber-600">Due: {entry.recredentialingDate}</p>
+                    <p className="text-sm text-amber-600">Due: {entry.recredentialingDate}</p>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="h-7 text-xs border-amber-300 text-amber-700 opacity-60" disabled title="Coming soon">
@@ -1443,7 +1443,7 @@ function RosterTab() {
               </div>
             ))}
           {roster.filter((e) => e.status === 'expiring').length === 0 && (
-            <p className="text-xs text-[#5A6B7A]">No upcoming re-credentialing deadlines.</p>
+            <p className="text-sm text-[#5A6B7A]">No upcoming re-credentialing deadlines.</p>
           )}
         </div>
       </Card>
@@ -1580,7 +1580,7 @@ function AIPlaybooksTab() {
 
             {node.guidance && (
               <div className="mt-3 p-3 rounded-lg bg-violet-50 border border-violet-200">
-                <p className="text-xs text-violet-800 leading-relaxed">{node.guidance}</p>
+                <p className="text-sm text-violet-800 leading-relaxed">{node.guidance}</p>
               </div>
             )}
 
@@ -1715,7 +1715,7 @@ function AIPlaybooksTab() {
                   <div className="w-5 h-5 rounded border-2 border-slate-300" />
                   <span className="text-sm text-[#3A4A57]">{item.task}</span>
                 </div>
-                <span className="text-xs text-slate-400 whitespace-nowrap ml-2">{item.timeline}</span>
+                <span className="text-sm text-slate-400 whitespace-nowrap ml-2">{item.timeline}</span>
               </div>
             ))}
           </div>
@@ -1731,7 +1731,7 @@ function AIPlaybooksTab() {
         <Bot className="w-5 h-5 text-violet-500" />
         <h3 className="text-sm font-semibold text-[#1B2733]">AI-Guided Playbooks</h3>
       </div>
-      <p className="text-xs text-[#5A6B7A]">
+      <p className="text-sm text-[#5A6B7A]">
         Interactive decision trees to help you navigate common credentialing and billing scenarios.
       </p>
       <div className="space-y-3">
@@ -1749,7 +1749,7 @@ function AIPlaybooksTab() {
                 {pb.icon}
                 <div className="flex-1">
                   <p className="text-sm font-semibold text-[#1B2733]">{pb.title}</p>
-                  <p className="text-xs text-[#5A6B7A]">{pb.description}</p>
+                  <p className="text-sm text-[#5A6B7A]">{pb.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400" />
               </div>
@@ -1792,21 +1792,21 @@ function ClaimQueueTab() {
       <div className="grid grid-cols-3 gap-2">
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-emerald-600">{readyCount}</p>
-          <p className="text-xs text-[#5A6B7A]">Ready</p>
+          <p className="text-sm text-[#5A6B7A]">Ready</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-amber-600">{warningCount}</p>
-          <p className="text-xs text-[#5A6B7A]">Warnings</p>
+          <p className="text-sm text-[#5A6B7A]">Warnings</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-red-600">{errorCount}</p>
-          <p className="text-xs text-[#5A6B7A]">Errors</p>
+          <p className="text-sm text-[#5A6B7A]">Errors</p>
         </Card>
       </div>
 
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             Total pending: <span className="font-semibold text-[#3A4A57]">${totalAmount.toLocaleString()}</span>
           </p>
         </div>
@@ -1831,7 +1831,7 @@ function ClaimQueueTab() {
           <Card className="p-6 text-center">
             <Receipt className="w-8 h-8 text-slate-300 mx-auto mb-2" />
             <p className="text-sm font-medium text-[#3A4A57]">No claims in the queue</p>
-            <p className="text-xs text-[#5A6B7A] mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               Completed sessions ready for billing will appear here for validation and submission.
             </p>
           </Card>
@@ -1855,7 +1855,7 @@ function ClaimQueueTab() {
                 {statusIcon(claim.validationStatus)}
                 <div>
                   <p className="text-sm font-medium text-[#3A4A57]">{claim.patientName}</p>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-sm text-slate-400">
                     {claim.dateOfService} &middot; {claim.cptCode} &middot; {claim.payer}
                   </p>
                 </div>
@@ -1863,7 +1863,7 @@ function ClaimQueueTab() {
               <div className="text-right">
                 <p className="text-sm font-semibold text-[#3A4A57]">${claim.amount}</p>
                 {claim.validationMessage && (
-                  <p className={`text-xs ${claim.validationStatus === 'error' ? 'text-red-500' : 'text-amber-500'}`}>
+                  <p className={`text-sm ${claim.validationStatus === 'error' ? 'text-red-500' : 'text-amber-500'}`}>
                     {claim.validationMessage}
                   </p>
                 )}
@@ -1919,7 +1919,7 @@ function DenialOpsTab() {
       <Card className="p-6 text-center">
         <BarChart3 className="w-8 h-8 text-slate-300 mx-auto mb-2" />
         <p className="text-sm font-medium text-[#3A4A57]">No denials to work</p>
-        <p className="text-xs text-[#5A6B7A] mt-1">
+        <p className="text-sm text-[#5A6B7A] mt-1">
           When a claim is denied, Aminy categorizes it here and helps you appeal before the deadline.
         </p>
       </Card>
@@ -1932,15 +1932,15 @@ function DenialOpsTab() {
       <div className="grid grid-cols-3 gap-2">
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-red-600">${totalDenied.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Total Denied</p>
+          <p className="text-sm text-[#5A6B7A]">Total Denied</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-violet-600">${recoverableAmount.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Recoverable</p>
+          <p className="text-sm text-[#5A6B7A]">Recoverable</p>
         </Card>
         <Card className="p-3 text-center">
           <p className="text-lg font-bold text-amber-600">{urgentAppeals.length}</p>
-          <p className="text-xs text-[#5A6B7A]">Urgent Appeals</p>
+          <p className="text-sm text-[#5A6B7A]">Urgent Appeals</p>
         </Card>
       </div>
 
@@ -1960,12 +1960,12 @@ function DenialOpsTab() {
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: CATEGORY_DOT_HEX[meta.color] || '#64748b' }}
                   />
-                  <span className="text-xs text-[#3A4A57]">{meta.label}</span>
-                  <span className="text-xs text-slate-400">({data.count})</span>
+                  <span className="text-sm text-[#3A4A57]">{meta.label}</span>
+                  <span className="text-sm text-slate-400">({data.count})</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-[#3A4A57]">${data.amount}</span>
-                  <span className="text-xs text-emerald-600">{meta.avgSuccessRate}% win rate</span>
+                  <span className="text-sm font-medium text-[#3A4A57]">${data.amount}</span>
+                  <span className="text-sm text-emerald-600">{meta.avgSuccessRate}% win rate</span>
                 </div>
               </div>
             );
@@ -1998,7 +1998,7 @@ function DenialOpsTab() {
                         <p className="text-sm font-medium text-[#3A4A57]">{denial.patientName}</p>
                         {statusBadge(denial.status)}
                       </div>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-sm text-slate-400">
                         {denial.denialCode} &middot; {meta.label} &middot; {denial.payer}
                       </p>
                     </div>
@@ -2006,7 +2006,7 @@ function DenialOpsTab() {
                   <div className="text-right flex items-center gap-2">
                     <div>
                       <p className="text-sm font-semibold text-[#3A4A57]">${denial.amount}</p>
-                      <p className={`text-xs ${isUrgent ? 'text-amber-600 font-medium' : 'text-slate-400'}`}>
+                      <p className={`text-sm ${isUrgent ? 'text-amber-600 font-medium' : 'text-slate-400'}`}>
                         {denial.daysUntilDeadline}d to appeal
                       </p>
                     </div>
@@ -2052,8 +2052,8 @@ function DenialOpsTab() {
                       {/* Success Probability */}
                       <div className="p-2 rounded bg-[#FAF7F2]">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs text-[#5A6B7A]">AI Appeal Success Estimate</span>
-                          <span className={`text-xs font-bold ${
+                          <span className="text-sm text-[#5A6B7A]">AI Appeal Success Estimate</span>
+                          <span className={`text-sm font-bold ${
                             denial.successProbability >= 70 ? 'text-emerald-600' :
                             denial.successProbability >= 40 ? 'text-amber-600' : 'text-red-600'
                           }`}>{denial.successProbability}%</span>
@@ -2064,7 +2064,7 @@ function DenialOpsTab() {
                       {/* Appeal Status */}
                       {denial.appealLetter && (
                         <div className="p-2 rounded bg-violet-50 border border-violet-100">
-                          <p className="text-xs text-violet-700">{denial.appealLetter}</p>
+                          <p className="text-sm text-violet-700">{denial.appealLetter}</p>
                         </div>
                       )}
 
@@ -2109,7 +2109,7 @@ function DenialOpsTab() {
                             title="Coming soon"
                           >
                             <TrendingUp className="w-3 h-3 mr-1" /> Check Appeal Status
-                            <span className="ml-auto text-xs text-slate-400 font-normal">Soon</span>
+                            <span className="ml-auto text-sm text-slate-400 font-normal">Soon</span>
                           </Button>
                         )}
                       </div>
@@ -2144,19 +2144,19 @@ function StatusDashboardTab() {
       <div className="grid grid-cols-4 gap-2">
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-emerald-600">{approved}</p>
-          <p className="text-xs text-[#5A6B7A]">Active</p>
+          <p className="text-sm text-[#5A6B7A]">Active</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-blue-600">{pending}</p>
-          <p className="text-xs text-[#5A6B7A]">Pending</p>
+          <p className="text-sm text-[#5A6B7A]">Pending</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-red-600">{rejected}</p>
-          <p className="text-xs text-[#5A6B7A]">Rejected</p>
+          <p className="text-sm text-[#5A6B7A]">Rejected</p>
         </Card>
         <Card className="p-2.5 text-center">
           <p className="text-lg font-bold text-amber-600">{reCredDue}</p>
-          <p className="text-xs text-[#5A6B7A]">Re-Cred</p>
+          <p className="text-sm text-[#5A6B7A]">Re-Cred</p>
         </Card>
       </div>
 
@@ -2165,7 +2165,7 @@ function StatusDashboardTab() {
         <Card className="p-3 border-amber-200 bg-amber-50">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
-            <p className="text-xs font-semibold text-amber-800">{totalMissing} Missing Document{totalMissing > 1 ? 's' : ''} Blocking Enrollment</p>
+            <p className="text-sm font-semibold text-amber-800">{totalMissing} Missing Document{totalMissing > 1 ? 's' : ''} Blocking Enrollment</p>
           </div>
           <div className="space-y-1">
             {entries
@@ -2189,7 +2189,7 @@ function StatusDashboardTab() {
           <Card className="p-6 text-center">
             <Gauge className="w-8 h-8 text-slate-300 mx-auto mb-2" />
             <p className="text-sm font-medium text-[#3A4A57]">No enrollments to track yet</p>
-            <p className="text-xs text-[#5A6B7A] mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               Once you submit payer applications, their status and re-credentialing dates show up here.
             </p>
           </Card>
@@ -2224,7 +2224,7 @@ function StatusDashboardTab() {
             </div>
 
             {entry.nextAction && (
-              <div className="mt-2 p-2 rounded bg-[#FAF7F2] text-xs text-[#5A6B7A]">
+              <div className="mt-2 p-2 rounded bg-[#FAF7F2] text-sm text-[#5A6B7A]">
                 <span className="font-medium">Next action:</span> {entry.nextAction}
               </div>
             )}
@@ -2238,7 +2238,7 @@ function StatusDashboardTab() {
           <Calendar className="w-4 h-4 text-violet-500" />
           Re-Credentialing Calendar
         </h3>
-        <p className="text-xs text-[#5A6B7A] mb-3">
+        <p className="text-sm text-[#5A6B7A] mb-3">
           Most payers require re-credentialing every 3 years. Start the process 90 days before the due date.
         </p>
         <div className="space-y-2">
@@ -2262,7 +2262,7 @@ function StatusDashboardTab() {
                   )}
                   <div>
                     <p className="text-sm font-medium text-[#3A4A57]">{entry.payerName}</p>
-                    <p className="text-xs text-[#5A6B7A]">Due: {entry.reCredentialingDate}</p>
+                    <p className="text-sm text-[#5A6B7A]">Due: {entry.reCredentialingDate}</p>
                   </div>
                 </div>
                 {entry.enrollmentStatus === 're-credentialing-due' && (
@@ -2327,7 +2327,7 @@ function HelpTab() {
             <Send className="w-3 h-3" />
           </Button>
         </div>
-        <p className="text-xs text-slate-400 mt-2">
+        <p className="text-sm text-slate-400 mt-2">
           Opens the Aminy AI chat with your question — answers in real time.
         </p>
       </Card>
@@ -2368,7 +2368,7 @@ function HelpTab() {
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden"
                 >
-                  <div className="px-3 pb-3 text-xs text-[#5A6B7A] leading-relaxed border-t border-[#E8E4DF] pt-2">
+                  <div className="px-3 pb-3 text-sm text-[#5A6B7A] leading-relaxed border-t border-[#E8E4DF] pt-2">
                     {faq.answer}
                   </div>
                 </motion.div>
@@ -2378,7 +2378,7 @@ function HelpTab() {
         ))}
         {filteredFaqs.length === 0 && (
           <div className="text-center py-4">
-            <p className="text-xs text-slate-400">No matching FAQs found.</p>
+            <p className="text-sm text-slate-400">No matching FAQs found.</p>
             <Button
               variant="ghost"
               size="sm"
@@ -2419,7 +2419,7 @@ function HelpTab() {
             title="Coming soon"
           >
             <BookOpen className="w-3 h-3 mr-2" /> Credentialing Knowledge Base
-            <span className="ml-auto text-xs text-slate-400 font-normal">Coming soon</span>
+            <span className="ml-auto text-sm text-slate-400 font-normal">Coming soon</span>
           </Button>
           <Button
             variant="outline"
@@ -2429,7 +2429,7 @@ function HelpTab() {
             title="Coming soon"
           >
             <FileText className="w-3 h-3 mr-2" /> Download Payer Requirements Guide
-            <span className="ml-auto text-xs text-slate-400 font-normal">Coming soon</span>
+            <span className="ml-auto text-sm text-slate-400 font-normal">Coming soon</span>
           </Button>
         </div>
       </Card>

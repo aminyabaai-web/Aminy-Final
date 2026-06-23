@@ -486,10 +486,10 @@ export function AppointmentConfirmationScreen({
                 </button>
               </div>
               {promoError && (
-                <p className="text-xs text-red-500 mt-1">{promoError}</p>
+                <p className="text-sm text-red-500 mt-1">{promoError}</p>
               )}
               {promoApplied && (
-                <p className="text-xs text-green-600 mt-1">Promo "{promoApplied}" applied!</p>
+                <p className="text-sm text-green-600 mt-1">Promo "{promoApplied}" applied!</p>
               )}
             </div>
 
@@ -526,7 +526,7 @@ export function AppointmentConfirmationScreen({
                 <p className="text-sm text-[#5A6B7A] mt-1">
                   Cancel or reschedule free up to 24 hours before your visit. Late cancellations are charged 50% of the visit price, and no-shows are charged the full visit amount. If life changes suddenly, the same appointment record keeps your reminders, payment details, and next steps together.
                 </p>
-                <p className="mt-2 text-xs text-[#5A6B7A]">
+                <p className="mt-2 text-sm text-[#5A6B7A]">
                   After booking, you can make changes from appointment details without losing your reminder history or secure room link.
                 </p>
               </div>
@@ -541,7 +541,7 @@ export function AppointmentConfirmationScreen({
                 <p className="mt-1 text-sm text-[#6B9080]">
                   After checkout, Aminy confirms the visit, sends your reminders, and keeps the video room link ready in the app and email. If you need reimbursement, your superbill is prepared after the session.
                 </p>
-                <p className="mt-2 text-xs text-[#6B9080]">
+                <p className="mt-2 text-sm text-[#6B9080]">
                   You will not be bounced between tools. Booking, reminders, room access, and follow-up stay in Aminy.
                 </p>
               </div>
@@ -558,7 +558,7 @@ export function AppointmentConfirmationScreen({
               onChange={e => setTelehealthConsent(e.target.checked)}
               className="mt-1 h-4 w-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
             />
-            <span className="text-xs text-[#5A6B7A] leading-5">
+            <span className="text-sm text-[#5A6B7A] leading-5">
               I consent to receive care via telehealth. I understand this session uses secure video, is not a substitute for emergency care, and that I should call 911 for emergencies. I have reviewed the{' '}
               <a href="/?screen=privacy-policy" className="text-[#6B9080] underline">Privacy Policy</a> and{' '}
               <a href="/?screen=terms-of-service" className="text-[#6B9080] underline">Terms of Service</a>.
@@ -641,7 +641,7 @@ export function AppointmentConfirmationScreen({
               <p className="text-sm text-green-800">
                 Secured by <span className="font-medium">Stripe</span>
               </p>
-              <p className="text-xs text-green-600">Your payment details stay encrypted. Aminy stores the appointment record, not your full card.</p>
+              <p className="text-sm text-green-600">Your payment details stay encrypted. Aminy stores the appointment record, not your full card.</p>
             </div>
           </div>
         </div>
@@ -740,7 +740,7 @@ export function AppointmentConfirmationScreen({
                 <p className="mt-1 text-sm text-[#6B9080]">
                   Aminy keeps the room link attached to this appointment and includes it in your reminder messages. The join button appears 15 minutes before start so you never need to hunt for it.
                 </p>
-                <p className="mt-2 text-xs text-[#6B9080]">
+                <p className="mt-2 text-sm text-[#6B9080]">
                   Open Aminy a few minutes early and use the same appointment card for reminders, room access, and follow-up.
                 </p>
               </div>
@@ -791,7 +791,7 @@ export function AppointmentConfirmationScreen({
                 <p className="mt-1 text-sm text-[#5A6B7A]">
                   Reschedule or cancel free up to 24 hours before the visit. Late cancellations are charged 50% and no-shows are charged the full visit amount.
                 </p>
-                <p className="mt-2 text-xs text-[#5A6B7A]">
+                <p className="mt-2 text-sm text-[#5A6B7A]">
                   Payment context, policy details, refund status, and the next room link stay tied to the same appointment record.
                 </p>
               </div>

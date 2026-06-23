@@ -413,7 +413,7 @@ export function RecordingPlayback({
             </div>
             <div>
               <h2 className="text-base font-semibold text-[#1B2733]">Session Recordings</h2>
-              <p className="text-xs text-[#5A6B7A]">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
+              <p className="text-sm text-[#5A6B7A]">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
             </div>
           </div>
           {onClose && (
@@ -445,7 +445,7 @@ export function RecordingPlayback({
                   {formatDate(rec.createdAt)}
                 </span>
                 {rec.durationSeconds && (
-                  <span className="block text-xs text-[#8A9BA8] mt-0.5">
+                  <span className="block text-sm text-[#8A9BA8] mt-0.5">
                     {formatDuration(rec.durationSeconds)}
                   </span>
                 )}
@@ -471,7 +471,7 @@ export function RecordingPlayback({
               <AlertCircle size={16} className="text-amber-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm font-medium text-amber-800">Playback Restricted</p>
-                <p className="text-xs text-amber-700 mt-1">{error}</p>
+                <p className="text-sm text-amber-700 mt-1">{error}</p>
               </div>
             </div>
           </div>
@@ -510,7 +510,7 @@ export function RecordingPlayback({
                 onChange={handleSeek}
                 className="w-full h-1.5 bg-[#E8E4DF] rounded-full appearance-none cursor-pointer accent-teal-600"
               />
-              <div className="flex justify-between text-xs text-[#8A9BA8]">
+              <div className="flex justify-between text-sm text-[#8A9BA8]">
                 <span>{formatDuration(currentTime)}</span>
                 <span>{formatDuration(duration)}</span>
               </div>
@@ -594,7 +594,7 @@ export function RecordingPlayback({
             {/* Bookmarks panel */}
             {showBookmarks && (
               <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
-                <h4 className="text-xs font-semibold text-[#3A4A57] flex items-center gap-1.5">
+                <h4 className="text-sm font-semibold text-[#3A4A57] flex items-center gap-1.5">
                   <BookmarkCheck size={13} />
                   Bookmarks ({bookmarks.length})
                 </h4>
@@ -627,7 +627,7 @@ export function RecordingPlayback({
                       >
                         <button
                           onClick={() => seekToTimestamp(bm.timestamp)}
-                          className="flex-1 flex items-center gap-2 px-2 py-1.5 text-xs text-left rounded-lg hover:bg-white transition-colors"
+                          className="flex-1 flex items-center gap-2 px-2 py-1.5 text-sm text-left rounded-lg hover:bg-white transition-colors"
                         >
                           <span className="text-[#6B9080] font-mono font-medium w-12">
                             {formatDuration(bm.timestamp)}
@@ -645,7 +645,7 @@ export function RecordingPlayback({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-xs text-[#8A9BA8] text-center py-2">
+                  <p className="text-sm text-[#8A9BA8] text-center py-2">
                     No bookmarks yet. Add one to mark a key moment.
                   </p>
                 )}
@@ -655,7 +655,7 @@ export function RecordingPlayback({
             {/* Metadata panel */}
             {showMetadata && selectedRecording && (
               <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
-                <h4 className="text-xs font-semibold text-[#3A4A57]">Recording Details</h4>
+                <h4 className="text-sm font-semibold text-[#3A4A57]">Recording Details</h4>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                   <div>
                     <span className="text-[#8A9BA8]">Date</span>
@@ -675,13 +675,13 @@ export function RecordingPlayback({
                   )}
                   <div>
                     <span className="text-[#8A9BA8]">Session ID</span>
-                    <p className="text-[#3A4A57] font-mono text-xs">{selectedRecording.sessionId.slice(0, 12)}...</p>
+                    <p className="text-[#3A4A57] font-mono text-sm">{selectedRecording.sessionId.slice(0, 12)}...</p>
                   </div>
                 </div>
                 {providerNotes && (
                   <div className="mt-2 pt-2 border-t border-[#E8E4DF]">
-                    <span className="text-[#8A9BA8] text-xs">Provider Notes</span>
-                    <p className="text-[#3A4A57] text-xs mt-1 leading-relaxed">{providerNotes}</p>
+                    <span className="text-[#8A9BA8] text-sm">Provider Notes</span>
+                    <p className="text-[#3A4A57] text-sm mt-1 leading-relaxed">{providerNotes}</p>
                   </div>
                 )}
               </div>
@@ -694,7 +694,7 @@ export function RecordingPlayback({
           <div className="p-12 text-center">
             <Video className="w-10 h-10 text-[#8A9BA8] mx-auto mb-3" />
             <p className="text-sm text-[#5A6B7A]">No recordings available.</p>
-            <p className="text-xs text-[#8A9BA8] mt-1">
+            <p className="text-sm text-[#8A9BA8] mt-1">
               Recordings appear here after a session with recording consent enabled.
             </p>
           </div>

@@ -477,7 +477,7 @@ export function BookVisitScreen({
             );
           })}
         </div>
-        <p className="text-xs leading-5 text-[#5A6B7A]">
+        <p className="text-sm leading-5 text-[#5A6B7A]">
           Choose a time and Aminy keeps the rest simple: payment, reminders, secure room access, and any superbill follow-up stay attached to the same appointment.
         </p>
       </div>
@@ -493,7 +493,7 @@ export function BookVisitScreen({
             <p className="text-sm font-medium text-[#1B2733]">
               Cash-pay stays simple here
             </p>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Choose a licensed provider, book a time, and keep reminders, room access, and your superbill in one place.
             </p>
           </div>
@@ -510,11 +510,11 @@ export function BookVisitScreen({
                 {telehealthAvailability.eligibleProviderCount} provider{telehealthAvailability.eligibleProviderCount !== 1 ? 's' : ''} available within 72 hours
               </p>
               {telehealthAvailability.earliestSlot && (
-                <p className="text-xs text-green-600">
+                <p className="text-sm text-green-600">
                   Next available: {new Date(telehealthAvailability.earliestSlot.startTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(telehealthAvailability.earliestSlot.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                 </p>
               )}
-              <p className="mt-1 text-xs text-green-700">
+              <p className="mt-1 text-sm text-green-700">
                 Aminy keeps the whole path calmer: booking, reminders, secure room access, and follow-up.
               </p>
             </div>
@@ -618,7 +618,7 @@ function ProviderCard({
             </div>
             <div className="text-right">
               <span className="text-lg font-bold text-[#1B2733]">${price}</span>
-              <p className="text-xs text-green-600 font-medium">HSA/FSA eligible</p>
+              <p className="text-sm text-green-600 font-medium">HSA/FSA eligible</p>
             </div>
           </div>
 
@@ -790,14 +790,14 @@ function NoProvidersCard({
                 <span className="text-lg">🎥</span>
                 <div>
                   <p className="text-sm font-medium text-[#1B2733]">Monthly Q&A Sessions</p>
-                  <p className="text-xs text-[#5A6B7A]">Live sessions with providers (included)</p>
+                  <p className="text-sm text-[#5A6B7A]">Live sessions with providers (included)</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">📚</span>
                 <div>
                   <p className="text-sm font-medium text-[#1B2733]">Evidence-Based Resources</p>
-                  <p className="text-xs text-[#5A6B7A]">Guides and strategies library</p>
+                  <p className="text-sm text-[#5A6B7A]">Guides and strategies library</p>
                 </div>
               </div>
               {/* ONLY show Find Local Care option when 72-hour rule permits */}
@@ -809,7 +809,7 @@ function NoProvidersCard({
                   <span className="text-lg">🔍</span>
                   <div>
                     <p className="text-sm font-medium text-[#1B2733]">Find Local Care</p>
-                    <p className="text-xs text-[#5A6B7A]">Provider directory & referrals</p>
+                    <p className="text-sm text-[#5A6B7A]">Provider directory & referrals</p>
                   </div>
                 </button>
               )}
