@@ -670,7 +670,7 @@ export function OnDemandTelehealth({
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 30)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Full session (recommended)</p>
+                <p className="text-sm text-[#5A6B7A]">Full session (recommended)</p>
               </button>
             </div>
           </div>
@@ -723,7 +723,7 @@ export function OnDemandTelehealth({
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
             <div className="flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 This is wellness coaching, not emergency services. If there's immediate danger,
                 please call <a href="tel:911" className="underline font-medium">911</a>.
               </p>
@@ -914,7 +914,7 @@ export function OnDemandTelehealth({
               </div>
               <div className="text-right">
                 <p className="text-white font-mono text-lg">{formatElapsed(elapsed)}</p>
-                <p className="text-white/50 text-xs">
+                <p className="text-white/50 text-sm">
                   of {session.duration} min session
                 </p>
               </div>
