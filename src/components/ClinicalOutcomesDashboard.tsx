@@ -412,8 +412,8 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
         </span>
       </div>
       <div className="flex justify-between mt-0.5">
-        <span className="text-xs text-[#8A9BA8]">Baseline: {goal.baseline} {goal.unit}</span>
-        <span className="text-xs text-[#8A9BA8]">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
+        <span className="text-sm text-[#8A9BA8]">Baseline: {goal.baseline} {goal.unit}</span>
+        <span className="text-sm text-[#8A9BA8]">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
       </div>
     </div>
   );
@@ -462,10 +462,10 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
       </div>
 
       <div className="flex justify-between mt-1">
-        <span className="text-xs text-[#8A9BA8]">
+        <span className="text-sm text-[#8A9BA8]">
           Prev 30d avg: {trend.avgPrevious30.toFixed(1)}
         </span>
-        <span className="text-xs text-[#8A9BA8]">
+        <span className="text-sm text-[#8A9BA8]">
           Last 30d avg: {trend.avgLast30.toFixed(1)}
         </span>
       </div>
@@ -499,7 +499,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           <div key={i} className="mb-3">
             <div className="flex justify-between mb-1">
               <span className="text-[13px] font-semibold text-[#0D1B2A]">{cat.category}</span>
-              <span className="text-xs text-[#5A6B7A]">{cat.count} goals / {cat.avgProgress}% avg</span>
+              <span className="text-sm text-[#5A6B7A]">{cat.count} goals / {cat.avgProgress}% avg</span>
             </div>
             <div className="h-2 bg-[#E8E4DF] rounded overflow-hidden">
               <div
@@ -520,13 +520,13 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-[#E8E4DF]">
             <div>
               <div className="text-[13px] font-semibold text-[#0D1B2A]">{child.childName}</div>
-              <div className="text-xs text-[#5A6B7A]">{child.goals.length} active goals</div>
+              <div className="text-sm text-[#5A6B7A]">{child.goals.length} active goals</div>
             </div>
             <div className="text-right">
               <div className="text-sm font-bold text-emerald-500">
                 +{child.improvementPct.toFixed(1)}%
               </div>
-              <div className="text-xs text-[#8A9BA8]">{child.assessmentType}</div>
+              <div className="text-sm text-[#8A9BA8]">{child.assessmentType}</div>
             </div>
           </div>
         ))}
