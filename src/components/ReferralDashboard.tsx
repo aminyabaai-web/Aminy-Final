@@ -375,7 +375,7 @@ export function ReferralDashboard({
             <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
               {summary.totalRewardsEarned}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Free Months</div>
+            <div className="text-sm text-[#5A6B7A]">Free Months</div>
           </Card>
         </div>
       )}
@@ -417,7 +417,7 @@ export function ReferralDashboard({
                 })()}
                 className="h-2 mb-3"
               />
-              <div className="flex justify-between text-xs text-[#5A6B7A]">
+              <div className="flex justify-between text-sm text-[#5A6B7A]">
                 <span>{summary.qualifiedReferrals} referrals</span>
                 <span>{summary.nextTier.minReferrals} for {summary.nextTier.name}</span>
               </div>
@@ -480,7 +480,7 @@ export function ReferralDashboard({
                     {tier.minReferrals}+ referrals
                   </span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {tier.perks[tier.perks.length - 1]}
                 </p>
               </div>
@@ -541,7 +541,7 @@ export function ReferralDashboard({
                       <div className="font-medium text-sm text-[#1B2733]">
                         Friend joined via your link
                       </div>
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {new Date(referral.createdAt).toLocaleDateString()}
                       </div>
                     </div>
