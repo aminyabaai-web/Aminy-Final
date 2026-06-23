@@ -446,7 +446,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       {loadingDenials && (
         <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF] flex items-center gap-2">
           <Loader2 className="w-4 h-4 animate-spin text-[#6B9080]" />
-          <span className="text-xs text-[#5A6B7A]">Checking for denied claims...</span>
+          <span className="text-sm text-[#5A6B7A]">Checking for denied claims...</span>
         </div>
       )}
 
@@ -577,7 +577,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <p className="text-sm font-medium text-[#1B2733]">{b.category}</p>
-                    <p className="text-xs text-[#5A6B7A]">{b.description}</p>
+                    <p className="text-sm text-[#5A6B7A]">{b.description}</p>
                   </div>
                   {b.authRequired && (
                     <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full flex-shrink-0">
@@ -585,7 +585,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                     </span>
                   )}
                 </div>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between text-sm mb-1">
                   <span className="text-[#5A6B7A]">
                     {b.unit === 'dollars' ? formatCurrency(b.used) : `${b.used} ${b.unit}`} used
                   </span>
@@ -599,7 +599,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                     style={{ width: `${usedPercent}%` }}
                   />
                 </div>
-                <p className="text-xs text-[#8A9BA8] mt-1">Annual limit: {b.annualLimit}</p>
+                <p className="text-sm text-[#8A9BA8] mt-1">Annual limit: {b.annualLimit}</p>
               </div>
             );
           })}
@@ -610,8 +610,8 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
       <div className="flex items-start gap-2 p-3 bg-[#EEF4F8] rounded-xl border border-blue-100">
         <HelpCircle className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
         <div>
-          <p className="text-xs font-medium text-[#4A6478]">Need help understanding your benefits?</p>
-          <p className="text-xs text-blue-700 mt-0.5">
+          <p className="text-sm font-medium text-[#4A6478]">Need help understanding your benefits?</p>
+          <p className="text-sm text-blue-700 mt-0.5">
             Ask Aminy AI to explain any coverage terms, or contact your insurance company using the number on the back of your card.
           </p>
         </div>
