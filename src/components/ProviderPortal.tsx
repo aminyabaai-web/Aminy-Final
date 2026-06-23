@@ -993,7 +993,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         {provider.credentials}
                       </Badge>
                     </div>
-                    <span className="text-xs text-neutral-400 dark:text-[#5A6B7A] -mt-0.5">powered by Aminy</span>
+                    <span className="text-sm text-neutral-400 dark:text-[#5A6B7A] -mt-0.5">powered by Aminy</span>
                   </div>
                 </>
               ) : (
@@ -1785,8 +1785,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           <p className="text-sm font-medium text-[#1B2733] dark:text-white">
                             {thread.child_name ? `Re: ${thread.child_name}` : thread.parent_name || 'Family'}
                           </p>
-                          <span className="text-xs text-[#5A6B7A]">·</span>
-                          <span className="text-xs text-[#5A6B7A]">
+                          <span className="text-sm text-[#5A6B7A]">·</span>
+                          <span className="text-sm text-[#5A6B7A]">
                             {Math.round((Date.now() - new Date(thread.created_at).getTime()) / 3600000)}h ago
                           </span>
                         </div>
