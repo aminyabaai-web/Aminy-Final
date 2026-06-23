@@ -331,15 +331,15 @@ export function ClinicalReportExport({
               <p className="text-2xl font-bold text-[#6B9080]">{avgProgress}%</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Attendance Rate</p>
+              <p className="text-sm text-[#8A9BA8]">Attendance Rate</p>
               <p className="text-2xl font-bold text-[#6B9080]">{reportData.sessions.attendanceRate.toFixed(0)}%</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Treatment Hours</p>
+              <p className="text-sm text-[#8A9BA8]">Treatment Hours</p>
               <p className="text-2xl font-bold text-[#1B2733]">{reportData.sessions.totalHours.toFixed(0)}</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Behavioral Trend</p>
+              <p className="text-sm text-[#8A9BA8]">Behavioral Trend</p>
               <p className={`text-lg font-bold flex items-center gap-1 ${
                 reportData.behaviorData.overallTrend === 'improving' ? 'text-green-700' :
                 reportData.behaviorData.overallTrend === 'declining' ? 'text-red-700' : 'text-blue-700'

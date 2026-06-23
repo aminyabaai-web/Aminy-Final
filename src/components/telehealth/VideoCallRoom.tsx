@@ -671,7 +671,7 @@ export function VideoCall({
           {/* Connection quality */}
           <div className="flex items-center gap-1" title={`Connection: ${connectionQuality}`}>
             {getConnectionQualityIcon()}
-            <span className="text-xs text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
+            <span className="text-sm text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
           </div>
 
           {/* Timer */}
@@ -782,7 +782,7 @@ export function VideoCall({
                       style={msg.isLocal ? undefined : { backgroundColor: '#374151' }}
                     >
                       {!msg.isLocal && (
-                        <p className="text-xs text-slate-300 mb-1">{msg.senderName}</p>
+                        <p className="text-sm text-slate-300 mb-1">{msg.senderName}</p>
                       )}
                       <p className="text-sm">{msg.text}</p>
                     </div>
