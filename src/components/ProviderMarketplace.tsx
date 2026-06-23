@@ -1217,17 +1217,17 @@ export function ProviderMarketplace({
             <div className="grid sm:grid-cols-3 gap-3">
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">ADHD Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 60 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 60 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$299</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">Autism Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 90 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 90 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$799</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">Combined Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 120 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 120 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$999</span>
               </div>
             </div>
@@ -1235,7 +1235,7 @@ export function ProviderMarketplace({
 
           {/* What's Included */}
           <div className="mt-5 pt-5 border-t border-[#E8E4DF]">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#5A6B7A]">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[#5A6B7A]">
               <span className="flex items-center gap-1">
                 <Check className="w-3.5 h-3.5 text-green-500" />
                 Video session from home
