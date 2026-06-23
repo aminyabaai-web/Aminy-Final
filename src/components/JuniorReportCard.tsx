@@ -342,7 +342,7 @@ export function JuniorReportCard({
                 <Clock className="w-3.5 h-3.5 text-purple-500" />
                 <span className="text-lg font-bold text-purple-700">{data.totalMinutes}</span>
               </div>
-              <div className="text-xs text-purple-500">Minutes</div>
+              <div className="text-sm text-purple-500">Minutes</div>
             </div>
           </div>
 
@@ -358,7 +358,7 @@ export function JuniorReportCard({
                   .filter(d => d.sessions > 0)
                   .map(d => (
                     <div key={d.domain} className="flex items-center gap-2">
-                      <span className="text-xs text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
+                      <span className="text-sm text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
                       <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
@@ -368,7 +368,7 @@ export function JuniorReportCard({
                           style={{ width: `${Math.min(d.accuracy, 100)}%` }}
                         />
                       </div>
-                      <span className={`text-xs font-medium w-10 text-right ${accuracyColor(d.accuracy)}`}>
+                      <span className={`text-sm font-medium w-10 text-right ${accuracyColor(d.accuracy)}`}>
                         {d.accuracy}%
                       </span>
                       {trendIcon(d.trend)}
@@ -400,7 +400,7 @@ export function JuniorReportCard({
           )}
 
           {/* Extra stats */}
-          <div className="flex items-center gap-3 text-xs text-[#8A9BA8] pt-2 border-t border-[#E8E4DF]">
+          <div className="flex items-center gap-3 text-sm text-[#8A9BA8] pt-2 border-t border-[#E8E4DF]">
             <span>{data.tokensEarned} tokens earned</span>
             {data.calmCornerCount > 0 && (
               <span>Calm Corner {data.calmCornerCount}x</span>
