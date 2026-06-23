@@ -269,7 +269,7 @@ function ScorecardSummaryBar({ categories }: { categories: KPICategory[] }) {
           </div>
           <div className="text-center">
             <p className="text-xl font-bold text-slate-400">{total - entered.length}</p>
-            <p className="text-xs text-slate-400">Not entered</p>
+            <p className="text-sm text-slate-400">Not entered</p>
           </div>
         </div>
       </div>
@@ -415,7 +415,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
               Export Scorecard
             </Button>
             {lastSaved && (
-              <span className="text-xs text-slate-400">Saved {lastSaved}</span>
+              <span className="text-sm text-slate-400">Saved {lastSaved}</span>
             )}
           </div>
         </div>
@@ -435,8 +435,8 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
             { label: 'AACT AZ Contracts', sublabel: 'AHCCCS + 9 commercial payers', color: 'border-emerald-200 bg-emerald-50 text-emerald-700' },
           ].map(badge => (
             <div key={badge.label} className={`flex-1 min-w-[160px] border rounded-xl p-3 ${badge.color}`}>
-              <p className="text-xs font-semibold">{badge.label}</p>
-              <p className="text-xs mt-0.5 opacity-70">{badge.sublabel}</p>
+              <p className="text-sm font-semibold">{badge.label}</p>
+              <p className="text-sm mt-0.5 opacity-70">{badge.sublabel}</p>
             </div>
           ))}
         </div>
