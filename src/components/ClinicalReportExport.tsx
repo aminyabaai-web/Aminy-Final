@@ -390,8 +390,8 @@ export function ClinicalReportExport({
 
           {/* Sections included */}
           <div className="bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] p-3">
-            <p className="text-xs text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
-            <p className="text-xs text-[#8A9BA8]">
+            <p className="text-sm text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
+            <p className="text-sm text-[#8A9BA8]">
               {sectionToggles.filter(t => sections[t.key]).map(t => t.label).join(' · ')}
             </p>
           </div>
@@ -441,8 +441,8 @@ export function ClinicalReportExport({
           </p>
 
           <div className="bg-[#6B9080]/10 rounded-lg p-3 text-left mb-4">
-            <p className="text-xs font-medium text-[#6B9080] mb-1">Sharing tips:</p>
-            <ul className="text-xs text-[#6B9080] space-y-1">
+            <p className="text-sm font-medium text-[#6B9080] mb-1">Sharing tips:</p>
+            <ul className="text-sm text-[#6B9080] space-y-1">
               <li>• Upload to your provider's patient portal</li>
               <li>• Bring a printed copy to your next appointment</li>
               <li>• Share via secure email with your care team</li>
@@ -451,7 +451,7 @@ export function ClinicalReportExport({
           </div>
 
           <div className="bg-amber-50 rounded-lg p-3 text-left">
-            <p className="text-xs text-amber-800">
+            <p className="text-sm text-amber-800">
               <span className="font-medium">Privacy note:</span> This PDF contains Protected Health Information (PHI).
               Only share with authorized care providers.
             </p>

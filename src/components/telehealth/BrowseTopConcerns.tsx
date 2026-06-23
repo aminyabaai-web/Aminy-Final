@@ -287,7 +287,7 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
       <h3 className="font-medium text-[#1B2733] text-sm leading-tight mb-1">
         {concern.name}
       </h3>
-      <p className="text-xs text-[#5A6B7A] line-clamp-2">
+      <p className="text-sm text-[#5A6B7A] line-clamp-2">
         {concern.description}
       </p>
 

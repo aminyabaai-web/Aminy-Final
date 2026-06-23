@@ -364,14 +364,14 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
             <Video className="w-3 h-3" />
             Remote Visit Summary
           </p>
-          <p className="text-xs text-[#8A9BA8] mt-1">{formatDate(summary.createdAt)}</p>
+          <p className="text-sm text-[#8A9BA8] mt-1">{formatDate(summary.createdAt)}</p>
         </div>
       </div>
 
       {/* Reason Preview */}
       <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
         <p className="text-sm text-[#5A6B7A] line-clamp-2">{summary.reasonForVisit}</p>
-        <p className="text-xs text-[#6B9080] mt-2">
+        <p className="text-sm text-[#6B9080] mt-2">
           {summary.planForNext7Days.length} action items
         </p>
       </div>
@@ -419,7 +419,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
             </p>
           )}
           {item.dueDate && (
-            <p className={`text-xs mt-2 flex items-center gap-1 ${
+            <p className={`text-sm mt-2 flex items-center gap-1 ${
               isOverdue ? 'text-red-500' : 'text-[#8A9BA8]'
             }`}>
               <Clock className="w-3 h-3" />
@@ -552,7 +552,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
       {/* Clinical disclaimer */}
       <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
         <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-        <p className="text-xs text-amber-800 leading-relaxed">
+        <p className="text-sm text-amber-800 leading-relaxed">
           Goals are suggested starting points. Review and customize with your child's BCBA or therapist for best results.
         </p>
       </div>
@@ -568,7 +568,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
               <p className="text-sm font-semibold text-[#1B2733]">
                 {activeGoals.length} Active Goal{activeGoals.length !== 1 ? 's' : ''}
               </p>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 {completedGoals.length > 0 ? `${completedGoals.length} completed · ` : ''}
                 Average progress: {activeGoals.length > 0 ? Math.round(activeGoals.reduce((sum, g) => sum + (g.targetProgress > 0 ? (g.currentProgress / g.targetProgress) * 100 : 0), 0) / activeGoals.length) : 0}%
               </p>
