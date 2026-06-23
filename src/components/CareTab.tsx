@@ -835,7 +835,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="text-sm font-medium">
                   {session.date.toLocaleDateString()}
                 </div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {session.duration} minutes
                 </div>
               </div>
@@ -1005,15 +1005,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="grid grid-cols-3 gap-2 mt-4">
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-purple-600">3</div>
-                    <div className="text-xs text-[#5A6B7A]">Active goals</div>
+                    <div className="text-sm text-[#5A6B7A]">Active goals</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-blue-600">5</div>
-                    <div className="text-xs text-[#5A6B7A]">Daily routines</div>
+                    <div className="text-sm text-[#5A6B7A]">Daily routines</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-green-600">68%</div>
-                    <div className="text-xs text-[#5A6B7A]">On track</div>
+                    <div className="text-sm text-[#5A6B7A]">On track</div>
                   </div>
                 </div>
               ) : (

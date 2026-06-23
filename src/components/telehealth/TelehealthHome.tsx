@@ -237,7 +237,7 @@ export function TelehealthHome({
             {featuredProvidersProvenance ? <DataProvenanceBadge provenance={featuredProvidersProvenance} /> : null}
           </div>
           <p className="text-sm text-sky-800">{providerAvailabilityNote}</p>
-          <p className="mt-2 text-xs leading-5 text-sky-700">
+          <p className="mt-2 text-sm leading-5 text-sky-700">
             Cash-pay booking is live in supported states, and Aminy keeps the booking, reminders, secure room link, and follow-up together in one place.
           </p>
         </div>
@@ -315,7 +315,7 @@ export function TelehealthHome({
                   {concern.icon}
                 </span>
                 <span className="text-sm font-medium leading-5 text-[#1B2733] line-clamp-2">{concern.name}</span>
-                <span className="mt-2 text-xs text-[#5A6B7A]">Tap to see the safest next step</span>
+                <span className="mt-2 text-sm text-[#5A6B7A]">Tap to see the safest next step</span>
               </button>
             ))}
           </div>

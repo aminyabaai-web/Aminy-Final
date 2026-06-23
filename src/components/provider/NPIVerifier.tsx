@@ -146,8 +146,8 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
         <div className="flex items-start gap-2 p-2.5 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-semibold text-red-800">NPI not found</p>
-            <p className="text-xs text-red-700">
+            <p className="text-sm font-semibold text-red-800">NPI not found</p>
+            <p className="text-sm text-red-700">
               Double-check your NPI number.{' '}
               <a
                 href="https://npiregistry.cms.hhs.gov/"
@@ -163,7 +163,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
       )}
 
       {state === 'error' && (
-        <p className="text-xs text-slate-400">NPI registry temporarily unavailable — we'll verify manually.</p>
+        <p className="text-sm text-slate-400">NPI registry temporarily unavailable — we'll verify manually.</p>
       )}
 
       <p className="text-xs text-slate-400 flex items-center gap-1">
