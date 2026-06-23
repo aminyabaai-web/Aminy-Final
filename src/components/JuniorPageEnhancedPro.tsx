@@ -2236,7 +2236,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <Check className="w-6 h-6" />
                         </motion.button>
                       </div>
-                      <p className="text-center text-xs text-[#8A9BA8] dark:text-slate-400 mt-2">
+                      <p className="text-center text-sm text-[#8A9BA8] dark:text-slate-400 mt-2">
                         Type the word above, then press Enter or tap the check button
                       </p>
                     </div>
@@ -2440,7 +2440,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               </div>
 
               {/* Activity count */}
-              <p className="text-xs text-[#8A9BA8] dark:text-slate-400 mb-3">
+              <p className="text-sm text-[#8A9BA8] dark:text-slate-400 mb-3">
                 {allActivities.filter(a => activeTrackFilter === 'all' || a.skillType === activeTrackFilter).length} activities
               </p>
 
@@ -2483,7 +2483,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           {activity.icon}
                           <div>
                             <h4 className="text-sm font-medium">{activity.title}</h4>
-                            <p className="text-xs opacity-75">{activity.duration} {activity.track && `\u2022 ${activity.track}`}</p>
+                            <p className="text-sm opacity-75">{activity.duration} {activity.track && `\u2022 ${activity.track}`}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -2500,7 +2500,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         </div>
                       </div>
 
-                      <p className="text-xs opacity-70 mb-2 line-clamp-2">{activity.description}</p>
+                      <p className="text-sm opacity-70 mb-2 line-clamp-2">{activity.description}</p>
 
                       <div className="flex flex-wrap gap-1">
                         <Badge variant="outline" className="text-xs">
