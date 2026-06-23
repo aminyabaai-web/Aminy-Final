@@ -481,7 +481,7 @@ function TierCardView({
 
       {/* Features */}
       {tier.features_heading && (
-        <p className="text-xs font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
+        <p className="text-sm font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
       )}
       <ul className="space-y-2 flex-1">
         {tier.features.map((f, i) => (
@@ -494,7 +494,7 @@ function TierCardView({
 
       {/* Promo footer */}
       {tier.promoFooter && (
-        <p className="text-xs text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
+        <p className="text-sm text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
           <span className="font-medium underline underline-offset-2">Promo terms apply.</span> {tier.promoFooter}
         </p>
       )}

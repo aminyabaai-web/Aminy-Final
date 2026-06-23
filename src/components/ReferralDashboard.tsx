@@ -361,14 +361,14 @@ export function ReferralDashboard({
             <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
               {summary.totalReferrals}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Total Referrals</div>
+            <div className="text-sm text-[#5A6B7A]">Total Referrals</div>
           </Card>
           <Card className="p-3 text-center">
             <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
             <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
               {summary.qualifiedReferrals}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Qualified</div>
+            <div className="text-sm text-[#5A6B7A]">Qualified</div>
           </Card>
           <Card className="p-3 text-center">
             <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
