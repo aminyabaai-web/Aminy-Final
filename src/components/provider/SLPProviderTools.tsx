@@ -154,7 +154,7 @@ function AACGoalTracker() {
             style={{ width: `${Math.min(100, (totalUses / spontTarget) * 100)}%` }}
           />
         </div>
-        <p className="text-xs text-[#5A6B7A] mt-1.5">
+        <p className="text-sm text-[#5A6B7A] mt-1.5">
           {totalUses >= spontTarget
             ? `Goal met! ${totalUses}/${spontTarget} communications`
             : `${totalUses}/${spontTarget} — ${spontTarget - totalUses} more to goal`}
@@ -236,7 +236,7 @@ function LanguageSampleAnalysis() {
                 style={{ height: `${(entry.mlu / chartMax) * 88}px` }}
                 title={`MLU: ${entry.mlu}`}
               />
-              <span className="text-xs text-[#8A9BA8]" style={{ fontSize: '9px' }}>
+              <span className="text-sm text-[#8A9BA8]" style={{ fontSize: '9px' }}>
                 {entry.date.slice(5)}
               </span>
             </div>
@@ -258,7 +258,7 @@ function LanguageSampleAnalysis() {
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">MLU</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">MLU</label>
                 <input
                   type="number"
                   step="0.1"
@@ -269,7 +269,7 @@ function LanguageSampleAnalysis() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Utterances sampled</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Utterances sampled</label>
                 <input
                   type="number"
                   value={newUtterances}
@@ -280,7 +280,7 @@ function LanguageSampleAnalysis() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Notes</label>
               <input
                 value={newNotes}
                 onChange={e => setNewNotes(e.target.value)}
@@ -304,7 +304,7 @@ function LanguageSampleAnalysis() {
           <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
             <div>
               <span className="text-sm font-medium text-[#1B2733]">MLU {entry.mlu}</span>
-              <span className="text-xs text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
+              <span className="text-sm text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
               <p className="text-xs text-[#5A6B7A]">{entry.date}</p>
