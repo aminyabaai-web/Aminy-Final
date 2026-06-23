@@ -682,7 +682,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                       {message.role === 'assistant' && (
                         <CompassIcon className="w-3 h-3 opacity-60" />
                       )}
-                      <span className={`text-xs opacity-60 ${
+                      <span className={`text-sm opacity-60 ${
                         message.role === 'user' ? 'text-white/80' : 'text-muted-foreground'
                       }`}>
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -740,7 +740,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                   {/* Enhanced Citations */}
                   {message.citations && message.citations.length > 0 && (
                     <div className="mt-3 space-y-2">
-                      <div className="text-xs opacity-60 font-medium">
+                      <div className="text-sm opacity-60 font-medium">
                         Referenced from your records:
                       </div>
                       {message.citations.map((citation, index) => (
@@ -755,7 +755,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
                           <div className="text-left">
                             <div className="font-medium">{citation.title}</div>
                             {citation.snippet && (
-                              <div className="text-xs opacity-80 mt-1 line-clamp-2">
+                              <div className="text-sm opacity-80 mt-1 line-clamp-2">
                                 {citation.snippet}
                               </div>
                             )}

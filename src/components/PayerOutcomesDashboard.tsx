@@ -754,17 +754,17 @@ export function PayerOutcomesDashboard({
                                 {lane.supported ? lane.launchState.replace(/_/g, ' ') : 'manual review'}
                               </Badge>
                             </div>
-                            <p className="mt-1 text-xs text-[#5A6B7A]">
+                            <p className="mt-1 text-sm text-[#5A6B7A]">
                               {lane.totalCases} cases • {lane.blockedCases} blocked • {lane.deniedCases} denied • submission via {lane.submissionModes.join(', ').replace(/_/g, ' ')}
                             </p>
                           </div>
-                          <div className="text-right text-xs text-[#5A6B7A]">
+                          <div className="text-right text-sm text-[#5A6B7A]">
                             <p>{lane.authBlockedCases} auth blocked</p>
                             <p>{lane.secondaryPolicyCases} with secondary</p>
                           </div>
                         </div>
                         {lane.operatorNotes.length > 0 ? (
-                          <ul className="mt-3 space-y-1 text-xs text-[#5A6B7A] dark:text-slate-300">
+                          <ul className="mt-3 space-y-1 text-sm text-[#5A6B7A] dark:text-slate-300">
                             {lane.operatorNotes.map((note) => (
                               <li key={note} className="flex items-start gap-2">
                                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-500" />
@@ -789,7 +789,7 @@ export function PayerOutcomesDashboard({
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <p className="font-medium text-[#1B2733] dark:text-white">{payer.displayName}</p>
-                          <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
+                          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                             {payer.payerType.replace(/_/g, ' ')} • {payer.submissionPath.replace(/_/g, ' ')}
                           </p>
                         </div>

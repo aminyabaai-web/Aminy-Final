@@ -461,7 +461,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                 {takenToday}/{totalToday}
               </p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Taken Today</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Taken Today</p>
             </div>
           </div>
         </Card>
@@ -475,7 +475,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{pendingNow.length}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Due Now</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Due Now</p>
             </div>
           </div>
         </Card>
@@ -487,7 +487,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{medications.length}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Active Meds</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Meds</p>
             </div>
           </div>
         </Card>
@@ -501,7 +501,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{upcomingRefills.length}</p>
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Refills Soon</p>
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Refills Soon</p>
             </div>
           </div>
         </Card>
@@ -711,12 +711,12 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                           ))}
                         </div>
                         {med.prescriber && (
-                          <p className="text-xs text-neutral-400 mt-2">
+                          <p className="text-sm text-neutral-400 mt-2">
                             Prescribed by {med.prescriber}
                           </p>
                         )}
                         {med.refillDate && (
-                          <p className="text-xs text-amber-600 mt-1">
+                          <p className="text-sm text-amber-600 mt-1">
                             <Bell className="w-3 h-3 inline mr-1" />
                             Refill by {med.refillDate}
                           </p>

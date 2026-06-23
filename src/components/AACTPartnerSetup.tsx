@@ -153,7 +153,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your invite link</p>
         <div className="flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-3 py-2.5">
-          <p className="text-xs text-[#3A4A57] flex-1 truncate font-mono">{inviteUrl}</p>
+          <p className="text-sm text-[#3A4A57] flex-1 truncate font-mono">{inviteUrl}</p>
           <button
             onClick={copyInvite}
             className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
@@ -162,7 +162,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-[#5A6B7A]" />}
           </button>
         </div>
-        <p className="text-xs text-[#5A6B7A] mt-2">
+        <p className="text-sm text-[#5A6B7A] mt-2">
           Any provider who signs up via this link gets the {config.displayName} contract terms ({(1 - getRatePercent(config.payoutRail)) * 100}% provider take, {config.payers.length} insurance payers, {systemOfRecordLabel(config.systemOfRecord)} sync) automatically applied.
         </p>
       </div>
@@ -226,7 +226,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             <Users className="w-4 h-4 text-slate-400" />
             <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Roster ({providers.length})</p>
           </div>
-          <button onClick={loadProviders} className="text-xs text-[#6B9080]">Refresh</button>
+          <button onClick={loadProviders} className="text-sm text-[#6B9080]">Refresh</button>
         </div>
 
         {/* Status pills */}
@@ -256,7 +256,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
                 </div>
                 <div className="flex-1 min-w-0">
                   {p.full_name && <p className="text-sm font-medium text-[#1B2733] truncate">{p.full_name}</p>}
-                  <p className="text-xs text-[#5A6B7A] truncate">{p.email}</p>
+                  <p className="text-sm text-[#5A6B7A] truncate">{p.email}</p>
                 </div>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A] capitalize shrink-0">{p.status || 'invited'}</span>
               </div>

@@ -378,20 +378,20 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4">
                     <div className="text-center">
                       <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.activeGoals}</div>
-                      <div className="text-xs text-[#5A6B7A]">Active Goals</div>
+                      <div className="text-sm text-[#5A6B7A]">Active Goals</div>
                     </div>
                     {/* Sessions/Weeks render only when the backing data provides them —
                         never fabricated for a real coach. */}
                     {typeof selectedFamily.sessionsCount === 'number' && (
                       <div className="text-center">
                         <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.sessionsCount}</div>
-                        <div className="text-xs text-[#5A6B7A]">Sessions</div>
+                        <div className="text-sm text-[#5A6B7A]">Sessions</div>
                       </div>
                     )}
                     {typeof selectedFamily.weeksInProgram === 'number' && (
                       <div className="text-center">
                         <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.weeksInProgram}</div>
-                        <div className="text-xs text-[#5A6B7A]">Weeks</div>
+                        <div className="text-sm text-[#5A6B7A]">Weeks</div>
                       </div>
                     )}
                   </div>
@@ -578,7 +578,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 </div>
                 <div>
                   <p className="font-semibold text-[#1B2733] text-sm">Data Collection</p>
-                  <p className="text-xs text-[#5A6B7A]">DTT · NET · Behavior</p>
+                  <p className="text-sm text-[#5A6B7A]">DTT · NET · Behavior</p>
                 </div>
               </button>
               <button

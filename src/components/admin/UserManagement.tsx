@@ -379,7 +379,7 @@ export function UserManagement() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalUsers}</p>
-              <p className="text-xs text-[#5A6B7A]">Total Users</p>
+              <p className="text-sm text-[#5A6B7A]">Total Users</p>
             </div>
           </div>
         </Card>

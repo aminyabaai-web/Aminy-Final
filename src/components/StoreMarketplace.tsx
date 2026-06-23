@@ -1065,7 +1065,7 @@ export function StoreMarketplace({
           )}
         </div>
         {discounted && tierLabel && (
-          <span className="text-xs text-[#6B9080] font-medium">{tierLabel}</span>
+          <span className="text-sm text-[#6B9080] font-medium">{tierLabel}</span>
         )}
       </div>
     );

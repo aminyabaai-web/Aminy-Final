@@ -515,7 +515,7 @@ function BehaviorMode({
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-red-700 font-medium">Behavior (B)</label>
+                  <label className="text-sm text-red-700 font-medium">Behavior (B)</label>
                   <input
                     type="text"
                     value={incident.behavior}
@@ -525,7 +525,7 @@ function BehaviorMode({
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-blue-700 font-medium">Consequence (C)</label>
+                  <label className="text-sm text-blue-700 font-medium">Consequence (C)</label>
                   <input
                     type="text"
                     value={incident.consequence}
@@ -572,7 +572,7 @@ function BehaviorMode({
           {isDurationRunning && (
             <div className="flex items-center justify-center gap-1 mb-4">
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-xs text-red-600">Recording</span>
+              <span className="text-sm text-red-600">Recording</span>
             </div>
           )}
           <div className="flex gap-3 justify-center mt-4">
@@ -589,7 +589,7 @@ function BehaviorMode({
           </div>
           {durationRecords.length > 0 && (
             <div className="mt-4 text-left">
-              <p className="text-xs text-[#5A6B7A] mb-2">Recorded Episodes</p>
+              <p className="text-sm text-[#5A6B7A] mb-2">Recorded Episodes</p>
               <div className="space-y-1">
                 {durationRecords.map((d, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
@@ -634,7 +634,7 @@ function BehaviorMode({
           {isIntervalRunning && (
             <div className="text-center mb-4">
               <p className="text-3xl font-mono font-bold text-[#1B2733]">{intervalTimeLeft}s</p>
-              <p className="text-xs text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
+              <p className="text-sm text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
 
@@ -1013,7 +1013,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             {sessionStarted && (
               <div className="flex items-center justify-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs text-green-400 font-mono">{formatSeconds(elapsedSeconds)}</span>
+                <span className="text-sm text-green-400 font-mono">{formatSeconds(elapsedSeconds)}</span>
               </div>
             )}
           </div>

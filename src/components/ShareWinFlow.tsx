@@ -304,7 +304,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                       <Gift className="w-4 h-4 text-[#2A7D99] shrink-0 mt-0.5" />
                       <div>
                         <p className="text-sm font-semibold text-[#1B2733]">Know another autism family?</p>
-                        <p className="text-xs text-[#5A6B7A]">
+                        <p className="text-sm text-[#5A6B7A]">
                           Send them an invite — they get {REFERRAL_PROGRAM_CONFIG.referredReward.description.toLowerCase()}, you get a free month.
                         </p>
                       </div>

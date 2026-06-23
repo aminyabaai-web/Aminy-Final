@@ -264,7 +264,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                     <p className="text-sm text-amber-700">{reward.description}</p>
                   </div>
                   {reward.redeemed ? (
-                    <span className="text-xs text-[#8A9BA8]">Redeemed</span>
+                    <span className="text-sm text-[#8A9BA8]">Redeemed</span>
                   ) : (
                     <span className="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-800">Active</span>
                   )}
@@ -290,20 +290,20 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
       <div className="flex items-center gap-4 text-center">
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalFamilies.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Families</p>
+          <p className="text-sm text-[#5A6B7A]">Families</p>
         </div>
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalProviders.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Providers</p>
+          <p className="text-sm text-[#5A6B7A]">Providers</p>
         </div>
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalSessions.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Sessions</p>
+          <p className="text-sm text-[#5A6B7A]">Sessions</p>
         </div>
       </div>
 
       {proof.recentSignups > 0 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-[#6B9080]">
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-sm text-[#6B9080]">
           <Zap className="h-3.5 w-3.5" />
           <span>{proof.recentSignups} families joined this week</span>
         </div>
@@ -316,7 +316,7 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
             className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-[#8A9BA8]'}`}
           />
         ))}
-        <span className="ml-1 text-xs text-[#5A6B7A]">{proof.averageRating.toFixed(1)}</span>
+        <span className="ml-1 text-sm text-[#5A6B7A]">{proof.averageRating.toFixed(1)}</span>
       </div>
     </div>
   );

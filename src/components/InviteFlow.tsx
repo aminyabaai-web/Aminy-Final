@@ -270,7 +270,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
             </div>
             <div>
               <h2 className="text-base font-bold text-[#1B2733]">Invite Friends</h2>
-              <p className="text-xs text-[#5A6B7A]">Give $25, get 1 free month</p>
+              <p className="text-sm text-[#5A6B7A]">Give $25, get 1 free month</p>
             </div>
           </div>
           <button
@@ -291,7 +291,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <p className="text-sm font-semibold text-[#6B9080]">
                   You both win
                 </p>
-                <p className="text-xs text-[#6B9080] mt-0.5 leading-relaxed">
+                <p className="text-sm text-[#6B9080] mt-0.5 leading-relaxed">
                   Your friend gets <strong>$25 credit</strong> toward their first expert session.
                   You get <strong>1 free month</strong> when they subscribe.
                 </p>

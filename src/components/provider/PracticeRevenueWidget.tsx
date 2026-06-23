@@ -173,7 +173,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
         ].map((item) => (
           <div key={item.label} className="rounded-xl bg-[#FAF7F2] p-2.5 text-center">
             <p className={`text-base font-bold ${item.color}`}>{fmt(item.amount)}</p>
-            <p className="text-xs text-[#5A6B7A] mt-0.5">{item.label}</p>
+            <p className="text-sm text-[#5A6B7A] mt-0.5">{item.label}</p>
           </div>
         ))}
       </div>
@@ -181,17 +181,17 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
       {/* This month / All-time */}
       <div className="flex gap-4 border-t border-[#E8E4DF] pt-3">
         <div>
-          <p className="text-xs text-[#5A6B7A]">This month</p>
+          <p className="text-sm text-[#5A6B7A]">This month</p>
           <p className="text-sm font-bold text-[#1B2733]">{fmt(data.thisMonthBilled)}</p>
-          <p className="text-xs text-[#5A6B7A]">{fmt(data.thisMonthPaid)} collected</p>
+          <p className="text-sm text-[#5A6B7A]">{fmt(data.thisMonthPaid)} collected</p>
         </div>
         <div className="border-l border-[#E8E4DF] pl-4">
-          <p className="text-xs text-[#5A6B7A]">All-time</p>
+          <p className="text-sm text-[#5A6B7A]">All-time</p>
           <p className="text-sm font-bold text-[#1B2733]">{fmt(data.allTimeBilled)}</p>
-          <p className="text-xs text-[#5A6B7A]">{fmt(data.allTimePaid)} collected</p>
+          <p className="text-sm text-[#5A6B7A]">{fmt(data.allTimePaid)} collected</p>
         </div>
         <div className="border-l border-[#E8E4DF] pl-4 ml-auto">
-          <p className="text-xs text-[#5A6B7A]">Avg/session</p>
+          <p className="text-sm text-[#5A6B7A]">Avg/session</p>
           <p className="text-sm font-bold text-[#1B2733]">${data.avgPerSession}</p>
         </div>
       </div>
@@ -200,13 +200,13 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
       <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-3 space-y-2">
         <div className="flex items-center gap-2">
           <CheckCircle className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-          <p className="text-xs font-medium text-emerald-800">
+          <p className="text-sm font-medium text-emerald-800">
             Clean claims: {data.cleanClaimsThisWeek} of {data.totalClaimsThisWeek} this week ({cleanRate}%)
           </p>
         </div>
         <div className="flex items-center gap-2">
           <TrendingUp className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-          <p className="text-xs text-emerald-700">
+          <p className="text-sm text-emerald-700">
             {data.topPayer} pays fastest — avg {data.topPayerAvgDays} days
           </p>
         </div>

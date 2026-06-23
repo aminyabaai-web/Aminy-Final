@@ -671,8 +671,8 @@ export function SuperbillGenerator({
                                   ${cpt.defaultPrice}
                                 </span>
                               </div>
-                              <p className="text-xs text-[#5A6B7A]">{cpt.description}</p>
-                              <p className="text-xs text-slate-400">Requires: {cpt.requiresLicense}</p>
+                              <p className="text-sm text-[#5A6B7A]">{cpt.description}</p>
+                              <p className="text-sm text-slate-400">Requires: {cpt.requiresLicense}</p>
                             </div>
                           </label>
                         ))}
@@ -728,19 +728,19 @@ export function SuperbillGenerator({
               <div>
                 <h4 className="font-medium text-[#3A4A57] mb-2">Provider</h4>
                 <p className="text-sm">{formData.providerName}, {formData.providerCredentials}</p>
-                {formData.providerNPI && <p className="text-xs text-[#5A6B7A]">NPI: {formData.providerNPI}</p>}
+                {formData.providerNPI && <p className="text-sm text-[#5A6B7A]">NPI: {formData.providerNPI}</p>}
               </div>
               <div>
                 <h4 className="font-medium text-[#3A4A57] mb-2">Patient</h4>
                 <p className="text-sm">{formData.patientName}</p>
-                <p className="text-xs text-[#5A6B7A]">DOB: {formData.patientDOB}</p>
+                <p className="text-sm text-[#5A6B7A]">DOB: {formData.patientDOB}</p>
               </div>
             </div>
 
             <div className="mb-4 sm:mb-6">
               <h4 className="font-medium text-[#3A4A57] mb-2">Date of Service</h4>
               <p className="text-sm">{formData.dateOfService}</p>
-              <p className="text-xs text-[#5A6B7A]">Place of Service: 02 (Telehealth)</p>
+              <p className="text-sm text-[#5A6B7A]">Place of Service: 02 (Telehealth)</p>
             </div>
 
             <div className="mb-4 sm:mb-6">
@@ -809,7 +809,7 @@ export function SuperbillGenerator({
               <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-medium text-blue-900">Submit to Insurance</p>
-                <p className="text-xs text-blue-700 mt-0.5">
+                <p className="text-sm text-blue-700 mt-0.5">
                   Electronically submit this claim to your insurance via our clearinghouse.
                   {!isClearinghouseConfigured() && ' (Demo mode - no live submission)'}
                 </p>
@@ -867,7 +867,7 @@ export function SuperbillGenerator({
           <p className="text-[#5A6B7A] mb-2">
             Generating EDI 837P and transmitting to clearinghouse.
           </p>
-          <p className="text-xs text-slate-400">This may take a moment.</p>
+          <p className="text-sm text-slate-400">This may take a moment.</p>
         </Card>
       )}
 
