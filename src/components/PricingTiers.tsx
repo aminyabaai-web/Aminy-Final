@@ -291,7 +291,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             </button>
           </div>
         </div>
-        <p className="text-center text-xs text-[#8A9BA8] mb-4">
+        <p className="text-center text-sm text-[#8A9BA8] mb-4">
           {audience === 'individual' ? 'For families & caregivers' : 'For BCBAs, clinics & ABA organizations'}
         </p>
 
@@ -335,7 +335,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {/* Cross-sell nudge */}
         {audience === 'individual' && (
           <div className="text-center mt-8 px-4">
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Are you a BCBA or running a clinic?{' '}
               <button
                 onClick={() => setAudience('provider')}

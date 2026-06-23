@@ -144,8 +144,8 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                 ))}
               </div>
               <div className="flex justify-between mt-1 px-0.5">
-                <span className="text-xs text-slate-400">None</span>
-                <span className="text-xs text-slate-400">A lot</span>
+                <span className="text-sm text-slate-400">None</span>
+                <span className="text-sm text-slate-400">A lot</span>
               </div>
             </motion.div>
           )}
@@ -168,8 +168,8 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                 ))}
               </div>
               <div className="flex justify-between mt-1 px-0.5">
-                <span className="text-xs text-slate-400">Not at all</span>
-                <span className="text-xs text-slate-400">Very</span>
+                <span className="text-sm text-slate-400">Not at all</span>
+                <span className="text-sm text-slate-400">Very</span>
               </div>
             </motion.div>
           )}
@@ -178,7 +178,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
             <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-2 text-center">
               <CheckCircle className="w-8 h-8 text-[#43AA8B] mx-auto mb-2" />
               <p className="text-sm font-medium text-[#1B2733]">Check-in recorded.</p>
-              <p className="text-xs text-slate-400 mt-0.5">See you next week.</p>
+              <p className="text-sm text-slate-400 mt-0.5">See you next week.</p>
             </motion.div>
           )}
         </AnimatePresence>

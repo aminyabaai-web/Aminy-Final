@@ -215,8 +215,8 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                   ))}
                 </div>
                 <div className="flex justify-between px-0.5">
-                  <span className="text-xs text-slate-400">Mild</span>
-                  <span className="text-xs text-slate-400">Severe</span>
+                  <span className="text-sm text-slate-400">Mild</span>
+                  <span className="text-sm text-slate-400">Severe</span>
                 </div>
               </motion.div>
             )}
