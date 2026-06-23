@@ -434,7 +434,7 @@ function HistoryView({
                     })}
                     {a.overallNotes && (
                       <div className="mt-2 p-2 bg-[#FAF7F2] rounded-lg">
-                        <p className="text-xs text-[#5A6B7A]">{a.overallNotes}</p>
+                        <p className="text-sm text-[#5A6B7A]">{a.overallNotes}</p>
                       </div>
                     )}
                   </div>
@@ -462,7 +462,7 @@ function DevelopmentPlanView({
       <div className="text-center py-12">
         <BarChart3 className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No assessments available</p>
-        <p className="text-xs text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
+        <p className="text-sm text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
       </div>
     );
   }
@@ -475,12 +475,12 @@ function DevelopmentPlanView({
   return (
     <div className="space-y-4">
       <h2 className="text-sm font-semibold text-[#3A4A57]">Development Plan &mdash; {rbtName}</h2>
-      <p className="text-xs text-[#5A6B7A]">Based on assessment from {latest.date}</p>
+      <p className="text-sm text-[#5A6B7A]">Based on assessment from {latest.date}</p>
 
       {/* Priority: Low areas */}
       {lowAreas.length > 0 && (
         <div className="bg-red-50 rounded-xl p-3 border border-red-200">
-          <h3 className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-red-700 mb-2 flex items-center gap-1">
             <AlertTriangle className="w-3.5 h-3.5" />
             Priority Development Areas ({lowAreas.length})
           </h3>
@@ -489,12 +489,12 @@ function DevelopmentPlanView({
               <div key={r.areaId} className="bg-white rounded-lg p-2 border border-red-100">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-[#1B2733]">{r.areaName}</span>
-                  <span className="text-xs font-bold text-red-600">{r.rating}/5</span>
+                  <span className="text-sm font-bold text-red-600">{r.rating}/5</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   {RATING_LABELS[r.rating]} &mdash; Schedule targeted supervision sessions focusing on this area.
                 </p>
-                {r.notes && <p className="text-xs text-[#5A6B7A] mt-1 italic">Note: {r.notes}</p>}
+                {r.notes && <p className="text-sm text-[#5A6B7A] mt-1 italic">Note: {r.notes}</p>}
               </div>
             ))}
           </div>
@@ -504,7 +504,7 @@ function DevelopmentPlanView({
       {/* Developing areas */}
       {midAreas.length > 0 && (
         <div className="bg-amber-50 rounded-xl p-3 border border-amber-200">
-          <h3 className="text-xs font-semibold text-amber-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-amber-700 mb-2 flex items-center gap-1">
             <TrendingUp className="w-3.5 h-3.5" />
             Developing ({midAreas.length})
           </h3>

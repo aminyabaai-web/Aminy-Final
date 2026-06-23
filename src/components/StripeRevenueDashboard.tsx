@@ -251,7 +251,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-bold text-[#1B2733]">Revenue Dashboard</h2>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">Real-time Stripe metrics</p>
+          <p className="text-sm text-[#5A6B7A] mt-0.5">Real-time Stripe metrics</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -306,7 +306,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             ) : (
               <Minus size={12} className="text-[#8A9BA8]" />
             )}
-            <span className={`text-xs font-medium ${
+            <span className={`text-sm font-medium ${
               (mrr?.mrrGrowthPercent || 0) > 0 ? 'text-green-600' :
               (mrr?.mrrGrowthPercent || 0) < 0 ? 'text-red-600' : 'text-[#5A6B7A]'
             }`}>
@@ -324,7 +324,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <p className="text-2xl font-bold text-[#1B2733]">
             {formatCurrency(arr)}
           </p>
-          <p className="text-xs text-[#5A6B7A] mt-1">
+          <p className="text-sm text-[#5A6B7A] mt-1">
             Run rate from current MRR
           </p>
         </div>

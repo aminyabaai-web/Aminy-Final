@@ -129,8 +129,8 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
           ].map(item => (
             <div key={item.label} className="flex items-center justify-between">
               <div>
-                <p className={`text-xs font-medium ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>{item.label}</p>
-                <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{item.desc}</p>
+                <p className={`text-sm font-medium ${isDark ? 'text-slate-200' : 'text-gray-800'}`}>{item.label}</p>
+                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>{item.desc}</p>
               </div>
               {item.locked
                 ? <span className="text-xs font-medium text-green-400 bg-green-900/40 px-2 py-0.5 rounded-full">Required</span>
@@ -143,7 +143,7 @@ export function CookieConsent({ onAccept, onDecline }: CookieConsentProps) {
 
       <div className={`backdrop-blur-md px-4 py-2.5 flex items-center gap-3 ${isDark ? 'bg-slate-900/95' : 'bg-white/95'}`} style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.15)', flexWrap: 'wrap', rowGap: '8px' }}>
         <Cookie className="w-3.5 h-3.5 flex-shrink-0 text-primary" />
-        <p className={`flex-1 text-xs leading-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{ minWidth: '150px' }}>
+        <p className={`flex-1 text-sm leading-5 ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{ minWidth: '150px' }}>
           We use cookies for functionality &amp; analytics.
         </p>
         <div className="flex items-center gap-1.5 flex-shrink-0" style={{ marginLeft: 'auto' }}>

@@ -242,7 +242,7 @@ export function UsageMeter({
                     ? "Unlock AI memories"
                     : "Go unlimited"}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {normalizedTier === 'free'
                   ? "Upgrade for unlimited chat & memory"
                   : "Pro includes unlimited everything"}
