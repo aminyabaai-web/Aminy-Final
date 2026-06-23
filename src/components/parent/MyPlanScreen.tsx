@@ -298,7 +298,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       />
                     </div>
                   </div>
-                  <p className="mt-2.5 text-xs leading-relaxed text-[#5A6B7A]">
+                  <p className="mt-2.5 text-sm leading-relaxed text-[#5A6B7A]">
                     {goal.recommendation}
                   </p>
                 </motion.div>
@@ -327,7 +327,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                 >
                   <div className="flex items-start gap-3">
                     <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500" />
-                    <p className="text-xs leading-relaxed text-amber-800">{alert}</p>
+                    <p className="text-sm leading-relaxed text-amber-800">{alert}</p>
                   </div>
                 </motion.div>
               ))}
@@ -355,7 +355,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                 >
                   <div className="flex items-start gap-3">
                     <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
-                    <p className="text-xs leading-relaxed text-[#6B9080]">{rec}</p>
+                    <p className="text-sm leading-relaxed text-[#6B9080]">{rec}</p>
                   </div>
                 </motion.div>
               ))}
@@ -404,7 +404,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   {action.dueDate && (
                     <div className="mt-1 flex items-center gap-1">
                       <Calendar className="h-3 w-3 text-[#8A9BA8]" />
-                      <span className="text-xs text-[#5A6B7A]">
+                      <span className="text-sm text-[#5A6B7A]">
                         Due {formatDate(action.dueDate)}
                       </span>
                     </div>
@@ -430,7 +430,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
             <Sparkles className="h-5 w-5" />
             Ask Aminy AI about this plan
           </button>
-          <p className="mt-2 text-center text-xs text-[#8A9BA8]">
+          <p className="mt-2 text-center text-sm text-[#8A9BA8]">
             Get personalized answers about your child's care plan
           </p>
         </motion.div>

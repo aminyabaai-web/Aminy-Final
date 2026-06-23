@@ -131,12 +131,12 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
         <div className="flex-1">
           <h3 className="font-semibold text-[#1B2733] text-base">{service.name}</h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <span className="text-xs text-slate-400 font-mono">CPT {service.cptCode}</span>
-            <span className="text-xs text-slate-400 flex items-center gap-1">
+            <span className="text-sm text-slate-400 font-mono">CPT {service.cptCode}</span>
+            <span className="text-sm text-slate-400 flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {service.durationMinutes} min
             </span>
-            <span className="text-xs text-[#6B9080] font-medium">{service.providerType}</span>
+            <span className="text-sm text-[#6B9080] font-medium">{service.providerType}</span>
           </div>
         </div>
 
@@ -153,7 +153,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       <p className="text-sm text-[#5A6B7A] leading-relaxed mb-4">{service.description}</p>
 
       {/* Market context */}
-      <div className="text-xs text-slate-400 mb-3">
+      <div className="text-sm text-slate-400 mb-3">
         National range: ${service.marketRange.low.toLocaleString()}–${service.marketRange.high.toLocaleString()}
       </div>
 
@@ -237,7 +237,7 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
               </div>
               <div className="text-right">
                 <div className="font-bold text-[#1B2733]">${opt.totalPrice.toFixed(2)}</div>
-                <div className="text-xs text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
+                <div className="text-sm text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
               </div>
             </button>
           ))}

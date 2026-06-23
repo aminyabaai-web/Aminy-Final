@@ -514,7 +514,7 @@ function NewSessionModal({
           </div>
 
           {calculateDuration() > 0 && (
-            <p className="text-xs text-[#6B9080] font-medium">Duration: {calculateDuration()} minutes</p>
+            <p className="text-sm text-[#6B9080] font-medium">Duration: {calculateDuration()} minutes</p>
           )}
 
           {/* Session Type */}
@@ -547,7 +547,7 @@ function NewSessionModal({
 
           {/* Data Collection */}
           <div className="border border-[#E8E4DF] rounded-lg p-3 space-y-2">
-            <label className="text-xs font-semibold text-[#5A6B7A]">Data Collection</label>
+            <label className="text-sm font-semibold text-[#5A6B7A]">Data Collection</label>
             <select value={dataType} onChange={(e) => setDataType(e.target.value as DataCollectionEntry['type'])}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
               <option value="trial-by-trial">Trial-by-Trial</option>

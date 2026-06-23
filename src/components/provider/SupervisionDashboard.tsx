@@ -85,7 +85,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">RBT Supervision</h1>
-            <p className="text-xs text-white/80">BACB Compliance Tracker</p>
+            <p className="text-sm text-white/80">BACB Compliance Tracker</p>
           </div>
           <button
             onClick={() => setShowQuickLog(true)}
@@ -100,15 +100,15 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{profiles.length}</div>
-            <div className="text-xs text-white/80">Active RBTs</div>
+            <div className="text-sm text-white/80">Active RBTs</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{allSessions.filter((s) => s.date.startsWith(thisMonth) && s.status === 'completed').length}</div>
-            <div className="text-xs text-white/80">Sessions This Mo</div>
+            <div className="text-sm text-white/80">Sessions This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold text-amber-300">{criticalRisks.length}</div>
-            <div className="text-xs text-white/80">Critical Alerts</div>
+            <div className="text-sm text-white/80">Critical Alerts</div>
           </div>
         </div>
       </div>

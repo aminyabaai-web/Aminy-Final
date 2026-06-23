@@ -63,7 +63,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">Competency Assessment</h1>
-            <p className="text-xs text-white/80">BACB 5th Edition Task List</p>
+            <p className="text-sm text-white/80">BACB 5th Edition Task List</p>
           </div>
         </div>
 
@@ -207,7 +207,7 @@ function AssessmentForm({
       <div className="bg-white rounded-xl p-3 border border-[#E8E4DF] flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold text-[#1B2733]">Assessing: {rbtName}</div>
-          <div className="text-xs text-[#5A6B7A]">{today}</div>
+          <div className="text-sm text-[#5A6B7A]">{today}</div>
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-violet-700">{avgRating.toFixed(1)}</div>
