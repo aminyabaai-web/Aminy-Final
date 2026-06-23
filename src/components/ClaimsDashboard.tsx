@@ -387,7 +387,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
 
                   {/* Appeal deadline warning */}
                   {daysUntilDeadline !== null && (
-                    <div className={`flex items-center gap-1.5 text-xs mt-1.5 ${
+                    <div className={`flex items-center gap-1.5 text-sm mt-1.5 ${
                       isUrgent ? 'text-red-600 font-semibold' : 'text-amber-600'
                     }`}>
                       <Clock className="w-3 h-3 flex-shrink-0" />
@@ -403,8 +403,8 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                       <div className="flex items-start gap-1.5">
                         <CheckCircle className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="text-xs font-medium text-[#3A4A57]">Recommended action</p>
-                          <p className="text-xs text-[#5A6B7A] mt-0.5">{topAction.description}</p>
+                          <p className="text-sm font-medium text-[#3A4A57]">Recommended action</p>
+                          <p className="text-sm text-[#5A6B7A] mt-0.5">{topAction.description}</p>
                         </div>
                       </div>
                     </div>
@@ -427,7 +427,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                        denial.status}
                     </span>
                     {denial.priority === 'critical' && (
-                      <span className="text-xs text-red-600 font-semibold">⚠ Critical</span>
+                      <span className="text-sm text-red-600 font-semibold">⚠ Critical</span>
                     )}
                   </div>
                 </div>
@@ -435,7 +435,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
             })}
 
             {activeDenials.length > 5 && (
-              <p className="text-xs text-[#5A6B7A] text-center pt-1">
+              <p className="text-sm text-[#5A6B7A] text-center pt-1">
                 + {activeDenials.length - 5} more denied claims
               </p>
             )}

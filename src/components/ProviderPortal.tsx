@@ -163,7 +163,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSession }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance' | 'messages'>('dashboard');
   // Partner attribution drives which tabs show. AACT providers don't manage their
   // own credentialing or claims (the org handles that). Cash-pay providers don't see
   // insurance/claims tabs. This keeps the EMR surface scoped to what's actually relevant.
@@ -1143,6 +1143,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               { id: 'claims', label: 'Claims', icon: FileText },
               { id: 'performance', label: 'Performance', icon: TrendingUp },
               { id: 'my-practice', label: 'My Practice', icon: Briefcase },
+              { id: 'messages', label: 'Messages', icon: Mail },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].filter(tab => {
               // AACT/Rise providers don't manage their own credentialing or claims
@@ -2834,6 +2835,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </Card>
             )}
           </div>
+        )}
+
+        {activeTab === 'messages' && (
+          <CommunicationTemplates
+            patientName={selectedPatient?.childName}
+            providerName={provider?.name}
+          />
         )}
 
         {activeTab === 'performance' && (
