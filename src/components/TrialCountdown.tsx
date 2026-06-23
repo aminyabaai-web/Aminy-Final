@@ -171,7 +171,7 @@ export function TrialCountdown({
             {onInvite && (urgencyLevel === 'critical' || urgencyLevel === 'high') && (
               <button
                 onClick={onInvite}
-                className="text-xs text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#43AA8B] transition-colors"
+                className="text-sm text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#43AA8B] transition-colors"
               >
                 Or invite a friend → get 7 more days free
               </button>
@@ -181,7 +181,7 @@ export function TrialCountdown({
 
         {/* Progress bar showing trial progress */}
         <div className="mt-4">
-          <div className="flex items-center justify-between text-xs text-[#5A6B7A] dark:text-neutral-400 mb-1">
+          <div className="flex items-center justify-between text-sm text-[#5A6B7A] dark:text-neutral-400 mb-1">
             <span>Trial started</span>
             <span>Trial ends</span>
           </div>
@@ -200,7 +200,7 @@ export function TrialCountdown({
             animate={{ opacity: 1 }}
             className="mt-3 p-2 bg-red-100 dark:bg-red-900/30 rounded-lg"
           >
-            <p className="text-xs text-red-700 dark:text-red-300 text-center">
+            <p className="text-sm text-red-700 dark:text-red-300 text-center">
               After your trial ends, you'll lose access to AI memories, care plan features, and more.
               Subscribe to keep everything.
             </p>
