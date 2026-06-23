@@ -246,7 +246,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
       {!hasRealData && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
           <span className="text-amber-600 text-sm font-medium">Demo Data</span>
-          <span className="text-amber-700/70 text-xs">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
+          <span className="text-amber-700/70 text-sm">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
         </div>
       )}
       {/* Header */}
@@ -298,7 +298,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                   <div style={{ color: metric.color }}>{metric.icon}</div>
                 </div>
                 {metric.target && (
-                  <span className="text-xs text-[#8A9BA8]">Target: {metric.target}</span>
+                  <span className="text-sm text-[#8A9BA8]">Target: {metric.target}</span>
                 )}
               </div>
               <div className="mt-3">
@@ -323,7 +323,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     {metric.change > 0 ? '+' : ''}
                     {metric.change}%
                   </span>
-                  <span className="text-xs text-[#8A9BA8]">{metric.changeLabel}</span>
+                  <span className="text-sm text-[#8A9BA8]">{metric.changeLabel}</span>
                 </div>
               </div>
             </motion.div>
@@ -365,11 +365,11 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 </div>
                 <div className="w-24 text-right">
                   <p className="text-sm font-medium text-[#1B2733]">{tier.users.toLocaleString()}</p>
-                  <p className="text-xs text-[#5A6B7A]">users</p>
+                  <p className="text-sm text-[#5A6B7A]">users</p>
                 </div>
                 <div className="w-20 text-right">
                   <p className="text-sm font-medium text-[#1B2733]">${tier.arpu}</p>
-                  <p className="text-xs text-[#5A6B7A]">ARPU</p>
+                  <p className="text-sm text-[#5A6B7A]">ARPU</p>
                 </div>
               </div>
             ))}

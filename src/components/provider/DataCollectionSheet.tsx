@@ -170,14 +170,14 @@ function TrialRow({ trial, index }: { trial: Trial; index: number }) {
         {cfg.shortLabel}
       </span>
       {trial.promptLevel && (
-        <span className="text-xs text-[#5A6B7A]">
+        <span className="text-sm text-[#5A6B7A]">
           {PROMPT_LEVELS.find(p => p.value === trial.promptLevel)?.label?.split(' ')[0]}
         </span>
       )}
       {trial.context && (
-        <span className="text-xs text-slate-400 truncate flex-1">{trial.context}</span>
+        <span className="text-sm text-slate-400 truncate flex-1">{trial.context}</span>
       )}
-      <span className="text-xs text-slate-400 ml-auto">
+      <span className="text-sm text-slate-400 ml-auto">
         {new Date(trial.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
       </span>
     </div>
@@ -223,15 +223,15 @@ function DTTMode({
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{trials.length}</p>
-          <p className="text-xs text-[#5A6B7A]">Trials</p>
+          <p className="text-sm text-[#5A6B7A]">Trials</p>
         </div>
         <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-[#E8E4DF]'}`}>
           <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#1B2733]'}`}>{pct}%</p>
-          <p className="text-xs text-[#5A6B7A]">% Correct</p>
+          <p className="text-sm text-[#5A6B7A]">% Correct</p>
         </div>
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{trials.filter(t => t.response === 'correct').length}</p>
-          <p className="text-xs text-[#5A6B7A]">Correct</p>
+          <p className="text-sm text-[#5A6B7A]">Correct</p>
         </div>
       </div>
 
@@ -339,17 +339,17 @@ function NETMode({
       <div className="bg-slate-900 rounded-2xl p-5 flex items-center justify-around">
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{trials.length}</p>
-          <p className="text-xs text-slate-400 mt-1">Opportunities</p>
+          <p className="text-sm text-slate-400 mt-1">Opportunities</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
         <div className="text-center">
           <p className="text-4xl font-bold text-emerald-500">{correct}</p>
-          <p className="text-xs text-slate-400 mt-1">Correct</p>
+          <p className="text-sm text-slate-400 mt-1">Correct</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{pct}%</p>
-          <p className="text-xs text-slate-400 mt-1">Rate</p>
+          <p className="text-sm text-slate-400 mt-1">Rate</p>
         </div>
       </div>
 
@@ -483,7 +483,7 @@ function BehaviorMode({
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide">ABC Data</p>
           <button
             onClick={onAddIncident}
-            className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
+            className="flex items-center gap-1 text-sm text-emerald-500 font-medium"
           >
             <Plus className="w-3 h-3" />
             Add Incident

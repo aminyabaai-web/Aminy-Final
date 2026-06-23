@@ -290,17 +290,17 @@ export function ProviderReferralProgram({
         <Card className="p-3 text-center">
           <Users className="w-5 h-5 mx-auto mb-1 text-indigo-500" />
           <div className="text-2xl font-bold text-[#1B2733]">{referrals.length}</div>
-          <div className="text-xs text-[#5A6B7A]">Referred</div>
+          <div className="text-sm text-[#5A6B7A]">Referred</div>
         </Card>
         <Card className="p-3 text-center">
           <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
           <div className="text-2xl font-bold text-[#1B2733]">{completedReferrals}</div>
-          <div className="text-xs text-[#5A6B7A]">Onboarded</div>
+          <div className="text-sm text-[#5A6B7A]">Onboarded</div>
         </Card>
         <Card className="p-3 text-center">
           <DollarSign className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
           <div className="text-2xl font-bold text-[#1B2733]">${totalCreditsEarned}</div>
-          <div className="text-xs text-[#5A6B7A]">Earned</div>
+          <div className="text-sm text-[#5A6B7A]">Earned</div>
         </Card>
       </div>
 
@@ -326,7 +326,7 @@ export function ProviderReferralProgram({
               value={(completedReferrals / FEATURED_BADGE_THRESHOLD) * 100}
               className="h-2 mb-2"
             />
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               {referralsToFeatured} more successful referral{referralsToFeatured !== 1 ? 's' : ''} to earn the Featured Provider badge
             </p>
           </>
@@ -349,7 +349,7 @@ export function ProviderReferralProgram({
           <div className="text-center py-8">
             <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
             <p className="text-sm font-medium text-[#3A4A57]">No referrals yet</p>
-            <p className="text-xs text-[#5A6B7A] mt-1">
+            <p className="text-sm text-[#5A6B7A] mt-1">
               Share your referral link with colleagues — they'll show up here once they apply.
             </p>
           </div>
@@ -376,14 +376,14 @@ export function ProviderReferralProgram({
 
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm text-[#1B2733]">{referral.name}</p>
-                <p className="text-xs text-[#5A6B7A]">{referral.specialty}</p>
+                <p className="text-sm text-[#5A6B7A]">{referral.specialty}</p>
               </div>
 
               <div className="text-right">
                 {referral.status === 'completed' ? (
                   <div>
                     <Badge className="bg-green-100 text-green-700 border-green-200">Onboarded</Badge>
-                    <p className="text-xs text-green-600 mt-1 font-medium">+${referral.creditEarned}</p>
+                    <p className="text-sm text-green-600 mt-1 font-medium">+${referral.creditEarned}</p>
                   </div>
                 ) : (
                   <Badge className={
@@ -416,7 +416,7 @@ export function ProviderReferralProgram({
               </div>
               <div>
                 <p className="font-medium text-indigo-900 text-sm">{item.title}</p>
-                <p className="text-xs text-indigo-700">{item.desc}</p>
+                <p className="text-sm text-indigo-700">{item.desc}</p>
               </div>
             </div>
           ))}

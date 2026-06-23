@@ -186,13 +186,13 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                             <>
                                                 <h3 className="text-xl font-bold text-emerald-900">NPI Verified</h3>
                                                 <p className="text-emerald-700 font-medium tracking-wide">Federal Registry Match</p>
-                                                <p className="text-emerald-600/80 text-xs mt-2">Sample result — illustrative only</p>
+                                                <p className="text-emerald-600/80 text-sm mt-2">Sample result — illustrative only</p>
                                             </>
                                         ) : (
                                             <>
                                                 <h3 className="text-xl font-bold text-emerald-900">Format Valid</h3>
                                                 <p className="text-emerald-700 font-medium">10-digit NPI accepted</p>
-                                                <p className="text-emerald-700/80 text-xs mt-2 max-w-xs mx-auto">
+                                                <p className="text-emerald-700/80 text-sm mt-2 max-w-xs mx-auto">
                                                     We'll confirm the match against the federal NPPES registry once your application is submitted.
                                                 </p>
                                             </>
@@ -269,7 +269,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                     {demo ? (
                                         <p>
                                             We found 3 verified Livescan locations near your ZIP code. We'll email you the exact barcode and authorization form required.
-                                            <span className="block text-amber-700/80 text-xs mt-1">Sample result — illustrative only</span>
+                                            <span className="block text-amber-700/80 text-sm mt-1">Sample result — illustrative only</span>
                                         </p>
                                     ) : (
                                         <p>

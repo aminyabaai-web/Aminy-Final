@@ -103,7 +103,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               <Database size={18} className="text-primary" />
               CentralReach Data Feed
             </h1>
-            <p className="text-xs text-white/60">Aminy → CentralReach sync engine</p>
+            <p className="text-sm text-white/60">Aminy → CentralReach sync engine</p>
           </div>
         </div>
 
@@ -111,15 +111,15 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-sm font-bold">{hoursAgo}h ago</p>
-            <p className="text-xs text-white/60">Last Sync</p>
+            <p className="text-sm text-white/60">Last Sync</p>
           </div>
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-sm font-bold text-amber-400">{syncStatus.pendingRecords}</p>
-            <p className="text-xs text-white/60">Pending</p>
+            <p className="text-sm text-white/60">Pending</p>
           </div>
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-sm font-bold text-green-400">{syncStatus.dataQualityScore}%</p>
-            <p className="text-xs text-white/60">Data Quality</p>
+            <p className="text-sm text-white/60">Data Quality</p>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
             <Sparkles size={15} className="text-[#6B9080]" />
             What Aminy sends to CentralReach
           </h2>
-          <p className="text-xs text-[#5A6B7A] leading-relaxed mb-3">
+          <p className="text-sm text-[#5A6B7A] leading-relaxed mb-3">
             CentralReach is the practice management EHR used by most ABA organizations. Aminy exports
             structured data CR can import directly — eliminating double-entry and keeping your EHR current automatically.
           </p>
@@ -142,7 +142,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mx-auto">
                 <Zap size={18} className="text-white" />
               </div>
-              <p className="text-xs font-semibold text-[#3A4A57] mt-1">Aminy</p>
+              <p className="text-sm font-semibold text-[#3A4A57] mt-1">Aminy</p>
             </div>
             <div className="flex-1 flex items-center justify-center">
               <ArrowRight size={20} className="text-primary" />
@@ -151,7 +151,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center mx-auto">
                 <Database size={18} className="text-white" />
               </div>
-              <p className="text-xs font-semibold text-[#3A4A57] mt-1">CentralReach</p>
+              <p className="text-sm font-semibold text-[#3A4A57] mt-1">CentralReach</p>
             </div>
           </div>
 
@@ -195,7 +195,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
                       {vp.stat}
                     </span>
                   </div>
-                  <p className="text-xs text-[#5A6B7A] mt-0.5 leading-relaxed">{vp.description}</p>
+                  <p className="text-sm text-[#5A6B7A] mt-0.5 leading-relaxed">{vp.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -225,14 +225,14 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               const pct = total > 0 ? Math.round((row.complete / total) * 100) : 100;
               return (
                 <div key={row.label} className="flex items-center gap-3">
-                  <span className="text-xs text-[#5A6B7A] w-20 shrink-0">{row.label}</span>
+                  <span className="text-sm text-[#5A6B7A] w-20 shrink-0">{row.label}</span>
                   <div className="flex-1 h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${pct === 100 ? 'bg-green-500' : pct >= 80 ? 'bg-amber-400' : 'bg-red-400'}`}
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <span className="text-xs text-[#5A6B7A] w-8 text-right">{pct}%</span>
+                  <span className="text-sm text-[#5A6B7A] w-8 text-right">{pct}%</span>
                 </div>
               );
             })}
@@ -240,9 +240,9 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
 
           {syncStatus.syncErrors.length > 0 && (
             <div className="mt-3 bg-amber-50 rounded-xl p-3 border border-amber-100">
-              <p className="text-xs font-semibold text-amber-700 mb-1">Sync errors ({syncStatus.syncErrors.length})</p>
+              <p className="text-sm font-semibold text-amber-700 mb-1">Sync errors ({syncStatus.syncErrors.length})</p>
               {syncStatus.syncErrors.map((err, i) => (
-                <p key={i} className="text-xs text-amber-600">
+                <p key={i} className="text-sm text-amber-600">
                   • {err.recordType} {err.recordId}: {err.error}
                 </p>
               ))}
@@ -283,7 +283,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
         {/* Schedule info */}
         <div className="flex items-center gap-2 bg-[#F0EDE8] rounded-xl p-3">
           <Clock size={14} className="text-[#5A6B7A] shrink-0" />
-          <p className="text-xs text-[#5A6B7A]">
+          <p className="text-sm text-[#5A6B7A]">
             Auto-sync runs every 6 hours. Next sync in ~{6 - (hoursAgo % 6)}h.
             Data is transmitted securely via encrypted API with signed session tokens.
           </p>

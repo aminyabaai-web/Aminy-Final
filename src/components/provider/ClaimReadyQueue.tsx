@@ -105,17 +105,17 @@ function ClaimCard({
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">{item.clientName}</p>
-                <p className="text-xs text-[#5A6B7A]">{item.dateOfService} · {PLACE_OF_SERVICE_LABELS[item.placeOfService] ?? item.placeOfService}</p>
+                <p className="text-sm text-[#5A6B7A]">{item.dateOfService} · {PLACE_OF_SERVICE_LABELS[item.placeOfService] ?? item.placeOfService}</p>
               </div>
               <div className="text-right shrink-0">
                 <p className="text-sm font-bold text-[#1B2733]">${item.billedAmount.toFixed(2)}</p>
-                <p className="text-xs text-[#8A9BA8]">{item.units} units</p>
+                <p className="text-sm text-[#8A9BA8]">{item.units} units</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2 mt-2">
               <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
-              <span className="text-xs text-[#5A6B7A]">{item.payerName}</span>
+              <span className="text-sm text-[#5A6B7A]">{item.payerName}</span>
             </div>
 
             {/* Block reasons */}
@@ -124,7 +124,7 @@ function ClaimCard({
                 {item.blockReasons.map((reason, i) => (
                   <div key={i} className="flex items-center gap-1.5 bg-red-50 border border-red-100 rounded-lg px-2 py-1">
                     <XCircle size={11} className="text-red-500 shrink-0" />
-                    <p className="text-xs text-red-700">{reason}</p>
+                    <p className="text-sm text-red-700">{reason}</p>
                   </div>
                 ))}
               </div>
@@ -136,7 +136,7 @@ function ClaimCard({
         <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-50">
           <button
             onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1.5 text-xs text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
+            className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] transition-colors"
           >
             <FileText size={12} />
             {failedChecks.length > 0 ? `${failedChecks.length} issue${failedChecks.length > 1 ? 's' : ''}` : 'All checks passed'}
@@ -151,7 +151,7 @@ function ClaimCard({
             </button>
           )}
           {item.submittedAt && (
-            <span className="ml-auto text-xs text-[#8A9BA8]">
+            <span className="ml-auto text-sm text-[#8A9BA8]">
               Submitted {new Date(item.submittedAt).toLocaleDateString()}
             </span>
           )}
@@ -174,7 +174,7 @@ function ClaimCard({
                     ) : (
                       <XCircle size={12} className={v.severity === 'error' ? 'text-red-500 shrink-0' : 'text-amber-400 shrink-0'} />
                     )}
-                    <span className={`text-xs ${v.passed ? 'text-[#5A6B7A]' : v.severity === 'error' ? 'text-red-600' : 'text-amber-600'}`}>
+                    <span className={`text-sm ${v.passed ? 'text-[#5A6B7A]' : v.severity === 'error' ? 'text-red-600' : 'text-amber-600'}`}>
                       {v.message}
                     </span>
                   </div>
@@ -253,7 +253,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           )}
           <div>
             <h1 className="text-lg font-bold">Claim-Ready Queue</h1>
-            <p className="text-xs text-white/60">Review, fix & submit claims</p>
+            <p className="text-sm text-white/60">Review, fix & submit claims</p>
           </div>
         </div>
 
@@ -261,15 +261,15 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         <div className="grid grid-cols-3 gap-2">
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-lg font-bold">${summary.totalBilledThisWeek.toLocaleString()}</p>
-            <p className="text-xs text-white/60">Submitted this week</p>
+            <p className="text-sm text-white/60">Submitted this week</p>
           </div>
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-lg font-bold text-green-400">${summary.totalPaidThisWeek.toLocaleString()}</p>
-            <p className="text-xs text-white/60">Paid</p>
+            <p className="text-sm text-white/60">Paid</p>
           </div>
           <div className="bg-white/10 rounded-xl p-3 text-center">
             <p className="text-lg font-bold text-amber-400">${(summary.totalBilledThisWeek - summary.totalPaidThisWeek).toLocaleString()}</p>
-            <p className="text-xs text-white/60">In process</p>
+            <p className="text-sm text-white/60">In process</p>
           </div>
         </div>
       </div>
@@ -320,19 +320,19 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           <div className="flex items-center justify-between">
             <button
               onClick={handleSelectAll}
-              className="text-xs text-[#6B9080] font-medium flex items-center gap-1.5"
+              className="text-sm text-[#6B9080] font-medium flex items-center gap-1.5"
             >
               <Layers size={13} />
               {selectedIds.size === filteredClaims.length ? 'Deselect all' : 'Select all'}
             </button>
-            <span className="text-xs text-[#8A9BA8]">{filteredClaims.length} claims</span>
+            <span className="text-sm text-[#8A9BA8]">{filteredClaims.length} claims</span>
           </div>
         )}
 
         {/* Blocked reasons summary */}
         {tab === 'blocked' && summary.blockedReasons.length > 0 && (
           <div className="bg-red-50 border border-red-100 rounded-2xl p-3">
-            <p className="text-xs font-semibold text-red-700 mb-2">Most common block reasons:</p>
+            <p className="text-sm font-semibold text-red-700 mb-2">Most common block reasons:</p>
             {summary.blockedReasons.map(r => (
               <div key={r.reason} className="flex items-center gap-2 text-xs text-red-600">
                 <span className="font-mono font-bold">{r.count}×</span>
@@ -349,7 +349,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               <FileText size={26} className="text-[#8A9BA8]" />
             </div>
             <p className="text-sm font-semibold text-[#3A4A57]">No claims yet</p>
-            <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs">
+            <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">
               Submitted claims will appear here once your sessions are billed. Finish and sign a session note to start the queue.
             </p>
           </div>
@@ -383,7 +383,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
           <div className="flex items-center justify-between mb-3">
             <div>
               <p className="text-sm font-semibold text-[#1B2733]">{selectedIds.size} claims selected</p>
-              <p className="text-xs text-[#5A6B7A]">Total billed: ${totalSelected.toFixed(2)}</p>
+              <p className="text-sm text-[#5A6B7A]">Total billed: ${totalSelected.toFixed(2)}</p>
             </div>
             <button
               onClick={() => setShowConfirmModal(true)}
@@ -428,7 +428,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4">
-                <p className="text-xs text-amber-700">
+                <p className="text-sm text-amber-700">
                   <strong>Before submitting:</strong> Ensure all session notes are signed, authorizations are active, and diagnosis codes match your authorization.
                 </p>
               </div>

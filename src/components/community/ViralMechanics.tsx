@@ -135,17 +135,17 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
           <div className="mt-4 flex items-center gap-4 text-center">
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.totalReferrals}</p>
-              <p className="text-xs text-teal-200">Invited</p>
+              <p className="text-sm text-teal-200">Invited</p>
             </div>
             <div className="h-8 w-px bg-teal-400/30" />
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.activeReferrals}</p>
-              <p className="text-xs text-teal-200">Active</p>
+              <p className="text-sm text-teal-200">Active</p>
             </div>
             <div className="h-8 w-px bg-teal-400/30" />
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.rewardsEarned.length}</p>
-              <p className="text-xs text-teal-200">Rewards</p>
+              <p className="text-sm text-teal-200">Rewards</p>
             </div>
           </div>
         </div>

@@ -372,7 +372,7 @@ export function ShareToUnlock({
                       <p className="text-sm font-medium text-[#1B2733]">
                         {achievement.unlockLabel}
                       </p>
-                      <p className="text-xs text-[#5A6B7A]">
+                      <p className="text-sm text-[#5A6B7A]">
                         Share this achievement to unlock
                       </p>
                     </div>
