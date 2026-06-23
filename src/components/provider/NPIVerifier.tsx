@@ -166,7 +166,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
         <p className="text-sm text-slate-400">NPI registry temporarily unavailable — we'll verify manually.</p>
       )}
 
-      <p className="text-xs text-slate-400 flex items-center gap-1">
+      <p className="text-sm text-slate-400 flex items-center gap-1">
         <Shield className="w-3 h-3" />
         Verified via CMS NPPES — free, instant, no manual labor
       </p>

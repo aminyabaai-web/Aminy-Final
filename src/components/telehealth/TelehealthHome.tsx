@@ -414,7 +414,7 @@ export function TelehealthHome({
                           </div>
                         )}
                         <span className="text-xs text-[#8A9BA8]">•</span>
-                        <span className="text-xs text-[#5A6B7A]">
+                        <span className="text-sm text-[#5A6B7A]">
                           From ${provider.consultPrice}
                         </span>
                       </div>
@@ -458,7 +458,7 @@ export function TelehealthHome({
                 <span className="font-medium">Emergency?</span>{' '}
                 <a href="tel:911" className="underline font-semibold">Call 911</a>
               </p>
-              <p className="text-xs text-red-600 mt-1">
+              <p className="text-sm text-red-600 mt-1">
                 Aminy provides guidance and coaching, not emergency medical care.
               </p>
             </div>
