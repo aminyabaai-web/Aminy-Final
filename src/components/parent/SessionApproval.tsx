@@ -350,7 +350,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               />
             ) : (
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A] mb-1.5 block">Type your full legal name</label>
+                <label className="text-sm font-medium text-[#5A6B7A] mb-1.5 block">Type your full legal name</label>
                 <input
                   type="text"
                   value={typedName}

@@ -827,7 +827,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                       {!doc.uploaded ? (
                         <button
                           onClick={() => handleDocCapture(id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" /> Mark ready
                         </button>
