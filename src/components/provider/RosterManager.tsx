@@ -283,7 +283,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                 className="flex flex-col items-center gap-2 p-4 bg-white border border-[#E8E4DF] rounded-2xl hover:bg-[#FAF7F2] transition-colors text-center"
               >
                 {item.icon}
-                <span className="text-xs text-[#3A4A57] font-medium leading-tight">{item.label}</span>
+                <span className="text-sm text-[#3A4A57] font-medium leading-tight">{item.label}</span>
               </button>
             ))}
           </div>
@@ -316,7 +316,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
 
               {addStep === 1 && (
                 <div className="space-y-3">
-                  <label className="text-xs font-medium text-[#5A6B7A]">Select Payer</label>
+                  <label className="text-sm font-medium text-[#5A6B7A]">Select Payer</label>
                   <div className="space-y-2">
                     {credentialedPayers.map(p => (
                       <button
@@ -351,20 +351,20 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               {addStep === 2 && (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Effective Date</label>
+                    <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Effective Date</label>
                     <input
                       type="date"
                       className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm text-[#1B2733] focus:outline-none focus:border-[#6B9080]"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-[#5A6B7A] block mb-2">Required Documents</label>
+                    <label className="text-sm font-medium text-[#5A6B7A] block mb-2">Required Documents</label>
                     <div className="space-y-2">
                       {['Provider participation request form', 'Updated W-9', 'Malpractice insurance certificate', 'CAQH authorization'].map(doc => (
                         <div key={doc} className="flex items-center gap-3 p-2.5 border border-dashed border-[#E8E4DF] rounded-xl">
                           <Upload size={14} className="text-[#8A9BA8] shrink-0" />
-                          <span className="text-xs text-[#5A6B7A]">{doc}</span>
-                          <button className="ml-auto text-xs text-blue-600 font-medium">Upload</button>
+                          <span className="text-sm text-[#5A6B7A]">{doc}</span>
+                          <button className="ml-auto text-sm text-blue-600 font-medium">Upload</button>
                         </div>
                       ))}
                     </div>
