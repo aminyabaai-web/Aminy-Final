@@ -1721,12 +1721,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <Star className="h-5 w-5 text-amber-500" />
                           {todayTokens}
                         </div>
-                        <div className="mt-1 text-xs text-[#5A6B7A] dark:text-slate-400">Earned for calm moments and progress.</div>
+                        <div className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">Earned for calm moments and progress.</div>
                       </div>
                       <div className="rounded-3xl border border-white/70 bg-white/80 p-4 shadow-sm dark:bg-slate-800/80 dark:border-slate-700/70">
                         <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Current feeling</div>
                         <div className="mt-2 text-2xl">{emotionDetected === 'calm' ? '😌' : emotionDetected === 'frustrated' ? '😤' : emotionDetected === 'anxious' ? '😰' : '🤩'}</div>
-                        <div className="mt-1 text-xs capitalize text-[#5A6B7A] dark:text-slate-400">{emotionDetected}</div>
+                        <div className="mt-1 text-sm capitalize text-[#5A6B7A] dark:text-slate-400">{emotionDetected}</div>
                       </div>
                     </div>
                   </div>
@@ -1801,7 +1801,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             Sensory Fidget
                           </div>
                           <div className="mt-1 text-base font-semibold">Tap, Breathe, Spin, Colors</div>
-                          <div className="mt-1 text-xs text-slate-400">Immersive calm tools</div>
+                          <div className="mt-1 text-sm text-slate-400">Immersive calm tools</div>
                         </div>
                         <div className="text-3xl ml-4">🌀</div>
                       </button>
@@ -1849,13 +1849,13 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <div>
                           <div className="text-[12px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-400">Reward snapshot</div>
                           <p className="mt-1 text-sm font-medium text-amber-950 dark:text-amber-200">{motivationGoal.celebrationLabel}</p>
-                          <p className="text-xs text-amber-800 dark:text-amber-300">Keep the prize visible so the next yes feels easier.</p>
+                          <p className="text-sm text-amber-800 dark:text-amber-300">Keep the prize visible so the next yes feels easier.</p>
                         </div>
                       </div>
 
                       <div className="mt-5">
                         <Progress value={motivationProgress} className="h-3 bg-[#F0EDE8]" />
-                        <div className="mt-2 flex items-center justify-between text-xs text-[#5A6B7A] dark:text-slate-400">
+                        <div className="mt-2 flex items-center justify-between text-sm text-[#5A6B7A] dark:text-slate-400">
                           <span>{motivationGoal.current} days complete</span>
                           <span>{motivationGoal.target - motivationGoal.current} to go</span>
                         </div>
@@ -1975,7 +1975,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/70">{activity.icon}</div>
                               <div>
                                 <div className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">{activity.title}</div>
-                                <div className="text-xs text-[#5A6B7A] dark:text-slate-300">{activity.duration}</div>
+                                <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{activity.duration}</div>
                               </div>
                             </div>
                             <ChevronRight className="h-4 w-4 text-[#5A6B7A] dark:text-slate-300" />
