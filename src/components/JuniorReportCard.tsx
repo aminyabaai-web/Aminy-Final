@@ -305,14 +305,14 @@ export function JuniorReportCard({
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold text-[#1B2733]">Weekly Report Card</h2>
-              <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+              <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                 <Calendar className="w-3 h-3" />
                 {data.weekLabel}
               </div>
             </div>
             <div className="flex items-center gap-1">
               {trendIcon(data.accuracyTrend)}
-              <span className={`text-xs font-medium ${trendColor(data.accuracyTrend)}`}>
+              <span className={`text-sm font-medium ${trendColor(data.accuracyTrend)}`}>
                 {trendLabel(data.accuracyTrend)}
               </span>
             </div>
@@ -322,13 +322,13 @@ export function JuniorReportCard({
           <div className="grid grid-cols-4 gap-2 mb-4">
             <div className="text-center p-2 rounded-xl bg-[#EEF4F8]">
               <div className="text-lg font-bold text-blue-700">{data.sessionsCompleted}</div>
-              <div className="text-xs text-blue-500">Sessions</div>
+              <div className="text-sm text-blue-500">Sessions</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-green-50">
               <div className={`text-lg font-bold ${accuracyColor(data.avgAccuracy)}`}>
                 {data.avgAccuracy}%
               </div>
-              <div className="text-xs text-green-500">Accuracy</div>
+              <div className="text-sm text-green-500">Accuracy</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-orange-50">
               <div className="flex items-center justify-center gap-0.5">

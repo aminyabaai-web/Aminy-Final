@@ -127,7 +127,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
               disabled={!settings.enabled}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>15 min</span>
               <span>60 min</span>
               <span>120 min</span>
@@ -207,7 +207,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
 
         {/* Info Card */}
         <div className="bg-[#FAF7F2] rounded-xl p-4 border border-[#E8E4DF]">
-          <p className="text-xs text-muted-foreground text-center">
+          <p className="text-sm text-muted-foreground text-center">
             Calm tools, rewards, and transition supports are designed to lower stress quickly and make daily routines easier for {childName}.
           </p>
         </div>

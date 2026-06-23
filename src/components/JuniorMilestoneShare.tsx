@@ -225,7 +225,7 @@ export function JuniorMilestoneShare({
           </p>
 
           {/* Privacy note */}
-          <p className="text-xs text-[#8A9BA8] text-center italic">
+          <p className="text-sm text-[#8A9BA8] text-center italic">
             Privacy-first: Uses initials only. No personal details shared.
           </p>
         </div>
