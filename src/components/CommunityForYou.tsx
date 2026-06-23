@@ -798,7 +798,7 @@ export function CommunityForYou({
       {liveSpotlights.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No spotlights yet</p>
-          <p className="text-xs mt-1">Parent success stories will appear here as our community grows.</p>
+          <p className="text-sm mt-1">Parent success stories will appear here as our community grows.</p>
         </div>
       )}
       {liveSpotlights.map((spotlight) => (
@@ -813,7 +813,7 @@ export function CommunityForYou({
                   <h4 className="font-semibold text-[#1B2733] dark:text-white">
                     {spotlight.parentName}
                   </h4>
-                  <p className="text-xs text-[#5A6B7A]">
+                  <p className="text-sm text-[#5A6B7A]">
                     Child age: {spotlight.childAge}
                   </p>
                 </div>
@@ -884,7 +884,7 @@ export function CommunityForYou({
       {liveQASessions.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No Q&A sessions scheduled</p>
-          <p className="text-xs mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
+          <p className="text-sm mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
         </div>
       )}
       {liveQASessions.map((session) => (

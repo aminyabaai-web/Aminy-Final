@@ -196,11 +196,11 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{totalRBTs}</p>
-          <p className="text-xs text-[#5A6B7A]">Active RBTs</p>
+          <p className="text-sm text-[#5A6B7A]">Active RBTs</p>
         </div>
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{totalPending}</p>
-          <p className="text-xs text-[#5A6B7A]">Pending</p>
+          <p className="text-sm text-[#5A6B7A]">Pending</p>
         </div>
         <div className={`rounded-xl border p-4 text-center ${
           nonCompliantCount > 0 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
@@ -208,7 +208,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           <p className={`text-2xl font-bold ${nonCompliantCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
             {nonCompliantCount}
           </p>
-          <p className="text-xs text-[#5A6B7A]">Non-Compliant</p>
+          <p className="text-sm text-[#5A6B7A]">Non-Compliant</p>
         </div>
       </div>
 
@@ -288,7 +288,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-[#1B2733] truncate">{rbt.name}</p>
-                        <p className="text-xs text-[#5A6B7A]">{rbt.email}</p>
+                        <p className="text-sm text-[#5A6B7A]">{rbt.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
                         {rbt.status === 'pending' && (
