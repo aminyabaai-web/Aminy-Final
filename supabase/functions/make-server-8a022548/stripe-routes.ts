@@ -79,6 +79,23 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '
 const RESEND_VERIFIED_DOMAIN = Deno.env.get('RESEND_VERIFIED_DOMAIN') === 'true';
 const FROM_EMAIL = RESEND_VERIFIED_DOMAIN ? 'Aminy <hello@aminy.ai>' : 'Aminy <onboarding@resend.dev>';
 
+async function sendSmsSilent(to: string, body: string): Promise<void> {
+  const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
+  const token = Deno.env.get('TWILIO_AUTH_TOKEN');
+  const from = Deno.env.get('TWILIO_FROM_NUMBER');
+  if (!sid || !token || !from) return;
+  try {
+    const form = new URLSearchParams({ To: to, From: from, Body: body.slice(0, 1500) });
+    await fetch(`https://api.twilio.com/2010-04-01/Accounts/${sid}/Messages.json`, {
+      method: 'POST',
+      headers: { Authorization: `Basic ${btoa(`${sid}:${token}`)}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: form.toString(),
+    });
+  } catch {
+    // Fire-and-forget — don't break webhook processing if SMS fails
+  }
+}
+
 // Initialize Supabase client with service role for admin operations
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
@@ -1472,11 +1489,36 @@ export async function handleWebhook(req: Request): Promise<Response> {
           }
         }
 
-        // Send payment failed notification
+        // Send payment failed notification (email + SMS)
         if (customerEmail) {
           const amount = `$${(invoice.amount_due / 100).toFixed(2)}`;
           const template = emailTemplates.paymentFailed(customerName, amount);
           await sendEmail(customerEmail, template.subject, template.html, template.text);
+        }
+
+        // Payment failure SMS — look up phone from profiles table (fire-and-forget)
+        if (failedCustomerId) {
+          (async () => {
+            try {
+              const { data: cust } = await supabase
+                .from('stripe_customers')
+                .select('user_id')
+                .eq('stripe_customer_id', failedCustomerId)
+                .single();
+              if (!cust?.user_id) return;
+              const { data: profile } = await supabase
+                .from('profiles')
+                .select('phone_number, sms_reminders_enabled')
+                .eq('id', cust.user_id)
+                .maybeSingle();
+              if (profile?.phone_number && profile.sms_reminders_enabled) {
+                await sendSmsSilent(
+                  profile.phone_number,
+                  'Aminy: Payment failed. Update your card to keep access: aminy.ai/settings',
+                );
+              }
+            } catch {/* non-critical */}
+          })();
         }
 
         break;
