@@ -206,7 +206,7 @@ describe('WeeklyOutcomeCheckIn', () => {
     });
 
     const calls = (localStorage.setItem as ReturnType<typeof vi.fn>).mock.calls;
-    const checkinCall = calls.find(([key]: [string]) => key === WEEKLY_CHECKIN_KEY);
+    const checkinCall = calls.find((call: unknown[]) => call[0] === WEEKLY_CHECKIN_KEY);
     expect(checkinCall).toBeTruthy();
     const savedTs = parseInt(checkinCall![1], 10);
     expect(savedTs).toBeGreaterThanOrEqual(beforeMs);

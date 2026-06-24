@@ -637,18 +637,20 @@ export function Dashboard10({
       .eq('event_type', 'weekly_parent_checkin')
       .order('created_at', { ascending: false })
       .limit(4)
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          // Reverse so oldest is first (left side of trend)
-          const points = data.reverse().map((row) => ({
-            rating: (row.payload as Record<string, number>)?.goal_progress_rating ?? 0,
-            recordedAt: row.recorded_at || row.created_at || '',
-          }));
-          setTrendData(points);
-        }
-        setTrendLoaded(true);
-      })
-      .catch(() => setTrendLoaded(true));
+      .then(
+        ({ data }) => {
+          if (data && data.length > 0) {
+            // Reverse so oldest is first (left side of trend)
+            const points = data.reverse().map((row) => ({
+              rating: (row.payload as Record<string, number>)?.goal_progress_rating ?? 0,
+              recordedAt: row.recorded_at || row.created_at || '',
+            }));
+            setTrendData(points);
+          }
+          setTrendLoaded(true);
+        },
+        () => setTrendLoaded(true),
+      );
   }, [userId]);
 
   // Export progress report
