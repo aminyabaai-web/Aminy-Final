@@ -375,8 +375,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     child_name: string | null;
     created_at: string;
     status: string;
+    ai_draft?: string | null;
+    user_id?: string | null;
   }>>([]);
   const [unsignedNoteCount, setUnsignedNoteCount] = useState(0);
+  const [reviewingThread, setReviewingThread] = useState<(typeof pendingBCBAThreads)[0] | null>(null);
+  const [reviewResponseText, setReviewResponseText] = useState('');
+  const [isSubmittingResponse, setIsSubmittingResponse] = useState(false);
 
   const notificationCount = pendingBCBAThreads.length + unsignedNoteCount;
 
@@ -384,7 +389,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     // Pending BCBA threads waiting for clinician review
     const { data: threads } = await supabase
       .from('ask_bcba_threads')
-      .select('id, question, parent_name, child_name, created_at, status')
+      .select('id, question, parent_name, child_name, created_at, status, ai_draft, user_id')
       .in('status', ['ai_drafted', 'awaiting_bcba'])
       .order('created_at', { ascending: true })
       .limit(20);
@@ -1796,8 +1801,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         size="sm"
                         className="bg-[#6B9080] hover:bg-[#216982] text-white shrink-0"
                         onClick={() => {
-                          // Open the thread in a new review modal or navigate to it
-                          toast.info('Thread review panel — coming soon. Check Supabase for thread ID: ' + thread.id.slice(0, 8));
+                          setReviewingThread(thread);
+                          setReviewResponseText(thread.ai_draft ?? '');
                         }}
                       >
                         Review
@@ -2849,6 +2854,99 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <ProviderPerformanceTab providerId={providerId} />
         )}
       </main>
+
+      {/* BCBA Thread Review Modal */}
+      {reviewingThread && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900">
+              <div>
+                <h2 className="text-base font-semibold text-[#1B2733] dark:text-white">Review parent question</h2>
+                {reviewingThread.child_name && (
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">Re: {reviewingThread.child_name}</p>
+                )}
+              </div>
+              <button
+                aria-label="Close review panel"
+                onClick={() => setReviewingThread(null)}
+                className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5 text-[#5A6B7A]" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-xs font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
+                <p className="text-sm text-[#1B2733] dark:text-slate-100 bg-[#FAF7F2] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
+                <textarea
+                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#43AA8B]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/40 focus:border-[#43AA8B]"
+                  value={reviewResponseText}
+                  onChange={(e) => setReviewResponseText(e.target.value)}
+                  placeholder="Edit the AI draft or write your own response…"
+                />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <Button
+                  className="flex-1 bg-[#43AA8B] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
+                  disabled={isSubmittingResponse || !reviewResponseText.trim()}
+                  onClick={async () => {
+                    if (!reviewingThread || !reviewResponseText.trim()) return;
+                    setIsSubmittingResponse(true);
+                    try {
+                      await supabase
+                        .from('ask_bcba_threads')
+                        .update({
+                          bcba_response: reviewResponseText.trim(),
+                          bcba_name: provider?.name ?? null,
+                          bcba_credentials: provider?.credentials ?? null,
+                          bcba_responded_at: new Date().toISOString(),
+                          status: 'completed',
+                        })
+                        .eq('id', reviewingThread.id);
+
+                      // Notify parent via email (non-blocking)
+                      if (reviewingThread.user_id) {
+                        const { data: { session: authSession } } = await supabase.auth.getSession();
+                        const token = authSession?.access_token ?? '';
+                        fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/make-server-8a022548/email/provider-message`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                          body: JSON.stringify({
+                            parentUserId: reviewingThread.user_id,
+                            subject: 'Your behaviorist answered your question',
+                            body: reviewResponseText.trim(),
+                            templateName: 'Ask-a-Behaviorist Response',
+                          }),
+                        }).catch(() => {/* non-critical */});
+                      }
+
+                      toast.success('Response sent to parent!');
+                      setPendingBCBAThreads((prev) => prev.filter((t) => t.id !== reviewingThread.id));
+                      setReviewingThread(null);
+                    } catch {
+                      toast.error('Failed to send — try again');
+                    } finally {
+                      setIsSubmittingResponse(false);
+                    }
+                  }}
+                >
+                  {isSubmittingResponse ? 'Sending…' : 'Send to Parent'}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-xl border-[#E8E4DF]"
+                  onClick={() => setReviewingThread(null)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Superbill Generator Overlay */}
       {showSuperbillGenerator && generatedSuperbill && (
