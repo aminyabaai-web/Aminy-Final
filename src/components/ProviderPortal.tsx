@@ -2841,6 +2841,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <CommunicationTemplates
             patientName={selectedPatient?.childName}
             providerName={provider?.name}
+            patientId={selectedPatient?.id}
           />
         )}
 
