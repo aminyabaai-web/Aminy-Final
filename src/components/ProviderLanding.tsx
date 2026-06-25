@@ -16,7 +16,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { isDemoMode } from '../lib/demo-seed';
-import compassImage from "figma:asset/2e39d2a71ccd340d3accf6a7d306e6a6a6781942.png";
+import aminyLogo from "../assets/aminy-logo-cropped.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -50,16 +50,12 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       {/* Header — compact on mobile */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
-          <button onClick={onBack} className="flex items-center gap-2 flex-shrink-0">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0" style={{ background: '#0d3d40' }}>
-              <img
-                src={compassImage}
-                alt=""
-                className="object-contain"
-                style={{ width: '130%', height: '130%', transform: 'scale(1.15)' }}
-              />
-            </div>
-            <span className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white tracking-tight">aminy</span>
+          <button onClick={onBack} className="flex items-center flex-shrink-0">
+            <img
+              src={aminyLogo}
+              alt="Aminy"
+              className="h-7 sm:h-8 w-auto object-contain"
+            />
           </button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-sm sm:text-sm px-2 sm:px-3" onClick={onLogin}>
@@ -322,7 +318,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Earnings Calculator */}
-      <section className="py-10 sm:py-16 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC]">
+      <section className="pt-16 pb-12 sm:pt-20 sm:pb-16 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC]">
         <div className="max-w-3xl mx-auto px-4">
           <div className="text-center text-white mb-6 sm:mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
@@ -464,16 +460,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <footer className="bg-neutral-900 dark:bg-slate-900 border-t border-neutral-800 py-6 sm:py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
-            <div className="flex items-center gap-3 mb-3 sm:mb-0">
-              <div className="w-7 h-7 rounded-full overflow-hidden bg-white flex items-center justify-center">
-                <img
-                  src={compassImage}
-                  alt="Aminy"
-                  className="object-contain"
-                  style={{ width: '130%', height: '130%', transform: 'scale(1.15)' }}
-                />
-              </div>
-              <span className="text-neutral-400 text-sm">Aminy for Providers</span>
+            <div className="flex items-center gap-2 mb-3 sm:mb-0">
+              <img src={aminyLogo} alt="Aminy" className="h-5 w-auto object-contain opacity-60" />
+              <span className="text-neutral-500 text-sm">for Providers</span>
             </div>
             <div className="flex gap-4 sm:gap-6 text-sm sm:text-sm text-[#5A6B7A]">
               <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
