@@ -165,7 +165,7 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
             >
-              TeleABA · Takes insurance · AI-powered
+              BCBA-designed · Takes insurance · AI-powered
             </span>
           </motion.div>
 
