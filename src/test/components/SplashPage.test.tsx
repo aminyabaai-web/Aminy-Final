@@ -71,14 +71,14 @@ describe('SplashPage', () => {
 
   // ─── Badge text ───────────────────────────────────────────────────────────
 
-  it('contains the "BCBA-designed" text in the top badge', () => {
+  it('contains the "TeleABA" text in the top badge', () => {
     render(<SplashPage {...defaultProps} />);
-    expect(screen.getByText(/BCBA-designed/i)).toBeInTheDocument();
+    expect(screen.getByText(/TeleABA/i)).toBeInTheDocument();
   });
 
-  it('does NOT contain "TeleABA" anywhere on the page', () => {
+  it('does NOT contain "BCBA-designed" in the badge', () => {
     const { container } = render(<SplashPage {...defaultProps} />);
-    expect(container.textContent).not.toContain('TeleABA');
+    expect(container.textContent).not.toContain('BCBA-designed');
   });
 
   it('top badge contains "Takes insurance" text', () => {
