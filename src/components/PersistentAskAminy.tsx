@@ -535,11 +535,11 @@ export function PersistentAskAminy({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
-                <Badge className="bg-green-100 text-green-800 border-green-200 text-xs">
+                <Badge className="bg-green-100 text-green-800 border-green-200 text-sm">
                   Always Available
                 </Badge>
                 {isStreaming && (
-                  <Badge variant="secondary" className="text-xs animate-pulse">
+                  <Badge variant="secondary" className="text-sm animate-pulse">
                     <Brain className="w-3 h-3 mr-1" />
                     Thinking...
                   </Badge>
@@ -668,13 +668,13 @@ export function PersistentAskAminy({
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={cn(
-                                "text-xs opacity-60",
+                                "text-sm opacity-60",
                                 message.role === 'user' ? "text-white/80" : "text-[#5A6B7A] dark:text-[#8A9BA8]"
                               )}>
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                               {message.contextUsed && (
-                                <Badge variant="secondary" className="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border-purple-200 dark:border-purple-800">
+                                <Badge variant="secondary" className="text-sm bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 border-purple-200 dark:border-purple-800">
                                   <Brain className="w-2 h-2 mr-1" />
                                   Aminy remembers
                                 </Badge>
@@ -715,7 +715,7 @@ export function PersistentAskAminy({
                           {/* Follow-up Suggestions */}
                           {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
                             <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-gray-600">
-                              <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
+                              <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
                               <div className="flex flex-wrap gap-2">
                                 {message.suggestions.map((suggestion, suggestionIndex) => (
                                   <Button
@@ -723,7 +723,7 @@ export function PersistentAskAminy({
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handleSuggestionClick(suggestion)}
-                                    className="text-xs h-7 px-2 hover:bg-accent/5 hover:border-accent/30"
+                                    className="text-sm h-7 px-2 hover:bg-accent/5 hover:border-accent/30"
                                   >
                                     {suggestion}
                                   </Button>
@@ -735,7 +735,7 @@ export function PersistentAskAminy({
                         
                         {message.role === 'user' && (
                           <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                            <span className="text-xs font-medium text-accent">
+                            <span className="text-sm font-medium text-accent">
                               {userData.parentName.charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -757,7 +757,7 @@ export function PersistentAskAminy({
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:0.1s]"></div>
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce [animation-delay:0.2s]"></div>
                           </div>
-                          <span className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
+                          <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Aminy is thinking...</span>
                         </div>
                       </div>
                     </div>
@@ -817,7 +817,7 @@ export function PersistentAskAminy({
               </div>
               
               {/* Helper Text */}
-              <div className="mt-3 flex items-center justify-between text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
+              <div className="mt-3 flex items-center justify-between text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 <div className="flex items-center gap-2">
                   <span className="aminy-ai-helper-text">
                     AI responses are for guidance only and don't replace professional medical advice

@@ -127,7 +127,7 @@ function ClaimLineRow({ line }: { line: PaidClaimLine }) {
             <span className="font-mono font-semibold text-sm text-[#1B2733]">{line.procedureCode}</span>
             <LineStatusBadge status={line.claimStatus} />
           </div>
-          <span className="text-xs text-[#8A9BA8]">{formatDate(line.serviceDate)}</span>
+          <span className="text-sm text-[#8A9BA8]">{formatDate(line.serviceDate)}</span>
         </div>
 
         {/* Amounts grid */}
@@ -139,15 +139,15 @@ function ClaimLineRow({ line }: { line: PaidClaimLine }) {
             { label: 'Pt. Resp.', value: line.patientResponsibility, cls: 'text-amber-600' },
           ].map(({ label, value, cls }) => (
             <div key={label} className="bg-white/60 rounded-lg py-1.5 px-1">
-              <p className="text-xs text-[#8A9BA8] mb-0.5">{label}</p>
-              <p className={`text-xs font-semibold ${cls}`}>{formatCurrency(value)}</p>
+              <p className="text-sm text-[#8A9BA8] mb-0.5">{label}</p>
+              <p className={`text-sm font-semibold ${cls}`}>{formatCurrency(value)}</p>
             </div>
           ))}
         </div>
 
         {/* Denial reason summary */}
         {line.denialReason && (
-          <p className="mt-2 text-xs text-red-600 bg-red-50 rounded-lg px-3 py-1.5">
+          <p className="mt-2 text-sm text-red-600 bg-red-50 rounded-lg px-3 py-1.5">
             {line.denialReason}
           </p>
         )}
@@ -156,7 +156,7 @@ function ClaimLineRow({ line }: { line: PaidClaimLine }) {
         {hasAdjustments && (
           <button
             onClick={() => setExpanded((v) => !v)}
-            className="mt-2 text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+            className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
           >
             <ArrowUpRight className={`w-3 h-3 transition-transform ${expanded ? 'rotate-90' : ''}`} />
             {expanded ? 'Hide' : 'Show'} {line.adjustments.length} adjustment{line.adjustments.length !== 1 ? 's' : ''}
@@ -168,7 +168,7 @@ function ClaimLineRow({ line }: { line: PaidClaimLine }) {
       {expanded && hasAdjustments && (
         <div className="border-t border-[#E8E4DF] bg-white/80 px-4 py-3 space-y-1.5">
           {line.adjustments.map((adj, i) => (
-            <div key={i} className="flex items-start justify-between gap-2 text-xs">
+            <div key={i} className="flex items-start justify-between gap-2 text-sm">
               <div className="flex-1 min-w-0">
                 <span className={`font-medium mr-1 ${
                   adj.adjustmentGroupCode === 'CO' ? 'text-orange-600' :
@@ -208,7 +208,7 @@ export function ERA835Viewer({ era, onAppeal, onPost }: ERA835ViewerProps) {
             </div>
             <div>
               <h2 className="font-semibold text-[#1B2733] text-sm leading-tight">ERA Remittance</h2>
-              <p className="text-xs text-[#8A9BA8]">Check #{era.checkNumber}</p>
+              <p className="text-sm text-[#8A9BA8]">Check #{era.checkNumber}</p>
             </div>
           </div>
           <OverallStatusBadge status={era.claimStatus} />
@@ -223,7 +223,7 @@ export function ERA835Viewer({ era, onAppeal, onPost }: ERA835ViewerProps) {
             { label: 'Member ID', value: era.memberId || '—' },
           ].map(({ label, value }) => (
             <div key={label} className="bg-[#FAF7F2] rounded-xl px-3 py-2">
-              <p className="text-xs text-[#8A9BA8] mb-0.5">{label}</p>
+              <p className="text-sm text-[#8A9BA8] mb-0.5">{label}</p>
               <p className="text-sm font-medium text-[#3A4A57] truncate">{value}</p>
             </div>
           ))}

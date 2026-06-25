@@ -203,21 +203,21 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
       </h3>
 
       {weekSessions.length === 0 ? (
-        <p className="text-xs text-[#8A9BA8] text-center py-4">No sessions logged this week yet</p>
+        <p className="text-sm text-[#8A9BA8] text-center py-4">No sessions logged this week yet</p>
       ) : (
         <>
           {/* Summary stats */}
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-indigo-50 rounded-xl p-3 text-center">
-              <p className="text-xs text-[#5A6B7A]">Sessions</p>
+              <p className="text-sm text-[#5A6B7A]">Sessions</p>
               <p className="text-xl font-black text-indigo-700">{weekSessions.length}</p>
             </div>
             <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
-              <p className="text-xs text-[#5A6B7A]">Total time</p>
+              <p className="text-sm text-[#5A6B7A]">Total time</p>
               <p className="text-xl font-black text-[#6B9080]">{totalMinutes}m</p>
             </div>
             <div className="bg-amber-50 rounded-xl p-3 text-center">
-              <p className="text-xs text-[#5A6B7A]">Avg/day</p>
+              <p className="text-sm text-[#5A6B7A]">Avg/day</p>
               <p className="text-xl font-black text-amber-700">{Math.round(totalMinutes / 7)}m</p>
             </div>
           </div>
@@ -225,22 +225,22 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
           {/* Parent ratings */}
           {(greatCount + okCount + roughCount) > 0 && (
             <div className="bg-[#FAF7F2] rounded-xl p-3">
-              <p className="text-xs font-semibold text-[#5A6B7A] mb-2">Session ratings</p>
+              <p className="text-sm font-semibold text-[#5A6B7A] mb-2">Session ratings</p>
               <div className="flex gap-3">
                 <div className="flex items-center gap-1">
                   <ThumbsUp className="w-3.5 h-3.5 text-green-500" />
                   <span className="text-sm font-bold text-green-600">{greatCount}</span>
-                  <span className="text-xs text-[#8A9BA8]">great</span>
+                  <span className="text-sm text-[#8A9BA8]">great</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Minus className="w-3.5 h-3.5 text-amber-500" />
                   <span className="text-sm font-bold text-amber-600">{okCount}</span>
-                  <span className="text-xs text-[#8A9BA8]">ok</span>
+                  <span className="text-sm text-[#8A9BA8]">ok</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <ThumbsDown className="w-3.5 h-3.5 text-red-500" />
                   <span className="text-sm font-bold text-red-600">{roughCount}</span>
-                  <span className="text-xs text-[#8A9BA8]">rough</span>
+                  <span className="text-sm text-[#8A9BA8]">rough</span>
                 </div>
               </div>
             </div>
@@ -249,13 +249,13 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
           {/* Top tools */}
           {topTools.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-[#5A6B7A] mb-2">Most used tools</p>
+              <p className="text-sm font-semibold text-[#5A6B7A] mb-2">Most used tools</p>
               <div className="space-y-1.5">
                 {topTools.map(([tool, data]) => (
                   <div key={tool} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-sm">
                     <span className="text-xl">{data.emoji}</span>
                     <span className="text-sm font-medium text-[#3A4A57] flex-1 capitalize">{tool}</span>
-                    <span className="text-xs text-[#8A9BA8]">{data.count}x · {data.minutes}m</span>
+                    <span className="text-sm text-[#8A9BA8]">{data.count}x · {data.minutes}m</span>
                   </div>
                 ))}
               </div>
@@ -307,7 +307,7 @@ export function PostSessionRatingPrompt({
             <span className="text-2xl">{toolEmoji}</span>
             <div>
               <p className="font-bold text-[#1B2733] text-sm">How did that go?</p>
-              <p className="text-xs text-[#8A9BA8] capitalize">{tool} session</p>
+              <p className="text-sm text-[#8A9BA8] capitalize">{tool} session</p>
             </div>
           </div>
           <button onClick={onDismiss} className="p-1.5 rounded-full bg-[#F0EDE8]">
@@ -331,7 +331,7 @@ export function PostSessionRatingPrompt({
                   style={{ borderColor: `${r.color}44`, background: `${r.color}11` }}
                 >
                   <span className="text-2xl">{r.emoji}</span>
-                  <span className="text-xs font-bold" style={{ color: r.color }}>{r.label}</span>
+                  <span className="text-sm font-bold" style={{ color: r.color }}>{r.label}</span>
                 </motion.button>
               ))}
             </div>
@@ -428,11 +428,11 @@ export function EaseParentView({
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-black text-indigo-900 text-base">{childName}'s Ease Session</h3>
-                  <p className="text-xs text-indigo-500">Parent View — Therapeutic Context</p>
+                  <p className="text-sm text-indigo-500">Parent View — Therapeutic Context</p>
                 </div>
                 <div className="flex items-center gap-1 bg-white rounded-full px-3 py-1.5 shadow-sm">
                   <Clock className="w-3.5 h-3.5 text-indigo-400" />
-                  <span className="text-xs font-bold text-indigo-700">{todayMinutes}m today</span>
+                  <span className="text-sm font-bold text-indigo-700">{todayMinutes}m today</span>
                 </div>
               </div>
 
@@ -441,8 +441,8 @@ export function EaseParentView({
                 <div className="mt-3 flex items-center gap-2 bg-white/60 rounded-2xl px-3 py-2">
                   <span className="text-2xl">{lastToolEmoji}</span>
                   <div>
-                    <p className="text-xs font-bold text-[#3A4A57] capitalize">{lastToolUsed}</p>
-                    <p className="text-xs text-[#8A9BA8]">Last used</p>
+                    <p className="text-sm font-bold text-[#3A4A57] capitalize">{lastToolUsed}</p>
+                    <p className="text-sm text-[#8A9BA8]">Last used</p>
                   </div>
                 </div>
               )}
@@ -474,23 +474,23 @@ export function EaseParentView({
                       <div className="bg-indigo-50 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
                           <Brain className="w-4 h-4 text-indigo-500 mt-0.5 flex-shrink-0" />
-                          <p className="text-xs font-bold text-indigo-800">Goal</p>
+                          <p className="text-sm font-bold text-indigo-800">Goal</p>
                         </div>
-                        <p className="text-xs text-indigo-700 ml-6">{goalInfo.goal}</p>
+                        <p className="text-sm text-indigo-700 ml-6">{goalInfo.goal}</p>
                       </div>
                       <div className="bg-[#6B9080]/10 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
                           <Eye className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-                          <p className="text-xs font-bold text-[#6B9080]">What to observe</p>
+                          <p className="text-sm font-bold text-[#6B9080]">What to observe</p>
                         </div>
-                        <p className="text-xs text-[#6B9080] ml-6">{goalInfo.whatToObserve}</p>
+                        <p className="text-sm text-[#6B9080] ml-6">{goalInfo.whatToObserve}</p>
                       </div>
                       <div className="bg-amber-50 rounded-2xl p-3">
                         <div className="flex items-start gap-2 mb-1">
                           <Heart className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                          <p className="text-xs font-bold text-amber-800">Therapist tip</p>
+                          <p className="text-sm font-bold text-amber-800">Therapist tip</p>
                         </div>
-                        <p className="text-xs text-amber-700 ml-6">{goalInfo.therapistTip}</p>
+                        <p className="text-sm text-amber-700 ml-6">{goalInfo.therapistTip}</p>
                       </div>
                     </div>
                   </motion.div>

@@ -433,7 +433,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
                     <p className="font-medium text-[#1B2733]">{log.action}</p>
                     <p className="text-[#5A6B7A]">{log.description}</p>
                   </div>
-                  <span className="text-xs text-[#5A6B7A] whitespace-nowrap ml-4">
+                  <span className="text-sm text-[#5A6B7A] whitespace-nowrap ml-4">
                     {new Date(log.timestamp).toLocaleString()}
                   </span>
                 </div>

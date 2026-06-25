@@ -83,9 +83,9 @@ export function GameLibrary({ onSelectGame, onBack }: { onSelectGame: (id: strin
           >
             <div className="text-3xl mb-2">{game.emoji}</div>
             <div className="text-white font-bold text-sm">{game.name}</div>
-            <div className="text-white/70 text-xs mt-0.5">{game.description}</div>
+            <div className="text-white/70 text-sm mt-0.5">{game.description}</div>
             <div className="mt-2 bg-white/20 rounded-full px-2 py-0.5 inline-block">
-              <span className="text-white/80 text-xs">{game.domain}</span>
+              <span className="text-white/80 text-sm">{game.domain}</span>
             </div>
           </motion.button>
         ))}
@@ -629,7 +629,7 @@ export function EmotionMatchGame({ onBack, onComplete, difficulty = 'easy' }: Ga
         </button>
         <div className="text-center">
           <div className="text-sm text-[#5A6B7A]">Matches: {matches}/{pairs.length}</div>
-          <div className="text-xs text-[#8A9BA8]">Moves: {moves}</div>
+          <div className="text-sm text-[#8A9BA8]">Moves: {moves}</div>
         </div>
         <div className="w-10" />
       </div>

@@ -305,14 +305,14 @@ export function JuniorReportCard({
             </div>
             <div className="flex-1">
               <h2 className="text-lg font-bold text-[#1B2733]">Weekly Report Card</h2>
-              <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+              <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                 <Calendar className="w-3 h-3" />
                 {data.weekLabel}
               </div>
             </div>
             <div className="flex items-center gap-1">
               {trendIcon(data.accuracyTrend)}
-              <span className={`text-xs font-medium ${trendColor(data.accuracyTrend)}`}>
+              <span className={`text-sm font-medium ${trendColor(data.accuracyTrend)}`}>
                 {trendLabel(data.accuracyTrend)}
               </span>
             </div>
@@ -322,27 +322,27 @@ export function JuniorReportCard({
           <div className="grid grid-cols-4 gap-2 mb-4">
             <div className="text-center p-2 rounded-xl bg-[#EEF4F8]">
               <div className="text-lg font-bold text-blue-700">{data.sessionsCompleted}</div>
-              <div className="text-xs text-blue-500">Sessions</div>
+              <div className="text-sm text-blue-500">Sessions</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-green-50">
               <div className={`text-lg font-bold ${accuracyColor(data.avgAccuracy)}`}>
                 {data.avgAccuracy}%
               </div>
-              <div className="text-xs text-green-500">Accuracy</div>
+              <div className="text-sm text-green-500">Accuracy</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-orange-50">
               <div className="flex items-center justify-center gap-0.5">
                 <Flame className="w-3.5 h-3.5 text-orange-500" />
                 <span className="text-lg font-bold text-orange-700">{data.streak}</span>
               </div>
-              <div className="text-xs text-orange-500">Streak</div>
+              <div className="text-sm text-orange-500">Streak</div>
             </div>
             <div className="text-center p-2 rounded-xl bg-purple-50">
               <div className="flex items-center justify-center gap-0.5">
                 <Clock className="w-3.5 h-3.5 text-purple-500" />
                 <span className="text-lg font-bold text-purple-700">{data.totalMinutes}</span>
               </div>
-              <div className="text-xs text-purple-500">Minutes</div>
+              <div className="text-sm text-purple-500">Minutes</div>
             </div>
           </div>
 
@@ -358,7 +358,7 @@ export function JuniorReportCard({
                   .filter(d => d.sessions > 0)
                   .map(d => (
                     <div key={d.domain} className="flex items-center gap-2">
-                      <span className="text-xs text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
+                      <span className="text-sm text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
                       <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
@@ -368,7 +368,7 @@ export function JuniorReportCard({
                           style={{ width: `${Math.min(d.accuracy, 100)}%` }}
                         />
                       </div>
-                      <span className={`text-xs font-medium w-10 text-right ${accuracyColor(d.accuracy)}`}>
+                      <span className={`text-sm font-medium w-10 text-right ${accuracyColor(d.accuracy)}`}>
                         {d.accuracy}%
                       </span>
                       {trendIcon(d.trend)}
@@ -400,7 +400,7 @@ export function JuniorReportCard({
           )}
 
           {/* Extra stats */}
-          <div className="flex items-center gap-3 text-xs text-[#8A9BA8] pt-2 border-t border-[#E8E4DF]">
+          <div className="flex items-center gap-3 text-sm text-[#8A9BA8] pt-2 border-t border-[#E8E4DF]">
             <span>{data.tokensEarned} tokens earned</span>
             {data.calmCornerCount > 0 && (
               <span>Calm Corner {data.calmCornerCount}x</span>
@@ -408,7 +408,7 @@ export function JuniorReportCard({
           </div>
 
           {/* Privacy note */}
-          <p className="text-xs text-[#8A9BA8] text-center mt-3">
+          <p className="text-sm text-[#8A9BA8] text-center mt-3">
             Aminy Ease | Privacy-first: initials only, no PII shared
           </p>
         </div>

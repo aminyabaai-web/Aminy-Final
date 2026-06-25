@@ -151,7 +151,7 @@ export default function EVVReconciliation({
           )}
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">EVV Reconciliation</h1>
-            <p className="text-xs text-[#5A6B7A]">Electronic Visit Verification</p>
+            <p className="text-sm text-[#5A6B7A]">Electronic Visit Verification</p>
           </div>
           <button
             onClick={onRefresh}
@@ -182,17 +182,17 @@ export default function EVVReconciliation({
               >
                 <div className="flex items-center gap-2 mb-1">
                   <div className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-                  <span className="text-xs font-semibold text-[#1B2733]">{cycle.label}</span>
+                  <span className="text-sm font-semibold text-[#1B2733]">{cycle.label}</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {new Date(cycle.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} -{' '}
                   {new Date(cycle.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
                   <span className="text-lg font-bold text-[#1B2733]">{cycle.cleanRate}%</span>
-                  <span className="text-xs text-[#5A6B7A]">clean</span>
+                  <span className="text-sm text-[#5A6B7A]">clean</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   {cycle.reconciled}/{cycle.totalVisits} visits | {cycle.discrepancies} issues
                 </p>
               </button>
@@ -206,19 +206,19 @@ export default function EVVReconciliation({
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <CheckCircle className="mx-auto h-5 w-5 text-green-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">{currentCycle.reconciled}</p>
-              <p className="text-xs text-[#5A6B7A]">Verified</p>
+              <p className="text-sm text-[#5A6B7A]">Verified</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <AlertTriangle className="mx-auto h-5 w-5 text-amber-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">{discrepancyCount}</p>
-              <p className="text-xs text-[#5A6B7A]">Discrepancies</p>
+              <p className="text-sm text-[#5A6B7A]">Discrepancies</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <Clock className="mx-auto h-5 w-5 text-blue-500 mb-1" />
               <p className="text-lg font-bold text-[#1B2733]">
                 {currentCycle.totalVisits - currentCycle.reconciled - discrepancyCount}
               </p>
-              <p className="text-xs text-[#5A6B7A]">Pending</p>
+              <p className="text-sm text-[#5A6B7A]">Pending</p>
             </div>
           </div>
         )}
@@ -282,7 +282,7 @@ export default function EVVReconciliation({
                           {visit.reconciliationStatus === 'resolved' && <CheckCircle className="h-4 w-4 text-blue-500" />}
                           <span className="text-sm font-semibold text-[#1B2733] truncate">{visit.clientName}</span>
                         </div>
-                        <p className="text-xs text-[#5A6B7A] mt-0.5">
+                        <p className="text-sm text-[#5A6B7A] mt-0.5">
                           {new Date(visit.serviceDate).toLocaleDateString()} | {visit.serviceCode} | {visit.providerName}
                         </p>
                         {visit.discrepancyType && (
@@ -292,7 +292,7 @@ export default function EVVReconciliation({
                         )}
                       </div>
                       <div className="flex items-center gap-2 ml-2">
-                        <span className={`text-xs font-bold ${confidenceColor}`}>
+                        <span className={`text-sm font-bold ${confidenceColor}`}>
                           {visit.fiscalAgentConfidence}%
                         </span>
                         {isExpanded ? <ChevronUp className="h-4 w-4 text-[#8A9BA8]" /> : <ChevronDown className="h-4 w-4 text-[#8A9BA8]" />}
@@ -312,11 +312,11 @@ export default function EVVReconciliation({
                           {/* Time Comparison */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">Scheduled</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">Scheduled</p>
                               <p className="text-sm text-[#1B2733]">{visit.scheduledStart} - {visit.scheduledEnd}</p>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">Actual</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">Actual</p>
                               <p className="text-sm text-[#1B2733]">
                                 {visit.actualStart ?? '—'} - {visit.actualEnd ?? '—'}
                               </p>
@@ -326,7 +326,7 @@ export default function EVVReconciliation({
                           {/* GPS */}
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-In</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">GPS Check-In</p>
                               {visit.gpsCheckIn ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckIn.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
@@ -339,7 +339,7 @@ export default function EVVReconciliation({
                               )}
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-[#5A6B7A]">GPS Check-Out</p>
+                              <p className="text-sm font-medium text-[#5A6B7A]">GPS Check-Out</p>
                               {visit.gpsCheckOut ? (
                                 <div className="flex items-center gap-1 text-sm">
                                   <MapPin className={`h-3.5 w-3.5 ${visit.gpsCheckOut.matchesServiceLocation ? 'text-green-500' : 'text-red-500'}`} />
@@ -355,7 +355,7 @@ export default function EVVReconciliation({
 
                           {/* Timesheet Match */}
                           <div>
-                            <p className="text-xs font-medium text-[#5A6B7A]">Timesheet</p>
+                            <p className="text-sm font-medium text-[#5A6B7A]">Timesheet</p>
                             <span className={`inline-flex items-center gap-1 text-sm ${
                               visit.timesheetMatch === 'match' ? 'text-green-700' :
                               visit.timesheetMatch === 'minor-variance' ? 'text-amber-700' :
@@ -370,7 +370,7 @@ export default function EVVReconciliation({
 
                           {/* Fiscal Agent Confidence */}
                           <div>
-                            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
+                            <p className="text-sm font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
                             <div className="flex items-center gap-2">
                               <div className="flex-1 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
                                 <div
@@ -390,9 +390,9 @@ export default function EVVReconciliation({
                           {/* Resolution Queue */}
                           {visit.reconciliationStatus === 'discrepancy' && (
                             <div className="rounded-lg bg-red-50 p-3">
-                              <p className="text-xs font-semibold text-red-800 mb-2">Resolution Required</p>
+                              <p className="text-sm font-semibold text-red-800 mb-2">Resolution Required</p>
                               {visit.discrepancyNote && (
-                                <p className="text-xs text-red-700 mb-2">{visit.discrepancyNote}</p>
+                                <p className="text-sm text-red-700 mb-2">{visit.discrepancyNote}</p>
                               )}
                               <textarea
                                 value={resolutionNote}

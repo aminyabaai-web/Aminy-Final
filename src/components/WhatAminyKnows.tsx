@@ -340,7 +340,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                 <p className="text-xl sm:text-2xl font-bold text-primary">
                   {totalFacts} {totalFacts === 1 ? 'thing' : 'things'}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   about {childName}
                 </p>
               </div>
@@ -382,7 +382,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                 >
                   <Icon className="w-3 h-3 mr-1" />
                   {cat.label}
-                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-xs">
+                  <Badge variant="secondary" className="ml-1 h-5 px-1.5 text-sm">
                     {count}
                   </Badge>
                 </Button>
@@ -425,7 +425,7 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                           </div>
                           <div>
                             <h3 className="font-semibold text-primary">{category.label}</h3>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-sm text-muted-foreground">
                               {category.description}
                             </p>
                           </div>
@@ -444,11 +444,11 @@ export function WhatAminyKnows({ onBack, childId }: WhatAminyKnowsProps) {
                               <div className="flex-1">
                                 <p className="text-primary">{fact.content}</p>
                                 <div className="flex items-center gap-2 mt-2">
-                                  <Badge variant="secondary" className="text-xs">
+                                  <Badge variant="secondary" className="text-sm">
                                     {sourceLabels[fact.source] || fact.source}
                                   </Badge>
                                   {fact.confidence < 0.8 && (
-                                    <span className="text-xs text-muted-foreground">
+                                    <span className="text-sm text-muted-foreground">
                                       (may need verification)
                                     </span>
                                   )}

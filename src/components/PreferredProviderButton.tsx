@@ -98,7 +98,7 @@ export function PreferredProviderButton({
         </motion.div>
       )}
       {showLabel && (
-        <span className="ml-1 text-xs">
+        <span className="ml-1 text-sm">
           {localPreferred ? 'Favorited' : 'Add to favorites'}
         </span>
       )}
@@ -118,7 +118,7 @@ export function PreferredProviderBadge({
     <div
       className={cn(
         'inline-flex items-center gap-1 px-2 py-0.5 rounded-full',
-        'bg-amber-100 text-amber-700 text-xs font-medium',
+        'bg-amber-100 text-amber-700 text-sm font-medium',
         className
       )}
     >

@@ -304,7 +304,7 @@ export function SessionScheduler({
             )}
             <div>
               <h2 className="text-base font-semibold text-[#1B2733]">Schedule Session</h2>
-              <p className="text-xs text-[#5A6B7A]">with {providerName}</p>
+              <p className="text-sm text-[#5A6B7A]">with {providerName}</p>
             </div>
           </div>
           {onCancel && (
@@ -357,7 +357,7 @@ export function SessionScheduler({
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[vt]}</p>
-                      <p className="text-xs text-[#8A9BA8]">
+                      <p className="text-sm text-[#8A9BA8]">
                         {durations.join(' or ')} min
                       </p>
                     </div>
@@ -380,7 +380,7 @@ export function SessionScheduler({
                     <button
                       key={d}
                       onClick={() => setDuration(d)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                         duration === d
                           ? 'bg-primary text-white'
                           : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
@@ -428,7 +428,7 @@ export function SessionScheduler({
                         }
                       }}
                       disabled={disabled}
-                      className={`flex flex-col items-center py-3 rounded-xl text-xs transition-all ${
+                      className={`flex flex-col items-center py-3 rounded-xl text-sm transition-all ${
                         disabled
                           ? 'opacity-30 cursor-not-allowed'
                           : selected
@@ -519,7 +519,7 @@ export function SessionScheduler({
                 <div>
                   <p className="text-sm font-semibold text-[#1B2733]">{providerName}</p>
                   {providerTitle && (
-                    <p className="text-xs text-[#5A6B7A]">{providerTitle}</p>
+                    <p className="text-sm text-[#5A6B7A]">{providerTitle}</p>
                   )}
                 </div>
               </div>
@@ -531,7 +531,7 @@ export function SessionScheduler({
                     <Stethoscope size={14} className="text-blue-600" />
                   </div>
                   <div>
-                    <span className="text-[#8A9BA8] text-xs">Visit Type</span>
+                    <span className="text-[#8A9BA8] text-sm">Visit Type</span>
                     <p className="font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[visitType]}</p>
                   </div>
                 </div>
@@ -540,7 +540,7 @@ export function SessionScheduler({
                     <Calendar size={14} className="text-green-600" />
                   </div>
                   <div>
-                    <span className="text-[#8A9BA8] text-xs">Date</span>
+                    <span className="text-[#8A9BA8] text-sm">Date</span>
                     <p className="font-medium text-[#1B2733]">{formatDate(selectedDate)}</p>
                   </div>
                 </div>
@@ -549,7 +549,7 @@ export function SessionScheduler({
                     <Clock size={14} className="text-purple-600" />
                   </div>
                   <div>
-                    <span className="text-[#8A9BA8] text-xs">Time</span>
+                    <span className="text-[#8A9BA8] text-sm">Time</span>
                     <p className="font-medium text-[#1B2733]">
                       {formatTime(selectedSlot.startTime)} &middot; {duration} min
                     </p>
@@ -561,7 +561,7 @@ export function SessionScheduler({
                       <User size={14} className="text-amber-600" />
                     </div>
                     <div>
-                      <span className="text-[#8A9BA8] text-xs">Child</span>
+                      <span className="text-[#8A9BA8] text-sm">Child</span>
                       <p className="font-medium text-[#1B2733]">{childName}</p>
                     </div>
                   </div>
@@ -572,7 +572,7 @@ export function SessionScheduler({
               {bookingError && (
                 <div className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg p-3">
                   <AlertCircle size={14} className="text-red-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-red-700">{bookingError}</p>
+                  <p className="text-sm text-red-700">{bookingError}</p>
                 </div>
               )}
             </div>

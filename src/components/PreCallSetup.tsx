@@ -324,31 +324,31 @@ export function PreCallSetup({
   const renderStatusBadge = (status: DeviceStatus[keyof DeviceStatus]) => {
     switch (status) {
       case 'pending':
-        return <Badge variant="secondary" className="text-xs">Waiting</Badge>;
+        return <Badge variant="secondary" className="text-sm">Waiting</Badge>;
       case 'testing':
         return (
-          <Badge variant="secondary" className="text-xs">
+          <Badge variant="secondary" className="text-sm">
             <Loader2 className="w-3 h-3 mr-1 animate-spin" />
             Testing
           </Badge>
         );
       case 'success':
         return (
-          <Badge className="bg-green-100 text-green-800 text-xs">
+          <Badge className="bg-green-100 text-green-800 text-sm">
             <CheckCircle className="w-3 h-3 mr-1" />
             Ready
           </Badge>
         );
       case 'warning':
         return (
-          <Badge className="bg-amber-100 text-amber-800 text-xs">
+          <Badge className="bg-amber-100 text-amber-800 text-sm">
             <AlertCircle className="w-3 h-3 mr-1" />
             Slow
           </Badge>
         );
       case 'error':
         return (
-          <Badge variant="destructive" className="text-xs">
+          <Badge variant="destructive" className="text-sm">
             <AlertCircle className="w-3 h-3 mr-1" />
             Error
           </Badge>
@@ -441,7 +441,7 @@ export function PreCallSetup({
                 style={{ width: `${audioLevel}%` }}
               />
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Speak to test your microphone
             </p>
           </div>
@@ -477,7 +477,7 @@ export function PreCallSetup({
                   variant="ghost"
                   size="sm"
                   onClick={testSpeaker}
-                  className="h-7 text-xs"
+                  className="h-7 text-sm"
                 >
                   <Play className="w-3 h-3 mr-1" />
                   Test

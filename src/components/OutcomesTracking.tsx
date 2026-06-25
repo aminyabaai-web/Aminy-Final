@@ -865,19 +865,19 @@ export function OutcomesWidget({
           <div className="text-lg font-bold text-[#6B9080]">
             {goalsAchieved}/{totalGoals}
           </div>
-          <p className="text-xs text-[#5A6B7A]">Goals</p>
+          <p className="text-sm text-[#5A6B7A]">Goals</p>
         </div>
         <div className="p-2 bg-violet-50 rounded-lg">
           <div className="text-lg font-bold text-violet-600">
             {streakDays}
           </div>
-          <p className="text-xs text-[#5A6B7A]">Day Streak</p>
+          <p className="text-sm text-[#5A6B7A]">Day Streak</p>
         </div>
         <div className="p-2 bg-pink-50 rounded-lg">
           <div className="text-lg font-bold text-pink-600">
             {confidenceScore}%
           </div>
-          <p className="text-xs text-[#5A6B7A]">Confidence</p>
+          <p className="text-sm text-[#5A6B7A]">Confidence</p>
         </div>
       </div>
     </Card>

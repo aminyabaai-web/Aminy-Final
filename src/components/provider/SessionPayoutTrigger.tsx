@@ -157,7 +157,7 @@ export function SessionPayoutTrigger({
 
             {isSample && (
               <div
-                className="px-5 py-2 flex items-center justify-center gap-1.5 text-xs font-semibold"
+                className="px-5 py-2 flex items-center justify-center gap-1.5 text-sm font-semibold"
                 style={{ backgroundColor: '#92400E', color: '#FFFBEB' }}
               >
                 <AlertCircle className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ export function SessionPayoutTrigger({
           <Card className="rounded-2xl border-0 shadow-sm bg-white p-8 flex flex-col items-center gap-3">
             <Loader2 className="w-8 h-8 text-primary animate-spin" />
             <p className="text-sm font-medium text-[#3A4A57]">Processing payout…</p>
-            <p className="text-xs text-[#8A9BA8] text-center">Transferring {formatCents(providerCents)} to {providerName}</p>
+            <p className="text-sm text-[#8A9BA8] text-center">Transferring {formatCents(providerCents)} to {providerName}</p>
           </Card>
         </motion.div>
       )}
@@ -270,7 +270,7 @@ export function SessionPayoutTrigger({
             <div>
               <h3 className="font-bold text-[#1B2733] text-base">Payment Released</h3>
               <p className="text-[#6B9080] font-semibold text-xl mt-1">{formatCents(payoutRecord.providerAmountCents)}</p>
-              <p className="text-xs text-[#8A9BA8] mt-1">Transfer ID: {payoutRecord.transferId}</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">Transfer ID: {payoutRecord.transferId}</p>
             </div>
             <p className="text-sm text-[#5A6B7A]">
               {providerName} will receive this payment within 2 business days via Stripe.

@@ -198,7 +198,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
         </button>
       </div>
 
-      <div className="text-xs text-slate-400">
+      <div className="text-sm text-slate-400">
         {items.length} / {step.count}
       </div>
     </div>
@@ -301,7 +301,7 @@ function BodyScan({ onFinish }: { onFinish: () => void }) {
         {zoneIndex < BODY_ZONES.length - 1 ? 'Next zone' : 'Finish'}
       </button>
 
-      <div className="text-xs text-center text-slate-400">
+      <div className="text-sm text-center text-slate-400">
         {completed.size} / {BODY_ZONES.length} zones
       </div>
     </div>
@@ -698,7 +698,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
                   <div className="text-2xl">{ex.emoji}</div>
                   <div className="flex-1">
                     <div className="text-sm font-semibold text-[#1B2733]">{ex.label}</div>
-                    <div className="text-xs text-[#5A6B7A]">{ex.description}</div>
+                    <div className="text-sm text-[#5A6B7A]">{ex.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
                 </motion.button>

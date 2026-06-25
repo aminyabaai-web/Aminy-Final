@@ -308,7 +308,7 @@ export function ProviderDirectory({
 
             <div className="flex flex-wrap gap-2">
               {provider.badges.map((badge, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
+                <Badge key={index} variant="outline" className="text-sm">
                   {badge === 'Insurance Verified' && <Shield className="w-3 h-3 mr-1" />}
                   {badge === 'Top Rated' && <Award className="w-3 h-3 mr-1" />}
                   {badge === 'Telehealth Available' && <Zap className="w-3 h-3 mr-1" />}

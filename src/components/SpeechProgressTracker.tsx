@@ -209,7 +209,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 <div className="text-xl sm:text-2xl font-bold text-purple-900">
                   {articulationSummary.averageAccuracy}%
                 </div>
-                <div className="text-xs text-purple-600 mt-1">
+                <div className="text-sm text-purple-600 mt-1">
                   {articulationSummary.sessionCount} sessions tracked
                 </div>
               </div>
@@ -222,7 +222,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 <div className="text-xl sm:text-2xl font-bold text-blue-900">
                   {expressiveSummary.averageAccuracy}%
                 </div>
-                <div className="text-xs text-blue-600 mt-1">
+                <div className="text-sm text-blue-600 mt-1">
                   {expressiveSummary.sessionCount} sessions tracked
                 </div>
               </div>
@@ -235,7 +235,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
                   {receptiveSummary.averageAccuracy}%
                 </div>
-                <div className="text-xs text-[#6B9080] mt-1">
+                <div className="text-sm text-[#6B9080] mt-1">
                   {receptiveSummary.sessionCount} sessions tracked
                 </div>
               </div>
@@ -274,7 +274,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                         <div className="font-medium text-sm">
                           {new Date(session.sessionDate).toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-[#5A6B7A]">
+                        <div className="text-sm text-[#5A6B7A]">
                           {session.duration} min - {session.domains.join(', ')}
                         </div>
                       </div>
@@ -349,7 +349,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                                 <div className="text-sm font-medium">
                                   {sound.currentAccuracy}%
                                 </div>
-                                <div className="text-xs text-[#5A6B7A]">
+                                <div className="text-sm text-[#5A6B7A]">
                                   Target: {sound.targetAccuracy}%
                                 </div>
                               </div>
@@ -365,11 +365,11 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                             <div className="px-4 pb-4 pt-0 border-t">
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
                                 <div>
-                                  <label className="text-xs text-[#5A6B7A]">Level</label>
+                                  <label className="text-sm text-[#5A6B7A]">Level</label>
                                   <div className="font-medium capitalize">{sound.level}</div>
                                 </div>
                                 <div>
-                                  <label className="text-xs text-[#5A6B7A]">Prompt</label>
+                                  <label className="text-sm text-[#5A6B7A]">Prompt</label>
                                   <div className="font-medium capitalize">
                                     {sound.promptLevel.replace('-', ' ')}
                                   </div>
@@ -378,7 +378,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
 
                               {/* Quick accuracy update */}
                               <div className="mt-4">
-                                <label className="text-xs text-[#5A6B7A] block mb-2">
+                                <label className="text-sm text-[#5A6B7A] block mb-2">
                                   Update Accuracy
                                 </label>
                                 <div className="flex gap-1">
@@ -392,7 +392,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                                           acc as AccuracyLevel
                                         )
                                       }
-                                      className={`flex-1 py-2 text-xs rounded transition-colors ${
+                                      className={`flex-1 py-2 text-sm rounded transition-colors ${
                                         sound.currentAccuracy === acc
                                           ? 'bg-green-600 text-white'
                                           : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
@@ -433,7 +433,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                       className="p-3 border rounded-lg hover:border-[#6B9080]/30 cursor-pointer transition-colors"
                     >
                       <div className="font-medium text-sm">{skill.name}</div>
-                      <div className="text-xs text-[#5A6B7A]">{skill.ageRange}</div>
+                      <div className="text-sm text-[#5A6B7A]">{skill.ageRange}</div>
                     </div>
                   ))}
                 </div>
@@ -453,7 +453,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                       className="p-3 border rounded-lg hover:border-blue-300 cursor-pointer transition-colors"
                     >
                       <div className="font-medium text-sm">{skill.name}</div>
-                      <div className="text-xs text-[#5A6B7A]">{skill.ageRange}</div>
+                      <div className="text-sm text-[#5A6B7A]">{skill.ageRange}</div>
                     </div>
                   ))}
                 </div>
@@ -568,7 +568,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                     )}
                     {session.parentCarryover.length > 0 && (
                       <div className="mt-2 pt-2 border-t">
-                        <div className="text-xs text-[#5A6B7A] mb-1">Home practice:</div>
+                        <div className="text-sm text-[#5A6B7A] mb-1">Home practice:</div>
                         <ul className="text-sm text-[#5A6B7A]">
                           {session.parentCarryover.map((item, i) => (
                             <li key={i} className="flex items-start gap-1">

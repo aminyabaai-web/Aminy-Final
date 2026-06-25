@@ -154,7 +154,7 @@ function AACGoalTracker() {
             style={{ width: `${Math.min(100, (totalUses / spontTarget) * 100)}%` }}
           />
         </div>
-        <p className="text-xs text-[#5A6B7A] mt-1.5">
+        <p className="text-sm text-[#5A6B7A] mt-1.5">
           {totalUses >= spontTarget
             ? `Goal met! ${totalUses}/${spontTarget} communications`
             : `${totalUses}/${spontTarget} — ${spontTarget - totalUses} more to goal`}
@@ -236,13 +236,13 @@ function LanguageSampleAnalysis() {
                 style={{ height: `${(entry.mlu / chartMax) * 88}px` }}
                 title={`MLU: ${entry.mlu}`}
               />
-              <span className="text-xs text-[#8A9BA8]" style={{ fontSize: '9px' }}>
+              <span className="text-sm text-[#8A9BA8]" style={{ fontSize: '9px' }}>
                 {entry.date.slice(5)}
               </span>
             </div>
           ))}
         </div>
-        <div className="flex justify-between text-xs text-[#5A6B7A] mt-2">
+        <div className="flex justify-between text-sm text-[#5A6B7A] mt-2">
           <span>Baseline</span>
           <span>Current MLU: <strong className="text-violet-700">{history[0]?.mlu ?? '—'}</strong></span>
         </div>
@@ -258,7 +258,7 @@ function LanguageSampleAnalysis() {
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">MLU</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">MLU</label>
                 <input
                   type="number"
                   step="0.1"
@@ -269,7 +269,7 @@ function LanguageSampleAnalysis() {
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Utterances sampled</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Utterances sampled</label>
                 <input
                   type="number"
                   value={newUtterances}
@@ -280,7 +280,7 @@ function LanguageSampleAnalysis() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Notes</label>
               <input
                 value={newNotes}
                 onChange={e => setNewNotes(e.target.value)}
@@ -304,11 +304,11 @@ function LanguageSampleAnalysis() {
           <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
             <div>
               <span className="text-sm font-medium text-[#1B2733]">MLU {entry.mlu}</span>
-              <span className="text-xs text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
+              <span className="text-sm text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
-              <p className="text-xs text-[#5A6B7A]">{entry.date}</p>
-              {entry.notes && <p className="text-xs text-[#8A9BA8]">{entry.notes}</p>}
+              <p className="text-sm text-[#5A6B7A]">{entry.date}</p>
+              {entry.notes && <p className="text-sm text-[#8A9BA8]">{entry.notes}</p>}
             </div>
           </div>
         ))}
@@ -438,7 +438,7 @@ function FluencyTracker() {
             <p className="text-3xl font-bold text-blue-700">{latest.wpm}</p>
             <p className="text-sm text-blue-600 mt-1">Words per minute</p>
             {prev && (
-              <p className={`text-xs mt-1 ${latest.wpm > prev.wpm ? 'text-green-600' : 'text-red-500'}`}>
+              <p className={`text-sm mt-1 ${latest.wpm > prev.wpm ? 'text-green-600' : 'text-red-500'}`}>
                 {latest.wpm > prev.wpm ? '+' : ''}{latest.wpm - prev.wpm} vs prior
               </p>
             )}
@@ -447,7 +447,7 @@ function FluencyTracker() {
             <p className="text-3xl font-bold text-orange-700">{latest.stutteringFreqPct}%</p>
             <p className="text-sm text-orange-600 mt-1">Stuttering frequency</p>
             {prev && (
-              <p className={`text-xs mt-1 ${latest.stutteringFreqPct < prev.stutteringFreqPct ? 'text-green-600' : 'text-red-500'}`}>
+              <p className={`text-sm mt-1 ${latest.stutteringFreqPct < prev.stutteringFreqPct ? 'text-green-600' : 'text-red-500'}`}>
                 {latest.stutteringFreqPct < prev.stutteringFreqPct ? '-' : '+'}{Math.abs(latest.stutteringFreqPct - prev.stutteringFreqPct)}% vs prior
               </p>
             )}
@@ -457,7 +457,7 @@ function FluencyTracker() {
 
       {latest?.avoidanceBehaviors?.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
-          <p className="text-xs font-medium text-amber-700 mb-1">Avoidance behaviors noted:</p>
+          <p className="text-sm font-medium text-amber-700 mb-1">Avoidance behaviors noted:</p>
           <div className="flex flex-wrap gap-1">
             {latest.avoidanceBehaviors.map(b => (
               <span key={b} className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{b}</span>
@@ -483,20 +483,20 @@ function FluencyTracker() {
           >
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">WPM</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">WPM</label>
                 <input type="number" value={form.wpm} onChange={e => setForm(f => ({ ...f, wpm: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Stutter % </label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Stutter % </label>
                 <input type="number" step="0.5" value={form.stutter} onChange={e => setForm(f => ({ ...f, stutter: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Avoidance behaviors (comma-separated)</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Avoidance behaviors (comma-separated)</label>
               <input value={form.avoidance} onChange={e => setForm(f => ({ ...f, avoidance: e.target.value }))} placeholder="word substitution, circumlocution..." className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Notes</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Notes</label>
               <input value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <button onClick={addEntry} disabled={!form.wpm} className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium disabled:opacity-50">Save</button>
@@ -644,7 +644,7 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
           )}
           <div>
             <h1 className="text-lg font-bold text-[#1B2733]">SLP Clinical Tools</h1>
-            <p className="text-xs text-[#5A6B7A]">Speech-Language Pathology</p>
+            <p className="text-sm text-[#5A6B7A]">Speech-Language Pathology</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">
             CCC-SLP
@@ -657,7 +657,7 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-[#6B9080] text-[#6B9080] bg-[#6B9080]/10/50'
                   : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'

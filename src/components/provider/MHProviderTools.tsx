@@ -319,7 +319,7 @@ function BRIEF2Widget() {
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/{maxScore}</span></p>
             <p className="text-sm font-medium">{latestElevation.label}</p>
           </div>
-          <div className="text-xs text-right opacity-70">
+          <div className="text-sm text-right opacity-70">
             {new Date(latest.date).toLocaleDateString()}
           </div>
         </div>
@@ -328,13 +328,13 @@ function BRIEF2Widget() {
       <AnimatePresence>
         {showForm && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-3 bg-indigo-50 border border-[#6B9080]/20 rounded-xl p-4">
-            <p className="text-xs text-[#5A6B7A] font-medium">Rate each domain: 1 = Never, 2 = Sometimes, 3 = Often</p>
+            <p className="text-sm text-[#5A6B7A] font-medium">Rate each domain: 1 = Never, 2 = Sometimes, 3 = Often</p>
             {BRIEF2_DOMAINS.map(domain => (
               <div key={domain.id}>
                 <div className="flex items-center justify-between mb-1">
                   <div>
                     <span className="text-sm font-medium text-[#1B2733]">{domain.label}</span>
-                    <span className="text-xs text-[#5A6B7A] ml-1">— {domain.desc}</span>
+                    <span className="text-sm text-[#5A6B7A] ml-1">— {domain.desc}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -407,7 +407,7 @@ function SafetyLog() {
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="bg-red-50 border border-red-200 rounded-xl p-4 space-y-3">
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Suicidal ideation</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Suicidal ideation</label>
                 <select value={form.si} onChange={e => setForm(f => ({ ...f, si: e.target.value as SafetyEntry['si'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="none">None</option>
                   <option value="ideation">Ideation only</option>
@@ -415,7 +415,7 @@ function SafetyLog() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Homicidal ideation</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Homicidal ideation</label>
                 <select value={form.hi} onChange={e => setForm(f => ({ ...f, hi: e.target.value as SafetyEntry['hi'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="none">None</option>
                   <option value="ideation">Ideation only</option>
@@ -423,7 +423,7 @@ function SafetyLog() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A]">Risk level</label>
+                <label className="text-sm font-medium text-[#5A6B7A]">Risk level</label>
                 <select value={form.risk} onChange={e => setForm(f => ({ ...f, risk: e.target.value as SafetyEntry['risk'] }))} className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                   <option value="low">Low</option>
                   <option value="moderate">Moderate</option>
@@ -432,7 +432,7 @@ function SafetyLog() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A]">Note</label>
+              <label className="text-sm font-medium text-[#5A6B7A]">Note</label>
               <input value={form.note} onChange={e => setForm(f => ({ ...f, note: e.target.value }))} placeholder="No safety concerns noted." className="w-full mt-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:outline-none" />
             </div>
             <button onClick={addEntry} className="w-full py-2 bg-red-600 text-white rounded-lg text-sm font-medium">Save Safety Screen</button>
@@ -453,7 +453,7 @@ function SafetyLog() {
                 {entry.si !== 'none' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">SI: {entry.si}</span>}
                 {entry.hi !== 'none' && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">HI: {entry.hi}</span>}
               </div>
-              {entry.note && <p className="text-xs text-[#5A6B7A] mt-1">{entry.note}</p>}
+              {entry.note && <p className="text-sm text-[#5A6B7A] mt-1">{entry.note}</p>}
             </div>
           </div>
         ))}
@@ -532,7 +532,7 @@ function MHSessionNote() {
           <label className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2 block">Safety Screening</label>
           <div className="grid grid-cols-3 gap-2">
             <div>
-              <p className="text-xs text-[#5A6B7A] mb-1">SI</p>
+              <p className="text-sm text-[#5A6B7A] mb-1">SI</p>
               <select value={note.si} onChange={e => setNote(n => ({ ...n, si: e.target.value as MHNote['si'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="none">None noted</option>
                 <option value="ideation">Ideation only</option>
@@ -540,7 +540,7 @@ function MHSessionNote() {
               </select>
             </div>
             <div>
-              <p className="text-xs text-[#5A6B7A] mb-1">HI</p>
+              <p className="text-sm text-[#5A6B7A] mb-1">HI</p>
               <select value={note.hi} onChange={e => setNote(n => ({ ...n, hi: e.target.value as MHNote['hi'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="none">None noted</option>
                 <option value="ideation">Ideation only</option>
@@ -548,7 +548,7 @@ function MHSessionNote() {
               </select>
             </div>
             <div>
-              <p className="text-xs text-[#5A6B7A] mb-1">Risk Level</p>
+              <p className="text-sm text-[#5A6B7A] mb-1">Risk Level</p>
               <select value={note.riskLevel} onChange={e => setNote(n => ({ ...n, riskLevel: e.target.value as MHNote['riskLevel'] }))} className="w-full rounded-lg border border-[#E8E4DF] px-2 py-1.5 text-sm focus:outline-none">
                 <option value="low">Low</option>
                 <option value="moderate">Moderate</option>
@@ -559,7 +559,7 @@ function MHSessionNote() {
           {note.riskLevel === 'high' && (
             <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-red-700">High risk — document safety plan and emergency contact notification.</p>
+              <p className="text-sm text-red-700">High risk — document safety plan and emergency contact notification.</p>
             </div>
           )}
         </div>
@@ -620,7 +620,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
           )}
           <div>
             <h1 className="text-lg font-bold text-[#1B2733]">MH Clinical Tools</h1>
-            <p className="text-xs text-[#5A6B7A]">Licensed Clinical Social Work</p>
+            <p className="text-sm text-[#5A6B7A]">Licensed Clinical Social Work</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-violet-100 text-violet-700 text-xs font-medium rounded-full">
             LCSW
@@ -632,7 +632,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                 activeTab === tab.id
                   ? 'border-violet-600 text-violet-700 bg-violet-50/50'
                   : 'border-transparent text-[#5A6B7A] hover:text-[#3A4A57]'

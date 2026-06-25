@@ -605,7 +605,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               </Button>
               <div>
                 <h1 className="text-lg text-[#1B2733]">Calm Corner</h1>
-                <p className="text-xs text-[#5A6B7A]">Sensory tools for {childName}</p>
+                <p className="text-sm text-[#5A6B7A]">Sensory tools for {childName}</p>
               </div>
             </div>
             <Button
@@ -644,7 +644,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                       step={10}
                       className="mt-2"
                     />
-                    <p className="text-xs text-[#5A6B7A] mt-1">{visualIntensity}%</p>
+                    <p className="text-sm text-[#5A6B7A] mt-1">{visualIntensity}%</p>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -658,7 +658,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                   {/* Ambient sounds - coming in future update
                   <div>
                     <Label className="text-sm text-[#3A4A57] mb-2">Ambient Sound</Label>
-                    <p className="text-xs text-[#8A9BA8]">Coming soon</p>
+                    <p className="text-sm text-[#8A9BA8]">Coming soon</p>
                   </div>
                   */}
                 </div>
@@ -674,7 +674,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                 <p className="text-sm text-[#3A4A57] mb-1">
                   These tools help with sensory regulation and calming
                 </p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   Each session is 90 seconds. Complete a full session to earn a star! ⭐
                 </p>
               </div>
@@ -735,11 +735,11 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
             </Button>
             <div>
               <h2 className="text-sm font-medium">{currentTool?.name}</h2>
-              <p className="text-xs text-gray-300">{90 - sessionDuration}s remaining</p>
+              <p className="text-sm text-gray-300">{90 - sessionDuration}s remaining</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-300">Progress</p>
+            <p className="text-sm text-gray-300">Progress</p>
             <p className="text-sm font-medium">{Math.round(progressPercent)}%</p>
           </div>
         </div>
@@ -1079,7 +1079,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                 {breathePhase === 'hold' && 'Hold gently...'}
                 {breathePhase === 'exhale' && 'Breathe out slowly...'}
               </p>
-              <p className="text-xs text-[#5A6B7A] mt-1">
+              <p className="text-sm text-[#5A6B7A] mt-1">
                 {getPhaseDuration()}s phase
               </p>
             </div>

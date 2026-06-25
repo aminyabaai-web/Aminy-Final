@@ -16,10 +16,10 @@ export function DisclaimerFooter({ className = '', variant = 'subtle' }: Disclai
   const baseClasses = "text-muted-foreground text-crisp";
 
   const variantClasses = {
-    default: "text-xs leading-relaxed",
-    compact: "text-xs leading-tight",
-    card: "text-xs leading-relaxed p-3 bg-muted/50 border border-muted rounded-lg",
-    subtle: "text-xs leading-tight",
+    default: "text-sm leading-relaxed",
+    compact: "text-sm leading-tight",
+    card: "text-sm leading-relaxed p-3 bg-muted/50 border border-muted rounded-lg",
+    subtle: "text-sm leading-tight",
   };
 
   const combinedClasses = `${baseClasses} ${variantClasses[variant]} ${className}`;

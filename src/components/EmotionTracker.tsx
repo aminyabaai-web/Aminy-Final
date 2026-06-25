@@ -184,7 +184,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
             className="w-full"
           />
 
-          <div className="flex justify-between text-xs text-[#5A6B7A]">
+          <div className="flex justify-between text-sm text-[#5A6B7A]">
             <span>Feeling a lot</span>
             <span>Feeling strong</span>
           </div>
@@ -218,7 +218,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
             ))}
           </div>
 
-          <div className="flex items-center justify-between mt-4 text-xs text-[#5A6B7A]">
+          <div className="flex items-center justify-between mt-4 text-sm text-[#5A6B7A]">
             <span>12 weeks ago</span>
             <span>This week</span>
           </div>
@@ -257,7 +257,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
                   </div>
                 )}
 
-                <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <div className="mt-3 flex flex-wrap gap-2 text-sm">
                   {insight.jrSessions > 0 && (
                     <span className="px-2 py-1 bg-white rounded-full">
                       {insight.jrSessions} Jr sessions

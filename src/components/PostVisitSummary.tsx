@@ -87,7 +87,7 @@ export function PostVisitSummary({
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-lg font-semibold text-[#1B2733]">Visit Summary</h3>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">
+          <p className="text-sm text-[#5A6B7A] mt-0.5">
             {sessionType} with {providerName}{providerCredentials ? `, ${providerCredentials}` : ''}
           </p>
         </div>
@@ -107,7 +107,7 @@ export function PostVisitSummary({
 
       {/* Session Details */}
       <div className="mb-4 p-3 bg-[#FAF7F2] rounded-lg">
-        <p className="text-xs text-[#5A6B7A]">
+        <p className="text-sm text-[#5A6B7A]">
           <Clock className="w-3 h-3 inline mr-1" />
           {sessionDate.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })} at{' '}
           {sessionDate.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
@@ -144,7 +144,7 @@ export function PostVisitSummary({
               </li>
             ))}
           </ul>
-          <p className="text-xs text-violet-600 mt-2">
+          <p className="text-sm text-violet-600 mt-2">
             Approve below to apply these updates to your AI's understanding of your child's plan.
           </p>
         </div>
@@ -155,7 +155,7 @@ export function PostVisitSummary({
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-sm font-semibold text-[#1B2733]">Action Items</h4>
-            <span className="text-xs text-[#5A6B7A]">{completedCount}/{totalItems} done</span>
+            <span className="text-sm text-[#5A6B7A]">{completedCount}/{totalItems} done</span>
           </div>
           <div className="space-y-2">
             {actionItems.map((item, index) => (

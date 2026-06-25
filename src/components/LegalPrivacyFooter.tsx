@@ -21,7 +21,7 @@ export function LegalPrivacyFooter({
   
   if (variant === 'inline') {
     return (
-      <div className={`text-xs text-[#5A6B7A] ${className}`}>
+      <div className={`text-sm text-[#5A6B7A] ${className}`}>
         <p>
           Aminy provides educational and behavioral wellness tools based on the principles of Applied Behavior Analysis (ABA). 
           It is not a medical device or provider of clinical therapy.
@@ -37,7 +37,7 @@ export function LegalPrivacyFooter({
           {showIcons && (
             <Shield className="w-5 h-5 text-slate-400 mt-0.5 flex-shrink-0" />
           )}
-          <div className="text-xs text-[#5A6B7A] leading-relaxed space-y-2">
+          <div className="text-sm text-[#5A6B7A] leading-relaxed space-y-2">
             <p>
               <strong>Disclaimer:</strong> Aminy provides educational and behavioral wellness tools based on the principles of Applied Behavior Analysis (ABA) and adaptive AI personalization. It is not a medical device or provider of clinical therapy.
             </p>
@@ -64,7 +64,7 @@ export function LegalPrivacyFooter({
               </div>
               <div>
                 <h3 className="font-semibold text-[#1B2733] mb-1">Important Disclosure</h3>
-                <p className="text-xs text-[#5A6B7A]">What Aminy is and is not</p>
+                <p className="text-sm text-[#5A6B7A]">What Aminy is and is not</p>
               </div>
             </div>
             
@@ -83,7 +83,7 @@ export function LegalPrivacyFooter({
               <li>Emergency support (for crises, call 911 or 988)</li>
             </ul>
             
-            <p className="text-xs text-[#5A6B7A] mt-4 italic">
+            <p className="text-sm text-[#5A6B7A] mt-4 italic">
               Always consult with qualified healthcare providers for medical concerns.
             </p>
           </Card>
@@ -96,7 +96,7 @@ export function LegalPrivacyFooter({
               </div>
               <div>
                 <h3 className="font-semibold text-[#1B2733] mb-1">Your Privacy & Data</h3>
-                <p className="text-xs text-[#5A6B7A]">We take security seriously</p>
+                <p className="text-sm text-[#5A6B7A]">We take security seriously</p>
               </div>
             </div>
             
@@ -127,7 +127,7 @@ export function LegalPrivacyFooter({
                 </ul>
               </div>
               
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 Read our <a href="/privacy" className="inline-flex min-h-11 items-center text-accent hover:underline">Privacy Policy</a> and{' '}
                 <a href="/terms" className="inline-flex min-h-11 items-center text-accent hover:underline">Terms of Service</a> for full details.
               </p>
@@ -137,7 +137,7 @@ export function LegalPrivacyFooter({
 
         {/* Footer Links */}
         <div className="mt-4 sm:mt-6 pt-6 border-t border-[#E8E4DF] text-center">
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-sm text-[#5A6B7A]">
             <a href="/about" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">About Aminy</a>
             <span>•</span>
             <a href="/privacy" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Privacy Policy</a>
@@ -149,7 +149,7 @@ export function LegalPrivacyFooter({
             <a href="/support" className="inline-flex min-h-11 items-center hover:text-accent transition-colors">Help Center</a>
           </div>
           
-          <p className="text-xs text-slate-400 mt-4">
+          <p className="text-sm text-slate-400 mt-4">
             © {new Date().getFullYear()} Aminy, LLC All rights reserved.
           </p>
         </div>
@@ -166,7 +166,7 @@ export function OnboardingLegalNotice({ className = '' }: { className?: string }
     <div className={`p-4 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg ${className}`}>
       <div className="flex items-start gap-2">
         <Info className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
-        <div className="text-xs text-[#5A6B7A] leading-relaxed space-y-1">
+        <div className="text-sm text-[#5A6B7A] leading-relaxed space-y-1">
           <p>
             <strong>Disclaimer:</strong> Aminy provides educational and behavioral wellness tools based on ABA principles. 
             It is not clinical therapy or a medical device.
@@ -185,7 +185,7 @@ export function OnboardingLegalNotice({ className = '' }: { className?: string }
  */
 export function MinimalLegalFooter({ className = '' }: { className?: string }) {
   return (
-    <div className={`text-center text-xs text-[#5A6B7A] leading-relaxed ${className}`}>
+    <div className={`text-center text-sm text-[#5A6B7A] leading-relaxed ${className}`}>
       <p>
         Aminy provides educational and behavioral wellness tools based on the principles of Applied Behavior Analysis (ABA). 
         Not a medical device or provider of clinical therapy.

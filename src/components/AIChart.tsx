@@ -117,10 +117,10 @@ export function AIChart({ spec }: { spec: AIChartSpec }) {
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
     >
       {spec.title && (
-        <p className="text-xs font-semibold text-[#3A4A57] mb-0.5">{spec.title}</p>
+        <p className="text-sm font-semibold text-[#3A4A57] mb-0.5">{spec.title}</p>
       )}
       {spec.subtitle && (
-        <p className="text-xs text-slate-400 mb-2">{spec.subtitle}</p>
+        <p className="text-sm text-slate-400 mb-2">{spec.subtitle}</p>
       )}
       {spec.type === 'bar' && <BarChartView spec={spec} />}
       {spec.type === 'line' && <LineChartView spec={spec} />}

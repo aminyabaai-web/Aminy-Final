@@ -242,7 +242,7 @@ export function UsageMeter({
                     ? "Unlock AI memories"
                     : "Go unlimited"}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {normalizedTier === 'free'
                   ? "Upgrade for unlimited chat & memory"
                   : "Pro includes unlimited everything"}
@@ -288,7 +288,7 @@ export function UpgradeUrgencyBanner({
                 key={i}
                 className="w-6 h-6 rounded-full bg-gradient-to-br from-accent to-purple-500 border-2 border-white flex items-center justify-center"
               >
-                <span className="text-xs text-white font-medium">
+                <span className="text-sm text-white font-medium">
                   {['S', 'M', 'J'][i]}
                 </span>
               </div>

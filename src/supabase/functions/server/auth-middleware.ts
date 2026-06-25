@@ -67,7 +67,7 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
     'full-reports',
     'vault-access',
     'ai-document-analysis',
-    'multi-child',            // Up to 2 children
+    'multi-child',            // Unlimited children
     'marketplace-access',
     'care-plan-export',
   ]),
@@ -83,7 +83,7 @@ const TIER_FEATURES: Record<TierType, Set<string>> = {
     'full-reports',           // Monthly analytics
     'vault-access',           // Document storage
     'ai-document-analysis',   // AI reads IEPs, medical records
-    'multi-child',            // Up to 2 children
+    'multi-child',            // Unlimited children
     'marketplace-access',     // Book sessions (pay per use)
     'care-plan-export',       // Export for providers
   ]),

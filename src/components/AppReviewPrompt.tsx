@@ -108,13 +108,13 @@ export function AppReviewPrompt() {
 
           {/* Selected feedback */}
           {selectedRating > 0 && selectedRating < 4 && (
-            <p className="text-xs text-[#5A6B7A] mb-3 animate-in fade-in">
+            <p className="text-sm text-[#5A6B7A] mb-3 animate-in fade-in">
               Thank you for your feedback. We&apos;ll use it to improve!
             </p>
           )}
           {selectedRating >= 4 && (
             <div className="flex flex-col items-center gap-2 mb-3 animate-in fade-in">
-              <div className="flex items-center gap-1.5 text-xs text-[#6B9080]">
+              <div className="flex items-center gap-1.5 text-sm text-[#6B9080]">
                 <ExternalLink size={12} />
                 <span>Taking you to leave a review...</span>
               </div>
@@ -122,7 +122,7 @@ export function AppReviewPrompt() {
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-[#6B9080] underline"
+                className="text-sm text-[#6B9080] underline"
               >
                 Leave a review on {store.label}
               </a>
@@ -132,7 +132,7 @@ export function AppReviewPrompt() {
           {/* Don't ask again */}
           <button
             onClick={neverAskAgain}
-            className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
+            className="text-sm text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
           >
             Don&apos;t ask me again
           </button>

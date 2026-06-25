@@ -281,8 +281,8 @@ export function QASessionsHub({
       {demo && (
         <div className="px-4 py-2 bg-amber-50 border-b border-amber-200">
           <div className="flex items-center gap-2">
-            <span className="text-amber-600 text-xs font-medium">Preview</span>
-            <span className="text-amber-700/70 text-xs">Sample sessions shown. Live Q&A sessions coming soon.</span>
+            <span className="text-amber-600 text-sm font-medium">Preview</span>
+            <span className="text-amber-700/70 text-sm">Sample sessions shown. Live Q&A sessions coming soon.</span>
           </div>
         </div>
       )}
@@ -536,7 +536,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
           <Play className="w-6 h-6 text-white fill-current ml-1" />
         </button>
         {session.replayDuration && (
-          <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-xs text-white">
+          <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-sm text-white">
             {session.replayDuration} min
           </div>
         )}
@@ -544,7 +544,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
 
       {/* Content */}
       <div className="p-3 sm:p-4">
-        <div className="flex items-center gap-2 text-xs text-[#5A6B7A] mb-2">
+        <div className="flex items-center gap-2 text-sm text-[#5A6B7A] mb-2">
           <Calendar className="w-3 h-3" />
           <span>{formatDate(session.date)}</span>
           {session.replayViews && (
@@ -569,7 +569,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
               </div>
             ))}
           </div>
-          <div className="text-xs text-[#5A6B7A]">
+          <div className="text-sm text-[#5A6B7A]">
             {session.hosts.map(h => h.name).join(' & ')}
           </div>
         </div>
@@ -585,7 +585,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
             </span>
           ))}
           {session.topics.length > 3 && (
-            <span className="px-2 py-0.5 text-[#8A9BA8] text-xs">
+            <span className="px-2 py-0.5 text-[#8A9BA8] text-sm">
               +{session.topics.length - 3} more
             </span>
           )}

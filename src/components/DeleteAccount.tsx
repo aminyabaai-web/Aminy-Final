@@ -403,7 +403,7 @@ export function DeleteAccount({
         </div>
 
         {/* Footer note */}
-        <p className="text-xs text-[#8A9BA8] dark:text-[#5A6B7A] text-center mt-6">
+        <p className="text-sm text-[#8A9BA8] dark:text-[#5A6B7A] text-center mt-6">
           Account deletion requests are processed within 30 days per our privacy policy.
           Clinical records are retained as required by law.
         </p>

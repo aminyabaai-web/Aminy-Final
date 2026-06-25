@@ -115,7 +115,7 @@ export function AskAminyChatScreen({
               <div>
                 <h1 className="text-base font-semibold text-[#1B2733] dark:text-slate-100">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today
                   </p>
                 )}
@@ -156,20 +156,20 @@ export function AskAminyChatScreen({
           className="border-b border-[#E8E4DF] dark:border-slate-800 bg-[#FAF7F2] dark:bg-slate-800"
         >
           <div className="max-w-3xl mx-auto px-4 py-3">
-            <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-2">
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">
               Aminy remembers your child's preferences, routines, and what works.
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => onNavigate?.('memory-settings')}
-                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
+                className="text-sm px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
               >
                 <MessageSquare className="w-3 h-3 inline mr-1" />
                 Manage Memory
               </button>
               <button
                 onClick={() => onNavigate?.('vault')}
-                className="text-xs px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
+                className="text-sm px-3 py-1.5 bg-white dark:bg-slate-900 text-[#3A4A57] dark:text-slate-300 border border-[#E8E4DF] dark:border-slate-800 rounded-lg hover:border-slate-300 transition-colors"
               >
                 Upload Records
               </button>

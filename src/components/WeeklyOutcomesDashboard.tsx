@@ -154,7 +154,7 @@ export function WeeklyOutcomesDashboard({
           </div>
         </div>
         <div className="text-right">
-          <div className="text-xs text-muted-foreground mb-1">Week of</div>
+          <div className="text-sm text-muted-foreground mb-1">Week of</div>
           <div className="text-sm text-primary font-medium">
             {getWeekStart().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </div>
@@ -179,12 +179,12 @@ export function WeeklyOutcomesDashboard({
         <div className="p-4 bg-white border border-[#E8E4DF] rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle className="w-4 h-4 text-green-600" />
-            <span className="text-xs text-muted-foreground">Activities</span>
+            <span className="text-sm text-muted-foreground">Activities</span>
           </div>
           <div className="text-2xl font-semibold text-primary">
             {summary.totalActivities}
           </div>
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             completed this week
           </div>
         </div>
@@ -193,12 +193,12 @@ export function WeeklyOutcomesDashboard({
         <div className="p-4 bg-white border border-[#E8E4DF] rounded-lg">
           <div className="flex items-center gap-2 mb-2">
             <Target className="w-4 h-4 text-accent" />
-            <span className="text-xs text-muted-foreground">Goals</span>
+            <span className="text-sm text-muted-foreground">Goals</span>
           </div>
           <div className="text-2xl font-semibold text-primary">
             {summary.goalsProgress}
           </div>
-          <div className="text-xs text-muted-foreground mt-1">
+          <div className="text-sm text-muted-foreground mt-1">
             steps forward
           </div>
         </div>
@@ -207,7 +207,7 @@ export function WeeklyOutcomesDashboard({
       {/* Milestones */}
       {summary.milestones && summary.milestones.length > 0 && (
         <div className="mb-4">
-          <div className="text-xs text-muted-foreground mb-2 flex items-center gap-2">
+          <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
             <Sparkles className="w-3 h-3" />
             <span>Recent milestones</span>
           </div>
@@ -255,13 +255,13 @@ export function WeeklyOutcomesDashboard({
 
       {/* Encouragement */}
       {!summary.aiSummary && summary.totalActivities > 0 && (
-        <p className="text-xs text-muted-foreground mt-4 italic text-center">
+        <p className="text-sm text-muted-foreground mt-4 italic text-center">
           You're showing up for {childName}—that's what matters most. 💙
         </p>
       )}
       
       {summary.totalActivities === 0 && (
-        <p className="text-xs text-muted-foreground mt-4 italic text-center">
+        <p className="text-sm text-muted-foreground mt-4 italic text-center">
           Ready to start fresh? Every small step with {childName} counts.
         </p>
       )}

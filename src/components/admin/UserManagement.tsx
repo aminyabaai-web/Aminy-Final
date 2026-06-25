@@ -379,7 +379,7 @@ export function UserManagement() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalUsers}</p>
-              <p className="text-xs text-[#5A6B7A]">Total Users</p>
+              <p className="text-sm text-[#5A6B7A]">Total Users</p>
             </div>
           </div>
         </Card>
@@ -390,7 +390,7 @@ export function UserManagement() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.activeUsers}</p>
-              <p className="text-xs text-[#5A6B7A]">Active</p>
+              <p className="text-sm text-[#5A6B7A]">Active</p>
             </div>
           </div>
         </Card>
@@ -401,7 +401,7 @@ export function UserManagement() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.paidUsers}</p>
-              <p className="text-xs text-[#5A6B7A]">Paid Users</p>
+              <p className="text-sm text-[#5A6B7A]">Paid Users</p>
             </div>
           </div>
         </Card>
@@ -412,7 +412,7 @@ export function UserManagement() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">${stats.mrr.toFixed(0)}</p>
-              <p className="text-xs text-[#5A6B7A]">Est. MRR</p>
+              <p className="text-sm text-[#5A6B7A]">Est. MRR</p>
             </div>
           </div>
         </Card>
@@ -541,24 +541,24 @@ export function UserManagement() {
                         {user.flags.length > 0 && (
                           <div className="mt-1 flex gap-1">
                             {user.flags.includes('at_risk') && (
-                              <span className="text-xs text-amber-600">At Risk</span>
+                              <span className="text-sm text-amber-600">At Risk</span>
                             )}
                             {user.flags.includes('high_engagement') && (
-                              <span className="text-xs text-emerald-600">High Engagement</span>
+                              <span className="text-sm text-emerald-600">High Engagement</span>
                             )}
                             {user.flags.includes('conversion_candidate') && (
-                              <span className="text-xs text-blue-600">Convert</span>
+                              <span className="text-sm text-blue-600">Convert</span>
                             )}
                           </div>
                         )}
                       </td>
                       <td className="px-4 py-4">
                         <p className="text-sm text-[#1B2733] dark:text-white">{formatTimeAgo(user.lastActiveAt)}</p>
-                        <p className="text-xs text-[#5A6B7A]">Joined {formatDate(user.createdAt)}</p>
+                        <p className="text-sm text-[#5A6B7A]">Joined {formatDate(user.createdAt)}</p>
                       </td>
                       <td className="px-4 py-4">
                         <p className="font-medium text-[#1B2733] dark:text-white">${user.totalSpent.toFixed(2)}</p>
-                        <p className="text-xs text-[#5A6B7A]">{user.totalSessions} sessions</p>
+                        <p className="text-sm text-[#5A6B7A]">{user.totalSessions} sessions</p>
                       </td>
                       <td className="px-4 py-4">
                         <div className="flex items-center justify-end gap-1">

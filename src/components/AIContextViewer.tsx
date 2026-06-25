@@ -92,7 +92,7 @@ export function AIContextViewer() {
               <span className="text-muted-foreground text-sm">Current Concerns:</span>
               <div className="flex flex-wrap gap-1 mt-1">
                 {context.child.concerns.map((concern, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
+                  <Badge key={idx} variant="outline" className="text-sm">
                     {concern}
                   </Badge>
                 ))}
@@ -105,7 +105,7 @@ export function AIContextViewer() {
               <span className="text-muted-foreground text-sm">Strengths:</span>
               <div className="flex flex-wrap gap-1 mt-1">
                 {context.child.strengths.map((strength, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs bg-green-50 text-green-700 border-green-200">
+                  <Badge key={idx} variant="outline" className="text-sm bg-green-50 text-green-700 border-green-200">
                     {strength}
                   </Badge>
                 ))}
@@ -133,10 +133,10 @@ export function AIContextViewer() {
             context.child.currentGoals.map((goal, idx) => (
               <div key={idx} className="p-3 bg-[#FAF7F2] rounded-lg text-sm">
                 <div className="flex items-center justify-between mb-1">
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     {goal.area}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">{goal.progress}% complete</span>
+                  <span className="text-sm text-muted-foreground">{goal.progress}% complete</span>
                 </div>
                 <p>{goal.description}</p>
                 <div className="w-full bg-[#E8E4DF] rounded-full h-1.5 mt-2">
@@ -240,7 +240,7 @@ export function AIContextViewer() {
           {context.memory.parentConcerns.length > 0 && (
             <div>
               <span className="text-muted-foreground">Recent concerns:</span>
-              <ul className="mt-1 space-y-1 text-xs">
+              <ul className="mt-1 space-y-1 text-sm">
                 {context.memory.parentConcerns.slice(0, 3).map((concern, idx) => (
                   <li key={idx} className="p-2 bg-amber-50 rounded text-amber-900 truncate">
                     {concern}
@@ -274,7 +274,7 @@ export function AIContextViewer() {
               <span className="text-muted-foreground">Skills worked on:</span>
               <div className="flex flex-wrap gap-1 mt-1">
                 {context.juniorMode.skillsPracticed.slice(0, 6).map((skill, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
+                  <Badge key={idx} variant="outline" className="text-sm">
                     {skill}
                   </Badge>
                 ))}
@@ -325,7 +325,7 @@ export function AIContextViewer() {
                       <div className="flex items-center gap-2">
                         <span className="font-medium">{section.title}</span>
                         {section.count > 0 && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-sm">
                             {section.count}
                           </Badge>
                         )}
@@ -351,7 +351,7 @@ export function AIContextViewer() {
 
       {/* Footer */}
       <Card className="p-3 bg-accent/5 border-accent/20">
-        <div className="flex items-start gap-2 text-xs">
+        <div className="flex items-start gap-2 text-sm">
           <Eye className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-medium text-accent mb-1">Privacy & Security</p>

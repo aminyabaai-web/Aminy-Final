@@ -260,7 +260,7 @@ function ResultCard({ result }: { result: FundingResult }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-white text-sm leading-tight">{result.title}</p>
-          <p className="text-xs mt-0.5" style={{ color: result.accentColor }}>{result.subtitle}</p>
+          <p className="text-sm mt-0.5" style={{ color: result.accentColor }}>{result.subtitle}</p>
         </div>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
@@ -294,12 +294,12 @@ function ResultCard({ result }: { result: FundingResult }) {
                       <Heart className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#E8A598' }} />
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-white">{np.name}</p>
-                        <p className="text-xs text-slate-400 mt-0.5">{np.desc}</p>
+                        <p className="text-sm text-slate-400 mt-0.5">{np.desc}</p>
                         <a
                           href={np.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs flex items-center gap-1 mt-1"
+                          className="text-sm flex items-center gap-1 mt-1"
                           style={{ color: '#43AA8B' }}
                           onClick={e => e.stopPropagation()}
                         >
@@ -353,7 +353,7 @@ function AppealLetterSection() {
       {!submitted ? (
         <div className="space-y-3">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-400">Insurance company name</label>
+            <label className="text-sm font-medium text-slate-400">Insurance company name</label>
             <input
               value={insurerName}
               onChange={e => setInsurerName(e.target.value)}
@@ -363,7 +363,7 @@ function AppealLetterSection() {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-400">Service that was denied</label>
+            <label className="text-sm font-medium text-slate-400">Service that was denied</label>
             <input
               value={deniedService}
               onChange={e => setDeniedService(e.target.value)}
@@ -373,7 +373,7 @@ function AppealLetterSection() {
             />
           </div>
           <div className="space-y-1">
-            <label className="text-xs font-medium text-slate-400">Child's diagnosis or concern (optional)</label>
+            <label className="text-sm font-medium text-slate-400">Child's diagnosis or concern (optional)</label>
             <input
               value={diagnosis}
               onChange={e => setDiagnosis(e.target.value)}
@@ -403,7 +403,7 @@ function AppealLetterSection() {
             <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#9B8EC4' }} />
             <div>
               <p className="font-semibold text-white text-sm">Let's get your appeal started</p>
-              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              <p className="text-sm text-slate-400 mt-1 leading-relaxed">
                 Fully automated AI drafts are still in beta review. For now, Aminy's care team
                 will help you draft your appeal — email{' '}
                 <a
@@ -421,7 +421,7 @@ function AppealLetterSection() {
           </div>
           <button
             onClick={() => setSubmitted(false)}
-            className="text-xs underline"
+            className="text-sm underline"
             style={{ color: '#9B8EC4' }}
           >
             Try again
@@ -538,7 +538,7 @@ export function GrantNavigator({
         </button>
         <div className="flex-1 text-center">
           <h1 className="text-xl font-bold text-white">Grant Navigator</h1>
-          <p className="text-xs" style={{ color: '#43AA8B' }}>Pro</p>
+          <p className="text-sm" style={{ color: '#43AA8B' }}>Pro</p>
         </div>
         <div style={{ width: 36 }} />
       </div>
@@ -561,7 +561,7 @@ export function GrantNavigator({
               >
                 <div className="text-3xl mb-2">💰</div>
                 <h2 className="font-bold text-white">Find Funding Options</h2>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   Personalized to your state, therapy needs, and insurance status
                 </p>
               </div>
@@ -617,7 +617,7 @@ export function GrantNavigator({
               </div>
 
               {/* Disclaimer */}
-              <p className="text-xs text-[#5A6B7A] text-center px-2 leading-relaxed">
+              <p className="text-sm text-[#5A6B7A] text-center px-2 leading-relaxed">
                 Information is for guidance only. Eligibility and availability vary.
                 Consult a benefits specialist for personalized advice.
               </p>
@@ -639,13 +639,13 @@ export function GrantNavigator({
                 <div className="text-2xl">🔍</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-white font-semibold text-sm">{state}</p>
-                  <p className="text-xs text-slate-400 truncate">
+                  <p className="text-sm text-slate-400 truncate">
                     {results.length} funding options found
                   </p>
                 </div>
                 <button
                   onClick={handleReset}
-                  className="text-xs px-3 py-1 rounded-lg"
+                  className="text-sm px-3 py-1 rounded-lg"
                   style={{ background: '#ffffff18', color: '#94a3b8' }}
                 >
                   Edit
@@ -668,7 +668,7 @@ export function GrantNavigator({
               <AppealLetterSection />
 
               {/* Disclaimer */}
-              <p className="text-xs text-[#5A6B7A] text-center px-2 leading-relaxed">
+              <p className="text-sm text-[#5A6B7A] text-center px-2 leading-relaxed">
                 Information is for guidance only. Eligibility and availability vary.
                 Consult a benefits specialist for personalized advice.
               </p>

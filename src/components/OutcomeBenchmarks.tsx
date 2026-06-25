@@ -221,7 +221,7 @@ function BenchmarkRow({
           <span className="text-lg">{display.icon}</span>
           <div>
             <span className="font-medium text-[#1B2733]">{display.displayName}</span>
-            <p className="text-xs text-[#5A6B7A]">{display.description}</p>
+            <p className="text-sm text-[#5A6B7A]">{display.description}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -275,7 +275,7 @@ function BenchmarkRow({
       </div>
 
       {/* Trend description */}
-      <p className="text-xs text-[#5A6B7A] mt-2">
+      <p className="text-sm text-[#5A6B7A] mt-2">
         {benchmark.trendDescription}
       </p>
     </motion.div>

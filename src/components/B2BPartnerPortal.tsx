@@ -340,7 +340,7 @@ export function B2BPartnerPortal({
                         <h3 className="font-semibold text-[#1B2733]">
                           {benefit.title}
                         </h3>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-sm">
                           {benefit.metric}
                         </Badge>
                       </div>
@@ -378,7 +378,7 @@ export function B2BPartnerPortal({
                   <div className="text-sm font-medium text-[#1B2733] mb-1">
                     {stat.label}
                   </div>
-                  <div className="text-xs text-[#5A6B7A]">
+                  <div className="text-sm text-[#5A6B7A]">
                     {stat.detail}
                   </div>
                 </Card>
@@ -442,7 +442,7 @@ export function B2BPartnerPortal({
             </button>
             <span className={`text-sm font-medium ${billingPeriod === 'annual' ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>Annual</span>
             {billingPeriod === 'annual' && (
-              <Badge className="bg-green-100 text-green-800 text-xs">Save up to 30%</Badge>
+              <Badge className="bg-green-100 text-green-800 text-sm">Save up to 30%</Badge>
             )}
           </div>
 
@@ -460,16 +460,16 @@ export function B2BPartnerPortal({
                 <h3 className="text-lg font-bold text-[#1B2733] mb-1">
                   {tier.name}
                 </h3>
-                <p className="text-xs text-[#5A6B7A] mb-3">
+                <p className="text-sm text-[#5A6B7A] mb-3">
                   {tier.description}
                 </p>
                 <div className="text-2xl font-bold text-[#1B2733] mb-1">
                   {tier.price}
                 </div>
-                <p className="text-xs text-[#5A6B7A] mb-3">{tier.total}</p>
+                <p className="text-sm text-[#5A6B7A] mb-3">{tier.total}</p>
 
                 {tier.savings > 0 && (
-                  <p className="text-xs text-green-600 font-medium mb-3">
+                  <p className="text-sm text-green-600 font-medium mb-3">
                     Save ${tier.savings.toFixed(0)}/year
                   </p>
                 )}
@@ -497,13 +497,13 @@ export function B2BPartnerPortal({
 
                 <ul className="space-y-2 mb-4">
                   {tier.features.slice(0, 5).map((feature, i) => (
-                    <li key={i} className="flex items-center gap-2 text-xs">
+                    <li key={i} className="flex items-center gap-2 text-sm">
                       <CheckCircle className="w-3.5 h-3.5 text-green-600 flex-shrink-0" />
                       <span className="text-[#3A4A57]">{feature}</span>
                     </li>
                   ))}
                   {tier.features.length > 5 && (
-                    <li className="text-xs text-blue-600">+{tier.features.length - 5} more features</li>
+                    <li className="text-sm text-blue-600">+{tier.features.length - 5} more features</li>
                   )}
                 </ul>
                 <Button

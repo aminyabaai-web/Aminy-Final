@@ -108,7 +108,7 @@ const TIERS: TierCard[] = [
       { icon: <Spark />, text: 'Advanced clinical reasoning' },
       { icon: <Spark />, text: 'Higher message + upload limits' },
       { icon: <Spark />, text: 'Advanced image analysis (IEPs, scans, photos)' },
-      { icon: <Spark />, text: 'Multi-child support (up to 3)' },
+      { icon: <Spark />, text: 'Unlimited children profiles' },
       { icon: <Spark />, text: 'Custom AI personalities' },
       { icon: <Spark />, text: 'Outcomes tracking with validated measures' },
     ],
@@ -291,7 +291,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
             </button>
           </div>
         </div>
-        <p className="text-center text-xs text-[#8A9BA8] mb-4">
+        <p className="text-center text-sm text-[#8A9BA8] mb-4">
           {audience === 'individual' ? 'For families & caregivers' : 'For BCBAs, clinics & ABA organizations'}
         </p>
 
@@ -335,7 +335,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {/* Cross-sell nudge */}
         {audience === 'individual' && (
           <div className="text-center mt-8 px-4">
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Are you a BCBA or running a clinic?{' '}
               <button
                 onClick={() => setAudience('provider')}
@@ -348,7 +348,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         )}
         {audience === 'provider' && (
           <div className="text-center mt-8 px-4">
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Looking for personal use?{' '}
               <button
                 onClick={() => setAudience('individual')}
@@ -405,7 +405,7 @@ function TierCardView({
       {/* Name + tagline */}
       <div className="mb-4">
         <h2 className="text-2xl font-bold text-[#1B2733] mb-1">{tier.name}</h2>
-        <p className="text-xs text-[#5A6B7A] leading-snug">{tier.tagline}</p>
+        <p className="text-sm text-[#5A6B7A] leading-snug">{tier.tagline}</p>
       </div>
 
       {/* Price */}
@@ -423,7 +423,7 @@ function TierCardView({
             </span>
           </div>
         )}
-        <p className="text-xs text-slate-400 mt-1">
+        <p className="text-sm text-slate-400 mt-1">
           {hasPromo
             ? billing === 'annual'
               ? 'free to start, then billed annually'
@@ -462,12 +462,12 @@ function TierCardView({
       {/* Volume pricing table */}
       {tier.pricingTable && tier.pricingTable.length > 0 && (
         <div className="mb-5">
-          <p className="text-xs font-semibold text-[#1B2733] mb-2">Volume pricing</p>
+          <p className="text-sm font-semibold text-[#1B2733] mb-2">Volume pricing</p>
           <div className="rounded-xl border border-[#E8E4DF] overflow-hidden">
             {tier.pricingTable.map((row, i) => (
               <div
                 key={i}
-                className={`flex items-center justify-between px-3 py-1.5 text-xs ${
+                className={`flex items-center justify-between px-3 py-1.5 text-sm ${
                   i < tier.pricingTable!.length - 1 ? 'border-b border-[#E8E4DF]' : ''
                 } ${i % 2 === 0 ? 'bg-white' : 'bg-[#F8F9FA]'}`}
               >
@@ -481,7 +481,7 @@ function TierCardView({
 
       {/* Features */}
       {tier.features_heading && (
-        <p className="text-xs font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
+        <p className="text-sm font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
       )}
       <ul className="space-y-2 flex-1">
         {tier.features.map((f, i) => (
@@ -494,7 +494,7 @@ function TierCardView({
 
       {/* Promo footer */}
       {tier.promoFooter && (
-        <p className="text-xs text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
+        <p className="text-sm text-[#5A6B7A] mt-5 pt-3 border-t border-[#E8E4DF] leading-relaxed">
           <span className="font-medium underline underline-offset-2">Promo terms apply.</span> {tier.promoFooter}
         </p>
       )}

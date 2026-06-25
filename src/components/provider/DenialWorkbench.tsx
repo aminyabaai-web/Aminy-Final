@@ -346,21 +346,21 @@ function DenialInbox({
                   <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${categoryColor(denial.category)}`}>
                     {categoryLabel(denial.category)}
                   </span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.carcCode}</span>
-                  <span className="text-xs text-slate-400">&middot;</span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.payer}</span>
-                  <span className="text-xs text-slate-400">&middot;</span>
-                  <span className="text-xs text-[#5A6B7A]">{denial.cptCode}</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.carcCode}</span>
+                  <span className="text-sm text-slate-400">&middot;</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.payer}</span>
+                  <span className="text-sm text-slate-400">&middot;</span>
+                  <span className="text-sm text-[#5A6B7A]">{denial.cptCode}</span>
                 </div>
 
-                <p className="text-xs text-[#5A6B7A] mb-2">{denial.reason}</p>
+                <p className="text-sm text-[#5A6B7A] mb-2">{denial.reason}</p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-semibold text-[#3A4A57]">${denial.deniedAmount}</span>
-                    <span className="text-xs text-slate-400">{denial.dateOfService}</span>
+                    <span className="text-sm font-semibold text-[#3A4A57]">${denial.deniedAmount}</span>
+                    <span className="text-sm text-slate-400">{denial.dateOfService}</span>
                   </div>
-                  <div className={`text-xs font-medium ${denial.daysUntilDeadline <= 0 ? 'text-red-600' : denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-[#5A6B7A]'}`}>
+                  <div className={`text-sm font-medium ${denial.daysUntilDeadline <= 0 ? 'text-red-600' : denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-[#5A6B7A]'}`}>
                     {denial.daysUntilDeadline <= 0
                       ? 'DEADLINE EXPIRED'
                       : `${denial.daysUntilDeadline}d to appeal`}
@@ -379,7 +379,7 @@ function DenialInbox({
             {denials.length === 0 ? (
               <>
                 <p className="text-sm font-semibold text-[#3A4A57]">No denials to work</p>
-                <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs mx-auto">
+                <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs mx-auto">
                   When a payer denies one of your claims, it will land here with the reason code and a suggested fix.
                 </p>
               </>
@@ -454,7 +454,7 @@ NPI: [Your NPI]
 
   return (
     <div className="space-y-4">
-      <Button variant="ghost" size="sm" onClick={onBack} className="text-xs text-[#5A6B7A]">
+      <Button variant="ghost" size="sm" onClick={onBack} className="text-sm text-[#5A6B7A]">
         <ArrowLeft className="w-3 h-3 mr-1" /> Back to Inbox
       </Button>
 
@@ -463,14 +463,14 @@ NPI: [Your NPI]
         <div className="flex items-center justify-between mb-3">
           <div>
             <h3 className="text-base font-bold text-[#1B2733]">{denial.patientName}</h3>
-            <p className="text-xs text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
+            <p className="text-sm text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
           </div>
           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${sc.color}`}>
             {sc.icon} {sc.label}
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 text-xs">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
             <span className="text-slate-400">Payer</span>
             <p className="font-medium text-[#3A4A57]">{denial.payer}</p>
@@ -498,9 +498,9 @@ NPI: [Your NPI]
           <AlertCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-semibold text-red-800 mb-1">{denial.carcCode}: {categoryLabel(denial.category)}</p>
-            <p className="text-xs text-red-700">{denial.reason}</p>
+            <p className="text-sm text-red-700">{denial.reason}</p>
             {carcInfo && (
-              <p className="text-xs text-red-600 mt-1 italic">Standard: {carcInfo.reason}</p>
+              <p className="text-sm text-red-600 mt-1 italic">Standard: {carcInfo.reason}</p>
             )}
           </div>
         </div>
@@ -512,7 +512,7 @@ NPI: [Your NPI]
           <Zap className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-semibold text-emerald-800 mb-1">Suggested Action</p>
-            <p className="text-xs text-emerald-700">{denial.suggestedAction}</p>
+            <p className="text-sm text-emerald-700">{denial.suggestedAction}</p>
           </div>
         </div>
       </Card>
@@ -520,32 +520,32 @@ NPI: [Your NPI]
       {/* One-Click Actions */}
       <div className="grid grid-cols-2 gap-2">
         {denial.category === 'missing-info' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <Edit3 className="w-3 h-3 mr-1.5" /> Correction Form
           </Button>
         )}
         {denial.category === 'auth' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <RefreshCw className="w-3 h-3 mr-1.5" /> Request Retro-Auth
           </Button>
         )}
         {denial.category === 'coding' && (
-          <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+          <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
             <Sparkles className="w-3 h-3 mr-1.5" /> Suggest Correct Code
           </Button>
         )}
         <Button
           variant="outline"
           size="sm"
-          className="h-9 text-xs justify-start"
+          className="h-9 text-sm justify-start"
           onClick={() => setShowAppealLetter(!showAppealLetter)}
         >
           <FileText className="w-3 h-3 mr-1.5" /> {showAppealLetter ? 'Hide' : 'Generate'} Appeal Letter
         </Button>
-        <Button variant="outline" size="sm" className="h-9 text-xs justify-start">
+        <Button variant="outline" size="sm" className="h-9 text-sm justify-start">
           <Send className="w-3 h-3 mr-1.5" /> Resubmit Claim
         </Button>
-        <Button variant="outline" size="sm" className="h-9 text-xs justify-start text-red-600 border-red-200">
+        <Button variant="outline" size="sm" className="h-9 text-sm justify-start text-red-600 border-red-200">
           <XCircle className="w-3 h-3 mr-1.5" /> Write Off
         </Button>
       </div>
@@ -565,18 +565,18 @@ NPI: [Your NPI]
                   <Sparkles className="w-4 h-4 text-violet-500" />
                   Generated Appeal Letter
                 </h3>
-                <Button variant="ghost" size="sm" className="h-6 text-xs">
+                <Button variant="ghost" size="sm" className="h-6 text-sm">
                   <Copy className="w-3 h-3 mr-1" /> Copy
                 </Button>
               </div>
-              <pre className="text-xs text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
+              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
                 {appealLetterTemplate}
               </pre>
               <div className="flex gap-2 mt-3">
-                <Button size="sm" className="text-xs flex-1">
+                <Button size="sm" className="text-sm flex-1">
                   <Download className="w-3 h-3 mr-1" /> Download PDF
                 </Button>
-                <Button variant="outline" size="sm" className="text-xs flex-1">
+                <Button variant="outline" size="sm" className="text-sm flex-1">
                   <Edit3 className="w-3 h-3 mr-1" /> Edit Letter
                 </Button>
               </div>
@@ -614,8 +614,8 @@ NPI: [Your NPI]
                 }`}>
                   {step.label}
                 </p>
-                {step.date && <p className="text-xs text-slate-400">{step.date}</p>}
-                {step.description && <p className="text-xs text-[#5A6B7A] mt-0.5">{step.description}</p>}
+                {step.date && <p className="text-sm text-slate-400">{step.date}</p>}
+                {step.description && <p className="text-sm text-[#5A6B7A] mt-0.5">{step.description}</p>}
               </div>
             </div>
           ))}
@@ -639,7 +639,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
           <BarChart3 className="w-6 h-6 text-slate-400" />
         </div>
         <p className="text-sm font-semibold text-[#3A4A57]">No denial analytics yet</p>
-        <p className="text-xs text-[#5A6B7A] mt-1 max-w-xs mx-auto">
+        <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs mx-auto">
           Recovery rates, top denial reasons, and revenue-at-risk trends appear once you have denied claims to analyze.
         </p>
       </Card>
@@ -675,30 +675,30 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
       {/* Summary Cards */}
       <div className="grid grid-cols-2 gap-2">
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Total Denied</p>
+          <p className="text-sm text-[#5A6B7A]">Total Denied</p>
           <p className="text-xl font-bold text-red-600">${totalDenied.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">{denials.length} claims</p>
+          <p className="text-sm text-slate-400">{denials.length} claims</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Recovered</p>
+          <p className="text-sm text-[#5A6B7A]">Recovered</p>
           <p className="text-xl font-bold text-emerald-600">${totalRecovered.toLocaleString()}</p>
-          <p className="text-xs text-slate-400">{recovered.length} claims</p>
+          <p className="text-sm text-slate-400">{recovered.length} claims</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Denial Rate</p>
+          <p className="text-sm text-[#5A6B7A]">Denial Rate</p>
           <div className="flex items-center gap-1">
             <p className="text-xl font-bold text-[#1B2733]">{denialRate}%</p>
             <TrendingDown className="w-4 h-4 text-emerald-500" />
           </div>
-          <p className="text-xs text-emerald-500">-2% vs last month</p>
+          <p className="text-sm text-emerald-500">-2% vs last month</p>
         </Card>
         <Card className="p-3">
-          <p className="text-xs text-[#5A6B7A]">Recovery Rate</p>
+          <p className="text-sm text-[#5A6B7A]">Recovery Rate</p>
           <div className="flex items-center gap-1">
             <p className="text-xl font-bold text-[#1B2733]">{recoveryRate}%</p>
             <TrendingUp className="w-4 h-4 text-emerald-500" />
           </div>
-          <p className="text-xs text-emerald-500">+5% vs last month</p>
+          <p className="text-sm text-emerald-500">+5% vs last month</p>
         </Card>
       </div>
 
@@ -713,7 +713,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
             const pct = Math.round((count / maxReasonCount) * 100);
             return (
               <div key={cat}>
-                <div className="flex items-center justify-between text-xs mb-1">
+                <div className="flex items-center justify-between text-sm mb-1">
                   <span className="font-medium text-[#3A4A57]">{categoryLabel(cat as Denial['category'])}</span>
                   <span className="text-[#5A6B7A]">{count} ({Math.round((count / denials.length) * 100)}%)</span>
                 </div>
@@ -741,7 +741,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
               <div key={payer} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
                 <div>
                   <p className="text-sm font-medium text-[#3A4A57]">{payer}</p>
-                  <p className="text-xs text-slate-400">{data.count} denials</p>
+                  <p className="text-sm text-slate-400">{data.count} denials</p>
                 </div>
                 <span className="text-sm font-semibold text-red-600">${data.amount.toLocaleString()}</span>
               </div>
@@ -755,7 +755,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
           <DollarSign className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
           <div>
             <h3 className="text-sm font-semibold text-[#4A6478]">Revenue Impact</h3>
-            <p className="text-xs text-blue-600 mt-1">
+            <p className="text-sm text-blue-600 mt-1">
               At your current denial rate of {denialRate}%, approximately ${Math.round(totalDenied * 12 / denials.length * 30).toLocaleString()} in
               annual revenue is at risk. Reducing denials by 3% would recover an estimated
               ${Math.round(totalDenied * 0.25).toLocaleString()} per quarter.
@@ -778,7 +778,7 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-[#1B2733]">Claims Needing Correction</h3>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-sm">
           {reworkItems.length} items
         </Badge>
       </div>
@@ -795,29 +795,29 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <p className="text-sm font-medium text-[#3A4A57]">{denial.patientName}</p>
-                  <p className="text-xs text-slate-400">{denial.claimId}</p>
+                  <p className="text-sm text-slate-400">{denial.claimId}</p>
                 </div>
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryColor(denial.category)}`}>
                   {categoryLabel(denial.category)}
                 </span>
               </div>
-              <p className="text-xs text-[#5A6B7A] mb-2">{denial.suggestedAction}</p>
+              <p className="text-sm text-[#5A6B7A] mb-2">{denial.suggestedAction}</p>
               <div className="flex items-center justify-between">
-                <span className={`text-xs font-medium ${denial.daysUntilDeadline <= 7 ? 'text-red-600' : 'text-amber-600'}`}>
+                <span className={`text-sm font-medium ${denial.daysUntilDeadline <= 7 ? 'text-red-600' : 'text-amber-600'}`}>
                   {denial.daysUntilDeadline <= 0 ? 'OVERDUE' : `${denial.daysUntilDeadline}d remaining`}
                 </span>
                 <div className="flex gap-1">
                   {denial.category === 'missing-info' && (
-                    <Button variant="outline" size="sm" className="h-6 text-xs">
+                    <Button variant="outline" size="sm" className="h-6 text-sm">
                       <Edit3 className="w-2.5 h-2.5 mr-0.5" /> Fix
                     </Button>
                   )}
                   {denial.category === 'coding' && (
-                    <Button variant="outline" size="sm" className="h-6 text-xs">
+                    <Button variant="outline" size="sm" className="h-6 text-sm">
                       <Sparkles className="w-2.5 h-2.5 mr-0.5" /> Recode
                     </Button>
                   )}
-                  <Button variant="outline" size="sm" className="h-6 text-xs">
+                  <Button variant="outline" size="sm" className="h-6 text-sm">
                     <Send className="w-2.5 h-2.5 mr-0.5" /> Resubmit
                   </Button>
                 </div>
@@ -868,7 +868,7 @@ export default function DenialWorkbench({
           )}
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">Denial Workbench</h1>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               {urgentCount} urgent &middot; ${totalAtRisk.toLocaleString()} at risk
             </p>
           </div>

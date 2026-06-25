@@ -382,7 +382,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <Card className="p-6 text-center">
                 <FileText className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">No documents in your vault yet</p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   You can still proceed — documents can be added later
                 </p>
               </Card>
@@ -408,16 +408,16 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
 
             <Card className="p-4 space-y-3">
               <div>
-                <p className="text-xs text-muted-foreground">Patient</p>
+                <p className="text-sm text-muted-foreground">Patient</p>
                 <p className="font-medium">{childName || 'Child'}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Service</p>
+                <p className="text-sm text-muted-foreground">Service</p>
                 <p className="font-medium">{serviceType}</p>
                 <p className="text-sm text-[#5A6B7A]">{frequency} for {duration || '6 months'}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Diagnosis Codes</p>
+                <p className="text-sm text-muted-foreground">Diagnosis Codes</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {selectedCodes.map(code => (
                     <Badge key={code} variant="outline" className="font-mono">{code}</Badge>
@@ -425,18 +425,18 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Provider</p>
+                <p className="text-sm text-muted-foreground">Provider</p>
                 <p className="font-medium">{providerName}</p>
                 {providerCredentials && <p className="text-sm text-[#5A6B7A]">{providerCredentials}</p>}
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Insurance</p>
+                <p className="text-sm text-muted-foreground">Insurance</p>
                 <p className="font-medium">{insuranceCompany}</p>
                 {memberId && <p className="text-sm text-[#5A6B7A]">Member ID: {memberId}</p>}
               </div>
               {attachedDocs.length > 0 && (
                 <div>
-                  <p className="text-xs text-muted-foreground">Attached Documents ({attachedDocs.length})</p>
+                  <p className="text-sm text-muted-foreground">Attached Documents ({attachedDocs.length})</p>
                   {attachedDocs.map(d => (
                     <p key={d} className="text-sm text-[#5A6B7A]">• {d}</p>
                   ))}
@@ -444,14 +444,14 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               )}
               {notes && (
                 <div>
-                  <p className="text-xs text-muted-foreground">Notes</p>
+                  <p className="text-sm text-muted-foreground">Notes</p>
                   <p className="text-sm text-[#5A6B7A]">{notes}</p>
                 </div>
               )}
             </Card>
 
             <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
-              <p className="text-xs text-[#4A6478]">
+              <p className="text-sm text-[#4A6478]">
                 <strong>Next:</strong> We'll generate a PDF you can submit to {insuranceCompany}. You can also fax it directly from the next screen.
               </p>
             </div>
@@ -480,7 +480,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
             </div>
 
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg max-w-sm mx-auto mt-4">
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 <strong>Tip:</strong> Have your provider sign the form before submitting. Keep a copy for your records and note the submission date.
               </p>
             </div>

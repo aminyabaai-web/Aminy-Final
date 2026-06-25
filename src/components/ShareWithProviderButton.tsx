@@ -480,7 +480,7 @@ function ShareModal({
 
             {/* Privacy Note */}
             <div className="px-4 pb-4">
-              <p className="text-xs text-[#5A6B7A] text-center">
+              <p className="text-sm text-[#5A6B7A] text-center">
                 Reports are encrypted and HIPAA-conscious. You control who sees your data.
               </p>
             </div>

@@ -378,20 +378,20 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 pt-4">
                     <div className="text-center">
                       <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.activeGoals}</div>
-                      <div className="text-xs text-[#5A6B7A]">Active Goals</div>
+                      <div className="text-sm text-[#5A6B7A]">Active Goals</div>
                     </div>
                     {/* Sessions/Weeks render only when the backing data provides them —
                         never fabricated for a real coach. */}
                     {typeof selectedFamily.sessionsCount === 'number' && (
                       <div className="text-center">
                         <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.sessionsCount}</div>
-                        <div className="text-xs text-[#5A6B7A]">Sessions</div>
+                        <div className="text-sm text-[#5A6B7A]">Sessions</div>
                       </div>
                     )}
                     {typeof selectedFamily.weeksInProgram === 'number' && (
                       <div className="text-center">
                         <div className="text-2xl text-[#1B2733] mb-1">{selectedFamily.weeksInProgram}</div>
-                        <div className="text-xs text-[#5A6B7A]">Weeks</div>
+                        <div className="text-sm text-[#5A6B7A]">Weeks</div>
                       </div>
                     )}
                   </div>
@@ -412,7 +412,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                     <div className="flex-1">
                       <h4 className="text-[#1B2733] mb-1">{goal.title}</h4>
                       <p className="text-sm text-[#5A6B7A] mb-2">{goal.description}</p>
-                      <div className="flex items-center gap-3 text-xs">
+                      <div className="flex items-center gap-3 text-sm">
                         <Badge variant="outline">{goal.category}</Badge>
                         <span className="text-[#5A6B7A]">Baseline: {goal.baseline}</span>
                         <span className="text-[#5A6B7A]">Target: {goal.target}</span>
@@ -495,7 +495,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   {note.tags.length > 0 && (
                     <div className="flex gap-2 mt-3">
                       {note.tags.map(tag => (
-                        <Badge key={tag} variant="outline" className="text-xs">
+                        <Badge key={tag} variant="outline" className="text-sm">
                           {tag}
                         </Badge>
                       ))}
@@ -578,7 +578,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 </div>
                 <div>
                   <p className="font-semibold text-[#1B2733] text-sm">Data Collection</p>
-                  <p className="text-xs text-[#5A6B7A]">DTT · NET · Behavior</p>
+                  <p className="text-sm text-[#5A6B7A]">DTT · NET · Behavior</p>
                 </div>
               </button>
               <button
@@ -590,7 +590,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                 </div>
                 <div>
                   <p className="font-semibold text-[#1B2733] text-sm">Treatment Plan</p>
-                  <p className="text-xs text-[#5A6B7A]">Author · Finalize · Export</p>
+                  <p className="text-sm text-[#5A6B7A]">Author · Finalize · Export</p>
                 </div>
               </button>
             </div>

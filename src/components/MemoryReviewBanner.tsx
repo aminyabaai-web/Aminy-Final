@@ -58,7 +58,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <p className="font-medium text-sm">Save this as a memory?</p>
-            <Badge variant="outline" className={`text-xs ${getScopeColor(memoryItem.scope)}`}>
+            <Badge variant="outline" className={`text-sm ${getScopeColor(memoryItem.scope)}`}>
               {memoryItem.scope}
             </Badge>
           </div>
@@ -70,7 +70,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
 
       {/* Memory Content */}
       <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 mb-3">
-        <p className="text-xs font-medium text-muted-foreground mb-1">
+        <p className="text-sm font-medium text-muted-foreground mb-1">
           {memoryItem.key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
         </p>
         {isEditing ? (
@@ -92,7 +92,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
 
       {/* Details (collapsible) */}
       {showDetails && (
-        <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 mb-3 text-xs">
+        <div className="bg-white border border-[#E8E4DF] rounded-lg p-3 mb-3 text-sm">
           <p className="text-muted-foreground mb-1">Why this is being saved:</p>
           <p>{memoryItem.why_saved || 'Helps personalize Aminy\'s guidance'}</p>
           <p className="text-muted-foreground mt-2 mb-1">Confidence:</p>
@@ -107,7 +107,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
             <Button
               size="sm"
               onClick={handleEdit}
-              className="gap-1 h-8 text-xs"
+              className="gap-1 h-8 text-sm"
             >
               <Check className="w-3 h-3" />
               Save Edit
@@ -121,7 +121,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
                   typeof memoryItem.value === 'string' ? memoryItem.value : JSON.stringify(memoryItem.value)
                 );
               }}
-              className="gap-1 h-8 text-xs"
+              className="gap-1 h-8 text-sm"
             >
               <X className="w-3 h-3" />
               Cancel
@@ -132,7 +132,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
             <Button
               size="sm"
               onClick={onApprove}
-              className="gap-1 h-8 text-xs bg-accent hover:bg-accent/90"
+              className="gap-1 h-8 text-sm bg-accent hover:bg-accent/90"
             >
               <Check className="w-3 h-3" />
               Yes, Save
@@ -141,7 +141,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
               size="sm"
               variant="outline"
               onClick={() => setIsEditing(true)}
-              className="gap-1 h-8 text-xs"
+              className="gap-1 h-8 text-sm"
             >
               <Edit3 className="w-3 h-3" />
               Edit
@@ -150,7 +150,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
               size="sm"
               variant="ghost"
               onClick={onReject}
-              className="gap-1 h-8 text-xs"
+              className="gap-1 h-8 text-sm"
             >
               <X className="w-3 h-3" />
               No, Don't Save
@@ -159,7 +159,7 @@ export const MemoryReviewBanner: React.FC<MemoryReviewBannerProps> = ({
               size="sm"
               variant="ghost"
               onClick={() => setShowDetails(!showDetails)}
-              className="gap-1 h-8 text-xs ml-auto"
+              className="gap-1 h-8 text-sm ml-auto"
             >
               <Info className="w-3 h-3" />
               {showDetails ? 'Hide' : 'Show'} Details

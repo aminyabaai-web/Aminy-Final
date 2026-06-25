@@ -284,11 +284,11 @@ describe('Tier Utilities', () => {
   });
 
   describe('getMaxChildren', () => {
-    it('returns correct limits', () => {
+    it('returns correct limits (no per-child pricing penalty on paid tiers)', () => {
       expect(getMaxChildren('free')).toBe(1);
-      expect(getMaxChildren('starter')).toBe(2); // Legacy: same as Core
-      expect(getMaxChildren('core')).toBe(2);
-      expect(getMaxChildren('pro')).toBe(3);
+      expect(getMaxChildren('starter')).toBeNull(); // Legacy Core alias — unlimited
+      expect(getMaxChildren('core')).toBeNull();    // unlimited — multi-kid families pay same
+      expect(getMaxChildren('pro')).toBeNull();     // unlimited — multi-kid families pay same
       expect(getMaxChildren('proplus')).toBeNull(); // unlimited (Family Plan)
     });
   });

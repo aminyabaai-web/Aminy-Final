@@ -98,7 +98,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
     <div className="space-y-3 sm:space-y-4 sm:space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">BCBA/RBT Session Notes</h3>
-        <Badge variant="outline" className="text-xs">
+        <Badge variant="outline" className="text-sm">
           Auto-saved to Vault
         </Badge>
       </div>
@@ -107,11 +107,11 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       <Card className="p-4 bg-[#FAF7F2] border-[#E8E4DF]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div>
-            <Label className="text-xs text-[#5A6B7A]">Client Name</Label>
+            <Label className="text-sm text-[#5A6B7A]">Client Name</Label>
             <Input value={childName} readOnly className="bg-white" />
           </div>
           <div>
-            <Label className="text-xs text-[#5A6B7A]">Date & Time</Label>
+            <Label className="text-sm text-[#5A6B7A]">Date & Time</Label>
             <Input type="datetime-local" className="bg-white" />
           </div>
         </div>
@@ -269,7 +269,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       <Card className="p-3 bg-[#EEF4F8] border-[#C8DDE8]">
         <div className="flex items-start gap-2">
           <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-blue-700">
+          <p className="text-sm text-blue-700">
             <span className="font-semibold">Storage note:</span> Saved to Vault with timestamp; included in Provider-ready packet.
           </p>
         </div>

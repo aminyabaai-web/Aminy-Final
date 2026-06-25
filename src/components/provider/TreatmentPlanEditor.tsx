@@ -362,7 +362,7 @@ function GoalCard({
             value={goal.domain}
             onChange={e => update({ domain: e.target.value as GoalDomain })}
             disabled={isFinalized}
-            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-[#FAF7F2]"
+            className="text-sm border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-[#FAF7F2]"
           >
             {Object.entries(DOMAIN_LABELS).map(([val, label]) => (
               <option key={val} value={val}>{label}</option>
@@ -372,7 +372,7 @@ function GoalCard({
             value={goal.masteryStatus}
             onChange={e => update({ masteryStatus: e.target.value as MasteryStatus })}
             disabled={isFinalized}
-            className={`text-xs border rounded-lg px-2 py-1 outline-none focus:border-emerald-500 disabled:opacity-60 ${MASTERY_CONFIG[goal.masteryStatus].color}`}
+            className={`text-sm border rounded-lg px-2 py-1 outline-none focus:border-emerald-500 disabled:opacity-60 ${MASTERY_CONFIG[goal.masteryStatus].color}`}
           >
             {Object.entries(MASTERY_CONFIG).map(([val, cfg]) => (
               <option key={val} value={val}>{cfg.label}</option>
@@ -439,7 +439,7 @@ function GoalCard({
         <div>
           <button
             onClick={() => update({ objectivesExpanded: !goal.objectivesExpanded })}
-            className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
+            className="flex items-center gap-1 text-sm text-emerald-500 font-medium"
           >
             {goal.objectivesExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             Short-term Objectives ({goal.objectives.length})
@@ -450,7 +450,7 @@ function GoalCard({
               {goal.objectives.map((obj, oi) => (
                 <div key={obj.id} className="bg-[#FAF7F2] rounded-xl p-3 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#5A6B7A]">Objective {oi + 1}</span>
+                    <span className="text-sm font-semibold text-[#5A6B7A]">Objective {oi + 1}</span>
                     {!isFinalized && (
                       <button onClick={() => removeObjective(obj.id)} className="text-red-400">
                         <X className="w-3.5 h-3.5" />
@@ -487,7 +487,7 @@ function GoalCard({
                     value={obj.masteryStatus}
                     onChange={e => updateObjective(obj.id, { masteryStatus: e.target.value as MasteryStatus })}
                     disabled={isFinalized}
-                    className={`${selectCls} bg-white text-xs`}
+                    className={`${selectCls} bg-white text-sm`}
                   >
                     {Object.entries(MASTERY_CONFIG).map(([val, cfg]) => (
                       <option key={val} value={val}>{cfg.label}</option>
@@ -498,7 +498,7 @@ function GoalCard({
               {!isFinalized && (
                 <button
                   onClick={addObjective}
-                  className="flex items-center gap-1 text-xs text-emerald-500 font-medium mt-2"
+                  className="flex items-center gap-1 text-sm text-emerald-500 font-medium mt-2"
                 >
                   <Plus className="w-3 h-3" />
                   Add Objective
@@ -541,7 +541,7 @@ function BehaviorPlanCard({
             value={plan.hypothesizedFunction}
             onChange={e => update({ hypothesizedFunction: e.target.value as BehaviorFunction })}
             disabled={isFinalized}
-            className="text-xs border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-[#FAF7F2]"
+            className="text-sm border border-slate-300 rounded-lg px-2 py-1 outline-none focus:border-emerald-500 bg-white disabled:bg-[#FAF7F2]"
           >
             {BEHAVIOR_FUNCTIONS.map(f => (
               <option key={f.value} value={f.value}>{f.label}</option>
@@ -646,11 +646,11 @@ function VersionHistoryModal({
                   <p className="text-sm font-medium text-[#1B2733]">
                     {new Date(v.createdAt).toLocaleString()}
                   </p>
-                  <p className="text-xs text-[#5A6B7A]">{v.createdBy || 'Unknown author'}</p>
+                  <p className="text-sm text-[#5A6B7A]">{v.createdBy || 'Unknown author'}</p>
                 </div>
                 <button
                   onClick={() => { onRestore(v); onClose(); }}
-                  className="text-xs text-emerald-500 font-medium px-3 py-1.5 border border-emerald-500 rounded-lg"
+                  className="text-sm text-emerald-500 font-medium px-3 py-1.5 border border-emerald-500 rounded-lg"
                 >
                   Restore
                 </button>
@@ -894,15 +894,15 @@ export function TreatmentPlanEditor({
               {plan.isFinalized ? (
                 <div className="flex items-center justify-center gap-1">
                   <Lock className="w-3 h-3 text-amber-400" />
-                  <span className="text-xs text-amber-400">Finalized</span>
+                  <span className="text-sm text-amber-400">Finalized</span>
                 </div>
               ) : lastSaved ? (
-                <p className="text-xs text-slate-400">
+                <p className="text-sm text-slate-400">
                   {isSaving ? 'Saving...' : `Saved ${lastSaved.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`}
                   {isDirty && !isSaving && ' · Unsaved changes'}
                 </p>
               ) : (
-                <p className="text-xs text-slate-400">Draft</p>
+                <p className="text-sm text-slate-400">Draft</p>
               )}
             </div>
 
@@ -1062,7 +1062,7 @@ export function TreatmentPlanEditor({
                   {!plan.isFinalized && (
                     <button
                       onClick={() => updatePlan({ reinforcers: [...plan.reinforcers, { id: generateId(), item: '', category: 'tangible' }] })}
-                      className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
+                      className="flex items-center gap-1 text-sm text-emerald-500 font-medium"
                     >
                       <Plus className="w-3 h-3" /> Add
                     </button>
@@ -1078,7 +1078,7 @@ export function TreatmentPlanEditor({
                           value={r.category}
                           onChange={e => updatePlan({ reinforcers: plan.reinforcers.map(ri => ri.id === r.id ? { ...ri, category: e.target.value as ReinforcerItem['category'] } : ri) })}
                           disabled={plan.isFinalized}
-                          className="text-xs border border-slate-300 rounded-lg px-2 py-1.5 outline-none bg-white disabled:bg-[#FAF7F2]"
+                          className="text-sm border border-slate-300 rounded-lg px-2 py-1.5 outline-none bg-white disabled:bg-[#FAF7F2]"
                         >
                           <option value="edible">Edible</option>
                           <option value="tangible">Tangible</option>
@@ -1248,7 +1248,7 @@ export function TreatmentPlanEditor({
               {!plan.bcbaAttestation && (
                 <div className="flex items-center gap-2 text-amber-700 bg-amber-50 rounded-xl p-3">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <p className="text-xs">Attestation checkbox required before finalizing</p>
+                  <p className="text-sm">Attestation checkbox required before finalizing</p>
                 </div>
               )}
             </div>
@@ -1266,7 +1266,7 @@ export function TreatmentPlanEditor({
                 Finalize Plan
               </button>
               {(!plan.bcbaAttestation || plan.goals.length === 0) && (
-                <p className="text-xs text-slate-400 text-center mt-2">
+                <p className="text-sm text-slate-400 text-center mt-2">
                   {plan.goals.length === 0 ? 'Add at least one goal to finalize' : 'Complete attestation to finalize'}
                 </p>
               )}

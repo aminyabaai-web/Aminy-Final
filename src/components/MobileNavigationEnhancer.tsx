@@ -192,7 +192,7 @@ export const MobileNavigationEnhancer: React.FC<MobileNavigationEnhancerProps> =
                   
                   {/* Label */}
                   <span className={`
-                    relative z-10 text-xs font-medium leading-tight
+                    relative z-10 text-sm font-medium leading-tight
                     ${isActive ? 'text-accent' : 'text-inherit'}
                   `}>
                     {item.label}

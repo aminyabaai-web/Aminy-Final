@@ -66,7 +66,7 @@ export function RBTQuickActions({
               onClick={action.onClick}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-xs">{action.label}</span>
+              <span className="text-sm">{action.label}</span>
             </Button>
           );
         })}

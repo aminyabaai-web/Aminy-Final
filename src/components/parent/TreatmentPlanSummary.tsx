@@ -144,10 +144,10 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
               {expanded ? <ChevronUp className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />}
             </div>
             <div className="flex items-center gap-2">
-              <Badge className={`text-xs px-2 py-0 ${colors.bg} ${colors.text} border-0`}>
+              <Badge className={`text-sm px-2 py-0 ${colors.bg} ${colors.text} border-0`}>
                 {DOMAIN_LABEL[goal.domain]}
               </Badge>
-              <span className="text-xs text-slate-400">{goal.progressDescription}</span>
+              <span className="text-sm text-slate-400">{goal.progressDescription}</span>
             </div>
           </div>
         </div>
@@ -182,8 +182,8 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
                 <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider mb-2">Progress over time</p>
                 <ProgressMiniChart data={sparkline} />
                 <div className="flex justify-between mt-1">
-                  <span className="text-xs text-slate-400">8 weeks ago</span>
-                  <span className="text-xs text-[#6B9080] font-medium">Today: {goal.currentProgressPercent}%</span>
+                  <span className="text-sm text-slate-400">8 weeks ago</span>
+                  <span className="text-sm text-[#6B9080] font-medium">Today: {goal.currentProgressPercent}%</span>
                 </div>
               </div>
 
@@ -210,7 +210,7 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
               </div>
 
               {/* Provider */}
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-sm text-slate-400">
                 <User className="w-3.5 h-3.5" />
                 <span>{goal.responsibleProvider}</span>
                 <span>·</span>
@@ -264,7 +264,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
             )}
             <div>
               <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
-              <p className="text-xs text-slate-400">Treatment plan summary</p>
+              <p className="text-sm text-slate-400">Treatment plan summary</p>
             </div>
           </div>
         </div>
@@ -294,13 +294,13 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
             )}
             <div>
               <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
-              <p className="text-xs text-slate-400">{plan.periodLabel}</p>
+              <p className="text-sm text-slate-400">{plan.periodLabel}</p>
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
-            className="text-xs border-[#E8E4DF]"
+            className="text-sm border-[#E8E4DF]"
             onClick={() => toast.success('Generating PDF for school sharing...')}
           >
             <Share2 className="w-3.5 h-3.5 mr-1.5" />
@@ -331,7 +331,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
 
             {/* Provider note */}
             <div className="bg-white/15 rounded-xl p-3">
-              <p className="text-xs text-teal-100 font-medium mb-1">From your provider</p>
+              <p className="text-sm text-teal-100 font-medium mb-1">From your provider</p>
               <p className="text-sm text-white leading-relaxed">{plan.providerNote}</p>
             </div>
           </Card>
@@ -345,7 +345,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
                 <Calendar className="w-5 h-5 text-[#6B9080]" style={{ width: 18, height: 18 }} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Next session</p>
+                <p className="text-sm text-slate-400">Next session</p>
                 <p className="text-sm font-semibold text-[#1B2733]">
                   {new Date(plan.nextSessionDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
@@ -384,7 +384,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-teal-400 rounded-full mt-1.5 flex-shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-xs text-slate-400 mb-0.5">
+                      <p className="text-sm text-slate-400 mb-0.5">
                         {update.provider} · {new Date(update.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </p>
                       <p className="text-sm text-[#3A4A57] leading-relaxed">{update.note}</p>
@@ -405,7 +405,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
             <Share2 className="w-4 h-4 mr-2" />
             Share with school or pediatrician
           </Button>
-          <p className="text-xs text-center text-slate-400 mt-2">Creates a PDF-ready summary — no clinical jargon</p>
+          <p className="text-sm text-center text-slate-400 mt-2">Creates a PDF-ready summary — no clinical jargon</p>
         </div>
 
       </div>

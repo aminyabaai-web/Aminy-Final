@@ -165,19 +165,19 @@ function TrialRow({ trial, index }: { trial: Trial; index: number }) {
   const cfg = RESPONSE_CONFIG[trial.response];
   return (
     <div className="flex items-center gap-3 py-2 border-b border-[#E8E4DF] last:border-0">
-      <span className="text-xs text-slate-400 w-6 text-right">{index + 1}</span>
+      <span className="text-sm text-slate-400 w-6 text-right">{index + 1}</span>
       <span className={`font-bold text-sm px-2 py-0.5 rounded ${cfg.bgColor} ${cfg.color}`}>
         {cfg.shortLabel}
       </span>
       {trial.promptLevel && (
-        <span className="text-xs text-[#5A6B7A]">
+        <span className="text-sm text-[#5A6B7A]">
           {PROMPT_LEVELS.find(p => p.value === trial.promptLevel)?.label?.split(' ')[0]}
         </span>
       )}
       {trial.context && (
-        <span className="text-xs text-slate-400 truncate flex-1">{trial.context}</span>
+        <span className="text-sm text-slate-400 truncate flex-1">{trial.context}</span>
       )}
-      <span className="text-xs text-slate-400 ml-auto">
+      <span className="text-sm text-slate-400 ml-auto">
         {new Date(trial.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
       </span>
     </div>
@@ -223,15 +223,15 @@ function DTTMode({
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{trials.length}</p>
-          <p className="text-xs text-[#5A6B7A]">Trials</p>
+          <p className="text-sm text-[#5A6B7A]">Trials</p>
         </div>
         <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-[#E8E4DF]'}`}>
           <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#1B2733]'}`}>{pct}%</p>
-          <p className="text-xs text-[#5A6B7A]">% Correct</p>
+          <p className="text-sm text-[#5A6B7A]">% Correct</p>
         </div>
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
           <p className="text-2xl font-bold text-[#1B2733]">{trials.filter(t => t.response === 'correct').length}</p>
-          <p className="text-xs text-[#5A6B7A]">Correct</p>
+          <p className="text-sm text-[#5A6B7A]">Correct</p>
         </div>
       </div>
 
@@ -252,7 +252,7 @@ function DTTMode({
             <button
               key={pl.value}
               onClick={() => onSelectPromptLevel(pl.value)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              className={`text-sm px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-[#3A4A57] border-slate-300'
@@ -339,17 +339,17 @@ function NETMode({
       <div className="bg-slate-900 rounded-2xl p-5 flex items-center justify-around">
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{trials.length}</p>
-          <p className="text-xs text-slate-400 mt-1">Opportunities</p>
+          <p className="text-sm text-slate-400 mt-1">Opportunities</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
         <div className="text-center">
           <p className="text-4xl font-bold text-emerald-500">{correct}</p>
-          <p className="text-xs text-slate-400 mt-1">Correct</p>
+          <p className="text-sm text-slate-400 mt-1">Correct</p>
         </div>
         <div className="w-px h-12 bg-slate-600" />
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{pct}%</p>
-          <p className="text-xs text-slate-400 mt-1">Rate</p>
+          <p className="text-sm text-slate-400 mt-1">Rate</p>
         </div>
       </div>
 
@@ -373,7 +373,7 @@ function NETMode({
             <button
               key={pl.value}
               onClick={() => onSelectPromptLevel(pl.value)}
-              className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${
+              className={`text-sm px-3 py-1.5 rounded-lg border transition-all ${
                 selectedPromptLevel === pl.value
                   ? 'bg-emerald-500 text-white border-emerald-500'
                   : 'bg-white text-[#3A4A57] border-slate-300'
@@ -483,7 +483,7 @@ function BehaviorMode({
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide">ABC Data</p>
           <button
             onClick={onAddIncident}
-            className="flex items-center gap-1 text-xs text-emerald-500 font-medium"
+            className="flex items-center gap-1 text-sm text-emerald-500 font-medium"
           >
             <Plus className="w-3 h-3" />
             Add Incident
@@ -499,13 +499,13 @@ function BehaviorMode({
             {incidents.map((incident, idx) => (
               <div key={incident.id} className="bg-white border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#5A6B7A]">Incident {idx + 1}</span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-sm font-semibold text-[#5A6B7A]">Incident {idx + 1}</span>
+                  <span className="text-sm text-slate-400">
                     {new Date(incident.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
                 <div>
-                  <label className="text-xs text-amber-700 font-medium">Antecedent (A)</label>
+                  <label className="text-sm text-amber-700 font-medium">Antecedent (A)</label>
                   <input
                     type="text"
                     value={incident.antecedent}
@@ -515,7 +515,7 @@ function BehaviorMode({
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-red-700 font-medium">Behavior (B)</label>
+                  <label className="text-sm text-red-700 font-medium">Behavior (B)</label>
                   <input
                     type="text"
                     value={incident.behavior}
@@ -525,7 +525,7 @@ function BehaviorMode({
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-blue-700 font-medium">Consequence (C)</label>
+                  <label className="text-sm text-blue-700 font-medium">Consequence (C)</label>
                   <input
                     type="text"
                     value={incident.consequence}
@@ -572,7 +572,7 @@ function BehaviorMode({
           {isDurationRunning && (
             <div className="flex items-center justify-center gap-1 mb-4">
               <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <span className="text-xs text-red-600">Recording</span>
+              <span className="text-sm text-red-600">Recording</span>
             </div>
           )}
           <div className="flex gap-3 justify-center mt-4">
@@ -589,7 +589,7 @@ function BehaviorMode({
           </div>
           {durationRecords.length > 0 && (
             <div className="mt-4 text-left">
-              <p className="text-xs text-[#5A6B7A] mb-2">Recorded Episodes</p>
+              <p className="text-sm text-[#5A6B7A] mb-2">Recorded Episodes</p>
               <div className="space-y-1">
                 {durationRecords.map((d, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
@@ -634,7 +634,7 @@ function BehaviorMode({
           {isIntervalRunning && (
             <div className="text-center mb-4">
               <p className="text-3xl font-mono font-bold text-[#1B2733]">{intervalTimeLeft}s</p>
-              <p className="text-xs text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
+              <p className="text-sm text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
 
@@ -644,7 +644,7 @@ function BehaviorMode({
               {intervalCells.map(cell => (
                 <div
                   key={cell.intervalIndex}
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold border-2 ${
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold border-2 ${
                     cell.occurred === null
                       ? 'bg-[#F0EDE8] border-[#E8E4DF] text-slate-400'
                       : cell.occurred
@@ -1013,7 +1013,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             {sessionStarted && (
               <div className="flex items-center justify-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-xs text-green-400 font-mono">{formatSeconds(elapsedSeconds)}</span>
+                <span className="text-sm text-green-400 font-mono">{formatSeconds(elapsedSeconds)}</span>
               </div>
             )}
           </div>
@@ -1125,7 +1125,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               </div>
               <button
                 onClick={handleExport}
-                className="flex items-center gap-1 text-xs text-[#5A6B7A] hover:text-[#3A4A57] px-2 py-1 rounded-lg border border-[#E8E4DF]"
+                className="flex items-center gap-1 text-sm text-[#5A6B7A] hover:text-[#3A4A57] px-2 py-1 rounded-lg border border-[#E8E4DF]"
               >
                 <Download className="w-3.5 h-3.5" />
                 Export
@@ -1201,23 +1201,23 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                 <div className="grid grid-cols-3 gap-3 text-center">
                   <div>
                     <p className="text-2xl font-bold text-white">{sessionSummary.total}</p>
-                    <p className="text-xs text-slate-400">Trials</p>
+                    <p className="text-sm text-slate-400">Trials</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-emerald-500">{sessionSummary.correct}</p>
-                    <p className="text-xs text-slate-400">Correct</p>
+                    <p className="text-sm text-slate-400">Correct</p>
                   </div>
                   <div>
                     <p className={`text-2xl font-bold ${sessionSummary.pct >= MASTERY_THRESHOLD ? 'text-green-400' : 'text-white'}`}>
                       {sessionSummary.pct}%
                     </p>
-                    <p className="text-xs text-slate-400">% Correct</p>
+                    <p className="text-sm text-slate-400">% Correct</p>
                   </div>
                 </div>
                 {sessionSummary.pct >= MASTERY_THRESHOLD && (
                   <div className="mt-3 bg-green-900/30 rounded-lg p-2 flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-green-400" />
-                    <p className="text-xs text-green-300">
+                    <p className="text-sm text-green-300">
                       Mastery threshold met — verify across {MASTERY_CONSECUTIVE_SESSIONS} sessions
                     </p>
                   </div>
@@ -1255,7 +1255,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
               </button>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-400 justify-center pb-4">
+            <div className="flex items-center gap-2 text-sm text-slate-400 justify-center pb-4">
               <Timer className="w-3.5 h-3.5" />
               Session started {new Date(startTime).toLocaleTimeString()} · {formatSeconds(elapsedSeconds)} elapsed
             </div>

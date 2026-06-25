@@ -358,9 +358,9 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
               return (
                 <TabsTrigger key={suite.id} value={suite.id} className="flex flex-col gap-1 py-3">
                   <Icon className="w-4 h-4" />
-                  <span className="text-xs">{suite.name.split(' ')[0]}</span>
+                  <span className="text-sm">{suite.name.split(' ')[0]}</span>
                   {completedTests > 0 && (
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-sm">
                       {suitePassed}/{suiteTotal}
                     </Badge>
                   )}
@@ -387,7 +387,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
                           <div className="flex-1">
                             <div className="text-sm text-[#1B2733] mb-1">{test.name}</div>
                             {result?.message && (
-                              <div className={`text-xs ${
+                              <div className={`text-sm ${
                                 result.status === 'pass' ? 'text-green-600' :
                                 result.status === 'fail' ? 'text-red-600' :
                                 'text-[#5A6B7A]'
@@ -425,7 +425,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
               onClick={() => onNavigate('coach')}
             >
               <Users className="w-5 h-5" />
-              <span className="text-xs">Coach Portal</span>
+              <span className="text-sm">Coach Portal</span>
             </Button>
             <Button
               variant="outline"
@@ -433,7 +433,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
               onClick={() => onNavigate('analytics')}
             >
               <BarChart3 className="w-5 h-5" />
-              <span className="text-xs">Analytics</span>
+              <span className="text-sm">Analytics</span>
             </Button>
             <Button
               variant="outline"
@@ -441,7 +441,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
               onClick={() => onNavigate('launch')}
             >
               <Rocket className="w-5 h-5" />
-              <span className="text-xs">Launch Status</span>
+              <span className="text-sm">Launch Status</span>
             </Button>
           </div>
         </Card>

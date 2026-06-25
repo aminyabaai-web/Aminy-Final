@@ -246,7 +246,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
       {!hasRealData && (
         <div className="bg-amber-50 border-b border-amber-200 px-4 py-2.5 flex items-center gap-2">
           <span className="text-amber-600 text-sm font-medium">Demo Data</span>
-          <span className="text-amber-700/70 text-xs">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
+          <span className="text-amber-700/70 text-sm">Sample metrics shown for demonstration. Connect analytics backend for real data.</span>
         </div>
       )}
       {/* Header */}
@@ -298,7 +298,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                   <div style={{ color: metric.color }}>{metric.icon}</div>
                 </div>
                 {metric.target && (
-                  <span className="text-xs text-[#8A9BA8]">Target: {metric.target}</span>
+                  <span className="text-sm text-[#8A9BA8]">Target: {metric.target}</span>
                 )}
               </div>
               <div className="mt-3">
@@ -323,7 +323,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     {metric.change > 0 ? '+' : ''}
                     {metric.change}%
                   </span>
-                  <span className="text-xs text-[#8A9BA8]">{metric.changeLabel}</span>
+                  <span className="text-sm text-[#8A9BA8]">{metric.changeLabel}</span>
                 </div>
               </div>
             </motion.div>
@@ -365,11 +365,11 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 </div>
                 <div className="w-24 text-right">
                   <p className="text-sm font-medium text-[#1B2733]">{tier.users.toLocaleString()}</p>
-                  <p className="text-xs text-[#5A6B7A]">users</p>
+                  <p className="text-sm text-[#5A6B7A]">users</p>
                 </div>
                 <div className="w-20 text-right">
                   <p className="text-sm font-medium text-[#1B2733]">${tier.arpu}</p>
-                  <p className="text-xs text-[#5A6B7A]">ARPU</p>
+                  <p className="text-sm text-[#5A6B7A]">ARPU</p>
                 </div>
               </div>
             ))}
@@ -427,7 +427,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     <td className="py-3 px-2 text-right text-[#5A6B7A]">{cohort.users.toLocaleString()}</td>
                     <td className="py-3 px-2 text-right">
                       <span
-                        className="px-2 py-1 rounded text-white text-xs font-medium"
+                        className="px-2 py-1 rounded text-white text-sm font-medium"
                         style={{ backgroundColor: getRetentionColor(cohort.d1) }}
                       >
                         {cohort.d1}%
@@ -435,7 +435,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     </td>
                     <td className="py-3 px-2 text-right">
                       <span
-                        className="px-2 py-1 rounded text-white text-xs font-medium"
+                        className="px-2 py-1 rounded text-white text-sm font-medium"
                         style={{ backgroundColor: getRetentionColor(cohort.d7) }}
                       >
                         {cohort.d7}%
@@ -443,7 +443,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     </td>
                     <td className="py-3 px-2 text-right">
                       <span
-                        className="px-2 py-1 rounded text-white text-xs font-medium"
+                        className="px-2 py-1 rounded text-white text-sm font-medium"
                         style={{ backgroundColor: getRetentionColor(cohort.d30) }}
                       >
                         {cohort.d30}%
@@ -451,7 +451,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     </td>
                     <td className="py-3 px-2 text-right">
                       <span
-                        className="px-2 py-1 rounded text-white text-xs font-medium"
+                        className="px-2 py-1 rounded text-white text-sm font-medium"
                         style={{ backgroundColor: getRetentionColor(cohort.d60) }}
                       >
                         {cohort.d60}%
@@ -460,7 +460,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                     <td className="py-3 px-2 text-right">
                       {cohort.d90 > 0 ? (
                         <span
-                          className="px-2 py-1 rounded text-white text-xs font-medium"
+                          className="px-2 py-1 rounded text-white text-sm font-medium"
                           style={{ backgroundColor: getRetentionColor(cohort.d90) }}
                         >
                           {cohort.d90}%
@@ -475,7 +475,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             </table>
           </div>
 
-          <div className="mt-4 flex items-center gap-3 sm:gap-4 sm:gap-6 text-xs text-[#5A6B7A]">
+          <div className="mt-4 flex items-center gap-3 sm:gap-4 sm:gap-6 text-sm text-[#5A6B7A]">
             <span className="flex items-center gap-2">
               <div className="w-3 h-3 rounded" style={{ backgroundColor: getRetentionColor(80) }} />
               Excellent (70%+)

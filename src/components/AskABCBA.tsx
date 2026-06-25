@@ -268,7 +268,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             </div>
             <div>
               <p className="text-sm font-semibold text-[#1B2733]">Your behaviorist team, on demand</p>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
                 {isProPlus ? '10 questions/month included with Pro+' : 'Included for 7 days after each 1:1 session · Unlimited on Pro+'}
               </p>
             </div>
@@ -276,15 +276,15 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           <div className="space-y-2">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Instant AI draft</span> — Aminy gives you an answer right away, informed by your family's context</p>
+              <p className="text-sm text-[#3A4A57]"><span className="font-medium">Instant AI draft</span> — Aminy gives you an answer right away, informed by your family's context</p>
             </div>
             <div className="flex items-start gap-2">
               <ShieldCheck className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — a behaviorist (RBT, BCBA-supervised) edits and signs the response, typically within 24 hours — clinical-plan questions escalate to a BCBA or a telehealth session</p>
+              <p className="text-sm text-[#3A4A57]"><span className="font-medium">Clinician-reviewed</span> — a behaviorist (RBT, BCBA-supervised) edits and signs the response, typically within 24 hours — clinical-plan questions escalate to a BCBA or a telehealth session</p>
             </div>
             <div className="flex items-start gap-2">
               <MessageCircle className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" />
-              <p className="text-xs text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
+              <p className="text-sm text-slate-400">Other services make you wait up to 24h for any answer. Aminy gives you an instant AI answer, then a clinician confirms it.</p>
             </div>
           </div>
         </div>
@@ -301,7 +301,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   Behaviorist messaging is included for 7 days after each 1:1 telehealth session — or any time on Pro+ Family. Group sessions don't open the window.
                 </p>
               </div>
@@ -322,7 +322,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   Upgrade to Pro+ for unlimited access
                 </button>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-sm text-slate-400">
                 Pro+ Family ($49.99/mo) includes {ASK_BCBA_PROPLUS_MONTHLY_QUOTA} behaviorist questions/month, no session required — with instant AI drafts while you wait. Want a BCBA? Book a telehealth session.
               </p>
             </div>
@@ -334,7 +334,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             >
               <Plus className="w-5 h-5" />
               Ask your behaviorist team
-              {isProPlus && <span className="ml-auto text-xs font-normal opacity-80">Pro+ · 10/mo</span>}
+              {isProPlus && <span className="ml-auto text-sm font-normal opacity-80">Pro+ · 10/mo</span>}
             </button>
           )}
         </div>
@@ -352,7 +352,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
 
           {isPartnerOrg && (
             <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
-              <p className="text-xs text-[#3A4A57]">
+              <p className="text-sm text-[#3A4A57]">
                 Your question goes to <span className="font-semibold">your care team</span> — included with your organization's program at no charge.
               </p>
             </div>
@@ -370,7 +370,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
           />
 
           <div>
-            <p className="text-xs text-[#5A6B7A] mb-2">Category (helps the BCBA route)</p>
+            <p className="text-sm text-[#5A6B7A] mb-2">Category (helps the BCBA route)</p>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map(c => (
                 <button
@@ -397,7 +397,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             {isSubmitting ? 'Sending…' : 'Send to your behaviorist'}
           </button>
 
-          <p className="text-xs text-slate-400 text-center">AI drafts instantly · behaviorist review, typically within 24 hours (3 business days max)</p>
+          <p className="text-sm text-slate-400 text-center">AI drafts instantly · behaviorist review, typically within 24 hours (3 business days max)</p>
         </div>
       )}
 
@@ -424,7 +424,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   <p className="text-sm text-[#1B2733] line-clamp-2 flex-1">{t.question}</p>
                   <StatusPill status={t.status} />
                 </div>
-                <div className="flex items-center gap-3 text-xs text-slate-400">
+                <div className="flex items-center gap-3 text-sm text-slate-400">
                   <span>{relativeTime(t.created_at)}</span>
                   {t.category && <span className="capitalize">· {t.category}</span>}
                   {t.parent_rating && (
@@ -525,10 +525,10 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           </div>
           <p className="text-sm text-[#1B2733] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (
-            <p className="text-xs text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
+            <p className="text-sm text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
           )}
           {thread.bcba_responded_at && (
-            <p className="text-xs text-slate-400 mt-1">{new Date(thread.bcba_responded_at).toLocaleString()}</p>
+            <p className="text-sm text-slate-400 mt-1">{new Date(thread.bcba_responded_at).toLocaleString()}</p>
           )}
         </div>
       ) : (
@@ -537,7 +537,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           <div className="flex-1">
             <p className="text-sm font-medium text-[#1B2733]">Awaiting behaviorist review</p>
             {thread.target_response_at && (
-              <p className="text-xs text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
+              <p className="text-sm text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
           </div>
         </div>

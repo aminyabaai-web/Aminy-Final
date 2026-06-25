@@ -172,7 +172,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
                     {milestoneMessage || currentMessage?.message}
                   </p>
                   {currentMessage && !milestoneMessage && (
-                    <p className="text-xs text-[#8A9BA8] mt-0.5">
+                    <p className="text-sm text-[#8A9BA8] mt-0.5">
                       {currentMessage.timeAgo}
                     </p>
                   )}
@@ -192,7 +192,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
               <div className="px-3 pb-2">
                 <button
                   onClick={handleDontShowAgain}
-                  className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
+                  className="text-sm text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
                 >
                   Don&apos;t show again
                 </button>

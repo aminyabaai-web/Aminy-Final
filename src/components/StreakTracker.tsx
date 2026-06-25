@@ -115,7 +115,7 @@ export function StreakTracker({
                 }
               `}
             >
-              <span className={`text-xs font-medium ${isActive ? 'text-orange-700' : 'text-[#5A6B7A]'}`}>
+              <span className={`text-sm font-medium ${isActive ? 'text-orange-700' : 'text-[#5A6B7A]'}`}>
                 {day}
               </span>
             </div>
@@ -152,7 +152,7 @@ export function StreakTracker({
               >
                 {streakWarning.message}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {streakWarning.hoursLeft}h left today
               </p>
             </div>
@@ -200,7 +200,7 @@ export function StreakTracker({
       )}
 
       {/* Microcopy */}
-      <p className="text-xs text-muted-foreground mt-3 text-center">
+      <p className="text-sm text-muted-foreground mt-3 text-center">
         Streaks pause automatically during tough weeks. No pressure, just support.
       </p>
     </Card>

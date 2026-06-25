@@ -260,13 +260,13 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                             {index === 0 && (
                               <div className="flex items-center gap-1 px-2 py-0.5 bg-accent/20 rounded-full">
                                 <Sparkles className="w-3 h-3 text-accent" />
-                                <span className="text-xs text-accent">Top Focus</span>
+                                <span className="text-sm text-accent">Top Focus</span>
                               </div>
                             )}
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${getCategoryColor(task.category)}`}>
                               {task.category}
                             </span>
-                            <span className="text-xs text-[#5A6B7A]">{task.estimatedTime}</span>
+                            <span className="text-sm text-[#5A6B7A]">{task.estimatedTime}</span>
                           </div>
                           <p className="text-[#1B2733]">{task.title}</p>
                           {task.reason && (

@@ -186,7 +186,7 @@ export function PriorAuthTracker({
             <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
               You may owe $0 out-of-pocket
             </p>
-            <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-0.5">
+            <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-0.5">
               AHCCCS (your secondary coverage) pays the gap your commercial plan leaves behind for ABA services. Your family pays nothing.
             </p>
           </div>
@@ -204,13 +204,13 @@ export function PriorAuthTracker({
             Prior Authorization Status
           </span>
           {timeline && (
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-sm text-slate-500 dark:text-slate-400">
               · {timeline.payer}
             </span>
           )}
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-xs font-medium ${statusColor(status)}`}>
+          <span className={`text-sm font-medium ${statusColor(status)}`}>
             {statusLabel(status)}
           </span>
           {expanded ? (
@@ -245,7 +245,7 @@ export function PriorAuthTracker({
                     </div>
                     <div className="flex-1">
                       <p className="text-sm text-[#1B2733] dark:text-slate-200">{phase.label}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{phase.days}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400">{phase.days}</p>
                     </div>
                   </div>
                 ))}
@@ -254,7 +254,7 @@ export function PriorAuthTracker({
               {/* ICD-10 requirement note */}
               {timeline.icdRequired.length > 0 && (
                 <div className="mt-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 px-3 py-2">
-                  <p className="text-xs text-slate-600 dark:text-slate-300">
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
                     <span className="font-medium">ICD-10 required:</span>{' '}
                     {timeline.icdRequired.join(', ')} · {timeline.notes}
                   </p>
@@ -276,7 +276,7 @@ export function PriorAuthTracker({
                 <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
                 <p className="text-sm font-medium text-red-800 dark:text-red-200">Appeal options</p>
               </div>
-              <ul className="text-xs text-red-700 dark:text-red-300 space-y-1 ml-6 list-disc">
+              <ul className="text-sm text-red-700 dark:text-red-300 space-y-1 ml-6 list-disc">
                 <li>Request a peer-to-peer review — BCBA speaks directly with plan's medical director</li>
                 <li>Submit updated clinical documentation (ADOS-2, Vineland-3)</li>
                 <li>File a formal appeal within 60 days of denial letter</li>
@@ -293,7 +293,7 @@ export function PriorAuthTracker({
                 <p className="text-sm font-medium text-emerald-800 dark:text-emerald-200">
                   Ready to start ABA therapy!
                 </p>
-                <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-0.5">
+                <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-0.5">
                   Your prior authorization is approved. Contact your ABA provider to schedule the first session.
                 </p>
               </div>
@@ -309,7 +309,7 @@ export function PriorAuthTracker({
                   Don't wait {timeline ? `~${timeline.estimatedDays} days` : 'weeks'} — start today
                 </p>
               </div>
-              <p className="text-xs text-amber-700 dark:text-amber-300">
+              <p className="text-sm text-amber-700 dark:text-amber-300">
                 Many families pay cash for the first sessions while prior auth processes. Some payers allow retroactive billing once approved — ask your ABA provider.
               </p>
               {onStartCashPay && (
@@ -327,7 +327,7 @@ export function PriorAuthTracker({
           {onLearnMore && (
             <button
               onClick={onLearnMore}
-              className="text-xs text-[#6B9080] hover:underline"
+              className="text-sm text-[#6B9080] hover:underline"
             >
               Learn more about prior authorization →
             </button>
@@ -367,7 +367,7 @@ export function PriorAuthBadge({
       {hasSecondaryMedicaid && (
         <div className="flex items-center gap-1.5 mb-1">
           <Shield className="w-3.5 h-3.5 text-emerald-500" />
-          <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+          <span className="text-sm font-medium text-emerald-700 dark:text-emerald-300">
             Dual coverage detected — estimated $0 out-of-pocket
           </span>
         </div>
@@ -375,16 +375,16 @@ export function PriorAuthBadge({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#6B9080]" />
-          <span className="text-xs text-[#5A6B7A] dark:text-slate-300">
+          <span className="text-sm text-[#5A6B7A] dark:text-slate-300">
             Prior auth · {timeline?.payer ?? payerName ?? 'Your plan'}
           </span>
         </div>
-        <span className={`text-xs font-medium ${statusColor(status)}`}>
+        <span className={`text-sm font-medium ${statusColor(status)}`}>
           {statusLabel(status)}
         </span>
       </div>
       {timeline && status === 'not-started' && (
-        <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
           Typical timeline: ~{timeline.estimatedDays} days
           {!timeline.assessmentNeedsPA && ' · Assessment can start now (no PA needed)'}
         </p>

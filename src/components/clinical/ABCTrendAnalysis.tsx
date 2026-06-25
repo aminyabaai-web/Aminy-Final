@@ -373,7 +373,7 @@ export function ABCTrendAnalysis({
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Clinical Disclaimer */}
-      <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs">
+      <div className="flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-sm">
         <span className="text-amber-600 flex-shrink-0">📊</span>
         <span className="text-amber-800">
           Trend analysis is for educational tracking. Clinical interpretation requires a licensed BCBA or behavior analyst.
@@ -410,7 +410,7 @@ export function ABCTrendAnalysis({
               {analytics.frequencyTrend.change > 0 ? '+' : ''}{analytics.frequencyTrend.change.toFixed(0)}%
             </span>
           </div>
-          <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
             vs {analytics.frequencyTrend.previous} in previous period
           </p>
         </Card>
@@ -428,7 +428,7 @@ export function ABCTrendAnalysis({
               {analytics.intensityTrend.change > 0 ? '+' : ''}{analytics.intensityTrend.change.toFixed(0)}%
             </span>
           </div>
-          <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
             high intensity incidents
           </p>
         </Card>
@@ -455,7 +455,7 @@ export function ABCTrendAnalysis({
                 />
               ))}
             </div>
-            <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
+            <div className="flex justify-between text-sm text-[#8A9BA8] mt-1">
               <span>12am</span>
               <span>6am</span>
               <span>12pm</span>
@@ -529,8 +529,8 @@ export function ABCTrendAnalysis({
               className="p-3 bg-white dark:bg-slate-800 rounded-lg text-center"
             >
               <div className="text-lg font-semibold text-[#1B2733] dark:text-white">{f.count}</div>
-              <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{f.label}</div>
-              <div className="text-xs text-violet-600 dark:text-violet-400">{f.percentage.toFixed(0)}%</div>
+              <div className="text-sm text-[#5A6B7A] dark:text-slate-400">{f.label}</div>
+              <div className="text-sm text-violet-600 dark:text-violet-400">{f.percentage.toFixed(0)}%</div>
             </div>
           ))}
         </div>
@@ -706,7 +706,7 @@ export function ABCTrendAnalysis({
           </div>
         </div>
 
-        <p className="text-xs text-green-600 dark:text-green-400 mt-4">
+        <p className="text-sm text-green-600 dark:text-green-400 mt-4">
           Note: These recommendations are based on data patterns. Always consult with qualified professionals before implementing behavior interventions.
         </p>
       </Card>

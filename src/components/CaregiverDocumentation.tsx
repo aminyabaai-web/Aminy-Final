@@ -539,11 +539,11 @@ export function CaregiverDocumentation({
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-medium text-[#1B2733]">{entry.date}</span>
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-sm">
                         {ACTIVITY_TYPES.find(a => a.id === entry.activity_type)?.label}
                       </Badge>
                       {entry.verified && (
-                        <Badge className="bg-green-100 text-green-700 text-xs">
+                        <Badge className="bg-green-100 text-green-700 text-sm">
                           <CheckCircle className="w-3 h-3 mr-1" />
                           Verified
                         </Badge>

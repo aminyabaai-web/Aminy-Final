@@ -88,7 +88,7 @@ export function CalendarConnectionCard() {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-[#1B2733]">Calendar</p>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">
+          <p className="text-sm text-[#5A6B7A] mt-0.5">
             {activeProvider
               ? `Connected to ${PROVIDER_META[activeProvider].label}`
               : 'Push Aminy appointments to your calendar of choice'}
@@ -109,15 +109,15 @@ export function CalendarConnectionCard() {
       {/* Active connection details */}
       {activeProvider && (
         <div className="rounded-xl bg-[#FAF7F2] px-3 py-2.5">
-          <p className="text-xs font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">
+          <p className="text-sm font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
+          <p className="text-sm text-[#5A6B7A] mt-0.5">
             New appointments auto-push to your {PROVIDER_META[activeProvider].label}
             {connection?.lastSyncedAt ? ` · last synced ${new Date(connection.lastSyncedAt).toLocaleString()}` : ''}
           </p>
           <button
             onClick={handleDisconnect}
             disabled={working === 'disconnect'}
-            className="mt-2 flex items-center gap-1.5 text-xs text-[#5A6B7A] hover:text-red-500 font-medium"
+            className="mt-2 flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-red-500 font-medium"
           >
             {working === 'disconnect' ? <Loader2 className="w-3 h-3 animate-spin" /> : <Unlink className="w-3 h-3" />}
             Disconnect
@@ -157,7 +157,7 @@ export function CalendarConnectionCard() {
         />
       </div>
 
-      <p className="text-xs text-slate-400 leading-relaxed">
+      <p className="text-sm text-slate-400 leading-relaxed">
         Apple/iCloud doesn't allow third-party OAuth, so we use universal .ics files — tap "Add to Calendar" on any appointment to open it in Apple Calendar, Outlook, or your default app.
       </p>
     </div>
@@ -190,9 +190,9 @@ function ProviderButton({
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-[#1B2733]">{title}</p>
-        <p className="text-xs text-[#5A6B7A] truncate">{hint}</p>
+        <p className="text-sm text-[#5A6B7A] truncate">{hint}</p>
       </div>
-      <span className={`text-xs font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>
+      <span className={`text-sm font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>
         {isPassive ? <FileDown className="w-3.5 h-3.5 inline" /> : null} {cta}
       </span>
     </button>

@@ -47,7 +47,7 @@ export function ChildSwitcher({
   const getUpgradeTierForChildren = (): TierType | null => {
     if (tier === 'proplus') return null;
     if (tier === 'pro') return 'proplus';
-    if (tier === 'core') return 'proplus'; // Core has 3, Pro+ has unlimited
+    if (tier === 'core') return 'proplus'; // Core is unlimited; proplus adds storage/features
     if (tier === 'starter' || tier === 'free') return 'core';
     return 'core';
   };
@@ -66,7 +66,7 @@ export function ChildSwitcher({
           Add Child
         </Button>
         {!isUnlimited && (
-          <p className="text-xs text-muted-foreground mt-3">
+          <p className="text-sm text-muted-foreground mt-3">
             Your {getTierDisplayName(tier)} plan supports up to {maxChildren} child
             {maxChildren !== 1 ? 'ren' : ''}.
           </p>
@@ -83,12 +83,12 @@ export function ChildSwitcher({
           Your children
         </label>
         {!isUnlimited && (
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-sm">
             {children.length}/{maxChildren}
           </Badge>
         )}
         {isUnlimited && (
-          <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">
+          <Badge variant="outline" className="text-sm bg-purple-50 text-purple-700 border-purple-200">
             <InfinityIcon className="w-3 h-3 mr-1" />
             Unlimited
           </Badge>
@@ -107,7 +107,7 @@ export function ChildSwitcher({
         <div className="flex-1 text-left">
           <span className="font-medium">{activeChild?.name}</span>
           {activeChild?.conditions && activeChild.conditions.length > 0 && (
-            <span className="text-xs text-muted-foreground ml-2">
+            <span className="text-sm text-muted-foreground ml-2">
               {activeChild.conditions[0]}
             </span>
           )}
@@ -160,7 +160,7 @@ export function ChildSwitcher({
                 <Plus className="w-4 h-4" />
                 <span className="font-medium">Add another child</span>
                 {!isUnlimited && childrenRemaining > 0 && (
-                  <span className="text-xs text-muted-foreground ml-auto">
+                  <span className="text-sm text-muted-foreground ml-auto">
                     ({childrenRemaining} remaining)
                   </span>
                 )}

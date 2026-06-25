@@ -212,7 +212,7 @@ function BreathStep({
         </p>
 
         <div className="mb-6">
-          <div className="flex justify-between text-xs text-[#5A6B7A] mb-2">
+          <div className="flex justify-between text-sm text-[#5A6B7A] mb-2">
             <span>Calm</span>
             <span>Very overwhelmed</span>
           </div>
@@ -252,7 +252,7 @@ function BreathStep({
       <BreathingCircle phase={breathPhase as 'inhale' | 'hold' | 'exhale'} />
 
       <div className="mt-8">
-        <p className="text-xs text-[#5A6B7A] mb-2">Cycle {cycles + 1} of 3</p>
+        <p className="text-sm text-[#5A6B7A] mb-2">Cycle {cycles + 1} of 3</p>
       </div>
     </motion.div>
   );
@@ -420,7 +420,7 @@ function NextStepsStep({
       </h3>
 
       <div className="mb-6">
-        <div className="flex justify-between text-xs text-[#5A6B7A] mb-2">
+        <div className="flex justify-between text-sm text-[#5A6B7A] mb-2">
           <span>Much better</span>
           <span>Still overwhelmed</span>
         </div>

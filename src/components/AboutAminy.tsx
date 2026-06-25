@@ -38,7 +38,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
 
           {showLegal && (
             <div className="pt-3 border-t border-[#E8E4DF] dark:border-slate-600">
-              <p className="text-xs text-[#5A6B7A] dark:text-slate-400 italic">
+              <p className="text-sm text-[#5A6B7A] dark:text-slate-400 italic">
                 {LEGAL_PRIVACY.disclaimer}
               </p>
             </div>
@@ -73,7 +73,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
               <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5">
                 {BRAND_IDENTITY.category}
               </Badge>
-              <span className="text-xs text-[#5A6B7A] dark:text-slate-400">•</span>
+              <span className="text-sm text-[#5A6B7A] dark:text-slate-400">•</span>
               <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5">
                 {BRAND_IDENTITY.subcategory}
               </Badge>

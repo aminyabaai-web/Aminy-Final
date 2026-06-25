@@ -124,7 +124,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 ? 'Verification issue — see below'
                 : `Get verified to accept patients — ${status.completionPercent}% complete`}
           </p>
-          <p className="text-xs text-[#5A6B7A] mt-0.5">
+          <p className="text-sm text-[#5A6B7A] mt-0.5">
             Aminy requires all 4 checks before you can be matched with families.
           </p>
         </div>
@@ -161,9 +161,9 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
-                <p className="text-xs text-[#5A6B7A] truncate">{meta.description}</p>
+                <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
-                  <p className="text-xs text-red-600 mt-0.5">{row.check.failureReason}</p>
+                  <p className="text-sm text-red-600 mt-0.5">{row.check.failureReason}</p>
                 )}
               </div>
               <span className={`text-xs ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
@@ -174,7 +174,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <button
                   onClick={row.onAction}
                   disabled={working === row.key}
-                  className="shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                  className="shrink-0 text-sm font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
                 >
                   {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
                 </button>

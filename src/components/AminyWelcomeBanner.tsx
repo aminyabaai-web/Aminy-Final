@@ -42,7 +42,7 @@ export function AminyWelcomeBanner({
             </p>
 
             <div className="space-y-2">
-              <p className="text-xs font-medium text-[#5A6B7A] mb-2">Try asking:</p>
+              <p className="text-sm font-medium text-[#5A6B7A] mb-2">Try asking:</p>
               <div className="grid gap-2">
                 {suggestedPrompts.map((prompt, index) => (
                   <button

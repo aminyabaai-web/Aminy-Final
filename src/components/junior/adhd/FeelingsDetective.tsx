@@ -331,7 +331,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
                   className={`rounded-[20px] border p-4 text-center shadow-sm ${f.color}`}
                 >
                   <div className="text-3xl mb-1">{f.emoji}</div>
-                  <div className="text-xs font-semibold">{f.label}</div>
+                  <div className="text-sm font-semibold">{f.label}</div>
                 </motion.button>
               ))}
             </div>
@@ -371,7 +371,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               onChange={e => { setIntensity(Number(e.target.value)); haptic(10); }}
               className="w-full accent-amber-500"
             />
-            <div className="flex justify-between text-xs text-slate-400 px-1">
+            <div className="flex justify-between text-sm text-slate-400 px-1">
               <span>Tiny</span>
               <span>HUGE</span>
             </div>
@@ -411,7 +411,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
                   </div>
                   <div className="flex-1">
                     <div className="text-sm font-semibold text-[#1B2733]">{strategy.label}</div>
-                    <div className="text-xs text-[#5A6B7A]">{strategy.description}</div>
+                    <div className="text-sm text-[#5A6B7A]">{strategy.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
                 </motion.button>
@@ -484,11 +484,11 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               <div className="grid grid-cols-2 gap-3 text-center">
                 <div>
                   <div className="text-lg font-bold text-amber-600">{records.length}</div>
-                  <div className="text-xs text-slate-400">Scenarios explored</div>
+                  <div className="text-sm text-slate-400">Scenarios explored</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-green-600">{records.filter(r => r.copingUsed).length}</div>
-                  <div className="text-xs text-slate-400">Coping strategies used</div>
+                  <div className="text-sm text-slate-400">Coping strategies used</div>
                 </div>
               </div>
             </div>

@@ -158,12 +158,12 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
 
           <div className="mt-4 grid grid-cols-2 gap-2.5">
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-xs font-medium text-[#5A6B7A]">Access</div>
+              <div className="text-sm font-medium text-[#5A6B7A]">Access</div>
               <div className="mt-1 text-[14px] font-semibold text-[#1B2733]">AZ · MT · TX</div>
               <div className="text-[12px] text-[#5A6B7A]">Supported telehealth states</div>
             </div>
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-xs font-medium text-[#5A6B7A]">Focus</div>
+              <div className="text-sm font-medium text-[#5A6B7A]">Focus</div>
               <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-[#1B2733]">
                 <Activity className="h-3.5 w-3.5 text-[#6B9080]" />
                 Live workflow
@@ -188,7 +188,7 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
           className="rounded-[24px] border border-white/90 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)]"
           style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.84))' }}
         >
-          <div className="text-xs font-medium text-[#5A6B7A]">Signed in</div>
+          <div className="text-sm font-medium text-[#5A6B7A]">Signed in</div>
           <div className="mt-2 text-[15px] font-semibold text-slate-950">{userName || 'Your household'}</div>
           <div className="mt-1 text-[12px] leading-5 text-[#5A6B7A]">
             Guidance, telehealth, and records stay in one calmer place.

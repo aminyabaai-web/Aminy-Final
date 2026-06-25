@@ -109,7 +109,7 @@ const SimpleLineChart: React.FC<{
             x={padding.left - 8}
             y={padding.top + tick * chartHeight + 4}
             textAnchor="end"
-            className="text-xs fill-gray-400"
+            className="text-sm fill-gray-400"
           >
             {Math.round(maxValue - tick * valueRange)}
           </text>
@@ -155,7 +155,7 @@ const SimpleLineChart: React.FC<{
             x={points[i].x}
             y={height - 8}
             textAnchor="middle"
-            className="text-xs fill-gray-400"
+            className="text-sm fill-gray-400"
           >
             {d.label || new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </text>
@@ -180,7 +180,7 @@ const SimpleBarChart: React.FC<{
         const barHeight = (d.count / maxValue) * 100;
         return (
           <div key={i} className="flex flex-col items-center gap-2" style={{ width: `${barWidth}%` }}>
-            <span className="text-xs font-medium text-[#5A6B7A]">{d.count}</span>
+            <span className="text-sm font-medium text-[#5A6B7A]">{d.count}</span>
             <motion.div
               initial={{ height: 0 }}
               animate={{ height: `${barHeight}%` }}
@@ -188,7 +188,7 @@ const SimpleBarChart: React.FC<{
               className="w-8 rounded-t-lg"
               style={{ backgroundColor: d.color, maxHeight: height - 40 }}
             />
-            <span className="text-xs text-[#5A6B7A] truncate max-w-full">{d.category}</span>
+            <span className="text-sm text-[#5A6B7A] truncate max-w-full">{d.category}</span>
           </div>
         );
       })}
@@ -424,7 +424,7 @@ export function AnalyticsCharts({
       {demoMode && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
           <span className="text-amber-600 text-sm font-medium">Sample Data</span>
-          <span className="text-amber-700/70 text-xs">Showing demo analytics. Real data will appear as you track activities.</span>
+          <span className="text-amber-700/70 text-sm">Showing demo analytics. Real data will appear as you track activities.</span>
         </div>
       )}
       {/* Date Range Selector */}
@@ -500,7 +500,7 @@ export function AnalyticsCharts({
           <Moon className="w-4 h-4 text-indigo-500" />
         </div>
         <ActivityHeatmap data={chartData.timeOfDayActivity} />
-        <div className="flex justify-between mt-2 text-xs text-[#8A9BA8]">
+        <div className="flex justify-between mt-2 text-sm text-[#8A9BA8]">
           {chartData.timeOfDayActivity.map((d, i) => (
             <span key={i}>{d.hour}</span>
           ))}

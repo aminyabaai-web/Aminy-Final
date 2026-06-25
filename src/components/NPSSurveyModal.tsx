@@ -138,7 +138,7 @@ export function NPSSurveyModal({
                 </div>
                 <div>
                   <h2 className="font-semibold text-[#1B2733] dark:text-white">Quick Feedback</h2>
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Help us improve Aminy</p>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Help us improve Aminy</p>
                 </div>
               </div>
               <button
@@ -175,7 +175,7 @@ export function NPSSurveyModal({
                 </div>
 
                 {/* Scale labels */}
-                <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400 px-2">
+                <div className="flex justify-between text-sm text-[#5A6B7A] dark:text-slate-400 px-2">
                   <span>Not likely</span>
                   <span>Very likely</span>
                 </div>

@@ -117,7 +117,7 @@ export function ConnectionQualityIndicator({
           aria-label={`Connection quality: ${label}`}
         >
           <Icon size={14} className={color} />
-          <span className={`text-xs font-medium ${color}`}>{label}</span>
+          <span className={`text-sm font-medium ${color}`}>{label}</span>
           {expanded ? (
             <ChevronUp size={12} className={color} />
           ) : (
@@ -135,7 +135,7 @@ export function ConnectionQualityIndicator({
               </span>
             </div>
 
-            <div className="space-y-2 text-xs">
+            <div className="space-y-2 text-sm">
               {/* Video */}
               <div className="flex justify-between text-white/70">
                 <span>Video send</span>
@@ -189,7 +189,7 @@ export function ConnectionQualityIndicator({
             {/* Tip for poor quality */}
             {quality === 'poor' && (
               <div className="mt-3 p-2 bg-red-500/10 border border-red-500/20 rounded-lg">
-                <p className="text-xs text-red-300">
+                <p className="text-sm text-red-300">
                   Try moving closer to your router or switch to a wired connection.
                   Consider turning off your camera to improve audio quality.
                 </p>
@@ -210,7 +210,7 @@ export function ConnectionQualityIndicator({
           <div>
             <p className={`text-sm font-medium ${color}`}>{label} Connection</p>
             {stats && (
-              <p className="text-xs text-white/50 mt-0.5">
+              <p className="text-sm text-white/50 mt-0.5">
                 {formatBps(Math.max(stats.videoSendBps, stats.videoRecvBps))} video &middot;{' '}
                 {formatPacketLoss(
                   Math.max(stats.videoSendPacketLoss, stats.videoRecvPacketLoss),

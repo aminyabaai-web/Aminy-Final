@@ -171,7 +171,7 @@ function SyncRecordCard({
               </p>
               <StatusBadge status={record.status} />
             </div>
-            <p className="text-xs text-[#5A6B7A] mt-0.5">
+            <p className="text-sm text-[#5A6B7A] mt-0.5">
               {record.recordsSynced > 0
                 ? `${record.recordsSynced} records synced`
                 : 'No data synced yet'}
@@ -207,32 +207,32 @@ function SyncRecordCard({
       {expanded && (
         <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Direction</span>
               <p className="font-medium text-[#1B2733] capitalize">{record.direction}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Records</span>
               <p className="font-medium text-[#1B2733]">{record.recordsSynced}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Last Sync</span>
               <p className="font-medium text-[#1B2733]">{timeAgo(record.lastSyncAt)}</p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Next Sync</span>
               <p className="font-medium text-[#1B2733]">{timeAgo(record.nextSyncAt)}</p>
             </div>
           </div>
 
           {record.lastError && (
-            <div className="text-xs bg-red-50 text-red-700 rounded p-2">
+            <div className="text-sm bg-red-50 text-red-700 rounded p-2">
               <span className="font-medium">Last Error:</span> {record.lastError}
             </div>
           )}
 
           {record.consecutiveFailures > 0 && (
-            <div className="text-xs bg-amber-50 text-amber-700 rounded p-2">
+            <div className="text-sm bg-amber-50 text-amber-700 rounded p-2">
               <span className="font-medium">Consecutive Failures:</span>{' '}
               {record.consecutiveFailures}
             </div>
@@ -267,7 +267,7 @@ function ErrorCard({
             <p className="text-sm font-medium text-[#1B2733] truncate">
               {DATA_TYPE_LABELS[error.data_type] || error.data_type} ({error.direction})
             </p>
-            <p className="text-xs text-red-600 mt-0.5 truncate">
+            <p className="text-sm text-red-600 mt-0.5 truncate">
               {error.error_message}
             </p>
           </div>
@@ -279,7 +279,7 @@ function ErrorCard({
               onRetry();
             }}
             disabled={retrying}
-            className="min-h-11 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
+            className="min-h-11 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
           >
             {retrying ? (
               <Loader2 size={10} className="animate-spin" />
@@ -299,26 +299,26 @@ function ErrorCard({
         <div className="px-3 pb-3 border-t border-red-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
             {error.error_code && (
-              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Error Code</span>
                 <p className="font-mono font-medium text-[#1B2733]">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
-              <div className="text-xs bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Record ID</span>
                 <p className="font-mono font-medium text-[#1B2733] truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Retries</span>
               <p className="font-medium text-[#1B2733]">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
-            <div className="text-xs bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Created</span>
               <p className="font-medium text-[#1B2733]">
                 {formatDate(error.created_at)}
@@ -326,13 +326,13 @@ function ErrorCard({
             </div>
           </div>
 
-          <div className="text-xs bg-red-50 text-red-700 rounded p-2">
+          <div className="text-sm bg-red-50 text-red-700 rounded p-2">
             <span className="font-medium">Full Error:</span>
             <p className="mt-1 break-words">{error.error_message}</p>
           </div>
 
           {error.next_retry_at && (
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Next automatic retry: {formatDate(error.next_retry_at)}
             </p>
           )}
@@ -375,11 +375,11 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
                 <p className="text-sm font-medium text-[#1B2733]">
                   {DATA_TYPE_LABELS[entry.data_type] || entry.data_type}
                 </p>
-                <span className="text-xs text-[#8A9BA8]">
+                <span className="text-sm text-[#8A9BA8]">
                   {formatDate(entry.started_at)}
                 </span>
               </div>
-              <div className="flex items-center gap-3 mt-1 text-xs text-[#5A6B7A]">
+              <div className="flex items-center gap-3 mt-1 text-sm text-[#5A6B7A]">
                 <span className="flex items-center gap-1">
                   {entry.direction === 'pull' ? (
                     <ArrowDown size={10} className="text-blue-500" />
@@ -406,7 +406,7 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
                 )}
               </div>
               {entry.error_message && (
-                <p className="text-xs text-red-600 mt-1 truncate">
+                <p className="text-sm text-red-600 mt-1 truncate">
                   {entry.error_message}
                 </p>
               )}
@@ -641,14 +641,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <p className="text-lg font-bold text-[#1B2733]">
               {history.totalSyncs}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Total Syncs</p>
+            <p className="text-sm text-[#5A6B7A]">Total Syncs</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Zap size={16} className="text-green-500 mx-auto mb-1" />
             <p className="text-lg font-bold text-[#1B2733]">
               {history.totalRecordsProcessed}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Records</p>
+            <p className="text-sm text-[#5A6B7A]">Records</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <XCircle
@@ -660,7 +660,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             >
               {errorCount}
             </p>
-            <p className="text-xs text-[#5A6B7A]">Open Errors</p>
+            <p className="text-sm text-[#5A6B7A]">Open Errors</p>
           </div>
         </div>
       )}
@@ -695,7 +695,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Clinic Workflow Proof</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   This is the operational read on whether your clinic can trust the current CentralReach pull/export workflow in daily use.
                 </p>
               </div>
@@ -737,7 +737,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-[#1B2733]">{lane.label}</p>
-                      <p className="mt-0.5 text-xs text-[#5A6B7A]">{lane.operatorMessage}</p>
+                      <p className="mt-0.5 text-sm text-[#5A6B7A]">{lane.operatorMessage}</p>
                     </div>
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                       lane.state === 'healthy'
@@ -753,7 +753,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               ))}
             </div>
             {clinicWorkflow.blockedReasons.length > 0 ? (
-              <ul className="mt-4 space-y-1 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
+              <ul className="mt-4 space-y-1 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                 {clinicWorkflow.blockedReasons.slice(0, 4).map((reason) => (
                   <li key={reason} className="flex items-start gap-2">
                     <AlertTriangle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
@@ -767,7 +767,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-sm font-semibold text-[#1B2733]">Operator Reconciliation Queue</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
+                <p className="text-sm text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
               </div>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${attentionJobs.length > 0 ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
                 {attentionJobs.length > 0 ? `${attentionJobs.length} jobs need review` : 'All tracked jobs healthy'}
@@ -780,13 +780,13 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
-                        <p className="text-xs text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
+                        <p className="text-sm text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
                       </div>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${job.reconciliationState === 'healthy' ? 'bg-emerald-50 text-emerald-700' : job.reconciliationState === 'retry_required' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>
                         {job.reconciliationState === 'healthy' ? 'Healthy' : job.reconciliationState === 'retry_required' ? 'Retry required' : 'Attention needed'}
                       </span>
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-3 text-xs text-[#5A6B7A]">
+                    <div className="mt-2 flex flex-wrap gap-3 text-sm text-[#5A6B7A]">
                       <span>{job.recordsProcessed} processed</span>
                       <span>{job.recordsFailed} failed</span>
                       <span>{job.lastAttemptAt ? `${timeAgo(job.lastAttemptAt)} last attempt` : 'No completed attempt yet'}</span>
@@ -852,7 +852,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               <button
                 onClick={handleRetryAll}
                 disabled={bulkRetrying}
-                className="flex min-h-11 items-center gap-1.5 rounded-xl bg-red-100 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
+                className="flex min-h-11 items-center gap-1.5 rounded-xl bg-red-100 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-200 disabled:opacity-50"
               >
                 {bulkRetrying ? (
                   <Loader2 size={12} className="animate-spin" />
@@ -868,7 +868,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             <div className="text-center py-8">
               <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
               <p className="text-sm text-[#5A6B7A]">No sync errors</p>
-              <p className="text-xs text-[#8A9BA8] mt-1">
+              <p className="text-sm text-[#8A9BA8] mt-1">
                 All data is syncing successfully
               </p>
             </div>
@@ -896,25 +896,25 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 <p className="text-sm font-bold text-green-700">
                   {history.successCount}
                 </p>
-                <p className="text-xs text-green-600">Success</p>
+                <p className="text-sm text-green-600">Success</p>
               </div>
               <div className="text-center bg-red-50 rounded-lg p-2">
                 <p className="text-sm font-bold text-red-700">
                   {history.errorCount}
                 </p>
-                <p className="text-xs text-red-600">Errors</p>
+                <p className="text-sm text-red-600">Errors</p>
               </div>
               <div className="text-center bg-amber-50 rounded-lg p-2">
                 <p className="text-sm font-bold text-amber-700">
                   {history.partialCount}
                 </p>
-                <p className="text-xs text-amber-600">Partial</p>
+                <p className="text-sm text-amber-600">Partial</p>
               </div>
               <div className="text-center bg-[#FAF7F2] rounded-lg p-2">
                 <p className="text-sm font-bold text-[#3A4A57]">
                   {formatDuration(history.avgDurationMs)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Avg Time</p>
+                <p className="text-sm text-[#5A6B7A]">Avg Time</p>
               </div>
             </div>
           )}

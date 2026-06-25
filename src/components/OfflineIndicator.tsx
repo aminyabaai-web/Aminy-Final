@@ -158,7 +158,7 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
                 <p className="text-sm font-medium">
                   You're offline
                 </p>
-                <p className="text-xs text-white/80">
+                <p className="text-sm text-white/80">
                   {pendingSyncs > 0
                     ? `${pendingSyncs} pending sync${pendingSyncs !== 1 ? 's' : ''} — will retry when connected`
                     : 'Crisis resources still available'}
@@ -190,7 +190,7 @@ export function OfflineIndicator({ onCrisisResourcesClick }: OfflineIndicatorPro
 
         {/* Quick emergency contacts */}
         <div className="bg-amber-600 px-4 py-2">
-          <div className="flex items-center justify-center gap-4 text-xs max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-4 text-sm max-w-4xl mx-auto">
             <a href="tel:911" className="flex items-center gap-1 hover:underline">
               <Phone className="w-3 h-3" />
               911

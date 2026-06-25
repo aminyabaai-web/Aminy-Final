@@ -577,12 +577,12 @@ export function CommunityForYou({
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground mb-2">{post.summary}</p>
-                <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-3 text-sm">
                   <span className="text-[#6B9080] dark:text-primary italic">
                     Why this for you: {post.whyForYou}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-3 mt-2 text-sm text-muted-foreground">
                   {post.author && <span>By {post.author}</span>}
                   <span>{post.readTime} min read</span>
                 </div>
@@ -642,7 +642,7 @@ export function CommunityForYou({
       {localGroups.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No local groups yet</p>
-          <p className="text-xs mt-1">We're building your community — check back soon.</p>
+          <p className="text-sm mt-1">We're building your community — check back soon.</p>
         </div>
       )}
       {localGroups.map((group) => (
@@ -654,7 +654,7 @@ export function CommunityForYou({
                   {group.name}
                 </h4>
                 {group.isVirtual && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     <Video className="w-3 h-3 mr-1" />
                     Virtual
                   </Badge>
@@ -669,7 +669,7 @@ export function CommunityForYou({
               </div>
               <div className="flex flex-wrap gap-1 mb-3">
                 {group.topics.map((topic) => (
-                  <Badge key={topic} variant="secondary" className="text-xs">
+                  <Badge key={topic} variant="secondary" className="text-sm">
                     {topic}
                   </Badge>
                 ))}
@@ -706,9 +706,9 @@ export function CommunityForYou({
       {liveEvents.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No events scheduled yet</p>
-          <p className="text-xs mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          <p className="text-sm mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
           <button
-            className="mt-3 text-xs text-[#6B9080] font-semibold underline"
+            className="mt-3 text-sm text-[#6B9080] font-semibold underline"
             onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
           >
             Notify me when events launch →
@@ -754,7 +754,7 @@ export function CommunityForYou({
 
           <div className="flex flex-wrap gap-1 mb-3">
             {event.topics.map((topic) => (
-              <Badge key={topic} variant="outline" className="text-xs">
+              <Badge key={topic} variant="outline" className="text-sm">
                 {topic}
               </Badge>
             ))}
@@ -798,7 +798,7 @@ export function CommunityForYou({
       {liveSpotlights.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No spotlights yet</p>
-          <p className="text-xs mt-1">Parent success stories will appear here as our community grows.</p>
+          <p className="text-sm mt-1">Parent success stories will appear here as our community grows.</p>
         </div>
       )}
       {liveSpotlights.map((spotlight) => (
@@ -813,7 +813,7 @@ export function CommunityForYou({
                   <h4 className="font-semibold text-[#1B2733] dark:text-white">
                     {spotlight.parentName}
                   </h4>
-                  <p className="text-xs text-[#5A6B7A]">
+                  <p className="text-sm text-[#5A6B7A]">
                     Child age: {spotlight.childAge}
                   </p>
                 </div>
@@ -835,7 +835,7 @@ export function CommunityForYou({
           </div>
 
           <div className="flex items-center gap-2 mb-3">
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="text-sm">
               Strategy: {spotlight.strategyUsed}
             </Badge>
           </div>
@@ -884,7 +884,7 @@ export function CommunityForYou({
       {liveQASessions.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No Q&A sessions scheduled</p>
-          <p className="text-xs mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
+          <p className="text-sm mt-1">Live BCBA Q&A sessions are coming. You'll be notified when one is booked.</p>
         </div>
       )}
       {liveQASessions.map((session) => (
@@ -968,8 +968,8 @@ export function CommunityForYou({
       {/* Demo Data Banner — only in demo mode (real users see live data / empty states) */}
       {isDemoMode() && (
         <div className="bg-amber-50 dark:bg-amber-900/20 border-b border-amber-200 dark:border-amber-800 px-4 py-2 flex items-center gap-2">
-          <span className="text-amber-600 dark:text-amber-400 text-xs font-medium">Preview</span>
-          <span className="text-amber-700/70 dark:text-amber-300/70 text-xs">Community preview — sample data shown. Live groups and events launching this summer.</span>
+          <span className="text-amber-600 dark:text-amber-400 text-sm font-medium">Preview</span>
+          <span className="text-amber-700/70 dark:text-amber-300/70 text-sm">Community preview — sample data shown. Live groups and events launching this summer.</span>
         </div>
       )}
       {/* Header */}

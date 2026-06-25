@@ -383,7 +383,7 @@ function AppointmentCard({
         {/* Session Notes (for completed) */}
         {appointment.sessionNotes && appointment.status === 'completed' && (
           <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Session Notes</p>
+            <p className="text-sm font-medium text-[#5A6B7A] mb-1">Session Notes</p>
             <p className="text-sm text-[#3A4A57]">{appointment.sessionNotes}</p>
           </div>
         )}

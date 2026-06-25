@@ -275,7 +275,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm">{tab.label}</div>
-                        <div className="text-xs text-[#5A6B7A]">{tab.description}</div>
+                        <div className="text-sm text-[#5A6B7A]">{tab.description}</div>
                       </div>
                     </button>
                   ))}

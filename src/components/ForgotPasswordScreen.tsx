@@ -44,8 +44,13 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
 
       setIsSuccess(true);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send reset email. Please try again.';
-      setErrors({ email: errorMessage });
+      const raw = error instanceof Error ? error.message : String(error);
+      const isInformative = raw && raw !== '{}' && raw !== '[]' && raw !== 'undefined' && raw.length > 4;
+      setErrors({
+        email: isInformative
+          ? raw
+          : 'Unable to send reset link right now. Please try again in a moment.',
+      });
     } finally {
       setIsLoading(false);
     }

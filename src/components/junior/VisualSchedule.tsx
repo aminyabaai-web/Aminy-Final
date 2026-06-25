@@ -574,10 +574,10 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                         </p>
                         <div className="flex items-center gap-2 mt-0.5">
                           {item.time && (
-                            <span className="text-xs text-[#5A6B7A]">{item.time}</span>
+                            <span className="text-sm text-[#5A6B7A]">{item.time}</span>
                           )}
                           {item.durationMinutes && item.durationMinutes > 0 && (
-                            <span className="text-xs text-[#8A9BA8]">
+                            <span className="text-sm text-[#8A9BA8]">
                               {item.durationMinutes} min
                             </span>
                           )}
@@ -720,7 +720,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                     <h3 className="font-semibold text-[#1B2733]">
                       {template.name}
                     </h3>
-                    <p className="text-xs text-[#5A6B7A]">
+                    <p className="text-sm text-[#5A6B7A]">
                       {template.items.length} activities
                     </p>
                   </div>
@@ -729,7 +729,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                   {template.items.map((item, i) => (
                     <span
                       key={i}
-                      className="bg-[#F0EDE8] px-2 py-1 rounded-lg text-xs text-[#5A6B7A]"
+                      className="bg-[#F0EDE8] px-2 py-1 rounded-lg text-sm text-[#5A6B7A]"
                     >
                       {item.emoji} {item.label}
                     </span>

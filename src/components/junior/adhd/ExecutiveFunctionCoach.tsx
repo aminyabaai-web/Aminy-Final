@@ -241,7 +241,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
       </div>
 
       {steps.length > 0 && (
-        <div className="text-center text-xs text-[#5A6B7A]">
+        <div className="text-center text-sm text-[#5A6B7A]">
           {steps.filter(s => s.done).length} / {steps.length} steps done
         </div>
       )}
@@ -434,7 +434,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
       <div className="grid grid-cols-3 gap-2">
         {columns.map(col => (
           <div key={col.key} className={`rounded-2xl border ${col.borderColor} ${col.bgColor} p-2`}>
-            <div className="mb-2 text-center text-xs font-semibold text-[#3A4A57]">
+            <div className="mb-2 text-center text-sm font-semibold text-[#3A4A57]">
               {col.emoji} {col.label}
             </div>
             <div className="min-h-[80px] space-y-2">
@@ -446,7 +446,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="rounded-xl bg-white p-2 text-xs text-[#3A4A57] shadow-sm"
+                    className="rounded-xl bg-white p-2 text-sm text-[#3A4A57] shadow-sm"
                   >
                     <div className="mb-1 break-words">{card.text}</div>
                     <div className="flex gap-1">
@@ -455,7 +455,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                           key={target.key}
                           type="button"
                           onClick={() => moveCard(card.id, target.key)}
-                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-xs text-[#5A6B7A] active:scale-95"
+                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-sm text-[#5A6B7A] active:scale-95"
                         >
                           {target.emoji}
                         </button>
@@ -463,7 +463,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                       <button
                         type="button"
                         onClick={() => removeCard(card.id)}
-                        className="ml-auto rounded-lg bg-red-50 px-2 py-0.5 text-xs text-red-400"
+                        className="ml-auto rounded-lg bg-red-50 px-2 py-0.5 text-sm text-red-400"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
@@ -645,7 +645,7 @@ export default function ExecutiveFunctionCoach({ onBack, childName = 'Buddy' }: 
                   </div>
                   <div className="flex-1">
                     <div className="text-sm font-semibold">{tool.label}</div>
-                    <div className="text-xs opacity-70">{tool.description}</div>
+                    <div className="text-sm opacity-70">{tool.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 opacity-50" />
                 </motion.button>

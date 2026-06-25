@@ -275,7 +275,7 @@ export function ConsentFlow({
           {content.icon}
           <div>
             <h1 className="text-lg font-bold text-[#1B2733]">{content.title}</h1>
-            <p className="text-xs text-[#5A6B7A]">Version {content.version}</p>
+            <p className="text-sm text-[#5A6B7A]">Version {content.version}</p>
           </div>
         </div>
       </div>
@@ -368,7 +368,7 @@ export function ConsentFlow({
             </div>
           )}
 
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
             <Clock className="h-3.5 w-3.5" />
             <span>Timestamp will be recorded: {new Date().toLocaleString()}</span>
           </div>
@@ -408,13 +408,13 @@ export function ConsentFlow({
                 <div className="mt-3 flex gap-2">
                   <button
                     onClick={handleDecline}
-                    className="rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-700"
+                    className="rounded-lg bg-amber-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-amber-700"
                   >
                     Yes, Decline
                   </button>
                   <button
                     onClick={() => setShowDeclineConfirm(false)}
-                    className="rounded-lg border border-amber-300 px-3 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100"
+                    className="rounded-lg border border-amber-300 px-3 py-1.5 text-sm font-semibold text-amber-800 hover:bg-amber-100"
                   >
                     Go Back
                   </button>
@@ -468,13 +468,13 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
                 <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 p-3">
                   <div>
                     <p className="text-sm font-semibold text-green-900">{labelMap[c.consentType]}</p>
-                    <p className="text-xs text-green-700">
+                    <p className="text-sm text-green-700">
                       Signed by {c.signatureName} on {new Date(c.timestamp).toLocaleDateString()} (v{c.version})
                     </p>
                   </div>
                   <button
                     onClick={() => setWithdrawTarget(c.consentType)}
-                    className="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                    className="rounded-lg border border-red-200 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-50"
                   >
                     Withdraw
                   </button>
@@ -493,11 +493,11 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
                 <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-[#E8E4DF] bg-[#FAF7F2] p-3">
                   <div>
                     <p className="text-sm font-semibold text-[#5A6B7A]">{labelMap[c.consentType]}</p>
-                    <p className="text-xs text-[#5A6B7A]">
+                    <p className="text-sm text-[#5A6B7A]">
                       Withdrawn on {new Date(c.withdrawnAt!).toLocaleDateString()}
                     </p>
                   </div>
-                  <span className="text-xs text-[#8A9BA8]">Withdrawn</span>
+                  <span className="text-sm text-[#8A9BA8]">Withdrawn</span>
                 </div>
               ))}
             </div>
@@ -512,7 +512,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
               {declinedConsents.map(c => (
                 <div key={c.consentType} className="rounded-lg border border-amber-200 bg-amber-50 p-3">
                   <p className="text-sm font-semibold text-amber-900">{labelMap[c.consentType]}</p>
-                  <p className="text-xs text-amber-700">Declined on {new Date(c.timestamp).toLocaleDateString()}</p>
+                  <p className="text-sm text-amber-700">Declined on {new Date(c.timestamp).toLocaleDateString()}</p>
                 </div>
               ))}
             </div>

@@ -362,11 +362,11 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
                   <p className="text-sm text-[#3A4A57]">{cpt.details}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
                     <div className="bg-[#FAF7F2] p-3 rounded-lg">
-                      <p className="text-xs font-medium text-[#5A6B7A] mb-1">Who Provides</p>
+                      <p className="text-sm font-medium text-[#5A6B7A] mb-1">Who Provides</p>
                       <p className="text-sm text-[#1B2733]">{cpt.whoProvides}</p>
                     </div>
                     <div className="bg-[#FAF7F2] p-3 rounded-lg">
-                      <p className="text-xs font-medium text-[#5A6B7A] mb-1">Typical Amount</p>
+                      <p className="text-sm font-medium text-[#5A6B7A] mb-1">Typical Amount</p>
                       <p className="text-sm text-[#1B2733]">{cpt.typical}</p>
                     </div>
                   </div>
@@ -465,7 +465,7 @@ Enclosures: [List all attachments]`;
         </div>
 
         <div className="bg-[#FAF7F2] rounded-lg p-4 overflow-x-auto">
-          <pre className="text-xs text-[#3A4A57] whitespace-pre-wrap font-mono">
+          <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap font-mono">
             {appealTemplate}
           </pre>
         </div>
@@ -617,10 +617,10 @@ function MedicaidWaiverSection() {
 
           <div className="space-y-3">
             <div>
-              <p className="text-xs font-medium text-[#5A6B7A] mb-2">Services Covered</p>
+              <p className="text-sm font-medium text-[#5A6B7A] mb-2">Services Covered</p>
               <div className="flex flex-wrap gap-2">
                 {waiver.services.map((service, sIdx) => (
-                  <Badge key={sIdx} variant="secondary" className="text-xs">
+                  <Badge key={sIdx} variant="secondary" className="text-sm">
                     {service}
                   </Badge>
                 ))}
@@ -628,7 +628,7 @@ function MedicaidWaiverSection() {
             </div>
 
             <div className="bg-[#FAF7F2] p-3 rounded-lg">
-              <p className="text-xs font-medium text-[#5A6B7A] mb-1">Eligibility</p>
+              <p className="text-sm font-medium text-[#5A6B7A] mb-1">Eligibility</p>
               <p className="text-sm text-[#3A4A57]">{waiver.eligibility}</p>
             </div>
           </div>
@@ -708,7 +708,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
 
         <div className="space-y-3">
           <div>
-            <p className="text-xs font-medium text-indigo-700 mb-2">Available Waivers</p>
+            <p className="text-sm font-medium text-indigo-700 mb-2">Available Waivers</p>
             <div className="flex flex-wrap gap-2">
               {currentStateData.waivers.map((waiver, idx) => (
                 <Badge key={idx} className="bg-indigo-100 text-indigo-800 border-[#6B9080]/20">
@@ -719,7 +719,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
           </div>
 
           <div className="bg-white p-3 rounded-lg">
-            <p className="text-xs font-medium text-[#5A6B7A] mb-1">Contact</p>
+            <p className="text-sm font-medium text-[#5A6B7A] mb-1">Contact</p>
             <p className="text-sm text-[#1B2733] font-mono">{currentStateData.contact}</p>
           </div>
 
@@ -740,7 +740,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400" />
                 <span className="font-medium text-[#1B2733]">{state}</span>
-                <Badge variant="outline" className="text-xs">{data.waivers.length} waivers</Badge>
+                <Badge variant="outline" className="text-sm">{data.waivers.length} waivers</Badge>
               </div>
               {isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}
             </button>
@@ -750,7 +750,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
                 <div className="mt-3 space-y-3">
                   <div className="flex flex-wrap gap-2">
                     {data.waivers.map((waiver, idx) => (
-                      <Badge key={idx} variant="secondary" className="text-xs">
+                      <Badge key={idx} variant="secondary" className="text-sm">
                         {waiver}
                       </Badge>
                     ))}

@@ -169,9 +169,9 @@ function KPITile({
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className={`flex items-center justify-center ${compact ? 'w-6 h-6' : 'w-8 h-8'} rounded-full ${getStatusColor(kpi.status)} bg-opacity-20`}>
-            <span className={compact ? 'text-xs' : 'text-sm'}>{icon}</span>
+            <span className={compact ? 'text-sm' : 'text-sm'}>{icon}</span>
           </div>
-          <h3 className={`${compact ? 'text-xs' : 'text-sm'} font-medium text-[#5A6B7A] tracking-tight`}>{name}</h3>
+          <h3 className={`${compact ? 'text-sm' : 'text-sm'} font-medium text-[#5A6B7A] tracking-tight`}>{name}</h3>
         </div>
         <button
           onClick={onInfoClick}
@@ -195,13 +195,13 @@ function KPITile({
         </div>
       </div>
 
-      <p className={`${compact ? 'text-xs' : 'text-xs'} text-[#5A6B7A] font-medium`}>
+      <p className={`${compact ? 'text-sm' : 'text-sm'} text-[#5A6B7A] font-medium`}>
         {kpi.interpretation}
       </p>
 
       {!compact && (
         <div className="mt-3 flex items-center gap-1.5">
-          <span className="text-xs">{getStatusIcon(kpi.status)}</span>
+          <span className="text-sm">{getStatusIcon(kpi.status)}</span>
           <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{kpi.status.replace('_', ' ')}</span>
         </div>
       )}
@@ -252,7 +252,7 @@ function KPIExplainerModal({
           </div>
 
           <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-3">
-            <p className="text-xs text-blue-900">
+            <p className="text-sm text-blue-900">
               <strong>Important:</strong> {explanation.disclaimer}
             </p>
           </div>
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-xs text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
+      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>
@@ -325,9 +325,9 @@ function SummaryMetric({ label, value, status }: {
 }) {
   return (
     <div className={`${getStatusColor(status)} border rounded-lg p-2`}>
-      <div className="text-xs opacity-80 mb-1">{label}</div>
+      <div className="text-sm opacity-80 mb-1">{label}</div>
       <div className="text-sm font-semibold">{value}</div>
-      <div className="text-xs opacity-70 mt-1 capitalize">{status.replace('_', ' ')}</div>
+      <div className="text-sm opacity-70 mt-1 capitalize">{status.replace('_', ' ')}</div>
     </div>
   );
 }
@@ -369,7 +369,7 @@ export function KPITrendChart({ userId, childId, kpiName, days = 30 }: {
           />
         ))}
       </div>
-      <div className="flex justify-between text-xs text-[#5A6B7A]">
+      <div className="flex justify-between text-sm text-[#5A6B7A]">
         <span>{days} days ago</span>
         <span>Today</span>
       </div>

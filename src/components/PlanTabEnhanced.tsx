@@ -503,7 +503,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           </div>
           <div className="text-2xl text-[#1B2733] dark:text-slate-100">{enhancedGoals.length}</div>
           <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Goals</div>
-          <div className="text-xs text-green-600 mt-1">+50% from baseline</div>
+          <div className="text-sm text-green-600 mt-1">+50% from baseline</div>
         </Card>
         
         <Card className="p-4 text-center">
@@ -514,7 +514,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             {enhancedGoals.reduce((acc, goal) => acc + goal.milestones.filter(m => m.completed).length, 0)}
           </div>
           <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Milestones Completed</div>
-          <div className="text-xs text-blue-600 mt-1">67% mastery rate</div>
+          <div className="text-sm text-blue-600 mt-1">67% mastery rate</div>
         </Card>
         
         <Card className="p-4 text-center">
@@ -523,7 +523,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           </div>
           <div className="text-2xl text-[#1B2733] dark:text-slate-100">85%</div>
           <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Routine Completion</div>
-          <div className="text-xs text-green-600 mt-1">+15% this month</div>
+          <div className="text-sm text-green-600 mt-1">+15% this month</div>
         </Card>
         
         <Card className="p-4 text-center">
@@ -532,7 +532,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
           </div>
           <div className="text-2xl text-[#1B2733] dark:text-slate-100">95%</div>
           <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Parent Participation</div>
-          <div className="text-xs text-green-600 mt-1">Excellent consistency</div>
+          <div className="text-sm text-green-600 mt-1">Excellent consistency</div>
         </Card>
       </div>
 
@@ -555,11 +555,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                 <div className={`text-sm font-medium ${task.completed ? 'text-green-800' : 'text-[#1B2733]'}`}>
                   {task.title}
                 </div>
-                <div className={`text-xs ${task.completed ? 'text-green-600' : 'text-[#5A6B7A]'}`}>
+                <div className={`text-sm ${task.completed ? 'text-green-600' : 'text-[#5A6B7A]'}`}>
                   {task.description} • {task.estimatedTime}
                 </div>
                 {task.feedback && (
-                  <div className="text-xs text-green-700 mt-1 italic">
+                  <div className="text-sm text-green-700 mt-1 italic">
                     "{task.feedback}"
                   </div>
                 )}
@@ -583,8 +583,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   <Lightbulb className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-[#3A4A57] dark:text-slate-300">{pattern.pattern}</p>
-                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">{pattern.recommendation}</p>
-                    <Badge variant="outline" className="text-xs mt-1">{pattern.confidence}% confidence</Badge>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">{pattern.recommendation}</p>
+                    <Badge variant="outline" className="text-sm mt-1">{pattern.confidence}% confidence</Badge>
                   </div>
                 </div>
               ))}
@@ -647,24 +647,24 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-3">Progress Journey</h4>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
                       <div>
-                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Baseline</div>
+                        <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">Baseline</div>
                         <div className="text-lg font-semibold text-[#3A4A57]">{goal.baselineData.startingLevel}%</div>
-                        <div className="text-xs text-[#5A6B7A]">{goal.baselineData.startingDate.toLocaleDateString()}</div>
+                        <div className="text-sm text-[#5A6B7A]">{goal.baselineData.startingDate.toLocaleDateString()}</div>
                       </div>
                       <div>
-                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Current</div>
+                        <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">Current</div>
                         <div className="text-lg font-semibold text-[#6B9080]">{goal.progress}%</div>
-                        <div className="text-xs text-green-600">+{goal.progress - goal.baselineData.startingLevel}% growth</div>
+                        <div className="text-sm text-green-600">+{goal.progress - goal.baselineData.startingLevel}% growth</div>
                       </div>
                       <div>
-                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Goal</div>
+                        <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">Goal</div>
                         <div className="text-lg font-semibold text-[#3A4A57]">100%</div>
-                        <div className="text-xs text-[#5A6B7A]">{100 - goal.progress}% remaining</div>
+                        <div className="text-sm text-[#5A6B7A]">{100 - goal.progress}% remaining</div>
                       </div>
                     </div>
                     <div className="mt-3">
-                      <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-1">Assessment method:</div>
-                      <div className="text-xs text-[#3A4A57]">{goal.baselineData.assessmentMethod}</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">Assessment method:</div>
+                      <div className="text-sm text-[#3A4A57]">{goal.baselineData.assessmentMethod}</div>
                     </div>
                   </Card>
                 )}
@@ -678,7 +678,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                         <span className="text-sm text-[#1B2733] dark:text-slate-100">{goal.progress}%</span>
                         <div className="flex items-center gap-1">
                           <TrendingUp className="w-3 h-3 text-green-600" />
-                          <span className="text-xs text-green-600">
+                          <span className="text-sm text-green-600">
                             +{goal.trends[goal.trends.length - 1] - goal.trends[goal.trends.length - 2]}% this week
                           </span>
                         </div>
@@ -703,7 +703,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                           {milestone.title}
                         </span>
                       </div>
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {milestone.completed && milestone.completedDate ? (
                           `Completed ${milestone.completedDate.toLocaleDateString()}`
                         ) : milestone.dueDate ? (
@@ -732,7 +732,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                             <Star className="w-4 h-4 text-amber-400" />
                             <span className="text-sm">{feedback.effectiveness}/5</span>
                           </div>
-                          <span className="text-xs text-[#5A6B7A]">{feedback.date.toLocaleDateString()}</span>
+                          <span className="text-sm text-[#5A6B7A]">{feedback.date.toLocaleDateString()}</span>
                         </div>
                         {feedback.notes && (
                           <p className="text-sm text-[#5A6B7A] italic">"{feedback.notes}"</p>
@@ -970,7 +970,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                         {plan.steps.map((step, index) => (
                           <li key={index} className="flex items-start gap-2 text-sm text-[#5A6B7A] dark:text-slate-400">
                             <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                              <span className="text-xs text-green-700">{index + 1}</span>
+                              <span className="text-sm text-green-700">{index + 1}</span>
                             </div>
                             {step}
                           </li>
@@ -1268,7 +1268,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   {Math.round(Object.values(month.goalsProgress).reduce((a, b) => a + b, 0) / Object.values(month.goalsProgress).length)}% avg progress
                 </span>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 text-sm">
                 <div>
                   <div className="text-[#5A6B7A]">Goals</div>
                   <div className="text-[#1B2733]">
@@ -1613,11 +1613,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
             <div className="space-y-2 text-sm text-[#5A6B7A]">
               <div className="flex items-center justify-between">
                 <span>Teacher Pack sent to Ms. Johnson</span>
-                <span className="text-xs">2 days ago</span>
+                <span className="text-sm">2 days ago</span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Progress report shared with grandparents</span>
-                <span className="text-xs">1 week ago</span>
+                <span className="text-sm">1 week ago</span>
               </div>
             </div>
           </div>
@@ -1696,11 +1696,11 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                   {routine.steps.map((step) => (
                     <div key={step.id} className="flex items-start gap-3 p-2 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
                       <div className="w-6 h-6 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-xs text-[#6B9080]">{step.order}</span>
+                        <span className="text-sm text-[#6B9080]">{step.order}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm text-[#1B2733] dark:text-slate-100 mb-1">{step.title}</div>
-                        <div className="text-xs text-[#5A6B7A] dark:text-slate-400">{step.description}</div>
+                        <div className="text-sm text-[#5A6B7A] dark:text-slate-400">{step.description}</div>
                       </div>
                     </div>
                   ))}
@@ -2062,7 +2062,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     }`}></div>
                     <div className="flex-1">
                       <div className="text-sm text-[#1B2733]">{log.activity}</div>
-                      <div className="text-xs text-[#5A6B7A]">{log.time}</div>
+                      <div className="text-sm text-[#5A6B7A]">{log.time}</div>
                     </div>
                   </div>
                 ))}
@@ -2408,8 +2408,8 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                     </Badge>
                   </div>
                   <h4 className="text-sm font-medium text-[#1B2733] mb-1">{activity.title}</h4>
-                  <p className="text-xs text-[#5A6B7A] mb-2">{activity.matchReason}</p>
-                  <div className="text-xs text-[#5A6B7A]">{activity.timeNeeded}</div>
+                  <p className="text-sm text-[#5A6B7A] mb-2">{activity.matchReason}</p>
+                  <div className="text-sm text-[#5A6B7A]">{activity.timeNeeded}</div>
                 </div>
               ))}
             </div>
@@ -2528,7 +2528,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
 
                 <div className="flex flex-wrap gap-1 mb-4">
                   {resource.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs text-[#5A6B7A] border-slate-300">
+                    <Badge key={index} variant="outline" className="text-sm text-[#5A6B7A] border-slate-300">
                       {tag}
                     </Badge>
                   ))}
@@ -2764,7 +2764,7 @@ export function PlanTabEnhanced({ userData, userTier, connectorData, publishEven
                       </div>
                       <span className="text-sm text-[#1B2733] font-medium">{app.price}</span>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mb-3">Ages {app.ageRange}</p>
+                    <p className="text-sm text-[#5A6B7A] mb-3">Ages {app.ageRange}</p>
                     <Button size="sm" variant="outline" className="w-full">
                       <ExternalLink className="w-4 h-4 mr-2" />
                       View in App Store

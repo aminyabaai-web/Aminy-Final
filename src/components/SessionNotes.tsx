@@ -396,7 +396,7 @@ export function SessionNotes({
                   }`}
                 >
                   <p className="font-medium text-[#1B2733] text-sm">{template.name}</p>
-                  <p className="text-xs text-[#5A6B7A] mt-0.5">{template.description}</p>
+                  <p className="text-sm text-[#5A6B7A] mt-0.5">{template.description}</p>
                 </button>
               ))}
             </div>
@@ -410,7 +410,7 @@ export function SessionNotes({
             <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
               <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">S</span>
               Subjective
-              <span className="text-xs font-normal text-neutral-400">- Parent/caregiver report</span>
+              <span className="text-sm font-normal text-neutral-400">- Parent/caregiver report</span>
             </label>
             <Textarea
               value={noteData.subjective}
@@ -426,7 +426,7 @@ export function SessionNotes({
             <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
               <span className="w-6 h-6 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-xs font-bold">O</span>
               Objective
-              <span className="text-xs font-normal text-neutral-400">- Clinical observations & data</span>
+              <span className="text-sm font-normal text-neutral-400">- Clinical observations & data</span>
             </label>
             <Textarea
               value={noteData.objective}
@@ -442,7 +442,7 @@ export function SessionNotes({
             <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
               <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center text-xs font-bold">A</span>
               Assessment
-              <span className="text-xs font-normal text-neutral-400">- Clinical interpretation</span>
+              <span className="text-sm font-normal text-neutral-400">- Clinical interpretation</span>
             </label>
             <Textarea
               value={noteData.assessment}
@@ -458,7 +458,7 @@ export function SessionNotes({
             <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 mb-2">
               <span className="w-6 h-6 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">P</span>
               Plan
-              <span className="text-xs font-normal text-neutral-400">- Next steps & recommendations</span>
+              <span className="text-sm font-normal text-neutral-400">- Next steps & recommendations</span>
             </label>
             <Textarea
               value={noteData.plan}
@@ -474,7 +474,7 @@ export function SessionNotes({
             <label className="flex items-center gap-2 text-sm font-medium text-[#6B9080] mb-2">
               <Target className="w-4 h-4" />
               Home Practice Recommendations
-              <span className="text-xs font-normal text-[#6B9080]">- Will be shared with parent if enabled</span>
+              <span className="text-sm font-normal text-[#6B9080]">- Will be shared with parent if enabled</span>
             </label>
             <Textarea
               value={noteData.homeRecommendations}
@@ -492,7 +492,7 @@ export function SessionNotes({
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 flex-1">
               <Clock className="w-4 h-4 text-[#5A6B7A] shrink-0" />
-              <label className="text-xs text-[#5A6B7A] shrink-0">Start</label>
+              <label className="text-sm text-[#5A6B7A] shrink-0">Start</label>
               <input
                 type="time"
                 value={startTime}
@@ -502,7 +502,7 @@ export function SessionNotes({
             </div>
             <div className="flex items-center gap-2 flex-1">
               <Clock className="w-4 h-4 text-[#5A6B7A] shrink-0" />
-              <label className="text-xs text-[#5A6B7A] shrink-0">Stop</label>
+              <label className="text-sm text-[#5A6B7A] shrink-0">Stop</label>
               <input
                 type="time"
                 value={stopTime}
@@ -515,11 +515,11 @@ export function SessionNotes({
           {/* Compliance score — OIG 97155/97156 checklist */}
           <div className={`rounded-xl p-3 border ${isCompliant ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
             <div className="flex items-center justify-between mb-2">
-              <span className={`text-xs font-semibold flex items-center gap-1.5 ${isCompliant ? 'text-green-700' : 'text-amber-700'}`}>
+              <span className={`text-sm font-semibold flex items-center gap-1.5 ${isCompliant ? 'text-green-700' : 'text-amber-700'}`}>
                 {isCompliant ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertCircle className="w-3.5 h-3.5" />}
                 Documentation compliance: {complianceScore}/{complianceItems.length}
               </span>
-              <span className={`text-xs font-medium ${isCompliant ? 'text-green-600' : 'text-amber-600'}`}>
+              <span className={`text-sm font-medium ${isCompliant ? 'text-green-600' : 'text-amber-600'}`}>
                 {isCompliant ? 'Audit-ready ✓' : `${complianceItems.length - complianceScore} item${complianceItems.length - complianceScore !== 1 ? 's' : ''} missing`}
               </span>
             </div>

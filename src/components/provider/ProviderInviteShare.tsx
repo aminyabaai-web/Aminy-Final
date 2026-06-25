@@ -58,7 +58,7 @@ export function ProviderInviteShare(): React.JSX.Element {
           Invite Providers
         </h3>
       </div>
-      <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 ml-10">
+      <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 ml-10">
         Share this link to onboard new providers directly into the Aminy platform.
       </p>
 

@@ -384,13 +384,13 @@ export function WinsJournal({ userId }: { userId: string }) {
                     {moment.content}
                   </p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-[#5A6B7A]">
+                    <span className="text-sm text-[#5A6B7A]">
                       {getRelativeTime(moment.timestamp)}
                     </span>
                     {moment.tags && moment.tags.length > 0 && (
                       <div className="flex gap-1">
                         {moment.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
+                          <Badge key={index} variant="secondary" className="text-sm">
                             {tag}
                           </Badge>
                         ))}

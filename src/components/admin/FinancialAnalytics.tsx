@@ -109,7 +109,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
       {/* Demo Data Banner */}
       <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
         <span className="text-amber-600 text-sm font-medium">Demo Data</span>
-        <span className="text-amber-700/70 text-xs">Sample financial metrics. Connect Stripe for real revenue data.</span>
+        <span className="text-amber-700/70 text-sm">Sample financial metrics. Connect Stripe for real revenue data.</span>
       </div>
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -228,7 +228,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
           <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-emerald-600 dark:text-emerald-400 mb-1">
               <ArrowUpRight className="w-4 h-4" />
-              <span className="text-xs font-medium">New MRR</span>
+              <span className="text-sm font-medium">New MRR</span>
             </div>
             <p className="text-xl font-bold text-emerald-700 dark:text-emerald-300">
               +{formatCurrency(latestMRR?.newMRR || 0)}
@@ -237,7 +237,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
           <div className="text-center p-4 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-blue-600 dark:text-blue-400 mb-1">
               <Zap className="w-4 h-4" />
-              <span className="text-xs font-medium">Expansion</span>
+              <span className="text-sm font-medium">Expansion</span>
             </div>
             <p className="text-xl font-bold text-blue-700 dark:text-blue-300">
               +{formatCurrency(latestMRR?.expansionMRR || 0)}
@@ -246,7 +246,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
           <div className="text-center p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-amber-600 dark:text-amber-400 mb-1">
               <ArrowDownRight className="w-4 h-4" />
-              <span className="text-xs font-medium">Contraction</span>
+              <span className="text-sm font-medium">Contraction</span>
             </div>
             <p className="text-xl font-bold text-amber-700 dark:text-amber-300">
               -{formatCurrency(latestMRR?.contractionMRR || 0)}
@@ -255,7 +255,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
           <div className="text-center p-4 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-rose-600 dark:text-rose-400 mb-1">
               <AlertTriangle className="w-4 h-4" />
-              <span className="text-xs font-medium">Churn</span>
+              <span className="text-sm font-medium">Churn</span>
             </div>
             <p className="text-xl font-bold text-rose-700 dark:text-rose-300">
               -{formatCurrency(latestMRR?.churnMRR || 0)}
@@ -320,7 +320,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                       style={{ backgroundColor: tier.color }}
                     />
                     <span className="font-medium text-[#1B2733] dark:text-white">{tier.tier}</span>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="secondary" className="text-sm">
                       {tier.subscribers.toLocaleString()} subs
                     </Badge>
                   </div>
@@ -328,7 +328,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                     <span className="font-bold text-[#1B2733] dark:text-white">
                       {formatCurrency(tier.mrr)}
                     </span>
-                    <span className="text-xs text-emerald-600 ml-2">+{tier.growth}%</span>
+                    <span className="text-sm text-emerald-600 ml-2">+{tier.growth}%</span>
                   </div>
                 </div>
                 <div className="h-2 bg-neutral-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -340,7 +340,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                     }}
                   />
                 </div>
-                <div className="flex justify-between text-xs text-[#5A6B7A] dark:text-slate-400">
+                <div className="flex justify-between text-sm text-[#5A6B7A] dark:text-slate-400">
                   <span>ARPU: ${tier.arpu.toFixed(2)}</span>
                   <span>{tier.percentOfTotal}% of MRR</span>
                 </div>
@@ -384,7 +384,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                       <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                         {formatCurrency(item.projected)}
                       </p>
-                      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Projected</p>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Projected</p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm text-neutral-600 dark:text-slate-300">
@@ -392,7 +392,7 @@ export function FinancialAnalytics({ onBack }: FinancialAnalyticsProps) {
                         {' - '}
                         <span className="text-emerald-600">{formatCurrency(item.optimistic)}</span>
                       </p>
-                      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Range</p>
+                      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Range</p>
                     </div>
                   </div>
                 </div>
@@ -483,8 +483,8 @@ function MetricCard({
         </div>
       </div>
       <p className="text-2xl font-bold text-[#1B2733] dark:text-white mb-1">{value}</p>
-      <p className="text-xs text-[#5A6B7A] dark:text-slate-400">{title}</p>
-      <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">{subtitle}</p>
+      <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{title}</p>
+      <p className="text-sm text-neutral-400 dark:text-[#5A6B7A] mt-1">{subtitle}</p>
     </Card>
   );
 }
@@ -530,9 +530,9 @@ function HealthIndicator({
         {config.icon}
       </div>
       <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{value}</p>
-      <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">Target: {target}</p>
+      <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Target: {target}</p>
       {description && (
-        <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">{description}</p>
+        <p className="text-sm text-neutral-400 dark:text-[#5A6B7A] mt-1">{description}</p>
       )}
     </div>
   );

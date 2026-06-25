@@ -1065,7 +1065,7 @@ export function StoreMarketplace({
           )}
         </div>
         {discounted && tierLabel && (
-          <span className="text-xs text-[#6B9080] font-medium">{tierLabel}</span>
+          <span className="text-sm text-[#6B9080] font-medium">{tierLabel}</span>
         )}
       </div>
     );
@@ -1112,7 +1112,7 @@ export function StoreMarketplace({
               >
                 <Heart className={`w-4 h-4 ${showWishlistOnly ? 'fill-white' : ''}`} />
                 {favorites.size > 0 && (
-                  <span className="text-xs">{favorites.size}</span>
+                  <span className="text-sm">{favorites.size}</span>
                 )}
               </Button>
               <Button
@@ -1124,7 +1124,7 @@ export function StoreMarketplace({
                 <Filter className="w-4 h-4" />
                 Filters
                 {Object.values(filters).some(Boolean) && (
-                  <Badge className="bg-primary text-white text-xs px-1.5">
+                  <Badge className="bg-primary text-white text-sm px-1.5">
                     {Object.values(filters).filter(Boolean).length}
                   </Badge>
                 )}
@@ -1260,7 +1260,7 @@ export function StoreMarketplace({
                       AI Pick
                     </Badge>
                     {product.hsaFsaEligible && (
-                      <Badge className="absolute bottom-2 left-2 bg-emerald-100 text-emerald-700 text-xs">
+                      <Badge className="absolute bottom-2 left-2 bg-emerald-100 text-emerald-700 text-sm">
                         <Shield className="w-3 h-3 mr-1" />
                         HSA/FSA
                       </Badge>
@@ -1287,14 +1287,14 @@ export function StoreMarketplace({
                     <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
-                    <p className="text-xs text-[#5A6B7A] line-clamp-2 mt-1">{product.description}</p>
+                    <p className="text-sm text-[#5A6B7A] line-clamp-2 mt-1">{product.description}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <div className="flex items-center gap-1">
                         <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
+                        <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
                       </div>
                       {product.recommendedAgeRange && (
-                        <span className="text-xs text-slate-400">Ages {product.recommendedAgeRange}</span>
+                        <span className="text-sm text-slate-400">Ages {product.recommendedAgeRange}</span>
                       )}
                     </div>
                     <div className="mt-2">{renderPrice(product)}</div>
@@ -1339,8 +1339,8 @@ export function StoreMarketplace({
                     </h3>
                     <div className="flex items-center gap-1 mt-1">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
-                      <span className="text-xs text-slate-400">({product.reviewCount})</span>
+                      <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
+                      <span className="text-sm text-slate-400">({product.reviewCount})</span>
                     </div>
                     <div className="mt-2">{renderPrice(product)}</div>
                   </div>
@@ -1440,7 +1440,7 @@ export function StoreMarketplace({
                         {product.name}
                       </h3>
                       {product.bcbaRecommended && (
-                        <Badge className="shrink-0 bg-violet-100 text-violet-700 text-xs">
+                        <Badge className="shrink-0 bg-violet-100 text-violet-700 text-sm">
                           BCBA
                         </Badge>
                       )}
@@ -1450,18 +1450,18 @@ export function StoreMarketplace({
                     </p>
                     <div className="flex flex-wrap items-center gap-1.5 mb-2">
                       {product.hsaFsaEligible && (
-                        <Badge className="bg-emerald-100 text-emerald-700 text-xs">
+                        <Badge className="bg-emerald-100 text-emerald-700 text-sm">
                           <Shield className="w-3 h-3 mr-0.5" />
                           HSA/FSA
                         </Badge>
                       )}
                       {product.recommendedAgeRange && (
-                        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">
+                        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">
                           Ages {product.recommendedAgeRange}
                         </Badge>
                       )}
                       {product.matchesChildNeeds && (
-                        <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-xs">
+                        <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">
                           <Zap className="w-3 h-3 mr-0.5" />
                           Matches needs
                         </Badge>
@@ -1469,8 +1469,8 @@ export function StoreMarketplace({
                     </div>
                     <div className="flex items-center gap-1 mb-3">
                       <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs text-[#5A6B7A]">{product.rating}</span>
-                      <span className="text-xs text-slate-400">({product.reviewCount} reviews)</span>
+                      <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
+                      <span className="text-sm text-slate-400">({product.reviewCount} reviews)</span>
                     </div>
                     <div className="flex items-center justify-between">
                       {renderPrice(product)}

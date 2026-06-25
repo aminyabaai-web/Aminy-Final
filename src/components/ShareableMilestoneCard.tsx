@@ -381,7 +381,7 @@ export function ShareableMilestoneCard({
                       <div className="w-10 h-10 bg-[#E8E4DF] rounded-full flex items-center justify-center">
                         <Copy className="w-5 h-5 text-[#5A6B7A]" />
                       </div>
-                      <span className="text-xs text-muted-foreground">Copy</span>
+                      <span className="text-sm text-muted-foreground">Copy</span>
                     </button>
                     <a
                       href={`https://www.instagram.com/`}
@@ -392,7 +392,7 @@ export function ShareableMilestoneCard({
                       <div className="w-10 h-10 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-full flex items-center justify-center">
                         <Camera className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-xs text-muted-foreground">Instagram</span>
+                      <span className="text-sm text-muted-foreground">Instagram</span>
                     </a>
                     <a
                       href={`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(`${displayEmoji} ${displayTitle} - ${description}`)}`}
@@ -403,7 +403,7 @@ export function ShareableMilestoneCard({
                       <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
                         <Share2 className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-xs text-muted-foreground">Facebook</span>
+                      <span className="text-sm text-muted-foreground">Facebook</span>
                     </a>
                     <a
                       href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${displayEmoji} ${displayTitle}\n\n${description}\n\nTracked with @AminyApp`)}`}
@@ -414,7 +414,7 @@ export function ShareableMilestoneCard({
                       <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
                         <X className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-xs text-muted-foreground">X</span>
+                      <span className="text-sm text-muted-foreground">X</span>
                     </a>
                   </div>
                 </motion.div>

@@ -382,7 +382,7 @@ export function CareCoordination({
                         {member.name}
                       </h4>
                       {member.credentials && (
-                        <Badge variant="secondary" className="text-xs">
+                        <Badge variant="secondary" className="text-sm">
                           {member.credentials}
                         </Badge>
                       )}
@@ -392,7 +392,7 @@ export function CareCoordination({
                       {member.specialty && ` • ${member.specialty}`}
                     </p>
                     {member.lastActive && (
-                      <p className="text-xs text-neutral-400 dark:text-[#5A6B7A] mt-1">
+                      <p className="text-sm text-neutral-400 dark:text-[#5A6B7A] mt-1">
                         Active {formatTimeAgo(member.lastActive)}
                       </p>
                     )}
@@ -444,7 +444,7 @@ export function CareCoordination({
                     </>
                   )}
                 </div>
-                <Button variant="ghost" size="sm" className="text-xs">
+                <Button variant="ghost" size="sm" className="text-sm">
                   Manage Access
                 </Button>
               </div>
@@ -510,9 +510,9 @@ export function CareCoordination({
                       <span className="font-medium text-[#1B2733] dark:text-white">
                         {note.authorName}
                       </span>
-                      <span className="text-xs text-[#5A6B7A]">•</span>
-                      <span className="text-xs text-[#5A6B7A]">{note.authorRole}</span>
-                      <Badge className={`text-xs ${getNoteTypeColor(note.type)}`}>
+                      <span className="text-sm text-[#5A6B7A]">•</span>
+                      <span className="text-sm text-[#5A6B7A]">{note.authorRole}</span>
+                      <Badge className={`text-sm ${getNoteTypeColor(note.type)}`}>
                         {note.type}
                       </Badge>
                     </div>
@@ -520,17 +520,17 @@ export function CareCoordination({
                       {note.content}
                     </p>
                     <div className="flex items-center justify-between mt-3">
-                      <span className="text-xs text-neutral-400">
+                      <span className="text-sm text-neutral-400">
                         {formatTimeAgo(note.createdAt)}
                       </span>
                       <div className="flex items-center gap-2">
                         {note.reactions?.map((reaction, idx) => (
                           <span key={idx} className="text-sm">{reaction.emoji}</span>
                         ))}
-                        <Button variant="ghost" size="sm" className="text-xs h-7 px-2">
+                        <Button variant="ghost" size="sm" className="text-sm h-7 px-2">
                           React
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-xs h-7 px-2">
+                        <Button variant="ghost" size="sm" className="text-sm h-7 px-2">
                           Reply
                         </Button>
                       </div>
@@ -565,7 +565,7 @@ export function CareCoordination({
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="secondary" className="text-xs">
+                      <Badge variant="secondary" className="text-sm">
                         {item.category}
                       </Badge>
                       <Badge className={getStatusColor(item.status)}>
@@ -622,7 +622,7 @@ export function CareCoordination({
                         {item.assignedTo.map((memberId) => {
                           const member = careTeam.find(m => m.id === memberId);
                           return member ? (
-                            <Badge key={memberId} variant="secondary" className="text-xs">
+                            <Badge key={memberId} variant="secondary" className="text-sm">
                               {member.name} ({member.role})
                             </Badge>
                           ) : null;
@@ -709,14 +709,14 @@ export function CareCoordination({
                     <input type="radio" name="access" defaultChecked className="text-[#6B9080]" />
                     <div>
                       <p className="font-medium text-[#1B2733] dark:text-white">Full Access</p>
-                      <p className="text-xs text-[#5A6B7A]">View and contribute to all care coordination</p>
+                      <p className="text-sm text-[#5A6B7A]">View and contribute to all care coordination</p>
                     </div>
                   </label>
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
                     <input type="radio" name="access" className="text-[#6B9080]" />
                     <div>
                       <p className="font-medium text-[#1B2733] dark:text-white">Limited Access</p>
-                      <p className="text-xs text-[#5A6B7A]">View notes and care plan only</p>
+                      <p className="text-sm text-[#5A6B7A]">View notes and care plan only</p>
                     </div>
                   </label>
                 </div>
@@ -733,7 +733,7 @@ export function CareCoordination({
               </div>
             </div>
 
-            <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-4 text-center">
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-4 text-center">
               {parentName} will be notified and must approve the invitation
             </p>
           </Card>

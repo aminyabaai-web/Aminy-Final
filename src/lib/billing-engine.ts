@@ -198,7 +198,7 @@ export const PRICING_TIERS: PricingTier[] = [
     yearlyMonthlyEquivalent: +(tierPricing.core.yearly / 12).toFixed(2),
     features: [
       'Unlimited AI conversations',
-      'Up to 2 children',
+      'Unlimited children profiles',
       'Full routine management',
       'Document vault (25 docs)',
       'All calm tools',
@@ -228,7 +228,7 @@ export const PRICING_TIERS: PricingTier[] = [
     yearlyMonthlyEquivalent: +(tierPricing.pro.yearly / 12).toFixed(2),
     features: [
       'Everything in Core',
-      'Up to 3 children',
+      'Unlimited children profiles',
       'Clinical-grade reports',
       'Provider sharing',
       'Unlimited vault storage',

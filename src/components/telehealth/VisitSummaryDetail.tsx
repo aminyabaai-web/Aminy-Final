@@ -192,7 +192,7 @@ export function VisitSummaryDetailScreen({
         )}
 
         {/* Legal Disclaimer */}
-        <div className="p-4 bg-[#FAF7F2] rounded-xl text-xs text-[#5A6B7A]">
+        <div className="p-4 bg-[#FAF7F2] rounded-xl text-sm text-[#5A6B7A]">
           <p className="font-medium text-[#5A6B7A] mb-1">Important Note</p>
           <p>
             This summary is for informational purposes and reflects the guidance provided during your

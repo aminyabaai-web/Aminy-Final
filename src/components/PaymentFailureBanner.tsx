@@ -264,7 +264,7 @@ export function PaymentFailureBanner({
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-semibold text-[#1B2733]">{config.title}</h4>
-          <p className="text-xs text-[#5A6B7A] mt-0.5 leading-relaxed">
+          <p className="text-sm text-[#5A6B7A] mt-0.5 leading-relaxed">
             {config.message}
           </p>
 
@@ -273,7 +273,7 @@ export function PaymentFailureBanner({
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {/* Attempt count */}
               {info.attemptCount !== undefined && info.attemptCount > 0 && (
-                <span className="inline-flex items-center gap-1 text-xs text-[#5A6B7A]">
+                <span className="inline-flex items-center gap-1 text-sm text-[#5A6B7A]">
                   <RotateCw size={10} />
                   Attempt {info.attemptCount} of {MAX_RETRY_ATTEMPTS}
                 </span>
@@ -281,7 +281,7 @@ export function PaymentFailureBanner({
 
               {/* Next retry date */}
               {info.nextRetryAt && info.status === 'retry-pending' && (
-                <span className="inline-flex items-center gap-1 text-xs text-[#5A6B7A]">
+                <span className="inline-flex items-center gap-1 text-sm text-[#5A6B7A]">
                   <CalendarClock size={10} />
                   Next retry: {formatShortDate(info.nextRetryAt)}
                 </span>
@@ -289,7 +289,7 @@ export function PaymentFailureBanner({
 
               {/* Grace period countdown */}
               {info.gracePeriodEndsAt && info.status === 'grace-period' && (
-                <span className="inline-flex items-center gap-1 text-xs text-red-600 font-medium">
+                <span className="inline-flex items-center gap-1 text-sm text-red-600 font-medium">
                   <Clock size={10} />
                   Cancels {formatTimeRemaining(info.gracePeriodEndsAt)}
                 </span>
@@ -299,7 +299,7 @@ export function PaymentFailureBanner({
 
           {/* Error detail */}
           {info.lastError && (
-            <p className="text-xs text-[#5A6B7A] mt-1 italic">
+            <p className="text-sm text-[#5A6B7A] mt-1 italic">
               Reason: {info.lastError}
             </p>
           )}
@@ -308,7 +308,7 @@ export function PaymentFailureBanner({
           <button
             onClick={handleUpdatePayment}
             disabled={portalLoading}
-            className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 ${
+            className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
               info.status === 'cancelled'
                 ? 'bg-primary hover:bg-primary text-white'
                 : 'bg-white hover:bg-[#FAF7F2] text-[#3A4A57] border border-[#E8E4DF]'

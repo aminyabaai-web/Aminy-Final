@@ -270,7 +270,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 className="p-1 text-[#8A9BA8] hover:text-[#5A6B7A] transition-colors"
                 aria-label="Skip"
               >
-                <span className="text-xs">Skip</span>
+                <span className="text-sm">Skip</span>
               </button>
             )}
             <div className="flex-1 text-center">
@@ -351,19 +351,19 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">47%</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">fewer meltdowns in 30 days</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">fewer meltdowns in 30 days</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">89%</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">parents feel more confident</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">parents feel more confident</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">24/7</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">AI coach on call</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">AI coach on call</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
             <p className="text-xl font-bold text-[#43AA8B]">HSA/FSA</p>
-            <p className="text-xs text-[#5A6B7A] leading-tight">eligible with receipt</p>
+            <p className="text-sm text-[#5A6B7A] leading-tight">eligible with receipt</p>
           </div>
         </div>
 
@@ -399,9 +399,9 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="border-t border-[#E8E4DF] pt-2">
-                <p className="text-xs font-semibold text-[#1B2733]">{t.name}</p>
-                <p className="text-xs text-[#5A6B7A]">{t.role}</p>
-                <p className="text-xs text-[#43AA8B] font-medium mt-1">✓ {t.outcome}</p>
+                <p className="text-sm font-semibold text-[#1B2733]">{t.name}</p>
+                <p className="text-sm text-[#5A6B7A]">{t.role}</p>
+                <p className="text-sm text-[#43AA8B] font-medium mt-1">✓ {t.outcome}</p>
               </div>
             </div>
           ))}
@@ -414,7 +414,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           </div>
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#1B2733]">Give a month, get a month</p>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Refer a friend — you both get Core free for 30 days when they join.
             </p>
           </div>
@@ -441,7 +441,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             }`}
           >
             Yearly
-            <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs">
+            <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-sm">
               {/* Largest real annual savings across tiers (Core: 1 − 129/179.88 ≈ 28%) */}
               Save up to {Math.round((1 - tierPricing.core.yearly / (tierPricing.core.monthly * 12)) * 100)}%
             </Badge>
@@ -507,7 +507,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                               const savings = (monthlyPrice * 12 - price).toFixed(0);
                               return (
                                 <div className="flex flex-col items-end">
-                                  <span className="text-xs text-[#8A9BA8] line-through leading-none">
+                                  <span className="text-sm text-[#8A9BA8] line-through leading-none">
                                     ${monthlyEquivalent}/yr
                                   </span>
                                   <div className="flex items-baseline gap-1">
@@ -516,7 +516,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                                     </span>
                                     <span className="text-sm text-[#5A6B7A]">/yr</span>
                                   </div>
-                                  <span className="text-xs font-semibold text-[#43AA8B] leading-none mt-0.5">
+                                  <span className="text-sm font-semibold text-[#43AA8B] leading-none mt-0.5">
                                     Save ${savings} ({Math.floor(Number(savings) / monthlyPrice)} months free)
                                   </span>
                                 </div>
@@ -546,7 +546,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                         </div>
                       ))}
                       {features.length > 4 && (
-                        <p className="text-xs text-[#8A9BA8] pl-6">
+                        <p className="text-sm text-[#8A9BA8] pl-6">
                           +{features.length - 4} more features
                         </p>
                       )}
@@ -637,21 +637,21 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               <path d="M17.05 10.917c-.054-3.478 2.858-5.158 2.988-5.234-1.629-2.374-4.166-2.7-5.067-2.738-2.148-.22-4.208 1.264-5.302 1.264-1.1 0-2.79-1.234-4.59-1.2C2.876 3.044.872 4.417.872 7.723c0 3.117 1.75 7.42 3.15 9.08 1.39 1.65 3.053 1.55 3.79 1.55.737 0 2.137-1 4.037-1s2.95.95 3.95.95 2.4-.55 3.5-2.15c-.05-.05-2.25-1.35-2.25-4.236z" fill="currentColor"/>
               <path d="M14.5 2.05c.93-1.15 1.55-2.7 1.38-4.3-1.34.05-3 .9-3.95 2.05-.85 1-1.6 2.6-1.4 4.1 1.5.1 3.05-.75 3.97-1.85z" fill="currentColor" transform="translate(0, 2)"/>
             </svg>
-            <span className="text-xs font-semibold text-[#5A6B7A]">Apple Pay</span>
+            <span className="text-sm font-semibold text-[#5A6B7A]">Apple Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-[#F0EDE8] rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"/>
               <path d="M12 11v2.4h3.97c-.16 1.03-1.2 3.02-3.97 3.02-2.39 0-4.34-1.98-4.34-4.42S9.61 7.58 12 7.58c1.36 0 2.27.58 2.79 1.08l1.9-1.83C15.47 5.69 13.89 5 12 5 8.13 5 5 8.13 5 12s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84 0-.46-.05-.81-.11-1.16H12z" fill="white"/>
             </svg>
-            <span className="text-xs font-semibold text-[#5A6B7A]">Google Pay</span>
+            <span className="text-sm font-semibold text-[#5A6B7A]">Google Pay</span>
           </div>
           <div className="flex items-center gap-1.5 bg-[#F0EDE8] rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#5A6B7A]" aria-hidden="true">
               <rect width="20" height="14" x="2" y="5" rx="2"/>
               <line x1="2" x2="22" y1="10" y2="10"/>
             </svg>
-            <span className="text-xs font-semibold text-[#5A6B7A]">Cards</span>
+            <span className="text-sm font-semibold text-[#5A6B7A]">Cards</span>
           </div>
         </div>
 

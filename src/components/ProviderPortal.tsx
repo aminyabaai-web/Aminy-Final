@@ -68,7 +68,8 @@ import {
   Briefcase,
   Download,
   Printer,
-  CreditCard
+  CreditCard,
+  Mail
 } from 'lucide-react';
 import type { ProviderType } from '../lib/child-profiles';
 import { brandColors } from '../lib/brand-system';
@@ -102,6 +103,7 @@ import {
 } from '../lib/superbill-service';
 import type { Superbill } from '../types/telehealth';
 import { NPSSurveyModal } from './NPSSurveyModal';
+import { CommunicationTemplates } from './CommunicationTemplates';
 
 // Lazy-load the SuperbillGenerator for the provider-side superbill overlay
 const SuperbillGenerator = React.lazy(() => import('./SuperbillGenerator'));
@@ -161,7 +163,7 @@ interface ProviderPortalProps {
 }
 
 export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSession }: ProviderPortalProps) {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'clients' | 'sessions' | 'start-session' | 'earnings' | 'settings' | 'ai-summaries' | 'insights' | 'coordination' | 'my-practice' | 'clinical-notes' | 'supervision' | 'credentialing' | 'claims' | 'performance' | 'messages'>('dashboard');
   // Partner attribution drives which tabs show. AACT providers don't manage their
   // own credentialing or claims (the org handles that). Cash-pay providers don't see
   // insurance/claims tabs. This keeps the EMR surface scoped to what's actually relevant.
@@ -373,8 +375,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     child_name: string | null;
     created_at: string;
     status: string;
+    ai_draft?: string | null;
+    user_id?: string | null;
   }>>([]);
   const [unsignedNoteCount, setUnsignedNoteCount] = useState(0);
+  const [reviewingThread, setReviewingThread] = useState<(typeof pendingBCBAThreads)[0] | null>(null);
+  const [reviewResponseText, setReviewResponseText] = useState('');
+  const [isSubmittingResponse, setIsSubmittingResponse] = useState(false);
 
   const notificationCount = pendingBCBAThreads.length + unsignedNoteCount;
 
@@ -382,7 +389,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     // Pending BCBA threads waiting for clinician review
     const { data: threads } = await supabase
       .from('ask_bcba_threads')
-      .select('id, question, parent_name, child_name, created_at, status')
+      .select('id, question, parent_name, child_name, created_at, status, ai_draft, user_id')
       .in('status', ['ai_drafted', 'awaiting_bcba'])
       .order('created_at', { ascending: true })
       .limit(20);
@@ -991,7 +998,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         {provider.credentials}
                       </Badge>
                     </div>
-                    <span className="text-xs text-neutral-400 dark:text-[#5A6B7A] -mt-0.5">powered by Aminy</span>
+                    <span className="text-sm text-neutral-400 dark:text-[#5A6B7A] -mt-0.5">powered by Aminy</span>
                   </div>
                 </>
               ) : (
@@ -1063,7 +1070,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                 </div>
                                 <div>
                                   <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} unsigned note{unsignedNoteCount > 1 ? 's' : ''}</p>
-                                  <p className="text-xs text-[#5A6B7A]">Sign to submit for billing</p>
+                                  <p className="text-sm text-[#5A6B7A]">Sign to submit for billing</p>
                                 </div>
                               </div>
                             </button>
@@ -1080,8 +1087,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-medium text-[#1B2733]">Family Q awaiting review</p>
-                                  <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
-                                  {thread.child_name && <p className="text-xs text-[#5A6B7A]">Re: {thread.child_name}</p>}
+                                  <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
+                                  {thread.child_name && <p className="text-sm text-[#5A6B7A]">Re: {thread.child_name}</p>}
                                 </div>
                               </div>
                             </button>
@@ -1092,7 +1099,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     {notificationCount > 0 && (
                       <div className="p-3 border-t border-[#E8E4DF]">
                         <button
-                          className="w-full text-center text-xs text-[#6B9080] font-medium"
+                          className="w-full text-center text-sm text-[#6B9080] font-medium"
                           onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
                         >
                           View all pending reviews →
@@ -1114,7 +1121,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       <VerifiedBadge status={provider.verificationStatus} />
                     )}
                   </div>
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400">{provider.credentials}</p>
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{provider.credentials}</p>
                 </div>
               </div>
             </div>
@@ -1141,6 +1148,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               { id: 'claims', label: 'Claims', icon: FileText },
               { id: 'performance', label: 'Performance', icon: TrendingUp },
               { id: 'my-practice', label: 'My Practice', icon: Briefcase },
+              { id: 'messages', label: 'Messages', icon: Mail },
               { id: 'settings', label: 'Settings', icon: Settings }
             ].filter(tab => {
               // AACT/Rise providers don't manage their own credentialing or claims
@@ -1421,7 +1429,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} note{unsignedNoteCount > 1 ? 's' : ''} need your signature</p>
-                        <p className="text-xs text-[#5A6B7A]">Sign to unlock billing & share with families</p>
+                        <p className="text-sm text-[#5A6B7A]">Sign to unlock billing & share with families</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                     </button>
@@ -1439,7 +1447,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <p className="text-sm font-medium text-[#1B2733]">
                           {thread.child_name ? `${thread.child_name}'s family` : thread.parent_name || 'Family'} has a question
                         </p>
-                        <p className="text-xs text-[#5A6B7A] truncate">{thread.question}</p>
+                        <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                     </button>
@@ -1513,15 +1521,15 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <div className="grid grid-cols-3 gap-3 p-4 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[#1B2733]">{pendingIntake.length}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Pending first session</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Pending first session</p>
                   </div>
                   <div className="text-center border-x border-[#E8E4DF]">
                     <p className="text-2xl font-bold text-[#1B2733]">{avgDays !== null ? `${avgDays}d` : '—'}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
                   </div>
                   <div className="text-center">
                     <p className={`text-2xl font-bold ${atRisk.length > 0 ? 'text-amber-600' : 'text-green-600'}`}>{atRisk.length}</p>
-                    <p className="text-xs text-[#5A6B7A] mt-0.5">Drop-off risk (&gt;48h)</p>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">Drop-off risk (&gt;48h)</p>
                   </div>
                 </div>
               );
@@ -1782,8 +1790,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           <p className="text-sm font-medium text-[#1B2733] dark:text-white">
                             {thread.child_name ? `Re: ${thread.child_name}` : thread.parent_name || 'Family'}
                           </p>
-                          <span className="text-xs text-[#5A6B7A]">·</span>
-                          <span className="text-xs text-[#5A6B7A]">
+                          <span className="text-sm text-[#5A6B7A]">·</span>
+                          <span className="text-sm text-[#5A6B7A]">
                             {Math.round((Date.now() - new Date(thread.created_at).getTime()) / 3600000)}h ago
                           </span>
                         </div>
@@ -1793,8 +1801,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         size="sm"
                         className="bg-[#6B9080] hover:bg-[#216982] text-white shrink-0"
                         onClick={() => {
-                          // Open the thread in a new review modal or navigate to it
-                          toast.info('Thread review panel — coming soon. Check Supabase for thread ID: ' + thread.id.slice(0, 8));
+                          setReviewingThread(thread);
+                          setReviewResponseText(thread.ai_draft ?? '');
                         }}
                       >
                         Review
@@ -2020,7 +2028,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     onChange={e => setBrandingForm(prev => ({ ...prev, logoUrl: e.target.value }))}
                     placeholder="https://yoursite.com/logo.png"
                   />
-                  <p className="text-xs text-neutral-400 mt-1">Square image recommended (128×128 or larger)</p>
+                  <p className="text-sm text-neutral-400 mt-1">Square image recommended (128×128 or larger)</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1">Brand Color</label>
@@ -2070,12 +2078,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 {branding?.orgName && (
                   <div className="mt-3 p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mb-2">Preview:</p>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">Preview:</p>
                     <div className="flex items-center gap-2">
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}
@@ -2303,7 +2311,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60 dark:border-amber-800/40 rounded-lg">
                         <div className="flex items-start gap-2">
                           <Sparkles className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                          <div className="text-xs">
+                          <div className="text-sm">
                             <p className="font-semibold text-amber-800 dark:text-amber-300">{cpt.code} — {cpt.description}</p>
                             <p className="text-amber-700 dark:text-amber-400 mt-1">{cpt.billingTip}</p>
                             <p className="text-amber-600 dark:text-amber-500 mt-1">Duration: {cpt.typicalDuration} • Modifiers: {cpt.commonModifiers.join(', ') || 'none'}</p>
@@ -2316,7 +2324,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {/* Note Type (auto-selected by CPT, but can be overridden) */}
                   <div>
                     <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
-                      Note Template {editingNote.cptCode ? <span className="text-xs text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
+                      Note Template {editingNote.cptCode ? <span className="text-sm text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
                     </label>
                     <select
                       className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
@@ -2357,7 +2365,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     const validation = validateNoteForCPT(editingNote.cptCode, editingNote.content);
                     if (validation.valid && validation.warnings.length === 0) return null;
                     return (
-                      <div className={`p-3 rounded-lg text-xs ${validation.valid ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60' : 'bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60'}`}>
+                      <div className={`p-3 rounded-lg text-sm ${validation.valid ? 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200/60' : 'bg-rose-50 dark:bg-rose-900/20 border border-rose-200/60'}`}>
                         {!validation.valid && (
                           <p className="font-medium text-rose-700 dark:text-rose-300 mb-1">
                             <AlertCircle className="w-3.5 h-3.5 inline mr-1" />
@@ -2681,11 +2689,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <div className="grid grid-cols-2 gap-3 min-w-[220px]">
                     <div className="rounded-xl bg-[#6B9080]/10 dark:bg-[#6B9080]/10 p-3">
-                      <p className="text-xs text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
+                      <p className="text-sm text-[#6B9080] dark:text-[#7BA7BC]">Readiness</p>
                       <p className="text-2xl font-semibold text-[#6B9080] dark:text-[#7BA7BC]">{practiceSummary.readinessScore}%</p>
                     </div>
                     <div className="rounded-xl bg-violet-50 dark:bg-violet-900/20 p-3">
-                      <p className="text-xs text-violet-700 dark:text-violet-300">Monthly range</p>
+                      <p className="text-sm text-violet-700 dark:text-violet-300">Monthly range</p>
                       <p className="text-sm font-semibold text-violet-700 dark:text-violet-300">${practiceSummary.monthlyRevenueRange.low.toLocaleString()} - ${practiceSummary.monthlyRevenueRange.high.toLocaleString()}</p>
                     </div>
                   </div>
@@ -2730,15 +2738,15 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </p>
                     <div className="mt-3 grid grid-cols-3 gap-2 text-sm">
                       <div className="rounded-xl bg-emerald-50 dark:bg-emerald-900/20 p-2">
-                        <p className="text-xs text-emerald-700 dark:text-emerald-300">Ready</p>
+                        <p className="text-sm text-emerald-700 dark:text-emerald-300">Ready</p>
                         <p className="font-semibold text-emerald-700 dark:text-emerald-300">{practiceClaimQueueSummary.readyForBiller}</p>
                       </div>
                       <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-2">
-                        <p className="text-xs text-amber-700 dark:text-amber-300">Blocked</p>
+                        <p className="text-sm text-amber-700 dark:text-amber-300">Blocked</p>
                         <p className="font-semibold text-amber-700 dark:text-amber-300">{practiceClaimQueueSummary.blocked}</p>
                       </div>
                       <div className="rounded-xl bg-[#EEF4F8] dark:bg-blue-900/20 p-2">
-                        <p className="text-xs text-blue-700 dark:text-blue-300">Submitted</p>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">Submitted</p>
                         <p className="font-semibold text-blue-700 dark:text-blue-300">{practiceClaimQueueSummary.submitted}</p>
                       </div>
                     </div>
@@ -2834,10 +2842,111 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           </div>
         )}
 
+        {activeTab === 'messages' && (
+          <CommunicationTemplates
+            patientName={selectedPatient?.childName}
+            providerName={provider?.name}
+            patientId={selectedPatient?.id}
+          />
+        )}
+
         {activeTab === 'performance' && (
           <ProviderPerformanceTab providerId={providerId} />
         )}
       </main>
+
+      {/* BCBA Thread Review Modal */}
+      {reviewingThread && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-end sm:items-center justify-center p-4">
+          <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="p-5 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900">
+              <div>
+                <h2 className="text-base font-semibold text-[#1B2733] dark:text-white">Review parent question</h2>
+                {reviewingThread.child_name && (
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">Re: {reviewingThread.child_name}</p>
+                )}
+              </div>
+              <button
+                aria-label="Close review panel"
+                onClick={() => setReviewingThread(null)}
+                className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5 text-[#5A6B7A]" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <p className="text-xs font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
+                <p className="text-sm text-[#1B2733] dark:text-slate-100 bg-[#FAF7F2] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
+                <textarea
+                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#43AA8B]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/40 focus:border-[#43AA8B]"
+                  value={reviewResponseText}
+                  onChange={(e) => setReviewResponseText(e.target.value)}
+                  placeholder="Edit the AI draft or write your own response…"
+                />
+              </div>
+              <div className="flex gap-3 pt-1">
+                <Button
+                  className="flex-1 bg-[#43AA8B] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
+                  disabled={isSubmittingResponse || !reviewResponseText.trim()}
+                  onClick={async () => {
+                    if (!reviewingThread || !reviewResponseText.trim()) return;
+                    setIsSubmittingResponse(true);
+                    try {
+                      await supabase
+                        .from('ask_bcba_threads')
+                        .update({
+                          bcba_response: reviewResponseText.trim(),
+                          bcba_name: provider?.name ?? null,
+                          bcba_credentials: provider?.credentials ?? null,
+                          bcba_responded_at: new Date().toISOString(),
+                          status: 'completed',
+                        })
+                        .eq('id', reviewingThread.id);
+
+                      // Notify parent via email (non-blocking)
+                      if (reviewingThread.user_id) {
+                        const { data: { session: authSession } } = await supabase.auth.getSession();
+                        const token = authSession?.access_token ?? '';
+                        fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/make-server-8a022548/email/provider-message`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                          body: JSON.stringify({
+                            parentUserId: reviewingThread.user_id,
+                            subject: 'Your behaviorist answered your question',
+                            body: reviewResponseText.trim(),
+                            templateName: 'Ask-a-Behaviorist Response',
+                          }),
+                        }).catch(() => {/* non-critical */});
+                      }
+
+                      toast.success('Response sent to parent!');
+                      setPendingBCBAThreads((prev) => prev.filter((t) => t.id !== reviewingThread.id));
+                      setReviewingThread(null);
+                    } catch {
+                      toast.error('Failed to send — try again');
+                    } finally {
+                      setIsSubmittingResponse(false);
+                    }
+                  }}
+                >
+                  {isSubmittingResponse ? 'Sending…' : 'Send to Parent'}
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-xl border-[#E8E4DF]"
+                  onClick={() => setReviewingThread(null)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Superbill Generator Overlay */}
       {showSuperbillGenerator && generatedSuperbill && (

@@ -319,7 +319,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
           whileTap={{ scale: 0.97 }}
         >
           <Sparkles size={14} color="white" className="inline mr-1" style={{ opacity: 0.7 }} />
-          <span className="text-xs text-white font-medium" style={{ opacity: 0.8 }}>
+          <span className="text-sm text-white font-medium" style={{ opacity: 0.8 }}>
             Daily Affirmation (tap for new)
           </span>
           <AnimatePresence mode="wait">
@@ -370,7 +370,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                   whileTap={{ scale: 0.9 }}
                 >
                   <span style={{ fontSize: 28 }}>{face.emoji}</span>
-                  <span className="text-xs" style={{ color: selected ? '#43AA8B' : '#888' }}>
+                  <span className="text-sm" style={{ color: selected ? '#43AA8B' : '#888' }}>
                     {face.label}
                   </span>
                 </motion.button>
@@ -429,7 +429,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
               const isToday = d === today;
               return (
                 <div key={d} className="flex flex-col items-center gap-1">
-                  <span className="text-xs font-medium" style={{ color: isToday ? '#43AA8B' : '#888' }}>
+                  <span className="text-sm font-medium" style={{ color: isToday ? '#43AA8B' : '#888' }}>
                     {dayLabel(d)}
                   </span>
                   <div
@@ -452,7 +452,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
 
           {/* Mood trend line (2 weeks) */}
           <div className="mt-4">
-            <p className="text-xs font-medium mb-2" style={{ color: '#888' }}>
+            <p className="text-sm font-medium mb-2" style={{ color: '#888' }}>
               Mood Trend (2 weeks)
             </p>
             <svg width="100%" height={50} viewBox="0 0 280 50" preserveAspectRatio="none">
@@ -555,7 +555,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                     {streak > 0 && (
                       <div className="flex items-center gap-0.5">
                         <Flame size={14} color="#E07A5F" />
-                        <span className="text-xs font-bold" style={{ color: '#E07A5F' }}>
+                        <span className="text-sm font-bold" style={{ color: '#E07A5F' }}>
                           {streak}
                         </span>
                       </div>

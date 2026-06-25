@@ -206,7 +206,7 @@ export function BrandAuditChecker() {
 
             <div className="w-full md:w-64">
               <Progress value={overallScore} className="h-3" />
-              <p className="text-xs text-[#5A6B7A] mt-2 text-center">
+              <p className="text-sm text-[#5A6B7A] mt-2 text-center">
                 {auditResults.length} screens audited
               </p>
             </div>
@@ -221,28 +221,28 @@ export function BrandAuditChecker() {
               <Sparkles className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-[#1B2733]">AI Presence</p>
-                <p className="text-[#5A6B7A] text-xs">Visual or copy reference to AI</p>
+                <p className="text-[#5A6B7A] text-sm">Visual or copy reference to AI</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <FileText className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-[#1B2733]">ABA Reference</p>
-                <p className="text-[#5A6B7A] text-xs">Educational/proof mention</p>
+                <p className="text-[#5A6B7A] text-sm">Educational/proof mention</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-[#1B2733]">No Prohibited Words</p>
-                <p className="text-[#5A6B7A] text-xs">Therapy, patient, disorder, etc.</p>
+                <p className="text-[#5A6B7A] text-sm">Therapy, patient, disorder, etc.</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Eye className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-[#1B2733]">AI Gradient Glow</p>
-                <p className="text-[#5A6B7A] text-xs">Visual brand consistency</p>
+                <p className="text-[#5A6B7A] text-sm">Visual brand consistency</p>
               </div>
             </div>
           </div>

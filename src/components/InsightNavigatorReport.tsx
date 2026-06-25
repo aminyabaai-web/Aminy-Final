@@ -293,7 +293,7 @@ export function InsightNavigatorReport({
             <FileText className="w-5 h-5 text-[#6B9080]" />
             Executive Summary
           </h2>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-sm">
             <Sparkles className="w-3 h-3 mr-1" />AI-Generated
           </Badge>
         </div>
@@ -378,7 +378,7 @@ export function InsightNavigatorReport({
               {navigator.insights.whatsWorking.map((item) => (
                 <div key={item.id} className="p-3 bg-green-50 rounded-lg border border-green-200">
                   <p className="text-sm text-[#1B2733]">{item.content}</p>
-                  <Badge variant="outline" className="mt-2 text-xs">{item.category}</Badge>
+                  <Badge variant="outline" className="mt-2 text-sm">{item.category}</Badge>
                 </div>
               ))}
             </div>
@@ -392,7 +392,7 @@ export function InsightNavigatorReport({
               {navigator.insights.whatsNotWorking.map((item) => (
                 <div key={item.id} className="p-3 bg-amber-50 rounded-lg border border-amber-200">
                   <p className="text-sm text-[#1B2733]">{item.content}</p>
-                  <Badge variant="outline" className="mt-2 text-xs">{item.category}</Badge>
+                  <Badge variant="outline" className="mt-2 text-sm">{item.category}</Badge>
                 </div>
               ))}
             </div>
@@ -407,8 +407,8 @@ export function InsightNavigatorReport({
                 <div key={item.id} className="p-3 bg-white rounded-lg border border-[#6B9080]/20">
                   <p className="text-sm text-[#1B2733]">{item.content}</p>
                   <div className="flex gap-2 mt-2">
-                    <Badge variant="outline" className="text-xs">{item.category}</Badge>
-                    <Badge className={`text-xs ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#F0EDE8] text-[#3A4A57]'}`}>
+                    <Badge variant="outline" className="text-sm">{item.category}</Badge>
+                    <Badge className={`text-sm ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#F0EDE8] text-[#3A4A57]'}`}>
                       {item.priority}
                     </Badge>
                   </div>
@@ -466,10 +466,10 @@ export function InsightNavigatorReport({
                   <div>
                     <div className="flex items-center gap-2 text-sm">
                       <span className="font-medium text-[#1B2733]">{entry.area}</span>
-                      <Badge variant="outline" className="text-xs">{entry.type}</Badge>
+                      <Badge variant="outline" className="text-sm">{entry.type}</Badge>
                     </div>
                     <p className="text-sm text-[#5A6B7A]">{entry.description}</p>
-                    <p className="text-xs text-[#8A9BA8] mt-1">{new Date(entry.date).toLocaleDateString()} • {entry.addedBy}</p>
+                    <p className="text-sm text-[#8A9BA8] mt-1">{new Date(entry.date).toLocaleDateString()} • {entry.addedBy}</p>
                   </div>
                 </div>
               ))}

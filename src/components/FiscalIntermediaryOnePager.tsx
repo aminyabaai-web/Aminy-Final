@@ -152,19 +152,19 @@ export function FiscalIntermediaryOnePager({
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
           <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">40%</div>
-            <div className="text-xs text-[#5A6B7A] mt-1">Fewer support calls</div>
+            <div className="text-sm text-[#5A6B7A] mt-1">Fewer support calls</div>
           </div>
           <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">2.5hrs</div>
-            <div className="text-xs text-[#5A6B7A] mt-1">Saved/family/week</div>
+            <div className="text-sm text-[#5A6B7A] mt-1">Saved/family/week</div>
           </div>
           <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">94%</div>
-            <div className="text-xs text-[#5A6B7A] mt-1">6-month retention</div>
+            <div className="text-sm text-[#5A6B7A] mt-1">6-month retention</div>
           </div>
           <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
-            <div className="text-xs text-[#5A6B7A] mt-1">Family satisfaction</div>
+            <div className="text-sm text-[#5A6B7A] mt-1">Family satisfaction</div>
           </div>
         </div>
       </section>
@@ -180,42 +180,42 @@ export function FiscalIntermediaryOnePager({
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">HIPAA-Conscious</p>
-              <p className="text-xs text-[#5A6B7A]">BAA available on request</p>
+              <p className="text-sm text-[#5A6B7A]">BAA available on request</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">White-Label</p>
-              <p className="text-xs text-[#5A6B7A]">Your branding, our tech</p>
+              <p className="text-sm text-[#5A6B7A]">Your branding, our tech</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">SSO Integration</p>
-              <p className="text-xs text-[#5A6B7A]">Connect to existing systems</p>
+              <p className="text-sm text-[#5A6B7A]">Connect to existing systems</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">API Access</p>
-              <p className="text-xs text-[#5A6B7A]">Sync data with your platform</p>
+              <p className="text-sm text-[#5A6B7A]">Sync data with your platform</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">Bulk Onboarding</p>
-              <p className="text-xs text-[#5A6B7A]">Easy family import</p>
+              <p className="text-sm text-[#5A6B7A]">Easy family import</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-green-600 mt-0.5" />
             <div>
               <p className="font-medium text-[#1B2733] text-sm">State Compliance</p>
-              <p className="text-xs text-[#5A6B7A]">Waiver-specific features</p>
+              <p className="text-sm text-[#5A6B7A]">Waiver-specific features</p>
             </div>
           </div>
         </div>
@@ -252,7 +252,7 @@ export function FiscalIntermediaryOnePager({
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-[#5A6B7A] mt-2">
+        <p className="text-sm text-[#5A6B7A] mt-2">
           * No setup fees. No long-term contracts. Annual billing available for additional discount.
         </p>
       </section>
@@ -276,7 +276,7 @@ export function FiscalIntermediaryOnePager({
       </section>
 
       {/* Footer */}
-      <div className="mt-4 sm:mt-6 pt-4 border-t border-[#E8E4DF] flex justify-between items-center text-xs text-[#5A6B7A]">
+      <div className="mt-4 sm:mt-6 pt-4 border-t border-[#E8E4DF] flex justify-between items-center text-sm text-[#5A6B7A]">
         <span>© {new Date().getFullYear()} Aminy, LLC | aminy.ai</span>
         <span>HIPAA-Conscious • BCBA Advised • Parent-Founded</span>
       </div>

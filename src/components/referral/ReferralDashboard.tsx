@@ -258,7 +258,7 @@ export function EnhancedReferralDashboard({
                       className="w-full p-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center justify-between"
                     >
                       <div>
-                        <Badge variant="secondary" className="mb-1 text-xs">
+                        <Badge variant="secondary" className="mb-1 text-sm">
                           {msg.label}
                         </Badge>
                         <p className="text-sm text-[#5A6B7A] line-clamp-2">{msg.body.slice(0, 80)}...</p>
@@ -275,7 +275,7 @@ export function EnhancedReferralDashboard({
                           className="overflow-hidden"
                         >
                           <div className="p-3 pt-0 border-t border-[#E8E4DF]">
-                            <p className="text-xs text-[#5A6B7A] mb-3 whitespace-pre-line bg-[#FAF7F2] p-2 rounded-lg">
+                            <p className="text-sm text-[#5A6B7A] mb-3 whitespace-pre-line bg-[#FAF7F2] p-2 rounded-lg">
                               {msg.body}
                             </p>
                             <div className="grid grid-cols-4 gap-2">
@@ -284,28 +284,28 @@ export function EnhancedReferralDashboard({
                                 className="flex flex-col items-center p-2 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
                               >
                                 <MessageCircle className="w-4 h-4 text-green-600 mb-0.5" />
-                                <span className="text-xs text-green-700">Text</span>
+                                <span className="text-sm text-green-700">Text</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'email')}
                                 className="flex flex-col items-center p-2 bg-[#EEF4F8] rounded-lg hover:bg-blue-100 transition-colors"
                               >
                                 <Mail className="w-4 h-4 text-blue-600 mb-0.5" />
-                                <span className="text-xs text-blue-700">Email</span>
+                                <span className="text-sm text-blue-700">Email</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'whatsapp')}
                                 className="flex flex-col items-center p-2 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors"
                               >
                                 <MessageCircle className="w-4 h-4 text-emerald-600 mb-0.5" />
-                                <span className="text-xs text-emerald-700">WhatsApp</span>
+                                <span className="text-sm text-emerald-700">WhatsApp</span>
                               </button>
                               <button
                                 onClick={() => handleShareTemplate(msg, 'copy')}
                                 className="flex flex-col items-center p-2 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
                               >
                                 <Copy className="w-4 h-4 text-[#5A6B7A] mb-0.5" />
-                                <span className="text-xs text-[#3A4A57]">Copy</span>
+                                <span className="text-sm text-[#3A4A57]">Copy</span>
                               </button>
                             </div>
                           </div>
@@ -352,22 +352,22 @@ export function EnhancedReferralDashboard({
               <Card className="p-3 text-center">
                 <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
                 <div className="text-2xl font-bold text-[#1B2733]">{stats.totalShares}</div>
-                <div className="text-xs text-[#5A6B7A]">Shared</div>
+                <div className="text-sm text-[#5A6B7A]">Shared</div>
               </Card>
               <Card className="p-3 text-center">
                 <TrendingUp className="w-5 h-5 mx-auto mb-1 text-primary" />
                 <div className="text-2xl font-bold text-[#1B2733]">{stats.totalSignups}</div>
-                <div className="text-xs text-[#5A6B7A]">Signed Up</div>
+                <div className="text-sm text-[#5A6B7A]">Signed Up</div>
               </Card>
               <Card className="p-3 text-center">
                 <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
                 <div className="text-2xl font-bold text-[#1B2733]">{stats.totalConverted}</div>
-                <div className="text-xs text-[#5A6B7A]">Converted</div>
+                <div className="text-sm text-[#5A6B7A]">Converted</div>
               </Card>
               <Card className="p-3 text-center">
                 <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
                 <div className="text-2xl font-bold text-[#1B2733]">{stats.rewardsEarned.length}</div>
-                <div className="text-xs text-[#5A6B7A]">Rewards Earned</div>
+                <div className="text-sm text-[#5A6B7A]">Rewards Earned</div>
               </Card>
             </div>
 
@@ -385,7 +385,7 @@ export function EnhancedReferralDashboard({
                   { label: 'Sessions Booked', value: stats.totalSessionsBooked, color: 'bg-green-500' },
                 ].map((step, i) => (
                   <div key={step.label} className="flex items-center gap-3">
-                    <div className="w-24 text-xs text-[#5A6B7A] text-right">{step.label}</div>
+                    <div className="w-24 text-sm text-[#5A6B7A] text-right">{step.label}</div>
                     <div className="flex-1 h-6 bg-[#F0EDE8] rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
@@ -393,13 +393,13 @@ export function EnhancedReferralDashboard({
                         transition={{ delay: i * 0.1, duration: 0.5 }}
                         className={`h-full ${step.color} rounded-full flex items-center justify-end pr-2`}
                       >
-                        <span className="text-xs text-white font-medium">{step.value}</span>
+                        <span className="text-sm text-white font-medium">{step.value}</span>
                       </motion.div>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-[#8A9BA8] mt-2 text-right">
+              <p className="text-sm text-[#8A9BA8] mt-2 text-right">
                 {stats.conversionRate.toFixed(0)}% conversion rate
               </p>
             </Card>
@@ -493,7 +493,7 @@ export function EnhancedReferralDashboard({
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-[#1B2733]">{chain.refereeName}</p>
-                      <p className="text-xs text-[#5A6B7A]">
+                      <p className="text-sm text-[#5A6B7A]">
                         Joined {new Date(chain.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -544,7 +544,7 @@ export function EnhancedReferralDashboard({
                 <Trophy className="w-5 h-5 text-amber-500" />
                 Top Referrers This Month
               </h3>
-              <p className="text-xs text-[#5A6B7A] mb-4">
+              <p className="text-sm text-[#5A6B7A] mb-4">
                 Top 3 earn a free BCBA consultation
               </p>
 
@@ -599,7 +599,7 @@ export function EnhancedReferralDashboard({
                   <p className="font-medium text-[#6B9080] text-sm">
                     Share your code to climb the leaderboard
                   </p>
-                  <p className="text-xs text-[#6B9080]">
+                  <p className="text-sm text-[#6B9080]">
                     Every family you help find care moves you up
                   </p>
                 </div>
@@ -636,7 +636,7 @@ export function EnhancedReferralDashboard({
               </div>
               <div>
                 <p className="font-medium text-blue-900 text-sm">{item.title}</p>
-                <p className="text-xs text-blue-700">{item.desc}</p>
+                <p className="text-sm text-blue-700">{item.desc}</p>
               </div>
             </div>
           ))}

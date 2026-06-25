@@ -145,7 +145,7 @@ export function AddToCalendarButtons({
               {b.icon}
             </span>
             <span className="text-sm font-medium text-[#1B2733] flex-1">{b.label} Calendar</span>
-            <span className="text-xs text-[#6B9080] font-semibold shrink-0">Add →</span>
+            <span className="text-sm text-[#6B9080] font-semibold shrink-0">Add →</span>
           </a>
         ))}
       </div>
@@ -156,7 +156,7 @@ export function AddToCalendarButtons({
   return (
     <div className={className}>
       {label !== null && (
-        <p className="text-xs font-medium text-[#5A6B7A] mb-2">{label}</p>
+        <p className="text-sm font-medium text-[#5A6B7A] mb-2">{label}</p>
       )}
       <div className="flex items-center gap-2">
         {buttons.map(b => (
@@ -171,7 +171,7 @@ export function AddToCalendarButtons({
             aria-label={`Add to ${b.label} Calendar`}
           >
             <span className="w-6 h-6 flex items-center justify-center">{b.icon}</span>
-            <span className="text-xs font-medium text-[#5A6B7A]">{b.label}</span>
+            <span className="text-sm font-medium text-[#5A6B7A]">{b.label}</span>
           </a>
         ))}
       </div>

@@ -10,6 +10,7 @@ import {
   sendTrialExpirationEmail,
   sendWeeklyDigestEmail,
   sendChurnPreventionEmail,
+  sendEmail,
   type ChurnEmailType,
 } from "./email-service.ts";
 import { checkAllRateLimits, getRateLimitHeaders, checkAllLimits, getDailyUsage, DAILY_MESSAGE_LIMITS } from "./rate-limiter.ts";
@@ -57,6 +58,7 @@ import {
   type AuthUser,
   type TierType,
 } from "./auth-middleware.ts";
+import { handleAuthSendEmail } from "./auth-email-routes.ts";
 
 const app = new Hono();
 
@@ -2499,7 +2501,57 @@ app.put("/make-server-8a022548/sessions/:sessionId/status", async (c) => {
 // Submit session notes
 app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
   const sessionId = c.req.param('sessionId');
-  return submitSessionNotes(c.req.raw, sessionId);
+  const response = await submitSessionNotes(c.req.raw, sessionId);
+
+  // Fire session-notes-ready email to parent — fire-and-forget, don't delay the response
+  (async () => {
+    try {
+      const { createClient: mkNoteClient } = await import('jsr:@supabase/supabase-js@2');
+      const sbNote = mkNoteClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      );
+      // Look up session → child → parent email
+      const { data: appt } = await sbNote
+        .from('appointments')
+        .select('child_id, scheduled_at, profiles!inner(full_name, id)')
+        .eq('id', sessionId)
+        .maybeSingle();
+      if (!appt) return;
+      const parentId = (appt as Record<string, unknown>)?.profiles
+        ? ((appt as Record<string, {id: string}>).profiles as {id: string}).id
+        : null;
+      if (!parentId) return;
+      const { data: { user } } = await sbNote.auth.admin.getUserById(parentId);
+      if (!user?.email) return;
+      const date = appt.scheduled_at
+        ? new Date(appt.scheduled_at as string).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : 'today';
+      await sendEmail({
+        to: user.email,
+        subject: 'Session notes are ready in Aminy',
+        html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/></head><body style="font-family:sans-serif;background:#F8F8F6;margin:0;padding:32px 16px">
+<div style="max-width:560px;margin:0 auto">
+<div style="background:#0D1B2A;border-radius:14px 14px 0 0;padding:24px;text-align:center">
+<span style="font-size:22px;font-weight:700;color:#fff">Aminy<span style="color:#43AA8B">.</span></span>
+</div>
+<div style="background:#fff;border:1px solid #E8E4DF;border-radius:0 0 14px 14px;padding:32px 28px">
+<h1 style="font-size:18px;color:#0D1B2A;margin:0 0 12px">Session notes are ready</h1>
+<p style="font-size:15px;color:#3A4A57;line-height:1.6">Notes from ${date}'s session are now available in your Aminy dashboard.</p>
+<div style="text-align:center;margin:28px 0">
+<a href="https://aminy.ai" style="background:#43AA8B;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px 36px;border-radius:10px;display:inline-block">View session notes</a>
+</div>
+</div>
+<p style="text-align:center;font-size:12px;color:#8A9BB0;margin-top:16px">&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai" style="color:#43AA8B;text-decoration:none">aminy.ai</a></p>
+</div></body></html>`,
+      });
+      console.log(`[SessionNotes] Notified parent ${user.email} for session ${sessionId}`);
+    } catch (e) {
+      console.warn('[SessionNotes] Email notify failed (non-critical):', e);
+    }
+  })();
+
+  return response;
 });
 
 // Apply referral credit on signup (uses database-backed referral system)
@@ -4398,6 +4450,73 @@ app.get("/make-server-8a022548/retention/profile/:userId", async (c) => {
     });
   } catch (error) {
     return c.json({ error: 'Failed to get profile' }, 500);
+  }
+});
+
+// ============================================================================
+// AUTH EMAIL HOOK — Supabase calls this instead of sending auth emails itself
+// Configure in: Supabase Dashboard → Authentication → Hooks → Send Email hook
+// URL: https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/make-server-8a022548/auth/send-email
+// ============================================================================
+
+app.post("/make-server-8a022548/auth/send-email", handleAuthSendEmail);
+
+// ─── Provider → Parent message (Communication Templates) ─────────────────────
+// Called from CommunicationTemplates.tsx when provider clicks Send Email.
+// Looks up the parent's email from auth.users and sends via Resend.
+app.post("/make-server-8a022548/email/provider-message", async (c) => {
+  const authResult = await verifyAuth(c.req.header('Authorization') ?? null);
+  if (!authResult.authenticated) return c.json({ error: 'Unauthorized' }, 401);
+  try {
+    const { parentUserId, subject, body, templateName } = await c.req.json();
+    if (!parentUserId || !subject || !body) {
+      return c.json({ error: 'parentUserId, subject, and body are required' }, 400);
+    }
+
+    const { createClient: mkClient } = await import('jsr:@supabase/supabase-js@2');
+    const sb = mkClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+    );
+
+    // Fetch parent email
+    const { data: { user }, error: userErr } = await sb.auth.admin.getUserById(parentUserId);
+    if (userErr || !user?.email) {
+      return c.json({ error: 'Parent email not found' }, 404);
+    }
+
+    const parentEmail = user.email;
+    const parentName = user.user_metadata?.full_name ?? 'there';
+    const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F8F6;margin:0;padding:0}
+.wrap{max-width:560px;margin:32px auto;padding:0 16px 40px}
+.header{background:#0D1B2A;border-radius:14px 14px 0 0;padding:28px 32px 24px;text-align:center}
+.logo{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.5px}.logo span{color:#43AA8B}
+.card{background:#fff;border:1px solid #E8E4DF;border-top:none;border-radius:0 0 14px 14px;padding:36px 32px 28px}
+h1{font-size:20px;font-weight:700;color:#0D1B2A;margin:0 0 12px}
+p{font-size:15px;line-height:1.6;color:#3A4A57;margin:0 0 16px}
+.msg{background:#F8F8F6;border-left:3px solid #43AA8B;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:15px;color:#1B2733}
+.footer{text-align:center;font-size:12px;color:#8A9BB0;padding-top:8px}
+.footer a{color:#43AA8B;text-decoration:none}
+</style></head><body>
+<div class="wrap">
+<div class="header"><div class="logo">Aminy<span>.</span></div></div>
+<div class="card">
+<h1>Message from your provider</h1>
+<p>Hi ${parentName}, your care provider sent you a message via Aminy${templateName ? ` (${templateName})` : ''}:</p>
+<div class="msg">${body.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+<p style="margin-top:20px;font-size:13px;color:#8A9BB0">Reply by logging into Aminy or contacting your provider directly.</p>
+</div>
+<div class="footer"><p>&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai">aminy.ai</a></p></div>
+</div></body></html>`;
+
+    await sendEmail({ to: parentEmail, subject, html });
+    console.log(`[ProviderMessage] Sent "${subject}" to ${parentEmail}`);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error('[ProviderMessage] Failed:', error);
+    return c.json({ error: 'Failed to send message' }, 500);
   }
 });
 

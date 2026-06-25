@@ -272,7 +272,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     <Icon className="w-6 h-6 text-white" strokeWidth={2} />
                   </div>
                   <span
-                    className={`text-xs font-semibold mt-1 transition-colors ${
+                    className={`text-sm font-semibold mt-1 transition-colors ${
                       isActive ? 'text-[#43AA8B] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
                     }`}
                   >
@@ -351,7 +351,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
 
                 {/* Label */}
                 <span
-                  className={`text-xs font-medium ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
+                  className={`text-sm font-medium ${isDisabled ? 'opacity-40' : 'opacity-100'} transition-all duration-200`}
                 >
                   {tab.label}
                 </span>
@@ -442,7 +442,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                           <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
                             {item.label}
                           </div>
-                          <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>
+                          <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>
                         </div>
                       </div>
 

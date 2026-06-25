@@ -242,7 +242,7 @@ export function GetCareIntakeScreen({
                 <span className="font-medium">Emergency?</span>{' '}
                 <a href="tel:911" className="underline font-semibold">Call 911</a>
               </p>
-              <p className="text-xs text-red-600 mt-1">
+              <p className="text-sm text-red-600 mt-1">
                 Aminy provides guidance and coaching, not medical care.
               </p>
             </div>
@@ -335,7 +335,7 @@ function VisitTypeButton({
       {icon}
       <div className="text-left">
         <span className="text-sm font-medium block">{label}</span>
-        <span className="text-xs opacity-70">{sublabel}</span>
+        <span className="text-sm opacity-70">{sublabel}</span>
       </div>
     </button>
   );

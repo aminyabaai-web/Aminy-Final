@@ -124,13 +124,13 @@ function VendorRow({ vendor, index }: { vendor: VendorBAA; index: number }) {
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-[#1B2733]">{vendor.name}</h3>
-            <span className="text-xs text-[#5A6B7A]">· {vendor.role}</span>
+            <span className="text-sm text-[#5A6B7A]">· {vendor.role}</span>
           </div>
           <p className="text-sm text-[#5A6B7A] mt-0.5">{vendor.plan}</p>
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {cfg.icon}
-          <span className={`text-xs font-semibold ${cfg.color}`}>{cfg.label}</span>
+          <span className={`text-sm font-semibold ${cfg.color}`}>{cfg.label}</span>
         </div>
       </div>
 
@@ -224,7 +224,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
         ))}
 
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
-          <p className="text-xs text-[#5A6B7A] leading-relaxed">
+          <p className="text-sm text-[#5A6B7A] leading-relaxed">
             <strong>What is a BAA?</strong> A Business Associate Agreement (BAA) is a legally required
             contract between a HIPAA-covered entity (or business associate) and a vendor that will handle
             Protected Health Information (PHI). Under HIPAA, all vendors who process, store, or transmit
@@ -233,7 +233,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           </p>
         </div>
 
-        <p className="text-center text-xs text-[#8A9BA8] pb-4">
+        <p className="text-center text-sm text-[#8A9BA8] pb-4">
           Last updated: April 3, 2026 · Aminy Compliance Team
         </p>
       </div>

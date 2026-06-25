@@ -225,7 +225,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
             className={`mt-2 aminy-input-left ${errors.childNickname ? 'border-red-500' : ''}`}
           />
           {errors.childNickname && (
-            <p className="text-red-500 text-xs mt-1">{errors.childNickname}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.childNickname}</p>
           )}
         </div>
 
@@ -242,11 +242,11 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
             maxLength={4}
             className={`mt-2 aminy-input-left ${errors.childPin ? 'border-red-500' : ''}`}
           />
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Used to exit Jr Mode and access parent controls
           </p>
           {errors.childPin && (
-            <p className="text-red-500 text-xs mt-1">{errors.childPin}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.childPin}</p>
           )}
         </div>
 
@@ -407,7 +407,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
               Learning {profile.childNickname}'s preferences
             </p>
             <Progress value={calibrationProgress} className="h-3 mb-2" />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               {Math.round(calibrationProgress)}% complete
             </p>
           </Card>
@@ -423,7 +423,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         <div className="max-w-md mx-auto">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm font-medium text-muted-foreground">Jr Setup</span>
-            <Badge variant="outline" className="text-xs">Step {currentStep} of 3</Badge>
+            <Badge variant="outline" className="text-sm">Step {currentStep} of 3</Badge>
           </div>
           <Progress value={(currentStep / 3) * 100} className="h-2" />
         </div>

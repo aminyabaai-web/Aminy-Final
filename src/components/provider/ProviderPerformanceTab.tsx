@@ -351,7 +351,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
                     <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">{a.cptCode} · {a.payer}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#5A6B7A] dark:text-slate-400">
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       {a.hoursUsed}/{a.hoursApproved} hrs used
                     </span>
                     <Badge className={days <= 7 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}>
@@ -383,18 +383,18 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
             >
               <div className="flex items-center gap-2 mb-2">
                 <IconEl className="w-4 h-4 text-neutral-400" />
-                <p className="text-xs text-[#5A6B7A] dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
               </div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                 {formatVal(m)}
               </p>
               <div className="mt-1 flex items-center justify-between">
-                <p className="text-xs text-neutral-400 dark:text-[#5A6B7A]">
+                <p className="text-sm text-neutral-400 dark:text-[#5A6B7A]">
                   Target: {m.higherIsBetter ? '≥' : '≤'}{m.target}{m.unit === '%' ? '%' : m.unit === 'hrs' ? ' h' : m.unit === 'pts' ? ' pts' : ''}
                 </p>
                 <StatusChip status={status} />
               </div>
-              <p className="mt-2 text-xs text-[#5A6B7A] dark:text-slate-400 leading-snug">{m.description}</p>
+              <p className="mt-2 text-sm text-[#5A6B7A] dark:text-slate-400 leading-snug">{m.description}</p>
             </Card>
           );
         })}
@@ -412,10 +412,10 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
               <div key={d.id} className="px-4 py-3 flex items-center justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-[#1B2733] dark:text-white">{d.clientName}</p>
-                  <p className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-0.5">
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                     {d.cptCode} · {d.payer} · DOS {d.dateOfService}
                   </p>
-                  <p className="text-xs text-red-600 dark:text-red-400 mt-0.5">{d.reason}</p>
+                  <p className="text-sm text-red-600 dark:text-red-400 mt-0.5">{d.reason}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="text-sm font-semibold text-[#1B2733] dark:text-white">${d.amount.toLocaleString()}</p>

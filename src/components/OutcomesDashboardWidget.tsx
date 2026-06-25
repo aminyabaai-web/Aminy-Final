@@ -293,7 +293,7 @@ export function OutcomesDashboardWidget({
                   {getTrendIcon(metric)}
                 </div>
 
-                <p className="text-xs mt-1">
+                <p className="text-sm mt-1">
                   {getChangeText(metric)}
                 </p>
               </motion.div>

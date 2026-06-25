@@ -365,7 +365,7 @@ export default function CarePage({
         </div>
         
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-sm">
             {tier.charAt(0).toUpperCase() + tier.slice(1)}
           </Badge>
         </div>

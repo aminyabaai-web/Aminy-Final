@@ -202,7 +202,7 @@ export const NetworkErrorHandler: React.FC = () => {
                 {error.message}
               </p>
               {error.userAction && (
-                <p className="text-xs text-red-600 mt-2">
+                <p className="text-sm text-red-600 mt-2">
                   {error.userAction}
                 </p>
               )}
@@ -368,7 +368,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
             {showDetails && (
               <div className="mt-4 p-4 bg-[#F0EDE8] rounded-lg text-left">
                 <h3 className="font-medium text-[#1B2733] mb-2">Error Details:</h3>
-                <pre className="text-xs text-[#3A4A57] whitespace-pre-wrap overflow-auto max-h-40">
+                <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap overflow-auto max-h-40">
                   {error.stack}
                 </pre>
               </div>

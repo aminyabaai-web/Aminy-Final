@@ -604,7 +604,7 @@ export function CoverageCoach({
                   )}
 
                   <div className="flex items-center justify-between mt-4">
-                    <span className="text-xs text-[#5A6B7A] dark:text-slate-400">
+                    <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       Updated {benefit.lastUpdated}
                     </span>
                     

@@ -235,7 +235,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
           <h2 className="font-bold text-white flex items-center gap-2">
             <Eye className="w-5 h-5" /> Vision AI
           </h2>
-          <p className="text-xs text-white/70">
+          <p className="text-sm text-white/70">
             {mode === 'photo' ? 'Analyze photos for insights' : 'Live behavioral observation'}
           </p>
         </div>
@@ -243,7 +243,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
         <div className="flex bg-white/20 rounded-lg p-0.5">
           <button
             onClick={() => { setMode('photo'); if (isRecording) stopRecording(); }}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               mode === 'photo' ? 'bg-white text-violet-700' : 'text-white'
             }`}
           >
@@ -251,7 +251,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
           </button>
           <button
             onClick={() => videoAllowed ? setMode('video') : toast.error('Video AI requires Pro+ tier')}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               mode === 'video' ? 'bg-white text-violet-700' : 'text-white'
             } ${!videoAllowed ? 'opacity-50' : ''}`}
           >
@@ -370,7 +370,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={resetPhoto}
-                      className="px-3 py-1.5 text-xs font-medium text-violet-600 border border-violet-300 rounded-lg hover:bg-violet-100"
+                      className="px-3 py-1.5 text-sm font-medium text-violet-600 border border-violet-300 rounded-lg hover:bg-violet-100"
                     >
                       Analyze Another
                     </button>
@@ -421,9 +421,9 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                   {/* Live frame results */}
                   {frameResults.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-xs font-medium text-[#5A6B7A]">Live Analysis</p>
+                      <p className="text-sm font-medium text-[#5A6B7A]">Live Analysis</p>
                       {frameResults.slice(-3).map(fr => (
-                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-xs text-[#5A6B7A]">
+                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-sm text-[#5A6B7A]">
                           <span className="text-[#8A9BA8]">Frame {(fr.frameIndex ?? 0) + 1}:</span>{' '}
                           {fr.analysis.length > 100 ? fr.analysis.slice(0, 100) + '...' : fr.analysis}
                         </div>
@@ -442,7 +442,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     Record your child's activity for AI behavioral analysis.
                     Captures 1 frame every 3 seconds.
                   </p>
-                  <p className="text-xs text-[#8A9BA8] mb-6">
+                  <p className="text-sm text-[#8A9BA8] mb-6">
                     {tier === 'pro' ? '10 frames per session (Pro)' :
                      tier === 'pro_plus' ? '20 frames per session (Pro+)' :
                      tier === 'b2b' ? `${maxFrames} frames per session (Organization)` :
@@ -477,7 +477,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     <div className="flex items-center gap-2 mb-3">
                       <BarChart3 className="w-4 h-4 text-violet-600" />
                       <p className="font-medium text-violet-800 text-sm">Session Summary</p>
-                      <span className="text-xs text-violet-500 ml-auto">
+                      <span className="text-sm text-violet-500 ml-auto">
                         {frameResults.length} frames analyzed
                       </span>
                     </div>

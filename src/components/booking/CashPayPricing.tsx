@@ -131,12 +131,12 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
         <div className="flex-1">
           <h3 className="font-semibold text-[#1B2733] text-base">{service.name}</h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <span className="text-xs text-slate-400 font-mono">CPT {service.cptCode}</span>
-            <span className="text-xs text-slate-400 flex items-center gap-1">
+            <span className="text-sm text-slate-400 font-mono">CPT {service.cptCode}</span>
+            <span className="text-sm text-slate-400 flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {service.durationMinutes} min
             </span>
-            <span className="text-xs text-[#6B9080] font-medium">{service.providerType}</span>
+            <span className="text-sm text-[#6B9080] font-medium">{service.providerType}</span>
           </div>
         </div>
 
@@ -153,7 +153,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       <p className="text-sm text-[#5A6B7A] leading-relaxed mb-4">{service.description}</p>
 
       {/* Market context */}
-      <div className="text-xs text-slate-400 mb-3">
+      <div className="text-sm text-slate-400 mb-3">
         National range: ${service.marketRange.low.toLocaleString()}–${service.marketRange.high.toLocaleString()}
       </div>
 
@@ -237,13 +237,13 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
               </div>
               <div className="text-right">
                 <div className="font-bold text-[#1B2733]">${opt.totalPrice.toFixed(2)}</div>
-                <div className="text-xs text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
+                <div className="text-sm text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
               </div>
             </button>
           ))}
         </div>
 
-        <p className="text-xs text-slate-400 text-center mt-4">
+        <p className="text-sm text-slate-400 text-center mt-4">
           Package discounts stack with your membership discount
         </p>
 
@@ -286,7 +286,7 @@ function SavingsBanner({ tier, category }: SavingsBannerProps) {
         <p className="text-sm font-semibold text-[#6B9080]">
           As a {getTierLabel(tier)} member, you save ${savings.monthlySavings.toFixed(2)}/month
         </p>
-        <p className="text-xs text-[#6B9080] mt-0.5">
+        <p className="text-sm text-[#6B9080] mt-0.5">
           Based on {savings.sessionsPerMonth} sessions of {primaryService.name} per month.
           That is ${savings.annualSavings.toFixed(2)} saved per year.
         </p>
@@ -317,7 +317,7 @@ function TierSelector({ tier, onSelect }: TierSelectorProps) {
         >
           <div>{getTierLabel(m.tier)}</div>
           {m.monthlyPrice > 0 && (
-            <div className="text-xs text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
+            <div className="text-sm text-slate-400 mt-0.5">${m.monthlyPrice}/mo</div>
           )}
         </button>
       ))}
@@ -359,7 +359,7 @@ export default function CashPayPricing({
         <p className="text-sm text-[#5A6B7A] mt-1">
           No insurance needed. No surprise bills. Just clear, honest pricing for your family.
         </p>
-        <p className="text-xs text-[#6B9080] mt-2 font-medium">
+        <p className="text-sm text-[#6B9080] mt-2 font-medium">
           All prices include telehealth platform, Ease activities, and superbill for out-of-network reimbursement.
         </p>
       </div>
@@ -419,7 +419,7 @@ export default function CashPayPricing({
 
       {/* Footer trust badges */}
       <div className="px-5 mt-8">
-        <div className="flex items-center justify-center gap-6 text-slate-400 text-xs">
+        <div className="flex items-center justify-center gap-6 text-slate-400 text-sm">
           <span className="flex items-center gap-1.5">
             <Shield className="w-4 h-4" />
             HIPAA-Conscious

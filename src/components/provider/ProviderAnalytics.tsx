@@ -764,14 +764,14 @@ export function ProviderAnalytics({
         <div className={`p-2 rounded-lg ${metric.color} text-white`}>
           {metric.icon}
         </div>
-        <div className={`flex items-center gap-1 text-xs ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+        <div className={`flex items-center gap-1 text-sm ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
           {metric.change >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
           {Math.abs(metric.change)}%
         </div>
       </div>
       <h3 className="text-2xl font-bold text-[#1B2733] dark:text-white">{metric.value}</h3>
       <p className="text-sm text-[#5A6B7A] mt-1">{metric.title}</p>
-      <p className="text-xs text-slate-400 mt-0.5">{metric.changeLabel}</p>
+      <p className="text-sm text-slate-400 mt-0.5">{metric.changeLabel}</p>
     </Card>
   );
 
@@ -796,7 +796,7 @@ export function ProviderAnalytics({
           </div>
           <div>
             <p className="font-medium text-[#1B2733] dark:text-white">{patient.name}</p>
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               Last session: {patient.lastSession.toLocaleDateString()}
             </p>
           </div>
@@ -804,10 +804,10 @@ export function ProviderAnalytics({
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-sm font-medium">{patient.sessionsCompleted}/{patient.totalSessions}</p>
-            <p className="text-xs text-[#5A6B7A]">sessions</p>
+            <p className="text-sm text-[#5A6B7A]">sessions</p>
           </div>
           <div className="w-24">
-            <div className="flex items-center justify-between text-xs mb-1">
+            <div className="flex items-center justify-between text-sm mb-1">
               <span>Goals</span>
               <span>{patient.goalsProgress}%</span>
             </div>
@@ -854,7 +854,7 @@ export function ProviderAnalytics({
       {isDemo && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
           <span className="text-amber-600 text-sm font-medium">Demo Data</span>
-          <span className="text-amber-700/70 text-xs">Sample provider metrics shown. Connect practice management for real data.</span>
+          <span className="text-amber-700/70 text-sm">Sample provider metrics shown. Connect practice management for real data.</span>
         </div>
       )}
 
@@ -990,15 +990,15 @@ export function ProviderAnalytics({
           <div className="flex items-center justify-center gap-6 mt-6 pt-4 border-t border-[#E8E4DF] dark:border-slate-700">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary" />
-              <span className="text-xs text-[#5A6B7A]">Completed</span>
+              <span className="text-sm text-[#5A6B7A]">Completed</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
-              <span className="text-xs text-[#5A6B7A]">Cancelled</span>
+              <span className="text-sm text-[#5A6B7A]">Cancelled</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-red-500" />
-              <span className="text-xs text-[#5A6B7A]">No-show</span>
+              <span className="text-sm text-[#5A6B7A]">No-show</span>
             </div>
           </div>
         </Card>
@@ -1014,15 +1014,15 @@ export function ProviderAnalytics({
           <div className="grid grid-cols-3 gap-4 mb-6">
             <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
               <p className="text-2xl font-bold text-green-600">{patientStatusCounts.onTrack}</p>
-              <p className="text-xs text-green-600">On Track</p>
+              <p className="text-sm text-green-600">On Track</p>
             </div>
             <div className="text-center p-4 bg-[#FDF9F0] dark:bg-yellow-900/20 rounded-lg">
               <p className="text-2xl font-bold text-yellow-600">{patientStatusCounts.atRisk}</p>
-              <p className="text-xs text-yellow-600">At Risk</p>
+              <p className="text-sm text-yellow-600">At Risk</p>
             </div>
             <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
               <p className="text-2xl font-bold text-red-600">{patientStatusCounts.needsAttention}</p>
-              <p className="text-xs text-red-600">Needs Attention</p>
+              <p className="text-sm text-red-600">Needs Attention</p>
             </div>
           </div>
 
@@ -1066,7 +1066,7 @@ export function ProviderAnalytics({
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <p className="text-2xl font-bold">{patients.length}</p>
-                  <p className="text-xs text-[#5A6B7A]">Clients</p>
+                  <p className="text-sm text-[#5A6B7A]">Clients</p>
                 </div>
               </div>
             </div>
@@ -1098,7 +1098,7 @@ export function ProviderAnalytics({
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
               <p className="text-sm font-medium text-[#5A6B7A]">No clients yet</p>
-              <p className="text-xs text-slate-400 mt-1 max-w-xs">
+              <p className="text-sm text-slate-400 mt-1 max-w-xs">
                 Your caseload metrics will appear here once clients are assigned and sessions are logged.
               </p>
             </div>
@@ -1121,7 +1121,7 @@ export function ProviderAnalytics({
               <span className="text-sm font-medium">Session Notes</span>
             </div>
             <p className="text-2xl font-bold text-green-600">{docCompliance.sessionNotes}%</p>
-            <p className="text-xs text-[#5A6B7A]">Completed within 24h</p>
+            <p className="text-sm text-[#5A6B7A]">Completed within 24h</p>
           </div>
           <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
@@ -1129,7 +1129,7 @@ export function ProviderAnalytics({
               <span className="text-sm font-medium">Goal Updates</span>
             </div>
             <p className="text-2xl font-bold text-[#6B9080]">{docCompliance.goalUpdates}%</p>
-            <p className="text-xs text-[#5A6B7A]">Updated this month</p>
+            <p className="text-sm text-[#5A6B7A]">Updated this month</p>
           </div>
           <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
@@ -1137,7 +1137,7 @@ export function ProviderAnalytics({
               <span className="text-sm font-medium">Progress Reports</span>
             </div>
             <p className="text-2xl font-bold text-blue-600">{docCompliance.progressReports}%</p>
-            <p className="text-xs text-[#5A6B7A]">On schedule</p>
+            <p className="text-sm text-[#5A6B7A]">On schedule</p>
           </div>
           <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
@@ -1145,7 +1145,7 @@ export function ProviderAnalytics({
               <span className="text-sm font-medium">BIP Reviews</span>
             </div>
             <p className="text-2xl font-bold text-violet-600">{docCompliance.bipReviews}%</p>
-            <p className="text-xs text-[#5A6B7A]">Current quarter</p>
+            <p className="text-sm text-[#5A6B7A]">Current quarter</p>
           </div>
         </div>
       </Card>

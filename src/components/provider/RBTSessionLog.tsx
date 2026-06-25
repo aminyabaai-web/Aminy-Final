@@ -75,7 +75,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">Session Log</h1>
-            <p className="text-xs text-white/80">RBT Direct Service Documentation</p>
+            <p className="text-sm text-white/80">RBT Direct Service Documentation</p>
           </div>
           <button
             onClick={() => setShowNewSession(true)}
@@ -90,17 +90,17 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthHours.toFixed(1)}</div>
-            <div className="text-xs text-white/80">Hours This Mo</div>
+            <div className="text-sm text-white/80">Hours This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{monthSessions.length}</div>
-            <div className="text-xs text-white/80">Sessions</div>
+            <div className="text-sm text-white/80">Sessions</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className={`text-lg font-bold ${compliance.compliancePercent >= 5 ? 'text-emerald-300' : 'text-amber-300'}`}>
               {compliance.compliancePercent.toFixed(1)}%
             </div>
-            <div className="text-xs text-white/80">Supervision</div>
+            <div className="text-sm text-white/80">Supervision</div>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No sessions logged yet</p>
-        <p className="text-xs text-slate-400 mt-1">Tap + to log your first session</p>
+        <p className="text-sm text-slate-400 mt-1">Tap + to log your first session</p>
       </div>
     );
   }
@@ -190,7 +190,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-[#1B2733]">{s.clientName}</div>
-              <div className="text-xs text-[#5A6B7A]">
+              <div className="text-sm text-[#5A6B7A]">
                 {s.date} &middot; {s.startTime}-{s.endTime} &middot; {s.sessionType}
               </div>
             </div>
@@ -219,7 +219,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
 
           {/* Data collected */}
           {s.dataCollected.length > 0 && (
-            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-sm text-[#5A6B7A]">
               {s.dataCollected.map((d, i) => (
                 <span key={i} className="flex items-center gap-1">
                   <BarChart3 className="w-3 h-3" />
@@ -232,7 +232,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
           {/* Flag for BCBA */}
           {s.bcbaFlagReason && (
             <div className="mt-2 p-2 bg-amber-50 rounded-lg border border-amber-200">
-              <div className="flex items-center gap-1 text-xs text-amber-700">
+              <div className="flex items-center gap-1 text-sm text-amber-700">
                 <MessageSquare className="w-3 h-3" />
                 <span className="font-medium">Flagged:</span> {s.bcbaFlagReason}
               </div>
@@ -266,10 +266,10 @@ function ReviewQueue({
             <div key={s.id} className="bg-red-50 rounded-xl p-3 border border-red-200 mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-medium text-[#1B2733]">{s.clientName}</span>
-                <span className="text-xs text-[#5A6B7A]">{s.date}</span>
+                <span className="text-sm text-[#5A6B7A]">{s.date}</span>
               </div>
               {s.bcbaFlagReason && (
-                <p className="text-xs text-red-700 mt-1">{s.bcbaFlagReason}</p>
+                <p className="text-sm text-red-700 mt-1">{s.bcbaFlagReason}</p>
               )}
             </div>
           ))}
@@ -285,7 +285,7 @@ function ReviewQueue({
           <div className="text-center py-8">
             <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
             <p className="text-sm text-[#5A6B7A]">All caught up!</p>
-            <p className="text-xs text-slate-400">No sessions awaiting review</p>
+            <p className="text-sm text-slate-400">No sessions awaiting review</p>
           </div>
         )}
         {pending.map((s) => (
@@ -293,7 +293,7 @@ function ReviewQueue({
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-sm font-medium text-[#1B2733]">{s.clientName}</div>
-                <div className="text-xs text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
+                <div className="text-sm text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
               </div>
               <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
                 Pending
@@ -338,13 +338,13 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center p-3 bg-[#6B9080]/10 rounded-lg">
             <div className="text-2xl font-bold text-[#6B9080]">{directHours.toFixed(1)}</div>
-            <div className="text-xs text-[#6B9080]">Direct Hours</div>
+            <div className="text-sm text-[#6B9080]">Direct Hours</div>
           </div>
           <div className="text-center p-3 bg-[#FAF7F2] rounded-lg">
             <div className="text-2xl font-bold text-[#3A4A57]">
               {sessions.filter((s) => s.date.startsWith(thisMonth)).length}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Sessions</div>
+            <div className="text-sm text-[#5A6B7A]">Sessions</div>
           </div>
         </div>
       </div>
@@ -359,11 +359,11 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
               <div key={month} className="bg-white rounded-lg p-3 border border-[#E8E4DF] flex items-center justify-between">
                 <div>
                   <div className="text-sm font-medium text-[#3A4A57]">{month}</div>
-                  <div className="text-xs text-[#5A6B7A]">{data.sessions} sessions</div>
+                  <div className="text-sm text-[#5A6B7A]">{data.sessions} sessions</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-bold text-[#1B2733]">{(data.minutes / 60).toFixed(1)}h</div>
-                  <div className="text-xs text-slate-400">{data.minutes}min</div>
+                  <div className="text-sm text-slate-400">{data.minutes}min</div>
                 </div>
               </div>
             );
@@ -482,7 +482,7 @@ function NewSessionModal({
         <div className="space-y-3">
           {/* Client */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Client Name *</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Client Name *</label>
             <input
               type="text"
               value={clientName}
@@ -494,7 +494,7 @@ function NewSessionModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
           </div>
@@ -502,24 +502,24 @@ function NewSessionModal({
           {/* Time */}
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Start</label>
+              <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Start</label>
               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
             <div>
-              <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">End</label>
+              <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">End</label>
               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
             </div>
           </div>
 
           {calculateDuration() > 0 && (
-            <p className="text-xs text-[#6B9080] font-medium">Duration: {calculateDuration()} minutes</p>
+            <p className="text-sm text-[#6B9080] font-medium">Duration: {calculateDuration()} minutes</p>
           )}
 
           {/* Session Type */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Type</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Session Type</label>
             <div className="flex gap-2">
               {(['1:1', 'group'] as const).map((t) => (
                 <button
@@ -539,7 +539,7 @@ function NewSessionModal({
 
           {/* Goal */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Goal Targeted</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Goal Targeted</label>
             <input type="text" value={goalName} onChange={(e) => setGoalName(e.target.value)}
               placeholder="e.g. Manding for preferred items"
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm" />
@@ -547,7 +547,7 @@ function NewSessionModal({
 
           {/* Data Collection */}
           <div className="border border-[#E8E4DF] rounded-lg p-3 space-y-2">
-            <label className="text-xs font-semibold text-[#5A6B7A]">Data Collection</label>
+            <label className="text-sm font-semibold text-[#5A6B7A]">Data Collection</label>
             <select value={dataType} onChange={(e) => setDataType(e.target.value as DataCollectionEntry['type'])}
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm">
               <option value="trial-by-trial">Trial-by-Trial</option>
@@ -568,7 +568,7 @@ function NewSessionModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Session Notes</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Session Notes</label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
               placeholder="Session observations, client response, etc."
               className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm h-20 resize-none" />

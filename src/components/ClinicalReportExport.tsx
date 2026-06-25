@@ -198,7 +198,7 @@ export function ClinicalReportExport({
           {/* Info banner */}
           <div className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-lg p-3 flex items-start gap-2.5">
             <Shield className="w-4 h-4 text-[#6B9080] mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-[#6B9080]">
+            <p className="text-sm text-[#6B9080]">
               This generates an encrypted clinical PDF you can share with your child's
               pediatrician, BCBA, or school. All data stays on your device.
             </p>
@@ -236,7 +236,7 @@ export function ClinicalReportExport({
                 <Calendar className="w-4 h-4 text-[#6B9080]" />
                 <span>{reportData.reportPeriod.start} to {reportData.reportPeriod.end}</span>
               </div>
-              <p className="text-xs text-[#8A9BA8] mt-1">3-month reporting window</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">3-month reporting window</p>
             </div>
           </div>
 
@@ -244,7 +244,7 @@ export function ClinicalReportExport({
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-sm font-medium text-[#3A4A57]">Include sections:</label>
-              <span className="text-xs text-[#8A9BA8]">{enabledSectionCount} of {sectionToggles.length} selected</span>
+              <span className="text-sm text-[#8A9BA8]">{enabledSectionCount} of {sectionToggles.length} selected</span>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] divide-y divide-gray-100">
               {sectionToggles.map(toggle => (
@@ -269,7 +269,7 @@ export function ClinicalReportExport({
                         <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
                       )}
                     </div>
-                    <p className="text-xs text-[#8A9BA8] truncate">{toggle.description}</p>
+                    <p className="text-sm text-[#8A9BA8] truncate">{toggle.description}</p>
                   </div>
                   <div className={`w-9 h-5 rounded-full flex items-center transition-colors ${
                     sections[toggle.key] ? 'bg-primary' : 'bg-[#E8E4DF]'
@@ -327,19 +327,19 @@ export function ClinicalReportExport({
           {/* Summary metrics */}
           <div className="grid grid-cols-2 gap-2.5">
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Avg Goal Progress</p>
+              <p className="text-sm text-[#8A9BA8]">Avg Goal Progress</p>
               <p className="text-2xl font-bold text-[#6B9080]">{avgProgress}%</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Attendance Rate</p>
+              <p className="text-sm text-[#8A9BA8]">Attendance Rate</p>
               <p className="text-2xl font-bold text-[#6B9080]">{reportData.sessions.attendanceRate.toFixed(0)}%</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Treatment Hours</p>
+              <p className="text-sm text-[#8A9BA8]">Treatment Hours</p>
               <p className="text-2xl font-bold text-[#1B2733]">{reportData.sessions.totalHours.toFixed(0)}</p>
             </div>
             <div className="bg-white rounded-lg border border-[#E8E4DF] p-3">
-              <p className="text-xs text-[#8A9BA8]">Behavioral Trend</p>
+              <p className="text-sm text-[#8A9BA8]">Behavioral Trend</p>
               <p className={`text-lg font-bold flex items-center gap-1 ${
                 reportData.behaviorData.overallTrend === 'improving' ? 'text-green-700' :
                 reportData.behaviorData.overallTrend === 'declining' ? 'text-red-700' : 'text-blue-700'
@@ -356,7 +356,7 @@ export function ClinicalReportExport({
             {goals.map(goal => (
               <div key={goal.id} className="flex items-center gap-2 py-1.5">
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
+                  <p className="text-sm font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
                   <div className="w-full bg-[#F0EDE8] rounded-full h-1.5 mt-1">
                     <div
                       className={`h-1.5 rounded-full ${
@@ -366,7 +366,7 @@ export function ClinicalReportExport({
                     />
                   </div>
                 </div>
-                <span className="text-xs font-medium text-[#5A6B7A] w-10 text-right">{goal.current}%</span>
+                <span className="text-sm font-medium text-[#5A6B7A] w-10 text-right">{goal.current}%</span>
               </div>
             ))}
           </div>
@@ -377,8 +377,8 @@ export function ClinicalReportExport({
               <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Assessments ({reportData.assessments.length})</h3>
               {reportData.assessments.map(a => (
                 <div key={a.type} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                  <span className="text-xs text-[#5A6B7A]">{a.name}</span>
-                  <span className={`text-xs font-medium ${
+                  <span className="text-sm text-[#5A6B7A]">{a.name}</span>
+                  <span className={`text-sm font-medium ${
                     (a.change ?? 0) < 0 ? 'text-green-700' : (a.change ?? 0) > 0 ? 'text-orange-600' : 'text-[#5A6B7A]'
                   }`}>
                     {a.score} {a.change != null ? `(${a.change > 0 ? '+' : ''}${a.change})` : ''}
@@ -390,8 +390,8 @@ export function ClinicalReportExport({
 
           {/* Sections included */}
           <div className="bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] p-3">
-            <p className="text-xs text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
-            <p className="text-xs text-[#8A9BA8]">
+            <p className="text-sm text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
+            <p className="text-sm text-[#8A9BA8]">
               {sectionToggles.filter(t => sections[t.key]).map(t => t.label).join(' · ')}
             </p>
           </div>
@@ -441,8 +441,8 @@ export function ClinicalReportExport({
           </p>
 
           <div className="bg-[#6B9080]/10 rounded-lg p-3 text-left mb-4">
-            <p className="text-xs font-medium text-[#6B9080] mb-1">Sharing tips:</p>
-            <ul className="text-xs text-[#6B9080] space-y-1">
+            <p className="text-sm font-medium text-[#6B9080] mb-1">Sharing tips:</p>
+            <ul className="text-sm text-[#6B9080] space-y-1">
               <li>• Upload to your provider's patient portal</li>
               <li>• Bring a printed copy to your next appointment</li>
               <li>• Share via secure email with your care team</li>
@@ -451,7 +451,7 @@ export function ClinicalReportExport({
           </div>
 
           <div className="bg-amber-50 rounded-lg p-3 text-left">
-            <p className="text-xs text-amber-800">
+            <p className="text-sm text-amber-800">
               <span className="font-medium">Privacy note:</span> This PDF contains Protected Health Information (PHI).
               Only share with authorized care providers.
             </p>

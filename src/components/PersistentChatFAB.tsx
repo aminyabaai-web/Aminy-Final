@@ -104,7 +104,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
           <div className="absolute bottom-16 right-0 bg-white border border-accent/20 rounded-lg shadow-lg p-3 max-w-[200px] animate-in slide-in-from-bottom-2 fade-in">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-[#3A4A57]">
+              <p className="text-sm text-[#3A4A57]">
                 <strong>Tip:</strong> Ask me anything about your calm plan!
               </p>
             </div>
@@ -127,7 +127,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                 </div>
                 <div>
                   <SheetTitle className="text-lg">Aminy</SheetTitle>
-                  <p className="text-xs text-[#5A6B7A] mt-0.5">
+                  <p className="text-sm text-[#5A6B7A] mt-0.5">
                     Powered by AI and ABA behavioral science
                   </p>
                 </div>
@@ -145,7 +145,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
             {/* Starter Prompts */}
             {!isAuthenticated && (
               <div className="mt-4 space-y-2">
-                <p className="text-xs text-[#5A6B7A] font-medium">Try asking:</p>
+                <p className="text-sm text-[#5A6B7A] font-medium">Try asking:</p>
                 <div className="grid gap-2">
                   {starterPrompts.slice(0, 2).map((prompt, idx) => (
                     <button

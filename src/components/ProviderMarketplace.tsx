@@ -616,7 +616,7 @@ export function ProviderMarketplace({
             {/* Specialties */}
             <div className="flex flex-wrap gap-1.5 mb-2">
               {provider.specialties.slice(0, 3).map((spec, idx) => (
-                <Badge key={idx} variant="outline" className="text-xs">
+                <Badge key={idx} variant="outline" className="text-sm">
                   {spec}
                 </Badge>
               ))}
@@ -636,7 +636,7 @@ export function ProviderMarketplace({
                   </span>
                 ))}
                 {(provider.insuranceAccepted?.length || 0) > 3 && (
-                  <span className="text-xs text-[#5A6B7A]">
+                  <span className="text-sm text-[#5A6B7A]">
                     +{provider.insuranceAccepted.length - 3} more
                   </span>
                 )}
@@ -771,7 +771,7 @@ export function ProviderMarketplace({
               </div>
               <div>
                 <p className="text-sm font-medium text-emerald-800">Recommended for You</p>
-                <p className="text-xs text-emerald-600 mt-0.5">{screeningBanner}</p>
+                <p className="text-sm text-emerald-600 mt-0.5">{screeningBanner}</p>
               </div>
               <button
                 onClick={() => setScreeningBanner(null)}
@@ -962,7 +962,7 @@ export function ProviderMarketplace({
                   onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: Number(e.target.value) }))}
                   className="w-full h-2 bg-[#E8E4DF] rounded-lg appearance-none cursor-pointer accent-teal-600"
                 />
-                <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
+                <div className="flex justify-between text-sm text-[#8A9BA8] mt-1">
                   <span>$25</span>
                   <span>$500+</span>
                 </div>
@@ -1134,28 +1134,28 @@ export function ProviderMarketplace({
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Specialist Consultation</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min with a BCBA</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min with a BCBA</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Assessment</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 90 min comprehensive review</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 90 min comprehensive review</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$269</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Coaching Session</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 30 min skill-building</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 30 min skill-building</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$49</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">ABA Extended Coaching</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min deeper practice</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min deeper practice</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$89</span>
                 </div>
@@ -1174,28 +1174,28 @@ export function ProviderMarketplace({
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Family Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
                   </div>
                   <span className="font-semibold text-violet-600">$129</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Extended Therapy Session</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 60 min for complex needs</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 60 min for complex needs</p>
                   </div>
                   <span className="font-semibold text-violet-600">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Speech Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min communication support</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min communication support</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
                     <p className="font-medium text-[#1B2733] text-sm">Occupational Therapy</p>
-                    <p className="text-xs text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
+                    <p className="text-sm text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
@@ -1211,23 +1211,23 @@ export function ProviderMarketplace({
               </div>
               <div>
                 <h4 className="font-medium text-[#1B2733]">Diagnostic Evaluations</h4>
-                <p className="text-xs text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
+                <p className="text-sm text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">ADHD Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 60 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 60 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$299</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">Autism Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 90 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 90 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$799</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
                 <p className="font-medium text-[#1B2733] text-sm">Combined Evaluation</p>
-                <p className="text-xs text-[#5A6B7A] mb-1">Up to 120 min</p>
+                <p className="text-sm text-[#5A6B7A] mb-1">Up to 120 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$999</span>
               </div>
             </div>
@@ -1235,7 +1235,7 @@ export function ProviderMarketplace({
 
           {/* What's Included */}
           <div className="mt-5 pt-5 border-t border-[#E8E4DF]">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#5A6B7A]">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[#5A6B7A]">
               <span className="flex items-center gap-1">
                 <Check className="w-3.5 h-3.5 text-green-500" />
                 Video session from home

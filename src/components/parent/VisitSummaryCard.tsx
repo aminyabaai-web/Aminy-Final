@@ -85,7 +85,7 @@ export function VisitSummaryCard({
             <h3 className="text-lg font-semibold">{childName}'s Visit Summary</h3>
             <p className="text-teal-100 text-sm">{typeLabel} with {providerName}</p>
           </div>
-          <Badge className="bg-white/20 text-white border-white/30 text-xs">
+          <Badge className="bg-white/20 text-white border-white/30 text-sm">
             <Calendar className="w-3 h-3 mr-1" />
             {formattedDate}
           </Badge>
@@ -93,7 +93,7 @@ export function VisitSummaryCard({
         <div className="flex items-center gap-3 mt-2 text-sm text-teal-100">
           <span>{durationMinutes} minutes</span>
           {acknowledged && (
-            <Badge className="bg-emerald-400/30 text-white border-emerald-300/50 text-xs gap-1">
+            <Badge className="bg-emerald-400/30 text-white border-emerald-300/50 text-sm gap-1">
               <CheckCircle className="w-3 h-3" /> Acknowledged
             </Badge>
           )}
@@ -177,7 +177,7 @@ export function VisitSummaryCard({
         </div>
 
         {acknowledged && (
-          <p className="text-xs text-slate-400 text-center">
+          <p className="text-sm text-slate-400 text-center">
             You acknowledged this summary on {new Date().toLocaleDateString()}
           </p>
         )}
@@ -205,7 +205,7 @@ function GoalMeter({ title, progressPct }: { title: string; progressPct: number 
     <div>
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-[#3A4A57] truncate pr-2">{title}</span>
-        <span className="text-xs font-medium text-[#1B2733] whitespace-nowrap">{clamped}%</span>
+        <span className="text-sm font-medium text-[#1B2733] whitespace-nowrap">{clamped}%</span>
       </div>
       <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
         <div
@@ -228,7 +228,7 @@ function MetricPill({ label, value }: { label: string; value: number }) {
   return (
     <div className={`rounded-xl px-3 py-2 text-center ${color}`}>
       <div className="text-lg font-semibold">{value}%</div>
-      <div className="text-xs">{label}</div>
+      <div className="text-sm">{label}</div>
     </div>
   );
 }

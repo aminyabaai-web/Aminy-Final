@@ -364,14 +364,14 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
             <Video className="w-3 h-3" />
             Remote Visit Summary
           </p>
-          <p className="text-xs text-[#8A9BA8] mt-1">{formatDate(summary.createdAt)}</p>
+          <p className="text-sm text-[#8A9BA8] mt-1">{formatDate(summary.createdAt)}</p>
         </div>
       </div>
 
       {/* Reason Preview */}
       <div className="mt-3 pt-3 border-t border-[#E8E4DF]">
         <p className="text-sm text-[#5A6B7A] line-clamp-2">{summary.reasonForVisit}</p>
-        <p className="text-xs text-[#6B9080] mt-2">
+        <p className="text-sm text-[#6B9080] mt-2">
           {summary.planForNext7Days.length} action items
         </p>
       </div>
@@ -419,7 +419,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
             </p>
           )}
           {item.dueDate && (
-            <p className={`text-xs mt-2 flex items-center gap-1 ${
+            <p className={`text-sm mt-2 flex items-center gap-1 ${
               isOverdue ? 'text-red-500' : 'text-[#8A9BA8]'
             }`}>
               <Clock className="w-3 h-3" />
@@ -552,7 +552,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
       {/* Clinical disclaimer */}
       <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
         <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-        <p className="text-xs text-amber-800 leading-relaxed">
+        <p className="text-sm text-amber-800 leading-relaxed">
           Goals are suggested starting points. Review and customize with your child's BCBA or therapist for best results.
         </p>
       </div>
@@ -568,7 +568,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
               <p className="text-sm font-semibold text-[#1B2733]">
                 {activeGoals.length} Active Goal{activeGoals.length !== 1 ? 's' : ''}
               </p>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 {completedGoals.length > 0 ? `${completedGoals.length} completed · ` : ''}
                 Average progress: {activeGoals.length > 0 ? Math.round(activeGoals.reduce((sum, g) => sum + (g.targetProgress > 0 ? (g.currentProgress / g.targetProgress) * 100 : 0), 0) / activeGoals.length) : 0}%
               </p>
@@ -641,7 +641,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
               {categoryLabel}
             </span>
             {goal.targetFrequency && (
-              <span className="text-xs text-[#8A9BA8]">{goal.targetFrequency}</span>
+              <span className="text-sm text-[#8A9BA8]">{goal.targetFrequency}</span>
             )}
           </div>
           <h4 className={`font-medium ${isCompleted ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
@@ -656,10 +656,10 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
       {/* Progress bar */}
       <div className="mt-3">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-[#5A6B7A]">
+          <span className="text-sm text-[#5A6B7A]">
             {goal.currentProgress}/{goal.targetProgress} {goal.unit || 'completed'}
           </span>
-          <span className="text-xs font-medium text-[#3A4A57]">{progressPercent}%</span>
+          <span className="text-sm font-medium text-[#3A4A57]">{progressPercent}%</span>
         </div>
         <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
           <div
@@ -674,7 +674,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-3 flex items-center gap-2">
           <button
             onClick={() => onProgressUpdate(Math.min(goal.currentProgress + 1, goal.targetProgress))}
-            className="flex-1 py-2 text-xs font-medium text-[#6B9080] bg-[#6B9080]/5 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
+            className="flex-1 py-2 text-sm font-medium text-[#6B9080] bg-[#6B9080]/5 rounded-lg hover:bg-[#6B9080]/10 transition-colors"
           >
             + Log Progress
           </button>
@@ -695,14 +695,14 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
         <div className="mt-2 pt-2 border-t border-[#E8E4DF] flex flex-wrap gap-2">
           <button
             onClick={() => { onStatusChange('completed'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
           >
             <CheckCircle className="w-3.5 h-3.5" />
             Mark Complete
           </button>
           <button
             onClick={() => { onStatusChange(goal.status === 'paused' ? 'active' : 'paused'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
           >
             {goal.status === 'paused' ? (
               <><Play className="w-3.5 h-3.5" /> Resume</>
@@ -715,7 +715,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Completed badge */}
       {isCompleted && goal.completedAt && (
-        <div className="mt-3 pt-2 border-t border-green-100 flex items-center gap-2 text-xs text-green-600">
+        <div className="mt-3 pt-2 border-t border-green-100 flex items-center gap-2 text-sm text-green-600">
           <Award className="w-4 h-4" />
           Completed {new Date(goal.completedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </div>
@@ -723,7 +723,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
 
       {/* Timeline */}
       {!isCompleted && (
-        <div className="mt-2 flex items-center gap-1 text-xs text-[#8A9BA8]">
+        <div className="mt-2 flex items-center gap-1 text-sm text-[#8A9BA8]">
           <Clock className="w-3 h-3" />
           Started {new Date(goal.startedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
         </div>
@@ -746,7 +746,7 @@ function EmptyGoals() {
       <p className="text-[#5A6B7A] mb-2 max-w-xs mx-auto">
         Goals help track progress on specific developmental milestones. Ask your provider to set up SMART goals during your next visit.
       </p>
-      <p className="text-xs text-[#8A9BA8] max-w-xs mx-auto">
+      <p className="text-sm text-[#8A9BA8] max-w-xs mx-auto">
         Goals can also be created from your Aminy AI care plan suggestions.
       </p>
     </div>

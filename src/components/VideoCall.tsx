@@ -674,7 +674,7 @@ export function VideoCall({
             ].filter(Boolean).join(' · ')}
           >
             {getConnectionQualityIcon()}
-            <span className="text-xs text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
+            <span className="text-sm text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
           </div>
 
           {/* Timer */}
@@ -784,11 +784,11 @@ export function VideoCall({
                       style={msg.isLocal ? undefined : { backgroundColor: '#334155' }}
                     >
                       {!msg.isLocal && (
-                        <p className="text-xs text-slate-300 mb-1">{msg.senderName}</p>
+                        <p className="text-sm text-slate-300 mb-1">{msg.senderName}</p>
                       )}
                       <p className="text-sm">{msg.text}</p>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mt-1">
+                    <p className="text-sm text-[#5A6B7A] mt-1">
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>

@@ -320,8 +320,8 @@ function ProviderCardMini({
         <p className="text-sm text-[#5A6B7A]">{provider.title} · {provider.specialty}</p>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-sm text-amber-600">★ {provider.rating}</span>
-          <span className="text-xs text-[#8A9BA8]">({provider.reviewCount} reviews)</span>
-          <span className="text-xs text-[#6B9080] ml-auto">Next: {provider.nextAvailable}</span>
+          <span className="text-sm text-[#8A9BA8]">({provider.reviewCount} reviews)</span>
+          <span className="text-sm text-[#6B9080] ml-auto">Next: {provider.nextAvailable}</span>
         </div>
       </div>
       {selected && <Check className="w-5 h-5 text-[#6B9080] flex-shrink-0" />}
@@ -682,7 +682,7 @@ export function ConversationalBooking({
                   We will keep this simple for {childName} and only show providers available in supported states.
                 </p>
               </div>
-              <div className="ml-auto rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/80 px-3 py-2 text-xs text-[#6B9080]">
+              <div className="ml-auto rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/80 px-3 py-2 text-sm text-[#6B9080]">
                 AZ, MT, and TX cash-pay telehealth are available now.
               </div>
             </div>
@@ -719,7 +719,7 @@ export function ConversationalBooking({
             >
               <div>
                 <p className="font-medium">{concern.label}</p>
-                <p className="text-xs opacity-80">{concern.description}</p>
+                <p className="text-sm opacity-80">{concern.description}</p>
               </div>
             </OptionChip>
           ))}
@@ -865,13 +865,13 @@ export function ConversationalBooking({
                       <p className="text-sm font-medium text-emerald-800">Insurance may help cover this visit</p>
                       <div className="mt-2 space-y-1">
                         {insuranceResult.programs.slice(0, 2).map((prog, i) => (
-                          <p key={i} className="text-xs text-green-700">
+                          <p key={i} className="text-sm text-green-700">
                             {prog.name}: {prog.summary.slice(0, 80)}...
                           </p>
                         ))}
                       </div>
                       {insuranceResult.coveredServices.filter(s => s.covered).length > 0 && (
-                        <p className="text-xs text-green-600 mt-1">
+                        <p className="text-sm text-green-600 mt-1">
                           Covered: {insuranceResult.coveredServices.filter(s => s.covered).map(s => s.name).join(', ')}
                         </p>
                       )}
@@ -891,7 +891,7 @@ export function ConversationalBooking({
                   <div className="space-y-2">
                     <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-3">
                       <p className="text-sm text-amber-800">We could not verify coverage cleanly, so the safest route today is self-pay.</p>
-                      <p className="mt-1 text-xs text-amber-700">You can still book now and keep a reimbursement packet for later.</p>
+                      <p className="mt-1 text-sm text-amber-700">You can still book now and keep a reimbursement packet for later.</p>
                     </div>
                     <label className="flex items-center gap-2 text-sm text-[#5A6B7A] cursor-pointer">
                       <input
@@ -1048,10 +1048,10 @@ export function ConversationalBooking({
                   {generateSuperbill && (
                     <div className="flex items-center gap-2 mt-1">
                       <FileText className="w-4 h-4 text-primary" />
-                      <span className="text-xs text-[#6B9080]">Superbill will be prepared after the session</span>
+                      <span className="text-sm text-[#6B9080]">Superbill will be prepared after the session</span>
                     </div>
                   )}
-                  <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-xs text-[#5A6B7A]">
+                  <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-sm text-[#5A6B7A]">
                     Free changes at least 24 hours ahead. Late changes and no-shows can reduce the refund amount.
                   </div>
                 </div>
@@ -1068,7 +1068,7 @@ export function ConversationalBooking({
                   Confirm Booking
                 </motion.button>
 
-                <p className="mt-3 text-center text-xs text-[#5A6B7A]">
+                <p className="mt-3 text-center text-sm text-[#5A6B7A]">
                   You will receive a confirmation email, reminder, and secure video-room link.
                 </p>
               </div>

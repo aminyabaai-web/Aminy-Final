@@ -126,7 +126,7 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
   core: {
     aiMessagesPerDay: null,
     juniorAccess: true,
-    maxChildren: 2,
+    maxChildren: null,
     reportExports: 'caregiver',
     providerFeatures: false,
     storageLimitMb: 5_000, // 5 GB — full family archive (IEPs, evals, reports)
@@ -135,7 +135,7 @@ export const tierEntitlements: Record<CanonicalTierName, TierEntitlements> = {
   pro: {
     aiMessagesPerDay: null,
     juniorAccess: true,
-    maxChildren: 3,
+    maxChildren: null,
     reportExports: 'provider',
     providerFeatures: true,
     storageLimitMb: 25_000, // 25 GB — multi-child, video clips, session recordings
@@ -1019,7 +1019,7 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'full-reports',           // Monthly analytics
     'vault-access',           // Document storage
     'ai-document-analysis',   // AI reads IEPs, medical records
-    'multi-child',            // Up to 2 children
+    'multi-child',            // Unlimited children
     'marketplace-access',     // Book sessions (pay per use)
     'care-plan-export',       // Export for providers
   ],
@@ -1035,7 +1035,7 @@ const tierFeatureMap: Record<TierType, string[]> = {
     'full-reports',
     'vault-access',
     'ai-document-analysis',
-    'multi-child',            // Up to 3 children
+    'multi-child',            // Unlimited children
     'marketplace-access',
     'care-plan-export',
     'clinical-reports',       // IEP-ready reports
@@ -1128,7 +1128,7 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'AI memory: 5,000 facts — AI gets smarter every day',
       'Adaptive plans that learn what works',
       '10% off marketplace sessions',
-      'Support up to 2 children',
+      'Unlimited children profiles',
       'Full sensory regulation toolkit',
       'HSA/FSA eligible',
     ],
@@ -1139,14 +1139,14 @@ export function getTierFeatureDescriptions(tier: TierType): string[] {
       'AI memory: 5,000 facts — AI gets smarter every day',
       'Adaptive plans that learn what works',
       '10% off marketplace sessions',
-      'Support up to 2 children',
+      'Unlimited children profiles',
       'Full sensory regulation toolkit',
       'HSA/FSA eligible',
     ],
     pro: [
       'Everything in Core, plus:',
       'AI memory: 15,000 facts — never forgets a strategy',
-      'Support up to 3 children',
+      'Unlimited children profiles',
       'Clinical-grade progress reports (IEP-ready)',
       'Provider sharing portal',
       '20% off all marketplace sessions',
@@ -1311,9 +1311,9 @@ export function includesBCBAConsult(tier: TierType | undefined): boolean {
 export function getMaxChildren(tier: TierType | undefined): number | null {
   const limits: Record<TierType, number | null> = {
     free: 1,
-    starter: 2,    // Legacy: same as Core
-    core: 2,
-    pro: 3,
+    starter: null, // Legacy: same as Core (unlimited)
+    core: null,    // unlimited — no per-child pricing penalty
+    pro: null,     // unlimited — no per-child pricing penalty
     proplus: null, // unlimited (Family Plan)
   };
   return tier ? limits[tier] : 1;

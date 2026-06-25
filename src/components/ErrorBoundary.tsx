@@ -302,7 +302,7 @@ function DefaultErrorFallback({
 
         {/* Support link */}
         <div className="mt-4">
-          <p className="text-xs text-[#8A9BA8]">
+          <p className="text-sm text-[#8A9BA8]">
             If this problem persists, please{' '}
             <a 
               href="mailto:support@aminy.ai" 

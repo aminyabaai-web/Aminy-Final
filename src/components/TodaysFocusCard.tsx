@@ -64,7 +64,7 @@ export function TodaysFocusCard({
                 <h3 className={`${isPrimary ? 'text-lg' : 'text-sm'} font-semibold mb-1`}>
                   {task.title}
                 </h3>
-                <p className={`${isPrimary ? 'text-sm' : 'text-xs'} text-muted-foreground mb-2`}>
+                <p className={`${isPrimary ? 'text-sm' : 'text-sm'} text-muted-foreground mb-2`}>
                   {task.description}
                 </p>
               </div>
@@ -75,10 +75,10 @@ export function TodaysFocusCard({
             </div>
 
             <div className="flex items-center gap-2 flex-wrap mb-3">
-              <Badge variant="secondary" className={`${colors.bg} ${colors.text} text-xs`}>
+              <Badge variant="secondary" className={`${colors.bg} ${colors.text} text-sm`}>
                 {skillTypeLabels[task.skillType]}
               </Badge>
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
                 <Clock className="w-3 h-3" />
                 <span>{task.timeEstimate}</span>
               </div>
@@ -88,7 +88,7 @@ export function TodaysFocusCard({
               <div className="p-2 bg-accent/5 rounded-lg border border-accent/10 mb-3">
                 <div className="flex items-start gap-2">
                   <Sparkles className="w-3 h-3 text-accent mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-[#3A4A57]">
+                  <p className="text-sm text-[#3A4A57]">
                     <span className="font-medium">Why it helps: </span>
                     {task.whyItHelps}
                   </p>
@@ -136,7 +136,7 @@ export function TodaysFocusCard({
               onClick={() => setIsExpanded(!isExpanded)}
               className="h-8 px-3 gap-1 text-accent hover:bg-accent/10"
             >
-              <span className="text-xs font-medium">
+              <span className="text-sm font-medium">
                 {isExpanded ? 'Show less' : `+${additionalTasks.length} more`}
               </span>
               {isExpanded ? (

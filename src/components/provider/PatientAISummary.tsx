@@ -462,15 +462,15 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             {insights.map((insight, i) => (
               <div key={i} className="bg-neutral-50 dark:bg-slate-700 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-sm">
                     {insight.category}
                   </Badge>
-                  <span className="text-xs text-[#5A6B7A]">
+                  <span className="text-sm text-[#5A6B7A]">
                     {Math.round(insight.confidence * 100)}% confidence
                   </span>
                 </div>
                 <p className="text-neutral-800 dark:text-neutral-200 mb-2">{insight.insight}</p>
-                <p className="text-xs text-[#5A6B7A] dark:text-neutral-400 flex items-center gap-1">
+                <p className="text-sm text-[#5A6B7A] dark:text-neutral-400 flex items-center gap-1">
                   <FileText className="w-3 h-3" />
                   {insight.source}
                 </p>
@@ -492,7 +492,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
+                    <p className="text-sm font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
                       <AlertTriangle className="w-3 h-3 text-amber-500" />
                       Known Triggers
                     </p>
@@ -506,7 +506,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                     </ul>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
+                    <p className="text-sm font-medium text-[#5A6B7A] mb-2 flex items-center gap-1">
                       <CheckCircle className="w-3 h-3 text-green-500" />
                       Successful Strategies
                     </p>
@@ -623,7 +623,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                     onClick={() => setExpandedSuggestion(expandedSuggestion === suggestion.id ? null : suggestion.id)}
                   >
                     <div className="flex items-center gap-2">
-                      <Badge variant={suggestion.status === 'approved' ? 'default' : 'secondary'} className="text-xs">
+                      <Badge variant={suggestion.status === 'approved' ? 'default' : 'secondary'} className="text-sm">
                         {suggestion.type}
                       </Badge>
                       <h5 className="font-medium text-[#1B2733] dark:text-white">{suggestion.title}</h5>
@@ -647,12 +647,12 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                   {expandedSuggestion === suggestion.id && (
                     <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-slate-600 space-y-2">
                       <p className="text-sm text-neutral-700 dark:text-neutral-300">{suggestion.description}</p>
-                      <p className="text-xs text-[#5A6B7A] dark:text-neutral-400">
+                      <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
                         <strong>Rationale:</strong> {suggestion.rationale}
                       </p>
                       {suggestion.parentResponse && (
                         <div className="bg-green-100 dark:bg-green-900/30 rounded p-2 mt-2">
-                          <p className="text-xs text-green-700 dark:text-green-300">
+                          <p className="text-sm text-green-700 dark:text-green-300">
                             <strong>Parent response:</strong> {suggestion.parentResponse}
                           </p>
                         </div>

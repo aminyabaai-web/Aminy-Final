@@ -235,7 +235,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
             <Badge
               key={idx}
               variant="secondary"
-              className={`${statusConfig.bgColor} ${statusConfig.color} border-0 text-xs px-2 py-0.5`}
+              className={`${statusConfig.bgColor} ${statusConfig.color} border-0 text-sm px-2 py-0.5`}
             >
               <StatusIcon className="w-3 h-3 mr-1" />
               {config?.shortLabel || cred.credential_type.toUpperCase()}
@@ -243,7 +243,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
           );
         })}
         {credentials.length === 0 && (
-          <Badge variant="secondary" className="bg-neutral-100 text-[#5A6B7A] border-0 text-xs">
+          <Badge variant="secondary" className="bg-neutral-100 text-[#5A6B7A] border-0 text-sm">
             No credentials
           </Badge>
         )}
@@ -271,7 +271,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
             <p className="font-medium text-[#1B2733] dark:text-white text-sm">
               Credential Verification
             </p>
-            <p className={`text-xs ${STATUS_CONFIG[overallStatus].color}`}>
+            <p className={`text-sm ${STATUS_CONFIG[overallStatus].color}`}>
               {verifiedCount}/{credentials.length} credentials verified
             </p>
           </div>
@@ -303,7 +303,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${config?.color || 'from-gray-400 to-gray-500'} flex items-center justify-center`}>
-                    <span className="text-white text-xs font-bold">
+                    <span className="text-white text-sm font-bold">
                       {config?.shortLabel?.slice(0, 3) || cred.credential_type.slice(0, 3).toUpperCase()}
                     </span>
                   </div>
@@ -314,12 +314,12 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
                       </p>
                       <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />
                     </div>
-                    <p className="text-xs text-[#5A6B7A] dark:text-slate-400">
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                       #{cred.credential_number}
                       {cred.state && ` • ${cred.state}`}
                     </p>
                     {cred.expiration_date && (
-                      <p className={`text-xs ${isExpired ? 'text-rose-600' : expiresWarning ? 'text-amber-600' : 'text-neutral-400'}`}>
+                      <p className={`text-sm ${isExpired ? 'text-rose-600' : expiresWarning ? 'text-amber-600' : 'text-neutral-400'}`}>
                         {isExpired ? 'Expired' : 'Expires'}: {new Date(cred.expiration_date).toLocaleDateString()}
                       </p>
                     )}
@@ -333,7 +333,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
                       size="sm"
                       onClick={() => cred.id && handleVerify(cred.id)}
                       disabled={verifyingId === cred.id}
-                      className="text-xs h-8"
+                      className="text-sm h-8"
                     >
                       {verifyingId === cred.id ? (
                         <RefreshCw className="w-3 h-3 animate-spin mr-1" />
@@ -344,7 +344,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
                     </Button>
                   )}
                   {cred.verification_status === 'verified' && cred.verified_at && (
-                    <span className="text-xs text-emerald-600 dark:text-emerald-400">
+                    <span className="text-sm text-emerald-600 dark:text-emerald-400">
                       Verified {new Date(cred.verified_at).toLocaleDateString()}
                     </span>
                   )}
@@ -365,7 +365,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
 
           {/* Add credential button */}
           {credentials.length > 0 && (
-            <Button variant="outline" size="sm" className="w-full text-xs">
+            <Button variant="outline" size="sm" className="w-full text-sm">
               + Add Another Credential
             </Button>
           )}
@@ -381,7 +381,7 @@ export function VerifiedBadge({ status }: { status: VerificationStatus }) {
   const Icon = config.icon;
 
   return (
-    <span className={`inline-flex items-center gap-1 text-xs font-medium ${config.color}`}>
+    <span className={`inline-flex items-center gap-1 text-sm font-medium ${config.color}`}>
       <Icon className="w-3.5 h-3.5" />
       {config.label}
     </span>

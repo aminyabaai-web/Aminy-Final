@@ -115,7 +115,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
     <div className="mb-3">
       <button
         onClick={onToggle}
-        className="flex items-center gap-1.5 text-xs font-medium text-[#8E9BAA] mb-2 hover:text-[#5A6B7A] transition-colors"
+        className="flex items-center gap-1.5 text-sm font-medium text-[#8E9BAA] mb-2 hover:text-[#5A6B7A] transition-colors"
       >
         <Sparkles className="w-3.5 h-3.5 animate-pulse text-[#6B9080]" />
         Thinking...
@@ -139,7 +139,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.15, duration: 0.3 }}
-                    className="flex items-center gap-2 text-xs"
+                    className="flex items-center gap-2 text-sm"
                   >
                     <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${
                       step.status === 'complete' ? 'text-[#43AA8B]'

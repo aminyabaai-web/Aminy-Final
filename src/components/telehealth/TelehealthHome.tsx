@@ -237,7 +237,7 @@ export function TelehealthHome({
             {featuredProvidersProvenance ? <DataProvenanceBadge provenance={featuredProvidersProvenance} /> : null}
           </div>
           <p className="text-sm text-sky-800">{providerAvailabilityNote}</p>
-          <p className="mt-2 text-xs leading-5 text-sky-700">
+          <p className="mt-2 text-sm leading-5 text-sky-700">
             Cash-pay booking is live in supported states, and Aminy keeps the booking, reminders, secure room link, and follow-up together in one place.
           </p>
         </div>
@@ -315,7 +315,7 @@ export function TelehealthHome({
                   {concern.icon}
                 </span>
                 <span className="text-sm font-medium leading-5 text-[#1B2733] line-clamp-2">{concern.name}</span>
-                <span className="mt-2 text-xs text-[#5A6B7A]">Tap to see the safest next step</span>
+                <span className="mt-2 text-sm text-[#5A6B7A]">Tap to see the safest next step</span>
               </button>
             ))}
           </div>
@@ -408,13 +408,13 @@ export function TelehealthHome({
                       <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
                       <div className="flex items-center gap-2 mt-1">
                         {provider.rating && (
-                          <div className="flex items-center gap-1 text-xs text-[#5A6B7A]">
+                          <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                             <Star className="w-3 h-3 text-amber-400 fill-current" />
                             {provider.rating}
                           </div>
                         )}
-                        <span className="text-xs text-[#8A9BA8]">•</span>
-                        <span className="text-xs text-[#5A6B7A]">
+                        <span className="text-sm text-[#8A9BA8]">•</span>
+                        <span className="text-sm text-[#5A6B7A]">
                           From ${provider.consultPrice}
                         </span>
                       </div>
@@ -458,7 +458,7 @@ export function TelehealthHome({
                 <span className="font-medium">Emergency?</span>{' '}
                 <a href="tel:911" className="underline font-semibold">Call 911</a>
               </p>
-              <p className="text-xs text-red-600 mt-1">
+              <p className="text-sm text-red-600 mt-1">
                 Aminy provides guidance and coaching, not emergency medical care.
               </p>
             </div>

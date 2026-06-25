@@ -219,7 +219,7 @@ export function ManageCaregivers({
               <Badge className={`${roleColors[role]} mb-1`}>
                 {roleLabels[role]}
               </Badge>
-              <p className="text-muted-foreground text-xs">{roleDescriptions[role]}</p>
+              <p className="text-muted-foreground text-sm">{roleDescriptions[role]}</p>
             </div>
           ))}
         </div>

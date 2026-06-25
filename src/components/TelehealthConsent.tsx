@@ -121,7 +121,7 @@ export function TelehealthConsent({
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
               <p className="font-medium text-green-900 mb-2">Services MAY include:</p>
-              <ul className="space-y-1 text-green-800 text-xs">
+              <ul className="space-y-1 text-green-800 text-sm">
                 <li>• Parent coaching and training</li>
                 <li>• Behavioral strategy guidance</li>
                 <li>• Progress review and goal setting</li>
@@ -131,7 +131,7 @@ export function TelehealthConsent({
             </div>
             <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="font-medium text-red-900 mb-2">Services DO NOT include:</p>
-              <ul className="space-y-1 text-red-800 text-xs">
+              <ul className="space-y-1 text-red-800 text-sm">
                 <li>• Medical diagnosis or treatment</li>
                 <li>• Prescription medications</li>
                 <li>• Direct therapy with your child</li>
@@ -173,7 +173,7 @@ export function TelehealthConsent({
             </li>
           </ul>
           <div className="p-3 bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg">
-            <p className="text-[#4A6478] text-xs">
+            <p className="text-[#4A6478] text-sm">
               <strong>Technical requirements:</strong> Stable internet connection, device with camera/microphone,
               current web browser or the Aminy app.
             </p>
@@ -227,11 +227,11 @@ export function TelehealthConsent({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="p-2 bg-white rounded border border-red-200">
                 <p className="font-bold text-red-900">Emergency: 911</p>
-                <p className="text-xs text-red-700">Immediate danger</p>
+                <p className="text-sm text-red-700">Immediate danger</p>
               </div>
               <div className="p-2 bg-white rounded border border-red-200">
                 <p className="font-bold text-red-900">Crisis Line: 988</p>
-                <p className="text-xs text-red-700">Mental health crisis</p>
+                <p className="text-sm text-red-700">Mental health crisis</p>
               </div>
             </div>
           </div>
@@ -463,10 +463,10 @@ export function TelehealthConsent({
                     <div className="text-left">
                       <h3 className="font-medium text-[#1B2733]">{section.title}</h3>
                       {section.required && !isAccepted && (
-                        <span className="text-xs text-red-500">Required</span>
+                        <span className="text-sm text-red-500">Required</span>
                       )}
                       {isAccepted && (
-                        <span className="text-xs text-green-600 flex items-center gap-1">
+                        <span className="text-sm text-green-600 flex items-center gap-1">
                           <CheckCircle className="w-3 h-3" /> Acknowledged
                         </span>
                       )}
@@ -539,7 +539,7 @@ export function TelehealthConsent({
           </Button>
         </div>
 
-        <p className="text-xs text-[#8A9BA8] text-center mt-4">
+        <p className="text-sm text-[#8A9BA8] text-center mt-4">
           By clicking "I Consent & Agree", you acknowledge that you have read, understood, and agree
           to all terms and conditions. A copy will be sent to your email.
         </p>
@@ -553,7 +553,7 @@ export function TelehealthConsent({
  */
 export function TelehealthMiniDisclaimer({ className = '' }: { className?: string }) {
   return (
-    <div className={`text-xs text-[#5A6B7A] ${className}`}>
+    <div className={`text-sm text-[#5A6B7A] ${className}`}>
       <p>
         Sessions are parent coaching, not medical treatment. Providers are independent professionals,
         not Aminy employees. By booking, you agree to our{' '}

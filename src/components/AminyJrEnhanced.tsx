@@ -479,7 +479,7 @@ export function AminyJrEnhanced({
               </div>
               <div>
                 <h1 className="text-lg text-[#1B2733]">Aminy Jr</h1>
-                <p className="text-xs text-[#5A6B7A]">Hi {childName}!</p>
+                <p className="text-sm text-[#5A6B7A]">Hi {childName}!</p>
               </div>
             </div>
           </div>
@@ -642,11 +642,11 @@ export function AminyJrEnhanced({
                       <h3 className="text-lg text-[#1B2733] mb-1">{activity.title}</h3>
                       <p className="text-sm text-[#5A6B7A] mb-3">{activity.description}</p>
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-sm">
                           <Star className="w-3 h-3 mr-1 fill-yellow-500 text-yellow-500" />
                           {activity.stars} stars
                         </Badge>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-sm">
                           {activity.duration}
                         </Badge>
                       </div>

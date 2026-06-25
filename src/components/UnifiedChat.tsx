@@ -227,13 +227,13 @@ export function UnifiedChat({
                         <div className={`p-1 ${colors.bg} rounded`}>
                           {getAuthorIcon(getAuthor(message))}
                         </div>
-                        <span className="text-xs font-medium text-muted-foreground">
+                        <span className="text-sm font-medium text-muted-foreground">
                           {getAuthorLabel(getAuthor(message))}
                         </span>
                       </>
                     )}
                     {isUser && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-sm text-muted-foreground">
                         {new Date(message.timestamp).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -256,7 +256,7 @@ export function UnifiedChat({
 
                   {!isUser && (
                     <div className="flex items-center gap-2 mt-1 ml-2">
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-sm text-muted-foreground">
                         {new Date(message.timestamp).toLocaleTimeString([], {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -314,7 +314,7 @@ export function UnifiedChat({
             )}
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2 text-center">
+        <p className="text-sm text-muted-foreground mt-2 text-center">
           Aminy is here to support you—not replace medical advice. For emergencies, call 911.
         </p>
       </div>

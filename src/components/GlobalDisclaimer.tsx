@@ -27,7 +27,7 @@ export function GlobalDisclaimer({
   showIcon = false
 }: GlobalDisclaimerProps) {
 
-  const baseClasses = "text-xs leading-relaxed text-muted-foreground";
+  const baseClasses = "text-sm leading-relaxed text-muted-foreground";
 
   const variantClasses: Record<string, string> = {
     footer: "text-center p-3 border-t border-[#E8E4DF] bg-[#FAF7F2]/50",
@@ -46,7 +46,7 @@ export function GlobalDisclaimer({
         <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
         <div className="flex-1">
           <p className="font-semibold text-amber-900 text-sm mb-1">Important Notice</p>
-          <p className="text-amber-800 text-xs leading-relaxed">{GLOBAL_DISCLAIMER_TEXT}</p>
+          <p className="text-amber-800 text-sm leading-relaxed">{GLOBAL_DISCLAIMER_TEXT}</p>
         </div>
       </div>
     );
@@ -93,7 +93,7 @@ export function ClinicalScopeDisclaimer({
 }: ClinicalScopeDisclaimerProps) {
   if (compact) {
     return (
-      <div className={`flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs ${className}`}>
+      <div className={`flex items-center gap-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-sm ${className}`}>
         <Info className="w-4 h-4 text-amber-600 flex-shrink-0" />
         <span className="text-amber-800">{CLINICAL_SCOPE_TEXT}</span>
       </div>
@@ -110,10 +110,10 @@ export function ClinicalScopeDisclaimer({
           <h4 className="font-semibold text-amber-900 text-sm mb-1">
             Understanding Aminy's Role
           </h4>
-          <p className="text-amber-800 text-xs leading-relaxed mb-2">
+          <p className="text-amber-800 text-sm leading-relaxed mb-2">
             {CLINICAL_SCOPE_TEXT}
           </p>
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex items-center gap-2 text-sm">
             <span className="text-amber-600">Need clinical support?</span>
             <a
               href="#find-providers"
@@ -147,7 +147,7 @@ export function ClinicalScopeDisclaimer({
  */
 export function ChatDisclaimerBanner({ className = '' }: { className?: string }) {
   return (
-    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-[#FAF7F2] border-b border-[#E8E4DF] text-xs text-[#5A6B7A] ${className}`}>
+    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-[#FAF7F2] border-b border-[#E8E4DF] text-sm text-[#5A6B7A] ${className}`}>
       <Info className="w-3 h-3 flex-shrink-0" />
       <span>Aminy provides support, not clinical care. For emergencies, call 911 or 988.</span>
     </div>
@@ -165,7 +165,7 @@ export function FirstMessageDisclaimer({ className = '' }: { className?: string 
         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
           <Info className="w-3 h-3 text-blue-600" />
         </div>
-        <div className="flex-1 text-xs">
+        <div className="flex-1 text-sm">
           <p className="text-blue-900 font-medium mb-1">Before we chat</p>
           <p className="text-blue-700 leading-relaxed">
             I'm here to support you with strategies, routines, and resources. For clinical therapy or diagnosis, please work with licensed professionals.
@@ -199,7 +199,7 @@ export function UrgentHelpDisclaimer({ className = '' }: UrgentHelpDisclaimerPro
           <h4 className="font-semibold text-red-900 mb-1 text-sm">
             Emergency Notice
           </h4>
-          <p className="text-red-800 text-xs leading-relaxed">
+          <p className="text-red-800 text-sm leading-relaxed">
             {URGENT_HELP_TEXT}
           </p>
           <div className="mt-3 space-y-2">
@@ -232,7 +232,7 @@ export function CrisisResources() {
         <h4 className="font-semibold text-blue-900 mb-2 text-sm">
           Additional Crisis Resources
         </h4>
-        <div className="space-y-3 text-[#4A6478] text-xs">
+        <div className="space-y-3 text-[#4A6478] text-sm">
           <div>
             <p className="font-medium">National Suicide Prevention Lifeline</p>
             <a href="tel:988" className="underline hover:text-blue-900">Call or text: 988</a>
@@ -254,7 +254,7 @@ export function CrisisResources() {
       </div>
       
       <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-        <p className="text-amber-800 text-xs font-medium text-center">
+        <p className="text-amber-800 text-sm font-medium text-center">
           Always contact emergency services for immediate safety concerns.
         </p>
       </div>

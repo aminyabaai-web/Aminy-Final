@@ -208,11 +208,11 @@ export function PaidCaregiverMode({
             </p>
             <div className="flex flex-wrap gap-2 mb-4">
               {FISCAL_AGENTS.slice(0, 4).map((agent) => (
-                <Badge key={agent.id} variant="outline" className="text-xs">
+                <Badge key={agent.id} variant="outline" className="text-sm">
                   {agent.name.split(' ')[0]}
                 </Badge>
               ))}
-              <Badge variant="outline" className="text-xs">+ more</Badge>
+              <Badge variant="outline" className="text-sm">+ more</Badge>
             </div>
             <Button onClick={onSetupWaiver} className="bg-primary hover:bg-[#216982]">
               <Settings className="w-4 h-4 mr-2" />
@@ -351,19 +351,19 @@ export function PaidCaregiverMode({
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
               {formatHours(weeklyHours)}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Logged</div>
+            <div className="text-sm text-[#5A6B7A]">Logged</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold text-blue-600">
               {formatHours(hoursRemaining)}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Remaining</div>
+            <div className="text-sm text-[#5A6B7A]">Remaining</div>
           </div>
           <div>
             <div className="text-xl sm:text-2xl font-bold text-green-600">
               {weeklyEntries.filter((e) => e.status === 'completed').length}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Entries</div>
+            <div className="text-sm text-[#5A6B7A]">Entries</div>
           </div>
         </div>
       </Card>
@@ -410,12 +410,12 @@ export function PaidCaregiverMode({
                       <div className="font-medium text-sm text-[#1B2733]">
                         {service.description}
                       </div>
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         {entry.clockIn.toLocaleDateString()} • {formatHours(duration)}
                       </div>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-sm">
                     {service.code}
                   </Badge>
                 </div>
@@ -700,7 +700,7 @@ export function WaiverSetupFlow({
                     />
                     <div>
                       <div className="font-medium">{service.description}</div>
-                      <div className="text-xs text-[#5A6B7A]">
+                      <div className="text-sm text-[#5A6B7A]">
                         Code: {service.code} • ${service.hourlyRange[0]}-${service.hourlyRange[1]}/hr
                       </div>
                     </div>

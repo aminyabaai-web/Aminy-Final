@@ -671,7 +671,7 @@ export function VideoCall({
           {/* Connection quality */}
           <div className="flex items-center gap-1" title={`Connection: ${connectionQuality}`}>
             {getConnectionQualityIcon()}
-            <span className="text-xs text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
+            <span className="text-sm text-slate-400 hidden sm:inline capitalize">{connectionQuality}</span>
           </div>
 
           {/* Timer */}
@@ -782,11 +782,11 @@ export function VideoCall({
                       style={msg.isLocal ? undefined : { backgroundColor: '#374151' }}
                     >
                       {!msg.isLocal && (
-                        <p className="text-xs text-slate-300 mb-1">{msg.senderName}</p>
+                        <p className="text-sm text-slate-300 mb-1">{msg.senderName}</p>
                       )}
                       <p className="text-sm">{msg.text}</p>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mt-1">
+                    <p className="text-sm text-[#5A6B7A] mt-1">
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
@@ -844,7 +844,7 @@ export function VideoCall({
                 placeholder="Type session notes here..."
                 className="w-full h-32 p-2 border rounded-lg text-sm resize-none"
               />
-              <p className="mt-2 text-xs text-[#5A6B7A]">
+              <p className="mt-2 text-sm text-[#5A6B7A]">
                 Notes stay with this session and are saved when the call ends.
               </p>
               <button

@@ -58,7 +58,7 @@ export function UpcomingSessionsStrip({
         {sessions.length > 2 && onViewAll && (
           <button
             onClick={onViewAll}
-            className="text-xs text-accent hover:text-accent/80 flex items-center gap-1"
+            className="text-sm text-accent hover:text-accent/80 flex items-center gap-1"
           >
             View all
             <ChevronRight className="w-3 h-3" />
@@ -91,7 +91,7 @@ export function UpcomingSessionsStrip({
                   <p className="text-sm font-medium truncate">{session.title}</p>
                   <Badge 
                     variant="secondary" 
-                    className={`text-xs ${
+                    className={`text-sm ${
                       session.type === 'telehealth' 
                         ? 'bg-[#EEF4F8] text-blue-700' 
                         : 'bg-purple-50 text-purple-700'
@@ -100,7 +100,7 @@ export function UpcomingSessionsStrip({
                     {session.type === 'telehealth' ? 'Video' : 'Jr'}
                   </Badge>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span>{formatDate(session.date)}</span>
                   <span>•</span>
                   <span>{session.time}</span>

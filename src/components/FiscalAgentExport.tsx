@@ -431,7 +431,7 @@ export function FiscalAgentExport({
           <div className="mb-4 p-4 bg-neutral-50 rounded-lg border border-neutral-200">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               <div>
-                <label className="block text-xs text-[#5A6B7A] mb-1">Date</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Date</label>
                 <Input
                   type="date"
                   value={newEntry.date?.toISOString().split('T')[0]}
@@ -439,7 +439,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#5A6B7A] mb-1">Service Code</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Service Code</label>
                 <select
                   value={newEntry.serviceCode}
                   onChange={(e) => setNewEntry(prev => ({ ...prev, serviceCode: e.target.value }))}
@@ -451,7 +451,7 @@ export function FiscalAgentExport({
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-[#5A6B7A] mb-1">Start Time</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">Start Time</label>
                 <Input
                   type="time"
                   value={newEntry.startTime}
@@ -459,7 +459,7 @@ export function FiscalAgentExport({
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#5A6B7A] mb-1">End Time</label>
+                <label className="block text-sm text-[#5A6B7A] mb-1">End Time</label>
                 <Input
                   type="time"
                   value={newEntry.endTime}
@@ -483,13 +483,13 @@ export function FiscalAgentExport({
           <table className="w-full">
             <thead>
               <tr className="border-b border-neutral-200">
-                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Date</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Code</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Service</th>
-                <th className="text-left py-3 px-2 text-xs font-medium text-[#5A6B7A]">Time</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Units</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Rate</th>
-                <th className="text-right py-3 px-2 text-xs font-medium text-[#5A6B7A]">Amount</th>
+                <th className="text-left py-3 px-2 text-sm font-medium text-[#5A6B7A]">Date</th>
+                <th className="text-left py-3 px-2 text-sm font-medium text-[#5A6B7A]">Code</th>
+                <th className="text-left py-3 px-2 text-sm font-medium text-[#5A6B7A]">Service</th>
+                <th className="text-left py-3 px-2 text-sm font-medium text-[#5A6B7A]">Time</th>
+                <th className="text-right py-3 px-2 text-sm font-medium text-[#5A6B7A]">Units</th>
+                <th className="text-right py-3 px-2 text-sm font-medium text-[#5A6B7A]">Rate</th>
+                <th className="text-right py-3 px-2 text-sm font-medium text-[#5A6B7A]">Amount</th>
                 <th className="py-3 px-2"></th>
               </tr>
             </thead>
@@ -599,7 +599,7 @@ export function FiscalAgentExport({
                 </div>
                 <div className="text-right">
                   <p className="font-medium text-[#1B2733]">${service.rate.toFixed(2)}</p>
-                  <p className="text-xs text-[#5A6B7A]">per {service.unit}</p>
+                  <p className="text-sm text-[#5A6B7A]">per {service.unit}</p>
                 </div>
               </div>
             ))}

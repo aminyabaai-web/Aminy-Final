@@ -24,7 +24,7 @@ export function Logo({ size = 'md', showText = true, showTagline = false }: Logo
     sm: { 
       icon: 22, // Reduced from 24 (about 8% smaller)
       text: 'text-lg', 
-      tagline: 'text-xs',
+      tagline: 'text-sm',
       iconMargin: 'mr-3',
       taglineSize: '9px',
       wordmarkSize: '18px',

@@ -135,7 +135,7 @@ export function SessionBundles({
                 </div>
                 <div className="text-right">
                   <div className="font-bold text-purple-600">${bundle.bundlePrice}</div>
-                  <div className="text-xs text-[#8A9BA8] line-through">
+                  <div className="text-sm text-[#8A9BA8] line-through">
                     ${bundle.regularPrice}
                   </div>
                 </div>
@@ -251,7 +251,7 @@ export function SessionBundles({
                 </div>
 
                 {/* Validity */}
-                <div className="flex items-center gap-1 text-xs text-[#5A6B7A] mb-4">
+                <div className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-4">
                   <Calendar className="w-3 h-3" />
                   <span>Valid for {bundle.validityDays} days</span>
                 </div>
@@ -376,7 +376,7 @@ export function BundleCredits({
         </div>
       </div>
 
-      <p className="text-xs text-[#6B9080]">
+      <p className="text-sm text-[#6B9080]">
         Credits expire on {expiryDate.toLocaleDateString()}. Use them with any provider!
       </p>
     </Card>

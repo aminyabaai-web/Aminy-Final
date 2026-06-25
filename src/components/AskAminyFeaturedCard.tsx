@@ -78,7 +78,7 @@ export function AskAminyFeaturedCard({
           <Sparkles className="w-4 h-4 text-accent" />
           <span className="text-sm font-medium text-accent">Advanced AI Features:</span>
         </div>
-        <div className="flex flex-wrap gap-2 text-xs">
+        <div className="flex flex-wrap gap-2 text-sm">
           <span className="bg-accent/10 text-accent px-2 py-1 rounded-full">Real-time streaming</span>
           <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full">Context-aware</span>
           <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Persistent history</span>

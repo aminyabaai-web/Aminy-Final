@@ -112,7 +112,7 @@ export function OnboardingQuickStart({
           <div className="text-center mt-2">
             <button
               onClick={onSkipToLogin}
-              className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A]"
+              className="text-sm text-[#8A9BA8] hover:text-[#5A6B7A]"
             >
               Already have an account? Log in
             </button>
@@ -155,7 +155,7 @@ export function OnboardingQuickStart({
                   autoComplete="off"
                   aria-describedby="name-hint"
                 />
-                <p id="name-hint" className="text-xs text-[#8A9BA8] mt-1 text-left">
+                <p id="name-hint" className="text-sm text-[#8A9BA8] mt-1 text-left">
                   First name only — we keep everything private
                 </p>
               </div>
@@ -178,7 +178,7 @@ export function OnboardingQuickStart({
                   aria-valuenow={childAge}
                   aria-label={`Child's age: ${childAge} years`}
                 />
-                <div className="flex justify-between text-xs text-[#8A9BA8] mt-1">
+                <div className="flex justify-between text-sm text-[#8A9BA8] mt-1">
                   <span>2</span>
                   <span>18</span>
                 </div>
@@ -263,7 +263,7 @@ export function OnboardingQuickStart({
                     </div>
                   </div>
                 </div>
-                <div className="text-xs text-white/60 mt-3 flex items-center gap-1">
+                <div className="text-sm text-white/60 mt-3 flex items-center gap-1">
                   <Sparkles size={12} /> Recommended for first visit
                 </div>
               </button>
@@ -286,7 +286,7 @@ export function OnboardingQuickStart({
             </div>
 
             {/* Privacy note */}
-            <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-[#8A9BA8]">
+            <div className="mt-6 flex items-center justify-center gap-1.5 text-sm text-[#8A9BA8]">
               <Shield size={12} />
               <span>HIPAA-conscious • No data shared without consent</span>
             </div>

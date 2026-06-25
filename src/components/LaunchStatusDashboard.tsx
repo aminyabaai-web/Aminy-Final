@@ -251,7 +251,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
                 <div className="flex items-start gap-3">
                   {getStatusIcon(item.status)}
                   <div>
-                    <div className="text-xs text-[#5A6B7A] mb-1">{item.category}</div>
+                    <div className="text-sm text-[#5A6B7A] mb-1">{item.category}</div>
                     <h3 className="text-[#1B2733] mb-2">{item.title}</h3>
                     <Progress value={item.completion} className="h-2 w-48" />
                   </div>

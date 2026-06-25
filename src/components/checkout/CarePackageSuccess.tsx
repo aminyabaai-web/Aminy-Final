@@ -223,7 +223,7 @@ export function CarePackageSuccess({ onContinue }: CarePackageSuccessProps) {
         </div>
 
         {/* Confirmation note */}
-        <p className="text-xs text-slate-400 text-center px-4">
+        <p className="text-sm text-slate-400 text-center px-4">
           A payment receipt was sent to your email by Stripe. Keep it for your records.
         </p>
 

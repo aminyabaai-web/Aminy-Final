@@ -193,7 +193,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
           )}
           <div>
             <h2 className="text-lg font-bold text-[#1B2733]">Bundle Credits</h2>
-            <p className="text-xs text-[#5A6B7A]">Purchase history and credit usage</p>
+            <p className="text-sm text-[#5A6B7A]">Purchase history and credit usage</p>
           </div>
         </div>
         <button
@@ -209,7 +209,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       {error && (
         <div className="flex items-start gap-2 p-3 bg-red-50 rounded-xl border border-red-200">
           <AlertCircle size={14} className="text-red-500 mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-red-700">{error}</p>
+          <p className="text-sm text-red-700">{error}</p>
         </div>
       )}
 
@@ -223,16 +223,16 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         <div className="grid grid-cols-2 gap-4 mb-3">
           <div className="bg-[#6B9080]/10 rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-[#6B9080]">{currentCredits.consultCredits}</p>
-            <p className="text-xs text-[#6B9080]">Consult Credits</p>
+            <p className="text-sm text-[#6B9080]">Consult Credits</p>
           </div>
           <div className="bg-[#EEF4F8] rounded-xl p-3 text-center">
             <p className="text-2xl font-bold text-blue-700">{currentCredits.deepReviewCredits}</p>
-            <p className="text-xs text-blue-600">Deep Review Credits</p>
+            <p className="text-sm text-blue-600">Deep Review Credits</p>
           </div>
         </div>
 
         {currentCredits.expiresAt && totalCurrentCredits > 0 && (
-          <div className={`flex items-center gap-2 text-xs px-3 py-2 rounded-lg ${
+          <div className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg ${
             (expiryDays ?? 0) <= 7
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30
@@ -249,7 +249,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
         )}
 
         {totalCurrentCredits === 0 && (
-          <p className="text-xs text-[#8A9BA8] text-center py-2">
+          <p className="text-sm text-[#8A9BA8] text-center py-2">
             No active credits. Purchase a bundle to get started.
           </p>
         )}
@@ -289,12 +289,12 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                              txn.type === 'expiry' ? 'Credits Expired' :
                              'Credit Refund'}
                           </p>
-                          <p className="text-xs text-[#5A6B7A] mt-0.5">
+                          <p className="text-sm text-[#5A6B7A] mt-0.5">
                             {formatDateFull(txn.createdAt)}
                           </p>
                         </div>
                         {txn.amount > 0 && txn.type === 'purchase' && (
-                          <span className="text-xs font-medium text-[#5A6B7A] whitespace-nowrap">
+                          <span className="text-sm font-medium text-[#5A6B7A] whitespace-nowrap">
                             {formatPrice(txn.amount)}
                           </span>
                         )}
@@ -319,13 +319,13 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                       </div>
 
                       {/* Running balance */}
-                      <p className="text-xs text-[#8A9BA8] mt-1">
+                      <p className="text-sm text-[#8A9BA8] mt-1">
                         Balance after: {txn.consultCreditsAfter} consult, {txn.deepReviewCreditsAfter} deep review
                       </p>
 
                       {/* Expiry info for purchases */}
                       {txn.expiresAt && txn.type === 'purchase' && (
-                        <p className="text-xs text-[#8A9BA8] mt-0.5">
+                        <p className="text-sm text-[#8A9BA8] mt-0.5">
                           Expires: {formatDateShort(new Date(txn.expiresAt))}
                         </p>
                       )}
@@ -339,7 +339,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
           <div className="text-center py-6">
             <Package className="w-10 h-10 text-[#8A9BA8] mx-auto mb-2" />
             <p className="text-sm text-[#5A6B7A]">No credit history yet</p>
-            <p className="text-xs text-[#8A9BA8] mt-1">
+            <p className="text-sm text-[#8A9BA8] mt-1">
               Purchase a session bundle to see transactions here
             </p>
           </div>
@@ -347,7 +347,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
       </div>
 
       {/* Footer */}
-      <p className="text-xs text-[#8A9BA8] text-center">
+      <p className="text-sm text-[#8A9BA8] text-center">
         Credits are applied at checkout. Unused credits expire per bundle terms.
       </p>
     </div>

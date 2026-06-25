@@ -114,7 +114,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             <p className="text-sm text-[#5A6B7A] mb-4 leading-relaxed">{measure.description}</p>
             <div className="bg-white rounded-2xl border border-[#E8E4DF] p-4 mb-4 text-left">
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">About this assessment</p>
-              <ul className="text-xs text-[#3A4A57] space-y-1.5">
+              <ul className="text-sm text-[#3A4A57] space-y-1.5">
                 <li>• {measure.items.length} questions — about 2 minutes</li>
                 <li>• Your answers are private and HIPAA-protected</li>
                 <li>• Recommended every {measure.cadenceWeeks} weeks for tracking</li>
@@ -128,7 +128,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             >
               Begin assessment
             </button>
-            <p className="text-xs text-slate-400 mt-3">
+            <p className="text-sm text-slate-400 mt-3">
               {measure.shortName} · {measure.citation.split('.')[0]}
             </p>
           </div>
@@ -163,8 +163,8 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
                 <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-bold text-red-900 mb-1">Same-day clinical contact recommended</p>
-                  <p className="text-xs text-red-800 mb-2">You noted thoughts of self-harm. You're not alone.</p>
-                  <a href="tel:988" className="inline-flex items-center gap-1 text-xs font-bold text-white px-3 py-2 rounded-lg" style={{ background: '#dc2626' }}>
+                  <p className="text-sm text-red-800 mb-2">You noted thoughts of self-harm. You're not alone.</p>
+                  <a href="tel:988" className="inline-flex items-center gap-1 text-sm font-bold text-white px-3 py-2 rounded-lg" style={{ background: '#dc2626' }}>
                     Call 988 — Suicide & Crisis Lifeline
                   </a>
                 </div>
@@ -175,7 +175,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
           <div className="text-center mb-6">
             <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Score</p>
             <p className="text-6xl font-bold mb-1" style={{ color: bandColor }}>{result.total}</p>
-            <p className="text-xs text-slate-400">of {measure.items.length * (measure.items[0].scaleLabels.length - 1)} possible</p>
+            <p className="text-sm text-slate-400">of {measure.items.length * (measure.items[0].scaleLabels.length - 1)} possible</p>
             <p className="text-lg font-semibold mt-2" style={{ color: bandColor }}>{result.band?.label}</p>
           </div>
 
@@ -187,7 +187,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
           )}
 
           <div className="rounded-2xl p-4 mb-4" style={{ background: '#43AA8B10' }}>
-            <p className="text-xs text-[#3A4A57] leading-relaxed">
+            <p className="text-sm text-[#3A4A57] leading-relaxed">
               <strong className="text-[#6B9080]">Re-take in {measure.cadenceWeeks} weeks</strong> to track changes. Aminy will remind you. Your provider can see your trend in the clinical portal.
             </p>
           </div>
@@ -216,7 +216,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             <ChevronLeft className="w-4 h-4" />
             {itemIndex === 0 ? 'Back' : 'Previous'}
           </button>
-          <p className="text-xs text-[#5A6B7A] font-medium">
+          <p className="text-sm text-[#5A6B7A] font-medium">
             {itemIndex + 1} of {measure.items.length}
           </p>
         </div>
@@ -275,7 +275,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
               {submitting ? 'Saving…' : <>See my results <ChevronRight className="w-4 h-4" /></>}
             </button>
             {!allAnswered && (
-              <p className="text-xs text-slate-400 text-center mt-2">Answer all questions to see your result</p>
+              <p className="text-sm text-slate-400 text-center mt-2">Answer all questions to see your result</p>
             )}
           </div>
         )}

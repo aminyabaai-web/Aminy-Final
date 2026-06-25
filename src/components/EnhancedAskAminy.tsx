@@ -649,12 +649,12 @@ export function EnhancedAskAminy({
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
-                <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-xs">
+                <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-sm">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Powered by AI
                 </Badge>
                 {(isStreaming || isTyping) && (
-                  <Badge variant="secondary" className="text-xs animate-pulse">
+                  <Badge variant="secondary" className="text-sm animate-pulse">
                     <Brain className="w-3 h-3 mr-1" />
                     {isTyping ? 'Thinking...' : 'Responding...'}
                   </Badge>
@@ -761,13 +761,13 @@ export function EnhancedAskAminy({
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className={cn(
-                                "text-xs opacity-60",
+                                "text-sm opacity-60",
                                 message.role === 'user' ? "text-white/80" : "text-[#5A6B7A] dark:text-[#8A9BA8]"
                               )}>
                                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                               {message.contextUsed && message.role === 'assistant' && (
-                                <Badge variant="secondary" className="text-xs bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 border border-violet-200 animate-pulse-subtle">
+                                <Badge variant="secondary" className="text-sm bg-gradient-to-r from-violet-100 to-purple-100 text-violet-700 border border-violet-200 animate-pulse-subtle">
                                   <Brain className="w-3 h-3 mr-1" />
                                   Aminy remembers
                                 </Badge>
@@ -804,7 +804,7 @@ export function EnhancedAskAminy({
                           {message.isCrisisResponse && (
                             <div className="flex items-center gap-2 mb-2 p-2 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
                               <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                              <span className="text-xs text-amber-700 dark:text-amber-300 font-medium">
+                              <span className="text-sm text-amber-700 dark:text-amber-300 font-medium">
                                 Support resources included
                               </span>
                             </div>
@@ -814,7 +814,7 @@ export function EnhancedAskAminy({
                           {message.contextUsed && message.role === 'assistant' && !message.isStreaming && (
                             <div className="flex items-center gap-2 mb-3 p-2 bg-gradient-to-r from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 rounded-lg border border-violet-200 dark:border-violet-800">
                               <Brain className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-                              <span className="text-xs text-violet-700 dark:text-violet-300 font-medium">
+                              <span className="text-sm text-violet-700 dark:text-violet-300 font-medium">
                                 Personalized based on what I know about {userData.childName}
                               </span>
                             </div>
@@ -848,7 +848,7 @@ export function EnhancedAskAminy({
                           {/* Follow-up Suggestions */}
                           {message.role === 'assistant' && message.suggestions && message.suggestions.length > 0 && !message.isStreaming && (
                             <div className="mt-3 pt-3 border-t border-[#E8E4DF] dark:border-gray-600">
-                              <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
+                              <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">Continue the conversation:</p>
                               <div className="flex flex-wrap gap-2">
                                 {message.suggestions.map((suggestion, suggestionIndex) => (
                                   <Button
@@ -856,7 +856,7 @@ export function EnhancedAskAminy({
                                     variant="outline"
                                     size="sm"
                                     onClick={() => handleSuggestionClick(suggestion)}
-                                    className="text-xs h-7 px-2 hover:bg-accent/5 hover:border-accent/30"
+                                    className="text-sm h-7 px-2 hover:bg-accent/5 hover:border-accent/30"
                                   >
                                     {suggestion}
                                   </Button>
@@ -932,7 +932,7 @@ export function EnhancedAskAminy({
                         Messages reset in {memoryManager.getTimeUntilReset().formatted}
                       </span>
                     </div>
-                    <p className="text-xs text-amber-600 dark:text-amber-500">
+                    <p className="text-sm text-amber-600 dark:text-amber-500">
                       You've used your daily messages. Upgrade for unlimited chat!
                     </p>
                     <Button
@@ -944,7 +944,7 @@ export function EnhancedAskAminy({
                     </Button>
                   </div>
                 ) : (
-                  <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-2 text-center aminy-ai-helper-text">
+                  <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-2 text-center aminy-ai-helper-text">
                     Ask about routines, behaviors, communication, school, or any concerns
                     {messagesRemaining !== Infinity && messagesRemaining < 10 && (
                       <span className="ml-1 text-amber-600">

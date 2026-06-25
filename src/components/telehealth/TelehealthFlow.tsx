@@ -368,7 +368,7 @@ export function TelehealthFlow({
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
-                <p className="text-xs text-[#5A6B7A]">Choose how you'd like to get started</p>
+                <p className="text-sm text-[#5A6B7A]">Choose how you'd like to get started</p>
               </div>
             </div>
           </header>
@@ -389,15 +389,15 @@ export function TelehealthFlow({
                       Book a session right away — no insurance needed. Perfect for one-time questions or ongoing self-pay.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Clock className="w-3.5 h-3.5" />
                         <span>Book as soon as today</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>{publicCashPayRange} across {cashPayMenuSummary}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Verified experts in supported telehealth states</span>
                       </div>
@@ -424,15 +424,15 @@ export function TelehealthFlow({
                       Use your insurance where Aminy has a supported lane. We'll verify coverage, explain any authorization steps, and route you to the right next step.
                     </p>
                     <div className="space-y-1.5">
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Shield className="w-3.5 h-3.5" />
                         <span>Insurance eligibility verified before booking</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>Matched to supported in-network or partner-billed lanes</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-[#5A6B7A]">
+                      <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <CreditCard className="w-3.5 h-3.5" />
                         <span>Intake and claim-ready context built from your Aminy profile</span>
                       </div>
@@ -446,7 +446,7 @@ export function TelehealthFlow({
             {/* Nudge for cash-pay users */}
             <div className="bg-amber-50 rounded-xl p-3 flex items-start gap-3">
               <Shield className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 <span className="font-medium">Not sure?</span> Start with a Quick Consult — you can always add insurance later. We'll even check if your plan covers the services you need.
               </p>
             </div>
@@ -483,7 +483,7 @@ export function TelehealthFlow({
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-[#1B2733]">Verify Insurance</h1>
-                <p className="text-xs text-[#5A6B7A]">We'll check your coverage before matching providers</p>
+                <p className="text-sm text-[#5A6B7A]">We'll check your coverage before matching providers</p>
               </div>
             </div>
           </header>
@@ -495,7 +495,7 @@ export function TelehealthFlow({
                 </div>
                 <div>
                   <h3 className="font-semibold text-[#1B2733]">Insurance Eligibility Check</h3>
-                  <p className="text-xs text-[#5A6B7A]">Takes about 30 seconds</p>
+                  <p className="text-sm text-[#5A6B7A]">Takes about 30 seconds</p>
                 </div>
               </div>
               <p className="text-sm text-[#5A6B7A]">

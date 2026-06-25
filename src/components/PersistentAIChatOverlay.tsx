@@ -272,7 +272,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     <Badge
                       key={idx}
                       variant="secondary"
-                      className="bg-[#FAF7F2] text-[#5A6B7A] border-0 text-xs px-2 py-0.5"
+                      className="bg-[#FAF7F2] text-[#5A6B7A] border-0 text-sm px-2 py-0.5"
                     >
                       {chip}
                     </Badge>
@@ -306,14 +306,14 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     {memoryCallouts.slice(0, 2).map((callout) => (
                       <div
                         key={callout.id}
-                        className="flex items-start gap-2 text-xs text-violet-700 dark:text-violet-300"
+                        className="flex items-start gap-2 text-sm text-violet-700 dark:text-violet-300"
                       >
                         <Lightbulb className="w-3 h-3 mt-0.5 flex-shrink-0" />
                         <span className="line-clamp-1">{callout.content}</span>
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-violet-500 dark:text-violet-400 mt-2 italic">
+                  <p className="text-sm text-violet-500 dark:text-violet-400 mt-2 italic">
                     I use these memories to give you more personalized support.
                   </p>
                 </motion.div>
@@ -420,7 +420,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                 >
                   <div className="px-6 py-3 space-y-2 max-h-32 overflow-y-auto">
                     {memories.map((memory) => (
-                      <div key={memory.id} className="text-xs text-[#5A6B7A]">
+                      <div key={memory.id} className="text-sm text-[#5A6B7A]">
                         <div className="flex items-center gap-2 mb-1">
                           {memory.category === 'calm_cue' && <Heart className="w-3 h-3 text-emerald-500" />}
                           {memory.category === 'progress' && <TrendingUp className="w-3 h-3 text-primary" />}

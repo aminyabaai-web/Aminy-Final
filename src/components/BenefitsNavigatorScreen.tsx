@@ -248,12 +248,12 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
           {userState && !childAgeKnown && (
             <div className="mt-3 flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
               <AlertCircle className="w-4 h-4 text-amber-700 flex-shrink-0" />
-              <p className="text-xs text-amber-800 flex-1">
+              <p className="text-sm text-amber-800 flex-1">
                 Based on age {childAge} (we don't have your child's birthdate on file).
                 Some programs have age limits — confirm the age for accurate results.
               </p>
               <div className="flex items-center gap-2">
-                <label htmlFor="benefits-child-age" className="text-xs font-medium text-amber-800">
+                <label htmlFor="benefits-child-age" className="text-sm font-medium text-amber-800">
                   Child's age:
                 </label>
                 <input
@@ -306,15 +306,15 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                     </Badge>
                     <h3 className="font-medium text-sm">{prog.name}</h3>
                   </div>
-                  <p className="text-xs text-[#5A6B7A] mb-2">{prog.summary}</p>
+                  <p className="text-sm text-[#5A6B7A] mb-2">{prog.summary}</p>
                   {prog.waitlistWarning && (
-                    <p className="text-xs text-amber-700 flex items-center gap-1 mb-2">
+                    <p className="text-sm text-amber-700 flex items-center gap-1 mb-2">
                       <Clock className="w-3 h-3" /> {prog.waitlistWarning}
                     </p>
                   )}
                   <div className="space-y-1">
                     {prog.nextSteps.slice(0, 3).map((step, j) => (
-                      <p key={j} className="text-xs text-[#5A6B7A] flex items-start gap-1">
+                      <p key={j} className="text-sm text-[#5A6B7A] flex items-start gap-1">
                         <span className="text-green-500 mt-0.5">→</span> {step}
                       </p>
                     ))}
@@ -326,13 +326,13 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
             {/* Contact Info */}
             {eligibility.contactInfo && (
               <div className="mt-3 p-3 bg-white rounded-lg border border-green-100">
-                <p className="text-xs font-medium mb-1">{eligibility.contactInfo.agency}</p>
-                <p className="text-xs text-[#5A6B7A]">Phone: {eligibility.contactInfo.phone}</p>
+                <p className="text-sm font-medium mb-1">{eligibility.contactInfo.agency}</p>
+                <p className="text-sm text-[#5A6B7A]">Phone: {eligibility.contactInfo.phone}</p>
                 <a
                   href={eligibility.contactInfo.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-600 flex items-center gap-1 mt-1 hover:underline"
+                  className="text-sm text-blue-600 flex items-center gap-1 mt-1 hover:underline"
                 >
                   Visit Website <ExternalLink className="w-3 h-3" />
                 </a>
@@ -394,7 +394,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
             <Card className="p-4 sm:p-5 md:p-6">
               <h2 className="font-semibold mb-1">Your Coverage</h2>
               {stateData && (
-                <p className="text-xs text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   Based on {stateData.state} programs and mandates
                 </p>
               )}
@@ -412,7 +412,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                       />
                       <div className="min-w-0">
                         <p className="font-medium">{service.name}</p>
-                        <p className="text-xs text-muted-foreground truncate">
+                        <p className="text-sm text-muted-foreground truncate">
                           {service.coverage}
                         </p>
                       </div>
@@ -441,11 +441,11 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                     <p className="text-sm font-medium text-purple-900 mb-1">
                       {stateData.state} Autism Insurance Mandate
                     </p>
-                    <p className="text-xs text-purple-700 mb-2">
+                    <p className="text-sm text-purple-700 mb-2">
                       {stateData.autismMandate.summary}
                     </p>
                     {stateData.autismMandate.ageCap && (
-                      <p className="text-xs text-purple-600">
+                      <p className="text-sm text-purple-600">
                         Age limit: {stateData.autismMandate.ageCap} years
                         {stateData.autismMandate.dollarCap && ` | Cap: ${stateData.autismMandate.dollarCap}`}
                       </p>
@@ -480,7 +480,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                   <p className="text-sm font-medium text-blue-900 mb-1">
                     I'll nudge you only when something needs you.
                   </p>
-                  <p className="text-xs text-blue-700">
+                  <p className="text-sm text-blue-700">
                     You'll get notified when documents need signing, appeals require attention,
                     or coverage decisions arrive.
                   </p>

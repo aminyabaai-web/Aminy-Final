@@ -94,7 +94,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
     <div className="space-y-2">
       <label className="text-sm font-medium text-[#1B2733] dark:text-white block">
         NPI Number
-        <span className="text-xs font-normal text-[#5A6B7A] ml-2">10-digit · auto-verified via NPPES</span>
+        <span className="text-sm font-normal text-[#5A6B7A] ml-2">10-digit · auto-verified via NPPES</span>
       </label>
 
       <div className="relative">
@@ -116,7 +116,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
             <AlertCircle className="w-4 h-4 text-amber-500" />
           )}
           {state === 'idle' && npi.length > 0 && npi.length < 10 && (
-            <span className="text-xs text-slate-400">{10 - npi.length} more</span>
+            <span className="text-sm text-slate-400">{10 - npi.length} more</span>
           )}
         </div>
       </div>
@@ -126,8 +126,8 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
         <div className="flex items-start gap-2 p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg">
           <CheckCircle className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-semibold text-emerald-800">NPI verified ✓</p>
-            <p className="text-xs text-emerald-700">{verifiedName}{taxonomy ? ` · ${taxonomy}` : ''}</p>
+            <p className="text-sm font-semibold text-emerald-800">NPI verified ✓</p>
+            <p className="text-sm text-emerald-700">{verifiedName}{taxonomy ? ` · ${taxonomy}` : ''}</p>
           </div>
         </div>
       )}
@@ -136,8 +136,8 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
         <div className="flex items-start gap-2 p-2.5 bg-amber-50 border border-amber-200 rounded-lg">
           <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-semibold text-amber-800">Name mismatch — flagged for manual review</p>
-            <p className="text-xs text-amber-700">NPI found for "{verifiedName}" — doesn't match your profile name. Our team will verify within 1 business day.</p>
+            <p className="text-sm font-semibold text-amber-800">Name mismatch — flagged for manual review</p>
+            <p className="text-sm text-amber-700">NPI found for "{verifiedName}" — doesn't match your profile name. Our team will verify within 1 business day.</p>
           </div>
         </div>
       )}
@@ -146,8 +146,8 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
         <div className="flex items-start gap-2 p-2.5 bg-red-50 border border-red-200 rounded-lg">
           <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 shrink-0" />
           <div>
-            <p className="text-xs font-semibold text-red-800">NPI not found</p>
-            <p className="text-xs text-red-700">
+            <p className="text-sm font-semibold text-red-800">NPI not found</p>
+            <p className="text-sm text-red-700">
               Double-check your NPI number.{' '}
               <a
                 href="https://npiregistry.cms.hhs.gov/"
@@ -163,10 +163,10 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
       )}
 
       {state === 'error' && (
-        <p className="text-xs text-slate-400">NPI registry temporarily unavailable — we'll verify manually.</p>
+        <p className="text-sm text-slate-400">NPI registry temporarily unavailable — we'll verify manually.</p>
       )}
 
-      <p className="text-xs text-slate-400 flex items-center gap-1">
+      <p className="text-sm text-slate-400 flex items-center gap-1">
         <Shield className="w-3 h-3" />
         Verified via CMS NPPES — free, instant, no manual labor
       </p>

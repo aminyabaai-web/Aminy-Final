@@ -609,7 +609,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 {!item.completed && (
                   <div className="flex items-center gap-1 text-[#8A9BA8]">
                     <Clock className="w-4 h-4" />
-                    <span className="text-xs">{item.estimatedMinutes}m</span>
+                    <span className="text-sm">{item.estimatedMinutes}m</span>
                     <ChevronRight className="w-4 h-4 ml-1" />
                   </div>
                 )}
@@ -651,7 +651,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                   </div>
                   <div>
                     <h3 className="font-semibold text-[#1B2733]">{activeItem.title}</h3>
-                    <p className="text-xs text-[#5A6B7A]">~{activeItem.estimatedMinutes} min</p>
+                    <p className="text-sm text-[#5A6B7A]">~{activeItem.estimatedMinutes} min</p>
                   </div>
                 </div>
                 <button

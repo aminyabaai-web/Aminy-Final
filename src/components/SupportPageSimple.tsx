@@ -119,7 +119,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-semibold text-[#1B2733]">{tile.title}</h3>
                   {tile.popular && (
-                    <Badge className="bg-orange-100 text-orange-700 text-xs">Popular</Badge>
+                    <Badge className="bg-orange-100 text-orange-700 text-sm">Popular</Badge>
                   )}
                 </div>
                 <p className="text-sm text-[#5A6B7A]">{tile.description}</p>
@@ -182,7 +182,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
           {/* Submit */}
           <div className="flex items-center justify-between pt-4 border-t">
-            <div className="text-xs text-[#5A6B7A]">
+            <div className="text-sm text-[#5A6B7A]">
               Expected response: {userTier === 'pro' ? '4-8 hours' : '24-48 hours'}
             </div>
             <Button

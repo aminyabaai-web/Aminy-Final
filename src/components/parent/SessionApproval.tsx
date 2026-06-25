@@ -148,7 +148,7 @@ function SignaturePad({ onSign, onClear }: SignaturePadProps) {
       {hasSig && (
         <button
           onClick={clear}
-          className="text-xs text-[#5A6B7A] hover:text-red-500 flex items-center gap-1 transition-colors"
+          className="text-sm text-[#5A6B7A] hover:text-red-500 flex items-center gap-1 transition-colors"
         >
           <X className="w-3 h-3" />
           Clear and redo
@@ -202,7 +202,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
         )}
         <div className="flex-1">
           <h1 className="font-semibold text-[#1B2733] text-base">Session Note Approval</h1>
-          <p className="text-xs text-[#5A6B7A]">{sessionData.providerName} sent you a note to review</p>
+          <p className="text-sm text-[#5A6B7A]">{sessionData.providerName} sent you a note to review</p>
         </div>
         <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
       </div>
@@ -225,7 +225,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               </div>
               <div>
                 <p className="font-medium text-[#1B2733] text-sm">{sessionData.providerName}</p>
-                <p className="text-xs text-[#5A6B7A]">
+                <p className="text-sm text-[#5A6B7A]">
                   Session on {new Date(sessionData.dateOfService).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} · {sessionData.durationMinutes} min
                 </p>
               </div>
@@ -268,7 +268,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                       }`}
                     />
                     <p className="text-sm text-[#3A4A57] flex-1">{g.description}</p>
-                    <span className={`text-xs font-medium ${
+                    <span className={`text-sm font-medium ${
                       g.percentCorrect >= g.masteryThreshold ? 'text-emerald-600' : 'text-[#5A6B7A]'
                     }`}>
                       {g.percentCorrect >= g.masteryThreshold ? 'Mastered!' : `${g.percentCorrect}%`}
@@ -350,7 +350,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               />
             ) : (
               <div>
-                <label className="text-xs font-medium text-[#5A6B7A] mb-1.5 block">Type your full legal name</label>
+                <label className="text-sm font-medium text-[#5A6B7A] mb-1.5 block">Type your full legal name</label>
                 <input
                   type="text"
                   value={typedName}
@@ -362,7 +362,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               </div>
             )}
 
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-400 leading-relaxed">
               By signing, you acknowledge that you have reviewed the session note for {sessionData.dateOfService} and consent to its use for billing and clinical record-keeping purposes.
             </p>
 

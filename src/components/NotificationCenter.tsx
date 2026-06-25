@@ -140,7 +140,7 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
-              className="absolute -top-1 -right-1 h-5 min-w-[20px] flex items-center justify-center p-1 text-xs"
+              className="absolute -top-1 -right-1 h-5 min-w-[20px] flex items-center justify-center p-1 text-sm"
             >
               {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
@@ -212,7 +212,7 @@ export function NotificationCenter({ onNotificationClick }: NotificationCenterPr
                       </p>
 
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-[#5A6B7A]">
+                        <span className="text-sm text-[#5A6B7A]">
                           {getRelativeTime(notification.timestamp)}
                         </span>
 

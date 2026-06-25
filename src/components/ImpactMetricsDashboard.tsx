@@ -294,7 +294,7 @@ export function ImpactMetricsDashboard({
             <Download className="w-4 h-4 mr-2" />
             Export Report
           </Button>
-          <Badge variant="outline" className="text-xs">
+          <Badge variant="outline" className="text-sm">
             <Clock className="w-3 h-3 mr-1" />
             Updated {new Date(metrics.lastUpdated).toLocaleDateString()}
           </Badge>
@@ -335,8 +335,8 @@ export function ImpactMetricsDashboard({
                 <div className="text-xl sm:text-2xl font-bold text-blue-700 dark:text-blue-400">
                   {metrics.beneficiaries.total.toLocaleString()}
                 </div>
-                <div className="text-xs text-blue-600 dark:text-blue-500">Families Served</div>
-                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+                <div className="text-sm text-blue-600 dark:text-blue-500">Families Served</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   +{metrics.beneficiaries.newThisMonth} this month
                 </div>
               </Card>
@@ -351,8 +351,8 @@ export function ImpactMetricsDashboard({
                 <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">
                   {metrics.outcomes.behaviorImprovements}%
                 </div>
-                <div className="text-xs text-green-600 dark:text-green-500">Behavior Improvement</div>
-                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+                <div className="text-sm text-green-600 dark:text-green-500">Behavior Improvement</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Target: 70%
                 </div>
               </Card>
@@ -367,8 +367,8 @@ export function ImpactMetricsDashboard({
                 <div className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400">
                   {metrics.outcomes.stressReduction}%
                 </div>
-                <div className="text-xs text-purple-600 dark:text-purple-500">Stress Reduction</div>
-                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+                <div className="text-sm text-purple-600 dark:text-purple-500">Stress Reduction</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Caregiver reported
                 </div>
               </Card>
@@ -382,8 +382,8 @@ export function ImpactMetricsDashboard({
                 <div className="text-xl sm:text-2xl font-bold text-amber-700 dark:text-amber-400">
                   {metrics.outcomes.familyQualityOfLife}/10
                 </div>
-                <div className="text-xs text-amber-600 dark:text-amber-500">Quality of Life</div>
-                <div className="text-xs text-[#5A6B7A] dark:text-slate-400 mt-1">
+                <div className="text-sm text-amber-600 dark:text-amber-500">Quality of Life</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Family average score
                 </div>
               </Card>
@@ -457,7 +457,7 @@ export function ImpactMetricsDashboard({
                         title={`Target: ${metric.target}%`}
                       />
                     </div>
-                    <div className="text-xs text-[#8A9BA8] mt-0.5">
+                    <div className="text-sm text-[#8A9BA8] mt-0.5">
                       Target: {metric.target}%
                     </div>
                   </div>
@@ -476,25 +476,25 @@ export function ImpactMetricsDashboard({
                   <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.sessionsDelivered.toLocaleString()}
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Delivered</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Delivered</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.aiInteractions.toLocaleString()}
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">AI Interactions</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">AI Interactions</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.averageSessionLength}min
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Avg Session</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Avg Session</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#1B2733] dark:text-white">
                     {metrics.operations.contentEngagement}%
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Engagement</div>
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Engagement</div>
                 </div>
               </div>
             </Card>
@@ -597,7 +597,7 @@ export function ImpactMetricsDashboard({
                   {THEORY_OF_CHANGE.outcomes.map((outcome) => (
                     <div key={outcome.id} className="p-2 bg-green-50 dark:bg-green-900/20 rounded-lg text-sm">
                       <div className="text-[#3A4A57] dark:text-gray-300">{outcome.label}</div>
-                      <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">Target: {outcome.target}%</div>
+                      <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Target: {outcome.target}%</div>
                     </div>
                   ))}
                 </div>
@@ -646,7 +646,7 @@ export function ImpactMetricsDashboard({
                     </Badge>
                     <span className="font-medium text-[#1B2733] dark:text-white">{metric.name}</span>
                   </div>
-                  <div className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
+                  <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                     Category: {metric.category}
                   </div>
                 </div>

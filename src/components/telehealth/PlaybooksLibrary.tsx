@@ -580,7 +580,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             {/* Category & Evidence */}
             <div className="flex items-center gap-2 mb-2">
               <span className="text-lg">{CATEGORY_ICONS[playbook.category]}</span>
-              <span className="text-xs text-[#5A6B7A]">{CATEGORY_LABELS[playbook.category]}</span>
+              <span className="text-sm text-[#5A6B7A]">{CATEGORY_LABELS[playbook.category]}</span>
               <span className={`text-xs px-2 py-0.5 rounded-full ${evidenceBadgeColors[playbook.evidenceLevel]}`}>
                 {evidenceLabels[playbook.evidenceLevel]}
               </span>
@@ -594,7 +594,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             <p className="text-sm text-[#5A6B7A] line-clamp-2 mb-3">{playbook.description}</p>
 
             {/* Meta */}
-            <div className="flex items-center gap-3 sm:gap-4 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-3 sm:gap-4 text-sm text-[#5A6B7A]">
               <div className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {playbook.readTimeMinutes} min read
@@ -607,7 +607,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             {/* Progress (if started) */}
             {playbook.progress !== undefined && playbook.progress > 0 && !playbook.isCompleted && (
               <div className="mt-3">
-                <div className="flex items-center justify-between text-xs mb-1">
+                <div className="flex items-center justify-between text-sm mb-1">
                   <span className="text-[#5A6B7A]">Progress</span>
                   <span className="text-[#6B9080] font-medium">{playbook.progress}%</span>
                 </div>
@@ -622,7 +622,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
 
             {/* Completed Badge */}
             {playbook.isCompleted && (
-              <div className="mt-3 flex items-center gap-1 text-xs text-green-600">
+              <div className="mt-3 flex items-center gap-1 text-sm text-green-600">
                 <CheckCircle className="w-4 h-4" />
                 Completed
               </div>
@@ -653,7 +653,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
         </button>
 
         {playbook.citations && playbook.citations.length > 0 && (
-          <span className="text-xs text-[#8A9BA8] flex items-center gap-1">
+          <span className="text-sm text-[#8A9BA8] flex items-center gap-1">
             <ExternalLink className="w-3 h-3" />
             {playbook.citations.length} citations
           </span>

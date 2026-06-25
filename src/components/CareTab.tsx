@@ -403,7 +403,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         <Badge
           key={cred}
           variant="outline"
-          className={`text-xs ${
+          className={`text-sm ${
             isBCBA 
               ? 'bg-purple-50 text-purple-700 border-purple-200' 
               : isRBT 
@@ -463,13 +463,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-[#5A6B7A]">
+                    <span className="text-sm text-[#5A6B7A]">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                 </div>
               )}
-              
+
               <div className={`rounded-lg px-4 py-3 ${
                 message.from === 'parent'
                   ? 'bg-accent text-white'
@@ -486,7 +486,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                         ) : (
                           <FileText className="w-4 h-4" />
                         )}
-                        <span className="text-xs font-medium">{attachment}</span>
+                        <span className="text-sm font-medium">{attachment}</span>
                         <Button size="sm" variant="ghost" className="h-6 w-6 p-0 ml-auto">
                           <Play className="w-3 h-3" />
                         </Button>
@@ -498,7 +498,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               
               {message.from === 'parent' && (
                 <div className="text-right mt-1">
-                  <span className="text-xs text-[#5A6B7A]">
+                  <span className="text-sm text-[#5A6B7A]">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -563,7 +563,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <AlertCircle className="w-4 h-4 text-red-600" />
           <span className="font-medium text-red-900 text-sm">Not for emergencies</span>
         </div>
-        <p className="text-xs text-red-700 mt-1">
+        <p className="text-sm text-red-700 mt-1">
           For urgent concerns, contact your child's healthcare provider immediately.
         </p>
       </div>
@@ -587,7 +587,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="text-center">
               <div className="font-semibold text-lg">25 min</div>
               <div className="text-sm text-[#5A6B7A]">Quick check-in</div>
-              <div className="text-xs text-[#5A6B7A] mt-1">Focus session</div>
+              <div className="text-sm text-[#5A6B7A] mt-1">Focus session</div>
             </div>
           </button>
           <button
@@ -601,7 +601,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="text-center">
               <div className="font-semibold text-lg">50 min</div>
               <div className="text-sm text-[#5A6B7A]">Deep dive</div>
-              <div className="text-xs text-[#5A6B7A] mt-1">Strategy session</div>
+              <div className="text-sm text-[#5A6B7A] mt-1">Strategy session</div>
             </div>
           </button>
         </div>
@@ -660,7 +660,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-xs"
+                    className="text-sm"
                     onClick={() => handleSessionAction('reschedule', session.id)}
                   >
                     Reschedule
@@ -668,7 +668,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   <Button
                     size="sm"
                     variant="outline"
-                    className="text-xs"
+                    className="text-sm"
                     onClick={() => handleSessionAction('cancel', session.id)}
                   >
                     Cancel
@@ -747,7 +747,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">25 min</div>
                 <div className="text-lg font-semibold text-accent">$49</div>
-                <div className="text-xs text-[#5A6B7A]">$1.96 per minute</div>
+                <div className="text-sm text-[#5A6B7A]">$1.96 per minute</div>
               </div>
               <Button
                 onClick={() => handleBuyMinutes('25')}
@@ -762,8 +762,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">50 min</div>
                 <div className="text-lg font-semibold text-accent">$89</div>
-                <div className="text-xs text-[#5A6B7A]">$1.78 per minute</div>
-                <Badge className="text-xs mt-1">Best Value</Badge>
+                <div className="text-sm text-[#5A6B7A]">$1.78 per minute</div>
+                <Badge className="text-sm mt-1">Best Value</Badge>
               </div>
               <Button
                 onClick={() => handleBuyMinutes('50')}
@@ -786,13 +786,13 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E8E4DF]">
               <div>
                 <div className="font-medium text-sm">{usage.activity}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {usage.date.toLocaleDateString()}
                 </div>
               </div>
               <div className="text-right">
                 <div className="font-semibold text-sm">-{usage.minutesUsed} min</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {usage.type === 'session' ? 'Coaching Session' : 'Consultation'}
                 </div>
               </div>
@@ -835,7 +835,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="text-sm font-medium">
                   {session.date.toLocaleDateString()}
                 </div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {session.duration} minutes
                 </div>
               </div>
@@ -992,7 +992,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <Target className="w-5 h-5 text-purple-600" />
                 <h2 className="text-lg font-semibold text-[#1B2733]">Your Care Plan</h2>
                 {demo && (
-                  <Badge variant="outline" className="text-xs bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
+                  <Badge variant="outline" className="text-sm bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
                     Sample
                   </Badge>
                 )}
@@ -1005,15 +1005,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 <div className="grid grid-cols-3 gap-2 mt-4">
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-purple-600">3</div>
-                    <div className="text-xs text-[#5A6B7A]">Active goals</div>
+                    <div className="text-sm text-[#5A6B7A]">Active goals</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-blue-600">5</div>
-                    <div className="text-xs text-[#5A6B7A]">Daily routines</div>
+                    <div className="text-sm text-[#5A6B7A]">Daily routines</div>
                   </div>
                   <div className="text-center bg-white/70 rounded-lg py-3">
                     <div className="text-xl font-bold text-green-600">68%</div>
-                    <div className="text-xs text-[#5A6B7A]">On track</div>
+                    <div className="text-sm text-[#5A6B7A]">On track</div>
                   </div>
                 </div>
               ) : (

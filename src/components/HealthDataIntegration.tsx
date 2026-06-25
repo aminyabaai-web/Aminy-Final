@@ -326,7 +326,7 @@ export function HealthDataIntegration({
             )}
           </Button>
 
-          <div className="flex items-center gap-2 text-xs text-[#5A6B7A] justify-center">
+          <div className="flex items-center gap-2 text-sm text-[#5A6B7A] justify-center">
             <Shield className="w-3 h-3" />
             <span>We only read sleep data. Never shared.</span>
           </div>
@@ -410,17 +410,17 @@ export function HealthDataIntegration({
               <div className="grid grid-cols-3 gap-3">
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Clock className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
-                  <p className="text-xs text-[#5A6B7A]">Bedtime</p>
+                  <p className="text-sm text-[#5A6B7A]">Bedtime</p>
                   <p className="font-semibold text-[#1B2733]">{recentSleep?.bedtime || '--'}</p>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Sun className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
-                  <p className="text-xs text-[#5A6B7A]">Wake</p>
+                  <p className="text-sm text-[#5A6B7A]">Wake</p>
                   <p className="font-semibold text-[#1B2733]">{recentSleep?.wakeTime || '--'}</p>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <AlertTriangle className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
-                  <p className="text-xs text-[#5A6B7A]">Wakeups</p>
+                  <p className="text-sm text-[#5A6B7A]">Wakeups</p>
                   <p className="font-semibold text-[#1B2733]">{recentSleep?.interruptions ?? '--'}</p>
                 </div>
               </div>
@@ -435,13 +435,13 @@ export function HealthDataIntegration({
 
               {/* Sync button */}
               <div className="flex items-center justify-between pt-2">
-                <span className="text-xs text-[#5A6B7A]">
+                <span className="text-sm text-[#5A6B7A]">
                   Last sync: {lastSync?.toLocaleTimeString() || 'Never'}
                 </span>
                 <button
                   onClick={handleSync}
                   disabled={isConnecting}
-                  className="flex items-center gap-1 text-xs text-[#6B9080] hover:text-indigo-700"
+                  className="flex items-center gap-1 text-sm text-[#6B9080] hover:text-indigo-700"
                 >
                   <RefreshCw className={`w-3 h-3 ${isConnecting ? 'animate-spin' : ''}`} />
                   Sync now

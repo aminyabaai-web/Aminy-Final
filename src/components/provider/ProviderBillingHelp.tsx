@@ -427,7 +427,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
           )}
           <div>
             <h1 className="text-lg font-bold">Billing Help Center</h1>
-            <p className="text-xs text-white/60">Credentialing · Claims · EVV · Denials · Rates</p>
+            <p className="text-sm text-white/60">Credentialing · Claims · EVV · Denials · Rates</p>
           </div>
         </div>
 
@@ -472,7 +472,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 <Sparkles size={18} />
                 <h2 className="text-base font-bold">AI Billing Support</h2>
               </div>
-              <p className="text-xs text-white/80">Ask any billing, credentialing, or EVV question. Get an answer in seconds.</p>
+              <p className="text-sm text-white/80">Ask any billing, credentialing, or EVV question. Get an answer in seconds.</p>
             </div>
 
             {/* Quick questions */}
@@ -500,7 +500,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 <button
                   onClick={() => aiQuery.trim() && handleAIQuery(aiQuery)}
                   disabled={!aiQuery.trim() || aiLoading}
-                  className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-4 py-2 rounded-xl disabled:opacity-40 hover:bg-[#6B9080] transition-colors"
+                  className="flex items-center gap-1.5 bg-primary text-white text-sm font-medium px-4 py-2 rounded-xl disabled:opacity-40 hover:bg-[#6B9080] transition-colors"
                 >
                   {aiLoading ? <span className="animate-spin">⏳</span> : <Send size={13} />}
                   {aiLoading ? 'Thinking…' : 'Ask'}
@@ -518,10 +518,10 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Sparkles size={14} className="text-[#6B9080]" />
-                    <span className="text-xs font-semibold text-[#6B9080]">AI Answer</span>
+                    <span className="text-sm font-semibold text-[#6B9080]">AI Answer</span>
                   </div>
                   <p className="text-sm text-[#3A4A57] leading-relaxed whitespace-pre-line">{aiAnswer}</p>
-                  <p className="text-xs text-[#8A9BA8] mt-2">For complex situations, always verify with your payer's provider relations team.</p>
+                  <p className="text-sm text-[#8A9BA8] mt-2">For complex situations, always verify with your payer's provider relations team.</p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -543,8 +543,8 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                         <div key={ref.code} className="flex items-start gap-3 py-2 border-b border-gray-50">
                           <span className="text-xs font-mono font-bold text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded shrink-0">{ref.code}</span>
                           <div>
-                            <p className="text-xs font-medium text-[#1B2733]">{ref.desc}</p>
-                            <p className="text-xs text-[#5A6B7A]">{ref.unit} · {ref.payers}</p>
+                            <p className="text-sm font-medium text-[#1B2733]">{ref.desc}</p>
+                            <p className="text-sm text-[#5A6B7A]">{ref.unit} · {ref.payers}</p>
                           </div>
                         </div>
                       ))}
@@ -591,10 +591,10 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                                 <Play size={16} className="text-[#5A6B7A]" />
                               </div>
                               <div>
-                                <p className="text-xs font-medium text-[#1B2733]">{faq.videoTitle}</p>
-                                <p className="text-xs text-[#8A9BA8]">{faq.videoDuration} explainer</p>
+                                <p className="text-sm font-medium text-[#1B2733]">{faq.videoTitle}</p>
+                                <p className="text-sm text-[#8A9BA8]">{faq.videoDuration} explainer</p>
                               </div>
-                              <button className="ml-auto text-xs text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
+                              <button className="ml-auto text-sm text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
                                 Watch
                               </button>
                             </div>
@@ -620,7 +620,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
             </div>
             <div className="text-left">
               <p className="text-sm font-semibold text-[#1B2733]">Can't find your answer?</p>
-              <p className="text-xs text-[#5A6B7A]">Ask our AI billing assistant</p>
+              <p className="text-sm text-[#5A6B7A]">Ask our AI billing assistant</p>
             </div>
             <ChevronRight size={16} className="text-[#8A9BA8] ml-auto" />
           </button>

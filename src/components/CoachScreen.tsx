@@ -39,7 +39,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
               <div className="flex items-center gap-2">
                 <h1 className="text-xl text-primary font-medium">{title}</h1>
                 {userTier === 'pro' && (
-                  <Badge className="text-xs bg-purple-50 text-purple-700 border-purple-200">
+                  <Badge className="text-sm bg-purple-50 text-purple-700 border-purple-200">
                     Pro
                   </Badge>
                 )}
@@ -71,7 +71,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
                 <Video className="w-5 h-5 text-purple-600" />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Video Sessions</div>
-                  <div className="text-xs text-muted-foreground">30-minute sessions with certified coaches</div>
+                  <div className="text-sm text-muted-foreground">30-minute sessions with certified coaches</div>
                 </div>
                 <div className="text-sm font-medium text-purple-600">
                   {userTier === 'pro' ? '4/month' : '0/month'}
@@ -82,7 +82,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
                 <MessageCircle className="w-5 h-5 text-blue-600" />
                 <div className="flex-1">
                   <div className="font-medium text-sm">Coach Chats</div>
-                  <div className="text-xs text-muted-foreground">Text-based support and guidance</div>
+                  <div className="text-sm text-muted-foreground">Text-based support and guidance</div>
                 </div>
                 <div className="text-sm font-medium text-blue-600">
                   {userTier === 'pro' ? '10/month' : '0/month'}
@@ -130,7 +130,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-sm text-amber-700 font-medium">🔒 Pro Feature</span>
                   </div>
-                  <p className="text-xs text-amber-600">
+                  <p className="text-sm text-amber-600">
                     Upgrade to Pro to access professional coaching services with certified developmental specialists.
                   </p>
                 </div>
@@ -149,7 +149,7 @@ export function CoachScreen({ title, subtitle, userTier, onBookSession, onStartC
                     <CheckCircle className="w-4 h-4 text-green-600" />
                     <div>
                       <div className="font-medium text-sm">Strategy Review</div>
-                      <div className="text-xs text-muted-foreground">Dec 8, 2024</div>
+                      <div className="text-sm text-muted-foreground">Dec 8, 2024</div>
                     </div>
                   </div>
                   <Clock className="w-4 h-4 text-muted-foreground" />

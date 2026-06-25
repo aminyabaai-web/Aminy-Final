@@ -209,7 +209,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           <AlertTriangle className="w-4 h-4 text-amber-600" />
           <p className="text-sm font-semibold text-amber-900">Warning</p>
         </div>
-        <p className="text-xs text-amber-700">
+        <p className="text-sm text-amber-700">
           These settings are for development and testing only. Changes affect local state.
         </p>
       </div>
@@ -349,7 +349,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
             <Badge variant="default" className="bg-purple-600 hover:bg-purple-700">
               Phase 2
             </Badge>
-            <span className="text-xs text-[#5A6B7A]">BCBA Coach Portal & Analytics</span>
+            <span className="text-sm text-[#5A6B7A]">BCBA Coach Portal & Analytics</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Button 
@@ -460,7 +460,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               <MessageSquare className="w-4 h-4 text-blue-600" />
               <div>
                 <p className="font-medium text-sm">Chat Unlimited</p>
-                <p className="text-xs text-muted-foreground">Unlimited Aminy messages</p>
+                <p className="text-sm text-muted-foreground">Unlimited Aminy messages</p>
               </div>
             </div>
             <Switch 
@@ -475,7 +475,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               <BarChart3 className="w-4 h-4 text-purple-600" />
               <div>
                 <p className="font-medium text-sm">Reports Enabled</p>
-                <p className="text-xs text-muted-foreground">PDF exports & provider packets</p>
+                <p className="text-sm text-muted-foreground">PDF exports & provider packets</p>
               </div>
             </div>
             <Switch 
@@ -490,7 +490,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               <Play className="w-4 h-4 text-green-600" />
               <div>
                 <p className="font-medium text-sm">Jr Unlocked</p>
-                <p className="text-xs text-muted-foreground">Full Aminy Jr access</p>
+                <p className="text-sm text-muted-foreground">Full Aminy Jr access</p>
               </div>
             </div>
             <Switch 
@@ -505,7 +505,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
               <Video className="w-4 h-4 text-red-600" />
               <div>
                 <p className="font-medium text-sm">Live Video Enabled</p>
-                <p className="text-xs text-muted-foreground">Live AI Video sessions</p>
+                <p className="text-sm text-muted-foreground">Live AI Video sessions</p>
               </div>
             </div>
             <Switch 
@@ -578,7 +578,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">Debug Mode</p>
-              <p className="text-xs text-muted-foreground">Enable console logging</p>
+              <p className="text-sm text-muted-foreground">Enable console logging</p>
             </div>
             <Switch 
               checked={debugMode} 
@@ -590,7 +590,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">Show Logs</p>
-              <p className="text-xs text-muted-foreground">Display on-screen logs</p>
+              <p className="text-sm text-muted-foreground">Display on-screen logs</p>
             </div>
             <Switch 
               checked={showLogs} 
@@ -602,7 +602,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">Mock Data</p>
-              <p className="text-xs text-muted-foreground">Use sample responses</p>
+              <p className="text-sm text-muted-foreground">Use sample responses</p>
             </div>
             <Switch 
               checked={mockData} 
@@ -614,7 +614,7 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium text-sm">Bypass Paywall</p>
-              <p className="text-xs text-muted-foreground">Access all features</p>
+              <p className="text-sm text-muted-foreground">Access all features</p>
             </div>
             <Switch 
               checked={bypassPaywall} 
@@ -666,21 +666,21 @@ export function DeveloperModePanel({ onNavigate, onTierChange }: DeveloperModePa
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <div className="p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs text-muted-foreground mb-1">Screen Size</p>
+            <p className="text-sm text-muted-foreground mb-1">Screen Size</p>
             <p className="text-sm font-bold">{window.innerWidth}x{window.innerHeight}</p>
           </div>
           <div className="p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs text-muted-foreground mb-1">User Agent</p>
+            <p className="text-sm text-muted-foreground mb-1">User Agent</p>
             <p className="text-sm font-bold truncate" title={navigator.userAgent}>
               {navigator.userAgent.split(' ')[0]}
             </p>
           </div>
           <div className="p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs text-muted-foreground mb-1">Tier</p>
+            <p className="text-sm text-muted-foreground mb-1">Tier</p>
             <p className="text-sm font-bold">{currentTier.toUpperCase()}</p>
           </div>
           <div className="p-3 bg-[#FAF7F2] rounded-lg">
-            <p className="text-xs text-muted-foreground mb-1">Entitlements</p>
+            <p className="text-sm text-muted-foreground mb-1">Entitlements</p>
             <p className="text-sm font-bold">
               {[chatUnlimited, reportsEnabled, jrUnlocked, liveVideoEnabled].filter(Boolean).length}/4
             </p>

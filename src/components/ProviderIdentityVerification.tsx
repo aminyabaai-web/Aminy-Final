@@ -527,7 +527,7 @@ export function ProviderIdentityVerification({
                     {/* Consent form */}
                     {step.id === 'consent' && step.status !== 'complete' && (
                       <div className="mt-3 space-y-3">
-                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-xs text-[#5A6B7A] max-h-32 overflow-y-auto">
+                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-sm text-[#5A6B7A] max-h-32 overflow-y-auto">
                           <p className="font-semibold mb-1">Background Check Authorization</p>
                           <p>I hereby authorize Aminy and its designated background check provider
                           to conduct a background check, which may include criminal history,
@@ -575,7 +575,7 @@ export function ProviderIdentityVerification({
         {!isProcessingOrDone && (
           <div className="flex items-start gap-2 px-3 py-2 bg-[#F0EDE8] rounded-lg">
             <Lock className="w-4 h-4 text-[#5A6B7A] mt-0.5 shrink-0" />
-            <p className="text-xs text-[#5A6B7A]">
+            <p className="text-sm text-[#5A6B7A]">
               All data is encrypted and stored securely. Photos are used only for identity
               verification and deleted after review. SSN is encrypted — we never store the full number.
             </p>

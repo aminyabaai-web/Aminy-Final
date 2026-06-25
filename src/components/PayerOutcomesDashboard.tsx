@@ -223,7 +223,7 @@ export function PayerOutcomesDashboard({
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <Building2 className="w-5 h-5 text-[#6B9080]" />
-                <Badge variant="outline" className="text-xs">
+                <Badge variant="outline" className="text-sm">
                   {getOrgTypeLabel()}
                 </Badge>
                 <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
@@ -238,7 +238,7 @@ export function PayerOutcomesDashboard({
                 Coverage routing, claim-ready operations, and payer trust signals for the {marketLabel} supported lane.
               </p>
               {!providedMetrics ? (
-                <p className="mt-2 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                <p className="mt-2 max-w-2xl rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
                   This dashboard is using clearly labeled pilot sample metrics until live payer and claims data is connected for the {marketLabel} lane.
                 </p>
               ) : null}
@@ -656,7 +656,7 @@ export function PayerOutcomesDashboard({
                       <p className="text-sm font-medium text-[#3A4A57] dark:text-slate-200">
                         No claim-ready cases for the {marketLabel} lane yet
                       </p>
-                      <p className="mt-1 text-xs text-[#5A6B7A] dark:text-slate-400">
+                      <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">
                         Validated visit packets will appear here once they are assembled for biller review.
                       </p>
                     </div>
@@ -754,17 +754,17 @@ export function PayerOutcomesDashboard({
                                 {lane.supported ? lane.launchState.replace(/_/g, ' ') : 'manual review'}
                               </Badge>
                             </div>
-                            <p className="mt-1 text-xs text-[#5A6B7A]">
+                            <p className="mt-1 text-sm text-[#5A6B7A]">
                               {lane.totalCases} cases • {lane.blockedCases} blocked • {lane.deniedCases} denied • submission via {lane.submissionModes.join(', ').replace(/_/g, ' ')}
                             </p>
                           </div>
-                          <div className="text-right text-xs text-[#5A6B7A]">
+                          <div className="text-right text-sm text-[#5A6B7A]">
                             <p>{lane.authBlockedCases} auth blocked</p>
                             <p>{lane.secondaryPolicyCases} with secondary</p>
                           </div>
                         </div>
                         {lane.operatorNotes.length > 0 ? (
-                          <ul className="mt-3 space-y-1 text-xs text-[#5A6B7A] dark:text-slate-300">
+                          <ul className="mt-3 space-y-1 text-sm text-[#5A6B7A] dark:text-slate-300">
                             {lane.operatorNotes.map((note) => (
                               <li key={note} className="flex items-start gap-2">
                                 <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-500" />
@@ -789,7 +789,7 @@ export function PayerOutcomesDashboard({
                       <div className="flex items-center justify-between gap-3">
                         <div>
                           <p className="font-medium text-[#1B2733] dark:text-white">{payer.displayName}</p>
-                          <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
+                          <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                             {payer.payerType.replace(/_/g, ' ')} • {payer.submissionPath.replace(/_/g, ' ')}
                           </p>
                         </div>
@@ -798,7 +798,7 @@ export function PayerOutcomesDashboard({
                         </Badge>
                       </div>
                       {marketCoverage?.notes?.length ? (
-                        <ul className="mt-2 space-y-1 text-xs text-[#5A6B7A] dark:text-gray-300">
+                        <ul className="mt-2 space-y-1 text-sm text-[#5A6B7A] dark:text-gray-300">
                           {marketCoverage.notes.slice(0, 2).map((note: string) => (
                             <li key={note}>• {note}</li>
                           ))}
@@ -833,7 +833,7 @@ export function PayerOutcomesDashboard({
                         style={{ width: `${metrics.engagementRate}%` }}
                       />
                     </div>
-                    <p className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
+                    <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                       {metrics.engagementRate}% engagement rate
                     </p>
                   </div>
@@ -975,7 +975,7 @@ function MetricCard({
       <p className="text-2xl font-bold text-[#1B2733]">{value}</p>
       <p className="text-sm text-[#5A6B7A]">{label}</p>
       {subtext && (
-        <p className="mt-1 text-xs text-slate-400">{subtext}</p>
+        <p className="mt-1 text-sm text-slate-400">{subtext}</p>
       )}
     </Card>
   );
@@ -1044,7 +1044,7 @@ function SavingsRow({
       </div>
       <div className="text-right">
         <p className="font-semibold text-green-600">{formatCurrency(total)}</p>
-        <p className="text-xs text-[#8A9BA8]">
+        <p className="text-sm text-[#8A9BA8]">
           {formatNumber(count)} × {formatCurrency(avgCost)}
         </p>
       </div>

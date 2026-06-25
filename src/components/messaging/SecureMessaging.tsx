@@ -662,7 +662,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                         <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                       )}
                     </div>
-                    <span className="text-xs text-[#8A9BA8] flex-shrink-0">
+                    <span className="text-sm text-[#8A9BA8] flex-shrink-0">
                       {thread.lastMessage && formatTime(thread.lastMessage.createdAt)}
                     </span>
                   </div>
@@ -675,7 +675,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 {/* Unread badge */}
                 {thread.unreadCount > 0 && (
                   <div className="flex-shrink-0 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-medium">{thread.unreadCount}</span>
+                    <span className="text-sm text-white font-medium">{thread.unreadCount}</span>
                   </div>
                 )}
               </button>
@@ -721,7 +721,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     <Shield className="w-4 h-4 text-primary flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-xs text-[#5A6B7A] truncate">
+                <p className="text-sm text-[#5A6B7A] truncate">
                   {selectedThread.provider.credentials} • {selectedThread.provider.specialty}
                 </p>
               </div>
@@ -789,7 +789,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 {/* Avatar */}
                 {!isOwn && showAvatar && (
                   <div className="w-8 h-8 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-xs font-medium">
+                    <span className="text-white text-sm font-medium">
                       {selectedThread.provider.name.charAt(0)}
                     </span>
                   </div>
@@ -812,7 +812,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
 
                   {/* Message Meta */}
                   <div className={`flex items-center gap-1 mt-1 ${isOwn ? 'justify-end' : ''}`}>
-                    <span className="text-xs text-[#8A9BA8]">
+                    <span className="text-sm text-[#8A9BA8]">
                       {formatTime(message.createdAt)}
                     </span>
                     {isOwn && (

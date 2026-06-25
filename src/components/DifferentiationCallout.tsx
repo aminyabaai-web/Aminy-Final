@@ -200,7 +200,7 @@ export function DifferentiationCallout({
  */
 export function AminyAdvantageBadge({ feature }: { feature: string }) {
   return (
-    <div className="inline-flex items-center gap-1 px-2 py-1 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded text-xs text-[#6B9080]">
+    <div className="inline-flex items-center gap-1 px-2 py-1 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded text-sm text-[#6B9080]">
       <Zap className="w-3 h-3" />
       <span>Aminy {feature}</span>
     </div>

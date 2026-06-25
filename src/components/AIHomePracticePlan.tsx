@@ -154,13 +154,13 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-sm font-semibold text-[#1B2733]">✦ 2-Week Practice Plan</p>
-            <p className="text-xs text-[#5A6B7A] mt-0.5">Target: {plan.target}</p>
+            <p className="text-sm text-[#5A6B7A] mt-0.5">Target: {plan.target}</p>
           </div>
           <button onClick={copyPlan} className="p-1.5 rounded-lg hover:bg-white/60 transition-colors">
             {copied ? <Check className="w-4 h-4 text-[#6B9080]" /> : <Copy className="w-4 h-4 text-slate-400" />}
           </button>
         </div>
-        <p className="text-xs text-[#5A6B7A] mt-2 italic">"{plan.weeklyGoal}"</p>
+        <p className="text-sm text-[#5A6B7A] mt-2 italic">"{plan.weeklyGoal}"</p>
       </div>
 
       {/* Schedule */}
@@ -172,8 +172,8 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
               onClick={() => setExpandedDay(expandedDay === day.day ? null : day.day)}
             >
               <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">{day.label}</Badge>
-                <span className="text-xs text-[#5A6B7A]">{day.activities.map(a => a.title).join(' · ')}</span>
+                <Badge variant="outline" className="text-sm">{day.label}</Badge>
+                <span className="text-sm text-[#5A6B7A]">{day.activities.map(a => a.title).join(' · ')}</span>
               </div>
               {expandedDay === day.day ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
             </button>
@@ -185,20 +185,20 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-semibold text-[#1B2733]">{a.title}</span>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs text-slate-400">{a.time}</span>
-                        <Badge variant="outline" className="text-xs">{a.durationMinutes}m</Badge>
+                        <span className="text-sm text-slate-400">{a.time}</span>
+                        <Badge variant="outline" className="text-sm">{a.durationMinutes}m</Badge>
                       </div>
                     </div>
                     <ol className="space-y-1">
                       {a.steps.map((step, si) => (
-                        <li key={si} className="flex gap-2 text-xs text-[#5A6B7A]">
+                        <li key={si} className="flex gap-2 text-sm text-[#5A6B7A]">
                           <span className="w-4 h-4 rounded-full bg-[#6B9080]/10 text-[#6B9080] flex items-center justify-center shrink-0 font-medium text-xs">{si + 1}</span>
                           {step}
                         </li>
                       ))}
                     </ol>
                     {a.reinforcer && (
-                      <p className="text-xs text-[#6B9080] bg-[#6B9080]/10 rounded-lg px-3 py-1.5">✦ Reinforce: {a.reinforcer}</p>
+                      <p className="text-sm text-[#6B9080] bg-[#6B9080]/10 rounded-lg px-3 py-1.5">✦ Reinforce: {a.reinforcer}</p>
                     )}
                   </div>
                 ))}
@@ -211,12 +211,12 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
       {/* Tips */}
       {plan.tips.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 space-y-1.5">
-          <p className="text-xs font-semibold text-amber-800">Parent Tips</p>
-          {plan.tips.map((tip, i) => <p key={i} className="text-xs text-amber-700">• {tip}</p>)}
+          <p className="text-sm font-semibold text-amber-800">Parent Tips</p>
+          {plan.tips.map((tip, i) => <p key={i} className="text-sm text-amber-700">• {tip}</p>)}
         </div>
       )}
       {plan.fadingNote && (
-        <p className="text-xs text-[#5A6B7A] text-center italic px-2">{plan.fadingNote}</p>
+        <p className="text-sm text-[#5A6B7A] text-center italic px-2">{plan.fadingNote}</p>
       )}
 
       <Button variant="outline" size="sm" className="w-full" onClick={() => setPlan(null)}>

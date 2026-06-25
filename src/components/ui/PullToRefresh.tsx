@@ -160,7 +160,7 @@ export function PullToRefresh({
               )}
             </>
           )}
-          <span className="text-xs text-[#5A6B7A] dark:text-[#8A9BA8]">
+          <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
             {isRefreshing
               ? 'Refreshing...'
               : canRefresh

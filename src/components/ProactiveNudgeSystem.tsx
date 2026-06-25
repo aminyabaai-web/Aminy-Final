@@ -248,7 +248,7 @@ export function ProactiveNudgeSystem(props: ProactiveNudgeSystemProps) {
                   <p className="text-sm text-white/90 mt-1">{topNudge.message}</p>
 
                   {/* Proactive support differentiation */}
-                  <div className="flex items-center gap-1 mt-2 text-xs text-white/70">
+                  <div className="flex items-center gap-1 mt-2 text-sm text-white/70">
                     <Zap className="w-3 h-3" />
                     <span>Aminy reaches out proactively—you never have to ask.</span>
                   </div>

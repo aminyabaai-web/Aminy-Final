@@ -190,7 +190,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
                 )}
               </div>
               <span
-                className={`text-xs font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
+                className={`text-sm font-medium hidden sm:block ${active ? '' : 'text-slate-400'}`}
                 style={active ? { color: EMERALD } : undefined}
               >
                 {step.label}
@@ -410,8 +410,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
           <ArrowLeft className="w-4 h-4" />
           {step > 1 ? 'Back' : 'Skip'}
         </button>
-        <span className="text-xs text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
-        <button onClick={onSkip} className="text-xs text-slate-400 hover:text-[#5A6B7A] transition-colors">
+        <span className="text-sm text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
+        <button onClick={onSkip} className="text-sm text-slate-400 hover:text-[#5A6B7A] transition-colors">
           Skip setup
         </button>
       </div>
@@ -491,7 +491,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] text-center">
                 <Shield className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <p className="text-sm text-[#5A6B7A] font-medium">Paying out of pocket</p>
-                <p className="text-xs text-slate-400 mt-1">You can add insurance information later in your profile.</p>
+                <p className="text-sm text-slate-400 mt-1">You can add insurance information later in your profile.</p>
               </div>
             )}
 
@@ -608,7 +608,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E8E4DF] text-center">
                 <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                 <p className="text-sm font-medium text-[#3A4A57]">No matches just yet</p>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   We're still building our provider network in your area. You can finish setup now and we'll reach out as soon as a match is available.
                 </p>
                 <PrimaryButton
@@ -623,7 +623,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
             {usingSampleProviders && providers.length > 0 && (
               <div
-                className="flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-medium"
+                className="flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium"
                 style={{ backgroundColor: '#FEF9C3', borderColor: '#FDE68A', color: '#92400E' }}
               >
                 <span
@@ -654,7 +654,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <p className="font-semibold text-[#1B2733] text-sm">{prov.name}</p>
-                      <p className="text-xs text-[#5A6B7A]">{prov.credentials}</p>
+                      <p className="text-sm text-[#5A6B7A]">{prov.credentials}</p>
                     </div>
                     {prov.accepting && (
                       <span
@@ -666,7 +666,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs text-[#5A6B7A] mb-3">
+                  <div className="flex items-center gap-3 text-sm text-[#5A6B7A] mb-3">
                     <span>{prov.distance}</span>
                     <span>·</span>
                     <span className="flex items-center gap-0.5">
@@ -684,7 +684,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                   {isSel && (
                     <div className="mt-3 pt-3 border-t border-emerald-500/20">
                       <span
-                        className="text-xs font-semibold flex items-center gap-1"
+                        className="text-sm font-semibold flex items-center gap-1"
                         style={{ color: EMERALD }}
                       >
                         <CheckCircle className="w-3 h-3" />
@@ -789,7 +789,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               )}
             </PrimaryButton>
 
-            <p className="text-center text-xs text-slate-400">
+            <p className="text-center text-sm text-slate-400">
               Your provider will reach out within 1–2 business days.
             </p>
           </div>

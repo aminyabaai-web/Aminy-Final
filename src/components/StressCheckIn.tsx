@@ -223,7 +223,7 @@ export function StressCheckIn({
           )}
 
           {/* Scale Labels */}
-          <div className="flex justify-between text-xs text-[#5A6B7A] mb-4 sm:mb-6">
+          <div className="flex justify-between text-sm text-[#5A6B7A] mb-4 sm:mb-6">
             <span>Calm & peaceful</span>
             <span>Overwhelmed</span>
           </div>

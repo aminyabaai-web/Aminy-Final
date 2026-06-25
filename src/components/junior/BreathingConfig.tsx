@@ -305,7 +305,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
             style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(10px)' }}
           >
             <p className="text-white font-bold text-base">{exercise.name}</p>
-            <p className="text-white/60 text-xs mb-2">{exercise.description}</p>
+            <p className="text-white/60 text-sm mb-2">{exercise.description}</p>
             <p className="text-white/90 text-sm font-medium">{patternString}</p>
           </div>
 
@@ -343,7 +343,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
           </button>
 
           {/* Disclaimer */}
-          <p className="text-white/30 text-xs text-center mt-4">
+          <p className="text-white/30 text-sm text-center mt-4">
             For relaxation only. Not medical advice.
           </p>
         </div>
@@ -380,7 +380,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
         </div>
 
         {/* Cycle counter */}
-        <div className="absolute top-24 text-white/40 text-xs font-medium">
+        <div className="absolute top-24 text-white/40 text-sm font-medium">
           Cycle {cycles + 1}
         </div>
 
@@ -426,7 +426,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
         </div>
 
         {/* Tap to pause hint */}
-        <p className="absolute bottom-14 text-white/25 text-xs">Tap to {paused ? 'resume' : 'pause'}</p>
+        <p className="absolute bottom-14 text-white/25 text-sm">Tap to {paused ? 'resume' : 'pause'}</p>
 
         {/* Paused overlay */}
         {paused && (
@@ -480,7 +480,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
         <p className="text-white/80 text-sm">
           <span className="font-bold text-white">{Math.floor(duration / 60)}:{String(duration % 60).padStart(2, '0')}</span> of {exercise.name} breathing
         </p>
-        <p className="text-white/50 text-xs mt-1">{cycles} complete cycles</p>
+        <p className="text-white/50 text-sm mt-1">{cycles} complete cycles</p>
       </motion.div>
 
       {/* How do you feel? */}
@@ -500,7 +500,7 @@ export function BreathingConfig({ onBack, onComplete }: BreathingConfigProps) {
               style={{ opacity: selectedFeeling && selectedFeeling !== f.label ? 0.4 : 1 }}
             >
               <span className="text-3xl">{f.emoji}</span>
-              <span className="text-white/50 text-xs">{f.label}</span>
+              <span className="text-white/50 text-sm">{f.label}</span>
             </button>
           ))}
         </div>

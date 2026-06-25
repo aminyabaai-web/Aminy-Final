@@ -352,7 +352,7 @@ function AIBadge({ recommendation }: AIBadgeProps) {
   return (
     <div className="flex items-center gap-2 px-3 py-2 bg-accent/10 border border-accent/20 rounded-lg">
       <Lightbulb className="w-4 h-4 text-accent flex-shrink-0" />
-      <p className="text-xs text-accent font-medium">{recommendation}</p>
+      <p className="text-sm text-accent font-medium">{recommendation}</p>
     </div>
   );
 }

@@ -124,11 +124,11 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               <Users size={18} className="text-[#6B9080]" />
               Roster Manager
             </h1>
-            <p className="text-xs text-[#5A6B7A]">Active rosters · {rosterEntries.length} payers</p>
+            <p className="text-sm text-[#5A6B7A]">Active rosters · {rosterEntries.length} payers</p>
           </div>
           <button
             onClick={() => setShowAddFlow(true)}
-            className="flex items-center gap-1.5 bg-primary text-white text-xs font-medium px-3 py-2 rounded-xl hover:bg-[#6B9080] transition-colors"
+            className="flex items-center gap-1.5 bg-primary text-white text-sm font-medium px-3 py-2 rounded-xl hover:bg-[#6B9080] transition-colors"
           >
             <Plus size={14} />
             Add to Roster
@@ -144,7 +144,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
             <div className="bg-white rounded-2xl p-6 text-center border border-[#E8E4DF]">
               <Shield size={32} className="text-[#8A9BA8] mx-auto mb-2" />
               <p className="text-sm text-[#5A6B7A]">No active roster entries yet.</p>
-              <p className="text-xs text-[#8A9BA8] mt-1">Complete credentialing with a payer to appear on their roster.</p>
+              <p className="text-sm text-[#8A9BA8] mt-1">Complete credentialing with a payer to appear on their roster.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -153,7 +153,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                     <div>
                       <p className="text-sm font-semibold text-[#1B2733]">{entry.payer}</p>
-                      <p className="text-xs text-[#5A6B7A]">Effective {entry.effectiveDate}</p>
+                      <p className="text-sm text-[#5A6B7A]">Effective {entry.effectiveDate}</p>
                     </div>
                     <span className="text-xs font-medium text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
                       In-Network
@@ -164,16 +164,16 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <div className="px-4 py-3">
                     <div className="flex items-center gap-1.5 mb-2">
                       <DollarSign size={13} className="text-[#8A9BA8]" />
-                      <p className="text-xs font-medium text-[#5A6B7A]">Contracted Rates</p>
+                      <p className="text-sm font-medium text-[#5A6B7A]">Contracted Rates</p>
                     </div>
                     <div className="space-y-1.5">
                       {entry.contractedRates.map(rate => (
                         <div key={rate.cptCode} className="flex items-center justify-between">
                           <div>
                             <span className="text-xs font-mono font-medium text-[#3A4A57]">{rate.cptCode}</span>
-                            <span className="text-xs text-[#5A6B7A] ml-2">{rate.description}</span>
+                            <span className="text-sm text-[#5A6B7A] ml-2">{rate.description}</span>
                           </div>
-                          <span className="text-xs font-semibold text-[#1B2733]">
+                          <span className="text-sm font-semibold text-[#1B2733]">
                             ${rate.rate.toFixed(2)}/unit
                           </span>
                         </div>
@@ -189,7 +189,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                       ))}
                     </div>
 
-                    <button className="mt-3 w-full flex items-center justify-between py-2 border-t border-gray-50 text-xs text-[#5A6B7A] hover:text-[#3A4A57] transition-colors">
+                    <button className="mt-3 w-full flex items-center justify-between py-2 border-t border-gray-50 text-sm text-[#5A6B7A] hover:text-[#3A4A57] transition-colors">
                       <span>View full roster details</span>
                       <ChevronRight size={14} />
                     </button>
@@ -222,15 +222,15 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <p className="text-sm font-medium text-[#1B2733]">{typeLabels[req.type]}</p>
-                        <p className="text-xs text-[#5A6B7A]">{req.payer} · Submitted {req.submittedDate}</p>
+                        <p className="text-sm text-[#5A6B7A]">{req.payer} · Submitted {req.submittedDate}</p>
                       </div>
                       <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${statusCfg.bg} ${statusCfg.color}`}>
                         {statusCfg.icon}
                         {statusCfg.label}
                       </div>
                     </div>
-                    <p className="text-xs text-[#5A6B7A] mb-2">{req.description}</p>
-                    <div className="flex items-center gap-1.5 text-xs text-[#8A9BA8]">
+                    <p className="text-sm text-[#5A6B7A] mb-2">{req.description}</p>
+                    <div className="flex items-center gap-1.5 text-sm text-[#8A9BA8]">
                       <Calendar size={11} />
                       <span>Effective: {req.effectiveDate}</span>
                     </div>
@@ -255,7 +255,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         </React.Fragment>
                       ))}
                     </div>
-                    <div className="flex justify-between mt-1 text-xs text-[#8A9BA8] px-0.5">
+                    <div className="flex justify-between mt-1 text-sm text-[#8A9BA8] px-0.5">
                       <span>Submitted</span>
                       <span>Acknowledged</span>
                       <span>Confirmed</span>
@@ -283,7 +283,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                 className="flex flex-col items-center gap-2 p-4 bg-white border border-[#E8E4DF] rounded-2xl hover:bg-[#FAF7F2] transition-colors text-center"
               >
                 {item.icon}
-                <span className="text-xs text-[#3A4A57] font-medium leading-tight">{item.label}</span>
+                <span className="text-sm text-[#3A4A57] font-medium leading-tight">{item.label}</span>
               </button>
             ))}
           </div>
@@ -316,7 +316,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
 
               {addStep === 1 && (
                 <div className="space-y-3">
-                  <label className="text-xs font-medium text-[#5A6B7A]">Select Payer</label>
+                  <label className="text-sm font-medium text-[#5A6B7A]">Select Payer</label>
                   <div className="space-y-2">
                     {credentialedPayers.map(p => (
                       <button
@@ -351,20 +351,20 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               {addStep === 2 && (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-xs font-medium text-[#5A6B7A] block mb-1">Effective Date</label>
+                    <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Effective Date</label>
                     <input
                       type="date"
                       className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm text-[#1B2733] focus:outline-none focus:border-[#6B9080]"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-[#5A6B7A] block mb-2">Required Documents</label>
+                    <label className="text-sm font-medium text-[#5A6B7A] block mb-2">Required Documents</label>
                     <div className="space-y-2">
                       {['Provider participation request form', 'Updated W-9', 'Malpractice insurance certificate', 'CAQH authorization'].map(doc => (
                         <div key={doc} className="flex items-center gap-3 p-2.5 border border-dashed border-[#E8E4DF] rounded-xl">
                           <Upload size={14} className="text-[#8A9BA8] shrink-0" />
-                          <span className="text-xs text-[#5A6B7A]">{doc}</span>
-                          <button className="ml-auto text-xs text-blue-600 font-medium">Upload</button>
+                          <span className="text-sm text-[#5A6B7A]">{doc}</span>
+                          <button className="ml-auto text-sm text-blue-600 font-medium">Upload</button>
                         </div>
                       ))}
                     </div>

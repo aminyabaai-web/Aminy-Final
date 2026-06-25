@@ -135,7 +135,7 @@ export function ErrorDisplay({
               <div className="mt-3">
                 <button
                   onClick={() => setShowDetails(!showDetails)}
-                  className="text-xs text-[#5A6B7A] hover:text-[#3A4A57]"
+                  className="text-sm text-[#5A6B7A] hover:text-[#3A4A57]"
                 >
                   {showDetails ? 'Hide' : 'Show'} details
                 </button>
@@ -212,7 +212,7 @@ export function ErrorDisplay({
             <div className="mt-4">
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="text-xs text-[#8A9BA8] hover:text-[#5A6B7A]"
+                className="text-sm text-[#8A9BA8] hover:text-[#5A6B7A]"
               >
                 {showDetails ? 'Hide' : 'Show'} technical details
               </button>

@@ -330,6 +330,7 @@ export function CommunityHub({
   const [threadLoading, setThreadLoading] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [postingComment, setPostingComment] = useState(false);
+  const [othersTyping, setOthersTyping] = useState(false);
   // Upcoming BCBA group sessions for the "Live group sessions" strip.
   const [groupSessions, setGroupSessions] = useState<LiveGroupSession[]>([]);
 
@@ -508,6 +509,40 @@ export function CommunityHub({
     }
     loadGroupSessions();
   }, []);
+
+  // Typing indicator: broadcast when user types, subscribe to others' broadcasts
+  useEffect(() => {
+    if (!activeThread) return;
+    const channelName = `community:thread:${activeThread.id}`;
+    const channel = supabase.channel(channelName);
+    let clearTimer: ReturnType<typeof setTimeout>;
+
+    channel
+      .on('broadcast', { event: 'typing' }, (payload: { payload?: { userId?: string } }) => {
+        if (payload?.payload?.userId === userId) return;
+        setOthersTyping(true);
+        clearTimeout(clearTimer);
+        clearTimer = setTimeout(() => setOthersTyping(false), 3000);
+      })
+      .subscribe();
+
+    return () => {
+      clearTimeout(clearTimer);
+      supabase.removeChannel(channel);
+    };
+  }, [activeThread, userId]);
+
+  // Broadcast typing event (debounced to avoid flooding)
+  const typingTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const broadcastTyping = useCallback(() => {
+    if (!activeThread) return;
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      supabase.channel(`community:thread:${activeThread.id}`)
+        .send({ type: 'broadcast', event: 'typing', payload: { userId } })
+        .catch(() => { /* non-fatal */ });
+    }, 300);
+  }, [activeThread, userId]);
 
   // "Parents like you" suggestion — pure client-side matching of the user's own
   // pre-signup screening answers (localStorage `aminy_screening_results`) against
@@ -832,17 +867,17 @@ export function CommunityHub({
                 {post.authorName}
               </span>
               {post.isBCBA && (
-                <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-xs shrink-0">
+                <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-sm shrink-0">
                   ✓ Verified BCBA
                 </Badge>
               )}
             </div>
-            <span className="text-xs text-[#5A6B7A]">{formatRelativeTime(post.createdAt)}</span>
+            <span className="text-sm text-[#5A6B7A]">{formatRelativeTime(post.createdAt)}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
           {post.isPinned && (
-            <Badge className="bg-amber-100 text-amber-700 text-xs">Pinned</Badge>
+            <Badge className="bg-amber-100 text-amber-700 text-sm">Pinned</Badge>
           )}
           <Badge className={POST_CATEGORIES.find(c => c.id === post.category)?.color || ''}>
             {POST_CATEGORIES.find(c => c.id === post.category)?.name}
@@ -869,7 +904,7 @@ export function CommunityHub({
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {post.tags.map((tag) => (
-            <span key={tag} className="text-xs text-[#5A6B7A] hover:text-[#6B9080] cursor-pointer">
+            <span key={tag} className="text-sm text-[#5A6B7A] hover:text-[#6B9080] cursor-pointer">
               #{tag}
             </span>
           ))}
@@ -926,7 +961,7 @@ export function CommunityHub({
           </button>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400 flex items-center gap-1">
+          <span className="text-sm text-slate-400 flex items-center gap-1">
             <Eye className="w-3 h-3" />
             {post.views}
           </span>
@@ -1051,7 +1086,7 @@ export function CommunityHub({
                         <p className="font-medium text-sm text-[#1B2733] dark:text-white truncate">
                           {session.topic}
                         </p>
-                        <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                        <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
                           {session.sessionDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {' · '}
                           {session.sessionDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
@@ -1060,7 +1095,7 @@ export function CommunityHub({
                           <span className="text-sm font-semibold text-[#6B9080] dark:text-teal-200">
                             ${Math.round(session.pricePerFamilyCents / 100)}/family
                           </span>
-                          <span className="text-xs text-[#5A6B7A] dark:text-slate-300">
+                          <span className="text-sm text-[#5A6B7A] dark:text-slate-300">
                             {spotsLeft} {spotsLeft === 1 ? 'spot' : 'spots'} left
                           </span>
                         </div>
@@ -1095,7 +1130,7 @@ export function CommunityHub({
                             <p className="font-medium text-sm text-[#1B2733] dark:text-white">
                               Parents like you are in {suggestedGroup.name}
                             </p>
-                            <p className="text-xs text-[#5A6B7A] dark:text-slate-300 mt-1">
+                            <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
                               {suggestedGroup.memberCount.toLocaleString()} members supporting each other
                             </p>
                           </div>
@@ -1141,14 +1176,14 @@ export function CommunityHub({
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-[#1B2733] dark:text-white">{group.name}</h3>
                         {group.isPrivate && (
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-xs">
+                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">
                             <Shield className="w-3 h-3 mr-1" />
                             Private
                           </Badge>
                         )}
                       </div>
                       <p className="text-sm text-[#5A6B7A] mt-1">{group.description}</p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-slate-400">
+                      <div className="flex items-center gap-4 mt-2 text-sm text-slate-400">
                         <span className="flex items-center gap-1">
                           <Users className="w-3 h-3" />
                           {group.memberCount.toLocaleString()} members
@@ -1191,7 +1226,7 @@ export function CommunityHub({
                     <div className="flex items-center gap-2 mb-2">
                       <h3 className="font-semibold text-[#1B2733] dark:text-white">{event.title}</h3>
                       {event.isVirtual && (
-                        <Badge className="bg-blue-100 text-blue-700 text-xs">Virtual</Badge>
+                        <Badge className="bg-blue-100 text-blue-700 text-sm">Virtual</Badge>
                       )}
                     </div>
                     <p className="text-sm text-[#5A6B7A] mb-3">{event.description}</p>
@@ -1373,7 +1408,7 @@ export function CommunityHub({
                     {activeThread.authorName}
                   </span>
                   {activeThread.isBCBA && (
-                    <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-xs shrink-0">
+                    <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-sm shrink-0">
                       ✓ Verified BCBA
                     </Badge>
                   )}
@@ -1412,12 +1447,12 @@ export function CommunityHub({
                       {threadComments.map((c) => (
                         <div key={c.id} className="flex items-start gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-[#E8E4DF] dark:bg-slate-700 flex items-center justify-center shrink-0">
-                            <span className="text-xs font-medium text-[#5A6B7A]">{c.displayName.charAt(0)}</span>
+                            <span className="text-sm font-medium text-[#5A6B7A]">{c.displayName.charAt(0)}</span>
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-[#1B2733] dark:text-white">{c.displayName}</span>
-                              <span className="text-xs text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
+                              <span className="text-sm text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
                             </div>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>
                           </div>
@@ -1428,17 +1463,29 @@ export function CommunityHub({
                 </div>
               </div>
               <div className="p-4 border-t border-[#E8E4DF] dark:border-slate-700 flex items-center gap-2">
-                <Input
-                  placeholder="Add a comment…"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      handleAddComment();
-                    }
-                  }}
-                />
+                <div className="flex-1 flex flex-col gap-1">
+                  {othersTyping && (
+                    <div className="flex items-center gap-1.5 text-sm text-slate-400 px-1">
+                      <span className="flex gap-0.5">
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </span>
+                      <span>Someone is typing…</span>
+                    </div>
+                  )}
+                  <Input
+                    placeholder="Add a comment…"
+                    value={newComment}
+                    onChange={(e) => { setNewComment(e.target.value); broadcastTyping(); }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleAddComment();
+                      }
+                    }}
+                  />
+                </div>
                 <Button
                   onClick={handleAddComment}
                   disabled={postingComment || !newComment.trim()}

@@ -803,7 +803,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       );
                     })}
                   </div>
-                  <p className="text-xs text-[#5A6B7A] mt-2">
+                  <p className="text-sm text-[#5A6B7A] mt-2">
                     Independent providers can start with cash pay only, then add payer contracts or partner-billed lanes as they grow.
                   </p>
                 </div>

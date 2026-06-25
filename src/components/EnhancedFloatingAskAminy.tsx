@@ -66,7 +66,7 @@ function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) 
 
   return (
     <div className="mb-4">
-      <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A] mb-2">
+      <div className="flex items-center gap-1.5 text-sm text-[#5A6B7A] mb-2">
         <TimeIcon className="w-3 h-3" />
         <span>{config.label} suggestions</span>
       </div>
@@ -367,7 +367,7 @@ export function EnhancedAskAminyHomeCard({
         {contextScore > 50 && (
           <div className="flex items-center gap-1 px-2 py-1 bg-[#EEF4F8] rounded-lg">
             <Brain className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-medium text-blue-700">{contextScore}% personalized</span>
+            <span className="text-sm font-medium text-blue-700">{contextScore}% personalized</span>
           </div>
         )}
       </div>

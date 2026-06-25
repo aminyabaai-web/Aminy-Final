@@ -421,7 +421,7 @@ export function ModerationDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.pending}</p>
-              <p className="text-xs text-[#5A6B7A]">Pending</p>
+              <p className="text-sm text-[#5A6B7A]">Pending</p>
             </div>
           </div>
         </Card>
@@ -432,7 +432,7 @@ export function ModerationDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.approvedToday}</p>
-              <p className="text-xs text-[#5A6B7A]">Approved Today</p>
+              <p className="text-sm text-[#5A6B7A]">Approved Today</p>
             </div>
           </div>
         </Card>
@@ -443,7 +443,7 @@ export function ModerationDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.rejectedToday}</p>
-              <p className="text-xs text-[#5A6B7A]">Rejected Today</p>
+              <p className="text-sm text-[#5A6B7A]">Rejected Today</p>
             </div>
           </div>
         </Card>
@@ -454,7 +454,7 @@ export function ModerationDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.escalatedToday}</p>
-              <p className="text-xs text-[#5A6B7A]">Escalated</p>
+              <p className="text-sm text-[#5A6B7A]">Escalated</p>
             </div>
           </div>
         </Card>
@@ -465,7 +465,7 @@ export function ModerationDashboard() {
             </div>
             <div>
               <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.avgResponseTime}m</p>
-              <p className="text-xs text-[#5A6B7A]">Avg Response</p>
+              <p className="text-sm text-[#5A6B7A]">Avg Response</p>
             </div>
           </div>
         </Card>
@@ -537,7 +537,7 @@ export function ModerationDashboard() {
                           {item.reportCount} reports
                         </Badge>
                       )}
-                      <span className="text-xs text-[#5A6B7A]">
+                      <span className="text-sm text-[#5A6B7A]">
                         {item.contentType} • {formatTimeAgo(item.flaggedAt)}
                       </span>
                     </div>
@@ -664,15 +664,15 @@ export function ModerationDashboard() {
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                   <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{userHistory.totalFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Total Flags</p>
+                  <p className="text-sm text-[#5A6B7A]">Total Flags</p>
                 </div>
                 <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-emerald-600">{userHistory.approvedFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Approved</p>
+                  <p className="text-sm text-[#5A6B7A]">Approved</p>
                 </div>
                 <div className="text-center p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg">
                   <p className="text-2xl font-bold text-rose-600">{userHistory.rejectedFlags}</p>
-                  <p className="text-xs text-[#5A6B7A]">Rejected</p>
+                  <p className="text-sm text-[#5A6B7A]">Rejected</p>
                 </div>
               </div>
 

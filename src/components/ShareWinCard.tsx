@@ -174,7 +174,7 @@ export function ShareWinCard({
       </div>
 
       {/* Privacy notice */}
-      <p className="text-xs text-muted-foreground mt-3 text-center">
+      <p className="text-sm text-muted-foreground mt-3 text-center">
         🔒 {privacyHint}
       </p>
     </Card>

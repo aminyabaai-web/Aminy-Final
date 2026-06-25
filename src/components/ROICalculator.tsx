@@ -192,7 +192,7 @@ export function ROICalculator() {
                   step={50}
                   className="py-4"
                 />
-                <div className="flex justify-between text-xs text-[#8A9BA8]">
+                <div className="flex justify-between text-sm text-[#8A9BA8]">
                   <span>50</span>
                   <span>10,000</span>
                 </div>
@@ -216,7 +216,7 @@ export function ROICalculator() {
                   step={5}
                   className="py-4"
                 />
-                <p className="text-xs text-[#8A9BA8]">
+                <p className="text-sm text-[#8A9BA8]">
                   Industry avg: ~30 per 100 members/year
                 </p>
               </div>
@@ -239,7 +239,7 @@ export function ROICalculator() {
                   step={5}
                   className="py-4"
                 />
-                <p className="text-xs text-[#8A9BA8]">
+                <p className="text-sm text-[#8A9BA8]">
                   Mobile crisis, in-home stabilization, etc.
                 </p>
               </div>
@@ -262,7 +262,7 @@ export function ROICalculator() {
                   step={100}
                   className="py-4"
                 />
-                <p className="text-xs text-[#8A9BA8]">
+                <p className="text-sm text-[#8A9BA8]">
                   Support calls, questions, guidance requests
                 </p>
               </div>
@@ -285,7 +285,7 @@ export function ROICalculator() {
                   step={1}
                   className="py-4"
                 />
-                <p className="text-xs text-[#8A9BA8]">
+                <p className="text-sm text-[#8A9BA8]">
                   Aminy helps skills generalize = fewer hours needed
                 </p>
               </div>
@@ -413,7 +413,7 @@ export function ROICalculator() {
               source="Enterprise pricing (volume discounts available)"
             />
           </div>
-          <p className="text-xs text-[#8A9BA8] mt-4">
+          <p className="text-sm text-[#8A9BA8] mt-4">
             * Results are estimates based on industry benchmarks and Aminy pilot data.
             Actual results may vary based on population characteristics and implementation.
           </p>
@@ -487,7 +487,7 @@ function SavingsLine({
     <div className="flex justify-between items-center">
       <div>
         <p className="text-sm text-[#3A4A57] dark:text-gray-300">{label}</p>
-        <p className="text-xs text-[#8A9BA8]">{detail}</p>
+        <p className="text-sm text-[#8A9BA8]">{detail}</p>
       </div>
       <span className="font-medium text-green-600">{formatCurrency(value)}</span>
     </div>
@@ -512,7 +512,7 @@ function AssumptionCard({
         <span className="font-medium text-[#1B2733] dark:text-white">{title}</span>
       </div>
       <p className="text-lg font-semibold text-[#6B9080]">{value}</p>
-      <p className="text-xs text-[#8A9BA8] mt-1">{source}</p>
+      <p className="text-sm text-[#8A9BA8] mt-1">{source}</p>
     </div>
   );
 }

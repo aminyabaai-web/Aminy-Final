@@ -433,7 +433,7 @@ export function AIInsights() {
                         <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getPriorityColor(insight.priority)}`}>
                           {insight.priority}
                         </span>
-                        <span className="text-xs text-[#5A6B7A]">
+                        <span className="text-sm text-[#5A6B7A]">
                           {Math.round(insight.confidence * 100)}% confidence
                         </span>
                       </div>
@@ -535,7 +535,7 @@ export function AIInsights() {
                       </div>
                       <div>
                         <span className="font-medium text-[#1B2733] dark:text-white">{user.userName}</span>
-                        <p className="text-xs text-[#5A6B7A]">Last active: {user.lastActive}</p>
+                        <p className="text-sm text-[#5A6B7A]">Last active: {user.lastActive}</p>
                       </div>
                     </div>
                     <span className={`px-2 py-1 text-sm font-medium rounded-lg ${getRiskColor(user.riskScore)}`}>
@@ -601,7 +601,7 @@ export function AIInsights() {
                       </div>
                       <div>
                         <span className="font-medium text-[#1B2733] dark:text-white">{item.action}</span>
-                        <div className="flex items-center gap-3 text-xs text-[#5A6B7A] mt-1">
+                        <div className="flex items-center gap-3 text-sm text-[#5A6B7A] mt-1">
                           <span>Effort: {item.effort}</span>
                           <span>Time: {item.time}</span>
                         </div>
@@ -658,7 +658,7 @@ export function AIInsights() {
                       ].map(s => (
                         <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
                           <div className="text-xl font-bold">{s.count}</div>
-                          <div className="text-xs">{s.label}</div>
+                          <div className="text-sm">{s.label}</div>
                         </div>
                       ))}
                     </div>
@@ -666,7 +666,7 @@ export function AIInsights() {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="text-left text-xs text-[#5A6B7A] border-b border-neutral-100 dark:border-slate-700">
+                          <tr className="text-left text-sm text-[#5A6B7A] border-b border-neutral-100 dark:border-slate-700">
                             <th className="pb-2 pr-3 font-medium">Score</th>
                             <th className="pb-2 pr-3 font-medium">Trigger</th>
                             <th className="pb-2 font-medium">Comment</th>
@@ -691,7 +691,7 @@ export function AIInsights() {
                                   {row.score}
                                 </span>
                               </td>
-                              <td className="py-2 pr-3 text-[#5A6B7A] dark:text-[#8A9BA8] text-xs">
+                              <td className="py-2 pr-3 text-[#5A6B7A] dark:text-[#8A9BA8] text-sm">
                                 {row.trigger ?? '—'}
                               </td>
                               <td className="py-2 text-[#5A6B7A] dark:text-[#8A9BA8] max-w-xs truncate">
@@ -721,7 +721,7 @@ export function AIInsights() {
                     ].map(s => (
                       <div key={s.label} className={`text-center p-3 rounded-lg ${s.color}`}>
                         <div className="text-xl font-bold">{s.count}</div>
-                        <div className="text-xs">{s.label}</div>
+                        <div className="text-sm">{s.label}</div>
                       </div>
                     ))}
                   </div>

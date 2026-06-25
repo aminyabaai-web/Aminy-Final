@@ -705,13 +705,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   <span className="text-xl">{p.emoji}</span>
                   <span className="text-sm font-semibold dark:text-white">{p.name}</span>
-                  <span className="text-xs text-muted-foreground leading-snug">{p.tagline}</span>
+                  <span className="text-sm text-muted-foreground leading-snug">{p.tagline}</span>
                 </button>
               );
             })}
           </div>
           {selectedPersonality && (
-            <p className="mt-3 text-xs text-[#5A6B7A] dark:text-slate-400 text-center">
+            <p className="mt-3 text-sm text-[#5A6B7A] dark:text-slate-400 text-center">
               {AI_PERSONALITIES[selectedPersonality].description}
             </p>
           )}
@@ -758,13 +758,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 <>
                   {aiMemory.childName && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">Child</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">Child</span>
                       <span className="text-sm dark:text-white">{aiMemory.childName}{aiMemory.childAge ? `, age ${aiMemory.childAge}` : ''}{aiMemory.diagnosis ? ` · ${aiMemory.diagnosis}` : ''}</span>
                     </div>
                   )}
                   {(aiMemory.activeGoals?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Goals</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Goals</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.activeGoals!.map((g, i) => (
                           <span key={i} className="text-xs bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20 rounded-full px-2 py-0.5">{g}</span>
@@ -774,13 +774,13 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {aiMemory.lastCalmCue && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">Calm cue</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">Calm cue</span>
                       <span className="text-sm dark:text-white">"{aiMemory.lastCalmCue}"</span>
                     </div>
                   )}
                   {(aiMemory.celebratingWins?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Wins</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Wins</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.celebratingWins!.map((w, i) => (
                           <span key={i} className="text-xs bg-green-50 text-green-700 border border-green-200 rounded-full px-2 py-0.5">{w}</span>
@@ -790,7 +790,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {(aiMemory.strugglingWith?.length ?? 0) > 0 && (
                     <div className="flex items-start gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Working on</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0 mt-0.5">Working on</span>
                       <div className="flex flex-wrap gap-1">
                         {aiMemory.strugglingWith!.map((s, i) => (
                           <span key={i} className="text-xs bg-amber-50 text-amber-700 border border-amber-200 rounded-full px-2 py-0.5">{s}</span>
@@ -800,7 +800,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   )}
                   {aiMemory.progressThisWeek && (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-muted-foreground w-24 shrink-0">This week</span>
+                      <span className="text-sm font-medium text-muted-foreground w-24 shrink-0">This week</span>
                       <span className="text-sm dark:text-white">{aiMemory.progressThisWeek.sessionsCompleted} sessions · {aiMemory.progressThisWeek.calmMoments} calm moments</span>
                     </div>
                   )}
@@ -841,7 +841,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                     {subscription.cancelAtPeriodEnd ? 'Cancels' : 'Renews'} {new Date(subscription.currentPeriodEnd).toLocaleDateString()}
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-sm text-muted-foreground mt-0.5">
                   AI memory:{' '}
                   {subscription.tier === 'free' ? '50 facts' :
                    subscription.tier === 'core' ? '5,000 facts' :
@@ -886,7 +886,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 </span>
                 <ExternalLink aria-hidden="true" className="w-3.5 h-3.5 text-muted-foreground" />
               </Button>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Update payment method, switch plans, view invoices, or cancel
               </p>
             </div>
@@ -1028,7 +1028,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         </div>
                         <div>
                           <p className="font-medium text-[#1B2733] text-sm">AI Check-ins</p>
-                          <p className="text-xs text-muted-foreground">Proactive insights from Aminy</p>
+                          <p className="text-sm text-muted-foreground">Proactive insights from Aminy</p>
                         </div>
                       </div>
                       <Switch
@@ -1052,7 +1052,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <div className="px-4 py-3 space-y-3 border-t border-[#E8E4DF] bg-white">
                         {/* Frequency chips */}
                         <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">Frequency</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-2">Frequency</p>
                           <div className="flex gap-2 flex-wrap">
                             {([
                               { id: 'daily', label: 'Daily' },
@@ -1085,7 +1085,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
 
                         {/* Time chips */}
                         <div>
-                          <p className="text-xs font-medium text-muted-foreground mb-2">Best time</p>
+                          <p className="text-sm font-medium text-muted-foreground mb-2">Best time</p>
                           <div className="flex gap-2">
                             {([
                               { id: 'morning', label: '☀️ Morning', sub: '7–9 am' },
@@ -1107,14 +1107,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                     : 'border-[#E8E4DF] bg-[#FAF7F2] text-foreground hover:border-[#6B9080]'
                                 }`}
                               >
-                                <p className="text-xs font-medium">{opt.label}</p>
-                                <p className="text-xs text-slate-400 mt-0.5">{opt.sub}</p>
+                                <p className="text-sm font-medium">{opt.label}</p>
+                                <p className="text-sm text-slate-400 mt-0.5">{opt.sub}</p>
                               </button>
                             ))}
                           </div>
                         </div>
 
-                        <p className="text-xs text-slate-400 leading-relaxed">
+                        <p className="text-sm text-slate-400 leading-relaxed">
                           Aminy will send a personalized insight based on recent sessions, goals, and behavior patterns — at your chosen time.
                         </p>
                       </div>
@@ -1334,7 +1334,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           </>
                         )}
                       </Button>
-                      <p className="text-xs text-muted-foreground mt-3">
+                      <p className="text-sm text-muted-foreground mt-3">
                         We only access your calendar to create and read events. We never modify or delete your existing events.
                       </p>
                     </div>
@@ -1353,7 +1353,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-green-800 dark:text-green-300 text-sm">Google Calendar</p>
-                          <p className="text-xs text-green-600 dark:text-green-400">
+                          <p className="text-sm text-green-600 dark:text-green-400">
                             {calendarIntegration?.last_sync_at
                               ? `Last synced ${new Date(calendarIntegration.last_sync_at).toLocaleString()}`
                               : 'Connected — not yet synced'}
@@ -1631,7 +1631,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         )}
 
         {/* App Version — sourced from the shared app config so it stays in sync across screens */}
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-sm text-muted-foreground">
           Aminy v{appConfig.version} • Made with care
         </p>
         </div>{/* end settings content cards wrapper */}
@@ -1684,7 +1684,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Must contain uppercase letter and number
               </p>
             </div>

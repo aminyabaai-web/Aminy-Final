@@ -103,7 +103,7 @@ function StatCard({
       <div className="text-2xl font-bold text-[#1B2733]">{value}</div>
       {subtitle && <p className="text-sm text-[#5A6B7A] mt-1">{subtitle}</p>}
       {trend && (
-        <p className={`text-xs mt-2 ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
+        <p className={`text-sm mt-2 ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
           {trendUp ? '↑' : '↓'} {trend}
         </p>
       )}
@@ -187,11 +187,11 @@ function ProviderCard({
         <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t">
           <div className="text-center">
             <div className="text-lg font-semibold text-[#1B2733]">{stats.activeClients}</div>
-            <div className="text-xs text-[#5A6B7A]">Clients</div>
+            <div className="text-sm text-[#5A6B7A]">Clients</div>
           </div>
           <div className="text-center">
             <div className="text-lg font-semibold text-[#1B2733]">{formatPercent(stats.utilizationRate)}</div>
-            <div className="text-xs text-[#5A6B7A]">Utilization</div>
+            <div className="text-sm text-[#5A6B7A]">Utilization</div>
           </div>
           <div className="text-center">
             <div className={`text-lg font-semibold ${
@@ -200,7 +200,7 @@ function ProviderCard({
             }`}>
               {stats.credentialsStatus === 'current' ? '✓' : stats.credentialsStatus === 'expiring_soon' ? '!' : '✗'}
             </div>
-            <div className="text-xs text-[#5A6B7A]">Credentials</div>
+            <div className="text-sm text-[#5A6B7A]">Credentials</div>
           </div>
         </div>
       )}
@@ -236,7 +236,7 @@ function ClientCard({
             {client.assignedProviders.length} provider{client.assignedProviders.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(client.status)}`}>
+        <span className={`px-2 py-1 text-sm font-medium rounded ${getStatusColor(client.status)}`}>
           {client.status}
         </span>
       </div>
@@ -257,7 +257,7 @@ function ClientCard({
       </div>
 
       {auth && auth.periodEnd && (
-        <p className="text-xs text-[#8A9BA8] mt-3">
+        <p className="text-sm text-[#8A9BA8] mt-3">
           Auth expires: {new Date(auth.periodEnd).toLocaleDateString()}
         </p>
       )}
@@ -281,10 +281,10 @@ function LocationCard({
         <div>
           <h3 className="font-semibold text-[#1B2733]">{location.name}</h3>
           {location.isPrimary && (
-            <span className="text-xs text-[#6B9080] font-medium">Primary Location</span>
+            <span className="text-sm text-[#6B9080] font-medium">Primary Location</span>
           )}
         </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-[#1B2733]'}`}>
+        <span className={`px-2 py-1 text-sm font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-[#1B2733]'}`}>
           {location.isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
@@ -507,7 +507,7 @@ export function ClinicDashboard({
                             {pStats?.credentialsStatus === 'expiring_soon' ? 'Expiring Soon' : 'Expired'}
                           </span>
                           {pStats?.upcomingExpiration && (
-                            <p className="text-xs text-[#5A6B7A]">
+                            <p className="text-sm text-[#5A6B7A]">
                               {pStats.upcomingExpiration.toLocaleDateString()}
                             </p>
                           )}
@@ -721,7 +721,7 @@ export function ClinicDashboard({
                       <p className="font-medium text-[#1B2733]">{cred.insurerName}</p>
                       <p className="text-sm text-[#5A6B7A]">Contract: {cred.contractNumber || 'N/A'}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(cred.status)}`}>
+                    <span className={`px-2 py-1 text-sm font-medium rounded ${getStatusColor(cred.status)}`}>
                       {cred.status}
                     </span>
                   </div>

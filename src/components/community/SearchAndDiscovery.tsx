@@ -540,9 +540,9 @@ export function SearchAndDiscovery({
                           {result.authorName}
                         </span>
                         {result.isExpert && (
-                          <Badge className="bg-purple-100 text-purple-700 text-xs">Expert</Badge>
+                          <Badge className="bg-purple-100 text-purple-700 text-sm">Expert</Badge>
                         )}
-                        <span className="text-xs text-[#5A6B7A]">
+                        <span className="text-sm text-[#5A6B7A]">
                           {formatTimeAgo(result.createdAt)}
                         </span>
                       </div>
@@ -563,7 +563,7 @@ export function SearchAndDiscovery({
                           <Badge
                             key={tag}
                             variant="secondary"
-                            className="text-xs cursor-pointer hover:bg-neutral-200"
+                            className="text-sm cursor-pointer hover:bg-neutral-200"
                             onClick={e => {
                               e.stopPropagation();
                               handleTagClick(tag);
@@ -601,16 +601,16 @@ export function SearchAndDiscovery({
                     <span className="text-neutral-400 text-sm">{idx + 1}</span>
                     <div>
                       <p className="font-medium text-[#1B2733] dark:text-white">#{topic.tag}</p>
-                      <p className="text-xs text-[#5A6B7A]">{topic.postCount} posts</p>
+                      <p className="text-sm text-[#5A6B7A]">{topic.postCount} posts</p>
                     </div>
                   </div>
                   {topic.trend === 'up' && (
-                    <Badge className="bg-emerald-100 text-emerald-700 text-xs">
+                    <Badge className="bg-emerald-100 text-emerald-700 text-sm">
                       +{topic.changePercent}%
                     </Badge>
                   )}
                   {topic.trend === 'new' && (
-                    <Badge className="bg-blue-100 text-blue-700 text-xs">New</Badge>
+                    <Badge className="bg-blue-100 text-blue-700 text-sm">New</Badge>
                   )}
                 </button>
               ))}
@@ -639,13 +639,13 @@ export function SearchAndDiscovery({
                         {post.authorName}
                       </span>
                       {post.isExpert && (
-                        <Badge className="bg-purple-100 text-purple-700 text-xs">Expert</Badge>
+                        <Badge className="bg-purple-100 text-purple-700 text-sm">Expert</Badge>
                       )}
                     </div>
                     <p className="text-neutral-700 dark:text-slate-300 text-sm line-clamp-2">
                       {post.content}
                     </p>
-                    <div className="flex items-center gap-3 mt-2 text-xs text-[#5A6B7A]">
+                    <div className="flex items-center gap-3 mt-2 text-sm text-[#5A6B7A]">
                       <span className="flex items-center gap-1">
                         <Heart className="w-3 h-3" />
                         {post.likes}
@@ -691,7 +691,7 @@ export function SearchAndDiscovery({
                     setSearchHistory([]);
                     localStorage.removeItem('aminy_search_history');
                   }}
-                  className="text-[#5A6B7A] text-xs"
+                  className="text-[#5A6B7A] text-sm"
                 >
                   Clear history
                 </Button>

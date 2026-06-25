@@ -597,15 +597,15 @@ export function BrandGuideComponent() {
                   <div className="space-y-2">
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#1B2733]">"Finally, calm that works."</p>
-                      <p className="text-xs text-[#5A6B7A] mt-1">Splash screen hero</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">Splash screen hero</p>
                     </div>
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#1B2733]">"Today's Calm Plan"</p>
-                      <p className="text-xs text-[#5A6B7A] mt-1">Dashboard header</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">Dashboard header</p>
                     </div>
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#1B2733]">"Progress You Can See"</p>
-                      <p className="text-xs text-[#5A6B7A] mt-1">Reports section</p>
+                      <p className="text-sm text-[#5A6B7A] mt-1">Reports section</p>
                     </div>
                   </div>
                 </div>

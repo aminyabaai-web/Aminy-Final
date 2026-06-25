@@ -77,8 +77,8 @@ export function TodayStrip({ items = defaultTodayItems }: TodayStripProps) {
             >
               <Icon className="w-4 h-4 text-accent" />
               <div className="text-left">
-                <p className="text-xs font-medium text-[#3A4A57]">{item.title}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm font-medium text-[#3A4A57]">{item.title}</p>
+                <p className="text-sm text-muted-foreground">
                   {item.subtitle} · {item.duration}
                 </p>
               </div>

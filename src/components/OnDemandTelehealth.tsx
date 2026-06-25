@@ -458,7 +458,7 @@ export function OnDemandTelehealth({
             <Shield className="w-5 h-5 text-green-600" />
             <div>
               <p className="text-sm font-medium text-green-900">HIPAA-Conscious Video Sessions</p>
-              <p className="text-xs text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
+              <p className="text-sm text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
             </div>
           </div>
         </div>
@@ -467,7 +467,7 @@ export function OnDemandTelehealth({
           <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-2">
             <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
             {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} /> : null}
-            <p className="text-xs text-sky-700">{launchConfig.message}</p>
+            <p className="text-sm text-sky-700">{launchConfig.message}</p>
           </div>
         </div>
 
@@ -558,7 +558,7 @@ export function OnDemandTelehealth({
                       {/* Specialties */}
                       <div className="flex flex-wrap gap-1 mt-2">
                         {provider.specialties.map((specialty) => (
-                          <Badge key={specialty} variant="outline" className="text-xs capitalize">
+                          <Badge key={specialty} variant="outline" className="text-sm capitalize">
                             {specialty}
                           </Badge>
                         ))}
@@ -655,7 +655,7 @@ export function OnDemandTelehealth({
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 15)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Quick check-in</p>
+                <p className="text-sm text-[#5A6B7A]">Quick check-in</p>
               </button>
 
               <button
@@ -670,7 +670,7 @@ export function OnDemandTelehealth({
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 30)}
                 </p>
-                <p className="text-xs text-[#5A6B7A]">Full session (recommended)</p>
+                <p className="text-sm text-[#5A6B7A]">Full session (recommended)</p>
               </button>
             </div>
           </div>
@@ -723,7 +723,7 @@ export function OnDemandTelehealth({
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
             <div className="flex items-start gap-2">
               <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-amber-800">
+              <p className="text-sm text-amber-800">
                 This is wellness coaching, not emergency services. If there's immediate danger,
                 please call <a href="tel:911" className="underline font-medium">911</a>.
               </p>
@@ -914,7 +914,7 @@ export function OnDemandTelehealth({
               </div>
               <div className="text-right">
                 <p className="text-white font-mono text-lg">{formatElapsed(elapsed)}</p>
-                <p className="text-white/50 text-xs">
+                <p className="text-white/50 text-sm">
                   of {session.duration} min session
                 </p>
               </div>

@@ -63,7 +63,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">Competency Assessment</h1>
-            <p className="text-xs text-white/80">BACB 5th Edition Task List</p>
+            <p className="text-sm text-white/80">BACB 5th Edition Task List</p>
           </div>
         </div>
 
@@ -207,11 +207,11 @@ function AssessmentForm({
       <div className="bg-white rounded-xl p-3 border border-[#E8E4DF] flex items-center justify-between">
         <div>
           <div className="text-sm font-semibold text-[#1B2733]">Assessing: {rbtName}</div>
-          <div className="text-xs text-[#5A6B7A]">{today}</div>
+          <div className="text-sm text-[#5A6B7A]">{today}</div>
         </div>
         <div className="text-center">
           <div className="text-lg font-bold text-violet-700">{avgRating.toFixed(1)}</div>
-          <div className="text-xs text-slate-400">avg score</div>
+          <div className="text-sm text-slate-400">avg score</div>
         </div>
       </div>
 
@@ -234,7 +234,7 @@ function AssessmentForm({
                     onClick={() => setExpandedArea(isExpanded ? null : area.id)}
                     className="w-full px-3 py-2.5 flex items-center gap-2 text-left"
                   >
-                    <span className="text-xs text-slate-400 w-5">{area.id}.</span>
+                    <span className="text-sm text-slate-400 w-5">{area.id}.</span>
                     <span className="flex-1 text-sm text-[#3A4A57] truncate">{area.name}</span>
                     <span className={`text-sm font-bold ${ratingColor} w-6 text-center`}>{r.rating}</span>
                     {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
@@ -255,7 +255,7 @@ function AssessmentForm({
                               <button
                                 key={val}
                                 onClick={() => updateRating(area.id, val)}
-                                className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                                className={`flex-1 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                                   r.rating === val
                                     ? val >= 4 ? 'bg-emerald-600 text-white'
                                     : val >= 3 ? 'bg-amber-500 text-white'
@@ -267,7 +267,7 @@ function AssessmentForm({
                               </button>
                             ))}
                           </div>
-                          <div className="text-xs text-slate-400 text-center">
+                          <div className="text-sm text-slate-400 text-center">
                             {RATING_LABELS[r.rating]}
                           </div>
                           {/* Notes */}
@@ -275,7 +275,7 @@ function AssessmentForm({
                             value={r.notes}
                             onChange={(e) => updateNotes(area.id, e.target.value)}
                             placeholder="Notes for this competency..."
-                            className="w-full border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-xs h-16 resize-none"
+                            className="w-full border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm h-16 resize-none"
                           />
                         </div>
                       </motion.div>
@@ -290,7 +290,7 @@ function AssessmentForm({
 
       {/* Overall notes */}
       <div>
-        <label className="text-xs font-semibold text-[#5A6B7A] mb-1 block">Overall Notes</label>
+        <label className="text-sm font-semibold text-[#5A6B7A] mb-1 block">Overall Notes</label>
         <textarea
           value={overallNotes}
           onChange={(e) => setOverallNotes(e.target.value)}
@@ -302,7 +302,7 @@ function AssessmentForm({
       {/* Low-area preview */}
       {Object.values(ratings).some((r) => r.rating <= 2) && (
         <div className="bg-amber-50 rounded-xl p-3 border border-amber-200">
-          <div className="flex items-center gap-1 text-xs font-semibold text-amber-700 mb-2">
+          <div className="flex items-center gap-1 text-sm font-semibold text-amber-700 mb-2">
             <AlertTriangle className="w-3.5 h-3.5" />
             Development Areas Flagged
           </div>
@@ -310,7 +310,7 @@ function AssessmentForm({
             {BACB_TASK_LIST_AREAS
               .filter((a) => ratings[a.id].rating <= 2)
               .map((a) => (
-                <div key={a.id} className="text-xs text-amber-800">
+                <div key={a.id} className="text-sm text-amber-800">
                   &bull; {a.name} (rated {ratings[a.id].rating}/5)
                 </div>
               ))}
@@ -346,7 +346,7 @@ function HistoryView({
       <div className="text-center py-12">
         <FileText className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No assessments yet for {rbtName}</p>
-        <p className="text-xs text-slate-400 mt-1">Create a new assessment to start tracking</p>
+        <p className="text-sm text-slate-400 mt-1">Create a new assessment to start tracking</p>
       </div>
     );
   }
@@ -358,7 +358,7 @@ function HistoryView({
       {/* Progress chart */}
       {assessments.length >= 2 && (
         <div className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
-          <div className="flex items-center gap-1 text-xs font-semibold text-[#5A6B7A] mb-2">
+          <div className="flex items-center gap-1 text-sm font-semibold text-[#5A6B7A] mb-2">
             <TrendingUp className="w-3.5 h-3.5" />
             Progress Over Time
           </div>
@@ -368,7 +368,7 @@ function HistoryView({
               const height = (avg / 5) * 100;
               return (
                 <div key={a.id} className="flex-1 flex flex-col items-center gap-1">
-                  <div className="text-xs font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
+                  <div className="text-sm font-medium text-[#5A6B7A]">{avg.toFixed(1)}</div>
                   <div className="w-full bg-violet-100 rounded-t-sm overflow-hidden" style={{ height: '100%' }}>
                     <div
                       className="w-full bg-violet-500 rounded-t-sm mt-auto"
@@ -401,7 +401,7 @@ function HistoryView({
               </div>
               <div className="flex-1">
                 <div className="text-sm font-semibold text-[#1B2733]">{a.date}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   Avg: {avg.toFixed(1)} &middot; {highCount} strong &middot; {lowCount} needs work
                 </div>
               </div>
@@ -424,8 +424,8 @@ function HistoryView({
                         'bg-red-100 text-red-700';
                       return (
                         <div key={r.areaId} className="flex items-center gap-2">
-                          <span className="text-xs text-slate-400 w-4">{r.areaId}</span>
-                          <span className="flex-1 text-xs text-[#5A6B7A] truncate">{r.areaName}</span>
+                          <span className="text-sm text-slate-400 w-4">{r.areaId}</span>
+                          <span className="flex-1 text-sm text-[#5A6B7A] truncate">{r.areaName}</span>
                           <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${color}`}>
                             {r.rating}/5
                           </span>
@@ -434,7 +434,7 @@ function HistoryView({
                     })}
                     {a.overallNotes && (
                       <div className="mt-2 p-2 bg-[#FAF7F2] rounded-lg">
-                        <p className="text-xs text-[#5A6B7A]">{a.overallNotes}</p>
+                        <p className="text-sm text-[#5A6B7A]">{a.overallNotes}</p>
                       </div>
                     )}
                   </div>
@@ -462,7 +462,7 @@ function DevelopmentPlanView({
       <div className="text-center py-12">
         <BarChart3 className="w-8 h-8 text-slate-400 mx-auto mb-2" />
         <p className="text-sm text-[#5A6B7A]">No assessments available</p>
-        <p className="text-xs text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
+        <p className="text-sm text-slate-400 mt-1">Complete an assessment to generate a development plan</p>
       </div>
     );
   }
@@ -475,12 +475,12 @@ function DevelopmentPlanView({
   return (
     <div className="space-y-4">
       <h2 className="text-sm font-semibold text-[#3A4A57]">Development Plan &mdash; {rbtName}</h2>
-      <p className="text-xs text-[#5A6B7A]">Based on assessment from {latest.date}</p>
+      <p className="text-sm text-[#5A6B7A]">Based on assessment from {latest.date}</p>
 
       {/* Priority: Low areas */}
       {lowAreas.length > 0 && (
         <div className="bg-red-50 rounded-xl p-3 border border-red-200">
-          <h3 className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-red-700 mb-2 flex items-center gap-1">
             <AlertTriangle className="w-3.5 h-3.5" />
             Priority Development Areas ({lowAreas.length})
           </h3>
@@ -489,12 +489,12 @@ function DevelopmentPlanView({
               <div key={r.areaId} className="bg-white rounded-lg p-2 border border-red-100">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-[#1B2733]">{r.areaName}</span>
-                  <span className="text-xs font-bold text-red-600">{r.rating}/5</span>
+                  <span className="text-sm font-bold text-red-600">{r.rating}/5</span>
                 </div>
-                <p className="text-xs text-[#5A6B7A] mt-1">
+                <p className="text-sm text-[#5A6B7A] mt-1">
                   {RATING_LABELS[r.rating]} &mdash; Schedule targeted supervision sessions focusing on this area.
                 </p>
-                {r.notes && <p className="text-xs text-[#5A6B7A] mt-1 italic">Note: {r.notes}</p>}
+                {r.notes && <p className="text-sm text-[#5A6B7A] mt-1 italic">Note: {r.notes}</p>}
               </div>
             ))}
           </div>
@@ -504,15 +504,15 @@ function DevelopmentPlanView({
       {/* Developing areas */}
       {midAreas.length > 0 && (
         <div className="bg-amber-50 rounded-xl p-3 border border-amber-200">
-          <h3 className="text-xs font-semibold text-amber-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-amber-700 mb-2 flex items-center gap-1">
             <TrendingUp className="w-3.5 h-3.5" />
             Developing ({midAreas.length})
           </h3>
           <div className="space-y-1">
             {midAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
-                <span className="text-xs font-medium text-amber-600">{r.rating}/5</span>
+                <span className="text-sm text-[#3A4A57]">{r.areaName}</span>
+                <span className="text-sm font-medium text-amber-600">{r.rating}/5</span>
               </div>
             ))}
           </div>
@@ -522,15 +522,15 @@ function DevelopmentPlanView({
       {/* Strong areas */}
       {strongAreas.length > 0 && (
         <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-200">
-          <h3 className="text-xs font-semibold text-emerald-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-emerald-700 mb-2 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" />
             Strengths ({strongAreas.length})
           </h3>
           <div className="space-y-1">
             {strongAreas.map((r) => (
               <div key={r.areaId} className="flex items-center justify-between py-1">
-                <span className="text-xs text-[#3A4A57]">{r.areaName}</span>
-                <span className="text-xs font-medium text-emerald-600">{r.rating}/5</span>
+                <span className="text-sm text-[#3A4A57]">{r.areaName}</span>
+                <span className="text-sm font-medium text-emerald-600">{r.rating}/5</span>
               </div>
             ))}
           </div>
@@ -540,7 +540,7 @@ function DevelopmentPlanView({
       {/* Auto-generated plan items */}
       {latest.developmentPlan.length > 0 && (
         <div className="bg-white rounded-xl p-3 border border-violet-200">
-          <h3 className="text-xs font-semibold text-violet-700 mb-2 flex items-center gap-1">
+          <h3 className="text-sm font-semibold text-violet-700 mb-2 flex items-center gap-1">
             <FileText className="w-3.5 h-3.5" />
             Action Items
           </h3>
@@ -550,7 +550,7 @@ function DevelopmentPlanView({
                 <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-xs text-[#3A4A57]">{item}</p>
+                <p className="text-sm text-[#3A4A57]">{item}</p>
               </div>
             ))}
           </div>
@@ -561,7 +561,7 @@ function DevelopmentPlanView({
         <div className="text-center py-4">
           <CheckCircle2 className="w-6 h-6 text-emerald-500 mx-auto mb-1" />
           <p className="text-sm text-[#5A6B7A] font-medium">No critical development areas</p>
-          <p className="text-xs text-slate-400">All competencies rated 3 or above</p>
+          <p className="text-sm text-slate-400">All competencies rated 3 or above</p>
         </div>
       )}
     </div>

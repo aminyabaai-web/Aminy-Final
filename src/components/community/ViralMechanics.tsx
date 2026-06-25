@@ -135,17 +135,17 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
           <div className="mt-4 flex items-center gap-4 text-center">
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.totalReferrals}</p>
-              <p className="text-xs text-teal-200">Invited</p>
+              <p className="text-sm text-teal-200">Invited</p>
             </div>
             <div className="h-8 w-px bg-teal-400/30" />
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.activeReferrals}</p>
-              <p className="text-xs text-teal-200">Active</p>
+              <p className="text-sm text-teal-200">Active</p>
             </div>
             <div className="h-8 w-px bg-teal-400/30" />
             <div className="flex-1">
               <p className="text-2xl font-bold">{referral.rewardsEarned.length}</p>
-              <p className="text-xs text-teal-200">Rewards</p>
+              <p className="text-sm text-teal-200">Rewards</p>
             </div>
           </div>
         </div>
@@ -165,7 +165,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
               {copied ? 'Copied' : 'Copy'}
             </button>
           </div>
-          <p className="mt-2 text-xs text-[#5A6B7A]">Code: <span className="font-mono font-bold">{referral.code}</span></p>
+          <p className="mt-2 text-sm text-[#5A6B7A]">Code: <span className="font-mono font-bold">{referral.code}</span></p>
         </div>
 
         {/* Invite Methods */}
@@ -242,10 +242,10 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                   <p className={`text-sm font-medium ${m.reached ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>
                     {m.count} referral{m.count > 1 ? 's' : ''}
                   </p>
-                  <p className="text-xs text-[#5A6B7A]">{m.reward}</p>
+                  <p className="text-sm text-[#5A6B7A]">{m.reward}</p>
                 </div>
                 {m.reached && (
-                  <span className="text-xs font-semibold text-[#6B9080]">Earned</span>
+                  <span className="text-sm font-semibold text-[#6B9080]">Earned</span>
                 )}
               </div>
             ))}
@@ -261,10 +261,10 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                 <div key={reward.id} className="flex items-center justify-between rounded-lg bg-amber-50 p-3">
                   <div>
                     <p className="text-sm font-medium text-amber-900">{reward.label}</p>
-                    <p className="text-xs text-amber-700">{reward.description}</p>
+                    <p className="text-sm text-amber-700">{reward.description}</p>
                   </div>
                   {reward.redeemed ? (
-                    <span className="text-xs text-[#8A9BA8]">Redeemed</span>
+                    <span className="text-sm text-[#8A9BA8]">Redeemed</span>
                   ) : (
                     <span className="rounded-full bg-amber-200 px-2 py-0.5 text-xs font-semibold text-amber-800">Active</span>
                   )}
@@ -290,20 +290,20 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
       <div className="flex items-center gap-4 text-center">
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalFamilies.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Families</p>
+          <p className="text-sm text-[#5A6B7A]">Families</p>
         </div>
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalProviders.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Providers</p>
+          <p className="text-sm text-[#5A6B7A]">Providers</p>
         </div>
         <div className="flex-1">
           <p className="text-xl font-bold text-[#1B2733]">{proof.totalSessions.toLocaleString()}</p>
-          <p className="text-xs text-[#5A6B7A]">Sessions</p>
+          <p className="text-sm text-[#5A6B7A]">Sessions</p>
         </div>
       </div>
 
       {proof.recentSignups > 0 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5 text-xs text-[#6B9080]">
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-sm text-[#6B9080]">
           <Zap className="h-3.5 w-3.5" />
           <span>{proof.recentSignups} families joined this week</span>
         </div>
@@ -316,7 +316,7 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
             className={`h-4 w-4 ${i <= Math.floor(proof.averageRating) ? 'fill-amber-400 text-amber-400' : 'text-[#8A9BA8]'}`}
           />
         ))}
-        <span className="ml-1 text-xs text-[#5A6B7A]">{proof.averageRating.toFixed(1)}</span>
+        <span className="ml-1 text-sm text-[#5A6B7A]">{proof.averageRating.toFixed(1)}</span>
       </div>
     </div>
   );
@@ -343,8 +343,8 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
           </div>
           <div>
             <h3 className="text-sm font-bold text-[#1B2733]">{achievement.title}</h3>
-            <p className="text-xs text-[#5A6B7A]">{achievement.description}</p>
-            <p className="mt-1 text-xs text-[#8A9BA8]">
+            <p className="text-sm text-[#5A6B7A]">{achievement.description}</p>
+            <p className="mt-1 text-sm text-[#8A9BA8]">
               Earned {new Date(achievement.earnedAt).toLocaleDateString()}
             </p>
           </div>
@@ -352,7 +352,7 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
         {achievement.shareable && (
           <button
             onClick={() => onShare(achievement)}
-            className="flex items-center gap-1 rounded-lg bg-amber-200 px-2.5 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-300"
+            className="flex items-center gap-1 rounded-lg bg-amber-200 px-2.5 py-1.5 text-sm font-semibold text-amber-800 hover:bg-amber-300"
           >
             <Share2 className="h-3.5 w-3.5" />
             Share
@@ -409,15 +409,15 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                   {typeIcons[challenge.type]}
                   <span className="text-xs font-medium text-[#5A6B7A] uppercase">{challenge.type}</span>
                 </div>
-                <span className="text-xs text-[#8A9BA8]">{daysLeft}d left</span>
+                <span className="text-sm text-[#8A9BA8]">{daysLeft}d left</span>
               </div>
 
               <h3 className="text-sm font-bold text-[#1B2733]">{challenge.title}</h3>
-              <p className="mt-1 text-xs text-[#5A6B7A]">{challenge.description}</p>
+              <p className="mt-1 text-sm text-[#5A6B7A]">{challenge.description}</p>
 
               {/* Progress Bar */}
               <div className="mt-3">
-                <div className="flex items-center justify-between text-xs text-[#5A6B7A] mb-1">
+                <div className="flex items-center justify-between text-sm text-[#5A6B7A] mb-1">
                   <span>{challenge.progress}/{challenge.goal}</span>
                   <span>{progressPct}%</span>
                 </div>
@@ -432,12 +432,12 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
               </div>
 
               <div className="mt-3 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-[#5A6B7A]">
+                <div className="flex items-center gap-1.5 text-sm text-[#5A6B7A]">
                   <Users className="h-3.5 w-3.5" />
                   <span>{challenge.participants} participants</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="flex items-center gap-1 text-xs text-amber-600">
+                  <span className="flex items-center gap-1 text-sm text-amber-600">
                     <Gift className="h-3.5 w-3.5" />
                     {challenge.reward}
                   </span>
@@ -484,7 +484,7 @@ export function ShareGateOverlay({ gate, onShare }: ShareGateProps) {
     <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#6B9080]/30 bg-[#6B9080]/10/50 p-6 text-center">
       <Heart className="h-10 w-10 text-primary mb-3" />
       <h3 className="text-sm font-bold text-[#1B2733]">{gate.feature}</h3>
-      <p className="mt-1 text-xs text-[#5A6B7A]">{gate.description}</p>
+      <p className="mt-1 text-sm text-[#5A6B7A]">{gate.description}</p>
       <button
         onClick={onShare}
         className="mt-4 flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#6B9080]"

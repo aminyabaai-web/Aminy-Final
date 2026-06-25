@@ -73,7 +73,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
               <Clock className="w-4 h-4 text-blue-600" />
               <p className="text-sm font-semibold text-blue-900">Time-Limited Access</p>
             </div>
-            <p className="text-xs text-blue-700">
+            <p className="text-sm text-blue-700">
               The link will expire after {expiryDays} days for security
             </p>
           </div>
@@ -130,7 +130,7 @@ export function SharePlanLink({ tier, onGenerateLink }: SharePlanLinkProps) {
           </div>
 
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-            <p className="text-xs text-amber-700">
+            <p className="text-sm text-amber-700">
               This link will expire on {new Date(Date.now() + expiryDays * 24 * 60 * 60 * 1000).toLocaleDateString()}
             </p>
           </div>

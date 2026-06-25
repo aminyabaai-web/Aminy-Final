@@ -191,7 +191,7 @@ export default function FidgetLibrary({ onBack, onComplete }: FidgetLibraryProps
             >
               <span className="text-4xl" role="img" aria-hidden="true">{fidget.emoji}</span>
               <span className="text-base font-bold text-white drop-shadow-sm">{fidget.name}</span>
-              <span className="text-xs text-white/80">{fidget.description}</span>
+              <span className="text-sm text-white/80">{fidget.description}</span>
             </motion.button>
           ))}
         </div>

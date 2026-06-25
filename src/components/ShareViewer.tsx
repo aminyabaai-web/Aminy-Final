@@ -159,13 +159,13 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
               <h1 className="text-sm text-[#1B2733]">
                 {shareToken.metadata.parentFirstName}'s Share
               </h1>
-              <p className="text-xs text-[#5A6B7A]">
+              <p className="text-sm text-[#5A6B7A]">
                 {getContentTypeDisplayName(content.type)}
               </p>
             </div>
           </div>
           
-          <Badge variant="secondary" className="text-xs">
+          <Badge variant="secondary" className="text-sm">
             <Clock className="w-3 h-3 mr-1" />
             {formatExpirationDate(shareToken.expiresAt)}
           </Badge>
@@ -211,7 +211,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                 <h3 className="text-sm text-[#1B2733] mb-1">
                   Create Your Own Progress Snapshots
                 </h3>
-                <p className="text-xs text-[#5A6B7A] mb-3">
+                <p className="text-sm text-[#5A6B7A] mb-3">
                   Get personalized daily plans, AI coaching, and beautiful progress reports for your family.
                 </p>
                 <Button 
@@ -221,7 +221,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                   Start Free 7-Day Trial
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-                <p className="text-xs text-[#5A6B7A] mt-2 text-center">
+                <p className="text-sm text-[#5A6B7A] mt-2 text-center">
                   No credit card required • Full access during trial
                 </p>
               </div>
@@ -261,15 +261,15 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-blue-600 mb-1">{data.activitiesCompleted || 0}</div>
-            <div className="text-xs text-[#5A6B7A]">Activities</div>
+            <div className="text-sm text-[#5A6B7A]">Activities</div>
           </div>
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-green-600 mb-1">{data.streakDays || 0}</div>
-            <div className="text-xs text-[#5A6B7A]">Day Streak</div>
+            <div className="text-sm text-[#5A6B7A]">Day Streak</div>
           </div>
           <div className="bg-white rounded-lg p-3 text-center">
             <div className="text-2xl text-purple-600 mb-1">{data.goalsProgress || 0}%</div>
-            <div className="text-xs text-[#5A6B7A]">Goals</div>
+            <div className="text-sm text-[#5A6B7A]">Goals</div>
           </div>
         </div>
       </Card>
@@ -300,7 +300,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
           <div className="space-y-3">
             {data.goals.map((goal: WeeklySnapshotGoal, idx: number) => (
               <div key={`${goal.name}-${idx}`}>
-                <div className="flex justify-between text-xs mb-1">
+                <div className="flex justify-between text-sm mb-1">
                   <span className="text-[#3A4A57]">{goal.name}</span>
                   <span className="text-[#5A6B7A]">{goal.progress}%</span>
                 </div>
@@ -322,7 +322,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
           <Lock className="w-5 h-5 text-[#8A9BA8]" />
           <h3 className="text-sm text-[#3A4A57]">More Insights Available</h3>
         </div>
-        <p className="text-xs text-[#5A6B7A] mb-3">
+        <p className="text-sm text-[#5A6B7A] mb-3">
           Unlock detailed behavior analytics, AI coaching insights, and personalized recommendations.
         </p>
         <Button size="sm" variant="outline" className="w-full" onClick={onStartTrial}>
@@ -368,13 +368,13 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
                 </div>
                 <div className="space-y-1">
                   {routine.steps?.slice(0, 3).map((step: string, sIdx: number) => (
-                    <div key={sIdx} className="flex items-start gap-2 text-xs text-[#5A6B7A]">
+                    <div key={sIdx} className="flex items-start gap-2 text-sm text-[#5A6B7A]">
                       <span className="text-[#8A9BA8]">{sIdx + 1}.</span>
                       <span>{step}</span>
                     </div>
                   ))}
                   {(routine.steps?.length ?? 0) > 3 && (
-                    <p className="text-xs text-[#8A9BA8] pl-4">
+                    <p className="text-sm text-[#8A9BA8] pl-4">
                       +{(routine.steps?.length ?? 0) - 3} more steps
                     </p>
                   )}
@@ -389,7 +389,7 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
       <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <Lock className="w-5 h-5 text-[#8A9BA8] mb-2" />
         <h3 className="text-sm text-[#3A4A57] mb-2">Create Your Own Plans</h3>
-        <p className="text-xs text-[#5A6B7A]">
+        <p className="text-sm text-[#5A6B7A]">
           Get AI-powered daily plans tailored to your child's unique needs and goals.
         </p>
       </Card>
@@ -449,7 +449,7 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
       <Card className="p-5 bg-[#FAF7F2] border-dashed">
         <Lock className="w-5 h-5 text-[#8A9BA8] mb-2" />
         <h3 className="text-sm text-[#3A4A57] mb-2">Build Your Own Streaks</h3>
-        <p className="text-xs text-[#5A6B7A]">
+        <p className="text-sm text-[#5A6B7A]">
           Track daily progress, celebrate wins, and build lasting habits with your child.
         </p>
       </Card>

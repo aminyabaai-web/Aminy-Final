@@ -477,7 +477,7 @@ function CalmSpinner() {
         </motion.svg>
       </div>
 
-      <p className="text-[#5A6B7A] text-xs text-center">Let go and watch it coast...</p>
+      <p className="text-[#5A6B7A] text-sm text-center">Let go and watch it coast...</p>
     </div>
   );
 }
@@ -583,7 +583,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
         </button>
         <div className="flex-1 text-center">
           <h1 className="text-xl font-bold text-white">Calm Corner ✨</h1>
-          {childName && <p className="text-xs text-slate-400">{childName}'s space</p>}
+          {childName && <p className="text-sm text-slate-400">{childName}'s space</p>}
         </div>
         <div style={{ width: 36 }} />
       </div>
@@ -605,7 +605,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
           >
             <span style={{ fontSize: 18 }}>{tab.emoji}</span>
             <span
-              className="text-xs font-medium"
+              className="text-sm font-medium"
               style={{ color: activeTab === tab.id ? '#43AA8B' : '#94a3b8' }}
             >
               {tab.label}

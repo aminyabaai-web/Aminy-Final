@@ -191,7 +191,7 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
         </button>
       </div>
 
-      <p className="mt-4 text-xs text-[#8A9BA8]">
+      <p className="mt-4 text-sm text-[#8A9BA8]">
         Error ID: {errorId}
       </p>
     </div>
@@ -276,7 +276,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
         </a>
       </div>
 
-      <p className="mt-4 text-xs text-[#8A9BA8] text-center">
+      <p className="mt-4 text-sm text-[#8A9BA8] text-center">
         Reference: {errorId}
       </p>
     </div>
@@ -368,7 +368,7 @@ function FormErrorFallback({ error, retry, errorId }: FallbackProps) {
             {error?.message || "Something went wrong. Your data has been saved locally."}
           </p>
           {formData && (
-            <p className="text-xs text-yellow-600 mt-2">
+            <p className="text-sm text-yellow-600 mt-2">
               Your previous entries are saved and will be restored.
             </p>
           )}
@@ -542,7 +542,7 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
           </a>
         </div>
 
-        <p className="mt-6 text-xs text-[#8A9BA8]">
+        <p className="mt-6 text-sm text-[#8A9BA8]">
           Error reference: {errorId}
         </p>
       </div>

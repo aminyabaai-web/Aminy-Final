@@ -537,7 +537,7 @@ export function ParentWellnessCheck({
                                 <div className="flex items-start justify-between">
                                   <div>
                                     <h5 className="font-medium text-primary text-sm">{resource.name}</h5>
-                                    <p className="text-xs text-muted-foreground">{resource.description}</p>
+                                    <p className="text-sm text-muted-foreground">{resource.description}</p>
                                   </div>
                                   {resource.phone && (
                                     <a
@@ -597,7 +597,7 @@ export function CrisisSupportBanner({
           <Heart className="w-5 h-5" />
           <div>
             <p className="font-medium text-sm">Need someone to talk to?</p>
-            <p className="text-xs text-white/80">988 Lifeline is free & confidential 24/7</p>
+            <p className="text-sm text-white/80">988 Lifeline is free & confidential 24/7</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

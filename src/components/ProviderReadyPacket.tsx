@@ -165,7 +165,7 @@ export function ProviderReadyPacket({
             <p className="text-sm font-medium text-blue-900">
               I consent to share this packet with my child's providers
             </p>
-            <p className="text-xs text-blue-700 mt-1">
+            <p className="text-sm text-blue-700 mt-1">
               This packet contains information from your Aminy account including concerns,
               goals, routines, and visit summaries. You control who receives this document.
             </p>
@@ -217,7 +217,7 @@ export function ProviderReadyPacket({
           <p className="text-xs text-green-700 font-mono bg-white px-2 py-1 rounded border">
             {shareLink}
           </p>
-          <p className="text-xs text-green-600 mt-1">Link copied to clipboard. Expires in 30 days.</p>
+          <p className="text-sm text-green-600 mt-1">Link copied to clipboard. Expires in 30 days.</p>
         </div>
       )}
 
@@ -225,7 +225,7 @@ export function ProviderReadyPacket({
       <div className="p-3 bg-[#FAF7F2] rounded-lg mb-3">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-muted-foreground" />
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             Report includes Aminy watermark and generation date for authenticity
           </p>
         </div>
@@ -236,7 +236,7 @@ export function ProviderReadyPacket({
         <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-amber-600" />
-            <p className="text-xs text-amber-700">
+            <p className="text-sm text-amber-700">
               Share links expire after 30 days for security. You can generate new links anytime.
             </p>
           </div>
@@ -245,8 +245,8 @@ export function ProviderReadyPacket({
 
       {/* What's Included */}
       <div className="mt-4 pt-4 border-t">
-        <p className="text-xs font-medium text-[#3A4A57] mb-2">Packet includes:</p>
-        <ul className="text-xs text-[#5A6B7A] space-y-1">
+        <p className="text-sm font-medium text-[#3A4A57] mb-2">Packet includes:</p>
+        <ul className="text-sm text-[#5A6B7A] space-y-1">
           <li className="flex items-center gap-2">
             <Check className="w-3 h-3 text-green-600" />
             Child & family overview

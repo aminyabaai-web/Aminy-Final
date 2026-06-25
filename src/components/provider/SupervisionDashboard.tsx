@@ -85,7 +85,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
           </button>
           <div className="flex-1">
             <h1 className="text-lg font-bold">RBT Supervision</h1>
-            <p className="text-xs text-white/80">BACB Compliance Tracker</p>
+            <p className="text-sm text-white/80">BACB Compliance Tracker</p>
           </div>
           <button
             onClick={() => setShowQuickLog(true)}
@@ -100,15 +100,15 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
         <div className="grid grid-cols-3 gap-2 mt-3">
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{profiles.length}</div>
-            <div className="text-xs text-white/80">Active RBTs</div>
+            <div className="text-sm text-white/80">Active RBTs</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold">{allSessions.filter((s) => s.date.startsWith(thisMonth) && s.status === 'completed').length}</div>
-            <div className="text-xs text-white/80">Sessions This Mo</div>
+            <div className="text-sm text-white/80">Sessions This Mo</div>
           </div>
           <div className="bg-white/15 rounded-lg p-2 text-center backdrop-blur-sm">
             <div className="text-lg font-bold text-amber-300">{criticalRisks.length}</div>
-            <div className="text-xs text-white/80">Critical Alerts</div>
+            <div className="text-sm text-white/80">Critical Alerts</div>
           </div>
         </div>
       </div>
@@ -218,15 +218,15 @@ function RosterView({
                   <span className="font-semibold text-sm text-[#1B2733] truncate">{rbt.name}</span>
                   <span className={`w-2 h-2 rounded-full ${statusColor}`} />
                 </div>
-                <div className="text-xs text-[#5A6B7A]">{rbt.rbtNumber}</div>
+                <div className="text-sm text-[#5A6B7A]">{rbt.rbtNumber}</div>
               </div>
               <div className="text-right">
                 <div className="text-sm font-semibold text-[#3A4A57]">{c?.compliancePercent.toFixed(1)}%</div>
-                <div className="text-xs text-slate-400">supervision</div>
+                <div className="text-sm text-slate-400">supervision</div>
               </div>
               <ChevronRight className="w-4 h-4 text-slate-400" />
             </div>
-            <div className="mt-2 flex gap-3 text-xs text-[#5A6B7A]">
+            <div className="mt-2 flex gap-3 text-sm text-[#5A6B7A]">
               <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{c?.directServiceHours}h direct</span>
               <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{c?.directObservationCount} obs</span>
               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{c?.individualSessionCount}i / {c?.groupSessionCount}g</span>
@@ -271,7 +271,7 @@ function ComplianceView({
               <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: `${barWidth}%` }} />
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Direct hours</span>
                 <span className="font-medium text-[#3A4A57]">{c.directServiceHours}h</span>
@@ -352,7 +352,7 @@ function CalendarView({
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-0.5 text-center">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-          <div key={d} className="text-xs font-medium text-slate-400 py-1">{d}</div>
+          <div key={d} className="text-sm font-medium text-slate-400 py-1">{d}</div>
         ))}
         {days.map((day, i) => {
           const daySessions = day ? sessionsByDay[day] : undefined;
@@ -360,7 +360,7 @@ function CalendarView({
           return (
             <div
               key={i}
-              className={`aspect-square flex flex-col items-center justify-center rounded-lg text-xs relative ${
+              className={`aspect-square flex flex-col items-center justify-center rounded-lg text-sm relative ${
                 isToday ? 'bg-indigo-50 ring-1 ring-indigo-300' : ''
               } ${day ? '' : ''}`}
             >
@@ -390,7 +390,7 @@ function CalendarView({
       <div className="space-y-2 mt-4">
         <h3 className="text-xs font-semibold text-[#5A6B7A] uppercase">Sessions This Month</h3>
         {monthSessions.length === 0 && (
-          <p className="text-xs text-slate-400 text-center py-4">No sessions logged yet</p>
+          <p className="text-sm text-slate-400 text-center py-4">No sessions logged yet</p>
         )}
         {monthSessions
           .sort((a, b) => a.date.localeCompare(b.date))
@@ -407,7 +407,7 @@ function CalendarView({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-[#1B2733]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
-                <div className="text-xs text-[#5A6B7A]">
+                <div className="text-sm text-[#5A6B7A]">
                   {s.date} &middot; {s.durationMinutes}min &middot; {s.type}
                   {s.includesDirectObservation && ' + observation'}
                 </div>
@@ -425,7 +425,7 @@ function CalendarView({
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 justify-center text-xs text-[#5A6B7A] mt-2">
+      <div className="flex gap-4 justify-center text-sm text-[#5A6B7A] mt-2">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-500" />Individual</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-400" />Group</span>
       </div>
@@ -462,10 +462,10 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
   return (
     <div className="space-y-3">
       <h2 className="text-sm font-semibold text-[#3A4A57]">Competency Heatmap</h2>
-      <p className="text-xs text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
+      <p className="text-sm text-[#5A6B7A]">BACB 5th Ed. Task List &mdash; 20 areas rated 1-5</p>
 
       {/* Legend */}
-      <div className="flex gap-1 text-xs">
+      <div className="flex gap-1 text-sm">
         {[1, 2, 3, 4, 5].map((r) => (
           <div key={r} className={`px-2 py-0.5 rounded ${ratingColor(r)}`}>
             {r} {RATING_LABELS[r]}
@@ -479,7 +479,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
           <div className="flex gap-0.5 mb-1">
             <div className="w-28 shrink-0" />
             {profiles.map((p) => (
-              <div key={p.id} className="flex-1 text-center text-xs font-medium text-[#5A6B7A] truncate px-0.5">
+              <div key={p.id} className="flex-1 text-center text-sm font-medium text-[#5A6B7A] truncate px-0.5">
                 {p.name.split(' ')[0]}
               </div>
             ))}
@@ -496,7 +496,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
                 return (
                   <div
                     key={p.id}
-                    className={`flex-1 text-center text-xs font-medium rounded leading-5 ${
+                    className={`flex-1 text-center text-sm font-medium rounded leading-5 ${
                       rating ? ratingColor(rating) : 'bg-[#F0EDE8] text-slate-400'
                     }`}
                   >
@@ -527,7 +527,7 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
         <div className="text-center py-8">
           <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
           <p className="text-sm text-[#5A6B7A] font-medium">All clear</p>
-          <p className="text-xs text-slate-400">No compliance risks detected</p>
+          <p className="text-sm text-slate-400">No compliance risks detected</p>
         </div>
       )}
       {sorted.map((risk, i) => (
@@ -555,9 +555,9 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
                   {risk.severity}
                 </span>
               </div>
-              <p className="text-xs text-[#5A6B7A] mt-0.5">{risk.message}</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">{risk.message}</p>
               {risk.daysRemaining !== undefined && (
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-sm text-slate-400 mt-1">
                   {risk.daysRemaining} days remaining
                 </p>
               )}
@@ -639,7 +639,7 @@ function QuickLogModal({
         <div className="space-y-3">
           {/* RBT Select */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">RBT</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">RBT</label>
             <select
               value={rbtId}
               onChange={(e) => setRbtId(e.target.value)}
@@ -653,7 +653,7 @@ function QuickLogModal({
 
           {/* Date */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Date</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Date</label>
             <input
               type="date"
               value={date}
@@ -664,7 +664,7 @@ function QuickLogModal({
 
           {/* Duration */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Duration (minutes)</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Duration (minutes)</label>
             <input
               type="number"
               value={duration}
@@ -677,7 +677,7 @@ function QuickLogModal({
 
           {/* Type */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Type</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Type</label>
             <div className="flex gap-2">
               {(['individual', 'group'] as const).map((t) => (
                 <button
@@ -708,7 +708,7 @@ function QuickLogModal({
 
           {/* Topics */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">Topics (comma-separated)</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">Topics (comma-separated)</label>
             <input
               type="text"
               value={topics}
@@ -720,7 +720,7 @@ function QuickLogModal({
 
           {/* Notes */}
           <div>
-            <label className="text-xs font-medium text-[#5A6B7A] mb-1 block">BCBA Notes</label>
+            <label className="text-sm font-medium text-[#5A6B7A] mb-1 block">BCBA Notes</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

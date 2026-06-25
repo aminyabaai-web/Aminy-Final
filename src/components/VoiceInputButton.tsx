@@ -201,7 +201,7 @@ export function VoiceInputButton({
               )}
             </p>
             {confidence > 0 && (
-              <p className="text-xs text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 Confidence: {Math.round(confidence * 100)}%
               </p>
             )}

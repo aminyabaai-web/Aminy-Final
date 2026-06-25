@@ -97,8 +97,8 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
     <Card className={`p-6 ${className}`}>
       {/* Demo Data Banner */}
       <div className="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-4 flex items-center gap-2">
-        <span className="text-amber-600 text-xs font-medium">Demo Data</span>
-        <span className="text-amber-700/70 text-xs">Sample viral metrics. Connect referral backend for real data.</span>
+        <span className="text-amber-600 text-sm font-medium">Demo Data</span>
+        <span className="text-amber-700/70 text-sm">Sample viral metrics. Connect referral backend for real data.</span>
       </div>
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <h3 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
@@ -132,7 +132,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             {kInterpretation.message}
           </p>
           {metrics.weekOverWeekGrowth !== 0 && (
-            <p className={`text-xs mt-2 ${metrics.weekOverWeekGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-sm mt-2 ${metrics.weekOverWeekGrowth > 0 ? 'text-green-600' : 'text-red-600'}`}>
               {metrics.weekOverWeekGrowth > 0 ? '+' : ''}{metrics.weekOverWeekGrowth}% week over week
             </p>
           )}
@@ -144,7 +144,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Share2 className="w-4 h-4 text-blue-500" />
-            <span className="text-xs text-[#5A6B7A] dark:text-slate-400">Avg Invites/User</span>
+            <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Avg Invites/User</span>
           </div>
           <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
             {metrics.avgInvitesSent.toFixed(2)}
@@ -153,7 +153,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1">
             <Target className="w-4 h-4 text-green-500" />
-            <span className="text-xs text-[#5A6B7A] dark:text-slate-400">Conversion Rate</span>
+            <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Conversion Rate</span>
           </div>
           <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
             {metrics.conversionRate.toFixed(1)}%
@@ -171,7 +171,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
               <Share2 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             </div>
             <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesSent}</p>
-            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Sent</p>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Sent</p>
           </div>
 
           <ArrowRight className="w-4 h-4 text-[#8A9BA8]" />
@@ -182,7 +182,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
               <MousePointerClick className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
             </div>
             <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesClicked}</p>
-            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Clicked ({clickRate}%)</p>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Clicked ({clickRate}%)</p>
           </div>
 
           <ArrowRight className="w-4 h-4 text-[#8A9BA8]" />
@@ -193,7 +193,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
               <UserPlus className="w-5 h-5 text-green-600 dark:text-green-400" />
             </div>
             <p className="text-lg font-semibold text-[#1B2733] dark:text-white">{metrics.totalInvitesConverted}</p>
-            <p className="text-xs text-[#5A6B7A] dark:text-slate-400">Converted ({signupRate}%)</p>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Converted ({signupRate}%)</p>
           </div>
         </div>
       </div>
@@ -203,7 +203,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Users className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Users Who Invited</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Users Who Invited</p>
             <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.usersWhoInvited} / {metrics.totalUsers}
               <span className="text-[#8A9BA8] ml-1">
@@ -215,7 +215,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Avg Time to First Invite</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Avg Time to First Invite</p>
             <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.avgTimeToFirstInvite.toFixed(1)} days
             </p>
@@ -224,7 +224,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Avg Time to Conversion</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Avg Time to Conversion</p>
             <p className="font-medium text-[#1B2733] dark:text-white">
               {metrics.avgTimeToConversion.toFixed(1)} days
             </p>
@@ -233,7 +233,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
         <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
           <TrendingUp className="w-4 h-4 text-[#8A9BA8]" />
           <div>
-            <p className="text-[#5A6B7A] dark:text-slate-400 text-xs">Total Users</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Total Users</p>
             <p className="font-medium text-[#1B2733] dark:text-white">{metrics.totalUsers}</p>
           </div>
         </div>

@@ -33,8 +33,8 @@ export function StarDisplay({ totalStars, streak, size = 'sm' }: StarDisplayProp
       </div>
       {streak > 0 && (
         <div className="flex items-center gap-1 bg-orange-50 rounded-full px-2.5 py-1.5">
-          <span className={isLarge ? 'text-lg' : 'text-xs'}>🔥</span>
-          <span className={`font-semibold text-orange-600 ${isLarge ? 'text-lg' : 'text-xs'}`}>
+          <span className={isLarge ? 'text-lg' : 'text-sm'}>🔥</span>
+          <span className={`font-semibold text-orange-600 ${isLarge ? 'text-lg' : 'text-sm'}`}>
             {streak}d
           </span>
         </div>

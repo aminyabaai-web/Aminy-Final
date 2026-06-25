@@ -446,7 +446,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
               `}
             >
               Active Access
-              <span className="ml-2 text-xs opacity-60">({activeAccess.length})</span>
+              <span className="ml-2 text-sm opacity-60">({activeAccess.length})</span>
             </button>
           </div>
         </div>
@@ -510,11 +510,11 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                           </p>
 
                           <div className="flex items-center gap-3 sm:gap-4 mt-3">
-                            <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${ACCESS_LEVELS[request.requestedLevel].color}`}>
+                            <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-sm font-medium ${ACCESS_LEVELS[request.requestedLevel].color}`}>
                               {React.createElement(ACCESS_LEVELS[request.requestedLevel].icon, { className: 'w-3 h-3' })}
                               {ACCESS_LEVELS[request.requestedLevel].label}
                             </div>
-                            <span className="text-xs text-[#8A9BA8] flex items-center gap-1">
+                            <span className="text-sm text-[#8A9BA8] flex items-center gap-1">
                               <Clock className="w-3 h-3" />
                               {formatRelativeTime(request.createdAt)}
                             </span>
@@ -567,22 +567,22 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                         </p>
 
                         <div className="flex items-center gap-3 sm:gap-4 mt-3">
-                          <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-xs font-medium ${ACCESS_LEVELS[access.accessLevel].color}`}>
+                          <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-sm font-medium ${ACCESS_LEVELS[access.accessLevel].color}`}>
                             {React.createElement(ACCESS_LEVELS[access.accessLevel].icon, { className: 'w-3 h-3' })}
                             {ACCESS_LEVELS[access.accessLevel].label}
                           </div>
-                          <span className="text-xs text-[#8A9BA8]">
+                          <span className="text-sm text-[#8A9BA8]">
                             {access.accessCount} views
                           </span>
                         </div>
 
                         <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
-                          <span className="text-xs text-[#5A6B7A]">
+                          <span className="text-sm text-[#5A6B7A]">
                             Expires {new Date(access.expiresAt).toLocaleDateString()}
                           </span>
                           <button
                             onClick={() => setShowRevokeConfirm(access.id)}
-                            className="text-xs text-red-600 hover:text-red-700 font-medium min-h-[32px] px-3 flex items-center"
+                            className="text-sm text-red-600 hover:text-red-700 font-medium min-h-[32px] px-3 flex items-center"
                           >
                             Revoke Access
                           </button>

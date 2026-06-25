@@ -177,7 +177,7 @@ export function NotificationPreferences() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <Label>Check-in reminders</Label>
-              <p className="text-xs text-muted-foreground mt-0.5">Alert when a scheduled AI check-in is due</p>
+              <p className="text-sm text-muted-foreground mt-0.5">Alert when a scheduled AI check-in is due</p>
             </div>
             <Switch
               checked={preferences.ai.checkinReminders}
@@ -187,7 +187,7 @@ export function NotificationPreferences() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <Label>Session notes ready</Label>
-              <p className="text-xs text-muted-foreground mt-0.5">When AI finishes analyzing a therapy session note</p>
+              <p className="text-sm text-muted-foreground mt-0.5">When AI finishes analyzing a therapy session note</p>
             </div>
             <Switch
               checked={preferences.ai.sessionNotesReady}
@@ -197,7 +197,7 @@ export function NotificationPreferences() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <Label>Weekly AI digest</Label>
-              <p className="text-xs text-muted-foreground mt-0.5">Summary of AI insights from the past week</p>
+              <p className="text-sm text-muted-foreground mt-0.5">Summary of AI insights from the past week</p>
             </div>
             <Switch
               checked={preferences.ai.weeklyDigest}
@@ -207,7 +207,7 @@ export function NotificationPreferences() {
         </div>
       </Card>
 
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-sm text-muted-foreground text-center">
         You can update these preferences at any time
       </p>
     </div>

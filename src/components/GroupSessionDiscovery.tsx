@@ -252,7 +252,7 @@ export function GroupSessionDiscovery({
                 <span className="text-[#3A4A57]">Group session fee</span>
                 <span className="font-semibold text-[#1B2733]">${bookingSession.price_per_family_cents / 100}</span>
               </div>
-              <div className="flex items-center justify-between text-xs text-slate-400 mt-1">
+              <div className="flex items-center justify-between text-sm text-slate-400 mt-1">
                 <span>Cash pay · Secure Stripe checkout</span>
                 <span>Calendar invite included</span>
               </div>
@@ -322,13 +322,13 @@ function GroupSessionListCard({
                   {session.session_count ? `${session.session_count}-week` : 'Multi-week'} BCBA cohort
                 </span>
               )}
-              <p className="text-xs text-[#5A6B7A] mt-0.5">
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
                 {session.provider_name}{session.provider_credentials ? `, ${session.provider_credentials}` : ''}
               </p>
             </div>
             <div className="text-right shrink-0">
               <p className="font-bold text-[#1B2733]">${session.price_per_family_cents / 100}</p>
-              <p className="text-xs text-[#5A6B7A]">per family</p>
+              <p className="text-sm text-[#5A6B7A]">per family</p>
             </div>
           </div>
 
@@ -337,7 +337,7 @@ function GroupSessionListCard({
           )}
 
           <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-3 text-xs text-[#5A6B7A]">
+            <div className="flex items-center gap-3 text-sm text-[#5A6B7A]">
               <span className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5" />
                 {sessionDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}

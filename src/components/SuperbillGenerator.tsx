@@ -571,7 +571,7 @@ export function SuperbillGenerator({
           {/* Diagnosis Codes */}
           <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-[#1B2733] mb-4">Diagnosis Codes (ICD-10)</h3>
-            <p className="text-xs text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
+            <p className="text-sm text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {COMMON_DIAGNOSIS_CODES.map(diagnosis => (
                 <label
@@ -599,7 +599,7 @@ export function SuperbillGenerator({
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-xs font-mono text-[#5A6B7A]">{diagnosis.code}</span>
-                    <p className="text-xs text-[#3A4A57] truncate">{diagnosis.description}</p>
+                    <p className="text-sm text-[#3A4A57] truncate">{diagnosis.description}</p>
                   </div>
                 </label>
               ))}
@@ -609,7 +609,7 @@ export function SuperbillGenerator({
           {/* CPT Codes by Category */}
           <Card className="p-3 sm:p-4">
             <h3 className="font-medium text-[#1B2733] mb-4">Service Codes (CPT)</h3>
-            <p className="text-xs text-[#5A6B7A] mb-3">Select the services rendered</p>
+            <p className="text-sm text-[#5A6B7A] mb-3">Select the services rendered</p>
             <div className="space-y-2">
               {CPT_CATEGORIES.filter(cat => cat !== 'Modifier').map(category => {
                 const codes = getCPTCodesByCategory(category);
@@ -627,7 +627,7 @@ export function SuperbillGenerator({
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#1B2733]">{category}</span>
                         {selectedCount > 0 && (
-                          <Badge className="bg-accent text-white text-xs">
+                          <Badge className="bg-accent text-white text-sm">
                             {selectedCount} selected
                           </Badge>
                         )}
@@ -671,8 +671,8 @@ export function SuperbillGenerator({
                                   ${cpt.defaultPrice}
                                 </span>
                               </div>
-                              <p className="text-xs text-[#5A6B7A]">{cpt.description}</p>
-                              <p className="text-xs text-slate-400">Requires: {cpt.requiresLicense}</p>
+                              <p className="text-sm text-[#5A6B7A]">{cpt.description}</p>
+                              <p className="text-sm text-slate-400">Requires: {cpt.requiresLicense}</p>
                             </div>
                           </label>
                         ))}
@@ -728,19 +728,19 @@ export function SuperbillGenerator({
               <div>
                 <h4 className="font-medium text-[#3A4A57] mb-2">Provider</h4>
                 <p className="text-sm">{formData.providerName}, {formData.providerCredentials}</p>
-                {formData.providerNPI && <p className="text-xs text-[#5A6B7A]">NPI: {formData.providerNPI}</p>}
+                {formData.providerNPI && <p className="text-sm text-[#5A6B7A]">NPI: {formData.providerNPI}</p>}
               </div>
               <div>
                 <h4 className="font-medium text-[#3A4A57] mb-2">Patient</h4>
                 <p className="text-sm">{formData.patientName}</p>
-                <p className="text-xs text-[#5A6B7A]">DOB: {formData.patientDOB}</p>
+                <p className="text-sm text-[#5A6B7A]">DOB: {formData.patientDOB}</p>
               </div>
             </div>
 
             <div className="mb-4 sm:mb-6">
               <h4 className="font-medium text-[#3A4A57] mb-2">Date of Service</h4>
               <p className="text-sm">{formData.dateOfService}</p>
-              <p className="text-xs text-[#5A6B7A]">Place of Service: 02 (Telehealth)</p>
+              <p className="text-sm text-[#5A6B7A]">Place of Service: 02 (Telehealth)</p>
             </div>
 
             <div className="mb-4 sm:mb-6">
@@ -749,7 +749,7 @@ export function SuperbillGenerator({
                 {formData.diagnosisCodes.map(code => {
                   const diagnosis = COMMON_DIAGNOSIS_CODES.find(d => d.code === code);
                   return (
-                    <Badge key={code} variant="outline" className="text-xs">
+                    <Badge key={code} variant="outline" className="text-sm">
                       {code} - {diagnosis?.description}
                     </Badge>
                   );
@@ -809,7 +809,7 @@ export function SuperbillGenerator({
               <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-medium text-blue-900">Submit to Insurance</p>
-                <p className="text-xs text-blue-700 mt-0.5">
+                <p className="text-sm text-blue-700 mt-0.5">
                   Electronically submit this claim to your insurance via our clearinghouse.
                   {!isClearinghouseConfigured() && ' (Demo mode - no live submission)'}
                 </p>
@@ -867,7 +867,7 @@ export function SuperbillGenerator({
           <p className="text-[#5A6B7A] mb-2">
             Generating EDI 837P and transmitting to clearinghouse.
           </p>
-          <p className="text-xs text-slate-400">This may take a moment.</p>
+          <p className="text-sm text-slate-400">This may take a moment.</p>
         </Card>
       )}
 
@@ -888,7 +888,7 @@ export function SuperbillGenerator({
                 <p><span className="text-[#5A6B7A]">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>
               </div>
               {claimResponse.warnings && claimResponse.warnings.length > 0 && (
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-xs mb-4">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-left text-sm mb-4">
                   {claimResponse.warnings.map((w, i) => (
                     <p key={i} className="text-amber-700"><span className="font-medium">{w.code}:</span> {w.message}</p>
                   ))}
@@ -911,7 +911,7 @@ export function SuperbillGenerator({
                 {claimError || 'Your claim has been queued and will be retried automatically.'}
               </p>
               {claimResponse && claimResponse.errors && claimResponse.errors.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-left text-xs mb-4">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-left text-sm mb-4">
                   {claimResponse.errors.map((e, i) => (
                     <p key={i} className="text-red-700"><span className="font-medium">{e.code}:</span> {e.message}</p>
                   ))}

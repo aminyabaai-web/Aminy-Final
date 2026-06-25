@@ -238,7 +238,7 @@ export default function ClinicalOutcomesDashboard() {
             <button
               key={range}
               onClick={() => setTimeRange(range)}
-              className={`px-3 py-2 text-xs font-semibold rounded-md cursor-pointer ${
+              className={`px-3 py-2 text-sm font-semibold rounded-md cursor-pointer ${
                 timeRange === range
                   ? 'border-2 border-emerald-500 bg-emerald-50 text-emerald-500'
                   : 'border border-[#E8E4DF] bg-white text-[#5A6B7A]'
@@ -365,11 +365,11 @@ function PrePostCard({ child }: { child: ChildOutcome }) {
 
       <div className="flex gap-3 mb-3">
         <div className="flex-1 text-center bg-red-50 rounded-lg p-3">
-          <div className="text-xs text-[#E07A5F] font-semibold mb-1">PRE</div>
+          <div className="text-sm text-[#E07A5F] font-semibold mb-1">PRE</div>
           <div className="text-[28px] font-extrabold text-[#E07A5F]">{child.preScore}</div>
         </div>
         <div className="flex-1 text-center bg-emerald-50 rounded-lg p-3">
-          <div className="text-xs text-emerald-500 font-semibold mb-1">POST</div>
+          <div className="text-sm text-emerald-500 font-semibold mb-1">POST</div>
           <div className="text-[28px] font-extrabold text-emerald-500">{child.postScore}</div>
         </div>
       </div>
@@ -396,7 +396,7 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
     <div className="mb-3.5">
       <div className="flex justify-between mb-1">
         <span className="text-[13px] font-semibold text-[#0D1B2A]">{goal.title}</span>
-        <span className={`text-xs font-semibold ${trendColorClasses[goal.trend]}`}>
+        <span className={`text-sm font-semibold ${trendColorClasses[goal.trend]}`}>
           {trendLabels[goal.trend]}
         </span>
       </div>
@@ -407,13 +407,13 @@ function GoalBar({ goal }: { goal: GoalProgress }) {
             style={{ width: `${Math.min(goal.percentComplete, 100)}%` }}
           />
         </div>
-        <span className="text-xs font-bold text-[#0D1B2A] min-w-[36px] text-right">
+        <span className="text-sm font-bold text-[#0D1B2A] min-w-[36px] text-right">
           {goal.percentComplete}%
         </span>
       </div>
       <div className="flex justify-between mt-0.5">
-        <span className="text-xs text-[#8A9BA8]">Baseline: {goal.baseline} {goal.unit}</span>
-        <span className="text-xs text-[#8A9BA8]">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
+        <span className="text-sm text-[#8A9BA8]">Baseline: {goal.baseline} {goal.unit}</span>
+        <span className="text-sm text-[#8A9BA8]">Current: {goal.current} / Target: {goal.target} {goal.unit}</span>
       </div>
     </div>
   );
@@ -441,7 +441,7 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
             {isTarget ? 'TARGET' : 'CHALLENGING'}
           </span>
         </div>
-        <span className={`text-xs font-bold ${colorClass}`}>
+        <span className={`text-sm font-bold ${colorClass}`}>
           {trend.changePercent > 0 ? '+' : ''}{trend.changePercent.toFixed(1)}%
         </span>
       </div>
@@ -462,10 +462,10 @@ function BehaviorTrendChart({ trend }: { trend: BehaviorTrend }) {
       </div>
 
       <div className="flex justify-between mt-1">
-        <span className="text-xs text-[#8A9BA8]">
+        <span className="text-sm text-[#8A9BA8]">
           Prev 30d avg: {trend.avgPrevious30.toFixed(1)}
         </span>
-        <span className="text-xs text-[#8A9BA8]">
+        <span className="text-sm text-[#8A9BA8]">
           Last 30d avg: {trend.avgLast30.toFixed(1)}
         </span>
       </div>
@@ -499,7 +499,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           <div key={i} className="mb-3">
             <div className="flex justify-between mb-1">
               <span className="text-[13px] font-semibold text-[#0D1B2A]">{cat.category}</span>
-              <span className="text-xs text-[#5A6B7A]">{cat.count} goals / {cat.avgProgress}% avg</span>
+              <span className="text-sm text-[#5A6B7A]">{cat.count} goals / {cat.avgProgress}% avg</span>
             </div>
             <div className="h-2 bg-[#E8E4DF] rounded overflow-hidden">
               <div
@@ -520,13 +520,13 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
           <div key={child.childId} className="flex justify-between items-center py-2.5 border-b border-[#E8E4DF]">
             <div>
               <div className="text-[13px] font-semibold text-[#0D1B2A]">{child.childName}</div>
-              <div className="text-xs text-[#5A6B7A]">{child.goals.length} active goals</div>
+              <div className="text-sm text-[#5A6B7A]">{child.goals.length} active goals</div>
             </div>
             <div className="text-right">
               <div className="text-sm font-bold text-emerald-500">
                 +{child.improvementPct.toFixed(1)}%
               </div>
-              <div className="text-xs text-[#8A9BA8]">{child.assessmentType}</div>
+              <div className="text-sm text-[#8A9BA8]">{child.assessmentType}</div>
             </div>
           </div>
         ))}
@@ -542,7 +542,7 @@ function AggregateView({ aggregate, children }: { aggregate: AggregateMetrics | 
 function MetricCard({ label, value, colorClass }: { label: string; value: string; colorClass: string }) {
   return (
     <div className="bg-white rounded-xl p-3.5 shadow-sm">
-      <div className="text-xs text-[#5A6B7A] font-semibold mb-1">{label}</div>
+      <div className="text-sm text-[#5A6B7A] font-semibold mb-1">{label}</div>
       <div className={`text-2xl font-extrabold ${colorClass}`}>{value}</div>
     </div>
   );

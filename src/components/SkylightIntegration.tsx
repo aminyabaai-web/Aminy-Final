@@ -395,7 +395,7 @@ export function SkylightIntegration({
                 <div className="flex items-center gap-2 mb-3">
                   <Sun className="w-5 h-5 text-amber-400" />
                   <span className="text-white font-medium">Morning Routine</span>
-                  <Badge className="bg-amber-500/20 text-amber-300 text-xs">
+                  <Badge className="bg-amber-500/20 text-amber-300 text-sm">
                     In Progress
                   </Badge>
                 </div>
@@ -416,7 +416,7 @@ export function SkylightIntegration({
                       }`}
                     >
                       <span className="text-2xl">{step.icon}</span>
-                      <p className="text-white/80 text-xs mt-1 truncate">
+                      <p className="text-white/80 text-sm mt-1 truncate">
                         {step.name}
                       </p>
                       {index < 3 && (
@@ -428,7 +428,7 @@ export function SkylightIntegration({
               </div>
 
               {/* Aminy branding */}
-              <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white/40 text-xs">
+              <div className="absolute bottom-4 right-4 flex items-center gap-2 text-white/40 text-sm">
                 <Heart className="w-3 h-3" />
                 <span>Powered by Aminy</span>
               </div>
