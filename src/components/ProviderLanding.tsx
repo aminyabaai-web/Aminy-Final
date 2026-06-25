@@ -67,7 +67,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
   return (
     <div className="min-h-screen min-h-[100dvh] bg-white dark:bg-slate-900">
       {/* Header — compact on mobile */}
-      <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
+      <header className="bg-white dark:bg-slate-900 sticky top-0 z-50" style={{ borderBottom: '1px solid #e5e5e5' }}>
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
           <button onClick={onBack} className="flex items-center gap-2 flex-shrink-0">
             <CompassIcon size={32} />
@@ -453,12 +453,12 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       )}
 
       {/* CTA Section */}
-      <section className="py-12 sm:py-16 bg-neutral-900 dark:bg-slate-800">
+      <section className="py-12 sm:py-16 bg-neutral-900" style={{ background: '#0D1B2A' }}>
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
             Ready to Make a Difference?
           </h2>
-          <p className="text-neutral-400 text-sm sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto">
+          <p className="text-neutral-400 text-sm sm:text-lg mb-6 sm:mb-8 max-w-2xl mx-auto" style={{ color: '#94a3b8' }}>
             Join our growing network of verified providers and help families get the support they need.
             Applications are reviewed within 24-48 hours.
           </p>
@@ -477,21 +477,21 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </section>
 
       {/* Footer */}
-      <footer className="bg-neutral-900 dark:bg-slate-900 border-t border-neutral-800 py-6 sm:py-8">
+      <footer style={{ background: '#0D1B2A', borderTop: '1px solid #1e293b' }} className="py-6 sm:py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-3 sm:mb-0">
               <CompassIcon size={22} className="opacity-50" />
-              <span className="text-neutral-400 text-sm font-semibold" style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif" }}>aminy</span>
-              <span className="text-neutral-600 text-sm">for Providers</span>
+              <span className="text-sm font-semibold" style={{ color: '#64748b', fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif" }}>aminy</span>
+              <span className="text-sm" style={{ color: '#475569' }}>for Providers</span>
             </div>
-            <div className="flex gap-4 sm:gap-6 text-sm sm:text-sm text-[#5A6B7A]">
-              <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
-              <a href="/?screen=terms-of-service" className="hover:text-white">Terms of Service</a>
-              <a href="mailto:providers@aminy.ai" className="hover:text-white">Contact</a>
+            <div className="flex gap-4 sm:gap-6 text-sm" style={{ color: '#475569' }}>
+              <a href="/?screen=privacy-policy" style={{ color: '#475569' }} className="hover:text-white">Privacy Policy</a>
+              <a href="/?screen=terms-of-service" style={{ color: '#475569' }} className="hover:text-white">Terms of Service</a>
+              <a href="mailto:providers@aminy.ai" style={{ color: '#475569' }} className="hover:text-white">Contact</a>
             </div>
           </div>
-          <div className="text-center text-sm text-neutral-600 pt-4 border-t border-neutral-800">
+          <div className="text-center text-sm pt-4" style={{ color: '#334155', borderTop: '1px solid #1e293b' }}>
             &copy; {new Date().getFullYear()} Aminy, LLC. All rights reserved.
           </div>
         </div>

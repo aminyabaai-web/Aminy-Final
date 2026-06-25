@@ -147,7 +147,10 @@ test.describe('Provider Full Journey', () => {
       !e.includes('Failed to load resource') &&
       // Schema gap: columns may not exist yet on the remote DB; migrations applied June 2026
       !e.includes('is_accepting_patients') &&
-      !e.includes('verification_status'),
+      !e.includes('verification_status') &&
+      // Benign WebKit/Safari engine warning about a Chrome-only viewport meta key — not an app error
+      !e.toLowerCase().includes('interactive-widget') &&
+      !e.toLowerCase().includes('viewport argument'),
     );
 
     expect(realErrors, `Console errors:\n${realErrors.join('\n')}`).toEqual([]);

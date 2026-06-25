@@ -17,7 +17,10 @@ test.describe('Navigation', () => {
     const criticalErrors = errors.filter(e =>
       !e.includes('env') &&
       !e.includes('API') &&
-      !e.includes('Failed to load')
+      !e.includes('Failed to load') &&
+      // Benign WebKit/Safari engine warning about a Chrome-only viewport meta key — not an app error
+      !e.toLowerCase().includes('interactive-widget') &&
+      !e.toLowerCase().includes('viewport argument')
     );
 
     expect(criticalErrors).toHaveLength(0);
