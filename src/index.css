@@ -17862,3 +17862,39 @@ tr:hover td, .hover-row:hover {
 .dark .aminy-hero-card {
   background: linear-gradient(135deg, #1e293b 0%, #1e293b 50%, #0f172a 100%) !important;
 }
+
+/* ── ProviderLanding utilities (missing from precompile) ─────────────────── */
+/* Neutral background colors */
+.bg-neutral-50  { background-color: #fafafa; }
+.bg-neutral-100 { background-color: #f5f5f5; }
+.bg-neutral-900 { background-color: #171717; }
+
+/* Neutral text colors */
+.text-neutral-400 { color: #a3a3a3; }
+.text-neutral-600 { color: #525252; }
+.text-neutral-700 { color: #404040; }
+
+/* Neutral border colors */
+.border-neutral-200 { border-color: #e5e5e5; }
+.border-neutral-800 { border-color: #262626; }
+
+/* Spacing utilities */
+.py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+.py-16 { padding-top: 4rem;   padding-bottom: 4rem; }
+.py-24 { padding-top: 6rem;   padding-bottom: 6rem; }
+.pt-16 { padding-top: 4rem; }
+.pt-20 { padding-top: 5rem; }
+.pb-12 { padding-bottom: 3rem; }
+.pb-16 { padding-bottom: 4rem; }
+.gap-12 { gap: 3rem; }
+
+@media (min-width: 640px) {
+  .sm\:py-16 { padding-top: 4rem;   padding-bottom: 4rem; }
+  .sm\:pt-20 { padding-top: 5rem; }
+  .sm\:pb-16 { padding-bottom: 4rem; }
+  .sm\:gap-12 { gap: 3rem; }
+}
+@media (min-width: 1024px) {
+  .lg\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+  .lg\:gap-12 { gap: 3rem; }
+}
