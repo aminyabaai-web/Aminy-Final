@@ -24,7 +24,7 @@
 
 import { supabase } from '../utils/supabase/client';
 
-export type CheckType = 'identity' | 'background' | 'license' | 'malpractice';
+export type CheckType = 'identity' | 'background' | 'license' | 'malpractice' | 'oig_exclusion';
 
 export type CheckStatus =
   | 'not_started'
@@ -203,6 +203,40 @@ export async function verifyMalpracticeInsurance(input: MalpracticeInput): Promi
   return await response.json();
 }
 
+// ─── 5. OIG Exclusion Check ────────────────────────────────────────────────
+
+export interface OIGCheckInput {
+  providerId: string;
+  npi?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+/**
+ * Runs the OIG LEIE exclusion check against the federal exclusion database.
+ * Required for any provider billing Medicaid (AHCCCS, etc.).
+ * Result is stored server-side in provider_credential_checks.
+ */
+export async function runOIGExclusionCheck(input: OIGCheckInput): Promise<{ excluded: boolean; verified: boolean | null; error?: string }> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Sign in first');
+
+  const response = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/credentialing-automation/oig/check`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify(input),
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error((err as any).error || 'OIG check failed');
+  }
+  return await response.json();
+}
+
 // ─── Aggregate status (for the provider's dashboard) ───────────────────────
 
 export interface CredentialingStatus {
@@ -211,7 +245,8 @@ export interface CredentialingStatus {
   background: CredentialCheck;
   licenses: CredentialCheck[];   // one per state
   malpractice: CredentialCheck;
-  /** Overall = AND of all four. Provider can only start seeing patients when ALL verified. */
+  oigExclusion: CredentialCheck;
+  /** Overall = AND of all five. Provider can only start seeing patients when ALL verified. */
   overallStatus: 'incomplete' | 'in_review' | 'verified' | 'failed';
   completionPercent: number;
 }
@@ -246,6 +281,7 @@ export async function getCredentialingStatus(providerId: string): Promise<Creden
   const identity = find('identity');
   const background = find('background');
   const malpractice = find('malpractice');
+  const oigExclusion = find('oig_exclusion');
   const licenseChecks: CredentialCheck[] = (licenses || []).map(l => ({
     type: 'license',
     status: (l.verification_status as CheckStatus) ?? 'pending',
@@ -253,13 +289,19 @@ export async function getCredentialingStatus(providerId: string): Promise<Creden
     expiresAt: l.expires_at,
   }));
 
-  const required = [identity, background, malpractice, licenseChecks[0] || { type: 'license' as CheckType, status: 'not_started' as CheckStatus }];
+  const required = [
+    identity,
+    background,
+    malpractice,
+    oigExclusion,
+    licenseChecks[0] || { type: 'license' as CheckType, status: 'not_started' as CheckStatus },
+  ];
   const verifiedCount = required.filter(c => c.status === 'verified').length;
   const failedCount = required.filter(c => c.status === 'failed').length;
 
   const overallStatus =
     failedCount > 0 ? 'failed' :
-    verifiedCount === 4 ? 'verified' :
+    verifiedCount === 5 ? 'verified' :
     verifiedCount > 0 ? 'in_review' :
     'incomplete';
 
@@ -269,7 +311,8 @@ export async function getCredentialingStatus(providerId: string): Promise<Creden
     background,
     licenses: licenseChecks,
     malpractice,
+    oigExclusion,
     overallStatus,
-    completionPercent: Math.round((verifiedCount / 4) * 100),
+    completionPercent: Math.round((verifiedCount / 5) * 100),
   };
 }

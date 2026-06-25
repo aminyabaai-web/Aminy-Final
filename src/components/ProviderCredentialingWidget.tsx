@@ -18,11 +18,12 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck, ShieldAlert, Clock, AlertCircle, ChevronRight, Loader2, Camera, FileSearch, FileCheck, Award } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, ChevronRight, Loader2, Camera, FileSearch, FileCheck, Award, ShieldOff } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   getCredentialingStatus,
   startIdentityVerification,
+  runOIGExclusionCheck,
   type CredentialingStatus,
   type CheckStatus,
 } from '../lib/provider-credentialing-automation';
@@ -35,10 +36,11 @@ interface ProviderCredentialingWidgetProps {
 }
 
 const CHECK_META = {
-  identity:    { label: 'Identity verified',        icon: Camera,    description: 'Verify with gov ID + selfie · Powered by Stripe Identity · ~3 min' },
-  background:  { label: 'Background check',         icon: FileSearch, description: 'Criminal + identity background · Powered by Checkr · 3-5 days' },
-  license:     { label: 'License verified',         icon: Award,     description: 'NPI + state board check · Auto-verified via CMS · instant if valid' },
-  malpractice: { label: 'Malpractice insurance',    icon: FileCheck, description: 'Upload Certificate of Insurance · 1 business day to approve' },
+  identity:      { label: 'Identity verified',        icon: Camera,     description: 'Verify with gov ID + selfie · Powered by Stripe Identity · ~3 min' },
+  background:    { label: 'Background check',         icon: FileSearch, description: 'Criminal + identity background · Powered by Checkr · 3-5 days' },
+  license:       { label: 'License verified',         icon: Award,      description: 'NPI + state board check · Auto-verified via CMS · instant if valid' },
+  malpractice:   { label: 'Malpractice insurance',    icon: FileCheck,  description: 'Upload Certificate of Insurance · 1 business day to approve' },
+  oig_exclusion: { label: 'Federal exclusion check',  icon: ShieldOff,  description: 'OIG LEIE check · Required for Medicaid billing · instant' },
 } as const;
 
 const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: string; dot: string }> = {
@@ -55,13 +57,41 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
   const [status, setStatus] = useState<CredentialingStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [working, setWorking] = useState<string | null>(null);
+  const [providerName, setProviderName] = useState<{ firstName?: string; lastName?: string; npi?: string }>({});
 
   useEffect(() => { refresh(); }, [providerId]);
 
   async function refresh() {
-    try { setStatus(await getCredentialingStatus(providerId)); }
+    try {
+      const s = await getCredentialingStatus(providerId);
+      setStatus(s);
+    }
     catch { /* ignore — show empty state */ }
     finally { setIsLoading(false); }
+  }
+
+  async function handleOIGCheck() {
+    setWorking('oig_exclusion');
+    try {
+      const result = await runOIGExclusionCheck({
+        providerId,
+        npi: providerName.npi,
+        firstName: providerName.firstName,
+        lastName: providerName.lastName,
+      });
+      if (result.excluded) {
+        toast.error('OIG exclusion found — account flagged. Contact compliance@aminy.ai.');
+      } else if (result.verified) {
+        toast.success('Federal exclusion check passed.');
+      } else {
+        toast.info('OIG API unavailable — check queued for manual review.');
+      }
+      await refresh();
+    } catch (e: any) {
+      toast.error(e?.message || 'OIG check failed');
+    } finally {
+      setWorking(null);
+    }
   }
 
   async function handleIdentityStart() {
@@ -91,10 +121,11 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
   const firstLicense = status.licenses[0] || { type: 'license' as const, status: 'not_started' as CheckStatus };
 
   const rows = [
-    { key: 'identity' as const,    check: status.identity,    onAction: handleIdentityStart, actionLabel: 'Verify identity' },
-    { key: 'background' as const,  check: status.background,  onAction: () => toast.info('Background check starts after identity is verified'), actionLabel: 'Start check' },
-    { key: 'license' as const,     check: firstLicense,       onAction: () => toast.info('Add a state license in your profile to verify'),     actionLabel: 'Add license' },
-    { key: 'malpractice' as const, check: status.malpractice, onAction: () => toast.info('Upload your Certificate of Insurance in your profile'), actionLabel: 'Upload COI' },
+    { key: 'identity' as const,      check: status.identity,      onAction: handleIdentityStart, actionLabel: 'Verify identity' },
+    { key: 'background' as const,    check: status.background,    onAction: () => toast.info('Background check starts after identity is verified'), actionLabel: 'Start check' },
+    { key: 'license' as const,       check: firstLicense,         onAction: () => toast.info('Add a state license in your profile to verify'),     actionLabel: 'Add license' },
+    { key: 'malpractice' as const,   check: status.malpractice,   onAction: () => toast.info('Upload your Certificate of Insurance in your profile'), actionLabel: 'Upload COI' },
+    { key: 'oig_exclusion' as const, check: status.oigExclusion,  onAction: handleOIGCheck, actionLabel: 'Run check' },
   ];
 
   return (
@@ -125,7 +156,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 : `Get verified to accept patients — ${status.completionPercent}% complete`}
           </p>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
-            Aminy requires all 4 checks before you can be matched with families.
+            Aminy requires all 5 checks before you can be matched with families.
           </p>
         </div>
       </div>

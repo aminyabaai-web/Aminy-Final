@@ -268,6 +268,94 @@ async function verifyMalpractice(req: Request): Promise<Response> {
   return json({ status: 'pending', reason: 'Queued for COI review (typically 1 business day)' });
 }
 
+// ─── OIG Exclusion Check ─────────────────────────────────────────────────
+// Required for Medicaid (AHCCCS) providers. 42 CFR § 1001 — serving an
+// OIG-excluded provider is a federal violation regardless of intent.
+
+async function checkOIGExclusion(req: Request): Promise<Response> {
+  const user = await getUser(req);
+  if (!user) return json({ error: 'unauthorized' }, 401);
+
+  const { providerId, npi, firstName, lastName } = await req.json();
+  if (!providerId || providerId !== user.id) return json({ error: 'invalid providerId' }, 400);
+  if (!npi && (!firstName || !lastName)) return json({ error: 'npi or firstName+lastName required' }, 400);
+
+  // Search OIG LEIE — free public API, updated monthly
+  const params = new URLSearchParams();
+  if (npi) {
+    params.set('npi', npi);
+  } else {
+    params.set('firstname', (firstName as string).trim());
+    params.set('lastname', (lastName as string).trim());
+  }
+
+  let excluded = false;
+  let verified = false;
+  let matchedRecord: Record<string, string> | undefined;
+  let apiError: string | undefined;
+
+  try {
+    const oigResp = await fetch(
+      `https://oig.hhs.gov/exclusions/api/search.json?${params.toString()}`,
+      { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(10000) }
+    );
+
+    if (oigResp.ok) {
+      const data = await oigResp.json() as Array<Record<string, string>>;
+      verified = true;
+
+      if (Array.isArray(data) && data.length > 0) {
+        const match = npi
+          ? data.find(r => r.NPI === npi)
+          : data.find(r =>
+              r.LASTNAME?.toLowerCase() === (lastName as string).toLowerCase() &&
+              r.FIRSTNAME?.toLowerCase() === (firstName as string).toLowerCase()
+            );
+
+        if (match) {
+          excluded = true;
+          matchedRecord = match;
+        }
+      }
+    } else {
+      apiError = `OIG API returned ${oigResp.status}`;
+    }
+  } catch (err) {
+    apiError = String(err);
+  }
+
+  // Store result in provider_credential_checks
+  const checkStatus = excluded ? 'failed' : verified ? 'verified' : 'pending';
+  await sb().from('provider_credential_checks').upsert({
+    provider_id: providerId,
+    check_type: 'oig_exclusion',
+    status: checkStatus,
+    started_at: new Date().toISOString(),
+    completed_at: verified || excluded ? new Date().toISOString() : null,
+    result_data: {
+      excluded,
+      verified,
+      npi: npi || null,
+      matched_record: matchedRecord || null,
+      api_error: apiError || null,
+    },
+    failure_reason: excluded
+      ? `Provider found on OIG exclusion list (type: ${matchedRecord?.EXCLTYPE ?? 'unknown'}, since ${matchedRecord?.EXCLDATE ?? 'unknown'})`
+      : apiError
+        ? `OIG API unavailable — manual review required: ${apiError}`
+        : null,
+  }, { onConflict: 'provider_id,check_type' });
+
+  if (excluded) {
+    // Immediately block: set provider_profiles.verification_status = 'failed'
+    await sb().from('provider_profiles')
+      .update({ verification_status: 'failed' })
+      .eq('id', providerId);
+  }
+
+  return json({ excluded, verified, matchedRecord: matchedRecord || null, error: apiError || null });
+}
+
 // ─── Webhooks ───────────────────────────────────────────────────────────
 
 async function handleStripeWebhook(req: Request): Promise<Response> {
@@ -337,6 +425,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
       case '/checkr/start':             return await startCheckr(req);
       case '/license/verify':           return await verifyLicense(req);
       case '/malpractice/verify':       return await verifyMalpractice(req);
+      case '/oig/check':                return await checkOIGExclusion(req);
       case '/webhook/stripe':           return await handleStripeWebhook(req);
       case '/webhook/checkr':           return await handleCheckrWebhook(req);
       default:                          return json({ error: 'unknown path', path }, 404);

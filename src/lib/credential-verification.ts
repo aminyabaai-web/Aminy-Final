@@ -929,6 +929,107 @@ export function formatCredentialDisplay(credential: Credential): {
   };
 }
 
+// ─── OIG Exclusion Check ─────────────────────────────────────────────────────
+
+export interface OIGExclusionResult {
+  /** true = provider IS on the exclusion list — block immediately */
+  excluded: boolean;
+  /** false = check ran and returned clean. null = API unavailable, manual review required */
+  verified: boolean | null;
+  matchedRecord?: {
+    name: string;
+    npi?: string;
+    specialty?: string;
+    exclusionType: string;
+    exclusionDate: string;
+    reinstatedDate?: string;
+    state?: string;
+  };
+  error?: string;
+}
+
+/**
+ * Checks the OIG LEIE (List of Excluded Individuals/Entities).
+ * Required for any provider billing Medicaid (AHCCCS, etc.).
+ *
+ * Uses OIG public API — no auth key required.
+ * Falls back to manual review queue if the API is unreachable.
+ *
+ * @param npi - 10-digit NPI (preferred — most accurate match)
+ * @param firstName - Provider first name (used if NPI is absent)
+ * @param lastName - Provider last name
+ */
+export async function checkOIGExclusion(params: {
+  npi?: string;
+  firstName?: string;
+  lastName?: string;
+}): Promise<OIGExclusionResult> {
+  const { npi, firstName, lastName } = params;
+
+  if (!npi && (!firstName || !lastName)) {
+    return { excluded: false, verified: null, error: 'NPI or full name required' };
+  }
+
+  try {
+    // OIG LEIE public search API — free, no auth, updated monthly
+    // Docs: https://oig.hhs.gov/exclusions/exclusions_files.asp
+    const searchParams = new URLSearchParams();
+    if (npi) {
+      searchParams.set('npi', npi);
+    } else {
+      if (firstName) searchParams.set('firstname', firstName.trim());
+      if (lastName) searchParams.set('lastname', lastName.trim());
+    }
+
+    const resp = await fetch(
+      `https://oig.hhs.gov/exclusions/api/search.json?${searchParams.toString()}`,
+      { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(8000) }
+    );
+
+    if (!resp.ok) {
+      // API unreachable — flag for manual review, do NOT auto-block
+      return { excluded: false, verified: null, error: `OIG API ${resp.status}` };
+    }
+
+    const data = await resp.json() as Array<Record<string, string>>;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      // Clean — not found on exclusion list
+      return { excluded: false, verified: true };
+    }
+
+    // Match on NPI first (definitive), then name
+    const match = npi
+      ? data.find(r => r.NPI === npi)
+      : data.find(r =>
+          r.LASTNAME?.toLowerCase() === lastName?.toLowerCase() &&
+          r.FIRSTNAME?.toLowerCase() === firstName?.toLowerCase()
+        );
+
+    if (!match) {
+      return { excluded: false, verified: true };
+    }
+
+    // Provider IS excluded
+    return {
+      excluded: true,
+      verified: true,
+      matchedRecord: {
+        name: `${match.FIRSTNAME ?? ''} ${match.LASTNAME ?? ''}`.trim(),
+        npi: match.NPI || undefined,
+        specialty: match.SPECIALTY || undefined,
+        exclusionType: match.EXCLTYPE ?? 'Unknown',
+        exclusionDate: match.EXCLDATE ?? '',
+        reinstatedDate: match.REINDATE || undefined,
+        state: match.STATE || undefined,
+      },
+    };
+  } catch (err) {
+    // Network error or timeout — flag for manual review
+    return { excluded: false, verified: null, error: String(err) };
+  }
+}
+
 export default {
   verifyBACBCredential,
   verifyNPI,
@@ -941,4 +1042,5 @@ export default {
   checkReverificationNeeded,
   getRequiredCredentials,
   formatCredentialDisplay,
+  checkOIGExclusion,
 };
