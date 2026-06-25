@@ -16,7 +16,6 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { isDemoMode } from '../lib/demo-seed';
-import aminyLogo from "../assets/aminy-logo-cropped.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -32,8 +31,28 @@ import {
   Sparkles,
   Award,
   MessageSquare,
-  ChevronDown,
 } from 'lucide-react';
+
+/* Inline compass icon — avoids importing the full lockup PNG */
+function CompassIcon({ size = 32, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="32" cy="32" r="28" fill="none" stroke="#0D1B2A" strokeWidth="5" />
+      <g transform="rotate(-45 32 32)">
+        <path d="M32 32 L28 34 L32 10 L36 34 Z" fill="#0D1B2A" />
+        <path d="M32 32 L28 30 L32 54 L36 30 Z" fill="#4E93A8" />
+      </g>
+      <circle cx="32" cy="32" r="2.2" fill="#ffffff" />
+    </svg>
+  );
+}
 
 interface ProviderLandingProps {
   onApply: () => void;
@@ -50,12 +69,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       {/* Header — compact on mobile */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
-          <button onClick={onBack} className="flex items-center flex-shrink-0">
-            <img
-              src={aminyLogo}
-              alt="Aminy"
-              className="h-7 sm:h-8 w-auto object-contain"
-            />
+          <button onClick={onBack} className="flex items-center gap-2 flex-shrink-0">
+            <CompassIcon size={32} />
+            <span className="text-xl font-bold text-[#0D1B2A] dark:text-white tracking-tight" style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif" }}>aminy</span>
           </button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-sm sm:text-sm px-2 sm:px-3" onClick={onLogin}>
@@ -173,15 +189,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
+          {/* 5 cards: on mobile show 2-col with last item centered, on sm+ show all in a row */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
             {[
               { title: 'BCBAs', desc: 'Board Certified Behavior Analysts', icon: Brain },
               { title: 'RBTs', desc: 'Registered Behavior Technicians', icon: Award },
               { title: 'Psychologists', desc: 'Clinical & Child Psychologists', icon: Heart },
               { title: 'Therapists', desc: 'LMFT, LCSW, LPC', icon: MessageSquare },
               { title: 'SLPs', desc: 'Speech-Language Pathologists', icon: Users },
-            ].map(({ title, desc, icon: Icon }) => (
-              <Card key={title} className="p-3 sm:p-5 text-center hover:shadow-md transition-shadow">
+            ].map(({ title, desc, icon: Icon }, idx, arr) => (
+              <Card
+                key={title}
+                className={`p-3 sm:p-5 text-center hover:shadow-md transition-shadow${idx === arr.length - 1 && arr.length % 2 !== 0 ? ' col-span-2 sm:col-span-1 max-w-[160px] sm:max-w-none mx-auto sm:mx-0 w-full' : ''}`}
+              >
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#6B9080]/10 dark:bg-[#6B9080]/15 flex items-center justify-center mx-auto mb-2 sm:mb-3">
                   <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#6B9080]" />
                 </div>
@@ -461,8 +481,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col sm:flex-row items-center justify-between mb-4 sm:mb-6">
             <div className="flex items-center gap-2 mb-3 sm:mb-0">
-              <img src={aminyLogo} alt="Aminy" className="h-5 w-auto object-contain opacity-60" />
-              <span className="text-neutral-500 text-sm">for Providers</span>
+              <CompassIcon size={22} className="opacity-50" />
+              <span className="text-neutral-400 text-sm font-semibold" style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif" }}>aminy</span>
+              <span className="text-neutral-600 text-sm">for Providers</span>
             </div>
             <div className="flex gap-4 sm:gap-6 text-sm sm:text-sm text-[#5A6B7A]">
               <a href="/?screen=privacy-policy" className="hover:text-white">Privacy Policy</a>
