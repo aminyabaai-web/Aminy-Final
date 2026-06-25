@@ -165,7 +165,7 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
             >
-              BCBA-designed · Takes insurance · AI-powered
+              TeleABA · Takes insurance · AI-powered
             </span>
           </motion.div>
 
@@ -232,7 +232,7 @@ export function SplashPage({
               ...fontSmoothing,
             }}
           >
-            One place for every kind of care your child needs — ABA, speech, OT, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
+            One place for every kind of care your child needs — ABA, speech, mental health — coordinated by an AI that actually knows your family. From finding the right provider to tracking progress to handling insurance.
           </motion.p>
 
           {/* Primary CTA */}
