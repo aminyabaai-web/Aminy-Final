@@ -262,7 +262,7 @@ export function SessionScheduler({
           <p className="text-sm text-[#5A6B7A] mb-4">
             Your {VISIT_TYPE_LABELS[bookedSession.visitType]} with {providerName} is confirmed.
           </p>
-          <div className="bg-[#FAF7F2] rounded-xl p-4 mb-6 text-left space-y-2">
+          <div className="bg-[#F6FBFB] rounded-xl p-4 mb-6 text-left space-y-2">
             <div className="flex items-center gap-2 text-sm">
               <Calendar size={14} className="text-[#8A9BA8]" />
               <span className="text-[#3A4A57]">{formatDate(new Date(bookedSession.dateTime))}</span>
@@ -297,7 +297,7 @@ export function SessionScheduler({
             {step !== 'visit-type' && (
               <button
                 onClick={goBack}
-                className="p-1.5 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+                className="p-1.5 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -310,7 +310,7 @@ export function SessionScheduler({
           {onCancel && (
             <button
               onClick={onCancel}
-              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
             >
               <X size={18} />
             </button>
@@ -349,10 +349,10 @@ export function SessionScheduler({
                     className={`w-full flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${
                       visitType === vt
                         ? 'border-[#6B9080]/30 bg-[#6B9080]/10'
-                        : 'border-[#E8E4DF] hover:border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-[#E8E4DF] hover:bg-[#F6FBFB]'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] flex-shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-[#EDF4F7] flex items-center justify-center text-[#5A6B7A] flex-shrink-0">
                       {VISIT_TYPE_ICONS[vt]}
                     </div>
                     <div className="flex-1">
@@ -383,7 +383,7 @@ export function SessionScheduler({
                       className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                         duration === d
                           ? 'bg-primary text-white'
-                          : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                          : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                       }`}
                     >
                       {d} min
@@ -396,7 +396,7 @@ export function SessionScheduler({
               <div className="flex items-center justify-between">
                 <button
                   onClick={prevWeek}
-                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
                 >
                   <ChevronLeft size={18} />
                 </button>
@@ -405,7 +405,7 @@ export function SessionScheduler({
                 </span>
                 <button
                   onClick={nextWeek}
-                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+                  className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
                 >
                   <ChevronRight size={18} />
                 </button>
@@ -435,7 +435,7 @@ export function SessionScheduler({
                             ? 'bg-primary text-white'
                             : isToday
                               ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
-                              : 'hover:bg-[#FAF7F2] text-[#3A4A57]'
+                              : 'hover:bg-[#F6FBFB] text-[#3A4A57]'
                       }`}
                     >
                       <span className="text-xs uppercase opacity-60">
@@ -487,7 +487,7 @@ export function SessionScheduler({
                       className={`py-2.5 px-2 rounded-lg text-sm font-medium transition-all ${
                         selected
                           ? 'bg-primary text-white'
-                          : 'bg-[#FAF7F2] text-[#3A4A57] hover:bg-[#6B9080]/10 hover:text-[#6B9080] border border-[#E8E4DF]'
+                          : 'bg-[#F6FBFB] text-[#3A4A57] hover:bg-[#6B9080]/10 hover:text-[#6B9080] border border-[#E8E4DF]'
                       }`}
                     >
                       {formatTime(slot.startTime)}
@@ -504,7 +504,7 @@ export function SessionScheduler({
               <p className="text-sm text-[#5A6B7A]">Confirm your appointment</p>
 
               {/* Provider card */}
-              <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl">
                 {providerPhotoUrl ? (
                   <img
                     src={providerPhotoUrl}
@@ -584,7 +584,7 @@ export function SessionScheduler({
           <div className="p-4 border-t border-[#E8E4DF] flex gap-3">
             <button
               onClick={goBack}
-              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
             >
               Back
             </button>

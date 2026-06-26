@@ -269,7 +269,7 @@ function ArticleView({
   return (
     <div className="min-h-screen bg-mist pb-24">
       {/* Back header */}
-      <div className="sticky top-0 z-10 bg-[#FAF7F2] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-[#F6FBFB] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         <button onClick={onBack} className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E8E4DF]">
           <ArrowLeft className="w-4 h-4 text-[#132F43]" />
         </button>
@@ -308,7 +308,7 @@ function ArticleView({
           {isLocked && (
             <>
               {/* Fade overlay */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAF7F2] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F6FBFB] to-transparent pointer-events-none" />
               {/* Lock CTA */}
               <div className="mt-2 rounded-2xl bg-white border border-[#E8E4DF] p-5 text-center space-y-3">
                 <Lock className="w-8 h-8 text-slate-300 mx-auto" />
@@ -337,7 +337,7 @@ function ArticleView({
                 <button
                   key={i}
                   onClick={() => onNavigate?.('ask-bcba')}
-                  className="w-full text-left text-sm text-[#3A4A57] bg-[#F8F8F6] rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-[#F0EDE8] transition-colors"
+                  className="w-full text-left text-sm text-[#3A4A57] bg-[#F8F8F6] rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-[#EDF4F7] transition-colors"
                 >
                   <span className="flex-1">"{q}"</span>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -465,7 +465,7 @@ function parseBold(text: string): string {
 
 function TypeBadge({ type }: { type: Resource['type'] }) {
   return (
-    <span className="inline-flex items-center gap-1 text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1 text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full">
       {TYPE_ICONS[type]}{TYPE_LABELS[type]}
     </span>
   );

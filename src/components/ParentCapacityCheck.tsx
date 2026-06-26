@@ -215,7 +215,7 @@ export function ParentCapacityCheck({
             <Card className={cn(
               "p-4",
               stressLevel <= 3 ? "bg-green-50 border-green-200" :
-              stressLevel <= 6 ? "bg-[#FDF9F0] border-[#F0EDE8]" :
+              stressLevel <= 6 ? "bg-[#FDF9F0] border-[#EDF4F7]" :
               "bg-rose-50 border-rose-200"
             )}>
               <p className={cn(
@@ -277,7 +277,7 @@ export function ParentCapacityCheck({
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
-                      availableMinutes === option.value ? "bg-accent/20" : "bg-[#F0EDE8]"
+                      availableMinutes === option.value ? "bg-accent/20" : "bg-[#EDF4F7]"
                     )}>
                       <option.icon className={cn(
                         "w-5 h-5",
@@ -366,7 +366,7 @@ export function ParentCapacityCheck({
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className={cn(
                       "p-2 rounded-lg",
-                      supportLevel === option.value ? "bg-accent/20" : "bg-[#F0EDE8]"
+                      supportLevel === option.value ? "bg-accent/20" : "bg-[#EDF4F7]"
                     )}>
                       <option.icon className={cn(
                         "w-5 h-5",
@@ -496,7 +496,7 @@ export function ParentCapacityCheck({
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <button
             onClick={prevStep}
-            className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+            className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -507,7 +507,7 @@ export function ParentCapacityCheck({
         </div>
 
         {/* Progress */}
-        <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-8">
+        <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden mb-8">
           <motion.div
             className="h-full bg-gradient-to-r from-rose-400 to-pink-400"
             initial={{ width: 0 }}

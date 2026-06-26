@@ -183,7 +183,7 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
     <div className="flex items-center gap-2 text-sm">
       <span className="w-3 text-[#5A6B7A]">{stars}</span>
       <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-      <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+      <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
         <div
           className="h-full bg-amber-400 rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
@@ -278,7 +278,7 @@ function ReviewCard({
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mt-2 ml-6 p-3 bg-[#FAF7F2] rounded-lg border-l-2 border-[#6B9080]">
+                <div className="mt-2 ml-6 p-3 bg-[#F6FBFB] rounded-lg border-l-2 border-[#6B9080]">
                   <p className="text-sm text-[#3A4A57]">{review.providerResponse.content}</p>
                   <p className="text-sm text-[#5A6B7A] mt-2">
                     Responded on {formatDate(review.providerResponse.respondedAt)}
@@ -394,7 +394,7 @@ export function ProviderReviews({
       <button
         onClick={onBack}
         aria-label="Go back"
-        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#132F43] px-1 py-1 rounded-lg hover:bg-[#F0EDE8] transition-colors"
+        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#132F43] px-1 py-1 rounded-lg hover:bg-[#EDF4F7] transition-colors"
         style={{ minHeight: '40px', marginLeft: '-4px' }}
       >
         <ArrowLeft className="w-5 h-5" />
@@ -414,7 +414,7 @@ export function ProviderReviews({
           exit={{ height: 0, opacity: 0 }}
           className="overflow-hidden"
         >
-          <div className="px-4 sm:px-6 py-5 border-t border-[#E8E4DF] bg-[#FAF7F2]">
+          <div className="px-4 sm:px-6 py-5 border-t border-[#E8E4DF] bg-[#F6FBFB]">
             <h3 className="text-base font-semibold text-[#132F43] mb-4">Write a Review</h3>
 
             {/* Star picker */}
@@ -521,7 +521,7 @@ export function ProviderReviews({
         {backHeader}
         <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
           <div className="px-4 sm:px-6 py-8 text-center">
-            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EDF4F7] flex items-center justify-center">
               <Star className="w-6 h-6 text-gray-300" />
             </div>
             <p className="font-medium text-[#132F43]">No reviews yet</p>
@@ -567,7 +567,7 @@ export function ProviderReviews({
                     key={stars}
                     onClick={() => setFilterRating(filterRating === stars ? null : stars)}
                     className={`w-full transition-colors rounded ${
-                      filterRating === stars ? 'bg-amber-50' : 'hover:bg-[#FAF7F2]'
+                      filterRating === stars ? 'bg-amber-50' : 'hover:bg-[#F6FBFB]'
                     }`}
                   >
                     <RatingBar

@@ -290,7 +290,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
@@ -429,7 +429,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Card className="p-3 bg-white border-[#E8E4DF] hover:shadow-md transition-all">
                   <div className="flex items-start gap-3">
                     {/* File type icon */}
-                    <div className="w-10 h-10 bg-[#FAF7F2] rounded-lg flex items-center justify-center flex-shrink-0 border border-[#E8E4DF]">
+                    <div className="w-10 h-10 bg-[#F6FBFB] rounded-lg flex items-center justify-center flex-shrink-0 border border-[#E8E4DF]">
                       <FileText className={`w-5 h-5 ${FILE_TYPE_COLORS[doc.fileType]}`} />
                     </div>
 
@@ -467,7 +467,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <button
                           onClick={() => toast.info('Opening document preview...')}
-                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           Preview
@@ -481,7 +481,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                         </button>
                         <button
                           onClick={() => toast.success('Download started!')}
-                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Download className="w-3 h-3" />
                           Download

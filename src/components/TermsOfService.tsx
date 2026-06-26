@@ -301,7 +301,7 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <p className="text-[#5A6B7A] leading-relaxed">
               If you have questions about these Terms, please contact us:
             </p>
-            <div className="mt-4 p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="mt-4 p-4 bg-[#F6FBFB] rounded-lg">
               <p className="text-[#3A4A57]">
                 <strong>Email:</strong>{' '}
                 <a href="mailto:legal@aminy.ai" className="text-[#6B9080] hover:underline">

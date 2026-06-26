@@ -274,7 +274,7 @@ export function ProviderReferralProgram({
                 </button>
                 <button
                   onClick={() => handleShare('copy')}
-                  className="flex flex-col items-center p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors"
+                  className="flex flex-col items-center p-3 bg-[#F6FBFB] rounded-xl hover:bg-[#EDF4F7] transition-colors"
                 >
                   <Link2 className="w-5 h-5 text-[#5A6B7A] mb-1" />
                   <span className="text-sm text-[#3A4A57]">Copy Link</span>
@@ -356,7 +356,7 @@ export function ProviderReferralProgram({
         )}
         <div className="space-y-2">
           {referrals.map((referral) => (
-            <div key={referral.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
+            <div key={referral.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                 referral.status === 'completed' ? 'bg-green-100' :
                 referral.status === 'onboarding' ? 'bg-blue-100' :
@@ -389,7 +389,7 @@ export function ProviderReferralProgram({
                   <Badge className={
                     referral.status === 'onboarding' ? 'bg-blue-100 text-blue-700 border-[#C8DDE8]' :
                     referral.status === 'applied' ? 'bg-purple-100 text-purple-700 border-purple-200' :
-                    'bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]'
+                    'bg-[#EDF4F7] text-[#5A6B7A] border-[#E8E4DF]'
                   }>
                     {referral.status === 'onboarding' ? 'Onboarding' :
                      referral.status === 'applied' ? 'Applied' : 'Invited'}

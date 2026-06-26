@@ -168,7 +168,7 @@ export function GroupSessionDiscovery({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search by topic, strategy, or BCBA name…"
-              className="pl-9 bg-[#FAF7F2] border-[#E8E4DF]"
+              className="pl-9 bg-[#F6FBFB] border-[#E8E4DF]"
             />
           </div>
 
@@ -247,7 +247,7 @@ export function GroupSessionDiscovery({
               {' '}· with {bookingSession.provider_name}, {bookingSession.provider_credentials}
             </p>
 
-            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] mb-4">
+            <div className="p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] mb-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#3A4A57]">Group session fee</span>
                 <span className="font-semibold text-[#132F43]">${bookingSession.price_per_family_cents / 100}</span>

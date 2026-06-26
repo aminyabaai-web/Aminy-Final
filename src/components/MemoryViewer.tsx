@@ -103,7 +103,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
           </div>
           <button
             onClick={refresh}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
+            className="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]"
             aria-label="Refresh memory"
           >
             <RefreshCw className="w-4 h-4" />

@@ -470,7 +470,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => copyToClipboard(getShareUrl(link.id))}
-                          className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                          className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7] rounded-lg transition-colors"
                           title="Copy link"
                         >
                           <Copy className="w-4 h-4" />
@@ -596,7 +596,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
                     Download
                   </button>
                 </div>
-                <pre className="bg-[#FAF7F2] border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
+                <pre className="bg-[#F6FBFB] border rounded-lg p-4 text-xs overflow-auto max-h-64 font-mono">
                   {exportPreview.slice(0, 2000)}
                   {exportPreview.length > 2000 && '\n\n... (truncated for preview)'}
                 </pre>
@@ -620,7 +620,7 @@ export const ProviderDataSharing: React.FC<ProviderDataSharingProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-[#FAF7F2]">
+      <div className="border-t px-4 sm:px-6 py-3 sm:py-4 bg-[#F6FBFB]">
         <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
           <Shield className="w-4 h-4" />
           <span>

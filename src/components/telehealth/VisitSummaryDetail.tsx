@@ -56,7 +56,7 @@ export function VisitSummaryDetailScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -72,7 +72,7 @@ export function VisitSummaryDetailScreen({
             {onShare && (
               <button
                 onClick={onShare}
-                className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+                className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
                 aria-label="Share"
               >
                 <Share2 className="w-5 h-5 text-[#5A6B7A]" />
@@ -81,7 +81,7 @@ export function VisitSummaryDetailScreen({
             {onExport && (
               <button
                 onClick={onExport}
-                className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+                className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
                 aria-label="Export"
               >
                 <Download className="w-5 h-5 text-[#5A6B7A]" />
@@ -172,7 +172,7 @@ export function VisitSummaryDetailScreen({
           </h3>
           <ul className="space-y-2">
             {summary.whatToTrack.map((item, index) => (
-              <li key={index} className="flex items-center gap-3 p-2 bg-[#FAF7F2] rounded-lg">
+              <li key={index} className="flex items-center gap-3 p-2 bg-[#F6FBFB] rounded-lg">
                 <div className="w-2 h-2 bg-[#6B9080] rounded-full" />
                 <span className="text-[#3A4A57] text-sm">{item}</span>
               </li>
@@ -192,7 +192,7 @@ export function VisitSummaryDetailScreen({
         )}
 
         {/* Legal Disclaimer */}
-        <div className="p-4 bg-[#FAF7F2] rounded-xl text-sm text-[#5A6B7A]">
+        <div className="p-4 bg-[#F6FBFB] rounded-xl text-sm text-[#5A6B7A]">
           <p className="font-medium text-[#5A6B7A] mb-1">Important Note</p>
           <p>
             This summary is for informational purposes and reflects the guidance provided during your

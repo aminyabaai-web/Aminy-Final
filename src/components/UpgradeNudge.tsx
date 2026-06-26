@@ -76,7 +76,7 @@ export function UpgradeNudge({
         rounded-lg p-4 border
         ${urgency === 'high' ? 'bg-amber-50 border-amber-200' :
           urgency === 'medium' ? 'bg-[#EEF4F8] border-[#C8DDE8]' :
-          'bg-[#FAF7F2] border-[#E8E4DF]'}
+          'bg-[#F6FBFB] border-[#E8E4DF]'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -170,7 +170,7 @@ export function UpgradeNudge({
   // Memory preview - show what AI would remember on higher tier
   if (triggerType === 'memory-preview') {
     return (
-      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50">
+      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB] to-cyan-50">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-[#6B9080]/10">

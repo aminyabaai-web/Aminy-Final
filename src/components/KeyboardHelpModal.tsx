@@ -68,7 +68,7 @@ const shortcutCategories: ShortcutCategory[] = [
 
 function KeyboardKey({ children }: { children: React.ReactNode }) {
   return (
-    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-[#F0EDE8] dark:bg-slate-700 border border-[#E8E4DF] dark:border-slate-600 rounded text-xs font-mono font-medium text-[#3A4A57] dark:text-gray-300 shadow-sm">
+    <kbd className="inline-flex items-center justify-center min-w-[28px] h-7 px-2 bg-[#EDF4F7] dark:bg-slate-700 border border-[#E8E4DF] dark:border-slate-600 rounded text-xs font-mono font-medium text-[#3A4A57] dark:text-gray-300 shadow-sm">
       {children}
     </kbd>
   );
@@ -191,7 +191,7 @@ export function KeyboardHelpModal() {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-[#E8E4DF] dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-900">
+        <div className="px-6 py-4 border-t border-[#E8E4DF] dark:border-slate-700 bg-[#F6FBFB] dark:bg-slate-900">
           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] text-center">
             Press <KeyboardKey>Esc</KeyboardKey> to close this dialog
           </p>

@@ -64,7 +64,7 @@ function CategoryTab({ category, active, onSelect }: CategoryTabProps) {
       className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
         active
           ? 'bg-primary text-white shadow-md'
-          : 'bg-white text-[#5A6B7A] hover:bg-[#FAF7F2] border border-[#E8E4DF]'
+          : 'bg-white text-[#5A6B7A] hover:bg-[#F6FBFB] border border-[#E8E4DF]'
       }`}
     >
       {CATEGORY_ICONS[category]}
@@ -85,7 +85,7 @@ function MembershipBadge({ tier }: MembershipBadgeProps) {
       ? 'bg-amber-50 text-amber-700 border-amber-200'
       : tier === 'core'
         ? 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20'
-        : 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
+        : 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]';
 
   const discount = MEMBERSHIP_DISCOUNTS.find((m) => m.tier === tier);
 
@@ -176,7 +176,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
         </button>
         <button
           onClick={() => onViewPackages(service.id)}
-          className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#6B9080] font-medium py-2.5 px-3 rounded-xl hover:bg-[#FAF7F2] transition-colors"
+          className="flex items-center gap-1.5 text-sm text-[#5A6B7A] hover:text-[#6B9080] font-medium py-2.5 px-3 rounded-xl hover:bg-[#F6FBFB] transition-colors"
         >
           <Package className="w-4 h-4" />
           Packages
@@ -304,7 +304,7 @@ interface TierSelectorProps {
 
 function TierSelector({ tier, onSelect }: TierSelectorProps) {
   return (
-    <div className="flex items-center gap-2 bg-[#F0EDE8] rounded-xl p-1">
+    <div className="flex items-center gap-2 bg-[#EDF4F7] rounded-xl p-1">
       {MEMBERSHIP_DISCOUNTS.map((m) => (
         <button
           key={m.tier}

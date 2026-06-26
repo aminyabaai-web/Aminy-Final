@@ -108,7 +108,7 @@ export function CalendarConnectionCard() {
 
       {/* Active connection details */}
       {activeProvider && (
-        <div className="rounded-xl bg-[#FAF7F2] px-3 py-2.5">
+        <div className="rounded-xl bg-[#F6FBFB] px-3 py-2.5">
           <p className="text-sm font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
             New appointments auto-push to your {PROVIDER_META[activeProvider].label}
@@ -181,7 +181,7 @@ function ProviderButton({
       disabled={working || isPassive}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
         isPassive
-          ? 'border-[#E8E4DF] bg-[#FAF7F2] cursor-default'
+          ? 'border-[#E8E4DF] bg-[#F6FBFB] cursor-default'
           : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30'
       } ${working ? 'opacity-50' : ''}`}
     >

@@ -338,7 +338,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       responses[currentQuestion] === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#F6FBFB]'
                     }`}
                   >
                     <span className="font-medium text-[#132F43]">{option.label}</span>
@@ -367,7 +367,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                     className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                       difficulty === option.value
                         ? 'border-violet-500 bg-violet-50'
-                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
+                        : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#F6FBFB]'
                     }`}
                   >
                     <span className="font-medium text-[#132F43]">{option.label}</span>
@@ -415,7 +415,7 @@ interface PHQ9ResultsProps {
 export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsProps) {
   const severityColors: Record<string, string> = {
     minimal: 'bg-green-100 text-green-700 border-green-200',
-    mild: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
+    mild: 'bg-yellow-100 text-yellow-700 border-[#EDF4F7]',
     moderate: 'bg-orange-100 text-orange-700 border-orange-200',
     moderately_severe: 'bg-red-100 text-red-700 border-red-200',
     severe: 'bg-red-100 text-red-700 border-red-200',

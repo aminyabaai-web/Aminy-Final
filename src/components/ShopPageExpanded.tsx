@@ -206,7 +206,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
           </div>
 
           {/* Calm Coins Wallet */}
-          <Card className="p-6 bg-gradient-to-br from-yellow-50 to-amber-50 border-[#F0EDE8]">
+          <Card className="p-6 bg-gradient-to-br from-yellow-50 to-amber-50 border-[#EDF4F7]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center">
@@ -224,7 +224,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
             </div>
 
             {/* Recent Transactions */}
-            <div className="mt-4 pt-4 border-t border-[#F0EDE8]">
+            <div className="mt-4 pt-4 border-t border-[#EDF4F7]">
               <p className="text-sm font-medium text-[#3A4A57] mb-2">Recent Activity</p>
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {transactions.slice(0, 3).map((tx, idx) => (
@@ -533,7 +533,7 @@ function CheckoutModal({
 
         <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Item Summary */}
-          <Card className="p-4 bg-[#FAF7F2]">
+          <Card className="p-4 bg-[#F6FBFB]">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="text-4xl">{item.image}</div>
               <div className="flex-1">

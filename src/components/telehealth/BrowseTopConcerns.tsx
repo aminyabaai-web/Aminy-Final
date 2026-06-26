@@ -77,7 +77,7 @@ export function BrowseTopConcerns({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -98,7 +98,7 @@ export function BrowseTopConcerns({
             placeholder="Search concerns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
       {/* Icon */}
       <div className={`
         w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-3
-        ${isUrgent ? 'bg-amber-50' : 'bg-[#FAF7F2]'}
+        ${isUrgent ? 'bg-amber-50' : 'bg-[#F6FBFB]'}
       `}>
         {concern.icon || '💭'}
       </div>

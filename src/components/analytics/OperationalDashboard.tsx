@@ -72,7 +72,7 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
             <span className="text-[#5A6B7A]">{item.label}</span>
             <span className="text-[#132F43] font-medium">{item.value}{item.unit || '%'}</span>
           </div>
-          <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+          <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
             <div
               className={`h-full rounded-full ${colorClass}`}
               style={{ width: `${(item.value / maxVal) * 100}%` }}
@@ -281,7 +281,7 @@ export default function OperationalDashboard({
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -310,7 +310,7 @@ export default function OperationalDashboard({
               <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="flex items-center justify-center rounded-full p-2 hover:bg-[#F0EDE8] disabled:opacity-50"
+                className="flex items-center justify-center rounded-full p-2 hover:bg-[#EDF4F7] disabled:opacity-50"
                 aria-label="Refresh metrics"
                 title="Refresh metrics"
               >
@@ -319,7 +319,7 @@ export default function OperationalDashboard({
             )}
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
             >
               <Download className="h-3.5 w-3.5" />
               Export
@@ -346,7 +346,7 @@ export default function OperationalDashboard({
                 <button
                   key={preset.label}
                   onClick={() => { onDateRangeChange(preset); setShowDatePicker(false); }}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#FAF7F2] ${
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#F6FBFB] ${
                     data.dateRange.label === preset.label ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                   }`}
                 >
@@ -389,7 +389,7 @@ export default function OperationalDashboard({
               { label: '60-Day', value: data.familyRetention.retention60Day },
               { label: '90-Day', value: data.familyRetention.retention90Day },
             ].map(p => (
-              <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
+              <div key={p.label} className="rounded-lg bg-[#F6FBFB] p-2">
                 <p className="text-lg font-bold text-[#132F43]">{p.value}%</p>
                 <p className="text-sm text-[#5A6B7A]">{p.label}</p>
               </div>
@@ -419,7 +419,7 @@ export default function OperationalDashboard({
                 <div key={r.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] flex-1 truncate">{r.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-16 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="w-16 h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <div className="h-full rounded-full bg-rose-400" style={{ width: `${r.percentage}%` }} />
                     </div>
                     <span className="text-[#5A6B7A] w-8 text-right">{r.percentage}%</span>
@@ -579,7 +579,7 @@ export default function OperationalDashboard({
                       <span className="text-[#3A4A57]">{stage.stage}</span>
                       <span className="text-[#5A6B7A]">{stage.count} ({stage.conversionRate}%)</span>
                     </div>
-                    <div className="h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="h-4 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${widthPct}%` }}
@@ -637,7 +637,7 @@ export default function OperationalDashboard({
                 <div key={reason.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] truncate flex-1">{reason.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-20 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="w-20 h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-red-400"
                         style={{ width: `${reason.percentage}%` }}

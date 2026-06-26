@@ -155,7 +155,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
 
         <div className="space-y-2 mb-4">
           {(Object.entries(FLAG_REASON_LABELS) as [FlagReason, string][]).map(([key, label]) => (
-            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#E8E4DF] p-3 hover:bg-[#FAF7F2]">
+            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#E8E4DF] p-3 hover:bg-[#F6FBFB]">
               <input
                 type="radio"
                 name="reason"
@@ -197,7 +197,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           </button>
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             Cancel
           </button>
@@ -252,7 +252,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -329,7 +329,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="inline-flex items-center rounded-full bg-[#F0EDE8] px-2 py-0.5 text-xs font-medium text-[#5A6B7A]">
+                      <span className="inline-flex items-center rounded-full bg-[#EDF4F7] px-2 py-0.5 text-xs font-medium text-[#5A6B7A]">
                         {report.contentType}
                       </span>
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
@@ -435,7 +435,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 </button>
                 <button
                   onClick={() => { setActiveReport(null); setSelectedAction('none'); setModNote(''); }}
-                  className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+                  className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
                 >
                   Cancel
                 </button>
@@ -489,7 +489,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -513,7 +513,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
           </div>
         ))}
 
-        <div className="mt-6 rounded-xl bg-[#FAF7F2] p-4">
+        <div className="mt-6 rounded-xl bg-[#F6FBFB] p-4">
           <h3 className="text-sm font-semibold text-[#132F43]">Enforcement</h3>
           <p className="mt-1 text-sm text-[#5A6B7A]">
             Content with {AUTO_HIDE_THRESHOLD}+ reports is automatically hidden pending review.

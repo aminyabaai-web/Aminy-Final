@@ -622,7 +622,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               {onBack && (
                 <button
                   onClick={onBack}
-                  className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Go back"
                 >
                   <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
@@ -635,7 +635,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                     value={selectedOrg}
                     onChange={(e) => setSelectedOrg(e.target.value)}
                     aria-label="Select partner organization"
-                    className="text-sm bg-[#F0EDE8] dark:bg-slate-700 border-0 rounded-lg px-2 py-1 text-[#3A4A57] dark:text-gray-200 font-medium"
+                    className="text-sm bg-[#EDF4F7] dark:bg-slate-700 border-0 rounded-lg px-2 py-1 text-[#3A4A57] dark:text-gray-200 font-medium"
                   >
                     {PARTNER_ORGS.map(org => (
                       <option key={org.id} value={org.id}>{org.name}</option>
@@ -677,7 +677,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               <button
                 onClick={handleRefresh}
                 disabled={isRefreshing}
-                className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors disabled:opacity-50 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors disabled:opacity-50 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Refresh data"
               >
                 <RefreshCw className={`w-5 h-5 text-[#5A6B7A] ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -703,7 +703,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
             <span className="text-sm font-medium text-[#3A4A57] dark:text-gray-300">Pilot Progress</span>
             <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{pilotData.overview.daysRemaining} days remaining</span>
           </div>
-          <div className="h-2 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-accent to-accent/70 transition-all duration-500"
               style={{ width: `${pilotProgress}%` }}
@@ -808,7 +808,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 h-3 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden flex">
+              <div className="mt-4 h-3 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden flex">
                 <div
                   className="bg-gray-400 transition-all"
                   style={{ width: `${(pilotData.tierDistribution.free / 150) * 100}%` }}
@@ -974,7 +974,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
                         <span className="text-sm font-medium text-[#132F43]">{intent.intent}</span>
                         <span className="text-sm text-[#5A6B7A]">{intent.count}</span>
                       </div>
-                      <div className="h-2 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
+                      <div className="h-2 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-accent/70 rounded-full"
                           style={{ width: `${pilotData.aiUsage.topIntents[0]?.count > 0 ? (intent.count / pilotData.aiUsage.topIntents[0].count) * 100 : 0}%` }}
@@ -1108,7 +1108,7 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">Top Providers</h3>
               <div className="space-y-3 sm:space-y-4">
                 {pilotData.marketplace.topProviders.map((provider, i) => (
-                  <div key={provider.name} className="flex items-center gap-3 sm:gap-4 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                  <div key={provider.name} className="flex items-center gap-3 sm:gap-4 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                     <div className="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center text-accent font-bold">
                       {i + 1}
                     </div>
@@ -1259,7 +1259,7 @@ function MetricCard({ label, value, icon: Icon, target, current, total, trend, s
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-4">
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{label}</span>
-        <div className={`p-2 rounded-lg ${statusColors || 'bg-[#FAF7F2] dark:bg-slate-800'}`}>
+        <div className={`p-2 rounded-lg ${statusColors || 'bg-[#F6FBFB] dark:bg-slate-800'}`}>
           <Icon className="w-4 h-4" />
         </div>
       </div>
@@ -1295,7 +1295,7 @@ function KPIRow({ label, value, target }: { label: string; value: number; target
           <span className="text-sm text-[#8A9BA8] dark:text-[#5A6B7A]">/ {target}%</span>
         </div>
       </div>
-      <div className="h-2 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
+      <div className="h-2 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${isOnTrack ? 'bg-green-500' : 'bg-yellow-400'}`}
           style={{ width: `${Math.min(100, percentage)}%` }}
@@ -1315,7 +1315,7 @@ function NPSBar({ label, count, total, color }: { label: string; count: number; 
         <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{label}</span>
         <span className="text-sm font-medium text-[#132F43] dark:text-white">{count}</span>
       </div>
-      <div className="h-3 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
+      <div className="h-3 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full ${color}`}
           style={{ width: `${percentage}%` }}
@@ -1337,7 +1337,7 @@ function FunnelStep({ step, label, value, percentage }: { step: string; label: s
           <span className="text-sm font-medium text-[#132F43] dark:text-white">{label}</span>
           <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{value} ({percentage}%)</span>
         </div>
-        <div className="h-2 bg-[#F0EDE8] dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-2 bg-[#EDF4F7] dark:bg-slate-800 rounded-full overflow-hidden">
           <div
             className="h-full bg-accent/70 rounded-full"
             style={{ width: `${percentage}%` }}
@@ -1356,7 +1356,7 @@ function ConditionCard({ condition, families, adherence, improvement }: {
   improvement: number;
 }) {
   return (
-    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg text-center">
+    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg text-center">
       <div className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">{condition}</div>
       <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-3">{families} families</div>
       <div className="space-y-2 text-sm">
@@ -1381,7 +1381,7 @@ function PipelineRow({ stage, count }: { stage: string; count: number }) {
   return (
     <div className="flex items-center gap-3 sm:gap-4">
       <span className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] w-32">{stage}</span>
-      <div className="flex-1 h-6 bg-[#F0EDE8] dark:bg-slate-800 rounded overflow-hidden">
+      <div className="flex-1 h-6 bg-[#EDF4F7] dark:bg-slate-800 rounded overflow-hidden">
         <div
           className="h-full bg-accent/70 flex items-center justify-end px-2"
           style={{ width: `${percentage}%` }}

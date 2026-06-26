@@ -121,9 +121,9 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
       case 'routine':
         return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]';
       case 'someday':
-        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
+        return 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]';
       default:
-        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
+        return 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]';
     }
   };
 

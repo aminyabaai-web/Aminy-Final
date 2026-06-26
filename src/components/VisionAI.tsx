@@ -423,7 +423,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-[#5A6B7A]">Live Analysis</p>
                       {frameResults.slice(-3).map(fr => (
-                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-sm text-[#5A6B7A]">
+                        <div key={fr.id} className="bg-[#F6FBFB] rounded-lg p-2 text-sm text-[#5A6B7A]">
                           <span className="text-[#8A9BA8]">Frame {(fr.frameIndex ?? 0) + 1}:</span>{' '}
                           {fr.analysis.length > 100 ? fr.analysis.slice(0, 100) + '...' : fr.analysis}
                         </div>

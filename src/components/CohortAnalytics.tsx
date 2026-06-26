@@ -367,7 +367,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       )}
                     </div>
                   </div>
-                  <div className="h-8 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg overflow-hidden">
+                  <div className="h-8 bg-[#EDF4F7] dark:bg-slate-700 rounded-lg overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(stage.count / funnelData[0].count) * 100}%` }}
@@ -431,7 +431,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex-1 h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-3 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${feature.adoptionRate}%` }}

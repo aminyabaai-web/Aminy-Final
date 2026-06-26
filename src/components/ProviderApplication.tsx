@@ -291,7 +291,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   // Show existing application status
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white dark:from-slate-900 dark:to-slate-800">
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -394,7 +394,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   // Show success screen
   if (submitSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white dark:from-slate-900 dark:to-slate-800">
         <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center">
             <Logo size="sm" showText={false} />
@@ -416,7 +416,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
             </p>
 
             {verificationResult && (
-              <div className="bg-[#FAF7F2] dark:bg-slate-800/40 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 mb-6">
+              <div className="bg-[#F6FBFB] dark:bg-slate-800/40 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 mb-6">
                 <div className="flex items-center gap-2 text-[#3A4A57] dark:text-slate-300">
                   <Sparkles className="w-5 h-5" />
                   <span className="font-medium">Application received</span>
@@ -439,7 +439,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">

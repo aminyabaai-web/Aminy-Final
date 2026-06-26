@@ -389,7 +389,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                 <h2 id="more-menu-title" className="text-lg font-semibold text-[#132F43] dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
-                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
@@ -429,7 +429,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                             ? 'bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-800 dark:to-pink-900'
                             : isItemActive
                               ? 'bg-[#6B9080]/10 dark:bg-teal-800'
-                              : 'bg-[#F0EDE8] dark:bg-slate-600'
+                              : 'bg-[#EDF4F7] dark:bg-slate-600'
                           }
                         `}>
                           <Icon

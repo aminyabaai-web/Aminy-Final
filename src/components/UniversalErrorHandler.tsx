@@ -311,7 +311,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-[#FAF7F2]">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-[#F6FBFB]">
       <div className="max-w-md w-full text-center">
         <div className="w-16 h-16 mx-auto mb-4 sm:mb-6 bg-red-100 rounded-full flex items-center justify-center">
           <AlertTriangle className="w-8 h-8 text-red-600" />
@@ -337,7 +337,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
           <Button
             variant="outline"
             onClick={handleGoHome}
-            className="w-full border-[#E8E4DF] hover:bg-[#F0EDE8]"
+            className="w-full border-[#E8E4DF] hover:bg-[#EDF4F7]"
           >
             <Home className="w-4 h-4 mr-2" />
             Go to Home
@@ -366,7 +366,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
             </Button>
             
             {showDetails && (
-              <div className="mt-4 p-4 bg-[#F0EDE8] rounded-lg text-left">
+              <div className="mt-4 p-4 bg-[#EDF4F7] rounded-lg text-left">
                 <h3 className="font-medium text-[#132F43] mb-2">Error Details:</h3>
                 <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap overflow-auto max-h-40">
                   {error.stack}

@@ -168,7 +168,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
         {plan.schedule.map((day) => (
           <div key={day.day} className="border border-[#E8E4DF] rounded-xl overflow-hidden">
             <button
-              className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-[#FAF7F2] transition-colors"
+              className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-[#F6FBFB] transition-colors"
               onClick={() => setExpandedDay(expandedDay === day.day ? null : day.day)}
             >
               <div className="flex items-center gap-2">
@@ -179,7 +179,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
             </button>
 
             {expandedDay === day.day && (
-              <div className="px-4 pb-4 pt-2 bg-[#FAF7F2] space-y-3">
+              <div className="px-4 pb-4 pt-2 bg-[#F6FBFB] space-y-3">
                 {day.activities.map((a, ai) => (
                   <div key={ai} className="bg-white rounded-xl p-3 space-y-2">
                     <div className="flex items-center justify-between">

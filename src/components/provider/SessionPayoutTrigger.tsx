@@ -167,7 +167,7 @@ export function SessionPayoutTrigger({
 
             <div className="p-5 space-y-4">
               {/* Session info */}
-              <div className="rounded-xl bg-[#FAF7F2] p-4 space-y-2">
+              <div className="rounded-xl bg-[#F6FBFB] p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                   <User className="w-3.5 h-3.5 text-[#8A9BA8]" />
                   <span className="font-medium text-[#132F43]">{providerName}</span>
@@ -206,7 +206,7 @@ export function SessionPayoutTrigger({
                   <span className="font-medium text-red-500">−{formatCents(platformFeeCents)}</span>
                 </div>
 
-                <div className="h-px bg-[#F0EDE8] my-1" />
+                <div className="h-px bg-[#EDF4F7] my-1" />
 
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-semibold text-[#3A4A57]">Provider receives</span>

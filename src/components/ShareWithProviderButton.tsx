@@ -255,7 +255,7 @@ www.aminy.ai
 
   return (
     <>
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
+      <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-[#F5F2EC] border-[#C8DDE8]">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 bg-blue-100 rounded-full">
             <Stethoscope className="w-5 h-5 text-blue-600" />
@@ -356,7 +356,7 @@ function ShareModal({
             </div>
 
             {/* Report Preview */}
-            <div className="p-4 bg-[#FAF7F2] border-b">
+            <div className="p-4 bg-[#F6FBFB] border-b">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 text-[#6B9080]" />
@@ -398,7 +398,7 @@ function ShareModal({
                   onDownload();
                 }}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#F6FBFB] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <Download className="w-5 h-5 text-green-600" />
@@ -457,7 +457,7 @@ function ShareModal({
               <button
                 onClick={onCopyLink}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#F6FBFB] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                   {linkCopied ? (

@@ -424,7 +424,7 @@ export function TelehealthConsent({
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 rounded-xl">
+      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 rounded-xl">
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <FileText className="w-8 h-8 text-[#6B9080]" />
         </div>
@@ -454,10 +454,10 @@ export function TelehealthConsent({
               <Card key={section.id} className={`overflow-hidden ${isAccepted ? 'border-green-200 bg-green-50/30' : ''}`}>
                 <button
                   onClick={() => toggleSection(section.id)}
-                  className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
+                  className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#F0EDE8]'}`}>
+                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#EDF4F7]'}`}>
                       <Icon className={`w-4 h-4 ${isAccepted ? 'text-green-600' : 'text-[#5A6B7A]'}`} />
                     </div>
                     <div className="text-left">
@@ -484,7 +484,7 @@ export function TelehealthConsent({
                     <div className="pt-4 mb-4">
                       {section.content}
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+                    <div className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg">
                       <Checkbox
                         id={`accept-${section.id}`}
                         checked={isAccepted}

@@ -114,7 +114,7 @@ export function B2BOrgSetup({
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-[#F0EDE8] rounded-lg" aria-label="Back">
+          <button onClick={onBack} className="p-2 hover:bg-[#EDF4F7] rounded-lg" aria-label="Back">
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
@@ -284,7 +284,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('org-info')}
-                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB]"
                 >
                   Back
                 </button>
@@ -340,7 +340,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('invite-team')}
-                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB]"
                 >
                   Back
                 </button>

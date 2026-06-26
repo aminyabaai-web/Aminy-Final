@@ -32,7 +32,7 @@ export function LegalPrivacyFooter({
 
   if (variant === 'compact') {
     return (
-      <Card className={`p-4 bg-[#FAF7F2] border-[#E8E4DF] ${className}`}>
+      <Card className={`p-4 bg-[#F6FBFB] border-[#E8E4DF] ${className}`}>
         <div className="flex items-start gap-3">
           {showIcons && (
             <Shield className="w-5 h-5 text-slate-400 mt-0.5 flex-shrink-0" />
@@ -52,7 +52,7 @@ export function LegalPrivacyFooter({
 
   // Full variant - default
   return (
-    <div className={`border-t border-[#E8E4DF] bg-[#FAF7F2] py-8 px-6 ${className}`}>
+    <div className={`border-t border-[#E8E4DF] bg-[#F6FBFB] py-8 px-6 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           
@@ -163,7 +163,7 @@ export function LegalPrivacyFooter({
  */
 export function OnboardingLegalNotice({ className = '' }: { className?: string }) {
   return (
-    <div className={`p-4 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg ${className}`}>
+    <div className={`p-4 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg ${className}`}>
       <div className="flex items-start gap-2">
         <Info className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
         <div className="text-sm text-[#5A6B7A] leading-relaxed space-y-1">

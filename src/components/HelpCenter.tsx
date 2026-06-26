@@ -254,7 +254,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
 
         <div className="flex h-[calc(90vh-180px)]">
           {/* Sidebar */}
-          <div className="w-80 border-r border-[#E8E4DF] overflow-y-auto bg-[#FAF7F2]">
+          <div className="w-80 border-r border-[#E8E4DF] overflow-y-auto bg-[#F6FBFB]">
             {!selectedArticle ? (
               <div className="p-3 sm:p-4">
                 <nav className="space-y-2">
@@ -269,7 +269,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        activeTab === tab.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                        activeTab === tab.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#EDF4F7] text-[#5A6B7A]'
                       }`}>
                         {tab.icon}
                       </div>

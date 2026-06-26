@@ -103,7 +103,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 -ml-2 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
+              className="p-2 -ml-2 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded-lg transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -193,7 +193,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeCategory === 'all'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
-                : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
             }`}
           >
             All
@@ -207,7 +207,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === category
                     ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
-                    : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                 }`}
               >
                 <info.icon className="w-4 h-4" />

@@ -196,7 +196,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
+          <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#F6FBFB] transition-colors">
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
         )}
@@ -302,7 +302,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               </motion.button>
               <button
                 onClick={onAskQuestion}
-                className="w-full py-3.5 rounded-2xl font-medium text-[#3A4A57] bg-white border border-[#E8E4DF] text-sm flex items-center justify-center gap-2 hover:bg-[#FAF7F2] transition-colors"
+                className="w-full py-3.5 rounded-2xl font-medium text-[#3A4A57] bg-white border border-[#E8E4DF] text-sm flex items-center justify-center gap-2 hover:bg-[#F6FBFB] transition-colors"
               >
                 <MessageCircle className="w-4 h-4 text-slate-400" />
                 I have a question for {sessionData.providerName.split(' ')[1] || 'my provider'}
@@ -335,7 +335,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                   className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
                     signatureMode === mode
                       ? 'bg-slate-900 text-white'
-                      : 'text-[#5A6B7A] hover:bg-[#FAF7F2]'
+                      : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
                   }`}
                 >
                   {mode === 'drawn' ? 'Draw signature' : 'Type name'}

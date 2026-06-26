@@ -166,7 +166,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       case 'social': return 'text-green-600 bg-green-50 border-green-200';
       case 'sensory': return 'text-purple-600 bg-purple-50 border-purple-200';
       case 'routines': return 'text-orange-600 bg-orange-50 border-orange-200';
-      default: return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
+      default: return 'text-[#5A6B7A] bg-[#F6FBFB] border-[#E8E4DF]';
     }
   };
 
@@ -324,7 +324,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
 
   // Calm Break Card Component
   const CalmBreakCard = () => (
-    <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+    <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
       <div className="text-center">
         <div className="mb-4">
           <Wind className="w-12 h-12 text-blue-500 mx-auto mb-2" />
@@ -443,7 +443,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               <h3 className="text-sm font-semibold text-primary">Today's Activities:</h3>
               <div className="grid gap-2">
                 {activities.map((activity, index) => (
-                  <div key={activity.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+                  <div key={activity.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg">
                     <div className="text-[#2A7D99]">{activity.icon}</div>
                     <div className="flex-1 text-left">
                       <div className="text-sm font-medium text-primary">{activity.title}</div>
@@ -625,7 +625,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           {targets.map(target => {
             const successRate = target.attempts > 0 ? (target.successes / target.attempts) * 100 : 0;
             return (
-              <div key={target.id} className="flex items-center justify-between p-2 bg-[#FAF7F2] rounded-lg">
+              <div key={target.id} className="flex items-center justify-between p-2 bg-[#F6FBFB] rounded-lg">
                 <div className="flex items-center gap-2">
                   <div className={`p-1 rounded border ${getSkillColor(target.skill)}`}>
                     {getSkillIcon(target.skill)}

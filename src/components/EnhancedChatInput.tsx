@@ -445,7 +445,7 @@ export function EnhancedChatInput({
                       />
                     </div>
                   ) : (
-                    <div className="w-16 h-16 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 flex flex-col items-center justify-center p-1">
+                    <div className="w-16 h-16 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-[#F6FBFB] dark:bg-slate-700 flex flex-col items-center justify-center p-1">
                       <FileText className="w-6 h-6 text-[#8A9BA8]" />
                       <span className="text-sm text-[#5A6B7A] truncate w-full text-center mt-1">
                         {attachment.name.split('.').pop()?.toUpperCase()}
@@ -583,7 +583,7 @@ export function EnhancedChatInput({
             placeholder={isRecording ? 'Speak now or type...' : placeholder}
             disabled={disabled}
             rows={1}
-            className="w-full px-4 py-3 pr-12 rounded-2xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-[#5A6B7A] dark:text-white dark:placeholder:text-[#5A6B7A] disabled:opacity-50"
+            className="w-full px-4 py-3 pr-12 rounded-2xl border border-[#E8E4DF] dark:border-slate-600 bg-[#F6FBFB] dark:bg-slate-700 focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none text-sm placeholder:text-[#5A6B7A] dark:text-white dark:placeholder:text-[#5A6B7A] disabled:opacity-50"
             style={{ minHeight: '48px', maxHeight: '150px' }}
           />
         </div>

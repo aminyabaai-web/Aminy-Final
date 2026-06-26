@@ -170,7 +170,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
+              <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#EDF4F7]">
                 <Star className="w-3 h-3 mr-1" />
                 {tokens} tokens
               </Badge>
@@ -214,7 +214,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     className={`p-6 text-center cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 ${
                       isAffordable
                         ? `${colorClasses.gradient} ${colorClasses.border} ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:opacity-90'}`
-                        : 'opacity-50 cursor-not-allowed bg-[#F0EDE8]'
+                        : 'opacity-50 cursor-not-allowed bg-[#EDF4F7]'
                     }`}
                     onClick={() => isAffordable && redeemReward()}
                     tabIndex={isAffordable ? 0 : -1}
@@ -271,7 +271,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
+            <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#EDF4F7]">
               <Star className="w-3 h-3 mr-1" />
               {tokens}
             </Badge>

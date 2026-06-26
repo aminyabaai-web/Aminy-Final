@@ -1060,10 +1060,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           <p className="text-sm text-[#5A6B7A]">All caught up!</p>
                         </div>
                       ) : (
-                        <div className="divide-y divide-[#F0EDE8]">
+                        <div className="divide-y divide-[#EDF4F7]">
                           {unsignedNoteCount > 0 && (
                             <button
-                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              className="w-full text-left p-3 hover:bg-[#F6FBFB] transition-colors"
                               onClick={() => { setActiveTab('clinical-notes'); setShowNotifications(false); }}
                             >
                               <div className="flex items-start gap-2">
@@ -1080,7 +1080,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           {pendingBCBAThreads.slice(0, 5).map(thread => (
                             <button
                               key={thread.id}
-                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              className="w-full text-left p-3 hover:bg-[#F6FBFB] transition-colors"
                               onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
                             >
                               <div className="flex items-start gap-2">
@@ -1191,7 +1191,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {/* Welcome & Next Session */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
-              <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FAF7F2] p-6 shadow-sm">
+              <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#F6FBFB] via-white to-[#F6FBFB] p-6 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
@@ -1520,7 +1520,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               });
               if (pendingIntake.length === 0 && avgDays === null) return null;
               return (
-                <div className="grid grid-cols-3 gap-3 p-4 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
+                <div className="grid grid-cols-3 gap-3 p-4 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]">
                   <div className="text-center">
                     <p className="text-2xl font-bold text-[#132F43]">{pendingIntake.length}</p>
                     <p className="text-sm text-[#5A6B7A] mt-0.5">Pending first session</p>
@@ -2879,12 +2879,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <div className="p-5 space-y-4">
               <div>
                 <p className="text-sm font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
-                <p className="text-sm text-[#132F43] dark:text-slate-100 bg-[#FAF7F2] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
+                <p className="text-sm text-[#132F43] dark:text-slate-100 bg-[#F6FBFB] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
               </div>
               <div>
                 <p className="text-sm font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
                 <textarea
-                  className="w-full min-h-[160px] text-sm text-[#132F43] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#2A7D99]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/40 focus:border-[#2A7D99]"
+                  className="w-full min-h-[160px] text-sm text-[#132F43] dark:text-white bg-[#F6FBFB] dark:bg-slate-800 border border-[#2A7D99]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/40 focus:border-[#2A7D99]"
                   value={reviewResponseText}
                   onChange={(e) => setReviewResponseText(e.target.value)}
                   placeholder="Edit the AI draft or write your own response…"

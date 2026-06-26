@@ -147,7 +147,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         It takes just 2 minutes to complete.
                     </p>
 
-                    <Card className="p-5 bg-[#FAF7F2] border border-[#E8E4DF] mb-8">
+                    <Card className="p-5 bg-[#F6FBFB] border border-[#E8E4DF] mb-8">
                         <h3 className="font-semibold text-[#132F43] mb-2 flex items-center">
                             <Info className="w-4 h-4 text-blue-500 mr-2" />
                             Before you begin
@@ -273,7 +273,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         animate={{ opacity: 1, y: 0 }}
                         className="mt-8"
                     >
-                        <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border border-[#E8E4DF] p-6 rounded-2xl shadow-sm mb-6">
+                        <div className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 border border-[#E8E4DF] p-6 rounded-2xl shadow-sm mb-6">
                             <div className="flex gap-3">
                                 <Activity className="w-6 h-6 text-[#6B9080] shrink-0 mt-1" />
                                 <div>

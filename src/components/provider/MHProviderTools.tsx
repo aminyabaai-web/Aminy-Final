@@ -101,7 +101,7 @@ function PHQ9Widget() {
 
   const severityColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     moderately_severe: 'text-red-700 bg-red-50 border-red-200',
     severe: 'text-red-800 bg-red-100 border-red-300',
@@ -133,7 +133,7 @@ function PHQ9Widget() {
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-[#F6FBFB]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/27</span></p>
             <p className="text-sm capitalize font-medium">{String(latest.severity).replace('_', ' ')} depression</p>
@@ -187,7 +187,7 @@ function GAD7Widget() {
 
   const sevColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     severe: 'text-red-700 bg-red-50 border-red-200',
   };
@@ -218,7 +218,7 @@ function GAD7Widget() {
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-[#F6FBFB]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/21</span></p>
             <p className="text-sm font-medium capitalize">{latest.severity} anxiety</p>
@@ -281,7 +281,7 @@ function BRIEF2Widget() {
     const pct = total / maxScore;
     if (pct >= 0.75) return { label: 'At Risk', color: 'text-red-700 bg-red-50 border-red-200' };
     if (pct >= 0.55) return { label: 'Borderline', color: 'text-orange-700 bg-orange-50 border-orange-200' };
-    return { label: 'Elevated', color: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]' };
+    return { label: 'Elevated', color: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]' };
   };
 
   const logBRIEF = async () => {
@@ -614,7 +614,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}

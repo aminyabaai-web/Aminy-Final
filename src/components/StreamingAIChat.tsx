@@ -295,7 +295,7 @@ export function StreamingAIChat({
                   <button
                     key={card.title}
                     onClick={() => handleSend(card.prompt, [])}
-                    className="flex-shrink-0 w-[160px] text-left bg-white hover:bg-[#F0EDE8] active:scale-[0.97] border border-[#F0EDE8] rounded-2xl p-4 transition-all shadow-sm"
+                    className="flex-shrink-0 w-[160px] text-left bg-white hover:bg-[#EDF4F7] active:scale-[0.97] border border-[#EDF4F7] rounded-2xl p-4 transition-all shadow-sm"
                   >
                     <span className="text-2xl block mb-2">{card.icon}</span>
                     <p className="text-sm font-semibold text-[#132F43] leading-tight">{card.title}</p>
@@ -315,7 +315,7 @@ export function StreamingAIChat({
                 <button
                   key={prompt}
                   onClick={() => handleSend(prompt, [])}
-                  className="w-full text-left px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#F0EDE8] rounded-xl border border-[#F0EDE8] transition-all text-sm text-[#5A6B7A] flex items-center gap-2"
+                  className="w-full text-left px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#EDF4F7] rounded-xl border border-[#EDF4F7] transition-all text-sm text-[#5A6B7A] flex items-center gap-2"
                 >
                   <span className="text-[#6B9080] flex-shrink-0">&rarr;</span>
                   <span>{prompt}</span>
@@ -336,7 +336,7 @@ export function StreamingAIChat({
               className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                 message.role === 'user'
                   ? 'bg-accent text-white'
-                  : 'bg-[#F0EDE8] text-[#132F43]'
+                  : 'bg-[#EDF4F7] text-[#132F43]'
               }`}
             >
               <div className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -359,7 +359,7 @@ export function StreamingAIChat({
         {/* Streaming message — Bevel-style thinking steps */}
         {isStreaming && (
           <div className="flex justify-start">
-            <div className="max-w-[85%] rounded-2xl px-4 py-3 bg-white border border-[#F0EDE8] shadow-sm text-[#132F43]">
+            <div className="max-w-[85%] rounded-2xl px-4 py-3 bg-white border border-[#EDF4F7] shadow-sm text-[#132F43]">
               {streamingContent ? (
                 <div className="text-sm leading-relaxed whitespace-pre-wrap">
                   {streamingContent}
@@ -383,7 +383,7 @@ export function StreamingAIChat({
               <button
                 key={i}
                 onClick={() => handleSend(suggestion, [])}
-                className="w-full text-left flex items-start gap-2 px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#F0EDE8] rounded-xl border border-[#F0EDE8] transition-all text-sm text-[#5A6B7A]"
+                className="w-full text-left flex items-start gap-2 px-4 py-2.5 bg-white/80 hover:bg-white active:bg-[#EDF4F7] rounded-xl border border-[#EDF4F7] transition-all text-sm text-[#5A6B7A]"
               >
                 <span className="text-[#6B9080] mt-0.5 flex-shrink-0">&rarr;</span>
                 <span className="font-medium">{suggestion}</span>

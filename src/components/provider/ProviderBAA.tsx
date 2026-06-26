@@ -85,7 +85,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
       </div>
 
       {/* Parties */}
-      <div className="px-5 py-4 bg-[#FAF7F2] border-b border-[#E8E4DF]">
+      <div className="px-5 py-4 bg-[#F6FBFB] border-b border-[#E8E4DF]">
         <p className="text-sm text-[#5A6B7A] leading-relaxed">
           This HIPAA Business Associate Agreement is entered into between{' '}
           <strong>Aminy, LLC</strong> ("Covered Entity") and{' '}
@@ -122,7 +122,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
           {showFull ? 'Hide full agreement text' : 'View full agreement text'}
         </button>
         {showFull && (
-          <pre className="text-xs text-[#5A6B7A] bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg p-4 whitespace-pre-wrap font-mono leading-relaxed max-h-96 overflow-y-auto">
+          <pre className="text-xs text-[#5A6B7A] bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg p-4 whitespace-pre-wrap font-mono leading-relaxed max-h-96 overflow-y-auto">
             {baaText}
           </pre>
         )}
@@ -146,7 +146,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
 
       {/* E-Signature */}
       <div className="px-5 pb-6 border-t border-[#E8E4DF] pt-4 bg-white sticky bottom-0">
-        <div className="flex items-start gap-2 mb-4 p-3 bg-[#FAF7F2] rounded-lg text-sm text-[#5A6B7A]">
+        <div className="flex items-start gap-2 mb-4 p-3 bg-[#F6FBFB] rounded-lg text-sm text-[#5A6B7A]">
           <Lock className="w-4 h-4 shrink-0 mt-0.5" />
           <span>Type your full legal name below to sign electronically. Name must match exactly: <strong>{providerName}</strong></span>
         </div>
@@ -166,7 +166,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
         )}
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="py-3 px-5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2] transition-colors">
+            <button onClick={onBack} className="py-3 px-5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB] transition-colors">
               Back
             </button>
           )}

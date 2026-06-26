@@ -303,7 +303,7 @@ export function CalmCoins({
       </AnimatePresence>
 
       {/* Tab Navigation */}
-      <div className="flex gap-2 p-1 bg-[#F0EDE8] rounded-lg">
+      <div className="flex gap-2 p-1 bg-[#EDF4F7] rounded-lg">
         <button
           onClick={() => setActiveTab('earn')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${

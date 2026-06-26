@@ -137,7 +137,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
           </p>
 
           {/* Data flow diagram */}
-          <div className="flex items-center gap-2 bg-gradient-to-r from-[#FAF7F2] to-blue-50 rounded-xl p-3 border border-[#E8E4DF]">
+          <div className="flex items-center gap-2 bg-gradient-to-r from-[#F6FBFB] to-blue-50 rounded-xl p-3 border border-[#E8E4DF]">
             <div className="text-center">
               <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mx-auto">
                 <Zap size={18} className="text-white" />
@@ -180,7 +180,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
             {VALUE_PROPS.map((vp, i) => (
               <motion.div
                 key={i}
-                className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]"
+                className="flex items-start gap-3 p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
@@ -208,7 +208,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
             <Shield size={15} className="text-purple-600" />
             Data Quality Score: {syncStatus.dataQualityScore}%
           </h2>
-          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mb-3">
+          <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden mb-3">
             <div
               className="h-full bg-green-500 rounded-full"
               style={{ width: `${syncStatus.dataQualityScore}%` }}
@@ -226,7 +226,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
               return (
                 <div key={row.label} className="flex items-center gap-3">
                   <span className="text-sm text-[#5A6B7A] w-20 shrink-0">{row.label}</span>
-                  <div className="flex-1 h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+                  <div className="flex-1 h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full ${pct === 100 ? 'bg-green-500' : pct >= 80 ? 'bg-amber-400' : 'bg-red-400'}`}
                       style={{ width: `${pct}%` }}
@@ -273,7 +273,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
           <button
             onClick={handleSync}
             disabled={syncing}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-medium text-sm border border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl font-medium text-sm border border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
           >
             <RefreshCw size={15} className={syncing ? 'animate-spin' : ''} />
             {syncing ? 'Syncing…' : 'Sync Now'}
@@ -281,7 +281,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
         </div>
 
         {/* Schedule info */}
-        <div className="flex items-center gap-2 bg-[#F0EDE8] rounded-xl p-3">
+        <div className="flex items-center gap-2 bg-[#EDF4F7] rounded-xl p-3">
           <Clock size={14} className="text-[#5A6B7A] shrink-0" />
           <p className="text-sm text-[#5A6B7A]">
             Auto-sync runs every 6 hours. Next sync in ~{6 - (hoursAgo % 6)}h.

@@ -382,7 +382,7 @@ export function Phase2TestHarness({ onBack, onNavigate }: Phase2TestHarnessProps
                     {suite.tests.map(test => {
                       const result = testResults[test.id];
                       return (
-                        <div key={test.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#FAF7F2]">
+                        <div key={test.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-[#F6FBFB]">
                           {getStatusIcon(result?.status || 'pending')}
                           <div className="flex-1">
                             <div className="text-sm text-[#132F43] mb-1">{test.name}</div>

@@ -102,7 +102,7 @@ export interface DataCollectionSheetProps {
 const RESPONSE_CONFIG: Record<ResponseType, { label: string; shortLabel: string; color: string; bgColor: string }> = {
   correct: { label: 'Correct', shortLabel: '✓', color: 'text-green-700', bgColor: 'bg-green-100 border-green-400 active:bg-green-200' },
   incorrect: { label: 'Incorrect', shortLabel: '✗', color: 'text-red-700', bgColor: 'bg-red-100 border-red-400 active:bg-red-200' },
-  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-[#5A6B7A]', bgColor: 'bg-[#F0EDE8] border-slate-400 active:bg-[#E8E4DF]' },
+  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-[#5A6B7A]', bgColor: 'bg-[#EDF4F7] border-slate-400 active:bg-[#E8E4DF]' },
   prompted: { label: 'Prompted', shortLabel: 'P', color: 'text-amber-700', bgColor: 'bg-amber-100 border-amber-400 active:bg-amber-200' },
   self_corrected: { label: 'Self-Corrected', shortLabel: 'SC', color: 'text-blue-700', bgColor: 'bg-blue-100 border-blue-400 active:bg-blue-200' },
 };
@@ -213,7 +213,7 @@ function DTTMode({
   return (
     <div className="space-y-4">
       {/* Program info */}
-      <div className="bg-[#FAF7F2] rounded-xl p-4">
+      <div className="bg-[#F6FBFB] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
         <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
@@ -329,7 +329,7 @@ function NETMode({
 
   return (
     <div className="space-y-4">
-      <div className="bg-[#FAF7F2] rounded-xl p-4">
+      <div className="bg-[#F6FBFB] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
         <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
@@ -461,7 +461,7 @@ function BehaviorMode({
   return (
     <div className="space-y-4">
       {/* Mode selector */}
-      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
+      <div className="flex gap-2 bg-[#EDF4F7] rounded-xl p-1">
         {(['frequency', 'duration', 'interval'] as BehaviorRecordingType[]).map(t => (
           <button
             key={t}
@@ -491,7 +491,7 @@ function BehaviorMode({
         </div>
 
         {incidents.length === 0 ? (
-          <div className="bg-[#FAF7F2] rounded-xl p-4 text-center">
+          <div className="bg-[#F6FBFB] rounded-xl p-4 text-center">
             <p className="text-sm text-slate-400">Tap "Add Incident" to log antecedent, behavior, consequence</p>
           </div>
         ) : (
@@ -548,7 +548,7 @@ function BehaviorMode({
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={onDecrementFrequency}
-              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-[#5A6B7A] active:bg-[#F0EDE8]"
+              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-[#5A6B7A] active:bg-[#EDF4F7]"
             >
               <Minus className="w-6 h-6" />
             </button>
@@ -646,7 +646,7 @@ function BehaviorMode({
                   key={cell.intervalIndex}
                   className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold border-2 ${
                     cell.occurred === null
-                      ? 'bg-[#F0EDE8] border-[#E8E4DF] text-slate-400'
+                      ? 'bg-[#EDF4F7] border-[#E8E4DF] text-slate-400'
                       : cell.occurred
                       ? 'bg-green-100 border-green-400 text-green-700'
                       : 'bg-red-100 border-red-400 text-red-700'

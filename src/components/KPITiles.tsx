@@ -187,7 +187,7 @@ function KPITile({
             {kpi.label}
           </span>
           {kpi.change !== 0 && (
-            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-[#FAF7F2] px-1.5 py-0.5 rounded-full`}>
+            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-[#F6FBFB] px-1.5 py-0.5 rounded-full`}>
               {getTrendIcon(kpi.trend)}
               {Math.abs(kpi.change) > 0 && `${Math.abs(kpi.change).toFixed(kpi.change % 1 === 0 ? 0 : 1)}`}
             </span>
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
+      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#F6FBFB] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>

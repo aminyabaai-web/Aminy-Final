@@ -268,7 +268,7 @@ export function CoverageCoachExpanded({ userData, onSaveReport }: CoverageCoachE
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         {/* Progress Indicator */}
         {currentStep !== 'welcome' && currentStep !== 'report' && (
-          <Card className="p-4 mb-4 sm:mb-6 bg-[#FAF7F2]">
+          <Card className="p-4 mb-4 sm:mb-6 bg-[#F6FBFB]">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-[#3A4A57]">
                 {currentStep === 'provider' && 'Step 1 of 4: Insurance Provider'}

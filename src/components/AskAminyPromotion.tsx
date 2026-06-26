@@ -148,7 +148,7 @@ export function AskAminyPromotion({
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
         <button 
-          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#F6FBFB] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();
@@ -157,7 +157,7 @@ export function AskAminyPromotion({
           Help with {userData.childName}'s routine
         </button>
         <button 
-          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#F6FBFB] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();

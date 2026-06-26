@@ -115,7 +115,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+            <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
               <ArrowLeft size={20} className="text-[#3A4A57]" />
             </button>
           )}
@@ -183,7 +183,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     {/* Covered Services */}
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {entry.coveredServices.map(svc => (
-                        <span key={svc} className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
+                        <span key={svc} className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full">
                           {svc}
                         </span>
                       ))}
@@ -280,7 +280,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               <button
                 key={item.type}
                 onClick={() => { setShowAddFlow(true); }}
-                className="flex flex-col items-center gap-2 p-4 bg-white border border-[#E8E4DF] rounded-2xl hover:bg-[#FAF7F2] transition-colors text-center"
+                className="flex flex-col items-center gap-2 p-4 bg-white border border-[#E8E4DF] rounded-2xl hover:bg-[#F6FBFB] transition-colors text-center"
               >
                 {item.icon}
                 <span className="text-sm text-[#3A4A57] font-medium leading-tight">{item.label}</span>
@@ -309,7 +309,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
             >
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-base font-semibold text-[#132F43]">Add to Roster</h2>
-                <button onClick={() => setShowAddFlow(false)} className="p-1 rounded-lg hover:bg-[#F0EDE8]">
+                <button onClick={() => setShowAddFlow(false)} className="p-1 rounded-lg hover:bg-[#EDF4F7]">
                   <XCircle size={20} className="text-[#8A9BA8]" />
                 </button>
               </div>
@@ -325,7 +325,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
                           selectedPayer === p.payerId
                             ? 'border-[#6B9080] bg-[#6B9080]/10'
-                            : 'border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                            : 'border-[#E8E4DF] hover:bg-[#F6FBFB]'
                         }`}
                       >
                         <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-[#6B9080]' : 'text-[#8A9BA8]'} />

@@ -850,7 +850,7 @@ export const TalkToAminyEnhanced: React.FC<TalkToAminyEnhancedProps> = ({
 
       {/* Enhanced Input Area */}
       <div className="relative">
-        <div className="bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] focus-within:border-accent transition-all duration-200 focus-within:shadow-sm">
+        <div className="bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] focus-within:border-accent transition-all duration-200 focus-within:shadow-sm">
           <div className="relative">
             <Textarea
               ref={textareaRef}

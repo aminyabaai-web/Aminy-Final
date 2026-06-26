@@ -292,7 +292,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
             <Card key={option.type} className="p-3 sm:p-4">
               <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                  hasAccess ? 'bg-accent/10 text-accent' : 'bg-[#F0EDE8] text-slate-400'
+                  hasAccess ? 'bg-accent/10 text-accent' : 'bg-[#EDF4F7] text-slate-400'
                 }`}>
                   {option.icon}
                 </div>
@@ -354,7 +354,7 @@ export function AIReportGenerator({ childName, userTier }: AIReportGeneratorProp
               {/* Preview if generated */}
               {isGenerated && (
                 <div className="mt-4 pt-4 border-t">
-                  <div className="text-sm text-muted-foreground bg-[#FAF7F2] p-3 rounded max-h-32 overflow-y-auto">
+                  <div className="text-sm text-muted-foreground bg-[#F6FBFB] p-3 rounded max-h-32 overflow-y-auto">
                     {generatedReports.get(option.type)?.substring(0, 300)}...
                   </div>
                 </div>

@@ -375,7 +375,7 @@ export function BrandAuditChecker() {
         </div>
 
         {/* Summary */}
-        <Card className="mt-8 p-6 bg-[#FAF7F2]">
+        <Card className="mt-8 p-6 bg-[#F6FBFB]">
           <h3 className="font-semibold text-[#132F43] mb-3">Audit Summary</h3>
           <div className="grid md:grid-cols-3 gap-3 sm:gap-4 text-sm">
             <div>

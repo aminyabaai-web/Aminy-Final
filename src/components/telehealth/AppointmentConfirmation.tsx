@@ -354,7 +354,7 @@ export function AppointmentConfirmationScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -475,7 +475,7 @@ export function AppointmentConfirmationScreen({
                   value={promoCode}
                   onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
                   placeholder="Promo code"
-                  className="flex-1 px-3 py-2 text-sm bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                  className="flex-1 px-3 py-2 text-sm bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                 />
                 <button
                   onClick={handleApplyPromo}
@@ -511,7 +511,7 @@ export function AppointmentConfirmationScreen({
                 <span className="font-medium">HSA/FSA eligible</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
-                <span className="w-5 h-5 bg-[#F0EDE8] rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
+                <span className="w-5 h-5 bg-[#EDF4F7] rounded-full flex items-center justify-center flex-shrink-0 text-xs">📄</span>
                 <span>Superbill provided for insurance reimbursement</span>
               </div>
             </div>
@@ -591,7 +591,7 @@ export function AppointmentConfirmationScreen({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentStep('confirm')}
-              className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -766,7 +766,7 @@ export function AppointmentConfirmationScreen({
                   <button
                     key={option.type}
                     onClick={() => handleAddToCalendar(option.type)}
-                    className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3"
+                    className="w-full px-4 py-3 text-left hover:bg-[#F6FBFB] transition-colors flex items-center gap-3"
                   >
                     <span className="text-lg">{option.icon}</span>
                     <span className="text-[#132F43]">{option.name}</span>
@@ -774,7 +774,7 @@ export function AppointmentConfirmationScreen({
                 ))}
                 <button
                   onClick={() => handleAddToCalendar('download')}
-                  className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3 border-t border-[#E8E4DF]"
+                  className="w-full px-4 py-3 text-left hover:bg-[#F6FBFB] transition-colors flex items-center gap-3 border-t border-[#E8E4DF]"
                 >
                   <span className="text-lg">📥</span>
                   <span className="text-[#132F43]">Download .ics file</span>
@@ -812,7 +812,7 @@ export function AppointmentConfirmationScreen({
         </div>
 
         {/* Reminder Info */}
-        <div className="mt-4 sm:mt-6 p-4 bg-[#FAF7F2] rounded-xl text-sm text-[#5A6B7A]">
+        <div className="mt-4 sm:mt-6 p-4 bg-[#F6FBFB] rounded-xl text-sm text-[#5A6B7A]">
           <p className="font-medium text-[#3A4A57] mb-2">We'll remind you:</p>
           <ul className="space-y-1">
             <li>• 24 hours before your visit</li>

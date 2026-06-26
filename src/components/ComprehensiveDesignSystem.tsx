@@ -222,7 +222,7 @@ export function ComprehensiveDesignSystem() {
         </div>
         
         {/* Chart Placeholder */}
-        <div className="h-32 bg-[#FAF7F2] rounded-lg mb-3 flex items-center justify-center">
+        <div className="h-32 bg-[#F6FBFB] rounded-lg mb-3 flex items-center justify-center">
           <span className="text-sm text-[#8A9BA8]">Chart visualization</span>
         </div>
         
@@ -600,7 +600,7 @@ export function ComprehensiveDesignSystem() {
               <h3 className="text-lg sm:text-xl font-semibold text-primary">Modal Example</h3>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                className="p-1 hover:bg-[#EDF4F7] rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

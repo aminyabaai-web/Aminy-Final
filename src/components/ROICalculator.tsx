@@ -506,7 +506,7 @@ function AssumptionCard({
   source: string;
 }) {
   return (
-    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50 rounded-lg">
+    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800/50 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-4 h-4 text-[#6B9080]" />
         <span className="font-medium text-[#132F43] dark:text-white">{title}</span>

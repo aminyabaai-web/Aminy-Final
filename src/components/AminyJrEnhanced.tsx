@@ -465,7 +465,7 @@ export function AminyJrEnhanced({
 
   // Main Home View
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] via-blue-50 to-purple-50">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -509,7 +509,7 @@ export function AminyJrEnhanced({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Mascot Guide */}
         {currentView === 'home' && (
-          <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+          <Card className="p-6 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
             <div className="flex items-center gap-3 sm:gap-4">
               <CompassMascot mood="encouraging" />
               <div className="flex-1">
@@ -570,7 +570,7 @@ export function AminyJrEnhanced({
               onClick={() => setCurrentView('mini-missions')}
               className="group relative overflow-hidden rounded-2xl border-2 border-green-200 bg-white hover:border-green-400 transition-all hover:shadow-lg p-6 text-left"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-[#F0EDE8] opacity-50 group-hover:opacity-70 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-[#EDF4F7] opacity-50 group-hover:opacity-70 transition-opacity" />
               <div className="relative">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white mb-4 text-3xl">
                   🎯
@@ -585,7 +585,7 @@ export function AminyJrEnhanced({
             </button>
 
             {/* Badges */}
-            <Card className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-[#F0EDE8]">
+            <Card className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-[#EDF4F7]">
               <div className="flex items-center gap-3 mb-4">
                 <Crown className="w-8 h-8 text-yellow-600" />
                 <h3 className="text-xl text-[#132F43]">My Badges</h3>
@@ -661,7 +661,7 @@ export function AminyJrEnhanced({
         {/* Active Activity */}
         {currentView === 'speech-play' && isActivityActive && currentActivity && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-            <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+            <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
               <div className="text-center mb-4 sm:mb-6">
                 <div className="text-6xl mb-4">{currentActivity.icon}</div>
                 <h2 className="text-2xl text-[#132F43] mb-2">{currentActivity.title}</h2>
@@ -719,7 +719,7 @@ export function AminyJrEnhanced({
                         className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                           mission.completed
                             ? 'bg-green-200 text-green-700'
-                            : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                            : 'bg-[#EDF4F7] text-[#5A6B7A]'
                         }`}
                       >
                         {mission.completed ? (

@@ -140,7 +140,7 @@ export const EnhancedScheduleView: React.FC<EnhancedScheduleViewProps> = ({
         ))}
         
         {/* Schedule New Session Card */}
-        <Card className="p-6 border-dashed border-slate-300 bg-[#FAF7F2]">
+        <Card className="p-6 border-dashed border-slate-300 bg-[#F6FBFB]">
           <div className="text-center">
             <Calendar className="mx-auto h-8 w-8 text-slate-400 mb-3" />
             <h3 className="font-medium text-[#132F43] mb-2">Schedule New Session</h3>

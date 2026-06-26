@@ -205,7 +205,7 @@ export function StressCheckIn({
                   w-9 h-9 rounded-full font-medium text-sm transition-all
                   ${stressLevel === level
                     ? `${getStressColor(level)} text-white scale-110 shadow-lg`
-                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }
                 `}
               >
@@ -232,7 +232,7 @@ export function StressCheckIn({
           {recentLogs.length > 0 && (
             <button
               onClick={() => setShowTrend(!showTrend)}
-              className="w-full p-3 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors mb-4"
+              className="w-full p-3 bg-[#F6FBFB] rounded-lg hover:bg-[#EDF4F7] transition-colors mb-4"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm text-[#5A6B7A]">Your recent trend</span>

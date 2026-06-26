@@ -452,7 +452,7 @@ export function PlaybooksLibrary({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -485,7 +485,7 @@ export function PlaybooksLibrary({
             className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
               selectedCategory === 'all'
                 ? 'bg-primary text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             All
@@ -497,7 +497,7 @@ export function PlaybooksLibrary({
               className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1 ${
                 selectedCategory === cat
                   ? 'bg-primary text-white'
-                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                  : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               <span>{CATEGORY_ICONS[cat]}</span>
@@ -573,7 +573,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
     <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
       <button
         onClick={onSelect}
-        className="w-full p-4 text-left hover:bg-[#FAF7F2] transition-colors"
+        className="w-full p-4 text-left hover:bg-[#F6FBFB] transition-colors"
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -611,7 +611,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
                   <span className="text-[#5A6B7A]">Progress</span>
                   <span className="text-[#6B9080] font-medium">{playbook.progress}%</span>
                 </div>
-                <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                   <div
                     className="h-full bg-[#6B9080] rounded-full transition-all"
                     style={{ width: `${playbook.progress}%` }}

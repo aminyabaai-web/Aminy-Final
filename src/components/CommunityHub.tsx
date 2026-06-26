@@ -967,7 +967,7 @@ export function CommunityHub({
           </span>
           <button
             onClick={() => handleBookmark(post.id)}
-            className={`p-1.5 rounded-full hover:bg-[#F0EDE8] ${
+            className={`p-1.5 rounded-full hover:bg-[#EDF4F7] ${
               post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
           >
@@ -1176,7 +1176,7 @@ export function CommunityHub({
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold text-[#132F43] dark:text-white">{group.name}</h3>
                         {group.isPrivate && (
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">
+                          <Badge className="bg-[#EDF4F7] text-[#5A6B7A] text-sm">
                             <Shield className="w-3 h-3 mr-1" />
                             Private
                           </Badge>

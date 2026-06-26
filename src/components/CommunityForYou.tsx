@@ -534,7 +534,7 @@ export function CommunityForYou({
           className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all ${
             activeTab === id
               ? 'bg-primary text-white shadow-md'
-              : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+              : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -944,7 +944,7 @@ export function CommunityForYou({
       ))}
 
       {/* Past Q&A Archive */}
-      <Card className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50">
+      <Card className="p-4 bg-[#F6FBFB] dark:bg-slate-800/50">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="font-medium text-[#132F43] dark:text-white">
@@ -980,7 +980,7 @@ export function CommunityForYou({
               <button
                 onClick={onBack}
                 aria-label="Back"
-                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
               </button>

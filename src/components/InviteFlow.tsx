@@ -275,7 +275,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
             aria-label="Close"
           >
             <X size={20} />
@@ -284,7 +284,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
 
         <div className="p-5 space-y-5">
           {/* Reward callout */}
-          <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 rounded-xl p-4 border border-[#E8E4DF]">
+          <div className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 rounded-xl p-4 border border-[#E8E4DF]">
             <div className="flex items-start gap-3">
               <Gift className="w-5 h-5 text-[#6B9080] mt-0.5 flex-shrink-0" />
               <div>
@@ -302,7 +302,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           {/* Referral code display */}
           <div className="text-center">
             <p className="text-xs text-[#5A6B7A] uppercase tracking-wider mb-1.5">Your referral code</p>
-            <div className="inline-flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
+            <div className="inline-flex items-center gap-2 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
               <code className="text-base font-bold text-[#132F43] tracking-wide">
                 {referralCode}
               </code>
@@ -405,7 +405,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 {selectedContacts.map((contact, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between bg-[#FAF7F2] rounded-lg px-3 py-2"
+                    className="flex items-center justify-between bg-[#F6FBFB] rounded-lg px-3 py-2"
                   >
                     <span className="text-sm text-[#3A4A57] truncate">
                       {contact.name}

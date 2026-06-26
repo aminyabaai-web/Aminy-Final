@@ -92,7 +92,7 @@ const milestoneConfig: Record<MilestoneType, {
   'calm-champion': {
     icon: <Heart className="w-8 h-8" />,
     gradient: 'from-teal-500 to-green-500',
-    bgGradient: 'from-[#FAF7F2] to-green-50',
+    bgGradient: 'from-[#F6FBFB] to-green-50',
     getTitle: (m) => 'Calm Champion!',
     getMessage: (m) => `${m.childInitial}. completed ${m.value} calm-down activities in CalmCorner! Building real self-regulation skills.`,
     emoji: '💚',

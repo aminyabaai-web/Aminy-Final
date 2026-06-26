@@ -133,7 +133,7 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
       {/* Card header - always visible */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left p-4 hover:bg-[#FAF7F2] transition-colors"
+        className="w-full text-left p-4 hover:bg-[#F6FBFB] transition-colors"
       >
         <div className="flex items-start gap-3">
           <ProgressRing percent={goal.currentProgressPercent} />
@@ -258,7 +258,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
           <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
@@ -269,7 +269,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
           </div>
         </div>
         <div className="max-w-lg mx-auto px-4 py-16 flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#F0EDE8] flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#EDF4F7] flex items-center justify-center mb-4">
             <FileText className="w-7 h-7 text-slate-400" />
           </div>
           <h2 className="text-base font-semibold text-[#3A4A57] mb-1">No treatment plan yet</h2>
@@ -288,7 +288,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}

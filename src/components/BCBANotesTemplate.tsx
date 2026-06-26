@@ -104,7 +104,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       </div>
 
       {/* Client Info */}
-      <Card className="p-4 bg-[#FAF7F2] border-[#E8E4DF]">
+      <Card className="p-4 bg-[#F6FBFB] border-[#E8E4DF]">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div>
             <Label className="text-sm text-[#5A6B7A]">Client Name</Label>
@@ -148,7 +148,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
                 className={`cursor-pointer transition-all ${
                   selectedReasons.includes(reason)
                     ? 'bg-amber-100 text-amber-700 border-amber-300'
-                    : 'hover:bg-[#F0EDE8]'
+                    : 'hover:bg-[#EDF4F7]'
                 }`}
                 onClick={() => toggleReason(reason)}
               >

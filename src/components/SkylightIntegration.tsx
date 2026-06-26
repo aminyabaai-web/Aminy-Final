@@ -198,7 +198,7 @@ export function SkylightIntegration({
       >
         {!connected ? (
           <div className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-4 bg-[#EDF4F7] rounded-full flex items-center justify-center">
               <Link className="w-8 h-8 text-[#8A9BA8]" />
             </div>
             <h3 className="font-semibold text-[#132F43] mb-2">
@@ -287,7 +287,7 @@ export function SkylightIntegration({
               className={`p-4 cursor-pointer transition-all ${
                 selectedRoutines.includes(routine.id)
                   ? 'ring-2 ring-teal-500 bg-[#2A7D99]/10/50'
-                  : 'hover:bg-[#FAF7F2]'
+                  : 'hover:bg-[#F6FBFB]'
               }`}
               onClick={() => toggleRoutineSelection(routine.id)}
             >

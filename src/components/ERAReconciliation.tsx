@@ -47,7 +47,7 @@ function SummaryCard({ label, value, subLabel, color }: SummaryCardProps) {
     yellow: 'bg-amber-50 border-amber-200 text-amber-700',
     red: 'bg-red-50 border-red-200 text-red-700',
     blue: 'bg-[#EEF4F8] border-[#C8DDE8] text-blue-700',
-    gray: 'bg-[#FAF7F2] border-[#E8E4DF] text-[#3A4A57]',
+    gray: 'bg-[#F6FBFB] border-[#E8E4DF] text-[#3A4A57]',
   };
 
   return (
@@ -68,11 +68,11 @@ function StatusBadge({ status }: { status: string }) {
     underpaid: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Underpaid' },
     posted: { bg: 'bg-emerald-100', text: 'text-emerald-800', label: 'Posted' },
     pending_review: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Pending Review' },
-    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-[#132F43]', label: 'Write Off' },
+    write_off: { bg: 'bg-[#EDF4F7]', text: 'text-[#132F43]', label: 'Write Off' },
     appeal: { bg: 'bg-red-100', text: 'text-red-800', label: 'Appeal' },
   };
 
-  const config = statusConfig[status] || { bg: 'bg-[#F0EDE8]', text: 'text-[#3A4A57]', label: status };
+  const config = statusConfig[status] || { bg: 'bg-[#EDF4F7]', text: 'text-[#3A4A57]', label: status };
 
   return (
     <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${config.bg} ${config.text}`}>
@@ -90,7 +90,7 @@ function ServiceLineRow({ line }: {
     <div className="border-b border-[#E8E4DF] last:border-0">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-[#FAF7F2]"
+        className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-[#F6FBFB]"
       >
         <div className="flex items-center gap-3">
           <span className="font-mono text-sm font-semibold text-[#132F43]">{line.procedureCode}</span>
@@ -109,7 +109,7 @@ function ServiceLineRow({ line }: {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden bg-[#FAF7F2] px-4 pb-3"
+            className="overflow-hidden bg-[#F6FBFB] px-4 pb-3"
           >
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div>
@@ -182,7 +182,7 @@ function WriteOffCard({ suggestion, onAction }: {
         {suggestion.recommendation !== 'review' && (
           <button
             onClick={() => onAction('review')}
-            className="rounded-md border border-[#E8E4DF] px-3 py-1 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="rounded-md border border-[#E8E4DF] px-3 py-1 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             Review Instead
           </button>
@@ -312,7 +312,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {onNavigateBack && (
               <button
                 onClick={onNavigateBack}
-                className="rounded-lg p-1.5 text-[#5A6B7A] hover:bg-[#F0EDE8]"
+                className="rounded-lg p-1.5 text-[#5A6B7A] hover:bg-[#EDF4F7]"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -326,7 +326,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
           </div>
 
           {/* Tab Navigation */}
-          <div className="mt-4 flex gap-1 rounded-lg bg-[#F0EDE8] p-1">
+          <div className="mt-4 flex gap-1 rounded-lg bg-[#EDF4F7] p-1">
             {(['overview', 'reconciliation', 'write_offs', 'appeals'] as const).map((tab) => (
               <button
                 key={tab}
@@ -419,7 +419,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                 </h3>
                 <div className="mt-3 space-y-2">
                   {unreconciledPayments.slice(0, 10).map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between rounded-lg bg-[#FAF7F2] p-2">
+                    <div key={payment.id} className="flex items-center justify-between rounded-lg bg-[#F6FBFB] p-2">
                       <div>
                         <p className="text-sm font-medium text-[#132F43]">
                           {payment.claimControlNumber} - {payment.procedureCode}
@@ -469,7 +469,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               </div>
 
               <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                <div className="rounded-lg bg-[#FAF7F2] p-2">
+                <div className="rounded-lg bg-[#F6FBFB] p-2">
                   <p className="text-sm text-[#5A6B7A]">Charged</p>
                   <p className="text-sm font-bold">${reconciliationResult.originalChargedAmount.toFixed(2)}</p>
                 </div>

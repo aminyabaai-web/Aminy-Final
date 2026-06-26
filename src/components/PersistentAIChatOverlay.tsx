@@ -259,7 +259,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   variant="ghost"
                   size="sm"
                   onClick={onClose}
-                  className="h-8 w-8 p-0 hover:bg-[#F0EDE8]"
+                  className="h-8 w-8 p-0 hover:bg-[#EDF4F7]"
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -272,7 +272,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     <Badge
                       key={idx}
                       variant="secondary"
-                      className="bg-[#FAF7F2] text-[#5A6B7A] border-0 text-sm px-2 py-0.5"
+                      className="bg-[#F6FBFB] text-[#5A6B7A] border-0 text-sm px-2 py-0.5"
                     >
                       {chip}
                     </Badge>
@@ -337,7 +337,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <button
                         key={idx}
                         onClick={() => handleStarterPrompt(prompt)}
-                        className="w-full px-4 py-3 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-xl text-sm text-[#3A4A57] transition-colors text-left"
+                        className="w-full px-4 py-3 bg-[#F6FBFB] hover:bg-[#EDF4F7] rounded-xl text-sm text-[#3A4A57] transition-colors text-left"
                       >
                         {prompt}
                       </button>
@@ -355,7 +355,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                       message.role === 'user'
                         ? 'bg-primary text-white'
-                        : 'bg-[#FAF7F2] text-[#132F43]'
+                        : 'bg-[#F6FBFB] text-[#132F43]'
                     }`}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">
@@ -368,7 +368,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
               {/* Calm Pulse Typing Indicator */}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="px-4 py-3 bg-[#FAF7F2] rounded-2xl">
+                  <div className="px-4 py-3 bg-[#F6FBFB] rounded-2xl">
                     <div className="flex gap-1.5">
                       <motion.div
                         className="w-2 h-2 bg-cyan-400 rounded-full"
@@ -397,7 +397,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
             {memories.length > 0 && (
               <button
                 onClick={() => setShowMemoryDrawer(!showMemoryDrawer)}
-                className="px-6 py-2 border-t border-[#E8E4DF] flex items-center justify-between text-sm text-[#5A6B7A] hover:bg-[#FAF7F2] transition-colors shrink-0"
+                className="px-6 py-2 border-t border-[#E8E4DF] flex items-center justify-between text-sm text-[#5A6B7A] hover:bg-[#F6FBFB] transition-colors shrink-0"
               >
                 <span className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
@@ -416,7 +416,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-[#E8E4DF] bg-[#FAF7F2] overflow-hidden shrink-0"
+                  className="border-t border-[#E8E4DF] bg-[#F6FBFB] overflow-hidden shrink-0"
                 >
                   <div className="px-6 py-3 space-y-2 max-h-32 overflow-y-auto">
                     {memories.map((memory) => (

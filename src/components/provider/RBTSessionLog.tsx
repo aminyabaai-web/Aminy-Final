@@ -112,7 +112,7 @@ export function RBTSessionLog({ onBack, rbtId = 'rbt-001' }: RBTSessionLogProps)
             key={v.id}
             onClick={() => setViewMode(v.id)}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              viewMode === v.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
+              viewMode === v.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'
             }`}
           >
             {v.label}
@@ -210,7 +210,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
           {s.goalsTargeted.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-1">
               {s.goalsTargeted.map((g, i) => (
-                <span key={i} className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
+                <span key={i} className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full">
                   {g.goalName}
                 </span>
               ))}
@@ -340,7 +340,7 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
             <div className="text-2xl font-bold text-[#6B9080]">{directHours.toFixed(1)}</div>
             <div className="text-sm text-[#6B9080]">Direct Hours</div>
           </div>
-          <div className="text-center p-3 bg-[#FAF7F2] rounded-lg">
+          <div className="text-center p-3 bg-[#F6FBFB] rounded-lg">
             <div className="text-2xl font-bold text-[#3A4A57]">
               {sessions.filter((s) => s.date.startsWith(thisMonth)).length}
             </div>

@@ -106,7 +106,7 @@ export function PostVisitSummary({
       </div>
 
       {/* Session Details */}
-      <div className="mb-4 p-3 bg-[#FAF7F2] rounded-lg">
+      <div className="mb-4 p-3 bg-[#F6FBFB] rounded-lg">
         <p className="text-sm text-[#5A6B7A]">
           <Clock className="w-3 h-3 inline mr-1" />
           {sessionDate.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })} at{' '}
@@ -162,7 +162,7 @@ export function PostVisitSummary({
               <button
                 key={index}
                 onClick={() => toggleItem(index)}
-                className="w-full flex items-center gap-2.5 p-2.5 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors text-left"
+                className="w-full flex items-center gap-2.5 p-2.5 bg-[#F6FBFB] rounded-lg hover:bg-[#EDF4F7] transition-colors text-left"
               >
                 {completedItems.has(index)
                   ? <CheckCircle className="w-4 h-4 text-[#6B9080] shrink-0" />

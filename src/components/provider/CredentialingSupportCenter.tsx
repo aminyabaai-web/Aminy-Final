@@ -977,9 +977,9 @@ function statusBadge(status: string) {
     denied: 'bg-red-100 text-red-700',
     fail: 'bg-red-100 text-red-700',
     rejected: 'bg-red-100 text-red-700',
-    missing: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    missing: 'bg-[#EDF4F7] text-[#5A6B7A]',
     pending: 'bg-blue-100 text-blue-700',
-    application: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    application: 'bg-[#EDF4F7] text-[#5A6B7A]',
     processing: 'bg-blue-100 text-blue-700',
     credentialing: 'bg-violet-100 text-violet-700',
     new: 'bg-blue-100 text-blue-700',
@@ -987,7 +987,7 @@ function statusBadge(status: string) {
     won: 'bg-emerald-100 text-emerald-700',
     lost: 'bg-red-100 text-red-700',
   };
-  const cls = colors[status] || 'bg-[#F0EDE8] text-[#5A6B7A]';
+  const cls = colors[status] || 'bg-[#EDF4F7] text-[#5A6B7A]';
   const label = status.replace(/-/g, ' ');
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
@@ -1385,7 +1385,7 @@ function RosterTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#E8E4DF] bg-[#FAF7F2]">
+              <tr className="border-b border-[#E8E4DF] bg-[#F6FBFB]">
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Payer</th>
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Type</th>
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Effective</th>
@@ -2050,7 +2050,7 @@ function DenialOpsTab() {
                       </div>
 
                       {/* Success Probability */}
-                      <div className="p-2 rounded bg-[#FAF7F2]">
+                      <div className="p-2 rounded bg-[#F6FBFB]">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-sm text-[#5A6B7A]">AI Appeal Success Estimate</span>
                           <span className={`text-sm font-bold ${
@@ -2224,7 +2224,7 @@ function StatusDashboardTab() {
             </div>
 
             {entry.nextAction && (
-              <div className="mt-2 p-2 rounded bg-[#FAF7F2] text-sm text-[#5A6B7A]">
+              <div className="mt-2 p-2 rounded bg-[#F6FBFB] text-sm text-[#5A6B7A]">
                 <span className="font-medium">Next action:</span> {entry.nextAction}
               </div>
             )}
@@ -2251,7 +2251,7 @@ function StatusDashboardTab() {
                 className={`flex items-center justify-between py-2 px-3 rounded-lg border ${
                   entry.enrollmentStatus === 're-credentialing-due'
                     ? 'bg-amber-50 border-amber-200'
-                    : 'bg-[#FAF7F2] border-[#E8E4DF]'
+                    : 'bg-[#F6FBFB] border-[#E8E4DF]'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -2396,7 +2396,7 @@ function HelpTab() {
       </div>
 
       {/* Contact Support */}
-      <Card className="p-4 bg-[#FAF7F2]">
+      <Card className="p-4 bg-[#F6FBFB]">
         <h3 className="text-sm font-semibold text-[#132F43] mb-2">Need More Help?</h3>
         <div className="space-y-2">
           <Button
@@ -2497,7 +2497,7 @@ export default function CredentialingSupportCenter({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-slate-900 text-white'
-                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                 }`}
               >
                 {tab.icon}

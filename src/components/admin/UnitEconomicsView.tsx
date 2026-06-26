@@ -227,7 +227,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
           </div>
         </div>
         <div className="flex flex-col items-center text-center px-6 py-16">
-          <div className="w-12 h-12 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-3">
+          <div className="w-12 h-12 rounded-full bg-[#F6FBFB] flex items-center justify-center mb-3">
             <BarChart3 className="w-6 h-6 text-[#577590]" />
           </div>
           <h2 className="text-[15px] font-bold text-[#0D1B2A] mb-1">No analytics data yet</h2>
@@ -348,7 +348,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               <div key={tier.tier} className="flex items-center gap-3 sm:gap-4">
                 <div className="w-20 text-sm font-medium text-[#3A4A57]">{tier.tier}</div>
                 <div className="flex-1">
-                  <div className="h-8 bg-[#F0EDE8] rounded-lg overflow-hidden relative">
+                  <div className="h-8 bg-[#EDF4F7] rounded-lg overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(tier.revenue / totalRevenue) * 100}%` }}
@@ -420,7 +420,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 {cohortData.map((cohort) => (
                   <tr
                     key={cohort.month}
-                    className="border-b border-[#E8E4DF] hover:bg-[#FAF7F2] cursor-pointer"
+                    className="border-b border-[#E8E4DF] hover:bg-[#F6FBFB] cursor-pointer"
                     onClick={() => setSelectedCohort(selectedCohort === cohort.month ? null : cohort.month)}
                   >
                     <td className="py-3 px-2 font-medium text-[#132F43]">{cohort.month}</td>

@@ -171,7 +171,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
           { label: 'Paid', amount: data.thisWeekPaid, color: 'text-emerald-700' },
           { label: 'Pending', amount: data.thisWeekPending, color: 'text-amber-600' },
         ].map((item) => (
-          <div key={item.label} className="rounded-xl bg-[#FAF7F2] p-2.5 text-center">
+          <div key={item.label} className="rounded-xl bg-[#F6FBFB] p-2.5 text-center">
             <p className={`text-base font-bold ${item.color}`}>{fmt(item.amount)}</p>
             <p className="text-sm text-[#5A6B7A] mt-0.5">{item.label}</p>
           </div>

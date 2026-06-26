@@ -122,7 +122,7 @@ export function SupervisionDashboard({ onBack, onNavigateToRBTLog, onNavigateToA
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               activeTab === tab.id
                 ? 'bg-indigo-100 text-indigo-700'
-                : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
+                : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'
             }`}
           >
             {tab.icon}
@@ -267,7 +267,7 @@ function ComplianceView({
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-2 bg-[#F0EDE8] rounded-full mb-3 overflow-hidden">
+            <div className="w-full h-2 bg-[#EDF4F7] rounded-full mb-3 overflow-hidden">
               <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: `${barWidth}%` }} />
             </div>
 
@@ -416,7 +416,7 @@ function CalendarView({
                 s.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
                 s.status === 'pending-signatures' ? 'bg-amber-100 text-amber-700' :
                 s.status === 'scheduled' ? 'bg-blue-100 text-blue-700' :
-                'bg-[#F0EDE8] text-[#5A6B7A]'
+                'bg-[#EDF4F7] text-[#5A6B7A]'
               }`}>
                 {s.status === 'pending-signatures' ? 'Pending Sig' : s.status}
               </span>
@@ -497,7 +497,7 @@ function CompetencyHeatmap({ profiles }: { profiles: RBTProfile[] }) {
                   <div
                     key={p.id}
                     className={`flex-1 text-center text-sm font-medium rounded leading-5 ${
-                      rating ? ratingColor(rating) : 'bg-[#F0EDE8] text-slate-400'
+                      rating ? ratingColor(rating) : 'bg-[#EDF4F7] text-slate-400'
                     }`}
                   >
                     {rating ?? '-'}

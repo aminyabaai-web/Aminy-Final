@@ -60,7 +60,7 @@ const STATUS_CONFIG: Record<PanelApplicationStatus, {
   bg: string;
   border: string;
 }> = {
-  'not-started': { label: 'Not Started', color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]' },
+  'not-started': { label: 'Not Started', color: 'text-[#5A6B7A]', bg: 'bg-[#F6FBFB]', border: 'border-[#E8E4DF]' },
   'submitted': { label: 'Submitted', color: 'text-blue-600', bg: 'bg-[#EEF4F8]', border: 'border-[#C8DDE8]' },
   'pending': { label: 'Pending Review', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
   'credentialed': { label: 'Credentialed', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
@@ -104,7 +104,7 @@ function RiskBadge({ severity }: { severity: 'critical' | 'high' | 'medium' }) {
   const config = {
     critical: 'bg-red-100 text-red-700 border border-red-200',
     high: 'bg-amber-100 text-amber-700 border border-amber-200',
-    medium: 'bg-yellow-100 text-yellow-700 border border-[#F0EDE8]',
+    medium: 'bg-yellow-100 text-yellow-700 border border-[#EDF4F7]',
   };
   return (
     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${config[severity]}`}>
@@ -132,7 +132,7 @@ function GanttBar({ label, start, end, status, index }: {
   return (
     <div className="flex items-center gap-3 mb-2">
       <span className="text-sm text-[#5A6B7A] w-32 shrink-0 truncate">{label}</span>
-      <div className="flex-1 relative h-6 bg-[#F0EDE8] rounded overflow-hidden">
+      <div className="flex-1 relative h-6 bg-[#EDF4F7] rounded overflow-hidden">
         <motion.div
           className={`absolute top-1 bottom-1 rounded ${colors[status]}`}
           style={{ left: `${start}%`, width: `${width}%` }}
@@ -407,7 +407,7 @@ export default function CredentialingOrchestrator({
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-sm font-semibold text-[#132F43]">{selectedPlaybook.payerName} Enrollment</h2>
-                    <span className="text-xs text-[#5A6B7A] bg-[#F0EDE8] px-2 py-1 rounded-full">
+                    <span className="text-xs text-[#5A6B7A] bg-[#EDF4F7] px-2 py-1 rounded-full">
                       ~{selectedPlaybook.totalEstimatedDays} days
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default function CredentialingOrchestrator({
                         <div
                           key={idx}
                           className={`border rounded-xl transition-all ${
-                            isChecked ? 'border-green-200 bg-green-50' : 'border-[#E8E4DF] bg-[#FAF7F2]'
+                            isChecked ? 'border-green-200 bg-green-50' : 'border-[#E8E4DF] bg-[#F6FBFB]'
                           }`}
                         >
                           <div
@@ -580,15 +580,15 @@ export default function CredentialingOrchestrator({
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mb-4 text-center">
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
                     <p className="text-xl font-bold text-[#132F43]">{caqhProfile.completionPercent}%</p>
                     <p className="text-sm text-[#5A6B7A]">Complete</p>
                   </div>
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
                     <p className="text-sm text-[#132F43] font-semibold leading-tight">{caqhProfile.lastAttestedDate}</p>
                     <p className="text-sm text-[#5A6B7A]">Last Attested</p>
                   </div>
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
                     <p className="text-sm text-[#132F43] font-semibold leading-tight">{caqhProfile.nextAttestationDue}</p>
                     <p className="text-sm text-[#5A6B7A]">Next Due</p>
                   </div>
@@ -624,7 +624,7 @@ export default function CredentialingOrchestrator({
                           cat.percent === 100 ? 'text-green-600' : cat.percent >= 70 ? 'text-amber-600' : 'text-red-500'
                         }`}>{cat.percent}%</span>
                       </div>
-                      <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
                             cat.percent === 100 ? 'bg-green-500' : cat.percent >= 70 ? 'bg-amber-400' : 'bg-red-400'
@@ -722,7 +722,7 @@ export default function CredentialingOrchestrator({
                     return (
                       <button
                         key={type}
-                        className="flex items-center gap-2 p-3 border border-[#E8E4DF] rounded-xl hover:bg-[#FAF7F2] transition-colors text-left"
+                        className="flex items-center gap-2 p-3 border border-[#E8E4DF] rounded-xl hover:bg-[#F6FBFB] transition-colors text-left"
                       >
                         <Download size={13} className="text-[#8A9BA8] shrink-0" />
                         <span className="text-sm text-[#3A4A57]">{labels[type]}</span>

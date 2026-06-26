@@ -242,7 +242,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
                   <div
                     key={notification.id}
                     onClick={() => markAsRead(notification.id)}
-                    className={`p-4 cursor-pointer transition-colors hover:bg-[#FAF7F2] ${
+                    className={`p-4 cursor-pointer transition-colors hover:bg-[#F6FBFB] ${
                       !notification.read ? 'bg-accent/5' : ''
                     }`}
                   >
@@ -546,7 +546,7 @@ export function WeeklyEmailDigestPreview({
       </div>
 
       {/* Footer */}
-      <div className="bg-[#FAF7F2] p-6 text-center text-sm text-[#5A6B7A] border-t border-[#E8E4DF]">
+      <div className="bg-[#F6FBFB] p-6 text-center text-sm text-[#5A6B7A] border-t border-[#E8E4DF]">
         <p className="mb-2">Guided by AI. Grounded in ABA. Built for Family Life.</p>
         <p>
           <a href="#" className="text-accent hover:underline">Unsubscribe</a> • 

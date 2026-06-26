@@ -265,7 +265,7 @@ export function QASessionsHub({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -436,7 +436,7 @@ function UpcomingSessionCard({
           {session.topics.map((topic, idx) => (
             <span
               key={idx}
-              className="px-2 py-1 bg-[#F0EDE8] text-[#5A6B7A] text-xs rounded-full"
+              className="px-2 py-1 bg-[#EDF4F7] text-[#5A6B7A] text-xs rounded-full"
             >
               {topic}
             </span>
@@ -468,7 +468,7 @@ function UpcomingSessionCard({
                 className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-colors ${
                   session.hasReminder
                     ? 'bg-primary text-white'
-                    : 'border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]'
+                    : 'border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#F6FBFB]'
                 }`}
               >
                 {session.hasReminder ? (
@@ -486,7 +486,7 @@ function UpcomingSessionCard({
 
               <button
                 onClick={onAddToCalendar}
-                className="flex-1 py-2 px-4 border border-[#E8E4DF] rounded-xl text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-2 px-4 border border-[#E8E4DF] rounded-xl text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors flex items-center justify-center gap-2"
               >
                 <CalendarPlus className="w-4 h-4" />
                 Add to Calendar
@@ -579,7 +579,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
           {session.topics.slice(0, 3).map((topic, idx) => (
             <span
               key={idx}
-              className="px-2 py-0.5 bg-[#F0EDE8] text-[#5A6B7A] text-xs rounded-full"
+              className="px-2 py-0.5 bg-[#EDF4F7] text-[#5A6B7A] text-xs rounded-full"
             >
               {topic}
             </span>

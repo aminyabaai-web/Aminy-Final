@@ -639,7 +639,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-[#7BA7BC]'
-                    : 'text-foreground dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    : 'text-foreground dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                 }`}
               >
                 <Icon aria-hidden="true" className="w-4 h-4" />
@@ -931,7 +931,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="overflow-hidden">
           <button
             onClick={() => setActiveSection(activeSection === 'notifications' ? null : 'notifications')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Bell aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1071,7 +1071,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                                   notifications.checkInFrequency === opt.id
                                     ? 'text-white shadow-sm'
-                                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                                 }`}
                                 style={notifications.checkInFrequency === opt.id ? {
                                   background: 'linear-gradient(135deg, #2A7D99 0%, #6AA9BC 100%)'
@@ -1104,7 +1104,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                 className={`flex-1 py-2 px-1 rounded-xl text-center transition-all border ${
                                   notifications.checkInTime === opt.id
                                     ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#132F43]'
-                                    : 'border-[#E8E4DF] bg-[#FAF7F2] text-foreground hover:border-[#6B9080]'
+                                    : 'border-[#E8E4DF] bg-[#F6FBFB] text-foreground hover:border-[#6B9080]'
                                 }`}
                               >
                                 <p className="text-sm font-medium">{opt.label}</p>
@@ -1202,7 +1202,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="overflow-hidden">
           <button
             onClick={() => setActiveSection(activeSection === 'security' ? null : 'security')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Shield aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1226,7 +1226,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Change Password */}
                   <button
                     onClick={() => setShowPasswordDialog(true)}
-                    className="w-full flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <Key aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
@@ -1239,7 +1239,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   </button>
 
                   {/* Two-Factor Authentication */}
-                  <div className="flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                  <div className="flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Fingerprint aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
                       <div>
@@ -1279,7 +1279,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="overflow-hidden">
           <button
             onClick={() => setActiveSection(activeSection === 'calendars' ? null : 'calendars')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <CalendarDays aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1419,7 +1419,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="overflow-hidden">
           <button
             onClick={() => setActiveSection(activeSection === 'privacy' ? null : 'privacy')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Lock aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1441,7 +1441,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               >
                 <div className="p-4 space-y-4">
                   {/* Insurance Info */}
-                  <div className="p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                  <div className="p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-3">
                         <CreditCard aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
@@ -1489,7 +1489,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Export Data */}
                   <button
                     onClick={() => setShowExportDialog(true)}
-                    className="w-full flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <Download aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
@@ -1504,7 +1504,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Privacy Policy */}
                   <button
                     onClick={() => onNavigate?.('privacy-policy')}
-                    className="w-full flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
@@ -1519,7 +1519,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   {/* Terms of Service */}
                   <button
                     onClick={() => onNavigate?.('terms-of-service')}
-                    className="w-full flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                    className="w-full flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <FileText aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
@@ -1549,7 +1549,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         <Card className="divide-y divide-gray-200 dark:divide-slate-700">
           <button
             onClick={() => onNavigate?.('grant-navigator')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <DollarSign aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1582,7 +1582,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           </button>
           <button
             onClick={() => window.open('mailto:support@aminy.ai', '_blank')}
-            className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
           >
             <div className="flex items-center gap-3">
               <HelpCircle aria-hidden="true" className="w-5 h-5 text-primary" />
@@ -1856,7 +1856,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
               Two-factor authentication adds an extra layer of security by requiring a code from your authenticator app when you sign in.
             </p>
 
-            <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+            <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
               <p className="text-sm font-medium mb-2">You'll need:</p>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• An authenticator app (Google Authenticator, Authy, etc.)</li>

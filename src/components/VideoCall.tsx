@@ -567,7 +567,7 @@ export function VideoCall({
               : `Session with ${providerName || 'your provider'}`}
           </p>
 
-          <div className="bg-[#FAF7F2] rounded-lg p-4 mb-4 sm:mb-6">
+          <div className="bg-[#F6FBFB] rounded-lg p-4 mb-4 sm:mb-6">
             <div className="flex items-center justify-center gap-2 text-sm text-[#5A6B7A]">
               <Clock className="w-4 h-4" />
               <span>{sessionType === '50min' ? '50 minute' : '25 minute'} session</span>

@@ -268,7 +268,7 @@ export function ConsentFlow({
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -303,7 +303,7 @@ export function ConsentFlow({
 
         {/* Patient/child info */}
         {(patientName || childName) && (
-          <div className="mb-4 rounded-lg bg-[#FAF7F2] p-3 text-sm">
+          <div className="mb-4 rounded-lg bg-[#F6FBFB] p-3 text-sm">
             {patientName && <p><strong>Patient:</strong> {patientName}</p>}
             {childName && <p><strong>Child:</strong> {childName}</p>}
           </div>
@@ -385,7 +385,7 @@ export function ConsentFlow({
           </button>
           <button
             onClick={() => setShowDeclineConfirm(true)}
-            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-3 text-sm font-semibold text-[#3A4A57] transition-colors hover:bg-[#FAF7F2]"
+            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-3 text-sm font-semibold text-[#3A4A57] transition-colors hover:bg-[#F6FBFB]"
           >
             Decline
           </button>
@@ -450,7 +450,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -490,7 +490,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
             <h2 className="mb-3 text-sm font-semibold text-[#5A6B7A] uppercase tracking-wide">Withdrawn</h2>
             <div className="space-y-2">
               {withdrawnConsents.map(c => (
-                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-[#E8E4DF] bg-[#FAF7F2] p-3">
+                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-[#E8E4DF] bg-[#F6FBFB] p-3">
                   <div>
                     <p className="text-sm font-semibold text-[#5A6B7A]">{labelMap[c.consentType]}</p>
                     <p className="text-sm text-[#5A6B7A]">
@@ -544,7 +544,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
                     </button>
                     <button
                       onClick={() => setWithdrawTarget(null)}
-                      className="rounded-lg border border-[#E8E4DF] px-4 py-2 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+                      className="rounded-lg border border-[#E8E4DF] px-4 py-2 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
                     >
                       Cancel
                     </button>

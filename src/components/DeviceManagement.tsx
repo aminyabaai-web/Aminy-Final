@@ -171,7 +171,7 @@ export function DeviceManagement({
       case 'active': return 'bg-green-50 text-green-700 border-green-200';
       case 'inactive': return 'bg-red-50 text-red-700 border-red-200';
       case 'sleeping': return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]';
-      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#F6FBFB] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -302,7 +302,7 @@ export function DeviceManagement({
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-[#EDF4F7] dark:bg-slate-700 rounded-lg flex items-center justify-center">
                         {getDeviceIcon(device.type)}
                       </div>
                       <div>
@@ -367,7 +367,7 @@ export function DeviceManagement({
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-between mb-4 sm:mb-6">
                     <div className="flex items-center gap-3 sm:gap-4">
-                      <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-xl flex items-center justify-center">
+                      <div className="w-16 h-16 bg-[#EDF4F7] dark:bg-slate-700 rounded-xl flex items-center justify-center">
                         {getDeviceIcon(selectedDeviceData.type)}
                       </div>
                       <div>

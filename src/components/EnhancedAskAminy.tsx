@@ -755,7 +755,7 @@ export function EnhancedAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
+                            : "bg-[#EDF4F7] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Enhanced Message Header */}
                           <div className="flex items-center justify-between mb-2">
@@ -886,7 +886,7 @@ export function EnhancedAskAminy({
                       onKeyPress={handleKeyPress}
                       placeholder={`Ask me anything about ${userData.childName}...`}
                       aria-label={`Message Aminy about ${userData.childName}`}
-                      className="w-full resize-none rounded-xl border border-[#E8E4DF] dark:border-gray-700 bg-[#FAF7F2] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
+                      className="w-full resize-none rounded-xl border border-[#E8E4DF] dark:border-gray-700 bg-[#F6FBFB] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
                       style={{ minHeight: '48px', maxHeight: '120px' }}
                       disabled={isTyping || isStreaming || !canSendMessage}
                     />
@@ -896,7 +896,7 @@ export function EnhancedAskAminy({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-10 h-10 p-0 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-gray-800"
+                      className="w-10 h-10 p-0 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-gray-800"
                       title="Attach file"
                       aria-label="Attach file"
                       disabled={isTyping || isStreaming}

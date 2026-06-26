@@ -58,7 +58,7 @@ function getStatusColor(status: string): string {
     case 'waitlist':
       return 'bg-blue-100 text-[#4A6478]';
     default:
-      return 'bg-[#F0EDE8] text-[#132F43]';
+      return 'bg-[#EDF4F7] text-[#132F43]';
   }
 }
 
@@ -133,7 +133,7 @@ function UtilizationBar({
           {used.toFixed(1)} / {total.toFixed(1)} hrs ({percentage.toFixed(0)}%)
         </span>
       </div>
-      <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
+      <div className="w-full bg-[#EDF4F7] rounded-full h-2.5">
         <div
           className={`h-2.5 rounded-full transition-all ${isOverUtilized ? 'bg-red-500' : color}`}
           style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -174,7 +174,7 @@ function ProviderCard({
           {provider.specialties.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {provider.specialties.slice(0, 3).map(s => (
-                <span key={s} className="px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded">
+                <span key={s} className="px-2 py-0.5 text-xs bg-[#EDF4F7] text-[#5A6B7A] rounded">
                   {s}
                 </span>
               ))}
@@ -248,7 +248,7 @@ function ClientCard({
             {totalUsed.toFixed(1)} / {totalAuthorized.toFixed(1)}
           </span>
         </div>
-        <div className="w-full bg-[#F0EDE8] rounded-full h-2">
+        <div className="w-full bg-[#EDF4F7] rounded-full h-2">
           <div
             className={`h-2 rounded-full ${utilizationPercent > 90 ? 'bg-red-500' : utilizationPercent > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
             style={{ width: `${Math.min(utilizationPercent, 100)}%` }}
@@ -284,7 +284,7 @@ function LocationCard({
             <span className="text-sm text-[#6B9080] font-medium">Primary Location</span>
           )}
         </div>
-        <span className={`px-2 py-1 text-sm font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-[#132F43]'}`}>
+        <span className={`px-2 py-1 text-sm font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#EDF4F7] text-[#132F43]'}`}>
           {location.isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
@@ -422,7 +422,7 @@ export function ClinicDashboard({
               <span>{tab.icon}</span>
               {tab.label}
               {tab.count !== undefined && (
-                <span className="ml-1 px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded-full">
+                <span className="ml-1 px-2 py-0.5 text-xs bg-[#EDF4F7] text-[#5A6B7A] rounded-full">
                   {tab.count}
                 </span>
               )}
@@ -716,7 +716,7 @@ export function ClinicDashboard({
             {clinic.settings.insuranceCredentials.length > 0 ? (
               <div className="space-y-3">
                 {clinic.settings.insuranceCredentials.map((cred, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
+                  <div key={i} className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg">
                     <div>
                       <p className="font-medium text-[#132F43]">{cred.insurerName}</p>
                       <p className="text-sm text-[#5A6B7A]">Contract: {cred.contractNumber || 'N/A'}</p>
@@ -732,7 +732,7 @@ export function ClinicDashboard({
                 No insurance credentials configured
               </p>
             )}
-            <button className="mt-4 w-full py-2 border border-[#E8E4DF] rounded-lg text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors">
+            <button className="mt-4 w-full py-2 border border-[#E8E4DF] rounded-lg text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors">
               Add Insurance Credential
             </button>
           </div>

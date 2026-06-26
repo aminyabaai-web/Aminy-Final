@@ -272,7 +272,7 @@ export function MorningMission({
               <span className="font-medium text-[#3A4A57]">Morning Mission</span>
               <span>{completedSteps.size}/{missionSteps.length} complete</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-[#F0EDE8]">
+            <div className="h-2 overflow-hidden rounded-full bg-[#EDF4F7]">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
@@ -297,7 +297,7 @@ export function MorningMission({
                   'flex items-center gap-3 rounded-2xl p-3 transition-all',
                   step.completed
                     ? 'border border-emerald-200 bg-emerald-50/80'
-                    : 'border border-[#E8E4DF] bg-[#FAF7F2]/90 hover:border-slate-300 hover:bg-white'
+                    : 'border border-[#E8E4DF] bg-[#F6FBFB]/90 hover:border-slate-300 hover:bg-white'
                 )}
               >
                 <div className={cn(

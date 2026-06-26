@@ -42,7 +42,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -64,7 +64,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
 
         {/* Table of Contents */}
-        <nav className="mb-6 rounded-lg bg-[#FAF7F2] p-4">
+        <nav className="mb-6 rounded-lg bg-[#F6FBFB] p-4">
           <p className="mb-2 text-sm font-semibold text-[#132F43]">Contents</p>
           <ol className="space-y-1 text-sm text-[#6B9080]">
             {[
@@ -419,7 +419,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
         <Section title="17. Contact Us" id="contact">
           <p>For privacy-related inquiries or to exercise your rights:</p>
-          <div className="mt-2 rounded-lg bg-[#FAF7F2] p-4 text-sm">
+          <div className="mt-2 rounded-lg bg-[#F6FBFB] p-4 text-sm">
             <p><strong>Aminy Privacy Team</strong></p>
             <p>Email: privacy@aminy.app</p>
             <p>Phone: 1-800-AMINY-HELP</p>

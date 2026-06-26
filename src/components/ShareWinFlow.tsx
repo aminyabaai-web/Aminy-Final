@@ -234,7 +234,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
             </div>
 
             {/* Share Options */}
-            <div className="p-4 bg-[#FAF7F2] border-t">
+            <div className="p-4 bg-[#F6FBFB] border-t">
               <p className="text-sm text-[#5A6B7A] mb-3 text-center">
                 Share your progress and inspire other parents
               </p>

@@ -453,7 +453,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
               className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 activeCategory === cat.id
                   ? 'bg-primary text-white'
-                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                  : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               {cat.icon}
@@ -481,7 +481,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 <button
                   key={i}
                   onClick={() => handleAIQuery(q)}
-                  className="text-xs bg-white border border-[#E8E4DF] text-[#3A4A57] px-3 py-1.5 rounded-full hover:bg-[#FAF7F2] transition-colors"
+                  className="text-xs bg-white border border-[#E8E4DF] text-[#3A4A57] px-3 py-1.5 rounded-full hover:bg-[#F6FBFB] transition-colors"
                 >
                   {q}
                 </button>
@@ -586,7 +586,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                         <div className="px-4 pb-4 border-t border-gray-50">
                           <p className="text-sm text-[#5A6B7A] leading-relaxed mt-3 whitespace-pre-line">{faq.a}</p>
                           {faq.hasVideo && (
-                            <div className="mt-3 flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
+                            <div className="mt-3 flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]">
                               <div className="w-12 h-8 bg-[#E8E4DF] rounded-lg flex items-center justify-center shrink-0">
                                 <Play size={16} className="text-[#5A6B7A]" />
                               </div>
@@ -613,7 +613,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
         {activeCategory !== 'ai-support' && (
           <button
             onClick={() => setActiveCategory('ai-support')}
-            className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 rounded-2xl border border-[#E8E4DF] hover:border-[#6B9080]/20 transition-colors"
+            className="w-full flex items-center gap-3 p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 rounded-2xl border border-[#E8E4DF] hover:border-[#6B9080]/20 transition-colors"
           >
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shrink-0">
               <Sparkles size={18} className="text-white" />

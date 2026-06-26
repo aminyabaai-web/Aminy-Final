@@ -193,7 +193,7 @@ export function InsightNavigatorReport({
           </div>
         </Card>
 
-        <Card className="p-4 bg-[#FAF7F2]">
+        <Card className="p-4 bg-[#F6FBFB]">
           <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
             <Shield className="w-4 h-4 text-green-500" />
             <span>HIPAA-conscious • Encrypted • Parent-controlled</span>
@@ -408,7 +408,7 @@ export function InsightNavigatorReport({
                   <p className="text-sm text-[#132F43]">{item.content}</p>
                   <div className="flex gap-2 mt-2">
                     <Badge variant="outline" className="text-sm">{item.category}</Badge>
-                    <Badge className={`text-sm ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#F0EDE8] text-[#3A4A57]'}`}>
+                    <Badge className={`text-sm ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#EDF4F7] text-[#3A4A57]'}`}>
                       {item.priority}
                     </Badge>
                   </div>
@@ -479,7 +479,7 @@ export function InsightNavigatorReport({
       </Tabs>
 
       {/* Footer */}
-      <Card className="p-4 bg-[#FAF7F2]">
+      <Card className="p-4 bg-[#F6FBFB]">
         <div className="flex items-center justify-between text-sm text-[#5A6B7A]">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-green-500" />

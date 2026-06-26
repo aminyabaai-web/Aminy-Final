@@ -313,7 +313,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
               duration === m
                 ? 'bg-green-500 text-white shadow-sm'
-                : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A]'
             }`}
           >
             {m}m
@@ -368,7 +368,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
         <button
           type="button"
           onClick={() => { playTap(); reset(); }}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#F0EDE8] text-[#5A6B7A] active:scale-95"
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-[#EDF4F7] text-[#5A6B7A] active:scale-95"
         >
           <RotateCcw className="h-5 w-5" />
         </button>
@@ -455,7 +455,7 @@ function PriorityPicker({ onComplete }: { onComplete: () => void }) {
                           key={target.key}
                           type="button"
                           onClick={() => moveCard(card.id, target.key)}
-                          className="rounded-lg bg-[#F0EDE8] px-2 py-0.5 text-sm text-[#5A6B7A] active:scale-95"
+                          className="rounded-lg bg-[#EDF4F7] px-2 py-0.5 text-sm text-[#5A6B7A] active:scale-95"
                         >
                           {target.emoji}
                         </button>
@@ -540,7 +540,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
                 initial={{ scale: 0.5, opacity: 0.3 }}
                 animate={count >= n ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0.3 }}
                 className={`flex h-14 w-14 items-center justify-center rounded-full text-xl font-bold shadow-sm ${
-                  count >= n ? 'bg-blue-500 text-white' : 'bg-[#F0EDE8] text-slate-400'
+                  count >= n ? 'bg-blue-500 text-white' : 'bg-[#EDF4F7] text-slate-400'
                 }`}
               >
                 {n}
@@ -573,7 +573,7 @@ function ImpulsePause({ onComplete }: { onComplete: () => void }) {
           <button
             type="button"
             onClick={startCount}
-            className="mt-2 rounded-2xl bg-[#F0EDE8] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
+            className="mt-2 rounded-2xl bg-[#EDF4F7] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
           >
             Try again
           </button>

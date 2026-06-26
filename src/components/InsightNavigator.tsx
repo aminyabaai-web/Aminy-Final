@@ -153,7 +153,7 @@ export function InsightNavigator({
       case 'communication': return 'text-blue-600 bg-[#EEF4F8] dark:text-blue-400 dark:bg-blue-900/30';
       case 'social': return 'text-green-600 bg-green-50 dark:text-green-400 dark:bg-green-900/30';
       case 'sensory': return 'text-purple-600 bg-purple-50 dark:text-purple-400 dark:bg-purple-900/30';
-      default: return 'text-[#5A6B7A] bg-[#FAF7F2] dark:text-slate-400 dark:bg-slate-700';
+      default: return 'text-[#5A6B7A] bg-[#F6FBFB] dark:text-slate-400 dark:bg-slate-700';
     }
   };
 

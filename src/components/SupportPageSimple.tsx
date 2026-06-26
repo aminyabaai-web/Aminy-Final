@@ -286,7 +286,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                 <Button variant="ghost" size="sm">
                   <Bell className="w-4 h-4" />
                 </Button>
-                <div className="w-8 h-8 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-[#EDF4F7] rounded-full flex items-center justify-center">
                   <User className="w-4 h-4 text-[#5A6B7A]" />
                 </div>
               </div>

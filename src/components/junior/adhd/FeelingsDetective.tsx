@@ -349,7 +349,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             <p className="text-sm font-medium text-[#3A4A57]">How BIG is this feeling?</p>
 
             {/* Thermometer visual */}
-            <div className="relative mx-auto flex h-56 w-16 flex-col items-center justify-end rounded-full border-2 border-[#E8E4DF] bg-[#FAF7F2] overflow-hidden">
+            <div className="relative mx-auto flex h-56 w-16 flex-col items-center justify-end rounded-full border-2 border-[#E8E4DF] bg-[#F6FBFB] overflow-hidden">
               <motion.div
                 className={`absolute bottom-0 left-0 right-0 rounded-b-full ${
                   intensity > 7 ? 'bg-red-400' : intensity > 4 ? 'bg-amber-400' : 'bg-green-400'
@@ -480,7 +480,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
             </p>
 
             {/* Mini stats */}
-            <div className="rounded-[20px] border border-[#E8E4DF] bg-[#FAF7F2] p-4">
+            <div className="rounded-[20px] border border-[#E8E4DF] bg-[#F6FBFB] p-4">
               <div className="grid grid-cols-2 gap-3 text-center">
                 <div>
                   <div className="text-lg font-bold text-amber-600">{records.length}</div>
@@ -504,7 +504,7 @@ export default function FeelingsDetective({ onBack, childName = 'Buddy', onNavig
               <button
                 type="button"
                 onClick={() => { playTap(); onBack(); }}
-                className="flex items-center gap-2 rounded-2xl bg-[#F0EDE8] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
+                className="flex items-center gap-2 rounded-2xl bg-[#EDF4F7] px-6 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
               >
                 Done
               </button>

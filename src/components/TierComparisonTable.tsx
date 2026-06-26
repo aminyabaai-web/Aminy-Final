@@ -180,13 +180,13 @@ export function TierComparisonTable({ compact = false }: TierComparisonTableProp
           <tbody>
             {features.map((category, catIndex) => (
               <React.Fragment key={catIndex}>
-                <tr className="bg-[#FAF7F2]">
+                <tr className="bg-[#F6FBFB]">
                   <td colSpan={4} className="py-3 px-4 font-semibold text-sm text-primary">
                     {category.category}
                   </td>
                 </tr>
                 {category.items.map((item, itemIndex) => (
-                  <tr key={itemIndex} className="border-b border-[#E8E4DF] hover:bg-[#FAF7F2]/50">
+                  <tr key={itemIndex} className="border-b border-[#E8E4DF] hover:bg-[#F6FBFB]/50">
                     <td className="py-3 px-4 text-sm text-muted-foreground">{item.name}</td>
                     <td className="py-3 px-4 text-center">{renderCell(item.core)}</td>
                     <td className="py-3 px-4 text-center bg-[#6B9080]/10/30">{renderCell(item.pro)}</td>

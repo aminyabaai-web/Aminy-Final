@@ -112,7 +112,7 @@ export function DataConfirmationModal({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 32, stiffness: 320 }}
-            className="fixed inset-x-0 bottom-0 z-50 bg-[#FAF7F2] rounded-t-3xl border-t border-[#F0EDE8] flex flex-col max-h-[88vh]"
+            className="fixed inset-x-0 bottom-0 z-50 bg-[#F6FBFB] rounded-t-3xl border-t border-[#EDF4F7] flex flex-col max-h-[88vh]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="data-confirm-title"
@@ -120,11 +120,11 @@ export function DataConfirmationModal({
           >
             {/* Handle */}
             <div className="pt-2 pb-1 flex justify-center" aria-hidden="true">
-              <div className="w-10 h-1 rounded-full bg-[#F0EDE8]" />
+              <div className="w-10 h-1 rounded-full bg-[#EDF4F7]" />
             </div>
 
             {/* Header */}
-            <div className="px-5 pt-2 pb-4 flex items-start justify-between border-b border-[#F0EDE8]">
+            <div className="px-5 pt-2 pb-4 flex items-start justify-between border-b border-[#EDF4F7]">
               <div className="flex-1 min-w-0">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] text-xs font-semibold tracking-wider uppercase mb-1.5">
                   <Sparkles className="w-3 h-3" />
@@ -141,7 +141,7 @@ export function DataConfirmationModal({
               </div>
               <button
                 onClick={onClose}
-                className="ml-3 w-9 h-9 rounded-full hover:bg-[#F0EDE8] flex items-center justify-center flex-shrink-0 transition-colors"
+                className="ml-3 w-9 h-9 rounded-full hover:bg-[#EDF4F7] flex items-center justify-center flex-shrink-0 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-4 h-4 text-[#5A6B7A]" />
@@ -176,11 +176,11 @@ export function DataConfirmationModal({
 
             {/* Footer actions */}
             {pending.length > 1 && (
-              <div className="px-5 py-3 border-t border-[#F0EDE8] flex items-center gap-2"
+              <div className="px-5 py-3 border-t border-[#EDF4F7] flex items-center gap-2"
                    style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-3 rounded-xl bg-white border border-[#F0EDE8] text-sm font-medium text-[#5A6B7A] hover:bg-[#F0EDE8] active:scale-[0.99] transition-all"
+                  className="flex-1 py-3 rounded-xl bg-white border border-[#EDF4F7] text-sm font-medium text-[#5A6B7A] hover:bg-[#EDF4F7] active:scale-[0.99] transition-all"
                 >
                   Review later
                 </button>
@@ -228,10 +228,10 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
     .slice(0, 4);
 
   return (
-    <div className="rounded-2xl bg-white border border-[#F0EDE8] overflow-hidden">
+    <div className="rounded-2xl bg-white border border-[#EDF4F7] overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-start gap-3 p-3 text-left active:bg-[#FAF7F2] transition-colors"
+        className="w-full flex items-start gap-3 p-3 text-left active:bg-[#F6FBFB] transition-colors"
         aria-expanded={expanded}
       >
         <div
@@ -260,9 +260,9 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
       </button>
 
       {expanded && (
-        <div className="px-3 pb-3 border-t border-[#F0EDE8] space-y-3 pt-3">
+        <div className="px-3 pb-3 border-t border-[#EDF4F7] space-y-3 pt-3">
           {/* Quote of raw text */}
-          <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
+          <div className="rounded-xl bg-[#F6FBFB] border border-[#EDF4F7] px-3 py-2">
             <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1">
               You said
             </p>
@@ -273,7 +273,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
 
           {/* Structured data preview */}
           {previewEntries.length > 0 && (
-            <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
+            <div className="rounded-xl bg-[#F6FBFB] border border-[#EDF4F7] px-3 py-2">
               <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1.5">
                 What we'll save
               </p>
@@ -297,7 +297,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
             <button
               onClick={onSkip}
               disabled={isProcessing}
-              className="flex-1 py-2.5 rounded-xl bg-white border border-[#F0EDE8] text-sm font-medium text-[#5A6B7A] hover:bg-[#FAF7F2] active:scale-[0.99] transition-all disabled:opacity-40"
+              className="flex-1 py-2.5 rounded-xl bg-white border border-[#EDF4F7] text-sm font-medium text-[#5A6B7A] hover:bg-[#F6FBFB] active:scale-[0.99] transition-all disabled:opacity-40"
             >
               Skip
             </button>

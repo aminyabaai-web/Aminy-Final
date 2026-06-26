@@ -188,7 +188,7 @@ function urgencyColor(days: number): string {
   if (days <= 0) return 'text-red-600 bg-red-50 border-red-200';
   if (days <= 7) return 'text-red-600 bg-red-50 border-red-200';
   if (days <= 14) return 'text-amber-600 bg-amber-50 border-amber-200';
-  return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
+  return 'text-[#5A6B7A] bg-[#F6FBFB] border-[#E8E4DF]';
 }
 
 function categoryLabel(cat: Denial['category']): string {
@@ -210,11 +210,11 @@ function categoryColor(cat: Denial['category']): string {
     auth: 'bg-violet-100 text-violet-700',
     coding: 'bg-orange-100 text-orange-700',
     'medical-necessity': 'bg-red-100 text-red-700',
-    'timely-filing': 'bg-[#F0EDE8] text-[#3A4A57]',
+    'timely-filing': 'bg-[#EDF4F7] text-[#3A4A57]',
     eligibility: 'bg-[#6B9080]/10 text-cyan-700',
-    duplicate: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    duplicate: 'bg-[#EDF4F7] text-[#5A6B7A]',
   };
-  return colors[cat] || 'bg-[#F0EDE8] text-[#5A6B7A]';
+  return colors[cat] || 'bg-[#EDF4F7] text-[#5A6B7A]';
 }
 
 function statusConfig(status: Denial['status']) {
@@ -224,7 +224,7 @@ function statusConfig(status: Denial['status']) {
     appealed: { label: 'Appealed', color: 'bg-blue-100 text-blue-700', icon: <Send className="w-3 h-3" /> },
     corrected: { label: 'Corrected', color: 'bg-emerald-100 text-emerald-700', icon: <Edit3 className="w-3 h-3" /> },
     recovered: { label: 'Recovered', color: 'bg-emerald-100 text-emerald-700', icon: <CheckCircle className="w-3 h-3" /> },
-    'written-off': { label: 'Written Off', color: 'bg-[#F0EDE8] text-[#5A6B7A]', icon: <XCircle className="w-3 h-3" /> },
+    'written-off': { label: 'Written Off', color: 'bg-[#EDF4F7] text-[#5A6B7A]', icon: <XCircle className="w-3 h-3" /> },
   };
   return cfg[status] || cfg.new;
 }
@@ -290,7 +290,7 @@ function DenialInbox({
             className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               filterCategory === cat
                 ? 'bg-slate-800 text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             {cat === 'all' ? 'All' : categoryLabel(cat as Denial['category'])}
@@ -307,7 +307,7 @@ function DenialInbox({
             className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
               filterStatus === s
                 ? 'bg-slate-700 text-white'
-                : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F6FBFB]'
             }`}
           >
             {s === 'all' ? 'All Status' : s.charAt(0).toUpperCase() + s.slice(1).replace('-', ' ')}
@@ -373,7 +373,7 @@ function DenialInbox({
 
         {filtered.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
+            <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
               <Inbox className="w-6 h-6 text-slate-400" />
             </div>
             {denials.length === 0 ? (
@@ -569,7 +569,7 @@ NPI: [Your NPI]
                   <Copy className="w-3 h-3 mr-1" /> Copy
                 </Button>
               </div>
-              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
+              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#F6FBFB] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
                 {appealLetterTemplate}
               </pre>
               <div className="flex gap-2 mt-3">
@@ -635,7 +635,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
   if (denials.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
+        <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
           <BarChart3 className="w-6 h-6 text-slate-400" />
         </div>
         <p className="text-sm font-semibold text-[#3A4A57]">No denial analytics yet</p>
@@ -717,7 +717,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
                   <span className="font-medium text-[#3A4A57]">{categoryLabel(cat as Denial['category'])}</span>
                   <span className="text-[#5A6B7A]">{count} ({Math.round((count / denials.length) * 100)}%)</span>
                 </div>
-                <div className="w-full h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                   <motion.div
                     className="h-full bg-violet-500 rounded-full"
                     initial={{ width: 0 }}
@@ -886,7 +886,7 @@ export default function DenialWorkbench({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                     isActive
                       ? 'bg-slate-900 text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   {v.icon}

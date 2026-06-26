@@ -64,7 +64,7 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const TIMES = ['Morning (8am–12pm)', 'Afternoon (12pm–5pm)', 'Evening (5pm–8pm)'];
 
 const URGENCY_OPTIONS: { id: Urgency; label: string; color: string }[] = [
-  { id: 'routine', label: 'Routine — no rush', color: 'bg-[#F0EDE8] text-[#3A4A57]' },
+  { id: 'routine', label: 'Routine — no rush', color: 'bg-[#EDF4F7] text-[#3A4A57]' },
   { id: 'within-2-weeks', label: 'Within 2 weeks', color: 'bg-amber-50 text-amber-700' },
   { id: 'urgent', label: 'Urgent need', color: 'bg-red-50 text-red-700' },
 ];
@@ -172,7 +172,7 @@ export function ProviderWaitlist({
   if (submitted) {
     return (
       <div
-        className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white"
+        className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white"
         style={{ overflowX: 'hidden', overflowY: 'auto' }}
       >
         <div className="max-w-lg mx-auto px-4 py-8">
@@ -272,7 +272,7 @@ export function ProviderWaitlist({
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors"
+                className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
@@ -431,7 +431,7 @@ export function ProviderWaitlist({
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     form.preferredDays.includes(day)
                       ? 'bg-primary text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   {day}

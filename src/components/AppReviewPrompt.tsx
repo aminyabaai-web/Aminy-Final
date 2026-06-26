@@ -64,7 +64,7 @@ export function AppReviewPrompt() {
         {/* Close button */}
         <button
           onClick={dismissPrompt}
-          className="absolute right-3 top-3 p-1.5 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+          className="absolute right-3 top-3 p-1.5 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
           aria-label="Dismiss"
         >
           <X size={16} />

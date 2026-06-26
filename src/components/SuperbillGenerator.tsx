@@ -579,7 +579,7 @@ export function SuperbillGenerator({
                   className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-colors ${
                     formData.diagnosisCodes.includes(diagnosis.code)
                       ? 'bg-accent/10 border-accent'
-                      : 'bg-white border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                      : 'bg-white border-[#E8E4DF] hover:bg-[#F6FBFB]'
                   }`}
                 >
                   <input
@@ -622,7 +622,7 @@ export function SuperbillGenerator({
                   <div key={category} className="border border-[#E8E4DF] rounded-lg overflow-hidden">
                     <button
                       onClick={() => setExpandedCategory(isExpanded ? null : category)}
-                      className="w-full px-4 py-3 flex items-center justify-between bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors"
+                      className="w-full px-4 py-3 flex items-center justify-between bg-[#F6FBFB] hover:bg-[#EDF4F7] transition-colors"
                     >
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-[#132F43]">{category}</span>
@@ -646,7 +646,7 @@ export function SuperbillGenerator({
                             className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-colors ${
                               formData.selectedCPTCodes.includes(cpt.code)
                                 ? 'bg-accent/10 border-accent'
-                                : 'bg-white border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                                : 'bg-white border-[#E8E4DF] hover:bg-[#F6FBFB]'
                             }`}
                           >
                             <input
@@ -685,7 +685,7 @@ export function SuperbillGenerator({
           </Card>
 
           {/* Summary & Actions */}
-          <Card className="p-4 bg-[#FAF7F2]">
+          <Card className="p-4 bg-[#F6FBFB]">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="font-medium text-[#132F43]">Summary</h3>
@@ -882,7 +882,7 @@ export function SuperbillGenerator({
               <p className="text-[#5A6B7A] mb-2">
                 Your claim has been accepted by the clearinghouse.
               </p>
-              <div className="bg-[#FAF7F2] rounded-lg p-3 text-left text-sm mb-4 space-y-1">
+              <div className="bg-[#F6FBFB] rounded-lg p-3 text-left text-sm mb-4 space-y-1">
                 <p><span className="text-[#5A6B7A]">Control #:</span> <span className="font-mono">{claimResponse.claimControlNumber}</span></p>
                 <p><span className="text-[#5A6B7A]">Transaction ID:</span> <span className="font-mono">{claimResponse.transactionId}</span></p>
                 <p><span className="text-[#5A6B7A]">Status:</span> <Badge className="bg-green-100 text-green-800 ml-1">{claimResponse.status}</Badge></p>

@@ -285,7 +285,7 @@ function StatusBadge({ status }: { status: Appointment['status'] }) {
   const styles = {
     upcoming: 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20',
     'in-progress': 'bg-green-50 text-green-700 border-green-200',
-    completed: 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]',
+    completed: 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]',
     cancelled: 'bg-red-50 text-red-600 border-red-200',
     'no-show': 'bg-amber-50 text-amber-600 border-amber-200',
     'provider-no-show': 'bg-rose-50 text-rose-600 border-rose-200',
@@ -382,7 +382,7 @@ function AppointmentCard({
 
         {/* Session Notes (for completed) */}
         {appointment.sessionNotes && appointment.status === 'completed' && (
-          <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
+          <div className="mt-3 p-3 bg-[#F6FBFB] rounded-lg">
             <p className="text-sm font-medium text-[#5A6B7A] mb-1">Session Notes</p>
             <p className="text-sm text-[#3A4A57]">{appointment.sessionNotes}</p>
           </div>
@@ -451,7 +451,7 @@ function AppointmentCard({
             {appointment.canReschedule && (
               <button
                 onClick={() => onReschedule?.(appointment)}
-                className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#FAF7F2] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#F6FBFB] transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reschedule
@@ -559,7 +559,7 @@ export function MyAppointments({
         />
         <div className="px-4 pb-4">
           {/* Tabs */}
-          <div className="flex gap-1 bg-[#F0EDE8] dark:bg-slate-800 p-1 rounded-lg">
+          <div className="flex gap-1 bg-[#EDF4F7] dark:bg-slate-800 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${

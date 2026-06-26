@@ -272,7 +272,7 @@ export function ImpactMetricsDashboard({
   }
 
   return (
-    <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6 bg-[#FAF7F2] dark:bg-slate-900 min-h-screen">
+    <div className="p-6 space-y-3 sm:space-y-4 sm:space-y-6 bg-[#F6FBFB] dark:bg-slate-900 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
@@ -472,25 +472,25 @@ export function ImpactMetricsDashboard({
                 Operational Metrics
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                <div className="text-center p-3 bg-[#F6FBFB] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.sessionsDelivered.toLocaleString()}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Delivered</div>
                 </div>
-                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                <div className="text-center p-3 bg-[#F6FBFB] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.aiInteractions.toLocaleString()}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">AI Interactions</div>
                 </div>
-                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                <div className="text-center p-3 bg-[#F6FBFB] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.averageSessionLength}min
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Avg Session</div>
                 </div>
-                <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
+                <div className="text-center p-3 bg-[#F6FBFB] dark:bg-slate-900 rounded-lg">
                   <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.contentEngagement}%
                   </div>
@@ -637,7 +637,7 @@ export function ImpactMetricsDashboard({
             {IRIS_METRICS.map((metric) => (
               <div
                 key={metric.code}
-                className="flex items-center justify-between p-4 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg"
+                className="flex items-center justify-between p-4 bg-[#F6FBFB] dark:bg-slate-900 rounded-lg"
               >
                 <div>
                   <div className="flex items-center gap-2">

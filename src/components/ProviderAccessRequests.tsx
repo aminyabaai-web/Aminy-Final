@@ -409,7 +409,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             {onClose && (
               <button
                 onClick={onClose}
-                className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-[#5A6B7A]" />
               </button>
@@ -424,7 +424,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all min-h-[44px]
                 ${tab === 'pending'
                   ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-[#7BA7BC]'
-                  : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-[#8A9BA8]'
+                  : 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-700 dark:text-[#8A9BA8]'
                 }
               `}
             >
@@ -441,7 +441,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all min-h-[44px]
                 ${tab === 'active'
                   ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-[#7BA7BC]'
-                  : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-[#8A9BA8]'
+                  : 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-700 dark:text-[#8A9BA8]'
                 }
               `}
             >
@@ -458,7 +458,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
           <>
             {requests.filter(r => r.status === 'pending').length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#EDF4F7] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Bell className="w-8 h-8 text-[#8A9BA8]" />
                 </div>
                 <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
@@ -532,7 +532,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
           <>
             {activeAccess.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-[#EDF4F7] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-[#8A9BA8]" />
                 </div>
                 <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
@@ -633,7 +633,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </h2>
                 <button
                   onClick={() => setSelectedRequest(null)}
-                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <X className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
@@ -668,7 +668,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
               </div>
 
               {/* Request Details */}
-              <div className="bg-[#FAF7F2] dark:bg-slate-700 rounded-xl p-4">
+              <div className="bg-[#F6FBFB] dark:bg-slate-700 rounded-xl p-4">
                 <h4 className="text-sm font-medium text-[#3A4A57] dark:text-gray-300 mb-2">
                   Reason for Request
                 </h4>

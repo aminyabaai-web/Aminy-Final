@@ -408,17 +408,17 @@ export function HealthDataIntegration({
 
               {/* Stats grid */}
               <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                <div className="text-center p-3 bg-[#F6FBFB] rounded-xl">
                   <Clock className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Bedtime</p>
                   <p className="font-semibold text-[#132F43]">{recentSleep?.bedtime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                <div className="text-center p-3 bg-[#F6FBFB] rounded-xl">
                   <Sun className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Wake</p>
                   <p className="font-semibold text-[#132F43]">{recentSleep?.wakeTime || '--'}</p>
                 </div>
-                <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
+                <div className="text-center p-3 bg-[#F6FBFB] rounded-xl">
                   <AlertTriangle className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Wakeups</p>
                   <p className="font-semibold text-[#132F43]">{recentSleep?.interruptions ?? '--'}</p>
@@ -427,7 +427,7 @@ export function HealthDataIntegration({
 
               {/* Weekly average */}
               {weeklyAverage && (
-                <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-xl">
+                <div className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-xl">
                   <span className="text-sm text-[#5A6B7A]">7-Day Average</span>
                   <span className="font-semibold text-[#132F43]">{weeklyAverage.toFixed(1)} hours</span>
                 </div>

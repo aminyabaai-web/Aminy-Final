@@ -135,7 +135,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
           value={description}
           onChange={e => setDescription(e.target.value)}
           placeholder={`Describe what happened with ${name} — in your own words. E.g., "He had a meltdown at the grocery store after I said no to candy, lasted about 10 minutes, eventually calmed down with music"`}
-          className="w-full px-4 py-3 pr-12 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm placeholder:text-slate-400"
+          className="w-full px-4 py-3 pr-12 bg-[#F6FBFB] border border-[#E8E4DF] rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm placeholder:text-slate-400"
           style={{ minHeight: '80px', maxHeight: '140px' }}
           rows={3}
           onKeyDown={e => {

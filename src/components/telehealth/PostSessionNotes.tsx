@@ -348,7 +348,7 @@ export function PostSessionNotes({
             value={item.text}
             onChange={e => updateBullet(setter, item.id, e.target.value)}
             placeholder={placeholder}
-            className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+            className="flex-1 px-3 py-2 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
           />
           <button
             onClick={() => removeBullet(setter, item.id)}
@@ -393,7 +393,7 @@ export function PostSessionNotes({
           </div>
           <button
             onClick={onSkip}
-            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -402,7 +402,7 @@ export function PostSessionNotes({
 
         {/* Session metadata strip */}
         {(sessionDurationSeconds || wasRecorded) && (
-          <div className="px-5 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF] flex items-center gap-4 text-sm text-[#5A6B7A]">
+          <div className="px-5 py-3 bg-[#F6FBFB] border-b border-[#E8E4DF] flex items-center gap-4 text-sm text-[#5A6B7A]">
             {sessionDurationSeconds !== undefined && (
               <span className="flex items-center gap-1">
                 <Clock size={12} />
@@ -430,7 +430,7 @@ export function PostSessionNotes({
               value={reason}
               onChange={e => setReason(e.target.value)}
               placeholder="e.g., Behavioral concerns, medication follow-up..."
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             />
           </section>
 
@@ -481,7 +481,7 @@ export function PostSessionNotes({
             <select
               value={followUp}
               onChange={e => setFollowUp(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             >
               {FOLLOW_UP_OPTIONS.map(opt => (
                 <option key={opt} value={opt}>
@@ -495,7 +495,7 @@ export function PostSessionNotes({
                 value={customFollowUp}
                 onChange={e => setCustomFollowUp(e.target.value)}
                 placeholder="Describe custom follow-up plan..."
-                className="w-full mt-2 px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full mt-2 px-3 py-2.5 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             )}
           </section>
@@ -643,7 +643,7 @@ export function PostSessionNotes({
             </button>
 
             {showGoalSection && (
-              <div className="mt-3 p-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg">
+              <div className="mt-3 p-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg">
                 <p className="text-sm text-[#5A6B7A]">
                   Goal updates will be available after saving these notes.
                   You can update specific goals from the Care Plan tab.
@@ -666,14 +666,14 @@ export function PostSessionNotes({
           <div className="flex gap-3">
             <button
               onClick={onSkip}
-              className="py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+              className="py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
             >
               Skip
             </button>
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors flex items-center justify-center gap-2"
+              className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-sm text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors flex items-center justify-center gap-2"
             >
               <Save size={16} />
               {isSaving ? 'Saving...' : 'Save Draft'}

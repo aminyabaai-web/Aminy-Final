@@ -124,7 +124,7 @@ function ClaimRow({
       {onFileClaim && (
         <button
           onClick={() => onFileClaim(filing.claimId)}
-          className="shrink-0 text-sm font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2] active:bg-[#F0EDE8] transition-colors shadow-sm"
+          className="shrink-0 text-sm font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#F6FBFB] active:bg-[#EDF4F7] transition-colors shadow-sm"
         >
           File Now
         </button>

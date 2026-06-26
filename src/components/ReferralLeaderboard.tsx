@@ -91,7 +91,7 @@ function getRankStyle(rank: number): string {
     case 1:
       return 'bg-amber-50 border-amber-200';
     case 2:
-      return 'bg-[#FAF7F2] border-[#E8E4DF]';
+      return 'bg-[#F6FBFB] border-[#E8E4DF]';
     case 3:
       return 'bg-orange-50 border-orange-200';
     default:

@@ -159,7 +159,7 @@ export const MobileNavigationEnhancer: React.FC<MobileNavigationEnhancerProps> =
                     rounded-xl transition-all duration-200 ease-out
                     ${isActive 
                       ? 'text-accent bg-accent/10' 
-                      : 'text-[#5A6B7A] hover:text-[#132F43] hover:bg-[#FAF7F2]'
+                      : 'text-[#5A6B7A] hover:text-[#132F43] hover:bg-[#F6FBFB]'
                     }
                   `}
                   whileTap={{ scale: 0.95 }}

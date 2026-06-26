@@ -252,11 +252,11 @@ export function ClinicalReportExport({
                   key={toggle.key}
                   onClick={() => !toggle.locked && toggleSection(toggle.key)}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 text-left transition-colors ${
-                    toggle.locked ? 'cursor-default' : 'hover:bg-[#FAF7F2]'
+                    toggle.locked ? 'cursor-default' : 'hover:bg-[#F6FBFB]'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    sections[toggle.key] ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
+                    sections[toggle.key] ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#EDF4F7] text-[#8A9BA8]'
                   }`}>
                     {toggle.icon}
                   </div>
@@ -266,7 +266,7 @@ export function ClinicalReportExport({
                         {toggle.label}
                       </span>
                       {toggle.locked && (
-                        <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
+                        <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-1.5 py-0.5 rounded">Required</span>
                       )}
                     </div>
                     <p className="text-sm text-[#8A9BA8] truncate">{toggle.description}</p>
@@ -357,7 +357,7 @@ export function ClinicalReportExport({
               <div key={goal.id} className="flex items-center gap-2 py-1.5">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[#3A4A57] truncate">{goal.domain}: {goal.title}</p>
-                  <div className="w-full bg-[#F0EDE8] rounded-full h-1.5 mt-1">
+                  <div className="w-full bg-[#EDF4F7] rounded-full h-1.5 mt-1">
                     <div
                       className={`h-1.5 rounded-full ${
                         goal.trendDirection === 'improving' ? 'bg-primary' : goal.trendDirection === 'declining' ? 'bg-red-500' : 'bg-blue-500'
@@ -389,7 +389,7 @@ export function ClinicalReportExport({
           )}
 
           {/* Sections included */}
-          <div className="bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] p-3">
+          <div className="bg-[#F6FBFB] rounded-lg border border-[#E8E4DF] p-3">
             <p className="text-sm text-[#5A6B7A] mb-1">Sections included: {enabledSectionCount}</p>
             <p className="text-sm text-[#8A9BA8]">
               {sectionToggles.filter(t => sections[t.key]).map(t => t.label).join(' · ')}
@@ -461,7 +461,7 @@ export function ClinicalReportExport({
         <div className="flex gap-3 w-full mt-4">
           <button
             onClick={() => setStep('configure')}
-            className="flex-1 bg-white border border-[#E8E4DF] text-[#3A4A57] rounded-lg py-2.5 text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
+            className="flex-1 bg-white border border-[#E8E4DF] text-[#3A4A57] rounded-lg py-2.5 text-sm font-medium hover:bg-[#F6FBFB] transition-colors"
           >
             Generate Another
           </button>

@@ -231,7 +231,7 @@ export function PaymentFailureBanner({
       urgent: true,
     },
     'cancelled': {
-      bg: 'bg-[#F0EDE8] border-[#E8E4DF]',
+      bg: 'bg-[#EDF4F7] border-[#E8E4DF]',
       icon: <AlertTriangle className="w-5 h-5 text-[#5A6B7A]" />,
       title: 'Subscription cancelled',
       message: 'Your subscription was cancelled due to payment issues. Resubscribe to regain access to premium features.',
@@ -311,7 +311,7 @@ export function PaymentFailureBanner({
             className={`mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 ${
               info.status === 'cancelled'
                 ? 'bg-primary hover:bg-primary text-white'
-                : 'bg-white hover:bg-[#FAF7F2] text-[#3A4A57] border border-[#E8E4DF]'
+                : 'bg-white hover:bg-[#F6FBFB] text-[#3A4A57] border border-[#E8E4DF]'
             }`}
           >
             <CreditCard size={12} />

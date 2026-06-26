@@ -288,7 +288,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
                   className={`w-full p-4 text-left rounded-xl border-2 transition-all ${
                     responses[currentQuestion] === option.value
                       ? 'border-[#6B9080] bg-[#6B9080]/10'
-                      : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#FAF7F2]'
+                      : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#F6FBFB]'
                   }`}
                 >
                   <span className="font-medium text-[#132F43]">{option.label}</span>
@@ -335,7 +335,7 @@ interface CaregiverBurdenResultsProps {
 export function CaregiverBurdenResults({ result, onClose, onGetSupport }: CaregiverBurdenResultsProps) {
   const severityColors: Record<string, string> = {
     low: 'bg-green-100 text-green-700 border-green-200',
-    mild: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
+    mild: 'bg-yellow-100 text-yellow-700 border-[#EDF4F7]',
     moderate: 'bg-orange-100 text-orange-700 border-orange-200',
     high: 'bg-red-100 text-red-700 border-red-200',
   };

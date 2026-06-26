@@ -397,7 +397,7 @@ export function AnalyticsCharts({
         {[1, 2, 3].map(i => (
           <Card key={i} className="p-6 animate-pulse">
             <div className="h-4 bg-[#E8E4DF] rounded w-1/4 mb-4" />
-            <div className="h-40 bg-[#F0EDE8] rounded" />
+            <div className="h-40 bg-[#EDF4F7] rounded" />
           </Card>
         ))}
       </div>
@@ -544,7 +544,7 @@ export function AnalyticsCharts({
       {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real
           users are never shown fabricated clinical progress about their child. */}
       {demoMode && (
-        <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
+        <Card className="p-6 bg-gradient-to-r from-[#F6FBFB] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
           <h3 className="font-semibold mb-3 flex items-center gap-2 text-[#6B9080] dark:text-primary">
             <Zap className="w-5 h-5" />
             Pattern Insights

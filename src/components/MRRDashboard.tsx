@@ -251,7 +251,7 @@ function PlanBreakdown({
                 <span className="text-sm text-[#5A6B7A] ml-2">({data.count} customers)</span>
               </div>
             </div>
-            <div className="w-full bg-[#F0EDE8] rounded-full h-2">
+            <div className="w-full bg-[#EDF4F7] rounded-full h-2">
               <div
                 className={`h-2 rounded-full ${colors[plan] || 'bg-gray-400'}`}
                 style={{ width: `${data.percentage}%` }}
@@ -439,7 +439,7 @@ export function MRRDashboard({
       <div className={`animate-pulse ${className}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="bg-[#F0EDE8] rounded-xl h-32" />
+            <div key={i} className="bg-[#EDF4F7] rounded-xl h-32" />
           ))}
         </div>
       </div>

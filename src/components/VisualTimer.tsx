@@ -52,7 +52,7 @@ const THEMES = {
   default: {
     primary: 'rgb(20, 184, 166)', // teal
     secondary: 'rgb(20, 184, 166, 0.1)',
-    background: 'from-[#FAF7F2] to-[#F0EDE8]',
+    background: 'from-[#F6FBFB] to-[#EDF4F7]',
   },
   calm: {
     primary: 'rgb(139, 92, 246)', // purple

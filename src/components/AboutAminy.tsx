@@ -136,7 +136,7 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
             Our adaptive AI learns your family's unique rhythm and personalizes guidance based on proven ABA principles.
           </p>
 
-          <div className="bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4 my-4">
+          <div className="bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-4 my-4">
             <h3 className="font-semibold text-[#132F43] dark:text-white mb-3 flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               Powered by Adaptive AI & ABA Science
@@ -173,9 +173,9 @@ export function AboutAminy({ variant = 'full', showLegal = true }: AboutAminyPro
       )}
 
       {/* Privacy & Safety */}
-      <Card className="p-6 bg-[#FAF7F2] dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700">
+      <Card className="p-6 bg-[#F6FBFB] dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-[#EDF4F7] dark:bg-slate-700 rounded-full flex items-center justify-center flex-shrink-0">
             <Shield className="w-5 h-5 text-[#5A6B7A] dark:text-slate-400" />
           </div>
           <div>

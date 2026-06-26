@@ -105,7 +105,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
   return (
     <div className="space-y-4">
       {/* Hero Section */}
-      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-2 border-[#C8DDE8]">
+      <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-2 border-[#C8DDE8]">
         <div className="text-center mb-4">
           <h2 className="text-2xl text-[#132F43] mb-2">
             {childName}'s Progress Story
@@ -190,7 +190,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
       )}
 
       {/* Disclaimer */}
-      <Card className="p-4 bg-[#FDF9F0] border-[#F0EDE8]">
+      <Card className="p-4 bg-[#FDF9F0] border-[#EDF4F7]">
         <p className="text-sm text-yellow-900">
           <strong>Important:</strong> This report shows wellness coaching and support progress, not medical treatment outcomes. This is educational guidance only. Parents remain the decision authority for all care decisions. For clinical questions, consult your child's healthcare providers.
         </p>
@@ -469,7 +469,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
         </div>
       </div>
 
-      <div className="text-sm text-[#5A6B7A] p-3 bg-[#FAF7F2] rounded border">
+      <div className="text-sm text-[#5A6B7A] p-3 bg-[#F6FBFB] rounded border">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress. This is educational guidance only. Parents remain decision authority. Consult healthcare providers for clinical questions.
       </div>
     </div>

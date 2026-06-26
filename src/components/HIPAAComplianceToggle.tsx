@@ -78,7 +78,7 @@ export function HIPAAComplianceToggle({
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-            hipaaEnabled ? 'bg-green-100' : 'bg-[#F0EDE8]'
+            hipaaEnabled ? 'bg-green-100' : 'bg-[#EDF4F7]'
           }`}>
             <Shield className={`w-5 h-5 ${hipaaEnabled ? 'text-green-600' : 'text-slate-400'}`} />
           </div>
@@ -88,7 +88,7 @@ export function HIPAAComplianceToggle({
               {hipaaEnabled ? (
                 <Badge className="bg-green-100 text-green-700">Active</Badge>
               ) : (
-                <Badge className="bg-[#F0EDE8] text-[#3A4A57]">Disabled</Badge>
+                <Badge className="bg-[#EDF4F7] text-[#3A4A57]">Disabled</Badge>
               )}
             </h3>
             <p className="text-sm text-[#5A6B7A]">
@@ -157,7 +157,7 @@ export function HIPAAComplianceToggle({
           {complianceFeatures.map((feature, idx) => (
             <div key={idx} className="flex items-start gap-3">
               <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                feature.enabled ? 'bg-green-100' : 'bg-[#F0EDE8]'
+                feature.enabled ? 'bg-green-100' : 'bg-[#EDF4F7]'
               }`}>
                 {feature.enabled ? (
                   <Lock className="w-3 h-3 text-green-600" />

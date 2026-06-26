@@ -345,7 +345,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
@@ -491,7 +491,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               </div>
 
               {/* Letter generator */}
-              <div className="bg-[#F0EDE8] rounded-2xl border border-[#E8E4DF] p-5">
+              <div className="bg-[#EDF4F7] rounded-2xl border border-[#E8E4DF] p-5">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-[#132F43] flex items-center gap-2">
@@ -504,7 +504,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
                   </div>
                   <button
                     onClick={handleDownloadLetter}
-                    className="flex items-center gap-2 bg-white border border-[#E8E4DF] rounded-xl px-4 py-2.5 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+                    className="flex items-center gap-2 bg-white border border-[#E8E4DF] rounded-xl px-4 py-2.5 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
                   >
                     <Download className="w-4 h-4" />
                     Download
@@ -551,7 +551,7 @@ export default function PhysicianReferralPortal({ onBack }: PhysicianReferralPor
               <div className="flex gap-3 justify-center">
                 <button
                   onClick={handleDownloadLetter}
-                  className="flex items-center gap-2 bg-[#F0EDE8] text-[#3A4A57] rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-[#E8E4DF] transition-colors"
+                  className="flex items-center gap-2 bg-[#EDF4F7] text-[#3A4A57] rounded-xl px-4 py-2.5 text-sm font-medium hover:bg-[#E8E4DF] transition-colors"
                 >
                   <Download className="w-4 h-4" />
                   Download Letter

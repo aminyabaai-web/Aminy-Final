@@ -462,7 +462,7 @@ export function ReferralDashboard({
                     ? 'border-[#6B9080] bg-[#6B9080]/10'
                     : isUnlocked
                     ? 'border-green-200 bg-green-50'
-                    : 'border-[#E8E4DF] bg-[#FAF7F2]'
+                    : 'border-[#E8E4DF] bg-[#F6FBFB]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
@@ -517,7 +517,7 @@ export function ReferralDashboard({
               return (
                 <div
                   key={referral.id}
-                  className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg"
+                  className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div

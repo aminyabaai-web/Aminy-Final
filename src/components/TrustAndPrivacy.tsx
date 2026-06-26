@@ -427,7 +427,7 @@ export function TrustAndPrivacy({ userId }: { userId: string }) {
               {auditLogs.slice(0, 10).map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-start justify-between p-3 bg-[#FAF7F2] rounded-lg text-sm"
+                  className="flex items-start justify-between p-3 bg-[#F6FBFB] rounded-lg text-sm"
                 >
                   <div>
                     <p className="font-medium text-[#132F43]">{log.action}</p>

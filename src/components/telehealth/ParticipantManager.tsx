@@ -88,7 +88,7 @@ const ROLE_COLORS: Record<ParticipantRole, string> = {
   parent: 'bg-blue-100 text-blue-700',
   child: 'bg-purple-100 text-purple-700',
   interpreter: 'bg-amber-100 text-amber-700',
-  observer: 'bg-[#F0EDE8] text-[#5A6B7A]',
+  observer: 'bg-[#EDF4F7] text-[#5A6B7A]',
 };
 
 // ---------------------------------------------------------------------------
@@ -237,7 +237,7 @@ function ParticipantTile({
           {isProvider && !participant.isLocal && (
             <button
               onClick={() => setShowActions(!showActions)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8] transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7] transition-colors"
               aria-label="Toggle participant actions"
             >
               {showActions ? (
@@ -258,7 +258,7 @@ function ParticipantTile({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               isPinned
                 ? 'bg-[#6B9080]/10 text-[#6B9080] hover:bg-[#6B9080]/20'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             {isPinned ? (
@@ -350,7 +350,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#F0EDE8] transition-colors"
+            className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-[#EDF4F7] transition-colors"
           >
             <X className="w-5 h-5 text-slate-400" />
           </button>
@@ -363,7 +363,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
               Share join link
             </label>
             <div className="flex items-center gap-2">
-              <div className="flex-1 flex items-center gap-2 px-3 py-2.5 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
+              <div className="flex-1 flex items-center gap-2 px-3 py-2.5 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]">
                 <Link2 className="w-4 h-4 text-slate-400 flex-shrink-0" />
                 <span className="text-sm text-[#5A6B7A] truncate">{inviteLink}</span>
               </div>
@@ -483,7 +483,7 @@ export function ParticipantManager({
     <>
       <div className="flex flex-col h-full bg-white rounded-2xl shadow-lg border border-[#E8E4DF] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E4DF] bg-[#FAF7F2]">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E4DF] bg-[#F6FBFB]">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-[#6B9080]" />
             <h3 className="font-semibold text-[#132F43] text-sm">

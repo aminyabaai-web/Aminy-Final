@@ -206,7 +206,7 @@ export function JuniorSettings({ onBack, childName }: JuniorSettingsProps) {
         </div>
 
         {/* Info Card */}
-        <div className="bg-[#FAF7F2] rounded-xl p-4 border border-[#E8E4DF]">
+        <div className="bg-[#F6FBFB] rounded-xl p-4 border border-[#E8E4DF]">
           <p className="text-sm text-muted-foreground text-center">
             Calm tools, rewards, and transition supports are designed to lower stress quickly and make daily routines easier for {childName}.
           </p>

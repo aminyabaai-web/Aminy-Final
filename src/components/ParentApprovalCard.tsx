@@ -92,9 +92,9 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
     routine_change: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
     goal_adjustment: 'bg-purple-100 text-purple-700 border-purple-200',
     prompt_script: 'bg-green-100 text-green-700 border-green-200',
-    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
+    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#EDF4F7]',
     environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
-    coverage_note: 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]'
+    coverage_note: 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]'
   };
 
   // When rendered as a standalone screen, wrap content in a full-screen page
@@ -396,7 +396,7 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
         <SuggestionPreview suggestion={suggestion} />
       </div>
 
-      <div className="bg-[#FDF9F0] border border-[#F0EDE8] rounded-lg p-3">
+      <div className="bg-[#FDF9F0] border border-[#EDF4F7] rounded-lg p-3">
         <p className="text-sm text-yellow-900">
           <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName ?? 'your child'}. You can undo within 24 hours if needed.
         </p>

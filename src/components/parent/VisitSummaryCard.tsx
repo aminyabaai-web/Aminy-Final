@@ -207,7 +207,7 @@ function GoalMeter({ title, progressPct }: { title: string; progressPct: number 
         <span className="text-sm text-[#3A4A57] truncate pr-2">{title}</span>
         <span className="text-sm font-medium text-[#132F43] whitespace-nowrap">{clamped}%</span>
       </div>
-      <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+      <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500 ${color}`}
           style={{ width: `${clamped}%` }}

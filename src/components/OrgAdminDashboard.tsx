@@ -189,7 +189,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         variant="flat"
         actions={
           <>
-            <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
+            <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
             <StatusBadge status={org.subscriptionStatus} />
           </>
         }
@@ -272,7 +272,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             </div>
           )}
 
-          <div className="mt-3 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+          <div className="mt-3 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
               style={{
@@ -299,7 +299,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               <p className="text-sm text-[#132F43]">EVV sync</p>
               <p className="text-sm text-slate-400">Electronic Visit Verification (DCI)</p>
             </div>
-            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A]">
+            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#EDF4F7] text-[#5A6B7A]">
               Not configured
             </span>
           </div>
@@ -340,7 +340,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         </div>
 
         {showInvite && (
-          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF]">
+          <div className="px-4 py-3 bg-[#F6FBFB] border-b border-[#E8E4DF]">
             <div className="flex gap-2">
               <input
                 type="email"
@@ -360,7 +360,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               </button>
               <button
                 onClick={() => { setShowInvite(false); setInviteEmail(''); }}
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -408,8 +408,8 @@ function StatusBadge({ status }: { status: Organization['subscriptionStatus'] })
     active: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', label: 'Active' },
     trialing: { bg: 'bg-[#7BA7BC]/10', text: 'text-[#7BA7BC]', label: 'Trial' },
     past_due: { bg: 'bg-orange-50', text: 'text-orange-700', label: 'Past due' },
-    canceled: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Canceled' },
-    inactive: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Not active' },
+    canceled: { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]', label: 'Canceled' },
+    inactive: { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]', label: 'Not active' },
     incomplete: { bg: 'bg-amber-50', text: 'text-amber-700', label: 'Incomplete' },
   };
   const s = styles[status] || styles.inactive;
@@ -420,7 +420,7 @@ function RoleIcon({ role }: { role: OrgMember['role'] }) {
   if (role === 'owner') return <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center"><Crown className="w-4 h-4 text-amber-700" /></div>;
   if (role === 'admin') return <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center"><Shield className="w-4 h-4 text-[#6B9080]" /></div>;
   if (role === 'manager') return <div className="w-9 h-9 rounded-full bg-[#7BA7BC]/10 flex items-center justify-center"><Users className="w-4 h-4 text-[#7BA7BC]" /></div>;
-  return <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center"><User className="w-4 h-4 text-[#5A6B7A]" /></div>;
+  return <div className="w-9 h-9 rounded-full bg-[#EDF4F7] flex items-center justify-center"><User className="w-4 h-4 text-[#5A6B7A]" /></div>;
 }
 
 export default OrgAdminDashboard;

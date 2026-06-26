@@ -295,7 +295,7 @@ export default function CaregiverSimpleMode({
                 <div className="space-y-2 pt-1">
                   <a
                     href="tel:18008294357"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
+                    className="flex items-center gap-3 rounded-xl bg-[#F6FBFB] px-4 py-3 border border-[#E8E4DF]"
                   >
                     <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>
@@ -305,7 +305,7 @@ export default function CaregiverSimpleMode({
                   </a>
                   <a
                     href="tel:18004224453"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
+                    className="flex items-center gap-3 rounded-xl bg-[#F6FBFB] px-4 py-3 border border-[#E8E4DF]"
                   >
                     <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>

@@ -186,7 +186,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               value={draft.practiceName}
               onChange={(e) => setDraft((d) => ({ ...d, practiceName: e.target.value }))}
               placeholder="e.g. Sunshine ABA Therapy"
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#F6FBFB]"
             />
           </div>
 
@@ -202,7 +202,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               onChange={(e) => setDraft((d) => ({ ...d, npi: e.target.value.replace(/[^\d]/g, '').slice(0, 10) }))}
               placeholder="1234567890"
               maxLength={10}
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm font-mono text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm font-mono text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#F6FBFB]"
             />
             {draft.npi.length > 0 && draft.npi.length < 10 && (
               <p className="text-sm text-amber-600 mt-1">{10 - draft.npi.length} more digit{10 - draft.npi.length !== 1 ? 's' : ''} needed</p>
@@ -218,7 +218,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
             <select
               value={draft.taxonomyCode}
               onChange={(e) => setDraft((d) => ({ ...d, taxonomyCode: e.target.value }))}
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#F6FBFB]"
             >
               <option value="">Select taxonomy code…</option>
               {ABA_TAXONOMY_CODES.map((t) => (
@@ -277,14 +277,14 @@ function StatusBadge({ status }: { status: ConnectAccountStatus['status'] }) {
       );
     case 'pending':
       return (
-        <Badge className="bg-yellow-100 text-yellow-700 border-[#F0EDE8]">
+        <Badge className="bg-yellow-100 text-yellow-700 border-[#EDF4F7]">
           <Clock className="w-3 h-3 mr-1" />
           Pending Verification
         </Badge>
       );
     default:
       return (
-        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] border-[#E8E4DF]">
+        <Badge className="bg-[#EDF4F7] text-[#5A6B7A] border-[#E8E4DF]">
           <AlertCircle className="w-3 h-3 mr-1" />
           Not Connected
         </Badge>
@@ -297,7 +297,7 @@ function payoutStatusLabel(status: PayoutRecord['status']) {
     case 'paid': return { label: 'Paid', cls: 'bg-green-100 text-green-700' };
     case 'pending': return { label: 'Pending', cls: 'bg-yellow-100 text-yellow-700' };
     case 'failed': return { label: 'Failed', cls: 'bg-red-100 text-red-700' };
-    case 'canceled': return { label: 'Canceled', cls: 'bg-[#F0EDE8] text-[#5A6B7A]' };
+    case 'canceled': return { label: 'Canceled', cls: 'bg-[#EDF4F7] text-[#5A6B7A]' };
   }
 }
 
@@ -492,7 +492,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                 <p className="text-sm text-[#6B9080] font-medium mb-1">Available</p>
                 <p className="text-lg font-bold text-[#6B9080]">{formatCents(balance.availableCents)}</p>
               </div>
-              <div className="rounded-xl bg-[#FAF7F2] p-3 text-center">
+              <div className="rounded-xl bg-[#F6FBFB] p-3 text-center">
                 <p className="text-sm text-[#5A6B7A] font-medium mb-1">Pending</p>
                 <p className="text-lg font-bold text-[#3A4A57]">{formatCents(balance.pendingCents)}</p>
               </div>

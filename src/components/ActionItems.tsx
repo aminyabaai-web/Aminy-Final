@@ -552,7 +552,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
     <>
       {/* Action Items List */}
       <Card className="overflow-hidden">
-        <div className="p-4 border-b border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2] to-cyan-50">
+        <div className="p-4 border-b border-[#E8E4DF] bg-gradient-to-r from-[#F6FBFB] to-cyan-50">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ClipboardList className="w-5 h-5 text-[#6B9080]" />
@@ -579,8 +579,8 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 disabled={item.completed}
                 className={`w-full p-4 flex items-center gap-3 text-left transition-colors ${
                   item.completed
-                    ? 'bg-[#FAF7F2] cursor-default'
-                    : 'hover:bg-[#FAF7F2] cursor-pointer'
+                    ? 'bg-[#F6FBFB] cursor-default'
+                    : 'hover:bg-[#F6FBFB] cursor-pointer'
                 }`}
               >
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
@@ -588,7 +588,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     ? 'bg-green-100'
                     : item.priority === 'high'
                     ? 'bg-amber-100'
-                    : 'bg-[#F0EDE8]'
+                    : 'bg-[#EDF4F7]'
                 }`}>
                   {item.completed ? (
                     <Check className="w-5 h-5 text-green-600" />
@@ -656,7 +656,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                 </div>
                 <button
                   onClick={handleCloseItem}
-                  className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                  className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                 >
                   <X className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
@@ -678,7 +678,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                       className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                         msg.role === 'user'
                           ? 'bg-primary text-white'
-                          : 'bg-[#F0EDE8] text-[#132F43]'
+                          : 'bg-[#EDF4F7] text-[#132F43]'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -701,7 +701,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                       <Sparkles className="w-4 h-4 text-white" />
                     </div>
-                    <div className="bg-[#F0EDE8] rounded-2xl px-4 py-2.5">
+                    <div className="bg-[#EDF4F7] rounded-2xl px-4 py-2.5">
                       <div className="flex gap-1">
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                         <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />

@@ -523,7 +523,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#FAF7F2]">
+                  <tr className="bg-[#F6FBFB]">
                     <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Program</th>
                     <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Trials</th>
                     <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Mastery</th>
@@ -532,7 +532,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
                 </thead>
                 <tbody>
                   {programs.map((row, i) => (
-                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
+                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#F6FBFB]/50'}>
                       <td className="px-5 py-3 font-medium text-[#3A4A57]">{row.name}</td>
                       <td className="px-4 py-3 text-right text-[#5A6B7A]">{row.totalTrials.toLocaleString()}</td>
                       <td className="px-4 py-3 text-right">
@@ -564,7 +564,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-[#FAF7F2]">
+                    <tr className="bg-[#F6FBFB]">
                       <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Provider</th>
                       <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Clients</th>
                       <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Avg Sess/Wk</th>
@@ -573,7 +573,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
                   </thead>
                   <tbody>
                     {providers.map((row, i) => (
-                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
+                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#F6FBFB]/50'}>
                         <td className="px-5 py-3">
                           <p className="font-medium text-[#3A4A57]">{row.name}</p>
                         </td>

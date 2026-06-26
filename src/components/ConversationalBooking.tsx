@@ -274,7 +274,7 @@ function OptionChip({
       className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-left transition-all shadow-sm ${
         selected
           ? 'border-2 border-[#2A7D99] bg-primary text-white'
-          : 'border border-[#E8E4DF] bg-[#FAF7F2] text-[#3A4A57] hover:border-[#2A7D99]/30 hover:bg-[#2A7D99]/10'
+          : 'border border-[#E8E4DF] bg-[#F6FBFB] text-[#3A4A57] hover:border-[#2A7D99]/30 hover:bg-[#2A7D99]/10'
       }`}
     >
       {icon && <span className={selected ? 'text-white' : 'text-[#2A7D99]'}>{icon}</span>}
@@ -669,7 +669,7 @@ export function ConversationalBooking({
         <div className="mx-auto flex max-w-5xl items-start gap-3">
           <button
             onClick={goBack}
-            className="rounded-2xl border border-[#E8E4DF] bg-white p-2.5 transition-colors hover:bg-[#FAF7F2]"
+            className="rounded-2xl border border-[#E8E4DF] bg-white p-2.5 transition-colors hover:bg-[#F6FBFB]"
           >
             <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
           </button>
@@ -1005,7 +1005,7 @@ export function ConversationalBooking({
 
               <ChatMessage isAI>
                 <p className="font-medium">Here is your booking summary.</p>
-                <div className="mt-3 space-y-2 rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/90 p-4">
+                <div className="mt-3 space-y-2 rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB]/90 p-4">
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-[#8A9BA8]" />
                     <span className="text-sm">{state.selectedProvider?.name}</span>

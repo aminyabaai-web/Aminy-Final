@@ -31,7 +31,7 @@ const winTypeConfig: Record<WinType, { icon: React.ReactNode; gradient: string; 
   },
   goal: {
     icon: <Trophy className="w-5 h-5" />,
-    gradient: 'from-[#FAF7F2] to-[#F0EDE8] dark:from-blue-900/20 dark:to-cyan-900/20',
+    gradient: 'from-[#F6FBFB] to-[#EDF4F7] dark:from-blue-900/20 dark:to-cyan-900/20',
     label: 'Goal Completed!'
   },
   daily: {

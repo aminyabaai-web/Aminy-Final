@@ -296,8 +296,8 @@ export function PlanHierarchy({
     switch (confidence) {
       case 'high': return 'bg-green-100 text-green-700 border-green-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'low': return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
-      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      case 'low': return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -330,7 +330,7 @@ export function PlanHierarchy({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Goal Recommender */}
         {aiRecommendations.length > 0 && showAIRecommendations && (
-          <Card className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#6B9080]/20">
+          <Card className="p-5 bg-gradient-to-br from-[#F6FBFB] to-white border-2 border-[#6B9080]/20">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Brain className="w-5 h-5 text-white" />
@@ -406,7 +406,7 @@ export function PlanHierarchy({
         <Collapsible open={visionOpen} onOpenChange={setVisionOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Eye className="w-6 h-6 text-purple-600" />
@@ -456,7 +456,7 @@ export function PlanHierarchy({
         <Collapsible open={monthOpen} onOpenChange={setMonthOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-blue-600" />
@@ -486,7 +486,7 @@ export function PlanHierarchy({
                   {monthlyGoals.map((goal) => (
                     <div
                       key={goal.id}
-                      className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]"
+                      className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
@@ -527,7 +527,7 @@ export function PlanHierarchy({
         <Collapsible open={weekOpen} onOpenChange={setWeekOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
                     <CalendarDays className="w-6 h-6 text-[#6B9080]" />

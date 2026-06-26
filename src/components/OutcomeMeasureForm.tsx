@@ -220,7 +220,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             {itemIndex + 1} of {measure.items.length}
           </p>
         </div>
-        <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+        <div className="h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-300"
             style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #2A7D99 0%, #577590 100%)' }}

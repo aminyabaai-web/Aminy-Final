@@ -98,7 +98,7 @@ export function SupplementingServicesInfo({
 
   if (variant === 'compact') {
     return (
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+      <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3">
           <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
@@ -156,7 +156,7 @@ export function SupplementingServicesInfo({
 
         <div className="space-y-3">
           {supplementAreas.slice(0, 4).map((area, index) => (
-            <div key={index} className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+            <div key={index} className="flex items-start gap-3 p-3 bg-[#F6FBFB] rounded-lg">
               <area.icon className="w-5 h-5 text-[#6B9080] mt-0.5" />
               <div>
                 <p className="font-medium text-[#132F43]">{area.title}</p>
@@ -242,7 +242,7 @@ export function SupplementingServicesInfo({
                 <p className="text-sm text-[#5A6B7A] mb-3">
                   {area.description}
                 </p>
-                <div className="bg-[#FAF7F2] rounded-lg p-3">
+                <div className="bg-[#F6FBFB] rounded-lg p-3">
                   <p className="text-sm text-[#5A6B7A] mb-1">Example:</p>
                   <p className="text-sm text-[#3A4A57] italic">
                     "{area.example}"
@@ -330,7 +330,7 @@ export function SupplementingServicesInfo({
             </ul>
           </Card>
 
-          <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#6B9080]/20">
+          <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-[#6B9080]/20">
             <h3 className="font-semibold text-[#6B9080] mb-4 flex items-center gap-2">
               <Brain className="w-5 h-5 text-[#6B9080]" />
               Aminy Supplements With

@@ -270,7 +270,7 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               {/* Summary Card */}
-              <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+              <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-[#6B9080]">
                     Week of {summary ? new Date(summary.weekStart).toLocaleDateString() : '...'}
@@ -468,7 +468,7 @@ export function FiscalAgentSubmissionFlow({
                     const maxPay = data.hours * service.hourlyRange[1];
 
                     return (
-                      <div key={code} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
+                      <div key={code} className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg">
                         <div>
                           <div className="font-medium text-[#132F43]">{service.description}</div>
                           <div className="text-sm text-[#5A6B7A]">
@@ -514,7 +514,7 @@ export function FiscalAgentSubmissionFlow({
                       <div className="flex-1">
                         <div className="font-medium flex items-center gap-2 text-[#5A6B7A]">
                           Direct Electronic Submission
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">Coming soon</Badge>
+                          <Badge className="bg-[#EDF4F7] text-[#5A6B7A] text-sm">Coming soon</Badge>
                         </div>
                         <div className="text-sm text-[#5A6B7A]">
                           Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
@@ -632,7 +632,7 @@ export function FiscalAgentSubmissionFlow({
                 <div className="space-y-2">
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-red-500" />
@@ -648,7 +648,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-blue-500" />
@@ -664,7 +664,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-5 h-5 text-green-500" />
@@ -756,7 +756,7 @@ export function FiscalAgentSubmissionFlow({
                 to {fiscalAgent?.name || 'your fiscal agent'}.
               </p>
 
-              <Card className="p-4 bg-[#FAF7F2] text-left mb-4 sm:mb-6">
+              <Card className="p-4 bg-[#F6FBFB] text-left mb-4 sm:mb-6">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-[#5A6B7A]">Submission ID:</span>

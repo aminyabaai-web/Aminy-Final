@@ -44,7 +44,7 @@ const CHECK_META = {
 } as const;
 
 const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: string; dot: string }> = {
-  not_started:      { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',    label: 'Not started',    dot: 'bg-slate-300' },
+  not_started:      { bg: 'bg-[#EDF4F7]',   text: 'text-[#5A6B7A]',    label: 'Not started',    dot: 'bg-slate-300' },
   pending:          { bg: 'bg-amber-50',    text: 'text-amber-700',    label: 'In review',      dot: 'bg-amber-400' },
   in_progress:      { bg: 'bg-[#EEF4F8]',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
   requires_input:   { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Action needed',  dot: 'bg-orange-400' },
@@ -163,7 +163,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
       {/* Progress bar */}
       <div className="px-4 pb-3">
-        <div className="h-1.5 rounded-full bg-[#F0EDE8] overflow-hidden">
+        <div className="h-1.5 rounded-full bg-[#EDF4F7] overflow-hidden">
           <div
             className="h-full transition-all duration-500"
             style={{

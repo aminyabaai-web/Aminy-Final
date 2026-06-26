@@ -371,7 +371,7 @@ export function BookVisitScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -411,7 +411,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitFormat === 'remote'
                 ? 'bg-primary text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#6B9080]/10'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#6B9080]/10'
             }`}
           >
             <Video className="w-4 h-4" />
@@ -423,7 +423,7 @@ export function BookVisitScreen({
           >
             <Building2 className="w-4 h-4" />
             In Office
-            <span className="rounded-full bg-[#F0EDE8] px-2 py-0.5 text-xs font-semibold tracking-[0.02em] text-[#5A6B7A]">Soon</span>
+            <span className="rounded-full bg-[#EDF4F7] px-2 py-0.5 text-xs font-semibold tracking-[0.02em] text-[#5A6B7A]">Soon</span>
           </button>
         </div>
 
@@ -434,7 +434,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'consult'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -445,7 +445,7 @@ export function BookVisitScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
               visitType === 'deep-review'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] border-2 border-[#6B9080]'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] border-2 border-transparent hover:bg-[#6B9080]/10'
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -469,7 +469,7 @@ export function BookVisitScreen({
                     ? 'bg-primary text-white'
                     : isToday
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
-                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#6B9080]/10'
+                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#6B9080]/10'
                 }`}
               >
                 {formatDate(date)}
@@ -677,7 +677,7 @@ function ProviderCard({
 
       {/* Organization Badge */}
       {provider.organization !== 'independent' && (
-        <div className="px-4 py-2 bg-[#FAF7F2] border-t border-[#E8E4DF]">
+        <div className="px-4 py-2 bg-[#F6FBFB] border-t border-[#E8E4DF]">
           <span className="text-xs text-[#5A6B7A] uppercase tracking-wide">
             {provider.organization === 'aact' && 'AACT Partner'}
             {provider.organization === 'rise' && 'Rise Partner'}
@@ -763,7 +763,7 @@ function NoProvidersCard({
               {onExportReferralPacket && (
                 <button
                   onClick={onExportReferralPacket}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8E4DF] py-3 font-medium text-[#3A4A57] transition-colors hover:bg-[#FAF7F2]"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-[#E8E4DF] py-3 font-medium text-[#3A4A57] transition-colors hover:bg-[#F6FBFB]"
                 >
                   <FileText className="w-4 h-4" />
                   Download Referral Packet (PDF)
@@ -786,14 +786,14 @@ function NoProvidersCard({
           <div className="pt-4 border-t border-[#E8E4DF]">
             <h4 className="text-sm font-medium text-[#3A4A57] mb-2">While you wait:</h4>
             <div className="space-y-2 text-left">
-              <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl">
                 <span className="text-lg">🎥</span>
                 <div>
                   <p className="text-sm font-medium text-[#132F43]">Monthly Q&A Sessions</p>
                   <p className="text-sm text-[#5A6B7A]">Live sessions with providers (included)</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl">
                 <span className="text-lg">📚</span>
                 <div>
                   <p className="text-sm font-medium text-[#132F43]">Evidence-Based Resources</p>
@@ -804,7 +804,7 @@ function NoProvidersCard({
               {showLocalCareOptions && (
                 <button
                   onClick={onRequestLocalCare}
-                  className="w-full flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl hover:bg-[#F0EDE8] transition-colors text-left"
+                  className="w-full flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-xl hover:bg-[#EDF4F7] transition-colors text-left"
                 >
                   <span className="text-lg">🔍</span>
                   <div>

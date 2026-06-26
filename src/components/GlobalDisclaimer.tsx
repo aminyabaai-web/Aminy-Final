@@ -30,8 +30,8 @@ export function GlobalDisclaimer({
   const baseClasses = "text-sm leading-relaxed text-muted-foreground";
 
   const variantClasses: Record<string, string> = {
-    footer: "text-center p-3 border-t border-[#E8E4DF] bg-[#FAF7F2]/50",
-    card: "p-3 bg-[#FAF7F2]/50 border border-[#E8E4DF] rounded-lg",
+    footer: "text-center p-3 border-t border-[#E8E4DF] bg-[#F6FBFB]/50",
+    card: "p-3 bg-[#F6FBFB]/50 border border-[#E8E4DF] rounded-lg",
     modal: "p-2 text-center",
     inline: "py-2",
     critical: "p-4 bg-amber-50 border-2 border-amber-300 rounded-xl text-amber-900"
@@ -147,7 +147,7 @@ export function ClinicalScopeDisclaimer({
  */
 export function ChatDisclaimerBanner({ className = '' }: { className?: string }) {
   return (
-    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-[#FAF7F2] border-b border-[#E8E4DF] text-sm text-[#5A6B7A] ${className}`}>
+    <div className={`flex items-center justify-center gap-2 py-2 px-3 bg-[#F6FBFB] border-b border-[#E8E4DF] text-sm text-[#5A6B7A] ${className}`}>
       <Info className="w-3 h-3 flex-shrink-0" />
       <span>Aminy provides support, not clinical care. For emergencies, call 911 or 988.</span>
     </div>

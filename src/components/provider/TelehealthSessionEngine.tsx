@@ -236,7 +236,7 @@ export function TelehealthSessionEngine({
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         <button
           onClick={step === 1 ? onBack : () => setStep(prev => (prev - 1) as 1 | 2 | 3)}
-          className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
+          className="w-9 h-9 rounded-full bg-[#EDF4F7] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
         >
           <ArrowLeft className="w-4 h-4 text-[#5A6B7A]" />
         </button>
@@ -335,7 +335,7 @@ export function TelehealthSessionEngine({
                           <Sparkles className="w-3 h-3 text-violet-400 shrink-0" />
                           <span className="text-sm text-violet-600 font-medium">AI will capture:</span>
                           {modality.aiDocTargets.map(target => (
-                            <span key={target} className="text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded px-1.5 py-0.5">
+                            <span key={target} className="text-xs text-[#5A6B7A] bg-[#EDF4F7] rounded px-1.5 py-0.5">
                               {target.replace(/_/g, ' ')}
                             </span>
                           ))}
@@ -417,7 +417,7 @@ export function TelehealthSessionEngine({
                     : 'border-slate-300 bg-white'
                 }`}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-slate-400">
+                    <div className="w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center text-slate-400">
                       <Users className="w-5 h-5" />
                     </div>
                     <div className="flex-1">

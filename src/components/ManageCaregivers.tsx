@@ -73,7 +73,7 @@ const roleLabels: Record<CaregiverRole, string> = {
 const roleColors: Record<CaregiverRole, string> = {
   owner: 'bg-purple-100 text-purple-700 border-purple-200',
   caregiver: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
-  'read-only': 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]'
+  'read-only': 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]'
 };
 
 const statusColors: Record<CaregiverStatus, string> = {
@@ -211,7 +211,7 @@ export function ManageCaregivers({
       </div>
 
       {/* Role Descriptions */}
-      <Card className="p-4 bg-[#FAF7F2]">
+      <Card className="p-4 bg-[#F6FBFB]">
         <h4 className="font-medium text-sm mb-3">Access Roles</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {(Object.keys(roleDescriptions) as CaregiverRole[]).map((role) => (

@@ -94,7 +94,7 @@ export function DifferentiationCallout({
 
   if (variant === 'compact') {
     return (
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+      <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3">
           <div className="p-2 bg-[#6B9080]/10 rounded-full flex-shrink-0">
             <Brain className="w-4 h-4 text-[#6B9080]" />

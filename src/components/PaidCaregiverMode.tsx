@@ -193,7 +193,7 @@ export function PaidCaregiverMode({
   // No waiver profile setup yet
   if (!waiverProfile) {
     return (
-      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+      <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-3 bg-[#6B9080]/10 rounded-xl">
             <Building2 className="w-6 h-6 text-[#6B9080]" />
@@ -394,7 +394,7 @@ export function PaidCaregiverMode({
               return (
                 <div
                   key={entry.id}
-                  className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg"
+                  className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg ${

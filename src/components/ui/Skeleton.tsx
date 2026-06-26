@@ -198,7 +198,7 @@ export function SkeletonTable({
   return (
     <div className={`bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 overflow-hidden ${className}`}>
       {showHeader && (
-        <div className="flex gap-4 p-4 border-b border-[#E8E4DF] dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-800">
+        <div className="flex gap-4 p-4 border-b border-[#E8E4DF] dark:border-slate-700 bg-[#F6FBFB] dark:bg-slate-800">
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton key={i} height={14} width={`${100 / columns - 2}%`} />
           ))}

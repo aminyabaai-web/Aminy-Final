@@ -152,7 +152,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       {/* Invite link card */}
       <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your invite link</p>
-        <div className="flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-3 py-2.5">
+        <div className="flex items-center gap-2 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl px-3 py-2.5">
           <p className="text-sm text-[#3A4A57] flex-1 truncate font-mono">{inviteUrl}</p>
           <button
             onClick={copyInvite}
@@ -233,7 +233,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
         {providers.length > 0 && (
           <div className="px-4 py-2 flex flex-wrap gap-2 border-b border-[#E8E4DF]">
             {['invited', 'applied', 'approved', 'active'].map(s => (
-              <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#3A4A57] capitalize">
+              <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-[#EDF4F7] text-[#3A4A57] capitalize">
                 {s}: {statusCounts[s] || 0}
               </span>
             ))}
@@ -251,14 +251,14 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
           <div className="divide-y divide-slate-100">
             {providers.map((p, i) => (
               <div key={i} className="px-4 py-2.5 flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center text-sm font-semibold text-[#5A6B7A] shrink-0">
+                <div className="w-8 h-8 rounded-full bg-[#EDF4F7] flex items-center justify-center text-sm font-semibold text-[#5A6B7A] shrink-0">
                   {(p.full_name || p.email)[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
                   {p.full_name && <p className="text-sm font-medium text-[#132F43] truncate">{p.full_name}</p>}
                   <p className="text-sm text-[#5A6B7A] truncate">{p.email}</p>
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A] capitalize shrink-0">{p.status || 'invited'}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-[#EDF4F7] text-[#5A6B7A] capitalize shrink-0">{p.status || 'invited'}</span>
               </div>
             ))}
           </div>

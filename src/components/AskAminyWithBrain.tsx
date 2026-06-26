@@ -256,7 +256,7 @@ export function AskAminyWithBrain({
 
           {/* Context Panel */}
           {showContext && aiContext && (
-            <div className="p-3 border-b bg-[#FAF7F2] text-sm space-y-2">
+            <div className="p-3 border-b bg-[#F6FBFB] text-sm space-y-2">
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-sm">Context Loaded</Badge>
                 <span className="text-muted-foreground">AI knows:</span>
@@ -298,7 +298,7 @@ export function AskAminyWithBrain({
                       "max-w-[85%] rounded-2xl px-4 py-3 text-sm",
                       message.role === 'user'
                         ? "bg-accent text-white"
-                        : "bg-[#F0EDE8] text-[#132F43]"
+                        : "bg-[#EDF4F7] text-[#132F43]"
                     )}
                   >
                     {message.contextAware && (
@@ -314,7 +314,7 @@ export function AskAminyWithBrain({
 
               {isThinking && (
                 <div className="flex justify-start">
-                  <div className="bg-[#F0EDE8] rounded-2xl px-4 py-3 text-sm">
+                  <div className="bg-[#EDF4F7] rounded-2xl px-4 py-3 text-sm">
                     <div className="flex items-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin text-accent" />
                       <span className="text-muted-foreground">

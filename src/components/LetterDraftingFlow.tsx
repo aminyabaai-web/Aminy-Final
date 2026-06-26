@@ -332,7 +332,7 @@ export function LetterDraftingFlow({
               onChange={(e) => setEditedBody(e.target.value)}
             />
           ) : (
-            <div className="bg-[#FAF7F2] rounded-lg p-4 max-h-96 overflow-y-auto">
+            <div className="bg-[#F6FBFB] rounded-lg p-4 max-h-96 overflow-y-auto">
               <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap font-mono">
                 {editedBody || generatedLetter.body}
               </pre>

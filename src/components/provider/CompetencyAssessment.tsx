@@ -86,7 +86,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
             key={v.id}
             onClick={() => setViewMode(v.id)}
             className={`flex-1 py-1.5 rounded-full text-xs font-medium text-center transition-colors ${
-              viewMode === v.id ? 'bg-violet-100 text-violet-700' : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
+              viewMode === v.id ? 'bg-violet-100 text-violet-700' : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'
             }`}
           >
             {v.label}
@@ -260,7 +260,7 @@ function AssessmentForm({
                                     ? val >= 4 ? 'bg-emerald-600 text-white'
                                     : val >= 3 ? 'bg-amber-500 text-white'
                                     : 'bg-red-500 text-white'
-                                    : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                                    : 'bg-[#EDF4F7] text-[#5A6B7A]'
                                 }`}
                               >
                                 {val}
@@ -433,7 +433,7 @@ function HistoryView({
                       );
                     })}
                     {a.overallNotes && (
-                      <div className="mt-2 p-2 bg-[#FAF7F2] rounded-lg">
+                      <div className="mt-2 p-2 bg-[#F6FBFB] rounded-lg">
                         <p className="text-sm text-[#5A6B7A]">{a.overallNotes}</p>
                       </div>
                     )}

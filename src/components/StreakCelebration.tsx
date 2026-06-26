@@ -237,7 +237,7 @@ export function StreakCelebration({
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="bg-[#FAF7F2] rounded-lg p-3 mb-4"
+                className="bg-[#F6FBFB] rounded-lg p-3 mb-4"
               >
                 <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                   <TrendingUp className="w-4 h-4" />

@@ -317,7 +317,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                   ? 'bg-green-100 text-green-700' 
                   : selectedFamily.status === 'review'
                   ? 'bg-amber-100 text-amber-700'
-                  : 'bg-[#F0EDE8] text-[#3A4A57]'
+                  : 'bg-[#EDF4F7] text-[#3A4A57]'
               }>
                 {selectedFamily.status}
               </Badge>
@@ -421,7 +421,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
                     <Badge className={
                       goal.status === 'active' ? 'bg-green-100 text-green-700' :
                       goal.status === 'completed' ? 'bg-blue-100 text-blue-700' :
-                      'bg-[#F0EDE8] text-[#3A4A57]'
+                      'bg-[#EDF4F7] text-[#3A4A57]'
                     }>
                       {goal.status}
                     </Badge>

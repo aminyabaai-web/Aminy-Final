@@ -363,7 +363,7 @@ export function PriorAuthBadge({
   const timeline = detectPayer(payerName);
 
   return (
-    <div className="mt-2 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-700/50 px-3 py-2 space-y-1">
+    <div className="mt-2 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#F6FBFB] dark:bg-slate-700/50 px-3 py-2 space-y-1">
       {hasSecondaryMedicaid && (
         <div className="flex items-center gap-1.5 mb-1">
           <Shield className="w-3.5 h-3.5 text-emerald-500" />

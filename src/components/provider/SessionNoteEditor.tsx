@@ -56,7 +56,7 @@ interface SessionNoteEditorProps {
 // ============================================================================
 
 const STATUS_CONFIG: Record<NoteStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: 'Draft', color: 'bg-[#F0EDE8] text-[#3A4A57]', icon: <FileText className="w-3 h-3" /> },
+  draft: { label: 'Draft', color: 'bg-[#EDF4F7] text-[#3A4A57]', icon: <FileText className="w-3 h-3" /> },
   provider_review: { label: 'Under Review', color: 'bg-amber-100 text-amber-800', icon: <Eye className="w-3 h-3" /> },
   approved: { label: 'Approved', color: 'bg-green-100 text-green-800', icon: <CheckCircle className="w-3 h-3" /> },
   sent_to_parent: { label: 'Sent to Parent', color: 'bg-blue-100 text-[#4A6478]', icon: <Send className="w-3 h-3" /> },
@@ -230,7 +230,7 @@ export function SessionNoteEditor({
       </div>
 
       {/* Status Lifecycle */}
-      <Card className="p-3 bg-[#FAF7F2]">
+      <Card className="p-3 bg-[#F6FBFB]">
         <div className="flex items-center justify-between gap-1 text-sm">
           {Object.entries(STATUS_CONFIG).map(([key, cfg], idx) => {
             const isActive = key === status;
@@ -551,7 +551,7 @@ function CPTRow({
       ? 'text-green-700 bg-green-50'
       : cpt.confidence >= 0.7
       ? 'text-amber-700 bg-amber-50'
-      : 'text-[#5A6B7A] bg-[#FAF7F2]';
+      : 'text-[#5A6B7A] bg-[#F6FBFB]';
 
   return (
     <label
@@ -590,7 +590,7 @@ function MetricBar({ label, value }: { label: string; value: number }) {
         <span className="text-[#3A4A57]">{label}</span>
         <span className="font-medium text-[#132F43]">{value}%</span>
       </div>
-      <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+      <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all ${barColor}`}
           style={{ width: `${Math.min(100, Math.max(0, value))}%` }}

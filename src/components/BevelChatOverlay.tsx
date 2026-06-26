@@ -1011,7 +1011,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {/* Hamburger — opens history */}
               <button
                 onClick={() => setShowHistory(v => !v)}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors shrink-0"
                 aria-label="Chat history"
               >
                 <Menu className="w-4 h-4" />
@@ -1037,7 +1037,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {/* Settings */}
               <button
                 onClick={() => { setShowSettings(v => !v); setShowHistory(false); }}
-                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors shrink-0"
                 aria-label="Chat settings"
               >
                 <Settings className="w-4 h-4" />
@@ -1046,7 +1046,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               {/* Close */}
               <button
                 onClick={handleClose}
-                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors shrink-0"
+                className="w-8 h-8 rounded-full bg-[#EDF4F7] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors shrink-0"
                 aria-label="Close chat"
               >
                 <X className="w-4 h-4 text-[#5A6B7A]" />
@@ -1087,7 +1087,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         <button
                           key={item.screen}
                           onClick={() => { setShowHistory(false); onNavigate?.(item.screen); }}
-                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                          className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors text-left"
                         >
                           <item.icon className="w-4 h-4 text-[#6B9080]" />
                           <span className="text-sm text-[#132F43] dark:text-slate-100">{item.label}</span>
@@ -1100,7 +1100,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <div className="flex-1 overflow-y-auto">
                       {chatSessions.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-8 gap-3">
-                          <div className="w-12 h-12 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center">
                             <MessageSquare className="w-5 h-5 text-slate-400 dark:text-slate-300" />
                           </div>
                           <p className="text-sm text-[#5A6B7A] dark:text-slate-300">No previous chats yet.</p>
@@ -1112,7 +1112,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             <button
                               key={session.id}
                               onClick={() => loadHistorySession(session)}
-                              className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-[#FAF7F2] transition-colors text-left"
+                              className="w-full flex items-start gap-3 px-4 py-3.5 hover:bg-[#F6FBFB] transition-colors text-left"
                             >
                               <div
                                 className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5"
@@ -1155,7 +1155,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Aminy Settings</p>
                       <button
                         onClick={() => setShowSettings(false)}
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                        className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                         aria-label="Close settings"
                       >
                         <X className="w-4 h-4" />
@@ -1480,7 +1480,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <div className="px-4 mt-5 mb-6 space-y-2">
                         <button
                           onClick={() => { startNewChat(); setShowSettings(false); }}
-                          className="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors text-left"
+                          className="w-full flex items-center gap-2.5 px-4 py-3 rounded-xl border border-[#E8E4DF] text-sm text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors text-left"
                         >
                           <RotateCcw className="w-4 h-4 text-slate-400" />
                           Start new conversation
@@ -1503,9 +1503,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
                 {isProactiveLoading && messages.length === 0 && (
                   <div className="flex flex-col gap-2 pt-4">
-                    <div className="h-4 w-3/4 bg-[#F0EDE8] rounded-full animate-pulse" />
-                    <div className="h-4 w-full bg-[#F0EDE8] rounded-full animate-pulse" />
-                    <div className="h-4 w-2/3 bg-[#F0EDE8] rounded-full animate-pulse" />
+                    <div className="h-4 w-3/4 bg-[#EDF4F7] rounded-full animate-pulse" />
+                    <div className="h-4 w-full bg-[#EDF4F7] rounded-full animate-pulse" />
+                    <div className="h-4 w-2/3 bg-[#EDF4F7] rounded-full animate-pulse" />
                   </div>
                 )}
 
@@ -1524,7 +1524,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         className={`max-w-[78%] rounded-2xl text-sm leading-relaxed overflow-hidden ${
                           msg.role === 'user'
                             ? 'bg-slate-900 text-white rounded-br-md'
-                            : 'bg-[#FAF7F2] dark:bg-slate-800 text-[#132F43] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
+                            : 'bg-[#F6FBFB] dark:bg-slate-800 text-[#132F43] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
                         }`}
                       >
                         {/* Attached image */}
@@ -1640,7 +1640,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <button
                             key={i}
                             onClick={() => sendMessage(chip)}
-                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left text-sm text-[#3A4A57] dark:text-slate-200 hover:border-slate-400 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 active:bg-[#F0EDE8] transition-all"
+                            className="w-full flex items-center justify-between px-4 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left text-sm text-[#3A4A57] dark:text-slate-200 hover:border-slate-400 hover:bg-[#F6FBFB] dark:hover:bg-slate-700 active:bg-[#EDF4F7] transition-all"
                             style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                           >
                             <span className="leading-snug">{chip}</span>
@@ -1665,7 +1665,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         <ThinkingStepsDisplay steps={activeThinkingSteps} isExpanded={true} />
                       </div>
                     ) : (
-                      <div className="px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
+                      <div className="px-4 py-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-2xl rounded-bl-md">
                         <div className="flex gap-1.5 items-center">
                           {[0, 0.15, 0.3].map((delay, i) => (
                             <motion.div
@@ -1765,7 +1765,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           setTimeout(() => inputRef.current?.focus(), 50);
                         }
                       }}
-                      className="flex-shrink-0 flex items-start gap-2.5 px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left hover:bg-[#FAF7F2] dark:hover:bg-slate-700 hover:border-slate-400 transition-colors"
+                      className="flex-shrink-0 flex items-start gap-2.5 px-3.5 py-2.5 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-xl text-left hover:bg-[#F6FBFB] dark:hover:bg-slate-700 hover:border-slate-400 transition-colors"
                       style={{ minWidth: '140px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}
                     >
                       <chip.icon className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
@@ -1793,7 +1793,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 {/* Action sheet button */}
                 <button
                   onClick={() => setShowActionSheet(true)}
-                  className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-[#5A6B7A] hover:bg-[#E8E4DF] transition-colors shrink-0 mb-0.5"
+                  className="w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center text-[#5A6B7A] hover:bg-[#E8E4DF] transition-colors shrink-0 mb-0.5"
                   aria-label="More actions"
                 >
                   <Plus className="w-5 h-5" />
@@ -1814,7 +1814,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask Aminy anything…"
-                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm text-[#132F43] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full px-4 py-3 pr-24 bg-[#F6FBFB] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm text-[#132F43] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     style={{ minHeight: '48px', maxHeight: '120px' }}
                     rows={1}
                   />
@@ -1875,7 +1875,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 >
                   <div className="flex items-center justify-between px-4 pt-4 pb-2">
                     <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Add to message</p>
-                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center" aria-label="Close menu">
+                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center" aria-label="Close menu">
                       <X className="w-4 h-4 text-[#5A6B7A]" />
                     </button>
                   </div>
@@ -1946,7 +1946,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <button
                         key={item.label}
                         onClick={item.action}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors text-left"
                       >
                         <div className="w-9 h-9 rounded-xl bg-[#6B9080]/10 flex items-center justify-center shrink-0">
                           <item.icon className="w-4 h-4 text-[#6B9080]" />

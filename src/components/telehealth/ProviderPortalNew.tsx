@@ -339,7 +339,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
             {onLogout && (
               <button
                 onClick={onLogout}
-                className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7] rounded-lg transition-colors"
               >
                 <LogOut className="w-5 h-5" />
               </button>
@@ -365,7 +365,7 @@ export function ProviderPortalNew({ providerId, onLogout }: ProviderPortalProps)
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
                     activeTab === id
                       ? 'bg-[#6B9080]/10 text-[#6B9080] border-l-4 border-cyan-600'
-                      : 'text-[#5A6B7A] hover:bg-[#FAF7F2] border-l-4 border-transparent'
+                      : 'text-[#5A6B7A] hover:bg-[#F6FBFB] border-l-4 border-transparent'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -512,7 +512,7 @@ function ProfileTab({
                 className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors ${
                   provider.licensedStates.includes(state.code)
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
-                    : 'hover:bg-[#FAF7F2]'
+                    : 'hover:bg-[#F6FBFB]'
                 }`}
               >
                 <input
@@ -548,7 +548,7 @@ function ProfileTab({
         <h2 className="text-lg font-semibold text-[#132F43] mb-4 sm:mb-6">Pricing & Services</h2>
 
         <div className="space-y-3 sm:space-y-4">
-          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#F6FBFB] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -572,7 +572,7 @@ function ProfileTab({
             </div>
           </label>
 
-          <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
+          <label className="flex items-center justify-between p-4 bg-[#F6FBFB] rounded-lg">
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
@@ -664,7 +664,7 @@ function AvailabilityTab({
             const dayBlocks = byDay[value] || [];
 
             return (
-              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
+              <div key={value} className="flex items-start gap-3 sm:gap-4 p-4 bg-[#F6FBFB] rounded-lg">
                 <div className="w-28 flex-shrink-0">
                   <p className="font-medium text-[#132F43]">{label}</p>
                 </div>
@@ -710,7 +710,7 @@ function AvailabilityTab({
             <h2 className="text-lg font-semibold text-[#132F43]">Time Off</h2>
             <p className="text-sm text-[#5A6B7A]">Block dates when you're unavailable</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:bg-[#FAF7F2] transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-lg hover:bg-[#F6FBFB] transition-colors">
             <Plus className="w-4 h-4" />
             Add Time Off
           </button>
@@ -745,7 +745,7 @@ function AppointmentsTab({ appointments }: { appointments: Appointment[] }) {
       {appointments.length > 0 ? (
         <div className="space-y-3 sm:space-y-4">
           {appointments.map((apt) => (
-            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-[#FAF7F2] rounded-lg">
+            <div key={apt.id} className="flex items-center gap-3 sm:gap-4 p-4 bg-[#F6FBFB] rounded-lg">
               <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
                 <Video className="w-6 h-6 text-[#6B9080]" />
               </div>

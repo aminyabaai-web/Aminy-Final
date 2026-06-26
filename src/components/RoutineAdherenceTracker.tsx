@@ -317,8 +317,8 @@ export function RoutineAdherenceTracker({
                       key={routine.id}
                       className={`p-4 transition-all ${
                         isCompleted ? 'bg-green-50 border-green-200' :
-                        isPartial ? 'bg-[#FDF9F0] border-[#F0EDE8]' :
-                        isSkipped ? 'bg-[#FAF7F2] border-[#E8E4DF]' :
+                        isPartial ? 'bg-[#FDF9F0] border-[#EDF4F7]' :
+                        isSkipped ? 'bg-[#F6FBFB] border-[#E8E4DF]' :
                         'bg-white hover:shadow-md'
                       }`}
                     >
@@ -329,7 +329,7 @@ export function RoutineAdherenceTracker({
                           className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                             isCompleted ? 'bg-green-500 text-white' :
                             isPartial ? 'bg-yellow-500 text-white' :
-                            'bg-[#F0EDE8] hover:bg-accent hover:text-white'
+                            'bg-[#EDF4F7] hover:bg-accent hover:text-white'
                           }`}
                         >
                           {isCompleted || isPartial ? (

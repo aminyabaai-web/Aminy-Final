@@ -64,7 +64,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
             <p className="font-semibold text-[#132F43]">How was your session?</p>
             <p className="text-sm text-[#5A6B7A]">with {providerName}</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F0EDE8] text-[#5A6B7A]">
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#EDF4F7] text-[#5A6B7A]">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -101,7 +101,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
         )}
 
         <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl text-sm text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#FAF7F2] transition-colors">
+          <button onClick={onClose} className="flex-1 py-3 rounded-xl text-sm text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F6FBFB] transition-colors">
             Skip
           </button>
           <button

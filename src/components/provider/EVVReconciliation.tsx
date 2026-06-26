@@ -145,7 +145,7 @@ export default function EVVReconciliation({
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -155,7 +155,7 @@ export default function EVVReconciliation({
           </div>
           <button
             onClick={onRefresh}
-            className="rounded-lg border border-[#E8E4DF] p-2 hover:bg-[#FAF7F2]"
+            className="rounded-lg border border-[#E8E4DF] p-2 hover:bg-[#F6FBFB]"
           >
             <RefreshCw className="h-4 w-4 text-[#5A6B7A]" />
           </button>
@@ -232,7 +232,7 @@ export default function EVVReconciliation({
               className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
                 filterStatus === status
                   ? 'bg-primary text-white'
-                  : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                  : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
               }`}
             >
               {status === 'all' ? 'All' : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -372,7 +372,7 @@ export default function EVVReconciliation({
                           <div>
                             <p className="text-sm font-medium text-[#5A6B7A] mb-1">Fiscal Agent Confidence</p>
                             <div className="flex items-center gap-2">
-                              <div className="flex-1 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                              <div className="flex-1 h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
                                     visit.fiscalAgentConfidence >= 90 ? 'bg-green-500' :

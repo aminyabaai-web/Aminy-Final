@@ -240,7 +240,7 @@ export function CoverageClaritySummary({
       case 'high': return 'bg-red-100 text-red-700 border-red-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
       case 'low': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
-      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -379,7 +379,7 @@ export function CoverageClaritySummary({
         </div>
 
         {/* Next Steps */}
-        <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-white border-[#6B9080]/20">
+        <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-white border-[#6B9080]/20">
           <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
             Your Next Steps

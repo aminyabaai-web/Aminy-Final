@@ -582,12 +582,12 @@ export default function InsuranceCardScanner({
   // ------------------------------------------
 
   return (
-    <div className="flex flex-col min-h-0 bg-[#FAF7F2]">
+    <div className="flex flex-col min-h-0 bg-[#F6FBFB]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E8E4DF]">
         <button
           onClick={onClose}
-          className="p-2 -ml-2 rounded-lg text-[#5A6B7A] hover:bg-[#F0EDE8]"
+          className="p-2 -ml-2 rounded-lg text-[#5A6B7A] hover:bg-[#EDF4F7]"
           aria-label="Close scanner"
         >
           <X className="w-5 h-5" />

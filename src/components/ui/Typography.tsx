@@ -335,7 +335,7 @@ export function Code({ className, children }: { className?: string; children: Re
   return (
     <code
       className={cn(
-        'px-1.5 py-0.5 rounded bg-[#F0EDE8] dark:bg-slate-800',
+        'px-1.5 py-0.5 rounded bg-[#EDF4F7] dark:bg-slate-800',
         'font-mono text-sm',
         'text-[#132F43] dark:text-slate-200',
         className

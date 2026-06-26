@@ -85,7 +85,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-[#FAF7F2] to-white dark:from-slate-800 dark:to-slate-900 py-10 sm:py-16 lg:py-24">
+      <section className="bg-gradient-to-b from-[#F6FBFB] to-white dark:from-slate-800 dark:to-slate-900 py-10 sm:py-16 lg:py-24">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div>
@@ -261,7 +261,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
             ].map(({ icon: Icon, title, desc, highlight }) => (
               <Card
                 key={title}
-                className={`p-4 sm:p-6 ${highlight ? 'bg-gradient-to-br from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30' : ''}`}
+                className={`p-4 sm:p-6 ${highlight ? 'bg-gradient-to-br from-[#F6FBFB] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30' : ''}`}
               >
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4 ${
                   highlight

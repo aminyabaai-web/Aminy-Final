@@ -228,7 +228,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]"
             aria-label="Close pricing"
           >
             <X className="w-5 h-5" />
@@ -247,7 +247,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
 
         {/* Insured users: soften the wall, lead with a coverage check (booking covered care isn't live yet — link only to existing coverage tools, no guarantees) */}
         {isInsured && (
-          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border border-[#C8DDE8]">
+          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] border border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
                 <Check className="w-5 h-5 text-blue-600" />

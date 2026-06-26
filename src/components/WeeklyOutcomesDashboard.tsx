@@ -123,7 +123,7 @@ export function WeeklyOutcomesDashboard({
   const getTrendBadge = () => {
     const badges = {
       improving: { bg: 'bg-green-100', text: 'text-green-700', label: 'Great progress' },
-      stable: { bg: 'bg-[#F0EDE8]', text: 'text-[#3A4A57]', label: 'Steady pace' },
+      stable: { bg: 'bg-[#EDF4F7]', text: 'text-[#3A4A57]', label: 'Steady pace' },
       needs_attention: { bg: 'bg-orange-100', text: 'text-orange-700', label: 'Let\'s reconnect' }
     };
     

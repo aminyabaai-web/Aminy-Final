@@ -161,7 +161,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
             <ArrowLeft className="w-5 h-5" />
           </button>
         )}

@@ -94,7 +94,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'plan':
         return 'text-[#2A7D99] bg-[#2A7D99]/10';
       default:
-        return 'text-[#5A6B7A] bg-[#FAF7F2]';
+        return 'text-[#5A6B7A] bg-[#F6FBFB]';
     }
   };
 
@@ -142,7 +142,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       </div>
 
       {showLogForm && (
-        <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-800 space-y-2">
+        <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#F6FBFB] dark:bg-slate-800 space-y-2">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#132F43] dark:text-slate-200">Describe the behavior</p>
             <button onClick={() => { setShowLogForm(false); setLogText(''); }} className="text-slate-400 hover:text-slate-600">

@@ -1319,7 +1319,7 @@ export function StoreMarketplace({
                   className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-[#F0EDE8] dark:bg-slate-700 relative">
+                  <div className="aspect-video bg-[#EDF4F7] dark:bg-slate-700 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-slate-400">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1401,7 +1401,7 @@ export function StoreMarketplace({
                   key={product.id}
                   className="overflow-hidden hover:shadow-lg transition-shadow"
                 >
-                  <div className="aspect-video bg-[#F0EDE8] dark:bg-slate-700 relative">
+                  <div className="aspect-video bg-[#EDF4F7] dark:bg-slate-700 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-slate-400">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1456,7 +1456,7 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                       {product.recommendedAgeRange && (
-                        <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">
+                        <Badge className="bg-[#EDF4F7] text-[#5A6B7A] text-sm">
                           Ages {product.recommendedAgeRange}
                         </Badge>
                       )}

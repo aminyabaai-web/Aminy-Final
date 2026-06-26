@@ -114,7 +114,7 @@ function ClaimCard({
             </div>
 
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
+              <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-1.5 py-0.5 rounded font-mono">{item.cptCode}</span>
               <span className="text-sm text-[#5A6B7A]">{item.payerName}</span>
             </div>
 
@@ -305,7 +305,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
             >
               {t.label}
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-                tab === t.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                tab === t.id ? 'bg-[#6B9080]/10 text-[#6B9080]' : 'bg-[#EDF4F7] text-[#5A6B7A]'
               }`}>
                 {count}
               </span>
@@ -345,7 +345,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         {/* Claims list */}
         {claims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
+            <div className="w-14 h-14 rounded-full bg-[#EDF4F7] flex items-center justify-center mb-4">
               <FileText size={26} className="text-[#8A9BA8]" />
             </div>
             <p className="text-sm font-semibold text-[#3A4A57]">No claims yet</p>
@@ -418,7 +418,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
                 {Array.from(new Set(selectedClaims.map(c => c.payerName))).join(', ')}.
               </p>
 
-              <div className="bg-[#FAF7F2] rounded-xl p-3 mb-4 space-y-1">
+              <div className="bg-[#F6FBFB] rounded-xl p-3 mb-4 space-y-1">
                 {selectedClaims.map(c => (
                   <div key={c.id} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">{c.clientName} · {c.cptCode}</span>

@@ -276,7 +276,7 @@ export function BCBASessionBriefing({
   }) => (
     <button
       onClick={() => toggleSection(id)}
-      className="w-full flex items-center justify-between p-3 hover:bg-[#FAF7F2] rounded-lg transition-colors"
+      className="w-full flex items-center justify-between p-3 hover:bg-[#F6FBFB] rounded-lg transition-colors"
     >
       <div className="flex items-center gap-3">
         <div className={`p-2 rounded-lg ${color}`}>
@@ -309,7 +309,7 @@ export function BCBASessionBriefing({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-[#F6FBFB] pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8">
@@ -328,7 +328,7 @@ export function BCBASessionBriefing({
 
   if (!briefing) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] pb-24">
+      <div className="min-h-screen bg-[#F6FBFB] pb-24">
         {PageHeader}
         <div className="px-4 mt-4">
           <Card className="p-8 text-center">
@@ -351,11 +351,11 @@ export function BCBASessionBriefing({
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] pb-24">
+    <div className="min-h-screen bg-[#F6FBFB] pb-24">
       {PageHeader}
       <div className="space-y-3 sm:space-y-4 sm:space-y-6 px-4 mt-4">
       {/* Header */}
-      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
+      <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 border-[#6B9080]/20">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-[#6B9080]/10 rounded-xl">
@@ -429,7 +429,7 @@ export function BCBASessionBriefing({
               className={`p-3 rounded-lg border ${
                 item.trend === 'up' ? 'bg-green-50 border-green-200' :
                 item.trend === 'down' ? 'bg-red-50 border-red-200' :
-                'bg-[#FAF7F2] border-[#E8E4DF]'
+                'bg-[#F6FBFB] border-[#E8E4DF]'
               }`}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -566,7 +566,7 @@ export function BCBASessionBriefing({
           icon={FileText}
           title="From Documents (Vault)"
           count={briefing.vaultInsights.length}
-          color="bg-[#F0EDE8] text-[#3A4A57]"
+          color="bg-[#EDF4F7] text-[#3A4A57]"
         />
         {expandedSections.has('vault') && (
           <div className="px-4 pb-4">

@@ -1203,7 +1203,7 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#2A7D99]/20 dark:border-teal-700 rounded-xl p-3"
+            className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#2A7D99]/20 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-[#2A7D99] dark:text-primary mt-0.5 flex-shrink-0" />
@@ -1300,7 +1300,7 @@ export function Dashboard10({
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-full border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                className="rounded-full border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#F6FBFB] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 onClick={() => onNavigate?.('calm-tools')}
               >
                 Calm Corner
@@ -1380,7 +1380,7 @@ export function Dashboard10({
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
                     ? 'bg-[#2A7D99] text-white shadow-md'
-                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                 }`}
               >
                 {routine.icon}
@@ -1424,7 +1424,7 @@ export function Dashboard10({
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                      : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                      : 'bg-[#F6FBFB] dark:bg-slate-700/50 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
@@ -1710,7 +1710,7 @@ export function Dashboard10({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#2A7D99]/20 hover:bg-[#FAF7F2] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#2A7D99]/20 hover:bg-[#F6FBFB] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
                 <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
                   {action.icon}
@@ -1723,7 +1723,7 @@ export function Dashboard10({
           {/* Provider Reports Card */}
           {shouldShowProviderReportsCard ? (
             <div
-              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#F6FBFB] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
               onClick={() => onNavigate?.('clinical-reports')}
               role="button"
               tabIndex={0}
@@ -1915,7 +1915,7 @@ export function Dashboard10({
             </div>
 
             {/* Chat Input - Enhanced */}
-            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-750">
+            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#F6FBFB] dark:bg-slate-750">
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}

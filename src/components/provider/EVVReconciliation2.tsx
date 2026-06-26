@@ -84,7 +84,7 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
     ? 'text-red-600 bg-red-50 border-red-200'
     : discrepancies.some(d => d.severity === 'high')
     ? 'text-amber-600 bg-amber-50 border-amber-200'
-    : 'text-yellow-600 bg-[#FDF9F0] border-[#F0EDE8]';
+    : 'text-yellow-600 bg-[#FDF9F0] border-[#EDF4F7]';
 
   return (
     <div className={`border rounded-2xl overflow-hidden ${severityColor.split(' ').slice(1).join(' ')}`}>
@@ -205,7 +205,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
           </div>
         </div>
         <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
-          <div className="w-16 h-16 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-full bg-[#EDF4F7] flex items-center justify-center mb-4">
             <Shield size={30} className="text-[#8A9BA8]" />
           </div>
           <p className="text-base font-semibold text-[#3A4A57]">No EVV records to reconcile</p>

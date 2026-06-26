@@ -141,7 +141,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
   return (
     <div className="space-y-5 text-center">
       {/* Progress bar */}
-      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           className="h-full bg-sky-400 rounded-full"
           animate={{ width: `${progress}%` }}
@@ -439,7 +439,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
         {Math.floor((DURATION - elapsed) / 60)}:{String((DURATION - elapsed) % 60).padStart(2, '0')}
       </div>
 
-      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           className="h-full bg-amber-400 rounded-full"
           animate={{ width: `${(elapsed / DURATION) * 100}%` }}
@@ -456,7 +456,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
           setSelectedPlace(null);
           setElapsed(0);
         }}
-        className="mx-auto flex items-center gap-2 rounded-2xl bg-[#F0EDE8] px-4 py-2 text-sm text-[#5A6B7A] active:scale-95"
+        className="mx-auto flex items-center gap-2 rounded-2xl bg-[#EDF4F7] px-4 py-2 text-sm text-[#5A6B7A] active:scale-95"
       >
         <RotateCcw className="h-4 w-4" /> Change place
       </button>
@@ -597,7 +597,7 @@ function SquareBreathing({ onFinish }: { onFinish: () => void }) {
         <button
           type="button"
           onClick={() => { playTap(); setRunning(false); }}
-          className="mx-auto rounded-2xl bg-[#F0EDE8] px-8 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
+          className="mx-auto rounded-2xl bg-[#EDF4F7] px-8 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
         >
           Stop
         </button>
@@ -662,7 +662,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">

@@ -48,7 +48,7 @@ const DOMAIN_COLORS: Record<string, { bg: string; text: string; border: string; 
   routines: { bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200', icon: '📋' },
   motor: { bg: 'bg-pink-50', text: 'text-pink-800', border: 'border-pink-200', icon: '✋' },
   emotional: { bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200', icon: '💛' },
-  behavioral: { bg: 'bg-[#FDF9F0]', text: 'text-[#3A4A57]', border: 'border-[#F0EDE8]', icon: '⭐' },
+  behavioral: { bg: 'bg-[#FDF9F0]', text: 'text-[#3A4A57]', border: 'border-[#EDF4F7]', icon: '⭐' },
 };
 
 function getDomainStyle(domain: string) {
@@ -70,7 +70,7 @@ function PriorityBadge({ priority }: { priority: 'high' | 'medium' | 'low' }) {
   const styles = {
     high: 'bg-red-100 text-red-700',
     medium: 'bg-amber-100 text-amber-700',
-    low: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    low: 'bg-[#EDF4F7] text-[#5A6B7A]',
   };
   return (
     <span className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wider ${styles[priority]}`}>
@@ -283,7 +283,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                       <span>{goal.currentPct}%</span>
                       <span>Target: 100%</span>
                     </div>
-                    <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[#F0EDE8]">
+                    <div className="mt-1.5 h-2.5 overflow-hidden rounded-full bg-[#EDF4F7]">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${goal.currentPct}%` }}
@@ -351,7 +351,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
-                  className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 p-4"
+                  className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 p-4"
                 >
                   <div className="flex items-start gap-3">
                     <Sparkles className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
@@ -377,7 +377,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                 key={i}
                 onClick={() => toggleAction(i)}
                 className={`flex w-full items-start gap-3 border-b border-[#E8E4DF] p-4 text-left last:border-b-0 transition-colors ${
-                  checkedActions.has(i) ? 'bg-[#FAF7F2]' : ''
+                  checkedActions.has(i) ? 'bg-[#F6FBFB]' : ''
                 }`}
               >
                 <div

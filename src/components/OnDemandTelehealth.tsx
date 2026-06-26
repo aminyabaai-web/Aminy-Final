@@ -481,7 +481,7 @@ export function OnDemandTelehealth({
           ) : providers.length === 0 ? (
             // No providers available
             <Card className="p-6 text-center">
-              <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#EDF4F7] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-[#8A9BA8]" />
               </div>
               <h3 className="text-lg font-semibold text-[#132F43] mb-2">Verified expert support is not available right now</h3>
@@ -584,7 +584,7 @@ export function OnDemandTelehealth({
           )}
 
           {/* AI fallback option */}
-          <Card className="mt-4 sm:mt-6 p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+          <Card className="mt-4 sm:mt-6 p-4 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Brain className="w-5 h-5 text-blue-600" />
@@ -676,7 +676,7 @@ export function OnDemandTelehealth({
           </div>
 
           {/* Price breakdown */}
-          <Card className="p-4 bg-[#FAF7F2]">
+          <Card className="p-4 bg-[#F6FBFB]">
             <h3 className="font-medium text-[#132F43] mb-3">Price Breakdown</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">

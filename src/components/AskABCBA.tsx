@@ -345,13 +345,13 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#132F43]">Ask anything</p>
-            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
+            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]">
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {isPartnerOrg && (
-            <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
+            <div className="rounded-xl bg-[#EDF4F7] px-3 py-2">
               <p className="text-sm text-[#3A4A57]">
                 Your question goes to <span className="font-semibold">your care team</span> — included with your organization's program at no charge.
               </p>
@@ -485,7 +485,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
       />
       <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2 mb-1">
-          {thread.category && <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
+          {thread.category && <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
           <StatusPill status={thread.status} />
         </div>
         <p className="text-sm text-[#5A6B7A]">{relativeTime(thread.created_at)}</p>
@@ -552,7 +552,7 @@ function StatusPill({ status }: { status: Thread['status'] }) {
     ai_drafted:    { bg: 'bg-[#6B9080]/10',   text: 'text-[#6B9080]',   label: 'AI ready',   icon: <Sparkles className="w-3 h-3" /> },
     awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Team queue', icon: <Clock className="w-3 h-3" /> },
     completed:     { bg: 'bg-emerald-50',text: 'text-emerald-700',label: 'Reviewed',   icon: <Check className="w-3 h-3" /> },
-    closed:        { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
+    closed:        { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
   };
   const s = styles[status];
   return (

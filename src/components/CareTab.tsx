@@ -408,7 +408,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               ? 'bg-purple-50 text-purple-700 border-purple-200' 
               : isRBT 
                 ? 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]'
-                : 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]'
+                : 'bg-[#F6FBFB] text-[#3A4A57] border-[#E8E4DF]'
           }`}
         >
           {cred}
@@ -473,7 +473,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className={`rounded-lg px-4 py-3 ${
                 message.from === 'parent'
                   ? 'bg-accent text-white'
-                  : 'bg-[#FAF7F2] border border-[#E8E4DF]'
+                  : 'bg-[#F6FBFB] border border-[#E8E4DF]'
               }`}>
                 <p className="text-sm">{message.content}</p>
                 
@@ -610,7 +610,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Calendar Placeholder */}
       <div>
         <h3 className="font-semibold text-[#132F43] mb-3">Available Times</h3>
-        <div className="p-8 bg-[#FAF7F2] rounded-lg border-2 border-dashed border-[#E8E4DF] text-center">
+        <div className="p-8 bg-[#F6FBFB] rounded-lg border-2 border-dashed border-[#E8E4DF] text-center">
           <Calendar className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
           <p className="text-[#5A6B7A] mb-4">Calendar integration coming soon</p>
           <p className="text-sm text-[#5A6B7A]">
@@ -845,7 +845,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 className={`${
                   session.status === 'completed' 
                     ? 'bg-green-100 text-green-800' 
-                    : 'bg-[#F0EDE8] text-[#132F43]'
+                    : 'bg-[#EDF4F7] text-[#132F43]'
                 }`}
               >
                 {session.status}
@@ -860,7 +860,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
           {/* Session Summary */}
           {selectedSession?.id === session.id && session.summary && (
-            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] space-y-3 sm:space-y-4">
+            <div className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF] space-y-3 sm:space-y-4">
               <div>
                 <h4 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                   <Target className="w-4 h-4 text-blue-600" />
@@ -1073,7 +1073,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <>
             {/* Tab Navigation */}
             <div className="mb-4 sm:mb-6">
-              <div className="flex bg-[#F0EDE8] rounded-lg p-1">
+              <div className="flex bg-[#EDF4F7] rounded-lg p-1">
                 {tabItems.map((tab) => {
                   const Icon = tab.icon;
                   return (

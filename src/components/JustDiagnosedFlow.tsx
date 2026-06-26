@@ -272,7 +272,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
       ref={scrollRef}
       style={{
         minHeight: '100dvh',
-        background: '#FAF7F2',
+        background: '#F6FBFB',
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
@@ -554,7 +554,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     padding: '13px 16px',
                     background: selectedState === state.abbreviation ? 'rgba(42,125,153,0.08)' : 'transparent',
                     border: 'none',
-                    borderBottom: idx < filteredStates.length - 1 ? '1px solid #F0EDE8' : 'none',
+                    borderBottom: idx < filteredStates.length - 1 ? '1px solid #EDF4F7' : 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -1281,7 +1281,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     alignItems: 'flex-start',
                     paddingBottom: 14,
                     marginBottom: 14,
-                    borderBottom: '1px solid #F0EDE8',
+                    borderBottom: '1px solid #EDF4F7',
                   }}
                 >
                   <div
@@ -1345,7 +1345,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     gap: 12,
                     paddingBottom: step < 6 ? 12 : 0,
                     marginBottom: step < 6 ? 12 : 0,
-                    borderBottom: step < 6 ? '1px solid #F0EDE8' : 'none',
+                    borderBottom: step < 6 ? '1px solid #EDF4F7' : 'none',
                   }}
                 >
                   <div style={{ fontSize: 18, width: 28, textAlign: 'center', flexShrink: 0 }}>{icon}</div>

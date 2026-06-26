@@ -1620,7 +1620,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
             {/* Offline Indicator */}
             {isOfflineMode && (
-              <div className="bg-[#F0EDE8] px-2 py-1 rounded-full dark:bg-slate-700">
+              <div className="bg-[#EDF4F7] px-2 py-1 rounded-full dark:bg-slate-700">
                 <WifiOff className="w-4 h-4 text-[#5A6B7A] dark:text-slate-300" />
               </div>
             )}
@@ -1654,7 +1654,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition-colors ${
                 activeView === 'home'
                   ? 'border-[#E8E4DF] bg-white/90 text-slate-300 cursor-default dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
-                  : 'border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#6AA9BC] dark:hover:bg-slate-700'
+                  : 'border-[#E8E4DF] bg-[#F6FBFB] text-[#2A7D99] hover:bg-[#EDF4F7] dark:bg-slate-800 dark:border-slate-600 dark:text-[#6AA9BC] dark:hover:bg-slate-700'
               }`}
               aria-label="Go to Junior home screen"
               title="🏠 Home"
@@ -1819,7 +1819,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#F6FBFB] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
                       >
                         Open today’s transition board
                         <ArrowRight className="h-4 w-4" />
@@ -1854,7 +1854,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       </div>
 
                       <div className="mt-5">
-                        <Progress value={motivationProgress} className="h-3 bg-[#F0EDE8]" />
+                        <Progress value={motivationProgress} className="h-3 bg-[#EDF4F7]" />
                         <div className="mt-2 flex items-center justify-between text-sm text-[#5A6B7A] dark:text-slate-400">
                           <span>{motivationGoal.current} days complete</span>
                           <span>{motivationGoal.target - motivationGoal.current} to go</span>
@@ -1872,7 +1872,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <Button
                           variant="outline"
                           onClick={() => setActiveView('rewards')}
-                          className="h-12 rounded-2xl border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
+                          className="h-12 rounded-2xl border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#F6FBFB] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
                         >
                           <Gift className="mr-2 h-4 w-4" />
                           Open rewards
@@ -1886,7 +1886,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <div className="flex items-center justify-between gap-2">
                         <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Transition support</div>
                         {homeTransition.isExample && (
-                          <Badge variant="outline" className="border-[#E8E4DF] bg-[#FAF7F2] text-[#5A6B7A] dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                          <Badge variant="outline" className="border-[#E8E4DF] bg-[#F6FBFB] text-[#5A6B7A] dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300">
                             Example
                           </Badge>
                         )}
@@ -1910,7 +1910,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('visual-schedule')}
-                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#FAF7F2] dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                        className="mt-5 h-12 w-full justify-between rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#3A4A57] hover:bg-[#F6FBFB] dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                       >
                         Open visual schedule
                         <ArrowRight className="h-4 w-4" />
@@ -1953,7 +1953,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <h2 className="mt-2 text-xl font-semibold tracking-[-0.03em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Optional practice</h2>
                         <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">Calm, rewards, and transitions stay first. Practice stays secondary and only comes in when it actually helps the day.</p>
                       </div>
-                      <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-[#5A6B7A] hover:bg-[#F0EDE8]">
+                      <Button variant="ghost" onClick={() => setActiveView('buddy-select')} className="h-11 rounded-2xl px-4 text-[#5A6B7A] hover:bg-[#EDF4F7]">
                         Change buddy voice
                       </Button>
                     </div>
@@ -1991,7 +1991,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <Button
                         variant="outline"
                         onClick={() => setActiveView('activity-select')}
-                        className="h-12 rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#5A6B7A] hover:bg-[#FAF7F2] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
+                        className="h-12 rounded-2xl border-[#E8E4DF] bg-white px-4 text-[#5A6B7A] hover:bg-[#F6FBFB] dark:bg-slate-800 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700"
                       >
                         <Gamepad2 className="mr-2 h-4 w-4" />
                         Open optional practice
@@ -2288,7 +2288,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         }
                       }}
                       aria-label="Get a hint"
-                      className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center"
+                      className="w-16 h-16 bg-[#EDF4F7] dark:bg-slate-700 rounded-full flex items-center justify-center"
                     >
                       <HelpCircle className="w-6 h-6 text-[#5A6B7A] dark:text-slate-300" />
                     </motion.button>
@@ -2397,7 +2397,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
                   aria-label="Back to home"
-                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center dark:bg-slate-700 dark:text-slate-200"
+                  className="w-10 h-10 bg-[#EDF4F7] rounded-full flex items-center justify-center dark:bg-slate-700 dark:text-slate-200"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
@@ -2424,7 +2424,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200 ${
                       activeTrackFilter === filter.id
                         ? 'text-white'
-                        : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
+                        : 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
                     }`}
                     style={activeTrackFilter === filter.id ? {
                       background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
@@ -2535,7 +2535,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('activity-select')}
                   aria-label="Back to activities"
-                  className="w-10 h-10 bg-[#F0EDE8] rounded-full flex items-center justify-center"
+                  className="w-10 h-10 bg-[#EDF4F7] rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>

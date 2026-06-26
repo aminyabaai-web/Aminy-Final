@@ -662,7 +662,7 @@ export function PersistentAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
+                            : "bg-[#EDF4F7] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Message Header */}
                           <div className="flex items-center justify-between mb-2">
@@ -750,7 +750,7 @@ export function PersistentAskAminy({
                       <div className="w-8 h-8 bg-gradient-to-br from-accent/20 to-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Sparkles className="w-4 h-4 text-accent animate-pulse" />
                       </div>
-                      <div className="bg-[#F0EDE8] dark:bg-gray-800 rounded-2xl px-4 py-3 border border-[#E8E4DF] dark:border-gray-700">
+                      <div className="bg-[#EDF4F7] dark:bg-gray-800 rounded-2xl px-4 py-3 border border-[#E8E4DF] dark:border-gray-700">
                         <div className="flex items-center gap-2">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 bg-accent rounded-full animate-bounce"></div>
@@ -769,7 +769,7 @@ export function PersistentAskAminy({
 
             {/* Enhanced Input Area */}
             <div className="border-t border-[#E8E4DF] dark:border-gray-700 p-4 bg-white dark:bg-gray-900">
-              <div className="relative bg-[#FAF7F2] dark:bg-gray-800 rounded-xl border border-[#E8E4DF] dark:border-gray-700 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all aminy-ai-card">
+              <div className="relative bg-[#F6FBFB] dark:bg-gray-800 rounded-xl border border-[#E8E4DF] dark:border-gray-700 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all aminy-ai-card">
                 <textarea
                   ref={textareaRef}
                   value={input}

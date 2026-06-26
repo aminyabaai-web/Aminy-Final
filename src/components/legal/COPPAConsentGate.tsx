@@ -113,7 +113,7 @@ export default function COPPAConsentGate({
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>

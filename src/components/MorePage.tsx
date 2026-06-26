@@ -205,12 +205,12 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
         className={`w-full flex items-center justify-between p-4 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 group ${
           accent
             ? 'bg-teal-50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-800 hover:bg-teal-100 dark:hover:bg-teal-900/30'
-            : 'bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-600 hover:border-[#E8E4DF] dark:hover:border-slate-500 hover:bg-[#FAF7F2] dark:hover:bg-slate-700'
+            : 'bg-white dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-600 hover:border-[#E8E4DF] dark:hover:border-slate-500 hover:bg-[#F6FBFB] dark:hover:bg-slate-700'
         }`}
         aria-label={`Open ${item.label}`}
       >
         <div className="flex items-center space-x-4">
-          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${accent ? 'bg-teal-100 dark:bg-teal-800/50' : 'bg-[#F0EDE8] dark:bg-slate-700'}`}>
+          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${accent ? 'bg-teal-100 dark:bg-teal-800/50' : 'bg-[#EDF4F7] dark:bg-slate-700'}`}>
             <Icon className={`w-5 h-5 ${accent ? 'text-teal-600 dark:text-teal-300' : 'text-[#5A6B7A] dark:text-slate-300'}`} strokeWidth={1.5} />
           </div>
 

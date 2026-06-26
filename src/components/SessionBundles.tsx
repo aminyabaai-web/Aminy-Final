@@ -323,7 +323,7 @@ export function BundleCredits({
   const isExpiringSoon = daysUntilExpiry <= 14;
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+    <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="p-2 bg-[#6B9080]/10 rounded-lg">

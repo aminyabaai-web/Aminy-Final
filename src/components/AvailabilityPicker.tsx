@@ -155,7 +155,7 @@ function TimeSlotButton({
     return (
       <button
         disabled
-        className="px-3 py-2 text-sm text-[#8A9BA8] bg-[#FAF7F2] rounded-lg cursor-not-allowed"
+        className="px-3 py-2 text-sm text-[#8A9BA8] bg-[#F6FBFB] rounded-lg cursor-not-allowed"
       >
         {formatTime(slot.startTime)}
       </button>
@@ -264,13 +264,13 @@ function DateSelector({
         <div className="flex items-center gap-1">
           <button
             onClick={() => scroll('left')}
-            className="p-1.5 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+            className="p-1.5 hover:bg-[#EDF4F7] rounded-lg transition-colors"
           >
             <ChevronLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <button
             onClick={() => scroll('right')}
-            className="p-1.5 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+            className="p-1.5 hover:bg-[#EDF4F7] rounded-lg transition-colors"
           >
             <ChevronRight className="w-5 h-5 text-[#5A6B7A]" />
           </button>
@@ -298,7 +298,7 @@ function DateSelector({
                   ? 'bg-primary text-white shadow-md'
                   : hasAvailability
                   ? 'bg-white border border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10'
-                  : 'bg-[#FAF7F2] text-[#8A9BA8] cursor-not-allowed'
+                  : 'bg-[#F6FBFB] text-[#8A9BA8] cursor-not-allowed'
               }`}
               style={{ scrollSnapAlign: 'start' }}
             >
@@ -384,7 +384,7 @@ export function AvailabilityPicker({
   return (
     <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
       {/* Header */}
-      <div className="p-4 bg-gradient-to-r from-[#FAF7F2] to-white border-b border-[#E8E4DF]">
+      <div className="p-4 bg-gradient-to-r from-[#F6FBFB] to-white border-b border-[#E8E4DF]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
             <Calendar className="w-5 h-5 text-[#6B9080]" />

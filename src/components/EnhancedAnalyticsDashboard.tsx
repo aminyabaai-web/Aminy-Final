@@ -613,7 +613,7 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                                 </Badge>
                               </div>
                             </div>
-                            <div className="w-full bg-[#F0EDE8] rounded-full h-8 overflow-hidden">
+                            <div className="w-full bg-[#EDF4F7] rounded-full h-8 overflow-hidden">
                               <div
                                 className={`h-8 rounded-full transition-all duration-500 flex items-center justify-end pr-2 ${
                                   idx === 0 ? 'bg-accent' :
@@ -725,19 +725,19 @@ export function EnhancedAnalyticsDashboard({ onBack, userTier, userRole = 'user'
                   <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                     {/* Summary Cards */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                      <Card className="p-4 bg-[#FAF7F2]">
+                      <Card className="p-4 bg-[#F6FBFB]">
                         <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
                           {retentionData.averageD1.toFixed(1)}%
                         </div>
                         <div className="text-sm text-[#5A6B7A]">D1 Retention</div>
                       </Card>
-                      <Card className="p-4 bg-[#FAF7F2]">
+                      <Card className="p-4 bg-[#F6FBFB]">
                         <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
                           {retentionData.averageD7.toFixed(1)}%
                         </div>
                         <div className="text-sm text-[#5A6B7A]">D7 Retention</div>
                       </Card>
-                      <Card className="p-4 bg-[#FAF7F2]">
+                      <Card className="p-4 bg-[#F6FBFB]">
                         <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
                           {retentionData.averageD30.toFixed(1)}%
                         </div>

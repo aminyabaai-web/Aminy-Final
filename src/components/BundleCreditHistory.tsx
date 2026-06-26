@@ -72,7 +72,7 @@ function getTransactionIcon(type: CreditTransaction['type']) {
     case 'usage': return { icon: MinusCircle, color: 'text-blue-500', bg: 'bg-[#EEF4F8]' };
     case 'expiry': return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-50' };
     case 'refund': return { icon: CheckCircle2, color: 'text-purple-500', bg: 'bg-purple-50' };
-    default: return { icon: Package, color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]' };
+    default: return { icon: Package, color: 'text-[#5A6B7A]', bg: 'bg-[#F6FBFB]' };
   }
 }
 
@@ -237,7 +237,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30
               ? 'bg-amber-50 text-amber-700'
-              : 'bg-[#FAF7F2] text-[#5A6B7A]'
+              : 'bg-[#F6FBFB] text-[#5A6B7A]'
           }`}>
             <Calendar size={12} />
             <span>

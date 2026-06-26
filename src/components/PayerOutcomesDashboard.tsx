@@ -651,7 +651,7 @@ export function PayerOutcomesDashboard({
 
                 <div className="space-y-4">
                   {visibleClaimQueue.length === 0 ? (
-                    <div className="rounded-[28px] border border-dashed border-slate-300 bg-[#FAF7F2]/80 p-8 text-center dark:border-slate-700 dark:bg-slate-900/60">
+                    <div className="rounded-[28px] border border-dashed border-slate-300 bg-[#F6FBFB]/80 p-8 text-center dark:border-slate-700 dark:bg-slate-900/60">
                       <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
                       <p className="text-sm font-medium text-[#3A4A57] dark:text-slate-200">
                         No claim-ready cases for the {marketLabel} lane yet
@@ -687,7 +687,7 @@ export function PayerOutcomesDashboard({
                             {tone.helper}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-4 py-3 text-right dark:border-slate-700 dark:bg-slate-800/80">
+                        <div className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB]/80 px-4 py-3 text-right dark:border-slate-700 dark:bg-slate-800/80">
                           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Visit amount</p>
                           <p className="mt-1 text-lg font-semibold text-[#132F43] dark:text-white">{formatCurrency(item.amountCents / 100)}</p>
                         </div>
@@ -712,7 +712,7 @@ export function PayerOutcomesDashboard({
                     </div>
                   )})}
                   {claimQueue.length > visibleClaimQueue.length ? (
-                    <div className="rounded-2xl border border-dashed border-slate-300 bg-[#FAF7F2]/80 p-4 text-sm text-[#5A6B7A] dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+                    <div className="rounded-2xl border border-dashed border-slate-300 bg-[#F6FBFB]/80 p-4 text-sm text-[#5A6B7A] dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
                       {claimQueue.length - visibleClaimQueue.length} additional cases are available in the operator queue. This summary stays intentionally trimmed so billers can scan the lane quickly on desktop and mobile.
                     </div>
                   ) : null}
@@ -738,7 +738,7 @@ export function PayerOutcomesDashboard({
                       <p className="text-xs uppercase tracking-[0.18em] text-sky-700">Secondary plans</p>
                       <p className="mt-1 text-xl font-semibold text-sky-800">{payerOpsSummary.secondaryPolicyCases}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2] px-4 py-3">
+                    <div className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB] px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Out of matrix</p>
                       <p className="mt-1 text-xl font-semibold text-[#132F43]">{payerOpsSummary.unsupportedPayerCases}</p>
                     </div>
@@ -827,7 +827,7 @@ export function PayerOutcomesDashboard({
                         {formatNumber(metrics.activeUsers)} / {formatNumber(metrics.totalMembers)}
                       </span>
                     </div>
-                    <div className="h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-3 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-primary rounded-full"
                         style={{ width: `${metrics.engagementRate}%` }}
@@ -839,7 +839,7 @@ export function PayerOutcomesDashboard({
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                       <Activity className="w-5 h-5 text-[#2A7D99] mb-2" />
                       <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                         {metrics.avgSessionsPerWeek}
@@ -848,7 +848,7 @@ export function PayerOutcomesDashboard({
                         Avg sessions/week
                       </p>
                     </div>
-                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                       <Clock className="w-5 h-5 text-blue-600 mb-2" />
                       <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                         18 min
@@ -1012,7 +1012,7 @@ function ProgressMetric({
           {showPercentage ? `${value}%` : value}
         </span>
       </div>
-      <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
@@ -1059,7 +1059,7 @@ function UtilizationRow({ feature, percentage }: { feature: string; percentage: 
         <span className="text-sm text-[#5A6B7A]">{feature}</span>
         <span className="text-sm font-medium text-[#132F43]">{percentage}%</span>
       </div>
-      <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
         <div
           className="h-full bg-primary rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}

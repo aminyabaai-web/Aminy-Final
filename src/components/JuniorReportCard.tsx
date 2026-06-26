@@ -359,7 +359,7 @@ export function JuniorReportCard({
                   .map(d => (
                     <div key={d.domain} className="flex items-center gap-2">
                       <span className="text-sm text-[#5A6B7A] w-16 truncate capitalize">{d.domain}</span>
-                      <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${
                             d.accuracy >= 80 ? 'bg-green-400' :

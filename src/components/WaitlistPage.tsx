@@ -126,7 +126,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -155,7 +155,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center gap-3 text-left p-3 bg-[#FAF7F2] rounded-lg">
+              <div className="flex items-center gap-3 text-left p-3 bg-[#F6FBFB] rounded-lg">
                 <Sparkles className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Early access perks</p>
@@ -163,7 +163,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 text-left p-3 bg-[#FAF7F2] rounded-lg">
+              <div className="flex items-center gap-3 text-left p-3 bg-[#F6FBFB] rounded-lg">
                 <MessageCircle className="w-5 h-5 text-[#6B9080] flex-shrink-0" />
                 <div>
                   <p className="font-medium text-sm">Shape the product</p>
@@ -184,7 +184,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-white to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] via-white to-white">
       {/* Hero Section */}
       <section className="pt-12 pb-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
@@ -282,7 +282,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       </section>
 
       {/* Social Proof */}
-      <section className="py-16 px-4 bg-[#FAF7F2]">
+      <section className="py-16 px-4 bg-[#F6FBFB]">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-xl sm:text-2xl font-bold text-center text-[#132F43] mb-12">
             Families like yours are waiting

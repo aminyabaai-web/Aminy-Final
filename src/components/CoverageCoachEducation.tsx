@@ -259,7 +259,7 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
               const itemId = `q-${idx}-${qIdx}`;
               return (
                 <div key={qIdx} className="flex items-start gap-2 group">
-                  <span className="w-6 h-6 bg-[#F0EDE8] rounded-full flex items-center justify-center text-xs font-medium text-[#5A6B7A] flex-shrink-0">
+                  <span className="w-6 h-6 bg-[#EDF4F7] rounded-full flex items-center justify-center text-xs font-medium text-[#5A6B7A] flex-shrink-0">
                     {qIdx + 1}
                   </span>
                   <p className="text-sm text-[#3A4A57] flex-1">{question}</p>
@@ -340,7 +340,7 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
           <Card key={cpt.code} className="overflow-hidden">
             <button
               onClick={() => toggleExpand(cpt.code)}
-              className="w-full p-4 flex items-start gap-3 sm:gap-4 text-left hover:bg-[#FAF7F2] transition-colors"
+              className="w-full p-4 flex items-start gap-3 sm:gap-4 text-left hover:bg-[#F6FBFB] transition-colors"
             >
               <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                 <span className="text-lg font-bold text-purple-700">{cpt.code}</span>
@@ -361,11 +361,11 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
                 <div className="mt-4 space-y-3">
                   <p className="text-sm text-[#3A4A57]">{cpt.details}</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
-                    <div className="bg-[#FAF7F2] p-3 rounded-lg">
+                    <div className="bg-[#F6FBFB] p-3 rounded-lg">
                       <p className="text-sm font-medium text-[#5A6B7A] mb-1">Who Provides</p>
                       <p className="text-sm text-[#132F43]">{cpt.whoProvides}</p>
                     </div>
-                    <div className="bg-[#FAF7F2] p-3 rounded-lg">
+                    <div className="bg-[#F6FBFB] p-3 rounded-lg">
                       <p className="text-sm font-medium text-[#5A6B7A] mb-1">Typical Amount</p>
                       <p className="text-sm text-[#132F43]">{cpt.typical}</p>
                     </div>
@@ -464,7 +464,7 @@ Enclosures: [List all attachments]`;
           </Button>
         </div>
 
-        <div className="bg-[#FAF7F2] rounded-lg p-4 overflow-x-auto">
+        <div className="bg-[#F6FBFB] rounded-lg p-4 overflow-x-auto">
           <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap font-mono">
             {appealTemplate}
           </pre>
@@ -627,7 +627,7 @@ function MedicaidWaiverSection() {
               </div>
             </div>
 
-            <div className="bg-[#FAF7F2] p-3 rounded-lg">
+            <div className="bg-[#F6FBFB] p-3 rounded-lg">
               <p className="text-sm font-medium text-[#5A6B7A] mb-1">Eligibility</p>
               <p className="text-sm text-[#3A4A57]">{waiver.eligibility}</p>
             </div>
@@ -735,7 +735,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
           <Card key={state} className="overflow-hidden">
             <button
               onClick={() => toggleExpand(state)}
-              className="w-full p-4 flex items-center justify-between text-left hover:bg-[#FAF7F2] transition-colors"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-[#F6FBFB] transition-colors"
             >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400" />

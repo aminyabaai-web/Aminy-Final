@@ -93,12 +93,12 @@ export function DesignSystem() {
   const renderTokenCard = (tokenName: string, token: { value: string; description: string }, category: string) => (
     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
-        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#EDF4F7] dark:bg-slate-700 px-2 py-1 rounded">
           {tokenName}
         </code>
         <button
           onClick={() => copyToClipboard(token.value, tokenName)}
-          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
+          className="p-1 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded transition-colors"
         >
           {copiedToken === tokenName ? (
             <Check className="w-4 h-4 text-green-600" />
@@ -147,7 +147,7 @@ export function DesignSystem() {
             <div className="flex items-center gap-3">
               <button
                 onClick={toggleDarkMode}
-                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 {isDarkMode ? (
                   <Sun className="w-5 h-5 text-[#5A6B7A] dark:text-slate-400" />
@@ -174,7 +174,7 @@ export function DesignSystem() {
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-left transition-colors ${
                       selectedSection === section.id
                         ? 'bg-[#6B9080]/10 dark:bg-[#1a3a5c] text-[#6B9080] dark:text-teal-100'
-                        : 'text-[#3A4A57] dark:text-slate-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-800'
+                        : 'text-[#3A4A57] dark:text-slate-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-800'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -237,7 +237,7 @@ export function DesignSystem() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-[#FAF7F2] to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
+                <div className="bg-gradient-to-r from-[#F6FBFB] to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
                   <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                     Mobile-First Grid System
                   </h3>
@@ -297,12 +297,12 @@ export function DesignSystem() {
                   {Object.entries(typeTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#EDF4F7] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(`font-size: ${token.value.split('/')[0]}; line-height: ${token.value.split('/')[1]}; font-weight: ${token.weight};`, tokenName)}
-                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
@@ -350,12 +350,12 @@ export function DesignSystem() {
                   {Object.entries(spacingTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#EDF4F7] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(token.value, tokenName)}
-                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
@@ -386,12 +386,12 @@ export function DesignSystem() {
                   {Object.entries(radiusTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#EDF4F7] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
                           onClick={() => copyToClipboard(token.value, tokenName)}
-                          className="p-1 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded transition-colors"
+                          className="p-1 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded transition-colors"
                         >
                           {copiedToken === tokenName ? (
                             <Check className="w-4 h-4 text-green-600" />
@@ -449,17 +449,17 @@ export function DesignSystem() {
                       
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Secondary</h4>
-                        <button className="w-full bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#132F43] dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full bg-[#EDF4F7] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#132F43] dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Secondary Button
                         </button>
-                        <button className="w-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 text-[#3A4A57] dark:text-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full border border-slate-300 dark:border-slate-600 hover:bg-[#F6FBFB] dark:hover:bg-slate-800 text-[#3A4A57] dark:text-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Outline Button
                         </button>
                       </div>
                       
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Quiet</h4>
-                        <button className="w-full text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-100 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-100 hover:bg-[#EDF4F7] dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Quiet Button
                         </button>
                         <button className="w-full text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] hover:bg-[#6B9080]/10 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
@@ -544,7 +544,7 @@ export function DesignSystem() {
                       </p>
                     </div>
                     
-                    <div className="bg-gradient-to-br from-[#FAF7F2] to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-[#6B9080]/20 dark:border-[#6B9080]/30 rounded-lg p-6">
+                    <div className="bg-gradient-to-br from-[#F6FBFB] to-blue-50 dark:from-teal-950 dark:to-blue-950 border border-[#6B9080]/20 dark:border-[#6B9080]/30 rounded-lg p-6">
                       <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
                         <Star className="w-6 h-6 text-white" />
                       </div>
@@ -613,7 +613,7 @@ export function DesignSystem() {
                     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                       <div>
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Tab Navigation</h4>
-                        <div className="flex space-x-1 bg-[#F0EDE8] dark:bg-slate-700 p-1 rounded-lg">
+                        <div className="flex space-x-1 bg-[#EDF4F7] dark:bg-slate-700 p-1 rounded-lg">
                           <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-primary rounded-md transition-colors">
                             Active
                           </button>
@@ -628,7 +628,7 @@ export function DesignSystem() {
                       
                       <div>
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Bottom Navigation</h4>
-                        <div className="bg-[#FAF7F2] dark:bg-slate-900 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-2">
+                        <div className="bg-[#F6FBFB] dark:bg-slate-900 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-2">
                           <div className="flex justify-around">
                             <button className="flex flex-col items-center p-2 text-[#6B9080] dark:text-primary">
                               <Home className="w-5 h-5 mb-1" />
@@ -665,10 +665,10 @@ export function DesignSystem() {
                             <Check className="w-3 h-3" />
                             Selected
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#F0EDE8] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#EDF4F7] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
                             Unselected
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#F0EDE8] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-[#EDF4F7] dark:bg-slate-700 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-[#E8E4DF] dark:border-slate-600 hover:bg-[#E8E4DF] dark:hover:bg-slate-600">
                             Another Option
                           </button>
                         </div>
@@ -677,15 +677,15 @@ export function DesignSystem() {
                       <div>
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-3">Action Chips</h4>
                         <div className="flex flex-wrap gap-2">
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#F6FBFB] dark:hover:bg-slate-700">
                             <Plus className="w-3 h-3" />
                             Add Item
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#F6FBFB] dark:hover:bg-slate-700">
                             <Filter className="w-3 h-3" />
                             Filter
                           </button>
-                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-700">
+                          <button className="inline-flex items-center gap-1 px-3 py-1 bg-white dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 text-sm font-medium rounded-full border border-slate-300 dark:border-slate-600 hover:bg-[#F6FBFB] dark:hover:bg-slate-700">
                             <Download className="w-3 h-3" />
                             Export
                           </button>

@@ -211,7 +211,7 @@ function WorryInput({ onAdd }: { onAdd: (text: string) => void }) {
             type="button"
             onClick={handleVoice}
             className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm active:scale-95 ${
-              recording ? 'bg-red-500 text-white animate-pulse' : 'bg-[#F0EDE8] text-[#5A6B7A]'
+              recording ? 'bg-red-500 text-white animate-pulse' : 'bg-[#EDF4F7] text-[#5A6B7A]'
             }`}
           >
             <Mic className="h-5 w-5" />
@@ -457,7 +457,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                         type="button"
                         onClick={() => rateWorry(worry.id, n)}
                         className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors ${
-                          worry.rating >= n ? 'bg-violet-500 text-white' : 'bg-[#F0EDE8] text-slate-400'
+                          worry.rating >= n ? 'bg-violet-500 text-white' : 'bg-[#EDF4F7] text-slate-400'
                         }`}
                       >
                         {n}
@@ -491,7 +491,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                   <div className="space-y-1">
                     <div className="text-sm text-slate-400">Your reframes:</div>
                     {worry.reframes.map((r, i) => (
-                      <div key={i} className="text-sm text-[#5A6B7A] bg-[#FAF7F2] rounded-lg px-3 py-2">
+                      <div key={i} className="text-sm text-[#5A6B7A] bg-[#F6FBFB] rounded-lg px-3 py-2">
                         "{r}"
                       </div>
                     ))}
@@ -520,7 +520,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
 
         {/* Stats */}
         {worries.length > 0 && (
-          <div className="rounded-[20px] border border-[#E8E4DF] bg-[#FAF7F2] p-4">
+          <div className="rounded-[20px] border border-[#E8E4DF] bg-[#F6FBFB] p-4">
             <div className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Worry stats</div>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>

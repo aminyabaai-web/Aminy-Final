@@ -101,7 +101,7 @@ const STATUS_CONFIG: Record<BAAConfirmation, {
   'not-applicable': {
     label: 'Not Required',
     color: 'text-[#5A6B7A]',
-    bg: 'bg-[#FAF7F2] border-[#E8E4DF]',
+    bg: 'bg-[#F6FBFB] border-[#E8E4DF]',
     icon: <Shield className="w-5 h-5 text-[#8A9BA8]" />,
   },
 };
@@ -170,7 +170,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>

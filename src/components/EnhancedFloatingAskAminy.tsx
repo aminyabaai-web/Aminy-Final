@@ -74,7 +74,7 @@ function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) 
         {config.prompts.map((promptFn, index) => (
           <button
             key={index}
-            className="text-left p-2.5 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-lg text-sm transition-colors border border-transparent hover:border-[#E8E4DF]"
+            className="text-left p-2.5 bg-[#F6FBFB] hover:bg-[#EDF4F7] rounded-lg text-sm transition-colors border border-transparent hover:border-[#E8E4DF]"
             onClick={(e) => {
               e.stopPropagation();
               onAskAminyClick();

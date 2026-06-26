@@ -190,13 +190,13 @@ export function MatchingInProgress({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] via-white to-gray-50">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-1 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-1 rounded-full hover:bg-[#EDF4F7] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
@@ -209,7 +209,7 @@ export function MatchingInProgress({
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 p-5 space-y-4"
+          className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 p-5 space-y-4"
         >
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center">

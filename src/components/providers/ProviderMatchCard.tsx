@@ -31,7 +31,7 @@ export function ProviderMatchCard({ providers, onBookProvider }: ProviderMatchCa
                 {providers.map((provider) => (
                     <div
                         key={provider.id}
-                        className="flex-shrink-0 w-64 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] p-4 snap-start relative group hover:border-accent/50 transition-colors"
+                        className="flex-shrink-0 w-64 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] p-4 snap-start relative group hover:border-accent/50 transition-colors"
                     >
                         <div className="flex gap-3 mb-3">
                             <div className="w-12 h-12 rounded-full overflow-hidden bg-accent/10 border-2 border-white shadow-sm flex-shrink-0">

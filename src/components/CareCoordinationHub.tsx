@@ -230,7 +230,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
             const meta = SITE_META[site];
             const Icon = meta.icon;
             return (
-              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#FAF7F2]">
+              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#F6FBFB]">
                 <Icon className="w-4 h-4 text-[#5A6B7A] shrink-0" />
                 <span className="text-sm text-[#3A4A57]">{meta.label}</span>
               </div>
@@ -247,8 +247,8 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       {/* Loading shimmer */}
       {isLoading && activeServices.length === 0 && (
         <div className="px-4 mt-4 space-y-2">
-          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
-          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#EDF4F7] animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#EDF4F7] animate-pulse" />
         </div>
       )}
     </div>
@@ -268,12 +268,12 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 
 function AuthBadge({ status, expiresAt }: { status: AuthStatus; expiresAt?: string }) {
   const styles: Record<AuthStatus, { bg: string; text: string; label: string; icon: React.ReactNode }> = {
-    none:         { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
+    none:         { bg: 'bg-[#EDF4F7]',   text: 'text-[#5A6B7A]',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
     pending:      { bg: 'bg-amber-50',    text: 'text-amber-700',   label: 'Pending',          icon: <Clock className="w-3 h-3" /> },
     approved:     { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
     expiring:     { bg: 'bg-orange-50',   text: 'text-orange-700',  label: 'Expiring soon',    icon: <AlertTriangle className="w-3 h-3" /> },
     denied:       { bg: 'bg-red-50',      text: 'text-red-700',     label: 'Denied — appeal',  icon: <AlertTriangle className="w-3 h-3" /> },
-    not_required: { bg: 'bg-[#FAF7F2]',    text: 'text-[#5A6B7A]',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
+    not_required: { bg: 'bg-[#F6FBFB]',    text: 'text-[#5A6B7A]',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
   };
   const s = styles[status];
   let labelText = s.label;
@@ -349,7 +349,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
         <div className="mt-3 flex gap-2">
           <button
             onClick={() => onNavigate?.('marketplace')}
-            className="flex-1 text-sm font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex-1 text-sm font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             Book
           </button>

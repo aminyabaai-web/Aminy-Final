@@ -159,7 +159,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
       case 'in-progress':
         return <Badge className="bg-amber-100 text-amber-700">In Progress</Badge>;
       default:
-        return <Badge className="bg-[#F0EDE8] text-[#3A4A57]">Pending</Badge>;
+        return <Badge className="bg-[#EDF4F7] text-[#3A4A57]">Pending</Badge>;
     }
   };
 

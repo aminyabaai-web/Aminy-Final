@@ -117,10 +117,10 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <button
                                 type="button"
                                 onClick={() => frontInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idFront ? '' : 'border-slate-300 hover:bg-[#FAF7F2]'}`}
+                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idFront ? '' : 'border-slate-300 hover:bg-[#F6FBFB]'}`}
                                 style={idFront ? { borderColor: '#34d399', backgroundColor: '#ecfdf5' } : undefined}
                             >
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idFront ? 'bg-emerald-100' : 'bg-[#F0EDE8] group-hover:bg-indigo-100'}`}>
+                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idFront ? 'bg-emerald-100' : 'bg-[#EDF4F7] group-hover:bg-indigo-100'}`}>
                                     {idFront
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                                         : <Camera className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
@@ -134,10 +134,10 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <button
                                 type="button"
                                 onClick={() => backInputRef.current?.click()}
-                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idBack ? '' : 'border-slate-300 hover:bg-[#FAF7F2]'}`}
+                                className={`border-2 border-dashed rounded-2xl p-8 text-center transition-colors cursor-pointer group w-full ${idBack ? '' : 'border-slate-300 hover:bg-[#F6FBFB]'}`}
                                 style={idBack ? { borderColor: '#34d399', backgroundColor: '#ecfdf5' } : undefined}
                             >
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idBack ? 'bg-emerald-100' : 'bg-[#F0EDE8] group-hover:bg-indigo-100'}`}>
+                                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${idBack ? 'bg-emerald-100' : 'bg-[#EDF4F7] group-hover:bg-indigo-100'}`}>
                                     {idBack
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                                         : <UploadCloud className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
@@ -252,7 +252,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                 {demo ? (
                                     <Badge className="bg-emerald-100 text-emerald-700 px-3 py-1">Cleared</Badge>
                                 ) : (
-                                    <Badge className="bg-[#F0EDE8] text-[#5A6B7A] px-3 py-1">Not started</Badge>
+                                    <Badge className="bg-[#EDF4F7] text-[#5A6B7A] px-3 py-1">Not started</Badge>
                                 )}
                             </div>
 

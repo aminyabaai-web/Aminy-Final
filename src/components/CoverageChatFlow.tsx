@@ -346,7 +346,7 @@ export function CoverageChatFlow({
   return (
     <div className="flex flex-col h-full max-h-screen bg-white">
       {/* Header */}
-      <div className="flex-shrink-0 border-b border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2] to-white p-4">
+      <div className="flex-shrink-0 border-b border-[#E8E4DF] bg-gradient-to-r from-[#F6FBFB] to-white p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
@@ -382,7 +382,7 @@ export function CoverageChatFlow({
                 <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-[#F0EDE8] rounded-2xl rounded-tl-none px-4 py-3">
+                <div className="bg-[#EDF4F7] rounded-2xl rounded-tl-none px-4 py-3">
                   <p className="text-sm text-[#132F43] leading-relaxed">{message.content}</p>
                 </div>
               </div>
@@ -400,7 +400,7 @@ export function CoverageChatFlow({
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div className="bg-[#F0EDE8] rounded-2xl rounded-tl-none px-4 py-3">
+              <div className="bg-[#EDF4F7] rounded-2xl rounded-tl-none px-4 py-3">
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
                   <span className="text-sm text-[#5A6B7A]">Thinking...</span>

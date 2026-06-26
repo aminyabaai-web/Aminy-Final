@@ -271,7 +271,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
       </div>
 
       {/* Time range selector */}
-      <div className="flex gap-1 bg-[#F0EDE8] rounded-lg p-1">
+      <div className="flex gap-1 bg-[#EDF4F7] rounded-lg p-1">
         {(['7d', '30d', '90d', 'all'] as TimeRange[]).map((range) => (
           <button
             key={range}
@@ -472,7 +472,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
             Churn Analysis
           </h3>
           {/* Visual churn gauge */}
-          <div className="relative h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
+          <div className="relative h-4 rounded-full bg-[#EDF4F7] overflow-hidden">
             <div
               className={`absolute left-0 top-0 h-full rounded-full transition-all duration-700 ${
                 (customers.churnRate || 0) > 5
@@ -619,7 +619,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
           <h3 className="text-sm font-semibold text-[#3A4A57]">Revenue by Plan</h3>
 
           {/* Distribution bar */}
-          <div className="h-3 rounded-full bg-[#F0EDE8] overflow-hidden flex">
+          <div className="h-3 rounded-full bg-[#EDF4F7] overflow-hidden flex">
             {Object.entries(byPlan).map(([plan, data]) => (
               <div
                 key={plan}
@@ -672,7 +672,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
         {recentEvents.length > 0 ? (
           <div className="space-y-2">
             {recentEvents.slice(0, 10).map((event) => {
-              const meta = EVENT_TYPE_LABELS[event.type] || { label: event.type, color: 'text-[#5A6B7A] bg-[#FAF7F2]' };
+              const meta = EVENT_TYPE_LABELS[event.type] || { label: event.type, color: 'text-[#5A6B7A] bg-[#F6FBFB]' };
               return (
                 <div key={event.id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">

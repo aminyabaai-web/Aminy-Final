@@ -114,7 +114,7 @@ export function DevicePairingFlow({
       case 'active': return 'bg-green-50 text-green-700 border-green-200';
       case 'inactive': return 'bg-red-50 text-red-700 border-red-200';
       case 'pending': return 'bg-amber-50 text-amber-700 border-amber-200';
-      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#F6FBFB] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -276,7 +276,7 @@ export function DevicePairingFlow({
               <Card key={device.id} className="p-3 sm:p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg flex items-center justify-center">
+                    <div className="w-10 h-10 bg-[#EDF4F7] dark:bg-slate-700 rounded-lg flex items-center justify-center">
                       {getDeviceIcon(device.type)}
                     </div>
                     <div>
@@ -364,7 +364,7 @@ export function DevicePairingFlow({
         </p>
       </div>
 
-      <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg p-4">
+      <div className="bg-[#F6FBFB] dark:bg-slate-800 rounded-lg p-4">
         <div className="w-24 h-24 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg mx-auto flex items-center justify-center">
           <Search className="w-8 h-8 text-slate-400 dark:text-[#5A6B7A]" />
         </div>

@@ -88,7 +88,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
       cta: `Start Free ${TRIAL_CONFIG.durationDays}-Day Trial`,
       trialNote: 'No credit card needed',
       recommended: recommendedTier === 'core',
-      gradient: 'from-accent/10 to-[#F0EDE8]',
+      gradient: 'from-accent/10 to-[#EDF4F7]',
       borderColor: 'border-accent',
       accentColor: 'text-accent',
       buttonClass: 'bg-accent hover:bg-accent/90'
@@ -156,7 +156,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         </div>
 
         {/* Forta Differentiator Banner - VC-informed positioning */}
-        <div className="bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/40 dark:to-emerald-900/30 border border-[#6B9080]/20 dark:border-[#6B9080]/30/60 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-[#F6FBFB] to-emerald-50 dark:from-teal-900/40 dark:to-emerald-900/30 border border-[#6B9080]/20 dark:border-[#6B9080]/30/60 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
           <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c]/60 rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-[#6B9080] dark:text-[#7BA7BC]" />

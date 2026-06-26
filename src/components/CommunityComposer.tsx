@@ -510,7 +510,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
                 {images.map((image) => (
                   <div
                     key={image.id}
-                    className="relative aspect-square rounded-lg overflow-hidden border border-[#E8E4DF] bg-[#FAF7F2]"
+                    className="relative aspect-square rounded-lg overflow-hidden border border-[#E8E4DF] bg-[#F6FBFB]"
                   >
                     <img
                       src={image.url}

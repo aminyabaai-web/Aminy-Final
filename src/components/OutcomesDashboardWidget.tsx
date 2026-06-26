@@ -204,7 +204,7 @@ export function OutcomesDashboardWidget({
       : 'Complete screenings or set goals to start';
 
     return (
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+      <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-[#6B9080]/10 rounded-full">
@@ -230,7 +230,7 @@ export function OutcomesDashboardWidget({
       <Card className="border border-white/80 bg-[linear-gradient(180deg,_rgba(255,255,255,0.96)_0%,_rgba(244,249,250,0.98)_100%)] shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
         <div className="p-4 sm:p-5">
           <div className="flex items-start gap-3">
-            <div className="rounded-2xl bg-[#F0EDE8]/90 p-2.5 text-[#5A6B7A]">
+            <div className="rounded-2xl bg-[#EDF4F7]/90 p-2.5 text-[#5A6B7A]">
               <Activity className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
@@ -278,7 +278,7 @@ export function OutcomesDashboardWidget({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="p-4 bg-[#FAF7F2] rounded-xl"
+                className="p-4 bg-[#F6FBFB] rounded-xl"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Icon className={`w-4 h-4 ${metric.color}`} />

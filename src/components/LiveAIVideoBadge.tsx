@@ -35,7 +35,7 @@ export function LiveAIVideoBadge({ tier, variant = 'default' }: LiveAIVideoBadge
     return (
       <Badge
         variant="outline"
-        className="bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] inline-flex items-center gap-1 font-medium"
+        className="bg-[#F6FBFB] border-[#E8E4DF] text-[#5A6B7A] inline-flex items-center gap-1 font-medium"
       >
         <Video className="w-3 h-3" />
         Upgrade to Pro for Live AI Video

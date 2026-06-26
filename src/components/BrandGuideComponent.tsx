@@ -108,7 +108,7 @@ export function BrandGuideComponent() {
                 {/* Positioning Statement */}
                 <div>
                   <h3 className="font-semibold text-[#132F43] mb-3">Positioning Statement</h3>
-                  <p className="text-[#3A4A57] leading-relaxed bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
+                  <p className="text-[#3A4A57] leading-relaxed bg-[#F6FBFB] rounded-lg p-4 border border-[#E8E4DF]">
                     Aminy is an AI-powered behavioral wellness app that uses the proven principles of 
                     Applied Behavior Analysis (ABA) to help families create calm routines, improve 
                     communication, and celebrate progress—without clinical complexity.
@@ -545,7 +545,7 @@ export function BrandGuideComponent() {
               </div>
 
               {/* Replacement Guide */}
-              <div className="mt-4 sm:mt-6 bg-[#FAF7F2] rounded-xl p-6 border border-[#E8E4DF]">
+              <div className="mt-4 sm:mt-6 bg-[#F6FBFB] rounded-xl p-6 border border-[#E8E4DF]">
                 <h3 className="font-semibold text-[#132F43] mb-4">Say This Instead</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center gap-3 sm:gap-4">
@@ -595,15 +595,15 @@ export function BrandGuideComponent() {
                 <div>
                   <h3 className="font-semibold text-[#132F43] mb-3">Headlines</h3>
                   <div className="space-y-2">
-                    <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
+                    <div className="bg-[#F6FBFB] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#132F43]">"Finally, calm that works."</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Splash screen hero</p>
                     </div>
-                    <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
+                    <div className="bg-[#F6FBFB] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#132F43]">"Today's Calm Plan"</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Dashboard header</p>
                     </div>
-                    <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
+                    <div className="bg-[#F6FBFB] rounded-lg p-4 border border-[#E8E4DF]">
                       <p className="text-lg font-semibold text-[#132F43]">"Progress You Can See"</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Reports section</p>
                     </div>

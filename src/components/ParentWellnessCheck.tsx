@@ -332,7 +332,7 @@ export function ParentWellnessCheck({
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                     <motion.div
                       className="h-full bg-gradient-to-r from-rose-400 to-pink-400"
                       initial={{ width: 0 }}
@@ -652,7 +652,7 @@ export function WellnessCheckWidget({
       <div className="flex items-center gap-3 sm:gap-4">
         <div className={cn(
           "p-3 rounded-xl",
-          shouldPrompt ? "bg-rose-100" : "bg-[#F0EDE8]"
+          shouldPrompt ? "bg-rose-100" : "bg-[#EDF4F7]"
         )}>
           <HandHeart className={cn(
             "w-6 h-6",

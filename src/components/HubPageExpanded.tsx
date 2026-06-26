@@ -266,7 +266,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
           </div>
 
           {showFilters && (
-            <div className="flex flex-wrap gap-2 p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
+            <div className="flex flex-wrap gap-2 p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]">
               {filters.map(filter => (
                 <Badge
                   key={filter}
@@ -274,7 +274,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   className={`cursor-pointer ${
                     selectedFilter === filter
                       ? 'bg-accent text-white'
-                      : 'bg-white text-[#3A4A57] hover:bg-[#F0EDE8]'
+                      : 'bg-white text-[#3A4A57] hover:bg-[#EDF4F7]'
                   }`}
                 >
                   {filter}

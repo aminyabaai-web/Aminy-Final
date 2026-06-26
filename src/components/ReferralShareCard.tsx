@@ -64,7 +64,7 @@ export function ReferralShareCard({ referralCode, userName = 'A friend' }: Refer
                 </p>
             </div>
 
-            <div className="bg-[#FAF7F2] dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between mb-8">
+            <div className="bg-[#F6FBFB] dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between mb-8">
                 <div className="space-y-1">
                     <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider">Your Code</p>
                     <p className="text-xl font-mono font-bold text-[#132F43] dark:text-white tracking-widest">{referralCode}</p>

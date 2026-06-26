@@ -472,7 +472,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               type="button"
               onClick={onBack}
               aria-label="Go back"
-              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8] hover:text-[#3A4A57]"
+              className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-lg p-2 text-[#5A6B7A] transition-colors hover:bg-[#EDF4F7] hover:text-[#3A4A57]"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
@@ -562,7 +562,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     className={`text-left p-4 rounded-xl border-2 transition-all ${
                       form.practiceMode === opt.id
                         ? 'border-[#2A7D99] bg-[#2A7D99]/10'
-                        : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
+                        : 'border-[#E8E4DF] bg-[#F6FBFB] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
@@ -704,7 +704,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-sm ${
                         form.licensedStates.includes(state.code)
                           ? 'bg-[#2A7D99]/10 text-[#2A7D99] font-medium'
-                          : 'hover:bg-[#FAF7F2] text-[#5A6B7A]'
+                          : 'hover:bg-[#F6FBFB] text-[#5A6B7A]'
                       }`}
                     >
                       <input
@@ -768,7 +768,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       form.billingTrack === track.id
                         ? 'border-[#2A7D99] bg-[#2A7D99]/10'
-                        : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
+                        : 'border-[#E8E4DF] bg-[#F6FBFB] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
@@ -789,7 +789,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               <h2 className="text-lg font-semibold text-[#132F43] mb-6">Services & Pricing</h2>
 
               <div className="space-y-4">
-                <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
+                <label className="flex items-center justify-between p-4 bg-[#F6FBFB] rounded-lg">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -813,7 +813,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   </div>
                 </label>
 
-                <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
+                <label className="flex items-center justify-between p-4 bg-[#F6FBFB] rounded-lg">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
@@ -902,7 +902,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               ) : (
                 <div className="space-y-3">
                   {form.availability.map((slot, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+                    <div key={idx} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg">
                       <select
                         aria-label={`Day of week for time block ${idx + 1}`}
                         value={slot.dayOfWeek}
@@ -950,7 +950,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               <h2 className="text-lg font-semibold text-[#132F43] mb-6">Review Your Profile</h2>
 
               <div className="space-y-4">
-                <div className="p-4 bg-[#FAF7F2] rounded-lg">
+                <div className="p-4 bg-[#F6FBFB] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Profile</h3>
                   <p className="font-semibold text-[#132F43]">
                     {form.firstName} {form.lastName}, {form.credentials}
@@ -959,7 +959,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   {form.bio && <p className="text-sm text-[#5A6B7A] mt-2">{form.bio}</p>}
                 </div>
 
-                <div className="p-4 bg-[#FAF7F2] rounded-lg">
+                <div className="p-4 bg-[#F6FBFB] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Licensing</h3>
                   <div className="flex flex-wrap gap-1">
                     {form.licensedStates.map(code => (
@@ -976,7 +976,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   )}
                 </div>
 
-                <div className="p-4 bg-[#FAF7F2] rounded-lg">
+                <div className="p-4 bg-[#F6FBFB] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Services</h3>
                   {form.offersConsult && (
                     <p className="text-sm text-[#132F43]">25-min Consult — ${form.consultPrice}</p>
@@ -987,7 +987,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   <p className="text-sm text-[#5A6B7A] mt-2">Accepted rails: {form.acceptedInsurance.join(', ')}</p>
                 </div>
 
-                <div className="p-4 bg-[#FAF7F2] rounded-lg">
+                <div className="p-4 bg-[#F6FBFB] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Availability</h3>
                   {form.availability.length > 0 ? (
                     <div className="space-y-1">
@@ -1076,7 +1076,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             <button
               type="button"
               onClick={stepIndex === 0 ? onBack : prevStep}
-              className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
+              className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#EDF4F7]"
             >
               <ArrowLeft className="w-4 h-4" />
               {stepIndex === 0 ? 'Cancel' : 'Back'}

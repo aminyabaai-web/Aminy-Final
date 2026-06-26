@@ -30,7 +30,7 @@ export function CoverPage({ onNavigate }: CoverPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FAF7F2] via-white to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6FBFB] via-white to-blue-50 flex flex-col">
       {/* Header */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">

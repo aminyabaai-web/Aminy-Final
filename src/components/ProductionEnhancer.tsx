@@ -114,7 +114,7 @@ export class ProductionErrorBoundary extends React.Component<
 
 // Default error fallback component
 const DefaultErrorFallback: React.FC<{ error?: Error }> = ({ error }) => (
-  <div className="min-h-screen flex items-center justify-center p-6 bg-[#FAF7F2]">
+  <div className="min-h-screen flex items-center justify-center p-6 bg-[#F6FBFB]">
     <div className="max-w-md text-center">
       <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
         <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

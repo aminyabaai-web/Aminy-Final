@@ -76,7 +76,7 @@ export function GetCareIntakeScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -107,7 +107,7 @@ export function GetCareIntakeScreen({
                   setConcernId(undefined);
                 }
               }}
-              className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
           {preselectedConcern && concernId === preselectedConcern.id && (
@@ -157,7 +157,7 @@ export function GetCareIntakeScreen({
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
             <button
               onClick={() => setShowStateDropdown(!showStateDropdown)}
-              className="w-full pl-10 pr-10 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-left text-[#132F43] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-10 py-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl text-left text-[#132F43] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             >
               {userState ? getStateName(userState) : 'Select your state'}
             </button>
@@ -172,7 +172,7 @@ export function GetCareIntakeScreen({
                     placeholder="Search states..."
                     value={stateSearch}
                     onChange={(e) => setStateSearch(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
+                    className="w-full px-3 py-2 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-600/20"
                     autoFocus
                   />
                 </div>
@@ -185,7 +185,7 @@ export function GetCareIntakeScreen({
                         setShowStateDropdown(false);
                         setStateSearch('');
                       }}
-                      className={`w-full px-4 py-2 text-left text-sm hover:bg-[#FAF7F2] transition-colors ${
+                      className={`w-full px-4 py-2 text-left text-sm hover:bg-[#F6FBFB] transition-colors ${
                         userState === state.code ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                       }`}
                     >
@@ -204,7 +204,7 @@ export function GetCareIntakeScreen({
               placeholder="City (optional)"
               value={userCity}
               onChange={(e) => setUserCity(e.target.value)}
-              className="w-full px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full px-4 py-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
         </section>
@@ -294,7 +294,7 @@ function WhoButton({ icon, label, selected, onClick }: WhoButtonProps) {
       className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
         selected
           ? 'bg-[#6B9080]/10 border-cyan-600 text-[#6B9080]'
-          : 'bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
+          : 'bg-[#F6FBFB] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
       }`}
     >
       {icon}
@@ -326,10 +326,10 @@ function VisitTypeButton({
       disabled={disabled}
       className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all ${
         disabled
-          ? 'bg-[#F0EDE8] border-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed opacity-60'
+          ? 'bg-[#EDF4F7] border-[#E8E4DF] text-[#8A9BA8] cursor-not-allowed opacity-60'
           : selected
           ? 'bg-[#6B9080]/10 border-cyan-600 text-[#6B9080]'
-          : 'bg-[#FAF7F2] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
+          : 'bg-[#F6FBFB] border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'
       }`}
     >
       {icon}

@@ -677,7 +677,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
 
                   <div className="flex flex-wrap gap-1.5">
                     {prov.specialties.map(s => (
-                      <span key={s} className="text-xs bg-[#FAF7F2] border border-[#E8E4DF] text-[#5A6B7A] rounded-full px-2 py-0.5">{s}</span>
+                      <span key={s} className="text-xs bg-[#F6FBFB] border border-[#E8E4DF] text-[#5A6B7A] rounded-full px-2 py-0.5">{s}</span>
                     ))}
                   </div>
 

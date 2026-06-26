@@ -126,7 +126,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
   // Full-screen mode: render as a page with a close button, not a dialog overlay
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] flex flex-col">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-[#EDF4F7] flex flex-col">
         <div className="flex justify-end p-4">
           <button
             onClick={onClose}
@@ -147,7 +147,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] border-none">
+      <DialogContent className="max-w-md bg-gradient-to-b from-[#F6FBFB] to-[#EDF4F7] border-none">
         {stepContent}
       </DialogContent>
     </Dialog>
@@ -431,7 +431,7 @@ function NextStepsStep({
               onClick={() => setOverwhelm(num)}
               className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
                 ? 'bg-green-500 text-white'
-                : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                 }`}
             >
               {num}
@@ -524,7 +524,7 @@ export function CalmModeButton({
           setIsOpen(true);
         }}
         variant="outline"
-        className="w-full bg-white border border-[#E8E4DF] shadow-sm hover:shadow-md hover:bg-[#FAF7F2] text-[#3A4A57] font-medium transition-all duration-200 rounded-xl py-6"
+        className="w-full bg-white border border-[#E8E4DF] shadow-sm hover:shadow-md hover:bg-[#F6FBFB] text-[#3A4A57] font-medium transition-all duration-200 rounded-xl py-6"
       >
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-50 text-[#6B9080] rounded-lg">

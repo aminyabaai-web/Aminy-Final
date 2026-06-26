@@ -171,7 +171,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
   return (
     <div className="space-y-6">
       {/* View Tabs */}
-      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
+      <div className="flex gap-2 bg-[#EDF4F7] rounded-xl p-1">
         {[
           { id: 'roster' as const, label: 'RBT Roster', icon: Users },
           { id: 'supervision' as const, label: 'Supervision', icon: Clock },
@@ -255,7 +255,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={inviteRBT} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Send Invite
                 </button>
-                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -306,7 +306,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
+                      <div className="border-t border-[#E8E4DF] p-4 bg-[#F6FBFB] space-y-3">
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div>
                             <p className="text-[#5A6B7A]">Cert #</p>
@@ -443,7 +443,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={addSupervisionLog} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Save Log
                 </button>
-                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -510,7 +510,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 {data.logs.slice(-5).reverse().map(log => {
                   const rbt = data.rbts.find(r => r.id === log.rbtId);
                   return (
-                    <div key={log.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg text-sm">
+                    <div key={log.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg text-sm">
                       <Calendar className="w-4 h-4 text-[#8A9BA8]" />
                       <span className="text-[#5A6B7A]">{new Date(log.date).toLocaleDateString()}</span>
                       <span className="font-medium text-[#132F43]">{rbt?.name || 'Unknown'}</span>
@@ -564,7 +564,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     inv.status === 'paid' ? 'bg-green-100 text-green-700' :
                     inv.status === 'overdue' ? 'bg-red-100 text-red-700' :
                     inv.status === 'sent' ? 'bg-blue-100 text-blue-700' :
-                    'bg-[#F0EDE8] text-[#5A6B7A]'
+                    'bg-[#EDF4F7] text-[#5A6B7A]'
                   }`}>
                     {inv.status}
                   </span>

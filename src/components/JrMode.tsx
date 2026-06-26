@@ -181,7 +181,7 @@ export function JrMode({ childName, onExit, userTier }: JrModeProps) {
 
   if (showCalmBreak) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-[#EDF4F7] flex flex-col items-center justify-center p-4">
         <div className="max-w-md mx-auto text-center">
           <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <Heart className="w-12 h-12 text-blue-500 animate-pulse" />

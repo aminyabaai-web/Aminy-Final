@@ -138,7 +138,7 @@ export function CarePlanTabScreen({
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7] transition-colors"
             aria-label="Go back"
           >
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
@@ -156,7 +156,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'goals'
                 ? 'bg-primary text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <Target className="w-4 h-4" />
@@ -176,7 +176,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'summaries'
                 ? 'bg-primary text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -187,7 +187,7 @@ export function CarePlanTabScreen({
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               activeTab === 'actions'
                 ? 'bg-primary text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             <ClipboardList className="w-4 h-4" />
@@ -439,7 +439,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
 function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
   return (
     <div className="text-center py-12">
-      <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 bg-[#EDF4F7] rounded-full flex items-center justify-center mx-auto mb-4">
         <FileText className="w-8 h-8 text-[#8A9BA8]" />
       </div>
       <h3 className="text-lg font-medium text-[#132F43] mb-2">No visit summaries yet</h3>
@@ -525,7 +525,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
       'academic': { bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-[#6B9080]/20' },
       'motor': { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200' },
     };
-    return colors[category] || { bg: 'bg-[#FAF7F2]', text: 'text-[#3A4A57]', border: 'border-[#E8E4DF]' };
+    return colors[category] || { bg: 'bg-[#F6FBFB]', text: 'text-[#3A4A57]', border: 'border-[#E8E4DF]' };
   };
 
   const getCategoryLabel = (category: string) => {
@@ -661,7 +661,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </span>
           <span className="text-sm font-medium text-[#3A4A57]">{progressPercent}%</span>
         </div>
-        <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
+        <div className="w-full bg-[#EDF4F7] rounded-full h-2.5">
           <div
             className={`h-2.5 rounded-full transition-all duration-500 ${progressBarColor}`}
             style={{ width: `${progressPercent}%` }}
@@ -680,7 +680,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </button>
           <button
             onClick={() => setShowActions(!showActions)}
-            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#FAF7F2] rounded-lg transition-colors"
+            className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F6FBFB] rounded-lg transition-colors"
             aria-label="More actions"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -702,7 +702,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
           </button>
           <button
             onClick={() => { onStatusChange(goal.status === 'paused' ? 'active' : 'paused'); setShowActions(false); }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#5A6B7A] bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#5A6B7A] bg-[#F6FBFB] rounded-lg hover:bg-[#EDF4F7] transition-colors"
           >
             {goal.status === 'paused' ? (
               <><Play className="w-3.5 h-3.5" /> Resume</>

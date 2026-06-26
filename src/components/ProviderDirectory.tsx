@@ -187,7 +187,7 @@ export function ProviderDirectory({
     if (specialty.includes('ABA') || specialty.includes('Behavior')) return 'bg-blue-100 text-[#4A6478] border-[#C8DDE8]';
     if (specialty.includes('Speech') || specialty.includes('Language')) return 'bg-green-100 text-green-800 border-green-200';
     if (specialty.includes('Occupational') || specialty.includes('Sensory')) return 'bg-purple-100 text-purple-800 border-purple-200';
-    return 'bg-[#F0EDE8] text-[#132F43] border-[#E8E4DF]';
+    return 'bg-[#EDF4F7] text-[#132F43] border-[#E8E4DF]';
   };
 
   const toggleBookmark = (providerId: string) => {

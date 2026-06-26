@@ -515,7 +515,7 @@ export default function EVVDashboard({
                 </span>
               ))
             ) : (
-              <span className="inline-flex items-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] px-3 py-1 text-xs font-medium text-[#5A6B7A]">
+              <span className="inline-flex items-center rounded-full border border-[#E8E4DF] bg-[#F6FBFB] px-3 py-1 text-xs font-medium text-[#5A6B7A]">
                 No validated cycles yet
               </span>
             )}
@@ -733,7 +733,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
       rejected: 'bg-red-100 text-red-800',
       submitted: 'bg-blue-100 text-[#4A6478]',
     };
-    return styles[status] || 'bg-[#F0EDE8] text-[#132F43]';
+    return styles[status] || 'bg-[#EDF4F7] text-[#132F43]';
   };
 
   return (
@@ -860,7 +860,7 @@ function BudgetTab({
                 <span>{summary.totalUsed} used</span>
                 <span>{summary.remaining} remaining</span>
               </div>
-              <div className="h-3 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-3 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${progressColor}`}
                   style={{ width: `${Math.min(100, summary.percentUsed)}%` }}
@@ -1009,7 +1009,7 @@ function TimesheetsTab({
                 onClick={() => handleGenerateTimesheet(weekKey, true)}
                 disabled={generating}
                 aria-label="Download timesheet"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#5A6B7A] transition-colors hover:bg-[#F6FBFB] disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF

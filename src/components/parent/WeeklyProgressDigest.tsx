@@ -86,7 +86,7 @@ function ProgressBar({ value, color = 'teal' }: { value: number; color?: string 
     red: 'bg-red-400',
   };
   return (
-    <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
+    <div className="w-full bg-[#EDF4F7] rounded-full h-2.5">
       <div
         className={`h-2.5 rounded-full transition-all ${colorMap[color] || colorMap.teal}`}
         style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
@@ -135,7 +135,7 @@ export function WeeklyProgressDigest({
   const totalGoals = goalProgress.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white pb-20">
       {/* Header */}
       <div className="bg-gradient-to-br from-teal-600 to-teal-700 text-white px-5 pt-8 pb-6 rounded-b-3xl">
         <div className="flex items-center justify-between mb-1">

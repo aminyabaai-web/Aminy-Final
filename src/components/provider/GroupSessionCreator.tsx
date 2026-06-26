@@ -374,7 +374,7 @@ export function GroupSessionCreator({
             </div>
 
             {/* Earnings preview */}
-            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
+            <div className="p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]">
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your earnings preview</p>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#3A4A57]">Minimum ({minFamilies} families)</span>
@@ -507,7 +507,7 @@ function GroupSessionCard({
               </span>
               <span className="text-[#5A6B7A]">You earn: <strong>${bcbaEarns}</strong></span>
             </div>
-            <div className="w-full h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
               <div
                 className={`h-2 rounded-full transition-all ${meetsMinimum ? 'bg-emerald-500' : 'bg-amber-400'}`}
                 style={{ width: `${Math.min(100, enrollmentPct * 100)}%` }}

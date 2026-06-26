@@ -130,7 +130,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="pl-2 border-l-2 border-[#F0EDE8] space-y-1.5">
+            <div className="pl-2 border-l-2 border-[#EDF4F7] space-y-1.5">
               {steps.map((step, i) => {
                 const Icon = step.icon;
                 return (

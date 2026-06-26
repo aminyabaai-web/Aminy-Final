@@ -200,7 +200,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
 
       {/* Additional Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
           <Users className="w-4 h-4 text-[#8A9BA8]" />
           <div>
             <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Users Who Invited</p>
@@ -212,7 +212,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
             <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Avg Time to First Invite</p>
@@ -221,7 +221,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
           <Clock className="w-4 h-4 text-[#8A9BA8]" />
           <div>
             <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Avg Time to Conversion</p>
@@ -230,7 +230,7 @@ export function ViralMetricsDashboard({ className }: ViralMetricsDashboardProps)
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+        <div className="flex items-center gap-2 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
           <TrendingUp className="w-4 h-4 text-[#8A9BA8]" />
           <div>
             <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">Total Users</p>

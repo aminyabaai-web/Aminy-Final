@@ -212,7 +212,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
   return (
     <div className="min-h-screen bg-mist flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8] px-4 py-3">
+      <div className="sticky top-0 z-10 bg-[#F6FBFB]/90 backdrop-blur-md border-b border-[#EDF4F7] px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] flex items-center justify-center">
@@ -231,7 +231,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <div
                 key={i}
                 className={`w-2 h-2 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-[#2A7D99]' : 'bg-[#F0EDE8]'
+                  i <= currentStep ? 'bg-[#2A7D99]' : 'bg-[#EDF4F7]'
                 }`}
               />
             ))}
@@ -245,7 +245,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
-            className="border-b border-[#F0EDE8] bg-white/50 overflow-hidden"
+            className="border-b border-[#EDF4F7] bg-white/50 overflow-hidden"
           >
             <div className="max-w-lg mx-auto px-4 py-3">
               <p className="text-xs font-semibold text-[#8E9BAA] uppercase tracking-wider mb-2">
@@ -282,7 +282,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'parent'
                     ? 'bg-primary text-white rounded-br-md'
-                    : 'bg-white text-[#132F43] rounded-bl-md shadow-sm border border-[#F0EDE8]'
+                    : 'bg-white text-[#132F43] rounded-bl-md shadow-sm border border-[#EDF4F7]'
                 }`}
               >
                 {msg.text}
@@ -297,7 +297,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               animate={{ opacity: 1 }}
               className="flex justify-start"
             >
-              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-[#F0EDE8]">
+              <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-md shadow-sm border border-[#EDF4F7]">
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-[#8E9BAA] rounded-full animate-pulse" />
                   <div className="w-2 h-2 bg-[#8E9BAA] rounded-full animate-pulse" style={{ animationDelay: '0.2s' }} />
@@ -312,7 +312,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
       </div>
 
       {/* Input or finish button */}
-      <div className="sticky bottom-0 bg-[#FAF7F2] border-t border-[#F0EDE8] px-4 py-3"
+      <div className="sticky bottom-0 bg-[#F6FBFB] border-t border-[#EDF4F7] px-4 py-3"
            style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         <div className="max-w-lg mx-auto">
           {isComplete ? (
@@ -334,7 +334,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Type your answer..."
-                className="flex-1 bg-white border border-[#F0EDE8] rounded-xl px-4 py-3 text-sm text-[#132F43] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/30 focus:border-[#2A7D99]"
+                className="flex-1 bg-white border border-[#EDF4F7] rounded-xl px-4 py-3 text-sm text-[#132F43] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/30 focus:border-[#2A7D99]"
                 disabled={isTyping}
                 autoFocus
               />

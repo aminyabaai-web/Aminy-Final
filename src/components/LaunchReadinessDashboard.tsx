@@ -269,7 +269,7 @@ export function LaunchReadinessDashboard() {
       case 'complete': return 'text-green-600 bg-green-100';
       case 'in-progress': return 'text-yellow-600 bg-yellow-100';
       case 'missing': return 'text-red-600 bg-red-100';
-      default: return 'text-[#5A6B7A] bg-[#F0EDE8]';
+      default: return 'text-[#5A6B7A] bg-[#EDF4F7]';
     }
   };
 
@@ -304,7 +304,7 @@ export function LaunchReadinessDashboard() {
             <Button
               onClick={handleGeneratePDF}
               size="lg"
-              className="bg-white text-accent hover:bg-[#F0EDE8]"
+              className="bg-white text-accent hover:bg-[#EDF4F7]"
             >
               <Download className="w-5 h-5 mr-2" />
               Generate PDF
@@ -393,7 +393,7 @@ export function LaunchReadinessDashboard() {
         </div>
 
         {/* Next Steps */}
-        <Card className="p-6 mt-8 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+        <Card className="p-6 mt-8 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
           <h3 className="text-xl font-bold text-[#132F43] mb-4">✨ Next Steps</h3>
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div className="flex items-start gap-3">

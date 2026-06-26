@@ -145,7 +145,7 @@ export function SubscriptionPauseFlow({
   return (
     <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
       {/* Header */}
-      <div className="bg-[#FAF7F2] border-b border-[#E8E4DF] px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#F6FBFB] border-b border-[#E8E4DF] px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {pauseStatus?.isPaused ? (
             <PauseCircle className="w-4 h-4 text-amber-500" />
@@ -256,7 +256,7 @@ export function SubscriptionPauseFlow({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('select')}
-                className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl text-sm font-medium hover:bg-[#F6FBFB] transition-colors"
               >
                 Go Back
               </button>

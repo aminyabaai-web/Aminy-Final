@@ -316,7 +316,7 @@ export function TelehealthScreen({
               IEP documents, and BCBA notes. No need to manually transfer information.
             </p>
             
-            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
+            <div className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]">
               <h4 className="text-sm text-[#3A4A57] mb-2">What gets included:</h4>
               <ul className="space-y-1 text-sm text-[#5A6B7A]">
                 <li className="flex items-start gap-2">

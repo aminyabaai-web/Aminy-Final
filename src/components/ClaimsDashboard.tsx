@@ -228,7 +228,7 @@ function getStatusConfig(status: ExpenseRecord['status']) {
     case 'pending':
       return { icon: <Clock className="w-4 h-4 text-blue-500" />, label: 'Pending', color: 'bg-[#EEF4F8] text-blue-700' };
     case 'self_pay':
-      return { icon: <CreditCard className="w-4 h-4 text-[#5A6B7A]" />, label: 'Self-Pay', color: 'bg-[#FAF7F2] text-[#3A4A57]' };
+      return { icon: <CreditCard className="w-4 h-4 text-[#5A6B7A]" />, label: 'Self-Pay', color: 'bg-[#F6FBFB] text-[#3A4A57]' };
   }
 }
 
@@ -243,7 +243,7 @@ function LoadingSkeleton() {
         <div className="h-4 bg-[#E8E4DF] rounded w-1/3 mb-3" />
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="rounded-lg p-3 bg-[#FAF7F2]">
+            <div key={i} className="rounded-lg p-3 bg-[#F6FBFB]">
               <div className="h-3 bg-[#E8E4DF] rounded w-2/3 mb-2" />
               <div className="h-5 bg-[#E8E4DF] rounded w-1/2" />
             </div>
@@ -343,7 +343,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
             <p className="text-sm text-blue-600 font-medium">Pending Claims</p>
             <p className="text-lg font-bold text-[#4A6478]">{formatCurrency(pendingAmount)}</p>
           </div>
-          <div className="bg-[#FAF7F2] rounded-lg p-3">
+          <div className="bg-[#F6FBFB] rounded-lg p-3">
             <p className="text-sm text-[#5A6B7A] font-medium">Total Billed</p>
             <p className="text-lg font-bold text-[#132F43]">{formatCurrency(totalCharged)}</p>
           </div>
@@ -417,7 +417,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                       denial.status === 'appealed' ? 'bg-blue-100 text-blue-700' :
                       denial.status === 'resubmitted' ? 'bg-amber-100 text-amber-700' :
                       denial.status === 'under-review' ? 'bg-purple-100 text-purple-700' :
-                      'bg-[#F0EDE8] text-[#5A6B7A]'
+                      'bg-[#EDF4F7] text-[#5A6B7A]'
                     }`}>
                       {denial.status === 'new' ? 'New' :
                        denial.status === 'appealed' ? 'Appealed' :
@@ -535,7 +535,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                 <span className="text-[#5A6B7A]">Individual Deductible</span>
                 <span className="font-medium text-[#132F43]">$450 / $1,500</span>
               </div>
-              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div className="h-full bg-primary rounded-full" style={{ width: '30%' }} />
               </div>
               <p className="text-sm text-[#8A9BA8] mt-0.5">$1,050 remaining until deductible is met</p>
@@ -545,7 +545,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                 <span className="text-[#5A6B7A]">Out-of-Pocket Maximum</span>
                 <span className="font-medium text-[#132F43]">$470 / $6,000</span>
               </div>
-              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
               </div>
               <p className="text-sm text-[#8A9BA8] mt-0.5">After this, insurance covers 100%</p>
@@ -593,7 +593,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                     {b.unit === 'dollars' ? formatCurrency(b.remaining) : `${b.remaining} ${b.unit}`} remaining
                   </span>
                 </div>
-                <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full ${isLow ? 'bg-red-400' : 'bg-primary'}`}
                     style={{ width: `${usedPercent}%` }}

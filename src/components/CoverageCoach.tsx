@@ -206,7 +206,7 @@ export function CoverageCoach({
       case 'not_covered': return 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400';
       case 'unsure': return 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400';
       case 'pending': return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8] dark:bg-blue-900/30 dark:text-blue-400';
-      default: return 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF] dark:bg-slate-900/30 dark:text-slate-400';
+      default: return 'bg-[#F6FBFB] text-[#3A4A57] border-[#E8E4DF] dark:bg-slate-900/30 dark:text-slate-400';
     }
   };
 
@@ -380,7 +380,7 @@ export function CoverageCoach({
 
       <div className="px-4 py-6 sm:px-6 max-w-7xl mx-auto">
         {/* AI-Powered Coverage Chat CTA */}
-        <Card className="mb-8 p-6 bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#6B9080]/20">
+        <Card className="mb-8 p-6 bg-gradient-to-br from-[#F6FBFB] to-white border-2 border-[#6B9080]/20">
           <div className="flex items-start gap-3 sm:gap-4">
             <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-white" />
@@ -549,7 +549,7 @@ export function CoverageCoach({
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3 flex-1">
-                      <div className="p-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg">
+                      <div className="p-2 bg-[#EDF4F7] dark:bg-slate-700 rounded-lg">
                         {getCategoryIcon(benefit.category)}
                       </div>
                       <div className="flex-1">
@@ -580,7 +580,7 @@ export function CoverageCoach({
                   )}
 
                   {benefit.notes && (
-                    <div className="mb-3 p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-md">
+                    <div className="mb-3 p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-md">
                       <p className="text-sm text-[#3A4A57] dark:text-slate-300">
                         {benefit.notes}
                       </p>

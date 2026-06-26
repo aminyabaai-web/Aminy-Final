@@ -105,7 +105,7 @@ async function withTimeout<T>(promise: Promise<T>, fallback: T, timeoutMs = 5000
 }
 
 const STATUS_CONFIG = {
-  idle: { color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]', label: 'Idle', icon: Clock },
+  idle: { color: 'text-[#5A6B7A]', bg: 'bg-[#F6FBFB]', label: 'Idle', icon: Clock },
   syncing: { color: 'text-blue-600', bg: 'bg-[#EEF4F8]', label: 'Syncing...', icon: Loader2 },
   success: { color: 'text-green-600', bg: 'bg-green-50', label: 'Success', icon: CheckCircle2 },
   error: { color: 'text-red-600', bg: 'bg-red-50', label: 'Error', icon: XCircle },
@@ -160,7 +160,7 @@ function SyncRecordCard({
       <button
         onClick={() => setExpanded(!expanded)}
         aria-label={`${expanded ? 'Collapse' : 'Expand'} sync record for ${DATA_TYPE_LABELS[record.dataType] || record.dataType}`}
-        className="w-full flex items-center justify-between p-3 text-left hover:bg-[#FAF7F2] transition-colors"
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-[#F6FBFB] transition-colors"
       >
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <DirectionIcon size={14} className={directionColor} />
@@ -207,19 +207,19 @@ function SyncRecordCard({
       {expanded && (
         <div className="px-3 pb-3 border-t border-[#E8E4DF] pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Direction</span>
               <p className="font-medium text-[#132F43] capitalize">{record.direction}</p>
             </div>
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Records</span>
               <p className="font-medium text-[#132F43]">{record.recordsSynced}</p>
             </div>
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Last Sync</span>
               <p className="font-medium text-[#132F43]">{timeAgo(record.lastSyncAt)}</p>
             </div>
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Next Sync</span>
               <p className="font-medium text-[#132F43]">{timeAgo(record.nextSyncAt)}</p>
             </div>
@@ -299,26 +299,26 @@ function ErrorCard({
         <div className="px-3 pb-3 border-t border-red-100 pt-2 space-y-2">
           <div className="grid grid-cols-2 gap-2">
             {error.error_code && (
-              <div className="text-sm bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#F6FBFB] rounded p-2">
                 <span className="text-[#5A6B7A]">Error Code</span>
                 <p className="font-mono font-medium text-[#132F43]">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
-              <div className="text-sm bg-[#FAF7F2] rounded p-2">
+              <div className="text-sm bg-[#F6FBFB] rounded p-2">
                 <span className="text-[#5A6B7A]">Record ID</span>
                 <p className="font-mono font-medium text-[#132F43] truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Retries</span>
               <p className="font-medium text-[#132F43]">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
-            <div className="text-sm bg-[#FAF7F2] rounded p-2">
+            <div className="text-sm bg-[#F6FBFB] rounded p-2">
               <span className="text-[#5A6B7A]">Created</span>
               <p className="font-medium text-[#132F43]">
                 {formatDate(error.created_at)}
@@ -624,7 +624,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             {onBack && (
               <button
                 onClick={onBack}
-                className="min-h-11 rounded-xl border border-[#E8E4DF] px-3 py-2 text-sm text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] hover:text-[#3A4A57]"
+                className="min-h-11 rounded-xl border border-[#E8E4DF] px-3 py-2 text-sm text-[#5A6B7A] transition-colors hover:bg-[#F6FBFB] hover:text-[#3A4A57]"
               >
                 &larr; Back
               </button>
@@ -733,7 +733,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             </div>
             <div className="mt-4 grid gap-2">
               {clinicWorkflow.lanes.map((lane) => (
-                <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
+                <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB]/80 px-3 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div>
                       <p className="text-sm font-medium text-[#132F43]">{lane.label}</p>
@@ -776,7 +776,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             {syncJobs.length > 0 ? (
               <div className="mt-3 grid gap-2">
                 {syncJobs.slice(0, 6).map((job) => (
-                  <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
+                  <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB]/80 px-3 py-3">
                     <div className="flex items-center justify-between gap-3">
                       <div>
                         <p className="text-sm font-medium text-[#132F43]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
@@ -910,7 +910,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 </p>
                 <p className="text-sm text-amber-600">Partial</p>
               </div>
-              <div className="text-center bg-[#FAF7F2] rounded-lg p-2">
+              <div className="text-center bg-[#F6FBFB] rounded-lg p-2">
                 <p className="text-sm font-bold text-[#3A4A57]">
                   {formatDuration(history.avgDurationMs)}
                 </p>

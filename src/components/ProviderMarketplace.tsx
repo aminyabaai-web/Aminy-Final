@@ -750,7 +750,7 @@ export function ProviderMarketplace({
                 className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
-                    : 'text-[#5A6B7A] hover:bg-[#F0EDE8]'
+                    : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'
                 }`}
               >
                 <cat.icon className="w-4 h-4" />
@@ -875,7 +875,7 @@ export function ProviderMarketplace({
 
         {/* Advanced Filter Panel */}
         {showFilters && (
-          <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2]/50 to-cyan-50/50">
+          <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB]/50 to-cyan-50/50">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-[#132F43] flex items-center gap-2">
                 <Filter className="w-4 h-4 text-[#6B9080]" />
@@ -938,7 +938,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
                       filters.availableThisWeek
                         ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080]'
-                        : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#3A4A57] hover:bg-[#F6FBFB]'
                     }`}
                   >
                     <Check className={`w-3.5 h-3.5 inline mr-1 ${filters.availableThisWeek ? 'opacity-100' : 'opacity-0'}`} />
@@ -983,7 +983,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.languages.includes(lang)
                         ? 'bg-[#6B9080]/10 border-[#6B9080]/30 text-[#6B9080] border'
-                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#F6FBFB]'
                     }`}
                   >
                     {lang}
@@ -1006,7 +1006,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.conditions.includes(cond)
                         ? 'bg-violet-100 border-violet-300 text-violet-700 border'
-                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#F6FBFB]'
                     }`}
                   >
                     {cond}
@@ -1029,7 +1029,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.specialties.includes(spec)
                         ? 'bg-[#6B9080]/10 border-cyan-300 text-cyan-700 border'
-                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#F6FBFB]'
                     }`}
                   >
                     {spec}
@@ -1052,7 +1052,7 @@ export function ProviderMarketplace({
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       filters.insurances.includes(ins)
                         ? 'bg-green-100 border-green-300 text-green-700 border'
-                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#FAF7F2]'
+                        : 'bg-white border-[#E8E4DF] text-[#5A6B7A] border hover:bg-[#F6FBFB]'
                     }`}
                   >
                     {ins}

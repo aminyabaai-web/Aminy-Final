@@ -114,7 +114,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -154,7 +154,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
         <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
           <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your Referral Link</p>
           <div className="flex items-center gap-2">
-            <div className="flex-1 overflow-hidden rounded-lg bg-[#F0EDE8] px-3 py-2 text-sm text-[#3A4A57] truncate">
+            <div className="flex-1 overflow-hidden rounded-lg bg-[#EDF4F7] px-3 py-2 text-sm text-[#3A4A57] truncate">
               {referral.shareUrl}
             </div>
             <button
@@ -172,21 +172,21 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
         <div className="flex gap-3">
           <button
             onClick={() => setInviteMode('sms')}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             <MessageSquare className="h-4 w-4 text-green-600" />
             Text
           </button>
           <button
             onClick={() => setInviteMode('email')}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             <Mail className="h-4 w-4 text-blue-600" />
             Email
           </button>
           <button
             onClick={handleCopy}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-3 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             <Share2 className="h-4 w-4 text-purple-600" />
             Share
@@ -234,7 +234,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
             {milestones.map((m, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                  m.reached ? 'bg-[#2A7D99]/10 text-[#2A7D99]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
+                  m.reached ? 'bg-[#2A7D99]/10 text-[#2A7D99]' : 'bg-[#EDF4F7] text-[#8A9BA8]'
                 }`}>
                   {m.reached ? <Check className="h-4 w-4" /> : m.count}
                 </div>
@@ -383,7 +383,7 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -421,7 +421,7 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                   <span>{challenge.progress}/{challenge.goal}</span>
                   <span>{progressPct}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${progressPct}%` }}

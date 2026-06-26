@@ -247,7 +247,7 @@ export function AdaptiveReminders({ childName = 'Eddie', onClose }: AdaptiveRemi
                 <Label className="text-base font-medium mb-3 block">
                   Preview
                 </Label>
-                <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg p-4">
+                <div className="bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <Bell className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-[#3A4A57] flex-1">
@@ -547,7 +547,7 @@ export function AdaptiveRemindersExample() {
           >
             <button
               onClick={() => setShowSettings(false)}
-              className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               ← Back
             </button>

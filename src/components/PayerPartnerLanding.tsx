@@ -149,7 +149,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors"
+              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
@@ -194,7 +194,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-1.5 border border-[#E8E4DF] text-[#3A4A57] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#FAF7F2] transition-colors"
+              className="inline-flex items-center gap-1.5 border border-[#E8E4DF] text-[#3A4A57] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#F6FBFB] transition-colors"
             >
               See Features
             </a>

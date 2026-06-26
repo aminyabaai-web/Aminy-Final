@@ -312,7 +312,7 @@ export function WinsJournal({ userId }: { userId: string }) {
             </div>
           </CardHeader>
           <CardContent className="space-y-3 sm:space-y-4">
-            <div className="p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="p-4 bg-[#F6FBFB] rounded-lg">
               <p className="text-sm text-[#3A4A57] leading-relaxed">
                 {weeklySummary.generatedSummary}
               </p>
@@ -378,7 +378,7 @@ export function WinsJournal({ userId }: { userId: string }) {
               {moments.slice(0, 10).map((moment) => (
                 <div
                   key={moment.id}
-                  className="p-4 bg-[#FAF7F2] rounded-lg hover:bg-[#F0EDE8] transition-colors"
+                  className="p-4 bg-[#F6FBFB] rounded-lg hover:bg-[#EDF4F7] transition-colors"
                 >
                   <p className="text-sm text-[#3A4A57] leading-relaxed mb-2">
                     {moment.content}

@@ -402,7 +402,7 @@ export function OutcomesTracking({
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {caregiverMetrics.parentWellbeing.stressLevel !== null && (
-              <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+              <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
                 <div className={`text-xl sm:text-2xl font-bold ${
                   caregiverMetrics.parentWellbeing.stressLevel === 'low' ? 'text-green-600' :
                   caregiverMetrics.parentWellbeing.stressLevel === 'moderate' ? 'text-amber-600' :
@@ -421,14 +421,14 @@ export function OutcomesTracking({
               </div>
             )}
             {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
-              <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+              <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
                 <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
                   {caregiverMetrics.parentWellbeing.confidenceScore}%
                 </div>
                 <div className="text-sm text-[#5A6B7A]">Confidence Score</div>
               </div>
             )}
-            <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+            <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
               <div className="text-xl sm:text-2xl font-bold text-violet-600">
                 {caregiverMetrics.parentWellbeing.supportSessions}
               </div>

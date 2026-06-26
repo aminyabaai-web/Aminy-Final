@@ -229,7 +229,7 @@ export function ReferralShare({
             <Input
               value={referralLink}
               readOnly
-              className="bg-[#FAF7F2] text-sm"
+              className="bg-[#F6FBFB] text-sm"
             />
             <Button onClick={handleCopy} variant={copied ? 'default' : 'outline'}>
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -326,7 +326,7 @@ export function ReferralShare({
       </div>
 
       {/* Copy link section */}
-      <div className="p-4 bg-[#FAF7F2] rounded-lg mb-4 sm:mb-6">
+      <div className="p-4 bg-[#F6FBFB] rounded-lg mb-4 sm:mb-6">
         <p className="text-sm font-medium text-[#3A4A57] mb-2">Or copy your referral link:</p>
         <div className="flex gap-2">
           <Input

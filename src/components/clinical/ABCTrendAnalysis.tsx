@@ -381,7 +381,7 @@ export function ABCTrendAnalysis({
       </div>
 
       {/* Summary Header */}
-      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
+      <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
         <div className="flex items-start justify-between">
           <div>
             <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white mb-1">
@@ -478,7 +478,7 @@ export function ABCTrendAnalysis({
               {analytics.dailyPatterns.map((d) => (
                 <div key={d.day} className="flex items-center gap-3">
                   <span className="w-10 text-sm text-[#5A6B7A] dark:text-slate-400">{d.day}</span>
-                  <div className="flex-1 h-4 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="flex-1 h-4 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full transition-all"
                       style={{ width: `${d.percentage}%` }}
@@ -551,8 +551,8 @@ export function ABCTrendAnalysis({
                 corr.type === 'strong'
                   ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
                   : corr.type === 'moderate'
-                  ? 'bg-[#FDF9F0] dark:bg-yellow-900/20 border-[#F0EDE8] dark:border-yellow-800'
-                  : 'bg-[#FAF7F2] dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700'
+                  ? 'bg-[#FDF9F0] dark:bg-yellow-900/20 border-[#EDF4F7] dark:border-yellow-800'
+                  : 'bg-[#F6FBFB] dark:bg-slate-800 border-[#E8E4DF] dark:border-slate-700'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
@@ -602,7 +602,7 @@ export function ABCTrendAnalysis({
                       {a.count} ({a.percentage.toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-500 rounded-full"
                       style={{ width: `${a.percentage}%` }}
@@ -630,7 +630,7 @@ export function ABCTrendAnalysis({
                       {b.count} ({b.percentage.toFixed(0)}%)
                     </span>
                   </div>
-                  <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-red-500 rounded-full"
                       style={{ width: `${b.percentage}%` }}

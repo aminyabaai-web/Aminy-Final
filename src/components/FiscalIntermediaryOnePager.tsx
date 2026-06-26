@@ -64,7 +64,7 @@ export function FiscalIntermediaryOnePager({
           <Target className="w-5 h-5 text-[#6B9080]" />
           The Challenge
         </h2>
-        <div className="bg-[#FAF7F2] rounded-xl p-4">
+        <div className="bg-[#F6FBFB] rounded-xl p-4">
           <p className="text-[#3A4A57] leading-relaxed">
             Self-directed families receive <strong>funding for services</strong> but often lack the{' '}
             <strong>daily guidance</strong> to maximize outcomes. Your care coordinators can't be
@@ -150,19 +150,19 @@ export function FiscalIntermediaryOnePager({
           Pilot Results
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+          <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">40%</div>
             <div className="text-sm text-[#5A6B7A] mt-1">Fewer support calls</div>
           </div>
-          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+          <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">2.5hrs</div>
             <div className="text-sm text-[#5A6B7A] mt-1">Saved/family/week</div>
           </div>
-          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+          <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">94%</div>
             <div className="text-sm text-[#5A6B7A] mt-1">6-month retention</div>
           </div>
-          <div className="text-center p-4 bg-[#FAF7F2] rounded-lg">
+          <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
             <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">92%</div>
             <div className="text-sm text-[#5A6B7A] mt-1">Family satisfaction</div>
           </div>
@@ -226,7 +226,7 @@ export function FiscalIntermediaryOnePager({
         <h2 className="text-lg font-bold text-[#132F43] mb-3">Volume Pricing</h2>
         <div className="overflow-hidden rounded-lg border border-[#E8E4DF]">
           <table className="w-full text-sm">
-            <thead className="bg-[#FAF7F2]">
+            <thead className="bg-[#F6FBFB]">
               <tr>
                 <th className="px-4 py-2 text-left font-medium text-[#132F43]">Family Count</th>
                 <th className="px-4 py-2 text-left font-medium text-[#132F43]">Per Family/Month</th>

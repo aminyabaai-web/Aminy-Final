@@ -180,7 +180,7 @@ const HELP_CATEGORIES: HelpCategory[] = [
     label: 'Privacy & Records',
     icon: Lock,
     color: 'text-[#5A6B7A]',
-    bgColor: 'bg-[#F0EDE8]',
+    bgColor: 'bg-[#EDF4F7]',
     faqs: [
       {
         question: 'Who can see my child\'s records?',
@@ -226,7 +226,7 @@ function FAQAccordion({ faqs }: { faqs: FAQItem[] }) {
       {faqs.map((faq, i) => (
         <div key={i}>
           <button
-            className="w-full flex items-start gap-3 p-4 text-left hover:bg-[#FAF7F2] transition-colors"
+            className="w-full flex items-start gap-3 p-4 text-left hover:bg-[#F6FBFB] transition-colors"
             onClick={() => setOpenIdx(openIdx === i ? null : i)}
           >
             <span className="text-sm font-medium text-[#132F43] flex-1 leading-relaxed">{faq.question}</span>
@@ -293,7 +293,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
             <p className="text-sm text-slate-400">Typically replies in under 2 hours</p>
           </div>
         </div>
-        <button onClick={onClose} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
+        <button onClick={onClose} className="p-2 rounded-xl hover:bg-[#F6FBFB] transition-colors">
           <ChevronDown className="w-5 h-5 text-slate-400" />
         </button>
       </div>
@@ -304,7 +304,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
             <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
               msg.from === 'parent'
                 ? 'bg-slate-900 text-white rounded-br-sm'
-                : 'bg-[#F0EDE8] text-[#132F43] rounded-bl-sm'
+                : 'bg-[#EDF4F7] text-[#132F43] rounded-bl-sm'
             }`}>
               {msg.text}
             </div>
@@ -319,7 +319,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && send()}
           placeholder="Type your question..."
-          className="flex-1 px-4 py-2.5 bg-[#F0EDE8] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="flex-1 px-4 py-2.5 bg-[#EDF4F7] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         <button
           onClick={send}
@@ -376,7 +376,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-4">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
+            <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#F6FBFB] transition-colors">
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
@@ -384,7 +384,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
             <>
               <button
                 onClick={() => setActiveCategory(null)}
-                className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors"
+                className="p-2 rounded-xl hover:bg-[#F6FBFB] transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>

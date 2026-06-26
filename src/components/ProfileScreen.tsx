@@ -808,7 +808,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               <div className="space-y-3">
                 {connectedAccounts.length > 0 ? (
                   connectedAccounts.map(account => (
-                    <div key={account.provider} className="flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                    <div key={account.provider} className="flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                       <div className="flex items-center gap-3">
                         {account.provider === 'google' ? (
                           <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow">
@@ -852,7 +852,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
             <Card className="divide-y divide-[#E8E4DF] dark:divide-slate-700">
               <button
                 onClick={() => onNavigate?.('caregivers')}
-                className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+                className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <Users className="w-5 h-5 text-primary" />
@@ -866,7 +866,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
 
               <button
                 onClick={() => onNavigate?.('settings')}
-                className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors"
+                className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <Shield className="w-5 h-5 text-primary" />
@@ -1007,7 +1007,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 {sessions.map(session => (
                   <div
                     key={session.id}
-                    className="flex items-center justify-between p-3 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
@@ -1168,7 +1168,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       key={diagnosis}
                       variant={isSelected ? 'default' : 'outline'}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-primary hover:bg-[#216982]' : 'hover:bg-[#F0EDE8]'
+                        isSelected ? 'bg-primary hover:bg-[#216982]' : 'hover:bg-[#EDF4F7]'
                       }`}
                       onClick={() => {
                         if (editingChild) {
@@ -1212,7 +1212,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       key={concern}
                       variant={isSelected ? 'default' : 'outline'}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-[#7BA7BC] hover:bg-[#7BA7BC]' : 'hover:bg-[#F0EDE8]'
+                        isSelected ? 'bg-[#7BA7BC] hover:bg-[#7BA7BC]' : 'hover:bg-[#EDF4F7]'
                       }`}
                       onClick={() => {
                         if (editingChild) {
