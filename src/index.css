@@ -6574,7 +6574,7 @@ img[fetchpriority="high"], img[loading="eager"] {
   --shadow-lg: 0 10px 15px -3px #0000001a, 0 4px 6px -2px #0000000d;
   --shadow-xl: 0 20px 25px -5px #0000001a, 0 10px 10px -5px #0000000a;
   --shadow-ai-glow: 0 0 20px #c9ead94d, 0 0 40px #ffe2b633;
-  --shadow-accent-glow: 0 0 15px rgba(107,144,128,0.22);
+  --shadow-accent-glow: 0 0 15px rgba(78,147,168,0.22);
   --z-base: 0;
   --z-dropdown: 1000;
   --z-sticky: 1100;
@@ -17414,11 +17414,11 @@ h4, h5, h6 {
 
 /* ── Text selection: brand sage green ──────────────────────────────── */
 ::selection {
-  background-color: rgba(107, 144, 128, 0.18);
+  background-color: rgba(78, 147, 168, 0.18);
   color: #0D1B2A;
 }
 ::-moz-selection {
-  background-color: rgba(107, 144, 128, 0.18);
+  background-color: rgba(78, 147, 168, 0.18);
   color: #0D1B2A;
 }
 
@@ -17437,11 +17437,11 @@ h4, h5, h6 {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(107, 144, 128, 0.22);
+  background-color: rgba(78, 147, 168, 0.22);
   border-radius: 100px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(107, 144, 128, 0.45);
+  background-color: rgba(78, 147, 168, 0.45);
 }
 
 /* ── Smooth tap highlight removal (mobile) ─────────────────────────── */
@@ -17570,10 +17570,10 @@ button, a, [role="button"] {
 .active\:bg-\[\#6B9080\]:active { background-color: #6B9080; }
 .border-\[\#6B9080\] { border-color: #6B9080; }
 /* opacity utilities for brand colors */
-.bg-\[\#6B9080\]\/10 { background-color: rgba(107,144,128,0.10); }
-.bg-\[\#6B9080\]\/20 { background-color: rgba(107,144,128,0.20); }
-.border-\[\#6B9080\]\/20 { border-color: rgba(107,144,128,0.20); }
-.text-\[\#6B9080\]\/50 { color: rgba(107,144,128,0.50); }
+.bg-\[\#6B9080\]\/10 { background-color: rgba(78,147,168,0.10); }
+.bg-\[\#6B9080\]\/20 { background-color: rgba(78,147,168,0.20); }
+.border-\[\#6B9080\]\/20 { border-color: rgba(78,147,168,0.20); }
+.text-\[\#6B9080\]\/50 { color: rgba(78,147,168,0.50); }
 /* extra brand utilities for component-level use */
 .hover\:bg-\[\#FAF7F2\]:hover { background-color: #FAF7F2; }
 .border-\[\#E8E4DF\] { border-color: #E8E4DF; }
@@ -17585,7 +17585,7 @@ button, a, [role="button"] {
 .bg-\[\#E07A5F\]\/10 { background-color: rgba(224,122,95,0.10); }
 .text-\[\#E07A5F\] { color: #E07A5F; }
 .border-\[\#43AA8B\]\/20 { border-color: rgba(78,147,168,0.20); }
-.bg-\[\#7BA7BC\]\/10 { background-color: rgba(123,167,188,0.10); }
+.bg-\[\#7BA7BC\]\/10 { background-color: rgba(106,169,188,0.10); }
 .text-\[\#7BA7BC\] { color: #6AA9BC; }
 
 /* ── Premium Interaction Polish ─────────────────────────────────────── */
@@ -17602,14 +17602,14 @@ button, a, [role="button"] {
 /* Button press feedback already in button.tsx (active:scale-[0.97]);
    add consistent focus ring glow for brand */
 [data-slot="button"]:focus-visible {
-  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.25);
+  box-shadow: 0 0 0 3px rgba(78, 147, 168, 0.25);
 }
 
 /* Input premium feel: warm background tint on focus */
 [data-slot="input"]:focus {
   background-color: #FDFAF7;
   border-color: #6B9080;
-  box-shadow: 0 0 0 3px rgba(107, 144, 128, 0.12);
+  box-shadow: 0 0 0 3px rgba(78, 147, 168, 0.12);
 }
 
 /* Badge refinement: pill shape for secondary badges */
@@ -17701,9 +17701,9 @@ tr:hover td, .hover-row:hover {
   border-radius: 100px;
   font-size: 12px;
   font-weight: 500;
-  background-color: rgba(107, 144, 128, 0.10);
+  background-color: rgba(78, 147, 168, 0.10);
   color: #6B9080;
-  border: 1px solid rgba(107, 144, 128, 0.18);
+  border: 1px solid rgba(78, 147, 168, 0.18);
 }
 
 /* Gradient text utility for headlines */
@@ -17719,7 +17719,7 @@ tr:hover td, .hover-row:hover {
   width: 64px;
   height: 64px;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(107,144,128,0.1), rgba(123,167,188,0.1));
+  background: linear-gradient(135deg, rgba(78,147,168,0.1), rgba(106,169,188,0.1));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17727,10 +17727,10 @@ tr:hover td, .hover-row:hover {
 }
 
 /* Missing utility extras */
-.border-\[\#6B9080\]\/30 { border-color: rgba(107,144,128,0.30); }
-.bg-\[\#6B9080\]\/5 { background-color: rgba(107,144,128,0.05); }
+.border-\[\#6B9080\]\/30 { border-color: rgba(78,147,168,0.30); }
+.bg-\[\#6B9080\]\/5 { background-color: rgba(78,147,168,0.05); }
 .bg-\[\#FAF7F2\]\/80 { background-color: rgba(250,247,242,0.80); }
-.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(107,144,128,0)); }
+.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(78,147,168,0)); }
 .to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
 .from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250,247,242,0)); }
 .to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }

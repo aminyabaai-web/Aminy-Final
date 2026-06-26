@@ -242,7 +242,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     <div style={{ fontSize: '36px', fontWeight: 700, color: '#6B9080', marginBottom: '8px', letterSpacing: '-0.03em' }}>
                                         {selectedPatient.progressScore}%
                                     </div>
-                                    <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(107, 144, 128, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                                    <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(78, 147, 168, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
                                         <div style={{ width: selectedPatient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '4px' }} />
                                     </div>
                                 </div>
@@ -662,7 +662,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                 <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'rgba(17, 24, 39, 0.4)', marginBottom: '4px', fontWeight: 600 }}>Progress</p>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                     <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>{patient.progressScore}%</span>
-                                                    <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(107, 144, 128, 0.2)', borderRadius: '2px' }}>
+                                                    <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(78, 147, 168, 0.2)', borderRadius: '2px' }}>
                                                         <div style={{ width: patient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '2px' }} />
                                                     </div>
                                                 </div>
@@ -677,7 +677,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
 
                                 {filteredPatients.length === 0 && (
                                     <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#FFFFFF', borderRadius: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                                        <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(107, 144, 128, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(78, 147, 168, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <Users size={32} color="#6B9080" />
                                         </div>
                                         <div>

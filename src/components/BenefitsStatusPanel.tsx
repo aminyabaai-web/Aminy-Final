@@ -62,7 +62,7 @@ const STATUS_CONFIG: Record<BenefitStatusValue, {
   label: string;
 }> = {
   'not-started': { icon: Clock,         color: '#8A9BA8', bg: '#F5F2EC', label: 'Not started' },
-  'submitted':   { icon: Clock,         color: '#7BA7BC', bg: 'rgba(123,167,188,0.12)', label: 'Submitted' },
+  'submitted':   { icon: Clock,         color: '#6AA9BC', bg: 'rgba(106,169,188,0.12)', label: 'Submitted' },
   'review':      { icon: Clock,         color: '#E0A45F', bg: 'rgba(224,164,95,0.12)',  label: 'In review' },
   'approved':    { icon: CheckCircle,   color: '#4E93A8', bg: 'rgba(78,147,168,0.12)',  label: 'Approved ✓' },
   'info-requested': { icon: FileQuestion, color: '#E07A5F', bg: 'rgba(224,122,95,0.12)', label: 'Info needed' },
@@ -148,14 +148,14 @@ export function BenefitsStatusPanel({
       {stateConfig && (
         <div
           style={{
-            background: 'rgba(107,144,128,0.07)',
-            border: '1px solid rgba(107,144,128,0.18)',
+            background: 'rgba(78,147,168,0.07)',
+            border: '1px solid rgba(78,147,168,0.18)',
             borderRadius: 14,
             padding: '14px 16px',
             marginBottom: 16,
           }}
         >
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#6B9080', letterSpacing: '0.06em', marginBottom: 8 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#4E93A8', letterSpacing: '0.06em', marginBottom: 8 }}>
             {stateConfig.name.toUpperCase()} BENEFITS NAVIGATOR
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -179,7 +179,7 @@ export function BenefitsStatusPanel({
               href={`tel:${stateConfig.ddAgency.phone.replace(/\D/g, '')}`}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                marginTop: 10, fontSize: 13, fontWeight: 600, color: '#6B9080',
+                marginTop: 10, fontSize: 13, fontWeight: 600, color: '#4E93A8',
                 textDecoration: 'none',
               }}
             >
@@ -318,7 +318,7 @@ export function BenefitsStatusPanel({
                 rel="noopener noreferrer"
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8,
-                  fontSize: 13, color: '#7BA7BC', fontWeight: 500,
+                  fontSize: 13, color: '#6AA9BC', fontWeight: 500,
                   textDecoration: 'none',
                   padding: '8px 12px',
                   background: '#fff',
@@ -355,10 +355,10 @@ function CompactView({ programs, stateConfig }: { programs: BenefitTrackedItem[]
     <div style={{ fontFamily: 'Manrope, system-ui, sans-serif' }}>
       {stateConfig && (
         <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#6B9080', background: 'rgba(107,144,128,0.10)', borderRadius: 100, padding: '2px 10px' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: '#4E93A8', background: 'rgba(78,147,168,0.10)', borderRadius: 100, padding: '2px 10px' }}>
             {stateConfig.medicaid.name}
           </span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#7BA7BC', background: 'rgba(123,167,188,0.10)', borderRadius: 100, padding: '2px 10px' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: '#6AA9BC', background: 'rgba(106,169,188,0.10)', borderRadius: 100, padding: '2px 10px' }}>
             {stateConfig.ddAgency.abbreviation}
           </span>
           <span style={{ fontSize: 12, fontWeight: 600, color: '#4E93A8', background: 'rgba(78,147,168,0.10)', borderRadius: 100, padding: '2px 10px' }}>
@@ -375,7 +375,7 @@ function CompactView({ programs, stateConfig }: { programs: BenefitTrackedItem[]
         )}
         {inProgress > 0 && (
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 20, fontWeight: 700, color: '#7BA7BC' }}>{inProgress}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#6AA9BC' }}>{inProgress}</div>
             <div style={{ fontSize: 11, color: '#8A9BA8' }}>In progress</div>
           </div>
         )}

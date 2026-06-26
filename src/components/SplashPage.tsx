@@ -376,8 +376,8 @@ export function SplashPage({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '5px',
-                      background: 'rgba(123,167,188,0.07)',
-                      border: '1px solid rgba(123,167,188,0.25)',
+                      background: 'rgba(106,169,188,0.07)',
+                      border: '1px solid rgba(106,169,188,0.25)',
                       borderRadius: '100px',
                       color: '#4A8A9C',
                       fontFamily: fontStack,
@@ -389,12 +389,12 @@ export function SplashPage({
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.45)';
+                      e.currentTarget.style.backgroundColor = 'rgba(106,169,188,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(106,169,188,0.45)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.25)';
+                      e.currentTarget.style.backgroundColor = 'rgba(106,169,188,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(106,169,188,0.25)';
                     }}
                   >
                     Just diagnosed? First 30 Days plan →
