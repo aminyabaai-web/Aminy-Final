@@ -597,7 +597,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
       <div className="rounded-3xl border border-[#E8E4DF] bg-white/92 px-5 py-5 shadow-sm">
         <nav aria-label="CentralReach navigation" className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.18em] text-[#6B9080]">CentralReach operator lane</p>
+            <p className="text-sm uppercase tracking-[0.18em] text-[#6B9080]">CentralReach operator lane</p>
             <h1 className="mt-1 text-xl font-bold tracking-tight text-[#1B2733]">Sync Dashboard</h1>
             <h2 className="sr-only">CentralReach sync overview</h2>
             <h3 className="sr-only">Import, export, and reconciliation status</h3>
@@ -715,19 +715,19 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
               <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-emerald-700">Healthy</p>
+                <p className="text-sm uppercase tracking-[0.18em] text-emerald-700">Healthy</p>
                 <p className="mt-1 text-xl font-semibold text-emerald-800">{clinicWorkflow.healthyLanes}</p>
               </div>
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-amber-700">Warnings</p>
+                <p className="text-sm uppercase tracking-[0.18em] text-amber-700">Warnings</p>
                 <p className="mt-1 text-xl font-semibold text-amber-800">{clinicWorkflow.warningLanes}</p>
               </div>
               <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-rose-700">Blocked</p>
+                <p className="text-sm uppercase tracking-[0.18em] text-rose-700">Blocked</p>
                 <p className="mt-1 text-xl font-semibold text-rose-800">{clinicWorkflow.blockedLanes}</p>
               </div>
               <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3">
-                <p className="text-xs uppercase tracking-[0.18em] text-sky-700">Tracked lanes</p>
+                <p className="text-sm uppercase tracking-[0.18em] text-sky-700">Tracked lanes</p>
                 <p className="mt-1 text-xl font-semibold text-sky-800">{clinicWorkflow.totalLanes}</p>
               </div>
             </div>

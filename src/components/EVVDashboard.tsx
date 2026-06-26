@@ -476,7 +476,7 @@ export default function EVVDashboard({
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
+              <p className="text-sm uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
               <h2 className="text-lg font-semibold text-[#1B2733] mt-1">
                 {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
               </h2>
@@ -504,7 +504,7 @@ export default function EVVDashboard({
             </div>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="text-xs uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
+            <span className="text-sm uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
             {cutoverSummary.systemsValidated.length > 0 ? (
               cutoverSummary.systemsValidated.map((system) => (
                 <span
@@ -663,7 +663,7 @@ function ClockTab({
         {activeSession ? (
           <>
             <div className="mb-4">
-              <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Session in progress</p>
+              <p className="text-sm text-[#5A6B7A] uppercase tracking-wide mb-1">Session in progress</p>
               <p className="text-5xl font-mono font-bold text-[#1B2733] tabular-nums">
                 {formatElapsed(elapsedSeconds)}
               </p>

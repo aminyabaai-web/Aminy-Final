@@ -251,7 +251,7 @@ function ScorecardSummaryBar({ categories }: { categories: KPICategory[] }) {
     <Card className="p-4 bg-slate-900 text-white">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <p className="text-xs text-slate-400 uppercase tracking-widest">AACT Payer Scorecard</p>
+          <p className="text-sm text-slate-400 uppercase tracking-widest">AACT Payer Scorecard</p>
           <p className="text-lg font-bold mt-0.5">{entered.length}/{total} metrics tracked</p>
         </div>
         <div className="flex gap-4">

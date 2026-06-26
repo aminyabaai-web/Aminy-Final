@@ -224,7 +224,7 @@ export function TelehealthScreen({
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-semibold text-teal-900">Free 15-Min Meet & Greet</h3>
-                <span className="text-xs font-semibold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">No cost</span>
+                <span className="text-sm font-semibold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">No cost</span>
               </div>
               <p className="text-sm text-teal-800 mb-3">
                 Not sure where to start? Meet a BCBA who specializes in {childName}'s needs — no commitment, no charge. Find the right fit before you commit.
