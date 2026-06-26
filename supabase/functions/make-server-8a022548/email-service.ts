@@ -626,8 +626,8 @@ export async function sendBCBAResponseEmail(
     .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
-    .preview-box { background: #f8fafc; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; color: #475569; font-style: italic; }
-    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .preview-box { background: #f8fafc; border-left: 4px solid #4E93A8; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; color: #475569; font-style: italic; }
+    .button { display: inline-block; background: #4E93A8; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
 </head>
@@ -691,9 +691,9 @@ export async function sendSessionNotesEmail(
     .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
-    .session-info { background: #f0fdfa; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .session-info { background: #f0fdfa; border-left: 4px solid #4E93A8; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
     .session-info p { margin: 4px 0; font-size: 14px; }
-    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .button { display: inline-block; background: #4E93A8; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
 </head>

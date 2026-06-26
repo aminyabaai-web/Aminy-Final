@@ -176,7 +176,7 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
                   data: trend.map(t => ({ week: t.week, 'PHQ-9': t.phq9 ?? 0, 'GAD-7': t.gad7 ?? 0, 'ABC-I': t.abc ?? 0 })),
                   xKey: 'week',
                   yKeys: ['PHQ-9', 'GAD-7', 'ABC-I'],
-                  colors: ['#577590', '#43AA8B', '#E07A5F'],
+                  colors: ['#577590', '#4E93A8', '#E07A5F'],
                 }}
               />
               <p className="text-sm text-slate-400 text-center mt-1">
@@ -195,7 +195,7 @@ function OutcomeSummaryCard({ summary }: { summary: OutcomeSummary }) {
   const isImproving = deltaPct != null && ((lowerIsBetter && deltaPct < 0) || (!lowerIsBetter && deltaPct > 0));
   const isWorsening = deltaPct != null && ((lowerIsBetter && deltaPct > 0) || (!lowerIsBetter && deltaPct < 0));
 
-  const color = isImproving ? '#43AA8B' : isWorsening ? '#E07A5F' : '#64748b';
+  const color = isImproving ? '#4E93A8' : isWorsening ? '#E07A5F' : '#64748b';
   const Icon = isImproving ? TrendingDown : isWorsening ? TrendingUp : Minus;
 
   return (

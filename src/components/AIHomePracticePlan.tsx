@@ -138,7 +138,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
         onClick={generatePlan}
         disabled={isGenerating || targets.length === 0}
         className="w-full"
-        style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
       >
         {isGenerating
           ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating 2-week plan…</>
@@ -150,7 +150,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
   return (
     <div className="space-y-3">
       {/* Header */}
-      <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B18 0%, #57759018 100%)', border: '1px solid #43AA8B35' }}>
+      <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A818 0%, #57759018 100%)', border: '1px solid #4E93A835' }}>
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-sm font-semibold text-[#1B2733]">✦ 2-Week Practice Plan</p>

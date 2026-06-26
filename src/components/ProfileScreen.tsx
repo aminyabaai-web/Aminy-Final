@@ -657,7 +657,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     {profile.photoUrl ? (
                       <AvatarImage src={profile.photoUrl} alt={profile.name} />
                     ) : (
-                      <AvatarFallback className="text-white text-2xl font-semibold" style={{ background: 'linear-gradient(135deg, #6B9080, #7BA7BC)' }}>
+                      <AvatarFallback className="text-white text-2xl font-semibold" style={{ background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)' }}>
                         {profile.name?.charAt(0)?.toUpperCase() || 'U'}
                       </AvatarFallback>
                     )}
@@ -680,12 +680,14 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 <div className="flex-1">
                   <h2 className="text-xl font-semibold dark:text-white">{profile.name}</h2>
                   <p className="text-muted-foreground">{profile.email}</p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Member since {new Date(profile.createdAt).toLocaleDateString('en-US', {
-                      month: 'long',
-                      year: 'numeric'
-                    })}
-                  </p>
+                  {profile.createdAt && !isNaN(new Date(profile.createdAt).getTime()) && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Member since {new Date(profile.createdAt).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  )}
                 </div>
               </div>
             </Card>
@@ -894,7 +896,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     {child.photoUrl ? (
                       <AvatarImage src={child.photoUrl} alt={child.name} />
                     ) : (
-                      <AvatarFallback className="text-white text-xl font-semibold" style={{ background: 'linear-gradient(135deg, #7BA7BC, #6B9080)' }}>
+                      <AvatarFallback className="text-white text-xl font-semibold" style={{ background: 'linear-gradient(135deg, #6AA9BC, #4E93A8)' }}>
                         {child.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}
@@ -1090,7 +1092,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                     {editingChild.photoUrl ? (
                       <AvatarImage src={editingChild.photoUrl} alt={editingChild.name} />
                     ) : (
-                      <AvatarFallback className="text-white text-2xl" style={{ background: 'linear-gradient(135deg, #7BA7BC, #6B9080)' }}>
+                      <AvatarFallback className="text-white text-2xl" style={{ background: 'linear-gradient(135deg, #6AA9BC, #4E93A8)' }}>
                         {editingChild.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}

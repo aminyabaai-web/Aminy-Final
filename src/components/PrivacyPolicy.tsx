@@ -101,6 +101,15 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <li>Analyze usage to improve our features</li>
               <li>Comply with legal obligations</li>
             </ul>
+
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">SMS and Text Messages</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              If you provide your phone number, we may send you appointment reminders, session notifications,
+              and service updates via SMS. You can opt out at any time by replying STOP to any message or
+              updating your preferences in Settings. Opting out will not affect core app functionality.
+              We do not sell or share your phone number with third parties for their marketing purposes.
+              SMS messages are delivered via Twilio, our SMS provider, who acts as a data processor.
+            </p>
           </section>
 
           {/* Data Security */}
@@ -153,6 +162,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
               <li>Delete your data ("right to be forgotten")</li>
               <li>Export your data in a portable format</li>
               <li>Opt out of marketing communications</li>
+              <li>Opt out of SMS/text messages by replying STOP or via Settings</li>
               <li>Withdraw consent at any time</li>
             </ul>
             <p className="text-[#5A6B7A] leading-relaxed mt-4">

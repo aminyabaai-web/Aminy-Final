@@ -72,7 +72,7 @@ const SimpleLineChart: React.FC<{
   height?: number;
   color?: string;
   showArea?: boolean;
-}> = ({ data, height = 150, color = '#6B9080', showArea = true }) => {
+}> = ({ data, height = 150, color = '#4E93A8', showArea = true }) => {
   if (data.length === 0) return null;
 
   const padding = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -265,7 +265,7 @@ const ActivityHeatmap: React.FC<{
     <div className="flex items-end gap-1 h-20">
       {data.map((d, i) => {
         const intensity = d.count / maxCount;
-        const bgColor = `rgba(107, 144, 128, ${Math.max(0.1, intensity)})`;
+        const bgColor = `rgba(78, 147, 168, ${Math.max(0.1, intensity)})`;
 
         return (
           <div
@@ -336,7 +336,7 @@ export function AnalyticsCharts({
     return {
       progressOverTime,
       activitiesByCategory: [
-        { category: 'Routines', count: 42, color: '#6B9080' },
+        { category: 'Routines', count: 42, color: '#4E93A8' },
         { category: 'Communication', count: 28, color: '#8b5cf6' },
         { category: 'Behavior', count: 18, color: '#f59e0b' },
         { category: 'Social', count: 15, color: '#ec4899' },
@@ -344,7 +344,7 @@ export function AnalyticsCharts({
       ],
       moodDistribution: [
         { mood: 'Happy', percentage: 45, color: '#22c55e' },
-        { mood: 'Calm', percentage: 30, color: '#6B9080' },
+        { mood: 'Calm', percentage: 30, color: '#4E93A8' },
         { mood: 'Frustrated', percentage: 15, color: '#f59e0b' },
         { mood: 'Overwhelmed', percentage: 10, color: '#ef4444' }
       ],

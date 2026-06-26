@@ -75,7 +75,7 @@ const ACHIEVEMENTS: ShareableAchievement[] = [
     unlocks: 'buddy_accessory',
     unlockLabel: 'Custom Buddy Hat Accessory',
     icon: 'trophy',
-    cardColor: '#43AA8B',
+    cardColor: '#4E93A8',
     cardGradient: 'from-teal-500 to-emerald-600',
   },
   {

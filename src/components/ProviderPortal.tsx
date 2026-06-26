@@ -414,7 +414,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     // if Vite's DEV flag is unexpectedly false in the CI environment.
     try {
       if (localStorage.getItem('__e2e_auth') === 'bypass') {
-        setProvider({ id: providerId || 'dev-provider-test', name: 'Dev Provider', credentials: 'BCBA-D', type: 'bcba', specialties: ['ABA Therapy'], rating: 4.9, reviewCount: 12, totalPatients: 3, sessionsThisMonth: 5, earningsThisMonth: 2400, organization: 'Independent Provider', licensedStates: ['AZ'], acceptedInsurance: ['AHCCCS', 'BCBS', 'Cash Pay'], acceptsInsurance: true, verificationStatus: 'verified' });
+        const _storedUser = (() => { try { return JSON.parse(localStorage.getItem('aminy-user') || '{}'); } catch { return {}; } })();
+        const _e2eName = _storedUser.parentName || _storedUser.full_name || 'Dr. Provider';
+        setProvider({ id: providerId || 'dev-provider-test', name: _e2eName, credentials: 'BCBA-D', type: 'bcba', specialties: ['ABA Therapy'], rating: 4.9, reviewCount: 12, totalPatients: 3, sessionsThisMonth: 5, earningsThisMonth: 2400, organization: 'Independent Provider', licensedStates: ['AZ'], acceptedInsurance: ['AHCCCS', 'BCBS', 'Cash Pay'], acceptsInsurance: true, verificationStatus: 'verified' });
         setIsLoading(false);
         setIsRefreshing(false);
         return;
@@ -987,7 +989,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {branding.logoUrl ? (
                     <img src={branding.logoUrl} alt={branding.orgName} className="w-8 h-8 rounded-lg object-contain" />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
                       {branding.orgName.slice(0, 2).toUpperCase()}
                     </div>
                   )}
@@ -2035,14 +2037,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
-                      value={brandingForm.primaryColor || '#6B9080'}
+                      value={brandingForm.primaryColor || '#4E93A8'}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
                       className="w-10 h-10 rounded-lg border border-neutral-200 cursor-pointer"
                     />
                     <Input
                       value={brandingForm.primaryColor}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
-                      placeholder="#6B9080"
+                      placeholder="#4E93A8"
                       className="flex-1"
                     />
                   </div>
@@ -2083,7 +2085,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}
@@ -2882,7 +2884,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div>
                 <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
                 <textarea
-                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#43AA8B]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/40 focus:border-[#43AA8B]"
+                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#4E93A8]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/40 focus:border-[#4E93A8]"
                   value={reviewResponseText}
                   onChange={(e) => setReviewResponseText(e.target.value)}
                   placeholder="Edit the AI draft or write your own response…"
@@ -2890,7 +2892,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </div>
               <div className="flex gap-3 pt-1">
                 <Button
-                  className="flex-1 bg-[#43AA8B] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
+                  className="flex-1 bg-[#4E93A8] hover:bg-[#376E80] text-white rounded-xl disabled:opacity-50"
                   disabled={isSubmittingResponse || !reviewResponseText.trim()}
                   onClick={async () => {
                     if (!reviewingThread || !reviewResponseText.trim()) return;

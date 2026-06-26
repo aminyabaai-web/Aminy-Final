@@ -1,9 +1,9 @@
 import confetti from 'canvas-confetti';
 
 // Aminy brand palette
-const AMINY_COLORS = ['#43AA8B', '#2A7D99', '#E07A5F', '#F6A623', '#7BA7BC', '#90BE6D'];
+const AMINY_COLORS = ['#4E93A8', '#4E93A8', '#E07A5F', '#F6A623', '#6AA9BC', '#90BE6D'];
 const STREAK_COLORS = ['#F59E0B', '#F97316', '#FBBF24', '#FCD34D', '#FDE68A'];
-const UPGRADE_COLORS = ['#43AA8B', '#2A7D99', '#7BA7BC', '#E07A5F', '#F6A623', '#9333EA'];
+const UPGRADE_COLORS = ['#4E93A8', '#4E93A8', '#6AA9BC', '#E07A5F', '#F6A623', '#9333EA'];
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -120,7 +120,7 @@ export const DailyVideoFrame = forwardRef<DailyVideoFrameRef, DailyVideoFramePro
             showParticipantsBar: false, // Cleaner for 1:1 sessions
             theme: {
               colors: {
-                accent: '#43AA8B',
+                accent: '#4E93A8',
                 accentText: '#FFFFFF',
                 background: '#111827',
                 backgroundAccent: '#1f2937',

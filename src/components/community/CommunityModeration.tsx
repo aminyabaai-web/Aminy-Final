@@ -162,7 +162,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
                 value={key}
                 checked={reason === key}
                 onChange={() => setReason(key)}
-                className="h-4 w-4 text-[#6B9080] focus:ring-teal-500"
+                className="h-4 w-4 text-[#4E93A8] focus:ring-teal-500"
               />
               <span className="text-sm text-[#3A4A57]">{label}</span>
               {key === 'self-harm' && (
@@ -177,7 +177,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           onChange={e => setDetails(e.target.value)}
           placeholder="Additional details (optional)"
           rows={3}
-          className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none focus:ring-1 focus:ring-teal-500"
+          className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none focus:ring-1 focus:ring-teal-500"
         />
 
         {reason === 'self-harm' && (
@@ -256,7 +256,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <Shield className="h-6 w-6 text-[#6B9080]" />
+          <Shield className="h-6 w-6 text-[#4E93A8]" />
           <div className="flex-1">
             <h1 className="text-lg font-bold text-[#1B2733]">Moderation Queue</h1>
             <p className="text-sm text-[#5A6B7A]">{pendingCount} pending reports</p>
@@ -272,14 +272,14 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search reports..."
-              className="w-full rounded-lg border border-[#E8E4DF] py-2 pl-9 pr-3 text-sm focus:border-[#6B9080] focus:outline-none"
+              className="w-full rounded-lg border border-[#E8E4DF] py-2 pl-9 pr-3 text-sm focus:border-[#4E93A8] focus:outline-none"
             />
           </div>
           <button
             onClick={() => setFilterStatus(filterStatus === 'pending' ? 'all' : 'pending')}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium ${
               filterStatus === 'pending'
-                ? 'border-[#6B9080]/20 bg-[#6B9080]/10 text-[#6B9080]'
+                ? 'border-[#4E93A8]/20 bg-[#4E93A8]/10 text-[#4E93A8]'
                 : 'border-[#E8E4DF] bg-white text-[#5A6B7A]'
             }`}
           >
@@ -345,7 +345,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                   </div>
                   <button
                     onClick={() => setActiveReport(report)}
-                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#6B9080]"
+                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#4E93A8]"
                   >
                     Review
                   </button>
@@ -410,7 +410,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               <select
                 value={selectedAction}
                 onChange={e => setSelectedAction(e.target.value as ModerationAction)}
-                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
+                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none"
               >
                 {(Object.entries(ACTION_LABELS) as [ModerationAction, string][]).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
@@ -423,13 +423,13 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 onChange={e => setModNote(e.target.value)}
                 rows={2}
                 placeholder="Internal note (not visible to users)"
-                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none"
+                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none"
               />
 
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={handleAction}
-                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#6B9080]"
+                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#4E93A8]"
                 >
                   Apply Action
                 </button>
@@ -453,7 +453,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
 export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
   const guidelines = [
     {
-      icon: <ThumbsUp className="h-5 w-5 text-[#6B9080]" />,
+      icon: <ThumbsUp className="h-5 w-5 text-[#4E93A8]" />,
       title: 'Be Supportive',
       body: 'This is a community of families navigating autism together. Lead with empathy and kindness. Celebrate wins, offer encouragement during tough times.',
     },

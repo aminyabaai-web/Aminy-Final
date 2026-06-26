@@ -215,7 +215,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
       <div className="sticky top-0 z-10 bg-[#FAF7F2]/90 backdrop-blur-md border-b border-[#F0EDE8] px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div>
@@ -231,7 +231,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <div
                 key={i}
                 className={`w-2 h-2 rounded-full transition-colors ${
-                  i <= currentStep ? 'bg-[#6B9080]' : 'bg-[#F0EDE8]'
+                  i <= currentStep ? 'bg-[#4E93A8]' : 'bg-[#F0EDE8]'
                 }`}
               />
             ))}
@@ -255,7 +255,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 {profileFields.filter(f => f.filled).map(field => (
                   <div
                     key={field.key}
-                    className="flex items-center gap-1.5 bg-[#6B9080]/10 text-[#6B9080] px-2.5 py-1 rounded-full text-xs font-medium"
+                    className="flex items-center gap-1.5 bg-[#4E93A8]/10 text-[#6B9080] px-2.5 py-1 rounded-full text-xs font-medium"
                   >
                     <Check className="w-3 h-3" />
                     <span>{field.label}: {field.value.substring(0, 25)}{field.value.length > 25 ? '...' : ''}</span>
@@ -320,7 +320,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={handleFinish}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white py-3.5 rounded-xl text-sm font-semibold active:scale-[0.98] transition-transform"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#4E93A8] to-[#6AA9BC] text-white py-3.5 rounded-xl text-sm font-semibold active:scale-[0.98] transition-transform"
             >
               Let's go
               <ArrowRight className="w-4 h-4" />
@@ -334,7 +334,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Type your answer..."
-                className="flex-1 bg-white border border-[#F0EDE8] rounded-xl px-4 py-3 text-sm text-[#1B2733] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                className="flex-1 bg-white border border-[#F0EDE8] rounded-xl px-4 py-3 text-sm text-[#1B2733] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/30 focus:border-[#4E93A8]"
                 disabled={isTyping}
                 autoFocus
               />

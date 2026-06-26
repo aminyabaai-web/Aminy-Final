@@ -180,7 +180,7 @@ export function GroupSessionDiscovery({
                 onClick={() => setSelectedCategory(cat.id)}
                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap transition-all shrink-0"
                 style={selectedCategory === cat.id
-                  ? { background: '#43AA8B', borderColor: '#43AA8B', color: 'white', fontWeight: 600 }
+                  ? { background: '#4E93A8', borderColor: '#4E93A8', color: 'white', fontWeight: 600 }
                   : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
               >
                 <span>{cat.emoji}</span>{cat.label}

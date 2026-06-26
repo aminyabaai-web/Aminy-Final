@@ -254,7 +254,7 @@ export function SplashPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: '#2A7D99',
+                backgroundColor: '#4E93A8',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -265,14 +265,17 @@ export function SplashPage({
                 borderRadius: '14px',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'background-color 0.2s ease',
+                boxShadow: '0 2px 8px rgba(78,147,168,0.22), 0 4px 12px rgba(78,147,168,0.14)',
+                transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1F6080';
+                e.currentTarget.style.backgroundColor = '#376E80';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(78,147,168,0.32), 0 8px 20px rgba(78,147,168,0.18)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#2A7D99';
+                e.currentTarget.style.backgroundColor = '#4E93A8';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(78,147,168,0.22), 0 4px 12px rgba(78,147,168,0.14)';
               }}
             >
               Start free
@@ -345,10 +348,10 @@ export function SplashPage({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '5px',
-                      background: 'rgba(42,125,153,0.07)',
-                      border: '1px solid rgba(42,125,153,0.22)',
+                      background: 'rgba(78,147,168,0.07)',
+                      border: '1px solid rgba(78,147,168,0.22)',
                       borderRadius: '100px',
-                      color: '#2A7D99',
+                      color: '#4E93A8',
                       fontFamily: fontStack,
                       fontSize: '13px',
                       fontWeight: 600,
@@ -358,12 +361,12 @@ export function SplashPage({
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(42,125,153,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(42,125,153,0.40)';
+                      e.currentTarget.style.backgroundColor = 'rgba(78,147,168,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(78,147,168,0.40)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(42,125,153,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(42,125,153,0.22)';
+                      e.currentTarget.style.backgroundColor = 'rgba(78,147,168,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(78,147,168,0.22)';
                     }}
                   >
                     Concerned? Free screening →
@@ -376,8 +379,8 @@ export function SplashPage({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '5px',
-                      background: 'rgba(123,167,188,0.07)',
-                      border: '1px solid rgba(123,167,188,0.25)',
+                      background: 'rgba(106,169,188,0.07)',
+                      border: '1px solid rgba(106,169,188,0.25)',
                       borderRadius: '100px',
                       color: '#4A8A9C',
                       fontFamily: fontStack,
@@ -389,12 +392,12 @@ export function SplashPage({
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.45)';
+                      e.currentTarget.style.backgroundColor = 'rgba(106,169,188,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(106,169,188,0.45)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(123,167,188,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(123,167,188,0.25)';
+                      e.currentTarget.style.backgroundColor = 'rgba(106,169,188,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(106,169,188,0.25)';
                     }}
                   >
                     Just diagnosed? First 30 Days plan →
@@ -443,7 +446,7 @@ export function SplashPage({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(42, 125, 153, 0.75)',
+                    color: 'rgba(78, 147, 168, 0.75)',
                     fontFamily: fontStack,
                     fontSize: '12px',
                     fontWeight: 500,
@@ -452,8 +455,8 @@ export function SplashPage({
                     transition: 'color 0.2s ease',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(42, 125, 153, 1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(42, 125, 153, 0.75)'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(78, 147, 168, 1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(78, 147, 168, 0.75)'}
                 >
                   Provider pilot by invitation →
                 </button>

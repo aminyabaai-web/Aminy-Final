@@ -39,7 +39,7 @@ interface OperationalDashboardProps {
 
 // ─── Sparkline SVG ───────────────────────────────────────────────────
 
-function Sparkline({ points, color = '#6B9080' }: { points: TimeSeriesPoint[]; color?: string }) {
+function Sparkline({ points, color = '#4E93A8' }: { points: TimeSeriesPoint[]; color?: string }) {
   const normalized = normalizeSparkline(points);
   if (normalized.length < 2) return null;
 
@@ -133,7 +133,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
         <div className="mt-2">
           <Sparkline
             points={sparkData}
-            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#6B9080'}
+            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#4E93A8'}
           />
         </div>
       )}

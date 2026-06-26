@@ -178,12 +178,12 @@ export function UsageMeter({
               "text-sm font-medium",
               isAtLimit ? "text-red-600" : isNearLimit ? "text-amber-600" : "text-primary"
             )}>
-              {limits.messagesPerDay === Infinity
+              {limits.messagesPerDay == null || limits.messagesPerDay === Infinity
                 ? 'Unlimited'
                 : `${messagesUsedToday} / ${limits.messagesPerDay}`}
             </span>
           </div>
-          {limits.messagesPerDay !== Infinity && (
+          {limits.messagesPerDay != null && limits.messagesPerDay !== Infinity && (
             <Progress
               value={messagePercent}
               className={cn(
@@ -202,12 +202,12 @@ export function UsageMeter({
               <span className="text-sm text-muted-foreground">Vault Documents</span>
             </div>
             <span className="text-sm font-medium text-primary">
-              {limits.documents === Infinity
+              {limits.documents == null || limits.documents === Infinity
                 ? `${documentsUploaded} stored`
                 : `${documentsUploaded} / ${limits.documents}`}
             </span>
           </div>
-          {limits.documents !== Infinity && (
+          {limits.documents != null && limits.documents !== Infinity && (
             <Progress value={documentPercent} className="h-2" />
           )}
         </div>
@@ -220,11 +220,11 @@ export function UsageMeter({
               <span className="text-sm text-muted-foreground">Memory</span>
             </div>
             <span className="text-sm font-medium text-primary">
-              {limits.memoryFacts === Infinity
+              {limits.memoryFacts == null || limits.memoryFacts === Infinity
                 ? `${memoryFactsStored.toLocaleString()} facts · Unlimited`
                 : limits.memoryFacts === 0
                   ? 'None'
-                  : `${memoryFactsStored.toLocaleString()} / ${(limits.memoryFacts ?? 0).toLocaleString()} facts`}
+                  : `${memoryFactsStored.toLocaleString()} / ${limits.memoryFacts.toLocaleString()} facts`}
             </span>
           </div>
         </div>

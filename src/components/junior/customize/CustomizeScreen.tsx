@@ -29,7 +29,7 @@ interface CustomizePrefs {
 const STORAGE_KEY = 'aminy-ease-customize';
 
 const THEME_COLORS = [
-  { name: 'Teal', value: '#43AA8B' },
+  { name: 'Teal', value: '#4E93A8' },
   { name: 'Blue', value: '#577590' },
   { name: 'Purple', value: '#7B68EE' },
   { name: 'Pink', value: '#E87DA0' },
@@ -63,11 +63,11 @@ const BACKGROUNDS: {
   { id: 'day-sky', label: 'Day Sky', emoji: '☀️', gradient: 'linear-gradient(180deg, #87CEEB 0%, #E0F2FE 100%)' },
   { id: 'night-sky', label: 'Night Sky', emoji: '🌙', gradient: 'linear-gradient(180deg, #0D1B2A 0%, #1a3a5c 100%)' },
   { id: 'sunset', label: 'Sunset', emoji: '🌅', gradient: 'linear-gradient(180deg, #E07A5F 0%, #FFD166 100%)' },
-  { id: 'ocean', label: 'Ocean', emoji: '🌊', gradient: 'linear-gradient(180deg, #2EC4B6 0%, #43AA8B 100%)' },
+  { id: 'ocean', label: 'Ocean', emoji: '🌊', gradient: 'linear-gradient(180deg, #2EC4B6 0%, #4E93A8 100%)' },
 ];
 
 const DEFAULT_PREFS: CustomizePrefs = {
-  themeColor: '#43AA8B',
+  themeColor: '#4E93A8',
   buddyOutfit: [],
   backgroundTheme: 'night-sky',
   soundEffects: true,
@@ -256,7 +256,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                       className="flex items-center gap-3 p-3 rounded-2xl text-left transition-all"
                       style={{
                         backgroundColor: equipped ? '#E8F5E9' : locked ? '#F5F5F5' : 'white',
-                        border: equipped ? '2px solid #43AA8B' : '2px solid #E0E0E0',
+                        border: equipped ? '2px solid #4E93A8' : '2px solid #E0E0E0',
                         opacity: locked ? 0.6 : 1,
                       }}
                     >
@@ -266,15 +266,15 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                           {outfit.label}
                         </p>
                         {outfit.starCost > 0 && (
-                          <p className="text-sm" style={{ color: locked ? '#999' : '#43AA8B' }}>
+                          <p className="text-sm" style={{ color: locked ? '#999' : '#4E93A8' }}>
                             {locked ? <><Lock size={10} className="inline" /> {outfit.starCost} ⭐</> : 'Unlocked!'}
                           </p>
                         )}
                         {outfit.starCost === 0 && outfit.id !== 'none' && (
-                          <p className="text-sm" style={{ color: '#43AA8B' }}>Free!</p>
+                          <p className="text-sm" style={{ color: '#4E93A8' }}>Free!</p>
                         )}
                       </div>
-                      {equipped && <Check size={18} color="#43AA8B" />}
+                      {equipped && <Check size={18} color="#4E93A8" />}
                     </button>
                   );
                 })}
@@ -303,8 +303,8 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                       onClick={() => update({ backgroundTheme: b.id })}
                       className="rounded-2xl overflow-hidden transition-all"
                       style={{
-                        border: selected ? '3px solid #43AA8B' : '3px solid transparent',
-                        boxShadow: selected ? '0 4px 12px rgba(67,170,139,0.3)' : '0 2px 6px rgba(0,0,0,0.08)',
+                        border: selected ? '3px solid #4E93A8' : '3px solid transparent',
+                        boxShadow: selected ? '0 4px 12px rgba(78,147,168,0.3)' : '0 2px 6px rgba(0,0,0,0.08)',
                       }}
                     >
                       <div
@@ -342,7 +342,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                   className="w-full flex items-center gap-4 p-4 rounded-2xl"
                   style={{ backgroundColor: 'white', border: '2px solid #E0E0E0' }}
                 >
-                  {prefs.soundEffects ? <Volume2 size={24} color="#43AA8B" /> : <VolumeX size={24} color="#999" />}
+                  {prefs.soundEffects ? <Volume2 size={24} color="#4E93A8" /> : <VolumeX size={24} color="#999" />}
                   <div className="flex-1 text-left">
                     <p className="text-base font-semibold" style={{ color: '#333' }}>Sound Effects</p>
                     <p className="text-sm" style={{ color: '#666' }}>Taps, success sounds, and more</p>
@@ -350,7 +350,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                   <div
                     className="w-12 h-7 rounded-full flex items-center transition-all px-0.5"
                     style={{
-                      backgroundColor: prefs.soundEffects ? '#43AA8B' : '#ccc',
+                      backgroundColor: prefs.soundEffects ? '#4E93A8' : '#ccc',
                       justifyContent: prefs.soundEffects ? 'flex-end' : 'flex-start',
                     }}
                   >
@@ -364,7 +364,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                   className="w-full flex items-center gap-4 p-4 rounded-2xl"
                   style={{ backgroundColor: 'white', border: '2px solid #E0E0E0' }}
                 >
-                  <Music size={24} color={prefs.music ? '#43AA8B' : '#999'} />
+                  <Music size={24} color={prefs.music ? '#4E93A8' : '#999'} />
                   <div className="flex-1 text-left">
                     <p className="text-base font-semibold" style={{ color: '#333' }}>Music</p>
                     <p className="text-sm" style={{ color: '#666' }}>Background music during activities</p>
@@ -372,7 +372,7 @@ export default function CustomizeScreen({ onBack, totalStars }: CustomizeScreenP
                   <div
                     className="w-12 h-7 rounded-full flex items-center transition-all px-0.5"
                     style={{
-                      backgroundColor: prefs.music ? '#43AA8B' : '#ccc',
+                      backgroundColor: prefs.music ? '#4E93A8' : '#ccc',
                       justifyContent: prefs.music ? 'flex-end' : 'flex-start',
                     }}
                   >

@@ -39,7 +39,7 @@ export const AI_PERSONALITIES: Record<AIPersonality, PersonalityConfig> = {
 - Normalize the hard moments: make parents feel less alone in the struggle
 - Keep clinical knowledge in the background; lead always with human connection
 - Short paragraphs, conversational tone, never clinical or distant`,
-    color: '#43AA8B',
+    color: '#4E93A8',
     emoji: '💙',
   },
 

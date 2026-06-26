@@ -236,14 +236,14 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
                                 <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                        <Activity size={18} color="#6B9080" />
+                                        <Activity size={18} color="#4E93A8" />
                                         <h3 style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Clinical Progress</h3>
                                     </div>
-                                    <div style={{ fontSize: '36px', fontWeight: 700, color: '#6B9080', marginBottom: '8px', letterSpacing: '-0.03em' }}>
+                                    <div style={{ fontSize: '36px', fontWeight: 700, color: '#4E93A8', marginBottom: '8px', letterSpacing: '-0.03em' }}>
                                         {selectedPatient.progressScore}%
                                     </div>
-                                    <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(107, 144, 128, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                                        <div style={{ width: selectedPatient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '4px' }} />
+                                    <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(78, 147, 168, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
+                                        <div style={{ width: selectedPatient.progressScore + '%', height: '100%', backgroundColor: '#4E93A8', borderRadius: '4px' }} />
                                     </div>
                                 </div>
 
@@ -347,7 +347,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                     setSignatureHash(hash);
                                                     setIsSoapLocked(true);
                                                     toast.success('Note cryptographically signed and locked.');
-                                                }} style={{ padding: '10px 20px', borderRadius: '12px', backgroundColor: '#6B9080', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                }} style={{ padding: '10px 20px', borderRadius: '12px', backgroundColor: '#4E93A8', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                     <FileSignature size={16} /> Sign & Lock Note
                                                 </button>
                                             </>
@@ -414,7 +414,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Prior Auth Section */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '16px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                            <FileSignature size={18} color="#6B9080" />
+                                            <FileSignature size={18} color="#4E93A8" />
                                             <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>EDI 278 Prior Authorization</h4>
                                         </div>
                                         <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '16px' }}>
@@ -446,7 +446,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                         toast.dismiss();
                                                     }
                                                 }}
-                                                style={{ backgroundColor: '#6B9080', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
+                                                style={{ backgroundColor: '#4E93A8', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
                                                 Request Authorization (97153)
                                             </button>
                                         </div>
@@ -455,7 +455,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Remittance Advice Section */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '16px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                            <Award size={18} color="#6B9080" />
+                                            <Award size={18} color="#4E93A8" />
                                             <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>EDI 835 Remittance Advice</h4>
                                         </div>
                                         <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '16px' }}>
@@ -476,7 +476,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                         toast.dismiss();
                                                     }
                                                 }}
-                                                style={{ backgroundColor: '#6B9080', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
+                                                style={{ backgroundColor: '#4E93A8', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
                                                 Check Remittance (835)
                                             </button>
                                         </div>
@@ -531,7 +531,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Patient Portal Setup */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '20px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                                            <Globe size={20} color="#6B9080" />
+                                            <Globe size={20} color="#4E93A8" />
                                             <div>
                                                 <h4 style={{ fontSize: '16px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>Patient Sub-domain Setup</h4>
                                                 <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Give parents a dedicated, branded link to log in.</p>
@@ -662,8 +662,8 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                 <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'rgba(17, 24, 39, 0.4)', marginBottom: '4px', fontWeight: 600 }}>Progress</p>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                     <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>{patient.progressScore}%</span>
-                                                    <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(107, 144, 128, 0.2)', borderRadius: '2px' }}>
-                                                        <div style={{ width: patient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '2px' }} />
+                                                    <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(78, 147, 168, 0.2)', borderRadius: '2px' }}>
+                                                        <div style={{ width: patient.progressScore + '%', height: '100%', backgroundColor: '#4E93A8', borderRadius: '2px' }} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -677,8 +677,8 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
 
                                 {filteredPatients.length === 0 && (
                                     <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#FFFFFF', borderRadius: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-                                        <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(107, 144, 128, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Users size={32} color="#6B9080" />
+                                        <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(78, 147, 168, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Users size={32} color="#4E93A8" />
                                         </div>
                                         <div>
                                             <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', marginBottom: '8px' }}>Your Caseload is Empty</h3>

@@ -305,7 +305,7 @@ function computeResult(answers: Record<string, number>): ScreenerResult {
 
 const RECOMMENDATION_CONFIG = {
   routine: {
-    color: '#43AA8B',
+    color: '#4E93A8',
     bgColor: 'rgba(67, 170, 139, 0.08)',
     borderColor: 'rgba(67, 170, 139, 0.25)',
     icon: CheckCircle,
@@ -512,7 +512,7 @@ export function DevelopmentalScreener({
                 ] as const
               ).map(({ key, score, max }) => {
                 const pct = max > 0 ? (score / max) * 100 : 0;
-                const barColor = pct === 0 ? '#43AA8B' : pct <= 40 ? '#E6A817' : '#E07A5F';
+                const barColor = pct === 0 ? '#4E93A8' : pct <= 40 ? '#E6A817' : '#E07A5F';
                 return (
                   <div key={key} style={{ marginBottom: '14px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -629,7 +629,7 @@ export function DevelopmentalScreener({
 
   const areaOrder: Question['area'][] = ['developmental', 'speech', 'social_emotional'];
   const currentAreaIndex = areaOrder.indexOf(currentQuestion.area);
-  const areaColors = ['#577590', '#43AA8B', '#E07A5F'];
+  const areaColors = ['#577590', '#4E93A8', '#E07A5F'];
   const areaColor = areaColors[currentAreaIndex] ?? '#577590';
 
   return (

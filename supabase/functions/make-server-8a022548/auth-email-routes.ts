@@ -53,16 +53,16 @@ const BRAND_CSS = `
   .wrapper { max-width: 560px; margin: 32px auto; padding: 0 16px 40px; }
   .header { background: #0D1B2A; border-radius: 14px 14px 0 0; padding: 28px 32px 24px; text-align: center; }
   .logo { font-size: 26px; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
-  .logo span { color: #43AA8B; }
+  .logo span { color: #4E93A8; }
   .card { background: #ffffff; border: 1px solid #E8E4DF; border-top: none; border-radius: 0 0 14px 14px; padding: 36px 32px 28px; }
   h1 { font-size: 20px; font-weight: 700; color: #0D1B2A; margin: 0 0 12px; }
   p { font-size: 15px; line-height: 1.6; color: #3A4A57; margin: 0 0 16px; }
   .cta { display: block; margin: 28px auto; text-align: center; }
-  .cta a { background: #43AA8B; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 36px; border-radius: 10px; display: inline-block; }
+  .cta a { background: #4E93A8; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 36px; border-radius: 10px; display: inline-block; }
   .note { font-size: 13px; color: #8A9BB0; margin: 20px 0 0; }
   .divider { border: none; border-top: 1px solid #E8E4DF; margin: 24px 0; }
   .footer { text-align: center; font-size: 12px; color: #8A9BB0; padding-top: 8px; }
-  .footer a { color: #43AA8B; text-decoration: none; }
+  .footer a { color: #4E93A8; text-decoration: none; }
 `;
 
 function wrap(inner: string): string {
@@ -133,7 +133,7 @@ function emailChangeHtml(actionUrl: string, newEmail?: string): string {
     <div class="cta">
       <a href="${actionUrl}">Confirm new email</a>
     </div>
-    <p class="note">This link expires in 24 hours. If you didn't make this change, please contact <a href="mailto:support@aminy.ai" style="color:#43AA8B">support@aminy.ai</a> immediately.</p>
+    <p class="note">This link expires in 24 hours. If you didn't make this change, please contact <a href="mailto:support@aminy.ai" style="color:#4E93A8">support@aminy.ai</a> immediately.</p>
   `);
 }
 

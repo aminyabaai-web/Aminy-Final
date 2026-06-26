@@ -42,7 +42,7 @@ const SERVICE_META: Record<ServiceType, {
   typicallyAuthRequired: boolean;
   preferredSites: SiteOfCare[];
 }> = {
-  ABA:          { label: 'ABA Therapy',          short: 'ABA', icon: Brain,       color: '#43AA8B', description: 'Applied Behavior Analysis — behavioral, communication, daily living skills',  typicallyAuthRequired: true,  preferredSites: ['in_home', 'clinic', 'telehealth'] },
+  ABA:          { label: 'ABA Therapy',          short: 'ABA', icon: Brain,       color: '#4E93A8', description: 'Applied Behavior Analysis — behavioral, communication, daily living skills',  typicallyAuthRequired: true,  preferredSites: ['in_home', 'clinic', 'telehealth'] },
   PT:           { label: 'Physical Therapy',     short: 'PT',  icon: Activity,    color: '#577590', description: 'Gross motor, balance, gait, mobility', typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'in_home'] },
   OT:           { label: 'Occupational Therapy', short: 'OT',  icon: Hand,        color: '#9B5DE5', description: 'Fine motor, sensory processing, self-care skills',                                  typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'in_home'] },
   ST:           { label: 'Speech Therapy',       short: 'ST',  icon: MessageCircle, color: '#E07A5F', description: 'Articulation, language, AAC, feeding/swallowing',                                  typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'telehealth'] },
@@ -171,7 +171,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       />
 
       {/* Quick stats banner */}
-      <div className="mx-4 mt-4 rounded-2xl p-4 grid grid-cols-3 gap-3" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B25' }}>
+      <div className="mx-4 mt-4 rounded-2xl p-4 grid grid-cols-3 gap-3" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A825' }}>
         <Stat label="Active services" value={String(activeServices.length)} />
         <Stat label="Upcoming visits" value={String(services.filter(s => s.nextAppointmentAt).length)} />
         <Stat label="Auth alerts" value={String(services.filter(s => s.authStatus === 'expiring' || s.authStatus === 'pending' || s.authStatus === 'denied').length)} accent={services.some(s => s.authStatus === 'expiring' || s.authStatus === 'denied')} />
@@ -357,7 +357,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
             <button
               onClick={() => onNavigate?.('prior-auth')}
               className="flex-1 text-sm font-medium px-3 py-2 rounded-xl text-white"
-              style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
             >
               {row.authStatus === 'denied' ? 'Appeal' : 'Request auth'}
             </button>

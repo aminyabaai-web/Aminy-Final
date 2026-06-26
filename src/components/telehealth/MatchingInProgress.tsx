@@ -320,7 +320,7 @@ export function MatchingInProgress({
                 onClick={handleSubmit}
                 disabled={isSubmitting || (!email && !notifyPhone)}
                 className="w-full py-3 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-50"
-                style={{ backgroundColor: '#43AA8B' }}
+                style={{ backgroundColor: '#4E93A8' }}
               >
                 {isSubmitting ? 'Saving...' : 'Notify me when matched'}
               </button>

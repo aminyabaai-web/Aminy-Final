@@ -154,7 +154,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
           >
             <div className="bg-white rounded-xl shadow-lg border border-[#E8E4DF] overflow-hidden">
               {/* Teal accent bar */}
-              <div className="h-0.5 bg-gradient-to-r from-[#6B9080] to-[#43AA8B]" />
+              <div className="h-0.5 bg-gradient-to-r from-[#6B9080] to-[#4E93A8]" />
 
               <div className="p-3 flex items-start gap-3">
                 {/* Avatar / Icon */}

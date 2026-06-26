@@ -53,10 +53,10 @@ import {
 // DESIGN TOKENS — matches brand-system spec
 // ============================================
 
-const TEAL = '#2A7D99';
-const TEAL_HOVER = '#1F6080';
-const TEAL_BG_LIGHT = 'rgba(42, 125, 153, 0.07)';
-const TEAL_BORDER = 'rgba(42, 125, 153, 0.18)';
+const TEAL = '#4E93A8';
+const TEAL_HOVER = '#376E80';
+const TEAL_BG_LIGHT = 'rgba(78, 147, 168, 0.07)';
+const TEAL_BORDER = 'rgba(78, 147, 168, 0.18)';
 const MIST_BG = 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)';
 
 // ============================================
@@ -214,7 +214,7 @@ const S = {
     cursor: enabled ? 'pointer' : 'not-allowed',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
     transition: 'background-color 0.15s, opacity 0.15s',
-    boxShadow: enabled ? `0 4px 14px rgba(42,125,153,0.25)` : 'none',
+    boxShadow: enabled ? `0 4px 14px rgba(78,147,168,0.25)` : 'none',
   }),
   ageBtn: (selected: boolean) => ({
     padding: '12px 16px', borderRadius: 12,
@@ -248,7 +248,7 @@ const S = {
   stepItem: { display: 'flex', alignItems: 'flex-start', gap: 12, padding: 14, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.92)', border: '1px solid #E2EFF3' },
   stepNum: { width: 22, height: 22, borderRadius: 11, backgroundColor: TEAL_BG_LIGHT, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2 },
   providerTag: { display: 'inline-block', padding: '6px 12px', borderRadius: 10, backgroundColor: TEAL_BG_LIGHT, color: TEAL, fontSize: 12, fontWeight: 500, border: `1px solid ${TEAL_BORDER}` },
-  lureBanner: { padding: 18, borderRadius: 18, background: `linear-gradient(135deg, rgba(42,125,153,0.06), rgba(42,125,153,0.03))`, border: `1px solid ${TEAL_BORDER}` },
+  lureBanner: { padding: 18, borderRadius: 18, background: `linear-gradient(135deg, rgba(78,147,168,0.06), rgba(78,147,168,0.03))`, border: `1px solid ${TEAL_BORDER}` },
   lureItem: { display: 'flex', alignItems: 'flex-start', gap: 8, marginTop: 8 },
 
   // Insight interlude
@@ -417,7 +417,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                 fontSize: 14, color: '#1B2733', outline: 'none', boxSizing: 'border-box',
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
               }}
-              onFocus={(e) => { e.currentTarget.style.borderColor = TEAL; e.currentTarget.style.boxShadow = `0 0 0 3px rgba(42,125,153,0.12)`; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = TEAL; e.currentTarget.style.boxShadow = `0 0 0 3px rgba(78,147,168,0.12)`; }}
               onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(209, 213, 219, 1)'; e.currentTarget.style.boxShadow = 'none'; }}
             />
           </div>
@@ -471,7 +471,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
               <IIcon style={{ width: 32, height: 32, color: TEAL }} />
             </div>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
-              <h2 style={{ ...S.h2, marginBottom: 12 }}>{showInsight.title}</h2>
+              <h2 style={{ ...S.h2, marginBottom: 12, fontFamily: "'Newsreader', Georgia, serif", fontStyle: 'italic' }}>{showInsight.title}</h2>
               <p style={{ fontSize: 14, color: '#5A6B7A', lineHeight: 1.7, maxWidth: 340, margin: '0 auto' }}>{showInsight.body}</p>
             </div>
             <button
@@ -571,7 +571,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           {result.riskLevel !== 'low' && onJustDiagnosed && (
             <div style={{
               padding: 16, borderRadius: 12, marginBottom: 16,
-              background: `linear-gradient(135deg, rgba(42,125,153,0.10), rgba(42,125,153,0.05))`,
+              background: `linear-gradient(135deg, rgba(78,147,168,0.10), rgba(78,147,168,0.05))`,
               border: `1.5px solid ${TEAL_BORDER}`,
             }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: TEAL, letterSpacing: '0.04em', marginBottom: 6 }}>
@@ -588,7 +588,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                   background: `linear-gradient(135deg, ${TEAL}, #3A9AB8)`,
                   color: '#fff', border: 'none', borderRadius: 10,
                   padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                  boxShadow: `0 3px 12px rgba(42,125,153,0.25)`,
+                  boxShadow: `0 3px 12px rgba(78,147,168,0.25)`,
                 }}
               >
                 Get my First 30 Days plan →

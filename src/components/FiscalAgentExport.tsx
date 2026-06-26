@@ -176,7 +176,7 @@ export function FiscalAgentExport({
           <style>
             body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
             .header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 10px; }
-            .logo { font-size: 24px; font-weight: bold; color: #6B9080; }
+            .logo { font-size: 24px; font-weight: bold; color: #4E93A8; }
             .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .info-item { padding: 5px 0; }
             .info-label { font-weight: bold; color: #666; font-size: 12px; }

@@ -33,8 +33,8 @@ export function AminyWelcomeBanner({
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <h2 className="text-lg font-semibold">Hi {userName} — you're doing great.</h2>
-              <Sparkles className="w-4 h-4 text-accent" />
+              <h2 className="aminy-affirm" style={{ fontSize: '1.1rem', fontStyle: 'italic' }}>Hi {userName} — you're doing great.</h2>
+              <Sparkles className="w-4 h-4 text-accent flex-shrink-0" />
             </div>
             
             <p className="text-sm text-muted-foreground mb-4">

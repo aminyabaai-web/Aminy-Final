@@ -180,7 +180,7 @@ async function gatherOutcomesSnapshot(
 function renderEmail(d: OrgDigestData): { html: string; subject: string } {
   const trend = (pct: number | null) => pct == null ? '—' : pct === 0 ? '→' : pct > 0 ? `↑ +${pct}%` : `↓ ${pct}%`;
   const trendColor = (pct: number | null, lowerIsBetter = true) =>
-    pct == null ? '#94a3b8' : (lowerIsBetter ? (pct < 0 ? '#43AA8B' : pct > 0 ? '#E07A5F' : '#94a3b8') : (pct > 0 ? '#43AA8B' : '#E07A5F'));
+    pct == null ? '#94a3b8' : (lowerIsBetter ? (pct < 0 ? '#4E93A8' : pct > 0 ? '#E07A5F' : '#94a3b8') : (pct > 0 ? '#4E93A8' : '#E07A5F'));
 
   const subject = `Aminy × ${d.orgName} — weekly partner digest`;
   const html = `<!DOCTYPE html>
@@ -192,12 +192,12 @@ function renderEmail(d: OrgDigestData): { html: string; subject: string } {
     <p style="color: #64748b; font-size: 14px; margin: 0 0 24px;">${new Date(Date.now() - 7 * 86_400_000).toLocaleDateString()} – ${new Date().toLocaleDateString()}</p>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
-      <div style="background: linear-gradient(135deg, #43AA8B12, #57759012); padding: 16px; border-radius: 12px;">
+      <div style="background: linear-gradient(135deg, #4E93A812, #57759012); padding: 16px; border-radius: 12px;">
         <p style="font-size: 11px; color: #64748b; margin: 0; text-transform: uppercase;">New families</p>
-        <p style="font-size: 32px; font-weight: 700; margin: 4px 0; color: #43AA8B;">${d.newFamiliesThisWeek}</p>
+        <p style="font-size: 32px; font-weight: 700; margin: 4px 0; color: #4E93A8;">${d.newFamiliesThisWeek}</p>
         <p style="font-size: 11px; color: #94a3b8; margin: 0;">of ${d.totalActiveFamilies} total</p>
       </div>
-      <div style="background: linear-gradient(135deg, #43AA8B12, #57759012); padding: 16px; border-radius: 12px;">
+      <div style="background: linear-gradient(135deg, #4E93A812, #57759012); padding: 16px; border-radius: 12px;">
         <p style="font-size: 11px; color: #64748b; margin: 0; text-transform: uppercase;">Sessions this week</p>
         <p style="font-size: 32px; font-weight: 700; margin: 4px 0; color: #577590;">${d.sessionsCompleted}</p>
         <p style="font-size: 11px; color: #94a3b8; margin: 0;">${d.activeProviders} active providers</p>
@@ -246,7 +246,7 @@ function renderEmail(d: OrgDigestData): { html: string; subject: string } {
     </div>
 
     <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 32px 0 0;">
-      Aminy LLC · 5070 N. 40th St, Phoenix AZ · <a href="https://aminy.ai" style="color: #43AA8B;">aminy.ai</a>
+      Aminy LLC · 5070 N. 40th St, Phoenix AZ · <a href="https://aminy.ai" style="color: #4E93A8;">aminy.ai</a>
     </p>
   </div>
 </body></html>`;

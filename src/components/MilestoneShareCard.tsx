@@ -49,7 +49,7 @@ const MILESTONE_CONFIGS: Record<MilestoneType, MilestoneConfig> = {
     title: 'First Session Complete!',
     subtitle: 'The journey begins',
     emoji: '🎉',
-    gradientStart: '#43AA8B',
+    gradientStart: '#4E93A8',
     gradientEnd: '#577590',
   },
   '7_day_streak': {
@@ -64,14 +64,14 @@ const MILESTONE_CONFIGS: Record<MilestoneType, MilestoneConfig> = {
     subtitle: 'Building great habits',
     emoji: '⭐',
     gradientStart: '#577590',
-    gradientEnd: '#43AA8B',
+    gradientEnd: '#4E93A8',
   },
   level_up: {
     title: 'Level Up!',
     subtitle: 'Growing stronger every day',
     emoji: '🚀',
     gradientStart: '#6C63FF',
-    gradientEnd: '#43AA8B',
+    gradientEnd: '#4E93A8',
   },
   badge_earned: {
     title: 'Badge Earned!',

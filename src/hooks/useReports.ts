@@ -55,7 +55,7 @@ export interface ReportOptions {
 // ============================================================================
 
 const AMINY_BLUE = '#0891b2';
-const AMINY_GREEN = '#43AA8B';
+const AMINY_GREEN = '#4E93A8';
 const GRAY_600 = '#4B5563';
 const GRAY_400 = '#9CA3AF';
 

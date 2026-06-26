@@ -167,7 +167,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         )}
         <div className="flex-1 flex items-center justify-center px-6 text-center">
           <div className="max-w-sm">
-            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}>
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
@@ -213,7 +213,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
           {org.subscriptionStatus === 'inactive' && (
             <div className="mt-4 pt-4 border-t border-[#E8E4DF] flex gap-2">
-              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}>
+              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}>
                 Start Monthly
               </button>
               <button onClick={() => handleStartCheckout('year')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl border border-[#6B9080] text-[#6B9080] bg-white">
@@ -277,7 +277,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
               className="h-full rounded-full transition-all"
               style={{
                 width: `${Math.min(100, (usage.seatsUsed / usage.seatsAllocated) * 100)}%`,
-                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #43AA8B 0%, #7BA7BC 100%)',
+                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #4E93A8 0%, #6AA9BC 100%)',
               }}
             />
           </div>
@@ -333,7 +333,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             onClick={() => setShowInvite(true)}
             disabled={!!usage && usage.seatsAvailable === 0}
             className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-full disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)', color: 'white' }}
+            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)', color: 'white' }}
           >
             <Plus className="w-3.5 h-3.5" />Invite
           </button>
@@ -354,7 +354,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                 onClick={handleInvite}
                 disabled={isInviting || !inviteEmail.trim()}
                 className="text-sm font-semibold px-4 py-2 rounded-lg text-white disabled:opacity-50"
-                style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}
               >
                 {isInviting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
               </button>

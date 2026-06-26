@@ -39,13 +39,15 @@ import {
 } from '../types/telehealth';
 import { verifyProvider, type Credential, type ProviderVerificationSummary } from '../lib/credential-verification';
 import { SUPPORTED_PROVIDER_STATES, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
+import ProviderAgreement, { type AgreementAcceptance } from './provider/ProviderAgreement';
+import ProviderBAA, { type BAAAcceptance } from './provider/ProviderBAA';
 
 interface ProviderOnboardingProps {
   onBack?: () => void;
   onComplete?: (providerId: string) => void;
 }
 
-type OnboardingStep = 'basics' | 'licensing' | 'services' | 'availability' | 'review';
+type OnboardingStep = 'basics' | 'licensing' | 'services' | 'availability' | 'review' | 'agreement' | 'baa';
 
 const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = [
   { id: 'basics', label: 'Profile', icon: User },
@@ -53,6 +55,8 @@ const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = 
   { id: 'services', label: 'Services', icon: DollarSign },
   { id: 'availability', label: 'Schedule', icon: Calendar },
   { id: 'review', label: 'Review', icon: FileText },
+  { id: 'agreement', label: 'Agreement', icon: FileText },
+  { id: 'baa', label: 'BAA', icon: Shield },
 ];
 
 // Single source of truth for the launch-state list shown across this flow,
@@ -169,6 +173,8 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [nonSolicitationAck, setNonSolicitationAck] = useState(false);
+  const [agreementAcceptance, setAgreementAcceptance] = useState<AgreementAcceptance | null>(null);
+  const [baaAcceptance, setBaaAcceptance] = useState<BAAAcceptance | null>(null);
 
   const stepIndex = STEPS.findIndex(s => s.id === currentStep);
   const fieldId = (field: string) => `${formId}-${field}`;
@@ -189,6 +195,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
         return form.availability.length > 0;
       case 'review':
         return true;
+      case 'agreement':
+        return agreementAcceptance !== null;
+      case 'baa':
+        return baaAcceptance !== null;
       default:
         return false;
     }
@@ -229,6 +239,52 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
   const removeAvailability = (index: number) => {
     updateForm({ availability: form.availability.filter((_, i) => i !== index) });
+  };
+
+  const handleAgreementAccept = (acceptance: AgreementAcceptance) => {
+    setAgreementAcceptance(acceptance);
+    // Advance to the BAA step automatically on acceptance
+    setCurrentStep('baa');
+  };
+
+  const handleBAAAccept = async (acceptance: BAAAcceptance) => {
+    setBaaAcceptance(acceptance);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    // Save BAA acceptance first, best-effort
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Try to insert into provider_baa_agreements table; fall back to profiles upsert
+        const { error: baaError } = await supabase
+          .from('provider_baa_agreements')
+          .insert({
+            user_id: user.id,
+            accepted_at: acceptance.acceptedAt,
+            signed_name: acceptance.signedName,
+            document_version: acceptance.documentVersion,
+            provider_email: acceptance.providerEmail,
+          });
+
+        if (baaError) {
+          // Table doesn't exist yet — fall back to profiles column
+          console.warn('provider_baa_agreements insert failed, falling back to profiles:', baaError.message);
+          await supabase
+            .from('profiles')
+            .upsert({
+              id: user.id,
+              baa_accepted_at: acceptance.acceptedAt,
+            });
+        }
+      }
+    } catch (err) {
+      console.warn('Could not persist BAA acceptance:', err);
+      // Non-blocking — continue to submit regardless
+    }
+
+    // Proceed to the main onboarding submission (keeps isSubmitting=true)
+    await handleSubmit();
   };
 
   const handleSubmit = async () => {
@@ -425,15 +481,17 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             <h1 className="text-lg font-semibold text-[#1B2733]">Join Aminy as a Provider</h1>
             <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
           </div>
-          <button
-            type="button"
-            onClick={currentStep === 'review' ? handleSubmit : nextStep}
-            disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#6B9080] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#216982] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
-          >
-            {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {currentStep !== 'agreement' && currentStep !== 'baa' && (
+            <button
+              type="button"
+              onClick={currentStep === 'review' ? nextStep : nextStep}
+              disabled={!canAdvance() || isSubmitting}
+              className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#4E93A8] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#376E80] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            >
+              Continue
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
         </nav>
       </header>
 
@@ -453,7 +511,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   aria-label={`Open ${step.label} step`}
                   className={`flex h-11 min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                     isCurrent
-                      ? 'bg-[#6B9080]/10 text-[#6B9080]'
+                      ? 'bg-[#4E93A8]/10 text-[#4E93A8]'
                       : isCompleted
                         ? 'text-green-600 hover:bg-green-50'
                         : 'text-[#8A9BA8]'
@@ -503,12 +561,12 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     aria-pressed={form.practiceMode === opt.id}
                     className={`text-left p-4 rounded-xl border-2 transition-all ${
                       form.practiceMode === opt.id
-                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        ? 'border-[#4E93A8] bg-[#4E93A8]/10'
                         : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-[#6B9080] shrink-0" />}
+                      {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-[#4E93A8] shrink-0" />}
                       <span className="font-semibold text-[#1B2733]">{opt.title}</span>
                     </div>
                     <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
@@ -632,7 +690,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 </div>
               </div>
 
-              <div className="mb-6 rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 px-4 py-3 text-sm text-[#3A4A57]">
+              <div className="mb-6 rounded-2xl border border-[#E8E4DF] bg-[#4E93A8]/10/70 px-4 py-3 text-sm text-[#3A4A57]">
                 <p className="font-medium text-[#1B2733]">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
                 <p className="mt-1">You can add any licensed state now. Aminy keeps you off the marketplace until your credentials are validated, then turns on live booking only in supported markets where you are actually licensed.</p>
               </div>
@@ -645,7 +703,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       key={state.code}
                       className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors text-sm ${
                         form.licensedStates.includes(state.code)
-                          ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium'
+                          ? 'bg-[#4E93A8]/10 text-[#4E93A8] font-medium'
                           : 'hover:bg-[#FAF7F2] text-[#5A6B7A]'
                       }`}
                     >
@@ -653,14 +711,14 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                         type="checkbox"
                         checked={form.licensedStates.includes(state.code)}
                         onChange={() => toggleState(state.code)}
-                        className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
+                        className="rounded border-[#E8E4DF] text-[#4E93A8] focus:ring-cyan-600"
                       />
                       {state.code}
                     </label>
                   ))}
                 </div>
                 {form.licensedStates.length > 0 && (
-                  <p className="text-sm text-[#6B9080] mt-3 font-medium">
+                  <p className="text-sm text-[#4E93A8] mt-3 font-medium">
                     {form.licensedStates.length} state{form.licensedStates.length > 1 ? 's' : ''} selected
                   </p>
                 )}
@@ -682,7 +740,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     id: 'aact-partner' as const,
                     title: 'Aminy Network',
                     badge: 'Insurance — Rolling Out',
-                    badgeClass: 'bg-[#6B9080]/10 text-[#6B9080]',
+                    badgeClass: 'bg-[#4E93A8]/10 text-[#4E93A8]',
                     description: `Bill insured sessions under a group payer network — rolling out, pending payer-network access in your state. When live: AHCCCS/Medicaid, Mercy Care, Health Choice, BCBS, Aetna, UHC, Cigna, Magellan, and state Medicaid plans across ${SUPPORTED_STATES_AND}, with billing, claims, and prior-auths handled for you and ~biweekly payouts. Aminy fee: 10% of insured sessions.`,
                     highlight: true,
                   },
@@ -709,7 +767,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     onClick={() => updateForm({ billingTrack: track.id })}
                     className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                       form.billingTrack === track.id
-                        ? 'border-[#6B9080] bg-[#6B9080]/10'
+                        ? 'border-[#4E93A8] bg-[#4E93A8]/10'
                         : 'border-[#E8E4DF] bg-[#FAF7F2] hover:border-[#E8E4DF]'
                     }`}
                   >
@@ -737,7 +795,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersConsult}
                       onChange={e => updateForm({ offersConsult: e.target.checked })}
-                      className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
+                      className="rounded border-[#E8E4DF] text-[#4E93A8] focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-[#1B2733]">25-min Consult</p>
@@ -761,7 +819,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       type="checkbox"
                       checked={form.offersDeepReview}
                       onChange={e => updateForm({ offersDeepReview: e.target.checked })}
-                      className="rounded border-[#E8E4DF] text-[#6B9080] focus:ring-cyan-600"
+                      className="rounded border-[#E8E4DF] text-[#4E93A8] focus:ring-cyan-600"
                     />
                     <div>
                       <p className="font-medium text-[#1B2733]">50-min Deep Review</p>
@@ -796,7 +854,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                               : [...form.acceptedInsurance, plan],
                           })}
                           aria-pressed={active}
-                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-[#6B9080]/10 text-[#6B9080]' : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'}`}
+                          className={`min-h-11 rounded-full border px-3 py-2 text-sm transition-colors ${active ? 'border-cyan-600 bg-[#4E93A8]/10 text-[#4E93A8]' : 'border-[#E8E4DF] text-[#5A6B7A] hover:border-[#E8E4DF]'}`}
                         >
                           {plan}
                         </button>
@@ -829,7 +887,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 <button
                   type="button"
                   onClick={addAvailability}
-                  className="flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#6B9080]/90"
+                  className="flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#4E93A8]/90"
                 >
                   + Add Time Block
                 </button>
@@ -905,7 +963,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Licensing</h3>
                   <div className="flex flex-wrap gap-1">
                     {form.licensedStates.map(code => (
-                      <span key={code} className="px-2 py-0.5 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">
+                      <span key={code} className="px-2 py-0.5 bg-[#4E93A8]/10 text-[#4E93A8] text-xs font-medium rounded-full">
                         {code}
                       </span>
                     ))}
@@ -944,7 +1002,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   )}
                 </div>
 
-                <div className="rounded-2xl border border-[#E8E4DF] bg-[#6B9080]/10/70 px-4 py-4">
+                <div className="rounded-2xl border border-[#E8E4DF] bg-[#4E93A8]/10/70 px-4 py-4">
                   <h3 className="text-sm font-semibold text-[#1B2733]">Before you go live</h3>
                   <p className="mt-2 text-sm text-[#3A4A57]">
                     Aminy verifies your primary credential, matches your licensed states, and only turns on marketplace discovery after those checks pass. If you add states outside the live launch footprint, they stay saved on your profile and become bookable when that market is opened.
@@ -953,13 +1011,13 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               </div>
 
               {/* Non-solicitation acknowledgment */}
-              <div className={`mt-4 rounded-2xl border p-4 transition-colors ${nonSolicitationAck ? 'border-[#6B9080]/20 bg-[#6B9080]/10/60' : 'border-neutral-200 bg-neutral-50'}`}>
+              <div className={`mt-4 rounded-2xl border p-4 transition-colors ${nonSolicitationAck ? 'border-[#4E93A8]/20 bg-[#4E93A8]/10/60' : 'border-neutral-200 bg-neutral-50'}`}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={nonSolicitationAck}
                     onChange={(e) => setNonSolicitationAck(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-[#E8E4DF] text-[#6B9080] focus:ring-teal-500"
+                    className="mt-0.5 h-4 w-4 rounded border-[#E8E4DF] text-[#4E93A8] focus:ring-teal-500"
                   />
                   <span className="text-sm text-[#3A4A57]">
                     <span className="font-semibold text-[#1B2733]">Non-Solicitation Agreement — </span>
@@ -978,48 +1036,75 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           </div>
         )}
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-8">
-          <button
-            type="button"
-            onClick={stepIndex === 0 ? onBack : prevStep}
-            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {stepIndex === 0 ? 'Cancel' : 'Back'}
-          </button>
+        {currentStep === 'agreement' && (
+          <ProviderAgreement
+            providerName={`${form.firstName} ${form.lastName}`.trim() || 'Provider'}
+            providerEmail={form.email}
+            onAccept={handleAgreementAccept}
+            onBack={prevStep}
+          />
+        )}
 
-          {currentStep === 'review' ? (
+        {currentStep === 'baa' && (
+          <ProviderBAA
+            providerName={`${form.firstName} ${form.lastName}`.trim() || 'Provider'}
+            providerEmail={form.email}
+            onAccept={handleBAAAccept}
+            onBack={prevStep}
+          />
+        )}
+
+        {isSubmitting && currentStep === 'baa' && (
+          <div className="fixed inset-0 bg-white/80 flex items-center justify-center z-50">
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 className="w-8 h-8 animate-spin text-[#4E93A8]" />
+              <p className="text-sm text-[#5A6B7A] font-medium">Creating your provider profile…</p>
+            </div>
+          </div>
+        )}
+
+        {submitError && currentStep === 'baa' && (
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+            <p className="text-sm text-red-700">{submitError}</p>
+          </div>
+        )}
+
+        {/* Navigation — hidden on agreement/baa steps which have their own action buttons */}
+        {currentStep !== 'agreement' && currentStep !== 'baa' && (
+          <div className="flex items-center justify-between mt-8">
             <button
               type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !nonSolicitationAck}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#6B9080]/90 disabled:opacity-50"
+              onClick={stepIndex === 0 ? onBack : prevStep}
+              className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Creating Profile...
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  Submit for verification
-                </>
-              )}
+              <ArrowLeft className="w-4 h-4" />
+              {stepIndex === 0 ? 'Cancel' : 'Back'}
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={nextStep}
-              disabled={!canAdvance()}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#6B9080] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#6B9080]/90 disabled:opacity-50"
-            >
-              Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+
+            {currentStep === 'review' ? (
+              <button
+                type="button"
+                onClick={nextStep}
+                disabled={!nonSolicitationAck}
+                className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
+              >
+                <ArrowRight className="w-4 h-4" />
+                Continue to Agreement
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={nextStep}
+                disabled={!canAdvance()}
+                className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
+              >
+                Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

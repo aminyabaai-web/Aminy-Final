@@ -254,7 +254,7 @@ export function ERA835Viewer({ era, onAppeal, onPost }: ERA835ViewerProps) {
             <Button
               onClick={() => onPost(era)}
               className="flex-1 h-9 rounded-xl text-sm font-semibold text-white"
-              style={{ backgroundColor: '#43AA8B' }}
+              style={{ backgroundColor: '#4E93A8' }}
             >
               <CheckCircle className="w-4 h-4 mr-1.5" />
               Post to Claim

@@ -101,7 +101,7 @@ export const REFERRAL_TIERS: ReferralTier[] = [
     name: 'Champion',
     minReferrals: 5,
     perks: ['Everything in Supporter', '20% off marketplace sessions', 'Priority support'],
-    badgeColor: '#43AA8B',
+    badgeColor: '#4E93A8',
     badgeIcon: '🏆',
   },
   {

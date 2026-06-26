@@ -40,7 +40,7 @@ interface AddSlotForm {
 
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 7); // 7 AM to 6 PM
 const SLOT_TYPE_COLORS: Record<SlotType, { bg: string; border: string; text: string }> = {
-  available: { bg: '#e8f5f0', border: '#43AA8B', text: '#2d8a6e' },
+  available: { bg: '#e8f5f0', border: '#4E93A8', text: '#2d8a6e' },
   telehealth_only: { bg: '#e8f0fe', border: '#4285f4', text: '#1a56db' },
   in_person_only: { bg: '#fff5e6', border: '#F4A261', text: '#b87a3a' },
   blocked: { bg: '#f5f5f5', border: '#999', text: '#666' },
@@ -167,7 +167,7 @@ export default function ProviderAvailability() {
         </div>
         <div style={{ width: '1px', backgroundColor: '#e9ecef' }} />
         <div style={{ flex: 1, textAlign: 'center' }}>
-          <div style={{ fontSize: '18px', fontWeight: 800, color: '#43AA8B' }}>
+          <div style={{ fontSize: '18px', fontWeight: 800, color: '#4E93A8' }}>
             {Object.values(schedule).flat().filter((s) => s.slotType !== 'blocked').length}
           </div>
           <div style={{ fontSize: '10px', color: '#577590', fontWeight: 600 }}>SLOTS</div>
@@ -216,9 +216,9 @@ export default function ProviderAvailability() {
         style={{
           position: 'fixed', bottom: '80px', right: '16px',
           width: '56px', height: '56px', borderRadius: '28px',
-          backgroundColor: '#43AA8B', border: 'none', color: '#fff',
+          backgroundColor: '#4E93A8', border: 'none', color: '#fff',
           fontSize: '28px', fontWeight: 300, cursor: 'pointer',
-          boxShadow: '0 4px 12px rgba(67,170,139,0.4)',
+          boxShadow: '0 4px 12px rgba(78,147,168,0.4)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}
       >
@@ -277,8 +277,8 @@ function DayRow({
           onClick={onAddSlot}
           style={{
             padding: '4px 10px', fontSize: '11px', fontWeight: 600,
-            backgroundColor: 'transparent', border: '1px solid #43AA8B',
-            color: '#43AA8B', borderRadius: '4px', cursor: 'pointer',
+            backgroundColor: 'transparent', border: '1px solid #4E93A8',
+            color: '#4E93A8', borderRadius: '4px', cursor: 'pointer',
           }}
         >
           + Add
@@ -433,7 +433,7 @@ function SlotFormModal({
           <button onClick={onCancel} style={{ ...btnStyle, backgroundColor: '#f0f0f0', color: '#577590', flex: 1 }}>
             Cancel
           </button>
-          <button onClick={onSave} style={{ ...btnStyle, backgroundColor: '#43AA8B', color: '#fff', flex: 2 }}>
+          <button onClick={onSave} style={{ ...btnStyle, backgroundColor: '#4E93A8', color: '#fff', flex: 2 }}>
             {isEditing ? 'Update' : 'Add Slot'}
           </button>
         </div>

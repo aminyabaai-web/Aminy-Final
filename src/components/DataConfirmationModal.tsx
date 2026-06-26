@@ -50,17 +50,17 @@ interface CategoryStyle {
 
 const CATEGORY_STYLES: Record<DataCategory, CategoryStyle> = {
   incident:        { label: 'Behavioral incident', icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
-  medication:      { label: 'Medication',          icon: Pill,           color: '#7BA7BC', iconColor: '#fff' },
-  'goal-progress': { label: 'Goal progress',       icon: Target,         color: '#43AA8B', iconColor: '#fff' },
+  medication:      { label: 'Medication',          icon: Pill,           color: '#6AA9BC', iconColor: '#fff' },
+  'goal-progress': { label: 'Goal progress',       icon: Target,         color: '#4E93A8', iconColor: '#fff' },
   insurance:       { label: 'Insurance',           icon: Shield,         color: '#577590', iconColor: '#fff' },
   routine:         { label: 'Daily routine',       icon: Calendar,       color: '#D4A373', iconColor: '#fff' },
   trigger:         { label: 'Trigger',             icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
-  strategy:        { label: 'Effective strategy',  icon: Sparkles,       color: '#6B9080', iconColor: '#fff' },
+  strategy:        { label: 'Effective strategy',  icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
   appointment:     { label: 'Appointment',         icon: Calendar,       color: '#577590', iconColor: '#fff' },
-  'provider-note': { label: 'Provider note',       icon: Stethoscope,    color: '#7BA7BC', iconColor: '#fff' },
-  'child-profile': { label: 'Profile update',      icon: Baby,           color: '#6B9080', iconColor: '#fff' },
-  preference:      { label: 'Preference',          icon: Sparkles,       color: '#6B9080', iconColor: '#fff' },
-  milestone:       { label: 'Milestone',           icon: Sparkles,       color: '#43AA8B', iconColor: '#fff' },
+  'provider-note': { label: 'Provider note',       icon: Stethoscope,    color: '#6AA9BC', iconColor: '#fff' },
+  'child-profile': { label: 'Profile update',      icon: Baby,           color: '#4E93A8', iconColor: '#fff' },
+  preference:      { label: 'Preference',          icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
+  milestone:       { label: 'Milestone',           icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
   concern:         { label: 'Concern',             icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
   school:          { label: 'School',              icon: GraduationCap,  color: '#577590', iconColor: '#fff' },
   diet:            { label: 'Nutrition',           icon: Apple,          color: '#D4A373', iconColor: '#fff' },
@@ -152,8 +152,8 @@ export function DataConfirmationModal({
             <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
               {pending.length === 0 ? (
                 <div className="px-4 py-10 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#43AA8B]/10 flex items-center justify-center">
-                    <Check className="w-5 h-5 text-[#43AA8B]" />
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#4E93A8]/10 flex items-center justify-center">
+                    <Check className="w-5 h-5 text-[#4E93A8]" />
                   </div>
                   <p className="text-sm font-medium text-[#1B2733]">All caught up</p>
                   <p className="mt-1 text-sm text-[#8E9BAA]">Nothing waiting on your review.</p>
@@ -218,9 +218,9 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
       ? 'Likely match'
       : 'Best guess';
   const confidenceColor = item.confidence >= 0.8
-    ? '#43AA8B'
+    ? '#4E93A8'
     : item.confidence >= 0.65
-      ? '#6B9080'
+      ? '#4E93A8'
       : '#D4A373';
 
   const previewEntries = Object.entries(item.structuredData)

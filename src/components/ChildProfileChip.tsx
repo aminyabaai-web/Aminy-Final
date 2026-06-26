@@ -51,7 +51,7 @@ export function ChildProfileChip({
       {/* Profile Avatar */}
       <div className={`
         ${sizes.container} 
-        bg-gradient-to-br from-[#6B9080] to-[#43AA8B] 
+        bg-gradient-to-br from-[#6B9080] to-[#4E93A8] 
         rounded-full 
         flex items-center justify-center 
         text-white 

@@ -187,11 +187,27 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <p className="text-[#5A6B7A] leading-relaxed">
               The Service and its original content (excluding user-provided content) are and will remain
               the exclusive property of Aminy, LLC and its licensors. The Service is protected by
-              copyright, trademark, and other laws.
+              copyright, trademark, and other laws. Aminy's AI models, behavioral frameworks, scoring
+              algorithms, and prompt architecture constitute trade secrets under the Defend Trade Secrets
+              Act of 2016 (18 U.S.C. § 1836).
             </p>
             <p className="text-[#5A6B7A] leading-relaxed mt-4">
               You retain ownership of any content you submit to the Service, but grant us a license
               to use it to provide and improve our services.
+            </p>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">AI-Generated Content</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              All AI-generated recommendations, session plans, behavior summaries, and reports produced
+              by the Service are the property of Aminy, LLC. You may use such outputs solely for personal,
+              non-commercial purposes in caring for your child. You may not reproduce, redistribute,
+              sell, or use AI outputs to build or train any competing product or service.
+            </p>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">Prohibited Uses</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              You may not: (a) reverse-engineer or attempt to derive the source code or algorithms
+              of the Service; (b) use automated tools to scrape, index, or collect data from the Service;
+              (c) use the Service or its outputs to build, train, or improve any competing product;
+              (d) sublicense, sell, or commercially exploit any portion of the Service or its outputs.
             </p>
           </section>
 
@@ -228,6 +244,39 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <p className="text-[#5A6B7A] leading-relaxed mt-4">
               These Terms shall be governed by the laws of the State of Arizona, without regard
               to its conflict of law provisions.
+            </p>
+          </section>
+
+          {/* Automated Communications */}
+          <section>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Automated Communications</h2>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">SMS Text Messages</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              By providing your phone number, you consent to receive automated SMS text messages from Aminy,
+              including appointment reminders, session notifications, and service updates. Message and data
+              rates may apply. Message frequency varies based on your activity and appointments.
+            </p>
+            <p className="text-[#5A6B7A] leading-relaxed mt-4">
+              <strong>To opt out:</strong> Reply STOP to any SMS message at any time. You may also manage
+              SMS preferences in app Settings. Opting out of SMS will not affect your ability to use the Service.
+            </p>
+            <p className="text-[#5A6B7A] leading-relaxed mt-4">
+              <strong>Help:</strong> Reply HELP to any SMS message or contact{' '}
+              <a href="mailto:support@aminy.ai" className="text-[#376E80] hover:underline">support@aminy.ai</a>.
+            </p>
+
+            <h3 className="font-medium text-[#1B2733] mt-6 mb-2">Email Communications</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              By creating an account, you agree to receive transactional emails related to your account
+              (password resets, session confirmations, billing receipts) and, where you have consented,
+              marketing communications. You may unsubscribe from marketing emails at any time using the
+              unsubscribe link in any email or by contacting support.
+            </p>
+
+            <h3 className="font-medium text-[#1B2733] mt-6 mb-2">TCPA Compliance</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              SMS messages are sent in compliance with the Telephone Consumer Protection Act (TCPA).
+              Your consent to receive SMS is not a condition of purchasing any goods or services.
             </p>
           </section>
 

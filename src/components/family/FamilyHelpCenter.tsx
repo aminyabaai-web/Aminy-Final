@@ -285,7 +285,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
     >
       <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#43AA8B' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#4E93A8' }}>
             <MessageCircle className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -324,7 +324,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
         <button
           onClick={send}
           className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0"
-          style={{ backgroundColor: '#43AA8B' }}
+          style={{ backgroundColor: '#4E93A8' }}
         >
           <Send className="w-4 h-4" />
         </button>
@@ -465,7 +465,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                   onClick={() => setShowChat(true)}
                   className="w-full bg-white border border-[#E8E4DF] rounded-2xl p-4 flex items-center gap-3 hover:border-[#6B9080]/30 transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#43AA8B' }}>
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: '#4E93A8' }}>
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 text-left">
@@ -540,7 +540,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
         <button
           onClick={() => setShowChat(true)}
           className="fixed bottom-6 right-6 w-14 h-14 rounded-2xl shadow-lg flex items-center justify-center text-white z-40"
-          style={{ backgroundColor: '#43AA8B' }}
+          style={{ backgroundColor: '#4E93A8' }}
         >
           <MessageCircle className="w-6 h-6" />
         </button>

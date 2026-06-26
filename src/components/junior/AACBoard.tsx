@@ -69,7 +69,7 @@ const CATEGORY_META: Record<
   },
   people: {
     label: 'People',
-    color: '#43AA8B',
+    color: '#4E93A8',
     bgClass: 'aac-bg-people',
     borderClass: 'aac-border-people',
     emoji: '👥',

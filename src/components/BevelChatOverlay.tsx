@@ -74,9 +74,10 @@ async function executeSmartAction(action: SmartAction, userId: string): Promise<
         notes: action.payload.notes || null,
         is_positive: action.payload.is_positive ?? false,
         logged_at: new Date().toISOString(),
+        logged_by: 'ai_suggestion_parent_confirmed',
       });
       if (error) throw error;
-      return `✓ Behavior logged: ${action.payload.behavior_type}`;
+      return `✓ Behavior noted: ${action.payload.behavior_type}${action.payload.trigger ? ` (trigger: ${action.payload.trigger})` : ''}. Tap the behavior log to review or edit.`;
     }
     case 'SET_CALM_CUE': {
       await updateUserContext(userId, { lastCalmCue: action.payload.cue });
@@ -624,9 +625,11 @@ RESPONSE RULES:
 5. Identify the likely FUNCTION of behavior before recommending a strategy
 6. 3-5 sentences for most responses; longer only if explicitly asked
 7. End with an insight or a single focused question
-8. Never say "consult a professional" — YOU are the expert
-9. Never say "I'm just an AI" — you are Aminy
-10. If you notice a pattern, name it
+8. You are Aminy — an AI-powered behavioral wellness coach. You are NOT a licensed BCBA, therapist, or physician.
+9. Frame all suggestions as "what tends to work based on ABA principles" — never as clinical prescriptions.
+10. If a parent describes a CRISIS, EMERGENCY, danger to self/others, abuse, or medical symptom (seizure, medication reaction, injury), ALWAYS respond with: "This needs immediate professional help. Call 911 for emergencies or 988 for crisis support." — this overrides all other rules.
+11. If a parent asks about medication, medical diagnoses, or treatment decisions, always end with: "Your child's pediatrician or BCBA should weigh in on this before you make changes."
+12. If you notice a pattern, name it.
 
 RICH FORMATTING (write markdown — it renders as real tables, headings, and lists):
 • When you compare data across time, options, or categories (before/after, week-over-week, option A vs B, progress across multiple goals), present it as a GFM markdown TABLE:
@@ -1018,7 +1021,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <div
                   className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                  style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)', boxShadow: '0 2px 8px rgba(67,170,139,0.35)' }}
+                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)', boxShadow: '0 2px 8px rgba(78,147,168,0.35)' }}
                 >
                   ✦
                 </div>
@@ -1113,7 +1116,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             >
                               <div
                                 className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5"
-                                style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                                style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
                               >
                                 ✦
                               </div>
@@ -1161,11 +1164,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <div className="flex-1 overflow-y-auto">
 
                       {/* ── Profile card ── */}
-                      <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #43AA8B12 0%, #57759012 100%)', border: '1px solid #43AA8B25' }}>
+                      <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A825' }}>
                         <div className="flex items-center gap-3">
                           <div
                             className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0"
-                            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
                           >
                             {(userContext?.childName || propChildName || '?')[0].toUpperCase()}
                           </div>
@@ -1183,7 +1186,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="ml-auto shrink-0 text-right">
                             <div
                               className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                              style={{ background: 'linear-gradient(135deg, #43AA8B22 0%, #57759022 100%)', color: '#43AA8B' }}
+                              style={{ background: 'linear-gradient(135deg, #4E93A822 0%, #57759022 100%)', color: '#4E93A8' }}
                             >
                               ✦ AI Active
                             </div>
@@ -1220,8 +1223,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               }}
                               className="flex items-start gap-2 p-3 rounded-xl border transition-all text-left"
                               style={personality === p.id ? {
-                                background: 'linear-gradient(135deg, #43AA8B15 0%, #57759015 100%)',
-                                borderColor: '#43AA8B',
+                                background: 'linear-gradient(135deg, #4E93A815 0%, #57759015 100%)',
+                                borderColor: '#4E93A8',
                               } : {
                                 background: 'white',
                                 borderColor: '#e2e8f0',
@@ -1489,6 +1492,13 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
               {/* ── Messages ── */}
               <div className="absolute inset-0 overflow-y-auto px-4 pt-2 pb-2 space-y-4">
+                {/* AI disclaimer — shown once per session at top of chat */}
+                {messages.length === 0 && !isProactiveLoading && (
+                  <div className="mb-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 leading-relaxed">
+                    <span className="font-semibold">Educational guidance only.</span> Aminy AI provides ABA-informed support tools — not medical advice, diagnosis, or clinical therapy. For emergencies call 911 · For crisis support call 988.
+                  </div>
+                )}
+
                 {isProactiveLoading && messages.length === 0 && (
                   <div className="flex flex-col gap-2 pt-4">
                     <div className="h-4 w-3/4 bg-[#F0EDE8] rounded-full animate-pulse" />
@@ -1503,7 +1513,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       {msg.role === 'assistant' && (
                         <div
                           className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center text-white text-xs font-bold"
-                          style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                          style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
                         >
                           ✦
                         </div>
@@ -1552,7 +1562,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 <button
                                   onClick={() => { onUpgrade?.(); onClose(); }}
                                   className="mt-3 w-full py-2.5 px-4 rounded-xl text-sm font-semibold text-white"
-                                  style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
                                 >
                                   Start 7-day free trial →
                                 </button>
@@ -1597,7 +1607,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         >
                           <ThumbsUp
                             className="w-3.5 h-3.5"
-                            style={messageRatings[msg.id] === 'up' ? { fill: '#43AA8B', color: '#43AA8B' } : undefined}
+                            style={messageRatings[msg.id] === 'up' ? { fill: '#4E93A8', color: '#4E93A8' } : undefined}
                           />
                         </button>
                         <button
@@ -1644,7 +1654,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   <div className="flex items-start gap-2">
                     <div
                       className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold"
-                      style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
                     >
                       ✦
                     </div>
@@ -1829,9 +1839,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
                         background: (input.trim() || attachedImage)
-                          ? 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)'
+                          ? 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)'
                           : '#e2e8f0',
-                        boxShadow: (input.trim() || attachedImage) ? '0 2px 8px rgba(67,170,139,0.4)' : 'none'
+                        boxShadow: (input.trim() || attachedImage) ? '0 2px 8px rgba(78,147,168,0.4)' : 'none'
                       }}
                     >
                       <ArrowUp className="w-4 h-4 text-white" />

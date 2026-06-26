@@ -428,9 +428,9 @@ function generateHTMLReport(data: CoverageSummaryData): string {
   <title>Coverage Clarity Summary - ${data.childName}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #334155; max-width: 800px; margin: 0 auto; padding: 20px; }
-    h1 { color: #6B9080; border-bottom: 3px solid #6B9080; padding-bottom: 10px; }
+    h1 { color: #4E93A8; border-bottom: 3px solid #4E93A8; padding-bottom: 10px; }
     h2 { color: #0f172a; margin-top: 30px; }
-    .section { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #6B9080; }
+    .section { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4E93A8; }
     .recommendation { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 15px 0; }
     .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 8px; }
     .badge.high { background: #fee2e2; color: #991b1b; }

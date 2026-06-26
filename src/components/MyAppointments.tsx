@@ -344,7 +344,7 @@ function AppointmentCard({
         <div className="flex items-start justify-between gap-3">
           {/* Provider Info */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#43AA8B] flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#4E93A8] flex items-center justify-center text-white font-bold">
               {appointment.provider.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>

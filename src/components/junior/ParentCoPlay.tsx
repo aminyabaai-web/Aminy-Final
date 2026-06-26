@@ -326,11 +326,11 @@ export function ParentCoPlay({
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-3 w-full max-w-xs mb-6">
             <div className="bg-white rounded-xl p-3 shadow-sm">
-              <div className="text-2xl font-bold text-[#43AA8B]">{accuracy}%</div>
+              <div className="text-2xl font-bold text-[#4E93A8]">{accuracy}%</div>
               <div className="text-sm text-[#5A6B7A]">Accuracy</div>
             </div>
             <div className="bg-white rounded-xl p-3 shadow-sm">
-              <div className="text-2xl font-bold text-[#43AA8B]">{independentCount}/{trials.length}</div>
+              <div className="text-2xl font-bold text-[#4E93A8]">{independentCount}/{trials.length}</div>
               <div className="text-sm text-[#5A6B7A]">Independent</div>
             </div>
             <div className="bg-white rounded-xl p-3 shadow-sm">
@@ -379,7 +379,7 @@ export function ParentCoPlay({
               value={parentNotes}
               onChange={(e) => setParentNotes(e.target.value)}
               placeholder="Any observations about today's session..."
-              className="w-full p-3 rounded-xl border border-[#E8E4DF] text-sm resize-none h-20 focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/30"
+              className="w-full p-3 rounded-xl border border-[#E8E4DF] text-sm resize-none h-20 focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/30"
             />
           </div>
 
@@ -387,7 +387,7 @@ export function ParentCoPlay({
           <div className="flex gap-3 w-full max-w-xs">
             <button
               onClick={handleComplete}
-              className="flex-1 py-3 bg-[#43AA8B] text-white rounded-xl font-semibold text-sm active:scale-95 transition-transform"
+              className="flex-1 py-3 bg-[#4E93A8] text-white rounded-xl font-semibold text-sm active:scale-95 transition-transform"
             >
               Save & Finish
             </button>
@@ -435,7 +435,7 @@ export function ParentCoPlay({
           onClick={() => setIsPaused(!isPaused)}
           className="p-1.5 rounded-lg bg-[#F0EDE8] active:scale-95 transition-transform"
         >
-          {isPaused ? <Play className="w-4 h-4 text-[#43AA8B]" /> : <Pause className="w-4 h-4 text-[#5A6B7A]" />}
+          {isPaused ? <Play className="w-4 h-4 text-[#4E93A8]" /> : <Pause className="w-4 h-4 text-[#5A6B7A]" />}
         </button>
       </div>
 
@@ -454,7 +454,7 @@ export function ParentCoPlay({
               <p className="text-sm text-[#5A6B7A] mb-4">Take a break. {childName} is doing great!</p>
               <button
                 onClick={() => setIsPaused(false)}
-                className="w-full py-2.5 bg-[#43AA8B] text-white rounded-xl font-semibold text-sm active:scale-95 transition-transform"
+                className="w-full py-2.5 bg-[#4E93A8] text-white rounded-xl font-semibold text-sm active:scale-95 transition-transform"
               >
                 Resume
               </button>
@@ -470,7 +470,7 @@ export function ParentCoPlay({
         <div className="flex items-center gap-2">
           <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-[#43AA8B] rounded-full"
+              className="h-full bg-[#4E93A8] rounded-full"
               initial={false}
               animate={{ width: `${((currentTrial - 1) / totalTrials) * 100}%` }}
               transition={{ duration: 0.3 }}
@@ -504,7 +504,7 @@ export function ParentCoPlay({
             {activityDescription && (
               <p className="text-sm text-[#5A6B7A] mb-3">{activityDescription}</p>
             )}
-            <div className="text-4xl font-bold text-[#43AA8B]">{currentTrial}</div>
+            <div className="text-4xl font-bold text-[#4E93A8]">{currentTrial}</div>
             <div className="text-sm text-[#5A6B7A] mt-1">Current Trial</div>
           </div>
         </div>
@@ -552,7 +552,7 @@ export function ParentCoPlay({
                 onClick={() => setSelectedPromptLevel(level)}
                 className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-xl text-sm transition-all active:scale-95 ${
                   selectedPromptLevel === level
-                    ? 'bg-[#43AA8B] text-white shadow-sm'
+                    ? 'bg-[#4E93A8] text-white shadow-sm'
                     : 'bg-[#FAF7F2] text-[#5A6B7A]'
                 }`}
               >
@@ -575,7 +575,7 @@ export function ParentCoPlay({
                   {PROMPT_LEVELS.map(({ level, label, description, icon }) => (
                     <div
                       key={level}
-                      className={`flex items-center gap-2 py-1.5 ${level === selectedPromptLevel ? 'text-[#43AA8B] font-medium' : 'text-[#5A6B7A]'}`}
+                      className={`flex items-center gap-2 py-1.5 ${level === selectedPromptLevel ? 'text-[#4E93A8] font-medium' : 'text-[#5A6B7A]'}`}
                     >
                       {icon}
                       <div>

@@ -41,7 +41,7 @@ const COLORS: Record<number, string> = {
   1: '#f87171',  // red
   2: '#fbbf24',  // amber
   3: '#60a5fa',  // blue
-  4: '#43AA8B',  // teal (brand)
+  4: '#4E93A8',  // teal (brand)
 };
 
 export function PasswordStrengthMeter({ password }: PasswordStrengthMeterProps) {
@@ -83,8 +83,8 @@ export function PasswordStrengthMeter({ password }: PasswordStrengthMeterProps) 
                 alignItems: 'center',
                 gap: 4,
                 fontSize: 10,
-                color: c.passed ? '#43AA8B' : '#94a3b8',
-                background: c.passed ? '#43AA8B12' : '#f1f5f9',
+                color: c.passed ? '#4E93A8' : '#94a3b8',
+                background: c.passed ? '#4E93A812' : '#f1f5f9',
                 padding: '3px 8px',
                 borderRadius: 999,
                 whiteSpace: 'nowrap',
