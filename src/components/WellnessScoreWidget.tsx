@@ -85,7 +85,7 @@ export function WellnessScoreWidget({
             animate={{ width: `${score.confidence}%` }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, #4E93A8 0%, #6AA9BC 100%)' }}
+            style={{ background: 'linear-gradient(90deg, #2A7D99 0%, #4795AE 100%)' }}
           />
         </div>
       </div>
@@ -145,8 +145,8 @@ function TrendBadge({
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
       style={{
-        background: isUp ? '#4E93A815' : '#E07A5F15',
-        color: isUp ? '#4E93A8' : '#E07A5F',
+        background: isUp ? '#2A7D9915' : '#E07A5F15',
+        color: isUp ? '#2A7D99' : '#E07A5F',
       }}
     >
       {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -157,8 +157,8 @@ function TrendBadge({
 }
 
 function colorForScore(score: number): string {
-  if (score >= 75) return '#4E93A8';
-  if (score >= 50) return '#4E93A8';
+  if (score >= 75) return '#2A7D99';
+  if (score >= 50) return '#2A7D99';
   if (score >= 30) return '#D4A373';
   return '#E07A5F';
 }

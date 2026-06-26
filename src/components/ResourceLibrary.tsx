@@ -126,7 +126,7 @@ export function ResourceLibrary({
               onClick={() => setSelectedCategory(cat.id)}
               className="flex items-center gap-1.5 whitespace-nowrap text-xs px-3 py-1.5 rounded-full border transition-all shrink-0"
               style={selectedCategory === cat.id
-                ? { background: '#4E93A815', borderColor: '#4E93A8', color: '#4E93A8', fontWeight: 600 }
+                ? { background: '#2A7D9915', borderColor: '#2A7D99', color: '#2A7D99', fontWeight: 600 }
                 : { background: 'white', borderColor: '#e2e8f0', color: '#64748b' }}
             >
               <span>{cat.emoji}</span>{cat.label}
@@ -137,7 +137,7 @@ export function ResourceLibrary({
 
       {/* AI Recommendations — shown when we have context */}
       {!searchQuery && selectedCategory === 'all' && recommended.length > 0 && (
-        <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">
@@ -175,7 +175,7 @@ export function ResourceLibrary({
 
       {/* Bottom CTA — Ask BCBA team */}
       <div className="mx-4 mt-6 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+        <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
           <span className="text-white text-base">?</span>
         </div>
         <div className="flex-1">
@@ -184,7 +184,7 @@ export function ResourceLibrary({
         </div>
         <button
           onClick={() => onNavigate?.('ask-bcba')}
-          className="text-[#4E93A8] shrink-0"
+          className="text-[#2A7D99] shrink-0"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -294,7 +294,7 @@ function ArticleView({
         {/* Author */}
         {r.author && (
           <div className="flex items-center gap-2 mt-3 pb-3 border-b border-[#E8E4DF]">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>A</div>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>A</div>
             <div>
               <p className="text-sm font-medium text-[#1B2733]">{r.author}</p>
               {r.authorCredentials && <p className="text-sm text-[#5A6B7A]">{r.authorCredentials}</p>}
@@ -319,7 +319,7 @@ function ArticleView({
                 <button
                   onClick={() => onNavigate?.('paywall')}
                   className="w-full py-2.5 rounded-xl text-white text-sm font-semibold"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                 >
                   Upgrade to Pro+ — $49.99/mo
                 </button>
@@ -349,7 +349,7 @@ function ArticleView({
 
         {/* Related group sessions */}
         {!isLocked && r.relatedGroupTopics && r.relatedGroupTopics.length > 0 && (
-          <div className="mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+          <div className="mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-4 h-4 text-[#6B9080]" />
               <p className="text-sm font-semibold text-[#6B9080]">Live group sessions on this topic</p>
@@ -372,7 +372,7 @@ function ArticleView({
                           {' · '}${(s.price_per_family_cents / 100).toFixed(0)}/family
                         </p>
                       </div>
-                      <span className={`text-sm font-semibold shrink-0 ${spotsLeft <= 1 ? 'text-[#E07A5F]' : 'text-[#4E93A8]'}`}>
+                      <span className={`text-sm font-semibold shrink-0 ${spotsLeft <= 1 ? 'text-[#E07A5F]' : 'text-[#2A7D99]'}`}>
                         {spotsLeft === 0 ? 'Waitlist' : `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`}
                       </span>
                     </button>
@@ -386,7 +386,7 @@ function ArticleView({
             )}
             <button
               onClick={() => onNavigate?.('group-sessions')}
-              className="flex items-center gap-2 text-sm font-semibold text-[#4E93A8]"
+              className="flex items-center gap-2 text-sm font-semibold text-[#2A7D99]"
             >
               Browse all group sessions <ExternalLink className="w-3 h-3" />
             </button>
@@ -396,7 +396,7 @@ function ArticleView({
         {/* Ask BCBA CTA */}
         {!isLocked && (
           <div className="mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+            <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <span className="text-white text-base">?</span>
             </div>
             <div className="flex-1">
@@ -407,7 +407,7 @@ function ArticleView({
             </div>
             <button
               onClick={() => onNavigate?.('ask-bcba')}
-              className="text-[#4E93A8] shrink-0"
+              className="text-[#2A7D99] shrink-0"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

@@ -263,7 +263,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       {!showAsk && !isLoading && threads.length === 0 && (
         <div className="mx-4 mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4">
           <div className="flex items-start gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -309,14 +309,14 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 <button
                   onClick={() => onNavigate?.('booking')}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                 >
                   <CalendarDays className="w-4 h-4" />
                   Book a telehealth session
                 </button>
                 <button
                   onClick={() => onNavigate?.('paywall')}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#4E93A8] text-[#4E93A8] font-semibold text-sm"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#2A7D99] text-[#2A7D99] font-semibold text-sm"
                 >
                   <Sparkles className="w-4 h-4" />
                   Upgrade to Pro+ for unlimited access
@@ -330,7 +330,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             <button
               onClick={() => setShowAsk(true)}
               className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(78,147,168,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)', boxShadow: '0 4px 12px rgba(42,125,153,0.3)' }}
             >
               <Plus className="w-5 h-5" />
               Ask your behaviorist team
@@ -378,7 +378,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   onClick={() => setCategory(category === c.id ? null : c.id)}
                   className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all"
                   style={category === c.id
-                    ? { background: '#4E93A815', borderColor: '#4E93A8', color: '#4E93A8', fontWeight: 600 }
+                    ? { background: '#2A7D9915', borderColor: '#2A7D99', color: '#2A7D99', fontWeight: 600 }
                     : { background: 'white', borderColor: '#e2e8f0', color: '#64748b' }}
                 >
                   <span>{c.emoji}</span>{c.label}
@@ -391,7 +391,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             onClick={submitQuestion}
             disabled={!question.trim() || isSubmitting}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             {isSubmitting ? 'Sending…' : 'Send to your behaviorist'}
@@ -499,7 +499,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
 
       {/* AI draft — show the live draft, or a drafting indicator while it's being generated */}
       {thread.ai_draft ? (
-        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
@@ -507,7 +507,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.ai_draft}</p>
         </div>
       ) : aiDrafting ? (
-        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-2">
             <Loader2 className="w-4 h-4 text-[#6B9080] animate-spin" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>

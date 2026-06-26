@@ -1116,7 +1116,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             >
                               <div
                                 className="w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold mt-0.5"
-                                style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                                style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                               >
                                 ✦
                               </div>
@@ -1170,7 +1170,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         <div className="flex items-center gap-3">
                           <div
                             className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0"
-                            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                            style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                           >
                             {(userContext?.childName || propChildName || '?')[0].toUpperCase()}
                           </div>
@@ -1515,7 +1515,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       {msg.role === 'assistant' && (
                         <div
                           className="w-6 h-6 rounded-full shrink-0 mr-2 mt-1 flex items-center justify-center text-white text-xs font-bold"
-                          style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                          style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                         >
                           ✦
                         </div>
@@ -1564,7 +1564,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 <button
                                   onClick={() => { onUpgrade?.(); onClose(); }}
                                   className="mt-3 w-full py-2.5 px-4 rounded-xl text-sm font-semibold text-white"
-                                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                                 >
                                   Start 7-day free trial →
                                 </button>
@@ -1609,7 +1609,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         >
                           <ThumbsUp
                             className="w-3.5 h-3.5"
-                            style={messageRatings[msg.id] === 'up' ? { fill: '#4E93A8', color: '#4E93A8' } : undefined}
+                            style={messageRatings[msg.id] === 'up' ? { fill: '#2A7D99', color: '#2A7D99' } : undefined}
                           />
                         </button>
                         <button

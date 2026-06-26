@@ -130,7 +130,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
   return (
     <div className={`rounded-2xl border border-[#E8E4DF] overflow-hidden ${className}`}
-      style={{ background: 'linear-gradient(135deg, #4E93A808 0%, #57759008 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, #2A7D9908 0%, #21698208 100%)' }}>
 
       {/* Header */}
       <div className="px-4 pt-4 pb-3 flex items-start gap-3">
@@ -138,7 +138,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           className="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0"
           style={{
             background: status.overallStatus === 'verified'
-              ? 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)'
+              ? 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)'
               : '#fef3c7'
           }}
         >
@@ -168,7 +168,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
             className="h-full transition-all duration-500"
             style={{
               width: `${status.completionPercent}%`,
-              background: 'linear-gradient(90deg, #4E93A8 0%, #577590 100%)',
+              background: 'linear-gradient(90deg, #2A7D99 0%, #216982 100%)',
             }}
           />
         </div>

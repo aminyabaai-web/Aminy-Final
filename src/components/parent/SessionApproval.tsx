@@ -295,7 +295,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 whileTap={{ scale: 0.97 }}
                 onClick={() => setStep('sign')}
                 className="w-full py-4 rounded-2xl font-semibold text-white text-base flex items-center justify-center gap-2 shadow-sm"
-                style={{ backgroundColor: '#4E93A8' }}
+                style={{ backgroundColor: '#2A7D99' }}
               >
                 <CheckCircle className="w-5 h-5" />
                 Looks good — approve this note
@@ -372,7 +372,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 onClick={handleApprove}
                 disabled={!canApprove}
                 className="w-full py-4 rounded-2xl font-semibold text-white text-base flex items-center justify-center gap-2 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
-                style={{ backgroundColor: canApprove ? '#4E93A8' : '#94a3b8' }}
+                style={{ backgroundColor: canApprove ? '#2A7D99' : '#94a3b8' }}
               >
                 <CheckCircle className="w-5 h-5" />
                 Approve note
@@ -399,7 +399,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               animate={{ scale: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
               className="w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-lg"
-              style={{ backgroundColor: '#4E93A8' }}
+              style={{ backgroundColor: '#2A7D99' }}
             >
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
