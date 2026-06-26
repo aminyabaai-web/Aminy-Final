@@ -10,6 +10,7 @@ import {
   sendTrialExpirationEmail,
   sendWeeklyDigestEmail,
   sendChurnPreventionEmail,
+  sendSessionNotesEmail,
   sendEmail,
   type ChurnEmailType,
 } from "./email-service.ts";
@@ -2578,10 +2579,9 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
         Deno.env.get('SUPABASE_URL') ?? '',
         Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
       );
-      // Look up session → child → parent email
       const { data: appt } = await sbNote
         .from('appointments')
-        .select('child_id, scheduled_at, profiles!inner(full_name, id)')
+        .select('child_id, scheduled_at, profiles!inner(full_name, id), children(name), provider:profiles!provider_id(full_name)')
         .eq('id', sessionId)
         .maybeSingle();
       if (!appt) return;
@@ -2591,27 +2591,12 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
       if (!parentId) return;
       const { data: { user } } = await sbNote.auth.admin.getUserById(parentId);
       if (!user?.email) return;
+      const childName = (appt as Record<string, {name: string}>).children?.name ?? 'your child';
+      const providerName = (appt as Record<string, {full_name: string}>).provider?.full_name ?? 'your provider';
       const date = appt.scheduled_at
         ? new Date(appt.scheduled_at as string).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         : 'today';
-      await sendEmail({
-        to: user.email,
-        subject: 'Session notes are ready in Aminy',
-        html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/></head><body style="font-family:sans-serif;background:#F8F8F6;margin:0;padding:32px 16px">
-<div style="max-width:560px;margin:0 auto">
-<div style="background:#0D1B2A;border-radius:14px 14px 0 0;padding:24px;text-align:center">
-<span style="font-size:22px;font-weight:700;color:#fff">Aminy<span style="color:#4E93A8">.</span></span>
-</div>
-<div style="background:#fff;border:1px solid #E8E4DF;border-radius:0 0 14px 14px;padding:32px 28px">
-<h1 style="font-size:18px;color:#0D1B2A;margin:0 0 12px">Session notes are ready</h1>
-<p style="font-size:15px;color:#3A4A57;line-height:1.6">Notes from ${date}'s session are now available in your Aminy dashboard.</p>
-<div style="text-align:center;margin:28px 0">
-<a href="https://aminy.ai" style="background:#4E93A8;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px 36px;border-radius:10px;display:inline-block">View session notes</a>
-</div>
-</div>
-<p style="text-align:center;font-size:12px;color:#8A9BB0;margin-top:16px">&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai" style="color:#4E93A8;text-decoration:none">aminy.ai</a></p>
-</div></body></html>`,
-      });
+      await sendSessionNotesEmail(user.email, childName, date, providerName);
       console.log(`[SessionNotes] Notified parent ${user.email} for session ${sessionId}`);
     } catch (e) {
       console.warn('[SessionNotes] Email notify failed (non-critical):', e);

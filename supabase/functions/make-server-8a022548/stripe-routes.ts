@@ -77,7 +77,7 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 const RESEND_VERIFIED_DOMAIN = Deno.env.get('RESEND_VERIFIED_DOMAIN') === 'true';
-const FROM_EMAIL = RESEND_VERIFIED_DOMAIN ? 'Aminy <hello@aminy.ai>' : 'Aminy <onboarding@resend.dev>';
+const FROM_EMAIL = RESEND_VERIFIED_DOMAIN ? 'Aminy <noreply@aminy.ai>' : 'Aminy <onboarding@resend.dev>';
 
 async function sendSmsSilent(to: string, body: string): Promise<void> {
   const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
