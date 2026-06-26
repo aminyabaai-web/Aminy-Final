@@ -13,6 +13,8 @@ import { TelehealthSessionManager } from './TelehealthSessionManager';
 import { PostVisitSummary } from './PostVisitSummary';
 import { TelehealthConsent, ConsentStatusBadge } from './TelehealthConsent';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import PostSessionReview from './PostSessionReview';
+import { useAminyStore } from '../lib/store';
 
 interface TelehealthScreenProps {
   onBack?: () => void;
@@ -41,7 +43,16 @@ export function TelehealthScreen({
   // HIPAA audit: log telehealth session view on mount
   const { logAction, logExport } = useAuditedAction('telehealth_session');
 
+  const storeUser = useAminyStore(state => state.user);
+
   const [activeView, setActiveView] = useState<'credits' | 'history'>('credits');
+
+  // Post-session rating modal state
+  const [reviewSession, setReviewSession] = useState<{
+    providerId: string;
+    providerName: string;
+    sessionDate: string;
+  } | null>(null);
   const [selectedVisit, setSelectedVisit] = useState<string | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
   const [showConsentModal, setShowConsentModal] = useState<boolean>(false);
@@ -276,6 +287,24 @@ export function TelehealthScreen({
             }}
             onNotesComplete={(notes) => {
             }}
+            onSessionComplete={(session) => {
+              setReviewSession({
+                providerId: `provider-${session.provider.replace(/\s+/g, '-').toLowerCase()}`,
+                providerName: session.provider,
+                sessionDate: session.date.toISOString().split('T')[0],
+              });
+            }}
+          />
+        )}
+
+        {/* Post-session star rating prompt */}
+        {reviewSession && storeUser?.id && (
+          <PostSessionReview
+            providerId={reviewSession.providerId}
+            providerName={reviewSession.providerName}
+            sessionDate={reviewSession.sessionDate}
+            userId={storeUser.id}
+            onClose={() => setReviewSession(null)}
           />
         )}
 

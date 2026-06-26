@@ -82,6 +82,7 @@ interface TelehealthSessionManagerProps {
   userTier?: string;
   onSessionScheduled?: (session: ScheduledSession) => void;
   onNotesComplete?: (notes: SessionNotes) => void;
+  onSessionComplete?: (session: ScheduledSession) => void;
 }
 
 export function TelehealthSessionManager({
@@ -89,7 +90,8 @@ export function TelehealthSessionManager({
   parentName,
   userTier = 'pro',
   onSessionScheduled,
-  onNotesComplete
+  onNotesComplete,
+  onSessionComplete
 }: TelehealthSessionManagerProps) {
   const [sessionCredits, setSessionCredits] = useState<SessionCredit[]>([
     {
@@ -270,6 +272,7 @@ export function TelehealthSessionManager({
       ) {
         orchestratedSessionIds.current.add(session.id);
         handlePostSessionOrchestration(session);
+        onSessionComplete?.(session);
       }
     }
   }, [scheduledSessions]); // eslint-disable-line react-hooks/exhaustive-deps

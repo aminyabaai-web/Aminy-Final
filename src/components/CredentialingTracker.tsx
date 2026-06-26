@@ -194,13 +194,42 @@ function generateDemoCredentials(): ProviderCredential[] {
 // Component
 // ============================================================================
 
-export default function CredentialingTracker() {
+interface CredentialingTrackerProps {
+  providerId?: string;
+}
+
+export default function CredentialingTracker({ providerId }: CredentialingTrackerProps = {}) {
   const [credentials, setCredentials] = useState<ProviderCredential[]>([]);
   const [providerType, setProviderType] = useState<ProviderTypeKey>('bcba');
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<string | null>(null);
   const [filter, setFilter] = useState<'all' | 'alerts' | 'pending'>('all');
+  const [suspendLoading, setSuspendLoading] = useState(false);
+  const [suspendToast, setSuspendToast] = useState<string | null>(null);
+  const [isSuspended, setIsSuspended] = useState(false);
+
+  function showSuspendToast(msg: string) {
+    setSuspendToast(msg);
+    setTimeout(() => setSuspendToast(null), 4000);
+  }
+
+  async function handleSuspendFromMarketplace() {
+    if (!providerId) return;
+    setSuspendLoading(true);
+    try {
+      await supabase
+        .from('provider_profiles')
+        .update({ is_active: false, suspension_reason: 'insurance_expired' })
+        .eq('id', providerId);
+      setIsSuspended(true);
+      showSuspendToast('Provider suspended from marketplace. They will not appear in search results.');
+    } catch {
+      showSuspendToast('Failed to suspend provider. Please try again.');
+    } finally {
+      setSuspendLoading(false);
+    }
+  }
 
   const loadCredentials = useCallback(async () => {
     setLoading(true);
@@ -234,6 +263,11 @@ export default function CredentialingTracker() {
   const pending = credentials.filter((c) => c.status === 'pending' || c.status === 'submitted').length;
   const completionPct = credentials.length > 0 ? Math.round((verified / credentials.length) * 100) : 0;
 
+  // Detect expired liability insurance — triggers enforcement banner
+  const expiredInsurance = credentials.find(
+    (c) => c.credentialType === 'liability_insurance' && c.expirationSeverity === 'expired'
+  );
+
   // Filtered list
   const filteredCredentials = credentials.filter((c) => {
     if (filter === 'alerts') return c.expirationSeverity === 'danger' || c.expirationSeverity === 'expired';
@@ -258,6 +292,19 @@ export default function CredentialingTracker() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa', padding: '16px' }}>
+      {/* Suspension toast */}
+      {suspendToast && (
+        <div style={{
+          position: 'fixed', top: '16px', left: '50%', transform: 'translateX(-50%)',
+          zIndex: 1000, backgroundColor: '#0D1B2A', color: '#fff',
+          fontSize: '13px', fontWeight: 600, padding: '10px 16px',
+          borderRadius: '10px', boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+          whiteSpace: 'nowrap',
+        }}>
+          {suspendToast}
+        </div>
+      )}
+
       {/* Header */}
       <div style={{ marginBottom: '16px' }}>
         <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#0D1B2A', margin: '0 0 4px 0' }}>
@@ -267,6 +314,56 @@ export default function CredentialingTracker() {
           Track licenses, certifications, and compliance
         </p>
       </div>
+
+      {/* Expired Malpractice Insurance Enforcement Banner */}
+      {expiredInsurance && !isSuspended && (
+        <div style={{
+          padding: '14px', marginBottom: '16px', borderRadius: '12px',
+          backgroundColor: '#fff1f2', border: '2px solid #fca5a5',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+            <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0 }}>&#x26A0;&#xFE0F;</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: '#be123c', marginBottom: '4px' }}>
+                Malpractice insurance expired. Provider cannot see new clients until renewed.
+              </div>
+              <div style={{ fontSize: '12px', color: '#9f1239', marginBottom: '10px' }}>
+                {expiredInsurance.credentialName} expired{' '}
+                {Math.abs(expiredInsurance.daysUntilExpiration || 0)} day{Math.abs(expiredInsurance.daysUntilExpiration || 0) !== 1 ? 's' : ''} ago.
+                {expiredInsurance.expirationDate ? ` Expiration date: ${formatDate(expiredInsurance.expirationDate)}.` : ''}
+                {' '}Upload renewed coverage to restore marketplace access.
+              </div>
+              {providerId && (
+                <button
+                  onClick={handleSuspendFromMarketplace}
+                  disabled={suspendLoading}
+                  style={{
+                    padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: suspendLoading ? 'not-allowed' : 'pointer',
+                    backgroundColor: suspendLoading ? '#fca5a5' : '#be123c', color: '#fff',
+                    fontSize: '12px', fontWeight: 700, opacity: suspendLoading ? 0.7 : 1,
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  }}
+                >
+                  {suspendLoading ? 'Suspending...' : 'Suspend from marketplace'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Already suspended notice */}
+      {expiredInsurance && isSuspended && (
+        <div style={{
+          padding: '12px 14px', marginBottom: '16px', borderRadius: '12px',
+          backgroundColor: '#f0fdf4', border: '1px solid #86efac',
+          fontSize: '13px', fontWeight: 600, color: '#15803d',
+          display: 'flex', alignItems: 'center', gap: '8px',
+        }}>
+          <span>&#x2713;</span>
+          Provider suspended from marketplace. They will not appear in client search results until insurance is renewed.
+        </div>
+      )}
 
       {/* Provider Type Selector */}
       <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', marginBottom: '16px', paddingBottom: '4px' }}>

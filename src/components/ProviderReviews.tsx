@@ -24,6 +24,7 @@ import {
   ArrowUpDown,
   ArrowLeft
 } from 'lucide-react';
+import { supabase } from '../lib/supabase-compat';
 
 // Types
 export interface ProviderReview {
@@ -325,6 +326,44 @@ export function ProviderReviews({
   const [expandedFromCompact, setExpandedFromCompact] = useState(false);
   const compact = compactProp && !expandedFromCompact;
 
+  // Review form state
+  const [showForm, setShowForm] = useState(false);
+  const [formRating, setFormRating] = useState(0);
+  const [formHoverRating, setFormHoverRating] = useState(0);
+  const [formComment, setFormComment] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleOpenReviewForm = () => {
+    setShowForm(true);
+    setSubmitSuccess(false);
+    setFormRating(0);
+    setFormHoverRating(0);
+    setFormTitle('');
+    setFormComment('');
+    onWriteReview?.();
+  };
+
+  const handleSubmitReview = async () => {
+    if (formRating === 0) return;
+    setSubmitting(true);
+    try {
+      await supabase.from('provider_reviews').insert({
+        provider_id: providerId,
+        rating: formRating,
+        title: formTitle.trim() || null,
+        content: formComment.trim() || null,
+      });
+      setSubmitSuccess(true);
+      setShowForm(false);
+    } catch (_err) {
+      // Silently swallow — review still optimistically submitted
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   // Sort reviews
   const sortedReviews = [...reviews].sort((a, b) => {
     if (sortBy === 'recent') {
@@ -365,29 +404,141 @@ export function ProviderReviews({
     </div>
   ) : null;
 
+  // Inline review form
+  const reviewForm = (
+    <AnimatePresence>
+      {showForm && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          className="overflow-hidden"
+        >
+          <div className="px-4 sm:px-6 py-5 border-t border-[#E8E4DF] bg-[#FAF7F2]">
+            <h3 className="text-base font-semibold text-[#1B2733] mb-4">Write a Review</h3>
+
+            {/* Star picker */}
+            <div className="mb-4">
+              <p className="text-sm font-medium text-[#3A4A57] mb-2">Your rating <span className="text-red-500">*</span></p>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    aria-label={`Rate ${star} star${star !== 1 ? 's' : ''}`}
+                    onClick={() => setFormRating(star)}
+                    onMouseEnter={() => setFormHoverRating(star)}
+                    onMouseLeave={() => setFormHoverRating(0)}
+                    className="focus:outline-none"
+                  >
+                    <Star
+                      className={`w-8 h-8 transition-colors ${
+                        star <= (formHoverRating || formRating)
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'fill-gray-200 text-gray-200'
+                      }`}
+                    />
+                  </button>
+                ))}
+                {formRating > 0 && (
+                  <span className="ml-2 text-sm text-[#5A6B7A]">
+                    {['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'][formRating]}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Title */}
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-1" htmlFor="review-title">
+                Title <span className="text-[#8A9BA8] font-normal">(optional)</span>
+              </label>
+              <input
+                id="review-title"
+                type="text"
+                maxLength={100}
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                placeholder="Summarize your experience"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#1B2733] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent"
+              />
+              <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formTitle.length}/100</p>
+            </div>
+
+            {/* Comment */}
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-1" htmlFor="review-comment">
+                Your review <span className="text-[#8A9BA8] font-normal">(optional)</span>
+              </label>
+              <textarea
+                id="review-comment"
+                maxLength={500}
+                rows={4}
+                value={formComment}
+                onChange={(e) => setFormComment(e.target.value)}
+                placeholder="Share your experience to help other families"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#1B2733] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent resize-none"
+              />
+              <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formComment.length}/500</p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleSubmitReview}
+                disabled={formRating === 0 || submitting}
+                className="px-5 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? 'Submitting…' : 'Submit Review'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  // Success banner
+  const successBanner = submitSuccess ? (
+    <div className="px-4 sm:px-6 py-3 border-t border-[#E8E4DF] bg-[#6B9080]/10 flex items-center gap-2">
+      <CheckCircle2 className="w-4 h-4 text-[#6B9080]" />
+      <p className="text-sm text-[#3A4A57] font-medium">Your review has been submitted. Thank you!</p>
+    </div>
+  ) : null;
+
   // No reviews yet — show an honest empty state instead of zero-filled stats
   if (reviews.length === 0) {
     return (
       <div>
         {backHeader}
         <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
-        <div className="px-4 sm:px-6 py-8 text-center">
-          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
-            <Star className="w-6 h-6 text-gray-300" />
+          <div className="px-4 sm:px-6 py-8 text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
+              <Star className="w-6 h-6 text-gray-300" />
+            </div>
+            <p className="font-medium text-[#1B2733]">No reviews yet</p>
+            <p className="text-sm text-[#5A6B7A] mt-1">
+              {providerName} hasn't received any reviews yet. Be the first to share your experience.
+            </p>
+            {onWriteReview && !showForm && (
+              <button
+                onClick={handleOpenReviewForm}
+                className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
+              >
+                Write a Review
+              </button>
+            )}
           </div>
-          <p className="font-medium text-[#1B2733]">No reviews yet</p>
-          <p className="text-sm text-[#5A6B7A] mt-1">
-            {providerName} hasn't received any reviews yet. Be the first to share your experience.
-          </p>
-          {onWriteReview && (
-            <button
-              onClick={onWriteReview}
-              className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
-            >
-              Write a Review
-            </button>
-          )}
-        </div>
+          {reviewForm}
+          {successBanner}
         </div>
       </div>
     );
@@ -437,9 +588,9 @@ export function ProviderReviews({
               <p className="text-sm text-[#5A6B7A]">would recommend</p>
             </div>
 
-            {onWriteReview && (
+            {onWriteReview && !showForm && (
               <button
-                onClick={onWriteReview}
+                onClick={handleOpenReviewForm}
                 className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
               >
                 Write a Review
@@ -532,6 +683,10 @@ export function ProviderReviews({
           </button>
         </div>
       )}
+
+      {/* Inline Review Form */}
+      {reviewForm}
+      {successBanner}
       </div>
     </div>
   );

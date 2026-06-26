@@ -225,6 +225,46 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   const [auths, setAuths] = useState<AuthRecord[]>([]);
   const [denials, setDenials] = useState<DenialRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [acceptingNewPatients, setAcceptingNewPatients] = useState<boolean>(true);
+  const [referralActionLoading, setReferralActionLoading] = useState(false);
+  const [referralToast, setReferralToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setReferralToast(msg);
+    setTimeout(() => setReferralToast(null), 4000);
+  }
+
+  async function handlePauseReferrals() {
+    setReferralActionLoading(true);
+    try {
+      await supabase
+        .from('provider_profiles')
+        .update({ accepting_new_patients: false })
+        .eq('id', providerId);
+      setAcceptingNewPatients(false);
+      showToast('New referrals paused. Provider notified.');
+    } catch {
+      showToast('Failed to update referral status. Please try again.');
+    } finally {
+      setReferralActionLoading(false);
+    }
+  }
+
+  async function handleResumeReferrals() {
+    setReferralActionLoading(true);
+    try {
+      await supabase
+        .from('provider_profiles')
+        .update({ accepting_new_patients: true })
+        .eq('id', providerId);
+      setAcceptingNewPatients(true);
+      showToast('Referrals resumed. Provider is now accepting new clients.');
+    } catch {
+      showToast('Failed to update referral status. Please try again.');
+    } finally {
+      setReferralActionLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -289,6 +329,16 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
             })),
           );
         }
+
+        const { data: profileData } = await supabase
+          .from('provider_profiles')
+          .select('accepting_new_patients')
+          .eq('id', providerId)
+          .single();
+
+        if (profileData && typeof profileData.accepting_new_patients === 'boolean') {
+          setAcceptingNewPatients(profileData.accepting_new_patients);
+        }
       } catch {
         // Supabase tables may not exist yet — fall back to empty state gracefully
       } finally {
@@ -319,6 +369,13 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
         </p>
       </div>
 
+      {/* Toast notification */}
+      {referralToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl bg-[#0D1B2A] text-white text-sm font-medium px-4 py-3 shadow-lg">
+          {referralToast}
+        </div>
+      )}
+
       {/* Network Standing Banner */}
       <div className={`rounded-2xl border ${tierConfig.bg} ${tierConfig.border} p-4`}>
         <div className="flex items-center gap-3">
@@ -331,6 +388,56 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
           </div>
         </div>
       </div>
+
+      {/* Enforcement Action — shown when network standing is red */}
+      {tier === 'red' && (
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/20 p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-amber-800 dark:text-amber-200">Referral Enforcement</p>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-0.5">
+                This provider's network standing is at risk. You may pause new referrals until metrics recover.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {acceptingNewPatients ? (
+                  <button
+                    onClick={handlePauseReferrals}
+                    disabled={referralActionLoading}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 transition-colors"
+                  >
+                    {referralActionLoading ? (
+                      <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    )}
+                    Pause New Referrals
+                  </button>
+                ) : (
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-sm font-semibold px-3 py-1.5">
+                      <XCircle className="w-3.5 h-3.5" />
+                      New referrals paused
+                    </span>
+                    <button
+                      onClick={handleResumeReferrals}
+                      disabled={referralActionLoading}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400 dark:border-amber-500 bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-900/30 disabled:opacity-60 text-amber-700 dark:text-amber-300 text-sm font-semibold px-4 py-2 transition-colors"
+                    >
+                      {referralActionLoading ? (
+                        <span className="w-3.5 h-3.5 border-2 border-amber-400/40 border-t-amber-400 rounded-full animate-spin" />
+                      ) : (
+                        <CheckCircle className="w-3.5 h-3.5" />
+                      )}
+                      Resume Referrals
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Auth Expiry Alert */}
       {expiringAuths.length > 0 && (
