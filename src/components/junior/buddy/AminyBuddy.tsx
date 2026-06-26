@@ -38,7 +38,7 @@ const MOOD_CONFIG: Record<
   }
 > = {
   happy: {
-    bodyGradient: ['#4E93A8', '#2EC4B6'],
+    bodyGradient: ['#2A7D99', '#2EC4B6'],
     eyeShape: 'round',
     mouthType: 'smile',
     bobSpeed: 2.5,
@@ -52,7 +52,7 @@ const MOOD_CONFIG: Record<
     bobAmount: 6,
   },
   calm: {
-    bodyGradient: ['#577590', '#4E93A8'],
+    bodyGradient: ['#577590', '#2A7D99'],
     eyeShape: 'round',
     mouthType: 'calm',
     bobSpeed: 3.5,
@@ -66,7 +66,7 @@ const MOOD_CONFIG: Record<
     bobAmount: 1.5,
   },
   encouraging: {
-    bodyGradient: ['#4E93A8', '#06D6A0'],
+    bodyGradient: ['#2A7D99', '#06D6A0'],
     eyeShape: 'wide',
     mouthType: 'smile',
     bobSpeed: 2,
@@ -280,7 +280,7 @@ function Accessory({ name, size }: { name: string; size: number }) {
         <g opacity={0.5}>
           <ellipse cx={s * 0.15} cy={s * 0.5} rx={s * 0.12} ry={s * 0.18} fill="#E07A5F" transform={`rotate(-20, ${s * 0.15}, ${s * 0.5})`} />
           <ellipse cx={s * 0.15} cy={s * 0.5} rx={s * 0.09} ry={s * 0.14} fill="#FFD166" transform={`rotate(-20, ${s * 0.15}, ${s * 0.5})`} />
-          <ellipse cx={s * 0.85} cy={s * 0.5} rx={s * 0.12} ry={s * 0.18} fill="#4E93A8" transform={`rotate(20, ${s * 0.85}, ${s * 0.5})`} />
+          <ellipse cx={s * 0.85} cy={s * 0.5} rx={s * 0.12} ry={s * 0.18} fill="#2A7D99" transform={`rotate(20, ${s * 0.85}, ${s * 0.5})`} />
           <ellipse cx={s * 0.85} cy={s * 0.5} rx={s * 0.09} ry={s * 0.14} fill="#2EC4B6" transform={`rotate(20, ${s * 0.85}, ${s * 0.5})`} />
         </g>
       );
@@ -316,7 +316,7 @@ function Particles({ mood, size }: { mood: BuddyMood; size: number }) {
     return (
       <g>
         {[0, 1, 2, 3, 4, 5].map((i) => {
-          const colors = ['#E07A5F', '#FFD166', '#4E93A8', '#2EC4B6', '#577590', '#06D6A0'];
+          const colors = ['#E07A5F', '#FFD166', '#2A7D99', '#2EC4B6', '#577590', '#06D6A0'];
           const x = size * 0.2 + (i * size * 0.12);
           const y = size * 0.1 + Math.sin(i * 1.3) * size * 0.1;
           return <circle key={i} cx={x} cy={y} r={size * 0.02} fill={colors[i]} opacity={0.8} />;
@@ -334,7 +334,7 @@ function Particles({ mood, size }: { mood: BuddyMood; size: number }) {
 function EnergyBar({ energy, width }: { energy: number; width: number }) {
   const barW = width * 0.6;
   const barH = 4;
-  const fill = energy > 60 ? '#4E93A8' : energy > 25 ? '#FFD166' : '#E07A5F';
+  const fill = energy > 60 ? '#2A7D99' : energy > 25 ? '#FFD166' : '#E07A5F';
   return (
     <div className="flex items-center justify-center gap-1" style={{ marginBottom: 2 }}>
       <span style={{ fontSize: Math.max(8, width * 0.1), color: '#577590' }}>⚡</span>

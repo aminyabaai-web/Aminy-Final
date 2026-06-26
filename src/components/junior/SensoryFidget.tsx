@@ -36,7 +36,7 @@ const TABS: { id: Tab; label: string; emoji: string }[] = [
 ];
 
 const CALM_COLORS = [
-  '#4E93A8', // teal
+  '#2A7D99', // teal
   '#9B8EC4', // lavender
   '#7CBB9B', // sage
   '#77B5D9', // sky blue
@@ -48,7 +48,7 @@ const CALM_COLORS = [
 ];
 
 const TAP_COLORS = [
-  '#4E93A8',
+  '#2A7D99',
   '#77B5D9',
   '#9B8EC4',
   '#7CBB9B',
@@ -241,8 +241,8 @@ function BreathingGuide() {
               width: 180,
               height: 180,
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #4E93A844, #77B5D944)',
-              border: '3px solid #4E93A8',
+              background: 'linear-gradient(135deg, #2A7D9944, #77B5D944)',
+              border: '3px solid #2A7D99',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -253,7 +253,7 @@ function BreathingGuide() {
           <button
             onClick={() => setRunning(true)}
             className="px-8 py-3 rounded-2xl text-white font-semibold text-lg"
-            style={{ background: 'linear-gradient(135deg, #4E93A8, #77B5D9)' }}
+            style={{ background: 'linear-gradient(135deg, #2A7D99, #77B5D9)' }}
           >
             Start Breathing
           </button>
@@ -267,9 +267,9 @@ function BreathingGuide() {
               width: 160,
               height: 160,
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #4E93A866, #77B5D966)',
-              border: '4px solid #4E93A8',
-              boxShadow: '0 0 32px #4E93A855',
+              background: 'linear-gradient(135deg, #2A7D9966, #77B5D966)',
+              border: '4px solid #2A7D99',
+              boxShadow: '0 0 32px #2A7D9955',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -306,7 +306,7 @@ function BreathingGuide() {
                   width: 10,
                   height: 10,
                   borderRadius: '50%',
-                  background: i === phaseIdx ? '#4E93A8' : '#4E93A844',
+                  background: i === phaseIdx ? '#2A7D99' : '#2A7D9944',
                   transition: 'background 0.3s',
                 }}
               />
@@ -439,7 +439,7 @@ function CalmSpinner() {
           style={{ rotate: rotation }}
         >
           {/* Outer ring */}
-          <circle cx={120} cy={120} r={115} fill="none" stroke="#4E93A844" strokeWidth={2} />
+          <circle cx={120} cy={120} r={115} fill="none" stroke="#2A7D9944" strokeWidth={2} />
           {/* Petal shapes — 8 petals */}
           {Array.from({ length: 8 }).map((_, i) => {
             const angle = (i / 8) * 360;
@@ -472,8 +472,8 @@ function CalmSpinner() {
             );
           })}
           {/* Center */}
-          <circle cx={120} cy={120} r={22} fill="#0D1B2A" stroke="#4E93A8" strokeWidth={2} />
-          <circle cx={120} cy={120} r={12} fill="#4E93A855" />
+          <circle cx={120} cy={120} r={22} fill="#0D1B2A" stroke="#2A7D99" strokeWidth={2} />
+          <circle cx={120} cy={120} r={12} fill="#2A7D9955" />
         </motion.svg>
       </div>
 
@@ -599,14 +599,14 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
             onClick={() => setActiveTab(tab.id)}
             className="flex-1 py-3 flex flex-col items-center gap-1 transition-all"
             style={{
-              background: activeTab === tab.id ? '#4E93A833' : 'transparent',
-              borderBottom: activeTab === tab.id ? '2px solid #4E93A8' : '2px solid transparent',
+              background: activeTab === tab.id ? '#2A7D9933' : 'transparent',
+              borderBottom: activeTab === tab.id ? '2px solid #2A7D99' : '2px solid transparent',
             }}
           >
             <span style={{ fontSize: 18 }}>{tab.emoji}</span>
             <span
               className="text-sm font-medium"
-              style={{ color: activeTab === tab.id ? '#4E93A8' : '#94a3b8' }}
+              style={{ color: activeTab === tab.id ? '#2A7D99' : '#94a3b8' }}
             >
               {tab.label}
             </span>
