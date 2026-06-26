@@ -312,7 +312,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(42,125,153,0.18)',
+                border: '1px solid rgba(78,147,168,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -350,7 +350,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(42,125,153,0.18)',
+                border: '1px solid rgba(78,147,168,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -448,7 +448,7 @@ export function LoginScreen({
                 onFocus={(e) => {
                   if (!errors.email) {
                     e.currentTarget.style.borderColor = '#4E93A8';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(78,147,168,0.12)';
                   }
                 }}
                 onBlur={(e) => {
@@ -521,7 +521,7 @@ export function LoginScreen({
                   onFocus={(e) => {
                     if (!errors.password) {
                       e.currentTarget.style.borderColor = '#4E93A8';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(78,147,168,0.12)';
                     }
                   }}
                   onBlur={(e) => {
@@ -681,7 +681,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-                textDecorationColor: 'rgba(42,125,153,0.3)',
+                textDecorationColor: 'rgba(78,147,168,0.3)',
                 textUnderlineOffset: '2px',
                 transition: 'opacity 0.2s ease',
                 ...fontSmoothing,

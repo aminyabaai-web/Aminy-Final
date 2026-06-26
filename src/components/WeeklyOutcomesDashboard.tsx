@@ -166,7 +166,7 @@ export function WeeklyOutcomesDashboard({
         <div className="mb-4 sm:mb-6 p-4 bg-[#6B9080]/10 border border-[#E8E4DF] rounded-lg">
           <div className="flex items-start gap-3">
             <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-primary leading-relaxed italic">
+            <p className="aminy-affirm text-primary" style={{ fontSize: '0.95rem' }}>
               "{summary.aiSummary}"
             </p>
           </div>
@@ -255,13 +255,13 @@ export function WeeklyOutcomesDashboard({
 
       {/* Encouragement */}
       {!summary.aiSummary && summary.totalActivities > 0 && (
-        <p className="text-sm text-muted-foreground mt-4 italic text-center">
-          You're showing up for {childName}—that's what matters most. 💙
+        <p className="aminy-affirm text-muted-foreground mt-4 text-center" style={{ fontSize: '0.95rem' }}>
+          You're showing up for {childName}—that's what matters most.
         </p>
       )}
-      
+
       {summary.totalActivities === 0 && (
-        <p className="text-sm text-muted-foreground mt-4 italic text-center">
+        <p className="aminy-affirm text-muted-foreground mt-4 text-center" style={{ fontSize: '0.95rem' }}>
           Ready to start fresh? Every small step with {childName} counts.
         </p>
       )}

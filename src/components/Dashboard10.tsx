@@ -1775,7 +1775,7 @@ export function Dashboard10({
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'
           }`}
-          style={!showAIChat ? { boxShadow: '0 0 20px rgba(42,125,153,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
+          style={!showAIChat ? { boxShadow: '0 0 20px rgba(78,147,168,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
         >

@@ -451,13 +451,13 @@ export function CreateAccountScreen({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              backgroundColor: 'rgba(42,125,153,0.07)',
+              backgroundColor: 'rgba(78,147,168,0.07)',
               color: '#4E93A8',
               fontFamily: fontStack,
               fontWeight: 500,
               fontSize: '13px',
               borderRadius: '14px',
-              border: '1px solid rgba(42,125,153,0.18)',
+              border: '1px solid rgba(78,147,168,0.18)',
               cursor: magicLinkState !== 'idle' ? 'default' : 'pointer',
               marginBottom: '12px',
               transition: 'background-color 0.2s ease',
@@ -905,7 +905,7 @@ export function CreateAccountScreen({
         }
         input:focus {
           border-color: #2A7D99 !important;
-          box-shadow: 0 0 0 3px rgba(42,125,153,0.12);
+          box-shadow: 0 0 0 3px rgba(78,147,168,0.12);
         }
       `}</style>
     </div>

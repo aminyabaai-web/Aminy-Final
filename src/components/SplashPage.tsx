@@ -345,8 +345,8 @@ export function SplashPage({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '5px',
-                      background: 'rgba(42,125,153,0.07)',
-                      border: '1px solid rgba(42,125,153,0.22)',
+                      background: 'rgba(78,147,168,0.07)',
+                      border: '1px solid rgba(78,147,168,0.22)',
                       borderRadius: '100px',
                       color: '#4E93A8',
                       fontFamily: fontStack,
@@ -358,12 +358,12 @@ export function SplashPage({
                       ...fontSmoothing,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(42,125,153,0.12)';
-                      e.currentTarget.style.borderColor = 'rgba(42,125,153,0.40)';
+                      e.currentTarget.style.backgroundColor = 'rgba(78,147,168,0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(78,147,168,0.40)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(42,125,153,0.07)';
-                      e.currentTarget.style.borderColor = 'rgba(42,125,153,0.22)';
+                      e.currentTarget.style.backgroundColor = 'rgba(78,147,168,0.07)';
+                      e.currentTarget.style.borderColor = 'rgba(78,147,168,0.22)';
                     }}
                   >
                     Concerned? Free screening →
@@ -443,7 +443,7 @@ export function SplashPage({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'rgba(42, 125, 153, 0.75)',
+                    color: 'rgba(78, 147, 168, 0.75)',
                     fontFamily: fontStack,
                     fontSize: '12px',
                     fontWeight: 500,
@@ -452,8 +452,8 @@ export function SplashPage({
                     transition: 'color 0.2s ease',
                     ...fontSmoothing,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(42, 125, 153, 1)'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(42, 125, 153, 0.75)'}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'rgba(78, 147, 168, 1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(78, 147, 168, 0.75)'}
                 >
                   Provider pilot by invitation →
                 </button>
