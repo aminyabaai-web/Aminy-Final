@@ -60,7 +60,7 @@ const CONSENT_CONTENT: Record<ConsentType, {
     sections: [
       {
         heading: 'Nature of Telehealth',
-        body: 'Telehealth involves the use of electronic communications, including video conferencing, to provide healthcare services remotely. Your provider will use HIPAA-compliant technology to conduct sessions. Telehealth is not the same as in-person care, and some aspects of treatment may differ.',
+        body: 'Telehealth involves the use of electronic communications, including video conferencing, to provide healthcare services remotely. Your provider will use encrypted, HIPAA-conscious technology to conduct sessions. Telehealth is not the same as in-person care, and some aspects of treatment may differ.',
       },
       {
         heading: 'Benefits',
@@ -99,7 +99,7 @@ const CONSENT_CONTENT: Record<ConsentType, {
       },
       {
         heading: 'Storage & Security',
-        body: 'Recordings are encrypted (AES-256) and stored in HIPAA-compliant infrastructure. Access is restricted to authorized clinical personnel only. Recordings are automatically deleted after the retention period specified below.',
+        body: 'Recordings are encrypted (AES-256) and stored in HIPAA-conscious infrastructure with strong security controls. Access is restricted to authorized clinical personnel only. Recordings are automatically deleted after the retention period specified below.',
       },
       {
         heading: 'Retention Period',
