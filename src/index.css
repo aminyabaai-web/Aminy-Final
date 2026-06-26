@@ -18050,3 +18050,38 @@ tr:hover td, .hover-row:hover {
 .hover\:text-\[\#4E93A8\]:hover { color: #2A7D99; }
 .from-\[\#4E93A8\] { --tw-gradient-from: #2A7D99; }
 .to-\[\#4E93A8\] { --tw-gradient-to: #2A7D99; }
+
+/* ============================================================
+   DESIGN SYSTEM v3 — navy-800 #132F43 + mist-deep #EDF4F7 + mist
+   #F6FBFB variant utilities. Precompiled (no JIT): markup renamed
+   from #1B2733/#F0EDE8 to the new hexes, so these selectors must
+   exist literally or the colors silently fail to render.
+   ============================================================ */
+/* navy-800 #132F43 (was #1B2733) */
+.text-\[\#132F43\] { color: #132F43; }
+.bg-\[\#132F43\] { background-color: #132F43; }
+.from-\[\#132F43\] { --tw-gradient-from: #132F43; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.text-\[\#132F43\]\/30 { color: color-mix(in oklab, #132F43 30%, transparent); }
+.text-\[\#132F43\]\/45 { color: color-mix(in oklab, #132F43 45%, transparent); }
+.text-\[\#132F43\]\/50 { color: color-mix(in oklab, #132F43 50%, transparent); }
+.text-\[\#132F43\]\/60 { color: color-mix(in oklab, #132F43 60%, transparent); }
+.text-\[\#132F43\]\/70 { color: color-mix(in oklab, #132F43 70%, transparent); }
+.text-\[\#132F43\]\/80 { color: color-mix(in oklab, #132F43 80%, transparent); }
+.text-\[\#132F43\]\/90 { color: color-mix(in oklab, #132F43 90%, transparent); }
+.hover\:text-\[\#132F43\]:hover { color: #132F43; }
+.dark\:text-\[\#132F43\]:is(.dark *) { color: #132F43; }
+/* mist-deep #EDF4F7 (was #F0EDE8) */
+.bg-\[\#EDF4F7\] { background-color: #EDF4F7; }
+.bg-\[\#EDF4F7\]\/90 { background-color: color-mix(in oklab, #EDF4F7 90%, transparent); }
+.border-\[\#EDF4F7\] { border-color: #EDF4F7; }
+.divide-\[\#EDF4F7\] > :not([hidden]) ~ :not([hidden]) { border-color: #EDF4F7; }
+.to-\[\#EDF4F7\] { --tw-gradient-to: #EDF4F7; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.hover\:bg-\[\#EDF4F7\]:hover { background-color: #EDF4F7; }
+.active\:bg-\[\#EDF4F7\]:active { background-color: #EDF4F7; }
+/* mist #F6FBFB — opacity + interaction variants (base already defined above) */
+.bg-\[\#F6FBFB\]\/50 { background-color: color-mix(in oklab, #F6FBFB 50%, transparent); }
+.bg-\[\#F6FBFB\]\/80 { background-color: color-mix(in oklab, #F6FBFB 80%, transparent); }
+.bg-\[\#F6FBFB\]\/90 { background-color: color-mix(in oklab, #F6FBFB 90%, transparent); }
+.from-\[\#F6FBFB\]\/50 { --tw-gradient-from: color-mix(in oklab, #F6FBFB 50%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.hover\:bg-\[\#F6FBFB\]\/50:hover { background-color: color-mix(in oklab, #F6FBFB 50%, transparent); }
+.active\:bg-\[\#F6FBFB\]:active { background-color: #F6FBFB; }
