@@ -414,7 +414,9 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
     // if Vite's DEV flag is unexpectedly false in the CI environment.
     try {
       if (localStorage.getItem('__e2e_auth') === 'bypass') {
-        setProvider({ id: providerId || 'dev-provider-test', name: 'Dev Provider', credentials: 'BCBA-D', type: 'bcba', specialties: ['ABA Therapy'], rating: 4.9, reviewCount: 12, totalPatients: 3, sessionsThisMonth: 5, earningsThisMonth: 2400, organization: 'Independent Provider', licensedStates: ['AZ'], acceptedInsurance: ['AHCCCS', 'BCBS', 'Cash Pay'], acceptsInsurance: true, verificationStatus: 'verified' });
+        const _storedUser = (() => { try { return JSON.parse(localStorage.getItem('aminy-user') || '{}'); } catch { return {}; } })();
+        const _e2eName = _storedUser.parentName || _storedUser.full_name || 'Dr. Provider';
+        setProvider({ id: providerId || 'dev-provider-test', name: _e2eName, credentials: 'BCBA-D', type: 'bcba', specialties: ['ABA Therapy'], rating: 4.9, reviewCount: 12, totalPatients: 3, sessionsThisMonth: 5, earningsThisMonth: 2400, organization: 'Independent Provider', licensedStates: ['AZ'], acceptedInsurance: ['AHCCCS', 'BCBS', 'Cash Pay'], acceptsInsurance: true, verificationStatus: 'verified' });
         setIsLoading(false);
         setIsRefreshing(false);
         return;

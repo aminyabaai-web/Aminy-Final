@@ -142,8 +142,8 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
     <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <ScreenHeader
-        title={`${config.displayName} Provider Onboarding`}
-        subtitle={`One-click invites · CSV import · ${config.payoutRail.replace('_', ' ')} contract auto-applied`}
+        title={`${config.displayName} Onboarding`}
+        subtitle="One-click invites · CSV import · Contract auto-applied"
         icon={<Building2 className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -186,8 +186,8 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
             <p className="text-sm text-[#3A4A57] mt-0.5">Paste your provider roster — we'll pre-create their accounts</p>
           </div>
           {!showCsvInput && (
-            <button onClick={() => setShowCsvInput(true)} className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full">
-              <Upload className="w-3.5 h-3.5 inline mr-1" />Import
+            <button onClick={() => setShowCsvInput(true)} className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full whitespace-nowrap flex items-center gap-1">
+              <Upload className="w-3.5 h-3.5" />Import
             </button>
           )}
         </div>
