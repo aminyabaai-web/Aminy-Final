@@ -39,13 +39,15 @@ import {
 } from '../types/telehealth';
 import { verifyProvider, type Credential, type ProviderVerificationSummary } from '../lib/credential-verification';
 import { SUPPORTED_PROVIDER_STATES, isSupportedProviderState } from '../lib/insurance/state-market-coverage';
+import ProviderAgreement, { type AgreementAcceptance } from './provider/ProviderAgreement';
+import ProviderBAA, { type BAAAcceptance } from './provider/ProviderBAA';
 
 interface ProviderOnboardingProps {
   onBack?: () => void;
   onComplete?: (providerId: string) => void;
 }
 
-type OnboardingStep = 'basics' | 'licensing' | 'services' | 'availability' | 'review';
+type OnboardingStep = 'basics' | 'licensing' | 'services' | 'availability' | 'review' | 'agreement' | 'baa';
 
 const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = [
   { id: 'basics', label: 'Profile', icon: User },
@@ -53,6 +55,8 @@ const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = 
   { id: 'services', label: 'Services', icon: DollarSign },
   { id: 'availability', label: 'Schedule', icon: Calendar },
   { id: 'review', label: 'Review', icon: FileText },
+  { id: 'agreement', label: 'Agreement', icon: FileText },
+  { id: 'baa', label: 'BAA', icon: Shield },
 ];
 
 // Single source of truth for the launch-state list shown across this flow,
@@ -169,6 +173,8 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [nonSolicitationAck, setNonSolicitationAck] = useState(false);
+  const [agreementAcceptance, setAgreementAcceptance] = useState<AgreementAcceptance | null>(null);
+  const [baaAcceptance, setBaaAcceptance] = useState<BAAAcceptance | null>(null);
 
   const stepIndex = STEPS.findIndex(s => s.id === currentStep);
   const fieldId = (field: string) => `${formId}-${field}`;
@@ -189,6 +195,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
         return form.availability.length > 0;
       case 'review':
         return true;
+      case 'agreement':
+        return agreementAcceptance !== null;
+      case 'baa':
+        return baaAcceptance !== null;
       default:
         return false;
     }
@@ -229,6 +239,52 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
   const removeAvailability = (index: number) => {
     updateForm({ availability: form.availability.filter((_, i) => i !== index) });
+  };
+
+  const handleAgreementAccept = (acceptance: AgreementAcceptance) => {
+    setAgreementAcceptance(acceptance);
+    // Advance to the BAA step automatically on acceptance
+    setCurrentStep('baa');
+  };
+
+  const handleBAAAccept = async (acceptance: BAAAcceptance) => {
+    setBaaAcceptance(acceptance);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    // Save BAA acceptance first, best-effort
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Try to insert into provider_baa_agreements table; fall back to profiles upsert
+        const { error: baaError } = await supabase
+          .from('provider_baa_agreements')
+          .insert({
+            user_id: user.id,
+            accepted_at: acceptance.acceptedAt,
+            signed_name: acceptance.signedName,
+            document_version: acceptance.documentVersion,
+            provider_email: acceptance.providerEmail,
+          });
+
+        if (baaError) {
+          // Table doesn't exist yet — fall back to profiles column
+          console.warn('provider_baa_agreements insert failed, falling back to profiles:', baaError.message);
+          await supabase
+            .from('profiles')
+            .upsert({
+              id: user.id,
+              baa_accepted_at: acceptance.acceptedAt,
+            });
+        }
+      }
+    } catch (err) {
+      console.warn('Could not persist BAA acceptance:', err);
+      // Non-blocking — continue to submit regardless
+    }
+
+    // Proceed to the main onboarding submission (keeps isSubmitting=true)
+    await handleSubmit();
   };
 
   const handleSubmit = async () => {
@@ -425,15 +481,17 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             <h1 className="text-lg font-semibold text-[#1B2733]">Join Aminy as a Provider</h1>
             <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
           </div>
-          <button
-            type="button"
-            onClick={currentStep === 'review' ? handleSubmit : nextStep}
-            disabled={(currentStep !== 'review' && !canAdvance()) || isSubmitting}
-            className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#4E93A8] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#376E80] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
-          >
-            {currentStep === 'review' ? 'Submit for verification' : 'Continue'}
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          {currentStep !== 'agreement' && currentStep !== 'baa' && (
+            <button
+              type="button"
+              onClick={currentStep === 'review' ? nextStep : nextStep}
+              disabled={!canAdvance() || isSubmitting}
+              className="action-button ml-auto hidden min-h-11 items-center gap-2 rounded-xl bg-[#4E93A8] px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#376E80] disabled:cursor-not-allowed disabled:opacity-50 sm:inline-flex"
+            >
+              Continue
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
         </nav>
       </header>
 
@@ -978,48 +1036,75 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           </div>
         )}
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-8">
-          <button
-            type="button"
-            onClick={stepIndex === 0 ? onBack : prevStep}
-            className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            {stepIndex === 0 ? 'Cancel' : 'Back'}
-          </button>
+        {currentStep === 'agreement' && (
+          <ProviderAgreement
+            providerName={`${form.firstName} ${form.lastName}`.trim() || 'Provider'}
+            providerEmail={form.email}
+            onAccept={handleAgreementAccept}
+            onBack={prevStep}
+          />
+        )}
 
-          {currentStep === 'review' ? (
+        {currentStep === 'baa' && (
+          <ProviderBAA
+            providerName={`${form.firstName} ${form.lastName}`.trim() || 'Provider'}
+            providerEmail={form.email}
+            onAccept={handleBAAAccept}
+            onBack={prevStep}
+          />
+        )}
+
+        {isSubmitting && currentStep === 'baa' && (
+          <div className="fixed inset-0 bg-white/80 flex items-center justify-center z-50">
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 className="w-8 h-8 animate-spin text-[#4E93A8]" />
+              <p className="text-sm text-[#5A6B7A] font-medium">Creating your provider profile…</p>
+            </div>
+          </div>
+        )}
+
+        {submitError && currentStep === 'baa' && (
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+            <p className="text-sm text-red-700">{submitError}</p>
+          </div>
+        )}
+
+        {/* Navigation — hidden on agreement/baa steps which have their own action buttons */}
+        {currentStep !== 'agreement' && currentStep !== 'baa' && (
+          <div className="flex items-center justify-between mt-8">
             <button
               type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !nonSolicitationAck}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
+              onClick={stepIndex === 0 ? onBack : prevStep}
+              className="flex min-h-11 items-center gap-2 rounded-lg px-4 py-2.5 font-medium text-[#5A6B7A] transition-colors hover:bg-[#F0EDE8]"
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Creating Profile...
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  Submit for verification
-                </>
-              )}
+              <ArrowLeft className="w-4 h-4" />
+              {stepIndex === 0 ? 'Cancel' : 'Back'}
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={nextStep}
-              disabled={!canAdvance()}
-              className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
-            >
-              Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+
+            {currentStep === 'review' ? (
+              <button
+                type="button"
+                onClick={nextStep}
+                disabled={!nonSolicitationAck}
+                className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
+              >
+                <ArrowRight className="w-4 h-4" />
+                Continue to Agreement
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={nextStep}
+                disabled={!canAdvance()}
+                className="action-button flex min-h-11 items-center gap-2 rounded-lg bg-[#4E93A8] px-6 py-2.5 font-medium text-white transition-colors hover:bg-[#4E93A8]/90 disabled:opacity-50"
+              >
+                Continue to {STEPS[Math.min(stepIndex + 1, STEPS.length - 1)].label}
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
