@@ -231,6 +231,39 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             </p>
           </section>
 
+          {/* Automated Communications */}
+          <section>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Automated Communications</h2>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">SMS Text Messages</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              By providing your phone number, you consent to receive automated SMS text messages from Aminy,
+              including appointment reminders, session notifications, and service updates. Message and data
+              rates may apply. Message frequency varies based on your activity and appointments.
+            </p>
+            <p className="text-[#5A6B7A] leading-relaxed mt-4">
+              <strong>To opt out:</strong> Reply STOP to any SMS message at any time. You may also manage
+              SMS preferences in app Settings. Opting out of SMS will not affect your ability to use the Service.
+            </p>
+            <p className="text-[#5A6B7A] leading-relaxed mt-4">
+              <strong>Help:</strong> Reply HELP to any SMS message or contact{' '}
+              <a href="mailto:support@aminy.ai" className="text-[#376E80] hover:underline">support@aminy.ai</a>.
+            </p>
+
+            <h3 className="font-medium text-[#1B2733] mt-6 mb-2">Email Communications</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              By creating an account, you agree to receive transactional emails related to your account
+              (password resets, session confirmations, billing receipts) and, where you have consented,
+              marketing communications. You may unsubscribe from marketing emails at any time using the
+              unsubscribe link in any email or by contacting support.
+            </p>
+
+            <h3 className="font-medium text-[#1B2733] mt-6 mb-2">TCPA Compliance</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              SMS messages are sent in compliance with the Telephone Consumer Protection Act (TCPA).
+              Your consent to receive SMS is not a condition of purchasing any goods or services.
+            </p>
+          </section>
+
           {/* Changes to Terms */}
           <section>
             <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Changes to Terms</h2>
