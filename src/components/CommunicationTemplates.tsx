@@ -213,7 +213,7 @@ function TemplateCard({ template, tokenValues, hasPatient }: TemplateCardProps) 
   );
 }
 
-export default function CommunicationTemplates() {
+export function CommunicationTemplates() {
   const [selectedPatientId, setSelectedPatientId] = useState<string>("");
   const providerName = "Dr. Rivera";
   const sessionTime = "2:00 PM";
