@@ -340,7 +340,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
   return (
     <div className="max-w-2xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       <Card className="p-4 sm:p-5 md:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Share with the Community</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-4">Share with the Community</h2>
         
         {/* Draft notification */}
         {hasDraft && (
@@ -510,7 +510,7 @@ export function CommunityComposer({ onPost, onCancel, userId }: CommunityCompose
                 {images.map((image) => (
                   <div
                     key={image.id}
-                    className="relative aspect-square rounded-lg overflow-hidden border border-[#E8E4DF] bg-[#FAF7F2]"
+                    className="relative aspect-square rounded-lg overflow-hidden border border-[#E8E4DF] bg-[#F6FBFB]"
                   >
                     <img
                       src={image.url}

@@ -115,17 +115,17 @@ export function ChatSidebarDrawer({
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 32, stiffness: 320 }}
-            className="fixed top-0 left-0 bottom-0 z-50 w-[88vw] max-w-[320px] bg-[#FAF7F2] border-r border-[#F0EDE8] flex flex-col"
+            className="fixed top-0 left-0 bottom-0 z-50 w-[88vw] max-w-[320px] bg-[#F6FBFB] border-r border-[#EDF4F7] flex flex-col"
             style={{ paddingTop: 'env(safe-area-inset-top)' }}
             role="dialog"
             aria-label="Chat history"
           >
             {/* Header */}
-            <div className="px-4 py-3 border-b border-[#F0EDE8] flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-[#1B2733]">Conversations</h2>
+            <div className="px-4 py-3 border-b border-[#EDF4F7] flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-[#132F43]">Conversations</h2>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full hover:bg-[#F0EDE8] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full hover:bg-[#EDF4F7] flex items-center justify-center transition-colors"
                 aria-label="Close sidebar"
               >
                 <X className="w-4 h-4 text-[#5A6B7A]" />
@@ -155,7 +155,7 @@ export function ChatSidebarDrawer({
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search conversations"
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-white border border-[#F0EDE8] text-sm text-[#1B2733] placeholder-[#8E9BAA] focus:outline-none focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20"
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-white border border-[#EDF4F7] text-sm text-[#132F43] placeholder-[#8E9BAA] focus:outline-none focus:border-[#6B9080] focus:ring-2 focus:ring-[#6B9080]/20"
                 />
               </div>
             </div>
@@ -198,7 +198,7 @@ export function ChatSidebarDrawer({
                                   />
                                   <p
                                     className={`text-sm truncate ${
-                                      active ? 'font-semibold text-[#1B2733]' : 'text-[#1B2733]'
+                                      active ? 'font-semibold text-[#132F43]' : 'text-[#132F43]'
                                     }`}
                                   >
                                     {c.title}
@@ -234,10 +234,10 @@ export function ChatSidebarDrawer({
 function EmptyDrawer({ query }: { query: string }) {
   return (
     <div className="px-6 py-10 text-center">
-      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
+      <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EDF4F7] flex items-center justify-center">
         <MessageSquare className="w-5 h-5 text-[#8E9BAA]" />
       </div>
-      <p className="text-sm font-medium text-[#1B2733] mb-1">
+      <p className="text-sm font-medium text-[#132F43] mb-1">
         {query ? 'No matches' : 'No conversations yet'}
       </p>
       <p className="text-sm text-[#8E9BAA] leading-relaxed">

@@ -289,7 +289,7 @@ export function RoutineAdherenceTracker({
       {/* Today's Routines */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-[#1B2733]">Today's Routines</h3>
+          <h3 className="text-lg font-semibold text-[#132F43]">Today's Routines</h3>
           {onAddRoutine && (
             <Button variant="ghost" size="sm" onClick={onAddRoutine}>
               <Plus className="w-4 h-4 mr-1" />
@@ -317,8 +317,8 @@ export function RoutineAdherenceTracker({
                       key={routine.id}
                       className={`p-4 transition-all ${
                         isCompleted ? 'bg-green-50 border-green-200' :
-                        isPartial ? 'bg-[#FDF9F0] border-[#F0EDE8]' :
-                        isSkipped ? 'bg-[#FAF7F2] border-[#E8E4DF]' :
+                        isPartial ? 'bg-[#FDF9F0] border-[#EDF4F7]' :
+                        isSkipped ? 'bg-[#F6FBFB] border-[#E8E4DF]' :
                         'bg-white hover:shadow-md'
                       }`}
                     >
@@ -329,7 +329,7 @@ export function RoutineAdherenceTracker({
                           className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                             isCompleted ? 'bg-green-500 text-white' :
                             isPartial ? 'bg-yellow-500 text-white' :
-                            'bg-[#F0EDE8] hover:bg-accent hover:text-white'
+                            'bg-[#EDF4F7] hover:bg-accent hover:text-white'
                           }`}
                         >
                           {isCompleted || isPartial ? (
@@ -342,7 +342,7 @@ export function RoutineAdherenceTracker({
                         {/* Routine Info */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-[#5A6B7A] line-through' : 'text-[#1B2733]'}`}>
+                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-[#5A6B7A] line-through' : 'text-[#132F43]'}`}>
                               {routine.name}
                             </span>
                             {isCompleted && completion?.delay_minutes && completion.delay_minutes > 15 && (

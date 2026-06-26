@@ -89,6 +89,7 @@ import { triggerHaptic } from '../lib/haptics';
 import { fireConfetti } from '../lib/confetti';
 import { WeeklyOutcomeCheckIn, shouldShowWeeklyCheckIn } from './WeeklyOutcomeCheckIn';
 import { BaselineAssessment, needsBaseline } from './BaselineAssessment';
+import PostSessionReview from './PostSessionReview';
 
 // Types
 interface ChildProfile {
@@ -220,6 +221,7 @@ export function Dashboard10({
   const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(99);
   const [showWeeklyCheckIn, setShowWeeklyCheckIn] = useState(false);
   const [showBaselineAssessment, setShowBaselineAssessment] = useState(false);
+  const [postSessionReview, setPostSessionReview] = useState<{ providerId: string; providerName: string; sessionDate: string } | null>(null);
 
   // 4-week outcome trend data
   interface TrendPoint {
@@ -609,7 +611,7 @@ export function Dashboard10({
       fireConfetti('goal');
       toast.success(triggered.message, {
         duration: 5000,
-        style: { background: '#F6FBFB', border: '1px solid #4E93A8', color: '#1B2733' },
+        style: { background: '#F6FBFB', border: '1px solid #2A7D99', color: '#132F43' },
       });
     }, 2500); // slight delay — feels like a surprise, not an alert
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -693,7 +695,7 @@ export function Dashboard10({
           const weekLabel = pt.recordedAt
             ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             : `Week ${i + 1}`;
-          const color = pt.rating >= 4 ? '#4E93A8' : pt.rating === 3 ? '#F59E0B' : '#E07A5F';
+          const color = pt.rating >= 4 ? '#2A7D99' : pt.rating === 3 ? '#F59E0B' : '#E07A5F';
           return `<tr><td style="padding:6px 12px;">${weekLabel}</td><td style="padding:6px 12px;"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${color};vertical-align:middle;margin-right:6px;"></span>${pt.rating}/5</td></tr>`;
         }).join('')
       : '<tr><td colspan="2" style="padding:6px 12px;color:#888;">No check-in data yet</td></tr>';
@@ -704,10 +706,10 @@ export function Dashboard10({
 <meta charset="UTF-8" />
 <title>Aminy Progress Report — ${childName}</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #1B2733; }
+  body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #132F43; }
   h1 { color: #0D1B2A; font-size: 1.5rem; margin-bottom: 4px; }
   .subtitle { color: #5A6B7A; font-size: 0.9rem; margin-bottom: 32px; }
-  h2 { font-size: 1rem; color: #4E93A8; margin-bottom: 8px; }
+  h2 { font-size: 1rem; color: #2A7D99; margin-bottom: 8px; }
   table { border-collapse: collapse; width: 100%; }
   th { text-align: left; padding: 6px 12px; background: #F0F4F8; color: #3A4A57; font-size: 0.85rem; }
   td { border-bottom: 1px solid #E8E4DF; font-size: 0.9rem; }
@@ -741,7 +743,7 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-[#2A7D99] dark:text-[#6AA9BC]" />,
+      icon: <FileText className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />,
       accent: 'bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15',
     },
     {
@@ -954,7 +956,7 @@ export function Dashboard10({
                       : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] dark:text-slate-300 dark:bg-slate-700/50 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-700'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#4795AE] flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -967,13 +969,13 @@ export function Dashboard10({
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
                 <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-slate-100">AI memory</span>
+                  <span className="font-medium text-[#132F43] dark:text-slate-100">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
                 <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-slate-100">Ease progress</span>
+                  <span className="font-medium text-[#132F43] dark:text-slate-100">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -988,7 +990,7 @@ export function Dashboard10({
                 onClick={() => onNavigate?.('profile')}
                 aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)', border: 'none', cursor: 'pointer' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D99, #4795AE)', border: 'none', cursor: 'pointer' }}
               >
                 {child.photoUrl ? (
                   <img src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />
@@ -1002,7 +1004,7 @@ export function Dashboard10({
                   style={{
                     position: 'absolute', bottom: -2, right: -2,
                     width: 16, height: 16, borderRadius: 9999,
-                    background: '#fff', color: '#4E93A8',
+                    background: '#fff', color: '#2A7D99',
                     fontSize: 12, lineHeight: '14px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
@@ -1062,7 +1064,7 @@ export function Dashboard10({
                   }
                   className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800/85 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-800"
                 >
-                  <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#4E93A815' : '#F8B40015' }}>
+                  <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#2A7D9915' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
                       <Video className="w-4 h-4 text-[#2A7D99]" />
                     ) : (
@@ -1070,7 +1072,7 @@ export function Dashboard10({
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733] dark:text-slate-100">{event.title}</div>
+                    <div className="text-sm font-medium text-[#132F43] dark:text-slate-100">{event.title}</div>
                     <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{event.time}</div>
                   </div>
                 </button>
@@ -1136,13 +1138,28 @@ export function Dashboard10({
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => onNavigate?.('parent-approval')}
-              className="w-full mt-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Review & Approve
-            </button>
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => onNavigate?.('parent-approval')}
+                className="flex-1 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Review & Approve
+              </button>
+              {userId && pendingReviews[0] && (
+                <button
+                  onClick={() => setPostSessionReview({
+                    providerId: pendingReviews[0].id,
+                    providerName: pendingReviews[0].providerName || 'Your Provider',
+                    sessionDate: pendingReviews[0].sessionDate,
+                  })}
+                  className="py-2.5 px-3 bg-white border border-violet-300 text-violet-700 rounded-lg text-sm font-medium transition-colors hover:bg-violet-50 flex items-center gap-1.5"
+                >
+                  <Star className="w-4 h-4" />
+                  Rate
+                </button>
+              )}
+            </div>
           </motion.div>
         )}
 
@@ -1186,7 +1203,7 @@ export function Dashboard10({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#2A7D99]/20 dark:border-teal-700 rounded-xl p-3"
+            className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-[#2A7D99]/20 dark:border-teal-700 rounded-xl p-3"
           >
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-[#2A7D99] dark:text-primary mt-0.5 flex-shrink-0" />
@@ -1259,11 +1276,11 @@ export function Dashboard10({
         {shouldShowStarterSummary ? (
           <div className="rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-white via-transparent/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2A7D99]/10 text-[#2A7D99] dark:bg-[#2A7D99]/15 dark:text-[#6AA9BC]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2A7D99]/10 text-[#2A7D99] dark:bg-[#2A7D99]/15 dark:text-[#4795AE]">
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">
+                <h3 className="text-sm font-semibold text-[#132F43] dark:text-slate-100">
                   Start gently today
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-[#5A6B7A] dark:text-slate-300">
@@ -1283,7 +1300,7 @@ export function Dashboard10({
               <Button
                 size="sm"
                 variant="outline"
-                className="rounded-full border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#FAF7F2] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+                className="rounded-full border-[#E8E4DF] bg-white text-[#3A4A57] hover:bg-[#F6FBFB] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
                 onClick={() => onNavigate?.('calm-tools')}
               >
                 Calm Corner
@@ -1363,7 +1380,7 @@ export function Dashboard10({
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
                   activeRoutine === routine.timeOfDay
                     ? 'bg-[#2A7D99] text-white shadow-md'
-                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                 }`}
               >
                 {routine.icon}
@@ -1384,7 +1401,7 @@ export function Dashboard10({
             data-plan-snapshot-id={activePlanSnapshotId || ''}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
+              <h2 className="font-semibold text-[#132F43] dark:text-white flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
                 {currentRoutine.icon}
                 {currentRoutine.label}
               </h2>
@@ -1407,12 +1424,12 @@ export function Dashboard10({
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                      : 'bg-[#FAF7F2] dark:bg-slate-700/50 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                      : 'bg-[#F6FBFB] dark:bg-slate-700/50 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                   }`}
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
-                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#1B2733] dark:text-white'}`}>
+                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#132F43] dark:text-white'}`}>
                       {task.title}
                     </div>
                     <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{task.description}</div>
@@ -1464,7 +1481,7 @@ export function Dashboard10({
           <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">4-week trend</p>
+                <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">4-week trend</p>
                 {trendData.length >= 2 && (
                   <p className="text-sm text-[#8A9BA8] dark:text-slate-400 mt-0.5">
                     {new Date(trendData[0].recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -1502,7 +1519,7 @@ export function Dashboard10({
                 {trendData.map((pt, i) => {
                   const dotColor =
                     pt.rating >= 4
-                      ? 'bg-[#4E93A8]'
+                      ? 'bg-[#2A7D99]'
                       : pt.rating === 3
                       ? 'bg-amber-400'
                       : 'bg-[#E07A5F]';
@@ -1516,7 +1533,7 @@ export function Dashboard10({
                       : null;
                   const arrowColor =
                     arrow === '↑'
-                      ? 'text-[#4E93A8]'
+                      ? 'text-[#2A7D99]'
                       : arrow === '↓'
                       ? 'text-[#E07A5F]'
                       : 'text-[#8A9BA8]';
@@ -1683,7 +1700,7 @@ export function Dashboard10({
             5. QUICK ACTION GRID (15%)
             ======================================== */}
         <section>
-          <h2 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
+          <h2 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
             <Zap className="w-5 h-5 text-[#2A7D99]" />
             Quick Actions
           </h2>
@@ -1693,7 +1710,7 @@ export function Dashboard10({
               <button
                 key={action.id}
                 onClick={() => handleQuickAction(action.id)}
-                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#2A7D99]/20 hover:bg-[#FAF7F2] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
+                className="flex min-h-[108px] flex-col items-center gap-2 rounded-xl border border-[#E8E4DF] bg-white p-4 text-[#3A4A57] shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#2A7D99]/20 hover:bg-[#F6FBFB] hover:shadow-md active:scale-[0.98] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700/70"
               >
                 <span className={`flex h-11 w-11 items-center justify-center rounded-2xl ${action.accent}`}>
                   {action.icon}
@@ -1706,18 +1723,18 @@ export function Dashboard10({
           {/* Provider Reports Card */}
           {shouldShowProviderReportsCard ? (
             <div
-              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#FAF7F2] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
+              className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-[#F6FBFB] to-emerald-50 dark:from-teal-900/20 dark:to-emerald-900/20 border border-[#2A7D99]/20 dark:border-[#2A7D99]/30 flex items-center gap-3 cursor-pointer hover:shadow-sm transition-shadow"
               onClick={() => onNavigate?.('clinical-reports')}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
               <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-[#2A7D99] dark:text-[#6AA9BC]" />
+                <Stethoscope className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm text-[#2A7D99] dark:text-teal-100">Provider Reports</h3>
-                <p className="text-sm text-[#2A7D99] dark:text-[#6AA9BC]">Generate clinical PDFs for your child's care team</p>
+                <p className="text-sm text-[#2A7D99] dark:text-[#4795AE]">Generate clinical PDFs for your child's care team</p>
               </div>
               <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
@@ -1775,7 +1792,7 @@ export function Dashboard10({
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'
           }`}
-          style={!showAIChat ? { boxShadow: '0 0 20px rgba(78,147,168,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
+          style={!showAIChat ? { boxShadow: '0 0 20px rgba(42,125,153,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
         >
@@ -1802,7 +1819,7 @@ export function Dashboard10({
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
+            <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#132F43] to-[#2D3F4F] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
                   <Sparkles className="w-5 h-5 text-[#E07A5F]" />
@@ -1898,7 +1915,7 @@ export function Dashboard10({
             </div>
 
             {/* Chat Input - Enhanced */}
-            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#FAF7F2] dark:bg-slate-750">
+            <div className="flex-shrink-0 p-4 border-t dark:border-slate-700 bg-[#F6FBFB] dark:bg-slate-750">
               <div className="flex gap-2">
                 <button
                   onClick={() => onNavigate?.('vision-ai')}
@@ -1992,6 +2009,17 @@ export function Dashboard10({
       {/* ========================================
           TRIAL MODALS - Soft nudge & hard paywall
           ======================================== */}
+
+      {/* Post-session review modal — shown when parent taps "Rate" on a pending review */}
+      {postSessionReview && userId && (
+        <PostSessionReview
+          providerId={postSessionReview.providerId}
+          providerName={postSessionReview.providerName}
+          sessionDate={postSessionReview.sessionDate}
+          userId={userId}
+          onClose={() => setPostSessionReview(null)}
+        />
+      )}
 
       {/* Baseline assessment — modal overlay, shown once per user */}
       <AnimatePresence>

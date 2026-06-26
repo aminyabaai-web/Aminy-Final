@@ -24,14 +24,14 @@ export function ProviderMatchCard({ providers, onBookProvider }: ProviderMatchCa
         <div className="bg-white rounded-2xl border border-accent/20 overflow-hidden shadow-sm mt-2 mb-4">
             <div className="bg-accent/5 px-4 py-3 border-b border-accent/10 flex items-center gap-2">
                 <ShieldCheck className="w-5 h-5 text-accent" />
-                <h4 className="font-medium text-[#1B2733]">Recommended Matches</h4>
+                <h4 className="font-medium text-[#132F43]">Recommended Matches</h4>
             </div>
 
             <div className="p-4 flex gap-4 overflow-x-auto snap-x pb-4 -mx-4 px-4 scrollbar-hide">
                 {providers.map((provider) => (
                     <div
                         key={provider.id}
-                        className="flex-shrink-0 w-64 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] p-4 snap-start relative group hover:border-accent/50 transition-colors"
+                        className="flex-shrink-0 w-64 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] p-4 snap-start relative group hover:border-accent/50 transition-colors"
                     >
                         <div className="flex gap-3 mb-3">
                             <div className="w-12 h-12 rounded-full overflow-hidden bg-accent/10 border-2 border-white shadow-sm flex-shrink-0">
@@ -44,7 +44,7 @@ export function ProviderMatchCard({ providers, onBookProvider }: ProviderMatchCa
                                 )}
                             </div>
                             <div>
-                                <h5 className="font-semibold text-[#1B2733] leading-tight">
+                                <h5 className="font-semibold text-[#132F43] leading-tight">
                                     {provider.first_name} {provider.last_name}
                                 </h5>
                                 <p className="text-sm text-[#5A6B7A] font-medium">{provider.title}</p>

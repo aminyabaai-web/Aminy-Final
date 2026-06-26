@@ -113,13 +113,13 @@ export default function COPPAConsentGate({
         {onBack && (
           <button
             onClick={onBack}
-            className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           >
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
         )}
         <Shield className="w-6 h-6 text-[#6B9080] flex-shrink-0" />
-        <h1 className="text-lg font-bold text-[#1B2733]">Parent Permission Required</h1>
+        <h1 className="text-lg font-bold text-[#132F43]">Parent Permission Required</h1>
       </div>
 
       {/* Body */}
@@ -140,7 +140,7 @@ export default function COPPAConsentGate({
 
           {/* Explanation */}
           <div className="bg-white rounded-xl border border-[#E8E4DF] p-5">
-            <h2 className="text-base font-semibold text-[#1B2733] mb-3">
+            <h2 className="text-base font-semibold text-[#132F43] mb-3">
               What Aminy collects for {childName}
             </h2>
             <p className="text-sm text-[#3A4A57] leading-relaxed">

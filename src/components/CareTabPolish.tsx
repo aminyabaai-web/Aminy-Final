@@ -274,7 +274,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
       {/* Available appointment slots */}
       <div className="space-y-3">
-        <h4 className="font-medium text-[#1B2733]">Available Times</h4>
+        <h4 className="font-medium text-[#132F43]">Available Times</h4>
         {['2024-12-18', '2024-12-19', '2024-12-20'].map((date) => (
           <div key={date} className="border rounded-lg p-4">
             <h5 className="font-medium mb-2">{new Date(date).toLocaleDateString('en-US', { 
@@ -317,7 +317,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Completion progress */}
-          <div className="bg-[#FAF7F2] p-4 rounded-lg">
+          <div className="bg-[#F6FBFB] p-4 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium">Preparation Progress</span>
               <span className="text-sm text-[#5A6B7A]">{sessionPrep.completionRate}% Complete</span>
@@ -337,7 +337,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
             return (
               <div key={category} className="space-y-3">
-                <h4 className="font-medium text-[#1B2733] capitalize">
+                <h4 className="font-medium text-[#132F43] capitalize">
                   {category === 'preparation' ? 'Session Preparation' : category}
                 </h4>
                 <div className="space-y-2">
@@ -349,7 +349,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
+                        <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#132F43]'} ${item.required ? 'font-medium' : ''}`}>
                           {item.text}
                         </span>
                         {item.required && (
@@ -414,7 +414,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                   className={`p-2 rounded-lg transition-colors ${
                     sessionRating >= rating
                       ? 'bg-amber-100 text-amber-600'
-                      : 'bg-[#F0EDE8] text-slate-400 hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-slate-400 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <Star className={`h-5 w-5 ${sessionRating >= rating ? 'fill-current' : ''}`} />
@@ -457,7 +457,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
             {uploadedFiles.length > 0 && (
               <div className="mt-3 space-y-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#F6FBFB] rounded">
                     <FileText className="h-4 w-4 text-[#5A6B7A]" />
                     <span className="text-sm text-[#3A4A57] flex-1">{file.name}</span>
                     <button
@@ -489,7 +489,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
   // Render enhanced provider info card
   const renderProviderInfoCard = () => (
-    <Card className="p-4 mb-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
+    <Card className="p-4 mb-4 bg-gradient-to-r from-[#F6FBFB] to-cyan-50 border-[#6B9080]/20">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3">
           <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
@@ -561,7 +561,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
           {uploadedFiles.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-[#F0EDE8] rounded text-sm">
+                <div key={index} className="flex items-center gap-1 px-2 py-1 bg-[#EDF4F7] rounded text-sm">
                   <Paperclip className="h-3 w-3" />
                   <span>{file.name}</span>
                   <button
@@ -652,7 +652,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
         </div>
 
         {/* Session preparation status */}
-        <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
+        <div className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg">
           <div className="flex items-center gap-2">
             <CheckCircle2 className={`h-5 w-5 ${sessionPrep.completionRate === 100 ? 'text-green-500' : 'text-slate-400'}`} />
             <span className="text-sm font-medium">

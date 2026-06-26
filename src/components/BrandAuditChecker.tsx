@@ -178,7 +178,7 @@ export function BrandAuditChecker() {
             </div>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-semibold text-[#1B2733] mb-4">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-[#132F43] mb-4">
             Brand Audit Report
           </h1>
           
@@ -191,7 +191,7 @@ export function BrandAuditChecker() {
         <Card className="p-8 mb-8 bg-gradient-to-r from-accent/5 to-teal-50 border-accent/20">
           <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 sm:gap-6">
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Overall Brand Score</h2>
+              <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Overall Brand Score</h2>
               <p className="text-[#5A6B7A]">Compliance with ABA wellness framework</p>
             </div>
             
@@ -215,33 +215,33 @@ export function BrandAuditChecker() {
 
         {/* Audit Criteria */}
         <Card className="p-6 mb-8">
-          <h3 className="font-semibold text-[#1B2733] mb-4">Audit Criteria</h3>
+          <h3 className="font-semibold text-[#132F43] mb-4">Audit Criteria</h3>
           <div className="grid md:grid-cols-4 gap-3 sm:gap-4 text-sm">
             <div className="flex items-start gap-2">
               <Sparkles className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-medium text-[#1B2733]">AI Presence</p>
+                <p className="font-medium text-[#132F43]">AI Presence</p>
                 <p className="text-[#5A6B7A] text-sm">Visual or copy reference to AI</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <FileText className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-medium text-[#1B2733]">ABA Reference</p>
+                <p className="font-medium text-[#132F43]">ABA Reference</p>
                 <p className="text-[#5A6B7A] text-sm">Educational/proof mention</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-medium text-[#1B2733]">No Prohibited Words</p>
+                <p className="font-medium text-[#132F43]">No Prohibited Words</p>
                 <p className="text-[#5A6B7A] text-sm">Therapy, patient, disorder, etc.</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Eye className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-medium text-[#1B2733]">AI Gradient Glow</p>
+                <p className="font-medium text-[#132F43]">AI Gradient Glow</p>
                 <p className="text-[#5A6B7A] text-sm">Visual brand consistency</p>
               </div>
             </div>
@@ -250,14 +250,14 @@ export function BrandAuditChecker() {
 
         {/* Individual Screen Results */}
         <div className="space-y-3 sm:space-y-4">
-          <h2 className="text-2xl font-semibold text-[#1B2733] mb-4">Screen-by-Screen Analysis</h2>
+          <h2 className="text-2xl font-semibold text-[#132F43] mb-4">Screen-by-Screen Analysis</h2>
           
           {auditResults.map((result, index) => (
             <Card key={index} className="p-4 sm:p-5 md:p-6">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 sm:gap-4 mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-lg font-semibold text-[#1B2733]">{result.screen}</h3>
+                    <h3 className="text-lg font-semibold text-[#132F43]">{result.screen}</h3>
                     <Badge className={getScoreBadge(result.score)}>
                       {result.score}%
                     </Badge>
@@ -339,7 +339,7 @@ export function BrandAuditChecker() {
               {/* Recommendations */}
               {result.recommendations.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+                  <h4 className="text-sm font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                     <Check className="w-4 h-4 text-green-600" />
                     Recommendations
                   </h4>
@@ -375,8 +375,8 @@ export function BrandAuditChecker() {
         </div>
 
         {/* Summary */}
-        <Card className="mt-8 p-6 bg-[#FAF7F2]">
-          <h3 className="font-semibold text-[#1B2733] mb-3">Audit Summary</h3>
+        <Card className="mt-8 p-6 bg-[#F6FBFB]">
+          <h3 className="font-semibold text-[#132F43] mb-3">Audit Summary</h3>
           <div className="grid md:grid-cols-3 gap-3 sm:gap-4 text-sm">
             <div>
               <p className="text-[#5A6B7A] mb-1">Screens Passing</p>

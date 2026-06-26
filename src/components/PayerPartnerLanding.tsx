@@ -149,14 +149,14 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors"
+              className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors"
             >
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex items-center gap-2">
             <Building2 className="w-5 h-5 text-[#6B9080]" />
-            <span className="text-base font-bold text-[#1B2733]">
+            <span className="text-base font-bold text-[#132F43]">
               Aminy for Payers
             </span>
           </div>
@@ -179,7 +179,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           <Badge className="bg-slate-900 text-white border-transparent mb-4 text-sm px-3 py-1">
             Behavioral Health Network
           </Badge>
-          <h1 className="text-2xl font-bold text-[#1B2733] mb-3 leading-tight">
+          <h1 className="text-2xl font-bold text-[#132F43] mb-3 leading-tight">
             Partner with Aminy — Reduce Behavioral Health Costs Through Early Intervention
           </h1>
           <p className="text-[#5A6B7A] text-sm leading-relaxed max-w-lg mx-auto">
@@ -194,7 +194,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             </a>
             <a
               href="#features"
-              className="inline-flex items-center gap-1.5 border border-[#E8E4DF] text-[#3A4A57] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#FAF7F2] transition-colors"
+              className="inline-flex items-center gap-1.5 border border-[#E8E4DF] text-[#3A4A57] text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-[#F6FBFB] transition-colors"
             >
               See Features
             </a>
@@ -226,7 +226,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           transition={{ duration: 0.45, delay: 0.15 }}
           className="space-y-4 mb-10"
         >
-          <h2 className="text-lg font-bold text-[#1B2733]">Why Aminy for Your Network</h2>
+          <h2 className="text-lg font-bold text-[#132F43]">Why Aminy for Your Network</h2>
           {VALUE_PROPS.map((vp) => (
             <Card key={vp.headline} className="p-4 border border-[#E8E4DF]">
               <div className="flex gap-3">
@@ -234,7 +234,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                   <vp.icon className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-[#1B2733] mb-1">{vp.headline}</p>
+                  <p className="text-sm font-bold text-[#132F43] mb-1">{vp.headline}</p>
                   <p className="text-sm text-[#5A6B7A] leading-relaxed">{vp.body}</p>
                 </div>
               </div>
@@ -250,7 +250,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
           transition={{ duration: 0.45, delay: 0.2 }}
           className="mb-10"
         >
-          <h2 className="text-lg font-bold text-[#1B2733] mb-4">For Payers</h2>
+          <h2 className="text-lg font-bold text-[#132F43] mb-4">For Payers</h2>
           <div className="space-y-2.5">
             {FEATURES.map((f) => (
               <div key={f.text} className="flex items-start gap-3">
@@ -274,7 +274,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
             {submitted ? (
               <div className="text-center py-6">
                 <CheckCircle className="w-10 h-10 text-[#6B9080] mx-auto mb-3" />
-                <h3 className="text-base font-bold text-[#1B2733] mb-1">
+                <h3 className="text-base font-bold text-[#132F43] mb-1">
                   Request received!
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">
@@ -290,7 +290,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
               <>
                 <div className="flex items-center gap-2 mb-4">
                   <Phone className="w-4 h-4 text-[#6B9080]" />
-                  <h3 className="text-base font-bold text-[#1B2733]">
+                  <h3 className="text-base font-bold text-[#132F43]">
                     Schedule a Payer Partnership Call
                   </h3>
                 </div>
@@ -308,7 +308,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, name: e.target.value }))
                         }
                         placeholder="Jane Smith"
-                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -325,7 +325,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           }))
                         }
                         placeholder="Acme Health Plan"
-                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -373,7 +373,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, email: e.target.value }))
                         }
                         placeholder="jane@example.com"
-                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                     <div>
@@ -387,7 +387,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                           setForm((prev) => ({ ...prev, phone: e.target.value }))
                         }
                         placeholder="(602) 555-0100"
-                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                        className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
                       />
                     </div>
                   </div>
@@ -403,7 +403,7 @@ export function PayerPartnerLanding({ onBack, onNavigate }: PayerPartnerLandingP
                       }
                       placeholder="Tell us about your network, member population, or specific use case..."
                       rows={3}
-                      className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 rounded-xl border border-[#E8E4DF] bg-white text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent resize-none"
                     />
                   </div>
 

@@ -411,7 +411,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
               <Brain className="w-6 h-6 text-violet-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+              <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">
                 AI Summary: {patient.childName}
               </h2>
               <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
@@ -484,7 +484,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             {patterns.map((pattern, i) => (
               <div key={i} className="bg-neutral-50 dark:bg-slate-700 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-[#1B2733] dark:text-white">{pattern.behavior}</h4>
+                  <h4 className="font-medium text-[#132F43] dark:text-white">{pattern.behavior}</h4>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${getFrequencyColor(pattern.frequency)}`}>
                     {pattern.frequency}
                   </span>
@@ -532,7 +532,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {getTrendIcon(item.trend)}
-                    <h4 className="font-medium text-[#1B2733] dark:text-white">{item.area}</h4>
+                    <h4 className="font-medium text-[#132F43] dark:text-white">{item.area}</h4>
                   </div>
                   <span className={`text-sm font-medium ${
                     item.trend === 'positive' ? 'text-green-600' :
@@ -558,14 +558,14 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             {/* Add new suggestion */}
             {isAddingSuggestion ? (
               <div className="bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-lg p-4">
-                <h4 className="font-medium text-[#1B2733] dark:text-white mb-3">Add Care Plan Suggestion</h4>
+                <h4 className="font-medium text-[#132F43] dark:text-white mb-3">Add Care Plan Suggestion</h4>
                 <div className="space-y-3">
                   <input
                     type="text"
                     placeholder="Title (e.g., 'Implement token economy system')"
                     value={newSuggestion.title}
                     onChange={e => setNewSuggestion({ ...newSuggestion, title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-[#1B2733] dark:text-white"
+                    className="w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-[#132F43] dark:text-white"
                   />
                   <Textarea
                     placeholder="Description - What should the parent do?"
@@ -626,7 +626,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                       <Badge variant={suggestion.status === 'approved' ? 'default' : 'secondary'} className="text-sm">
                         {suggestion.type}
                       </Badge>
-                      <h5 className="font-medium text-[#1B2733] dark:text-white">{suggestion.title}</h5>
+                      <h5 className="font-medium text-[#132F43] dark:text-white">{suggestion.title}</h5>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`text-xs px-2 py-1 rounded-full ${

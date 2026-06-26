@@ -77,7 +77,7 @@ const EMOTIONS: { id: Emotion; emoji: string; label: string; color: string }[] =
 const CALM_ACTIVITIES: { id: CalmActivity; emoji: string; label: string; desc: string; color: string }[] = [
   { id: 'breathing', emoji: '🌬️', label: 'Breathing', desc: 'Follow the circle', color: 'from-blue-100 to-cyan-100' },
   { id: 'body-scan', emoji: '🧘', label: 'Body Scan', desc: 'Relax each part', color: 'from-purple-100 to-pink-100' },
-  { id: 'sounds', emoji: '🎵', label: 'Calm Sounds', desc: 'Listen & relax', color: 'from-green-100 to-[#F0EDE8]' },
+  { id: 'sounds', emoji: '🎵', label: 'Calm Sounds', desc: 'Listen & relax', color: 'from-green-100 to-[#EDF4F7]' },
   { id: 'grounding', emoji: '🌳', label: 'Grounding', desc: '5-4-3-2-1', color: 'from-emerald-100 to-lime-100' },
   { id: 'bubble-pop', emoji: '🫧', label: 'Bubbles', desc: 'Pop to relax', color: 'from-sky-100 to-indigo-100' },
 ];
@@ -378,7 +378,7 @@ export function JrCalmCorner({
                     className={`bg-gradient-to-br ${activity.color} rounded-2xl p-4 text-left border border-white/50 shadow-sm`}
                   >
                     <span className="text-3xl block mb-2">{activity.emoji}</span>
-                    <p className="font-semibold text-[#1B2733] text-sm">{activity.label}</p>
+                    <p className="font-semibold text-[#132F43] text-sm">{activity.label}</p>
                     <p className="text-sm text-[#5A6B7A]">{activity.desc}</p>
                   </motion.button>
                 ))}

@@ -248,7 +248,7 @@ export function TrialProgressBanner({ onUpgrade }: TrialProgressBannerProps) {
             <Gift className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="font-medium text-[#1B2733]">
+            <p className="font-medium text-[#132F43]">
               {remaining > 0 ? (
                 <>
                   Calm start plan: <span className="text-violet-700">{remaining} guided chats left</span>
@@ -330,7 +330,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
                 <Heart className="w-4 h-4 text-green-600" />
               </div>
               <div>
-                <p className="font-medium text-[#1B2733]">I'm learning about {childName}</p>
+                <p className="font-medium text-[#132F43]">I'm learning about {childName}</p>
                 <p className="text-sm text-[#5A6B7A]">Every conversation helps me give better advice</p>
               </div>
             </div>
@@ -340,7 +340,7 @@ export function SoftNudgeModal({ childName, insightsCount, onUpgrade, onDismiss 
                 <TrendingUp className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <p className="font-medium text-[#1B2733]">Premium unlocks everything</p>
+                <p className="font-medium text-[#132F43]">Premium unlocks everything</p>
                 <p className="text-sm text-[#5A6B7A]">Unlimited chats, telehealth access, care team</p>
               </div>
             </div>
@@ -423,7 +423,7 @@ export function HardPaywallModal({ childName, onUpgrade }: HardPaywallModalProps
 
         <Button
           onClick={onUpgrade}
-          className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-[#1B2733]"
+          className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-[#132F43]"
         >
           Start 7-Day Free Trial
         </Button>

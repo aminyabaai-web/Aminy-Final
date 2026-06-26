@@ -40,7 +40,7 @@ export function WellnessScoreWidget({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className={`w-full text-left rounded-3xl bg-white border border-[#F0EDE8] shadow-[0_18px_40px_rgba(15,23,42,0.06)] p-5 sm:p-6 active:scale-[0.99] transition-transform ${className}`}
+      className={`w-full text-left rounded-3xl bg-white border border-[#EDF4F7] shadow-[0_18px_40px_rgba(15,23,42,0.06)] p-5 sm:p-6 active:scale-[0.99] transition-transform ${className}`}
       aria-label={`Wellness score ${score.composite} of 100, ${score.confidenceLabel}`}
     >
       {/* Header row */}
@@ -79,13 +79,13 @@ export function WellnessScoreWidget({
           <span className="text-sm text-[#8E9BAA]">{score.confidenceLabel}</span>
           <span className="text-sm font-medium text-[#5A6B7A]">{score.confidence}%</span>
         </div>
-        <div className="h-1.5 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
+        <div className="h-1.5 w-full rounded-full bg-[#EDF4F7] overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${score.confidence}%` }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, #4E93A8 0%, #6AA9BC 100%)' }}
+            style={{ background: 'linear-gradient(90deg, #2A7D99 0%, #4795AE 100%)' }}
           />
         </div>
       </div>
@@ -112,8 +112,8 @@ export function WellnessScoreWidget({
 
       {/* Top insight */}
       {topInsight && (
-        <div className="rounded-2xl bg-[#FAF7F2] border border-[#F0EDE8] px-3.5 py-2.5">
-          <p className="text-sm text-[#1B2733] leading-snug">{topInsight}</p>
+        <div className="rounded-2xl bg-[#F6FBFB] border border-[#EDF4F7] px-3.5 py-2.5">
+          <p className="text-sm text-[#132F43] leading-snug">{topInsight}</p>
         </div>
       )}
 
@@ -134,7 +134,7 @@ function TrendBadge({
 }) {
   if (direction === 'stable' || trend === 0) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A] text-xs font-medium">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#EDF4F7] text-[#5A6B7A] text-xs font-medium">
         <Minus className="w-3 h-3" />
         Steady
       </span>
@@ -145,8 +145,8 @@ function TrendBadge({
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
       style={{
-        background: isUp ? '#4E93A815' : '#E07A5F15',
-        color: isUp ? '#4E93A8' : '#E07A5F',
+        background: isUp ? '#2A7D9915' : '#E07A5F15',
+        color: isUp ? '#2A7D99' : '#E07A5F',
       }}
     >
       {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
@@ -157,8 +157,8 @@ function TrendBadge({
 }
 
 function colorForScore(score: number): string {
-  if (score >= 75) return '#4E93A8';
-  if (score >= 50) return '#4E93A8';
+  if (score >= 75) return '#2A7D99';
+  if (score >= 50) return '#2A7D99';
   if (score >= 30) return '#D4A373';
   return '#E07A5F';
 }

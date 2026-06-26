@@ -143,7 +143,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+                <h1 className="text-lg font-semibold text-[#132F43] dark:text-white">
                   {payorName} Analytics
                 </h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Aminy Payor Portal</p>
@@ -159,7 +159,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                       selectedPeriod === period
                         ? 'bg-white dark:bg-slate-700 text-blue-600 shadow-sm'
-                        : 'text-neutral-600 dark:text-slate-400 hover:text-[#1B2733]'
+                        : 'text-neutral-600 dark:text-slate-400 hover:text-[#132F43]'
                     }`}
                   >
                     {period}M
@@ -270,7 +270,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     +8%
                   </Badge>
                 </div>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.utilization.activeMembers.toLocaleString()}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Members</p>
@@ -288,7 +288,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     +27%
                   </Badge>
                 </div>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.goalAchievementRate}%
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Goal Achievement</p>
@@ -306,7 +306,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     -59%
                   </Badge>
                 </div>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   ${data.costEffectiveness.avgCostPerImprovedOutcome}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Cost/Outcome</p>
@@ -322,7 +322,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                   </div>
                   <Sparkles className="w-4 h-4 text-amber-500" />
                 </div>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.memberSatisfactionScore}
                 </p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Member Satisfaction</p>
@@ -334,7 +334,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
 
             {/* Trends Chart (Simplified) */}
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 Performance Trends
               </h3>
               <div className="space-y-4">
@@ -363,7 +363,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
 
             {/* Benchmark Comparison */}
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 Benchmark Comparison
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
@@ -382,7 +382,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                     </div>
                     <div className="flex items-end justify-between">
                       <div>
-                        <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                        <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                           {typeof benchmark.aminyValue === 'number' && benchmark.aminyValue < 10
                             ? benchmark.aminyValue.toFixed(1)
                             : benchmark.aminyValue}
@@ -412,51 +412,51 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Total Sessions</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.utilization.totalSessions.toLocaleString()}
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Avg Sessions/Member</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.utilization.avgSessionsPerMember}
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Engagement Rate</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.utilization.engagementRate}%
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Avg Minutes/Session</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.utilization.avgMinutesPerSession}
                 </p>
               </Card>
             </div>
 
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 Utilization by Service Type
               </h3>
               <div className="space-y-4">
                 {Object.entries(data.utilization.byServiceType).map(([service, metrics]) => (
                   <div key={service} className="p-4 rounded-lg bg-neutral-50 dark:bg-slate-800">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-[#1B2733] dark:text-white">{service}</span>
+                      <span className="font-medium text-[#132F43] dark:text-white">{service}</span>
                       <span className="text-sm text-[#5A6B7A]">{metrics.uniqueMembers} members</span>
                     </div>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-[#5A6B7A]">Sessions:</span>
-                        <span className="ml-2 font-medium text-[#1B2733] dark:text-white">
+                        <span className="ml-2 font-medium text-[#132F43] dark:text-white">
                           {metrics.sessions.toLocaleString()}
                         </span>
                       </div>
                       <div>
                         <span className="text-[#5A6B7A]">Minutes:</span>
-                        <span className="ml-2 font-medium text-[#1B2733] dark:text-white">
+                        <span className="ml-2 font-medium text-[#132F43] dark:text-white">
                           {metrics.minutes.toLocaleString()}
                         </span>
                       </div>
@@ -473,39 +473,39 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Goals Tracked</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.totalGoalsTracked.toLocaleString()}
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Goals Achieved</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.goalsAchieved.toLocaleString()}
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Member Improvement</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.memberImprovementRate}%
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Clinical Significance</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.outcomes.clinicallySignificantImprovement}%
                 </p>
               </Card>
             </div>
 
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 Outcomes by Category
               </h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Object.entries(data.outcomes.byCategory).map(([category, metrics]) => (
                   <div key={category} className="p-4 rounded-lg bg-neutral-50 dark:bg-slate-800">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-medium text-[#1B2733] dark:text-white capitalize">
+                      <span className="font-medium text-[#132F43] dark:text-white capitalize">
                         {category.replace('-', ' ')}
                       </span>
                       <span className="text-sm text-green-600">{metrics.avgProgress}%</span>
@@ -532,7 +532,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">PMPM Cost</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   ${data.costEffectiveness.avgCostPerMember.toFixed(2)}
                 </p>
               </Card>
@@ -544,13 +544,13 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Crises Prevented</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.costEffectiveness.preventedCrisisEvents}
                 </p>
               </Card>
               <Card className="p-5">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">ER Visits Avoided</p>
-                <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                   {data.costEffectiveness.reducedERVisits}
                 </p>
               </Card>
@@ -582,7 +582,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
             <div className="grid grid-cols-3 gap-4">
               <Card className="p-5 text-center">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">NCQA Score</p>
-                <p className="text-3xl font-bold text-[#1B2733] dark:text-white">
+                <p className="text-3xl font-bold text-[#132F43] dark:text-white">
                   {qualityMetrics.ncqaScore}
                 </p>
                 <p className="text-sm text-neutral-400">out of 5.0</p>
@@ -614,14 +614,14 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
             </div>
 
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 HEDIS Compliance Measures
               </h3>
               <div className="space-y-4">
                 {qualityMetrics.hedisCompliance.map((measure, idx) => (
                   <div key={idx} className="p-4 rounded-lg bg-neutral-50 dark:bg-slate-800">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         {measure.measure}
                       </span>
                       <Badge className={
@@ -647,7 +647,7 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <span className="font-medium text-[#1B2733] dark:text-white">{measure.rate}%</span>
+                        <span className="font-medium text-[#132F43] dark:text-white">{measure.rate}%</span>
                         <span className="text-neutral-400">/ {measure.benchmark}% benchmark</span>
                       </div>
                     </div>

@@ -228,7 +228,7 @@ function getStatusConfig(status: ExpenseRecord['status']) {
     case 'pending':
       return { icon: <Clock className="w-4 h-4 text-blue-500" />, label: 'Pending', color: 'bg-[#EEF4F8] text-blue-700' };
     case 'self_pay':
-      return { icon: <CreditCard className="w-4 h-4 text-[#5A6B7A]" />, label: 'Self-Pay', color: 'bg-[#FAF7F2] text-[#3A4A57]' };
+      return { icon: <CreditCard className="w-4 h-4 text-[#5A6B7A]" />, label: 'Self-Pay', color: 'bg-[#F6FBFB] text-[#3A4A57]' };
   }
 }
 
@@ -243,7 +243,7 @@ function LoadingSkeleton() {
         <div className="h-4 bg-[#E8E4DF] rounded w-1/3 mb-3" />
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="rounded-lg p-3 bg-[#FAF7F2]">
+            <div key={i} className="rounded-lg p-3 bg-[#F6FBFB]">
               <div className="h-3 bg-[#E8E4DF] rounded w-2/3 mb-2" />
               <div className="h-5 bg-[#E8E4DF] rounded w-1/2" />
             </div>
@@ -273,7 +273,7 @@ function EmptyExpenseState() {
       <div className="mx-auto w-12 h-12 rounded-full bg-[#6B9080]/10 flex items-center justify-center mb-4">
         <Inbox className="w-6 h-6 text-primary" />
       </div>
-      <h3 className="text-sm font-semibold text-[#1B2733] mb-2">
+      <h3 className="text-sm font-semibold text-[#132F43] mb-2">
         No expenses tracked yet
       </h3>
       <p className="text-sm text-[#5A6B7A] max-w-[260px] mx-auto leading-relaxed">
@@ -326,7 +326,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
     <div className="space-y-4">
       {/* Summary */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF]">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <PiggyBank className="w-4 h-4 text-[#6B9080]" />
           This Year&apos;s Summary
         </h3>
@@ -343,9 +343,9 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
             <p className="text-sm text-blue-600 font-medium">Pending Claims</p>
             <p className="text-lg font-bold text-[#4A6478]">{formatCurrency(pendingAmount)}</p>
           </div>
-          <div className="bg-[#FAF7F2] rounded-lg p-3">
+          <div className="bg-[#F6FBFB] rounded-lg p-3">
             <p className="text-sm text-[#5A6B7A] font-medium">Total Billed</p>
-            <p className="text-lg font-bold text-[#1B2733]">{formatCurrency(totalCharged)}</p>
+            <p className="text-lg font-bold text-[#132F43]">{formatCurrency(totalCharged)}</p>
           </div>
         </div>
       </div>
@@ -353,7 +353,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
       {/* ── Denial Alerts ──────────────────────────────────────────────── */}
       {!loadingDenials && activeDenials.length > 0 && (
         <div className="bg-white rounded-xl p-4 shadow-sm border border-red-100">
-          <h3 className="text-sm font-semibold text-[#1B2733] mb-1 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-[#132F43] mb-1 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500" />
             Denied Claims ({activeDenials.length})
           </h3>
@@ -373,7 +373,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                 <div key={denial.id} className="border border-red-100 rounded-lg p-3 bg-red-50/40">
                   <div className="flex items-start justify-between mb-1.5">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-[#1B2733]">
+                      <p className="text-sm font-medium text-[#132F43]">
                         {denial.payerName}
                       </p>
                       <p className="text-sm text-[#5A6B7A]">
@@ -417,7 +417,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
                       denial.status === 'appealed' ? 'bg-blue-100 text-blue-700' :
                       denial.status === 'resubmitted' ? 'bg-amber-100 text-amber-700' :
                       denial.status === 'under-review' ? 'bg-purple-100 text-purple-700' :
-                      'bg-[#F0EDE8] text-[#5A6B7A]'
+                      'bg-[#EDF4F7] text-[#5A6B7A]'
                     }`}>
                       {denial.status === 'new' ? 'New' :
                        denial.status === 'appealed' ? 'Appealed' :
@@ -452,7 +452,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
 
       {/* Expense List */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF]">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-[#6B9080]" />
           Recent Expenses
         </h3>
@@ -463,7 +463,7 @@ function SpendingTab({ expenses, childName, loading, denials = [], loadingDenial
               <div key={exp.id} className="border border-[#E8E4DF] rounded-lg p-3">
                 <div className="flex items-start justify-between mb-1.5">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-[#1B2733] truncate">{exp.service}</p>
+                    <p className="text-sm font-medium text-[#132F43] truncate">{exp.service}</p>
                     <p className="text-sm text-[#5A6B7A]">{exp.provider}</p>
                   </div>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ml-2 flex-shrink-0 ${statusConfig.color}`}>
@@ -524,7 +524,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
       {/* Deductible Tracker — real plan figures only shown in demo; real users
           must connect their plan before we can show dollar amounts. */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF]">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Shield className="w-4 h-4 text-[#6B9080]" />
           Deductible &amp; Out-of-Pocket Max
         </h3>
@@ -533,9 +533,9 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-[#5A6B7A]">Individual Deductible</span>
-                <span className="font-medium text-[#1B2733]">$450 / $1,500</span>
+                <span className="font-medium text-[#132F43]">$450 / $1,500</span>
               </div>
-              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div className="h-full bg-primary rounded-full" style={{ width: '30%' }} />
               </div>
               <p className="text-sm text-[#8A9BA8] mt-0.5">$1,050 remaining until deductible is met</p>
@@ -543,9 +543,9 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-[#5A6B7A]">Out-of-Pocket Maximum</span>
-                <span className="font-medium text-[#1B2733]">$470 / $6,000</span>
+                <span className="font-medium text-[#132F43]">$470 / $6,000</span>
               </div>
-              <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div className="h-full bg-emerald-500 rounded-full" style={{ width: '8%' }} />
               </div>
               <p className="text-sm text-[#8A9BA8] mt-0.5">After this, insurance covers 100%</p>
@@ -562,7 +562,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
 
       {/* Benefits */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF]">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Heart className="w-4 h-4 text-[#6B9080]" />
           Your Benefits
         </h3>
@@ -576,7 +576,7 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
               <div key={b.category} className="border border-[#E8E4DF] rounded-lg p-3">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">{b.category}</p>
+                    <p className="text-sm font-medium text-[#132F43]">{b.category}</p>
                     <p className="text-sm text-[#5A6B7A]">{b.description}</p>
                   </div>
                   {b.authRequired && (
@@ -589,11 +589,11 @@ function CoverageTab({ benefits }: { benefits: CoverageBenefit[] }) {
                   <span className="text-[#5A6B7A]">
                     {b.unit === 'dollars' ? formatCurrency(b.used) : `${b.used} ${b.unit}`} used
                   </span>
-                  <span className={`font-medium ${isLow ? 'text-red-600' : 'text-[#1B2733]'}`}>
+                  <span className={`font-medium ${isLow ? 'text-red-600' : 'text-[#132F43]'}`}>
                     {b.unit === 'dollars' ? formatCurrency(b.remaining) : `${b.remaining} ${b.unit}`} remaining
                   </span>
                 </div>
-                <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full ${isLow ? 'bg-red-400' : 'bg-primary'}`}
                     style={{ width: `${usedPercent}%` }}
@@ -727,7 +727,7 @@ export default function ClaimsDashboard({
   return (
     <div className="min-h-screen bg-mist">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#6B9080] to-[#4E93A8] text-white px-4 pt-12 pb-4">
+      <div className="bg-gradient-to-r from-[#6B9080] to-[#2A7D99] text-white px-4 pt-12 pb-4">
         <nav aria-label="Coverage navigation" className="mb-3 flex items-center gap-3">
           <button
             onClick={onBack}

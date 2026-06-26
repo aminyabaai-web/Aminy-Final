@@ -159,7 +159,7 @@ export function UnifiedChat({
       case 'provider':
         return { bg: 'bg-green-50', text: 'text-green-900', border: 'border-green-100' };
       default:
-        return { bg: 'bg-[#FAF7F2]', text: 'text-[#1B2733]', border: 'border-[#E8E4DF]' };
+        return { bg: 'bg-[#F6FBFB]', text: 'text-[#132F43]', border: 'border-[#E8E4DF]' };
     }
   };
 

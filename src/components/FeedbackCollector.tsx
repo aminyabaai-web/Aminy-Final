@@ -118,7 +118,7 @@ export function FeedbackCollector({
             className="py-4"
           >
             <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-xl text-[#1B2733] mb-2">
+              <h2 className="text-xl text-[#132F43] mb-2">
                 How's Aminy feeling?
               </h2>
               <p className="text-sm text-[#5A6B7A]">
@@ -162,7 +162,7 @@ export function FeedbackCollector({
             className="py-4"
           >
             <div className="text-center mb-4 sm:mb-6">
-              <h2 className="text-xl text-[#1B2733] mb-2">
+              <h2 className="text-xl text-[#132F43] mb-2">
                 Tell us more
               </h2>
               <p className="text-sm text-[#5A6B7A]">
@@ -247,7 +247,7 @@ export function FeedbackCollector({
               <Heart className="w-8 h-8 text-emerald-600 fill-emerald-600" />
             </motion.div>
 
-            <h2 className="text-xl text-[#1B2733] mb-2">
+            <h2 className="text-xl text-[#132F43] mb-2">
               Thank you 💚
             </h2>
             <p className="text-sm text-[#5A6B7A]">

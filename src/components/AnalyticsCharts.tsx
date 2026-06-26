@@ -72,7 +72,7 @@ const SimpleLineChart: React.FC<{
   height?: number;
   color?: string;
   showArea?: boolean;
-}> = ({ data, height = 150, color = '#4E93A8', showArea = true }) => {
+}> = ({ data, height = 150, color = '#2A7D99', showArea = true }) => {
   if (data.length === 0) return null;
 
   const padding = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -248,7 +248,7 @@ const SimplePieChart: React.FC<{
           <div key={i} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color }} />
             <span className="text-sm text-[#5A6B7A]">{d.mood}</span>
-            <span className="text-sm font-medium text-[#1B2733]">{d.percentage}%</span>
+            <span className="text-sm font-medium text-[#132F43]">{d.percentage}%</span>
           </div>
         ))}
       </div>
@@ -265,7 +265,7 @@ const ActivityHeatmap: React.FC<{
     <div className="flex items-end gap-1 h-20">
       {data.map((d, i) => {
         const intensity = d.count / maxCount;
-        const bgColor = `rgba(78, 147, 168, ${Math.max(0.1, intensity)})`;
+        const bgColor = `rgba(42, 125, 153, ${Math.max(0.1, intensity)})`;
 
         return (
           <div
@@ -336,7 +336,7 @@ export function AnalyticsCharts({
     return {
       progressOverTime,
       activitiesByCategory: [
-        { category: 'Routines', count: 42, color: '#4E93A8' },
+        { category: 'Routines', count: 42, color: '#2A7D99' },
         { category: 'Communication', count: 28, color: '#8b5cf6' },
         { category: 'Behavior', count: 18, color: '#f59e0b' },
         { category: 'Social', count: 15, color: '#ec4899' },
@@ -344,7 +344,7 @@ export function AnalyticsCharts({
       ],
       moodDistribution: [
         { mood: 'Happy', percentage: 45, color: '#22c55e' },
-        { mood: 'Calm', percentage: 30, color: '#4E93A8' },
+        { mood: 'Calm', percentage: 30, color: '#2A7D99' },
         { mood: 'Frustrated', percentage: 15, color: '#f59e0b' },
         { mood: 'Overwhelmed', percentage: 10, color: '#ef4444' }
       ],
@@ -397,7 +397,7 @@ export function AnalyticsCharts({
         {[1, 2, 3].map(i => (
           <Card key={i} className="p-6 animate-pulse">
             <div className="h-4 bg-[#E8E4DF] rounded w-1/4 mb-4" />
-            <div className="h-40 bg-[#F0EDE8] rounded" />
+            <div className="h-40 bg-[#EDF4F7] rounded" />
           </Card>
         ))}
       </div>
@@ -410,7 +410,7 @@ export function AnalyticsCharts({
         <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
           <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
         </div>
-        <h3 className="text-base font-semibold text-[#1B2733] dark:text-white">No analytics yet</h3>
+        <h3 className="text-base font-semibold text-[#132F43] dark:text-white">No analytics yet</h3>
         <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
           As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
         </p>
@@ -544,7 +544,7 @@ export function AnalyticsCharts({
       {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real
           users are never shown fabricated clinical progress about their child. */}
       {demoMode && (
-        <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
+        <Card className="p-6 bg-gradient-to-r from-[#F6FBFB] to-slate-50 dark:from-teal-900/20 dark:to-slate-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
           <h3 className="font-semibold mb-3 flex items-center gap-2 text-[#6B9080] dark:text-primary">
             <Zap className="w-5 h-5" />
             Pattern Insights

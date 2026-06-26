@@ -74,7 +74,7 @@ export function PreferredProviderButton({
         'rounded-full transition-all hover:scale-110',
         localPreferred
           ? 'text-amber-500 hover:text-amber-600 hover:bg-amber-50'
-          : 'text-[#8A9BA8] hover:text-amber-500 hover:bg-[#F0EDE8]',
+          : 'text-[#8A9BA8] hover:text-amber-500 hover:bg-[#EDF4F7]',
         className
       )}
       aria-label={localPreferred ? 'Remove from favorites' : 'Add to favorites'}

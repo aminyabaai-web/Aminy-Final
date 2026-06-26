@@ -155,7 +155,7 @@ export function GroupSessionDiscovery({
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="mb-3">
-            <h1 className="text-xl font-bold text-[#1B2733]">Group BCBA Sessions</h1>
+            <h1 className="text-xl font-bold text-[#132F43]">Group BCBA Sessions</h1>
             <p className="text-sm text-[#5A6B7A]">
               Expert-led parent training with up to 4 families · $50/family · cash pay
             </p>
@@ -168,7 +168,7 @@ export function GroupSessionDiscovery({
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search by topic, strategy, or BCBA name…"
-              className="pl-9 bg-[#FAF7F2] border-[#E8E4DF]"
+              className="pl-9 bg-[#F6FBFB] border-[#E8E4DF]"
             />
           </div>
 
@@ -180,7 +180,7 @@ export function GroupSessionDiscovery({
                 onClick={() => setSelectedCategory(cat.id)}
                 className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border whitespace-nowrap transition-all shrink-0"
                 style={selectedCategory === cat.id
-                  ? { background: '#4E93A8', borderColor: '#4E93A8', color: 'white', fontWeight: 600 }
+                  ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
                   : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
               >
                 <span>{cat.emoji}</span>{cat.label}
@@ -214,7 +214,7 @@ export function GroupSessionDiscovery({
         ) : sessions.length === 0 ? (
           <Card className="p-10 text-center border-dashed border-[#E8E4DF]">
             <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-            <p className="text-[#1B2733] font-medium mb-1">No sessions found</p>
+            <p className="text-[#132F43] font-medium mb-1">No sessions found</p>
             <p className="text-sm text-[#5A6B7A]">
               {selectedCategory !== 'all' || searchQuery
                 ? 'Try a different topic or search term.'
@@ -240,17 +240,17 @@ export function GroupSessionDiscovery({
       {bookingSession && (
         <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4">
           <Card className="w-full max-w-md p-5 rounded-2xl">
-            <h3 className="text-lg font-semibold text-[#1B2733] mb-1">{bookingSession.topic}</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] mb-1">{bookingSession.topic}</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
               {new Date(bookingSession.session_date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })} at{' '}
               {new Date(bookingSession.session_date).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}
               {' '}· with {bookingSession.provider_name}, {bookingSession.provider_credentials}
             </p>
 
-            <div className="p-3 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF] mb-4">
+            <div className="p-3 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF] mb-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#3A4A57]">Group session fee</span>
-                <span className="font-semibold text-[#1B2733]">${bookingSession.price_per_family_cents / 100}</span>
+                <span className="font-semibold text-[#132F43]">${bookingSession.price_per_family_cents / 100}</span>
               </div>
               <div className="flex items-center justify-between text-sm text-slate-400 mt-1">
                 <span>Cash pay · Secure Stripe checkout</span>
@@ -313,7 +313,7 @@ function GroupSessionListCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-[#1B2733] leading-tight">
+              <p className="font-semibold text-[#132F43] leading-tight">
                 {categoryInfo && <span className="mr-1">{categoryInfo.emoji}</span>}
                 {session.topic}
               </p>
@@ -327,7 +327,7 @@ function GroupSessionListCard({
               </p>
             </div>
             <div className="text-right shrink-0">
-              <p className="font-bold text-[#1B2733]">${session.price_per_family_cents / 100}</p>
+              <p className="font-bold text-[#132F43]">${session.price_per_family_cents / 100}</p>
               <p className="text-sm text-[#5A6B7A]">per family</p>
             </div>
           </div>

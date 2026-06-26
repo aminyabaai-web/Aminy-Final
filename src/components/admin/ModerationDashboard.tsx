@@ -396,7 +396,7 @@ export function ModerationDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Content Moderation</h2>
+          <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">Content Moderation</h2>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
             {stats.pending} items awaiting review
           </p>
@@ -420,7 +420,7 @@ export function ModerationDashboard() {
               <Clock className="w-5 h-5 text-amber-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.pending}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.pending}</p>
               <p className="text-sm text-[#5A6B7A]">Pending</p>
             </div>
           </div>
@@ -431,7 +431,7 @@ export function ModerationDashboard() {
               <CheckCircle className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.approvedToday}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.approvedToday}</p>
               <p className="text-sm text-[#5A6B7A]">Approved Today</p>
             </div>
           </div>
@@ -442,7 +442,7 @@ export function ModerationDashboard() {
               <XCircle className="w-5 h-5 text-rose-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.rejectedToday}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.rejectedToday}</p>
               <p className="text-sm text-[#5A6B7A]">Rejected Today</p>
             </div>
           </div>
@@ -453,7 +453,7 @@ export function ModerationDashboard() {
               <AlertTriangle className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.escalatedToday}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.escalatedToday}</p>
               <p className="text-sm text-[#5A6B7A]">Escalated</p>
             </div>
           </div>
@@ -464,7 +464,7 @@ export function ModerationDashboard() {
               <Clock className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.avgResponseTime}m</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.avgResponseTime}m</p>
               <p className="text-sm text-[#5A6B7A]">Avg Response</p>
             </div>
           </div>
@@ -542,7 +542,7 @@ export function ModerationDashboard() {
                       </span>
                     </div>
 
-                    <p className="text-[#1B2733] dark:text-white mb-3 line-clamp-3">
+                    <p className="text-[#132F43] dark:text-white mb-3 line-clamp-3">
                       "{item.content}"
                     </p>
 
@@ -652,7 +652,7 @@ export function ModerationDashboard() {
                     {userHistory.userName.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1B2733] dark:text-white">{userHistory.userName}</h3>
+                    <h3 className="font-semibold text-[#132F43] dark:text-white">{userHistory.userName}</h3>
                     <p className="text-sm text-[#5A6B7A]">Moderation History</p>
                   </div>
                 </div>
@@ -663,7 +663,7 @@ export function ModerationDashboard() {
 
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="text-center p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
-                  <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{userHistory.totalFlags}</p>
+                  <p className="text-2xl font-bold text-[#132F43] dark:text-white">{userHistory.totalFlags}</p>
                   <p className="text-sm text-[#5A6B7A]">Total Flags</p>
                 </div>
                 <div className="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">

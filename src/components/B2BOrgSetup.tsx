@@ -114,11 +114,11 @@ export function B2BOrgSetup({
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} className="p-2 hover:bg-[#F0EDE8] rounded-lg" aria-label="Back">
+          <button onClick={onBack} className="p-2 hover:bg-[#EDF4F7] rounded-lg" aria-label="Back">
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-[#1B2733]">Set Up Your Organization</h1>
+            <h1 className="font-bold text-[#132F43]">Set Up Your Organization</h1>
             <p className="text-sm text-[#5A6B7A]">{plan.name} Plan · {seatCount} seats</p>
           </div>
           <Crown className="w-6 h-6 text-blue-600" />
@@ -148,7 +148,7 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Building2 className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Organization Details</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Organization Details</h2>
                 <p className="text-[#5A6B7A] text-sm">Tell us about your organization</p>
               </div>
 
@@ -208,7 +208,7 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Users className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Invite Your Team</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Invite Your Team</h2>
                 <p className="text-[#5A6B7A] text-sm">{teamMembers.length + 1}/{seatCount} seats used (including you)</p>
               </div>
 
@@ -249,7 +249,7 @@ export function B2BOrgSetup({
                     {(adminEmail || 'A')[0].toUpperCase()}
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-[#1B2733]">{adminEmail || 'You (Admin)'}</p>
+                    <p className="text-sm font-medium text-[#132F43]">{adminEmail || 'You (Admin)'}</p>
                     <p className="text-sm text-blue-600">Organization Admin</p>
                   </div>
                   <Crown className="w-4 h-4 text-blue-600" />
@@ -261,7 +261,7 @@ export function B2BOrgSetup({
                       {member.email[0].toUpperCase()}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#1B2733]">{member.email}</p>
+                      <p className="text-sm font-medium text-[#132F43]">{member.email}</p>
                       <p className="text-sm text-[#5A6B7A] capitalize">{member.role}</p>
                     </div>
                     <button
@@ -284,7 +284,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('org-info')}
-                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB]"
                 >
                   Back
                 </button>
@@ -309,26 +309,26 @@ export function B2BOrgSetup({
             >
               <div className="text-center mb-8">
                 <Sparkles className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Review & Launch</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Review & Launch</h2>
                 <p className="text-[#5A6B7A] text-sm">Everything looks good?</p>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E4DF] divide-y divide-gray-100">
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Organization</p>
-                  <p className="font-semibold text-[#1B2733]">{orgName}</p>
+                  <p className="font-semibold text-[#132F43]">{orgName}</p>
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Plan</p>
-                  <p className="font-semibold text-[#1B2733]">{plan.name} · {seatCount} seats</p>
+                  <p className="font-semibold text-[#132F43]">{plan.name} · {seatCount} seats</p>
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Admin</p>
-                  <p className="font-semibold text-[#1B2733]">{adminEmail || 'Not set'}</p>
+                  <p className="font-semibold text-[#132F43]">{adminEmail || 'Not set'}</p>
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Team Members</p>
-                  <p className="font-semibold text-[#1B2733]">{teamMembers.length + 1} of {seatCount} seats filled</p>
+                  <p className="font-semibold text-[#132F43]">{teamMembers.length + 1} of {seatCount} seats filled</p>
                   {teamMembers.length > 0 && (
                     <p className="text-sm text-[#5A6B7A] mt-1">
                       {teamMembers.map(m => m.email).join(', ')}
@@ -340,7 +340,7 @@ export function B2BOrgSetup({
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep('invite-team')}
-                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2]"
+                  className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB]"
                 >
                   Back
                 </button>

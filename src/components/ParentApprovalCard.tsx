@@ -92,9 +92,9 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
     routine_change: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
     goal_adjustment: 'bg-purple-100 text-purple-700 border-purple-200',
     prompt_script: 'bg-green-100 text-green-700 border-green-200',
-    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#F0EDE8]',
+    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#EDF4F7]',
     environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
-    coverage_note: 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]'
+    coverage_note: 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]'
   };
 
   // When rendered as a standalone screen, wrap content in a full-screen page
@@ -108,7 +108,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
             <button
               onClick={onBack}
               aria-label="Go back"
-              className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#1B2733] mb-4"
+              className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#132F43] mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
               Back
@@ -127,7 +127,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
       <motion.div {...ANIMATIONS.fadeIn}>
         <Card className="p-6 border-2 border-[#E8E4DF] bg-white text-center">
           <Sparkles className="w-8 h-8 text-blue-400 mx-auto mb-3" />
-          <h4 className="text-sm font-medium text-[#1B2733] mb-1">No suggestions to review</h4>
+          <h4 className="text-sm font-medium text-[#132F43] mb-1">No suggestions to review</h4>
           <p className="text-sm text-[#5A6B7A]">
             When your care team shares a suggestion for you to review, it will appear here.
           </p>
@@ -158,7 +158,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-[#1B2733]">
+              <p className="text-sm text-[#132F43]">
                 Suggested by <strong>{suggestion.providerName}</strong>
                 <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
               </p>
@@ -178,7 +178,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
 
           {/* Summary */}
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-[#1B2733] mb-2">
+            <h4 className="text-sm font-medium text-[#132F43] mb-2">
               {getSuggestionTitle(suggestion)}
             </h4>
             <p className="text-sm text-[#3A4A57] mb-2">
@@ -186,7 +186,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
             </p>
             <div className="bg-white rounded-lg p-3 border border-[#E8E4DF]">
               <p className="text-sm text-[#5A6B7A] mb-1">Expected outcome:</p>
-              <p className="text-sm text-[#1B2733]">{suggestion.expectedOutcome}</p>
+              <p className="text-sm text-[#132F43]">{suggestion.expectedOutcome}</p>
             </div>
           </div>
 
@@ -311,7 +311,7 @@ function RoutineChangePreview({ payload }: { payload: RoutineChangePayload }) {
             </div>
             <div>
               <div className="text-green-600 mb-1">After:</div>
-              <div className="text-[#1B2733] font-medium">{change.after}</div>
+              <div className="text-[#132F43] font-medium">{change.after}</div>
             </div>
           </div>
         </div>
@@ -330,7 +330,7 @@ function GoalAdjustmentPreview({ payload }: { payload: GoalAdjustmentPayload }) 
         </div>
         <div>
           <div className="text-green-600 mb-1 text-sm">New:</div>
-          <div className="text-[#1B2733] font-medium">{payload.after}</div>
+          <div className="text-[#132F43] font-medium">{payload.after}</div>
         </div>
       </div>
     </div>
@@ -342,7 +342,7 @@ function PromptScriptPreview({ payload }: { payload: PromptScriptPayload }) {
     <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="mb-2">
         <span className="text-[#5A6B7A]">For: </span>
-        <span className="text-[#1B2733] font-medium">{payload.situation}</span>
+        <span className="text-[#132F43] font-medium">{payload.situation}</span>
       </div>
       <div className="bg-[#EEF4F8] rounded p-2 text-sm text-[#3A4A57]">
         "{payload.script ?? ''}"
@@ -361,7 +361,7 @@ function ReinforcementPreview({ payload }: { payload: ReinforcementPayload }) {
     <div className="bg-white rounded p-3 border border-[#E8E4DF] text-sm">
       <div className="mb-2">
         <span className="text-[#5A6B7A]">Reinforce: </span>
-        <span className="text-[#1B2733] font-medium">{payload.behavior}</span>
+        <span className="text-[#132F43] font-medium">{payload.behavior}</span>
       </div>
       <div className="mb-2">
         <span className="text-[#5A6B7A]">With: </span>
@@ -382,21 +382,21 @@ function SuggestionDetailsView({ suggestion }: { suggestion: ProviderSuggestion 
   return (
     <div className="space-y-4">
       <div>
-        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Rationale</h4>
+        <h4 className="text-sm font-medium text-[#132F43] mb-2">Rationale</h4>
         <p className="text-sm text-[#3A4A57]">{suggestion.rationale}</p>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Expected Outcome</h4>
+        <h4 className="text-sm font-medium text-[#132F43] mb-2">Expected Outcome</h4>
         <p className="text-sm text-[#3A4A57]">{suggestion.expectedOutcome}</p>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-[#1B2733] mb-2">Changes</h4>
+        <h4 className="text-sm font-medium text-[#132F43] mb-2">Changes</h4>
         <SuggestionPreview suggestion={suggestion} />
       </div>
 
-      <div className="bg-[#FDF9F0] border border-[#F0EDE8] rounded-lg p-3">
+      <div className="bg-[#FDF9F0] border border-[#EDF4F7] rounded-lg p-3">
         <p className="text-sm text-yellow-900">
           <strong>Remember:</strong> You're always the final decision-maker. Accept this suggestion only if it feels right for {suggestion.childName ?? 'your child'}. You can undo within 24 hours if needed.
         </p>

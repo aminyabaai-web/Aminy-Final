@@ -13,6 +13,8 @@ import { TelehealthSessionManager } from './TelehealthSessionManager';
 import { PostVisitSummary } from './PostVisitSummary';
 import { TelehealthConsent, ConsentStatusBadge } from './TelehealthConsent';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import PostSessionReview from './PostSessionReview';
+import { useAminyStore } from '../lib/store';
 
 interface TelehealthScreenProps {
   onBack?: () => void;
@@ -41,7 +43,16 @@ export function TelehealthScreen({
   // HIPAA audit: log telehealth session view on mount
   const { logAction, logExport } = useAuditedAction('telehealth_session');
 
+  const storeUser = useAminyStore(state => state.user);
+
   const [activeView, setActiveView] = useState<'credits' | 'history'>('credits');
+
+  // Post-session rating modal state
+  const [reviewSession, setReviewSession] = useState<{
+    providerId: string;
+    providerName: string;
+    sessionDate: string;
+  } | null>(null);
   const [selectedVisit, setSelectedVisit] = useState<string | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
   const [showConsentModal, setShowConsentModal] = useState<boolean>(false);
@@ -125,7 +136,7 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-[#1B2733] dark:text-white">Telehealth Consent Required</h1>
+                <h1 className="text-[#132F43] dark:text-white">Telehealth Consent Required</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Please review and accept before booking sessions
                 </p>
@@ -171,7 +182,7 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-[#1B2733] dark:text-white">Telehealth Sessions</h1>
+                <h1 className="text-[#132F43] dark:text-white">Telehealth Sessions</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Professional guidance for {childName}'s development
                 </p>
@@ -213,7 +224,7 @@ export function TelehealthScreen({
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <h3 className="font-semibold text-teal-900">Free 15-Min Meet & Greet</h3>
-                <span className="text-xs font-semibold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">No cost</span>
+                <span className="text-sm font-semibold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">No cost</span>
               </div>
               <p className="text-sm text-teal-800 mb-3">
                 Not sure where to start? Meet a BCBA who specializes in {childName}'s needs — no commitment, no charge. Find the right fit before you commit.
@@ -276,18 +287,36 @@ export function TelehealthScreen({
             }}
             onNotesComplete={(notes) => {
             }}
+            onSessionComplete={(session) => {
+              setReviewSession({
+                providerId: `provider-${session.provider.replace(/\s+/g, '-').toLowerCase()}`,
+                providerName: session.provider,
+                sessionDate: session.date.toISOString().split('T')[0],
+              });
+            }}
+          />
+        )}
+
+        {/* Post-session star rating prompt */}
+        {reviewSession && storeUser?.id && (
+          <PostSessionReview
+            providerId={reviewSession.providerId}
+            providerName={reviewSession.providerName}
+            sessionDate={reviewSession.sessionDate}
+            userId={storeUser.id}
+            onClose={() => setReviewSession(null)}
           />
         )}
 
         {activeView === 'history' && (
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-[#1B2733] mb-2">Progress Report Integration</h3>
+            <h3 className="text-lg text-[#132F43] mb-2">Progress Report Integration</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
               All telehealth session notes are automatically included in your AI-generated progress reports, 
               IEP documents, and BCBA notes. No need to manually transfer information.
             </p>
             
-            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]">
+            <div className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]">
               <h4 className="text-sm text-[#3A4A57] mb-2">What gets included:</h4>
               <ul className="space-y-1 text-sm text-[#5A6B7A]">
                 <li className="flex items-start gap-2">

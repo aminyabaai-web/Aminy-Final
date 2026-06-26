@@ -49,7 +49,7 @@ const MILESTONE_CONFIGS: Record<MilestoneType, MilestoneConfig> = {
     title: 'First Session Complete!',
     subtitle: 'The journey begins',
     emoji: '🎉',
-    gradientStart: '#4E93A8',
+    gradientStart: '#2A7D99',
     gradientEnd: '#577590',
   },
   '7_day_streak': {
@@ -64,14 +64,14 @@ const MILESTONE_CONFIGS: Record<MilestoneType, MilestoneConfig> = {
     subtitle: 'Building great habits',
     emoji: '⭐',
     gradientStart: '#577590',
-    gradientEnd: '#4E93A8',
+    gradientEnd: '#2A7D99',
   },
   level_up: {
     title: 'Level Up!',
     subtitle: 'Growing stronger every day',
     emoji: '🚀',
     gradientStart: '#6C63FF',
-    gradientEnd: '#4E93A8',
+    gradientEnd: '#2A7D99',
   },
   badge_earned: {
     title: 'Badge Earned!',
@@ -339,13 +339,13 @@ export function MilestoneShareCard({
         <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-500" />
-            <h3 className="font-semibold text-[#1B2733] text-base">
+            <h3 className="font-semibold text-[#132F43] text-base">
               Share This Milestone!
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+            className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
             aria-label="Close"
           >
             <X size={18} />
@@ -394,7 +394,7 @@ export function MilestoneShareCard({
 
           <button
             onClick={handleDownload}
-            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-[#3A4A57] bg-[#F0EDE8] hover:bg-[#E8E4DF] transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-medium text-[#3A4A57] bg-[#EDF4F7] hover:bg-[#E8E4DF] transition-all active:scale-95"
             aria-label="Download image"
           >
             <Download size={18} />

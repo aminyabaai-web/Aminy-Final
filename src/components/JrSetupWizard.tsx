@@ -171,7 +171,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         onValueChange={(value) => updateProfile('deviceType', value)}
         className="space-y-3"
       >
-        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#FAF7F2] transition-colors">
+        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#F6FBFB] transition-colors">
           <RadioGroupItem value="this-device" id="this-device" />
           <Label htmlFor="this-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
@@ -184,7 +184,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
           </Label>
         </div>
 
-        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#FAF7F2] transition-colors">
+        <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-[#F6FBFB] transition-colors">
           <RadioGroupItem value="another-device" id="another-device" />
           <Label htmlFor="another-device" className="flex-1 cursor-pointer">
             <div className="flex items-center gap-3">
@@ -337,7 +337,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
             </p>
           </div>
 
-          <Card className="p-6 text-center bg-[#FAF7F2]">
+          <Card className="p-6 text-center bg-[#F6FBFB]">
             {/* Mock QR Code */}
             <div className="w-32 h-32 bg-white border-2 border-[#E8E4DF] rounded-lg mx-auto mb-4 flex items-center justify-center">
               <QrCode className="w-16 h-16 text-[#8A9BA8]" />
@@ -383,7 +383,7 @@ export const JrSetupWizard: React.FC<JrSetupWizardProps> = ({
         </div>
 
         {!isCalibrating ? (
-          <Card className="p-6 text-center bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8]">
+          <Card className="p-6 text-center bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7]">
             <Sparkles className="w-12 h-12 text-purple-600 mx-auto mb-4" />
             <h4 className="font-semibold text-primary mb-2">Ready to Start!</h4>
             <p className="text-sm text-muted-foreground mb-4">

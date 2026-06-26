@@ -497,11 +497,11 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#F0EDE8] rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#EDF4F7] rounded-lg">
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-[#1B2733]">Become a Paid Caregiver</h1>
+            <h1 className="font-bold text-[#132F43]">Become a Paid Caregiver</h1>
             <p className="text-sm text-[#5A6B7A]">Get paid through Medicaid waiver programs</p>
           </div>
           <DollarSign className="w-6 h-6 text-emerald-600" />
@@ -526,7 +526,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="state" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <MapPin className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">What state do you live in?</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">What state do you live in?</h2>
                 <p className="text-[#5A6B7A] text-sm">We'll find programs available in your state</p>
               </div>
 
@@ -568,7 +568,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="eligibility" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <ClipboardCheck className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Eligibility Check</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Eligibility Check</h2>
                 <p className="text-[#5A6B7A] text-sm">Let's verify your child qualifies</p>
               </div>
 
@@ -603,7 +603,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div>
-                <label className="flex items-center gap-3 p-4 bg-[#FAF7F2] rounded-xl cursor-pointer">
+                <label className="flex items-center gap-3 p-4 bg-[#F6FBFB] rounded-xl cursor-pointer">
                   <input
                     type="checkbox"
                     checked={data.hasMedicaid}
@@ -611,7 +611,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                     className="w-5 h-5 text-emerald-600 rounded border-[#E8E4DF] focus:ring-emerald-500"
                   />
                   <div>
-                    <p className="font-medium text-[#1B2733]">Child has active Medicaid</p>
+                    <p className="font-medium text-[#132F43]">Child has active Medicaid</p>
                     <p className="text-sm text-[#5A6B7A]">Required for waiver programs</p>
                   </div>
                 </label>
@@ -644,7 +644,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               )}
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('state-select')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('state-select')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -663,7 +663,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="program" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <Heart className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Choose Your Program</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Choose Your Program</h2>
                 <p className="text-[#5A6B7A] text-sm">Select how you'd like to provide care</p>
               </div>
 
@@ -673,7 +673,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'self-directed'
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   Self-Directed
@@ -683,7 +683,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'agency-directed'
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   Agency-Directed
@@ -715,7 +715,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   >
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium text-[#1B2733]">{program.name}</p>
+                        <p className="font-medium text-[#132F43]">{program.name}</p>
                         <p className="text-sm text-[#5A6B7A] mt-1">{program.description}</p>
                       </div>
                       <span className="text-sm font-semibold text-emerald-600 whitespace-nowrap ml-3">
@@ -727,7 +727,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('eligibility')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('eligibility')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -746,7 +746,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="fiscal" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <Building2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Select Fiscal Agent</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Select Fiscal Agent</h2>
                 <p className="text-[#5A6B7A] text-sm">They handle your payroll and taxes</p>
               </div>
 
@@ -761,13 +761,13 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                         : 'border-[#E8E4DF] bg-white hover:border-emerald-300'
                     }`}
                   >
-                    <p className="font-medium text-[#1B2733]">{agent.name}</p>
+                    <p className="font-medium text-[#132F43]">{agent.name}</p>
                     <p className="text-sm text-[#5A6B7A] mt-1">{agent.phone}</p>
                   </button>
                 ))}
               </div>
 
-              <div className="bg-[#FAF7F2] rounded-xl p-3 flex gap-2">
+              <div className="bg-[#F6FBFB] rounded-xl p-3 flex gap-2">
                 <Info className="w-4 h-4 text-[#8A9BA8] shrink-0 mt-0.5" />
                 <p className="text-sm text-[#5A6B7A]">
                   A fiscal agent (also called fiscal intermediary) processes your payroll,
@@ -777,7 +777,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('program-select')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('program-select')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -796,7 +796,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="docs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <FileText className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Required Documents</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Required Documents</h2>
                 <p className="text-[#5A6B7A] text-sm">{requiredUploaded}/{requiredDocs.length} required docs uploaded</p>
               </div>
 
@@ -813,7 +813,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                           <div className="w-5 h-5 rounded-full border-2 border-[#E8E4DF]" />
                         )}
                         <div>
-                          <p className="font-medium text-[#1B2733] text-sm">{doc.label}</p>
+                          <p className="font-medium text-[#132F43] text-sm">{doc.label}</p>
                           {doc.required && !doc.uploaded && (
                             <span className="text-sm text-red-500">Required</span>
                           )}
@@ -840,7 +840,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('fiscal-agent')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('fiscal-agent')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -859,7 +859,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="training" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <GraduationCap className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Training Requirements</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Training Requirements</h2>
                 <p className="text-[#5A6B7A] text-sm">Complete these before you can start providing services</p>
               </div>
 
@@ -882,13 +882,13 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   className="mt-0.5 w-5 h-5 text-emerald-600 rounded border-[#E8E4DF] focus:ring-emerald-500"
                 />
                 <div>
-                  <p className="font-medium text-[#1B2733]">I acknowledge these training requirements</p>
+                  <p className="font-medium text-[#132F43]">I acknowledge these training requirements</p>
                   <p className="text-sm text-[#5A6B7A]">I will complete all required training before providing services</p>
                 </div>
               </label>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('documents')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('documents')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -907,23 +907,23 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <motion.div key="review" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
                 <Send className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Review & Submit</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Review & Submit</h2>
                 <p className="text-[#5A6B7A] text-sm">Double-check your information</p>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E4DF] divide-y divide-gray-100">
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">State</p>
-                  <p className="font-semibold text-[#1B2733]">{stateData.name}</p>
+                  <p className="font-semibold text-[#132F43]">{stateData.name}</p>
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Child</p>
-                  <p className="font-semibold text-[#1B2733]">Age {data.childAge} · {data.childDiagnosis}</p>
+                  <p className="font-semibold text-[#132F43]">Age {data.childAge} · {data.childDiagnosis}</p>
                   {data.medicaidId && <p className="text-sm text-[#5A6B7A]">Medicaid: {data.medicaidId}</p>}
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program</p>
-                  <p className="font-semibold text-[#1B2733]">
+                  <p className="font-semibold text-[#132F43]">
                     {stateData.programs.find(p => p.id === data.selectedProgram)?.name || data.selectedProgram}
                   </p>
                   <p className="text-sm text-emerald-600">
@@ -932,17 +932,17 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Fiscal Agent</p>
-                  <p className="font-semibold text-[#1B2733]">
+                  <p className="font-semibold text-[#132F43]">
                     {stateData.fiscalAgents.find(a => a.id === data.fiscalAgent)?.name || data.fiscalAgent}
                   </p>
                 </div>
                 <div className="p-4">
                   <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Documents</p>
-                  <p className="font-semibold text-[#1B2733]">{uploadedCount} uploaded</p>
+                  <p className="font-semibold text-[#132F43]">{uploadedCount} uploaded</p>
                 </div>
               </div>
 
-              <label className="flex items-start gap-3 p-4 bg-[#FAF7F2] rounded-xl cursor-pointer">
+              <label className="flex items-start gap-3 p-4 bg-[#F6FBFB] rounded-xl cursor-pointer">
                 <input
                   type="checkbox"
                   checked={data.agreedToTerms}
@@ -956,7 +956,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </label>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('training')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#FAF7F2]">
+                <button onClick={() => setStep('training')} className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl hover:bg-[#F6FBFB]">
                   Back
                 </button>
                 <button
@@ -981,7 +981,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-10 h-10 text-emerald-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1B2733]">Application Submitted!</h2>
+              <h2 className="text-2xl font-bold text-[#132F43]">Application Submitted!</h2>
               <p className="text-[#5A6B7A] max-w-md mx-auto">
                 Your caregiver enrollment application has been submitted. Processing typically
                 takes {stateData.estimatedProcessingDays} days in {stateData.name}.

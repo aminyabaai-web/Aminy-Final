@@ -92,9 +92,9 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'goal':
         return 'text-amber-600 bg-amber-50';
       case 'plan':
-        return 'text-[#4E93A8] bg-[#4E93A8]/10';
+        return 'text-[#2A7D99] bg-[#2A7D99]/10';
       default:
-        return 'text-[#5A6B7A] bg-[#FAF7F2]';
+        return 'text-[#5A6B7A] bg-[#F6FBFB]';
     }
   };
 
@@ -142,9 +142,9 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       </div>
 
       {showLogForm && (
-        <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-800 space-y-2">
+        <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#F6FBFB] dark:bg-slate-800 space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-200">Describe the behavior</p>
+            <p className="text-sm font-semibold text-[#132F43] dark:text-slate-200">Describe the behavior</p>
             <button onClick={() => { setShowLogForm(false); setLogText(''); }} className="text-slate-400 hover:text-slate-600">
               <X className="w-4 h-4" />
             </button>
@@ -153,13 +153,13 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
             value={logText}
             onChange={e => setLogText(e.target.value)}
             placeholder="What happened? When, where, what triggered it…"
-            className="w-full text-sm rounded-lg border border-[#E8E4DF] dark:border-slate-600 p-2 bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 resize-none"
+            className="w-full text-sm rounded-lg border border-[#E8E4DF] dark:border-slate-600 p-2 bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 resize-none"
             rows={3}
           />
           <button
             onClick={handleAddLog}
             disabled={!logText.trim()}
-            className="w-full py-2 rounded-lg bg-[#4E93A8] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#376E80]"
+            className="w-full py-2 rounded-lg bg-[#2A7D99] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#376E80]"
           >
             Save
           </button>

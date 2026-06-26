@@ -144,7 +144,7 @@ export function AddToCalendarButtons({
             <span className="w-9 h-9 rounded-lg bg-white border border-[#E8E4DF] flex items-center justify-center shrink-0">
               {b.icon}
             </span>
-            <span className="text-sm font-medium text-[#1B2733] flex-1">{b.label} Calendar</span>
+            <span className="text-sm font-medium text-[#132F43] flex-1">{b.label} Calendar</span>
             <span className="text-sm text-[#6B9080] font-semibold shrink-0">Add →</span>
           </a>
         ))}

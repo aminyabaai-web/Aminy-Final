@@ -18,7 +18,7 @@ export interface AIChartSpec {
   colors?: string[];
 }
 
-const DEFAULT_COLORS = ['#4E93A8', '#577590', '#E07A5F', '#9B5DE5', '#F8B400', '#1a3a5c'];
+const DEFAULT_COLORS = ['#2A7D99', '#577590', '#E07A5F', '#9B5DE5', '#F8B400', '#1a3a5c'];
 
 function getColors(spec: AIChartSpec): string[] {
   return spec.colors?.length ? spec.colors : DEFAULT_COLORS;

@@ -488,7 +488,7 @@ export function SearchAndDiscovery({
                   type="checkbox"
                   checked={filters.expertOnly}
                   onChange={e => setFilters(prev => ({ ...prev, expertOnly: e.target.checked }))}
-                  className="w-4 h-4 rounded text-[#4E93A8]"
+                  className="w-4 h-4 rounded text-[#2A7D99]"
                 />
                 <span className="text-sm text-neutral-700 dark:text-slate-300">Expert posts only</span>
               </label>
@@ -514,7 +514,7 @@ export function SearchAndDiscovery({
 
           {isSearching ? (
             <Card className="p-12 flex items-center justify-center">
-              <Loader2 className="w-8 h-8 animate-spin text-[#4E93A8]" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#2A7D99]" />
             </Card>
           ) : results.length === 0 ? (
             <Card className="p-12 text-center">
@@ -531,12 +531,12 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(result.id)}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] flex items-center justify-center text-white font-medium flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                       {result.authorName.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-[#1B2733] dark:text-white">
+                        <span className="font-medium text-[#132F43] dark:text-white">
                           {result.authorName}
                         </span>
                         {result.isExpert && (
@@ -546,7 +546,7 @@ export function SearchAndDiscovery({
                           {formatTimeAgo(result.createdAt)}
                         </span>
                       </div>
-                      <p className="text-[#1B2733] dark:text-white mb-2">{result.content}</p>
+                      <p className="text-[#132F43] dark:text-white mb-2">{result.content}</p>
                       {result.excerpt && (
                         <p className="text-sm text-[#5A6B7A] mb-2 line-clamp-2">{result.excerpt}</p>
                       )}
@@ -587,8 +587,8 @@ export function SearchAndDiscovery({
           {/* Trending Topics */}
           <Card className="p-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-[#4E93A8]" />
-              <h3 className="font-semibold text-[#1B2733] dark:text-white">Trending Topics</h3>
+              <TrendingUp className="w-5 h-5 text-[#2A7D99]" />
+              <h3 className="font-semibold text-[#132F43] dark:text-white">Trending Topics</h3>
             </div>
             <div className="space-y-3">
               {trending.map((topic, idx) => (
@@ -600,7 +600,7 @@ export function SearchAndDiscovery({
                   <div className="flex items-center gap-3">
                     <span className="text-neutral-400 text-sm">{idx + 1}</span>
                     <div>
-                      <p className="font-medium text-[#1B2733] dark:text-white">#{topic.tag}</p>
+                      <p className="font-medium text-[#132F43] dark:text-white">#{topic.tag}</p>
                       <p className="text-sm text-[#5A6B7A]">{topic.postCount} posts</p>
                     </div>
                   </div>
@@ -621,7 +621,7 @@ export function SearchAndDiscovery({
           <Card className="p-4 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-amber-500" />
-              <h3 className="font-semibold text-[#1B2733] dark:text-white">Recommended for You</h3>
+              <h3 className="font-semibold text-[#132F43] dark:text-white">Recommended for You</h3>
             </div>
             <div className="space-y-4">
               {recommended.map(post => (
@@ -630,12 +630,12 @@ export function SearchAndDiscovery({
                   onClick={() => onSelectPost?.(post.id)}
                   className="flex items-start gap-3 p-3 rounded-lg hover:bg-neutral-50 dark:hover:bg-slate-800 cursor-pointer transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] flex items-center justify-center text-white font-medium flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] flex items-center justify-center text-white font-medium flex-shrink-0">
                     {post.authorName.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[#1B2733] dark:text-white text-sm">
+                      <span className="font-medium text-[#132F43] dark:text-white text-sm">
                         {post.authorName}
                       </span>
                       {post.isExpert && (

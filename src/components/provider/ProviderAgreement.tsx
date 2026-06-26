@@ -256,9 +256,9 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
       {/* Section Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between px-5 py-4 bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors text-left"
+        className="w-full flex items-center justify-between px-5 py-4 bg-[#F6FBFB] hover:bg-[#EDF4F7] transition-colors text-left"
       >
-        <span className="font-semibold text-[#1B2733] text-sm">{section.title}</span>
+        <span className="font-semibold text-[#132F43] text-sm">{section.title}</span>
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
         ) : (
@@ -366,7 +366,7 @@ export default function ProviderAgreement({
             <Scale className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#1B2733]">Provider Services Agreement</h1>
+            <h1 className="text-xl font-bold text-[#132F43]">Provider Services Agreement</h1>
             <p className="text-sm text-[#5A6B7A]">Aminy, Inc. — Effective Date: Upon Acceptance</p>
           </div>
         </div>
@@ -391,7 +391,7 @@ export default function ProviderAgreement({
       </div>
 
       {/* Preamble */}
-      <div className="px-5 py-4 bg-[#FAF7F2] border-b border-[#E8E4DF]">
+      <div className="px-5 py-4 bg-[#F6FBFB] border-b border-[#E8E4DF]">
         <p className="text-sm text-[#5A6B7A] leading-relaxed">
           This Provider Services Agreement ("Agreement") is entered into between{' '}
           <strong>Aminy, Inc.</strong>, an Arizona corporation ("Aminy"), and{' '}
@@ -443,7 +443,7 @@ export default function ProviderAgreement({
         </div>
 
         {/* E-Signature notice */}
-        <div className="flex items-start gap-2 mb-4 p-3 bg-[#FAF7F2] rounded-lg text-sm text-[#5A6B7A]">
+        <div className="flex items-start gap-2 mb-4 p-3 bg-[#F6FBFB] rounded-lg text-sm text-[#5A6B7A]">
           <Lock className="w-4 h-4 shrink-0 mt-0.5" />
           <span>
             By clicking "Accept Agreement," you are signing this agreement electronically.
@@ -457,7 +457,7 @@ export default function ProviderAgreement({
           {onBack && (
             <button
               onClick={onBack}
-              className="py-3 px-5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium rounded-xl hover:bg-[#FAF7F2] transition-colors"
+              className="py-3 px-5 text-sm text-[#5A6B7A] hover:text-[#3A4A57] font-medium rounded-xl hover:bg-[#F6FBFB] transition-colors"
             >
               Back
             </button>

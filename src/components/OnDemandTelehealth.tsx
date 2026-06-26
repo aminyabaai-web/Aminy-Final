@@ -445,7 +445,7 @@ export function OnDemandTelehealth({
                 </Button>
               )}
               <div>
-                <h1 className="text-lg font-semibold text-[#1B2733]">{crisisMessage.title}</h1>
+                <h1 className="text-lg font-semibold text-[#132F43]">{crisisMessage.title}</h1>
                 <p className="text-sm text-[#5A6B7A]">{crisisMessage.subtitle}</p>
               </div>
             </div>
@@ -481,10 +481,10 @@ export function OnDemandTelehealth({
           ) : providers.length === 0 ? (
             // No providers available
             <Card className="p-6 text-center">
-              <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#EDF4F7] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="w-8 h-8 text-[#8A9BA8]" />
               </div>
-              <h3 className="text-lg font-semibold text-[#1B2733] mb-2">Verified expert support is not available right now</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] mb-2">Verified expert support is not available right now</h3>
               <p className="text-[#5A6B7A] mb-4">
                 Aminy only shows real-time expert availability during limited launch. If no provider appears here, we do not substitute demo coverage.
               </p>
@@ -503,7 +503,7 @@ export function OnDemandTelehealth({
             // Provider list
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-medium text-[#1B2733]">Available Now</h2>
+                <h2 className="font-medium text-[#132F43]">Available Now</h2>
                 <Button variant="ghost" size="sm" onClick={() => loadProviders()}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   Refresh
@@ -529,7 +529,7 @@ export function OnDemandTelehealth({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-semibold text-[#1B2733]">{provider.name}</h3>
+                          <h3 className="font-semibold text-[#132F43]">{provider.name}</h3>
                           <p className="text-sm text-[#5A6B7A]">{provider.title}</p>
                         </div>
 
@@ -567,7 +567,7 @@ export function OnDemandTelehealth({
                       {/* Pricing */}
                       <div className="mt-3 flex items-center justify-between">
                         <p className="text-sm text-[#5A6B7A]">
-                          30 min: <span className="font-semibold text-[#1B2733]">${calculateCost(provider, 30)}</span>
+                          30 min: <span className="font-semibold text-[#132F43]">${calculateCost(provider, 30)}</span>
                           <span className="text-[#8A9BA8] ml-1">(incl. same-day fee)</span>
                         </p>
                         {provider.availabilityStatus === 'available' && (
@@ -584,7 +584,7 @@ export function OnDemandTelehealth({
           )}
 
           {/* AI fallback option */}
-          <Card className="mt-4 sm:mt-6 p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+          <Card className="mt-4 sm:mt-6 p-4 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Brain className="w-5 h-5 text-blue-600" />
@@ -616,7 +616,7 @@ export function OnDemandTelehealth({
               <Button variant="ghost" size="sm" onClick={() => setStep('browse')}>
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <h1 className="text-lg font-semibold text-[#1B2733]">You're almost connected</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">You're almost connected</h1>
             </div>
           </div>
         </div>
@@ -629,7 +629,7 @@ export function OnDemandTelehealth({
                 {selectedProvider.name.split(' ').map(n => n[0]).join('')}
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733]">{selectedProvider.name}</h3>
+                <h3 className="font-semibold text-[#132F43]">{selectedProvider.name}</h3>
                 <p className="text-sm text-[#5A6B7A]">{selectedProvider.title}</p>
                 <div className="flex items-center gap-1 mt-1">
                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
@@ -641,7 +641,7 @@ export function OnDemandTelehealth({
 
           {/* Duration selection */}
           <div>
-            <h3 className="font-medium text-[#1B2733] mb-3">Session Length</h3>
+            <h3 className="font-medium text-[#132F43] mb-3">Session Length</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 onClick={() => setSelectedDuration(15)}
@@ -651,7 +651,7 @@ export function OnDemandTelehealth({
                     : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                 }`}
               >
-                <p className="font-semibold text-[#1B2733]">15 minutes</p>
+                <p className="font-semibold text-[#132F43]">15 minutes</p>
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 15)}
                 </p>
@@ -666,7 +666,7 @@ export function OnDemandTelehealth({
                     : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                 }`}
               >
-                <p className="font-semibold text-[#1B2733]">30 minutes</p>
+                <p className="font-semibold text-[#132F43]">30 minutes</p>
                 <p className="text-lg font-bold text-accent mt-1">
                   ${calculateCost(selectedProvider, 30)}
                 </p>
@@ -676,21 +676,21 @@ export function OnDemandTelehealth({
           </div>
 
           {/* Price breakdown */}
-          <Card className="p-4 bg-[#FAF7F2]">
-            <h3 className="font-medium text-[#1B2733] mb-3">Price Breakdown</h3>
+          <Card className="p-4 bg-[#F6FBFB]">
+            <h3 className="font-medium text-[#132F43] mb-3">Price Breakdown</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Session ({selectedDuration} min)</span>
-                <span className="text-[#1B2733]">
+                <span className="text-[#132F43]">
                   ${sessionBasePrice(selectedProvider, selectedDuration)}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Same-day availability</span>
-                <span className="text-[#1B2733]">${URGENT_FEE}</span>
+                <span className="text-[#132F43]">${URGENT_FEE}</span>
               </div>
               <div className="border-t border-[#E8E4DF] pt-2 mt-2 flex justify-between font-semibold">
-                <span className="text-[#1B2733]">Total</span>
+                <span className="text-[#132F43]">Total</span>
                 <span className="text-accent">${calculateCost(selectedProvider, selectedDuration)}</span>
               </div>
             </div>
@@ -698,7 +698,7 @@ export function OnDemandTelehealth({
 
           {/* What to expect */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3">Here's what happens next</h3>
+            <h3 className="font-medium text-[#132F43] mb-3">Here's what happens next</h3>
             <ul className="space-y-2 text-sm text-[#5A6B7A]">
               <li className="flex items-start gap-2">
                 <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
@@ -755,7 +755,7 @@ export function OnDemandTelehealth({
               <Button variant="ghost" size="sm" onClick={() => setStep('confirm')}>
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Consent Required</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Consent Required</h1>
             </div>
           </div>
         </div>
@@ -783,7 +783,7 @@ export function OnDemandTelehealth({
                 <Video className="w-10 h-10 text-accent animate-pulse" />
               </div>
 
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
                 Connecting to {selectedProvider?.name}...
               </h2>
               <p className="text-[#5A6B7A] mb-4 sm:mb-6">
@@ -825,7 +825,7 @@ export function OnDemandTelehealth({
                 <WifiOff className="w-10 h-10 text-red-400" />
               </div>
 
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
                 Connection issue
               </h2>
               <p className="text-[#5A6B7A] mb-4 sm:mb-6">
@@ -940,7 +940,7 @@ export function OnDemandTelehealth({
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
-            <h1 className="text-lg font-semibold text-[#1B2733]">Session Complete</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Session Complete</h1>
           </div>
         </div>
 
@@ -950,7 +950,7 @@ export function OnDemandTelehealth({
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Great session!</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Great session!</h2>
             <p className="text-[#5A6B7A]">
               Your session with {session.provider.name} has ended.
             </p>
@@ -958,26 +958,26 @@ export function OnDemandTelehealth({
 
           {/* Session details */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3">Session Details</h3>
+            <h3 className="font-medium text-[#132F43] mb-3">Session Details</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Coach</span>
-                <span className="text-[#1B2733]">{session.provider.name}</span>
+                <span className="text-[#132F43]">{session.provider.name}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Duration</span>
-                <span className="text-[#1B2733]">{session.duration} minutes</span>
+                <span className="text-[#132F43]">{session.duration} minutes</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-[#5A6B7A]">Total charged</span>
-                <span className="text-[#1B2733]">${session.totalCost}</span>
+                <span className="text-[#132F43]">${session.totalCost}</span>
               </div>
             </div>
           </Card>
 
           {/* Session notes input */}
           <div>
-            <h3 className="font-medium text-[#1B2733] mb-2">Add your notes (optional)</h3>
+            <h3 className="font-medium text-[#132F43] mb-2">Add your notes (optional)</h3>
             <p className="text-sm text-[#5A6B7A] mb-3">
               Jot down key takeaways or strategies to remember. These will be saved to your reports.
             </p>
@@ -991,7 +991,7 @@ export function OnDemandTelehealth({
 
           {/* Rate provider */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3">How was your session?</h3>
+            <h3 className="font-medium text-[#132F43] mb-3">How was your session?</h3>
             <div className="flex items-center justify-center gap-2">
               {[1, 2, 3, 4, 5].map((rating) => (
                 <button

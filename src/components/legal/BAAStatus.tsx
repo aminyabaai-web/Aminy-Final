@@ -101,7 +101,7 @@ const STATUS_CONFIG: Record<BAAConfirmation, {
   'not-applicable': {
     label: 'Not Required',
     color: 'text-[#5A6B7A]',
-    bg: 'bg-[#FAF7F2] border-[#E8E4DF]',
+    bg: 'bg-[#F6FBFB] border-[#E8E4DF]',
     icon: <Shield className="w-5 h-5 text-[#8A9BA8]" />,
   },
 };
@@ -123,7 +123,7 @@ function VendorRow({ vendor, index }: { vendor: VendorBAA; index: number }) {
       <div className="flex items-start justify-between gap-3 mb-2">
         <div className="flex-1">
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-[#1B2733]">{vendor.name}</h3>
+            <h3 className="font-bold text-[#132F43]">{vendor.name}</h3>
             <span className="text-sm text-[#5A6B7A]">· {vendor.role}</span>
           </div>
           <p className="text-sm text-[#5A6B7A] mt-0.5">{vendor.plan}</p>
@@ -170,7 +170,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-full hover:bg-[#F0EDE8] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#EDF4F7] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
@@ -178,7 +178,7 @@ export default function BAAStatus({ onBack }: BAAStatusProps) {
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-[#6B9080]" />
-              <h1 className="text-xl font-bold text-[#1B2733]">BAA Status</h1>
+              <h1 className="text-xl font-bold text-[#132F43]">BAA Status</h1>
             </div>
             <p className="text-sm text-[#5A6B7A] mt-0.5">
               Business Associate Agreement tracker — HIPAA compliance

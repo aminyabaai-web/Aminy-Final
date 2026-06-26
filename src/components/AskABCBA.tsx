@@ -263,11 +263,11 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       {!showAsk && !isLoading && threads.length === 0 && (
         <div className="mx-4 mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4">
           <div className="flex items-start gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">Your behaviorist team, on demand</p>
+              <p className="text-sm font-semibold text-[#132F43]">Your behaviorist team, on demand</p>
               <p className="text-sm text-[#5A6B7A] mt-0.5">
                 {isProPlus ? '10 questions/month included with Pro+' : 'Included for 7 days after each 1:1 session · Unlimited on Pro+'}
               </p>
@@ -300,7 +300,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 <Lock className="w-6 h-6 text-slate-400" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
+                <p className="text-sm font-semibold text-[#132F43]">Requires a recent telehealth session</p>
                 <p className="text-sm text-[#5A6B7A] mt-1">
                   Behaviorist messaging is included for 7 days after each 1:1 telehealth session — or any time on Pro+ Family. Group sessions don't open the window.
                 </p>
@@ -309,14 +309,14 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 <button
                   onClick={() => onNavigate?.('booking')}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold text-sm"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                 >
                   <CalendarDays className="w-4 h-4" />
                   Book a telehealth session
                 </button>
                 <button
                   onClick={() => onNavigate?.('paywall')}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#4E93A8] text-[#4E93A8] font-semibold text-sm"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-[#2A7D99] text-[#2A7D99] font-semibold text-sm"
                 >
                   <Sparkles className="w-4 h-4" />
                   Upgrade to Pro+ for unlimited access
@@ -330,7 +330,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             <button
               onClick={() => setShowAsk(true)}
               className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl text-white font-semibold"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)', boxShadow: '0 4px 12px rgba(78,147,168,0.3)' }}
+              style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)', boxShadow: '0 4px 12px rgba(42,125,153,0.3)' }}
             >
               <Plus className="w-5 h-5" />
               Ask your behaviorist team
@@ -344,14 +344,14 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       {showAsk && (
         <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-[#1B2733]">Ask anything</p>
-            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
+            <p className="text-sm font-semibold text-[#132F43]">Ask anything</p>
+            <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]">
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {isPartnerOrg && (
-            <div className="rounded-xl bg-[#F0EDE8] px-3 py-2">
+            <div className="rounded-xl bg-[#EDF4F7] px-3 py-2">
               <p className="text-sm text-[#3A4A57]">
                 Your question goes to <span className="font-semibold">your care team</span> — included with your organization's program at no charge.
               </p>
@@ -378,7 +378,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                   onClick={() => setCategory(category === c.id ? null : c.id)}
                   className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all"
                   style={category === c.id
-                    ? { background: '#4E93A815', borderColor: '#4E93A8', color: '#4E93A8', fontWeight: 600 }
+                    ? { background: '#2A7D9915', borderColor: '#2A7D99', color: '#2A7D99', fontWeight: 600 }
                     : { background: 'white', borderColor: '#e2e8f0', color: '#64748b' }}
                 >
                   <span>{c.emoji}</span>{c.label}
@@ -391,7 +391,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
             onClick={submitQuestion}
             disabled={!question.trim() || isSubmitting}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-white font-semibold disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
           >
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             {isSubmitting ? 'Sending…' : 'Send to your behaviorist'}
@@ -421,7 +421,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 className="w-full text-left bg-white border border-[#E8E4DF] rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <p className="text-sm text-[#1B2733] line-clamp-2 flex-1">{t.question}</p>
+                  <p className="text-sm text-[#132F43] line-clamp-2 flex-1">{t.question}</p>
                   <StatusPill status={t.status} />
                 </div>
                 <div className="flex items-center gap-3 text-sm text-slate-400">
@@ -485,7 +485,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
       />
       <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2 mb-1">
-          {thread.category && <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
+          {thread.category && <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
           <StatusPill status={thread.status} />
         </div>
         <p className="text-sm text-[#5A6B7A]">{relativeTime(thread.created_at)}</p>
@@ -494,20 +494,20 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
       {/* Question */}
       <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your question</p>
-        <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.question}</p>
+        <p className="text-sm text-[#132F43] whitespace-pre-wrap">{thread.question}</p>
       </div>
 
       {/* AI draft — show the live draft, or a drafting indicator while it's being generated */}
       {thread.ai_draft ? (
-        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
           </div>
-          <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.ai_draft}</p>
+          <p className="text-sm text-[#132F43] whitespace-pre-wrap">{thread.ai_draft}</p>
         </div>
       ) : aiDrafting ? (
-        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-2">
             <Loader2 className="w-4 h-4 text-[#6B9080] animate-spin" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
@@ -523,7 +523,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">BCBA Reviewed & Signed</p>
           </div>
-          <p className="text-sm text-[#1B2733] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
+          <p className="text-sm text-[#132F43] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (
             <p className="text-sm text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
           )}
@@ -535,7 +535,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">Awaiting behaviorist review</p>
+            <p className="text-sm font-medium text-[#132F43]">Awaiting behaviorist review</p>
             {thread.target_response_at && (
               <p className="text-sm text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}
@@ -552,7 +552,7 @@ function StatusPill({ status }: { status: Thread['status'] }) {
     ai_drafted:    { bg: 'bg-[#6B9080]/10',   text: 'text-[#6B9080]',   label: 'AI ready',   icon: <Sparkles className="w-3 h-3" /> },
     awaiting_bcba: { bg: 'bg-amber-50',  text: 'text-amber-700',  label: 'Team queue', icon: <Clock className="w-3 h-3" /> },
     completed:     { bg: 'bg-emerald-50',text: 'text-emerald-700',label: 'Reviewed',   icon: <Check className="w-3 h-3" /> },
-    closed:        { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
+    closed:        { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]',  label: 'Closed',     icon: <Check className="w-3 h-3" /> },
   };
   const s = styles[status];
   return (

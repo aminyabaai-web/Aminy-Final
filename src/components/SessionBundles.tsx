@@ -128,7 +128,7 @@ export function SessionBundles({
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium text-[#1B2733]">{bundle.name}</div>
+                  <div className="font-medium text-[#132F43]">{bundle.name}</div>
                   <div className="text-sm text-[#5A6B7A]">
                     Save {bundle.savingsPercent}%
                   </div>
@@ -160,7 +160,7 @@ export function SessionBundles({
           <Sparkles className="w-3 h-3 mr-1" />
           Save with Bundles
         </Badge>
-        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
           Session Packages
         </h2>
         <p className="text-[#5A6B7A] max-w-xl mx-auto">
@@ -203,7 +203,7 @@ export function SessionBundles({
 
                 {/* Bundle header */}
                 <div className="mb-4">
-                  <h3 className="font-bold text-lg text-[#1B2733] mb-1">
+                  <h3 className="font-bold text-lg text-[#132F43] mb-1">
                     {bundle.name}
                   </h3>
                   <p className="text-sm text-[#5A6B7A]">
@@ -229,7 +229,7 @@ export function SessionBundles({
 
                 {/* Pricing */}
                 <div className="flex items-end gap-2 mb-4">
-                  <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
+                  <span className="text-2xl sm:text-3xl font-bold text-[#132F43]">
                     ${bundle.bundlePrice}
                   </span>
                   <span className="text-sm text-[#8A9BA8] line-through mb-1">
@@ -323,7 +323,7 @@ export function BundleCredits({
   const isExpiringSoon = daysUntilExpiry <= 14;
 
   return (
-    <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+    <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="p-2 bg-[#6B9080]/10 rounded-lg">
@@ -344,7 +344,7 @@ export function BundleCredits({
             <Clock className="w-4 h-4 text-blue-500" />
             <span className="text-sm text-[#5A6B7A]">25-min Consults</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+          <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
             {consultCredits}
           </div>
           <Button
@@ -362,7 +362,7 @@ export function BundleCredits({
             <Users className="w-4 h-4 text-green-500" />
             <span className="text-sm text-[#5A6B7A]">50-min Reviews</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+          <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
             {deepReviewCredits}
           </div>
           <Button

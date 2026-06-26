@@ -31,7 +31,7 @@ export function ProactiveNudge({
         </div>
         
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-[#1B2733] mb-3">{message}</p>
+          <p className="text-sm text-[#132F43] mb-3">{message}</p>
           
           <div className="flex items-center gap-2">
             <Button
@@ -48,7 +48,7 @@ export function ProactiveNudge({
                 onClick={onDismiss}
                 variant="ghost"
                 size="sm"
-                className="h-8 px-3 text-[#5A6B7A] hover:text-[#1B2733]"
+                className="h-8 px-3 text-[#5A6B7A] hover:text-[#132F43]"
               >
                 Not now
               </Button>

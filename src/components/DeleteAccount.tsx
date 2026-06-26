@@ -155,7 +155,7 @@ export function DeleteAccount({
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+          <h1 className="text-lg font-semibold text-[#132F43] dark:text-white">
             Delete Account
           </h1>
         </div>
@@ -285,7 +285,7 @@ export function DeleteAccount({
 
           {/* What gets deleted */}
           <div className="space-y-2">
-            <p className="font-medium text-[#1B2733] dark:text-white">
+            <p className="font-medium text-[#132F43] dark:text-white">
               What will be deleted:
             </p>
             <ul className="list-disc list-inside space-y-1 text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -298,7 +298,7 @@ export function DeleteAccount({
           </div>
 
           <div className="space-y-2">
-            <p className="font-medium text-[#1B2733] dark:text-white">
+            <p className="font-medium text-[#132F43] dark:text-white">
               What will be retained (per legal requirements):
             </p>
             <ul className="list-disc list-inside space-y-1 text-[#5A6B7A] dark:text-[#8A9BA8]">

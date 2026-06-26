@@ -204,7 +204,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white">
+          <h2 className="text-2xl font-bold text-[#132F43] dark:text-white">
             Cohort Analytics
           </h2>
           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -268,7 +268,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Retention Matrix */}
         <TabsContent value="retention">
           <Card className="p-6 overflow-x-auto">
-            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+            <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
               Retention by Cohort
             </h3>
             <table className="min-w-full">
@@ -297,7 +297,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       selectedCohort === cohort.cohortWeek ? null : cohort.cohortWeek
                     )}
                   >
-                    <td className="py-3 pr-4 font-medium text-[#1B2733] dark:text-white cursor-pointer">
+                    <td className="py-3 pr-4 font-medium text-[#132F43] dark:text-white cursor-pointer">
                       {cohort.cohortWeek}
                     </td>
                     <td className="py-3 px-4 text-center text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -328,7 +328,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                         {cohort.conversionRate}%
                       </span>
                     </td>
-                    <td className="py-3 pl-4 text-right font-medium text-[#1B2733] dark:text-white">
+                    <td className="py-3 pl-4 text-right font-medium text-[#132F43] dark:text-white">
                       ${cohort.ltv.toFixed(0)}
                     </td>
                   </tr>
@@ -341,7 +341,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Conversion Funnel */}
         <TabsContent value="funnel">
           <Card className="p-6">
-            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-6">
+            <h3 className="font-semibold text-[#132F43] dark:text-white mb-6">
               Signup to Subscription Funnel
             </h3>
             <div className="space-y-4">
@@ -352,12 +352,12 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       <span className="w-6 h-6 rounded-full bg-[#6B9080]/10 dark:bg-[#1a3a5c] text-[#6B9080] dark:text-[#7BA7BC] text-xs font-bold flex items-center justify-center">
                         {idx + 1}
                       </span>
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         {stage.stage}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-semibold text-[#1B2733] dark:text-white">
+                      <span className="font-semibold text-[#132F43] dark:text-white">
                         {stage.count.toLocaleString()}
                       </span>
                       {idx > 0 && (
@@ -367,7 +367,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       )}
                     </div>
                   </div>
-                  <div className="h-8 bg-[#F0EDE8] dark:bg-slate-700 rounded-lg overflow-hidden">
+                  <div className="h-8 bg-[#EDF4F7] dark:bg-slate-700 rounded-lg overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(stage.count / funnelData[0].count) * 100}%` }}
@@ -400,7 +400,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
         {/* Feature Adoption */}
         <TabsContent value="features">
           <Card className="p-6">
-            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-6">
+            <h3 className="font-semibold text-[#132F43] dark:text-white mb-6">
               Feature Adoption & Retention Correlation
             </h3>
             <div className="space-y-6">
@@ -409,7 +409,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                 .map((feature) => (
                   <div key={feature.feature}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         {feature.feature}
                       </span>
                       <div className="flex items-center gap-4">
@@ -431,7 +431,7 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <div className="flex-1 h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-3 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${feature.adoptionRate}%` }}
@@ -493,7 +493,7 @@ function SummaryCard({
           {Math.abs(change).toFixed(1)}%
         </div>
       </div>
-      <p className="text-2xl font-bold text-[#1B2733] dark:text-white mt-3">
+      <p className="text-2xl font-bold text-[#132F43] dark:text-white mt-3">
         {value}
       </p>
       <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{label}</p>

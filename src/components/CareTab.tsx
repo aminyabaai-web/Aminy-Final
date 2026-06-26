@@ -408,7 +408,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               ? 'bg-purple-50 text-purple-700 border-purple-200' 
               : isRBT 
                 ? 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]'
-                : 'bg-[#FAF7F2] text-[#3A4A57] border-[#E8E4DF]'
+                : 'bg-[#F6FBFB] text-[#3A4A57] border-[#E8E4DF]'
           }`}
         >
           {cred}
@@ -454,7 +454,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm text-[#1B2733]">
+                      <span className="font-medium text-sm text-[#132F43]">
                         {message.coachName}
                       </span>
                       {message.coachCredentials && (
@@ -473,7 +473,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               <div className={`rounded-lg px-4 py-3 ${
                 message.from === 'parent'
                   ? 'bg-accent text-white'
-                  : 'bg-[#FAF7F2] border border-[#E8E4DF]'
+                  : 'bg-[#F6FBFB] border border-[#E8E4DF]'
               }`}>
                 <p className="text-sm">{message.content}</p>
                 
@@ -574,7 +574,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Duration Selection */}
       <div>
-        <h3 className="font-semibold text-[#1B2733] mb-3">Session Duration</h3>
+        <h3 className="font-semibold text-[#132F43] mb-3">Session Duration</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => setSelectedDuration('25min')}
@@ -609,8 +609,8 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {/* Calendar Placeholder */}
       <div>
-        <h3 className="font-semibold text-[#1B2733] mb-3">Available Times</h3>
-        <div className="p-8 bg-[#FAF7F2] rounded-lg border-2 border-dashed border-[#E8E4DF] text-center">
+        <h3 className="font-semibold text-[#132F43] mb-3">Available Times</h3>
+        <div className="p-8 bg-[#F6FBFB] rounded-lg border-2 border-dashed border-[#E8E4DF] text-center">
           <Calendar className="w-8 h-8 text-[#8A9BA8] mx-auto mb-2" />
           <p className="text-[#5A6B7A] mb-4">Calendar integration coming soon</p>
           <p className="text-sm text-[#5A6B7A]">
@@ -622,7 +622,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
       {/* Upcoming Sessions */}
       {upcomingSessions.length > 0 && (
         <div>
-          <h3 className="font-semibold text-[#1B2733] mb-3">Upcoming Sessions</h3>
+          <h3 className="font-semibold text-[#132F43] mb-3">Upcoming Sessions</h3>
           <div className="space-y-3">
             {upcomingSessions.map((session) => (
               <div key={session.id} className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
@@ -713,7 +713,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Minutes Wallet */}
       <div className="p-6 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
-        <h3 className="font-semibold text-[#1B2733] mb-4">Your Minutes Wallet</h3>
+        <h3 className="font-semibold text-[#132F43] mb-4">Your Minutes Wallet</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
           <div className="text-center">
             <div className="text-xl sm:text-2xl font-bold text-purple-600">
@@ -741,7 +741,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           Purchase buttons. */}
       {demo && (
         <div>
-          <h3 className="font-semibold text-[#1B2733] mb-3">Buy Additional Minutes</h3>
+          <h3 className="font-semibold text-[#132F43] mb-3">Buy Additional Minutes</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
               <div className="text-center mb-3">
@@ -780,7 +780,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
       {/* Usage History */}
       <div>
-        <h3 className="font-semibold text-[#1B2733] mb-3">Recent Usage</h3>
+        <h3 className="font-semibold text-[#132F43] mb-3">Recent Usage</h3>
         <div className="space-y-3">
           {minutesUsage.map((usage) => (
             <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E8E4DF]">
@@ -845,7 +845,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 className={`${
                   session.status === 'completed' 
                     ? 'bg-green-100 text-green-800' 
-                    : 'bg-[#F0EDE8] text-[#1B2733]'
+                    : 'bg-[#EDF4F7] text-[#132F43]'
                 }`}
               >
                 {session.status}
@@ -860,9 +860,9 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
           {/* Session Summary */}
           {selectedSession?.id === session.id && session.summary && (
-            <div className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF] space-y-3 sm:space-y-4">
+            <div className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF] space-y-3 sm:space-y-4">
               <div>
-                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                   <Target className="w-4 h-4 text-blue-600" />
                   What We Practiced
                 </h4>
@@ -877,7 +877,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
 
               <div>
-                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-purple-600" />
                   Your Next Steps
                 </h4>
@@ -892,7 +892,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
 
               <div>
-                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                   <Brain className="w-4 h-4 text-orange-600" />
                   Key Insights
                 </h4>
@@ -902,7 +902,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               </div>
 
               <div>
-                <h4 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+                <h4 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-green-600" />
                   Recommended Activities
                 </h4>
@@ -990,7 +990,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             <div className="p-5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-5 h-5 text-purple-600" />
-                <h2 className="text-lg font-semibold text-[#1B2733]">Your Care Plan</h2>
+                <h2 className="text-lg font-semibold text-[#132F43]">Your Care Plan</h2>
                 {demo && (
                   <Badge variant="outline" className="text-sm bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
                     Sample
@@ -1048,7 +1048,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             {/* Coaching add-on (Pro) */}
             <div className="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-700 text-center">
               <Stethoscope className="w-10 h-10 text-purple-400 mx-auto mb-3" />
-              <h3 className="font-semibold text-[#1B2733] mb-1">Add 1-on-1 coaching</h3>
+              <h3 className="font-semibold text-[#132F43] mb-1">Add 1-on-1 coaching</h3>
               <p className="text-sm text-[#5A6B7A] mb-4 max-w-xs mx-auto">
                 Work directly with certified developmental specialists on {childName || 'your child'}'s plan
               </p>
@@ -1073,7 +1073,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <>
             {/* Tab Navigation */}
             <div className="mb-4 sm:mb-6">
-              <div className="flex bg-[#F0EDE8] rounded-lg p-1">
+              <div className="flex bg-[#EDF4F7] rounded-lg p-1">
                 {tabItems.map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -1083,7 +1083,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                       className={`flex-1 flex items-center justify-center gap-1 py-3 px-2 rounded-md text-sm font-medium transition-all ${
                         activeView === tab.id
                           ? 'bg-white text-accent shadow-sm'
-                          : 'text-[#5A6B7A] hover:text-[#1B2733]'
+                          : 'text-[#5A6B7A] hover:text-[#132F43]'
                       }`}
                     >
                       <Icon className="w-4 h-4" />

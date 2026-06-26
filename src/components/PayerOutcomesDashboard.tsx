@@ -222,14 +222,14 @@ export function PayerOutcomesDashboard({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#4E93A8]" />
+                <Building2 className="w-5 h-5 text-[#2A7D99]" />
                 <Badge variant="outline" className="text-sm">
                   {getOrgTypeLabel()}
                 </Badge>
                 <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
                 <DataProvenanceBadge provenance={metricsProvenance} />
               </div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#1B2733] sm:text-3xl">
+              <h1 className="text-2xl font-bold tracking-tight text-[#132F43] sm:text-3xl">
                 {organizationName} Coverage and Claims
               </h1>
               <h2 className="sr-only">Payer operations overview</h2>
@@ -252,14 +252,14 @@ export function PayerOutcomesDashboard({
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       selectedTimeframe === tf
                         ? 'bg-primary text-white'
-                        : 'bg-white text-[#5A6B7A] hover:bg-[#4E93A8]/10'
+                        : 'bg-white text-[#5A6B7A] hover:bg-[#2A7D99]/10'
                     }`}
                   >
                     {tf === '30d' ? '30 Days' : tf === '90d' ? '90 Days' : '1 Year'}
                   </button>
                 ))}
               </div>
-              <Button onClick={onExportReport} className="rounded-2xl bg-primary text-white hover:bg-[#4E93A8]">
+              <Button onClick={onExportReport} className="rounded-2xl bg-primary text-white hover:bg-[#2A7D99]">
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </Button>
@@ -322,13 +322,13 @@ export function PayerOutcomesDashboard({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* ROI Summary */}
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                   Return on Investment Summary
                 </h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-[#E8E4DF] dark:border-slate-700">
                     <span className="text-[#5A6B7A] dark:text-[#8A9BA8]">Investment per member/month</span>
-                    <span className="font-semibold text-[#1B2733] dark:text-white">
+                    <span className="font-semibold text-[#132F43] dark:text-white">
                       {formatCurrency(metrics.avgCostPerMember / 12)}
                     </span>
                   </div>
@@ -355,7 +355,7 @@ export function PayerOutcomesDashboard({
 
               {/* Engagement Overview */}
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                   Member Engagement
                 </h3>
                 <div className="space-y-6">
@@ -393,7 +393,7 @@ export function PayerOutcomesDashboard({
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Cost Breakdown */}
               <Card className="p-6 lg:col-span-2">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-6">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-6">
                   Cost Savings Breakdown
                 </h3>
                 <div className="space-y-4">
@@ -424,7 +424,7 @@ export function PayerOutcomesDashboard({
                 </div>
                 <div className="mt-6 pt-6 border-t border-[#E8E4DF] dark:border-slate-700">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-medium text-[#1B2733] dark:text-white">
+                    <span className="text-lg font-medium text-[#132F43] dark:text-white">
                       Total Annual Savings
                     </span>
                     <span className="text-2xl font-bold text-green-600">
@@ -457,7 +457,7 @@ export function PayerOutcomesDashboard({
                 </Card>
 
                 <Card className="p-4">
-                  <h4 className="font-medium text-[#1B2733] dark:text-white mb-3">
+                  <h4 className="font-medium text-[#132F43] dark:text-white mb-3">
                     Per Member Economics
                   </h4>
                   <div className="space-y-2 text-sm">
@@ -488,14 +488,14 @@ export function PayerOutcomesDashboard({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Member Satisfaction</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">Member Satisfaction</h3>
                   <Badge className="bg-green-100 text-green-700">
                     <CheckCircle2 className="w-3 h-3 mr-1" />
                     Exceeds Target
                   </Badge>
                 </div>
                 <div className="text-center py-4">
-                  <p className="text-5xl font-bold text-[#4E93A8]">{metrics.memberSatisfaction}%</p>
+                  <p className="text-5xl font-bold text-[#2A7D99]">{metrics.memberSatisfaction}%</p>
                   <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-2">
                     {providedMetrics ? 'Based on quarterly CAHPS surveys' : 'Pilot sample metric — not yet sourced from CAHPS surveys'}
                   </p>
@@ -514,7 +514,7 @@ export function PayerOutcomesDashboard({
 
               <Card className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Net Promoter Score</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">Net Promoter Score</h3>
                   <Badge className="bg-blue-100 text-blue-700">Excellent</Badge>
                 </div>
                 <div className="text-center py-4">
@@ -541,7 +541,7 @@ export function PayerOutcomesDashboard({
 
               <Card className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Caregiver Burnout</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">Caregiver Burnout</h3>
                   <Badge className="bg-purple-100 text-purple-700">
                     <TrendingDown className="w-3 h-3 mr-1" />
                     Improving
@@ -563,7 +563,7 @@ export function PayerOutcomesDashboard({
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                   Goal Achievement Rate
                 </h3>
                 <ProgressMetric
@@ -579,7 +579,7 @@ export function PayerOutcomesDashboard({
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                   Routine Adherence
                 </h3>
                 <ProgressMetric
@@ -595,7 +595,7 @@ export function PayerOutcomesDashboard({
               </Card>
 
               <Card className="p-6">
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                   Documentation Compliance
                 </h3>
                 <ProgressMetric
@@ -618,7 +618,7 @@ export function PayerOutcomesDashboard({
               <Card className="p-6 xl:col-span-2">
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Claim-Ready Queue</h3>
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Claim-Ready Queue</h3>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                       Aminy assembles validated visit packets for biller review before submission. The queue is scoped to the {marketLabel} supported payer matrix and is not a fake auto-submit surface.
                     </p>
@@ -651,7 +651,7 @@ export function PayerOutcomesDashboard({
 
                 <div className="space-y-4">
                   {visibleClaimQueue.length === 0 ? (
-                    <div className="rounded-[28px] border border-dashed border-slate-300 bg-[#FAF7F2]/80 p-8 text-center dark:border-slate-700 dark:bg-slate-900/60">
+                    <div className="rounded-[28px] border border-dashed border-slate-300 bg-[#F6FBFB]/80 p-8 text-center dark:border-slate-700 dark:bg-slate-900/60">
                       <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
                       <p className="text-sm font-medium text-[#3A4A57] dark:text-slate-200">
                         No claim-ready cases for the {marketLabel} lane yet
@@ -669,7 +669,7 @@ export function PayerOutcomesDashboard({
                       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                         <div>
                           <div className="flex flex-wrap items-center gap-2 mb-2">
-                            <p className="font-semibold text-[#1B2733] dark:text-white">{item.patientName}</p>
+                            <p className="font-semibold text-[#132F43] dark:text-white">{item.patientName}</p>
                             <Badge variant="outline" className="border-slate-300/80 bg-white/90 text-[#5A6B7A]">
                               {item.payerName}
                             </Badge>
@@ -687,9 +687,9 @@ export function PayerOutcomesDashboard({
                             {tone.helper}
                           </p>
                         </div>
-                        <div className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-4 py-3 text-right dark:border-slate-700 dark:bg-slate-800/80">
+                        <div className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB]/80 px-4 py-3 text-right dark:border-slate-700 dark:bg-slate-800/80">
                           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Visit amount</p>
-                          <p className="mt-1 text-lg font-semibold text-[#1B2733] dark:text-white">{formatCurrency(item.amountCents / 100)}</p>
+                          <p className="mt-1 text-lg font-semibold text-[#132F43] dark:text-white">{formatCurrency(item.amountCents / 100)}</p>
                         </div>
                       </div>
                       {item.issues.length > 0 ? (
@@ -712,7 +712,7 @@ export function PayerOutcomesDashboard({
                     </div>
                   )})}
                   {claimQueue.length > visibleClaimQueue.length ? (
-                    <div className="rounded-2xl border border-dashed border-slate-300 bg-[#FAF7F2]/80 p-4 text-sm text-[#5A6B7A] dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
+                    <div className="rounded-2xl border border-dashed border-slate-300 bg-[#F6FBFB]/80 p-4 text-sm text-[#5A6B7A] dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-300">
                       {claimQueue.length - visibleClaimQueue.length} additional cases are available in the operator queue. This summary stays intentionally trimmed so billers can scan the lane quickly on desktop and mobile.
                     </div>
                   ) : null}
@@ -721,7 +721,7 @@ export function PayerOutcomesDashboard({
 
               <div className="space-y-6">
                 <Card className="p-6">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Payer Ops Pressure</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Payer Ops Pressure</h3>
                   <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                     This is the real biller pressure summary for the supported-state lane: auth blockers, denials, secondaries, and any payer cases that fall outside the launch matrix.
                   </p>
@@ -738,9 +738,9 @@ export function PayerOutcomesDashboard({
                       <p className="text-xs uppercase tracking-[0.18em] text-sky-700">Secondary plans</p>
                       <p className="mt-1 text-xl font-semibold text-sky-800">{payerOpsSummary.secondaryPolicyCases}</p>
                     </div>
-                    <div className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2] px-4 py-3">
+                    <div className="rounded-2xl border border-[#E8E4DF] bg-[#F6FBFB] px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A]">Out of matrix</p>
-                      <p className="mt-1 text-xl font-semibold text-[#1B2733]">{payerOpsSummary.unsupportedPayerCases}</p>
+                      <p className="mt-1 text-xl font-semibold text-[#132F43]">{payerOpsSummary.unsupportedPayerCases}</p>
                     </div>
                   </div>
                   <div className="mt-5 space-y-3">
@@ -749,7 +749,7 @@ export function PayerOutcomesDashboard({
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
-                              <p className="text-sm font-semibold text-[#1B2733] dark:text-white">{lane.payerName}</p>
+                              <p className="text-sm font-semibold text-[#132F43] dark:text-white">{lane.payerName}</p>
                               <Badge className={lane.supported ? 'bg-emerald-100 text-emerald-700' : 'bg-[#E8E4DF] text-[#3A4A57]'}>
                                 {lane.supported ? lane.launchState.replace(/_/g, ' ') : 'manual review'}
                               </Badge>
@@ -779,7 +779,7 @@ export function PayerOutcomesDashboard({
                 </Card>
 
                 <Card className="p-6">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Supported Payer Matrix</h3>
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Supported Payer Matrix</h3>
                 <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                   Coverage Coach and claims ops should support the payer products covering the majority of addressable demand in each live state.
                 </p>
@@ -788,7 +788,7 @@ export function PayerOutcomesDashboard({
                     <div key={payer.id} className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="font-medium text-[#1B2733] dark:text-white">{payer.displayName}</p>
+                          <p className="font-medium text-[#132F43] dark:text-white">{payer.displayName}</p>
                           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                             {payer.payerType.replace(/_/g, ' ')} • {payer.submissionPath.replace(/_/g, ' ')}
                           </p>
@@ -816,7 +816,7 @@ export function PayerOutcomesDashboard({
           <TabsContent value="utilization">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                   Platform Engagement
                 </h3>
                 <div className="space-y-6">
@@ -827,7 +827,7 @@ export function PayerOutcomesDashboard({
                         {formatNumber(metrics.activeUsers)} / {formatNumber(metrics.totalMembers)}
                       </span>
                     </div>
-                    <div className="h-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div className="h-3 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-primary rounded-full"
                         style={{ width: `${metrics.engagementRate}%` }}
@@ -839,18 +839,18 @@ export function PayerOutcomesDashboard({
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-                      <Activity className="w-5 h-5 text-[#4E93A8] mb-2" />
-                      <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
+                      <Activity className="w-5 h-5 text-[#2A7D99] mb-2" />
+                      <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                         {metrics.avgSessionsPerWeek}
                       </p>
                       <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                         Avg sessions/week
                       </p>
                     </div>
-                    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+                    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
                       <Clock className="w-5 h-5 text-blue-600 mb-2" />
-                      <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                      <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                         18 min
                       </p>
                       <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -862,7 +862,7 @@ export function PayerOutcomesDashboard({
               </Card>
 
               <Card className="p-6">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                   Feature Utilization
                 </h3>
                 <div className="space-y-4">
@@ -876,14 +876,14 @@ export function PayerOutcomesDashboard({
               </Card>
 
               <Card className="p-6 lg:col-span-2">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                   HEDIS Quality Measures Impact
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 border border-[#E8E4DF] dark:border-slate-700 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         Follow-Up After ED Visit
                       </span>
                     </div>
@@ -895,7 +895,7 @@ export function PayerOutcomesDashboard({
                   <div className="p-4 border border-[#E8E4DF] dark:border-slate-700 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         Care Plan Documentation
                       </span>
                     </div>
@@ -907,7 +907,7 @@ export function PayerOutcomesDashboard({
                   <div className="p-4 border border-[#E8E4DF] dark:border-slate-700 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
                       <CheckCircle2 className="w-5 h-5 text-green-600" />
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         Caregiver Assessment
                       </span>
                     </div>
@@ -950,7 +950,7 @@ function MetricCard({
     blue: 'bg-[#EEF4F8] text-blue-600',
     pink: 'bg-pink-50 text-pink-600',
     purple: 'bg-purple-50 text-purple-600',
-    teal: 'bg-[#4E93A8]/10 text-[#4E93A8]',
+    teal: 'bg-[#2A7D99]/10 text-[#2A7D99]',
   };
 
   return (
@@ -972,7 +972,7 @@ function MetricCard({
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold text-[#1B2733]">{value}</p>
+      <p className="text-2xl font-bold text-[#132F43]">{value}</p>
       <p className="text-sm text-[#5A6B7A]">{label}</p>
       {subtext && (
         <p className="mt-1 text-sm text-slate-400">{subtext}</p>
@@ -1008,11 +1008,11 @@ function ProgressMetric({
     <div>
       <div className="flex justify-between mb-2">
         <span className="text-sm text-[#5A6B7A]">{label}</span>
-        <span className="text-sm font-medium text-[#1B2733]">
+        <span className="text-sm font-medium text-[#132F43]">
           {showPercentage ? `${value}%` : value}
         </span>
       </div>
-      <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
@@ -1039,7 +1039,7 @@ function SavingsRow({
   return (
     <div className="flex items-center justify-between border-b border-[#E8E4DF] py-3">
       <div>
-        <p className="font-medium text-[#1B2733]">{category}</p>
+        <p className="font-medium text-[#132F43]">{category}</p>
         <p className="text-sm text-[#5A6B7A]">{description}</p>
       </div>
       <div className="text-right">
@@ -1057,9 +1057,9 @@ function UtilizationRow({ feature, percentage }: { feature: string; percentage: 
     <div>
       <div className="flex justify-between mb-1">
         <span className="text-sm text-[#5A6B7A]">{feature}</span>
-        <span className="text-sm font-medium text-[#1B2733]">{percentage}%</span>
+        <span className="text-sm font-medium text-[#132F43]">{percentage}%</span>
       </div>
-      <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
         <div
           className="h-full bg-primary rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}

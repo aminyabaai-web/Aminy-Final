@@ -115,7 +115,7 @@ const getSeverityInfo = (severity: string) => {
         label: 'Mild Anxiety',
         color: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
         bgColor: 'from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20',
-        borderColor: 'border-[#F0EDE8] dark:border-yellow-800',
+        borderColor: 'border-[#EDF4F7] dark:border-yellow-800',
         description: 'Scores in this range suggest mild anxiety that may benefit from monitoring.',
         recommendation: 'Consider stress management techniques and monitor symptoms. Discuss with your healthcare provider if symptoms persist.'
       };
@@ -140,7 +140,7 @@ const getSeverityInfo = (severity: string) => {
     default:
       return {
         label: 'Unknown',
-        color: 'bg-[#F0EDE8] text-[#3A4A57]',
+        color: 'bg-[#EDF4F7] text-[#3A4A57]',
         bgColor: 'from-gray-50 to-gray-100',
         borderColor: 'border-[#E8E4DF]',
         description: '',
@@ -283,7 +283,7 @@ export function GAD7Screener({
     return (
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
             <History className="w-5 h-5 text-[#6B9080]" />
             Assessment History
           </h2>
@@ -308,7 +308,7 @@ export function GAD7Screener({
           <div className="space-y-3 sm:space-y-4">
             {/* Trend Summary */}
             {history.length >= 2 && (
-              <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
+              <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg mb-4 sm:mb-6">
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">Score Trend</p>
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className="flex items-end gap-1 h-16">
@@ -358,7 +358,7 @@ export function GAD7Screener({
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">
+                    <span className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">
                       {h.totalScore}/21
                     </span>
                     <span className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -385,7 +385,7 @@ export function GAD7Screener({
             <div>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">GAD-7 Score</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-[#1B2733] dark:text-white">
+                <span className="text-4xl font-bold text-[#132F43] dark:text-white">
                   {result.totalScore}
                 </span>
                 <span className="text-lg text-[#5A6B7A] dark:text-slate-400">/21</span>
@@ -437,7 +437,7 @@ export function GAD7Screener({
 
         {/* Question breakdown */}
         <div className="mb-4 sm:mb-6">
-          <h3 className="font-medium text-[#1B2733] dark:text-white mb-3">Response Summary</h3>
+          <h3 className="font-medium text-[#132F43] dark:text-white mb-3">Response Summary</h3>
           <div className="space-y-2">
             {GAD7_QUESTIONS.map((q, i) => (
               <div key={q.id} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] dark:border-slate-800">
@@ -485,7 +485,7 @@ export function GAD7Screener({
       {/* Header */}
       <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
             <Heart className="w-5 h-5 text-[#6B9080]" />
             GAD-7 Anxiety Screening
           </h2>
@@ -510,7 +510,7 @@ export function GAD7Screener({
           <span>Question {currentQuestion + 1} of 7</span>
           <span>{Math.round(progress)}% complete</span>
         </div>
-        <div className="h-2 bg-[#F0EDE8] dark:bg-slate-700 rounded-full overflow-hidden">
+        <div className="h-2 bg-[#EDF4F7] dark:bg-slate-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -520,7 +520,7 @@ export function GAD7Screener({
 
       {/* Question */}
       <div className="mb-8">
-        <p className="text-xl font-medium text-[#1B2733] dark:text-white mb-4 sm:mb-6">
+        <p className="text-xl font-medium text-[#132F43] dark:text-white mb-4 sm:mb-6">
           {GAD7_QUESTIONS[currentQuestion].text}
         </p>
 
@@ -532,12 +532,12 @@ export function GAD7Screener({
               className={`w-full p-4 rounded-xl border-2 transition-all text-left ${
                 answers[currentQuestion] === option.value
                   ? 'border-[#6B9080] bg-[#6B9080]/10 dark:bg-[#6B9080]/15'
-                  : 'border-[#E8E4DF] dark:border-slate-700 hover:border-[#6B9080]/30 hover:bg-[#FAF7F2] dark:hover:bg-slate-800'
+                  : 'border-[#E8E4DF] dark:border-slate-700 hover:border-[#6B9080]/30 hover:bg-[#F6FBFB] dark:hover:bg-slate-800'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-medium text-[#1B2733] dark:text-white">{option.label}</span>
+                  <span className="font-medium text-[#132F43] dark:text-white">{option.label}</span>
                   <span className="text-sm text-[#5A6B7A] dark:text-slate-400 ml-2">({option.days})</span>
                 </div>
                 {answers[currentQuestion] === option.value && (
@@ -587,7 +587,7 @@ export function GAD7Screener({
       </div>
 
       {/* Info */}
-      <div className="mt-8 p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+      <div className="mt-8 p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
         <div className="flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
           <div>

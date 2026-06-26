@@ -648,7 +648,7 @@ export function EnhancedAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
+                <h3 className="font-semibold text-[#132F43] dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-gradient-to-r from-violet-100 to-purple-100 text-violet-800 border-violet-200 text-sm">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Powered by AI
@@ -713,7 +713,7 @@ export function EnhancedAskAminy({
                       <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Sparkles className="w-8 h-8 text-accent" />
                       </div>
-                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">
+                      <h4 className="text-lg font-semibold text-[#132F43] dark:text-gray-100 mb-2">
                         How can I help with {userData.childName} today?
                       </h4>
                       <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 sm:mb-6 max-w-md mx-auto">
@@ -755,7 +755,7 @@ export function EnhancedAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#1B2733] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
+                            : "bg-[#EDF4F7] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Enhanced Message Header */}
                           <div className="flex items-center justify-between mb-2">
@@ -886,7 +886,7 @@ export function EnhancedAskAminy({
                       onKeyPress={handleKeyPress}
                       placeholder={`Ask me anything about ${userData.childName}...`}
                       aria-label={`Message Aminy about ${userData.childName}`}
-                      className="w-full resize-none rounded-xl border border-[#E8E4DF] dark:border-gray-700 bg-[#FAF7F2] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
+                      className="w-full resize-none rounded-xl border border-[#E8E4DF] dark:border-gray-700 bg-[#F6FBFB] dark:bg-gray-800 px-4 py-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 aminy-ai-input-field"
                       style={{ minHeight: '48px', maxHeight: '120px' }}
                       disabled={isTyping || isStreaming || !canSendMessage}
                     />
@@ -896,7 +896,7 @@ export function EnhancedAskAminy({
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-10 h-10 p-0 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-gray-800"
+                      className="w-10 h-10 p-0 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-gray-800"
                       title="Attach file"
                       aria-label="Attach file"
                       disabled={isTyping || isStreaming}

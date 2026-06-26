@@ -412,14 +412,14 @@ export function RecordingPlayback({
               <Video className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-[#1B2733]">Session Recordings</h2>
+              <h2 className="text-base font-semibold text-[#132F43]">Session Recordings</h2>
               <p className="text-sm text-[#5A6B7A]">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
             </div>
           </div>
           {onClose && (
             <button
               onClick={onClose}
-              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 text-[#8A9BA8] hover:text-[#5A6B7A] rounded-full hover:bg-[#EDF4F7] transition-colors"
               aria-label="Close"
             >
               <X size={18} />
@@ -437,7 +437,7 @@ export function RecordingPlayback({
                 className={`flex-shrink-0 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   selectedRecording?.id === rec.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080] border border-[#6B9080]/20'
-                    : 'bg-[#FAF7F2] text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F0EDE8]'
+                    : 'bg-[#F6FBFB] text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#EDF4F7]'
                 }`}
               >
                 <span className="flex items-center gap-1.5">
@@ -522,7 +522,7 @@ export function RecordingPlayback({
                 {/* Skip back 15s */}
                 <button
                   onClick={skipBack}
-                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7] rounded-full transition-colors"
                   aria-label="Skip back 15 seconds"
                 >
                   <SkipBack size={18} />
@@ -540,7 +540,7 @@ export function RecordingPlayback({
                 {/* Skip forward 15s */}
                 <button
                   onClick={skipForward}
-                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7] rounded-full transition-colors"
                   aria-label="Skip forward 15 seconds"
                 >
                   <SkipForward size={18} />
@@ -549,7 +549,7 @@ export function RecordingPlayback({
                 {/* Speed control */}
                 <button
                   onClick={cycleSpeed}
-                  className="px-2.5 py-1 text-xs font-medium text-[#5A6B7A] bg-[#F0EDE8] hover:bg-[#E8E4DF] rounded-full transition-colors flex items-center gap-1"
+                  className="px-2.5 py-1 text-xs font-medium text-[#5A6B7A] bg-[#EDF4F7] hover:bg-[#E8E4DF] rounded-full transition-colors flex items-center gap-1"
                   aria-label={`Playback speed: ${speed}x`}
                 >
                   <Gauge size={12} />
@@ -562,7 +562,7 @@ export function RecordingPlayback({
                 <button
                   onClick={() => setShowBookmarks(!showBookmarks)}
                   className={`p-2 rounded-full transition-colors ${
-                    showBookmarks ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8]'
+                    showBookmarks ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7]'
                   }`}
                   aria-label="Bookmarks"
                 >
@@ -573,7 +573,7 @@ export function RecordingPlayback({
                 <button
                   onClick={() => setShowMetadata(!showMetadata)}
                   className={`p-2 rounded-full transition-colors ${
-                    showMetadata ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8]'
+                    showMetadata ? 'text-[#6B9080] bg-[#6B9080]/10' : 'text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7]'
                   }`}
                   aria-label="Recording details"
                 >
@@ -583,7 +583,7 @@ export function RecordingPlayback({
                 {/* Download */}
                 <button
                   onClick={handleDownload}
-                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#F0EDE8] rounded-full transition-colors"
+                  className="p-2 text-[#5A6B7A] hover:text-[#3A4A57] hover:bg-[#EDF4F7] rounded-full transition-colors"
                   aria-label="Download recording"
                 >
                   <Download size={16} />
@@ -593,7 +593,7 @@ export function RecordingPlayback({
 
             {/* Bookmarks panel */}
             {showBookmarks && (
-              <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
+              <div className="bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <h4 className="text-sm font-semibold text-[#3A4A57] flex items-center gap-1.5">
                   <BookmarkCheck size={13} />
                   Bookmarks ({bookmarks.length})
@@ -654,7 +654,7 @@ export function RecordingPlayback({
 
             {/* Metadata panel */}
             {showMetadata && selectedRecording && (
-              <div className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
+              <div className="bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl p-3 space-y-2">
                 <h4 className="text-sm font-semibold text-[#3A4A57]">Recording Details</h4>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                   <div>

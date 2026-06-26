@@ -145,14 +145,14 @@ export function SubscriptionPauseFlow({
   return (
     <div className="bg-white rounded-2xl border border-[#E8E4DF] overflow-hidden">
       {/* Header */}
-      <div className="bg-[#FAF7F2] border-b border-[#E8E4DF] px-5 py-3 flex items-center justify-between">
+      <div className="bg-[#F6FBFB] border-b border-[#E8E4DF] px-5 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {pauseStatus?.isPaused ? (
             <PauseCircle className="w-4 h-4 text-amber-500" />
           ) : (
             <PauseCircle className="w-4 h-4 text-[#8A9BA8]" />
           )}
-          <h3 className="text-sm font-semibold text-[#1B2733]">
+          <h3 className="text-sm font-semibold text-[#132F43]">
             {pauseStatus?.isPaused ? 'Subscription Paused' : 'Pause Subscription'}
           </h3>
         </div>
@@ -208,7 +208,7 @@ export function SubscriptionPauseFlow({
                         )}
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-medium text-[#1B2733]">{opt.label}</p>
+                        <p className="text-sm font-medium text-[#132F43]">{opt.label}</p>
                         <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
                       </div>
                     </div>
@@ -256,7 +256,7 @@ export function SubscriptionPauseFlow({
             <div className="flex gap-3">
               <button
                 onClick={() => setStep('select')}
-                className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl text-sm font-medium hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 border border-[#E8E4DF] text-[#3A4A57] rounded-xl text-sm font-medium hover:bg-[#F6FBFB] transition-colors"
               >
                 Go Back
               </button>
@@ -291,7 +291,7 @@ export function SubscriptionPauseFlow({
                     <Calendar size={12} />
                     Resumes on
                   </span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {formatResumeDate(pauseStatus.resumeDate)}
                   </span>
                 </div>
@@ -300,7 +300,7 @@ export function SubscriptionPauseFlow({
                     <Clock size={12} />
                     Days remaining
                   </span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {daysUntilResume(pauseStatus.resumeDate)} days
                   </span>
                 </div>
@@ -333,7 +333,7 @@ export function SubscriptionPauseFlow({
               <Check className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">Subscription Resumed!</p>
+              <p className="text-sm font-semibold text-[#132F43]">Subscription Resumed!</p>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 Your premium features are now active again.
               </p>

@@ -98,7 +98,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
             <Shield className="w-5 h-5 text-blue-500" />
           </div>
           <div className="flex-1">
-            <p className="font-semibold text-[#1B2733] text-sm">Your Coverage</p>
+            <p className="font-semibold text-[#132F43] text-sm">Your Coverage</p>
             <p className="text-sm text-[#5A6B7A]">{benefits.planName}</p>
           </div>
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -120,7 +120,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
               ${benefits.deductible.individualUsed.toLocaleString()} of ${benefits.deductible.individual.toLocaleString()} used
             </span>
           </div>
-          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-blue-500"
               initial={{ width: 0 }}
@@ -139,7 +139,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
               ${benefits.outOfPocketMax.individualUsed.toLocaleString()} of ${benefits.outOfPocketMax.individual.toLocaleString()} used
             </span>
           </div>
-          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+          <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <motion.div
               className="h-full rounded-full bg-emerald-500"
               initial={{ width: 0 }}
@@ -173,11 +173,11 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
                   { label: 'Speech Therapy', data: benefits.coverageDetails.speech, icon: '💬' },
                   { label: 'Telehealth', data: benefits.coverageDetails.telehealth, icon: '📱' },
                 ] as const).map((item) => (
-                  <div key={item.label} className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-xl">
+                  <div key={item.label} className="flex items-start gap-3 p-3 bg-[#F6FBFB] rounded-xl">
                     <span className="text-lg">{item.icon}</span>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-[#1B2733]">{item.label}</span>
+                        <span className="text-sm font-medium text-[#132F43]">{item.label}</span>
                         {item.data.covered ? (
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                         ) : (
@@ -219,7 +219,7 @@ function PriorAuthTracker() {
             <FileText className="w-5 h-5 text-amber-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Prior Authorization — ABA Therapy</p>
+            <p className="font-semibold text-[#132F43] text-sm">Prior Authorization — ABA Therapy</p>
             <p className="text-sm text-[#5A6B7A]">Auth #PA-8X2K9M · 240 units approved</p>
           </div>
         </div>
@@ -227,7 +227,7 @@ function PriorAuthTracker() {
       <div className="p-4">
         <div className="relative">
           {/* Progress line */}
-          <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-[#F0EDE8]" />
+          <div className="absolute left-[11px] top-3 bottom-3 w-0.5 bg-[#EDF4F7]" />
           <div
             className="absolute left-[11px] top-3 w-0.5 bg-emerald-400 transition-all duration-700"
             style={{ height: `${(currentStageIdx / (PRIOR_AUTH_STAGES.length - 1)) * 100}%` }}
@@ -247,7 +247,7 @@ function PriorAuthTracker() {
                     {(isPast || isActive) && <Check className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <div className="flex-1">
-                    <p className={`text-sm font-medium ${isActive ? 'text-[#1B2733]' : isPast ? 'text-[#5A6B7A]' : 'text-slate-400'}`}>
+                    <p className={`text-sm font-medium ${isActive ? 'text-[#132F43]' : isPast ? 'text-[#5A6B7A]' : 'text-slate-400'}`}>
                       {stage.label}
                     </p>
                     <p className="text-sm text-slate-400">{stage.date}</p>
@@ -264,9 +264,9 @@ function PriorAuthTracker() {
         <div className="mt-4 pt-4 border-t border-slate-50">
           <div className="flex items-center justify-between">
             <span className="text-sm text-[#5A6B7A]">Sessions used</span>
-            <span className="text-sm font-bold text-[#1B2733]">24 of 60</span>
+            <span className="text-sm font-bold text-[#132F43]">24 of 60</span>
           </div>
-          <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mt-2">
+          <div className="h-2 bg-[#EDF4F7] rounded-full overflow-hidden mt-2">
             <div className="h-full rounded-full bg-emerald-500" style={{ width: '40%' }} />
           </div>
           <p className="text-sm text-slate-400 mt-1.5">36 sessions remaining in this authorization period</p>
@@ -285,7 +285,7 @@ function UpcomingSessionCosts() {
             <Calendar className="w-5 h-5 text-green-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Upcoming Session Costs</p>
+            <p className="font-semibold text-[#132F43] text-sm">Upcoming Session Costs</p>
             <p className="text-sm text-[#5A6B7A]">Estimated — final amounts may vary</p>
           </div>
         </div>
@@ -293,16 +293,16 @@ function UpcomingSessionCosts() {
       <div className="divide-y divide-slate-50">
         {MOCK_UPCOMING_SESSIONS.map((session, i) => (
           <div key={i} className="p-4 flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#FAF7F2] flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-[#F6FBFB] flex items-center justify-center shrink-0">
               <Clock className="w-4 h-4 text-slate-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#1B2733]">{session.type}</p>
+              <p className="text-sm font-medium text-[#132F43]">{session.type}</p>
               <p className="text-sm text-[#5A6B7A]">{session.provider}</p>
               <p className="text-sm text-slate-400 mt-0.5">{session.date} at {session.time}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-base font-bold text-[#1B2733]">${session.estimatedCost}</p>
+              <p className="text-base font-bold text-[#132F43]">${session.estimatedCost}</p>
               <p className="text-sm text-slate-400">
                 {session.coinsurance ? session.coinsurance + ' coinsurance' : `$${session.copay} copay`}
               </p>
@@ -329,7 +329,7 @@ function EOBTranslations() {
             <DollarSign className="w-5 h-5 text-purple-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Recent Payments</p>
+            <p className="font-semibold text-[#132F43] text-sm">Recent Payments</p>
             <p className="text-sm text-[#5A6B7A]">Plain-English EOB breakdown</p>
           </div>
         </div>
@@ -339,7 +339,7 @@ function EOBTranslations() {
           <div key={i} className="p-4 space-y-2">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm font-medium text-[#1B2733] capitalize">{item.service}</p>
+                <p className="text-sm font-medium text-[#132F43] capitalize">{item.service}</p>
                 <p className="text-sm text-slate-400">{item.date}</p>
               </div>
               <div className="text-right">
@@ -406,12 +406,12 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-4">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#FAF7F2] transition-colors">
+            <button onClick={onBack} className="p-2 rounded-xl hover:bg-[#F6FBFB] transition-colors">
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
-            <h1 className="font-bold text-[#1B2733]">Insurance Care Hub</h1>
+            <h1 className="font-bold text-[#132F43]">Insurance Care Hub</h1>
             <p className="text-sm text-[#5A6B7A]">{childName}'s benefits & coverage</p>
           </div>
           {benefits && (
@@ -455,7 +455,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
           </div>
         ) : !benefits ? (
           <div className="flex flex-col items-center text-center py-20">
-            <div className="w-16 h-16 rounded-2xl bg-[#F0EDE8] flex items-center justify-center mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[#EDF4F7] flex items-center justify-center mb-4">
               <Shield className="w-7 h-7 text-slate-400" />
             </div>
             <h2 className="text-base font-semibold text-[#3A4A57] mb-1">No coverage on file yet</h2>

@@ -157,11 +157,11 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                 {/* Section Header */}
                 <button
                   onClick={() => setExpandedSection(isExpanded ? null : sectionId)}
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      progress === 100 ? 'bg-green-100' : 'bg-[#F0EDE8]'
+                      progress === 100 ? 'bg-green-100' : 'bg-[#EDF4F7]'
                     }`}>
                       {progress === 100 ? (
                         <CheckCircle className="w-6 h-6 text-green-600" />
@@ -193,7 +193,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                       <div
                         key={item.id}
                         className={`flex items-start gap-3 py-2 ${
-                          item.link ? 'cursor-pointer hover:bg-[#FAF7F2] -mx-2 px-2 rounded-lg' : ''
+                          item.link ? 'cursor-pointer hover:bg-[#F6FBFB] -mx-2 px-2 rounded-lg' : ''
                         }`}
                         onClick={() => item.link && onNavigate?.(item.link)}
                       >
@@ -204,7 +204,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                         )}
                         <div className="flex-1">
                           <p className={`text-sm ${
-                            item.complete ? 'text-[#1B2733]' : 'text-[#5A6B7A]'
+                            item.complete ? 'text-[#132F43]' : 'text-[#5A6B7A]'
                           }`}>
                             {item.label}
                           </p>
@@ -222,7 +222,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
         </div>
 
         {/* Final Summary Card */}
-        <div className="mt-8 bg-gradient-to-br from-[#FAF7F2] to-blue-50 rounded-xl border border-[#6B9080]/20 p-6 text-center">
+        <div className="mt-8 bg-gradient-to-br from-[#F6FBFB] to-blue-50 rounded-xl border border-[#6B9080]/20 p-6 text-center">
           <FileCheck className="w-12 h-12 text-accent mx-auto mb-4" />
           <h3 className="text-lg sm:text-xl font-semibold text-primary mb-2">
             {overallProgress === 100 ? '🎉 All Complete!' : 'Great Progress!'}

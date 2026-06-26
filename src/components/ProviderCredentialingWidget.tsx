@@ -44,7 +44,7 @@ const CHECK_META = {
 } as const;
 
 const STATUS_STYLE: Record<CheckStatus, { bg: string; text: string; label: string; dot: string }> = {
-  not_started:      { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',    label: 'Not started',    dot: 'bg-slate-300' },
+  not_started:      { bg: 'bg-[#EDF4F7]',   text: 'text-[#5A6B7A]',    label: 'Not started',    dot: 'bg-slate-300' },
   pending:          { bg: 'bg-amber-50',    text: 'text-amber-700',    label: 'In review',      dot: 'bg-amber-400' },
   in_progress:      { bg: 'bg-[#EEF4F8]',     text: 'text-blue-700',     label: 'In progress',    dot: 'bg-blue-400' },
   requires_input:   { bg: 'bg-orange-50',   text: 'text-orange-700',   label: 'Action needed',  dot: 'bg-orange-400' },
@@ -130,7 +130,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
   return (
     <div className={`rounded-2xl border border-[#E8E4DF] overflow-hidden ${className}`}
-      style={{ background: 'linear-gradient(135deg, #4E93A808 0%, #57759008 100%)' }}>
+      style={{ background: 'linear-gradient(135deg, #2A7D9908 0%, #21698208 100%)' }}>
 
       {/* Header */}
       <div className="px-4 pt-4 pb-3 flex items-start gap-3">
@@ -138,7 +138,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           className="w-11 h-11 rounded-xl flex items-center justify-center text-white shrink-0"
           style={{
             background: status.overallStatus === 'verified'
-              ? 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)'
+              ? 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)'
               : '#fef3c7'
           }}
         >
@@ -148,7 +148,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           }
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1B2733]">
+          <p className="text-sm font-semibold text-[#132F43]">
             {status.overallStatus === 'verified'
               ? 'Fully verified — accepting patients'
               : status.overallStatus === 'failed'
@@ -163,12 +163,12 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
 
       {/* Progress bar */}
       <div className="px-4 pb-3">
-        <div className="h-1.5 rounded-full bg-[#F0EDE8] overflow-hidden">
+        <div className="h-1.5 rounded-full bg-[#EDF4F7] overflow-hidden">
           <div
             className="h-full transition-all duration-500"
             style={{
               width: `${status.completionPercent}%`,
-              background: 'linear-gradient(90deg, #4E93A8 0%, #577590 100%)',
+              background: 'linear-gradient(90deg, #2A7D99 0%, #216982 100%)',
             }}
           />
         </div>
@@ -191,7 +191,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <Icon className="w-4 h-4 text-[#5A6B7A]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
                 <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
                   <p className="text-sm text-red-600 mt-0.5">{row.check.failureReason}</p>

@@ -30,7 +30,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
     html,
     text,
     from = 'Aminy <noreply@aminy.ai>',
-    replyTo = 'aminyaba.ai@gmail.com'
+    replyTo = 'support@aminy.ai'
   } = options;
 
   // Get Resend API key from environment
@@ -101,10 +101,10 @@ export async function sendReportShareEmail(
 <head>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
-    .header { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header { background: linear-gradient(135deg, #0D1B2A 0%, #1a3a5c 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; }
-    .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
-    .message { background: #f1f5f9; padding: 20px; border-left: 4px solid #0891b2; margin: 20px 0; border-radius: 4px; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+    .message { background: #f1f5f9; padding: 20px; border-left: 4px solid #43AA8B; margin: 20px 0; border-radius: 4px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
     .security-note { background: #fef3c7; border: 1px solid #fbbf24; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; }
   </style>
@@ -139,7 +139,7 @@ export async function sendReportShareEmail(
   
   <div class="footer">
     <p>This email was sent by Aminy on behalf of ${senderName}.</p>
-    <p>If you believe you received this email in error, please contact aminyaba.ai@gmail.com</p>
+    <p>If you believe you received this email in error, please contact support@aminy.ai</p>
     <p>&copy; ${new Date().getFullYear()} Aminy LLC. All rights reserved.</p>
   </div>
 </body>
@@ -157,7 +157,7 @@ Security Note: This link will expire in 7 days for privacy and security.
 
 --
 Aminy AI
-aminyaba.ai@gmail.com
+support@aminy.ai
   `;
 
   return sendEmail({
@@ -166,7 +166,7 @@ aminyaba.ai@gmail.com
     html,
     text,
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -186,9 +186,9 @@ export async function sendWelcomeEmail(
 <head>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
-    .header { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header { background: linear-gradient(135deg, #0D1B2A 0%, #1a3a5c 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; }
-    .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
     .tip-box { background: #f0fdfa; border-left: 4px solid #14b8a6; padding: 20px; margin: 20px 0; border-radius: 4px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
@@ -230,7 +230,7 @@ export async function sendWelcomeEmail(
   </div>
 
   <div class="footer">
-    <p>Questions? Reply to this email or reach us at aminyaba.ai@gmail.com</p>
+    <p>Questions? Reply to this email or reach us at support@aminy.ai</p>
     <p>&copy; ${new Date().getFullYear()} Aminy LLC. All rights reserved.</p>
   </div>
 </body>
@@ -242,7 +242,7 @@ export async function sendWelcomeEmail(
     subject,
     html,
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -266,7 +266,7 @@ export async function sendReEngagementEmail(
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
     .content { background: white; padding: 30px; }
-    .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
     .gentle-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
@@ -316,7 +316,7 @@ export async function sendReEngagementEmail(
     subject,
     html,
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -343,14 +343,14 @@ export async function sendWeeklyDigestEmail(
 <head>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
-    .header { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header { background: linear-gradient(135deg, #0D1B2A 0%, #1a3a5c 100%); color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; }
     .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
     .stat-box { background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; }
-    .stat-number { font-size: 32px; font-weight: bold; color: #0891b2; }
+    .stat-number { font-size: 32px; font-weight: bold; color: #43AA8B; }
     .stat-label { font-size: 12px; color: #64748b; margin-top: 5px; }
     .win-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px; }
-    .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
 </head>
@@ -415,7 +415,7 @@ export async function sendWeeklyDigestEmail(
     subject,
     html,
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -459,11 +459,11 @@ export async function sendChurnPreventionEmail(
     const baseStyles = `
       body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; background: #f8fafc; }
       .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-      .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
-      .button-secondary { background: #f1f5f9; color: #0891b2; }
+      .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+      .button-secondary { background: #f1f5f9; color: #43AA8B; }
       .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
       .stat-box { background: #f1f5f9; padding: 16px; border-radius: 8px; text-align: center; }
-      .stat-number { font-size: 24px; font-weight: bold; color: #0891b2; }
+      .stat-number { font-size: 24px; font-weight: bold; color: #43AA8B; }
       .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
       .highlight { background: linear-gradient(135deg, #ecfdf5 0%, #f0fdfa 100%); border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
       .offer-box { background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%); border: 2px solid #f59e0b; padding: 24px; border-radius: 12px; text-align: center; margin: 24px 0; }
@@ -603,7 +603,7 @@ export async function sendChurnPreventionEmail(
     subject: subjects[emailType],
     html: getHtml(),
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -626,8 +626,8 @@ export async function sendBCBAResponseEmail(
     .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
-    .preview-box { background: #f8fafc; border-left: 4px solid #4E93A8; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; color: #475569; font-style: italic; }
-    .button { display: inline-block; background: #4E93A8; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .preview-box { background: #f8fafc; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; color: #475569; font-style: italic; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
 </head>
@@ -667,7 +667,7 @@ export async function sendBCBAResponseEmail(
     subject,
     html,
     from: 'Aminy <support@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -691,9 +691,9 @@ export async function sendSessionNotesEmail(
     .header { background: #0D1B2A; color: white; padding: 30px; text-align: center; border-radius: 12px 12px 0 0; }
     .header h1 { margin: 0; font-size: 22px; font-weight: 700; }
     .content { background: white; padding: 30px; border: 1px solid #e2e8f0; border-top: none; border-radius: 0 0 12px 12px; }
-    .session-info { background: #f0fdfa; border-left: 4px solid #4E93A8; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .session-info { background: #f0fdfa; border-left: 4px solid #43AA8B; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; }
     .session-info p { margin: 4px 0; font-size: 14px; }
-    .button { display: inline-block; background: #4E93A8; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; font-size: 15px; }
     .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
   </style>
 </head>
@@ -737,7 +737,7 @@ export async function sendSessionNotesEmail(
     subject,
     html,
     from: 'Aminy <support@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }
 
@@ -758,7 +758,7 @@ export async function sendTrialExpirationEmail(
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; }
     .header { text-align: center; padding: 20px; }
     .content { background: white; padding: 30px; }
-    .button { display: inline-block; background: #0891b2; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
+    .button { display: inline-block; background: #43AA8B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: 600; }
     .highlight { background: #ecfdf5; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; }
   </style>
 </head>
@@ -779,7 +779,7 @@ export async function sendTrialExpirationEmail(
     `}
     
     <div class="highlight">
-      <strong>What you get with Core ($69/month):</strong>
+      <strong>What you get with Core ($14.99/month):</strong>
       <ul>
         <li>✨ Unlimited AI chat (text & voice)</li>
         <li>🎯 Full Aminy Jr suite</li>
@@ -792,7 +792,7 @@ export async function sendTrialExpirationEmail(
       <a href="https://aminy.ai/upgrade" class="button">Upgrade Now</a>
     </center>
     
-    <p>Questions? We're here to help at aminyaba.ai@gmail.com</p>
+    <p>Questions? We're here to help at support@aminy.ai</p>
     
     <p>– The Aminy Team 💙</p>
   </div>
@@ -805,6 +805,6 @@ export async function sendTrialExpirationEmail(
     subject,
     html,
     from: 'Aminy <noreply@aminy.ai>',
-    replyTo: 'aminyaba.ai@gmail.com',
+    replyTo: 'support@aminy.ai',
   });
 }

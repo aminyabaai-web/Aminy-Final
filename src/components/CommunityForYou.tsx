@@ -534,7 +534,7 @@ export function CommunityForYou({
           className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap shrink-0 transition-all ${
             activeTab === id
               ? 'bg-primary text-white shadow-md'
-              : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+              : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
           }`}
         >
           <Icon className="w-4 h-4" />
@@ -550,7 +550,7 @@ export function CommunityForYou({
       {resolvedPosts.length === 0 ? (
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-          <h4 className="font-medium text-[#1B2733] dark:text-white mb-2">
+          <h4 className="font-medium text-[#132F43] dark:text-white mb-2">
             Your personalized feed
           </h4>
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
@@ -566,7 +566,7 @@ export function CommunityForYou({
               </div>
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-2">
-                  <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
+                  <h4 className="font-semibold text-[#132F43] dark:text-white mb-1">
                     {post.title}
                   </h4>
                   {post.likes && (
@@ -628,7 +628,7 @@ export function CommunityForYou({
   const renderGroups = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="font-semibold text-[#132F43] dark:text-white">
           {resolvedLocation ? 'Parent Groups Near You' : 'Parent Groups'}
         </h3>
         {resolvedLocation && (
@@ -650,7 +650,7 @@ export function CommunityForYou({
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <h4 className="font-semibold text-[#1B2733] dark:text-white">
+                <h4 className="font-semibold text-[#132F43] dark:text-white">
                   {group.name}
                 </h4>
                 {group.isVirtual && (
@@ -698,7 +698,7 @@ export function CommunityForYou({
   const renderEvents = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="font-semibold text-[#132F43] dark:text-white">
           Upcoming Events
         </h3>
       </div>
@@ -722,7 +722,7 @@ export function CommunityForYou({
               <div className="flex items-center gap-2 mb-1">
                 {getEventTypeBadge(event.type)}
               </div>
-              <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
+              <h4 className="font-semibold text-[#132F43] dark:text-white mb-1">
                 {event.title}
               </h4>
               <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-2">
@@ -787,7 +787,7 @@ export function CommunityForYou({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Award className="w-5 h-5 text-amber-500" />
-        <h3 className="font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="font-semibold text-[#132F43] dark:text-white">
           Parent Spotlights
         </h3>
       </div>
@@ -810,7 +810,7 @@ export function CommunityForYou({
             <div className="flex-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-semibold text-[#1B2733] dark:text-white">
+                  <h4 className="font-semibold text-[#132F43] dark:text-white">
                     {spotlight.parentName}
                   </h4>
                   <p className="text-sm text-[#5A6B7A]">
@@ -873,7 +873,7 @@ export function CommunityForYou({
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-2">
         <Sparkles className="w-5 h-5 text-purple-500" />
-        <h3 className="font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="font-semibold text-[#132F43] dark:text-white">
           Weekly BCBA Q&A Sessions
         </h3>
       </div>
@@ -897,7 +897,7 @@ export function CommunityForYou({
                   LIVE NOW
                 </Badge>
               )}
-              <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
+              <h4 className="font-semibold text-[#132F43] dark:text-white mb-1">
                 {session.topic}
               </h4>
               <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -944,10 +944,10 @@ export function CommunityForYou({
       ))}
 
       {/* Past Q&A Archive */}
-      <Card className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50">
+      <Card className="p-4 bg-[#F6FBFB] dark:bg-slate-800/50">
         <div className="flex items-center justify-between">
           <div>
-            <h4 className="font-medium text-[#1B2733] dark:text-white">
+            <h4 className="font-medium text-[#132F43] dark:text-white">
               Past Q&A Archive
             </h4>
             <p className="text-sm text-[#5A6B7A]">
@@ -980,13 +980,13 @@ export function CommunityForYou({
               <button
                 onClick={onBack}
                 aria-label="Back"
-                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded-lg transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
               </button>
             )}
             <div>
-              <h1 className="text-xl font-semibold text-[#1B2733] dark:text-white">
+              <h1 className="text-xl font-semibold text-[#132F43] dark:text-white">
                 {title}
               </h1>
               <h2 className="sr-only">{title} overview</h2>

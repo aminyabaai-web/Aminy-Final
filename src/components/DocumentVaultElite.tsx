@@ -290,12 +290,12 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">Document Vault</h1>
+              <h1 className="text-base font-semibold text-[#132F43]">Document Vault</h1>
               <div className="flex items-center gap-1 text-sm text-slate-400">
                 <Lock className="w-3 h-3" />
                 <span>Encrypted · HIPAA-conscious</span>
@@ -429,7 +429,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                 <Card className="p-3 bg-white border-[#E8E4DF] hover:shadow-md transition-all">
                   <div className="flex items-start gap-3">
                     {/* File type icon */}
-                    <div className="w-10 h-10 bg-[#FAF7F2] rounded-lg flex items-center justify-center flex-shrink-0 border border-[#E8E4DF]">
+                    <div className="w-10 h-10 bg-[#F6FBFB] rounded-lg flex items-center justify-center flex-shrink-0 border border-[#E8E4DF]">
                       <FileText className={`w-5 h-5 ${FILE_TYPE_COLORS[doc.fileType]}`} />
                     </div>
 
@@ -437,7 +437,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="text-sm font-semibold text-[#1B2733] leading-snug truncate">{doc.name}</p>
+                          <p className="text-sm font-semibold text-[#132F43] leading-snug truncate">{doc.name}</p>
                           <p className="text-sm text-slate-400 mt-0.5">{doc.source}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <span className="text-sm text-slate-400">{formatDate(doc.dateUploaded)}</span>
@@ -467,7 +467,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <button
                           onClick={() => toast.info('Opening document preview...')}
-                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           Preview
@@ -481,7 +481,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                         </button>
                         <button
                           onClick={() => toast.success('Download started!')}
-                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#F0EDE8] rounded-lg hover:bg-[#E8E4DF] transition-colors"
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Download className="w-3 h-3" />
                           Download
@@ -521,7 +521,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-[#1B2733]">Upload Document</h3>
+                <h3 className="font-semibold text-[#132F43]">Upload Document</h3>
                 <button onClick={() => setShowUpload(false)}>
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -617,7 +617,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
               className="bg-white rounded-2xl p-6 w-full max-w-lg shadow-2xl"
             >
               <div className="flex items-center justify-between mb-1">
-                <h3 className="font-semibold text-[#1B2733]">Share with provider</h3>
+                <h3 className="font-semibold text-[#132F43]">Share with provider</h3>
                 <button onClick={() => setShareModal(null)}>
                   <X className="w-5 h-5 text-slate-400" />
                 </button>
@@ -647,7 +647,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       <div className="w-8 h-8 bg-[#6B9080]/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-bold text-[#6B9080]">{provider.charAt(0)}</span>
                       </div>
-                      <span className="text-sm text-[#1B2733]">{provider}</span>
+                      <span className="text-sm text-[#132F43]">{provider}</span>
                       {selectedProvider === provider && (
                         <CheckCircle className="w-4 h-4 text-primary ml-auto" />
                       )}

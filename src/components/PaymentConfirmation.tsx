@@ -48,7 +48,7 @@ export function PaymentConfirmation({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
             Payment Successful!
           </h2>
           <p className="text-[#5A6B7A] mb-4 sm:mb-6">
@@ -72,7 +72,7 @@ export function PaymentConfirmation({
           <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-amber-600" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
             Verification Taking Longer Than Expected
           </h2>
           <p className="text-[#5A6B7A] mb-4">
@@ -125,7 +125,7 @@ export function PaymentConfirmation({
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <Loader2 className="w-8 h-8 text-[#6B9080] animate-spin" />
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
           Confirming Your Payment
         </h2>
         <p className="text-[#5A6B7A] mb-2">

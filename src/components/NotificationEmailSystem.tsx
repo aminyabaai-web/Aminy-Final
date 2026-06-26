@@ -242,7 +242,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
                   <div
                     key={notification.id}
                     onClick={() => markAsRead(notification.id)}
-                    className={`p-4 cursor-pointer transition-colors hover:bg-[#FAF7F2] ${
+                    className={`p-4 cursor-pointer transition-colors hover:bg-[#F6FBFB] ${
                       !notification.read ? 'bg-accent/5' : ''
                     }`}
                   >
@@ -252,7 +252,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-1">
-                          <h4 className={`text-sm font-medium ${!notification.read ? 'text-[#1B2733]' : 'text-[#3A4A57]'}`}>
+                          <h4 className={`text-sm font-medium ${!notification.read ? 'text-[#132F43]' : 'text-[#3A4A57]'}`}>
                             {notification.title}
                           </h4>
                           {!notification.read && (
@@ -290,11 +290,11 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
           <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 sm:space-y-6">
             {/* Push Notifications */}
             <div>
-              <h3 className="font-medium text-[#1B2733] mb-4">Push Notifications</h3>
+              <h3 className="font-medium text-[#132F43] mb-4">Push Notifications</h3>
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Morning Cue</p>
+                    <p className="text-sm font-medium text-[#132F43]">Morning Cue</p>
                     <p className="text-sm text-[#5A6B7A]">Daily calm plan reminder (8:00 AM)</p>
                   </div>
                   <Switch
@@ -305,7 +305,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Evening Reflection</p>
+                    <p className="text-sm font-medium text-[#132F43]">Evening Reflection</p>
                     <p className="text-sm text-[#5A6B7A]">Reflect on today's wins (8:00 PM)</p>
                   </div>
                   <Switch
@@ -316,7 +316,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Milestone Celebrations</p>
+                    <p className="text-sm font-medium text-[#132F43]">Milestone Celebrations</p>
                     <p className="text-sm text-[#5A6B7A]">Celebrate streaks and achievements</p>
                   </div>
                   <Switch
@@ -327,7 +327,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Activity Reminders</p>
+                    <p className="text-sm font-medium text-[#132F43]">Activity Reminders</p>
                     <p className="text-sm text-[#5A6B7A]">Upcoming sessions and tasks</p>
                   </div>
                   <Switch
@@ -340,11 +340,11 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
             {/* Email Preferences */}
             <div className="pt-6 border-t border-[#E8E4DF]">
-              <h3 className="font-medium text-[#1B2733] mb-4">Email Digest</h3>
+              <h3 className="font-medium text-[#132F43] mb-4">Email Digest</h3>
               <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Weekly Calm Progress Summary</p>
+                    <p className="text-sm font-medium text-[#132F43]">Weekly Calm Progress Summary</p>
                     <p className="text-sm text-[#5A6B7A]">Highlights, goals, and encouragement</p>
                   </div>
                   <Switch
@@ -355,7 +355,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Daily ABA Tips</p>
+                    <p className="text-sm font-medium text-[#132F43]">Daily ABA Tips</p>
                     <p className="text-sm text-[#5A6B7A]">Morning behavioral science lessons</p>
                   </div>
                   <Switch
@@ -366,7 +366,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Milestone Updates</p>
+                    <p className="text-sm font-medium text-[#132F43]">Milestone Updates</p>
                     <p className="text-sm text-[#5A6B7A]">Achievement notifications via email</p>
                   </div>
                   <Switch
@@ -377,7 +377,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Community Updates</p>
+                    <p className="text-sm font-medium text-[#132F43]">Community Updates</p>
                     <p className="text-sm text-[#5A6B7A]">Parent stories and new resources</p>
                   </div>
                   <Switch
@@ -416,7 +416,7 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
               <Bell className="w-8 h-8 text-white" />
             </div>
             
-            <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">
+            <h2 className="text-2xl font-semibold text-[#132F43] mb-2">
               Stay connected to your calm plan
             </h2>
             
@@ -428,21 +428,21 @@ export function NotificationEmailSystem({ userData }: NotificationEmailSystemPro
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">Morning calm cues</p>
+                  <p className="text-sm font-medium text-[#132F43]">Morning calm cues</p>
                   <p className="text-sm text-[#5A6B7A]">Start each day prepared</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">Milestone celebrations</p>
+                  <p className="text-sm font-medium text-[#132F43]">Milestone celebrations</p>
                   <p className="text-sm text-[#5A6B7A]">Never miss an achievement</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">Evening reflections</p>
+                  <p className="text-sm font-medium text-[#132F43]">Evening reflections</p>
                   <p className="text-sm text-[#5A6B7A]">Track progress daily</p>
                 </div>
               </div>
@@ -503,7 +503,7 @@ export function WeeklyEmailDigestPreview({
       <div className="p-8 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Section 1: Highlights */}
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">🌟 This Week's Highlights</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-4">🌟 This Week's Highlights</h2>
           <ul className="space-y-2">
             {weekHighlights.map((highlight, idx) => (
               <li key={idx} className="flex items-start gap-2">
@@ -516,7 +516,7 @@ export function WeeklyEmailDigestPreview({
 
         {/* Section 2: Next Goals */}
         <div className="bg-accent/5 rounded-lg p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">🎯 Next Week's Goals</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-4">🎯 Next Week's Goals</h2>
           <ul className="space-y-2">
             {nextGoals.map((goal, idx) => (
               <li key={idx} className="flex items-start gap-2">
@@ -546,7 +546,7 @@ export function WeeklyEmailDigestPreview({
       </div>
 
       {/* Footer */}
-      <div className="bg-[#FAF7F2] p-6 text-center text-sm text-[#5A6B7A] border-t border-[#E8E4DF]">
+      <div className="bg-[#F6FBFB] p-6 text-center text-sm text-[#5A6B7A] border-t border-[#E8E4DF]">
         <p className="mb-2">Guided by AI. Grounded in ABA. Built for Family Life.</p>
         <p>
           <a href="#" className="text-accent hover:underline">Unsubscribe</a> • 

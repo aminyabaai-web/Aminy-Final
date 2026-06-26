@@ -161,12 +161,12 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         {onBack && (
-          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
+          <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
             <ArrowLeft className="w-5 h-5" />
           </button>
         )}
         <div>
-          <h1 className="text-lg font-bold text-[#1B2733]">Mental Health Progress</h1>
+          <h1 className="text-lg font-bold text-[#132F43]">Mental Health Progress</h1>
           <p className="text-sm text-[#5A6B7A]">{childName} — plain-language summary</p>
         </div>
         <Heart className="w-5 h-5 text-pink-400 ml-auto" />
@@ -178,7 +178,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{phqHistory[0]?.score !== undefined && phqHistory[0].score < 5 ? '😊' : phqHistory[0]?.score !== undefined && phqHistory[0].score < 10 ? '😐' : '😔'}</span>
-            <h2 className="font-semibold text-[#1B2733]">Mood Check-In</h2>
+            <h2 className="font-semibold text-[#132F43]">Mood Check-In</h2>
           </div>
           <div className="flex items-start gap-2">
             {phqInfo.icon}
@@ -201,7 +201,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{gadHistory[0]?.score !== undefined && gadHistory[0].score < 5 ? '😌' : gadHistory[0]?.score !== undefined && gadHistory[0].score < 10 ? '😬' : '😰'}</span>
-            <h2 className="font-semibold text-[#1B2733]">Anxiety Check-In</h2>
+            <h2 className="font-semibold text-[#132F43]">Anxiety Check-In</h2>
           </div>
           <div className="flex items-start gap-2">
             {gadInfo.icon}
@@ -224,7 +224,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
           className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <Star className="w-5 h-5 text-amber-400" />
-            <h2 className="font-semibold text-[#1B2733]">What we worked on this month</h2>
+            <h2 className="font-semibold text-[#132F43]">What we worked on this month</h2>
           </div>
           <div className="space-y-2">
             {skillsPracticed.map(skill => (

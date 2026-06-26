@@ -89,7 +89,7 @@ function MatchingProgress() {
               ) : (
                 <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
               )}
-              <span className={`text-sm ${i === activeStep ? 'text-[#1B2733] font-medium' : 'text-[#5A6B7A]'}`}>
+              <span className={`text-sm ${i === activeStep ? 'text-[#132F43] font-medium' : 'text-[#5A6B7A]'}`}>
                 {step.label}
               </span>
             </motion.div>
@@ -190,17 +190,17 @@ export function MatchingInProgress({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] via-white to-gray-50">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF] px-4 py-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 -ml-1 rounded-full hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 -ml-1 rounded-full hover:bg-[#EDF4F7] transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
-          <h1 className="text-base font-semibold text-[#1B2733]">Finding Your Match</h1>
+          <h1 className="text-base font-semibold text-[#132F43]">Finding Your Match</h1>
         </div>
       </div>
 
@@ -209,14 +209,14 @@ export function MatchingInProgress({
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 p-5 space-y-4"
+          className="rounded-2xl border border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 p-5 space-y-4"
         >
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center">
               <PulsingDots />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#1B2733]">Matching in Progress</h2>
+              <h2 className="text-base font-bold text-[#132F43]">Matching in Progress</h2>
               <p className="text-sm text-[#6B9080] mt-0.5">You'll hear from us within 24-48 hours</p>
             </div>
           </div>
@@ -241,7 +241,7 @@ export function MatchingInProgress({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <h3 className="text-sm font-bold text-[#1B2733] mb-3">While we search for you</h3>
+          <h3 className="text-sm font-bold text-[#132F43] mb-3">While we search for you</h3>
           <div className="space-y-2.5">
             {BRIDGE_CARDS.map((card, i) => (
               <motion.button
@@ -256,7 +256,7 @@ export function MatchingInProgress({
                   {card.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#1B2733]">{card.title}</p>
+                  <p className="text-sm font-semibold text-[#132F43]">{card.title}</p>
                   <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{card.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
@@ -274,7 +274,7 @@ export function MatchingInProgress({
         >
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4 text-[#6B9080]" />
-            <h3 className="text-sm font-bold text-[#1B2733]">Get notified when your match is ready</h3>
+            <h3 className="text-sm font-bold text-[#132F43]">Get notified when your match is ready</h3>
           </div>
 
           {submitted ? (
@@ -320,7 +320,7 @@ export function MatchingInProgress({
                 onClick={handleSubmit}
                 disabled={isSubmitting || (!email && !notifyPhone)}
                 className="w-full py-3 rounded-xl font-semibold text-white text-sm transition-all disabled:opacity-50"
-                style={{ backgroundColor: '#4E93A8' }}
+                style={{ backgroundColor: '#2A7D99' }}
               >
                 {isSubmitting ? 'Saving...' : 'Notify me when matched'}
               </button>

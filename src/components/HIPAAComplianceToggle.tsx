@@ -78,17 +78,17 @@ export function HIPAAComplianceToggle({
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-            hipaaEnabled ? 'bg-green-100' : 'bg-[#F0EDE8]'
+            hipaaEnabled ? 'bg-green-100' : 'bg-[#EDF4F7]'
           }`}>
             <Shield className={`w-5 h-5 ${hipaaEnabled ? 'text-green-600' : 'text-slate-400'}`} />
           </div>
           <div>
-            <h3 className="text-[#1B2733] mb-1 flex items-center gap-2">
+            <h3 className="text-[#132F43] mb-1 flex items-center gap-2">
               HIPAA-Lite Mode
               {hipaaEnabled ? (
                 <Badge className="bg-green-100 text-green-700">Active</Badge>
               ) : (
-                <Badge className="bg-[#F0EDE8] text-[#3A4A57]">Disabled</Badge>
+                <Badge className="bg-[#EDF4F7] text-[#3A4A57]">Disabled</Badge>
               )}
             </h3>
             <p className="text-sm text-[#5A6B7A]">
@@ -107,7 +107,7 @@ export function HIPAAComplianceToggle({
           <div className="flex items-start gap-2 mb-2">
             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-[#1B2733] mb-1">
+              <p className="text-sm text-[#132F43] mb-1">
                 HIPAA-Conscious protections are active
               </p>
               <p className="text-sm text-[#5A6B7A]">
@@ -123,7 +123,7 @@ export function HIPAAComplianceToggle({
           <div className="flex items-start gap-2">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-[#1B2733] mb-1">
+              <p className="text-sm text-[#132F43] mb-1">
                 HIPAA protections are disabled
               </p>
               <p className="text-sm text-[#5A6B7A]">
@@ -136,7 +136,7 @@ export function HIPAAComplianceToggle({
 
       <button
         onClick={() => setShowDetails(!showDetails)}
-        className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-3"
+        className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#132F43] transition-colors mb-3"
       >
         {showDetails ? (
           <>
@@ -153,11 +153,11 @@ export function HIPAAComplianceToggle({
 
       {showDetails && (
         <div className="space-y-3 pt-3 border-t border-[#E8E4DF]">
-          <h4 className="text-sm text-[#1B2733] mb-2">Active Protections</h4>
+          <h4 className="text-sm text-[#132F43] mb-2">Active Protections</h4>
           {complianceFeatures.map((feature, idx) => (
             <div key={idx} className="flex items-start gap-3">
               <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                feature.enabled ? 'bg-green-100' : 'bg-[#F0EDE8]'
+                feature.enabled ? 'bg-green-100' : 'bg-[#EDF4F7]'
               }`}>
                 {feature.enabled ? (
                   <Lock className="w-3 h-3 text-green-600" />
@@ -166,7 +166,7 @@ export function HIPAAComplianceToggle({
                 )}
               </div>
               <div>
-                <div className="text-sm text-[#1B2733]">{feature.name}</div>
+                <div className="text-sm text-[#132F43]">{feature.name}</div>
                 <div className="text-sm text-[#5A6B7A]">{feature.description}</div>
               </div>
             </div>

@@ -339,7 +339,7 @@ export function SessionNotes({
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-lg font-semibold text-[#1B2733]">Session Notes</h2>
+                <h2 className="text-lg font-semibold text-[#132F43]">Session Notes</h2>
                 <AISparkleButton prompt={`Based on this session with ${patientName} (${sessionType}), what are the most important things for the family to follow up on at home?`} label="Summarize for family" />
               </div>
               <p className="text-sm text-[#5A6B7A] mt-1">
@@ -395,7 +395,7 @@ export function SessionNotes({
                       : 'bg-white border-neutral-200 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/50'
                   }`}
                 >
-                  <p className="font-medium text-[#1B2733] text-sm">{template.name}</p>
+                  <p className="font-medium text-[#132F43] text-sm">{template.name}</p>
                   <p className="text-sm text-[#5A6B7A] mt-0.5">{template.description}</p>
                 </button>
               ))}
@@ -497,7 +497,7 @@ export function SessionNotes({
                 type="time"
                 value={startTime}
                 onChange={e => setStartTime(e.target.value)}
-                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
+                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
               />
             </div>
             <div className="flex items-center gap-2 flex-1">
@@ -507,7 +507,7 @@ export function SessionNotes({
                 type="time"
                 value={stopTime}
                 onChange={e => setStopTime(e.target.value)}
-                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
+                className="flex-1 border border-[#E8E4DF] rounded-lg px-2 py-1.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30"
               />
             </div>
           </div>

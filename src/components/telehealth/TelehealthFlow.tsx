@@ -106,7 +106,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
       <p className="text-center text-[#5A6B7A]">Let's make sure everything is ready for your visit</p>
 
       <div className="space-y-4">
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#F6FBFB]">
           <span className="text-2xl">{checking ? '\u23F3' : cameraReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Camera</p>
@@ -114,7 +114,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           </div>
         </div>
 
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#F6FBFB]">
           <span className="text-2xl">{checking ? '\u23F3' : micReady ? '\u2705' : '\u274C'}</span>
           <div>
             <p className="font-medium">Microphone</p>
@@ -122,7 +122,7 @@ function PreCallCheck({ onReady, onBack }: { onReady: () => void; onBack: () => 
           </div>
         </div>
 
-        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#FAF7F2]">
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-[#F6FBFB]">
           <span className="text-2xl">{'connection' in navigator ? '\u2705' : '\u26A0\uFE0F'}</span>
           <div>
             <p className="font-medium">Internet Connection</p>
@@ -363,11 +363,11 @@ export function TelehealthFlow({
         <div className="min-h-screen bg-mist">
           <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
-              <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
+              <button onClick={onClose} className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7]">
                 <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
               </button>
               <div>
-                <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
+                <h1 className="text-lg font-semibold text-[#132F43]">Get Care</h1>
                 <p className="text-sm text-[#5A6B7A]">Choose how you'd like to get started</p>
               </div>
             </div>
@@ -382,7 +382,7 @@ export function TelehealthFlow({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-[#1B2733]">Quick Consult</h3>
+                      <h3 className="text-base font-semibold text-[#132F43]">Quick Consult</h3>
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#EEF4F8] text-blue-700">Cash Pay</span>
                     </div>
                     <p className="text-sm text-[#5A6B7A] mb-3">
@@ -417,7 +417,7 @@ export function TelehealthFlow({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-base font-semibold text-[#1B2733]">Start Services</h3>
+                      <h3 className="text-base font-semibold text-[#132F43]">Start Services</h3>
                       <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Insurance</span>
                     </div>
                     <p className="text-sm text-[#5A6B7A] mb-3">
@@ -478,11 +478,11 @@ export function TelehealthFlow({
         <div className="min-h-screen bg-mist">
           <header className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF] px-4 py-3">
             <div className="flex items-center gap-3">
-              <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-[#F0EDE8]">
+              <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-[#EDF4F7]">
                 <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
               </button>
               <div>
-                <h1 className="text-lg font-semibold text-[#1B2733]">Verify Insurance</h1>
+                <h1 className="text-lg font-semibold text-[#132F43]">Verify Insurance</h1>
                 <p className="text-sm text-[#5A6B7A]">We'll check your coverage before matching providers</p>
               </div>
             </div>
@@ -494,7 +494,7 @@ export function TelehealthFlow({
                   <Shield className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#1B2733]">Insurance Eligibility Check</h3>
+                  <h3 className="font-semibold text-[#132F43]">Insurance Eligibility Check</h3>
                   <p className="text-sm text-[#5A6B7A]">Takes about 30 seconds</p>
                 </div>
               </div>

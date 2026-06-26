@@ -269,13 +269,13 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               <UserPlus className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#1B2733]">Invite Friends</h2>
+              <h2 className="text-base font-bold text-[#132F43]">Invite Friends</h2>
               <p className="text-sm text-[#5A6B7A]">Give $25, get 1 free month</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+            className="p-2 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
             aria-label="Close"
           >
             <X size={20} />
@@ -284,7 +284,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
 
         <div className="p-5 space-y-5">
           {/* Reward callout */}
-          <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 rounded-xl p-4 border border-[#E8E4DF]">
+          <div className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 rounded-xl p-4 border border-[#E8E4DF]">
             <div className="flex items-start gap-3">
               <Gift className="w-5 h-5 text-[#6B9080] mt-0.5 flex-shrink-0" />
               <div>
@@ -302,8 +302,8 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           {/* Referral code display */}
           <div className="text-center">
             <p className="text-xs text-[#5A6B7A] uppercase tracking-wider mb-1.5">Your referral code</p>
-            <div className="inline-flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
-              <code className="text-base font-bold text-[#1B2733] tracking-wide">
+            <div className="inline-flex items-center gap-2 bg-[#F6FBFB] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
+              <code className="text-base font-bold text-[#132F43] tracking-wide">
                 {referralCode}
               </code>
               <button
@@ -337,7 +337,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <MessageCircle className="w-5 h-5 text-green-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-[#1B2733]">Text Message</p>
+                <p className="text-sm font-medium text-[#132F43]">Text Message</p>
                 <p className="text-sm text-[#5A6B7A]">Send a pre-filled SMS invite</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -353,7 +353,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <Mail className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-[#1B2733]">Email</p>
+                <p className="text-sm font-medium text-[#132F43]">Email</p>
                 <p className="text-sm text-[#5A6B7A]">Share via your email app</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -370,7 +370,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <Share2 className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-[#1B2733]">More Options</p>
+                  <p className="text-sm font-medium text-[#132F43]">More Options</p>
                   <p className="text-sm text-[#5A6B7A]">WhatsApp, Messenger, and more</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -387,7 +387,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <Users className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-[#1B2733]">Choose from Contacts</p>
+                  <p className="text-sm font-medium text-[#132F43]">Choose from Contacts</p>
                   <p className="text-sm text-[#5A6B7A]">Pick friends directly from your address book</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -405,7 +405,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 {selectedContacts.map((contact, i) => (
                   <div
                     key={i}
-                    className="flex items-center justify-between bg-[#FAF7F2] rounded-lg px-3 py-2"
+                    className="flex items-center justify-between bg-[#F6FBFB] rounded-lg px-3 py-2"
                   >
                     <span className="text-sm text-[#3A4A57] truncate">
                       {contact.name}

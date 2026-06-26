@@ -989,13 +989,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {branding.logoUrl ? (
                     <img src={branding.logoUrl} alt={branding.orgName} className="w-8 h-8 rounded-lg object-contain" />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#2A7D99' }}>
                       {branding.orgName.slice(0, 2).toUpperCase()}
                     </div>
                   )}
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg font-semibold text-[#1B2733] dark:text-white">{branding.orgName}</span>
+                      <span className="text-lg font-semibold text-[#132F43] dark:text-white">{branding.orgName}</span>
                       <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary font-medium">
                         {provider.credentials}
                       </Badge>
@@ -1007,7 +1007,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <>
                   <Logo size="sm" showText={false} />
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Portal</span>
+                    <span className="text-lg font-semibold text-[#132F43] dark:text-white">Provider Portal</span>
                     <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary font-medium">
                       {provider.credentials}
                     </Badge>
@@ -1048,8 +1048,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 {showNotifications && (
                   <div className="absolute right-0 top-12 w-80 bg-white border border-[#E8E4DF] rounded-2xl shadow-xl z-50 overflow-hidden">
                     <div className="p-3 border-b border-[#E8E4DF] flex items-center justify-between">
-                      <p className="text-sm font-semibold text-[#1B2733]">Action required</p>
-                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-slate-600">
+                      <p className="text-sm font-semibold text-[#132F43]">Action required</p>
+                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-slate-600" aria-label="Close notifications">
                         <X className="w-4 h-4" />
                       </button>
                     </div>
@@ -1060,10 +1060,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           <p className="text-sm text-[#5A6B7A]">All caught up!</p>
                         </div>
                       ) : (
-                        <div className="divide-y divide-[#F0EDE8]">
+                        <div className="divide-y divide-[#EDF4F7]">
                           {unsignedNoteCount > 0 && (
                             <button
-                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              className="w-full text-left p-3 hover:bg-[#F6FBFB] transition-colors"
                               onClick={() => { setActiveTab('clinical-notes'); setShowNotifications(false); }}
                             >
                               <div className="flex items-start gap-2">
@@ -1071,7 +1071,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                   <FileText className="w-4 h-4 text-amber-600" />
                                 </div>
                                 <div>
-                                  <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} unsigned note{unsignedNoteCount > 1 ? 's' : ''}</p>
+                                  <p className="text-sm font-medium text-[#132F43]">{unsignedNoteCount} unsigned note{unsignedNoteCount > 1 ? 's' : ''}</p>
                                   <p className="text-sm text-[#5A6B7A]">Sign to submit for billing</p>
                                 </div>
                               </div>
@@ -1080,7 +1080,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           {pendingBCBAThreads.slice(0, 5).map(thread => (
                             <button
                               key={thread.id}
-                              className="w-full text-left p-3 hover:bg-[#FAF7F2] transition-colors"
+                              className="w-full text-left p-3 hover:bg-[#F6FBFB] transition-colors"
                               onClick={() => { setActiveTab('ai-summaries'); setShowNotifications(false); }}
                             >
                               <div className="flex items-start gap-2">
@@ -1088,7 +1088,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                                   <MessageSquare className="w-4 h-4 text-[#6B9080]" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-[#1B2733]">Family Q awaiting review</p>
+                                  <p className="text-sm font-medium text-[#132F43]">Family Q awaiting review</p>
                                   <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
                                   {thread.child_name && <p className="text-sm text-[#5A6B7A]">Re: {thread.child_name}</p>}
                                 </div>
@@ -1118,7 +1118,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 <div className="hidden sm:block">
                   <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium text-[#1B2733] dark:text-white">{provider.name}</p>
+                    <p className="text-sm font-medium text-[#132F43] dark:text-white">{provider.name}</p>
                     {provider.verificationStatus && (
                       <VerifiedBadge status={provider.verificationStatus} />
                     )}
@@ -1191,13 +1191,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {/* Welcome & Next Session */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
               {/* Welcome Card */}
-              <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FAF7F2] p-6 shadow-sm">
+              <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#F6FBFB] via-white to-[#F6FBFB] p-6 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
                       Independent practice cockpit
                     </p>
-                    <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                    <h1 className="text-xl sm:text-2xl font-bold text-[#132F43]">
                       Welcome back, {provider.name.split(' ')[0]}
                     </h1>
                     <h2 className="sr-only">Practice overview</h2>
@@ -1208,7 +1208,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   </div>
                   <div className="flex items-center gap-1 bg-white/80 rounded-lg px-3 py-1.5">
                     <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                    <span className="font-semibold text-[#1B2733]">{provider.rating}</span>
+                    <span className="font-semibold text-[#132F43]">{provider.rating}</span>
                     <span className="text-[#5A6B7A] text-sm">({provider.reviewCount})</span>
                   </div>
                 </div>
@@ -1223,7 +1223,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           </span>
                         </div>
                         <div>
-                          <p className="font-semibold text-[#1B2733]">
+                          <p className="font-semibold text-[#132F43]">
                             {nextSession.patientName}
                           </p>
                           <p className="text-sm text-[#5A6B7A]">
@@ -1282,7 +1282,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Stats Card */}
               <Card className="p-4 sm:p-5 md:p-6">
-                <h3 className="font-semibold text-[#1B2733] mb-4">This Month</h3>
+                <h3 className="font-semibold text-[#132F43] mb-4">This Month</h3>
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1291,7 +1291,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Active Clients</span>
                     </div>
-                    <span className="text-xl font-bold text-[#1B2733]">{provider.totalPatients}</span>
+                    <span className="text-xl font-bold text-[#132F43]">{provider.totalPatients}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1300,7 +1300,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Sessions</span>
                     </div>
-                    <span className="text-xl font-bold text-[#1B2733]">{provider.sessionsThisMonth}</span>
+                    <span className="text-xl font-bold text-[#132F43]">{provider.sessionsThisMonth}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -1309,7 +1309,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <span className="text-neutral-600">Earnings</span>
                     </div>
-                    <span className="text-xl font-bold text-[#1B2733]">
+                    <span className="text-xl font-bold text-[#132F43]">
                       ${provider.earningsThisMonth.toLocaleString()}
                     </span>
                   </div>
@@ -1325,7 +1325,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Pending Profile Access */}
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1B2733]">Pending Profile Access</h3>
+                  <h3 className="font-semibold text-[#132F43]">Pending Profile Access</h3>
                   <Badge className="bg-amber-100 text-amber-700">
                     {patients.filter(p => p.profileAccess === 'pending').length} pending
                   </Badge>
@@ -1340,7 +1340,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                             <Lock className="w-4 h-4 text-amber-600" />
                           </div>
                           <div>
-                            <p className="font-medium text-[#1B2733]">{patient.childName}</p>
+                            <p className="font-medium text-[#132F43]">{patient.childName}</p>
                             <p className="text-sm text-[#5A6B7A]">
                               Awaiting {patient.parentName}'s approval
                             </p>
@@ -1364,7 +1364,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Upcoming Sessions This Week */}
               <Card className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-[#1B2733]">This Week's Sessions</h3>
+                  <h3 className="font-semibold text-[#132F43]">This Week's Sessions</h3>
                   <Button variant="ghost" size="sm" onClick={() => setActiveTab('sessions')}>
                     View All
                     <ChevronRight className="w-4 h-4 ml-1" />
@@ -1380,7 +1380,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-[#1B2733]">{session.patientName}</p>
+                          <p className="font-medium text-[#132F43]">{session.patientName}</p>
                           <p className="text-sm text-[#5A6B7A]">{formatDate(session.scheduledAt)}</p>
                         </div>
                       </div>
@@ -1430,7 +1430,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <FileText className="w-4 h-4 text-amber-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-[#1B2733]">{unsignedNoteCount} note{unsignedNoteCount > 1 ? 's' : ''} need your signature</p>
+                        <p className="text-sm font-medium text-[#132F43]">{unsignedNoteCount} note{unsignedNoteCount > 1 ? 's' : ''} need your signature</p>
                         <p className="text-sm text-[#5A6B7A]">Sign to unlock billing & share with families</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
@@ -1446,7 +1446,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <MessageSquare className="w-4 h-4 text-[#6B9080]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-[#1B2733]">
+                        <p className="text-sm font-medium text-[#132F43]">
                           {thread.child_name ? `${thread.child_name}'s family` : thread.parent_name || 'Family'} has a question
                         </p>
                         <p className="text-sm text-[#5A6B7A] truncate">{thread.question}</p>
@@ -1466,7 +1466,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <Brain className="w-7 h-7 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-[#1B2733]">
+                    <h3 className="text-lg font-semibold text-[#132F43]">
                       Insight Navigator
                     </h3>
                     <p className="text-neutral-600">
@@ -1520,13 +1520,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               });
               if (pendingIntake.length === 0 && avgDays === null) return null;
               return (
-                <div className="grid grid-cols-3 gap-3 p-4 bg-[#FAF7F2] rounded-xl border border-[#E8E4DF]">
+                <div className="grid grid-cols-3 gap-3 p-4 bg-[#F6FBFB] rounded-xl border border-[#E8E4DF]">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-[#1B2733]">{pendingIntake.length}</p>
+                    <p className="text-2xl font-bold text-[#132F43]">{pendingIntake.length}</p>
                     <p className="text-sm text-[#5A6B7A] mt-0.5">Pending first session</p>
                   </div>
                   <div className="text-center border-x border-[#E8E4DF]">
-                    <p className="text-2xl font-bold text-[#1B2733]">{avgDays !== null ? `${avgDays}d` : '—'}</p>
+                    <p className="text-2xl font-bold text-[#132F43]">{avgDays !== null ? `${avgDays}d` : '—'}</p>
                     <p className="text-sm text-[#5A6B7A] mt-0.5">Avg. days to first session</p>
                   </div>
                   <div className="text-center">
@@ -1541,7 +1541,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {filteredPatients.length === 0 ? (
               <Card className="p-8 sm:p-12 text-center">
                 <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+                <h3 className="text-lg font-semibold text-[#132F43] mb-2">
                   {searchQuery ? 'No patients found' : 'No patients yet'}
                 </h3>
                 <p className="text-[#5A6B7A] max-w-md mx-auto mb-6">
@@ -1576,7 +1576,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-[#1B2733]">{patient.childName}</h4>
+                        <h4 className="font-semibold text-[#132F43]">{patient.childName}</h4>
                         <p className="text-sm text-[#5A6B7A]">
                           {patient.age} years old • Parent: {patient.parentName}
                         </p>
@@ -1658,7 +1658,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'sessions' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Upcoming Sessions</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Upcoming Sessions</h2>
               <Button className="bg-primary hover:bg-[#216982]">
                 <Calendar className="w-4 h-4 mr-2" />
                 Manage Availability
@@ -1676,7 +1676,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-[#1B2733]">{session.patientName}</h4>
+                        <h4 className="font-semibold text-[#132F43]">{session.patientName}</h4>
                         <p className="text-sm text-[#5A6B7A]">
                           {session.type} • {session.duration} min
                         </p>
@@ -1713,7 +1713,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {upcomingSessions.length === 0 && (
                 <Card className="p-12 text-center">
                   <Calendar className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-                  <h3 className="text-lg font-medium text-[#1B2733] mb-2">
+                  <h3 className="text-lg font-medium text-[#132F43] mb-2">
                     No upcoming sessions
                   </h3>
                   <p className="text-[#5A6B7A]">
@@ -1762,7 +1762,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">AI Patient Summaries</h2>
+                <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">AI Patient Summaries</h2>
                 <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   AI-generated insights for your patients. Submit care plan suggestions that parents can approve.
                 </p>
@@ -1774,7 +1774,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-4 border-[#6B9080]/30 bg-[#6B9080]/5">
                 <div className="flex items-center gap-2 mb-3">
                   <MessageSquare className="w-5 h-5 text-[#6B9080]" />
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">
                     Family Questions Awaiting Review ({pendingBCBAThreads.length})
                   </h3>
                 </div>
@@ -1789,7 +1789,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-sm font-medium text-[#1B2733] dark:text-white">
+                          <p className="text-sm font-medium text-[#132F43] dark:text-white">
                             {thread.child_name ? `Re: ${thread.child_name}` : thread.parent_name || 'Family'}
                           </p>
                           <span className="text-sm text-[#5A6B7A]">·</span>
@@ -1819,7 +1819,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Patient list sidebar */}
               <Card className="p-4 lg:col-span-1">
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Select Client</h3>
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">Select Client</h3>
                 <div className="space-y-2">
                   {patients
                     .filter(p => p.profileAccess === 'granted')
@@ -1840,7 +1840,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                             </span>
                           </div>
                           <div>
-                            <p className="font-medium text-[#1B2733] dark:text-white">{patient.childName}</p>
+                            <p className="font-medium text-[#132F43] dark:text-white">{patient.childName}</p>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{patient.age} years old</p>
                           </div>
                         </div>
@@ -1868,7 +1868,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 ) : (
                   <Card className="p-12 text-center">
                     <Brain className="w-16 h-16 mx-auto mb-4 text-neutral-200 dark:text-[#5A6B7A]" />
-                    <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                    <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                       Select a Patient
                     </h3>
                     <p className="text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
@@ -1885,7 +1885,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'earnings' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Earnings Overview</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Earnings Overview</h2>
               <Button variant="outline">
                 <DollarSign className="w-4 h-4 mr-2" />
                 Request Payout
@@ -1905,7 +1905,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <Card key={i} className="p-5">
                   <p className="text-sm text-[#5A6B7A] mb-1">{stat.label}</p>
                   <div className="flex items-end justify-between">
-                    <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{stat.value}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-[#132F43]">{stat.value}</p>
                     {stat.trend && (
                       <span className={`text-sm font-medium ${stat.color === 'teal' ? 'text-[#6B9080]' : 'text-green-600'}`}>
                         <TrendingUp className="w-3.5 h-3.5 inline mr-1" />
@@ -1919,7 +1919,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
             {/* Recent Transactions — sample list shown ONLY in demo mode */}
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] mb-4">Recent Sessions</h3>
+              <h3 className="font-semibold text-[#132F43] mb-4">Recent Sessions</h3>
               {!isDemoMode() && (
                 <div className="py-8 text-center">
                   <DollarSign className="w-10 h-10 text-neutral-300 mx-auto mb-2" />
@@ -1941,12 +1941,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium text-[#1B2733]">{tx.patient}</p>
+                        <p className="font-medium text-[#132F43]">{tx.patient}</p>
                         <p className="text-sm text-[#5A6B7A]">{tx.type} • {tx.date}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-[#1B2733]">${tx.amount}</p>
+                      <p className="font-semibold text-[#132F43]">${tx.amount}</p>
                       <Badge className={tx.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}>
                         {tx.status}
                       </Badge>
@@ -1960,16 +1960,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
         {activeTab === 'settings' && (
           <div className="max-w-2xl space-y-3 sm:space-y-4 sm:space-y-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Settings</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Settings</h2>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] mb-4">Profile</h3>
+              <h3 className="font-semibold text-[#132F43] mb-4">Profile</h3>
               <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-2xl font-semibold">
                   {provider.name.split(' ').map(n => n[0]).join('')}
                 </div>
                 <div>
-                  <p className="font-semibold text-[#1B2733]">{provider.name}</p>
+                  <p className="font-semibold text-[#132F43]">{provider.name}</p>
                   <p className="text-[#5A6B7A]">{provider.credentials}</p>
                   <Button variant="ghost" size="sm" className="mt-1 text-[#6B9080] -ml-2">
                     Change photo
@@ -2002,7 +2002,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Credentials & Verification</h3>
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">Credentials & Verification</h3>
               <p className="text-neutral-600 dark:text-slate-400 mb-4 text-sm">
                 Verified credentials build trust with families and enable insurance billing
               </p>
@@ -2010,7 +2010,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-2">Practice Branding</h3>
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-2">Practice Branding</h3>
               <p className="text-[#5A6B7A] dark:text-slate-400 text-sm mb-4">
                 Customize how your practice appears to families. Your logo and name will display in the header with "powered by Aminy."
               </p>
@@ -2037,14 +2037,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
-                      value={brandingForm.primaryColor || '#4E93A8'}
+                      value={brandingForm.primaryColor || '#2A7D99'}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
                       className="w-10 h-10 rounded-lg border border-neutral-200 cursor-pointer"
                     />
                     <Input
                       value={brandingForm.primaryColor}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
-                      placeholder="#4E93A8"
+                      placeholder="#2A7D99"
                       className="flex-1"
                     />
                   </div>
@@ -2085,12 +2085,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#2A7D99' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}
                       <div>
-                        <span className="text-sm font-semibold text-[#1B2733] dark:text-white">{branding.orgName}</span>
+                        <span className="text-sm font-semibold text-[#132F43] dark:text-white">{branding.orgName}</span>
                         <span className="block text-[9px] text-neutral-400">powered by Aminy</span>
                       </div>
                     </div>
@@ -2100,7 +2100,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] mb-4">Availability</h3>
+              <h3 className="font-semibold text-[#132F43] mb-4">Availability</h3>
               <p className="text-neutral-600 mb-4">
                 Set your available hours for patient bookings
               </p>
@@ -2111,7 +2111,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </Card>
 
             <Card className="p-4 sm:p-5 md:p-6">
-              <h3 className="font-semibold text-[#1B2733] mb-4">Notifications</h3>
+              <h3 className="font-semibold text-[#132F43] mb-4">Notifications</h3>
               <div className="space-y-3">
                 {[
                   'New booking notifications',
@@ -2153,7 +2153,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         ) : activeTab === 'coordination' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Care Coordination</h2>
+              <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">Care Coordination</h2>
               <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                 Select a patient with granted access to view their care team
               </p>
@@ -2175,7 +2175,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         </span>
                       </div>
                       <div>
-                        <h4 className="font-medium text-[#1B2733] dark:text-white">{patient.childName}</h4>
+                        <h4 className="font-medium text-[#132F43] dark:text-white">{patient.childName}</h4>
                         <p className="text-sm text-[#5A6B7A] dark:text-slate-400">{patient.parentName}</p>
                       </div>
                     </div>
@@ -2189,7 +2189,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             {patients.filter(p => p.profileAccess === 'granted').length === 0 && (
               <Card className="p-12 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4 text-neutral-300 dark:text-[#5A6B7A]" />
-                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                   No Patients with Access
                 </h3>
                 <p className="text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
@@ -2205,7 +2205,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Clinical Notes</h2>
+                <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">Clinical Notes</h2>
                 <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                   SOAP notes, ABA session notes, and progress documentation
                 </p>
@@ -2231,7 +2231,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 border-2 border-[#6B9080]/20 dark:border-[#6B9080]/30 bg-white dark:bg-slate-900">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-[#1B2733] dark:text-white">New Clinical Note</h3>
+                    <h3 className="font-semibold text-[#132F43] dark:text-white">New Clinical Note</h3>
                     <button
                       type="button"
                       onClick={() => { setShowNoteEditor(false); setEditingNote(null); }}
@@ -2249,7 +2249,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                         <Sparkles className="w-3.5 h-3.5 inline mr-1 text-amber-500" />CPT Code
                       </label>
                       <select
-                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#132F43] dark:text-white text-sm"
                         value={editingNote.cptCode || ''}
                         onChange={e => {
                           const code = e.target.value;
@@ -2294,7 +2294,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <div>
                       <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">Client</label>
                       <select
-                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
+                        className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#132F43] dark:text-white text-sm"
                         value={editingNote.patientName}
                         onChange={e => setEditingNote(prev => prev ? { ...prev, patientName: e.target.value } : prev)}
                       >
@@ -2329,7 +2329,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       Note Template {editingNote.cptCode ? <span className="text-sm text-[#6B9080] font-normal">(auto-selected by CPT)</span> : ''}
                     </label>
                     <select
-                      className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white text-sm"
+                      className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#132F43] dark:text-white text-sm"
                       value={editingNote.noteType}
                       onChange={e => setEditingNote(prev => prev ? { ...prev, noteType: e.target.value as NoteType, content: {} } : prev)}
                     >
@@ -2416,7 +2416,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{note.patientName}</h3>
+                        <h3 className="font-semibold text-[#132F43] dark:text-white">{note.patientName}</h3>
                         <Badge className={tmpl.badgeClass}>{tmpl.badge}</Badge>
                         {note.cptCode && (
                           <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-mono text-xs">
@@ -2538,7 +2538,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Payout Setup</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">Payout Setup</h3>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                     Configure your bank account for scheduled biweekly payouts via Aminy
                   </p>
@@ -2561,7 +2561,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'claims' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">Claims & Billing</h2>
+              <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">Claims & Billing</h2>
               <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
                 Aminy submits all claims under the Aminy Network group NPI. Payments are issued on a net-30 basis after payer remittance; contact billing support if a payer is delayed beyond 45 days.
               </p>
@@ -2574,7 +2574,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">Denial Workbench</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">Denial Workbench</h3>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                     Review and appeal denied claims with AI-assisted justifications
                   </p>
@@ -2597,7 +2597,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         {activeTab === 'my-practice' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
+              <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">
                 {isOrgCaseload ? 'Organization Caseload' : 'My Practice'}
               </h2>
               <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
@@ -2636,7 +2636,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 <Card className="p-4 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <h3 className="font-semibold text-[#1B2733] dark:text-white">
+                      <h3 className="font-semibold text-[#132F43] dark:text-white">
                         {isOrgCaseload ? 'Caseload RBTs' : 'Your RBTs'}
                       </h3>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
@@ -2677,8 +2677,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Practice Launch Score</p>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mt-1">{practiceSummary.headline}</h3>
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Practice Launch Score</p>
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mt-1">{practiceSummary.headline}</h3>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 max-w-2xl">{practiceSummary.supportingCopy}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {(provider?.licensedStates || []).slice(0, 4).map((state) => (
@@ -2708,7 +2708,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                           {item.completed ? <CheckCircle className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
                         </div>
                         <div>
-                          <p className="font-medium text-[#1B2733] dark:text-white">{item.label}</p>
+                          <p className="font-medium text-[#132F43] dark:text-white">{item.label}</p>
                           <p className="text-sm text-neutral-600 dark:text-slate-300 mt-1">{item.description}</p>
                         </div>
                       </div>
@@ -2717,8 +2717,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 <div className="mt-5 grid gap-3 lg:grid-cols-2">
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Supported Market</p>
-                    <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Supported Market</p>
+                    <h4 className="mt-2 text-base font-semibold text-[#132F43] dark:text-white">
                       {practiceMarketCoverage ? practiceMarketCoverage.label : 'Expand to a supported state'}
                     </h4>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
@@ -2733,8 +2733,8 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     ) : null}
                   </div>
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Claim-Ready Queue</p>
-                    <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Claim-Ready Queue</p>
+                    <h4 className="mt-2 text-base font-semibold text-[#132F43] dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
                       Aminy assembles claim-ready visit packets for supported-state payer rails. Biller review stays explicit before any submission lane runs.
                     </p>
@@ -2762,7 +2762,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex items-center gap-2 mb-1">
                   <DollarSign className="w-5 h-5 text-[#6B9080]" />
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white">How you get paid</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white">How you get paid</h3>
                 </div>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
                   Choose how sessions are billed. You can run cash-pay today and layer in payer-network billing as it becomes available.
@@ -2771,7 +2771,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {/* Cash-pay — LIVE */}
                   <div className="rounded-2xl border border-[#6B9080]/20 dark:border-[#6B9080]/30 bg-[#6B9080]/10/60 dark:bg-[#6B9080]/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-[#1B2733] dark:text-white">Cash-pay sessions</h4>
+                      <h4 className="font-semibold text-[#132F43] dark:text-white">Cash-pay sessions</h4>
                       <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">Live</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
@@ -2790,7 +2790,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {/* Payer-network billing — ROADMAP, interest capture */}
                   <div className="rounded-2xl border border-[#E8E4DF] dark:border-teal-900/40 bg-[#6B9080]/10/60 dark:bg-[#1a3a5c]/10 p-4 flex flex-col">
                     <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-semibold text-[#1B2733] dark:text-white">Payer-network billing</h4>
+                      <h4 className="font-semibold text-[#132F43] dark:text-white">Payer-network billing</h4>
                       <Badge className="bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#1a3a5c]/40 dark:text-[#7BA7BC]">Early access</Badge>
                     </div>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 flex-1">
@@ -2824,7 +2824,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
-                    <h3 className="font-semibold text-[#1B2733] dark:text-white">
+                    <h3 className="font-semibold text-[#132F43] dark:text-white">
                       {isOrgCaseload ? 'Manage your caseload RBTs' : 'Build out your RBT team'}
                     </h3>
                     <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
@@ -2863,7 +2863,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="p-5 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between sticky top-0 bg-white dark:bg-slate-900">
               <div>
-                <h2 className="text-base font-semibold text-[#1B2733] dark:text-white">Review parent question</h2>
+                <h2 className="text-base font-semibold text-[#132F43] dark:text-white">Review parent question</h2>
                 {reviewingThread.child_name && (
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">Re: {reviewingThread.child_name}</p>
                 )}
@@ -2878,13 +2878,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </div>
             <div className="p-5 space-y-4">
               <div>
-                <p className="text-xs font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
-                <p className="text-sm text-[#1B2733] dark:text-slate-100 bg-[#FAF7F2] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
+                <p className="text-sm font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
+                <p className="text-sm text-[#132F43] dark:text-slate-100 bg-[#F6FBFB] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
+                <p className="text-sm font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
                 <textarea
-                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#4E93A8]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/40 focus:border-[#4E93A8]"
+                  className="w-full min-h-[160px] text-sm text-[#132F43] dark:text-white bg-[#F6FBFB] dark:bg-slate-800 border border-[#2A7D99]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/40 focus:border-[#2A7D99]"
                   value={reviewResponseText}
                   onChange={(e) => setReviewResponseText(e.target.value)}
                   placeholder="Edit the AI draft or write your own response…"
@@ -2892,7 +2892,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </div>
               <div className="flex gap-3 pt-1">
                 <Button
-                  className="flex-1 bg-[#4E93A8] hover:bg-[#376E80] text-white rounded-xl disabled:opacity-50"
+                  className="flex-1 bg-[#2A7D99] hover:bg-[#376E80] text-white rounded-xl disabled:opacity-50"
                   disabled={isSubmittingResponse || !reviewResponseText.trim()}
                   onClick={async () => {
                     if (!reviewingThread || !reviewResponseText.trim()) return;
@@ -2956,7 +2956,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
           <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-white dark:bg-slate-900">
             <div className="p-4 border-b border-neutral-100 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-900 z-10 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
                   <FileText className="w-5 h-5 text-[#6B9080]" />
                   Superbill — {generatedSuperbill.patientName}
                 </h2>
@@ -3033,7 +3033,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     </span>
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">
+                    <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">
                       {selectedPatient.childName}
                     </h2>
                     <p className="text-[#5A6B7A]">
@@ -3085,7 +3085,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Conditions */}
               <div>
-                <h3 className="font-medium text-[#1B2733] mb-2">Conditions</h3>
+                <h3 className="font-medium text-[#132F43] mb-2">Conditions</h3>
                 <div className="flex flex-wrap gap-2">
                   {selectedPatient.conditions.map(condition => (
                     <Badge key={condition} className={getConditionColor(condition)}>
@@ -3097,7 +3097,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
               {/* Session History */}
               <div>
-                <h3 className="font-medium text-[#1B2733] mb-2">Session History</h3>
+                <h3 className="font-medium text-[#132F43] mb-2">Session History</h3>
                 <p className="text-neutral-600">
                   {selectedPatient.totalSessions} sessions completed
                 </p>
@@ -3112,7 +3112,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               {/* Next Session */}
               {selectedPatient.nextSession && (
                 <div>
-                  <h3 className="font-medium text-[#1B2733] mb-2">Next Session</h3>
+                  <h3 className="font-medium text-[#132F43] mb-2">Next Session</h3>
                   <div className="flex items-center gap-3 p-3 bg-[#6B9080]/10 rounded-lg">
                     <Calendar className="w-5 h-5 text-[#6B9080]" />
                     <span className="text-[#6B9080]">

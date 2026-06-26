@@ -64,7 +64,7 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const TIMES = ['Morning (8am–12pm)', 'Afternoon (12pm–5pm)', 'Evening (5pm–8pm)'];
 
 const URGENCY_OPTIONS: { id: Urgency; label: string; color: string }[] = [
-  { id: 'routine', label: 'Routine — no rush', color: 'bg-[#F0EDE8] text-[#3A4A57]' },
+  { id: 'routine', label: 'Routine — no rush', color: 'bg-[#EDF4F7] text-[#3A4A57]' },
   { id: 'within-2-weeks', label: 'Within 2 weeks', color: 'bg-amber-50 text-amber-700' },
   { id: 'urgent', label: 'Urgent need', color: 'bg-red-50 text-red-700' },
 ];
@@ -172,7 +172,7 @@ export function ProviderWaitlist({
   if (submitted) {
     return (
       <div
-        className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white"
+        className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white"
         style={{ overflowX: 'hidden', overflowY: 'auto' }}
       >
         <div className="max-w-lg mx-auto px-4 py-8">
@@ -196,7 +196,7 @@ export function ProviderWaitlist({
               <CheckCircle className="w-8 h-8 text-[#6B9080]" />
             </div>
 
-            <h1 className="text-2xl font-bold text-[#1B2733] mb-2">
+            <h1 className="text-2xl font-bold text-[#132F43] mb-2">
               You're on the list!
             </h1>
 
@@ -246,7 +246,7 @@ export function ProviderWaitlist({
                     className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-[#E8E4DF] text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
                   >
                     <item.icon className="w-4 h-4 text-[#6B9080]" />
-                    <span className="text-sm font-semibold text-[#1B2733]">
+                    <span className="text-sm font-semibold text-[#132F43]">
                       {item.label}
                     </span>
                     <span className="text-sm text-slate-400">{item.desc}</span>
@@ -272,13 +272,13 @@ export function ProviderWaitlist({
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors"
+                className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">
+              <h1 className="text-base font-semibold text-[#132F43]">
                 Join Provider Waitlist
               </h1>
               <p className="text-sm text-slate-400">We'll find your match</p>
@@ -299,7 +299,7 @@ export function ProviderWaitlist({
               Growing in your area
             </Badge>
           </div>
-          <h2 className="text-xl font-bold text-[#1B2733] mb-2">
+          <h2 className="text-xl font-bold text-[#132F43] mb-2">
             We're actively recruiting providers for your area
           </h2>
           <p className="text-sm text-[#5A6B7A]">
@@ -322,7 +322,7 @@ export function ProviderWaitlist({
                 className="flex-1 bg-white rounded-xl border border-[#E8E4DF] p-2.5 text-center"
               >
                 <stat.icon className="w-4 h-4 text-primary mx-auto mb-1" />
-                <p className="text-sm font-bold text-[#1B2733]">{stat.label}</p>
+                <p className="text-sm font-bold text-[#132F43]">{stat.label}</p>
                 <p className="text-sm text-slate-400">{stat.sub}</p>
               </div>
             ))}
@@ -349,7 +349,7 @@ export function ProviderWaitlist({
               value={form.name}
               onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
               placeholder="Parent name"
-              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
             />
           </div>
 
@@ -363,7 +363,7 @@ export function ProviderWaitlist({
               value={form.email}
               onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
               placeholder="you@example.com"
-              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
             />
           </div>
 
@@ -392,7 +392,7 @@ export function ProviderWaitlist({
                     }`}
                   />
                   <div>
-                    <p className="text-sm font-semibold text-[#1B2733]">
+                    <p className="text-sm font-semibold text-[#132F43]">
                       {svc.label}
                     </p>
                     <p className="text-sm text-slate-400">{svc.desc}</p>
@@ -413,7 +413,7 @@ export function ProviderWaitlist({
               onChange={(e) => setForm((prev) => ({ ...prev, zip: e.target.value }))}
               placeholder="85018"
               maxLength={5}
-              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+              className="w-full px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
             />
           </div>
 
@@ -431,7 +431,7 @@ export function ProviderWaitlist({
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     form.preferredDays.includes(day)
                       ? 'bg-primary text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   {day}
@@ -557,7 +557,7 @@ export function ProviderWaitlist({
                 className="flex flex-col gap-1 p-3 bg-white rounded-xl border border-[#E8E4DF] text-left hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors"
               >
                 <item.icon className="w-4 h-4 text-[#6B9080]" />
-                <span className="text-sm font-semibold text-[#1B2733]">
+                <span className="text-sm font-semibold text-[#132F43]">
                   {item.label}
                 </span>
                 <span className="text-sm text-slate-400">{item.desc}</span>

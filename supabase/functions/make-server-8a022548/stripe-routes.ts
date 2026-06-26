@@ -77,7 +77,7 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || '';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 const RESEND_VERIFIED_DOMAIN = Deno.env.get('RESEND_VERIFIED_DOMAIN') === 'true';
-const FROM_EMAIL = RESEND_VERIFIED_DOMAIN ? 'Aminy <hello@aminy.ai>' : 'Aminy <onboarding@resend.dev>';
+const FROM_EMAIL = RESEND_VERIFIED_DOMAIN ? 'Aminy <noreply@aminy.ai>' : 'Aminy <onboarding@resend.dev>';
 
 async function sendSmsSilent(to: string, body: string): Promise<void> {
   const sid = Deno.env.get('TWILIO_ACCOUNT_SID');
@@ -202,11 +202,11 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
+          .logo { font-size: 28px; font-weight: 600; color: #43AA8B; }
           .content { background: #f8f9fa; padding: 30px; border-radius: 12px; }
-          .amount { font-size: 24px; font-weight: 600; color: #0891b2; }
+          .amount { font-size: 24px; font-weight: 600; color: #43AA8B; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #43AA8B; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -243,10 +243,10 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
+          .logo { font-size: 28px; font-weight: 600; color: #43AA8B; }
           .content { background: #fff5f5; padding: 30px; border-radius: 12px; border: 1px solid #fed7d7; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #43AA8B; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -287,11 +287,11 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
+          .logo { font-size: 28px; font-weight: 600; color: #43AA8B; }
           .content { background: #f8f9fa; padding: 30px; border-radius: 12px; }
           .highlight { background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 20px 0; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #43AA8B; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -331,14 +331,14 @@ const emailTemplates = {
           body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
           .header { text-align: center; margin-bottom: 30px; }
-          .logo { font-size: 28px; font-weight: 600; color: #0891b2; }
+          .logo { font-size: 28px; font-weight: 600; color: #43AA8B; }
           .content { background: linear-gradient(135deg, #f8f9fa 0%, #e8f4f8 100%); padding: 30px; border-radius: 12px; }
-          .countdown { font-size: 48px; font-weight: 700; color: #0891b2; text-align: center; margin: 20px 0; }
+          .countdown { font-size: 48px; font-weight: 700; color: #43AA8B; text-align: center; margin: 20px 0; }
           .features { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .feature { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
           .check { color: #22c55e; font-weight: bold; }
           .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-          .button { display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
+          .button { display: inline-block; background: #43AA8B; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 20px; }
         </style>
       </head>
       <body>
@@ -1116,7 +1116,7 @@ export async function handleWebhook(req: Request): Promise<Response> {
                   'Your Telehealth Visit is Confirmed - Aminy',
                   `
                     <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                      <h1 style="color: #0891b2;">Your Visit is Confirmed!</h1>
+                      <h1 style="color: #43AA8B;">Your Visit is Confirmed!</h1>
                       <p>Hi ${customerName},</p>
                       <p>Your telehealth appointment has been scheduled and paid for.</p>
                       <div style="background: #f5f5f5; padding: 20px; border-radius: 12px; margin: 20px 0;">
@@ -1243,7 +1243,7 @@ export async function handleWebhook(req: Request): Promise<Response> {
                         <p>We were unable to process your latest payment. Don't worry — your full access continues until <strong>${graceEndDate}</strong>.</p>
                         <p>Please update your payment method before then to avoid losing your features:</p>
                         <p style="text-align: center; margin: 24px 0;">
-                          <a href="https://app.aminy.ai/settings/subscription" style="display: inline-block; background: #0891b2; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;">Update Payment Method</a>
+                          <a href="https://app.aminy.ai/settings/subscription" style="display: inline-block; background: #43AA8B; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none;">Update Payment Method</a>
                         </p>
                         <p>If you have any questions, just reply to this email.</p>
                         <p>— The Aminy Team</p>

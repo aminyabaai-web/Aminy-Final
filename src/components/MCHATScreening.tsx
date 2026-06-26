@@ -126,7 +126,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                             <Button variant="ghost" size="sm" onClick={onBack}>
                                 <ChevronLeft className="w-4 h-4" />
                             </Button>
-                            <h1 className="text-lg font-semibold text-[#1B2733]">M-CHAT-R™ Screening</h1>
+                            <h1 className="text-lg font-semibold text-[#132F43]">M-CHAT-R™ Screening</h1>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         </div>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-center text-[#1B2733] mb-4">
+                    <h2 className="text-2xl font-bold text-center text-[#132F43] mb-4">
                         Check {childName}'s Development
                     </h2>
 
@@ -147,8 +147,8 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         It takes just 2 minutes to complete.
                     </p>
 
-                    <Card className="p-5 bg-[#FAF7F2] border border-[#E8E4DF] mb-8">
-                        <h3 className="font-semibold text-[#1B2733] mb-2 flex items-center">
+                    <Card className="p-5 bg-[#F6FBFB] border border-[#E8E4DF] mb-8">
+                        <h3 className="font-semibold text-[#132F43] mb-2 flex items-center">
                             <Info className="w-4 h-4 text-blue-500 mr-2" />
                             Before you begin
                         </h3>
@@ -176,7 +176,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
             <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
                 <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
                     <div className="max-w-2xl mx-auto px-4 py-4">
-                        <h1 className="text-lg font-semibold text-[#1B2733]">Screening Complete</h1>
+                        <h1 className="text-lg font-semibold text-[#132F43]">Screening Complete</h1>
                     </div>
                 </div>
 
@@ -187,7 +187,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         ) : (
                             <AlertCircle className={`w-12 h-12 ${riskColor} mb-4`} />
                         )}
-                        <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
+                        <h2 className="text-2xl font-bold text-[#132F43] mb-2">
                             {riskLevel} Risk Profile
                         </h2>
                         <p className="text-[#3A4A57] text-lg">
@@ -196,7 +196,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                     </div>
 
                     <Card className="p-6 mb-8 border-[#E8E4DF]">
-                        <h3 className="font-semibold text-[#1B2733] mb-3 text-lg">What does this mean?</h3>
+                        <h3 className="font-semibold text-[#132F43] mb-3 text-lg">What does this mean?</h3>
                         <p className="text-[#5A6B7A] mb-4 whitespace-pre-line leading-relaxed">
                             {recommendation}
                         </p>
@@ -230,7 +230,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         <Button variant="ghost" size="sm" onClick={() => currentStep === 0 ? setCurrentStep(-1) : setCurrentStep(prev => prev - 1)}>
                             <ChevronLeft className="w-4 h-4" />
                         </Button>
-                        <h1 className="text-lg font-semibold text-[#1B2733] text-center flex-1">
+                        <h1 className="text-lg font-semibold text-[#132F43] text-center flex-1">
                             Question {currentStep + 1} of {MCH_QUESTIONS.length}
                         </h1>
                         <div className="w-8" /> {/* Spacer */}
@@ -240,7 +240,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
             </div>
 
             <div className="max-w-xl mx-auto px-4 py-12">
-                <h2 className="text-xl font-bold text-[#1B2733] mb-6 leading-tight">
+                <h2 className="text-xl font-bold text-[#132F43] mb-6 leading-tight">
                     {question.text}
                 </h2>
 
@@ -273,7 +273,7 @@ export function MCHATScreening({ onComplete, onBack, childName = "your child" }:
                         animate={{ opacity: 1, y: 0 }}
                         className="mt-8"
                     >
-                        <div className="bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border border-[#E8E4DF] p-6 rounded-2xl shadow-sm mb-6">
+                        <div className="bg-gradient-to-r from-[#F6FBFB] to-cyan-50 border border-[#E8E4DF] p-6 rounded-2xl shadow-sm mb-6">
                             <div className="flex gap-3">
                                 <Activity className="w-6 h-6 text-[#6B9080] shrink-0 mt-1" />
                                 <div>

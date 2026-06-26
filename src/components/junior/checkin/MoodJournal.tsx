@@ -288,7 +288,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
       {/* Header */}
       <div
         className="px-4 pt-4 pb-5 rounded-b-3xl"
-        style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #2EC4B6 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #2EC4B6 100%)' }}
       >
         <div className="flex items-center gap-3 mb-3">
           <button
@@ -363,14 +363,14 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                   className="flex flex-col items-center gap-1 flex-1 py-2 rounded-xl transition-all"
                   style={{
                     backgroundColor: selected ? '#E8F5E9' : 'transparent',
-                    border: selected ? '2px solid #4E93A8' : '2px solid transparent',
+                    border: selected ? '2px solid #2A7D99' : '2px solid transparent',
                     minWidth: 44,
                     minHeight: 44,
                   }}
                   whileTap={{ scale: 0.9 }}
                 >
                   <span style={{ fontSize: 28 }}>{face.emoji}</span>
-                  <span className="text-sm" style={{ color: selected ? '#4E93A8' : '#888' }}>
+                  <span className="text-sm" style={{ color: selected ? '#2A7D99' : '#888' }}>
                     {face.label}
                   </span>
                 </motion.button>
@@ -383,7 +383,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                 transition={{ duration: 0.5 }}
                 className="absolute inset-0 flex items-center justify-center pointer-events-none"
               >
-                <Sparkles size={28} color="#4E93A8" />
+                <Sparkles size={28} color="#2A7D99" />
               </motion.div>
             )}
           </div>
@@ -429,14 +429,14 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
               const isToday = d === today;
               return (
                 <div key={d} className="flex flex-col items-center gap-1">
-                  <span className="text-sm font-medium" style={{ color: isToday ? '#4E93A8' : '#888' }}>
+                  <span className="text-sm font-medium" style={{ color: isToday ? '#2A7D99' : '#888' }}>
                     {dayLabel(d)}
                   </span>
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center"
                     style={{
                       backgroundColor: face ? '#E8F5E9' : '#F5F5F5',
-                      border: isToday ? '2px solid #4E93A8' : '2px solid transparent',
+                      border: isToday ? '2px solid #2A7D99' : '2px solid transparent',
                     }}
                   >
                     {face ? (
@@ -485,9 +485,9 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                   .join(' ');
                 return (
                   <>
-                    <path d={pathD} fill="none" stroke="#4E93A8" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                    <path d={pathD} fill="none" stroke="#2A7D99" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
                     {points.map((p, i) => (
-                      <circle key={i} cx={p.x} cy={p.y} r={3} fill="#4E93A8" />
+                      <circle key={i} cx={p.x} cy={p.y} r={3} fill="#2A7D99" />
                     ))}
                   </>
                 );
@@ -518,7 +518,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                     className="w-full flex items-center gap-3 p-3 rounded-2xl transition-all"
                     style={{
                       backgroundColor: doneToday ? '#E8F5E9' : '#FAFAFA',
-                      border: doneToday ? '2px solid #4E93A8' : '2px solid #EEEEEE',
+                      border: doneToday ? '2px solid #2A7D99' : '2px solid #EEEEEE',
                       minHeight: 44,
                     }}
                     whileTap={{ scale: 0.97 }}
@@ -528,7 +528,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                       <p
                         className="text-sm font-semibold"
                         style={{
-                          color: doneToday ? '#4E93A8' : '#333',
+                          color: doneToday ? '#2A7D99' : '#333',
                           textDecoration: doneToday ? 'line-through' : 'none',
                         }}
                       >
@@ -543,7 +543,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                               key={d}
                               className="w-3 h-3 rounded-full"
                               style={{
-                                backgroundColor: done ? '#4E93A8' : '#E0E0E0',
+                                backgroundColor: done ? '#2A7D99' : '#E0E0E0',
                                 transition: 'background-color 0.3s ease',
                               }}
                             />
@@ -564,7 +564,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center"
                       style={{
-                        backgroundColor: doneToday ? '#4E93A8' : '#E0E0E0',
+                        backgroundColor: doneToday ? '#2A7D99' : '#E0E0E0',
                         transition: 'background-color 0.3s ease',
                       }}
                     >
@@ -579,7 +579,7 @@ export default function MoodJournal({ childName, onBack }: MoodJournalProps) {
                       transition={{ duration: 0.5 }}
                       className="absolute inset-0 flex items-center justify-center pointer-events-none"
                     >
-                      <Sparkles size={24} color="#4E93A8" />
+                      <Sparkles size={24} color="#2A7D99" />
                     </motion.div>
                   )}
                 </div>

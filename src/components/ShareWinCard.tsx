@@ -31,7 +31,7 @@ const winTypeConfig: Record<WinType, { icon: React.ReactNode; gradient: string; 
   },
   goal: {
     icon: <Trophy className="w-5 h-5" />,
-    gradient: 'from-[#FAF7F2] to-[#F0EDE8] dark:from-blue-900/20 dark:to-cyan-900/20',
+    gradient: 'from-[#F6FBFB] to-[#EDF4F7] dark:from-blue-900/20 dark:to-cyan-900/20',
     label: 'Goal Completed!'
   },
   daily: {
@@ -147,7 +147,7 @@ export function ShareWinCard({
           className="bg-white/60 dark:bg-black/20 hover:bg-sky-50 dark:hover:bg-sky-900/30"
           aria-label="Share on X"
         >
-          <X className="w-4 h-4 text-[#1B2733]" />
+          <X className="w-4 h-4 text-[#132F43]" />
         </Button>
         <Button
           onClick={shareToFacebook}

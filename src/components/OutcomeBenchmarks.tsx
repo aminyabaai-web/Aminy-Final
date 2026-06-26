@@ -104,7 +104,7 @@ export function OutcomeBenchmarks({
     if (percentile >= 75) return 'bg-green-100 text-green-700';
     if (percentile >= 50) return 'bg-blue-100 text-blue-700';
     if (percentile >= 25) return 'bg-amber-100 text-amber-700';
-    return 'bg-[#F0EDE8] text-[#3A4A57]';
+    return 'bg-[#EDF4F7] text-[#3A4A57]';
   };
 
   return (
@@ -116,7 +116,7 @@ export function OutcomeBenchmarks({
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-[#1B2733]">Progress Benchmarks</h3>
+            <h3 className="font-semibold text-[#132F43]">Progress Benchmarks</h3>
             <p className="text-sm text-[#5A6B7A]">
               How {childName} compares to similar families
             </p>
@@ -134,7 +134,7 @@ export function OutcomeBenchmarks({
       </div>
 
       {/* Overall Percentile Hero */}
-      <div className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 rounded-xl border border-[#6B9080]/20">
+      <div className="mb-4 sm:mb-6 p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 rounded-xl border border-[#6B9080]/20">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-[#6B9080] mb-1">Overall Progress</p>
@@ -220,7 +220,7 @@ function BenchmarkRow({
         <div className="flex items-center gap-2">
           <span className="text-lg">{display.icon}</span>
           <div>
-            <span className="font-medium text-[#1B2733]">{display.displayName}</span>
+            <span className="font-medium text-[#132F43]">{display.displayName}</span>
             <p className="text-sm text-[#5A6B7A]">{display.description}</p>
           </div>
         </div>
@@ -230,7 +230,7 @@ function BenchmarkRow({
               ? 'bg-green-100 text-green-700'
               : benchmark.percentileBreakpoints.p50 <= benchmark.userPercentile
               ? 'bg-blue-100 text-blue-700'
-              : 'bg-[#F0EDE8] text-[#3A4A57]'
+              : 'bg-[#EDF4F7] text-[#3A4A57]'
           }`}>
             {benchmark.userPercentile}th
           </Badge>
@@ -244,7 +244,7 @@ function BenchmarkRow({
       </div>
 
       {/* Percentile visualization */}
-      <div className="relative h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+      <div className="relative h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
         {/* Quartile markers */}
         <div
           className="absolute top-0 bottom-0 w-0.5 bg-gray-300"
@@ -300,7 +300,7 @@ export function BenchmarkWidget({
 }) {
   return (
     <Card
-      className="p-4 bg-gradient-to-br from-[#FAF7F2] to-blue-50 border-[#6B9080]/20 cursor-pointer hover:shadow-md transition-shadow"
+      className="p-4 bg-gradient-to-br from-[#F6FBFB] to-blue-50 border-[#6B9080]/20 cursor-pointer hover:shadow-md transition-shadow"
       onClick={onViewDetails}
     >
       <div className="flex items-center gap-3">

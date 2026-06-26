@@ -133,18 +133,18 @@ export function NPSSurveyModal({
             {/* Header */}
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] rounded-full flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-[#1B2733] dark:text-white">Quick Feedback</h2>
+                  <h2 className="font-semibold text-[#132F43] dark:text-white">Quick Feedback</h2>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Help us improve Aminy</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
                 aria-label="Close survey"
-                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 rounded-lg transition-colors"
+                className="p-2 hover:bg-[#EDF4F7] dark:hover:bg-slate-800 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-[#8A9BA8]" />
               </button>
@@ -166,7 +166,7 @@ export function NPSSurveyModal({
                       className={`w-10 h-10 rounded-full font-semibold transition-all ${
                         score === value
                           ? getScoreColor(value) + ' text-white scale-110'
-                          : 'bg-[#F0EDE8] dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
+                          : 'bg-[#EDF4F7] dark:bg-slate-800 text-[#3A4A57] dark:text-slate-300 hover:bg-[#E8E4DF] dark:hover:bg-slate-700'
                       }`}
                     >
                       {value}
@@ -263,10 +263,10 @@ export function NPSSurveyModal({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                   Thank you!
                 </h3>
                 <p className="text-[#5A6B7A] dark:text-slate-400">

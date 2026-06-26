@@ -97,7 +97,7 @@ export function OptimizedLCPImage({
             justifyContent: 'center',
             background: '#f5f5f5',
             borderRadius: '12px',
-            color: '#4E93A8',
+            color: '#2A7D99',
             fontWeight: 600,
             fontSize: '20px',
           }}

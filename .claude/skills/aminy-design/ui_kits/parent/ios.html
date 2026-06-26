@@ -1,0 +1,153 @@
+<!-- @dsCard group="Parent app" viewport="1280x980" name="iOS system surfaces" subtitle="Push notifications · iMessage reminders · calendar invite · App Store page" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aminy — iOS System Surfaces</title>
+<link rel="icon" href="../../assets/favicon.svg"/>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font-ui);background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));padding:30px 20px 60px;-webkit-font-smoothing:antialiased;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px;max-width:1480px;margin:0 auto;justify-items:center;}
+  .lab{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aminy-teal-700);margin:0 0 12px;display:flex;align-items:center;gap:8px;}
+  .lab::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--aminy-teal-500);}
+  .cell{width:100%;max-width:360px;}
+  .sys{font-family:-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;}
+
+  /* shared phone frame */
+  .ph{width:100%;border-radius:42px;padding:12px;background:#fff;border:1px solid #e5e7eb;box-shadow:0 22px 54px rgba(12,34,48,0.16);}
+  .scr{border-radius:32px;overflow:hidden;height:640px;display:flex;flex-direction:column;position:relative;}
+
+  /* ---- 1) lock screen ---- */
+  .lock{background:linear-gradient(170deg,#9FCCDA 0%,#4795AE 45%,#195466 100%);align-items:center;padding:0 14px;}
+  .lk-time{color:#fff;font-weight:700;font-size:64px;letter-spacing:-0.02em;margin-top:74px;line-height:1;text-shadow:0 2px 14px rgba(12,34,48,0.18);}
+  .lk-date{color:rgba(255,255,255,0.92);font-size:15px;font-weight:600;margin:6px 0 26px;}
+  .ntf{width:100%;background:rgba(255,255,255,0.82);backdrop-filter:blur(18px);border-radius:20px;padding:12px 14px;display:flex;gap:11px;margin-bottom:9px;box-shadow:0 4px 14px rgba(12,34,48,0.10);}
+  .ntf .ic{width:38px;height:38px;border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 4px rgba(12,34,48,0.12);}
+  .ntf .ic img{width:26px;height:26px;}
+  .ntf .tx{flex:1;min-width:0;}
+  .ntf .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .ntf .t b{font-size:13.5px;color:#0C2230;}
+  .ntf .t span{font-size:11px;color:rgba(12,34,48,0.5);flex-shrink:0;}
+  .ntf p{margin:2px 0 0;font-size:13px;line-height:1.35;color:rgba(12,34,48,0.78);}
+  .lk-note{margin-top:auto;margin-bottom:18px;color:rgba(255,255,255,0.85);font-size:11px;text-align:center;}
+
+  /* ---- 2) iMessage ---- */
+  .msg{background:#fff;}
+  .msg-hd{padding:14px 16px 10px;text-align:center;border-bottom:0.5px solid #e5e7eb;background:rgba(249,250,251,0.95);}
+  .msg-hd .av{width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid #e5e7eb;display:inline-flex;align-items:center;justify-content:center;}
+  .msg-hd .av img{width:30px;height:30px;}
+  .msg-hd div{font-size:12px;font-weight:600;color:#0C2230;margin-top:4px;}
+  .msg-bd{flex:1;padding:16px 14px;display:flex;flex-direction:column;gap:8px;overflow:hidden;}
+  .stamp{text-align:center;font-size:10.5px;color:#9ca3af;font-weight:600;margin:2px 0;}
+  .bub{max-width:82%;padding:9px 13px;border-radius:18px;font-size:14px;line-height:1.4;}
+  .bub.them{background:#e9e9eb;color:#111;align-self:flex-start;border-bottom-left-radius:5px;}
+  .bub.me{background:#0a84ff;color:#fff;align-self:flex-end;border-bottom-right-radius:5px;}
+  .bub a{color:#0a84ff;text-decoration:none;font-weight:600;}
+  .msg-ft{padding:10px 14px 16px;display:flex;gap:8px;align-items:center;border-top:0.5px solid #f3f4f6;}
+  .msg-ft .field{flex:1;height:36px;border:1px solid #e5e7eb;border-radius:999px;display:flex;align-items:center;padding:0 14px;font-size:13.5px;color:#9ca3af;}
+
+  /* ---- 3) calendar ---- */
+  .cal{background:#f2f2f7;}
+  .cal-hd{background:#fff;padding:16px 18px 14px;border-bottom:0.5px solid #e5e7eb;}
+  .cal-hd .dot{display:inline-block;width:11px;height:11px;border-radius:3px;background:var(--aminy-teal-600);margin-right:8px;}
+  .cal-hd h3{display:inline;font-size:17px;font-weight:700;color:#0C2230;letter-spacing:-0.015em;}
+  .cal-hd p{margin:7px 0 0;font-size:13.5px;color:#6b7280;}
+  .cal-sec{background:#fff;margin:10px 12px 0;border-radius:12px;overflow:hidden;}
+  .cal-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:0.5px solid #f3f4f6;font-size:14px;color:#111;}
+  .cal-row:last-child{border:0;}
+  .cal-row .k{color:#6b7280;width:74px;flex-shrink:0;font-size:13px;}
+  .cal-row .join{margin-left:auto;background:var(--aminy-teal-600);color:#fff;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;}
+  .cal-row .inv{display:flex;align-items:center;gap:8px;}
+  .cal-row .pav{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#74B2C6,#216982);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .cal-note{margin:10px 12px;background:#fff;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.5;color:#6b7280;}
+  .ics{margin:auto 12px 14px;text-align:center;font-size:11px;color:#9ca3af;line-height:1.5;}
+
+  /* ---- 4) app store ---- */
+  .as{background:#fff;padding:18px 16px;overflow:hidden;}
+  .as-hd{display:flex;gap:14px;}
+  .as-ic{width:96px;height:96px;border-radius:22px;background:#fff;border:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(12,34,48,0.10);flex-shrink:0;}
+  .as-ic img{width:62px;height:62px;}
+  .as-hd h3{font-size:19px;font-weight:700;color:#0C2230;margin:2px 0 2px;letter-spacing:-0.02em;}
+  .as-hd .sub{font-size:13px;color:#6b7280;}
+  .get{margin-top:10px;display:inline-block;background:#0a84ff;color:#fff;border-radius:999px;padding:7px 22px;font-size:14px;font-weight:700;}
+  .as-meta{display:flex;justify-content:space-between;text-align:center;padding:16px 6px;border-bottom:0.5px solid #f3f4f6;margin-top:14px;}
+  .as-meta b{display:block;font-size:15px;color:#6b7280;font-weight:700;}
+  .as-meta span{font-size:10px;color:#9ca3af;letter-spacing:.04em;text-transform:uppercase;}
+  .shots{display:flex;gap:10px;padding:16px 0 6px;}
+  .shot{flex:1;aspect-ratio:9/16;border-radius:14px;border:1px solid var(--color-border);background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));padding:10px 8px;display:flex;flex-direction:column;gap:6px;overflow:hidden;}
+  .shot .cap{font-size:9px;font-weight:800;color:var(--aminy-teal-800);letter-spacing:-0.01em;line-height:1.2;}
+  .shot .blk{background:#fff;border:1px solid var(--color-border);border-radius:8px;flex:1;}
+  .shot .blk.t{background:linear-gradient(180deg,#fff,var(--aminy-teal-50));border-left:2px solid var(--aminy-teal-600);}
+  .as-desc{font-size:13.5px;line-height:1.6;color:#374151;padding-top:12px;}
+  .as-desc b{color:#0C2230;}
+</style></head>
+<body>
+<div class="grid">
+
+  <div class="cell"><div class="lab">Push notifications · lock screen</div>
+    <div class="ph"><div class="scr lock sys">
+      <div class="lk-time">9:41</div>
+      <div class="lk-date">Wednesday, June 17</div>
+      <div class="ntf"><div class="ic"><img src="../../assets/aminy_compass.png" alt=""/></div><div class="tx"><div class="t"><b>Aminy</b><span>now</span></div><p>Kai's TeleABA visit with Dr. Patel starts in 10 min. Tap to join. 📹</p></div></div>
+      <div class="ntf"><div class="ic"><img src="../../assets/aminy_compass.png" alt=""/></div><div class="tx"><div class="t"><b>Aminy</b><span>9:02 AM</span></div><p>Dr. Morales answered your question — signed and ready to read.</p></div></div>
+      <div class="ntf"><div class="ic"><img src="../../assets/aminy_compass.png" alt=""/></div><div class="tx"><div class="t"><b>Aminy</b><span>7:15 AM</span></div><p>Gentle nudge: teeth before dressed this morning. You've got this. 💛</p></div></div>
+      <div class="lk-note">Calm copy · no badges-guilt · time-sensitive only for visits</div>
+    </div></div>
+  </div>
+
+  <div class="cell"><div class="lab">iMessage · appointment reminders</div>
+    <div class="ph"><div class="scr msg sys">
+      <div class="msg-hd"><span class="av"><img src="../../assets/aminy_compass.png" alt=""/></span><div>Aminy ›</div></div>
+      <div class="msg-bd">
+        <div class="stamp">Today 11:30 AM</div>
+        <div class="bub them">Hi Sarah — reminder: Kai's TeleABA OT with Dr. Patel is <b>tomorrow at 3:00 PM</b>.<br/><br/>Reply <b>C</b> to confirm · <b>R</b> to reschedule</div>
+        <div class="bub me">C</div>
+        <div class="bub them">You're confirmed 💛 We'll text the join link 10 minutes before. A calendar invite is on your phone already.</div>
+        <div class="stamp">Tomorrow 2:50 PM</div>
+        <div class="bub them">Kai's visit starts in 10 minutes. Join here when you're ready:<br/><a href="#">aminy.ai/j/kai-patel</a></div>
+      </div>
+      <div class="msg-ft"><div class="field">Text message</div></div>
+    </div></div>
+  </div>
+
+  <div class="cell"><div class="lab">Calendar invite · auto-added (.ics)</div>
+    <div class="ph"><div class="scr cal sys">
+      <div class="cal-hd"><span class="dot"></span><h3>Kai — TeleABA OT · Dr. Patel</h3><p>Wednesday, June 17 ⋅ 3:00 – 3:30 PM</p></div>
+      <div class="cal-sec">
+        <div class="cal-row"><span class="k">Location</span><span>Aminy Video</span><span class="join">Join</span></div>
+        <div class="cal-row"><span class="k">Alert</span><span>1 hour before</span></div>
+        <div class="cal-row"><span class="k">2nd alert</span><span>10 minutes before</span></div>
+      </div>
+      <div class="cal-sec">
+        <div class="cal-row"><span class="k">Invitees</span><span class="inv"><span class="pav">SC</span>Sarah (you)</span></div>
+        <div class="cal-row"><span class="k"></span><span class="inv"><span class="pav">AC</span>Alex</span></div>
+        <div class="cal-row"><span class="k"></span><span class="inv"><span class="pav">DP</span>Dr. Patel, OTR/L</span></div>
+      </div>
+      <div class="cal-note"><b style="color:#111;">Prep:</b> a quiet-ish corner, Kai's fidget, water nearby. Dr. Patel handles the rest.</div>
+      <div class="ics">Booking auto-sends .ics invites → Apple, Google & Outlook calendars<br/>for every caregiver + the provider. Reschedules update everyone.</div>
+    </div></div>
+  </div>
+
+  <div class="cell"><div class="lab">App Store page</div>
+    <div class="ph"><div class="scr as sys">
+      <div class="as-hd">
+        <div class="as-ic"><img src="../../assets/aminy_compass.png" alt=""/></div>
+        <div><h3>Aminy</h3><div class="sub">The calm center of your child's care</div><span class="get">GET</span><div style="font-size:9.5px;color:#9ca3af;margin-top:4px;">In-app purchases</div></div>
+      </div>
+      <div class="as-meta">
+        <div><b>4.8 ★</b><span>2.1K ratings</span></div>
+        <div><b>4+</b><span>Age</span></div>
+        <div><b>#3</b><span>Medical</span></div>
+        <div><b>EN +2</b><span>Language</span></div>
+      </div>
+      <div class="shots">
+        <div class="shot"><span class="cap">An AI coach that knows your child</span><div class="blk t"></div><div class="blk" style="flex:0.5;"></div></div>
+        <div class="shot"><span class="cap">Real BCBAs sign every answer</span><div class="blk"></div><div class="blk t" style="flex:0.6;"></div></div>
+        <div class="shot"><span class="cap">Therapy visits in two taps</span><div class="blk" style="flex:0.5;"></div><div class="blk"></div></div>
+      </div>
+      <div class="as-desc"><b>Like having a BCBA in the family.</b> Ask Aminy anything at any hour, follow calm visual routines, book TeleABA visits, and watch gentle progress — with licensed experts signing off on what matters.</div>
+    </div></div>
+  </div>
+
+</div>
+</body></html>

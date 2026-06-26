@@ -169,7 +169,7 @@ export function ROICalculator() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Input Section */}
           <Card className="p-6 lg:col-span-2">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-6">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-6">
               Your Organization
             </h2>
 
@@ -319,7 +319,7 @@ export function ROICalculator() {
 
             {/* Savings Breakdown */}
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
                 Savings Breakdown
               </h3>
               <div className="space-y-3">
@@ -345,7 +345,7 @@ export function ROICalculator() {
                 />
                 <div className="pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
                   <div className="flex justify-between font-semibold">
-                    <span className="text-[#1B2733] dark:text-white">Total Savings</span>
+                    <span className="text-[#132F43] dark:text-white">Total Savings</span>
                     <span className="text-green-600">
                       {formatCurrency(results.totalSavings)}
                     </span>
@@ -362,7 +362,7 @@ export function ROICalculator() {
 
             {/* CTA */}
             <Card className="p-6">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-3">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-3">
                 Ready to Get Started?
               </h3>
               <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
@@ -384,7 +384,7 @@ export function ROICalculator() {
 
         {/* Assumptions & Methodology */}
         <Card className="mt-8 p-6">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">
+          <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">
             Methodology & Assumptions
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
@@ -428,7 +428,7 @@ export function ROICalculator() {
             animate={{ opacity: 1, scale: 1 }}
             className="bg-white dark:bg-slate-800 rounded-xl p-6 max-w-md w-full shadow-xl"
           >
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
               Get Your Personalized Report
             </h3>
             <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4">
@@ -506,10 +506,10 @@ function AssumptionCard({
   source: string;
 }) {
   return (
-    <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800/50 rounded-lg">
+    <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800/50 rounded-lg">
       <div className="flex items-center gap-2 mb-2">
         <Icon className="w-4 h-4 text-[#6B9080]" />
-        <span className="font-medium text-[#1B2733] dark:text-white">{title}</span>
+        <span className="font-medium text-[#132F43] dark:text-white">{title}</span>
       </div>
       <p className="text-lg font-semibold text-[#6B9080]">{value}</p>
       <p className="text-sm text-[#8A9BA8] mt-1">{source}</p>

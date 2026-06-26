@@ -126,7 +126,7 @@ export function ResourceLibrary({
               onClick={() => setSelectedCategory(cat.id)}
               className="flex items-center gap-1.5 whitespace-nowrap text-xs px-3 py-1.5 rounded-full border transition-all shrink-0"
               style={selectedCategory === cat.id
-                ? { background: '#4E93A815', borderColor: '#4E93A8', color: '#4E93A8', fontWeight: 600 }
+                ? { background: '#2A7D9915', borderColor: '#2A7D99', color: '#2A7D99', fontWeight: 600 }
                 : { background: 'white', borderColor: '#e2e8f0', color: '#64748b' }}
             >
               <span>{cat.emoji}</span>{cat.label}
@@ -137,7 +137,7 @@ export function ResourceLibrary({
 
       {/* AI Recommendations — shown when we have context */}
       {!searchQuery && selectedCategory === 'all' && recommended.length > 0 && (
-        <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+        <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">
@@ -175,16 +175,16 @@ export function ResourceLibrary({
 
       {/* Bottom CTA — Ask BCBA team */}
       <div className="mx-4 mt-6 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+        <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
           <span className="text-white text-base">?</span>
         </div>
         <div className="flex-1">
-          <p className="text-sm font-semibold text-[#1B2733]">Still have questions?</p>
+          <p className="text-sm font-semibold text-[#132F43]">Still have questions?</p>
           <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, clinician-reviewed within 24h.</p>
         </div>
         <button
           onClick={() => onNavigate?.('ask-bcba')}
-          className="text-[#4E93A8] shrink-0"
+          className="text-[#2A7D99] shrink-0"
         >
           <ChevronRight className="w-5 h-5" />
         </button>
@@ -209,9 +209,9 @@ function ResourceCard({ resource: r, onOpen, compact = false }: { resource: Reso
             <span className="text-sm text-slate-400 flex items-center gap-0.5">
               <Clock className="w-3 h-3" />{r.readTimeMinutes} min
             </span>
-            {r.ageRange && <span className="text-xs text-slate-400">· {r.ageRange}</span>}
+            {r.ageRange && <span className="text-sm text-slate-400">· {r.ageRange}</span>}
           </div>
-          <p className={`font-semibold text-[#1B2733] leading-snug ${compact ? 'text-sm' : 'text-sm'}`}>{r.title}</p>
+          <p className={`font-semibold text-[#132F43] leading-snug ${compact ? 'text-sm' : 'text-sm'}`}>{r.title}</p>
           {!compact && <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{r.subtitle}</p>}
         </div>
         <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
@@ -269,11 +269,11 @@ function ArticleView({
   return (
     <div className="min-h-screen bg-mist pb-24">
       {/* Back header */}
-      <div className="sticky top-0 z-10 bg-[#FAF7F2] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
+      <div className="sticky top-0 z-10 bg-[#F6FBFB] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         <button onClick={onBack} className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E8E4DF]">
-          <ArrowLeft className="w-4 h-4 text-[#1B2733]" />
+          <ArrowLeft className="w-4 h-4 text-[#132F43]" />
         </button>
-        <span className="text-sm font-medium text-[#1B2733] truncate flex-1">{r.title}</span>
+        <span className="text-sm font-medium text-[#132F43] truncate flex-1">{r.title}</span>
       </div>
 
       <div className="px-4 pt-5">
@@ -284,19 +284,19 @@ function ArticleView({
           <span className="text-sm text-slate-400 flex items-center gap-1">
             <Clock className="w-3 h-3" />{r.readTimeMinutes} min read
           </span>
-          {r.ageRange && <span className="text-xs text-slate-400">· Ages {r.ageRange}</span>}
+          {r.ageRange && <span className="text-sm text-slate-400">· Ages {r.ageRange}</span>}
         </div>
 
         {/* Title */}
-        <h1 className="text-xl font-bold text-[#1B2733] leading-snug">{r.title}</h1>
+        <h1 className="text-xl font-bold text-[#132F43] leading-snug">{r.title}</h1>
         <p className="text-sm text-[#5A6B7A] mt-1">{r.subtitle}</p>
 
         {/* Author */}
         {r.author && (
           <div className="flex items-center gap-2 mt-3 pb-3 border-b border-[#E8E4DF]">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>A</div>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>A</div>
             <div>
-              <p className="text-sm font-medium text-[#1B2733]">{r.author}</p>
+              <p className="text-sm font-medium text-[#132F43]">{r.author}</p>
               {r.authorCredentials && <p className="text-sm text-[#5A6B7A]">{r.authorCredentials}</p>}
             </div>
           </div>
@@ -308,18 +308,18 @@ function ArticleView({
           {isLocked && (
             <>
               {/* Fade overlay */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#FAF7F2] to-transparent pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F6FBFB] to-transparent pointer-events-none" />
               {/* Lock CTA */}
               <div className="mt-2 rounded-2xl bg-white border border-[#E8E4DF] p-5 text-center space-y-3">
                 <Lock className="w-8 h-8 text-slate-300 mx-auto" />
                 <div>
-                  <p className="text-sm font-semibold text-[#1B2733]">Pro+ resource</p>
+                  <p className="text-sm font-semibold text-[#132F43]">Pro+ resource</p>
                   <p className="text-sm text-[#5A6B7A] mt-1">Upgrade to Pro+ Family to unlock all premium guides, printables, and 10 BCBA team questions/month.</p>
                 </div>
                 <button
                   onClick={() => onNavigate?.('paywall')}
                   className="w-full py-2.5 rounded-xl text-white text-sm font-semibold"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}
                 >
                   Upgrade to Pro+ — $49.99/mo
                 </button>
@@ -337,7 +337,7 @@ function ArticleView({
                 <button
                   key={i}
                   onClick={() => onNavigate?.('ask-bcba')}
-                  className="w-full text-left text-sm text-[#3A4A57] bg-[#F8F8F6] rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-[#F0EDE8] transition-colors"
+                  className="w-full text-left text-sm text-[#3A4A57] bg-[#F8F8F6] rounded-xl px-3 py-2.5 flex items-center gap-2 hover:bg-[#EDF4F7] transition-colors"
                 >
                   <span className="flex-1">"{q}"</span>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -349,7 +349,7 @@ function ArticleView({
 
         {/* Related group sessions */}
         {!isLocked && r.relatedGroupTopics && r.relatedGroupTopics.length > 0 && (
-          <div className="mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+          <div className="mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
             <div className="flex items-center gap-2 mb-2">
               <Users className="w-4 h-4 text-[#6B9080]" />
               <p className="text-sm font-semibold text-[#6B9080]">Live group sessions on this topic</p>
@@ -365,14 +365,14 @@ function ArticleView({
                       className="w-full text-left bg-white rounded-xl px-3 py-2.5 border border-[#E8E4DF] flex items-center gap-2 hover:bg-[#F8F8F6] transition-colors"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-[#1B2733] truncate">{s.topic}</p>
+                        <p className="text-sm font-semibold text-[#132F43] truncate">{s.topic}</p>
                         <p className="text-sm text-[#5A6B7A]">
                           {new Date(s.session_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {s.provider_name ? ` · ${s.provider_name}` : ''}
                           {' · '}${(s.price_per_family_cents / 100).toFixed(0)}/family
                         </p>
                       </div>
-                      <span className={`text-sm font-semibold shrink-0 ${spotsLeft <= 1 ? 'text-[#E07A5F]' : 'text-[#4E93A8]'}`}>
+                      <span className={`text-sm font-semibold shrink-0 ${spotsLeft <= 1 ? 'text-[#E07A5F]' : 'text-[#2A7D99]'}`}>
                         {spotsLeft === 0 ? 'Waitlist' : `${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`}
                       </span>
                     </button>
@@ -386,7 +386,7 @@ function ArticleView({
             )}
             <button
               onClick={() => onNavigate?.('group-sessions')}
-              className="flex items-center gap-2 text-sm font-semibold text-[#4E93A8]"
+              className="flex items-center gap-2 text-sm font-semibold text-[#2A7D99]"
             >
               Browse all group sessions <ExternalLink className="w-3 h-3" />
             </button>
@@ -396,18 +396,18 @@ function ArticleView({
         {/* Ask BCBA CTA */}
         {!isLocked && (
           <div className="mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+            <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <span className="text-white text-base">?</span>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#1B2733]">
+              <p className="text-sm font-semibold text-[#132F43]">
                 {childName ? `Questions about ${childName}?` : 'Have follow-up questions?'}
               </p>
               <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, reviewed within 24h.</p>
             </div>
             <button
               onClick={() => onNavigate?.('ask-bcba')}
-              className="text-[#4E93A8] shrink-0"
+              className="text-[#2A7D99] shrink-0"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -422,12 +422,12 @@ function ArticleView({
 
 function ArticleBody({ lines }: { lines: string[] }) {
   return (
-    <div className="space-y-3 text-sm text-[#1B2733] leading-relaxed">
+    <div className="space-y-3 text-sm text-[#132F43] leading-relaxed">
       {lines.map((line, i) => {
         if (!line.trim()) return <div key={i} className="h-1" />;
         // Bold headers: **text**
         if (line.startsWith('**') && line.endsWith('**')) {
-          return <p key={i} className="font-bold text-[#1B2733] mt-4">{line.replace(/\*\*/g, '')}</p>;
+          return <p key={i} className="font-bold text-[#132F43] mt-4">{line.replace(/\*\*/g, '')}</p>;
         }
         // Bullet points
         if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*') && !line.startsWith('**')) {
@@ -465,7 +465,7 @@ function parseBold(text: string): string {
 
 function TypeBadge({ type }: { type: Resource['type'] }) {
   return (
-    <span className="inline-flex items-center gap-1 text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1 text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full">
       {TYPE_ICONS[type]}{TYPE_LABELS[type]}
     </span>
   );

@@ -58,16 +58,16 @@ export function ReferralShareCard({ referralCode, userName = 'A friend' }: Refer
             </div>
 
             <div className="text-center space-y-2 mb-8">
-                <h3 className="text-2xl font-bold text-[#1B2733] dark:text-white">Sign up a friend, get a free month</h3>
+                <h3 className="text-2xl font-bold text-[#132F43] dark:text-white">Sign up a friend, get a free month</h3>
                 <p className="text-[#5A6B7A] dark:text-slate-400">
                     Share Aminy with a family who could benefit. When they join, they get $25 off and you get your next month free!
                 </p>
             </div>
 
-            <div className="bg-[#FAF7F2] dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between mb-8">
+            <div className="bg-[#F6FBFB] dark:bg-slate-900 rounded-xl p-4 flex items-center justify-between mb-8">
                 <div className="space-y-1">
                     <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider">Your Code</p>
-                    <p className="text-xl font-mono font-bold text-[#1B2733] dark:text-white tracking-widest">{referralCode}</p>
+                    <p className="text-xl font-mono font-bold text-[#132F43] dark:text-white tracking-widest">{referralCode}</p>
                 </div>
                 <Button
                     variant="ghost"

@@ -409,7 +409,7 @@ export function ClinicalOutcomesTracker({
                 </button>
               )}
               <div>
-                <h1 className="text-lg font-semibold text-[#1B2733]">Clinical Outcomes</h1>
+                <h1 className="text-lg font-semibold text-[#132F43]">Clinical Outcomes</h1>
                 <p className="text-sm text-[#5A6B7A]">{childName}</p>
               </div>
             </div>
@@ -472,7 +472,7 @@ export function ClinicalOutcomesTracker({
         {/* Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card className="p-4 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">{outcomes.length}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-[#132F43]">{outcomes.length}</p>
             <p className="text-sm text-[#5A6B7A]">Total Assessments</p>
           </Card>
           <Card className="p-4 text-center">
@@ -504,7 +504,7 @@ export function ClinicalOutcomesTracker({
         {/* Trend Cards */}
         {trendsByType.length > 0 && (
           <div>
-            <h3 className="font-semibold text-[#1B2733] mb-3">Trends</h3>
+            <h3 className="font-semibold text-[#132F43] mb-3">Trends</h3>
             <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
               {trendsByType.map((trend, i) => {
                 const config = ASSESSMENT_CONFIGS.find(c => c.type === trend.type);
@@ -518,7 +518,7 @@ export function ClinicalOutcomesTracker({
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-medium text-[#1B2733]">{trend.name || config?.name}</p>
+                          <p className="font-medium text-[#132F43]">{trend.name || config?.name}</p>
                           <p className="text-sm text-[#5A6B7A]">{trend.items.length} assessments</p>
                         </div>
                       </div>
@@ -559,11 +559,11 @@ export function ClinicalOutcomesTracker({
 
         {/* Recent Assessments */}
         <div>
-          <h3 className="font-semibold text-[#1B2733] mb-3">Recent Assessments</h3>
+          <h3 className="font-semibold text-[#132F43] mb-3">Recent Assessments</h3>
           {filteredOutcomes.length === 0 ? (
             <Card className="p-12 text-center">
               <BarChart3 className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-              <h3 className="text-lg font-medium text-[#1B2733] mb-2">No assessments yet</h3>
+              <h3 className="text-lg font-medium text-[#132F43] mb-2">No assessments yet</h3>
               <p className="text-[#5A6B7A] mb-4">
                 Start tracking clinical outcomes to measure progress
               </p>
@@ -586,7 +586,7 @@ export function ClinicalOutcomesTracker({
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className="font-medium text-[#1B2733]">
+                          <p className="font-medium text-[#132F43]">
                             {outcome.assessmentName || config?.name}
                           </p>
                           <p className="text-sm text-[#5A6B7A]">
@@ -597,7 +597,7 @@ export function ClinicalOutcomesTracker({
                       </div>
                       <div className="text-right">
                         <div className="flex items-center gap-2">
-                          <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                          <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                             {outcome.rawScore}
                           </span>
                           {outcome.changeFromPrevious !== null && outcome.changeFromPrevious !== undefined && (
@@ -641,7 +641,7 @@ export function ClinicalOutcomesTracker({
           <Card className="max-w-lg w-full">
             <div className="p-6 border-b border-neutral-100">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-[#1B2733]">New Assessment</h2>
+                <h2 className="text-lg font-semibold text-[#132F43]">New Assessment</h2>
                 <button onClick={() => setShowNewAssessment(false)} className="p-2 hover:bg-neutral-100 rounded-lg">
                   <ChevronDown className="w-5 h-5 text-[#5A6B7A] rotate-45" />
                 </button>
@@ -673,7 +673,7 @@ export function ClinicalOutcomesTracker({
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-[#1B2733]">{config.name}</p>
+                          <p className="text-sm font-medium text-[#132F43]">{config.name}</p>
                           <p className="text-sm text-[#5A6B7A] line-clamp-1">{config.description}</p>
                         </div>
                       </button>

@@ -31,7 +31,7 @@ export function DisplayHeading({ className, children, ...props }: HeadingProps) 
     <h1
       className={cn(
         'text-4xl md:text-5xl font-bold tracking-tight',
-        'text-[#1B2733] dark:text-slate-50',
+        'text-[#132F43] dark:text-slate-50',
         'leading-[1.1]',
         className
       )}
@@ -47,7 +47,7 @@ export function PageTitle({ className, children, as: Tag = 'h1', ...props }: Hea
     <Tag
       className={cn(
         'text-2xl md:text-3xl font-semibold tracking-tight',
-        'text-[#1B2733] dark:text-slate-50',
+        'text-[#132F43] dark:text-slate-50',
         'leading-tight',
         className
       )}
@@ -63,7 +63,7 @@ export function SectionTitle({ className, children, as: Tag = 'h2', ...props }: 
     <Tag
       className={cn(
         'text-xl md:text-2xl font-semibold tracking-tight',
-        'text-[#1B2733] dark:text-slate-100',
+        'text-[#132F43] dark:text-slate-100',
         'leading-snug',
         className
       )}
@@ -79,7 +79,7 @@ export function CardTitle({ className, children, as: Tag = 'h3', ...props }: Hea
     <Tag
       className={cn(
         'text-lg font-semibold',
-        'text-[#1B2733] dark:text-slate-100',
+        'text-[#132F43] dark:text-slate-100',
         'leading-snug',
         className
       )}
@@ -292,7 +292,7 @@ interface LinkTextProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 export function LinkText({ className, variant = 'default', children, ...props }: LinkTextProps) {
   const variantClasses = {
     default: 'text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] underline-offset-2 hover:underline',
-    subtle: 'text-[#5A6B7A] dark:text-slate-300 hover:text-[#1B2733] dark:hover:text-slate-100 hover:underline',
+    subtle: 'text-[#5A6B7A] dark:text-slate-300 hover:text-[#132F43] dark:hover:text-slate-100 hover:underline',
     bold: 'text-[#6B9080] dark:text-primary font-semibold hover:text-[#6B9080] dark:hover:text-[#7BA7BC]'
   };
 
@@ -317,7 +317,7 @@ export function LinkText({ className, variant = 'default', children, ...props }:
 
 export function Strong({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <strong className={cn('font-semibold text-[#1B2733] dark:text-slate-100', className)}>
+    <strong className={cn('font-semibold text-[#132F43] dark:text-slate-100', className)}>
       {children}
     </strong>
   );
@@ -335,9 +335,9 @@ export function Code({ className, children }: { className?: string; children: Re
   return (
     <code
       className={cn(
-        'px-1.5 py-0.5 rounded bg-[#F0EDE8] dark:bg-slate-800',
+        'px-1.5 py-0.5 rounded bg-[#EDF4F7] dark:bg-slate-800',
         'font-mono text-sm',
-        'text-[#1B2733] dark:text-slate-200',
+        'text-[#132F43] dark:text-slate-200',
         className
       )}
     >
@@ -449,7 +449,7 @@ export function StatNumber({ className, children }: { className?: string; childr
     <span
       className={cn(
         'text-3xl md:text-4xl font-bold tracking-tight',
-        'text-[#1B2733] dark:text-slate-50',
+        'text-[#132F43] dark:text-slate-50',
         className
       )}
     >

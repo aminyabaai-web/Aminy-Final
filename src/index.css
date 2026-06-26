@@ -16648,17 +16648,17 @@ button[class*="bg-primary"] {
   --aminy-navy-100: #e2e8f0;
   --aminy-navy-50:  #f1f5f9;
 
-  /* --- Teal scale (compass needle — #4E93A8 is the logo teal) --- */
-  --aminy-teal-900: #1E3F4B;
-  --aminy-teal-800: #2A5868;
-  --aminy-teal-700: #376E80;
-  --aminy-teal-600: #4E93A8;
-  --aminy-teal-500: #6AA9BC;
-  --aminy-teal-400: #8EC0CE;
-  --aminy-teal-300: #B0D3DD;
-  --aminy-teal-200: #CCE1E8;
-  --aminy-teal-100: #E2EDF1;
-  --aminy-teal-50:  #F1F6F8;
+  /* --- Teal scale (compass needle — #2A7D99 sampled from real logo) --- */
+  --aminy-teal-900: #0F3A48;
+  --aminy-teal-800: #195466;
+  --aminy-teal-700: #216982;
+  --aminy-teal-600: #2A7D99;
+  --aminy-teal-500: #4795AE;
+  --aminy-teal-400: #74B2C6;
+  --aminy-teal-300: #9FCCDA;
+  --aminy-teal-200: #C5E0E9;
+  --aminy-teal-100: #E2EFF3;
+  --aminy-teal-50:  #F1F8FA;
   /* --- Compass-stone (softer blue-grey in the logo) --- */
   --aminy-stone-700: #3f6272;
   --aminy-stone-600: #5B8A9A;
@@ -16678,8 +16678,8 @@ button[class*="bg-primary"] {
   --aminy-text: #1e293b;
   --aminy-text-secondary: #475569;
   --aminy-text-muted: #64748b;
-  --aminy-sage: #6AA9BC;
-  --aminy-teal: #4E93A8;
+  --aminy-sage: #4795AE;
+  --aminy-teal: #2A7D99;
   --aminy-terracotta: #E07A5F;
   --aminy-calm-blue: #4795AE;
   --aminy-card: #FFFFFF;
@@ -16714,8 +16714,8 @@ button[class*="bg-primary"] {
   --shadow-md: 0 4px 12px rgba(120,120,120,0.10);
   --shadow-lg: 0 8px 24px rgba(15,23,42,0.08);
   --shadow-xl: 0 18px 40px rgba(15,23,42,0.06);
-  --shadow-cta: 0 2px 8px rgba(78,147,168,0.22), 0 4px 12px rgba(78,147,168,0.14);
-  --shadow-glow-teal: 0 2px 8px rgba(78,147,168,0.32);
+  --shadow-cta: 0 2px 8px rgba(42,125,153,0.22), 0 4px 12px rgba(42,125,153,0.14);
+  --shadow-glow-teal: 0 2px 8px rgba(42,125,153,0.32);
 
   /* --- Motion tokens --- */
   --ease-calm:   cubic-bezier(0.4, 0, 0.2, 1);
@@ -16763,29 +16763,29 @@ button[class*="bg-primary"] {
 .bg-\[\#FAF7F2\] { background-color: #FAF7F2; }
 .bg-\[\#FFF8F0\] { background-color: #FFF8F0; }
 .bg-\[\#F0EDE8\] { background-color: #F0EDE8; }
-.bg-\[\#6B9080\] { background-color: #4E93A8; }
-.bg-\[\#7BA7BC\] { background-color: #6AA9BC; }
-.text-\[\#1B2733\] { color: #1B2733; }
-.text-\[\#5A6B7A\] { color: #5A6B7A; }
-.text-\[\#8E9BAA\] { color: #8E9BAA; }
-.text-\[\#6B9080\] { color: #376E80; }
-.border-\[\#6B9080\] { border-color: #4E93A8; }
-.from-\[\#6B9080\] { --tw-gradient-from: #4E93A8; }
-.to-\[\#7BA7BC\] { --tw-gradient-to: #6AA9BC; }
-.from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; }
-.ring-\[\#6B9080\] { --tw-ring-color: #4E93A8; }
-.focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #4E93A8; }
+.bg-\[\#6B9080\] { background-color: #2A7D99; }
+.bg-\[\#7BA7BC\] { background-color: #4795AE; }
+.text-\[\#1B2733\] { color: #132F43; }
+.text-\[\#5A6B7A\] { color: #475569; }
+.text-\[\#8E9BAA\] { color: #94a3b8; }
+.text-\[\#6B9080\] { color: #216982; }
+.border-\[\#6B9080\] { border-color: #2A7D99; }
+.from-\[\#6B9080\] { --tw-gradient-from: #2A7D99; }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #4795AE; }
+.from-\[\#FAF7F2\] { --tw-gradient-from: #F6FBFB; }
+.ring-\[\#6B9080\] { --tw-ring-color: #2A7D99; }
+.focus\:ring-\[\#6B9080\]:focus { --tw-ring-color: #2A7D99; }
 
-/* #2A7D99 — legacy class names, values updated to logo teal #4E93A8 */
-.bg-\[\#2A7D99\] { background-color: #4E93A8; }
-.text-\[\#2A7D99\] { color: #376E80; }
-.border-\[\#2A7D99\] { border-color: #4E93A8; }
-.from-\[\#2A7D99\] { --tw-gradient-from: #4E93A8; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
-.to-\[\#2A7D99\] { --tw-gradient-to: #4E93A8; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
-.bg-\[\#2A7D99\]\/10 { background-color: color-mix(in oklab, #4E93A8 10%, transparent); }
-.bg-\[\#2A7D99\]\/15 { background-color: color-mix(in oklab, #4E93A8 15%, transparent); }
-.bg-\[\#2A7D99\]\/20 { background-color: color-mix(in oklab, #4E93A8 20%, transparent); }
-.bg-\[\#2A7D99\]\/25 { background-color: color-mix(in oklab, #4E93A8 25%, transparent); }
+/* #2A7D99 — logo-accurate primary teal (compass needle) */
+.bg-\[\#2A7D99\] { background-color: #2A7D99; }
+.text-\[\#2A7D99\] { color: #2A7D99; }
+.border-\[\#2A7D99\] { border-color: #2A7D99; }
+.from-\[\#2A7D99\] { --tw-gradient-from: #2A7D99; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.to-\[\#2A7D99\] { --tw-gradient-to: #2A7D99; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.bg-\[\#2A7D99\]\/10 { background-color: color-mix(in oklab, #2A7D99 10%, transparent); }
+.bg-\[\#2A7D99\]\/15 { background-color: color-mix(in oklab, #2A7D99 15%, transparent); }
+.bg-\[\#2A7D99\]\/20 { background-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.bg-\[\#2A7D99\]\/25 { background-color: color-mix(in oklab, #2A7D99 25%, transparent); }
 .border-\[\#2A7D99\]\/15 { border-color: color-mix(in oklab, #4E93A8 15%, transparent); }
 .border-\[\#2A7D99\]\/20 { border-color: color-mix(in oklab, #4E93A8 20%, transparent); }
 .border-\[\#2A7D99\]\/25 { border-color: color-mix(in oklab, #4E93A8 25%, transparent); }
@@ -18015,3 +18015,73 @@ tr:hover td, .hover-row:hover {
   .lg\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
   .lg\:gap-12 { gap: 3rem; }
 }
+
+/* ============================================================
+   AMINY DESIGN SYSTEM v3 — theme.css utilities
+   .bg-app, .shadow-cta, .text-affirm (from handoff/theme.css)
+   ============================================================ */
+.bg-app {
+  background: linear-gradient(180deg, var(--aminy-mist), var(--aminy-mist-deep));
+}
+.shadow-cta {
+  box-shadow: var(--shadow-cta);
+}
+.text-affirm {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+/* Hex utilities — #4E93A8 (old logo teal) remapped to #2A7D99 (true logo needle) */
+.text-\[\#4E93A8\] { color: #2A7D99; }
+.border-\[\#4E93A8\] { border-color: #2A7D99; }
+.bg-\[\#4E93A8\] { background-color: #2A7D99; }
+.bg-\[\#4E93A8\]\/10 { background-color: color-mix(in oklab, #2A7D99 10%, transparent); }
+.bg-\[\#4E93A8\]\/15 { background-color: color-mix(in oklab, #2A7D99 15%, transparent); }
+.bg-\[\#4E93A8\]\/20 { background-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.bg-\[\#4E93A8\]\/25 { background-color: color-mix(in oklab, #2A7D99 25%, transparent); }
+.border-\[\#4E93A8\]\/20 { border-color: color-mix(in oklab, #2A7D99 20%, transparent); }
+.border-\[\#4E93A8\]\/30 { border-color: color-mix(in oklab, #2A7D99 30%, transparent); }
+.ring-\[\#4E93A8\] { --tw-ring-color: #2A7D99; }
+.focus\:ring-\[\#4E93A8\]:focus { --tw-ring-color: #2A7D99; }
+.hover\:border-\[\#4E93A8\]\/30:hover { border-color: color-mix(in oklab, #2A7D99 30%, transparent); }
+.hover\:text-\[\#4E93A8\]:hover { color: #2A7D99; }
+.from-\[\#4E93A8\] { --tw-gradient-from: #2A7D99; }
+.to-\[\#4E93A8\] { --tw-gradient-to: #2A7D99; }
+
+/* ============================================================
+   DESIGN SYSTEM v3 — navy-800 #132F43 + mist-deep #EDF4F7 + mist
+   #F6FBFB variant utilities. Precompiled (no JIT): markup renamed
+   from #1B2733/#F0EDE8 to the new hexes, so these selectors must
+   exist literally or the colors silently fail to render.
+   ============================================================ */
+/* navy-800 #132F43 (was #1B2733) */
+.text-\[\#132F43\] { color: #132F43; }
+.bg-\[\#132F43\] { background-color: #132F43; }
+.from-\[\#132F43\] { --tw-gradient-from: #132F43; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.text-\[\#132F43\]\/30 { color: color-mix(in oklab, #132F43 30%, transparent); }
+.text-\[\#132F43\]\/45 { color: color-mix(in oklab, #132F43 45%, transparent); }
+.text-\[\#132F43\]\/50 { color: color-mix(in oklab, #132F43 50%, transparent); }
+.text-\[\#132F43\]\/60 { color: color-mix(in oklab, #132F43 60%, transparent); }
+.text-\[\#132F43\]\/70 { color: color-mix(in oklab, #132F43 70%, transparent); }
+.text-\[\#132F43\]\/80 { color: color-mix(in oklab, #132F43 80%, transparent); }
+.text-\[\#132F43\]\/90 { color: color-mix(in oklab, #132F43 90%, transparent); }
+.hover\:text-\[\#132F43\]:hover { color: #132F43; }
+.dark\:text-\[\#132F43\]:is(.dark *) { color: #132F43; }
+/* mist-deep #EDF4F7 (was #F0EDE8) */
+.bg-\[\#EDF4F7\] { background-color: #EDF4F7; }
+.bg-\[\#EDF4F7\]\/90 { background-color: color-mix(in oklab, #EDF4F7 90%, transparent); }
+.border-\[\#EDF4F7\] { border-color: #EDF4F7; }
+.divide-\[\#EDF4F7\] > :not([hidden]) ~ :not([hidden]) { border-color: #EDF4F7; }
+.to-\[\#EDF4F7\] { --tw-gradient-to: #EDF4F7; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.hover\:bg-\[\#EDF4F7\]:hover { background-color: #EDF4F7; }
+.active\:bg-\[\#EDF4F7\]:active { background-color: #EDF4F7; }
+/* mist #F6FBFB — opacity + interaction variants (base already defined above) */
+.bg-\[\#F6FBFB\]\/50 { background-color: color-mix(in oklab, #F6FBFB 50%, transparent); }
+.bg-\[\#F6FBFB\]\/80 { background-color: color-mix(in oklab, #F6FBFB 80%, transparent); }
+.bg-\[\#F6FBFB\]\/90 { background-color: color-mix(in oklab, #F6FBFB 90%, transparent); }
+.from-\[\#F6FBFB\]\/50 { --tw-gradient-from: color-mix(in oklab, #F6FBFB 50%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
+.hover\:bg-\[\#F6FBFB\]\/50:hover { background-color: color-mix(in oklab, #F6FBFB 50%, transparent); }
+.active\:bg-\[\#F6FBFB\]:active { background-color: #F6FBFB; }

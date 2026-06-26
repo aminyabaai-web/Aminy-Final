@@ -1,0 +1,254 @@
+<!-- @dsCard group="Website" viewport="1280x900" name="aminy.ai/providers — B2B recruiting" subtitle="Grow your practice: hero · roles · tools · earnings · how it works · apply" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aminy for Providers — Get your evenings back.</title>
+<link rel="icon" href="../../assets/favicon.svg"/>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font-ui);color:var(--color-text);background:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+  *{scrollbar-width:none;}::-webkit-scrollbar{width:0;height:0;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+
+  nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--color-border);}
+  .nav-in{display:flex;align-items:center;gap:12px;height:68px;}
+  .nav-in img{height:28px;display:block;}
+  .nav-in .pfx{font-size:14px;font-weight:600;color:var(--aminy-navy-400);padding-top:3px;}
+  .nav-cta{margin-left:auto;display:flex;align-items:center;gap:18px;}
+  .signin{font-size:14.5px;font-weight:600;color:var(--color-text-strong);text-decoration:none;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:var(--radius-md);font-family:var(--font-ui);font-weight:600;font-size:15.5px;text-decoration:none;cursor:pointer;border:0;transition:background var(--dur-base) var(--ease-calm), transform var(--dur-fast) var(--ease-calm);}
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--aminy-teal-600);color:#fff;box-shadow:var(--shadow-cta);}
+  .btn-primary:hover{background:var(--aminy-teal-700);}
+  .btn-ghost{background:#fff;color:var(--aminy-navy-700);border:1px solid var(--color-border-strong);}
+  .btn-sm{height:42px;padding:0 18px;font-size:14px;}
+  .btn-lg{height:56px;padding:0 32px;font-size:17px;}
+
+  .hero{background:linear-gradient(180deg,#fff 0%,var(--aminy-mist) 60%,var(--aminy-mist-deep) 100%);}
+  .hero-in{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;padding:80px 0 68px;}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--aminy-teal-700);background:var(--aminy-teal-50);border:1px solid var(--aminy-teal-100);border-radius:999px;padding:7px 14px;margin-bottom:22px;}
+  h1{font-size:52px;line-height:1.07;letter-spacing:-0.032em;font-weight:800;color:var(--color-text-strong);margin:0 0 20px;text-wrap:balance;}
+  h1 em{font-style:normal;color:var(--aminy-teal-600);}
+  .sub{font-size:18.5px;line-height:1.6;color:var(--aminy-navy-500);max-width:480px;margin:0 0 30px;text-wrap:pretty;}
+  .hero-ctas{display:flex;gap:14px;align-items:center;margin-bottom:16px;}
+  .trust{display:flex;gap:20px;flex-wrap:wrap;}
+  .trust span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--aminy-navy-500);}
+
+  /* provider sample card */
+  .pcard{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-2xl);box-shadow:0 24px 60px rgba(12,34,48,0.12);overflow:hidden;max-width:400px;margin:0 auto;}
+  .pcard .top{padding:22px 22px 0;}
+  .pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--color-text-muted);background:var(--aminy-navy-50);border-radius:999px;padding:4px 11px;margin-bottom:14px;}
+  .pc-id{display:flex;align-items:center;gap:13px;}
+  .pc-av{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--aminy-teal-400),var(--aminy-teal-700));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
+  .pc-id b{font-size:17px;color:var(--color-text-strong);letter-spacing:-0.01em;}
+  .pc-id .cr{font-size:13px;color:var(--color-text-muted);}
+  .pc-id .rt{font-size:13px;color:var(--aminy-navy-500);margin-top:3px;display:flex;align-items:center;gap:5px;}
+  .pc-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--color-border);margin-top:20px;border-top:1px solid var(--color-border);}
+  .pc-stats div{background:#fff;padding:16px 8px;text-align:center;}
+  .pc-stats b{display:block;font-size:20px;font-weight:800;color:var(--color-text-strong);letter-spacing:-0.02em;}
+  .pc-stats span{font-size:11px;color:var(--color-text-muted);}
+  .pc-verified{display:flex;align-items:center;justify-content:center;gap:7px;background:var(--aminy-grow-50);color:var(--aminy-grow-600);font-size:13px;font-weight:600;padding:11px;}
+
+  section{padding:84px 0;}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--aminy-teal-700);margin-bottom:14px;}
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--aminy-teal-500);}
+  h2{font-size:38px;line-height:1.12;letter-spacing:-0.028em;font-weight:700;color:var(--color-text-strong);margin:0 0 14px;text-wrap:balance;}
+  .center{text-align:center;}
+  .center .eyebrow{justify-content:center;}
+  .lede{font-size:17px;line-height:1.6;color:var(--aminy-navy-500);max-width:580px;margin:0 0 44px;}
+  .center .lede{margin-left:auto;margin-right:auto;}
+  .mist{background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));}
+
+  /* roles */
+  .roles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+  .role{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px 16px;text-align:center;box-shadow:var(--shadow-sm);transition:transform var(--dur-base) var(--ease-lift),box-shadow var(--dur-base) var(--ease-lift);}
+  .role:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  .role .ic{width:46px;height:46px;border-radius:14px;background:var(--aminy-teal-50);color:var(--aminy-teal-700);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .role b{display:block;font-size:16px;font-weight:700;color:var(--color-text-strong);}
+  .role span{font-size:12.5px;color:var(--aminy-navy-500);line-height:1.4;display:block;margin-top:4px;}
+
+  /* features */
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .feat{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:26px;box-shadow:var(--shadow-sm);}
+  .feat:first-child{background:linear-gradient(135deg,var(--aminy-teal-50),#fff);border-color:var(--aminy-teal-100);}
+  .feat .ic{width:44px;height:44px;border-radius:13px;background:var(--aminy-teal-50);color:var(--aminy-teal-700);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+  .feat:first-child .ic{background:#fff;}
+  .feat h3{font-size:18px;font-weight:700;letter-spacing:-0.015em;color:var(--color-text-strong);margin:0 0 7px;}
+  .feat p{font-size:14px;line-height:1.6;color:var(--aminy-navy-500);margin:0;}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;}
+  .step{text-align:center;}
+  .step .n{width:56px;height:56px;border-radius:50%;background:#fff;border:1px solid var(--color-border);color:var(--aminy-teal-700);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:var(--shadow-sm);}
+  .step b{display:block;font-size:16px;font-weight:700;color:var(--color-text-strong);}
+  .step span{font-size:13.5px;color:var(--aminy-navy-500);line-height:1.5;display:block;margin-top:5px;}
+
+  /* earnings */
+  .earn{background:var(--aminy-navy-950);color:#fff;}
+  .earn h2{color:#fff;}
+  .earn .lede{color:#B9CCD8;}
+  .echips{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:36px;}
+  .echips span{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;color:#cfe0e8;}
+  .ecard{background:#fff;border-radius:var(--radius-2xl);padding:28px;max-width:520px;margin:0 auto;color:var(--color-text);box-shadow:var(--shadow-xl);}
+  .ecard h4{font-size:17px;font-weight:700;text-align:center;color:var(--color-text-strong);margin:0 0 18px;}
+  .erow{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--aminy-mist);border-radius:12px;margin-bottom:8px;font-size:15px;color:var(--aminy-navy-500);}
+  .erow b{color:var(--color-text-strong);font-weight:700;}
+  .erow.total{background:var(--aminy-teal-50);border:1px solid var(--aminy-teal-100);}
+  .erow.total span,.erow.total b{color:var(--aminy-teal-800);font-size:17px;}
+  .eyr{text-align:center;font-size:14px;color:var(--color-text-muted);margin:14px 0 0;}
+  .edis{text-align:center;font-size:12px;color:var(--color-text-subtle);font-style:italic;margin:8px 0 0;line-height:1.5;}
+
+  .cta{background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));text-align:center;}
+  .cta h2{margin-bottom:14px;}
+  .cta p{font-size:17px;color:var(--aminy-navy-500);max-width:480px;margin:0 auto 30px;line-height:1.6;}
+  footer{padding:40px 0;border-top:1px solid var(--color-border);}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .foot img{height:24px;}
+  .foot .lk{display:flex;gap:22px;}
+  .foot a{font-size:13.5px;color:var(--aminy-navy-500);text-decoration:none;}
+
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease-lift),transform .6s var(--ease-lift);}
+  .rv.on{opacity:1;transform:none;}
+  .hero .rv,nav .rv{opacity:1;transform:none;transition:none;}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none;}}
+  @media (max-width:980px){
+    .hero-in{grid-template-columns:1fr;padding:52px 0;}
+    .pcard{display:none;}
+    h1{font-size:38px;}.nav-in .pfx{display:none;}
+    .roles{grid-template-columns:repeat(2,1fr);}
+    .feats,.steps{grid-template-columns:1fr;}
+    .wrap{padding:0 20px;}section{padding:56px 0;}h2{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <img src="../../assets/aminy_logo.png" alt="aminy"/>
+  <span class="pfx">for Providers</span>
+  <div class="nav-cta">
+    <a class="signin" href="#">Sign in</a>
+    <a class="btn btn-primary btn-sm" href="#apply">Apply to join</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap hero-in">
+  <div>
+    <span class="kicker rv">For BCBAs, RBTs, SLPs, OTs &amp; mental-health clinicians</span>
+    <h1 class="rv">Grow your practice.<br/><em>Get your evenings back.</em></h1>
+    <p class="sub rv">Join Aminy's marketplace and meet families who need you. AI drafts your notes, we handle credentialing and claims, and you keep 90% — built for neurodivergent care.</p>
+    <div class="hero-ctas rv">
+      <a class="btn btn-primary btn-lg" href="#apply">Apply to join →</a>
+      <a class="btn btn-ghost btn-lg" href="#tools">See the tools</a>
+    </div>
+    <div class="trust rv">
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Free to join</span>
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> 90% revenue share</span>
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> You set your schedule</span>
+    </div>
+  </div>
+  <div class="pcard rv" aria-hidden="true">
+    <div class="top">
+      <span class="pill">Sample profile · illustrative</span>
+      <div class="pc-id">
+        <div class="pc-av">AM</div>
+        <div>
+          <b>Dr. Ana Morales</b>
+          <div class="cr">BCBA-D · LBA</div>
+          <div class="rt"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--aminy-win-500)" stroke="var(--aminy-win-500)" stroke-width="1"><path d="M12 2.6l2.6 5.7 6.2.7-4.6 4.2 1.2 6.1L12 20l-5.6 3 1.2-6.1L3 12.7l6.2-.7z"/></svg> 4.9 <span style="color:var(--color-text-subtle)">(127 reviews)</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pc-stats">
+      <div><b>7</b><span>Active clients</span></div>
+      <div><b>$8.2k</b><span>This month</span></div>
+      <div><b>98%</b><span>Satisfaction</span></div>
+    </div>
+    <div class="pc-verified"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Verified Provider</div>
+  </div>
+</div></header>
+
+<section class="center"><div class="wrap">
+  <span class="eyebrow rv">Who we're looking for</span>
+  <h2 class="rv">Licensed clinicians who love this work.</h2>
+  <p class="lede rv">If you're credentialed and passionate about neurodivergent care, there's a place for you on Aminy.</p>
+  <div class="roles">
+    <div class="role rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg></div><b>BCBAs</b><span>Board Certified Behavior Analysts</span></div>
+    <div class="role rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div><b>RBTs</b><span>Registered Behavior Technicians</span></div>
+    <div class="role rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><b>Psychologists</b><span>Clinical &amp; child psychologists</span></div>
+    <div class="role rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div><b>Therapists</b><span>LMFT · LCSW · LPC</span></div>
+    <div class="role rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><b>SLPs</b><span>Speech-Language Pathologists</span></div>
+  </div>
+</div></section>
+
+<section class="mist" id="tools"><div class="wrap">
+  <span class="eyebrow rv">Everything you need to grow</span>
+  <h2 class="rv">The practice OS that does the busywork.</h2>
+  <p class="lede rv">Aminy handles the admin that burns clinicians out, so you can focus on what matters most — your clients.</p>
+  <div class="feats">
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg></div><h3>AI session notes</h3><p>Aminy drafts SOAP notes from your session data. You review and sign — never start from a blank page again.</p></div>
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>A marketplace of families</h3><p>Get discovered by families actively seeking your expertise. Build your caseload without marketing overhead.</p></div>
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div><h3>Built-in telehealth</h3><p>Encrypted video sessions right in the platform — no third-party tools, no extra logins.</p></div>
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><h3>Smart scheduling</h3><p>Set your availability; families book directly. Automated reminders + calendar invites cut no-shows.</p></div>
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div><h3>Credentialing &amp; claims</h3><p>We run payer credentialing for you and catch denials before they cost you — billing handled end to end.</p></div>
+    <div class="feat rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><h3>Get paid, automatically</h3><p>Stripe payouts 2 business days after each session. Transparent 10% platform fee — no monthly cost.</p></div>
+  </div>
+</div></section>
+
+<section class="center"><div class="wrap">
+  <span class="eyebrow rv">Getting started is easy</span>
+  <h2 class="rv">From application to first family in days.</h2>
+  <p class="lede rv">Our AI verifies your license and credentials fast, so you're seeing clients sooner.</p>
+  <div class="steps">
+    <div class="step rv"><div class="n"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg></div><b>1 · Apply online</b><span>A simple application with your credentials.</span></div>
+    <div class="step rv"><div class="n"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg></div><b>2 · AI verification</b><span>We verify your license &amp; credentials.</span></div>
+    <div class="step rv"><div class="n"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div><b>3 · Build profile</b><span>Set up your profile and availability.</span></div>
+    <div class="step rv"><div class="n"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><b>4 · Start helping</b><span>Connect with families and grow.</span></div>
+  </div>
+</div></section>
+
+<section class="earn"><div class="wrap center">
+  <span class="eyebrow rv" style="color:#8EC0CE;">Earn what you're worth</span>
+  <h2 class="rv">Competitive, transparent rates.</h2>
+  <p class="lede rv" style="margin:0 auto 28px;">Standardized rates by credential and session length. Keep 90% — no hidden costs, ever.</p>
+  <div class="echips rv" style="justify-content:center;">
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8EC0CE" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> BCBAs $65–$95/session</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8EC0CE" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> RBTs $20–$38/session</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8EC0CE" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Weekly payouts</span>
+    <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8EC0CE" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> No monthly fees</span>
+  </div>
+  <div class="ecard rv">
+    <h4>BCBA earnings example</h4>
+    <div class="erow"><span>20 consults/wk @ $65</span><b>$1,300</b></div>
+    <div class="erow"><span>10 assessments/wk @ $95</span><b>$950</b></div>
+    <div class="erow total"><span>Weekly earnings</span><b>$2,250</b></div>
+    <p class="eyr">= $9,000/month or $108,000/year</p>
+    <p class="edis">Hypothetical illustration. Example only — actual earnings vary by caseload, credential, and availability.</p>
+  </div>
+</div></section>
+
+<section class="cta" id="apply"><div class="wrap">
+  <h2 class="rv">Ready to make a difference?</h2>
+  <p class="rv">Join our growing network of verified providers and help families get the support they need. Applications reviewed within 24–48 hours.</p>
+  <a class="btn btn-primary btn-lg rv" href="#">Apply now — it's free →</a>
+  <p class="rv" style="font-size:14px;color:var(--color-text-muted);margin-top:18px;">Questions? Email <a href="#" style="color:var(--aminy-teal-700);text-decoration:none;font-weight:600;">providers@aminy.ai</a></p>
+</div></section>
+
+<footer><div class="wrap foot">
+  <div style="display:flex;align-items:center;gap:10px;"><img src="../../assets/aminy_logo.png" alt="aminy"/><span style="font-size:13px;color:var(--color-text-muted);">for Providers</span></div>
+  <div class="lk"><a href="legal.html">Privacy Policy</a><a href="legal.html">Terms of Service</a><a href="#">Contact</a><a href="index.html">For families →</a></div>
+</div></footer>
+
+<script>
+  (function(){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{threshold:0.12});
+    document.querySelectorAll('.rv').forEach(function(el,i){el.style.transitionDelay=(i%4)*55+'ms';io.observe(el);});
+    setTimeout(function(){document.querySelectorAll('.rv:not(.on)').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight)el.classList.add('on');});},700);
+  })();
+</script>
+</body>
+</html>

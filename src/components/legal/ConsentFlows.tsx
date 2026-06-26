@@ -60,7 +60,7 @@ const CONSENT_CONTENT: Record<ConsentType, {
     sections: [
       {
         heading: 'Nature of Telehealth',
-        body: 'Telehealth involves the use of electronic communications, including video conferencing, to provide healthcare services remotely. Your provider will use HIPAA-compliant technology to conduct sessions. Telehealth is not the same as in-person care, and some aspects of treatment may differ.',
+        body: 'Telehealth involves the use of electronic communications, including video conferencing, to provide healthcare services remotely. Your provider will use encrypted, HIPAA-conscious technology to conduct sessions. Telehealth is not the same as in-person care, and some aspects of treatment may differ.',
       },
       {
         heading: 'Benefits',
@@ -99,7 +99,7 @@ const CONSENT_CONTENT: Record<ConsentType, {
       },
       {
         heading: 'Storage & Security',
-        body: 'Recordings are encrypted (AES-256) and stored in HIPAA-compliant infrastructure. Access is restricted to authorized clinical personnel only. Recordings are automatically deleted after the retention period specified below.',
+        body: 'Recordings are encrypted (AES-256) and stored in HIPAA-conscious infrastructure with strong security controls. Access is restricted to authorized clinical personnel only. Recordings are automatically deleted after the retention period specified below.',
       },
       {
         heading: 'Retention Period',
@@ -268,13 +268,13 @@ export function ConsentFlow({
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           {content.icon}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">{content.title}</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">{content.title}</h1>
             <p className="text-sm text-[#5A6B7A]">Version {content.version}</p>
           </div>
         </div>
@@ -303,7 +303,7 @@ export function ConsentFlow({
 
         {/* Patient/child info */}
         {(patientName || childName) && (
-          <div className="mb-4 rounded-lg bg-[#FAF7F2] p-3 text-sm">
+          <div className="mb-4 rounded-lg bg-[#F6FBFB] p-3 text-sm">
             {patientName && <p><strong>Patient:</strong> {patientName}</p>}
             {childName && <p><strong>Child:</strong> {childName}</p>}
           </div>
@@ -313,7 +313,7 @@ export function ConsentFlow({
         <div className="space-y-4">
           {content.sections.map((section, i) => (
             <div key={i}>
-              <h3 className="text-sm font-semibold text-[#1B2733]">{section.heading}</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">{section.heading}</h3>
               <p className="mt-1 text-sm leading-relaxed text-[#3A4A57]">{section.body}</p>
             </div>
           ))}
@@ -385,7 +385,7 @@ export function ConsentFlow({
           </button>
           <button
             onClick={() => setShowDeclineConfirm(true)}
-            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-3 text-sm font-semibold text-[#3A4A57] transition-colors hover:bg-[#FAF7F2]"
+            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-3 text-sm font-semibold text-[#3A4A57] transition-colors hover:bg-[#F6FBFB]"
           >
             Decline
           </button>
@@ -450,11 +450,11 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-[#1B2733]">Manage Consents</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Manage Consents</h1>
         </div>
       </div>
 
@@ -490,7 +490,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
             <h2 className="mb-3 text-sm font-semibold text-[#5A6B7A] uppercase tracking-wide">Withdrawn</h2>
             <div className="space-y-2">
               {withdrawnConsents.map(c => (
-                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-[#E8E4DF] bg-[#FAF7F2] p-3">
+                <div key={c.consentType} className="flex items-center justify-between rounded-lg border border-[#E8E4DF] bg-[#F6FBFB] p-3">
                   <div>
                     <p className="text-sm font-semibold text-[#5A6B7A]">{labelMap[c.consentType]}</p>
                     <p className="text-sm text-[#5A6B7A]">
@@ -530,7 +530,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
               <div className="flex items-start gap-3">
                 <AlertTriangle className="h-6 w-6 text-red-500" />
                 <div>
-                  <h3 className="text-base font-semibold text-[#1B2733]">Withdraw Consent</h3>
+                  <h3 className="text-base font-semibold text-[#132F43]">Withdraw Consent</h3>
                   <p className="mt-2 text-sm text-[#5A6B7A]">
                     Are you sure you want to withdraw your {labelMap[withdrawTarget]} consent?
                     This action will be timestamped and may affect available services.
@@ -544,7 +544,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
                     </button>
                     <button
                       onClick={() => setWithdrawTarget(null)}
-                      className="rounded-lg border border-[#E8E4DF] px-4 py-2 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+                      className="rounded-lg border border-[#E8E4DF] px-4 py-2 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
                     >
                       Cancel
                     </button>

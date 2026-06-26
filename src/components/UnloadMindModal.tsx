@@ -121,9 +121,9 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
       case 'routine':
         return 'bg-[#EEF4F8] text-blue-700 border-[#C8DDE8]';
       case 'someday':
-        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
+        return 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]';
       default:
-        return 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]';
+        return 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]';
     }
   };
 
@@ -157,7 +157,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                 <Brain className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <h2 id="unload-mind-title" className="text-[#1B2733]">
+                <h2 id="unload-mind-title" className="text-[#132F43]">
                   {CONTENT.UNLOAD_MIND.TITLE}
                 </h2>
                 <p className="text-sm text-[#5A6B7A]">
@@ -243,7 +243,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
 
               {/* Tasks */}
               <div>
-                <h3 className="text-[#1B2733] mb-3">Your tasks</h3>
+                <h3 className="text-[#132F43] mb-3">Your tasks</h3>
                 <div className="space-y-2">
                   {categorizedTasks.map((task, index) => (
                     <div
@@ -268,7 +268,7 @@ export function UnloadMindModal({ isOpen, onClose, onTasksCreated }: UnloadMindM
                             </span>
                             <span className="text-sm text-[#5A6B7A]">{task.estimatedTime}</span>
                           </div>
-                          <p className="text-[#1B2733]">{task.title}</p>
+                          <p className="text-[#132F43]">{task.title}</p>
                           {task.reason && (
                             <p className="text-sm text-[#5A6B7A] mt-1 italic">💡 {task.reason}</p>
                           )}

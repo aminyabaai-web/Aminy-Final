@@ -84,7 +84,7 @@ export function StreakTracker({
           <Flame className="w-8 h-8 text-orange-600" />
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">{currentStreak}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-[#132F43]">{currentStreak}</p>
           <p className="text-sm text-muted-foreground">
             {currentStreak === 1 ? 'day' : 'days'} this week
           </p>
@@ -92,7 +92,7 @@ export function StreakTracker({
       </div>
 
       {/* Longest Streak */}
-      <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg mb-3">
+      <div className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg mb-3">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">Longest streak</span>
@@ -111,7 +111,7 @@ export function StreakTracker({
                 aspect-square rounded-lg flex flex-col items-center justify-center
                 ${isActive 
                   ? 'bg-gradient-to-br from-orange-100 to-amber-100 border border-orange-200' 
-                  : 'bg-[#F0EDE8] border border-[#E8E4DF]'
+                  : 'bg-[#EDF4F7] border border-[#E8E4DF]'
                 }
               `}
             >
@@ -192,7 +192,7 @@ export function StreakTracker({
           </p>
         </div>
       ) : (
-        <div className="p-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg">
+        <div className="p-3 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg">
           <p className="text-sm text-[#5A6B7A]">
             Start your streak today with a quick check-in.
           </p>

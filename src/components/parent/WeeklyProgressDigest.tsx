@@ -86,7 +86,7 @@ function ProgressBar({ value, color = 'teal' }: { value: number; color?: string 
     red: 'bg-red-400',
   };
   return (
-    <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
+    <div className="w-full bg-[#EDF4F7] rounded-full h-2.5">
       <div
         className={`h-2.5 rounded-full transition-all ${colorMap[color] || colorMap.teal}`}
         style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
@@ -135,7 +135,7 @@ export function WeeklyProgressDigest({
   const totalGoals = goalProgress.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white pb-20">
       {/* Header */}
       <div className="bg-gradient-to-br from-teal-600 to-teal-700 text-white px-5 pt-8 pb-6 rounded-b-3xl">
         <div className="flex items-center justify-between mb-1">
@@ -191,7 +191,7 @@ export function WeeklyProgressDigest({
 
         {/* Ease Activity Breakdown */}
         <Card className="p-4">
-          <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
             <Brain size={16} className="text-[#6B9080]" /> Ease Activities
           </h3>
           <div className="space-y-2.5">
@@ -205,7 +205,7 @@ export function WeeklyProgressDigest({
                   <div className="w-20">
                     <ProgressBar value={(d.count / Math.max(...easeEngagement.activitiesByDomain.map(x => x.count), 1)) * 100} />
                   </div>
-                  <span className="text-sm font-medium text-[#1B2733] w-6 text-right">{d.count}</span>
+                  <span className="text-sm font-medium text-[#132F43] w-6 text-right">{d.count}</span>
                 </div>
               </div>
             ))}
@@ -215,13 +215,13 @@ export function WeeklyProgressDigest({
         {/* Therapy Sessions */}
         {therapySessions.length > 0 && (
           <Card className="p-4">
-            <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+            <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
               <Calendar size={16} className="text-blue-600" /> Therapy This Week
             </h3>
             {therapySessions.map((session, i) => (
               <div key={i} className="mb-3 last:mb-0 pb-3 last:pb-0 border-b last:border-0 border-[#E8E4DF]">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-[#1B2733]">{session.type}</span>
+                  <span className="text-sm font-medium text-[#132F43]">{session.type}</span>
                   <span className="text-sm text-[#5A6B7A]">{session.date}</span>
                 </div>
                 <p className="text-sm text-[#5A6B7A] mb-1.5">with {session.provider}</p>
@@ -238,13 +238,13 @@ export function WeeklyProgressDigest({
 
         {/* Goal Progress */}
         <Card className="p-4">
-          <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
             <Target size={16} className="text-purple-600" /> Goal Progress
           </h3>
           {goalProgress.map((goal, i) => (
             <div key={i} className="mb-4 last:mb-0">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-[#1B2733]">{goal.title}</span>
+                <span className="text-sm font-medium text-[#132F43]">{goal.title}</span>
                 <TrendBadge trend={goal.status} />
               </div>
               <div className="flex items-center gap-2">
@@ -268,27 +268,27 @@ export function WeeklyProgressDigest({
 
         {/* Home Program */}
         <Card className="p-4">
-          <h3 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+          <h3 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
             <Heart size={16} className="text-rose-500" /> Home Program
           </h3>
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-[#5A6B7A]">
               {homeProgram.tasksCompleted}/{homeProgram.tasksAssigned} tasks completed
             </span>
-            <span className="text-lg font-bold text-[#1B2733]">{homeProgram.completionRate}%</span>
+            <span className="text-lg font-bold text-[#132F43]">{homeProgram.completionRate}%</span>
           </div>
           <ProgressBar value={homeProgram.completionRate} color={homeProgram.completionRate >= 70 ? 'green' : homeProgram.completionRate >= 40 ? 'amber' : 'red'} />
         </Card>
 
         {/* Mood Trend */}
         <Card className="p-4">
-          <h3 className="font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+          <h3 className="font-semibold text-[#132F43] mb-2 flex items-center gap-2">
             <Wind size={16} className="text-[#6B9080]" /> Mood This Week
           </h3>
           <div className="flex items-center gap-3">
             <MoodEmoji value={moodTrend.avgMood} />
             <div>
-              <div className="text-sm font-medium text-[#1B2733]">
+              <div className="text-sm font-medium text-[#132F43]">
                 Average: {moodTrend.avgMood.toFixed(1)}/5
               </div>
               <div className="text-sm text-[#5A6B7A]">

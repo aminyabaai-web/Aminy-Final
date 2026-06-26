@@ -210,7 +210,7 @@ export function ReferralDashboard({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-[#1B2733] flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[#132F43] flex items-center gap-2">
             <Gift className="w-6 h-6 text-[#6B9080]" />
             Refer & Earn
           </h2>
@@ -358,21 +358,21 @@ export function ReferralDashboard({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
           <Card className="p-3 text-center">
             <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
-            <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+            <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
               {summary.totalReferrals}
             </div>
             <div className="text-sm text-[#5A6B7A]">Total Referrals</div>
           </Card>
           <Card className="p-3 text-center">
             <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-            <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+            <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
               {summary.qualifiedReferrals}
             </div>
             <div className="text-sm text-[#5A6B7A]">Qualified</div>
           </Card>
           <Card className="p-3 text-center">
             <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
-            <div className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+            <div className="text-xl sm:text-2xl font-bold text-[#132F43]">
               {summary.totalRewardsEarned}
             </div>
             <div className="text-sm text-[#5A6B7A]">Free Months</div>
@@ -386,7 +386,7 @@ export function ReferralDashboard({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               {getTierIcon(summary.currentTier)}
-              <span className="font-semibold text-[#1B2733]">
+              <span className="font-semibold text-[#132F43]">
                 {summary.currentTier?.name || 'Getting Started'}
               </span>
               {summary.currentTier && (
@@ -443,7 +443,7 @@ export function ReferralDashboard({
 
       {/* Tier Roadmap */}
       <Card className="p-3 sm:p-4">
-        <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Trophy className="w-5 h-5 text-amber-500" />
           Tier Roadmap
         </h3>
@@ -462,13 +462,13 @@ export function ReferralDashboard({
                     ? 'border-[#6B9080] bg-[#6B9080]/10'
                     : isUnlocked
                     ? 'border-green-200 bg-green-50'
-                    : 'border-[#E8E4DF] bg-[#FAF7F2]'
+                    : 'border-[#E8E4DF] bg-[#F6FBFB]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{tier.badgeIcon}</span>
-                    <span className="font-medium text-[#1B2733]">{tier.name}</span>
+                    <span className="font-medium text-[#132F43]">{tier.name}</span>
                     {isCurrentTier && (
                       <Badge className="bg-primary text-white text-sm">Current</Badge>
                     )}
@@ -492,7 +492,7 @@ export function ReferralDashboard({
       {/* Recent Referrals */}
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-[#1B2733]">Recent Referrals</h3>
+          <h3 className="font-semibold text-[#132F43]">Recent Referrals</h3>
           {referrals.length > 5 && (
             <Button
               variant="ghost"
@@ -517,7 +517,7 @@ export function ReferralDashboard({
               return (
                 <div
                   key={referral.id}
-                  className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg"
+                  className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg"
                 >
                   <div className="flex items-center gap-3">
                     <div
@@ -538,7 +538,7 @@ export function ReferralDashboard({
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-sm text-[#1B2733]">
+                      <div className="font-medium text-sm text-[#132F43]">
                         Friend joined via your link
                       </div>
                       <div className="text-sm text-[#5A6B7A]">

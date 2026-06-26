@@ -60,7 +60,7 @@ const STATUS_CONFIG: Record<PanelApplicationStatus, {
   bg: string;
   border: string;
 }> = {
-  'not-started': { label: 'Not Started', color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]' },
+  'not-started': { label: 'Not Started', color: 'text-[#5A6B7A]', bg: 'bg-[#F6FBFB]', border: 'border-[#E8E4DF]' },
   'submitted': { label: 'Submitted', color: 'text-blue-600', bg: 'bg-[#EEF4F8]', border: 'border-[#C8DDE8]' },
   'pending': { label: 'Pending Review', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200' },
   'credentialed': { label: 'Credentialed', color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-200' },
@@ -75,7 +75,7 @@ function ReadinessGauge({ percent }: { percent: number }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
-  const color = percent >= 80 ? '#4E93A8' : percent >= 50 ? '#F59E0B' : '#EF4444';
+  const color = percent >= 80 ? '#2A7D99' : percent >= 50 ? '#F59E0B' : '#EF4444';
 
   return (
     <div className="flex flex-col items-center">
@@ -104,7 +104,7 @@ function RiskBadge({ severity }: { severity: 'critical' | 'high' | 'medium' }) {
   const config = {
     critical: 'bg-red-100 text-red-700 border border-red-200',
     high: 'bg-amber-100 text-amber-700 border border-amber-200',
-    medium: 'bg-yellow-100 text-yellow-700 border border-[#F0EDE8]',
+    medium: 'bg-yellow-100 text-yellow-700 border border-[#EDF4F7]',
   };
   return (
     <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${config[severity]}`}>
@@ -132,7 +132,7 @@ function GanttBar({ label, start, end, status, index }: {
   return (
     <div className="flex items-center gap-3 mb-2">
       <span className="text-sm text-[#5A6B7A] w-32 shrink-0 truncate">{label}</span>
-      <div className="flex-1 relative h-6 bg-[#F0EDE8] rounded overflow-hidden">
+      <div className="flex-1 relative h-6 bg-[#EDF4F7] rounded overflow-hidden">
         <motion.div
           className={`absolute top-1 bottom-1 rounded ${colors[status]}`}
           style={{ left: `${start}%`, width: `${width}%` }}
@@ -274,7 +274,7 @@ export default function CredentialingOrchestrator({
 
               {/* Payer Kanban Board */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <Users size={15} className="text-[#6B9080]" />
                   Payer Status Board
                 </h2>
@@ -300,7 +300,7 @@ export default function CredentialingOrchestrator({
                               }}
                             >
                               <div>
-                                <p className="text-sm font-medium text-[#1B2733]">{app.payer}</p>
+                                <p className="text-sm font-medium text-[#132F43]">{app.payer}</p>
                                 {app.submittedDate && (
                                   <p className="text-sm text-[#5A6B7A]">Submitted {app.submittedDate}</p>
                                 )}
@@ -326,7 +326,7 @@ export default function CredentialingOrchestrator({
               {/* Risk Alerts Full List */}
               {risks.length > 0 && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                  <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                     <AlertTriangle size={15} className="text-red-500" />
                     Credentialing Risks
                   </h2>
@@ -337,7 +337,7 @@ export default function CredentialingOrchestrator({
                           <div className="flex items-center gap-2 mb-0.5">
                             <RiskBadge severity={risk.severity} />
                           </div>
-                          <p className="text-sm font-medium text-[#1B2733] mt-1">{risk.description}</p>
+                          <p className="text-sm font-medium text-[#132F43] mt-1">{risk.description}</p>
                           <p className="text-sm text-[#5A6B7A] mt-0.5">{risk.action}</p>
                         </div>
                         {risk.link && (
@@ -368,7 +368,7 @@ export default function CredentialingOrchestrator({
             >
               {/* Payer Selector */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <Sparkles size={15} className="text-[#6B9080]" />
                   Select Payer for AI Playbook
                 </h2>
@@ -394,7 +394,7 @@ export default function CredentialingOrchestrator({
                             : `${cfg.border} ${cfg.bg} hover:opacity-80`
                         }`}
                       >
-                        <p className="text-sm font-medium text-[#1B2733]">{names[payerId]}</p>
+                        <p className="text-sm font-medium text-[#132F43]">{names[payerId]}</p>
                         <p className={`text-sm mt-0.5 ${cfg.color}`}>{cfg.label}</p>
                       </button>
                     );
@@ -406,8 +406,8 @@ export default function CredentialingOrchestrator({
               {selectedPlaybook && (
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
                   <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-sm font-semibold text-[#1B2733]">{selectedPlaybook.payerName} Enrollment</h2>
-                    <span className="text-xs text-[#5A6B7A] bg-[#F0EDE8] px-2 py-1 rounded-full">
+                    <h2 className="text-sm font-semibold text-[#132F43]">{selectedPlaybook.payerName} Enrollment</h2>
+                    <span className="text-xs text-[#5A6B7A] bg-[#EDF4F7] px-2 py-1 rounded-full">
                       ~{selectedPlaybook.totalEstimatedDays} days
                     </span>
                   </div>
@@ -421,7 +421,7 @@ export default function CredentialingOrchestrator({
                         <div
                           key={idx}
                           className={`border rounded-xl transition-all ${
-                            isChecked ? 'border-green-200 bg-green-50' : 'border-[#E8E4DF] bg-[#FAF7F2]'
+                            isChecked ? 'border-green-200 bg-green-50' : 'border-[#E8E4DF] bg-[#F6FBFB]'
                           }`}
                         >
                           <div
@@ -447,7 +447,7 @@ export default function CredentialingOrchestrator({
                                 <span className="text-xs text-[#8A9BA8]">·</span>
                                 <span className="text-sm text-[#5A6B7A]">{step.estimatedDays}d</span>
                               </div>
-                              <p className={`text-sm font-medium leading-tight ${isChecked ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
+                              <p className={`text-sm font-medium leading-tight ${isChecked ? 'line-through text-[#8A9BA8]' : 'text-[#132F43]'}`}>
                                 {step.title}
                               </p>
                             </div>
@@ -557,7 +557,7 @@ export default function CredentialingOrchestrator({
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <h2 className="text-sm font-semibold text-[#1B2733] flex items-center gap-2">
+                    <h2 className="text-sm font-semibold text-[#132F43] flex items-center gap-2">
                       <Shield size={15} className="text-blue-600" />
                       CAQH ProView Status
                     </h2>
@@ -580,16 +580,16 @@ export default function CredentialingOrchestrator({
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mb-4 text-center">
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
-                    <p className="text-xl font-bold text-[#1B2733]">{caqhProfile.completionPercent}%</p>
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
+                    <p className="text-xl font-bold text-[#132F43]">{caqhProfile.completionPercent}%</p>
                     <p className="text-sm text-[#5A6B7A]">Complete</p>
                   </div>
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
-                    <p className="text-sm text-[#1B2733] font-semibold leading-tight">{caqhProfile.lastAttestedDate}</p>
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
+                    <p className="text-sm text-[#132F43] font-semibold leading-tight">{caqhProfile.lastAttestedDate}</p>
                     <p className="text-sm text-[#5A6B7A]">Last Attested</p>
                   </div>
-                  <div className="bg-[#FAF7F2] rounded-xl p-2">
-                    <p className="text-sm text-[#1B2733] font-semibold leading-tight">{caqhProfile.nextAttestationDue}</p>
+                  <div className="bg-[#F6FBFB] rounded-xl p-2">
+                    <p className="text-sm text-[#132F43] font-semibold leading-tight">{caqhProfile.nextAttestationDue}</p>
                     <p className="text-sm text-[#5A6B7A]">Next Due</p>
                   </div>
                 </div>
@@ -624,7 +624,7 @@ export default function CredentialingOrchestrator({
                           cat.percent === 100 ? 'text-green-600' : cat.percent >= 70 ? 'text-amber-600' : 'text-red-500'
                         }`}>{cat.percent}%</span>
                       </div>
-                      <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
                             cat.percent === 100 ? 'bg-green-500' : cat.percent >= 70 ? 'bg-amber-400' : 'bg-red-400'
@@ -654,7 +654,7 @@ export default function CredentialingOrchestrator({
               className="space-y-4"
             >
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-1 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-1 flex items-center gap-2">
                   <Clock size={15} className="text-[#6B9080]" />
                   Credentialing Timeline
                 </h2>
@@ -691,7 +691,7 @@ export default function CredentialingOrchestrator({
                       <span className="text-sm text-[#3A4A57]">{app.payer}</span>
                       <div className="text-right">
                         {app.expectedApprovalDate ? (
-                          <span className="text-sm font-medium text-[#1B2733]">{app.expectedApprovalDate}</span>
+                          <span className="text-sm font-medium text-[#132F43]">{app.expectedApprovalDate}</span>
                         ) : app.status === 'credentialed' ? (
                           <span className="text-sm font-medium text-green-600 flex items-center gap-1">
                             <CheckCircle size={13} /> Approved
@@ -707,7 +707,7 @@ export default function CredentialingOrchestrator({
 
               {/* Generate Roster Letter */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <ListChecks size={15} className="text-[#5A6B7A]" />
                   Roster Update Letters
                 </h2>
@@ -722,7 +722,7 @@ export default function CredentialingOrchestrator({
                     return (
                       <button
                         key={type}
-                        className="flex items-center gap-2 p-3 border border-[#E8E4DF] rounded-xl hover:bg-[#FAF7F2] transition-colors text-left"
+                        className="flex items-center gap-2 p-3 border border-[#E8E4DF] rounded-xl hover:bg-[#F6FBFB] transition-colors text-left"
                       >
                         <Download size={13} className="text-[#8A9BA8] shrink-0" />
                         <span className="text-sm text-[#3A4A57]">{labels[type]}</span>

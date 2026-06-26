@@ -977,9 +977,9 @@ function statusBadge(status: string) {
     denied: 'bg-red-100 text-red-700',
     fail: 'bg-red-100 text-red-700',
     rejected: 'bg-red-100 text-red-700',
-    missing: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    missing: 'bg-[#EDF4F7] text-[#5A6B7A]',
     pending: 'bg-blue-100 text-blue-700',
-    application: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    application: 'bg-[#EDF4F7] text-[#5A6B7A]',
     processing: 'bg-blue-100 text-blue-700',
     credentialing: 'bg-violet-100 text-violet-700',
     new: 'bg-blue-100 text-blue-700',
@@ -987,7 +987,7 @@ function statusBadge(status: string) {
     won: 'bg-emerald-100 text-emerald-700',
     lost: 'bg-red-100 text-red-700',
   };
-  const cls = colors[status] || 'bg-[#F0EDE8] text-[#5A6B7A]';
+  const cls = colors[status] || 'bg-[#EDF4F7] text-[#5A6B7A]';
   const label = status.replace(/-/g, ' ');
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
@@ -1028,7 +1028,7 @@ function CAQHTab() {
       {/* Profile Completion */}
       <Card className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-[#1B2733]">CAQH Profile Completion</h3>
+          <h3 className="text-sm font-semibold text-[#132F43]">CAQH Profile Completion</h3>
           <span className="text-sm font-bold text-[#3A4A57]">{completionPct}%</span>
         </div>
         <Progress value={completionPct} className="h-2 mb-3" />
@@ -1103,7 +1103,7 @@ function CAQHTab() {
 
       {/* Document Checklist */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Document Checklist</h3>
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3">Document Checklist</h3>
         <div className="space-y-2">
           {docs.map((doc) => (
             <div
@@ -1181,7 +1181,7 @@ function EnrollmentTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-1">
             <Sparkles className="w-5 h-5 text-blue-500" />
-            <h3 className="text-sm font-semibold text-[#1B2733]">{activeWorkflow.payerName} Enrollment</h3>
+            <h3 className="text-sm font-semibold text-[#132F43]">{activeWorkflow.payerName} Enrollment</h3>
           </div>
           <p className="text-sm text-[#5A6B7A] mb-4">
             Estimated timeline: {activeWorkflow.totalEstimatedDays} days total
@@ -1196,7 +1196,7 @@ function EnrollmentTab() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold text-[#1B2733]">{step.title}</p>
+                      <p className="text-sm font-semibold text-[#132F43]">{step.title}</p>
                       <span className="text-sm text-slate-400">~{step.estimatedDays}d</span>
                     </div>
                     <p className="text-sm text-[#5A6B7A] mt-1 leading-relaxed">{step.description}</p>
@@ -1245,7 +1245,7 @@ function EnrollmentTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Payer Enrollment Pipeline</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Payer Enrollment Pipeline</h3>
         <Button variant="outline" size="sm" className="h-7 text-sm opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Start New Enrollment
         </Button>
@@ -1288,7 +1288,7 @@ function EnrollmentTab() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-[#5A6B7A]" />
-                <span className="text-sm font-semibold text-[#1B2733]">{enrollment.payerName}</span>
+                <span className="text-sm font-semibold text-[#132F43]">{enrollment.payerName}</span>
               </div>
               {statusBadge(enrollment.stage)}
             </div>
@@ -1375,7 +1375,7 @@ function RosterTab() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Active Payer Roster</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Active Payer Roster</h3>
         <Button variant="outline" size="sm" className="h-7 text-sm opacity-60" disabled title="Coming soon">
           <Plus className="w-3 h-3 mr-1" /> Add Payer
         </Button>
@@ -1385,7 +1385,7 @@ function RosterTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#E8E4DF] bg-[#FAF7F2]">
+              <tr className="border-b border-[#E8E4DF] bg-[#F6FBFB]">
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Payer</th>
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Type</th>
                 <th className="text-left py-2 px-3 font-semibold text-[#5A6B7A]">Effective</th>
@@ -1418,7 +1418,7 @@ function RosterTab() {
 
       {/* Re-credentialing schedule */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-violet-500" />
           Upcoming Re-Credentialing
         </h3>
@@ -1552,7 +1552,7 @@ function AIPlaybooksTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Bot className="w-5 h-5 text-violet-500" />
-            <h3 className="text-sm font-semibold text-[#1B2733]">Denial Resolution Guide</h3>
+            <h3 className="text-sm font-semibold text-[#132F43]">Denial Resolution Guide</h3>
           </div>
 
           <motion.div
@@ -1655,7 +1655,7 @@ function AIPlaybooksTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-blue-500" />
-            <h3 className="text-sm font-semibold text-[#1B2733]">New Payer Enrollment Wizard</h3>
+            <h3 className="text-sm font-semibold text-[#132F43]">New Payer Enrollment Wizard</h3>
           </div>
           <div className="space-y-3">
             {['Verify CAQH profile is current', 'Check payer network availability in your state', 'Gather required documents (license, DEA, malpractice)', 'Complete payer-specific application', 'Submit via payer portal or clearinghouse', 'Track application status in Enrollment tab'].map((step, i) => (
@@ -1698,7 +1698,7 @@ function AIPlaybooksTab() {
         <Card className="p-4">
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-5 h-5 text-amber-500" />
-            <h3 className="text-sm font-semibold text-[#1B2733]">Credential Renewal Checklist</h3>
+            <h3 className="text-sm font-semibold text-[#132F43]">Credential Renewal Checklist</h3>
           </div>
           <div className="space-y-2">
             {[
@@ -1729,7 +1729,7 @@ function AIPlaybooksTab() {
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-1">
         <Bot className="w-5 h-5 text-violet-500" />
-        <h3 className="text-sm font-semibold text-[#1B2733]">AI-Guided Playbooks</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">AI-Guided Playbooks</h3>
       </div>
       <p className="text-sm text-[#5A6B7A]">
         Interactive decision trees to help you navigate common credentialing and billing scenarios.
@@ -1748,7 +1748,7 @@ function AIPlaybooksTab() {
               <div className="flex items-center gap-3">
                 {pb.icon}
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-[#1B2733]">{pb.title}</p>
+                  <p className="text-sm font-semibold text-[#132F43]">{pb.title}</p>
                   <p className="text-sm text-[#5A6B7A]">{pb.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -1946,7 +1946,7 @@ function DenialOpsTab() {
 
       {/* Category Breakdown */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-[#5A6B7A]" />
           Denial Categories
         </h3>
@@ -1975,7 +1975,7 @@ function DenialOpsTab() {
 
       {/* Individual Denials */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Active Denials</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Active Denials</h3>
         {denials.map((denial) => {
           const meta = DENIAL_CATEGORY_META[denial.denialCategory] || DENIAL_CATEGORY_META['other'];
           const isExpanded = expandedDenial === denial.id;
@@ -2050,7 +2050,7 @@ function DenialOpsTab() {
                       </div>
 
                       {/* Success Probability */}
-                      <div className="p-2 rounded bg-[#FAF7F2]">
+                      <div className="p-2 rounded bg-[#F6FBFB]">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-sm text-[#5A6B7A]">AI Appeal Success Estimate</span>
                           <span className={`text-sm font-bold ${
@@ -2184,7 +2184,7 @@ function StatusDashboardTab() {
 
       {/* Per-Payer Status */}
       <div className="space-y-2">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Enrollment Status by Payer</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Enrollment Status by Payer</h3>
         {entries.length === 0 && (
           <Card className="p-6 text-center">
             <Gauge className="w-8 h-8 text-slate-300 mx-auto mb-2" />
@@ -2224,7 +2224,7 @@ function StatusDashboardTab() {
             </div>
 
             {entry.nextAction && (
-              <div className="mt-2 p-2 rounded bg-[#FAF7F2] text-sm text-[#5A6B7A]">
+              <div className="mt-2 p-2 rounded bg-[#F6FBFB] text-sm text-[#5A6B7A]">
                 <span className="font-medium">Next action:</span> {entry.nextAction}
               </div>
             )}
@@ -2234,7 +2234,7 @@ function StatusDashboardTab() {
 
       {/* Re-Credentialing Calendar */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Calendar className="w-4 h-4 text-violet-500" />
           Re-Credentialing Calendar
         </h3>
@@ -2251,7 +2251,7 @@ function StatusDashboardTab() {
                 className={`flex items-center justify-between py-2 px-3 rounded-lg border ${
                   entry.enrollmentStatus === 're-credentialing-due'
                     ? 'bg-amber-50 border-amber-200'
-                    : 'bg-[#FAF7F2] border-[#E8E4DF]'
+                    : 'bg-[#F6FBFB] border-[#E8E4DF]'
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -2311,7 +2311,7 @@ function HelpTab() {
       <Card className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-violet-500" />
-          <h3 className="text-sm font-semibold text-[#1B2733]">AI Credentialing Assistant</h3>
+          <h3 className="text-sm font-semibold text-[#132F43]">AI Credentialing Assistant</h3>
         </div>
         <div className="flex gap-2">
           <Input
@@ -2335,7 +2335,7 @@ function HelpTab() {
       {/* FAQ */}
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-2 px-1">
-          <h3 className="text-sm font-semibold text-[#1B2733]">Frequently Asked Questions</h3>
+          <h3 className="text-sm font-semibold text-[#132F43]">Frequently Asked Questions</h3>
         </div>
         <div className="relative">
           <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -2396,8 +2396,8 @@ function HelpTab() {
       </div>
 
       {/* Contact Support */}
-      <Card className="p-4 bg-[#FAF7F2]">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-2">Need More Help?</h3>
+      <Card className="p-4 bg-[#F6FBFB]">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-2">Need More Help?</h3>
         <div className="space-y-2">
           <Button
             variant="outline"
@@ -2497,7 +2497,7 @@ export default function CredentialingSupportCenter({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-slate-900 text-white'
-                    : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                    : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                 }`}
               >
                 {tab.icon}
@@ -2505,7 +2505,7 @@ export default function CredentialingSupportCenter({
                 {badge != null && badge > 0 && (
                   <span
                     className={`ml-1 w-4 h-4 rounded-full text-xs font-bold flex items-center justify-center ${
-                      isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
+                      isActive ? 'bg-white text-[#132F43]' : 'bg-red-500 text-white'
                     }`}
                   >
                     {badge}

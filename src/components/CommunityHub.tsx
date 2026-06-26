@@ -863,7 +863,7 @@ export function CommunityHub({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-medium text-[#1B2733] dark:text-white">
+              <span className="font-medium text-[#132F43] dark:text-white">
                 {post.authorName}
               </span>
               {post.isBCBA && (
@@ -886,7 +886,7 @@ export function CommunityHub({
       </div>
 
       {/* Post Content */}
-      <h3 className="font-semibold text-[#1B2733] dark:text-white mb-2">{post.title}</h3>
+      <h3 className="font-semibold text-[#132F43] dark:text-white mb-2">{post.title}</h3>
       {/* line-clamp-3 is not in the precompiled Tailwind build, so clamp via inline style */}
       <p
         className="text-[#5A6B7A] dark:text-slate-300 text-sm mb-4"
@@ -967,7 +967,7 @@ export function CommunityHub({
           </span>
           <button
             onClick={() => handleBookmark(post.id)}
-            className={`p-1.5 rounded-full hover:bg-[#F0EDE8] ${
+            className={`p-1.5 rounded-full hover:bg-[#EDF4F7] ${
               post.isBookmarked ? 'text-[#6B9080]' : 'text-slate-400'
             }`}
           >
@@ -991,7 +991,7 @@ export function CommunityHub({
                 </Button>
               )}
               <div>
-                <h1 className="text-xl font-bold text-[#1B2733] dark:text-white">Community</h1>
+                <h1 className="text-xl font-bold text-[#132F43] dark:text-white">Community</h1>
                 <p className="text-sm text-[#5A6B7A]">Connect with other parents</p>
               </div>
             </div>
@@ -1069,7 +1069,7 @@ export function CommunityHub({
               <div className="mb-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Calendar className="w-4 h-4 text-[#6B9080]" />
-                  <h2 className="text-sm font-semibold text-[#1B2733] dark:text-white">
+                  <h2 className="text-sm font-semibold text-[#132F43] dark:text-white">
                     Live group sessions
                   </h2>
                 </div>
@@ -1083,7 +1083,7 @@ export function CommunityHub({
                         className="text-left shrink-0 w-64 p-3 rounded-xl bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 hover:shadow-md transition-shadow"
                         aria-label={`View group session: ${session.topic}`}
                       >
-                        <p className="font-medium text-sm text-[#1B2733] dark:text-white truncate">
+                        <p className="font-medium text-sm text-[#132F43] dark:text-white truncate">
                           {session.topic}
                         </p>
                         <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
@@ -1127,7 +1127,7 @@ export function CommunityHub({
                             <Users className="w-5 h-5 text-[#6B9080]" />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-medium text-sm text-[#1B2733] dark:text-white">
+                            <p className="font-medium text-sm text-[#132F43] dark:text-white">
                               Parents like you are in {suggestedGroup.name}
                             </p>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 mt-1">
@@ -1155,7 +1155,7 @@ export function CommunityHub({
         {/* Groups View */}
         {view === 'groups' && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
               Your Groups
             </h2>
             {groups.length === 0 ? (
@@ -1174,9 +1174,9 @@ export function CommunityHub({
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{group.name}</h3>
+                        <h3 className="font-semibold text-[#132F43] dark:text-white">{group.name}</h3>
                         {group.isPrivate && (
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">
+                          <Badge className="bg-[#EDF4F7] text-[#5A6B7A] text-sm">
                             <Shield className="w-3 h-3 mr-1" />
                             Private
                           </Badge>
@@ -1209,7 +1209,7 @@ export function CommunityHub({
         {/* Events View */}
         {view === 'events' && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
               Upcoming Events
             </h2>
             {events.length === 0 ? (
@@ -1224,7 +1224,7 @@ export function CommunityHub({
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-semibold text-[#1B2733] dark:text-white">{event.title}</h3>
+                      <h3 className="font-semibold text-[#132F43] dark:text-white">{event.title}</h3>
                       {event.isVirtual && (
                         <Badge className="bg-blue-100 text-blue-700 text-sm">Virtual</Badge>
                       )}
@@ -1404,7 +1404,7 @@ export function CommunityHub({
               </div>
               <div className="p-4 overflow-y-auto flex-1 space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+                  <span className="text-sm font-medium text-[#132F43] dark:text-white">
                     {activeThread.authorName}
                   </span>
                   {activeThread.isBCBA && (
@@ -1451,7 +1451,7 @@ export function CommunityHub({
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-[#1B2733] dark:text-white">{c.displayName}</span>
+                              <span className="text-sm font-medium text-[#132F43] dark:text-white">{c.displayName}</span>
                               <span className="text-sm text-slate-400">{formatRelativeTime(new Date(c.createdAt))}</span>
                             </div>
                             <p className="text-sm text-[#5A6B7A] dark:text-slate-300 break-words">{c.body}</p>

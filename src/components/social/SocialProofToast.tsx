@@ -154,7 +154,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
           >
             <div className="bg-white rounded-xl shadow-lg border border-[#E8E4DF] overflow-hidden">
               {/* Teal accent bar */}
-              <div className="h-0.5 bg-gradient-to-r from-[#6B9080] to-[#4E93A8]" />
+              <div className="h-0.5 bg-gradient-to-r from-[#6B9080] to-[#2A7D99]" />
 
               <div className="p-3 flex items-start gap-3">
                 {/* Avatar / Icon */}
@@ -168,7 +168,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-[#1B2733] leading-snug">
+                  <p className="text-sm text-[#132F43] leading-snug">
                     {milestoneMessage || currentMessage?.message}
                   </p>
                   {currentMessage && !milestoneMessage && (

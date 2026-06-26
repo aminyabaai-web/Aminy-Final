@@ -131,7 +131,7 @@ export function AskAminyHomeCard({
               )} />
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100 flex items-center gap-3">
+              <h2 className="text-2xl font-semibold text-[#132F43] dark:text-slate-100 flex items-center gap-3">
                 Your AI companion
                 <Sparkles className="w-6 h-6 text-accent animate-pulse" />
               </h2>

@@ -76,7 +76,7 @@ export function UpgradeNudge({
         rounded-lg p-4 border
         ${urgency === 'high' ? 'bg-amber-50 border-amber-200' :
           urgency === 'medium' ? 'bg-[#EEF4F8] border-[#C8DDE8]' :
-          'bg-[#FAF7F2] border-[#E8E4DF]'}
+          'bg-[#F6FBFB] border-[#E8E4DF]'}
       `}>
         <div className="flex items-start gap-3">
           <div className={`
@@ -86,7 +86,7 @@ export function UpgradeNudge({
             <MessageSquare className={`w-5 h-5 ${urgency === 'high' ? 'text-amber-600' : 'text-blue-600'}`} />
           </div>
           <div className="flex-1">
-            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-[#1B2733]'}`}>
+            <p className={`font-medium ${urgency === 'high' ? 'text-amber-900' : 'text-[#132F43]'}`}>
               {remaining <= 0
                 ? "You've reached your daily message limit"
                 : `${remaining} message${remaining !== 1 ? 's' : ''} left today`}
@@ -122,7 +122,7 @@ export function UpgradeNudge({
             <FileText className="w-5 h-5 text-purple-600" />
           </div>
           <div className="flex-1">
-            <p className="font-medium text-[#1B2733]">
+            <p className="font-medium text-[#132F43]">
               {documentsUsed >= documentsLimit
                 ? "Document vault is full"
                 : `${documentsLimit - documentsUsed} document slots remaining`}
@@ -151,7 +151,7 @@ export function UpgradeNudge({
             <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <Lock className="w-6 h-6 text-accent" />
             </div>
-            <h3 className="font-semibold text-[#1B2733] mb-1">
+            <h3 className="font-semibold text-[#132F43] mb-1">
               {lockedFeature || 'Premium Feature'}
             </h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
@@ -170,7 +170,7 @@ export function UpgradeNudge({
   // Memory preview - show what AI would remember on higher tier
   if (triggerType === 'memory-preview') {
     return (
-      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2] to-cyan-50">
+      <Card className="p-4 border-[#6B9080]/20 bg-gradient-to-br from-[#F6FBFB] to-cyan-50">
         <div className="flex items-start justify-between">
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-[#6B9080]/10">
@@ -178,7 +178,7 @@ export function UpgradeNudge({
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <p className="font-medium text-[#1B2733]">AI Memory</p>
+                <p className="font-medium text-[#132F43]">AI Memory</p>
                 <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">Core+</Badge>
               </div>
               <p className="text-sm text-[#5A6B7A]">
@@ -279,8 +279,8 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
               Most Popular
             </Badge>
           )}
-          <h3 className="font-semibold text-lg text-[#1B2733]">{tier.name}</h3>
-          <p className="text-xl sm:text-2xl font-bold text-[#1B2733] mt-2">{tier.price}</p>
+          <h3 className="font-semibold text-lg text-[#132F43]">{tier.name}</h3>
+          <p className="text-xl sm:text-2xl font-bold text-[#132F43] mt-2">{tier.price}</p>
           <ul className="mt-4 space-y-2">
             {tier.features.map((feature, i) => (
               <li key={i} className="flex items-center gap-2 text-sm text-[#5A6B7A]">

@@ -114,7 +114,7 @@ function HighlightsList({ highlights }: HighlightsListProps) {
         className="w-full flex items-center justify-between px-5 py-4 text-left"
         onClick={() => setExpanded((v) => !v)}
       >
-        <span className="font-semibold text-[#1B2733] text-sm">What's included</span>
+        <span className="font-semibold text-[#132F43] text-sm">What's included</span>
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-slate-400" />
         ) : (
@@ -254,11 +254,11 @@ export function CarePackageCheckoutScreen({
           </div>
 
           {/* Package name */}
-          <h2 className="text-xl font-bold text-[#1B2733] mb-2">{pkg.name}</h2>
+          <h2 className="text-xl font-bold text-[#132F43] mb-2">{pkg.name}</h2>
 
           {/* Price */}
           <div className="flex items-baseline gap-1 mb-4">
-            <span className="text-3xl font-extrabold text-[#1B2733]">
+            <span className="text-3xl font-extrabold text-[#132F43]">
               ${pkg.amount.toLocaleString()}
             </span>
             <span className="text-[#5A6B7A] text-sm font-medium">
@@ -282,10 +282,10 @@ export function CarePackageCheckoutScreen({
 
         {/* Billing details */}
         <div className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm p-5 space-y-3">
-          <h3 className="font-semibold text-[#1B2733] text-sm mb-1">Billing details</h3>
+          <h3 className="font-semibold text-[#132F43] text-sm mb-1">Billing details</h3>
           <div className="flex items-center justify-between text-sm">
             <span className="text-[#5A6B7A]">Your first charge</span>
-            <span className="font-semibold text-[#1B2733]">${pkg.amount.toLocaleString()} today</span>
+            <span className="font-semibold text-[#132F43]">${pkg.amount.toLocaleString()} today</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-[#5A6B7A]">Billing</span>

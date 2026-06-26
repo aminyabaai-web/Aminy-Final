@@ -21,11 +21,11 @@
   --aminy-navy-light: rgba(13, 27, 42, 0.8);
   --aminy-navy-muted: rgba(13, 27, 42, 0.6);
 
-  /* Accent - Teal (consolidated to #0891b2 for brand consistency) */
-  --aminy-teal: #0891b2;
-  --aminy-accent: #0891b2;
-  --aminy-accent-hover: #0780a0;
-  --aminy-accent-light: rgba(8, 145, 178, 0.1);
+  /* Accent - Teal (#2A7D99 sampled from real Aminy logo needle) */
+  --aminy-teal: #2A7D99;
+  --aminy-accent: #2A7D99;
+  --aminy-accent-hover: #216982;
+  --aminy-accent-light: rgba(42, 125, 153, 0.1);
 
   /* Legacy gradient colors (soft versions) */
   --aminy-mint: #C9EAD9;
@@ -70,9 +70,9 @@
      TYPOGRAPHY
      ======================================== */
 
-  /* Font Families - Manrope for warm, premium feel (matches index.html) */
-  --font-primary: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-secondary: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  /* Font Families - Schibsted Grotesk (UI), Fredoka (logo wordmark only) */
+  --font-primary: 'Schibsted Grotesk', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-secondary: 'Schibsted Grotesk', 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
   
   /* Font Sizes - Calm Hierarchy */

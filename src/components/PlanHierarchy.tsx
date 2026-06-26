@@ -296,8 +296,8 @@ export function PlanHierarchy({
     switch (confidence) {
       case 'high': return 'bg-green-100 text-green-700 border-green-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'low': return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
-      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      case 'low': return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -311,7 +311,7 @@ export function PlanHierarchy({
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] p-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-semibold text-[#1B2733]">Your Plan</h1>
+          <h1 className="text-2xl font-semibold text-[#132F43]">Your Plan</h1>
           <p className="text-[#5A6B7A] mt-1">
             {parentName} — here's {safeChildName}'s path forward
           </p>
@@ -330,13 +330,13 @@ export function PlanHierarchy({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* AI Goal Recommender */}
         {aiRecommendations.length > 0 && showAIRecommendations && (
-          <Card className="p-5 bg-gradient-to-br from-[#FAF7F2] to-white border-2 border-[#6B9080]/20">
+          <Card className="p-5 bg-gradient-to-br from-[#F6FBFB] to-white border-2 border-[#6B9080]/20">
             <div className="flex items-start gap-3 mb-4">
               <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
+                <h3 className="font-semibold text-[#132F43] flex items-center gap-2">
                   AI Recommendations
                   <Badge variant="secondary" className="text-sm">
                     {aiRecommendations.length} suggestions
@@ -364,7 +364,7 @@ export function PlanHierarchy({
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-primary" />
-                      <h4 className="font-medium text-[#1B2733]">{rec.title}</h4>
+                      <h4 className="font-medium text-[#132F43]">{rec.title}</h4>
                     </div>
                     <Badge className={getConfidenceColor(rec.confidence)}>
                       {rec.confidence} confidence
@@ -406,14 +406,14 @@ export function PlanHierarchy({
         <Collapsible open={visionOpen} onOpenChange={setVisionOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                     <Eye className="w-6 h-6 text-purple-600" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-[#1B2733]">Vision</h2>
+                      <h2 className="font-semibold text-lg text-[#132F43]">Vision</h2>
                       <Badge variant="secondary" className="text-sm">
                         {vision.timeframe}
                       </Badge>
@@ -434,7 +434,7 @@ export function PlanHierarchy({
                 <Separator className="mb-4" />
                 <div className="space-y-3">
                   <div>
-                    <h3 className="font-medium text-[#1B2733] mb-2">{vision.title}</h3>
+                    <h3 className="font-medium text-[#132F43] mb-2">{vision.title}</h3>
                     <p className="text-[#3A4A57]">{vision.description}</p>
                   </div>
                   <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
@@ -456,14 +456,14 @@ export function PlanHierarchy({
         <Collapsible open={monthOpen} onOpenChange={setMonthOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-blue-600" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-[#1B2733]">This Month</h2>
+                      <h2 className="font-semibold text-lg text-[#132F43]">This Month</h2>
                       <Badge variant="secondary" className="text-sm">
                         {monthlyGoals.length} goals
                       </Badge>
@@ -486,11 +486,11 @@ export function PlanHierarchy({
                   {monthlyGoals.map((goal) => (
                     <div
                       key={goal.id}
-                      className="p-4 bg-[#FAF7F2] rounded-lg border border-[#E8E4DF]"
+                      className="p-4 bg-[#F6FBFB] rounded-lg border border-[#E8E4DF]"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
-                          <h3 className="font-medium text-[#1B2733] mb-1">{goal.title}</h3>
+                          <h3 className="font-medium text-[#132F43] mb-1">{goal.title}</h3>
                           <p className="text-sm text-[#5A6B7A]">{goal.description}</p>
                         </div>
                         <Badge className="bg-blue-100 text-blue-700 border-[#C8DDE8]">
@@ -527,14 +527,14 @@ export function PlanHierarchy({
         <Collapsible open={weekOpen} onOpenChange={setWeekOpen}>
           <Card className="overflow-hidden">
             <CollapsibleTrigger className="w-full">
-              <div className="p-5 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors cursor-pointer">
+              <div className="p-5 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-[#6B9080]/10 rounded-lg flex items-center justify-center">
                     <CalendarDays className="w-6 h-6 text-[#6B9080]" />
                   </div>
                   <div className="text-left">
                     <div className="flex items-center gap-2">
-                      <h2 className="font-semibold text-lg text-[#1B2733]">This Week</h2>
+                      <h2 className="font-semibold text-lg text-[#132F43]">This Week</h2>
                       <Badge variant="secondary" className="text-sm">
                         {weeklyFocus.length} focus areas
                       </Badge>
@@ -571,7 +571,7 @@ export function PlanHierarchy({
                             ) : (
                               <Circle className="w-5 h-5 text-slate-400" />
                             )}
-                            <h3 className="font-medium text-[#1B2733]">{week.title}</h3>
+                            <h3 className="font-medium text-[#132F43]">{week.title}</h3>
                           </div>
                           <p className="text-sm text-[#5A6B7A] ml-7">{week.description}</p>
                         </div>
@@ -629,7 +629,7 @@ export function PlanHierarchy({
 
         {/* Quick Actions */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#1B2733] mb-3">Quick Actions</h3>
+          <h3 className="font-medium text-[#132F43] mb-3">Quick Actions</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button variant="outline" className="justify-start gap-2">
               <Copy className="w-4 h-4" />

@@ -284,7 +284,7 @@ export function ShimmerTable({ rows = 5, cols = 4 }: { rows?: number; cols?: num
   return (
     <div className="rounded-lg border overflow-hidden animate-in fade-in duration-300">
       {/* Header */}
-      <div className="bg-[#FAF7F2] dark:bg-slate-800/50 p-4 border-b">
+      <div className="bg-[#F6FBFB] dark:bg-slate-800/50 p-4 border-b">
         <div className="flex gap-3 sm:gap-4">
           {Array.from({ length: cols }).map((_, i) => (
             <ShimmerBase key={i} className="h-4 flex-1" />

@@ -1,0 +1,89 @@
+/* ============================================================
+   AMINY · COLOR TOKENS
+   Navy = voice · Teal = the one pointer · Mist = exhale
+   Amber / Green / Violet / Red are EARNED — never decoration.
+   ============================================================ */
+
+:root {
+  /* ---------- NAVY — the voice of the compass, calm authority (sampled from logo) ---------- */
+  --aminy-navy-950: #0C2230;   /* Logo ring darkest */
+  --aminy-navy-900: #102A3A;
+  --aminy-navy-800: #132F43;   /* Logo wordmark navy (sampled) */
+  --aminy-navy-700: #1e293b;   /* Body text (neutral slate) */
+  --aminy-navy-500: #475569;
+  --aminy-navy-400: #64748b;
+  --aminy-navy-300: #94a3b8;
+  --aminy-navy-200: #cbd5e1;
+  --aminy-navy-100: #e2e8f0;
+  --aminy-navy-50:  #f1f5f9;
+
+  /* ---------- TEAL — the compass needle, sampled from the logo. PRIMARY ---------- */
+  --aminy-teal-900: #0F3A48;
+  --aminy-teal-800: #195466;
+  --aminy-teal-700: #216982;
+  --aminy-teal-600: #2A7D99;   /* PRIMARY accent — sampled from the logo needle */
+  --aminy-teal-500: #4795AE;
+  --aminy-teal-400: #74B2C6;
+  --aminy-teal-300: #9FCCDA;
+  --aminy-teal-200: #C5E0E9;
+  --aminy-teal-100: #E2EFF3;
+  --aminy-teal-50:  #F1F8FA;
+
+  /* ---------- COMPASS-STONE — the softer blue-grey in the logo ---------- */
+  --aminy-stone-700: #3f6272;
+  --aminy-stone-600: #5B8A9A;  /* Compass needle blue */
+  --aminy-stone-500: #7aa5b5;
+  --aminy-stone-100: #e5eef1;
+
+  /* ---------- SURFACES — the "exhale" backgrounds (never pure white) ---------- */
+  --aminy-cream:     #F5F5F5;
+  --aminy-paper:     #FAFAFA;
+  --aminy-mist:      #F6FBFB;  /* Calm hub background top */
+  --aminy-mist-deep: #EDF4F7;  /* Calm hub background bottom */
+  --aminy-warm:      #f8fafc;
+
+  /* ---------- EARNED / STATE COLORS — never decoration ---------- */
+  --aminy-win-600:  #D97706;   /* Amber — wins, streaks */
+  --aminy-win-500:  #F59E0B;
+  --aminy-win-100:  #FEF3C7;
+  --aminy-win-50:   #FFFBEB;
+
+  --aminy-grow-600: #16a34a;   /* Green — goals met, growth */
+  --aminy-grow-500: #22c55e;
+  --aminy-grow-100: #DCFCE7;
+  --aminy-grow-50:  #F0FDF4;
+
+  --aminy-care-600: #7c3aed;   /* Violet — clinical / provider */
+  --aminy-care-100: #ede9fe;
+  --aminy-care-50:  #f5f3ff;
+
+  --aminy-alert-600:#dc2626;   /* Red — reserved for true urgency only */
+  --aminy-alert-100:#fee2e2;
+
+  /* ---------- EASE (KID-FACING) PALETTE — never used in parent surfaces ---------- */
+  --jr-sky-100:    #e0f2fe;
+  --jr-sky-300:    #7dd3fc;
+  --jr-indigo-50:  #eef2ff;
+  --jr-indigo-400: #818cf8;
+  --jr-purple-50:  #faf5ff;
+  --jr-purple-300: #d8b4fe;
+  --jr-rose-100:   #ffe4e6;
+  --jr-mint-100:   #d1fae5;
+  --jr-ink:        #312e81;    /* Ease headline ink (indigo-900-ish) */
+  --jr-primary:    #7c3aed;    /* Ease primary (violet) */
+
+  /* ---------- SEMANTIC ALIASES (parent app) ---------- */
+  --color-bg:            var(--aminy-mist);
+  --color-bg-elevated:   #ffffff;
+  --color-bg-soft:       var(--aminy-warm);
+  --color-text:          var(--aminy-navy-700);
+  --color-text-strong:   var(--aminy-navy-950);
+  --color-text-muted:    var(--aminy-navy-400);
+  --color-text-subtle:   var(--aminy-navy-300);
+  --color-border:        var(--aminy-navy-100);
+  --color-border-strong: var(--aminy-navy-200);
+  --color-primary:       var(--aminy-teal-600);
+  --color-primary-hover: var(--aminy-teal-700);
+  --color-primary-soft:  var(--aminy-teal-50);
+  --color-focus-ring:    var(--aminy-teal-600);
+}

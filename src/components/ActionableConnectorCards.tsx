@@ -84,7 +84,7 @@ export function ActionableConnectorCards({ cards = [] }: ActionableConnectorCard
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2 mb-1">
-                  <h3 className="font-semibold text-[#1B2733]">{card.title}</h3>
+                  <h3 className="font-semibold text-[#132F43]">{card.title}</h3>
                   <StatusIcon className={`w-4 h-4 ${config.iconColor} flex-shrink-0 mt-0.5`} />
                 </div>
 

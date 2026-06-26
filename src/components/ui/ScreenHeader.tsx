@@ -52,7 +52,7 @@ export function ScreenHeader({
       {onBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-3 hover:text-[#1B2733] transition-colors min-h-[36px]"
+          className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-3 hover:text-[#132F43] transition-colors min-h-[36px]"
         >
           <ChevronLeft className="w-4 h-4" />
           {backLabel}
@@ -60,12 +60,12 @@ export function ScreenHeader({
       )}
       <div className="flex items-start gap-3">
         {icon && (
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}>
             {icon}
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold text-[#1B2733] truncate">{title}</h1>
+          <h1 className="text-lg font-bold text-[#132F43] truncate">{title}</h1>
           {subtitle && (
             <p className="text-sm text-[#5A6B7A] mt-0.5 truncate">{subtitle}</p>
           )}

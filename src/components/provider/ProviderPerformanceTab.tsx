@@ -97,7 +97,7 @@ function StatusChip({ status }: { status: MetricStatus }) {
     green: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
     yellow: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
     red: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-    info: 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-800 dark:text-slate-400',
+    info: 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-800 dark:text-slate-400',
   };
   const icons: Record<MetricStatus, React.ReactNode> = {
     green: <CheckCircle className="w-3.5 h-3.5" />,
@@ -225,6 +225,46 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   const [auths, setAuths] = useState<AuthRecord[]>([]);
   const [denials, setDenials] = useState<DenialRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [acceptingNewPatients, setAcceptingNewPatients] = useState<boolean>(true);
+  const [referralActionLoading, setReferralActionLoading] = useState(false);
+  const [referralToast, setReferralToast] = useState<string | null>(null);
+
+  function showToast(msg: string) {
+    setReferralToast(msg);
+    setTimeout(() => setReferralToast(null), 4000);
+  }
+
+  async function handlePauseReferrals() {
+    setReferralActionLoading(true);
+    try {
+      await supabase
+        .from('provider_profiles')
+        .update({ accepting_new_patients: false })
+        .eq('id', providerId);
+      setAcceptingNewPatients(false);
+      showToast('New referrals paused. Provider notified.');
+    } catch {
+      showToast('Failed to update referral status. Please try again.');
+    } finally {
+      setReferralActionLoading(false);
+    }
+  }
+
+  async function handleResumeReferrals() {
+    setReferralActionLoading(true);
+    try {
+      await supabase
+        .from('provider_profiles')
+        .update({ accepting_new_patients: true })
+        .eq('id', providerId);
+      setAcceptingNewPatients(true);
+      showToast('Referrals resumed. Provider is now accepting new clients.');
+    } catch {
+      showToast('Failed to update referral status. Please try again.');
+    } finally {
+      setReferralActionLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -289,6 +329,16 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
             })),
           );
         }
+
+        const { data: profileData } = await supabase
+          .from('provider_profiles')
+          .select('accepting_new_patients')
+          .eq('id', providerId)
+          .single();
+
+        if (profileData && typeof profileData.accepting_new_patients === 'boolean') {
+          setAcceptingNewPatients(profileData.accepting_new_patients);
+        }
       } catch {
         // Supabase tables may not exist yet — fall back to empty state gracefully
       } finally {
@@ -313,11 +363,18 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">My Performance</h2>
+        <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">My Performance</h2>
         <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
           Your network scorecard. Aminy uses these metrics to evaluate provider quality and referral eligibility.
         </p>
       </div>
+
+      {/* Toast notification */}
+      {referralToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl bg-[#0D1B2A] text-white text-sm font-medium px-4 py-3 shadow-lg">
+          {referralToast}
+        </div>
+      )}
 
       {/* Network Standing Banner */}
       <div className={`rounded-2xl border ${tierConfig.bg} ${tierConfig.border} p-4`}>
@@ -331,6 +388,56 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
           </div>
         </div>
       </div>
+
+      {/* Enforcement Action — shown when network standing is red */}
+      {tier === 'red' && (
+        <div className="rounded-2xl border border-amber-300 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/20 p-4">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-amber-800 dark:text-amber-200">Referral Enforcement</p>
+              <p className="text-sm text-amber-700 dark:text-amber-300 mt-0.5">
+                This provider's network standing is at risk. You may pause new referrals until metrics recover.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {acceptingNewPatients ? (
+                  <button
+                    onClick={handlePauseReferrals}
+                    disabled={referralActionLoading}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-60 text-white text-sm font-semibold px-4 py-2 transition-colors"
+                  >
+                    {referralActionLoading ? (
+                      <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                    )}
+                    Pause New Referrals
+                  </button>
+                ) : (
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-sm font-semibold px-3 py-1.5">
+                      <XCircle className="w-3.5 h-3.5" />
+                      New referrals paused
+                    </span>
+                    <button
+                      onClick={handleResumeReferrals}
+                      disabled={referralActionLoading}
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400 dark:border-amber-500 bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-900/30 disabled:opacity-60 text-amber-700 dark:text-amber-300 text-sm font-semibold px-4 py-2 transition-colors"
+                    >
+                      {referralActionLoading ? (
+                        <span className="w-3.5 h-3.5 border-2 border-amber-400/40 border-t-amber-400 rounded-full animate-spin" />
+                      ) : (
+                        <CheckCircle className="w-3.5 h-3.5" />
+                      )}
+                      Resume Referrals
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Auth Expiry Alert */}
       {expiringAuths.length > 0 && (
@@ -347,7 +454,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
               return (
                 <div key={a.id} className="flex items-center justify-between rounded-xl bg-white dark:bg-slate-900/50 px-3 py-2 text-sm">
                   <div>
-                    <span className="font-medium text-[#1B2733] dark:text-white">{a.clientName}</span>
+                    <span className="font-medium text-[#132F43] dark:text-white">{a.clientName}</span>
                     <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">{a.cptCode} · {a.payer}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -385,7 +492,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
                 <IconEl className="w-4 h-4 text-neutral-400" />
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
               </div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                 {formatVal(m)}
               </p>
               <div className="mt-1 flex items-center justify-between">
@@ -405,20 +512,20 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 overflow-hidden">
           <div className="px-4 py-3 border-b border-neutral-100 dark:border-slate-700 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500" />
-            <h3 className="font-semibold text-[#1B2733] dark:text-white">Open Denials ({denials.length})</h3>
+            <h3 className="font-semibold text-[#132F43] dark:text-white">Open Denials ({denials.length})</h3>
           </div>
           <div className="divide-y divide-neutral-100 dark:divide-slate-700">
             {denials.map((d) => (
               <div key={d.id} className="px-4 py-3 flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-[#1B2733] dark:text-white">{d.clientName}</p>
+                  <p className="text-sm font-medium text-[#132F43] dark:text-white">{d.clientName}</p>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                     {d.cptCode} · {d.payer} · DOS {d.dateOfService}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-400 mt-0.5">{d.reason}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-sm font-semibold text-[#1B2733] dark:text-white">${d.amount.toLocaleString()}</p>
+                  <p className="text-sm font-semibold text-[#132F43] dark:text-white">${d.amount.toLocaleString()}</p>
                 </div>
               </div>
             ))}
@@ -430,7 +537,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
       {denials.length === 0 && (
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-6 text-center">
           <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-          <p className="font-medium text-[#1B2733] dark:text-white">No open denials</p>
+          <p className="font-medium text-[#132F43] dark:text-white">No open denials</p>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Your claims are processing cleanly.</p>
         </Card>
       )}

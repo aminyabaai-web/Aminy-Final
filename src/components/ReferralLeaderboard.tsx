@@ -91,7 +91,7 @@ function getRankStyle(rank: number): string {
     case 1:
       return 'bg-amber-50 border-amber-200';
     case 2:
-      return 'bg-[#FAF7F2] border-[#E8E4DF]';
+      return 'bg-[#F6FBFB] border-[#E8E4DF]';
     case 3:
       return 'bg-orange-50 border-orange-200';
     default:
@@ -386,7 +386,7 @@ export function ReferralLeaderboard({
                         className={`font-medium text-sm truncate ${
                           entry.isCurrentUser
                             ? 'text-[#6B9080]'
-                            : 'text-[#1B2733]'
+                            : 'text-[#132F43]'
                         }`}
                       >
                         {entry.isCurrentUser
@@ -407,7 +407,7 @@ export function ReferralLeaderboard({
 
                   {/* Referral count */}
                   <div className="text-right">
-                    <span className="font-bold text-sm text-[#1B2733]">
+                    <span className="font-bold text-sm text-[#132F43]">
                       {entry.referralCount}
                     </span>
                     <p className="text-sm text-[#8A9BA8]">
@@ -437,7 +437,7 @@ export function ReferralLeaderboard({
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-sm text-[#1B2733]">
+                      <span className="font-bold text-sm text-[#132F43]">
                         {data.currentUserEntry.referralCount}
                       </span>
                       <p className="text-sm text-[#8A9BA8]">

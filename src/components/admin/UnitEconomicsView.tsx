@@ -216,18 +216,18 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Unit Economics</h1>
+              <h1 className="text-lg sm:text-xl font-semibold text-[#132F43]">Unit Economics</h1>
               <p className="text-sm text-[#5A6B7A] mt-1">Investor-grade metrics dashboard</p>
             </div>
             {onBack && (
-              <button onClick={onBack} className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]">
+              <button onClick={onBack} className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#132F43]">
                 ← Back
               </button>
             )}
           </div>
         </div>
         <div className="flex flex-col items-center text-center px-6 py-16">
-          <div className="w-12 h-12 rounded-full bg-[#FAF7F2] flex items-center justify-center mb-3">
+          <div className="w-12 h-12 rounded-full bg-[#F6FBFB] flex items-center justify-center mb-3">
             <BarChart3 className="w-6 h-6 text-[#577590]" />
           </div>
           <h2 className="text-[15px] font-bold text-[#0D1B2A] mb-1">No analytics data yet</h2>
@@ -253,7 +253,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
       <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Unit Economics</h1>
+            <h1 className="text-lg sm:text-xl font-semibold text-[#132F43]">Unit Economics</h1>
             <p className="text-sm text-[#5A6B7A] mt-1">Investor-grade metrics dashboard</p>
           </div>
           <div className="flex items-center gap-3">
@@ -270,7 +270,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
             {onBack && (
               <button
                 onClick={onBack}
-                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]"
+                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#132F43]"
               >
                 ← Back
               </button>
@@ -303,7 +303,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               </div>
               <div className="mt-3">
                 <p className="text-sm text-[#5A6B7A]">{metric.title}</p>
-                <p className="text-2xl font-semibold text-[#1B2733] mt-1">{metric.value}</p>
+                <p className="text-2xl font-semibold text-[#132F43] mt-1">{metric.value}</p>
                 <div className="flex items-center gap-1 mt-2">
                   {metric.trend === 'up' ? (
                     <ArrowUpRight className="w-4 h-4 text-green-500" />
@@ -334,11 +334,11 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Revenue by Tier</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Revenue by Tier</h2>
               <p className="text-sm text-[#5A6B7A]">Monthly recurring revenue breakdown</p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-semibold text-[#1B2733]">${totalRevenue.toLocaleString()}</p>
+              <p className="text-2xl font-semibold text-[#132F43]">${totalRevenue.toLocaleString()}</p>
               <p className="text-sm text-[#5A6B7A]">Total MRR</p>
             </div>
           </div>
@@ -348,7 +348,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               <div key={tier.tier} className="flex items-center gap-3 sm:gap-4">
                 <div className="w-20 text-sm font-medium text-[#3A4A57]">{tier.tier}</div>
                 <div className="flex-1">
-                  <div className="h-8 bg-[#F0EDE8] rounded-lg overflow-hidden relative">
+                  <div className="h-8 bg-[#EDF4F7] rounded-lg overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${(tier.revenue / totalRevenue) * 100}%` }}
@@ -364,11 +364,11 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                   </div>
                 </div>
                 <div className="w-24 text-right">
-                  <p className="text-sm font-medium text-[#1B2733]">{tier.users.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-[#132F43]">{tier.users.toLocaleString()}</p>
                   <p className="text-sm text-[#5A6B7A]">users</p>
                 </div>
                 <div className="w-20 text-right">
-                  <p className="text-sm font-medium text-[#1B2733]">${tier.arpu}</p>
+                  <p className="text-sm font-medium text-[#132F43]">${tier.arpu}</p>
                   <p className="text-sm text-[#5A6B7A]">ARPU</p>
                 </div>
               </div>
@@ -378,17 +378,17 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
           <div className="mt-4 sm:mt-6 pt-4 border-t border-[#E8E4DF] flex items-center justify-between">
             <div>
               <p className="text-sm text-[#5A6B7A]">Blended ARPU (Paid Users)</p>
-              <p className="text-lg font-semibold text-[#1B2733]">${blendedArpu.toFixed(2)}/mo</p>
+              <p className="text-lg font-semibold text-[#132F43]">${blendedArpu.toFixed(2)}/mo</p>
             </div>
             <div>
               <p className="text-sm text-[#5A6B7A]">Free → Paid Conversion</p>
-              <p className="text-lg font-semibold text-[#1B2733]">
+              <p className="text-lg font-semibold text-[#132F43]">
                 {((totalPaidUsers / (totalPaidUsers + TIER_BREAKDOWN[0].users)) * 100).toFixed(1)}%
               </p>
             </div>
             <div>
               <p className="text-sm text-[#5A6B7A]">Upgrade Rate (Starter → Higher)</p>
-              <p className="text-lg font-semibold text-[#1B2733]">42.3%</p>
+              <p className="text-lg font-semibold text-[#132F43]">42.3%</p>
             </div>
           </div>
         </div>
@@ -397,7 +397,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Cohort Retention</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Cohort Retention</h2>
               <p className="text-sm text-[#5A6B7A]">User retention by signup month</p>
             </div>
             <BarChart3 className="w-5 h-5 text-[#8A9BA8]" />
@@ -420,10 +420,10 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
                 {cohortData.map((cohort) => (
                   <tr
                     key={cohort.month}
-                    className="border-b border-[#E8E4DF] hover:bg-[#FAF7F2] cursor-pointer"
+                    className="border-b border-[#E8E4DF] hover:bg-[#F6FBFB] cursor-pointer"
                     onClick={() => setSelectedCohort(selectedCohort === cohort.month ? null : cohort.month)}
                   >
-                    <td className="py-3 px-2 font-medium text-[#1B2733]">{cohort.month}</td>
+                    <td className="py-3 px-2 font-medium text-[#132F43]">{cohort.month}</td>
                     <td className="py-3 px-2 text-right text-[#5A6B7A]">{cohort.users.toLocaleString()}</td>
                     <td className="py-3 px-2 text-right">
                       <span
@@ -495,7 +495,7 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Acquisition Channels</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Acquisition Channels</h2>
               <p className="text-sm text-[#5A6B7A]">CAC and LTV by marketing channel</p>
             </div>
             <PieChart className="w-5 h-5 text-[#8A9BA8]" />
@@ -517,15 +517,15 @@ export function UnitEconomicsView({ onBack }: UnitEconomicsViewProps) {
               <tbody>
                 {MOCK_CHANNELS.map((channel) => (
                   <tr key={channel.channel} className="border-b border-[#E8E4DF]">
-                    <td className="py-3 px-2 font-medium text-[#1B2733]">{channel.channel}</td>
+                    <td className="py-3 px-2 font-medium text-[#132F43]">{channel.channel}</td>
                     <td className="py-3 px-2 text-right text-[#5A6B7A]">
                       {channel.spend === 0 ? '$0' : `$${channel.spend.toLocaleString()}`}
                     </td>
                     <td className="py-3 px-2 text-right text-[#5A6B7A]">{channel.acquisitions.toLocaleString()}</td>
-                    <td className="py-3 px-2 text-right text-[#1B2733] font-medium">
+                    <td className="py-3 px-2 text-right text-[#132F43] font-medium">
                       {channel.cac === 0 ? '$0' : `$${channel.cac.toFixed(2)}`}
                     </td>
-                    <td className="py-3 px-2 text-right text-[#1B2733] font-medium">${channel.ltv}</td>
+                    <td className="py-3 px-2 text-right text-[#132F43] font-medium">${channel.ltv}</td>
                     <td className="py-3 px-2 text-right">
                       <span
                         className={`font-semibold ${

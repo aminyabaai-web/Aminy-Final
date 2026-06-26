@@ -353,7 +353,7 @@ export default function CarePage({
             variant="ghost"
             size="sm"
             onClick={() => onNavigate?.('home')}
-            className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-300 dark:hover:text-white"
+            className="text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-300 dark:hover:text-white"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -361,7 +361,7 @@ export default function CarePage({
         </div>
         
         <div className="flex items-center gap-3 sm:gap-4">
-          <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">Care</h1>
+          <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">Care</h1>
         </div>
         
         <div className="flex items-center gap-2">
@@ -385,7 +385,7 @@ export default function CarePage({
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeView === id
                 ? 'border-[#6B9080] text-[#6B9080] dark:text-primary'
-                : 'border-transparent text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-white'
+                : 'border-transparent text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-400 dark:hover:text-white'
             }`}
           >
             <Icon className="h-4 w-4" />
@@ -401,7 +401,7 @@ export default function CarePage({
           <div className="h-full flex items-center justify-center p-6">
             <div className="text-center">
               <MessageCircle className="mx-auto h-12 w-12 text-slate-400 dark:text-[#5A6B7A] mb-4" />
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Enhanced Messages</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Enhanced Messages</h3>
               <p className="text-[#5A6B7A] dark:text-slate-400">Professional messaging with providers</p>
             </div>
           </div>
@@ -410,7 +410,7 @@ export default function CarePage({
           <div className="h-full flex items-center justify-center p-6">
             <div className="text-center">
               <Video className="mx-auto h-12 w-12 text-slate-400 dark:text-[#5A6B7A] mb-4" />
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Session Management</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Session Management</h3>
               <p className="text-[#5A6B7A] dark:text-slate-400">Manage your therapy sessions</p>
             </div>
           </div>
@@ -419,7 +419,7 @@ export default function CarePage({
           <div className="h-full flex items-center justify-center p-6">
             <div className="text-center">
               <FileText className="mx-auto h-12 w-12 text-slate-400 dark:text-[#5A6B7A] mb-4" />
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Session History</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Session History</h3>
               <p className="text-[#5A6B7A] dark:text-slate-400">View past session records and files</p>
             </div>
           </div>

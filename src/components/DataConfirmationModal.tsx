@@ -50,19 +50,19 @@ interface CategoryStyle {
 
 const CATEGORY_STYLES: Record<DataCategory, CategoryStyle> = {
   incident:        { label: 'Behavioral incident', icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
-  medication:      { label: 'Medication',          icon: Pill,           color: '#6AA9BC', iconColor: '#fff' },
-  'goal-progress': { label: 'Goal progress',       icon: Target,         color: '#4E93A8', iconColor: '#fff' },
-  insurance:       { label: 'Insurance',           icon: Shield,         color: '#577590', iconColor: '#fff' },
+  medication:      { label: 'Medication',          icon: Pill,           color: '#4795AE', iconColor: '#fff' },
+  'goal-progress': { label: 'Goal progress',       icon: Target,         color: '#2A7D99', iconColor: '#fff' },
+  insurance:       { label: 'Insurance',           icon: Shield,         color: '#216982', iconColor: '#fff' },
   routine:         { label: 'Daily routine',       icon: Calendar,       color: '#D4A373', iconColor: '#fff' },
   trigger:         { label: 'Trigger',             icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
-  strategy:        { label: 'Effective strategy',  icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
-  appointment:     { label: 'Appointment',         icon: Calendar,       color: '#577590', iconColor: '#fff' },
-  'provider-note': { label: 'Provider note',       icon: Stethoscope,    color: '#6AA9BC', iconColor: '#fff' },
-  'child-profile': { label: 'Profile update',      icon: Baby,           color: '#4E93A8', iconColor: '#fff' },
-  preference:      { label: 'Preference',          icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
-  milestone:       { label: 'Milestone',           icon: Sparkles,       color: '#4E93A8', iconColor: '#fff' },
+  strategy:        { label: 'Effective strategy',  icon: Sparkles,       color: '#2A7D99', iconColor: '#fff' },
+  appointment:     { label: 'Appointment',         icon: Calendar,       color: '#216982', iconColor: '#fff' },
+  'provider-note': { label: 'Provider note',       icon: Stethoscope,    color: '#4795AE', iconColor: '#fff' },
+  'child-profile': { label: 'Profile update',      icon: Baby,           color: '#2A7D99', iconColor: '#fff' },
+  preference:      { label: 'Preference',          icon: Sparkles,       color: '#2A7D99', iconColor: '#fff' },
+  milestone:       { label: 'Milestone',           icon: Sparkles,       color: '#2A7D99', iconColor: '#fff' },
   concern:         { label: 'Concern',             icon: AlertCircle,    color: '#E07A5F', iconColor: '#fff' },
-  school:          { label: 'School',              icon: GraduationCap,  color: '#577590', iconColor: '#fff' },
+  school:          { label: 'School',              icon: GraduationCap,  color: '#216982', iconColor: '#fff' },
   diet:            { label: 'Nutrition',           icon: Apple,          color: '#D4A373', iconColor: '#fff' },
 };
 
@@ -112,7 +112,7 @@ export function DataConfirmationModal({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 32, stiffness: 320 }}
-            className="fixed inset-x-0 bottom-0 z-50 bg-[#FAF7F2] rounded-t-3xl border-t border-[#F0EDE8] flex flex-col max-h-[88vh]"
+            className="fixed inset-x-0 bottom-0 z-50 bg-[#F6FBFB] rounded-t-3xl border-t border-[#EDF4F7] flex flex-col max-h-[88vh]"
             role="dialog"
             aria-modal="true"
             aria-labelledby="data-confirm-title"
@@ -120,17 +120,17 @@ export function DataConfirmationModal({
           >
             {/* Handle */}
             <div className="pt-2 pb-1 flex justify-center" aria-hidden="true">
-              <div className="w-10 h-1 rounded-full bg-[#F0EDE8]" />
+              <div className="w-10 h-1 rounded-full bg-[#EDF4F7]" />
             </div>
 
             {/* Header */}
-            <div className="px-5 pt-2 pb-4 flex items-start justify-between border-b border-[#F0EDE8]">
+            <div className="px-5 pt-2 pb-4 flex items-start justify-between border-b border-[#EDF4F7]">
               <div className="flex-1 min-w-0">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#6B9080]/10 text-[#6B9080] text-xs font-semibold tracking-wider uppercase mb-1.5">
                   <Sparkles className="w-3 h-3" />
                   Ready for review
                 </div>
-                <h2 id="data-confirm-title" className="text-lg font-semibold text-[#1B2733] leading-tight">
+                <h2 id="data-confirm-title" className="text-lg font-semibold text-[#132F43] leading-tight">
                   {pending.length === 1
                     ? 'Aminy heard something — want to save it?'
                     : `Aminy heard ${pending.length} things — want to save them?`}
@@ -141,7 +141,7 @@ export function DataConfirmationModal({
               </div>
               <button
                 onClick={onClose}
-                className="ml-3 w-9 h-9 rounded-full hover:bg-[#F0EDE8] flex items-center justify-center flex-shrink-0 transition-colors"
+                className="ml-3 w-9 h-9 rounded-full hover:bg-[#EDF4F7] flex items-center justify-center flex-shrink-0 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-4 h-4 text-[#5A6B7A]" />
@@ -152,10 +152,10 @@ export function DataConfirmationModal({
             <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2">
               {pending.length === 0 ? (
                 <div className="px-4 py-10 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#4E93A8]/10 flex items-center justify-center">
-                    <Check className="w-5 h-5 text-[#4E93A8]" />
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
+                    <Check className="w-5 h-5 text-[#2A7D99]" />
                   </div>
-                  <p className="text-sm font-medium text-[#1B2733]">All caught up</p>
+                  <p className="text-sm font-medium text-[#132F43]">All caught up</p>
                   <p className="mt-1 text-sm text-[#8E9BAA]">Nothing waiting on your review.</p>
                 </div>
               ) : (
@@ -176,11 +176,11 @@ export function DataConfirmationModal({
 
             {/* Footer actions */}
             {pending.length > 1 && (
-              <div className="px-5 py-3 border-t border-[#F0EDE8] flex items-center gap-2"
+              <div className="px-5 py-3 border-t border-[#EDF4F7] flex items-center gap-2"
                    style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
                 <button
                   onClick={onClose}
-                  className="flex-1 py-3 rounded-xl bg-white border border-[#F0EDE8] text-sm font-medium text-[#5A6B7A] hover:bg-[#F0EDE8] active:scale-[0.99] transition-all"
+                  className="flex-1 py-3 rounded-xl bg-white border border-[#EDF4F7] text-sm font-medium text-[#5A6B7A] hover:bg-[#EDF4F7] active:scale-[0.99] transition-all"
                 >
                   Review later
                 </button>
@@ -218,9 +218,9 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
       ? 'Likely match'
       : 'Best guess';
   const confidenceColor = item.confidence >= 0.8
-    ? '#4E93A8'
+    ? '#2A7D99'
     : item.confidence >= 0.65
-      ? '#4E93A8'
+      ? '#2A7D99'
       : '#D4A373';
 
   const previewEntries = Object.entries(item.structuredData)
@@ -228,10 +228,10 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
     .slice(0, 4);
 
   return (
-    <div className="rounded-2xl bg-white border border-[#F0EDE8] overflow-hidden">
+    <div className="rounded-2xl bg-white border border-[#EDF4F7] overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-start gap-3 p-3 text-left active:bg-[#FAF7F2] transition-colors"
+        className="w-full flex items-start gap-3 p-3 text-left active:bg-[#F6FBFB] transition-colors"
         aria-expanded={expanded}
       >
         <div
@@ -242,7 +242,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-semibold text-[#1B2733]">{style.label}</p>
+            <p className="text-sm font-semibold text-[#132F43]">{style.label}</p>
             <span
               className="text-xs font-medium px-1.5 py-0.5 rounded-full"
               style={{ background: `${confidenceColor}15`, color: confidenceColor }}
@@ -260,20 +260,20 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
       </button>
 
       {expanded && (
-        <div className="px-3 pb-3 border-t border-[#F0EDE8] space-y-3 pt-3">
+        <div className="px-3 pb-3 border-t border-[#EDF4F7] space-y-3 pt-3">
           {/* Quote of raw text */}
-          <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
+          <div className="rounded-xl bg-[#F6FBFB] border border-[#EDF4F7] px-3 py-2">
             <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1">
               You said
             </p>
-            <p className="text-sm text-[#1B2733] leading-snug italic">
+            <p className="text-sm text-[#132F43] leading-snug italic">
               "{item.rawText}"
             </p>
           </div>
 
           {/* Structured data preview */}
           {previewEntries.length > 0 && (
-            <div className="rounded-xl bg-[#FAF7F2] border border-[#F0EDE8] px-3 py-2">
+            <div className="rounded-xl bg-[#F6FBFB] border border-[#EDF4F7] px-3 py-2">
               <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1.5">
                 What we'll save
               </p>
@@ -283,7 +283,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
                     <dt className="text-sm text-[#8E9BAA] capitalize truncate">
                       {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                     </dt>
-                    <dd className="text-sm font-medium text-[#1B2733] truncate">
+                    <dd className="text-sm font-medium text-[#132F43] truncate">
                       {String(value)}
                     </dd>
                   </div>
@@ -297,7 +297,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
             <button
               onClick={onSkip}
               disabled={isProcessing}
-              className="flex-1 py-2.5 rounded-xl bg-white border border-[#F0EDE8] text-sm font-medium text-[#5A6B7A] hover:bg-[#FAF7F2] active:scale-[0.99] transition-all disabled:opacity-40"
+              className="flex-1 py-2.5 rounded-xl bg-white border border-[#EDF4F7] text-sm font-medium text-[#5A6B7A] hover:bg-[#F6FBFB] active:scale-[0.99] transition-all disabled:opacity-40"
             >
               Skip
             </button>

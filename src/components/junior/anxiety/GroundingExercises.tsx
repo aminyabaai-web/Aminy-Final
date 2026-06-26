@@ -34,7 +34,7 @@ const SLATE_400 = '#94a3b8';
 /** Tailwind teal-300 (#5eead4) — body part completed fill */
 const TEAL_300 = '#5eead4';
 /** Tailwind teal-600 (#6B9080) — face detail accent */
-const TEAL_600 = '#4E93A8';
+const TEAL_600 = '#2A7D99';
 /** Tailwind indigo-100 (#e0e7ff) — inactive corner fill */
 const INDIGO_100 = '#e0e7ff';
 /** Tailwind indigo-200 (#c7d2fe) — square border stroke */
@@ -141,7 +141,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
   return (
     <div className="space-y-5 text-center">
       {/* Progress bar */}
-      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           className="h-full bg-sky-400 rounded-full"
           animate={{ width: `${progress}%` }}
@@ -157,7 +157,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
         className="space-y-3"
       >
         <div className={`${step.color}`}>{step.icon}</div>
-        <div className="text-lg font-bold text-[#1B2733]">
+        <div className="text-lg font-bold text-[#132F43]">
           Name <span className="text-2xl">{step.count}</span> {step.prompt}
         </div>
         <div className="text-xs text-slate-400 uppercase tracking-wider">{step.sense}</div>
@@ -439,7 +439,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
         {Math.floor((DURATION - elapsed) / 60)}:{String((DURATION - elapsed) % 60).padStart(2, '0')}
       </div>
 
-      <div className="h-2 w-full rounded-full bg-[#F0EDE8] overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-[#EDF4F7] overflow-hidden">
         <motion.div
           className="h-full bg-amber-400 rounded-full"
           animate={{ width: `${(elapsed / DURATION) * 100}%` }}
@@ -456,7 +456,7 @@ function SafePlace({ onFinish }: { onFinish: () => void }) {
           setSelectedPlace(null);
           setElapsed(0);
         }}
-        className="mx-auto flex items-center gap-2 rounded-2xl bg-[#F0EDE8] px-4 py-2 text-sm text-[#5A6B7A] active:scale-95"
+        className="mx-auto flex items-center gap-2 rounded-2xl bg-[#EDF4F7] px-4 py-2 text-sm text-[#5A6B7A] active:scale-95"
       >
         <RotateCcw className="h-4 w-4" /> Change place
       </button>
@@ -597,7 +597,7 @@ function SquareBreathing({ onFinish }: { onFinish: () => void }) {
         <button
           type="button"
           onClick={() => { playTap(); setRunning(false); }}
-          className="mx-auto rounded-2xl bg-[#F0EDE8] px-8 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
+          className="mx-auto rounded-2xl bg-[#EDF4F7] px-8 py-3 text-sm font-medium text-[#5A6B7A] active:scale-95"
         >
           Stop
         </button>
@@ -630,7 +630,7 @@ function CompletionOverlay({ onDismiss }: { onDismiss: () => void }) {
         >
           🌟
         </motion.div>
-        <h3 className="text-lg font-bold text-[#1B2733] mb-1">Great job!</h3>
+        <h3 className="text-lg font-bold text-[#132F43] mb-1">Great job!</h3>
         <p className="text-sm text-[#5A6B7A] mb-5">You did amazing grounding yourself.</p>
         <button
           type="button"
@@ -662,7 +662,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white">
       {/* Header */}
       <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="flex items-center justify-between px-4 py-3">
@@ -670,7 +670,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
             <ArrowLeft className="h-5 w-5" />
             {activeExercise ? 'Exercises' : 'Back'}
           </button>
-          <div className="text-sm font-semibold text-[#1B2733]">
+          <div className="text-sm font-semibold text-[#132F43]">
             {activeExercise ? EXERCISES.find(e => e.id === activeExercise)?.label : 'Grounding Exercises'}
           </div>
           <div className="w-10" />
@@ -682,7 +682,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
           <>
             <div className="mb-5 text-center">
               <div className="text-2xl mb-1">🌿</div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Feel grounded</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Feel grounded</h2>
               <p className="text-sm text-[#5A6B7A] mt-1">Pick an exercise to calm your body and mind.</p>
             </div>
 
@@ -697,7 +697,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
                 >
                   <div className="text-2xl">{ex.emoji}</div>
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-[#1B2733]">{ex.label}</div>
+                    <div className="text-sm font-semibold text-[#132F43]">{ex.label}</div>
                     <div className="text-sm text-[#5A6B7A]">{ex.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />

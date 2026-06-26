@@ -197,7 +197,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
+          <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">
             Provider Applications
           </h2>
           <p className="text-[#5A6B7A] dark:text-slate-400 mt-1">
@@ -218,7 +218,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
               <Clock className="w-5 h-5 text-amber-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.pending}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.pending}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Pending</p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
               <Eye className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.underReview}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.underReview}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Under Review</p>
             </div>
           </div>
@@ -240,7 +240,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.approved}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.approved}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Approved</p>
             </div>
           </div>
@@ -251,7 +251,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
               <XCircle className="w-5 h-5 text-red-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.rejected}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.rejected}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Rejected</p>
             </div>
           </div>
@@ -291,7 +291,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
       ) : loadError ? (
         <Card className="p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-[#1B2733] dark:text-white font-medium mb-2">Unable to Load Applications</p>
+          <p className="text-[#132F43] dark:text-white font-medium mb-2">Unable to Load Applications</p>
           <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">{loadError}</p>
           <Button variant="outline" onClick={loadApplications}>
             <RefreshCw className="w-4 h-4 mr-2" />
@@ -301,7 +301,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
       ) : filteredApplications.length === 0 ? (
         <Card className="p-8 text-center">
           <FileText className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <h3 className="font-medium text-[#1B2733] dark:text-white mb-2">
+          <h3 className="font-medium text-[#132F43] dark:text-white mb-2">
             No applications found
           </h3>
           <p className="text-[#5A6B7A] dark:text-slate-400">
@@ -324,7 +324,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-[#1B2733] dark:text-white">
+                        <h4 className="font-semibold text-[#132F43] dark:text-white">
                           {app.full_name}
                         </h4>
                         {getStatusBadge(app.status)}
@@ -365,7 +365,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Contact Info */}
                     <div className="space-y-3">
-                      <h5 className="font-medium text-[#1B2733] dark:text-white flex items-center gap-2">
+                      <h5 className="font-medium text-[#132F43] dark:text-white flex items-center gap-2">
                         <User className="w-4 h-4 text-[#6B9080]" />
                         Contact Information
                       </h5>
@@ -383,7 +383,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
 
                     {/* Credentials */}
                     <div className="space-y-3">
-                      <h5 className="font-medium text-[#1B2733] dark:text-white flex items-center gap-2">
+                      <h5 className="font-medium text-[#132F43] dark:text-white flex items-center gap-2">
                         <Award className="w-4 h-4 text-[#6B9080]" />
                         Credentials
                       </h5>
@@ -408,7 +408,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
 
                   {/* Specialties */}
                   <div>
-                    <h5 className="font-medium text-[#1B2733] dark:text-white mb-2">Specialties</h5>
+                    <h5 className="font-medium text-[#132F43] dark:text-white mb-2">Specialties</h5>
                     <div className="flex flex-wrap gap-2">
                       {app.specialties.map(s => (
                         <Badge key={s} className="bg-[#6B9080]/10 text-[#6B9080]">{s}</Badge>
@@ -419,7 +419,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                   {/* Bio */}
                   {app.bio && (
                     <div>
-                      <h5 className="font-medium text-[#1B2733] dark:text-white mb-2">Bio</h5>
+                      <h5 className="font-medium text-[#132F43] dark:text-white mb-2">Bio</h5>
                       <p className="text-sm text-neutral-600 dark:text-slate-400">{app.bio}</p>
                     </div>
                   )}
@@ -431,7 +431,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                         ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
                         : 'bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800'
                     }`}>
-                      <h5 className="font-medium text-[#1B2733] dark:text-white mb-3 flex items-center gap-2">
+                      <h5 className="font-medium text-[#132F43] dark:text-white mb-3 flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-violet-600" />
                         AI Verification Results
                       </h5>
@@ -458,13 +458,13 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
                         </div>
                         <div>
                           <p className="text-[#5A6B7A] dark:text-slate-400">Confidence</p>
-                          <p className="font-medium text-[#1B2733] dark:text-white">
+                          <p className="font-medium text-[#132F43] dark:text-white">
                             {Math.round(app.ai_verification_result.confidence_score * 100)}%
                           </p>
                         </div>
                         <div>
                           <p className="text-[#5A6B7A] dark:text-slate-400">Verified At</p>
-                          <p className="font-medium text-[#1B2733] dark:text-white">
+                          <p className="font-medium text-[#132F43] dark:text-white">
                             {formatDate(app.ai_verification_result.verified_at)}
                           </p>
                         </div>
@@ -531,7 +531,7 @@ export function ProviderApplicationReview({ adminId }: ProviderApplicationReview
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="w-full max-w-md">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4">
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4">
                 Reject Application
               </h3>
               <p className="text-sm text-neutral-600 dark:text-slate-400 mb-4">

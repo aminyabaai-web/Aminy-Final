@@ -271,7 +271,7 @@ export function VoiceInput({
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-center text-[#1B2733] dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-center text-[#132F43] dark:text-white mb-2">
               "Aminy" would like to access the Microphone
             </h3>
 
@@ -281,7 +281,7 @@ export function VoiceInput({
             </p>
 
             {/* Privacy note */}
-            <div className="bg-[#FAF7F2] dark:bg-slate-800 rounded-lg p-3 mb-4 sm:mb-6">
+            <div className="bg-[#F6FBFB] dark:bg-slate-800 rounded-lg p-3 mb-4 sm:mb-6">
               <p className="text-sm text-[#5A6B7A] dark:text-gray-300">
                 <strong>From Aminy:</strong> For this app, your voice and speech data will not be sent to external servers. We will convert your speech to text directly on your device to protect your information.
               </p>
@@ -313,7 +313,7 @@ export function VoiceInput({
           <Card className="px-4 py-3 bg-white dark:bg-slate-900 shadow-lg rounded-full flex items-center gap-3">
             {/* Recording indicator */}
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+            <span className="text-sm font-medium text-[#132F43] dark:text-white">
               Listening...
             </span>
             {transcript && (

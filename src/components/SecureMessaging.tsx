@@ -421,7 +421,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         {/* Header */}
         <div className="p-4 border-b border-neutral-200">
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold text-[#1B2733]">Messages</h2>
+            <h2 className="text-lg font-semibold text-[#132F43]">Messages</h2>
             <Button variant="ghost" size="sm">
               <Plus className="w-5 h-5" />
             </Button>
@@ -475,7 +475,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-[#1B2733] truncate">
+                      <span className="font-medium text-[#132F43] truncate">
                         {userType === 'parent' ? thread.providerName : thread.parentName}
                       </span>
                       {thread.lastMessage && (
@@ -522,7 +522,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                 <User className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733]">
+                <h3 className="font-semibold text-[#132F43]">
                   {userType === 'parent' ? selectedThread.providerName : selectedThread.parentName}
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">
@@ -570,7 +570,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
                       className={`rounded-2xl px-4 py-2 ${
                         isOwn
                           ? 'bg-primary text-white rounded-br-md'
-                          : 'bg-white text-[#1B2733] border border-neutral-200 rounded-bl-md'
+                          : 'bg-white text-[#132F43] border border-neutral-200 rounded-bl-md'
                       }`}
                     >
                       <p className="whitespace-pre-wrap">{message.content}</p>
@@ -743,7 +743,7 @@ export function SecureMessaging({ userId, userType, userName }: SecureMessagingP
         <div className="flex-1 hidden md:flex items-center justify-center bg-neutral-50">
           <div className="text-center">
             <MessageSquare className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#1B2733] mb-1">Select a conversation</h3>
+            <h3 className="text-lg font-medium text-[#132F43] mb-1">Select a conversation</h3>
             <p className="text-[#5A6B7A]">Choose a thread to start messaging</p>
           </div>
         </div>

@@ -72,7 +72,7 @@ export function UpgradeModal({
               {/* Dismiss button */}
               <button
                 onClick={handleDismiss}
-                className="absolute top-3 right-3 p-1 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+                className="absolute top-3 right-3 p-1 rounded-full text-slate-400 hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
                 aria-label="Dismiss"
               >
                 <X className="w-4 h-4" />
@@ -95,7 +95,7 @@ export function UpgradeModal({
               </span>
 
               {/* Headline */}
-              <h3 className="text-base font-bold text-[#1B2733] mb-1 pr-4">
+              <h3 className="text-base font-bold text-[#132F43] mb-1 pr-4">
                 {prompt.headline}
               </h3>
 

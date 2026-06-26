@@ -74,7 +74,7 @@ function TimeAwarePrompts({ userData, onAskAminyClick }: TimeAwarePromptsProps) 
         {config.prompts.map((promptFn, index) => (
           <button
             key={index}
-            className="text-left p-2.5 bg-[#FAF7F2] hover:bg-[#F0EDE8] rounded-lg text-sm transition-colors border border-transparent hover:border-[#E8E4DF]"
+            className="text-left p-2.5 bg-[#F6FBFB] hover:bg-[#EDF4F7] rounded-lg text-sm transition-colors border border-transparent hover:border-[#E8E4DF]"
             onClick={(e) => {
               e.stopPropagation();
               onAskAminyClick();
@@ -350,7 +350,7 @@ export function EnhancedAskAminyHomeCard({
             <Sparkles className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-[#1B2733]">Talk to Aminy</h3>
+            <h3 className="text-lg font-semibold text-[#132F43]">Talk to Aminy</h3>
             {userTier !== 'starter' ? (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                 <Zap className="w-3 h-3 mr-1" />

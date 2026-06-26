@@ -240,7 +240,7 @@ export function CoverageClaritySummary({
       case 'high': return 'bg-red-100 text-red-700 border-red-200';
       case 'medium': return 'bg-amber-100 text-amber-700 border-amber-200';
       case 'low': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
-      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -336,14 +336,14 @@ export function CoverageClaritySummary({
 
         {/* Personalized Recommendations */}
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Your Personalized Coverage Recommendations</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-4">Your Personalized Coverage Recommendations</h2>
           <div className="space-y-3 sm:space-y-4">
             {recommendations.map((rec, index) => (
               <Card key={index} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg text-[#1B2733]">{rec.title}</h3>
+                      <h3 className="font-semibold text-lg text-[#132F43]">{rec.title}</h3>
                       <Badge className={getPriorityColor(rec.priority)}>
                         {rec.priority} priority
                       </Badge>
@@ -363,7 +363,7 @@ export function CoverageClaritySummary({
                 )}
 
                 <div>
-                  <h4 className="font-medium text-[#1B2733] mb-2">Action Items:</h4>
+                  <h4 className="font-medium text-[#132F43] mb-2">Action Items:</h4>
                   <ul className="space-y-2">
                     {rec.actionItems.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
@@ -379,7 +379,7 @@ export function CoverageClaritySummary({
         </div>
 
         {/* Next Steps */}
-        <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-white border-[#6B9080]/20">
+        <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-white border-[#6B9080]/20">
           <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
             Your Next Steps
@@ -401,7 +401,7 @@ export function CoverageClaritySummary({
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1B2733] mb-2">Important Reminders</h3>
+              <h3 className="font-semibold text-[#132F43] mb-2">Important Reminders</h3>
               <ul className="space-y-2 text-sm text-[#3A4A57]">
                 <li>• Coverage details can vary — always verify with your specific plan</li>
                 <li>• Get coverage confirmations in writing (email is best)</li>
@@ -428,9 +428,9 @@ function generateHTMLReport(data: CoverageSummaryData): string {
   <title>Coverage Clarity Summary - ${data.childName}</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #334155; max-width: 800px; margin: 0 auto; padding: 20px; }
-    h1 { color: #4E93A8; border-bottom: 3px solid #4E93A8; padding-bottom: 10px; }
+    h1 { color: #2A7D99; border-bottom: 3px solid #2A7D99; padding-bottom: 10px; }
     h2 { color: #0f172a; margin-top: 30px; }
-    .section { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #4E93A8; }
+    .section { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #2A7D99; }
     .recommendation { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin: 15px 0; }
     .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 8px; }
     .badge.high { background: #fee2e2; color: #991b1b; }

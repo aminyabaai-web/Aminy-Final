@@ -78,7 +78,7 @@ export function ReferralCard({
               <Gift className="w-5 h-5 text-pink-600" />
             </div>
             <div>
-              <p className="font-medium text-[#1B2733]">Share Aminy, Get Rewards</p>
+              <p className="font-medium text-[#132F43]">Share Aminy, Get Rewards</p>
               <p className="text-sm text-[#5A6B7A]">
                 {referralCount > 0
                   ? `${referralCount} friends joined • $${rewardEarned} earned`
@@ -121,14 +121,14 @@ export function ReferralCard({
         <div className="p-6 space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
+            <div className="text-center p-4 bg-[#F6FBFB] rounded-xl">
               <Users className="w-6 h-6 text-[#8A9BA8] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#1B2733]">{referralCount}</p>
+              <p className="text-2xl font-bold text-[#132F43]">{referralCount}</p>
               <p className="text-sm text-[#5A6B7A]">Friends joined</p>
             </div>
-            <div className="text-center p-4 bg-[#FAF7F2] rounded-xl">
+            <div className="text-center p-4 bg-[#F6FBFB] rounded-xl">
               <Heart className="w-6 h-6 text-[#8A9BA8] mx-auto mb-2" />
-              <p className="text-2xl font-bold text-[#1B2733]">${rewardEarned}</p>
+              <p className="text-2xl font-bold text-[#132F43]">${rewardEarned}</p>
               <p className="text-sm text-[#5A6B7A]">Credits earned</p>
             </div>
           </div>
@@ -143,7 +143,7 @@ export function ReferralCard({
                 type="text"
                 readOnly
                 value={referralLink}
-                className="flex-1 px-3 py-2 text-sm bg-[#F0EDE8] border border-[#E8E4DF] rounded-lg text-[#5A6B7A]"
+                className="flex-1 px-3 py-2 text-sm bg-[#EDF4F7] border border-[#E8E4DF] rounded-lg text-[#5A6B7A]"
               />
               <Button
                 onClick={handleCopy}
@@ -162,7 +162,7 @@ export function ReferralCard({
 
           {/* How it works */}
           <div className="space-y-3">
-            <h3 className="font-medium text-[#1B2733]">How it works</h3>
+            <h3 className="font-medium text-[#132F43]">How it works</h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xs font-bold shrink-0">

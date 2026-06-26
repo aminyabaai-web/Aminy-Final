@@ -246,11 +246,11 @@ export function ProviderIdentityVerification({
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#F0EDE8] rounded-lg">
+          <button onClick={onBack} aria-label="Go back" className="p-2 hover:bg-[#EDF4F7] rounded-lg">
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
           <div className="flex-1">
-            <h1 className="font-bold text-[#1B2733]">Identity Verification</h1>
+            <h1 className="font-bold text-[#132F43]">Identity Verification</h1>
             <p className="text-sm text-[#5A6B7A]">
               {completedSteps}/{state.steps.length} steps complete
             </p>
@@ -287,7 +287,7 @@ export function ProviderIdentityVerification({
               {state.status === 'processing' && <Loader2 className="w-6 h-6 text-amber-600 animate-spin" />}
               {state.status === 'manual_review' && <AlertTriangle className="w-6 h-6 text-amber-600" />}
               <div>
-                <p className="font-semibold text-[#1B2733]">
+                <p className="font-semibold text-[#132F43]">
                   {state.status === 'approved' && 'Verification Approved'}
                   {state.status === 'denied' && 'Verification Not Approved'}
                   {state.status === 'processing' && 'Verification Processing'}
@@ -397,7 +397,7 @@ export function ProviderIdentityVerification({
                     <StepIcon step={step} />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-[#1B2733]">{step.label}</p>
+                    <p className="font-medium text-[#132F43]">{step.label}</p>
                     <p className="text-sm text-[#5A6B7A] mt-0.5">{step.description}</p>
 
                     {/* ID Front capture button */}
@@ -527,7 +527,7 @@ export function ProviderIdentityVerification({
                     {/* Consent form */}
                     {step.id === 'consent' && step.status !== 'complete' && (
                       <div className="mt-3 space-y-3">
-                        <div className="bg-[#FAF7F2] rounded-lg p-3 text-sm text-[#5A6B7A] max-h-32 overflow-y-auto">
+                        <div className="bg-[#F6FBFB] rounded-lg p-3 text-sm text-[#5A6B7A] max-h-32 overflow-y-auto">
                           <p className="font-semibold mb-1">Background Check Authorization</p>
                           <p>I hereby authorize Aminy and its designated background check provider
                           to conduct a background check, which may include criminal history,
@@ -573,7 +573,7 @@ export function ProviderIdentityVerification({
 
         {/* Security notice */}
         {!isProcessingOrDone && (
-          <div className="flex items-start gap-2 px-3 py-2 bg-[#F0EDE8] rounded-lg">
+          <div className="flex items-start gap-2 px-3 py-2 bg-[#EDF4F7] rounded-lg">
             <Lock className="w-4 h-4 text-[#5A6B7A] mt-0.5 shrink-0" />
             <p className="text-sm text-[#5A6B7A]">
               All data is encrypted and stored securely. Photos are used only for identity

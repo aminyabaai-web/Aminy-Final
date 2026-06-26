@@ -59,7 +59,7 @@ export function MicroAffirmationBanner({ parentName }: MicroAffirmationBannerPro
   if (dismissed || !currentAffirmation) return null;
 
   return (
-    <Card className="relative overflow-hidden border-[#E8E4DF] bg-gradient-to-r from-[#FAF7F2]/50 to-white">
+    <Card className="relative overflow-hidden border-[#E8E4DF] bg-gradient-to-r from-[#F6FBFB]/50 to-white">
       <div className="p-3 sm:p-4">
         <button
           onClick={() => setDismissed(true)}

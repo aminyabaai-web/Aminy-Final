@@ -264,7 +264,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     className={`
                       flex items-center justify-center w-14 h-14 rounded-full -mt-6 shadow-lg transition-all duration-200
                       ${isActive
-                        ? 'bg-gradient-to-br from-[#4E93A8] to-[#577590] scale-110'
+                        ? 'bg-gradient-to-br from-[#2A7D99] to-[#577590] scale-110'
                         : 'bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] hover:scale-105 active:scale-95'
                       }
                     `}
@@ -273,7 +273,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   </div>
                   <span
                     className={`text-sm font-semibold mt-1 transition-colors ${
-                      isActive ? 'text-[#4E93A8] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
+                      isActive ? 'text-[#2A7D99] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
                     }`}
                   >
                     {tab.label}
@@ -328,7 +328,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     style={{
                       width: 28,
                       height: 3,
-                      background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
+                      background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
                       transform: 'translateX(-50%)',
                       animation: 'navIndicatorIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards',
                     }}
@@ -386,10 +386,10 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
 
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-3 border-b border-[#E8E4DF] dark:border-slate-700">
-                <h2 id="more-menu-title" className="text-lg font-semibold text-[#1B2733] dark:text-gray-100">More</h2>
+                <h2 id="more-menu-title" className="text-lg font-semibold text-[#132F43] dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
-                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5 text-[#5A6B7A] dark:text-[#8A9BA8]" />
@@ -429,7 +429,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                             ? 'bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-800 dark:to-pink-900'
                             : isItemActive
                               ? 'bg-[#6B9080]/10 dark:bg-teal-800'
-                              : 'bg-[#F0EDE8] dark:bg-slate-600'
+                              : 'bg-[#EDF4F7] dark:bg-slate-600'
                           }
                         `}>
                           <Icon
@@ -439,7 +439,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         </div>
 
                         <div className="text-left">
-                          <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
+                          <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#132F43] dark:text-gray-100'}`}>
                             {item.label}
                           </div>
                           <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>

@@ -95,10 +95,10 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
       {/* Header */}
       <div className="flex items-center justify-between px-4 pt-4 pb-2">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-[#4E93A8]/10 flex items-center justify-center">
-            <CheckCircle className="w-4 h-4 text-[#4E93A8]" />
+          <div className="w-7 h-7 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
+            <CheckCircle className="w-4 h-4 text-[#2A7D99]" />
           </div>
-          <span className="text-sm font-semibold text-[#1B2733]">Weekly check-in</span>
+          <span className="text-sm font-semibold text-[#132F43]">Weekly check-in</span>
         </div>
         <button onClick={onDismiss} className="p-1 rounded-full hover:bg-slate-100 transition-colors">
           <X className="w-4 h-4 text-slate-400" />
@@ -117,7 +117,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                   <button
                     key={opt.value}
                     onClick={() => { setFrequency(opt.value); setStep('progress'); }}
-                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-left text-[#3A4A57] hover:border-[#4E93A8] hover:bg-[#4E93A8]/5 transition-all"
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl border border-[#E8E4DF] text-sm text-left text-[#3A4A57] hover:border-[#2A7D99] hover:bg-[#2A7D99]/5 transition-all"
                   >
                     {opt.label}
                     <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
@@ -137,7 +137,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                   <button
                     key={val}
                     onClick={() => { setProgress(val); setStep('confidence'); }}
-                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#4E93A8] hover:bg-[#4E93A8]/5 transition-all"
+                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#2A7D99] hover:bg-[#2A7D99]/5 transition-all"
                   >
                     {val}
                   </button>
@@ -161,7 +161,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                     key={val}
                     onClick={() => handleConfidence(val)}
                     disabled={saving}
-                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#4E93A8] hover:bg-[#4E93A8]/5 transition-all disabled:opacity-50"
+                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#2A7D99] hover:bg-[#2A7D99]/5 transition-all disabled:opacity-50"
                   >
                     {val}
                   </button>
@@ -176,8 +176,8 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
 
           {step === 'done' && (
             <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-2 text-center">
-              <CheckCircle className="w-8 h-8 text-[#4E93A8] mx-auto mb-2" />
-              <p className="text-sm font-semibold text-[#1B2733]">Check-in recorded.</p>
+              <CheckCircle className="w-8 h-8 text-[#2A7D99] mx-auto mb-2" />
+              <p className="text-sm font-semibold text-[#132F43]">Check-in recorded.</p>
               <p className="aminy-affirm text-slate-500 mt-0.5" style={{ fontSize: '0.9rem' }}>See you next week.</p>
             </motion.div>
           )}

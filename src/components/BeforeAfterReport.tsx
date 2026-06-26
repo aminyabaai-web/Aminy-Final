@@ -105,9 +105,9 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
   return (
     <div className="space-y-4">
       {/* Hero Section */}
-      <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-2 border-[#C8DDE8]">
+      <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-2 border-[#C8DDE8]">
         <div className="text-center mb-4">
-          <h2 className="text-2xl text-[#1B2733] mb-2">
+          <h2 className="text-2xl text-[#132F43] mb-2">
             {childName}'s Progress Story
           </h2>
           <p className="text-sm text-[#5A6B7A]">
@@ -190,7 +190,7 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
       )}
 
       {/* Disclaimer */}
-      <Card className="p-4 bg-[#FDF9F0] border-[#F0EDE8]">
+      <Card className="p-4 bg-[#FDF9F0] border-[#EDF4F7]">
         <p className="text-sm text-yellow-900">
           <strong>Important:</strong> This report shows wellness coaching and support progress, not medical treatment outcomes. This is educational guidance only. Parents remain the decision authority for all care decisions. For clinical questions, consult your child's healthcare providers.
         </p>
@@ -241,7 +241,7 @@ function MetricCard({
 
       <div className="mb-2">
         <div className="text-sm text-[#5A6B7A]">Now</div>
-        <div className="text-2xl font-bold text-[#1B2733]">
+        <div className="text-2xl font-bold text-[#132F43]">
           {after}{unit}
         </div>
       </div>
@@ -279,7 +279,7 @@ function DetailedReport({
     >
       <Card className="p-6 space-y-6">
         <div>
-          <h3 className="text-lg text-[#1B2733] mb-2">Your Progress Story</h3>
+          <h3 className="text-lg text-[#132F43] mb-2">Your Progress Story</h3>
           <p className="text-sm text-[#3A4A57]">
             {parentName}, here's what we've seen over the past {summary.timeframe}:
           </p>
@@ -287,7 +287,7 @@ function DetailedReport({
 
         {/* Parent Wellbeing */}
         <div>
-          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#132F43] mb-2 flex items-center gap-2">
             💙 Your Wellbeing
           </h4>
           <p className="text-sm text-[#3A4A57] mb-2">
@@ -307,7 +307,7 @@ function DetailedReport({
 
         {/* Routine Consistency */}
         <div>
-          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#132F43] mb-2 flex items-center gap-2">
             ✅ Daily Routines
           </h4>
           <p className="text-sm text-[#3A4A57] mb-2">
@@ -327,7 +327,7 @@ function DetailedReport({
 
         {/* Challenging Moments */}
         <div>
-          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#132F43] mb-2 flex items-center gap-2">
             🤝 Tough Moments
           </h4>
           <p className="text-sm text-[#3A4A57] mb-2">
@@ -347,7 +347,7 @@ function DetailedReport({
 
         {/* Goal Achievement */}
         <div>
-          <h4 className="text-sm font-medium text-[#1B2733] mb-2 flex items-center gap-2">
+          <h4 className="text-sm font-medium text-[#132F43] mb-2 flex items-center gap-2">
             🎯 Goals & Skills
           </h4>
           <p className="text-sm text-[#3A4A57] mb-2">
@@ -371,7 +371,7 @@ function DetailedReport({
 
         {/* Next Steps */}
         <div className="bg-[#EEF4F8] border border-[#C8DDE8] rounded-lg p-4">
-          <h4 className="text-sm font-medium text-[#1B2733] mb-2">What's Next?</h4>
+          <h4 className="text-sm font-medium text-[#132F43] mb-2">What's Next?</h4>
           <ul className="space-y-1 text-sm text-[#3A4A57]">
             <li className="flex items-start gap-2">
               <span className="text-blue-600 mt-0.5">•</span>
@@ -469,7 +469,7 @@ export function BeforeAfterSectionForPDF({ userId, childId, childName, parentNam
         </div>
       </div>
 
-      <div className="text-sm text-[#5A6B7A] p-3 bg-[#FAF7F2] rounded border">
+      <div className="text-sm text-[#5A6B7A] p-3 bg-[#F6FBFB] rounded border">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress. This is educational guidance only. Parents remain decision authority. Consult healthcare providers for clinical questions.
       </div>
     </div>

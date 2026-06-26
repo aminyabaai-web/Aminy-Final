@@ -253,7 +253,7 @@ function MissionCard({
       <div className="flex items-center gap-3">
         <span className="text-2xl flex-shrink-0">{isCompleted ? '✅' : mission.emoji}</span>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-[#1B2733] text-sm">{mission.title}</p>
+          <p className="font-bold text-[#132F43] text-sm">{mission.title}</p>
           <p className="text-sm text-[#5A6B7A] truncate">{mission.description}</p>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
@@ -406,7 +406,7 @@ export function DailyMission({ completedSteps = 0, onStartMission }: DailyMissio
               {allComplete ? '🎉' : '🚀'}
             </motion.div>
             <div>
-              <h3 className="font-black text-[#1B2733] text-sm">
+              <h3 className="font-black text-[#132F43] text-sm">
                 {allComplete ? 'All missions done!' : "Today's Missions"}
               </h3>
               <p className="text-sm text-[#5A6B7A]">

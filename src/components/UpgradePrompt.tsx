@@ -89,7 +89,7 @@ export function UpgradePrompt({
             <Crown className="w-5 h-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h4 className="font-semibold text-[#1B2733] dark:text-white mb-1">
+            <h4 className="font-semibold text-[#132F43] dark:text-white mb-1">
               {prompt.title}
             </h4>
             <p className="text-sm text-neutral-600 dark:text-slate-400 mb-3">
@@ -219,7 +219,7 @@ export function UpgradePrompt({
 
                 {/* Price */}
                 <div className="text-center mb-6">
-                  <span className="text-3xl font-bold text-[#1B2733] dark:text-white">
+                  <span className="text-3xl font-bold text-[#132F43] dark:text-white">
                     {TIER_PRICES[recTier]}
                   </span>
                   <span className="text-[#5A6B7A]">/month</span>
@@ -276,7 +276,7 @@ export function UpgradePrompt({
               <Crown className="w-4 h-4 text-white" />
             </div>
             <div className="flex-1">
-              <h4 className="font-medium text-[#1B2733] dark:text-white text-sm">
+              <h4 className="font-medium text-[#132F43] dark:text-white text-sm">
                 {prompt.title}
               </h4>
               <Button

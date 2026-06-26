@@ -144,8 +144,8 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }} aria-label="Goal mastery trend over 12 weeks">
       <defs>
         <linearGradient id="masteryGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#4E93A8" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#4E93A8" stopOpacity="0.02" />
+          <stop offset="0%" stopColor="#2A7D99" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#2A7D99" stopOpacity="0.02" />
         </linearGradient>
       </defs>
 
@@ -186,7 +186,7 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
       <path d={areaD} fill="url(#masteryGrad)" />
 
       {/* Line */}
-      <path d={pathD} fill="none" stroke="#4E93A8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={pathD} fill="none" stroke="#2A7D99" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 
       {/* End point dot */}
       {points.length > 0 && (() => {
@@ -195,7 +195,7 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
         const ly = yPos(last.masteryPct);
         return (
           <g>
-            <circle cx={lx} cy={ly} r={5} fill="#4E93A8" />
+            <circle cx={lx} cy={ly} r={5} fill="#2A7D99" />
             <circle cx={lx} cy={ly} r={3} fill="white" />
             <text x={lx + 8} y={ly} dominantBaseline="middle" className="fill-emerald-500 font-bold" style={{ fontSize: 10 }}>
               {last.masteryPct}%
@@ -234,7 +234,7 @@ function BarChart({ buckets }: { buckets: FrequencyBucket[] }) {
               x={bX} y={bY}
               width={barW} height={bH}
               rx={4}
-              fill="#4E93A8"
+              fill="#2A7D99"
               opacity={0.85}
             />
             <text
@@ -274,7 +274,7 @@ function KPITile({
   return (
     <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
       <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-1">{label}</p>
-      <p className={`text-3xl font-bold ${color ?? 'text-[#1B2733]'}`}>
+      <p className={`text-3xl font-bold ${color ?? 'text-[#132F43]'}`}>
         {value}
         {unit && <span className="text-base font-medium text-[#5A6B7A] ml-1">{unit}</span>}
       </p>
@@ -440,13 +440,13 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               label="Active Clients"
               value={kpi.activeClients}
               sub="enrolled families"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
             <KPITile
               label="Sessions This Month"
               value={kpi.sessionsThisMonth}
               sub="completed sessions"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
             <KPITile
               label="Goals at Mastery"
@@ -460,7 +460,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               value={kpi.avgWeeksToFirstMastery}
               unit="wks"
               sub="from program start"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
           </div>
         </section>
@@ -469,7 +469,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-bold text-[#1B2733]">Goal Mastery Trend</h2>
+              <h2 className="text-sm font-bold text-[#132F43]">Goal Mastery Trend</h2>
               <p className="text-sm text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
             </div>
             {weekly.length > 1 && (
@@ -487,7 +487,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {/* ── Section 3: Session Frequency ─────────────────── */}
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="mb-4">
-            <h2 className="text-sm font-bold text-[#1B2733]">Session Frequency Distribution</h2>
+            <h2 className="text-sm font-bold text-[#132F43]">Session Frequency Distribution</h2>
             <p className="text-sm text-slate-400 mt-0.5">
               {frequency.length > 0 && kpi.activeClients > 0
                 ? `Sessions per week across ${kpi.activeClients} active clients`
@@ -516,14 +516,14 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {/* ── Section 4: Top Programs ───────────────────────── */}
         <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#E8E4DF]">
-            <h2 className="text-sm font-bold text-[#1B2733]">Top Programs by Mastery Rate</h2>
+            <h2 className="text-sm font-bold text-[#132F43]">Top Programs by Mastery Rate</h2>
             <p className="text-sm text-slate-400 mt-0.5">Across all active treatment plans</p>
           </div>
           {programs.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#FAF7F2]">
+                  <tr className="bg-[#F6FBFB]">
                     <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Program</th>
                     <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Trials</th>
                     <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Mastery</th>
@@ -532,7 +532,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
                 </thead>
                 <tbody>
                   {programs.map((row, i) => (
-                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
+                    <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#F6FBFB]/50'}>
                       <td className="px-5 py-3 font-medium text-[#3A4A57]">{row.name}</td>
                       <td className="px-4 py-3 text-right text-[#5A6B7A]">{row.totalTrials.toLocaleString()}</td>
                       <td className="px-4 py-3 text-right">
@@ -557,14 +557,14 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {!providerId && (
           <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
             <div className="px-5 py-4 border-b border-[#E8E4DF]">
-              <h2 className="text-sm font-bold text-[#1B2733]">Provider Performance</h2>
+              <h2 className="text-sm font-bold text-[#132F43]">Provider Performance</h2>
               <p className="text-sm text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
             </div>
             {providers.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-[#FAF7F2]">
+                    <tr className="bg-[#F6FBFB]">
                       <th className="text-left px-5 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Provider</th>
                       <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Clients</th>
                       <th className="text-right px-4 py-2.5 text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Avg Sess/Wk</th>
@@ -573,7 +573,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
                   </thead>
                   <tbody>
                     {providers.map((row, i) => (
-                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#FAF7F2]/50'}>
+                      <tr key={row.name} className={i % 2 === 0 ? '' : 'bg-[#F6FBFB]/50'}>
                         <td className="px-5 py-3">
                           <p className="font-medium text-[#3A4A57]">{row.name}</p>
                         </td>

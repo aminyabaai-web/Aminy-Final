@@ -395,7 +395,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                                       className={`flex-1 py-2 text-sm rounded transition-colors ${
                                         sound.currentAccuracy === acc
                                           ? 'bg-green-600 text-white'
-                                          : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
+                                          : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                                       }`}
                                     >
                                       {acc}%
@@ -484,7 +484,7 @@ export const SpeechProgressTracker: React.FC<SpeechProgressTrackerProps> = ({
                 {CORE_VOCABULARY_STARTER.slice(0, 20).map((word) => (
                   <span
                     key={word}
-                    className="px-3 py-1 bg-[#F0EDE8] text-[#3A4A57] rounded-full text-sm"
+                    className="px-3 py-1 bg-[#EDF4F7] text-[#3A4A57] rounded-full text-sm"
                   >
                     {word}
                   </span>

@@ -42,7 +42,7 @@ const SERVICE_META: Record<ServiceType, {
   typicallyAuthRequired: boolean;
   preferredSites: SiteOfCare[];
 }> = {
-  ABA:          { label: 'ABA Therapy',          short: 'ABA', icon: Brain,       color: '#4E93A8', description: 'Applied Behavior Analysis — behavioral, communication, daily living skills',  typicallyAuthRequired: true,  preferredSites: ['in_home', 'clinic', 'telehealth'] },
+  ABA:          { label: 'ABA Therapy',          short: 'ABA', icon: Brain,       color: '#2A7D99', description: 'Applied Behavior Analysis — behavioral, communication, daily living skills',  typicallyAuthRequired: true,  preferredSites: ['in_home', 'clinic', 'telehealth'] },
   PT:           { label: 'Physical Therapy',     short: 'PT',  icon: Activity,    color: '#577590', description: 'Gross motor, balance, gait, mobility', typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'in_home'] },
   OT:           { label: 'Occupational Therapy', short: 'OT',  icon: Hand,        color: '#9B5DE5', description: 'Fine motor, sensory processing, self-care skills',                                  typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'in_home'] },
   ST:           { label: 'Speech Therapy',       short: 'ST',  icon: MessageCircle, color: '#E07A5F', description: 'Articulation, language, AAC, feeding/swallowing',                                  typicallyAuthRequired: true,  preferredSites: ['clinic', 'school', 'telehealth'] },
@@ -171,7 +171,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       />
 
       {/* Quick stats banner */}
-      <div className="mx-4 mt-4 rounded-2xl p-4 grid grid-cols-3 gap-3" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A825' }}>
+      <div className="mx-4 mt-4 rounded-2xl p-4 grid grid-cols-3 gap-3" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #57759012 100%)', border: '1px solid #2A7D9925' }}>
         <Stat label="Active services" value={String(activeServices.length)} />
         <Stat label="Upcoming visits" value={String(services.filter(s => s.nextAppointmentAt).length)} />
         <Stat label="Auth alerts" value={String(services.filter(s => s.authStatus === 'expiring' || s.authStatus === 'pending' || s.authStatus === 'denied').length)} accent={services.some(s => s.authStatus === 'expiring' || s.authStatus === 'denied')} />
@@ -207,7 +207,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                    <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
                     <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                   </div>
                   <Plus className="w-4 h-4 text-slate-400 shrink-0" />
@@ -230,7 +230,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
             const meta = SITE_META[site];
             const Icon = meta.icon;
             return (
-              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#FAF7F2]">
+              <div key={site} className="flex items-center gap-2 p-2 rounded-xl bg-[#F6FBFB]">
                 <Icon className="w-4 h-4 text-[#5A6B7A] shrink-0" />
                 <span className="text-sm text-[#3A4A57]">{meta.label}</span>
               </div>
@@ -247,8 +247,8 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
       {/* Loading shimmer */}
       {isLoading && activeServices.length === 0 && (
         <div className="px-4 mt-4 space-y-2">
-          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
-          <div className="h-20 rounded-2xl bg-[#F0EDE8] animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#EDF4F7] animate-pulse" />
+          <div className="h-20 rounded-2xl bg-[#EDF4F7] animate-pulse" />
         </div>
       )}
     </div>
@@ -268,12 +268,12 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
 
 function AuthBadge({ status, expiresAt }: { status: AuthStatus; expiresAt?: string }) {
   const styles: Record<AuthStatus, { bg: string; text: string; label: string; icon: React.ReactNode }> = {
-    none:         { bg: 'bg-[#F0EDE8]',   text: 'text-[#5A6B7A]',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
+    none:         { bg: 'bg-[#EDF4F7]',   text: 'text-[#5A6B7A]',   label: 'No auth on file', icon: <ShieldAlert className="w-3 h-3" /> },
     pending:      { bg: 'bg-amber-50',    text: 'text-amber-700',   label: 'Pending',          icon: <Clock className="w-3 h-3" /> },
     approved:     { bg: 'bg-[#6B9080]/10',     text: 'text-[#6B9080]',    label: 'Approved',         icon: <ShieldCheck className="w-3 h-3" /> },
     expiring:     { bg: 'bg-orange-50',   text: 'text-orange-700',  label: 'Expiring soon',    icon: <AlertTriangle className="w-3 h-3" /> },
     denied:       { bg: 'bg-red-50',      text: 'text-red-700',     label: 'Denied — appeal',  icon: <AlertTriangle className="w-3 h-3" /> },
-    not_required: { bg: 'bg-[#FAF7F2]',    text: 'text-[#5A6B7A]',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
+    not_required: { bg: 'bg-[#F6FBFB]',    text: 'text-[#5A6B7A]',   label: 'No auth needed',   icon: <ShieldCheck className="w-3 h-3" /> },
   };
   const s = styles[status];
   let labelText = s.label;
@@ -302,7 +302,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-semibold text-[#1B2733]">{meta.label}</p>
+              <p className="text-sm font-semibold text-[#132F43]">{meta.label}</p>
               <AuthBadge status={row.authStatus} expiresAt={row.authExpiresAt} />
             </div>
             {row.providerName && (
@@ -349,7 +349,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
         <div className="mt-3 flex gap-2">
           <button
             onClick={() => onNavigate?.('marketplace')}
-            className="flex-1 text-sm font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex-1 text-sm font-medium px-3 py-2 rounded-xl border border-[#E8E4DF] text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             Book
           </button>
@@ -357,7 +357,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
             <button
               onClick={() => onNavigate?.('prior-auth')}
               className="flex-1 text-sm font-medium px-3 py-2 rounded-xl text-white"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
             >
               {row.authStatus === 'denied' ? 'Appeal' : 'Request auth'}
             </button>

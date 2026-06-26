@@ -61,7 +61,7 @@ export function AskAminyChatScreen({
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ backgroundColor: isDark ? '#0F172A' : '#FAF7F2' }}
+        style={{ backgroundColor: isDark ? '#0F172A' : '#F6FBFB' }}
       >
         <div className="text-center">
           <Sparkles className="w-8 h-8 text-[#6B9080] mx-auto mb-3 animate-pulse" />
@@ -78,7 +78,7 @@ export function AskAminyChatScreen({
     // scrolling (only the messages list does).
     <div
       className="flex flex-col overflow-hidden"
-      style={{ height: '100dvh', backgroundColor: isDark ? '#0F172A' : '#FAF7F2' }}
+      style={{ height: '100dvh', backgroundColor: isDark ? '#0F172A' : '#F6FBFB' }}
     >
       {/* Header — minimal, Claude-style. Warm in light, slate in dark so it matches
           the StreamingAIChat input bar instead of staying cream over a dark body. */}
@@ -86,7 +86,7 @@ export function AskAminyChatScreen({
         className="sticky top-0 z-10 backdrop-blur-md border-b"
         style={{
           backgroundColor: isDark ? 'rgba(15,23,42,0.9)' : 'rgba(250,247,242,0.9)',
-          borderColor: isDark ? '#334155' : '#F0EDE8',
+          borderColor: isDark ? '#334155' : '#EDF4F7',
         }}
       >
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -94,7 +94,7 @@ export function AskAminyChatScreen({
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-2 -ml-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                className="p-2 -ml-2 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
                 aria-label="Back"
               >
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A] dark:text-slate-300" />
@@ -102,7 +102,7 @@ export function AskAminyChatScreen({
             )}
             <button
               onClick={() => setShowSidebar(true)}
-              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
               aria-label="Open chat history"
               title="Chat history"
             >
@@ -113,7 +113,7 @@ export function AskAminyChatScreen({
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-base font-semibold text-[#1B2733] dark:text-slate-100">Aminy AI</h1>
+                <h1 className="text-base font-semibold text-[#132F43] dark:text-slate-100">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today
@@ -132,7 +132,7 @@ export function AskAminyChatScreen({
                   window.location.reload();
                 }
               }}
-              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
               aria-label="New conversation"
               title="New conversation"
             >
@@ -140,7 +140,7 @@ export function AskAminyChatScreen({
             </button>
             <button
               onClick={() => setShowSettings(!showSettings)}
-              className="p-2 rounded-lg hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+              className="p-2 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-700 transition-colors"
               aria-label="Chat settings"
               title="Memory & settings"
             >
@@ -153,7 +153,7 @@ export function AskAminyChatScreen({
       {/* Settings panel */}
       {showSettings && (
         <div
-          className="border-b border-[#E8E4DF] dark:border-slate-800 bg-[#FAF7F2] dark:bg-slate-800"
+          className="border-b border-[#E8E4DF] dark:border-slate-800 bg-[#F6FBFB] dark:bg-slate-800"
         >
           <div className="max-w-3xl mx-auto px-4 py-3">
             <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-2">

@@ -102,7 +102,7 @@ export interface DataCollectionSheetProps {
 const RESPONSE_CONFIG: Record<ResponseType, { label: string; shortLabel: string; color: string; bgColor: string }> = {
   correct: { label: 'Correct', shortLabel: '✓', color: 'text-green-700', bgColor: 'bg-green-100 border-green-400 active:bg-green-200' },
   incorrect: { label: 'Incorrect', shortLabel: '✗', color: 'text-red-700', bgColor: 'bg-red-100 border-red-400 active:bg-red-200' },
-  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-[#5A6B7A]', bgColor: 'bg-[#F0EDE8] border-slate-400 active:bg-[#E8E4DF]' },
+  no_response: { label: 'No Response', shortLabel: 'NR', color: 'text-[#5A6B7A]', bgColor: 'bg-[#EDF4F7] border-slate-400 active:bg-[#E8E4DF]' },
   prompted: { label: 'Prompted', shortLabel: 'P', color: 'text-amber-700', bgColor: 'bg-amber-100 border-amber-400 active:bg-amber-200' },
   self_corrected: { label: 'Self-Corrected', shortLabel: 'SC', color: 'text-blue-700', bgColor: 'bg-blue-100 border-blue-400 active:bg-blue-200' },
 };
@@ -213,24 +213,24 @@ function DTTMode({
   return (
     <div className="space-y-4">
       {/* Program info */}
-      <div className="bg-[#FAF7F2] rounded-xl p-4">
+      <div className="bg-[#F6FBFB] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
       {/* Running summary */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{trials.length}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{trials.length}</p>
           <p className="text-sm text-[#5A6B7A]">Trials</p>
         </div>
         <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-[#E8E4DF]'}`}>
-          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#1B2733]'}`}>{pct}%</p>
+          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#132F43]'}`}>{pct}%</p>
           <p className="text-sm text-[#5A6B7A]">% Correct</p>
         </div>
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{trials.filter(t => t.response === 'correct').length}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{trials.filter(t => t.response === 'correct').length}</p>
           <p className="text-sm text-[#5A6B7A]">Correct</p>
         </div>
       </div>
@@ -329,9 +329,9 @@ function NETMode({
 
   return (
     <div className="space-y-4">
-      <div className="bg-[#FAF7F2] rounded-xl p-4">
+      <div className="bg-[#F6FBFB] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
@@ -461,7 +461,7 @@ function BehaviorMode({
   return (
     <div className="space-y-4">
       {/* Mode selector */}
-      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
+      <div className="flex gap-2 bg-[#EDF4F7] rounded-xl p-1">
         {(['frequency', 'duration', 'interval'] as BehaviorRecordingType[]).map(t => (
           <button
             key={t}
@@ -491,7 +491,7 @@ function BehaviorMode({
         </div>
 
         {incidents.length === 0 ? (
-          <div className="bg-[#FAF7F2] rounded-xl p-4 text-center">
+          <div className="bg-[#F6FBFB] rounded-xl p-4 text-center">
             <p className="text-sm text-slate-400">Tap "Add Incident" to log antecedent, behavior, consequence</p>
           </div>
         ) : (
@@ -544,11 +544,11 @@ function BehaviorMode({
       {recordingType === 'frequency' && (
         <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Frequency Count</p>
-          <p className="text-7xl font-bold text-[#1B2733] mb-6">{frequencyCount}</p>
+          <p className="text-7xl font-bold text-[#132F43] mb-6">{frequencyCount}</p>
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={onDecrementFrequency}
-              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-[#5A6B7A] active:bg-[#F0EDE8]"
+              className="w-16 h-16 rounded-full border-2 border-slate-300 flex items-center justify-center text-[#5A6B7A] active:bg-[#EDF4F7]"
             >
               <Minus className="w-6 h-6" />
             </button>
@@ -566,7 +566,7 @@ function BehaviorMode({
       {recordingType === 'duration' && (
         <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Duration Recording</p>
-          <p className="text-6xl font-mono font-bold text-[#1B2733] mb-2">
+          <p className="text-6xl font-mono font-bold text-[#132F43] mb-2">
             {formatSeconds(isDurationRunning ? durationElapsed : 0)}
           </p>
           {isDurationRunning && (
@@ -594,7 +594,7 @@ function BehaviorMode({
                 {durationRecords.map((d, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">Episode {i + 1}</span>
-                    <span className="font-medium text-[#1B2733]">{formatSeconds(d)}</span>
+                    <span className="font-medium text-[#132F43]">{formatSeconds(d)}</span>
                   </div>
                 ))}
                 <div className="border-t border-[#E8E4DF] pt-1 flex items-center justify-between text-sm font-semibold">
@@ -633,7 +633,7 @@ function BehaviorMode({
           {/* Timer display */}
           {isIntervalRunning && (
             <div className="text-center mb-4">
-              <p className="text-3xl font-mono font-bold text-[#1B2733]">{intervalTimeLeft}s</p>
+              <p className="text-3xl font-mono font-bold text-[#132F43]">{intervalTimeLeft}s</p>
               <p className="text-sm text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
@@ -646,7 +646,7 @@ function BehaviorMode({
                   key={cell.intervalIndex}
                   className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold border-2 ${
                     cell.occurred === null
-                      ? 'bg-[#F0EDE8] border-[#E8E4DF] text-slate-400'
+                      ? 'bg-[#EDF4F7] border-[#E8E4DF] text-slate-400'
                       : cell.occurred
                       ? 'bg-green-100 border-green-400 text-green-700'
                       : 'bg-red-100 border-red-400 text-red-700'
@@ -1036,7 +1036,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
         {/* Setup card */}
         {!sessionStarted ? (
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-4">
-            <h2 className="text-[#1B2733] font-bold text-lg">Session Setup</h2>
+            <h2 className="text-[#132F43] font-bold text-lg">Session Setup</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>

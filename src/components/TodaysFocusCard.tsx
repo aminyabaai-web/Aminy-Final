@@ -126,7 +126,7 @@ export function TodaysFocusCard({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Target className="w-5 h-5 text-accent" />
-            <h2 className="font-semibold text-[#1B2733]">Today's Calm Plan</h2>
+            <h2 className="font-semibold text-[#132F43]">Today's Calm Plan</h2>
           </div>
           
           {additionalTasks.length > 0 && (

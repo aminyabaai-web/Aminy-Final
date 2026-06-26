@@ -54,7 +54,7 @@ export function AskAminyPromotion({
             )}
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold text-[#1B2733]">Talk to Aminy</h3>
+            <h3 className="font-semibold text-[#132F43]">Talk to Aminy</h3>
             <p className="text-sm text-[#5A6B7A]">Get instant guidance for {userData.childName}</p>
           </div>
           <MessageSquare className="w-5 h-5 text-accent/60" />
@@ -96,7 +96,7 @@ export function AskAminyPromotion({
           )}
         </div>
         <div>
-          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Talk to Aminy</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-[#132F43]">Talk to Aminy</h3>
           <div className="flex items-center gap-2">
             {userTier !== 'starter' ? (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -148,7 +148,7 @@ export function AskAminyPromotion({
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
         <button 
-          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#F6FBFB] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();
@@ -157,7 +157,7 @@ export function AskAminyPromotion({
           Help with {userData.childName}'s routine
         </button>
         <button 
-          className="text-left p-2 bg-[#FAF7F2] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
+          className="text-left p-2 bg-[#F6FBFB] hover:bg-accent/5 hover:border-accent/30 rounded-lg text-sm transition-colors border border-transparent"
           onClick={(e) => {
             e.stopPropagation();
             onAskAminyClick();

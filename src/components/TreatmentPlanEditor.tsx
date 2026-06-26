@@ -481,7 +481,7 @@ export function TreatmentPlanEditor({
                     onClick={() => setSelectedPlan(plan)}
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-medium text-[#1B2733] line-clamp-2">{plan.title}</h3>
+                      <h3 className="font-medium text-[#132F43] line-clamp-2">{plan.title}</h3>
                       <Badge className={
                         plan.status === 'active' ? 'bg-green-100 text-green-700' :
                         plan.status === 'draft' ? 'bg-neutral-100 text-neutral-600' :
@@ -513,7 +513,7 @@ export function TreatmentPlanEditor({
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{selectedPlan.title}</h2>
+                      <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">{selectedPlan.title}</h2>
                       {selectedPlan.description && (
                         <p className="text-neutral-600 mt-1">{selectedPlan.description}</p>
                       )}
@@ -575,7 +575,7 @@ export function TreatmentPlanEditor({
                 {/* Progress Overview */}
                 <Card className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-semibold text-[#1B2733]">Progress Overview</h3>
+                    <h3 className="font-semibold text-[#132F43]">Progress Overview</h3>
                     <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
                       {selectedPlan.goals.filter(g => g.status === 'mastered').length} / {selectedPlan.goals.length} Mastered
                     </Badge>
@@ -621,7 +621,7 @@ export function TreatmentPlanEditor({
 
                 {/* Goals List */}
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-[#1B2733]">Goals</h3>
+                  <h3 className="font-semibold text-[#132F43]">Goals</h3>
                   <Button size="sm" onClick={() => setShowGoalForm(true)}>
                     <Plus className="w-4 h-4 mr-1" />
                     Add Goal
@@ -650,7 +650,7 @@ export function TreatmentPlanEditor({
                               <Badge className="bg-red-100 text-red-700">High Priority</Badge>
                             )}
                           </div>
-                          <h4 className="font-medium text-[#1B2733]">{goal.title}</h4>
+                          <h4 className="font-medium text-[#132F43]">{goal.title}</h4>
                           {goal.description && (
                             <p className="text-sm text-[#5A6B7A] mt-1 line-clamp-1">{goal.description}</p>
                           )}
@@ -658,7 +658,7 @@ export function TreatmentPlanEditor({
 
                         <div className="flex items-center gap-3 sm:gap-4">
                           <div className="text-right">
-                            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{goal.currentProgress}%</p>
+                            <p className="text-xl sm:text-2xl font-bold text-[#132F43]">{goal.currentProgress}%</p>
                             <div className="w-24 h-2 bg-neutral-200 rounded-full overflow-hidden">
                               <div
                                 className={`h-full ${getProgressColor(goal.currentProgress)} rounded-full`}
@@ -714,7 +714,7 @@ export function TreatmentPlanEditor({
                           {/* Progress Update Form */}
                           {showProgressForm === goal.id ? (
                             <div className="p-4 bg-neutral-50 rounded-lg">
-                              <h5 className="font-medium text-[#1B2733] mb-3">Log Progress</h5>
+                              <h5 className="font-medium text-[#132F43] mb-3">Log Progress</h5>
                               <div className="space-y-3">
                                 <div>
                                   <label className="block text-sm text-neutral-600 mb-1">
@@ -811,7 +811,7 @@ export function TreatmentPlanEditor({
             ) : (
               <Card className="p-12 text-center">
                 <Target className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-                <h3 className="text-lg font-medium text-[#1B2733] mb-2">Select a Plan</h3>
+                <h3 className="text-lg font-medium text-[#132F43] mb-2">Select a Plan</h3>
                 <p className="text-[#5A6B7A] mb-4">
                   Choose a treatment plan from the sidebar or create a new one
                 </p>
@@ -831,7 +831,7 @@ export function TreatmentPlanEditor({
           <Card className="max-w-lg w-full">
             <div className="p-6 border-b border-neutral-100">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-[#1B2733]">New Treatment Plan</h2>
+                <h2 className="text-lg font-semibold text-[#132F43]">New Treatment Plan</h2>
                 <button onClick={() => setShowPlanForm(false)} aria-label="Close" className="p-2 hover:bg-neutral-100 rounded-lg">
                   <X className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
@@ -920,7 +920,7 @@ export function TreatmentPlanEditor({
           <Card className="max-w-lg w-full">
             <div className="p-6 border-b border-neutral-100">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-[#1B2733]">
+                <h2 className="text-lg font-semibold text-[#132F43]">
                   {editingGoal ? 'Edit Goal' : 'Add Goal'}
                 </h2>
                 <button

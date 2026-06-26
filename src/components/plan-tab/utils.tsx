@@ -59,7 +59,7 @@ export function getCategoryColor(category: GoalCategory | string): string {
     case 'routines':
       return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/30 dark:border-orange-800';
     default:
-      return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF] dark:text-[#8A9BA8] dark:bg-gray-900/30 dark:border-gray-800';
+      return 'text-[#5A6B7A] bg-[#F6FBFB] border-[#E8E4DF] dark:text-[#8A9BA8] dark:bg-gray-900/30 dark:border-gray-800';
   }
 }
 
@@ -89,7 +89,7 @@ export function getPriorityColor(priority: Priority | string): string {
     case 'low':
       return 'text-green-600 bg-green-50 border-green-200';
     default:
-      return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
+      return 'text-[#5A6B7A] bg-[#F6FBFB] border-[#E8E4DF]';
   }
 }
 

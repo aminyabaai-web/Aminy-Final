@@ -103,13 +103,13 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 -ml-2 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 rounded-lg transition-colors"
+              className="p-2 -ml-2 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700 rounded-lg transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-[#1B2733] dark:text-white flex-1">
+          <h1 className="text-xl font-bold text-[#132F43] dark:text-white flex-1">
             Crisis Resources
           </h1>
           <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
@@ -143,7 +143,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-red-600 dark:text-red-400">
               Need help right now?
             </p>
-            <h2 className="mt-1 text-lg font-semibold text-[#1B2733] dark:text-white">
+            <h2 className="mt-1 text-lg font-semibold text-[#132F43] dark:text-white">
               Call or text 988 for immediate crisis support
             </h2>
             <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-300">
@@ -173,7 +173,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 <Phone className="w-5 h-5 text-red-600 dark:text-red-400" />
               </div>
               <div>
-                <p className="font-semibold text-[#1B2733] dark:text-white text-sm">
+                <p className="font-semibold text-[#132F43] dark:text-white text-sm">
                   {resource.title}
                 </p>
                 <p className="text-red-600 dark:text-red-400 font-bold">
@@ -193,7 +193,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
             className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeCategory === 'all'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
-                : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
             }`}
           >
             All
@@ -207,7 +207,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === category
                     ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
-                    : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700'
+                    : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
                 }`}
               >
                 <info.icon className="w-4 h-4" />
@@ -222,7 +222,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
       <div className="p-4 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">All crisis supports</h2>
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">All crisis supports</h2>
             <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
               Browse hotlines, calming supports, safety planning, and parent self-care resources.
             </p>
@@ -281,7 +281,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white">
+          <h3 className="font-semibold text-[#132F43] dark:text-white">
             {resource.title}
           </h3>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -310,7 +310,7 @@ function ResourceCard({ resource, isExpanded, onToggle }: ResourceCardProps) {
                   // Handle markdown-style headers
                   if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
                     return (
-                      <h4 key={i} className="font-bold text-[#1B2733] dark:text-white mt-4 mb-2">
+                      <h4 key={i} className="font-bold text-[#132F43] dark:text-white mt-4 mb-2">
                         {paragraph.replace(/\*\*/g, '')}
                       </h4>
                     );

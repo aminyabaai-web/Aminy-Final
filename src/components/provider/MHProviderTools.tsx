@@ -101,7 +101,7 @@ function PHQ9Widget() {
 
   const severityColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     moderately_severe: 'text-red-700 bg-red-50 border-red-200',
     severe: 'text-red-800 bg-red-100 border-red-300',
@@ -126,14 +126,14 @@ function PHQ9Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">PHQ-9 Depression Screen</h4>
+        <h4 className="font-semibold text-[#132F43]">PHQ-9 Depression Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-violet-600 font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${severityColor[latest.severity] ?? 'bg-[#F6FBFB]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/27</span></p>
             <p className="text-sm capitalize font-medium">{String(latest.severity).replace('_', ' ')} depression</p>
@@ -187,7 +187,7 @@ function GAD7Widget() {
 
   const sevColor: Record<string, string> = {
     minimal: 'text-green-700 bg-green-50 border-green-200',
-    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]',
+    mild: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]',
     moderate: 'text-orange-700 bg-orange-50 border-orange-200',
     severe: 'text-red-700 bg-red-50 border-red-200',
   };
@@ -211,14 +211,14 @@ function GAD7Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">GAD-7 Anxiety Screen</h4>
+        <h4 className="font-semibold text-[#132F43]">GAD-7 Anxiety Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
       </div>
 
       {latest && (
-        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-[#FAF7F2]'}`}>
+        <div className={`flex items-center justify-between p-3 rounded-lg border ${sevColor[latest.severity] ?? 'bg-[#F6FBFB]'}`}>
           <div>
             <p className="text-2xl font-bold">{latest.score}<span className="text-sm font-normal opacity-60">/21</span></p>
             <p className="text-sm font-medium capitalize">{latest.severity} anxiety</p>
@@ -281,7 +281,7 @@ function BRIEF2Widget() {
     const pct = total / maxScore;
     if (pct >= 0.75) return { label: 'At Risk', color: 'text-red-700 bg-red-50 border-red-200' };
     if (pct >= 0.55) return { label: 'Borderline', color: 'text-orange-700 bg-orange-50 border-orange-200' };
-    return { label: 'Elevated', color: 'text-yellow-700 bg-[#FDF9F0] border-[#F0EDE8]' };
+    return { label: 'Elevated', color: 'text-yellow-700 bg-[#FDF9F0] border-[#EDF4F7]' };
   };
 
   const logBRIEF = async () => {
@@ -307,7 +307,7 @@ function BRIEF2Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">BRIEF-2 Executive Function</h4>
+        <h4 className="font-semibold text-[#132F43]">BRIEF-2 Executive Function</h4>
         <button onClick={() => setShowForm(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showForm ? 'Cancel' : '+ Screen'}
         </button>
@@ -333,7 +333,7 @@ function BRIEF2Widget() {
               <div key={domain.id}>
                 <div className="flex items-center justify-between mb-1">
                   <div>
-                    <span className="text-sm font-medium text-[#1B2733]">{domain.label}</span>
+                    <span className="text-sm font-medium text-[#132F43]">{domain.label}</span>
                     <span className="text-sm text-[#5A6B7A] ml-1">— {domain.desc}</span>
                   </div>
                 </div>
@@ -614,12 +614,12 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">MH Clinical Tools</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">MH Clinical Tools</h1>
             <p className="text-sm text-[#5A6B7A]">Licensed Clinical Social Work</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-violet-100 text-violet-700 text-xs font-medium rounded-full">

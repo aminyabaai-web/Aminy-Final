@@ -39,7 +39,7 @@ interface OperationalDashboardProps {
 
 // ─── Sparkline SVG ───────────────────────────────────────────────────
 
-function Sparkline({ points, color = '#4E93A8' }: { points: TimeSeriesPoint[]; color?: string }) {
+function Sparkline({ points, color = '#2A7D99' }: { points: TimeSeriesPoint[]; color?: string }) {
   const normalized = normalizeSparkline(points);
   if (normalized.length < 2) return null;
 
@@ -70,9 +70,9 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
         <div key={item.label}>
           <div className="flex items-center justify-between text-sm mb-0.5">
             <span className="text-[#5A6B7A]">{item.label}</span>
-            <span className="text-[#1B2733] font-medium">{item.value}{item.unit || '%'}</span>
+            <span className="text-[#132F43] font-medium">{item.value}{item.unit || '%'}</span>
           </div>
-          <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+          <div className="h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
             <div
               className={`h-full rounded-full ${colorClass}`}
               style={{ width: `${(item.value / maxVal) * 100}%` }}
@@ -115,7 +115,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
       <p className="text-sm font-medium text-[#5A6B7A] truncate">{kpi.label}</p>
       <div className="mt-1 flex items-end justify-between">
         <div className="flex items-baseline gap-0.5">
-          <span className="text-xl font-bold text-[#1B2733]">
+          <span className="text-xl font-bold text-[#132F43]">
             {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
           </span>
           {kpi.unit && <span className="text-sm text-[#5A6B7A]">{kpi.unit}</span>}
@@ -133,7 +133,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
         <div className="mt-2">
           <Sparkline
             points={sparkData}
-            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#4E93A8'}
+            color={kpi.status === 'good' ? '#22c55e' : kpi.status === 'warning' ? '#f59e0b' : kpi.status === 'critical' ? '#ef4444' : '#2A7D99'}
           />
         </div>
       )}
@@ -147,7 +147,7 @@ function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }
   return (
     <div className="flex items-center gap-2 mt-6 mb-3">
       {icon}
-      <h2 className="text-sm font-bold text-[#1B2733] uppercase tracking-wide">{title}</h2>
+      <h2 className="text-sm font-bold text-[#132F43] uppercase tracking-wide">{title}</h2>
     </div>
   );
 }
@@ -182,7 +182,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
         <div className="flex items-center gap-2">
           {config.icon}
           <div>
-            <h3 className="text-sm font-bold text-[#1B2733]">Platform Health</h3>
+            <h3 className="text-sm font-bold text-[#132F43]">Platform Health</h3>
             <p className={`text-sm font-medium ${trendColors[health.trend]}`}>{trendLabels[health.trend]}</p>
           </div>
         </div>
@@ -201,7 +201,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
               />
             </div>
             <p className="text-sm text-[#5A6B7A]">{cat.label}</p>
-            <p className="text-sm font-bold text-[#1B2733]">{cat.score}</p>
+            <p className="text-sm font-bold text-[#132F43]">{cat.score}</p>
           </div>
         ))}
       </div>
@@ -281,13 +281,13 @@ export default function OperationalDashboard({
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-[#1B2733]">Operational Metrics</h1>
+              <h1 className="text-lg font-bold text-[#132F43]">Operational Metrics</h1>
               {/* Live vs Demo badge */}
               <span
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -310,7 +310,7 @@ export default function OperationalDashboard({
               <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                className="flex items-center justify-center rounded-full p-2 hover:bg-[#F0EDE8] disabled:opacity-50"
+                className="flex items-center justify-center rounded-full p-2 hover:bg-[#EDF4F7] disabled:opacity-50"
                 aria-label="Refresh metrics"
                 title="Refresh metrics"
               >
@@ -319,7 +319,7 @@ export default function OperationalDashboard({
             )}
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2]"
+              className="flex items-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB]"
             >
               <Download className="h-3.5 w-3.5" />
               Export
@@ -346,7 +346,7 @@ export default function OperationalDashboard({
                 <button
                   key={preset.label}
                   onClick={() => { onDateRangeChange(preset); setShowDatePicker(false); }}
-                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#FAF7F2] ${
+                  className={`w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[#F6FBFB] ${
                     data.dateRange.label === preset.label ? 'bg-[#6B9080]/10 text-[#6B9080] font-medium' : 'text-[#3A4A57]'
                   }`}
                 >
@@ -389,8 +389,8 @@ export default function OperationalDashboard({
               { label: '60-Day', value: data.familyRetention.retention60Day },
               { label: '90-Day', value: data.familyRetention.retention90Day },
             ].map(p => (
-              <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
-                <p className="text-lg font-bold text-[#1B2733]">{p.value}%</p>
+              <div key={p.label} className="rounded-lg bg-[#F6FBFB] p-2">
+                <p className="text-lg font-bold text-[#132F43]">{p.value}%</p>
                 <p className="text-sm text-[#5A6B7A]">{p.label}</p>
               </div>
             ))}
@@ -419,7 +419,7 @@ export default function OperationalDashboard({
                 <div key={r.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] flex-1 truncate">{r.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-16 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="w-16 h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <div className="h-full rounded-full bg-rose-400" style={{ width: `${r.percentage}%` }} />
                     </div>
                     <span className="text-[#5A6B7A] w-8 text-right">{r.percentage}%</span>
@@ -550,11 +550,11 @@ export default function OperationalDashboard({
           <div className="text-sm text-[#5A6B7A] space-y-1">
             <div className="flex justify-between">
               <span>Avg days to 1st session</span>
-              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysToFirstSession} days</span>
+              <span className="font-medium text-[#132F43]">{data.providerLaunch.averageDaysToFirstSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Avg days to 10th session</span>
-              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysTo10thSession} days</span>
+              <span className="font-medium text-[#132F43]">{data.providerLaunch.averageDaysTo10thSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Top complaint</span>
@@ -579,7 +579,7 @@ export default function OperationalDashboard({
                       <span className="text-[#3A4A57]">{stage.stage}</span>
                       <span className="text-[#5A6B7A]">{stage.count} ({stage.conversionRate}%)</span>
                     </div>
-                    <div className="h-4 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="h-4 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${widthPct}%` }}
@@ -637,7 +637,7 @@ export default function OperationalDashboard({
                 <div key={reason.reason} className="flex items-center justify-between text-sm">
                   <span className="text-[#3A4A57] truncate flex-1">{reason.reason}</span>
                   <div className="flex items-center gap-2 ml-2">
-                    <div className="w-20 h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
+                    <div className="w-20 h-2 rounded-full bg-[#EDF4F7] overflow-hidden">
                       <div
                         className="h-full rounded-full bg-red-400"
                         style={{ width: `${reason.percentage}%` }}

@@ -69,7 +69,7 @@ const CATEGORY_META: Record<
   },
   people: {
     label: 'People',
-    color: '#4E93A8',
+    color: '#2A7D99',
     bgClass: 'aac-bg-people',
     borderClass: 'aac-border-people',
     emoji: '👥',
@@ -351,22 +351,22 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
   }[gridSize];
 
   return (
-    <div className="h-full flex flex-col bg-[#FAF7F2]">
+    <div className="h-full flex flex-col bg-[#F6FBFB]">
       {/* ---- Header ---- */}
       <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-shrink-0">
         <button
           onClick={onBack}
-          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center"
           aria-label="Go back"
         >
           <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
         </button>
-        <h2 className="text-lg font-semibold text-[#1B2733]">
+        <h2 className="text-lg font-semibold text-[#132F43]">
           {childName}&apos;s Words
         </h2>
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center"
+          className="w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center"
           aria-label="Settings"
         >
           <Settings className="w-5 h-5 text-[#5A6B7A]" />
@@ -448,7 +448,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
             className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
               activeCategory === 'favorites'
                 ? 'bg-yellow-400 text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A]'
             }`}
           >
             <Star className="w-4 h-4" />
@@ -463,7 +463,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeCategory === cat
                     ? `${meta.bgClass} text-white`
-                    : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                    : 'bg-[#EDF4F7] text-[#5A6B7A]'
                 }`}
               >
                 <span>{meta.emoji}</span>
@@ -489,7 +489,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                     className={`w-8 h-8 rounded-lg text-sm font-medium ${
                       gridSize === size
                         ? 'bg-blue-500 text-white'
-                        : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                        : 'bg-[#EDF4F7] text-[#5A6B7A]'
                     }`}
                   >
                     {size}
@@ -577,7 +577,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       {symbol.emoji}
                     </span>
                   )}
-                  <span className="text-sm font-semibold text-[#1B2733] mt-1 leading-tight text-center truncate w-full">
+                  <span className="text-sm font-semibold text-[#132F43] mt-1 leading-tight text-center truncate w-full">
                     {symbol.label}
                   </span>
                 </button>
@@ -651,7 +651,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
               <h3 className="text-lg font-semibold">Add Custom Symbol</h3>
               <button
                 onClick={() => setShowAddSymbol(false)}
-                className="w-8 h-8 rounded-full bg-[#F0EDE8] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[#EDF4F7] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -711,7 +711,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                         className={`px-2 py-1.5 rounded-lg text-sm font-medium ${
                           customCategory === cat
                             ? `${meta.bgClass} text-white`
-                            : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                            : 'bg-[#EDF4F7] text-[#5A6B7A]'
                         }`}
                       >
                         {meta.emoji} {meta.label}

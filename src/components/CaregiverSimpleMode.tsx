@@ -89,7 +89,7 @@ function BigCard({
     >
       <div className="px-5 py-4 flex items-center gap-3">
         <div className="flex-shrink-0">{icon}</div>
-        <h2 className="text-xl font-bold text-[#1B2733]">{title}</h2>
+        <h2 className="text-xl font-bold text-[#132F43]">{title}</h2>
       </div>
       <div className="px-5 pb-5">{children}</div>
     </motion.div>
@@ -103,7 +103,7 @@ function AppointmentRow({ appt }: { appt: Appointment }) {
         <Clock className="w-5 h-5 text-[#6B9080]" />
       </div>
       <div>
-        <p className="text-xl font-semibold text-[#1B2733] leading-tight">{appt.time}</p>
+        <p className="text-xl font-semibold text-[#132F43] leading-tight">{appt.time}</p>
         <p className="text-lg text-[#3A4A57] mt-0.5">{appt.serviceType}</p>
         <p className="text-base text-[#5A6B7A] mt-0.5 flex items-center gap-1">
           <User className="w-4 h-4" /> {appt.providerName}
@@ -117,7 +117,7 @@ function DocRow({ doc }: { doc: Document }) {
   return (
     <div className="flex items-center justify-between py-3 border-t border-[#E8E4DF] first:border-0">
       <div>
-        <p className="text-xl font-semibold text-[#1B2733]">{doc.name}</p>
+        <p className="text-xl font-semibold text-[#132F43]">{doc.name}</p>
         <p className="text-base text-[#5A6B7A] mt-0.5">{doc.date}</p>
       </div>
       <ChevronRight className="w-5 h-5 text-[#8A9BA8] flex-shrink-0" />
@@ -197,7 +197,7 @@ export default function CaregiverSimpleMode({
         >
           <Heart className="w-9 h-9 text-pink-500 flex-shrink-0" />
           <div className="flex-1">
-            <h2 className="text-xl font-bold text-[#1B2733]">Ease Activities</h2>
+            <h2 className="text-xl font-bold text-[#132F43]">Ease Activities</h2>
             <p className="text-base text-[#5A6B7A] mt-0.5">
               Fun therapeutic activities for {childName}
             </p>
@@ -295,21 +295,21 @@ export default function CaregiverSimpleMode({
                 <div className="space-y-2 pt-1">
                   <a
                     href="tel:18008294357"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
+                    className="flex items-center gap-3 rounded-xl bg-[#F6FBFB] px-4 py-3 border border-[#E8E4DF]"
                   >
                     <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>
-                      <p className="text-lg font-semibold text-[#1B2733]">SAMHSA Helpline</p>
+                      <p className="text-lg font-semibold text-[#132F43]">SAMHSA Helpline</p>
                       <p className="text-sm text-[#5A6B7A]">1-800-662-4357 — Mental health & substance use</p>
                     </div>
                   </a>
                   <a
                     href="tel:18004224453"
-                    className="flex items-center gap-3 rounded-xl bg-[#FAF7F2] px-4 py-3 border border-[#E8E4DF]"
+                    className="flex items-center gap-3 rounded-xl bg-[#F6FBFB] px-4 py-3 border border-[#E8E4DF]"
                   >
                     <Phone className="w-6 h-6 text-[#5A6B7A] flex-shrink-0" />
                     <div>
-                      <p className="text-lg font-semibold text-[#1B2733]">Autism Society Helpline</p>
+                      <p className="text-lg font-semibold text-[#132F43]">Autism Society Helpline</p>
                       <p className="text-sm text-[#5A6B7A]">1-800-328-8476</p>
                     </div>
                   </a>

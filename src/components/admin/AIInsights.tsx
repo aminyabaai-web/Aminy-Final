@@ -363,7 +363,7 @@ export function AIInsights() {
             <Brain className="w-6 h-6 text-violet-600" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">AI Insights</h2>
+            <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">AI Insights</h2>
             <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
               {lastAnalyzed ? `Last analyzed ${lastAnalyzed.toLocaleTimeString()}` : 'Analyzing...'}
             </p>
@@ -429,7 +429,7 @@ export function AIInsights() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-[#1B2733] dark:text-white">{insight.title}</h3>
+                        <h3 className="font-semibold text-[#132F43] dark:text-white">{insight.title}</h3>
                         <span className={`px-2 py-0.5 text-xs font-medium rounded-full border ${getPriorityColor(insight.priority)}`}>
                           {insight.priority}
                         </span>
@@ -475,7 +475,7 @@ export function AIInsights() {
                   className="bg-white dark:bg-slate-800 rounded-lg border border-neutral-200 dark:border-slate-700 p-4"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-[#1B2733] dark:text-white">{feature.feature}</span>
+                    <span className="font-medium text-[#132F43] dark:text-white">{feature.feature}</span>
                     <div className="flex items-center gap-2">
                       <span className={`text-sm font-medium ${
                         feature.usagePercent >= 60 ? 'text-green-600' :
@@ -534,7 +534,7 @@ export function AIInsights() {
                         </span>
                       </div>
                       <div>
-                        <span className="font-medium text-[#1B2733] dark:text-white">{user.userName}</span>
+                        <span className="font-medium text-[#132F43] dark:text-white">{user.userName}</span>
                         <p className="text-sm text-[#5A6B7A]">Last active: {user.lastActive}</p>
                       </div>
                     </div>
@@ -583,7 +583,7 @@ export function AIInsights() {
               </div>
 
               <div className="space-y-3">
-                <h4 className="font-medium text-[#1B2733] dark:text-white">Top Revenue Actions</h4>
+                <h4 className="font-medium text-[#132F43] dark:text-white">Top Revenue Actions</h4>
                 {[
                   { action: 'Shift upgrade prompts to 7-9pm', impact: '+$2,400/mo', effort: 'Low', time: '1 day' },
                   { action: 'Add referral prompt after positive AI interactions', impact: '+$5,200/mo', effort: 'Medium', time: '3 days' },
@@ -600,7 +600,7 @@ export function AIInsights() {
                         {i + 1}
                       </div>
                       <div>
-                        <span className="font-medium text-[#1B2733] dark:text-white">{item.action}</span>
+                        <span className="font-medium text-[#132F43] dark:text-white">{item.action}</span>
                         <div className="flex items-center gap-3 text-sm text-[#5A6B7A] mt-1">
                           <span>Effort: {item.effort}</span>
                           <span>Time: {item.time}</span>
@@ -623,7 +623,7 @@ export function AIInsights() {
             <div className="space-y-5">
               {/* Provider NPS */}
               <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-5">
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-500" />
                   Provider Satisfaction NPS
                 </h3>
@@ -709,7 +709,7 @@ export function AIInsights() {
               {/* Verification status (shown even with no NPS) */}
               {providerStats && providerStats.npsRows.length === 0 && (
                 <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-5">
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+                  <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-teal-600" />
                     Verification Status
                   </h3>

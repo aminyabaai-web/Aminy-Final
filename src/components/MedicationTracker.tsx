@@ -429,7 +429,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+          <h2 className="text-xl font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
             <Pill className="w-6 h-6 text-[#6B9080]" />
             Medication Tracker
           </h2>
@@ -458,7 +458,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <CheckCircle className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                 {takenToday}/{totalToday}
               </p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Taken Today</p>
@@ -474,7 +474,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <Clock className={`w-5 h-5 ${pendingNow.length > 0 ? 'text-amber-600' : 'text-neutral-400'}`} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{pendingNow.length}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{pendingNow.length}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Due Now</p>
             </div>
           </div>
@@ -486,7 +486,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <Pill className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{medications.length}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{medications.length}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Active Meds</p>
             </div>
           </div>
@@ -500,7 +500,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
               <Bell className={`w-5 h-5 ${upcomingRefills.length > 0 ? 'text-amber-600' : 'text-neutral-400'}`} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{upcomingRefills.length}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{upcomingRefills.length}</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Refills Soon</p>
             </div>
           </div>
@@ -550,7 +550,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           {todaysLogs.length === 0 ? (
             <Card className="p-8 text-center">
               <Calendar className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-              <h3 className="font-medium text-[#1B2733] dark:text-white mb-2">
+              <h3 className="font-medium text-[#132F43] dark:text-white mb-2">
                 No medications scheduled
               </h3>
               <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
@@ -607,7 +607,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                           )}
                         </div>
                         <div>
-                          <h4 className="font-medium text-[#1B2733] dark:text-white">
+                          <h4 className="font-medium text-[#132F43] dark:text-white">
                             {log.medicationName}
                           </h4>
                           <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -679,7 +679,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           {medications.length === 0 ? (
             <Card className="p-8 text-center">
               <Pill className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-              <h3 className="font-medium text-[#1B2733] dark:text-white mb-2">
+              <h3 className="font-medium text-[#132F43] dark:text-white mb-2">
                 No medications added
               </h3>
               <p className="text-[#5A6B7A] dark:text-slate-400">
@@ -696,7 +696,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
                         <Pill className="w-6 h-6 text-[#6B9080]" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-[#1B2733] dark:text-white">
+                        <h4 className="font-medium text-[#132F43] dark:text-white">
                           {med.name}
                         </h4>
                         <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -758,7 +758,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
       {activeTab === 'history' && (
         <Card className="p-6 text-center">
           <History className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <h3 className="font-medium text-[#1B2733] dark:text-white mb-2">
+          <h3 className="font-medium text-[#132F43] dark:text-white mb-2">
             Medication History
           </h3>
           <p className="text-[#5A6B7A] dark:text-slate-400">
@@ -774,7 +774,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           <Card className="w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">
                   {editingMedication ? 'Edit Medication' : 'Add Medication'}
                 </h3>
                 <Button
@@ -951,7 +951,7 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
           <Card className="w-full max-w-md">
             <div className="p-6 border-b border-neutral-200 dark:border-slate-700">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">
                   Log Side Effects
                 </h3>
                 <Button variant="ghost" size="sm" onClick={() => setShowLogSideEffects(null)}>

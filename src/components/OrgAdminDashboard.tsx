@@ -167,10 +167,10 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         )}
         <div className="flex-1 flex items-center justify-center px-6 text-center">
           <div className="max-w-sm">
-            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}>
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #4795AE 100%)' }}>
               <Building2 className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
+            <h1 className="text-lg font-semibold text-[#132F43] mb-2">No organization yet</h1>
             <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for solo BCBAs, clinics, schools, agencies, and AACT-style pilots — from a single seat to enterprise, under one billing account.</p>
             <p className="text-sm text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
@@ -189,7 +189,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         variant="flat"
         actions={
           <>
-            <span className="text-xs bg-[#F0EDE8] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
+            <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{org.planType}</span>
             <StatusBadge status={org.subscriptionStatus} />
           </>
         }
@@ -213,7 +213,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
 
           {org.subscriptionStatus === 'inactive' && (
             <div className="mt-4 pt-4 border-t border-[#E8E4DF] flex gap-2">
-              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}>
+              <button onClick={() => handleStartCheckout('month')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl text-white" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #4795AE 100%)' }}>
                 Start Monthly
               </button>
               <button onClick={() => handleStartCheckout('year')} className="flex-1 text-sm font-semibold py-2.5 rounded-xl border border-[#6B9080] text-[#6B9080] bg-white">
@@ -267,17 +267,17 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-[#1B2733]">{usage.seatsUsed}</span>
+              <span className="text-3xl font-bold text-[#132F43]">{usage.seatsUsed}</span>
               <span className="text-sm text-[#5A6B7A]">of {usage.seatsAllocated} used</span>
             </div>
           )}
 
-          <div className="mt-3 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+          <div className="mt-3 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all"
               style={{
                 width: `${Math.min(100, (usage.seatsUsed / usage.seatsAllocated) * 100)}%`,
-                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #4E93A8 0%, #6AA9BC 100%)',
+                background: usage.seatsAvailable === 0 ? '#E07A5F' : 'linear-gradient(90deg, #2A7D99 0%, #4795AE 100%)',
               }}
             />
           </div>
@@ -296,20 +296,20 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-[#1B2733]">EVV sync</p>
+              <p className="text-sm text-[#132F43]">EVV sync</p>
               <p className="text-sm text-slate-400">Electronic Visit Verification (DCI)</p>
             </div>
-            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A]">
+            <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#EDF4F7] text-[#5A6B7A]">
               Not configured
             </span>
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-[#1B2733]">BCBA supervision</p>
+              <p className="text-sm text-[#132F43]">BCBA supervision</p>
               <p className="text-sm text-slate-400">Hours logged this billing period</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-sm font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
+              <p className="text-sm font-semibold text-[#132F43]">{usage?.seatsUsed ?? 0} <span className="text-sm font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
               <p className="text-sm text-slate-400">2h/seat/mo</p>
             </div>
           </div>
@@ -333,14 +333,14 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             onClick={() => setShowInvite(true)}
             disabled={!!usage && usage.seatsAvailable === 0}
             className="flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-full disabled:opacity-50"
-            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)', color: 'white' }}
+            style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #4795AE 100%)', color: 'white' }}
           >
             <Plus className="w-3.5 h-3.5" />Invite
           </button>
         </div>
 
         {showInvite && (
-          <div className="px-4 py-3 bg-[#FAF7F2] border-b border-[#E8E4DF]">
+          <div className="px-4 py-3 bg-[#F6FBFB] border-b border-[#E8E4DF]">
             <div className="flex gap-2">
               <input
                 type="email"
@@ -354,13 +354,13 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
                 onClick={handleInvite}
                 disabled={isInviting || !inviteEmail.trim()}
                 className="text-sm font-semibold px-4 py-2 rounded-lg text-white disabled:opacity-50"
-                style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #4795AE 100%)' }}
               >
                 {isInviting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Send'}
               </button>
               <button
                 onClick={() => { setShowInvite(false); setInviteEmail(''); }}
-                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
+                className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -375,7 +375,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             <div key={member.id} className="px-4 py-3 flex items-center gap-3">
               <RoleIcon role={member.role} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1B2733] truncate">{member.email}</p>
+                <p className="text-sm font-medium text-[#132F43] truncate">{member.email}</p>
                 <p className="text-sm text-[#5A6B7A] capitalize">{member.role} · {member.status}</p>
               </div>
               {member.role !== 'owner' && (
@@ -395,10 +395,10 @@ function Row({ label, value, subtitle }: { label: string; value: string; subtitl
   return (
     <div className="flex items-baseline justify-between">
       <div>
-        <p className="text-sm text-[#1B2733]">{label}</p>
+        <p className="text-sm text-[#132F43]">{label}</p>
         {subtitle && <p className="text-sm text-slate-400">{subtitle}</p>}
       </div>
-      <p className="text-sm font-semibold text-[#1B2733]">{value}</p>
+      <p className="text-sm font-semibold text-[#132F43]">{value}</p>
     </div>
   );
 }
@@ -408,8 +408,8 @@ function StatusBadge({ status }: { status: Organization['subscriptionStatus'] })
     active: { bg: 'bg-[#6B9080]/10', text: 'text-[#6B9080]', label: 'Active' },
     trialing: { bg: 'bg-[#7BA7BC]/10', text: 'text-[#7BA7BC]', label: 'Trial' },
     past_due: { bg: 'bg-orange-50', text: 'text-orange-700', label: 'Past due' },
-    canceled: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Canceled' },
-    inactive: { bg: 'bg-[#F0EDE8]', text: 'text-[#5A6B7A]', label: 'Not active' },
+    canceled: { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]', label: 'Canceled' },
+    inactive: { bg: 'bg-[#EDF4F7]', text: 'text-[#5A6B7A]', label: 'Not active' },
     incomplete: { bg: 'bg-amber-50', text: 'text-amber-700', label: 'Incomplete' },
   };
   const s = styles[status] || styles.inactive;
@@ -420,7 +420,7 @@ function RoleIcon({ role }: { role: OrgMember['role'] }) {
   if (role === 'owner') return <div className="w-9 h-9 rounded-full bg-amber-100 flex items-center justify-center"><Crown className="w-4 h-4 text-amber-700" /></div>;
   if (role === 'admin') return <div className="w-9 h-9 rounded-full bg-[#6B9080]/10 flex items-center justify-center"><Shield className="w-4 h-4 text-[#6B9080]" /></div>;
   if (role === 'manager') return <div className="w-9 h-9 rounded-full bg-[#7BA7BC]/10 flex items-center justify-center"><Users className="w-4 h-4 text-[#7BA7BC]" /></div>;
-  return <div className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center"><User className="w-4 h-4 text-[#5A6B7A]" /></div>;
+  return <div className="w-9 h-9 rounded-full bg-[#EDF4F7] flex items-center justify-center"><User className="w-4 h-4 text-[#5A6B7A]" /></div>;
 }
 
 export default OrgAdminDashboard;

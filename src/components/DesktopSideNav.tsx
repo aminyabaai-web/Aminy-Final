@@ -87,7 +87,7 @@ function NavGroup({
               className={[
                 'group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200',
                 active
-                  ? 'bg-[#6B9080]/10 text-[#1B2733] shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-[#6B9080]/20/80'
+                  ? 'bg-[#6B9080]/10 text-[#132F43] shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-[#6B9080]/20/80'
                   : 'bg-transparent text-[#3A4A57] hover:bg-white/85 hover:text-slate-950',
               ].join(' ')}
             >
@@ -124,7 +124,7 @@ function NavGroup({
 export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopSideNavProps) {
   return (
     <nav
-      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-[#E8E4DF]/50 px-5 pb-5 pt-6 text-[#1B2733] md:flex"
+      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-[#E8E4DF]/50 px-5 pb-5 pt-6 text-[#132F43] md:flex"
       style={{
         background:
           'radial-gradient(circle at top left, rgba(45, 212, 191, 0.16), transparent 24%), linear-gradient(180deg, #f8fbfb 0%, #f1f7f8 46%, #eef4f8 100%)',
@@ -159,12 +159,12 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
           <div className="mt-4 grid grid-cols-2 gap-2.5">
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
               <div className="text-sm font-medium text-[#5A6B7A]">Access</div>
-              <div className="mt-1 text-[14px] font-semibold text-[#1B2733]">AZ · MT · TX</div>
+              <div className="mt-1 text-[14px] font-semibold text-[#132F43]">AZ · MT · TX</div>
               <div className="text-[12px] text-[#5A6B7A]">Supported telehealth states</div>
             </div>
             <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
               <div className="text-sm font-medium text-[#5A6B7A]">Focus</div>
-              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-[#1B2733]">
+              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-[#132F43]">
                 <Activity className="h-3.5 w-3.5 text-[#6B9080]" />
                 Live workflow
               </div>

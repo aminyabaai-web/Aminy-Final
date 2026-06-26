@@ -236,12 +236,12 @@ export function TelehealthSessionEngine({
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center gap-3 sticky top-0 z-10">
         <button
           onClick={step === 1 ? onBack : () => setStep(prev => (prev - 1) as 1 | 2 | 3)}
-          className="w-9 h-9 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
+          className="w-9 h-9 rounded-full bg-[#EDF4F7] flex items-center justify-center hover:bg-[#E8E4DF] transition-colors"
         >
           <ArrowLeft className="w-4 h-4 text-[#5A6B7A]" />
         </button>
         <div className="flex-1">
-          <h1 className="text-base font-semibold text-[#1B2733]">Start Telehealth Session</h1>
+          <h1 className="text-base font-semibold text-[#132F43]">Start Telehealth Session</h1>
           <div className="flex items-center gap-1 mt-0.5">
             {[1, 2, 3].map(n => (
               <div
@@ -262,7 +262,7 @@ export function TelehealthSessionEngine({
         {step === 1 && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-[#1B2733]">Select Session Type</h2>
+              <h2 className="text-lg font-bold text-[#132F43]">Select Session Type</h2>
               <p className="text-sm text-[#5A6B7A] mt-0.5">Choose the telehealth modality for this session.</p>
             </div>
 
@@ -287,7 +287,7 @@ export function TelehealthSessionEngine({
                       <div className="flex-1 min-w-0">
                         {/* Title row */}
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-[#1B2733] text-sm">{modality.label}</span>
+                          <span className="font-semibold text-[#132F43] text-sm">{modality.label}</span>
                           {modality.cptCodes.map(code => (
                             <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
                               CPT {code}
@@ -313,7 +313,7 @@ export function TelehealthSessionEngine({
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                           <Users className="w-3 h-3 text-slate-400 shrink-0" />
                           {modality.participants.map((p, i) => (
-                            <span key={i} className="text-xs text-[#5A6B7A]">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
+                            <span key={i} className="text-sm text-[#5A6B7A]">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
                           ))}
                         </div>
 
@@ -335,7 +335,7 @@ export function TelehealthSessionEngine({
                           <Sparkles className="w-3 h-3 text-violet-400 shrink-0" />
                           <span className="text-sm text-violet-600 font-medium">AI will capture:</span>
                           {modality.aiDocTargets.map(target => (
-                            <span key={target} className="text-xs text-[#5A6B7A] bg-[#F0EDE8] rounded px-1.5 py-0.5">
+                            <span key={target} className="text-xs text-[#5A6B7A] bg-[#EDF4F7] rounded px-1.5 py-0.5">
                               {target.replace(/_/g, ' ')}
                             </span>
                           ))}
@@ -355,7 +355,7 @@ export function TelehealthSessionEngine({
         {step === 2 && selectedModality && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-[#1B2733]">Select Client</h2>
+              <h2 className="text-lg font-bold text-[#132F43]">Select Client</h2>
               <p className="text-sm text-[#5A6B7A] mt-0.5">
                 Who is this session with?
               </p>
@@ -395,7 +395,7 @@ export function TelehealthSessionEngine({
                         {patient.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1">
-                        <p className="font-semibold text-[#1B2733] text-sm">{patient.name}</p>
+                        <p className="font-semibold text-[#132F43] text-sm">{patient.name}</p>
                         <p className="text-sm text-[#5A6B7A]">{patient.insurancePayer}</p>
                       </div>
                       {selectedClientId === patient.id && (
@@ -417,7 +417,7 @@ export function TelehealthSessionEngine({
                     : 'border-slate-300 bg-white'
                 }`}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[#F0EDE8] flex items-center justify-center text-slate-400">
+                    <div className="w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center text-slate-400">
                       <Users className="w-5 h-5" />
                     </div>
                     <div className="flex-1">
@@ -447,7 +447,7 @@ export function TelehealthSessionEngine({
         {step === 3 && selectedModality && (
           <>
             <div>
-              <h2 className="text-lg font-bold text-[#1B2733]">Ready to Start</h2>
+              <h2 className="text-lg font-bold text-[#132F43]">Ready to Start</h2>
               <p className="text-sm text-[#5A6B7A] mt-0.5">Review your session config and confirm pre-session checklist.</p>
             </div>
 
@@ -458,7 +458,7 @@ export function TelehealthSessionEngine({
                   {selectedModality.icon}
                 </div>
                 <div>
-                  <p className="font-bold text-[#1B2733]">{selectedModality.label}</p>
+                  <p className="font-bold text-[#132F43]">{selectedModality.label}</p>
                   <div className="flex gap-1.5 mt-0.5">
                     {selectedModality.cptCodes.map(code => (
                       <Badge key={code} variant="outline" className="text-xs font-mono border-[#6B9080]/20 text-[#6B9080] bg-[#6B9080]/10">
@@ -472,14 +472,14 @@ export function TelehealthSessionEngine({
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Client</p>
-                  <p className="text-[#1B2733] font-medium mt-0.5">
+                  <p className="text-[#132F43] font-medium mt-0.5">
                     {selectedClientId === 'new' ? 'New Client' : selectedClient?.name || '—'}
                   </p>
                   {selectedClient && <p className="text-sm text-slate-400">{selectedClient.insurancePayer}</p>}
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Duration</p>
-                  <p className="text-[#1B2733] font-medium mt-0.5">{selectedModality.estimatedMinutes} min</p>
+                  <p className="text-[#132F43] font-medium mt-0.5">{selectedModality.estimatedMinutes} min</p>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Participants</p>
@@ -528,7 +528,7 @@ export function TelehealthSessionEngine({
 
             {/* Pre-session checklist */}
             <div>
-              <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Pre-Session Checklist</h3>
+              <h3 className="text-sm font-semibold text-[#132F43] mb-3">Pre-Session Checklist</h3>
               <div className="space-y-2">
                 {PRE_SESSION_CHECKLIST.map(item => (
                   <button

@@ -152,7 +152,7 @@ export function FeedbackInbox() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Inbox className="w-5 h-5 text-accent" />
-          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">Feedback Inbox</h2>
+          <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">Feedback Inbox</h2>
         </div>
         <div className="flex items-center gap-2">
           {(['new', 'responded', 'all'] as const).map(f => (
@@ -162,7 +162,7 @@ export function FeedbackInbox() {
               className={`px-3 py-1.5 rounded-full text-xs font-medium capitalize transition-colors ${
                 filter === f
                   ? 'bg-accent text-white'
-                  : 'bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#E8E4DF]'
+                  : 'bg-[#EDF4F7] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 hover:bg-[#E8E4DF]'
               }`}
             >
               {f}
@@ -170,7 +170,7 @@ export function FeedbackInbox() {
           ))}
           <button
             onClick={load}
-            className="p-1.5 rounded-full text-[#5A6B7A] hover:bg-[#F0EDE8] dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full text-[#5A6B7A] hover:bg-[#EDF4F7] dark:hover:bg-slate-800 transition-colors"
             aria-label="Refresh"
           >
             <RefreshCw className="w-4 h-4" />
@@ -209,9 +209,9 @@ export function FeedbackInbox() {
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        {mood && <span className="text-sm font-semibold text-[#1B2733] dark:text-white">{mood.label}</span>}
+                        {mood && <span className="text-sm font-semibold text-[#132F43] dark:text-white">{mood.label}</span>}
                         {item.context && (
-                          <span className="text-xs px-2 py-0.5 bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
+                          <span className="text-xs px-2 py-0.5 bg-[#EDF4F7] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
                             {item.context}
                           </span>
                         )}
@@ -261,7 +261,7 @@ export function FeedbackInbox() {
 
                 {/* Draft editor */}
                 {draftFor === item.id && (
-                  <div className="mt-3 pt-3 border-t border-[#F0EDE8] dark:border-slate-800">
+                  <div className="mt-3 pt-3 border-t border-[#EDF4F7] dark:border-slate-800">
                     {isDrafting ? (
                       <div className="flex items-center gap-2 text-sm text-[#5A6B7A] py-3">
                         <Loader2 className="w-4 h-4 animate-spin" /> Aminy is drafting…
@@ -272,7 +272,7 @@ export function FeedbackInbox() {
                           value={draftText}
                           onChange={e => setDraftText(e.target.value)}
                           rows={3}
-                          className="w-full text-sm text-[#1B2733] dark:text-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30"
+                          className="w-full text-sm text-[#132F43] dark:text-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30"
                           placeholder="Your reply to this parent…"
                         />
                         <div className="flex items-center justify-end gap-2 mt-2">

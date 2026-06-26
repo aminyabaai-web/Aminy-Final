@@ -522,8 +522,8 @@ const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-md text-center">
+      <div className="min-h-screen bg-app flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-md text-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl">🔒</span>
           </div>
@@ -867,8 +867,8 @@ const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
     description: customDescription || baseMsg.description,
   };
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 max-w-md text-center">
+    <div className="min-h-screen bg-app dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 max-w-md text-center">
         <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg className="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -3300,13 +3300,13 @@ export default function App() {
         case "weekly-insights":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
-                <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+              <div className="min-h-screen bg-app dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
                   <div className="max-w-2xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => navigateToScreen("dashboard")}
-                        className="p-2 hover:bg-gray-100 rounded-lg"
+                        className="p-2 hover:bg-slate-100 rounded-lg"
                       >
                         <span className="sr-only">Back</span>
                         ←
@@ -3329,13 +3329,13 @@ export default function App() {
         case "analytics-charts":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pb-24">
-                <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+              <div className="min-h-screen bg-app dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
                   <div className="max-w-2xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => navigateToScreen("dashboard")}
-                        className="p-2 hover:bg-gray-100 rounded-lg"
+                        className="p-2 hover:bg-slate-100 rounded-lg"
                       >
                         <span className="sr-only">Back</span>
                         ←
@@ -3413,7 +3413,7 @@ export default function App() {
                   </p>
                   <button
                     onClick={() => navigateToScreen("login")}
-                    className="px-4 py-2 bg-[#4E93A8] text-white rounded-xl text-sm font-medium"
+                    className="px-4 py-2 bg-[#2A7D99] text-white rounded-xl text-sm font-medium"
                   >
                     Sign In
                   </button>
@@ -3884,7 +3884,7 @@ export default function App() {
               />
             </Suspense>
           ) : (
-            <div className="min-h-screen bg-[#FAF7F2] flex flex-col items-center justify-center px-6 text-center">
+            <div className="min-h-screen bg-app flex flex-col items-center justify-center px-6 text-center">
               <p className="text-base font-semibold text-slate-800">No session selected for payout</p>
               <p className="mt-2 text-sm text-slate-500 max-w-sm">
                 Open a completed session from the provider portal to release its payment.
@@ -4100,7 +4100,7 @@ export default function App() {
                 )}
 
                 <MotionConfig reducedMotion="user">
-                <div className="min-h-screen" style={{ backgroundColor: '#F5F5F5' }}>
+                <div className="min-h-screen bg-app dark:bg-slate-900">
                   {/* Skip links for keyboard navigation accessibility */}
                   <div className="skip-links">
                     <a

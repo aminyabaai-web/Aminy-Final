@@ -233,7 +233,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
       case 'child': return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'parent': return 'bg-purple-100 text-purple-700 border-purple-200';
       case 'family': return 'bg-green-100 text-green-700 border-green-200';
-      default: return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+      default: return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -342,7 +342,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
 
         {/* Expanded Details */}
         {isExpanded && (
-          <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
+          <div className="border-t border-[#E8E4DF] p-4 bg-[#F6FBFB] space-y-3">
             {/* Why Saved */}
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-1 flex items-center gap-1">

@@ -65,7 +65,7 @@ export function EmptyState({
       {/* Icon */}
       <div
         className={cn(
-          'rounded-full bg-[#F0EDE8] dark:bg-slate-800 flex items-center justify-center mb-4',
+          'rounded-full bg-[#EDF4F7] dark:bg-slate-800 flex items-center justify-center mb-4',
           isCompact ? 'w-12 h-12' : 'w-16 h-16'
         )}
       >
@@ -80,7 +80,7 @@ export function EmptyState({
       {/* Headline */}
       <h3
         className={cn(
-          'font-semibold text-[#1B2733] dark:text-white mb-2',
+          'font-semibold text-[#132F43] dark:text-white mb-2',
           isCompact ? 'text-base' : 'text-lg'
         )}
       >

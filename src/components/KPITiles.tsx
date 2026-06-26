@@ -183,11 +183,11 @@ function KPITile({
 
       <div className="mb-2">
         <div className="flex items-baseline gap-2">
-          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-[#1B2733] tracking-tight`}>
+          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-[#132F43] tracking-tight`}>
             {kpi.label}
           </span>
           {kpi.change !== 0 && (
-            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-[#FAF7F2] px-1.5 py-0.5 rounded-full`}>
+            <span className={`${compact ? 'text-xs' : 'text-sm'} font-medium ${getTrendColor(kpi.trend, inverted)} flex items-center gap-0.5 bg-[#F6FBFB] px-1.5 py-0.5 rounded-full`}>
               {getTrendIcon(kpi.trend)}
               {Math.abs(kpi.change) > 0 && `${Math.abs(kpi.change).toFixed(kpi.change % 1 === 0 ? 0 : 1)}`}
             </span>
@@ -235,12 +235,12 @@ function KPIExplainerModal({
 
         <div className="space-y-4">
           <div>
-            <h4 className="text-sm font-medium text-[#1B2733] mb-2">What this measures:</h4>
+            <h4 className="text-sm font-medium text-[#132F43] mb-2">What this measures:</h4>
             <p className="text-sm text-[#3A4A57]">{explanation.description}</p>
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-[#1B2733] mb-2">How to improve:</h4>
+            <h4 className="text-sm font-medium text-[#132F43] mb-2">How to improve:</h4>
             <ul className="space-y-1">
               {explanation.howToImprove.map((tip: string, idx: number) => (
                 <li key={idx} className="text-sm text-[#3A4A57] flex items-start gap-2">
@@ -286,7 +286,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-[#1B2733] mb-3">Key Progress Indicators ({timeframe})</h3>
+      <h3 className="text-sm font-medium text-[#132F43] mb-3">Key Progress Indicators ({timeframe})</h3>
 
       <div className="grid grid-cols-2 gap-3">
         <SummaryMetric
@@ -311,7 +311,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
         />
       </div>
 
-      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#FAF7F2] rounded">
+      <div className="text-sm text-[#5A6B7A] mt-3 p-2 bg-[#F6FBFB] rounded">
         <strong>Disclaimer:</strong> These metrics track wellness support and coaching progress, not medical treatment outcomes. Parents remain the decision authority for all care decisions.
       </div>
     </div>

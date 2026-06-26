@@ -244,7 +244,7 @@ export function FiscalAgentSubmissionFlow({
             <Building2 className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#1B2733]">Submit Hours</h2>
+            <h2 className="text-lg font-bold text-[#132F43]">Submit Hours</h2>
             <p className="text-sm text-[#5A6B7A]">
               to {fiscalAgent?.name || 'Fiscal Agent'}
             </p>
@@ -270,7 +270,7 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               {/* Summary Card */}
-              <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+              <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-[#6B9080]">
                     Week of {summary ? new Date(summary.weekStart).toLocaleDateString() : '...'}
@@ -288,7 +288,7 @@ export function FiscalAgentSubmissionFlow({
               {entries.length === 0 ? (
                 <Card className="p-6 text-center">
                   <Clock className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
-                  <h3 className="font-medium text-[#1B2733] mb-1">No Hours to Submit</h3>
+                  <h3 className="font-medium text-[#132F43] mb-1">No Hours to Submit</h3>
                   <p className="text-sm text-[#5A6B7A]">
                     Complete your shifts by clocking out to see them here.
                   </p>
@@ -353,7 +353,7 @@ export function FiscalAgentSubmissionFlow({
                           />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
-                              <span className="font-medium text-[#1B2733]">
+                              <span className="font-medium text-[#132F43]">
                                 {service.description}
                               </span>
                               <Badge variant="outline" className="text-sm">
@@ -443,7 +443,7 @@ export function FiscalAgentSubmissionFlow({
               className="space-y-3 sm:space-y-4"
             >
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <ClipboardCheck className="w-5 h-5 text-[#6B9080]" />
                   Hours Summary
                 </h3>
@@ -468,15 +468,15 @@ export function FiscalAgentSubmissionFlow({
                     const maxPay = data.hours * service.hourlyRange[1];
 
                     return (
-                      <div key={code} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
+                      <div key={code} className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg">
                         <div>
-                          <div className="font-medium text-[#1B2733]">{service.description}</div>
+                          <div className="font-medium text-[#132F43]">{service.description}</div>
                           <div className="text-sm text-[#5A6B7A]">
                             Code: {service.code} • {data.count} entries
                           </div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-[#1B2733]">{formatDuration(data.hours)}</div>
+                          <div className="font-bold text-[#132F43]">{formatDuration(data.hours)}</div>
                           <div className="text-sm text-green-600">
                             ${minPay.toFixed(0)} - ${maxPay.toFixed(0)}
                           </div>
@@ -500,7 +500,7 @@ export function FiscalAgentSubmissionFlow({
 
               {/* Submission Method */}
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3">How do you want to submit?</h3>
+                <h3 className="font-semibold text-[#132F43] mb-3">How do you want to submit?</h3>
                 <div className="space-y-2">
                   {/* Clearinghouse submission - not yet available (no live billing/subscriber data wired) */}
                   <button
@@ -514,7 +514,7 @@ export function FiscalAgentSubmissionFlow({
                       <div className="flex-1">
                         <div className="font-medium flex items-center gap-2 text-[#5A6B7A]">
                           Direct Electronic Submission
-                          <Badge className="bg-[#F0EDE8] text-[#5A6B7A] text-sm">Coming soon</Badge>
+                          <Badge className="bg-[#EDF4F7] text-[#5A6B7A] text-sm">Coming soon</Badge>
                         </div>
                         <div className="text-sm text-[#5A6B7A]">
                           Submit via Availity clearinghouse (EDI 837P). In the meantime, use a PDF or your fiscal agent portal.
@@ -628,11 +628,11 @@ export function FiscalAgentSubmissionFlow({
 
               {/* Generated Documents */}
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3">Generated Documents</h3>
+                <h3 className="font-semibold text-[#132F43] mb-3">Generated Documents</h3>
                 <div className="space-y-2">
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-red-500" />
@@ -648,7 +648,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <FileText className="w-5 h-5 text-blue-500" />
@@ -664,7 +664,7 @@ export function FiscalAgentSubmissionFlow({
 
                   <button
                     onClick={handleDownloadPdf}
-                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#FAF7F2]"
+                    className="w-full p-3 flex items-center justify-between border rounded-lg hover:bg-[#F6FBFB]"
                   >
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-5 h-5 text-green-500" />
@@ -748,7 +748,7 @@ export function FiscalAgentSubmissionFlow({
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
 
-              <h3 className="text-xl font-bold text-[#1B2733] mb-2">
+              <h3 className="text-xl font-bold text-[#132F43] mb-2">
                 Hours Submitted!
               </h3>
               <p className="text-[#5A6B7A] mb-4 sm:mb-6">
@@ -756,7 +756,7 @@ export function FiscalAgentSubmissionFlow({
                 to {fiscalAgent?.name || 'your fiscal agent'}.
               </p>
 
-              <Card className="p-4 bg-[#FAF7F2] text-left mb-4 sm:mb-6">
+              <Card className="p-4 bg-[#F6FBFB] text-left mb-4 sm:mb-6">
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-[#5A6B7A]">Submission ID:</span>

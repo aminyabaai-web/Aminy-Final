@@ -1,0 +1,35 @@
+<!-- @dsCard group="Spacing" viewport="700x230" name="Motion in use" subtitle="Count-up, AI-thinking pulse, breath ring, win pop — all reduced-motion safe" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;background:var(--aminy-mist);font-family:var(--font-ui);padding:18px;color:var(--color-text);}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .cell{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:14px;box-shadow:var(--shadow-sm);min-height:150px;display:flex;flex-direction:column;}
+  .lab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:auto;}
+  .big{font-size:34px;font-weight:700;letter-spacing:-0.02em;color:var(--aminy-teal-700);}
+  .bar{height:8px;border-radius:4px;background:var(--aminy-navy-50);overflow:hidden;margin-top:8px;}
+  .fill{height:100%;border-radius:4px;background:var(--aminy-teal-500);width:0;animation:grow var(--dur-enter) var(--ease-lift) forwards;}
+  @keyframes grow{to{width:72%;}}
+  .dots{display:inline-flex;gap:5px;margin-top:6px;}
+  .dots span{width:8px;height:8px;border-radius:999px;background:var(--aminy-teal-500);animation:aminy-think 1s ease-in-out infinite;}
+  .dots span:nth-child(2){animation-delay:.18s;} .dots span:nth-child(3){animation-delay:.36s;}
+  .ring{position:relative;width:64px;height:64px;margin:6px auto 0;}
+  .ring i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--aminy-teal-400);animation:aminy-breath var(--dur-breath) var(--ease-breath) infinite;}
+  .ring b{position:absolute;inset:14px;border-radius:50%;background:linear-gradient(135deg,var(--aminy-teal-300),var(--aminy-teal-600));}
+  .win{font-size:30px;animation:aminy-pop var(--dur-slow) var(--ease-spring) both;}
+  .shimmer{margin-top:8px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--aminy-win-100),#fff,var(--aminy-win-100));background-size:200% 100%;animation:aminy-shimmer 2s linear infinite;}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="cell"><span class="lab">Count-up · stat</span><div class="big" id="n">0</div><div style="font-size:11px;color:var(--color-text-muted)">routine days</div></div>
+    <div class="cell"><span class="lab">Progress fill</span><div style="font-size:13px;font-weight:600;color:var(--color-text-strong)">Morning transitions</div><div class="bar"><div class="fill"></div></div></div>
+    <div class="cell"><span class="lab">AI thinking</span><div style="font-size:12px;color:var(--color-text-muted);margin-bottom:6px">not a spinner</div><div class="dots"><span></span><span></span><span></span></div></div>
+    <div class="cell"><span class="lab">Breath · win</span><div class="ring"><i></i><b></b></div></div>
+  </div>
+  <script>
+    // tiny count-up demo
+    var el=document.getElementById('n'),t=5,s=null;
+    function f(ts){if(!s)s=ts;var p=Math.min(1,(ts-s)/900);el.textContent=Math.round(t*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f);}
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches)requestAnimationFrame(f);else el.textContent=t;
+  </script>
+</body></html>

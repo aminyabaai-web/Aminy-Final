@@ -1,0 +1,86 @@
+<!-- @dsCard group="Components" viewport="700x600" name="Core primitives" subtitle="Button · Badge · Input · Card · Nudge · Stat · Avatar" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  body{margin:0;background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));font-family:var(--font-ui);color:var(--color-text);}
+  #root{padding:22px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .cell{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow-sm);}
+  .cell.wide{grid-column:1 / -1;}
+  .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-muted);font-weight:700;margin-bottom:12px;}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .stack{display:flex;flex-direction:column;gap:10px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel">
+  const { Button, Badge, Input, Card, Nudge, Stat, Avatar } = window.DesignSystem_39fb2b;
+  const Ico = ({d, w=18}) => (<svg width={w} height={w} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{d}</svg>);
+  const Heart = <Ico d={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>} />;
+  const Arrow = <Ico d={<><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></>} />;
+
+  function Gallery(){
+    return (
+      <div className="grid">
+        <div className="cell">
+          <div className="lbl">Buttons</div>
+          <div className="stack">
+            <div className="row"><Button icon={Heart}>See my plan</Button><Button variant="secondary">Not now</Button></div>
+            <div className="row"><Button variant="ghost" size="sm">Skip for today</Button><Button size="sm" iconRight={Arrow}>Continue</Button></div>
+            <div className="row"><Button disabled>Disabled</Button></div>
+          </div>
+        </div>
+
+        <div className="cell">
+          <div className="lbl">Badges</div>
+          <div className="stack">
+            <div className="row"><Badge tone="teal">Morning routine</Badge><Badge tone="win" icon="⭐">Win</Badge></div>
+            <div className="row"><Badge tone="grow">3-day streak</Badge><Badge tone="care">Provider review</Badge><Badge tone="navy">Transitions</Badge></div>
+          </div>
+        </div>
+
+        <div className="cell">
+          <div className="lbl">Input</div>
+          <Input label="Note a moment" placeholder="What happened, in your words…" hint="Only you can see this." />
+        </div>
+
+        <div className="cell">
+          <div className="lbl">Avatars</div>
+          <div className="row">
+            <Avatar name="Sarah" tone="teal" size={44} />
+            <Avatar name="Kai" tone="child" size={44} />
+            <Avatar name="Dr Morales" tone="care" size={44} />
+            <Avatar name="AJ" tone="navy" size={44} />
+          </div>
+        </div>
+
+        <div className="cell wide">
+          <div className="lbl">Proactive nudge</div>
+          <Nudge actions={<><Button size="sm">Try it today</Button><Button size="sm" variant="ghost">Not this one</Button></>}>
+            You showed up three evenings in a row. That's not nothing — that's the pattern.
+          </Nudge>
+        </div>
+
+        <div className="cell wide">
+          <div className="lbl">Stats — celebrate consistency, not perfection</div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
+            <Stat label="This week" value="5" unit="/7" caption="Routine days" accent />
+            <Stat label="Calm streak" value="3" unit="days" caption="Longest this month" />
+            <Stat label="Goals met" value="2" unit="/3" caption="One left · no rush" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Gallery/>);
+</script>
+</body>
+</html>

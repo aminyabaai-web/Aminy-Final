@@ -255,7 +255,7 @@ www.aminy.ai
 
   return (
     <>
-      <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F5F2EC] border-[#C8DDE8]">
+      <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-[#F5F2EC] border-[#C8DDE8]">
         <div className="flex items-start gap-3 sm:gap-4">
           <div className="p-2 bg-blue-100 rounded-full">
             <Stethoscope className="w-5 h-5 text-blue-600" />
@@ -356,13 +356,13 @@ function ShareModal({
             </div>
 
             {/* Report Preview */}
-            <div className="p-4 bg-[#FAF7F2] border-b">
+            <div className="p-4 bg-[#F6FBFB] border-b">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
                   <User className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="font-medium text-[#1B2733]">{report.childName}'s Progress Report</p>
+                  <p className="font-medium text-[#132F43]">{report.childName}'s Progress Report</p>
                   <p className="text-sm text-[#5A6B7A]">
                     {report.dateRange.start.toLocaleDateString()} - {report.dateRange.end.toLocaleDateString()}
                   </p>
@@ -372,13 +372,13 @@ function ShareModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="p-2 bg-white rounded border">
                   <span className="text-[#5A6B7A]">Stress Level</span>
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {report.metrics.stressLevel.current}/10
                   </p>
                 </div>
                 <div className="p-2 bg-white rounded border">
                   <span className="text-[#5A6B7A]">Routine Adherence</span>
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {report.metrics.routineAdherence.current}%
                   </p>
                 </div>
@@ -398,13 +398,13 @@ function ShareModal({
                   onDownload();
                 }}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#F6FBFB] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <Download className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1B2733]">Download PDF</p>
+                  <p className="font-medium text-[#132F43]">Download PDF</p>
                   <p className="text-sm text-[#5A6B7A]">Save to your device</p>
                 </div>
                 {generating && shareMethod === 'download' && (
@@ -422,7 +422,7 @@ function ShareModal({
                     <Mail className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-[#1B2733]">Email to Provider</p>
+                    <p className="font-medium text-[#132F43]">Email to Provider</p>
                     <p className="text-sm text-[#5A6B7A]">Send directly via email</p>
                   </div>
                 </button>
@@ -457,7 +457,7 @@ function ShareModal({
               <button
                 onClick={onCopyLink}
                 disabled={generating}
-                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#FAF7F2] transition-colors text-left"
+                className="w-full flex items-center gap-3 sm:gap-4 p-3 border rounded-lg hover:bg-[#F6FBFB] transition-colors text-left"
               >
                 <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
                   {linkCopied ? (
@@ -467,7 +467,7 @@ function ShareModal({
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {linkCopied ? 'Link Copied!' : 'Copy Shareable Link'}
                   </p>
                   <p className="text-sm text-[#5A6B7A]">Valid for 7 days, view-only access</p>

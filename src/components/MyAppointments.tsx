@@ -285,7 +285,7 @@ function StatusBadge({ status }: { status: Appointment['status'] }) {
   const styles = {
     upcoming: 'bg-[#6B9080]/10 text-[#6B9080] border-[#6B9080]/20',
     'in-progress': 'bg-green-50 text-green-700 border-green-200',
-    completed: 'bg-[#FAF7F2] text-[#5A6B7A] border-[#E8E4DF]',
+    completed: 'bg-[#F6FBFB] text-[#5A6B7A] border-[#E8E4DF]',
     cancelled: 'bg-red-50 text-red-600 border-red-200',
     'no-show': 'bg-amber-50 text-amber-600 border-amber-200',
     'provider-no-show': 'bg-rose-50 text-rose-600 border-rose-200',
@@ -344,11 +344,11 @@ function AppointmentCard({
         <div className="flex items-start justify-between gap-3">
           {/* Provider Info */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#4E93A8] flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#2A7D99] flex items-center justify-center text-white font-bold">
               {appointment.provider.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
-              <h3 className="font-semibold text-[#1B2733]">{appointment.provider.name}</h3>
+              <h3 className="font-semibold text-[#132F43]">{appointment.provider.name}</h3>
               <p className="text-sm text-[#5A6B7A]">{appointment.provider.title}</p>
             </div>
           </div>
@@ -382,7 +382,7 @@ function AppointmentCard({
 
         {/* Session Notes (for completed) */}
         {appointment.sessionNotes && appointment.status === 'completed' && (
-          <div className="mt-3 p-3 bg-[#FAF7F2] rounded-lg">
+          <div className="mt-3 p-3 bg-[#F6FBFB] rounded-lg">
             <p className="text-sm font-medium text-[#5A6B7A] mb-1">Session Notes</p>
             <p className="text-sm text-[#3A4A57]">{appointment.sessionNotes}</p>
           </div>
@@ -451,7 +451,7 @@ function AppointmentCard({
             {appointment.canReschedule && (
               <button
                 onClick={() => onReschedule?.(appointment)}
-                className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#FAF7F2] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#F6FBFB] transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reschedule
@@ -559,13 +559,13 @@ export function MyAppointments({
         />
         <div className="px-4 pb-4">
           {/* Tabs */}
-          <div className="flex gap-1 bg-[#F0EDE8] dark:bg-slate-800 p-1 rounded-lg">
+          <div className="flex gap-1 bg-[#EDF4F7] dark:bg-slate-800 p-1 rounded-lg">
             <button
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'upcoming'
-                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
-                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-200'
               }`}
             >
               Upcoming ({upcomingAppointments.length})
@@ -574,8 +574,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('past')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'past'
-                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
-                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-200'
               }`}
             >
               Past ({pastAppointments.length})

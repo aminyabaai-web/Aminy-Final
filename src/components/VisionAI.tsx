@@ -306,7 +306,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {!cameraActive && !capturedImage && (
                 <div className="bg-gradient-to-b from-violet-50 to-white rounded-xl border border-violet-100 p-8 text-center">
                   <Sparkles className="w-12 h-12 text-violet-500 mx-auto mb-3" />
-                  <h3 className="font-semibold text-[#1B2733] mb-1">Photo Analysis</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-1">Photo Analysis</h3>
                   <p className="text-sm text-[#5A6B7A] mb-6">
                     Take a photo of a document (IEP, prescription), your child's activity,
                     or anything you'd like Aminy to analyze.
@@ -423,7 +423,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-[#5A6B7A]">Live Analysis</p>
                       {frameResults.slice(-3).map(fr => (
-                        <div key={fr.id} className="bg-[#FAF7F2] rounded-lg p-2 text-sm text-[#5A6B7A]">
+                        <div key={fr.id} className="bg-[#F6FBFB] rounded-lg p-2 text-sm text-[#5A6B7A]">
                           <span className="text-[#8A9BA8]">Frame {(fr.frameIndex ?? 0) + 1}:</span>{' '}
                           {fr.analysis.length > 100 ? fr.analysis.slice(0, 100) + '...' : fr.analysis}
                         </div>
@@ -437,7 +437,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {!isRecording && !sessionSummary && !summaryLoading && (
                 <div className="bg-gradient-to-b from-violet-50 to-white rounded-xl border border-violet-100 p-8 text-center">
                   <Video className="w-12 h-12 text-violet-500 mx-auto mb-3" />
-                  <h3 className="font-semibold text-[#1B2733] mb-1">Video Observation</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-1">Video Observation</h3>
                   <p className="text-sm text-[#5A6B7A] mb-2">
                     Record your child's activity for AI behavioral analysis.
                     Captures 1 frame every 3 seconds.
@@ -461,7 +461,7 @@ export function VisionAI({ tier, userId, onClose, onBack, onAnalysisComplete, in
               {summaryLoading && (
                 <div className="text-center py-8">
                   <Loader2 className="w-8 h-8 text-violet-600 animate-spin mx-auto mb-3" />
-                  <p className="font-medium text-[#1B2733]">Generating session summary...</p>
+                  <p className="font-medium text-[#132F43]">Generating session summary...</p>
                   <p className="text-sm text-[#5A6B7A]">Analyzing {frameResults.length} frames</p>
                 </div>
               )}

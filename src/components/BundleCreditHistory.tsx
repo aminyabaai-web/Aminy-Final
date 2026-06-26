@@ -72,7 +72,7 @@ function getTransactionIcon(type: CreditTransaction['type']) {
     case 'usage': return { icon: MinusCircle, color: 'text-blue-500', bg: 'bg-[#EEF4F8]' };
     case 'expiry': return { icon: AlertCircle, color: 'text-amber-500', bg: 'bg-amber-50' };
     case 'refund': return { icon: CheckCircle2, color: 'text-purple-500', bg: 'bg-purple-50' };
-    default: return { icon: Package, color: 'text-[#5A6B7A]', bg: 'bg-[#FAF7F2]' };
+    default: return { icon: Package, color: 'text-[#5A6B7A]', bg: 'bg-[#F6FBFB]' };
   }
 }
 
@@ -192,7 +192,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
             </button>
           )}
           <div>
-            <h2 className="text-lg font-bold text-[#1B2733]">Bundle Credits</h2>
+            <h2 className="text-lg font-bold text-[#132F43]">Bundle Credits</h2>
             <p className="text-sm text-[#5A6B7A]">Purchase history and credit usage</p>
           </div>
         </div>
@@ -237,7 +237,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
               ? 'bg-red-50 text-red-700'
               : (expiryDays ?? 0) <= 30
               ? 'bg-amber-50 text-amber-700'
-              : 'bg-[#FAF7F2] text-[#5A6B7A]'
+              : 'bg-[#F6FBFB] text-[#5A6B7A]'
           }`}>
             <Calendar size={12} />
             <span>
@@ -283,7 +283,7 @@ export function BundleCreditHistory({ userId, onBack }: BundleCreditHistoryProps
                     <div className="flex-1 min-w-0 pb-1">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-[#1B2733] truncate">
+                          <p className="text-sm font-medium text-[#132F43] truncate">
                             {txn.type === 'purchase' ? `Purchased ${txn.bundleName}` :
                              txn.type === 'usage' ? 'Credit Used' :
                              txn.type === 'expiry' ? 'Credits Expired' :

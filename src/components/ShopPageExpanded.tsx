@@ -194,7 +194,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h1 className="text-3xl font-semibold text-[#1B2733] mb-2">Shop</h1>
+              <h1 className="text-3xl font-semibold text-[#132F43] mb-2">Shop</h1>
               <p className="text-[#5A6B7A]">Science-backed calm tools for home</p>
             </div>
             <Button variant="outline" size="sm" className="gap-2">
@@ -206,14 +206,14 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
           </div>
 
           {/* Calm Coins Wallet */}
-          <Card className="p-6 bg-gradient-to-br from-yellow-50 to-amber-50 border-[#F0EDE8]">
+          <Card className="p-6 bg-gradient-to-br from-yellow-50 to-amber-50 border-[#EDF4F7]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-full flex items-center justify-center">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-[#1B2733]">Calm Coins Balance</h3>
+                  <h3 className="font-semibold text-[#132F43]">Calm Coins Balance</h3>
                   <p className="text-sm text-[#5A6B7A]">Earn by completing activities</p>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
             </div>
 
             {/* Recent Transactions */}
-            <div className="mt-4 pt-4 border-t border-[#F0EDE8]">
+            <div className="mt-4 pt-4 border-t border-[#EDF4F7]">
               <p className="text-sm font-medium text-[#3A4A57] mb-2">Recent Activity</p>
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {transactions.slice(0, 3).map((tx, idx) => (
@@ -256,7 +256,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-accent" />
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Suggested for {userData.childName}</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Suggested for {userData.childName}</h2>
               <Badge className="bg-accent/10 text-accent border-accent/20">AI Powered</Badge>
             </div>
             <p className="text-sm text-[#5A6B7A] mb-4">
@@ -271,7 +271,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
                     <Badge className="bg-accent text-white">AI Pick</Badge>
                   </div>
                   
-                  <h3 className="font-semibold text-[#1B2733] mb-2">{item.name}</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-2">{item.name}</h3>
                   <p className="text-sm text-[#5A6B7A] mb-4">{item.description}</p>
                   
                   <div className="flex items-center justify-between">
@@ -353,7 +353,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
               <div className="flex items-start gap-3">
                 <Sparkles className="w-5 h-5 text-accent mt-0.5" />
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733] mb-1">
+                  <p className="text-sm font-medium text-[#132F43] mb-1">
                     Expand your child's Aminy Jr experience
                   </p>
                   <p className="text-sm text-[#5A6B7A]">
@@ -382,7 +382,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
               <div className="flex items-start gap-3">
                 <Star className="w-5 h-5 text-purple-600 mt-0.5 fill-purple-600" />
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733] mb-1">
+                  <p className="text-sm font-medium text-[#132F43] mb-1">
                     Professional-grade tools and templates
                   </p>
                   <p className="text-sm text-[#5A6B7A]">
@@ -409,7 +409,7 @@ export function ShopPageExpanded({ userData, userTier, childGoals = [] }: ShopPa
         {/* Support Message */}
         <Card className="mt-8 p-6 bg-gradient-to-r from-accent/5 to-teal-50 border-accent/20 text-center">
           <Heart className="w-8 h-8 text-accent mx-auto mb-3" />
-          <h3 className="font-semibold text-[#1B2733] mb-2">Every purchase supports your family's progress plan</h3>
+          <h3 className="font-semibold text-[#132F43] mb-2">Every purchase supports your family's progress plan</h3>
           <p className="text-sm text-[#5A6B7A]">
             All materials are science-backed and designed by ABA professionals to integrate seamlessly with your calm plan.
           </p>
@@ -468,7 +468,7 @@ function ShopItemCard({
         ) : getTierBadge()}
       </div>
       
-      <h3 className="font-semibold text-[#1B2733] mb-2">{item.name}</h3>
+      <h3 className="font-semibold text-[#132F43] mb-2">{item.name}</h3>
       <p className="text-sm text-[#5A6B7A] mb-4 line-clamp-2">{item.description}</p>
       
       <div className="flex flex-wrap gap-1 mb-4">
@@ -481,7 +481,7 @@ function ShopItemCard({
       
       <div className="flex items-center justify-between pt-4 border-t border-[#E8E4DF]">
         <div>
-          <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">${item.price}</span>
+          <span className="text-xl sm:text-2xl font-bold text-[#132F43]">${item.price}</span>
         </div>
         <div className="flex gap-2">
           <Button
@@ -533,22 +533,22 @@ function CheckoutModal({
 
         <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Item Summary */}
-          <Card className="p-4 bg-[#FAF7F2]">
+          <Card className="p-4 bg-[#F6FBFB]">
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="text-4xl">{item.image}</div>
               <div className="flex-1">
-                <h3 className="font-semibold text-[#1B2733]">{item.name}</h3>
+                <h3 className="font-semibold text-[#132F43]">{item.name}</h3>
                 <p className="text-sm text-[#5A6B7A]">{item.category}</p>
               </div>
               <div className="text-right">
-                <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">${item.price}</p>
+                <p className="text-xl sm:text-2xl font-bold text-[#132F43]">${item.price}</p>
               </div>
             </div>
           </Card>
 
           {/* Payment Method */}
           <div>
-            <h4 className="font-medium text-[#1B2733] mb-3">Payment Method</h4>
+            <h4 className="font-medium text-[#132F43] mb-3">Payment Method</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Card 
                 onClick={() => setPaymentMethod('card')}
@@ -561,7 +561,7 @@ function CheckoutModal({
                 <div className="flex items-center gap-3">
                   <CreditCard className="w-5 h-5 text-[#3A4A57]" />
                   <div>
-                    <p className="font-medium text-[#1B2733]">Credit Card</p>
+                    <p className="font-medium text-[#132F43]">Credit Card</p>
                     <p className="text-sm text-[#5A6B7A]">Stripe checkout</p>
                   </div>
                   {paymentMethod === 'card' && (
@@ -582,7 +582,7 @@ function CheckoutModal({
                 <div className="flex items-center gap-3">
                   <Sparkles className="w-5 h-5 text-yellow-600" />
                   <div>
-                    <p className="font-medium text-[#1B2733]">Calm Coins</p>
+                    <p className="font-medium text-[#132F43]">Calm Coins</p>
                     <p className="text-sm text-[#5A6B7A]">{calmCoinsBalance} available</p>
                   </div>
                   {paymentMethod === 'coins' && canAffordWithCoins && (

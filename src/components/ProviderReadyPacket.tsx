@@ -222,7 +222,7 @@ export function ProviderReadyPacket({
       )}
 
       {/* Watermark Notice */}
-      <div className="p-3 bg-[#FAF7F2] rounded-lg mb-3">
+      <div className="p-3 bg-[#F6FBFB] rounded-lg mb-3">
         <div className="flex items-center gap-2">
           <Shield className="w-4 h-4 text-muted-foreground" />
           <p className="text-sm text-muted-foreground">

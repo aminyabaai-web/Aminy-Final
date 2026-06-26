@@ -1,0 +1,113 @@
+<!-- @dsCard group="Website" viewport="1280x900" name="Email templates" subtitle="11 Resend emails · Twilio SMS · Web push — full repo parity" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aminy — Email Templates</title>
+<link rel="icon" href="../../assets/favicon.svg"/>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font-ui);background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));padding:28px 16px 64px;-webkit-font-smoothing:antialiased;}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:0 auto 24px;max-width:760px;}
+  .pills button{padding:9px 16px;border-radius:999px;border:1px solid var(--color-border);background:#fff;cursor:pointer;font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--color-text-muted);}
+  .pills button.on{background:var(--aminy-teal-600);color:#fff;border-color:var(--aminy-teal-600);}
+  /* Email canvas — 600px fluid, email-safe patterns (solid colors, tables-free preview) */
+  .email{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--color-border);box-shadow:var(--shadow-md);}
+  .eh{padding:28px 32px 0;text-align:center;}
+  .eh img{height:30px;}
+  .eb{padding:28px 32px 8px;}
+  .eb h1{font-size:24px;font-weight:800;letter-spacing:-0.025em;color:#0C2230;margin:0 0 12px;line-height:1.2;}
+  .eb p{font-size:15px;line-height:1.65;color:#475569;margin:0 0 16px;}
+  .ecta{display:inline-block;background:#2A7D99;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 28px;border-radius:12px;}
+  .ecard{background:#F1F8FA;border:1px solid #E2EFF3;border-radius:14px;padding:18px 20px;margin:0 0 16px;}
+  .ecard b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#216982;margin-bottom:6px;}
+  .ecard span{font-size:14.5px;line-height:1.55;color:#1e293b;}
+  .erow{display:flex;justify-content:space-between;font-size:14px;color:#475569;padding:9px 0;border-bottom:1px solid #E2EFF3;}
+  .erow:last-child{border:0;}
+  .ef{padding:22px 32px 30px;text-align:center;border-top:1px solid #f1f5f9;margin-top:20px;}
+  .ef p{font-size:11.5px;line-height:1.6;color:#94a3b8;margin:0 0 4px;}
+  .ef a{color:#2A7D99;text-decoration:none;}
+  .stat3{display:flex;gap:10px;margin:0 0 16px;}
+  .stat3 div{flex:1;background:#F1F8FA;border-radius:12px;padding:12px;text-align:center;}
+  .stat3 b{display:block;font-size:22px;font-weight:800;color:#216982;letter-spacing:-0.02em;}
+  .stat3 span{font-size:11px;color:#64748b;}
+  @media (max-width:640px){.eb,.eh,.ef{padding-left:20px;padding-right:20px;}}
+  .pref{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid #f1f5f9;}
+  .pref b{display:block;font-size:14.5px;color:#0C2230;}
+  .pref i{font-style:normal;font-size:12px;color:#94a3b8;}
+  .sw{width:46px;height:28px;border-radius:999px;background:#e5e7eb;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;}
+  .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s;}
+  .sw-on{background:#2A7D99;}
+  .sw-on::after{left:21px;}
+  /* SMS / push preview — phone-ish */
+  .phone{max-width:380px;margin:0 auto;background:#0C2230;border-radius:32px;padding:16px 14px 26px;box-shadow:var(--shadow-lg);}
+  .phone .scr{background:#E9EEF1;border-radius:22px;padding:18px 14px;min-height:420px;}
+  .smshd{text-align:center;font-size:12px;color:#64748b;margin:0 0 16px;font-weight:600;}
+  .bub{max-width:80%;background:#fff;border-radius:18px;border-bottom-left-radius:5px;padding:11px 14px;margin:0 0 12px;box-shadow:0 1px 2px rgba(0,0,0,.08);}
+  .bub p{margin:0;font-size:14px;line-height:1.5;color:#0C2230;}
+  .bub .who{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2A7D99;margin:0 0 4px;}
+  .bub .tm{display:block;font-size:10px;color:#94a3b8;margin-top:5px;}
+  .pn{background:#fff;border-radius:16px;padding:13px 15px;margin:0 0 11px;box-shadow:0 2px 8px rgba(12,34,48,.1);display:flex;gap:11px;align-items:flex-start;}
+  .pn .ic{width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid var(--color-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .pn .ic img{height:22px;}
+  .pn b{display:block;font-size:13.5px;color:#0C2230;margin:0 0 2px;}
+  .pn span{font-size:12.5px;line-height:1.45;color:#475569;}
+  .pn i{font-style:normal;display:block;font-size:10.5px;color:#94a3b8;margin-top:4px;}
+  .note{max-width:600px;margin:18px auto 0;font-size:12px;color:#64748b;text-align:center;line-height:1.55;}
+</style></head>
+<body>
+<div class="pills" id="pills"></div>
+<div id="stage"></div>
+<script>
+const FOOT = '<div class="ef"><p>Aminy · Gentle guidance. Meaningful progress.</p><p>You\'re receiving this because you have an Aminy account. <a href="javascript:void(0)" onclick="show(`prefs`)">Notification settings</a> · <a href="javascript:void(0)" onclick="unsubAll()">Unsubscribe</a></p><p>Aminy LLC · Phoenix, AZ · <a href="legal.html">Privacy</a></p></div>';
+const HEAD = '<div class="eh"><img src="../../assets/aminy_logo.png" alt="aminy"/></div>';
+const EMAILS = {
+  welcome: { label: "Welcome", html: HEAD+'<div class="eb"><h1>Welcome, Sarah. Tonight can go a little easier.</h1><p>You\'re set up — and Aminy already has a first suggestion for Kai based on what you shared.</p><div class="ecard"><b>Tonight\'s first step</b><span>Try a "calm-down kit": 3 things Kai finds soothing in a small bag. When things escalate, hand it over — no other words needed.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Open Aminy</a></p></div>'+FOOT },
+  reminder: { label: "Session reminder", html: HEAD+'<div class="eb"><h1>Kai\'s OT session is tomorrow at 3:00 PM.</h1><p>With Dr. Patel · TeleABA · 30 minutes. The join link goes live 10 minutes before.</p><div class="ecard"><b>Quick prep</b><span>A quiet-ish corner, Kai\'s fidget, and water nearby. That\'s it — Dr. Patel handles the rest.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Add to calendar</a></p><p style="text-align:center;font-size:13px;"><a href="#" style="color:#2A7D99;">Need to reschedule? No problem →</a></p></div>'+FOOT },
+  bcba: { label: "BCBA answer ready", html: HEAD+'<div class="eb"><h1>Dr. Morales answered your question.</h1><p>Your question about dinner-table bolting has been reviewed and signed by Kai\'s BCBA.</p><div class="ecard"><b>Signed answer · Dr. Ana Morales, BCBA-D</b><span>"Great instinct to avoid the battle. Pair the table with something regulating — a weighted lap pad he only gets at meals…"</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Read the full answer</a></p></div>'+FOOT },
+  weekly: { label: "Weekly progress", html: HEAD+'<div class="eb"><h1>Kai had more calm mornings this week than last.</h1><p>That\'s real progress — here\'s the week at a glance.</p><div class="stat3"><div><b>5/7</b><span>Routine days</span></div><div><b>3</b><span>Day calm streak</span></div><div><b>2/3</b><span>Goals on track</span></div></div><div class="ecard"><b>This week\'s win</b><span>Kai named "frustrated" twice without prompting. The feelings work is landing.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">See the full report</a></p></div>'+FOOT },
+  trial: { label: "Trial ending", html: HEAD+'<div class="eb"><h1>Your trial ends in 3 days — no surprises.</h1><p>On June 24 your Core plan begins at <b>$129/year</b> (you\'re saving 28% vs monthly). Want to change or cancel? Two taps, no questions asked.</p><div class="ecard"><b>What you\'ve built in 11 days</b><span>14 Ask-Aminy conversations · Kai\'s profile & practice plan · 2 signed BCBA answers · a 6-day med streak.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Keep going</a></p><p style="text-align:center;font-size:13px;"><a href="#" style="color:#64748b;">Manage or cancel plan</a></p></div>'+FOOT },
+  receipt: { label: "Receipt", html: HEAD+'<div class="eb"><h1>Receipt — thanks, Sarah.</h1><p>Your payment went through. HSA/FSA users: this receipt works for reimbursement.</p><div class="ecard" style="background:#fff;border:1px solid #E2EFF3;"><div class="erow"><span>Aminy Core — annual</span><span>$129.00</span></div><div class="erow"><span>Payment method</span><span>Visa ····4242</span></div><div class="erow"><span>Date</span><span>June 24, 2026</span></div><div class="erow"><span>Invoice</span><span>AMY-2026-08412</span></div></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Download invoice (PDF)</a></p></div>'+FOOT },
+  winback: { label: "Win-back", html: HEAD+'<div class="eb"><h1>We saved Kai\'s spot.</h1><p>It\'s been a few weeks — and everything is exactly where you left it: Kai\'s profile, the practice plan, and every single thing Aminy learned about what works for him.</p><div class="ecard"><b>Come back for less</b><span>50% off your next 3 months — our way of saying we\'d love to keep helping.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Pick up where you left off</a></p><p style="text-align:center;font-size:12px;color:#94a3b8;">Offer good for 30 days · Kai\'s data stays safe for 90</p></div>'+FOOT },
+  prefs: { label: "Preferences", html: HEAD+'<div class="eb"><h1>Email preferences</h1><p>Choose what reaches your inbox. Visit confirmations and security messages always send.</p>'+
+    '<div class="pref"><div><b>Session reminders</b><i>Day-before and 10-minute reminders</i></div><span class="sw sw-on" onclick="tgl(this)"></span></div>'+
+    '<div class="pref"><div><b>BCBA answers</b><i>When a signed review is ready</i></div><span class="sw sw-on" onclick="tgl(this)"></span></div>'+
+    '<div class="pref"><div><b>Weekly progress</b><i>Sunday evening recap</i></div><span class="sw sw-on" onclick="tgl(this)"></span></div>'+
+    '<div class="pref"><div><b>Tips & product news</b><i>Occasional, genuinely useful</i></div><span class="sw" onclick="tgl(this)"></span></div>'+
+    '<p style="text-align:center;margin-top:24px;"><a class="ecta" href="javascript:void(0)" onclick="savedMsg()">Save preferences</a></p>'+
+    '<p id="saveok" style="display:none;text-align:center;font-size:13px;color:#16a34a;font-weight:700;">Saved — you\'re in control 💛</p>'+
+    '</div>'+FOOT },
+};
+// Resend transactional emails not yet above — full repo parity
+EMAILS.report = { label: "Report shared", html: HEAD+'<div class="eb"><h1>Sarah shared Kai\'s progress report with you.</h1><p>You\'ve been given secure access to a progress summary for <b>Kai</b>.</p><div class="ecard"><b>A note from Sarah</b><span>"Sharing this ahead of the IEP meeting so we\'re all on the same page. Thank you!"</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">View report</a></p><p style="text-align:center;font-size:12px;color:#94a3b8;">🔒 This secure link expires in 7 days.</p></div>'+FOOT };
+EMAILS.nudge = { label: "Gentle check-in", html: HEAD+'<div class="eb"><h1>I\'m here whenever you\'re ready, Sarah.</h1><p>No pressure — parenting is hard enough without an app adding guilt. When you have a moment, even a 30-second check-in helps me support you and Kai better.</p><div class="ecard"><b>Easy ways back in</b><span>A quick voice chat while doing dishes · revisiting what worked before · or just venting about a tough moment.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Open Aminy</a></p></div>'+FOOT };
+EMAILS.progress = { label: "Trial progress", html: HEAD+'<div class="eb"><h1>You\'re making real progress with Kai.</h1><p>A few days into your trial, here\'s what you\'ve built together:</p><div class="stat3"><div><b>14</b><span>AI chats</span></div><div><b>6</b><span>Ease sessions</span></div><div><b>5</b><span>Days active</span></div></div><div class="ecard"><b>Every small step matters</b><span>The consistency you\'re building with Kai is what creates lasting change. Keep going.</span></div><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Continue your journey</a></p></div>'+FOOT };
+EMAILS.notes = { label: "Session notes", html: HEAD+'<div class="eb"><h1>Kai\'s session notes are ready.</h1><p>The notes from Kai\'s appointment are now in Aminy.</p><div class="ecard"><b>Session</b><span>Kai · June 18, 2026 · Dr. Ana Morales, BCBA-D</span></div><p>Review the notes, track progress, and find any recommendations your provider shared — all in one place.</p><p style="text-align:center;margin-top:22px;"><a class="ecta" href="#">Open session notes</a></p></div>'+FOOT };
+// Twilio SMS + Web Push — non-email channels
+EMAILS.sms = { label: "SMS (Twilio)", type: "sms", bubbles: [
+  ["To parent · 24h before", "Aminy: Tomorrow you have OT with Dr. Patel at Thu, Jun 19, 3:00 PM (TeleABA). Reply STOP to opt out.", "9:00 AM"],
+  ["To parent · ~1h before", "Aminy: Starting in ~1 hour — OT with Dr. Patel at 3:00 PM (TeleABA).", "2:00 PM"],
+  ["To provider", "Aminy: Reminder — you have a session with Kai R. at 3:00 PM. — Aminy Team", "2:00 PM"],
+], note: "Sent only to families who opted into SMS reminders (sms_reminders_enabled). Reply STOP honored automatically. Times localize to each recipient\u2019s timezone. Only Aminy-booked telehealth visits trigger SMS." };
+EMAILS.push = { label: "Push", type: "push", cards: [
+  ["Time for Kai\'s evening routine", "3 steps · about 10 minutes. Tap to start together.", "now"],
+  ["Dr. Morales answered your question", "Your BCBA reviewed and signed a reply about dinner-table bolting.", "2m ago"],
+  ["A calm moment for you", "You\'ve had a full day. 60 seconds of breathing in Exhale?", "7:30 PM"],
+], note: "Web Push via VAPID. Quiet hours and per-type opt-outs respected from notification_preferences. Never sent during a child\u2019s focus session." };
+const pills=document.getElementById('pills'), stage=document.getElementById('stage');
+function show(id){
+  pills.innerHTML=Object.keys(EMAILS).map(k=>'<button class="'+(k===id?'on':'')+'" onclick="show(\''+k+'\')">'+EMAILS[k].label+'</button>').join('');
+  var e=EMAILS[id];
+  if(e.type==='sms'){
+    stage.innerHTML='<div class="phone"><div class="scr"><p class="smshd">Text Message · Aminy</p>'+e.bubbles.map(function(b){return '<div class="bub"><div class="who">'+b[0]+'</div><p>'+b[1]+'</p><span class="tm">'+b[2]+'</span></div>';}).join('')+'</div></div><p class="note">'+e.note+'</p>';
+  } else if(e.type==='push'){
+    stage.innerHTML='<div class="phone"><div class="scr">'+e.cards.map(function(c){return '<div class="pn"><div class="ic"><img src="../../assets/favicon.svg" alt=""/></div><div><b>'+c[0]+'</b><span>'+c[1]+'</span><i>Aminy · '+c[2]+'</i></div></div>';}).join('')+'</div></div><p class="note">'+e.note+'</p>';
+  } else {
+    stage.innerHTML='<div class="email">'+e.html+'</div>';
+  }
+}
+function tgl(el){el.classList.toggle('sw-on');}
+function savedMsg(){var e=document.getElementById('saveok');if(e)e.style.display='block';}
+function unsubAll(){show('prefs');setTimeout(function(){document.querySelectorAll('.sw').forEach(function(s){s.classList.remove('sw-on');});savedMsg();},60);}
+show('welcome');
+</script>
+</body></html>

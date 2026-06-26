@@ -769,7 +769,7 @@ export function ProviderAnalytics({
           {Math.abs(metric.change)}%
         </div>
       </div>
-      <h3 className="text-2xl font-bold text-[#1B2733] dark:text-white">{metric.value}</h3>
+      <h3 className="text-2xl font-bold text-[#132F43] dark:text-white">{metric.value}</h3>
       <p className="text-sm text-[#5A6B7A] mt-1">{metric.title}</p>
       <p className="text-sm text-slate-400 mt-0.5">{metric.changeLabel}</p>
     </Card>
@@ -795,7 +795,7 @@ export function ProviderAnalytics({
             <span className="font-medium text-[#5A6B7A]">{patient.name.charAt(0)}</span>
           </div>
           <div>
-            <p className="font-medium text-[#1B2733] dark:text-white">{patient.name}</p>
+            <p className="font-medium text-[#132F43] dark:text-white">{patient.name}</p>
             <p className="text-sm text-[#5A6B7A]">
               Last session: {patient.lastSession.toLocaleDateString()}
             </p>
@@ -875,14 +875,14 @@ export function ProviderAnalytics({
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-lg text-[#5A6B7A] dark:text-slate-300 hover:bg-[#F0EDE8] transition-colors"
+              className="p-2 rounded-lg text-[#5A6B7A] dark:text-slate-300 hover:bg-[#EDF4F7] transition-colors"
               aria-label="Back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white">Analytics Dashboard</h2>
+            <h2 className="text-2xl font-bold text-[#132F43] dark:text-white">Analytics Dashboard</h2>
             <p className="text-[#5A6B7A]">Performance overview for {resolvedProviderName}</p>
           </div>
         </div>
@@ -917,7 +917,7 @@ export function ProviderAnalytics({
                       key={range}
                       role="menuitem"
                       onClick={() => handleRangeChange(range)}
-                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-colors ${
+                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-[#F6FBFB] dark:hover:bg-slate-700 transition-colors ${
                         selectedRange === range
                           ? 'text-[#6B9080] font-medium'
                           : 'text-[#3A4A57] dark:text-slate-200'
@@ -952,8 +952,8 @@ export function ProviderAnalytics({
         {/* Session Distribution Chart */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Session Distribution</h3>
-            <Badge className="bg-[#F0EDE8] text-[#5A6B7A]">This Week</Badge>
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Session Distribution</h3>
+            <Badge className="bg-[#EDF4F7] text-[#5A6B7A]">This Week</Badge>
           </div>
           <div className="space-y-4">
             {sessionData.map((day) => {
@@ -965,7 +965,7 @@ export function ProviderAnalytics({
               return (
                 <div key={day.date} className="flex items-center gap-4">
                   <span className="text-sm text-[#5A6B7A] w-8">{day.date}</span>
-                  <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-[#F0EDE8] dark:bg-slate-700">
+                  <div className="flex-1 flex h-6 rounded-lg overflow-hidden bg-[#EDF4F7] dark:bg-slate-700">
                     <div
                       className="bg-primary transition-all"
                       style={{ width: `${completedWidth}%` }}
@@ -1006,7 +1006,7 @@ export function ProviderAnalytics({
         {/* Patient Status Overview */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Status</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Patient Status</h3>
             <Button variant="ghost" size="sm" disabled title="Coming soon">View All</Button>
           </div>
 
@@ -1077,7 +1077,7 @@ export function ProviderAnalytics({
       {/* Patient List */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Overview</h3>
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Patient Overview</h3>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -1094,7 +1094,7 @@ export function ProviderAnalytics({
         <div>
           {patients.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-14 h-14 rounded-full bg-[#F0EDE8] flex items-center justify-center mb-3">
+              <div className="w-14 h-14 rounded-full bg-[#EDF4F7] flex items-center justify-center mb-3">
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
               <p className="text-sm font-medium text-[#5A6B7A]">No clients yet</p>
@@ -1111,11 +1111,11 @@ export function ProviderAnalytics({
       {/* Documentation Compliance */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Documentation Compliance</h3>
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Documentation Compliance</h3>
           <Badge className="bg-green-100 text-green-700">{docCompliance.overallCompliance}% Complete</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Session Notes</span>
@@ -1123,7 +1123,7 @@ export function ProviderAnalytics({
             <p className="text-2xl font-bold text-green-600">{docCompliance.sessionNotes}%</p>
             <p className="text-sm text-[#5A6B7A]">Completed within 24h</p>
           </div>
-          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Target className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Goal Updates</span>
@@ -1131,7 +1131,7 @@ export function ProviderAnalytics({
             <p className="text-2xl font-bold text-[#6B9080]">{docCompliance.goalUpdates}%</p>
             <p className="text-sm text-[#5A6B7A]">Updated this month</p>
           </div>
-          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Activity className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">Progress Reports</span>
@@ -1139,7 +1139,7 @@ export function ProviderAnalytics({
             <p className="text-2xl font-bold text-blue-600">{docCompliance.progressReports}%</p>
             <p className="text-sm text-[#5A6B7A]">On schedule</p>
           </div>
-          <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
+          <div className="p-4 bg-[#F6FBFB] dark:bg-slate-800 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Award className="w-4 h-4 text-[#5A6B7A]" />
               <span className="text-sm font-medium">BIP Reviews</span>

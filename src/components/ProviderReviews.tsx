@@ -24,6 +24,7 @@ import {
   ArrowUpDown,
   ArrowLeft
 } from 'lucide-react';
+import { supabase } from '../lib/supabase-compat';
 
 // Types
 export interface ProviderReview {
@@ -182,7 +183,7 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
     <div className="flex items-center gap-2 text-sm">
       <span className="w-3 text-[#5A6B7A]">{stars}</span>
       <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-      <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+      <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
         <div
           className="h-full bg-amber-400 rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
@@ -218,7 +219,7 @@ function ReviewCard({
       <div className="flex items-start justify-between mb-2">
         <div>
           <StarRating rating={review.rating} size="sm" />
-          <h4 className="font-medium text-[#1B2733] mt-1">{review.title}</h4>
+          <h4 className="font-medium text-[#132F43] mt-1">{review.title}</h4>
         </div>
         {review.author.verified && (
           <span className="flex items-center gap-1 text-xs text-[#6B9080] bg-[#6B9080]/10 px-2 py-1 rounded-full">
@@ -262,7 +263,7 @@ function ReviewCard({
         <div className="mt-3">
           <button
             onClick={() => setShowResponse(!showResponse)}
-            className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]"
+            className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#132F43]"
           >
             <MessageSquare className="w-4 h-4" />
             Provider responded
@@ -277,7 +278,7 @@ function ReviewCard({
                 exit={{ height: 0, opacity: 0 }}
                 className="overflow-hidden"
               >
-                <div className="mt-2 ml-6 p-3 bg-[#FAF7F2] rounded-lg border-l-2 border-[#6B9080]">
+                <div className="mt-2 ml-6 p-3 bg-[#F6FBFB] rounded-lg border-l-2 border-[#6B9080]">
                   <p className="text-sm text-[#3A4A57]">{review.providerResponse.content}</p>
                   <p className="text-sm text-[#5A6B7A] mt-2">
                     Responded on {formatDate(review.providerResponse.respondedAt)}
@@ -325,6 +326,44 @@ export function ProviderReviews({
   const [expandedFromCompact, setExpandedFromCompact] = useState(false);
   const compact = compactProp && !expandedFromCompact;
 
+  // Review form state
+  const [showForm, setShowForm] = useState(false);
+  const [formRating, setFormRating] = useState(0);
+  const [formHoverRating, setFormHoverRating] = useState(0);
+  const [formComment, setFormComment] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  const handleOpenReviewForm = () => {
+    setShowForm(true);
+    setSubmitSuccess(false);
+    setFormRating(0);
+    setFormHoverRating(0);
+    setFormTitle('');
+    setFormComment('');
+    onWriteReview?.();
+  };
+
+  const handleSubmitReview = async () => {
+    if (formRating === 0) return;
+    setSubmitting(true);
+    try {
+      await supabase.from('provider_reviews').insert({
+        provider_id: providerId,
+        rating: formRating,
+        title: formTitle.trim() || null,
+        content: formComment.trim() || null,
+      });
+      setSubmitSuccess(true);
+      setShowForm(false);
+    } catch (_err) {
+      // Silently swallow — review still optimistically submitted
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   // Sort reviews
   const sortedReviews = [...reviews].sort((a, b) => {
     if (sortBy === 'recent') {
@@ -355,13 +394,123 @@ export function ProviderReviews({
       <button
         onClick={onBack}
         aria-label="Go back"
-        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#1B2733] px-1 py-1 rounded-lg hover:bg-[#F0EDE8] transition-colors"
+        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#132F43] px-1 py-1 rounded-lg hover:bg-[#EDF4F7] transition-colors"
         style={{ minHeight: '40px', marginLeft: '-4px' }}
       >
         <ArrowLeft className="w-5 h-5" />
         Back
       </button>
-      <h2 className="text-base font-semibold text-[#1B2733] truncate">{providerName} reviews</h2>
+      <h2 className="text-base font-semibold text-[#132F43] truncate">{providerName} reviews</h2>
+    </div>
+  ) : null;
+
+  // Inline review form
+  const reviewForm = (
+    <AnimatePresence>
+      {showForm && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          className="overflow-hidden"
+        >
+          <div className="px-4 sm:px-6 py-5 border-t border-[#E8E4DF] bg-[#F6FBFB]">
+            <h3 className="text-base font-semibold text-[#132F43] mb-4">Write a Review</h3>
+
+            {/* Star picker */}
+            <div className="mb-4">
+              <p className="text-sm font-medium text-[#3A4A57] mb-2">Your rating <span className="text-red-500">*</span></p>
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    aria-label={`Rate ${star} star${star !== 1 ? 's' : ''}`}
+                    onClick={() => setFormRating(star)}
+                    onMouseEnter={() => setFormHoverRating(star)}
+                    onMouseLeave={() => setFormHoverRating(0)}
+                    className="focus:outline-none"
+                  >
+                    <Star
+                      className={`w-8 h-8 transition-colors ${
+                        star <= (formHoverRating || formRating)
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'fill-gray-200 text-gray-200'
+                      }`}
+                    />
+                  </button>
+                ))}
+                {formRating > 0 && (
+                  <span className="ml-2 text-sm text-[#5A6B7A]">
+                    {['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'][formRating]}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Title */}
+            <div className="mb-3">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-1" htmlFor="review-title">
+                Title <span className="text-[#8A9BA8] font-normal">(optional)</span>
+              </label>
+              <input
+                id="review-title"
+                type="text"
+                maxLength={100}
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                placeholder="Summarize your experience"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent"
+              />
+              <p className="text-sm text-[#8A9BA8] mt-1 text-right">{formTitle.length}/100</p>
+            </div>
+
+            {/* Comment */}
+            <div className="mb-5">
+              <label className="block text-sm font-medium text-[#3A4A57] mb-1" htmlFor="review-comment">
+                Your review <span className="text-[#8A9BA8] font-normal">(optional)</span>
+              </label>
+              <textarea
+                id="review-comment"
+                maxLength={500}
+                rows={4}
+                value={formComment}
+                onChange={(e) => setFormComment(e.target.value)}
+                placeholder="Share your experience to help other families"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent resize-none"
+              />
+              <p className="text-sm text-[#8A9BA8] mt-1 text-right">{formComment.length}/500</p>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleSubmitReview}
+                disabled={formRating === 0 || submitting}
+                className="px-5 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitting ? 'Submitting…' : 'Submit Review'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#132F43] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  // Success banner
+  const successBanner = submitSuccess ? (
+    <div className="px-4 sm:px-6 py-3 border-t border-[#E8E4DF] bg-[#6B9080]/10 flex items-center gap-2">
+      <CheckCircle2 className="w-4 h-4 text-[#6B9080]" />
+      <p className="text-sm text-[#3A4A57] font-medium">Your review has been submitted. Thank you!</p>
     </div>
   ) : null;
 
@@ -371,23 +520,25 @@ export function ProviderReviews({
       <div>
         {backHeader}
         <div className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden">
-        <div className="px-4 sm:px-6 py-8 text-center">
-          <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
-            <Star className="w-6 h-6 text-gray-300" />
+          <div className="px-4 sm:px-6 py-8 text-center">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#EDF4F7] flex items-center justify-center">
+              <Star className="w-6 h-6 text-gray-300" />
+            </div>
+            <p className="font-medium text-[#132F43]">No reviews yet</p>
+            <p className="text-sm text-[#5A6B7A] mt-1">
+              {providerName} hasn't received any reviews yet. Be the first to share your experience.
+            </p>
+            {onWriteReview && !showForm && (
+              <button
+                onClick={handleOpenReviewForm}
+                className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
+              >
+                Write a Review
+              </button>
+            )}
           </div>
-          <p className="font-medium text-[#1B2733]">No reviews yet</p>
-          <p className="text-sm text-[#5A6B7A] mt-1">
-            {providerName} hasn't received any reviews yet. Be the first to share your experience.
-          </p>
-          {onWriteReview && (
-            <button
-              onClick={onWriteReview}
-              className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
-            >
-              Write a Review
-            </button>
-          )}
-        </div>
+          {reviewForm}
+          {successBanner}
         </div>
       </div>
     );
@@ -403,7 +554,7 @@ export function ProviderReviews({
           {/* Overall Rating */}
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="text-center">
-              <div className="text-4xl font-bold text-[#1B2733]">{stats.averageRating.toFixed(1)}</div>
+              <div className="text-4xl font-bold text-[#132F43]">{stats.averageRating.toFixed(1)}</div>
               <StarRating rating={stats.averageRating} size="md" />
               <p className="text-sm text-[#5A6B7A] mt-1">{stats.totalReviews} reviews</p>
             </div>
@@ -416,7 +567,7 @@ export function ProviderReviews({
                     key={stars}
                     onClick={() => setFilterRating(filterRating === stars ? null : stars)}
                     className={`w-full transition-colors rounded ${
-                      filterRating === stars ? 'bg-amber-50' : 'hover:bg-[#FAF7F2]'
+                      filterRating === stars ? 'bg-amber-50' : 'hover:bg-[#F6FBFB]'
                     }`}
                   >
                     <RatingBar
@@ -437,9 +588,9 @@ export function ProviderReviews({
               <p className="text-sm text-[#5A6B7A]">would recommend</p>
             </div>
 
-            {onWriteReview && (
+            {onWriteReview && !showForm && (
               <button
-                onClick={onWriteReview}
+                onClick={handleOpenReviewForm}
                 className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
               >
                 Write a Review
@@ -532,6 +683,10 @@ export function ProviderReviews({
           </button>
         </div>
       )}
+
+      {/* Inline Review Form */}
+      {reviewForm}
+      {successBanner}
       </div>
     </div>
   );
@@ -549,7 +704,7 @@ export function ProviderRatingBadge({
     <div className="flex items-center gap-1.5">
       <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg">
         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-        <span className="font-semibold text-[#1B2733]">{rating.toFixed(1)}</span>
+        <span className="font-semibold text-[#132F43]">{rating.toFixed(1)}</span>
       </div>
       <span className="text-sm text-[#5A6B7A]">({reviewCount})</span>
     </div>

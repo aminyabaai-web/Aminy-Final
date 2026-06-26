@@ -64,7 +64,7 @@ export function AppReviewPrompt() {
         {/* Close button */}
         <button
           onClick={dismissPrompt}
-          className="absolute right-3 top-3 p-1.5 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] transition-colors"
+          className="absolute right-3 top-3 p-1.5 rounded-full text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] transition-colors"
           aria-label="Dismiss"
         >
           <X size={16} />
@@ -76,7 +76,7 @@ export function AppReviewPrompt() {
             <Heart className="w-6 h-6 text-pink-500 fill-pink-500" />
           </div>
 
-          <h3 className="text-base font-semibold text-[#1B2733] mb-1">
+          <h3 className="text-base font-semibold text-[#132F43] mb-1">
             Enjoying Aminy?
           </h3>
           <p className="text-sm text-[#5A6B7A] mb-4">

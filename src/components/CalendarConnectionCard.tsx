@@ -83,11 +83,11 @@ export function CalendarConnectionCard() {
     <div className="rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-4">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: activeProvider ? '#4E93A815' : '#f1f5f9' }}>
-          <Calendar className="w-5 h-5" style={{ color: activeProvider ? '#4E93A8' : '#64748b' }} />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: activeProvider ? '#2A7D9915' : '#f1f5f9' }}>
+          <Calendar className="w-5 h-5" style={{ color: activeProvider ? '#2A7D99' : '#64748b' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1B2733]">Calendar</p>
+          <p className="text-sm font-semibold text-[#132F43]">Calendar</p>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
             {activeProvider
               ? `Connected to ${PROVIDER_META[activeProvider].label}`
@@ -108,7 +108,7 @@ export function CalendarConnectionCard() {
 
       {/* Active connection details */}
       {activeProvider && (
-        <div className="rounded-xl bg-[#FAF7F2] px-3 py-2.5">
+        <div className="rounded-xl bg-[#F6FBFB] px-3 py-2.5">
           <p className="text-sm font-medium text-[#3A4A57]">{connection?.email || 'Connected'}</p>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
             New appointments auto-push to your {PROVIDER_META[activeProvider].label}
@@ -181,7 +181,7 @@ function ProviderButton({
       disabled={working || isPassive}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-colors text-left ${
         isPassive
-          ? 'border-[#E8E4DF] bg-[#FAF7F2] cursor-default'
+          ? 'border-[#E8E4DF] bg-[#F6FBFB] cursor-default'
           : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/30'
       } ${working ? 'opacity-50' : ''}`}
     >
@@ -189,7 +189,7 @@ function ProviderButton({
         {working ? <Loader2 className="w-4 h-4 text-slate-400 animate-spin" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[#1B2733]">{title}</p>
+        <p className="text-sm font-medium text-[#132F43]">{title}</p>
         <p className="text-sm text-[#5A6B7A] truncate">{hint}</p>
       </div>
       <span className={`text-sm font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>

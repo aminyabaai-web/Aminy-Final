@@ -107,10 +107,10 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
         </div>
         <div className="flex-1 flex items-center justify-center px-6">
           <div className="max-w-md text-center">
-            <div className="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+            <div className="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}>
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-[#1B2733] mb-2">{measure.name}</h1>
+            <h1 className="text-2xl font-bold text-[#132F43] mb-2">{measure.name}</h1>
             <p className="text-sm text-[#5A6B7A] mb-4 leading-relaxed">{measure.description}</p>
             <div className="bg-white rounded-2xl border border-[#E8E4DF] p-4 mb-4 text-left">
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">About this assessment</p>
@@ -124,7 +124,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             <button
               onClick={() => setStep('questions')}
               className="w-full py-3.5 rounded-xl text-white font-semibold"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
             >
               Begin assessment
             </button>
@@ -140,7 +140,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
   // ─── Result screen ─────────────────────────────────────────────────────
   if (step === 'result' && result) {
     const bandColor =
-      result.band?.severity === 'minimal' || result.band?.severity === 'negative_screen' ? '#4E93A8' :
+      result.band?.severity === 'minimal' || result.band?.severity === 'negative_screen' ? '#2A7D99' :
       result.band?.severity === 'mild' ? '#F8B400' :
       result.band?.severity === 'moderate' ? '#E07A5F' :
       result.band?.severity === 'severe' || result.band?.severity === 'moderately_severe' ? '#dc2626' :
@@ -186,7 +186,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             </div>
           )}
 
-          <div className="rounded-2xl p-4 mb-4" style={{ background: '#4E93A810' }}>
+          <div className="rounded-2xl p-4 mb-4" style={{ background: '#2A7D9910' }}>
             <p className="text-sm text-[#3A4A57] leading-relaxed">
               <strong className="text-[#6B9080]">Re-take in {measure.cadenceWeeks} weeks</strong> to track changes. Aminy will remind you. Your provider can see your trend in the clinical portal.
             </p>
@@ -220,10 +220,10 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             {itemIndex + 1} of {measure.items.length}
           </p>
         </div>
-        <div className="h-1.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+        <div className="h-1.5 bg-[#EDF4F7] rounded-full overflow-hidden">
           <div
             className="h-full rounded-full transition-all duration-300"
-            style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #4E93A8 0%, #577590 100%)' }}
+            style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #2A7D99 0%, #577590 100%)' }}
           />
         </div>
       </div>
@@ -235,7 +235,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             {measure.id === 'phq9' || measure.id === 'gad7' || measure.id === 'phq-a' ? 'Over the last 2 weeks…' : 'How often did this happen?'}
           </p>
         </div>
-        <h2 className="text-lg font-semibold text-[#1B2733] mb-6 leading-snug">{currentItem.text}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43] mb-6 leading-snug">{currentItem.text}</h2>
 
         <div className="space-y-2">
           {currentItem.scaleLabels.map((label, value) => {
@@ -270,7 +270,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
               onClick={submitForm}
               disabled={!allAnswered || submitting}
               className="w-full py-3.5 rounded-xl text-white font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
             >
               {submitting ? 'Saving…' : <>See my results <ChevronRight className="w-4 h-4" /></>}
             </button>

@@ -242,7 +242,7 @@ function DefaultErrorFallback({
           </svg>
         </div>
         
-        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-3">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-3">
           We hit an unexpected bump
         </h2>
 
@@ -261,7 +261,7 @@ function DefaultErrorFallback({
           </button>
           
           {showDetails && (
-            <div className="bg-[#FAF7F2] p-4 rounded-lg text-left text-sm font-mono text-[#3A4A57] max-h-32 overflow-y-auto">
+            <div className="bg-[#F6FBFB] p-4 rounded-lg text-left text-sm font-mono text-[#3A4A57] max-h-32 overflow-y-auto">
               <div className="mb-2"><strong>Error:</strong> {error?.name}</div>
               <div className="mb-2"><strong>Message:</strong> {error?.message}</div>
               <div><strong>Error ID:</strong> {errorId}</div>
@@ -280,7 +280,7 @@ function DefaultErrorFallback({
           
           <button
             onClick={reloadPage}
-            className="bg-[#F0EDE8] text-[#3A4A57] px-6 py-3 rounded-lg hover:bg-[#E8E4DF] transition-colors font-medium"
+            className="bg-[#EDF4F7] text-[#3A4A57] px-6 py-3 rounded-lg hover:bg-[#E8E4DF] transition-colors font-medium"
           >
             Reload page
           </button>
@@ -465,7 +465,7 @@ export function AsyncBoundary({
 function DefaultLoadingFallback() {
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="w-8 h-8 border-4 border-[#4E93A8]/20 border-t-indigo-600 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#2A7D99]/20 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
 }

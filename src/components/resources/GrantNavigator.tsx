@@ -121,7 +121,7 @@ function buildResults(
       `Contact your state's developmental disabilities division to apply — ` +
       `waitlists exist but early enrollment is critical.`,
     icon: <Shield className="w-5 h-5" />,
-    accentColor: '#4E93A8',
+    accentColor: '#2A7D99',
   });
 
   // 2. Insurance appeal (if private insurance)
@@ -220,7 +220,7 @@ function SelectField({
           value={value}
           onChange={e => onChange(e.target.value)}
           className="w-full appearance-none rounded-xl px-4 py-3 pr-10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
-          style={{ background: '#1a3a5c', border: '1px solid #4E93A844' }}
+          style={{ background: '#1a3a5c', border: '1px solid #2A7D9944' }}
         >
           <option value="">{placeholder}</option>
           {options.map(o => (
@@ -231,7 +231,7 @@ function SelectField({
         </select>
         <ChevronDown
           className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-          style={{ color: '#4E93A8' }}
+          style={{ color: '#2A7D99' }}
         />
       </div>
     </div>
@@ -300,7 +300,7 @@ function ResultCard({ result }: { result: FundingResult }) {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-sm flex items-center gap-1 mt-1"
-                          style={{ color: '#4E93A8' }}
+                          style={{ color: '#2A7D99' }}
                           onClick={e => e.stopPropagation()}
                         >
                           Visit site <ExternalLink className="w-3 h-3" />
@@ -488,12 +488,12 @@ export function GrantNavigator({
         <div className="flex flex-col items-center justify-center flex-1 gap-6 px-8 text-center">
           <div
             className="w-20 h-20 rounded-3xl flex items-center justify-center"
-            style={{ background: '#4E93A822' }}
+            style={{ background: '#2A7D9922' }}
           >
-            <Lock className="w-10 h-10" style={{ color: '#4E93A8' }} />
+            <Lock className="w-10 h-10" style={{ color: '#2A7D99' }} />
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#4E93A8' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#2A7D99' }}>
               Pro Feature
             </p>
             <h2 className="text-2xl font-bold text-white">Find Funding for Care</h2>
@@ -505,7 +505,7 @@ export function GrantNavigator({
           <button
             onClick={onUpgrade}
             className="w-full py-4 rounded-2xl text-white font-bold text-lg"
-            style={{ background: 'linear-gradient(135deg, #4E93A8, #77B5D9)' }}
+            style={{ background: 'linear-gradient(135deg, #2A7D99, #77B5D9)' }}
           >
             Upgrade to Pro
           </button>
@@ -538,7 +538,7 @@ export function GrantNavigator({
         </button>
         <div className="flex-1 text-center">
           <h1 className="text-xl font-bold text-white">Grant Navigator</h1>
-          <p className="text-sm" style={{ color: '#4E93A8' }}>Pro</p>
+          <p className="text-sm" style={{ color: '#2A7D99' }}>Pro</p>
         </div>
         <div style={{ width: 36 }} />
       </div>
@@ -557,7 +557,7 @@ export function GrantNavigator({
               {/* Hero */}
               <div
                 className="rounded-2xl p-4 text-center"
-                style={{ background: 'linear-gradient(135deg, #4E93A822, #77B5D922)', border: '1px solid #4E93A833' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D9922, #77B5D922)', border: '1px solid #2A7D9933' }}
               >
                 <div className="text-3xl mb-2">💰</div>
                 <h2 className="font-bold text-white">Find Funding Options</h2>
@@ -569,7 +569,7 @@ export function GrantNavigator({
               {/* Form */}
               <div
                 className="rounded-2xl p-4 space-y-4"
-                style={{ background: '#1a3a5c', border: '1px solid #4E93A822' }}
+                style={{ background: '#1a3a5c', border: '1px solid #2A7D9922' }}
               >
                 <SelectField
                   label="Your state"
@@ -609,7 +609,7 @@ export function GrantNavigator({
                   onClick={handleFind}
                   disabled={!state || !need || !insurance}
                   className="w-full py-4 rounded-2xl text-white font-bold flex items-center justify-center gap-2 transition-opacity disabled:opacity-40"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8, #77B5D9)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99, #77B5D9)' }}
                 >
                   <Search className="w-5 h-5" />
                   Find Funding Options
@@ -634,7 +634,7 @@ export function GrantNavigator({
               {/* Summary bar */}
               <div
                 className="rounded-xl px-4 py-3 flex items-center gap-3"
-                style={{ background: '#4E93A822', border: '1px solid #4E93A844' }}
+                style={{ background: '#2A7D9922', border: '1px solid #2A7D9944' }}
               >
                 <div className="text-2xl">🔍</div>
                 <div className="flex-1 min-w-0">

@@ -85,9 +85,9 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
       case 'caregiver':
         return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'read-only':
-        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+        return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
       default:
-        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+        return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -98,7 +98,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
       case 'pending':
         return 'bg-amber-100 text-amber-700 border-amber-200';
       default:
-        return 'bg-[#F0EDE8] text-[#3A4A57] border-[#E8E4DF]';
+        return 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]';
     }
   };
 
@@ -179,7 +179,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
           <h2 className="font-semibold mb-4">Team Members</h2>
           {caregivers.length === 0 && (
             <Card className="p-8 text-center border-dashed">
-              <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
                 <Users className="w-6 h-6 text-slate-400" />
               </div>
               <p className="text-sm font-medium text-[#3A4A57] mb-1">Build your care team</p>

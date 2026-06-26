@@ -61,7 +61,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       <div className={`relative ${className}`}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg hover:bg-[#F0EDE8] transition-colors flex items-center gap-1"
+          className="p-2 rounded-lg hover:bg-[#EDF4F7] transition-colors flex items-center gap-1"
           aria-label={t('settings.language')}
         >
           <span className="text-lg">{currentLanguageInfo?.flag || '🌐'}</span>
@@ -80,7 +80,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   key={lang.code}
                   onClick={() => handleLanguageChange(lang.code)}
                   disabled={isChanging}
-                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-[#FAF7F2] transition-colors ${
+                  className={`w-full px-3 py-2 text-left flex items-center gap-2 hover:bg-[#F6FBFB] transition-colors ${
                     lang.code === currentLang
                       ? 'bg-[#6B9080]/10 text-[#6B9080]'
                       : 'text-[#3A4A57]'
@@ -114,7 +114,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               className={`p-1.5 rounded transition-colors ${
                 lang.code === currentLang
                   ? 'bg-[#6B9080]/10 ring-2 ring-teal-500'
-                  : 'hover:bg-[#F0EDE8]'
+                  : 'hover:bg-[#EDF4F7]'
               }`}
               title={lang.nativeName}
             >
@@ -162,7 +162,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 key={lang.code}
                 onClick={() => handleLanguageChange(lang.code)}
                 disabled={isChanging}
-                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#FAF7F2] transition-colors ${
+                className={`w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-[#F6FBFB] transition-colors ${
                   lang.code === currentLang
                     ? 'bg-[#6B9080]/10'
                     : ''

@@ -298,7 +298,7 @@ export default function InsuranceCardScanner({
       </div>
 
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-[#1B2733]">
+        <h3 className="text-lg font-semibold text-[#132F43]">
           Scan {side === 'front' ? 'Front' : 'Back'} of Card
         </h3>
         <p className="text-sm text-[#5A6B7A] max-w-xs">
@@ -383,11 +383,11 @@ export default function InsuranceCardScanner({
             onBlur={() => setEditingField(null)}
             onKeyDown={(e) => e.key === 'Enter' && setEditingField(null)}
             autoFocus
-            className="flex-1 text-sm text-[#1B2733] border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="flex-1 text-sm text-[#132F43] border border-blue-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
         ) : (
           <div className="flex items-center space-x-2 flex-1 justify-end">
-            <span className="text-sm text-[#1B2733] text-right">
+            <span className="text-sm text-[#132F43] text-right">
               {value || '—'}
             </span>
             <button
@@ -457,7 +457,7 @@ export default function InsuranceCardScanner({
         {/* Extracted fields */}
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4">
           <div className="flex items-center justify-between mb-3">
-            <h4 className="text-sm font-semibold text-[#1B2733]">
+            <h4 className="text-sm font-semibold text-[#132F43]">
               {side === 'front' ? 'Card Front Details' : 'Card Back Details'}
             </h4>
             <Eye className="w-4 h-4 text-[#8A9BA8]" />
@@ -517,7 +517,7 @@ export default function InsuranceCardScanner({
           <CheckCircle className="w-5 h-5 text-green-600" />
         </div>
         <div>
-          <h3 className="text-base font-semibold text-[#1B2733]">
+          <h3 className="text-base font-semibold text-[#132F43]">
             Review Insurance Details
           </h3>
           <p className="text-sm text-[#5A6B7A]">
@@ -550,7 +550,7 @@ export default function InsuranceCardScanner({
               className="flex justify-between text-sm py-1 border-b border-gray-50 last:border-0"
             >
               <span className="text-[#5A6B7A]">{label}</span>
-              <span className="text-[#1B2733] font-medium text-right max-w-[55%]">
+              <span className="text-[#132F43] font-medium text-right max-w-[55%]">
                 {val}
               </span>
             </div>
@@ -582,17 +582,17 @@ export default function InsuranceCardScanner({
   // ------------------------------------------
 
   return (
-    <div className="flex flex-col min-h-0 bg-[#FAF7F2]">
+    <div className="flex flex-col min-h-0 bg-[#F6FBFB]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E8E4DF]">
         <button
           onClick={onClose}
-          className="p-2 -ml-2 rounded-lg text-[#5A6B7A] hover:bg-[#F0EDE8]"
+          className="p-2 -ml-2 rounded-lg text-[#5A6B7A] hover:bg-[#EDF4F7]"
           aria-label="Close scanner"
         >
           <X className="w-5 h-5" />
         </button>
-        <h2 className="text-base font-semibold text-[#1B2733]">
+        <h2 className="text-base font-semibold text-[#132F43]">
           Scan Insurance Card
         </h2>
         {/* Step indicator */}

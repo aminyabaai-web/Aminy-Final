@@ -116,7 +116,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       icon: Gift,
       popular: false,
       gradient: 'from-gray-50 to-gray-100',
-      iconBg: 'bg-[#F0EDE8]',
+      iconBg: 'bg-[#EDF4F7]',
       iconColor: 'text-[#5A6B7A]',
     },
     {
@@ -125,7 +125,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       subtitle: 'The full companion',
       icon: Target,
       popular: true,
-      gradient: 'from-[#FAF7F2] to-cyan-50',
+      gradient: 'from-[#F6FBFB] to-cyan-50',
       iconBg: 'bg-[#2A7D99]/10',
       iconColor: 'text-[#2A7D99]',
     },
@@ -221,7 +221,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
               {childName ? `${childName}'s plan is ready` : 'Your personalized plan is ready'}
             </h3>
             <p className="text-[#5A6B7A] dark:text-slate-300 mb-4 text-sm leading-relaxed">
@@ -258,7 +258,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 variant="ghost"
                 size="sm"
                 onClick={handleClose}
-                className="p-2 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 rounded-full"
+                className="p-2 hover:bg-[#EDF4F7] dark:hover:bg-slate-800 rounded-full"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -274,7 +274,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </button>
             )}
             <div className="flex-1 text-center">
-              <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                 {isPostOnboarding && childName
                   ? `${childName}'s Plan is Ready!`
                   : 'Choose Your Plan'}
@@ -288,7 +288,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Insured families — softened wall: lead with coverage tools, honest "may/check" language */}
         {isInsured && (
-          <Card className="p-5 mb-6 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
+          <Card className="p-5 mb-6 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
                 <ClipboardCheck className="w-6 h-6 text-blue-600" />
@@ -350,19 +350,19 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         {/* Outcome Stats — social proof with specific numbers */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-            <p className="text-xl font-bold text-[#4E93A8]">47%</p>
+            <p className="text-xl font-bold text-[#2A7D99]">47%</p>
             <p className="text-sm text-[#5A6B7A] leading-tight">fewer meltdowns in 30 days</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-            <p className="text-xl font-bold text-[#4E93A8]">89%</p>
+            <p className="text-xl font-bold text-[#2A7D99]">89%</p>
             <p className="text-sm text-[#5A6B7A] leading-tight">parents feel more confident</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-            <p className="text-xl font-bold text-[#4E93A8]">24/7</p>
+            <p className="text-xl font-bold text-[#2A7D99]">24/7</p>
             <p className="text-sm text-[#5A6B7A] leading-tight">AI coach on call</p>
           </div>
           <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-            <p className="text-xl font-bold text-[#4E93A8]">HSA/FSA</p>
+            <p className="text-xl font-bold text-[#2A7D99]">HSA/FSA</p>
             <p className="text-sm text-[#5A6B7A] leading-tight">eligible with receipt</p>
           </div>
         </div>
@@ -399,21 +399,21 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="border-t border-[#E8E4DF] pt-2">
-                <p className="text-sm font-semibold text-[#1B2733]">{t.name}</p>
+                <p className="text-sm font-semibold text-[#132F43]">{t.name}</p>
                 <p className="text-sm text-[#5A6B7A]">{t.role}</p>
-                <p className="text-sm text-[#4E93A8] font-medium mt-1">✓ {t.outcome}</p>
+                <p className="text-sm text-[#2A7D99] font-medium mt-1">✓ {t.outcome}</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* Referral Incentive Banner */}
-        <div className="bg-gradient-to-r from-[#4E93A8]/10 to-[#577590]/10 border border-[#4E93A8]/20 rounded-2xl p-4 mb-6 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#4E93A8]/20 flex items-center justify-center flex-shrink-0">
-            <Gift className="w-5 h-5 text-[#4E93A8]" />
+        <div className="bg-gradient-to-r from-[#2A7D99]/10 to-[#577590]/10 border border-[#2A7D99]/20 rounded-2xl p-4 mb-6 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-[#2A7D99]/20 flex items-center justify-center flex-shrink-0">
+            <Gift className="w-5 h-5 text-[#2A7D99]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#1B2733]">Give a month, get a month</p>
+            <p className="text-sm font-semibold text-[#132F43]">Give a month, get a month</p>
             <p className="text-sm text-[#5A6B7A]">
               Refer a friend — you both get Core free for 30 days when they join.
             </p>
@@ -426,8 +426,8 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             onClick={() => setBillingPeriod('monthly')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               billingPeriod === 'monthly'
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#1B2733]'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
             }`}
           >
             Monthly
@@ -436,8 +436,8 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             onClick={() => setBillingPeriod('yearly')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
               billingPeriod === 'yearly'
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#1B2733]'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
             }`}
           >
             Yearly
@@ -494,10 +494,10 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline justify-between mb-1">
-                      <h3 className="text-lg font-semibold text-[#1B2733]">{tier.name}</h3>
+                      <h3 className="text-lg font-semibold text-[#132F43]">{tier.name}</h3>
                       <div className="text-right">
                         {price === 0 ? (
-                          <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">Free</span>
+                          <span className="text-xl sm:text-2xl font-bold text-[#132F43]">Free</span>
                         ) : (
                           <>
                             {/* Annual pricing anchor — show strikethrough monthly equivalent when yearly */}
@@ -511,12 +511,12 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                                     ${monthlyEquivalent}/yr
                                   </span>
                                   <div className="flex items-baseline gap-1">
-                                    <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                                    <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                                       ${price.toFixed(2)}
                                     </span>
                                     <span className="text-sm text-[#5A6B7A]">/yr</span>
                                   </div>
-                                  <span className="text-sm font-semibold text-[#4E93A8] leading-none mt-0.5">
+                                  <span className="text-sm font-semibold text-[#2A7D99] leading-none mt-0.5">
                                     Save ${savings} ({Math.floor(Number(savings) / monthlyPrice)} months free)
                                   </span>
                                 </div>
@@ -524,7 +524,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                             })()}
                             {billingPeriod === 'monthly' && (
                               <>
-                                <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                                <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                                   ${price.toFixed(2)}
                                 </span>
                                 <span className="text-sm text-[#5A6B7A]">/mo</span>
@@ -558,7 +558,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                         tier.popular
                           ? 'bg-[#2A7D99] hover:bg-[#1F6080] text-white'
                           : tier.id === 'free'
-                          ? 'bg-[#F0EDE8] hover:bg-[#E8E4DF] text-[#3A4A57]'
+                          ? 'bg-[#EDF4F7] hover:bg-[#E8E4DF] text-[#3A4A57]'
                           : 'bg-gray-900 hover:bg-gray-800 text-white'
                       }`}
                       disabled={isCurrentTier || isLoading !== null}
@@ -601,7 +601,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
         {/* HSA/FSA Eligible Badge */}
         <div className="mt-8">
-          <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
+          <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-700 border-[#C8DDE8] dark:border-slate-600">
             <div className="flex items-center justify-center gap-3">
               <div className="p-2 bg-blue-100 rounded-full">
                 <Shield className="w-5 h-5 text-blue-600" />
@@ -632,21 +632,21 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
 
         {/* Accepted Payment Methods — Apple Pay / Google Pay / Cards */}
         <div className="mt-4 flex items-center justify-center gap-2.5">
-          <div className="flex items-center gap-1.5 bg-[#F0EDE8] rounded-full px-3 py-1.5">
+          <div className="flex items-center gap-1.5 bg-[#EDF4F7] rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-[#3A4A57]">
               <path d="M17.05 10.917c-.054-3.478 2.858-5.158 2.988-5.234-1.629-2.374-4.166-2.7-5.067-2.738-2.148-.22-4.208 1.264-5.302 1.264-1.1 0-2.79-1.234-4.59-1.2C2.876 3.044.872 4.417.872 7.723c0 3.117 1.75 7.42 3.15 9.08 1.39 1.65 3.053 1.55 3.79 1.55.737 0 2.137-1 4.037-1s2.95.95 3.95.95 2.4-.55 3.5-2.15c-.05-.05-2.25-1.35-2.25-4.236z" fill="currentColor"/>
               <path d="M14.5 2.05c.93-1.15 1.55-2.7 1.38-4.3-1.34.05-3 .9-3.95 2.05-.85 1-1.6 2.6-1.4 4.1 1.5.1 3.05-.75 3.97-1.85z" fill="currentColor" transform="translate(0, 2)"/>
             </svg>
             <span className="text-sm font-semibold text-[#5A6B7A]">Apple Pay</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#F0EDE8] rounded-full px-3 py-1.5">
+          <div className="flex items-center gap-1.5 bg-[#EDF4F7] rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#4285F4"/>
               <path d="M12 11v2.4h3.97c-.16 1.03-1.2 3.02-3.97 3.02-2.39 0-4.34-1.98-4.34-4.42S9.61 7.58 12 7.58c1.36 0 2.27.58 2.79 1.08l1.9-1.83C15.47 5.69 13.89 5 12 5 8.13 5 5 8.13 5 12s3.13 7 7 7c4.04 0 6.72-2.84 6.72-6.84 0-.46-.05-.81-.11-1.16H12z" fill="white"/>
             </svg>
             <span className="text-sm font-semibold text-[#5A6B7A]">Google Pay</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-[#F0EDE8] rounded-full px-3 py-1.5">
+          <div className="flex items-center gap-1.5 bg-[#EDF4F7] rounded-full px-3 py-1.5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#5A6B7A]" aria-hidden="true">
               <rect width="20" height="14" x="2" y="5" rx="2"/>
               <line x1="2" x2="22" y1="10" y2="10"/>

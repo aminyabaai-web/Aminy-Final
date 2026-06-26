@@ -74,7 +74,7 @@ function ProgressRing({ percent, size = 56 }: { percent: number; size?: number }
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#4E93A8"
+          stroke="#2A7D99"
           strokeWidth={6}
           strokeDasharray={`${filled} ${circumference}`}
           strokeLinecap="round"
@@ -111,7 +111,7 @@ function ProgressMiniChart({ data }: { data: number[] }) {
             flex: 1,
             height: `${(val / max) * 100}%`,
             minHeight: '3px',
-            backgroundColor: i === data.length - 1 ? '#4E93A8' : '#d1fae5',
+            backgroundColor: i === data.length - 1 ? '#2A7D99' : '#d1fae5',
             borderRadius: '2px 2px 0 0',
             transition: 'height 0.5s ease',
           }}
@@ -133,14 +133,14 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
       {/* Card header - always visible */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full text-left p-4 hover:bg-[#FAF7F2] transition-colors"
+        className="w-full text-left p-4 hover:bg-[#F6FBFB] transition-colors"
       >
         <div className="flex items-start gap-3">
           <ProgressRing percent={goal.currentProgressPercent} />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="font-semibold text-[#1B2733] text-sm leading-snug">{goal.plainEnglishTitle}</h3>
+              <h3 className="font-semibold text-[#132F43] text-sm leading-snug">{goal.plainEnglishTitle}</h3>
               {expanded ? <ChevronUp className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />}
             </div>
             <div className="flex items-center gap-2">
@@ -258,18 +258,18 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
           <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#132F43]">{childName}&apos;s Plan</h1>
               <p className="text-sm text-slate-400">Treatment plan summary</p>
             </div>
           </div>
         </div>
         <div className="max-w-lg mx-auto px-4 py-16 flex flex-col items-center text-center">
-          <div className="w-16 h-16 rounded-2xl bg-[#F0EDE8] flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#EDF4F7] flex items-center justify-center mb-4">
             <FileText className="w-7 h-7 text-slate-400" />
           </div>
           <h2 className="text-base font-semibold text-[#3A4A57] mb-1">No treatment plan yet</h2>
@@ -288,12 +288,12 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {onBack && (
-              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#F0EDE8] transition-colors">
+              <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#132F43]">{childName}&apos;s Plan</h1>
               <p className="text-sm text-slate-400">{plan.periodLabel}</p>
             </div>
           </div>
@@ -346,7 +346,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
               </div>
               <div>
                 <p className="text-sm text-slate-400">Next session</p>
-                <p className="text-sm font-semibold text-[#1B2733]">
+                <p className="text-sm font-semibold text-[#132F43]">
                   {new Date(plan.nextSessionDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
               </div>

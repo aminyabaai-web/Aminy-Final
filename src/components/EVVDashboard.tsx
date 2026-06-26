@@ -435,7 +435,7 @@ export default function EVVDashboard({
               </button>
             )}
             <div className="flex-1">
-              <h1 className="flex items-center gap-2 text-lg font-semibold text-[#1B2733]">
+              <h1 className="flex items-center gap-2 text-lg font-semibold text-[#132F43]">
                 <Shield className="w-5 h-5 text-primary" />
                 Visit Verification
               </h1>
@@ -476,8 +476,8 @@ export default function EVVDashboard({
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
-              <h2 className="text-lg font-semibold text-[#1B2733] mt-1">
+              <p className="text-sm uppercase tracking-wide text-[#5A6B7A]">EVV Cutover Readiness</p>
+              <h2 className="text-lg font-semibold text-[#132F43] mt-1">
                 {cutoverSummary.state === 'cutover_ready' ? 'Ready for primary EVV cutover' : 'Parallel run still required'}
               </h2>
               <p className="text-sm text-[#5A6B7A] mt-1">
@@ -487,7 +487,7 @@ export default function EVVDashboard({
             <div className="grid grid-cols-2 gap-3 min-w-[220px]">
               <div>
                 <p className="text-sm text-[#5A6B7A]">Cycles</p>
-                <p className="text-2xl font-semibold text-[#1B2733]">{cutoverSummary.cyclesCompleted}</p>
+                <p className="text-2xl font-semibold text-[#132F43]">{cutoverSummary.cyclesCompleted}</p>
               </div>
               <div>
                 <p className="text-sm text-[#5A6B7A]">Clean streak</p>
@@ -504,7 +504,7 @@ export default function EVVDashboard({
             </div>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="text-xs uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
+            <span className="text-sm uppercase tracking-[0.18em] text-slate-400">Transition systems validated</span>
             {cutoverSummary.systemsValidated.length > 0 ? (
               cutoverSummary.systemsValidated.map((system) => (
                 <span
@@ -515,7 +515,7 @@ export default function EVVDashboard({
                 </span>
               ))
             ) : (
-              <span className="inline-flex items-center rounded-full border border-[#E8E4DF] bg-[#FAF7F2] px-3 py-1 text-xs font-medium text-[#5A6B7A]">
+              <span className="inline-flex items-center rounded-full border border-[#E8E4DF] bg-[#F6FBFB] px-3 py-1 text-xs font-medium text-[#5A6B7A]">
                 No validated cycles yet
               </span>
             )}
@@ -638,7 +638,7 @@ function ClockTab({
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-sm text-[#1B2733]">{auth.serviceName}</p>
+                    <p className="font-medium text-sm text-[#132F43]">{auth.serviceName}</p>
                     <p className="text-sm text-[#5A6B7A] mt-0.5">
                       {auth.serviceCode} &bull; Auth #{auth.authorizationNumber}
                     </p>
@@ -663,8 +663,8 @@ function ClockTab({
         {activeSession ? (
           <>
             <div className="mb-4">
-              <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Session in progress</p>
-              <p className="text-5xl font-mono font-bold text-[#1B2733] tabular-nums">
+              <p className="text-sm text-[#5A6B7A] uppercase tracking-wide mb-1">Session in progress</p>
+              <p className="text-5xl font-mono font-bold text-[#132F43] tabular-nums">
                 {formatElapsed(elapsedSeconds)}
               </p>
               <p className="text-sm text-[#5A6B7A] mt-2">
@@ -733,7 +733,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
       rejected: 'bg-red-100 text-red-800',
       submitted: 'bg-blue-100 text-[#4A6478]',
     };
-    return styles[status] || 'bg-[#F0EDE8] text-[#1B2733]';
+    return styles[status] || 'bg-[#EDF4F7] text-[#132F43]';
   };
 
   return (
@@ -759,7 +759,7 @@ function RecordsTab({ records }: { records: EVVRecord[] }) {
           <div key={record.id} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-start justify-between mb-2">
               <div>
-                <p className="font-medium text-sm text-[#1B2733]">{record.providerName}</p>
+                <p className="font-medium text-sm text-[#132F43]">{record.providerName}</p>
                 <p className="text-sm text-[#5A6B7A]">
                   {new Date(record.serviceDate).toLocaleDateString('en-US', {
                     weekday: 'short', month: 'short', day: 'numeric'
@@ -844,7 +844,7 @@ function BudgetTab({
           <div key={summary.authorizationId} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="font-medium text-sm text-[#1B2733]">{summary.serviceName}</p>
+                <p className="font-medium text-sm text-[#132F43]">{summary.serviceName}</p>
                 <p className="text-sm text-[#5A6B7A]">Auth #{auth?.authorizationNumber}</p>
               </div>
               <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -860,7 +860,7 @@ function BudgetTab({
                 <span>{summary.totalUsed} used</span>
                 <span>{summary.remaining} remaining</span>
               </div>
-              <div className="h-3 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="h-3 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${progressColor}`}
                   style={{ width: `${Math.min(100, summary.percentUsed)}%` }}
@@ -874,15 +874,15 @@ function BudgetTab({
             {/* Stats grid */}
             <div className="grid grid-cols-3 gap-3 pt-3 border-t border-[#E8E4DF]">
               <div className="text-center">
-                <p className="text-lg font-bold text-[#1B2733]">{summary.daysRemaining}</p>
+                <p className="text-lg font-bold text-[#132F43]">{summary.daysRemaining}</p>
                 <p className="text-sm text-[#8A9BA8]">Days Left</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold text-[#1B2733]">{summary.burnRate}</p>
+                <p className="text-lg font-bold text-[#132F43]">{summary.burnRate}</p>
                 <p className="text-sm text-[#8A9BA8]">Units/Week</p>
               </div>
               <div className="text-center">
-                <p className="text-lg font-bold text-[#1B2733]">
+                <p className="text-lg font-bold text-[#132F43]">
                   {summary.projectedExhaustion
                     ? new Date(summary.projectedExhaustion).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
                     : '—'}
@@ -976,7 +976,7 @@ function TimesheetsTab({
           <div key={weekKey} className="bg-white rounded-xl border border-[#E8E4DF] p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="font-medium text-sm text-[#1B2733]">
+                <p className="font-medium text-sm text-[#132F43]">
                   Week of {weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </p>
                 <p className="text-sm text-[#5A6B7A]">
@@ -995,7 +995,7 @@ function TimesheetsTab({
                 type="button"
                 onClick={() => handleGenerateTimesheet(weekKey)}
                 disabled={generating}
-                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#1B2733] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0D1B2A]"
+                className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-[#132F43] py-2 text-sm font-medium text-white transition-colors hover:bg-[#0D1B2A]"
               >
                 {generating ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -1009,7 +1009,7 @@ function TimesheetsTab({
                 onClick={() => handleGenerateTimesheet(weekKey, true)}
                 disabled={generating}
                 aria-label="Download timesheet"
-                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#5A6B7A] transition-colors hover:bg-[#FAF7F2] disabled:opacity-50"
+                className="flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm font-medium text-[#5A6B7A] transition-colors hover:bg-[#F6FBFB] disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF

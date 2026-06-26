@@ -126,7 +126,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
   // Full-screen mode: render as a page with a close button, not a dialog overlay
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] flex flex-col">
+      <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-[#EDF4F7] flex flex-col">
         <div className="flex justify-end p-4">
           <button
             onClick={onClose}
@@ -147,7 +147,7 @@ export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'P
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md bg-gradient-to-b from-[#FAF7F2] to-[#F0EDE8] border-none">
+      <DialogContent className="max-w-md bg-gradient-to-b from-[#F6FBFB] to-[#EDF4F7] border-none">
         {stepContent}
       </DialogContent>
     </Dialog>
@@ -204,7 +204,7 @@ function BreathStep({
     return (
       <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
         <Cloud className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-        <h2 className="text-2xl text-[#1B2733] mb-4">
+        <h2 className="text-2xl text-[#132F43] mb-4">
           Let's breathe, {parentName}
         </h2>
         <p className="text-sm text-[#5A6B7A] mb-6">
@@ -242,7 +242,7 @@ function BreathStep({
         >
           <Heart className="w-16 h-16 text-green-500 mx-auto mb-4" />
         </motion.div>
-        <p className="text-lg text-[#1B2733]">Nice work</p>
+        <p className="text-lg text-[#132F43]">Nice work</p>
       </motion.div>
     );
   }
@@ -305,7 +305,7 @@ function GroundStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
-      <h3 className="text-xl text-[#1B2733] mb-6">
+      <h3 className="text-xl text-[#132F43] mb-6">
         Ground yourself, {parentName}
       </h3>
 
@@ -364,7 +364,7 @@ function IdentifyStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-[#1B2733] mb-2 text-center">
+      <h3 className="text-xl text-[#132F43] mb-2 text-center">
         What's hardest right now?
       </h3>
       <p className="text-sm text-[#5A6B7A] mb-6 text-center">
@@ -379,7 +379,7 @@ function IdentifyStep({
             className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-blue-500 hover:bg-[#EEF4F8] transition-all text-left"
           >
             <div className="text-2xl mb-2">{challenge.emoji}</div>
-            <div className="text-sm text-[#1B2733]">{challenge.label}</div>
+            <div className="text-sm text-[#132F43]">{challenge.label}</div>
           </button>
         ))}
       </div>
@@ -415,7 +415,7 @@ function NextStepsStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-[#1B2733] mb-4 text-center">
+      <h3 className="text-xl text-[#132F43] mb-4 text-center">
         How do you feel now?
       </h3>
 
@@ -431,7 +431,7 @@ function NextStepsStep({
               onClick={() => setOverwhelm(num)}
               className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
                 ? 'bg-green-500 text-white'
-                : 'bg-[#F0EDE8] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                 }`}
             >
               {num}
@@ -524,7 +524,7 @@ export function CalmModeButton({
           setIsOpen(true);
         }}
         variant="outline"
-        className="w-full bg-white border border-[#E8E4DF] shadow-sm hover:shadow-md hover:bg-[#FAF7F2] text-[#3A4A57] font-medium transition-all duration-200 rounded-xl py-6"
+        className="w-full bg-white border border-[#E8E4DF] shadow-sm hover:shadow-md hover:bg-[#F6FBFB] text-[#3A4A57] font-medium transition-all duration-200 rounded-xl py-6"
       >
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-50 text-[#6B9080] rounded-lg">

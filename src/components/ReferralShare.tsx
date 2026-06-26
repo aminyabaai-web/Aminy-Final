@@ -152,7 +152,7 @@ export function ReferralShare({
             <Gift className="w-5 h-5 text-accent" />
           </div>
           <div className="flex-1">
-            <p className="font-medium text-[#1B2733]">Share the love</p>
+            <p className="font-medium text-[#132F43]">Share the love</p>
             <p className="text-sm text-[#5A6B7A]">
               Earn $10 credit for each friend who joins
             </p>
@@ -186,7 +186,7 @@ export function ReferralShare({
             <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Heart className="w-8 h-8 text-accent" />
             </div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
               Help Other Families
             </h2>
             <p className="text-[#5A6B7A]">
@@ -229,7 +229,7 @@ export function ReferralShare({
             <Input
               value={referralLink}
               readOnly
-              className="bg-[#FAF7F2] text-sm"
+              className="bg-[#F6FBFB] text-sm"
             />
             <Button onClick={handleCopy} variant={copied ? 'default' : 'outline'}>
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -261,7 +261,7 @@ export function ReferralShare({
           <Heart className="w-8 h-8 text-accent" />
         </div>
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-1">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-1">
             Help Other Families Find Support
           </h2>
           <p className="text-[#5A6B7A]">
@@ -326,7 +326,7 @@ export function ReferralShare({
       </div>
 
       {/* Copy link section */}
-      <div className="p-4 bg-[#FAF7F2] rounded-lg mb-4 sm:mb-6">
+      <div className="p-4 bg-[#F6FBFB] rounded-lg mb-4 sm:mb-6">
         <p className="text-sm font-medium text-[#3A4A57] mb-2">Or copy your referral link:</p>
         <div className="flex gap-2">
           <Input

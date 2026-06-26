@@ -171,7 +171,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
   return (
     <div className="space-y-6">
       {/* View Tabs */}
-      <div className="flex gap-2 bg-[#F0EDE8] rounded-xl p-1">
+      <div className="flex gap-2 bg-[#EDF4F7] rounded-xl p-1">
         {[
           { id: 'roster' as const, label: 'RBT Roster', icon: Users },
           { id: 'supervision' as const, label: 'Supervision', icon: Clock },
@@ -182,7 +182,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             onClick={() => setActiveView(tab.id)}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
               activeView === tab.id
-                ? 'bg-white text-[#1B2733] shadow-sm'
+                ? 'bg-white text-[#132F43] shadow-sm'
                 : 'text-[#5A6B7A] hover:text-[#3A4A57]'
             }`}
           >
@@ -195,11 +195,11 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {/* Stats Summary */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{totalRBTs}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{totalRBTs}</p>
           <p className="text-sm text-[#5A6B7A]">Active RBTs</p>
         </div>
         <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{totalPending}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{totalPending}</p>
           <p className="text-sm text-[#5A6B7A]">Pending</p>
         </div>
         <div className={`rounded-xl border p-4 text-center ${
@@ -216,7 +216,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'roster' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-[#1B2733]">RBT Roster</h3>
+            <h3 className="font-semibold text-[#132F43]">RBT Roster</h3>
             <button
               onClick={() => setShowInviteForm(!showInviteForm)}
               className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
@@ -255,7 +255,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={inviteRBT} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Send Invite
                 </button>
-                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -287,7 +287,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                         {rbt.name[0]}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-[#1B2733] truncate">{rbt.name}</p>
+                        <p className="font-medium text-[#132F43] truncate">{rbt.name}</p>
                         <p className="text-sm text-[#5A6B7A]">{rbt.email}</p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -306,7 +306,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     </button>
 
                     {isExpanded && (
-                      <div className="border-t border-[#E8E4DF] p-4 bg-[#FAF7F2] space-y-3">
+                      <div className="border-t border-[#E8E4DF] p-4 bg-[#F6FBFB] space-y-3">
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div>
                             <p className="text-[#5A6B7A]">Cert #</p>
@@ -369,7 +369,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'supervision' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-[#1B2733]">Supervision Tracking</h3>
+            <h3 className="font-semibold text-[#132F43]">Supervision Tracking</h3>
             <button
               onClick={() => setShowLogForm(!showLogForm)}
               className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]"
@@ -393,7 +393,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           {/* Log Form */}
           {showLogForm && (
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-4 space-y-3">
-              <p className="font-medium text-[#1B2733] text-sm">Log Supervision Session</p>
+              <p className="font-medium text-[#132F43] text-sm">Log Supervision Session</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <select
                   value={logForm.rbtId}
@@ -443,7 +443,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 <button onClick={addSupervisionLog} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
                   Save Log
                 </button>
-                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#F0EDE8] rounded-lg">
+                <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
                   Cancel
                 </button>
               </div>
@@ -465,7 +465,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 return (
                   <div key={rbt.id} className="bg-white rounded-xl border border-[#E8E4DF] p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="font-medium text-[#1B2733]">{rbt.name}</p>
+                      <p className="font-medium text-[#132F43]">{rbt.name}</p>
                       {c.isCompliant || rbt.totalDirectHours === 0 ? (
                         <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">Compliant</span>
                       ) : (
@@ -477,11 +477,11 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                     <div className="grid grid-cols-3 gap-2 text-sm text-[#5A6B7A] mb-2">
                       <div>
                         <p>Direct</p>
-                        <p className="font-semibold text-[#1B2733]">{rbt.totalDirectHours.toFixed(1)}h</p>
+                        <p className="font-semibold text-[#132F43]">{rbt.totalDirectHours.toFixed(1)}h</p>
                       </div>
                       <div>
                         <p>Supervision</p>
-                        <p className="font-semibold text-[#1B2733]">{rbt.totalSupervisionHours.toFixed(1)}h</p>
+                        <p className="font-semibold text-[#132F43]">{rbt.totalSupervisionHours.toFixed(1)}h</p>
                       </div>
                       <div>
                         <p>Rate</p>
@@ -510,10 +510,10 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 {data.logs.slice(-5).reverse().map(log => {
                   const rbt = data.rbts.find(r => r.id === log.rbtId);
                   return (
-                    <div key={log.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg text-sm">
+                    <div key={log.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg text-sm">
                       <Calendar className="w-4 h-4 text-[#8A9BA8]" />
                       <span className="text-[#5A6B7A]">{new Date(log.date).toLocaleDateString()}</span>
-                      <span className="font-medium text-[#1B2733]">{rbt?.name || 'Unknown'}</span>
+                      <span className="font-medium text-[#132F43]">{rbt?.name || 'Unknown'}</span>
                       <span className="text-[#5A6B7A]">{log.hours}h {log.type}</span>
                       {log.notes && <span className="text-[#8A9BA8] truncate flex-1">{log.notes}</span>}
                     </div>
@@ -529,7 +529,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
       {activeView === 'billing' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-[#1B2733]">Client Billing</h3>
+            <h3 className="font-semibold text-[#132F43]">Client Billing</h3>
             <button className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
               <Plus className="w-4 h-4" /> New Invoice
             </button>
@@ -556,15 +556,15 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
               {data.invoices.map(inv => (
                 <div key={inv.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#E8E4DF]">
                   <div className="flex-1">
-                    <p className="font-medium text-[#1B2733]">{inv.familyName}</p>
+                    <p className="font-medium text-[#132F43]">{inv.familyName}</p>
                     <p className="text-sm text-[#5A6B7A]">{inv.services}</p>
                   </div>
-                  <p className="font-semibold text-[#1B2733]">${inv.amount.toFixed(2)}</p>
+                  <p className="font-semibold text-[#132F43]">${inv.amount.toFixed(2)}</p>
                   <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                     inv.status === 'paid' ? 'bg-green-100 text-green-700' :
                     inv.status === 'overdue' ? 'bg-red-100 text-red-700' :
                     inv.status === 'sent' ? 'bg-blue-100 text-blue-700' :
-                    'bg-[#F0EDE8] text-[#5A6B7A]'
+                    'bg-[#EDF4F7] text-[#5A6B7A]'
                   }`}>
                     {inv.status}
                   </span>

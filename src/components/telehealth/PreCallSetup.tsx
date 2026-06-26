@@ -412,7 +412,7 @@ export function PreCallSetup({
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 px-4 py-4">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+          <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
             Pre-Call Setup
           </h1>
           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
@@ -474,7 +474,7 @@ export function PreCallSetup({
           {/* Device Status */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden">
             <div className="p-4 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between">
-              <h2 className="font-semibold text-[#1B2733] dark:text-white">Device Check</h2>
+              <h2 className="font-semibold text-[#132F43] dark:text-white">Device Check</h2>
               <button
                 onClick={() => setShowDeviceSettings(!showDeviceSettings)}
                 className="flex items-center text-sm text-[#6B9080] dark:text-primary"
@@ -490,14 +490,14 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.camera === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
+                    status.camera === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#EDF4F7] dark:bg-slate-700'
                   }`}>
                     <Video className={`w-5 h-5 ${
                       status.camera === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-[#5A6B7A]'
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Camera</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Camera</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.camera, 'Camera')}
                     </p>
@@ -510,14 +510,14 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.microphone === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
+                    status.microphone === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#EDF4F7] dark:bg-slate-700'
                   }`}>
                     <Mic className={`w-5 h-5 ${
                       status.microphone === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-[#5A6B7A]'
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Microphone</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Microphone</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.microphone, 'Microphone')}
                     </p>
@@ -530,14 +530,14 @@ export function PreCallSetup({
               <div className="p-4 flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    status.speaker === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#F0EDE8] dark:bg-slate-700'
+                    status.speaker === 'ready' ? 'bg-green-100 dark:bg-green-900/30' : 'bg-[#EDF4F7] dark:bg-slate-700'
                   }`}>
                     <Volume2 className={`w-5 h-5 ${
                       status.speaker === 'ready' ? 'text-green-600 dark:text-green-400' : 'text-[#5A6B7A]'
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Speaker</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Speaker</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.speaker, 'Speaker')}
                     </p>
@@ -561,7 +561,7 @@ export function PreCallSetup({
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     status.network === 'good' ? 'bg-green-100 dark:bg-green-900/30' :
                     status.network === 'fair' ? 'bg-yellow-100 dark:bg-yellow-900/30' :
-                    'bg-[#F0EDE8] dark:bg-slate-700'
+                    'bg-[#EDF4F7] dark:bg-slate-700'
                   }`}>
                     {status.network === 'poor' ? (
                       <WifiOff className="w-5 h-5 text-red-500" />
@@ -574,7 +574,7 @@ export function PreCallSetup({
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Network</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Network</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.network, 'Network')}
                     </p>
@@ -609,7 +609,7 @@ export function PreCallSetup({
 
             {/* Device Settings Dropdown */}
             {showDeviceSettings && devices.cameras.length > 0 && (
-              <div className="p-4 bg-[#FAF7F2] dark:bg-slate-900 space-y-3 sm:space-y-4">
+              <div className="p-4 bg-[#F6FBFB] dark:bg-slate-900 space-y-3 sm:space-y-4">
                 {/* Camera Selection */}
                 <div>
                   <label className="block text-sm font-medium text-[#3A4A57] dark:text-gray-300 mb-1">
@@ -619,7 +619,7 @@ export function PreCallSetup({
                     value={selectedDevices.camera}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, camera: e.target.value }))}
                     aria-label="Select camera"
-                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                   >
                     {devices.cameras.map(device => (
                       <option key={device.deviceId} value={device.deviceId}>
@@ -638,7 +638,7 @@ export function PreCallSetup({
                     value={selectedDevices.microphone}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, microphone: e.target.value }))}
                     aria-label="Select microphone"
-                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                   >
                     {devices.microphones.map(device => (
                       <option key={device.deviceId} value={device.deviceId}>
@@ -658,7 +658,7 @@ export function PreCallSetup({
                       value={selectedDevices.speaker}
                       onChange={(e) => setSelectedDevices(prev => ({ ...prev, speaker: e.target.value }))}
                       aria-label="Select speaker"
-                      className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                      className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                     >
                       {devices.speakers.map(device => (
                         <option key={device.deviceId} value={device.deviceId}>
@@ -677,7 +677,7 @@ export function PreCallSetup({
             <div className={`border rounded-xl p-4 ${
               audioOnlyRecommended
                 ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800'
-                : 'bg-[#FDF9F0] dark:bg-yellow-900/20 border-[#F0EDE8] dark:border-yellow-800'
+                : 'bg-[#FDF9F0] dark:bg-yellow-900/20 border-[#EDF4F7] dark:border-yellow-800'
             }`}>
               <div className="flex items-start space-x-3">
                 <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
@@ -756,7 +756,7 @@ export function PreCallSetup({
 
           {/* Weak connection tips (only when no specific bandwidth warning shown) */}
           {status.network === 'poor' && !bandwidthWarning && (
-            <div className="bg-[#FDF9F0] dark:bg-yellow-900/20 border border-[#F0EDE8] dark:border-yellow-800 rounded-xl p-4">
+            <div className="bg-[#FDF9F0] dark:bg-yellow-900/20 border border-[#EDF4F7] dark:border-yellow-800 rounded-xl p-4">
               <div className="flex items-start space-x-3">
                 <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
                 <div>
@@ -790,7 +790,7 @@ export function PreCallSetup({
         <div className="max-w-2xl mx-auto flex items-center space-x-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-3 px-4 rounded-xl border border-[#E8E4DF] dark:border-slate-600 text-[#3A4A57] dark:text-gray-300 font-medium hover:bg-[#FAF7F2] dark:hover:bg-slate-700 transition-colors"
+            className="flex-1 py-3 px-4 rounded-xl border border-[#E8E4DF] dark:border-slate-600 text-[#3A4A57] dark:text-gray-300 font-medium hover:bg-[#F6FBFB] dark:hover:bg-slate-700 transition-colors"
           >
             Cancel
           </button>

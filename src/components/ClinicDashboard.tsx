@@ -58,7 +58,7 @@ function getStatusColor(status: string): string {
     case 'waitlist':
       return 'bg-blue-100 text-[#4A6478]';
     default:
-      return 'bg-[#F0EDE8] text-[#1B2733]';
+      return 'bg-[#EDF4F7] text-[#132F43]';
   }
 }
 
@@ -100,7 +100,7 @@ function StatCard({
         <span className="text-sm font-medium text-[#5A6B7A]">{label}</span>
         <div className="p-2 bg-indigo-50 rounded-lg text-[#6B9080]">{icon}</div>
       </div>
-      <div className="text-2xl font-bold text-[#1B2733]">{value}</div>
+      <div className="text-2xl font-bold text-[#132F43]">{value}</div>
       {subtitle && <p className="text-sm text-[#5A6B7A] mt-1">{subtitle}</p>}
       {trend && (
         <p className={`text-sm mt-2 ${trendUp ? 'text-green-600' : 'text-red-600'}`}>
@@ -133,7 +133,7 @@ function UtilizationBar({
           {used.toFixed(1)} / {total.toFixed(1)} hrs ({percentage.toFixed(0)}%)
         </span>
       </div>
-      <div className="w-full bg-[#F0EDE8] rounded-full h-2.5">
+      <div className="w-full bg-[#EDF4F7] rounded-full h-2.5">
         <div
           className={`h-2.5 rounded-full transition-all ${isOverUtilized ? 'bg-red-500' : color}`}
           style={{ width: `${Math.min(percentage, 100)}%` }}
@@ -163,7 +163,7 @@ function ProviderCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-[#1B2733] truncate">
+            <h3 className="font-semibold text-[#132F43] truncate">
               {provider.firstName} {provider.lastName}
             </h3>
             <span className={`px-2 py-0.5 text-xs font-medium rounded ${getStatusColor(provider.status)}`}>
@@ -174,7 +174,7 @@ function ProviderCard({
           {provider.specialties.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {provider.specialties.slice(0, 3).map(s => (
-                <span key={s} className="px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded">
+                <span key={s} className="px-2 py-0.5 text-xs bg-[#EDF4F7] text-[#5A6B7A] rounded">
                   {s}
                 </span>
               ))}
@@ -186,11 +186,11 @@ function ProviderCard({
       {stats && (
         <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t">
           <div className="text-center">
-            <div className="text-lg font-semibold text-[#1B2733]">{stats.activeClients}</div>
+            <div className="text-lg font-semibold text-[#132F43]">{stats.activeClients}</div>
             <div className="text-sm text-[#5A6B7A]">Clients</div>
           </div>
           <div className="text-center">
-            <div className="text-lg font-semibold text-[#1B2733]">{formatPercent(stats.utilizationRate)}</div>
+            <div className="text-lg font-semibold text-[#132F43]">{formatPercent(stats.utilizationRate)}</div>
             <div className="text-sm text-[#5A6B7A]">Utilization</div>
           </div>
           <div className="text-center">
@@ -231,7 +231,7 @@ function ClientCard({
     >
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h3 className="font-semibold text-[#1B2733]">Client #{client.id.slice(0, 8)}</h3>
+          <h3 className="font-semibold text-[#132F43]">Client #{client.id.slice(0, 8)}</h3>
           <p className="text-sm text-[#5A6B7A]">
             {client.assignedProviders.length} provider{client.assignedProviders.length !== 1 ? 's' : ''}
           </p>
@@ -244,11 +244,11 @@ function ClientCard({
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-[#5A6B7A]">Hours Utilized</span>
-          <span className={`font-medium ${utilizationPercent > 80 ? 'text-orange-600' : 'text-[#1B2733]'}`}>
+          <span className={`font-medium ${utilizationPercent > 80 ? 'text-orange-600' : 'text-[#132F43]'}`}>
             {totalUsed.toFixed(1)} / {totalAuthorized.toFixed(1)}
           </span>
         </div>
-        <div className="w-full bg-[#F0EDE8] rounded-full h-2">
+        <div className="w-full bg-[#EDF4F7] rounded-full h-2">
           <div
             className={`h-2 rounded-full ${utilizationPercent > 90 ? 'bg-red-500' : utilizationPercent > 70 ? 'bg-yellow-500' : 'bg-green-500'}`}
             style={{ width: `${Math.min(utilizationPercent, 100)}%` }}
@@ -279,12 +279,12 @@ function LocationCard({
     >
       <div className="flex items-start justify-between mb-2">
         <div>
-          <h3 className="font-semibold text-[#1B2733]">{location.name}</h3>
+          <h3 className="font-semibold text-[#132F43]">{location.name}</h3>
           {location.isPrimary && (
             <span className="text-sm text-[#6B9080] font-medium">Primary Location</span>
           )}
         </div>
-        <span className={`px-2 py-1 text-sm font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#F0EDE8] text-[#1B2733]'}`}>
+        <span className={`px-2 py-1 text-sm font-medium rounded ${location.isActive ? 'bg-green-100 text-green-800' : 'bg-[#EDF4F7] text-[#132F43]'}`}>
           {location.isActive ? 'Active' : 'Inactive'}
         </span>
       </div>
@@ -397,7 +397,7 @@ export function ClinicDashboard({
             <img src={clinic.logo} alt={clinic.name} className="w-12 h-12 rounded-lg object-cover" />
           )}
           <div>
-            <h1 className="text-2xl font-bold text-[#1B2733]">{clinic.name}</h1>
+            <h1 className="text-2xl font-bold text-[#132F43]">{clinic.name}</h1>
             <p className="text-sm text-[#5A6B7A]">{clinic.tier.charAt(0).toUpperCase() + clinic.tier.slice(1)} Plan</p>
           </div>
           <span className={`ml-auto px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(clinic.status)}`}>
@@ -422,7 +422,7 @@ export function ClinicDashboard({
               <span>{tab.icon}</span>
               {tab.label}
               {tab.count !== undefined && (
-                <span className="ml-1 px-2 py-0.5 text-xs bg-[#F0EDE8] text-[#5A6B7A] rounded-full">
+                <span className="ml-1 px-2 py-0.5 text-xs bg-[#EDF4F7] text-[#5A6B7A] rounded-full">
                   {tab.count}
                 </span>
               )}
@@ -468,7 +468,7 @@ export function ClinicDashboard({
           {/* Utilization Details */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Provider Utilization</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] mb-4">Provider Utilization</h3>
               {providers.slice(0, 5).map(provider => {
                 const pStats = providerStats[provider.id];
                 return (
@@ -484,7 +484,7 @@ export function ClinicDashboard({
             </div>
 
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Upcoming Expirations</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] mb-4">Upcoming Expirations</h3>
               <div className="space-y-3">
                 {providers
                   .filter(p => providerStats[p.id]?.credentialsStatus !== 'current')
@@ -497,7 +497,7 @@ export function ClinicDashboard({
                         className="flex items-center justify-between p-3 bg-[#FDF9F0] rounded-lg"
                       >
                         <div>
-                          <p className="font-medium text-[#1B2733]">
+                          <p className="font-medium text-[#132F43]">
                             {provider.firstName} {provider.lastName}
                           </p>
                           <p className="text-sm text-[#5A6B7A]">{getRoleLabel(provider.role)}</p>
@@ -526,7 +526,7 @@ export function ClinicDashboard({
 
           {/* Quick Actions */}
           <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <button className="flex flex-col items-center gap-2 p-4 border border-[#E8E4DF] rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors">
                 <span className="text-2xl">➕</span>
@@ -554,7 +554,7 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Providers</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Providers</h2>
               <p className="text-sm text-[#5A6B7A]">{providers.length} total providers</p>
             </div>
             <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#216982] transition-colors">
@@ -580,7 +580,7 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Clients</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Clients</h2>
               <p className="text-sm text-[#5A6B7A]">
                 {clients.filter(c => c.status === 'active').length} active,{' '}
                 {clients.filter(c => c.status === 'waitlist').length} on waitlist
@@ -608,7 +608,7 @@ export function ClinicDashboard({
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Locations</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Locations</h2>
               <p className="text-sm text-[#5A6B7A]">{locations.length} locations</p>
             </div>
             <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#216982] transition-colors">
@@ -632,11 +632,11 @@ export function ClinicDashboard({
       {activeTab === 'settings' && clinic && (
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Clinic Settings</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] mb-4">Clinic Settings</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-[#1B2733]">Provider Self-Onboarding</p>
+                  <p className="font-medium text-[#132F43]">Provider Self-Onboarding</p>
                   <p className="text-sm text-[#5A6B7A]">Allow providers to complete onboarding themselves</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -652,7 +652,7 @@ export function ClinicDashboard({
 
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-[#1B2733]">Session Approval Required</p>
+                  <p className="font-medium text-[#132F43]">Session Approval Required</p>
                   <p className="text-sm text-[#5A6B7A]">Require supervisor approval for session notes</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -668,7 +668,7 @@ export function ClinicDashboard({
 
               <div className="flex items-center justify-between py-3 border-b">
                 <div>
-                  <p className="font-medium text-[#1B2733]">Electronic Visit Verification (EVV)</p>
+                  <p className="font-medium text-[#132F43]">Electronic Visit Verification (EVV)</p>
                   <p className="text-sm text-[#5A6B7A]">Enable GPS-based session verification</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -684,7 +684,7 @@ export function ClinicDashboard({
 
               <div className="flex items-center justify-between py-3">
                 <div>
-                  <p className="font-medium text-[#1B2733]">Auto-Generate Reports</p>
+                  <p className="font-medium text-[#132F43]">Auto-Generate Reports</p>
                   <p className="text-sm text-[#5A6B7A]">Automatically generate progress reports</p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -712,13 +712,13 @@ export function ClinicDashboard({
           </div>
 
           <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] mb-4">Insurance Credentials</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] mb-4">Insurance Credentials</h3>
             {clinic.settings.insuranceCredentials.length > 0 ? (
               <div className="space-y-3">
                 {clinic.settings.insuranceCredentials.map((cred, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-lg">
+                  <div key={i} className="flex items-center justify-between p-3 bg-[#F6FBFB] rounded-lg">
                     <div>
-                      <p className="font-medium text-[#1B2733]">{cred.insurerName}</p>
+                      <p className="font-medium text-[#132F43]">{cred.insurerName}</p>
                       <p className="text-sm text-[#5A6B7A]">Contract: {cred.contractNumber || 'N/A'}</p>
                     </div>
                     <span className={`px-2 py-1 text-sm font-medium rounded ${getStatusColor(cred.status)}`}>
@@ -732,7 +732,7 @@ export function ClinicDashboard({
                 No insurance credentials configured
               </p>
             )}
-            <button className="mt-4 w-full py-2 border border-[#E8E4DF] rounded-lg text-sm font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors">
+            <button className="mt-4 w-full py-2 border border-[#E8E4DF] rounded-lg text-sm font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors">
               Add Insurance Credential
             </button>
           </div>

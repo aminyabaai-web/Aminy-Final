@@ -56,9 +56,9 @@ const ERROR_COLORS: Record<ApiErrorType, { bg: string; border: string; icon: str
   auth: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-600', text: 'text-purple-900' },
   'rate-limit': { bg: 'bg-orange-50', border: 'border-orange-200', icon: 'text-orange-600', text: 'text-orange-900' },
   validation: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  'not-found': { bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#1B2733]' },
+  'not-found': { bg: 'bg-[#F6FBFB]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#132F43]' },
   server: { bg: 'bg-red-50', border: 'border-red-200', icon: 'text-red-600', text: 'text-red-900' },
-  unknown: { bg: 'bg-[#FAF7F2]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#1B2733]' }
+  unknown: { bg: 'bg-[#F6FBFB]', border: 'border-[#E8E4DF]', icon: 'text-[#5A6B7A]', text: 'text-[#132F43]' }
 };
 
 export function ErrorDisplay({
@@ -167,7 +167,7 @@ export function ErrorDisplay({
             <Icon className={`w-8 h-8 ${colors.icon}`} />
           </div>
 
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-3">{displayTitle}</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-3">{displayTitle}</h2>
 
           {displaySecondary && (
             <p className="text-[#5A6B7A] mb-4 sm:mb-6">{displaySecondary}</p>
@@ -217,7 +217,7 @@ export function ErrorDisplay({
                 {showDetails ? 'Hide' : 'Show'} technical details
               </button>
               {showDetails && (
-                <div className="mt-2 p-3 bg-[#F0EDE8] rounded-lg text-left text-xs font-mono text-[#5A6B7A]">
+                <div className="mt-2 p-3 bg-[#EDF4F7] rounded-lg text-left text-xs font-mono text-[#5A6B7A]">
                   <p><strong>Type:</strong> {error.type}</p>
                   <p><strong>Message:</strong> {error.technicalMessage}</p>
                   {error.code && <p><strong>Code:</strong> {error.code}</p>}
@@ -303,10 +303,10 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className={`text-center py-12 px-4 ${className}`}>
-      <div className="w-16 h-16 mx-auto mb-4 bg-[#F0EDE8] rounded-full flex items-center justify-center">
+      <div className="w-16 h-16 mx-auto mb-4 bg-[#EDF4F7] rounded-full flex items-center justify-center">
         <Icon className="w-8 h-8 text-[#8A9BA8]" />
       </div>
-      <h3 className="text-lg font-medium text-[#1B2733] mb-1">{title}</h3>
+      <h3 className="text-lg font-medium text-[#132F43] mb-1">{title}</h3>
       {description && (
         <p className="text-[#5A6B7A] mb-4 max-w-sm mx-auto">{description}</p>
       )}

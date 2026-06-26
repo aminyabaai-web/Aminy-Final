@@ -251,31 +251,31 @@ export function TelehealthConsent({
         <div className="space-y-3 text-sm text-[#3A4A57]">
           <ul className="space-y-2">
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>Sessions are <strong>cash-pay</strong> unless otherwise specified</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>Payment is collected at time of booking</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>Cancellations with <strong>24+ hours notice</strong> receive full refund</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>Late cancellations (&lt;24 hours) are charged at <strong>50% of the visit price</strong></span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>No-shows are charged the <strong>full visit amount</strong></span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>No-shows are charged in full</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="font-bold text-[#1B2733]">•</span>
+              <span className="font-bold text-[#132F43]">•</span>
               <span>Prepaid session credits never expire</span>
             </li>
           </ul>
@@ -348,7 +348,7 @@ export function TelehealthConsent({
           <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-6 h-6 text-[#6B9080]" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Confirm Your Session</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Confirm Your Session</h2>
           {providerName && (
             <p className="text-[#5A6B7A] mt-1">with {providerName}</p>
           )}
@@ -424,11 +424,11 @@ export function TelehealthConsent({
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 rounded-xl">
+      <div className="text-center mb-4 sm:mb-6 p-6 bg-gradient-to-br from-[#F6FBFB] to-cyan-50 rounded-xl">
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <FileText className="w-8 h-8 text-[#6B9080]" />
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
           Telehealth Informed Consent
         </h1>
         <p className="text-[#5A6B7A]">
@@ -454,14 +454,14 @@ export function TelehealthConsent({
               <Card key={section.id} className={`overflow-hidden ${isAccepted ? 'border-green-200 bg-green-50/30' : ''}`}>
                 <button
                   onClick={() => toggleSection(section.id)}
-                  className="w-full p-4 flex items-center justify-between hover:bg-[#FAF7F2] transition-colors"
+                  className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#F0EDE8]'}`}>
+                    <div className={`p-2 rounded-lg ${isAccepted ? 'bg-green-100' : 'bg-[#EDF4F7]'}`}>
                       <Icon className={`w-4 h-4 ${isAccepted ? 'text-green-600' : 'text-[#5A6B7A]'}`} />
                     </div>
                     <div className="text-left">
-                      <h3 className="font-medium text-[#1B2733]">{section.title}</h3>
+                      <h3 className="font-medium text-[#132F43]">{section.title}</h3>
                       {section.required && !isAccepted && (
                         <span className="text-sm text-red-500">Required</span>
                       )}
@@ -484,7 +484,7 @@ export function TelehealthConsent({
                     <div className="pt-4 mb-4">
                       {section.content}
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
+                    <div className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg">
                       <Checkbox
                         id={`accept-${section.id}`}
                         checked={isAccepted}

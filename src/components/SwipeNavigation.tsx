@@ -169,7 +169,7 @@ export function SwipeNavigation({
             className={`p-3 rounded-full transition-all duration-200 ${
               showLeftIndicator
                 ? 'bg-accent text-white scale-110'
-                : 'bg-[#F0EDE8] text-[#8A9BA8]'
+                : 'bg-[#EDF4F7] text-[#8A9BA8]'
             }`}
           >
             <ChevronLeft className="w-6 h-6" />
@@ -191,7 +191,7 @@ export function SwipeNavigation({
             className={`p-3 rounded-full transition-all duration-200 ${
               showRightIndicator
                 ? 'bg-accent text-white scale-110'
-                : 'bg-[#F0EDE8] text-[#8A9BA8]'
+                : 'bg-[#EDF4F7] text-[#8A9BA8]'
             }`}
           >
             <ChevronRight className="w-6 h-6" />

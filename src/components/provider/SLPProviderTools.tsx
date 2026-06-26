@@ -136,19 +136,19 @@ function AACGoalTracker() {
 
       <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-[#1B2733]">Spontaneous Communication Goal</h4>
+          <h4 className="font-medium text-[#132F43]">Spontaneous Communication Goal</h4>
           <div className="flex items-center gap-2">
-            <button onClick={() => setSpontTarget(t => Math.max(1, t - 1))} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
+            <button onClick={() => setSpontTarget(t => Math.max(1, t - 1))} className="w-7 h-7 rounded-full bg-[#EDF4F7] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Minus className="w-3 h-3" />
             </button>
-            <span className="font-bold text-[#1B2733] w-8 text-center">{spontTarget}</span>
-            <button onClick={() => setSpontTarget(t => t + 1)} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
+            <span className="font-bold text-[#132F43] w-8 text-center">{spontTarget}</span>
+            <button onClick={() => setSpontTarget(t => t + 1)} className="w-7 h-7 rounded-full bg-[#EDF4F7] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Plus className="w-3 h-3" />
             </button>
             <span className="text-sm text-[#5A6B7A]">/ session</span>
           </div>
         </div>
-        <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
+        <div className="h-2.5 bg-[#EDF4F7] rounded-full overflow-hidden">
           <div
             className="h-full bg-primary rounded-full transition-all"
             style={{ width: `${Math.min(100, (totalUses / spontTarget) * 100)}%` }}
@@ -162,12 +162,12 @@ function AACGoalTracker() {
       </div>
 
       <div>
-        <h4 className="font-medium text-[#1B2733] mb-2">Most Used Symbols</h4>
+        <h4 className="font-medium text-[#132F43] mb-2">Most Used Symbols</h4>
         <div className="space-y-2">
           {topSymbols.map((u) => (
             <div key={u.symbol} className="flex items-center gap-3">
               <span className="w-16 text-sm font-medium text-[#3A4A57] capitalize">{u.symbol}</span>
-              <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                 <div
                   className="h-full bg-teal-400 rounded-full"
                   style={{ width: `${(u.count / (topSymbols[0]?.count || 1)) * 100}%` }}
@@ -227,7 +227,7 @@ function LanguageSampleAnalysis() {
       </div>
 
       {/* Simple CSS line chart */}
-      <div className="bg-[#FAF7F2] rounded-xl p-4">
+      <div className="bg-[#F6FBFB] rounded-xl p-4">
         <div className="flex items-end gap-2 h-24">
           {chartData.map((entry, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
@@ -303,7 +303,7 @@ function LanguageSampleAnalysis() {
         {history.map((entry, i) => (
           <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
             <div>
-              <span className="text-sm font-medium text-[#1B2733]">MLU {entry.mlu}</span>
+              <span className="text-sm font-medium text-[#132F43]">MLU {entry.mlu}</span>
               <span className="text-sm text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
@@ -338,7 +338,7 @@ function ArticulationProgress() {
     if (pct >= 80) return { label: 'Mastered', cls: 'bg-green-100 text-green-700' };
     if (pct >= 50) return { label: 'Emerging', cls: 'bg-yellow-100 text-yellow-700' };
     if (pct > 0) return { label: 'Developing', cls: 'bg-orange-100 text-orange-700' };
-    return { label: 'Not started', cls: 'bg-[#F0EDE8] text-[#5A6B7A]' };
+    return { label: 'Not started', cls: 'bg-[#EDF4F7] text-[#5A6B7A]' };
   };
 
   return (
@@ -354,7 +354,7 @@ function ArticulationProgress() {
               onClick={() => { setEditingSound(sound); setPctInput(String(pct)); }}
               className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center hover:border-[#6B9080]/30 transition-colors"
             >
-              <p className="text-xl font-bold text-[#1B2733]">/{sound}/</p>
+              <p className="text-xl font-bold text-[#132F43]">/{sound}/</p>
               <p className="text-sm font-medium text-[#3A4A57] mt-1">{pct}%</p>
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${cls}`}>{label}</span>
             </button>
@@ -370,7 +370,7 @@ function ArticulationProgress() {
             exit={{ opacity: 0, y: 8 }}
             className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4"
           >
-            <p className="font-medium text-[#1B2733] mb-2">/{editingSound}/ — % correct today</p>
+            <p className="font-medium text-[#132F43] mb-2">/{editingSound}/ — % correct today</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -388,7 +388,7 @@ function ArticulationProgress() {
               </button>
               <button
                 onClick={() => setEditingSound(null)}
-                className="px-3 py-2 bg-[#F0EDE8] text-[#5A6B7A] rounded-lg text-sm"
+                className="px-3 py-2 bg-[#EDF4F7] text-[#5A6B7A] rounded-lg text-sm"
               >
                 Cancel
               </button>
@@ -565,7 +565,7 @@ ${note.caregiverProgram}
       <Field label="% Correct This Session">
         <div className="flex items-center gap-3">
           <input type="number" min={0} max={100} value={note.articulationPct ?? ''} onChange={e => setNote(n => ({ ...n, articulationPct: parseInt(e.target.value) || 0 }))} className="w-24 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#6B9080] focus:outline-none" />
-          <div className="flex-1 h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+          <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <div className="h-full bg-primary rounded-full" style={{ width: `${note.articulationPct ?? 0}%` }} />
           </div>
           <span className="text-sm font-medium text-[#6B9080]">{note.articulationPct}%</span>
@@ -593,7 +593,7 @@ ${note.caregiverProgram}
         <button onClick={handleSave} className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${saved ? 'bg-green-500 text-white' : 'bg-primary text-white hover:bg-[#6B9080]'}`}>
           {saved ? <><Check className="w-4 h-4" /> Saved!</> : <><Save className="w-4 h-4" /> Save Note</>}
         </button>
-        <button onClick={handleCopy} className="px-4 py-3 border border-[#E8E4DF] rounded-xl text-sm text-[#5A6B7A] hover:bg-[#FAF7F2] flex items-center gap-1.5">
+        <button onClick={handleCopy} className="px-4 py-3 border border-[#E8E4DF] rounded-xl text-sm text-[#5A6B7A] hover:bg-[#F6FBFB] flex items-center gap-1.5">
           <Download className="w-4 h-4" /> Copy
         </button>
       </div>
@@ -638,12 +638,12 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="flex items-center gap-3 px-4 py-3">
           {onBack && (
-            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#F0EDE8] text-[#5A6B7A]">
+            <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">SLP Clinical Tools</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">SLP Clinical Tools</h1>
             <p className="text-sm text-[#5A6B7A]">Speech-Language Pathology</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">

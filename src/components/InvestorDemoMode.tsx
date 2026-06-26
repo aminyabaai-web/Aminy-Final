@@ -160,7 +160,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={() => setMinimized(false)}
-        className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#4E93A8] to-[#577590] text-white rounded-full shadow-lg hover:shadow-xl transition-all"
+        className="fixed bottom-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#2A7D99] to-[#577590] text-white rounded-full shadow-lg hover:shadow-xl transition-all"
       >
         <Sparkles className="w-4 h-4" />
         <span className="text-sm font-semibold">Investor Demo</span>
@@ -179,7 +179,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
     >
       <div className="bg-white rounded-2xl shadow-2xl border border-[#E8E4DF] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-br from-[#4E93A8] to-[#577590] text-white px-5 py-3 flex items-center justify-between">
+        <div className="bg-gradient-to-br from-[#2A7D99] to-[#577590] text-white px-5 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
             <span className="text-sm font-semibold">INVESTOR DEMO MODE</span>
@@ -216,7 +216,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
             exit={{ opacity: 0, x: -20 }}
             className="p-5"
           >
-            <h3 className="text-lg font-bold text-[#1B2733] mb-1">
+            <h3 className="text-lg font-bold text-[#132F43] mb-1">
               {currentStep.title}
             </h3>
             <p className="text-sm text-[#5A6B7A] mb-3 leading-relaxed">
@@ -224,11 +224,11 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
             </p>
 
             {currentStep.keyMetric && (
-              <div className="bg-gradient-to-br from-[#4E93A8]/10 to-[#577590]/10 border border-[#4E93A8]/20 rounded-xl p-3 mb-3 flex items-center justify-between">
+              <div className="bg-gradient-to-br from-[#2A7D99]/10 to-[#577590]/10 border border-[#2A7D99]/20 rounded-xl p-3 mb-3 flex items-center justify-between">
                 <span className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wider">
                   {currentStep.keyMetric.label}
                 </span>
-                <span className="text-xl font-bold text-[#4E93A8]">
+                <span className="text-xl font-bold text-[#2A7D99]">
                   {currentStep.keyMetric.value}
                 </span>
               </div>
@@ -241,7 +241,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
               <ul className="space-y-1.5">
                 {currentStep.talkingPoints.map((point, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-[#3A4A57]">
-                    <ChevronRight className="w-3.5 h-3.5 text-[#4E93A8] flex-shrink-0 mt-0.5" />
+                    <ChevronRight className="w-3.5 h-3.5 text-[#2A7D99] flex-shrink-0 mt-0.5" />
                     <span>{point}</span>
                   </li>
                 ))}
@@ -272,7 +272,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
               <div
                 key={i}
                 className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                  i === stepIndex ? 'bg-[#4E93A8]' : 'bg-[#E8E4DF]'
+                  i === stepIndex ? 'bg-[#2A7D99]' : 'bg-[#E8E4DF]'
                 }`}
               />
             ))}
@@ -281,7 +281,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
           {stepIndex === DEMO_STEPS.length - 1 ? (
             <button
               onClick={onClose}
-              className="flex items-center gap-1 text-sm font-semibold text-white bg-gradient-to-br from-[#4E93A8] to-[#577590] px-4 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+              className="flex items-center gap-1 text-sm font-semibold text-white bg-gradient-to-br from-[#2A7D99] to-[#577590] px-4 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
             >
               Done
               <Award className="w-3.5 h-3.5" />
@@ -289,7 +289,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
           ) : (
             <button
               onClick={next}
-              className="flex items-center gap-1 text-sm font-semibold text-white bg-gradient-to-br from-[#4E93A8] to-[#577590] px-4 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
+              className="flex items-center gap-1 text-sm font-semibold text-white bg-gradient-to-br from-[#2A7D99] to-[#577590] px-4 py-1.5 rounded-lg hover:opacity-90 transition-opacity"
             >
               Next
               <ArrowRight className="w-3.5 h-3.5" />

@@ -89,14 +89,14 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
     label: 'Insurance & Medicaid',
     subtitle: "What do we qualify for? What's covered?",
     icon: Shield,
-    color: '#6AA9BC',
+    color: '#4795AE',
   },
   {
     id: 'therapy',
     label: 'Finding therapy',
     subtitle: 'ABA, OT, speech — where do we start?',
     icon: Brain,
-    color: '#4E93A8',
+    color: '#2A7D99',
   },
   {
     id: 'school',
@@ -110,21 +110,21 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
     label: "How we'll pay",
     subtitle: 'Waivers, grants, out-of-pocket costs',
     icon: DollarSign,
-    color: '#4E93A8',
+    color: '#2A7D99',
   },
   {
     id: 'understanding',
     label: 'Understanding the diagnosis',
     subtitle: 'What does autism actually mean for my child?',
     icon: BookOpen,
-    color: '#6AA9BC',
+    color: '#4795AE',
   },
   {
     id: 'home',
     label: 'Supporting my child at home',
     subtitle: 'Behaviors, communication, daily routines',
     icon: Home,
-    color: '#4E93A8',
+    color: '#2A7D99',
   },
   {
     id: 'self',
@@ -138,7 +138,7 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
     label: 'DD agency & waivers',
     subtitle: 'DDD/DDS, HCBS waivers, waiver funding',
     icon: HandHeart,
-    color: '#4E93A8',
+    color: '#2A7D99',
   },
 ];
 
@@ -147,12 +147,12 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CATEGORY_CONFIG: Record<string, { icon: React.ElementType; color: string; label: string }> = {
-  insurance: { icon: Shield, color: '#6AA9BC', label: 'Benefits & Coverage' },
-  therapy:   { icon: Brain,  color: '#4E93A8', label: 'Therapy' },
+  insurance: { icon: Shield, color: '#4795AE', label: 'Benefits & Coverage' },
+  therapy:   { icon: Brain,  color: '#2A7D99', label: 'Therapy' },
   school:    { icon: GraduationCap, color: '#E07A5F', label: 'School & IEP' },
-  financial: { icon: DollarSign, color: '#4E93A8', label: 'Financial' },
+  financial: { icon: DollarSign, color: '#2A7D99', label: 'Financial' },
   'self-care': { icon: Heart, color: '#E07A5F', label: 'Take care of yourself' },
-  community: { icon: Users, color: '#6AA9BC', label: 'Community & AI' },
+  community: { icon: Users, color: '#4795AE', label: 'Community & AI' },
 };
 
 const PRIORITY_LABELS: Record<number, string> = {
@@ -180,7 +180,7 @@ function ProgressBar({ phase }: { phase: FlowPhase }) {
           top: 0,
           height: '100%',
           width: `${pct}%`,
-          background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
+          background: 'linear-gradient(90deg, #2A7D99, #4795AE)',
           borderRadius: 99,
           transition: 'width 0.4s cubic-bezier(0.4,0,0.2,1)',
         }}
@@ -272,7 +272,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
       ref={scrollRef}
       style={{
         minHeight: '100dvh',
-        background: '#FAF7F2',
+        background: '#F6FBFB',
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
@@ -314,7 +314,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
             <ArrowLeft size={20} />
           </button>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 13, fontWeight: 600, color: '#4E93A8', letterSpacing: '0.04em' }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: '#2A7D99', letterSpacing: '0.04em' }}>
               AMINY
             </div>
             <div style={{ fontSize: 12, color: '#8A9BA8', marginTop: 1 }}>
@@ -329,12 +329,12 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
           {phase === 'action-plan' && stateConfig && (
             <div
               style={{
-                background: 'rgba(78,147,168,0.10)',
+                background: 'rgba(42,125,153,0.10)',
                 borderRadius: 100,
                 padding: '3px 10px',
                 fontSize: 12,
                 fontWeight: 600,
-                color: '#4E93A8',
+                color: '#2A7D99',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 4,
@@ -361,15 +361,15 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: 80,
                   height: 80,
                   borderRadius: 28,
-                  background: 'linear-gradient(135deg, rgba(78,147,168,0.15), rgba(106,169,188,0.15))',
+                  background: 'linear-gradient(135deg, rgba(42,125,153,0.15), rgba(106,169,188,0.15))',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: 20,
-                  boxShadow: '0 4px 24px rgba(78,147,168,0.12)',
+                  boxShadow: '0 4px 24px rgba(42,125,153,0.12)',
                 }}
               >
-                <Heart size={36} color="#4E93A8" strokeWidth={1.5} />
+                <Heart size={36} color="#2A7D99" strokeWidth={1.5} />
               </div>
               <h1
                 style={{
@@ -377,7 +377,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   fontWeight: 400,
                   fontFamily: "'Newsreader', Georgia, serif",
                   fontStyle: 'italic',
-                  color: '#1B2733',
+                  color: '#132F43',
                   lineHeight: 1.25,
                   margin: '0 0 12px',
                   letterSpacing: '-0.01em',
@@ -385,7 +385,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               >
                 You just got the news.
                 <br />
-                <span style={{ color: '#4E93A8' }}>We're here.</span>
+                <span style={{ color: '#2A7D99' }}>We're here.</span>
               </h1>
               <p style={{ fontSize: 16, color: '#5A6B7A', lineHeight: 1.6, margin: 0 }}>
                 An autism diagnosis changes everything — and nothing. Your child is the
@@ -400,19 +400,19 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 icon: Shield,
                 title: 'Know exactly what you qualify for',
                 body: 'State Medicaid, DD agency, HCBS waivers, paid parent caregiving — Aminy knows every program in your state.',
-                color: '#6AA9BC',
+                color: '#4795AE',
               },
               {
                 icon: Brain,
                 title: 'A clear first-steps plan',
                 body: 'No jargon. No overwhelm. A prioritized list of what to do this week, this month, and in the next 90 days.',
-                color: '#4E93A8',
+                color: '#2A7D99',
               },
               {
                 icon: Sparkles,
                 title: 'AI that knows autism services',
                 body: 'Ask anything at 2am. Insurance denials, IEP rights, what ABA actually looks like — Aminy has answers.',
-                color: '#4E93A8',
+                color: '#2A7D99',
               },
             ].map(({ icon: Icon, title, body, color }) => (
               <div
@@ -443,7 +443,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   <Icon size={20} color={color} />
                 </div>
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: '#1B2733', marginBottom: 4 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#132F43', marginBottom: 4 }}>
                     {title}
                   </div>
                   <div style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55 }}>
@@ -471,7 +471,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -483,7 +483,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 justifyContent: 'center',
                 gap: 8,
                 marginTop: 8,
-                boxShadow: '0 4px 20px rgba(78,147,168,0.30)',
+                boxShadow: '0 4px 20px rgba(42,125,153,0.30)',
                 letterSpacing: '-0.2px',
               }}
             >
@@ -496,7 +496,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── STATE SELECT ──────────────────────────────────────────────── */}
         {phase === 'state-select' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               Which state are you in?
             </h2>
             <p style={{ fontSize: 14, color: '#5A6B7A', margin: '0 0 20px', lineHeight: 1.55 }}>
@@ -508,7 +508,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
             <div
               style={{
                 background: '#fff',
-                border: `1.5px solid ${stateSearch ? '#4E93A8' : '#E8E4DF'}`,
+                border: `1.5px solid ${stateSearch ? '#2A7D99' : '#E8E4DF'}`,
                 borderRadius: 12,
                 padding: '11px 14px',
                 display: 'flex',
@@ -528,7 +528,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   border: 'none',
                   outline: 'none',
                   fontSize: 15,
-                  color: '#1B2733',
+                  color: '#132F43',
                   background: 'transparent',
                 }}
               />
@@ -552,9 +552,9 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   style={{
                     width: '100%',
                     padding: '13px 16px',
-                    background: selectedState === state.abbreviation ? 'rgba(78,147,168,0.08)' : 'transparent',
+                    background: selectedState === state.abbreviation ? 'rgba(42,125,153,0.08)' : 'transparent',
                     border: 'none',
-                    borderBottom: idx < filteredStates.length - 1 ? '1px solid #F0EDE8' : 'none',
+                    borderBottom: idx < filteredStates.length - 1 ? '1px solid #EDF4F7' : 'none',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -563,7 +563,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   }}
                 >
                   <div>
-                    <span style={{ fontSize: 15, fontWeight: 500, color: '#1B2733' }}>
+                    <span style={{ fontSize: 15, fontWeight: 500, color: '#132F43' }}>
                       {state.name}
                     </span>
                     <span style={{ fontSize: 12, color: '#8A9BA8', marginLeft: 8 }}>
@@ -571,7 +571,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     </span>
                   </div>
                   {selectedState === state.abbreviation && (
-                    <CheckCircle size={18} color="#4E93A8" />
+                    <CheckCircle size={18} color="#2A7D99" />
                   )}
                 </button>
               ))}
@@ -586,14 +586,14 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
             {selectedState && stateConfig && (
               <div
                 style={{
-                  background: 'rgba(78,147,168,0.08)',
-                  border: '1px solid rgba(78,147,168,0.20)',
+                  background: 'rgba(42,125,153,0.08)',
+                  border: '1px solid rgba(42,125,153,0.20)',
                   borderRadius: 14,
                   padding: '14px 16px',
                   marginBottom: 20,
                 }}
               >
-                <div style={{ fontSize: 13, fontWeight: 600, color: '#4E93A8', marginBottom: 8, letterSpacing: '0.04em' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#2A7D99', marginBottom: 8, letterSpacing: '0.04em' }}>
                   {stateConfig.name.toUpperCase()} AT A GLANCE
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -622,7 +622,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 width: '100%',
                 padding: '15px 20px',
                 background: selectedState
-                  ? 'linear-gradient(135deg, #4E93A8, #6AA9BC)'
+                  ? 'linear-gradient(135deg, #2A7D99, #4795AE)'
                   : '#E8E4DF',
                 color: selectedState ? '#fff' : '#8A9BA8',
                 border: 'none',
@@ -634,7 +634,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: selectedState ? '0 4px 20px rgba(78,147,168,0.25)' : 'none',
+                boxShadow: selectedState ? '0 4px 20px rgba(42,125,153,0.25)' : 'none',
                 transition: 'all 0.2s',
               }}
             >
@@ -647,7 +647,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── CHILD INFO ────────────────────────────────────────────────── */}
         {phase === 'child-info' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               Tell us about your child
             </h2>
             <p style={{ fontSize: 14, color: '#5A6B7A', margin: '0 0 24px', lineHeight: 1.55 }}>
@@ -670,12 +670,12 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   border: '1.5px solid #E8E4DF',
                   borderRadius: 12,
                   background: '#fff',
-                  color: '#1B2733',
+                  color: '#132F43',
                   outline: 'none',
                   boxSizing: 'border-box',
                   transition: 'border-color 0.2s',
                 }}
-                onFocus={e => { e.currentTarget.style.borderColor = '#4E93A8'; }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#2A7D99'; }}
                 onBlur={e => { e.currentTarget.style.borderColor = '#E8E4DF'; }}
               />
             </div>
@@ -698,10 +698,10 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                       onClick={() => setChildInfo(p => ({ ...p, ageYears: p.ageYears === val ? '' : val }))}
                       style={{
                         padding: '10px 8px',
-                        border: `1.5px solid ${sel ? '#4E93A8' : '#E8E4DF'}`,
+                        border: `1.5px solid ${sel ? '#2A7D99' : '#E8E4DF'}`,
                         borderRadius: 10,
-                        background: sel ? 'rgba(78,147,168,0.10)' : '#fff',
-                        color: sel ? '#4E93A8' : '#5A6B7A',
+                        background: sel ? 'rgba(42,125,153,0.10)' : '#fff',
+                        color: sel ? '#2A7D99' : '#5A6B7A',
                         fontSize: 13,
                         fontWeight: sel ? 600 : 400,
                         cursor: 'pointer',
@@ -729,7 +729,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   alignItems: 'flex-start',
                 }}
               >
-                <Star size={16} color="#6AA9BC" style={{ flexShrink: 0, marginTop: 2 }} />
+                <Star size={16} color="#4795AE" style={{ flexShrink: 0, marginTop: 2 }} />
                 <p style={{ fontSize: 13, color: '#4A6478', lineHeight: 1.55, margin: 0 }}>
                   <strong>Early Intervention (Part C of IDEA)</strong> — For children under 3,
                   the state must provide free developmental services. Contact your {selectedState
@@ -761,7 +761,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   flex: 2,
                   padding: '15px 20px',
-                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                  background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                   color: '#fff',
                   border: 'none',
                   borderRadius: 14,
@@ -772,7 +772,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 8,
-                  boxShadow: '0 4px 20px rgba(78,147,168,0.25)',
+                  boxShadow: '0 4px 20px rgba(42,125,153,0.25)',
                 }}
               >
                 Continue
@@ -785,7 +785,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── OVERWHELMS ────────────────────────────────────────────────── */}
         {phase === 'overwhelms' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               {childInfo.name
                 ? `What are you most overwhelmed about for ${childInfo.name}?`
                 : 'What are you most overwhelmed about right now?'}
@@ -837,7 +837,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                         style={{
                           fontSize: 15,
                           fontWeight: 600,
-                          color: sel ? '#1B2733' : '#3A4A57',
+                          color: sel ? '#132F43' : '#3A4A57',
                           marginBottom: 2,
                         }}
                       >
@@ -879,7 +879,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -890,7 +890,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: '0 4px 20px rgba(78,147,168,0.25)',
+                boxShadow: '0 4px 20px rgba(42,125,153,0.25)',
               }}
             >
               Build my plan
@@ -905,8 +905,8 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
             {/* Hero */}
             <div
               style={{
-                background: 'linear-gradient(135deg, rgba(78,147,168,0.12), rgba(106,169,188,0.12))',
-                border: '1px solid rgba(78,147,168,0.20)',
+                background: 'linear-gradient(135deg, rgba(42,125,153,0.12), rgba(106,169,188,0.12))',
+                border: '1px solid rgba(42,125,153,0.20)',
                 borderRadius: 18,
                 padding: '20px 18px',
                 marginBottom: 24,
@@ -918,12 +918,12 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: 52,
                   height: 52,
                   borderRadius: 16,
-                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                  background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: 12,
-                  boxShadow: '0 4px 16px rgba(78,147,168,0.25)',
+                  boxShadow: '0 4px 16px rgba(42,125,153,0.25)',
                 }}
               >
                 <Star size={24} color="#fff" />
@@ -932,7 +932,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: '#1B2733',
+                  color: '#132F43',
                   margin: '0 0 6px',
                   letterSpacing: '-0.3px',
                 }}
@@ -942,7 +942,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               </h2>
               <p style={{ fontSize: 14, color: '#5A6B7A', margin: '0 0 12px', lineHeight: 1.5 }}>
                 {stateConfig ? (
-                  <>Personalized for <strong style={{ color: '#4E93A8' }}>{stateConfig.name}</strong> — {stateConfig.ddAgency.abbreviation}, {stateConfig.medicaid.name}, {stateConfig.waiver.abbreviation}</>
+                  <>Personalized for <strong style={{ color: '#2A7D99' }}>{stateConfig.name}</strong> — {stateConfig.ddAgency.abbreviation}, {stateConfig.medicaid.name}, {stateConfig.waiver.abbreviation}</>
                 ) : (
                   'Personalized for your situation'
                 )}
@@ -950,8 +950,8 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
                 <span
                   style={{
-                    background: 'rgba(78,147,168,0.15)',
-                    color: '#4E93A8',
+                    background: 'rgba(42,125,153,0.15)',
+                    color: '#2A7D99',
                     borderRadius: 100,
                     padding: '3px 10px',
                     fontSize: 12,
@@ -986,7 +986,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                       fontSize: 11,
                       fontWeight: 700,
                       letterSpacing: '0.08em',
-                      color: pri === 1 ? '#E07A5F' : pri === 2 ? '#4E93A8' : '#8A9BA8',
+                      color: pri === 1 ? '#E07A5F' : pri === 2 ? '#2A7D99' : '#8A9BA8',
                       marginBottom: 10,
                       display: 'flex',
                       alignItems: 'center',
@@ -998,7 +998,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                         width: 6,
                         height: 6,
                         borderRadius: 99,
-                        background: pri === 1 ? '#E07A5F' : pri === 2 ? '#4E93A8' : '#8A9BA8',
+                        background: pri === 1 ? '#E07A5F' : pri === 2 ? '#2A7D99' : '#8A9BA8',
                       }}
                     />
                     {PRIORITY_LABELS[pri].toUpperCase()}
@@ -1044,7 +1044,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 600,
-                                  color: '#1B2733',
+                                  color: '#132F43',
                                   lineHeight: 1.4,
                                   marginBottom: 2,
                                 }}
@@ -1055,8 +1055,8 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                                 <span
                                   style={{
                                     display: 'inline-block',
-                                    background: 'rgba(78,147,168,0.10)',
-                                    color: '#4E93A8',
+                                    background: 'rgba(42,125,153,0.10)',
+                                    color: '#2A7D99',
                                     borderRadius: 100,
                                     padding: '1px 7px',
                                     fontSize: 10,
@@ -1104,7 +1104,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                                     gap: 5,
                                     fontSize: 12,
                                     fontWeight: 600,
-                                    color: '#6AA9BC',
+                                    color: '#4795AE',
                                     textDecoration: 'none',
                                   }}
                                 >
@@ -1126,8 +1126,8 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
             {stateConfig && (
               <div
                 style={{
-                  background: 'rgba(78,147,168,0.07)',
-                  border: '1px solid rgba(78,147,168,0.18)',
+                  background: 'rgba(42,125,153,0.07)',
+                  border: '1px solid rgba(42,125,153,0.18)',
                   borderRadius: 16,
                   padding: '16px 18px',
                   marginBottom: 20,
@@ -1137,14 +1137,14 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   style={{
                     fontSize: 12,
                     fontWeight: 700,
-                    color: '#4E93A8',
+                    color: '#2A7D99',
                     letterSpacing: '0.05em',
                     marginBottom: 10,
                   }}
                 >
                   {stateConfig.ddAgency.abbreviation} QUICK CONTACT
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#1B2733', marginBottom: 4 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43', marginBottom: 4 }}>
                   {stateConfig.ddAgency.name}
                 </div>
                 {stateConfig.ddAgency.phone && (
@@ -1156,7 +1156,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                       gap: 6,
                       fontSize: 15,
                       fontWeight: 600,
-                      color: '#4E93A8',
+                      color: '#2A7D99',
                       textDecoration: 'none',
                       marginBottom: 8,
                     }}
@@ -1176,7 +1176,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -1187,7 +1187,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: '0 4px 20px rgba(78,147,168,0.25)',
+                boxShadow: '0 4px 20px rgba(42,125,153,0.25)',
               }}
             >
               Save my plan & get started
@@ -1205,12 +1205,12 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: 72,
                   height: 72,
                   borderRadius: 22,
-                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                  background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: 18,
-                  boxShadow: '0 8px 32px rgba(78,147,168,0.30)',
+                  boxShadow: '0 8px 32px rgba(42,125,153,0.30)',
                 }}
               >
                 <Sparkles size={32} color="#fff" />
@@ -1219,7 +1219,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   fontSize: 24,
                   fontWeight: 700,
-                  color: '#1B2733',
+                  color: '#132F43',
                   margin: '0 0 10px',
                   letterSpacing: '-0.4px',
                   lineHeight: 1.25,
@@ -1227,7 +1227,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               >
                 Your plan is ready.
                 <br />
-                <span style={{ color: '#4E93A8' }}>Let's put it to work.</span>
+                <span style={{ color: '#2A7D99' }}>Let's put it to work.</span>
               </h2>
               <p style={{ fontSize: 15, color: '#5A6B7A', margin: 0, lineHeight: 1.6 }}>
                 Create a free Aminy account to save your plan, unlock the AI companion,
@@ -1248,13 +1248,13 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               {[
                 {
                   icon: Brain,
-                  color: '#4E93A8',
+                  color: '#2A7D99',
                   title: 'Aminy AI — always on',
                   body: 'Ask anything about your plan, your rights, your insurance. 24/7, no appointment needed.',
                 },
                 {
                   icon: Shield,
-                  color: '#6AA9BC',
+                  color: '#4795AE',
                   title: 'Benefits Navigator',
                   body: stateConfig
                     ? `Track your ${stateConfig.ddAgency.abbreviation} application, ${stateConfig.medicaid.name} coverage, and waiver status.`
@@ -1262,7 +1262,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 },
                 {
                   icon: Users,
-                  color: '#4E93A8',
+                  color: '#2A7D99',
                   title: 'Provider matching',
                   body: 'Find BCBAs, OTs, and SLPs who accept your insurance and are taking new families.',
                 },
@@ -1281,7 +1281,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     alignItems: 'flex-start',
                     paddingBottom: 14,
                     marginBottom: 14,
-                    borderBottom: '1px solid #F0EDE8',
+                    borderBottom: '1px solid #EDF4F7',
                   }}
                 >
                   <div
@@ -1299,7 +1299,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     <Icon size={18} color={color} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: '#1B2733', marginBottom: 2 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43', marginBottom: 2 }}>
                       {title}
                     </div>
                     <div style={{ fontSize: 12, color: '#5A6B7A', lineHeight: 1.5 }}>
@@ -1309,7 +1309,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 </div>
               ))}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <CheckCircle size={16} color="#4E93A8" />
+                <CheckCircle size={16} color="#2A7D99" />
                 <span style={{ fontSize: 13, color: '#5A6B7A' }}>
                   Free to start — no credit card required
                 </span>
@@ -1326,7 +1326,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 marginBottom: 24,
               }}
             >
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2733', marginBottom: 14, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#132F43', marginBottom: 14, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
                 Your Journey — 6 Steps
               </div>
               {[
@@ -1345,13 +1345,13 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     gap: 12,
                     paddingBottom: step < 6 ? 12 : 0,
                     marginBottom: step < 6 ? 12 : 0,
-                    borderBottom: step < 6 ? '1px solid #F0EDE8' : 'none',
+                    borderBottom: step < 6 ? '1px solid #EDF4F7' : 'none',
                   }}
                 >
                   <div style={{ fontSize: 18, width: 28, textAlign: 'center', flexShrink: 0 }}>{icon}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, color: '#8A9BA8', fontWeight: 600 }}>Step {step}</div>
-                    <div style={{ fontSize: 14, color: '#1B2733', fontWeight: 500 }}>{label}</div>
+                    <div style={{ fontSize: 14, color: '#132F43', fontWeight: 500 }}>{label}</div>
                   </div>
                   <ChevronRight size={16} color="#C0CDD4" />
                 </div>
@@ -1363,7 +1363,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '16px 20px',
-                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
+                background: 'linear-gradient(135deg, #2A7D99, #4795AE)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -1374,7 +1374,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 8,
-                boxShadow: '0 6px 24px rgba(78,147,168,0.35)',
+                boxShadow: '0 6px 24px rgba(42,125,153,0.35)',
                 marginBottom: 12,
                 letterSpacing: '-0.2px',
               }}
@@ -1390,8 +1390,8 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: '100%',
                   padding: '14px 20px',
                   background: 'transparent',
-                  color: '#4E93A8',
-                  border: '1.5px solid rgba(78,147,168,0.30)',
+                  color: '#2A7D99',
+                  border: '1.5px solid rgba(42,125,153,0.30)',
                   borderRadius: 14,
                   fontSize: 15,
                   fontWeight: 600,
@@ -1444,14 +1444,14 @@ function StateInfoRow({
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-      <Icon size={14} color={accent ? '#4E93A8' : '#8A9BA8'} style={{ marginTop: 2, flexShrink: 0 }} />
+      <Icon size={14} color={accent ? '#2A7D99' : '#8A9BA8'} style={{ marginTop: 2, flexShrink: 0 }} />
       <div style={{ flex: 1 }}>
         <span style={{ fontSize: 12, color: '#8A9BA8' }}>{label}: </span>
         <span
           style={{
             fontSize: 12,
             fontWeight: 600,
-            color: accent ? '#4E93A8' : '#3A4A57',
+            color: accent ? '#2A7D99' : '#3A4A57',
           }}
         >
           {value}

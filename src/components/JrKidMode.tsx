@@ -170,7 +170,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
+              <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#EDF4F7]">
                 <Star className="w-3 h-3 mr-1" />
                 {tokens} tokens
               </Badge>
@@ -214,7 +214,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     className={`p-6 text-center cursor-pointer transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500 ${
                       isAffordable
                         ? `${colorClasses.gradient} ${colorClasses.border} ${!prefersReducedMotion ? 'hover:scale-105' : 'hover:opacity-90'}`
-                        : 'opacity-50 cursor-not-allowed bg-[#F0EDE8]'
+                        : 'opacity-50 cursor-not-allowed bg-[#EDF4F7]'
                     }`}
                     onClick={() => isAffordable && redeemReward()}
                     tabIndex={isAffordable ? 0 : -1}
@@ -228,7 +228,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     }}
                   >
                     <div className="text-4xl mb-3" aria-hidden="true">{reward.icon}</div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">{reward.name}</h3>
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-gray-100 mb-2">{reward.name}</h3>
                     <div className="flex items-center justify-center gap-2">
                       <Star className="w-4 h-4 text-yellow-500" aria-hidden="true" />
                       <span className="font-medium">{reward.cost} tokens</span>
@@ -271,7 +271,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#F0EDE8]">
+            <Badge variant="outline" className="bg-[#FDF9F0] text-yellow-700 border-[#EDF4F7]">
               <Star className="w-3 h-3 mr-1" />
               {tokens}
             </Badge>
@@ -581,7 +581,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
           <config.icon className="w-16 h-16 text-white" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-[#1B2733] mb-4">
+        <h2 className="text-2xl font-semibold text-[#132F43] mb-4">
           {currentActivityData.name}
         </h2>
 

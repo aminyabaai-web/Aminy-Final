@@ -185,7 +185,7 @@ export function ColorMatchGame({ onBack, onComplete, difficulty = 'easy' }: Game
           <div className="text-sm font-medium text-[#5A6B7A]">Round {round + 1}/{maxRounds}</div>
           <div className="flex items-center gap-1">
             <Star size={14} className="text-amber-500" />
-            <span className="font-bold text-[#1B2733]">{score}</span>
+            <span className="font-bold text-[#132F43]">{score}</span>
           </div>
         </div>
         <div className="w-10" />
@@ -486,7 +486,7 @@ export function SpeedTapGame({ onBack, onComplete, difficulty = 'easy' }: GamePr
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8">
-        <div className="text-6xl font-bold text-[#1B2733] mb-2">{taps}</div>
+        <div className="text-6xl font-bold text-[#132F43] mb-2">{taps}</div>
         <div className="text-sm text-[#5A6B7A] mb-8">{tapsPerSecond} taps/sec</div>
 
         <motion.button
@@ -504,7 +504,7 @@ export function SpeedTapGame({ onBack, onComplete, difficulty = 'easy' }: GamePr
 
         {!isRunning && taps > 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 text-center">
-            <p className="text-2xl font-bold text-[#1B2733]">Final: {taps} taps!</p>
+            <p className="text-2xl font-bold text-[#132F43]">Final: {taps} taps!</p>
             <button
               onClick={() => { setTaps(0); setTimeLeft(difficulty === 'easy' ? 10 : 15); setBestTap(Infinity); }}
               className="mt-3 bg-orange-500 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2 mx-auto"
@@ -661,7 +661,7 @@ export function EmotionMatchGame({ onBack, onComplete, difficulty = 'easy' }: Ga
           animate={{ opacity: 1, y: 0 }}
           className="p-6 text-center"
         >
-          <p className="text-2xl font-bold text-[#1B2733] mb-1">All Matched!</p>
+          <p className="text-2xl font-bold text-[#132F43] mb-1">All Matched!</p>
           <p className="text-[#5A6B7A] text-sm">Completed in {moves} moves</p>
         </motion.div>
       )}

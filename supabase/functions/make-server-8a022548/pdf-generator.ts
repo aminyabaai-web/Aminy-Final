@@ -232,11 +232,11 @@ export function generateHTMLReport(data: ReportData): string {
 <head>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; color: #1e293b; }
-    h1 { color: #0891b2; border-bottom: 3px solid #0891b2; padding-bottom: 10px; }
+    h1 { color: #43AA8B; border-bottom: 3px solid #43AA8B; padding-bottom: 10px; }
     h2 { color: #334155; margin-top: 30px; }
     .watermark { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; }
     .metric { display: inline-block; margin: 10px 20px; padding: 15px; background: #f1f5f9; border-radius: 8px; }
-    .metric-value { font-size: 32px; font-weight: bold; color: #0891b2; }
+    .metric-value { font-size: 32px; font-weight: bold; color: #43AA8B; }
     .metric-label { font-size: 14px; color: #64748b; }
     .milestone { padding: 10px; margin: 5px 0; background: #ecfdf5; border-left: 3px solid #10b981; }
     .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }

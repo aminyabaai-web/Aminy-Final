@@ -1,0 +1,22 @@
+<!-- @dsCard group="Colors" viewport="700x210" name="Earned states" subtitle="Amber, green, violet, red — only for wins, growth, clinical, urgency" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;background:var(--aminy-mist);font-family:var(--font-ui);padding:20px;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .st{border-radius:var(--radius-lg);padding:14px;border:1px solid;}
+  .dot{width:28px;height:28px;border-radius:var(--radius-full);margin-bottom:10px;}
+  .lab{font-size:12px;font-weight:700;}
+  .use{font-size:10px;margin-top:2px;opacity:.85;}
+  .hex{font-size:10px;margin-top:8px;font-weight:600;opacity:.7;}
+  .cap{margin-top:12px;font-size:12px;color:var(--color-text-muted);}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="st" style="background:var(--aminy-win-50);border-color:var(--aminy-win-100);color:var(--aminy-win-600)"><div class="dot" style="background:var(--aminy-win-600)"></div><div class="lab">Amber</div><div class="use">Wins · streaks</div><div class="hex">#D97706</div></div>
+    <div class="st" style="background:var(--aminy-grow-50);border-color:var(--aminy-grow-100);color:var(--aminy-grow-600)"><div class="dot" style="background:var(--aminy-grow-600)"></div><div class="lab">Green</div><div class="use">Goals met · growth</div><div class="hex">#16A34A</div></div>
+    <div class="st" style="background:var(--aminy-care-50);border-color:var(--aminy-care-100);color:var(--aminy-care-600)"><div class="dot" style="background:var(--aminy-care-600)"></div><div class="lab">Violet</div><div class="use">Clinical · provider</div><div class="hex">#7C3AED</div></div>
+    <div class="st" style="background:var(--aminy-alert-100);border-color:#fecaca;color:var(--aminy-alert-600)"><div class="dot" style="background:var(--aminy-alert-600)"></div><div class="lab">Red</div><div class="use">True urgency only</div><div class="hex">#DC2626</div></div>
+  </div>
+  <div class="cap">Earned, never decorative. Never more than two accent colors on one screen. Incomplete = empty circle, never a red X.</div>
+</body></html>

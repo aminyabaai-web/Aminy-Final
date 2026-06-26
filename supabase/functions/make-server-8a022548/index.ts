@@ -10,6 +10,7 @@ import {
   sendTrialExpirationEmail,
   sendWeeklyDigestEmail,
   sendChurnPreventionEmail,
+  sendSessionNotesEmail,
   sendEmail,
   type ChurnEmailType,
 } from "./email-service.ts";
@@ -1988,6 +1989,73 @@ RESPONSE REQUIREMENTS:
   }
 });
 
+// ─── Ask BCBA — BCBA submits final response ──────────────────────────────────
+// BCBA reviews AI draft, edits it, and submits. We update the thread status to
+// 'answered' and fire a notification email to the parent.
+app.post("/make-server-8a022548/ask-bcba/respond", async (c) => {
+  try {
+    const { threadId, response, bcbaId, bcbaName } = await c.req.json();
+    if (!threadId || !response) {
+      return c.json({ error: 'threadId and response required' }, 400);
+    }
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const sb = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Load thread to get parent email + child info
+    const { data: thread } = await sb
+      .from('ask_bcba_threads')
+      .select('user_id, child_name, question')
+      .eq('id', threadId)
+      .single();
+
+    if (!thread) return c.json({ error: 'Thread not found' }, 404);
+
+    // Update thread with final response
+    await sb
+      .from('ask_bcba_threads')
+      .update({
+        bcba_response: response,
+        bcba_id: bcbaId || null,
+        bcba_name: bcbaName || null,
+        responded_at: new Date().toISOString(),
+        status: 'answered',
+      })
+      .eq('id', threadId);
+
+    // Notify parent via email
+    const { data: parentProfile } = await sb
+      .from('profiles')
+      .select('email, first_name')
+      .eq('id', thread.user_id)
+      .maybeSingle();
+
+    if (parentProfile?.email) {
+      const { sendBCBAResponseEmail } = await import('./email-service.ts');
+      try {
+        await sendBCBAResponseEmail(
+          parentProfile.email,
+          parentProfile.first_name || 'there',
+          thread.child_name || 'your child',
+          bcbaName || 'a BCBA',
+          thread.question,
+          response,
+        );
+      } catch (emailErr) {
+        console.error('[ask-bcba/respond] Email failed (non-fatal):', emailErr);
+      }
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Respond failed';
+    return c.json({ error: msg.slice(0, 200) }, 500);
+  }
+});
+
 // ─── Voice transcription (Whisper) ──────────────────────────────────────────
 // Parent records audio in BevelChatOverlay (hands-busy moments mid-meltdown,
 // driving, holding a baby, etc.). We send to OpenAI Whisper for STT and
@@ -2511,10 +2579,9 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
         Deno.env.get('SUPABASE_URL') ?? '',
         Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
       );
-      // Look up session → child → parent email
       const { data: appt } = await sbNote
         .from('appointments')
-        .select('child_id, scheduled_at, profiles!inner(full_name, id)')
+        .select('child_id, scheduled_at, profiles!inner(full_name, id), children(name), provider:profiles!provider_id(full_name)')
         .eq('id', sessionId)
         .maybeSingle();
       if (!appt) return;
@@ -2524,27 +2591,12 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
       if (!parentId) return;
       const { data: { user } } = await sbNote.auth.admin.getUserById(parentId);
       if (!user?.email) return;
+      const childName = (appt as Record<string, {name: string}>).children?.name ?? 'your child';
+      const providerName = (appt as Record<string, {full_name: string}>).provider?.full_name ?? 'your provider';
       const date = appt.scheduled_at
         ? new Date(appt.scheduled_at as string).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
         : 'today';
-      await sendEmail({
-        to: user.email,
-        subject: 'Session notes are ready in Aminy',
-        html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/></head><body style="font-family:sans-serif;background:#F8F8F6;margin:0;padding:32px 16px">
-<div style="max-width:560px;margin:0 auto">
-<div style="background:#0D1B2A;border-radius:14px 14px 0 0;padding:24px;text-align:center">
-<span style="font-size:22px;font-weight:700;color:#fff">Aminy<span style="color:#4E93A8">.</span></span>
-</div>
-<div style="background:#fff;border:1px solid #E8E4DF;border-radius:0 0 14px 14px;padding:32px 28px">
-<h1 style="font-size:18px;color:#0D1B2A;margin:0 0 12px">Session notes are ready</h1>
-<p style="font-size:15px;color:#3A4A57;line-height:1.6">Notes from ${date}'s session are now available in your Aminy dashboard.</p>
-<div style="text-align:center;margin:28px 0">
-<a href="https://aminy.ai" style="background:#4E93A8;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px 36px;border-radius:10px;display:inline-block">View session notes</a>
-</div>
-</div>
-<p style="text-align:center;font-size:12px;color:#8A9BB0;margin-top:16px">&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai" style="color:#4E93A8;text-decoration:none">aminy.ai</a></p>
-</div></body></html>`,
-      });
+      await sendSessionNotesEmail(user.email, childName, date, providerName);
       console.log(`[SessionNotes] Notified parent ${user.email} for session ${sessionId}`);
     } catch (e) {
       console.warn('[SessionNotes] Email notify failed (non-critical):', e);
@@ -3544,7 +3596,7 @@ app.post("/make-server-8a022548/coverage/email", async (c) => {
       subject: 'Your Coverage Clarity Report - Aminy',
       html: `
         <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #0891b2;">Your Coverage Clarity Report</h1>
+          <h1 style="color: #43AA8B;">Your Coverage Clarity Report</h1>
           <p>Here is your insurance coverage analysis from Aminy.</p>
           <p>For the full PDF report, please download it from your Aminy dashboard.</p>
           <p>Best regards,<br>The Aminy Team</p>

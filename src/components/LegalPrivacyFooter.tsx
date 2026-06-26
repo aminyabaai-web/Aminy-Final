@@ -32,7 +32,7 @@ export function LegalPrivacyFooter({
 
   if (variant === 'compact') {
     return (
-      <Card className={`p-4 bg-[#FAF7F2] border-[#E8E4DF] ${className}`}>
+      <Card className={`p-4 bg-[#F6FBFB] border-[#E8E4DF] ${className}`}>
         <div className="flex items-start gap-3">
           {showIcons && (
             <Shield className="w-5 h-5 text-slate-400 mt-0.5 flex-shrink-0" />
@@ -52,7 +52,7 @@ export function LegalPrivacyFooter({
 
   // Full variant - default
   return (
-    <div className={`border-t border-[#E8E4DF] bg-[#FAF7F2] py-8 px-6 ${className}`}>
+    <div className={`border-t border-[#E8E4DF] bg-[#F6FBFB] py-8 px-6 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           
@@ -63,7 +63,7 @@ export function LegalPrivacyFooter({
                 <Info className="w-5 h-5 text-amber-700" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733] mb-1">Important Disclosure</h3>
+                <h3 className="font-semibold text-[#132F43] mb-1">Important Disclosure</h3>
                 <p className="text-sm text-[#5A6B7A]">What Aminy is and is not</p>
               </div>
             </div>
@@ -95,7 +95,7 @@ export function LegalPrivacyFooter({
                 <Lock className="w-5 h-5 text-blue-700" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733] mb-1">Your Privacy & Data</h3>
+                <h3 className="font-semibold text-[#132F43] mb-1">Your Privacy & Data</h3>
                 <p className="text-sm text-[#5A6B7A]">We take security seriously</p>
               </div>
             </div>
@@ -163,7 +163,7 @@ export function LegalPrivacyFooter({
  */
 export function OnboardingLegalNotice({ className = '' }: { className?: string }) {
   return (
-    <div className={`p-4 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg ${className}`}>
+    <div className={`p-4 bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg ${className}`}>
       <div className="flex items-start gap-2">
         <Info className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
         <div className="text-sm text-[#5A6B7A] leading-relaxed space-y-1">

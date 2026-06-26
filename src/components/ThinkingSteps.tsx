@@ -130,7 +130,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="pl-2 border-l-2 border-[#F0EDE8] space-y-1.5">
+            <div className="pl-2 border-l-2 border-[#EDF4F7] space-y-1.5">
               {steps.map((step, i) => {
                 const Icon = step.icon;
                 return (
@@ -142,13 +142,13 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
                     className="flex items-center gap-2 text-sm"
                   >
                     <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${
-                      step.status === 'complete' ? 'text-[#4E93A8]'
+                      step.status === 'complete' ? 'text-[#2A7D99]'
                         : step.status === 'active' ? 'text-[#6B9080] animate-pulse'
                         : 'text-[#8E9BAA]'
                     }`} />
                     <span className={
                       step.status === 'complete' ? 'text-[#5A6B7A]'
-                        : step.status === 'active' ? 'text-[#1B2733] font-medium'
+                        : step.status === 'active' ? 'text-[#132F43] font-medium'
                         : 'text-[#8E9BAA]'
                     }>
                       {step.label}

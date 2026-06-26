@@ -57,7 +57,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
     <div className="min-h-screen bg-white dark:bg-slate-900 flex flex-col">
       {/* Header */}
       <div className="px-4 py-6 border-b border-[#E8E4DF]">
-        <h1 className="text-2xl font-semibold text-center text-[#1B2733]">
+        <h1 className="text-2xl font-semibold text-center text-[#132F43]">
           Your 7-day gentle start
         </h1>
         <p className="text-center text-muted-foreground mt-2">
@@ -81,7 +81,7 @@ export function ApproveScreen({ onApprove, onSimplify, onNotNow }: ApproveScreen
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <Icon className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-[#1B2733]">{item.title}</h3>
+                  <h3 className="font-semibold text-[#132F43]">{item.title}</h3>
                 </div>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>

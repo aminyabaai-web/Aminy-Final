@@ -312,7 +312,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(78,147,168,0.18)',
+                border: '1px solid rgba(42,125,153,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -350,7 +350,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 fontSize: '15px',
                 borderRadius: '14px',
-                border: '1px solid rgba(78,147,168,0.18)',
+                border: '1px solid rgba(42,125,153,0.18)',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
                 opacity: isLoading ? 0.6 : 1,
                 transition: 'opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease',
@@ -447,8 +447,8 @@ export function LoginScreen({
                 }}
                 onFocus={(e) => {
                   if (!errors.email) {
-                    e.currentTarget.style.borderColor = '#4E93A8';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(78,147,168,0.12)';
+                    e.currentTarget.style.borderColor = '#2A7D99';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
                   }
                 }}
                 onBlur={(e) => {
@@ -520,8 +520,8 @@ export function LoginScreen({
                   }}
                   onFocus={(e) => {
                     if (!errors.password) {
-                      e.currentTarget.style.borderColor = '#4E93A8';
-                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(78,147,168,0.12)';
+                      e.currentTarget.style.borderColor = '#2A7D99';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(42,125,153,0.12)';
                     }
                   }}
                   onBlur={(e) => {
@@ -612,7 +612,7 @@ export function LoginScreen({
                 width: '100%',
                 height: '52px',
                 marginTop: '8px',
-                backgroundColor: '#4E93A8',
+                backgroundColor: '#2A7D99',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -625,8 +625,8 @@ export function LoginScreen({
                 transition: 'background-color 0.2s ease, transform 0.1s ease',
                 ...fontSmoothing,
               }}
-              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#376E80')}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#4E93A8'}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = '#216982')}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2A7D99'}
               onMouseDown={(e) => !isLoading && (e.currentTarget.style.transform = 'scale(0.98)')}
               onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
             >
@@ -681,7 +681,7 @@ export function LoginScreen({
                 fontWeight: 500,
                 cursor: 'pointer',
                 textDecoration: 'underline',
-                textDecorationColor: 'rgba(78,147,168,0.3)',
+                textDecorationColor: 'rgba(42,125,153,0.3)',
                 textUnderlineOffset: '2px',
                 transition: 'opacity 0.2s ease',
                 ...fontSmoothing,

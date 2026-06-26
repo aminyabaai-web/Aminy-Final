@@ -24,7 +24,7 @@ function Section({ title, id, children }: SectionProps) {
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between text-left"
       >
-        <h2 className="text-lg font-semibold text-[#1B2733]">{title}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43]">{title}</h2>
         {open ? <ChevronUp className="h-5 w-5 text-[#5A6B7A]" /> : <ChevronDown className="h-5 w-5 text-[#5A6B7A]" />}
       </button>
       {open && <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#3A4A57]">{children}</div>}
@@ -42,12 +42,12 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
           <Shield className="h-6 w-6 text-[#6B9080]" />
-          <h1 className="text-xl font-bold text-[#1B2733]">Privacy Policy</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Privacy Policy</h1>
         </div>
       </div>
 
@@ -64,8 +64,8 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         </p>
 
         {/* Table of Contents */}
-        <nav className="mb-6 rounded-lg bg-[#FAF7F2] p-4">
-          <p className="mb-2 text-sm font-semibold text-[#1B2733]">Contents</p>
+        <nav className="mb-6 rounded-lg bg-[#F6FBFB] p-4">
+          <p className="mb-2 text-sm font-semibold text-[#132F43]">Contents</p>
           <ol className="space-y-1 text-sm text-[#6B9080]">
             {[
               ['#info-collect', '1. Information We Collect'],
@@ -419,7 +419,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
         <Section title="17. Contact Us" id="contact">
           <p>For privacy-related inquiries or to exercise your rights:</p>
-          <div className="mt-2 rounded-lg bg-[#FAF7F2] p-4 text-sm">
+          <div className="mt-2 rounded-lg bg-[#F6FBFB] p-4 text-sm">
             <p><strong>Aminy Privacy Team</strong></p>
             <p>Email: privacy@aminy.app</p>
             <p>Phone: 1-800-AMINY-HELP</p>

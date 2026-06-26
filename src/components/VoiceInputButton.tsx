@@ -380,7 +380,7 @@ export function VoicePrompt({
     <div className={cn('flex flex-col items-center text-center space-y-3 sm:space-y-4 sm:space-y-6', className)}>
       {/* Prompt */}
       <div>
-        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{prompt}</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">{prompt}</h2>
         {subtext && <p className="text-muted-foreground mt-2">{subtext}</p>}
       </div>
 

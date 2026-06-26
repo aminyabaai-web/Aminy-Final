@@ -159,7 +159,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
       case 'in-progress':
         return <Badge className="bg-amber-100 text-amber-700">In Progress</Badge>;
       default:
-        return <Badge className="bg-[#F0EDE8] text-[#3A4A57]">Pending</Badge>;
+        return <Badge className="bg-[#EDF4F7] text-[#3A4A57]">Pending</Badge>;
     }
   };
 
@@ -170,18 +170,18 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         <div className="max-w-4xl mx-auto px-4 py-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#1B2733] transition-colors mb-4"
+            className="flex items-center gap-2 text-[#5A6B7A] hover:text-[#132F43] transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
             Back
           </button>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-[#1B2733] mb-2">Phase 2 Complete - Launch Status</h1>
+              <h1 className="text-[#132F43] mb-2">Phase 2 Complete - Launch Status</h1>
               <p className="text-[#5A6B7A]">Aminy Beta Readiness Dashboard</p>
             </div>
             <div className="text-right">
-              <div className="text-3xl text-[#1B2733] mb-1">{overallCompletion}%</div>
+              <div className="text-3xl text-[#132F43] mb-1">{overallCompletion}%</div>
               <div className="text-sm text-[#5A6B7A]">Ready</div>
             </div>
           </div>
@@ -193,20 +193,20 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
         <Card className="p-6 mb-4 sm:mb-6 border-2 border-accent/20">
           <div className="flex items-center gap-3 mb-4">
             <Sparkles className="w-6 h-6 text-accent" />
-            <h2 className="text-[#1B2733]">Overall Launch Readiness</h2>
+            <h2 className="text-[#132F43]">Overall Launch Readiness</h2>
           </div>
           <Progress value={overallCompletion} className="h-3 mb-4" />
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
-              <div className="text-2xl text-[#1B2733] mb-1">{completedModules}</div>
+              <div className="text-2xl text-[#132F43] mb-1">{completedModules}</div>
               <div className="text-sm text-[#5A6B7A]">Completed</div>
             </div>
             <div>
-              <div className="text-2xl text-[#1B2733] mb-1">{inProgressModules}</div>
+              <div className="text-2xl text-[#132F43] mb-1">{inProgressModules}</div>
               <div className="text-sm text-[#5A6B7A]">In Progress</div>
             </div>
             <div>
-              <div className="text-2xl text-[#1B2733] mb-1">{statusData.length}</div>
+              <div className="text-2xl text-[#132F43] mb-1">{statusData.length}</div>
               <div className="text-sm text-[#5A6B7A]">Total Modules</div>
             </div>
           </div>
@@ -214,7 +214,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
 
         {/* Key Achievements */}
         <Card className="p-6 mb-4 sm:mb-6 bg-green-50 border-green-200">
-          <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
+          <h3 className="text-[#132F43] mb-4 flex items-center gap-2">
             <CheckCircle className="w-5 h-5 text-green-600" />
             Phase 2 Achievements
           </h3>
@@ -244,7 +244,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
 
         {/* Detailed Status */}
         <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
-          <h2 className="text-[#1B2733]">Module Status</h2>
+          <h2 className="text-[#132F43]">Module Status</h2>
           {statusData.map(item => (
             <Card key={item.id} className="p-4 sm:p-5 md:p-6">
               <div className="flex items-start justify-between mb-4">
@@ -252,7 +252,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
                   {getStatusIcon(item.status)}
                   <div>
                     <div className="text-sm text-[#5A6B7A] mb-1">{item.category}</div>
-                    <h3 className="text-[#1B2733] mb-2">{item.title}</h3>
+                    <h3 className="text-[#132F43] mb-2">{item.title}</h3>
                     <Progress value={item.completion} className="h-2 w-48" />
                   </div>
                 </div>
@@ -278,7 +278,7 @@ export function LaunchStatusDashboard({ onBack }: LaunchStatusDashboardProps) {
 
         {/* Next Steps */}
         <Card className="p-6 bg-[#EEF4F8] border-[#C8DDE8]">
-          <h3 className="text-[#1B2733] mb-4 flex items-center gap-2">
+          <h3 className="text-[#132F43] mb-4 flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue-600" />
             Remaining for Beta Launch
           </h3>

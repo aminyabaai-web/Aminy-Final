@@ -228,14 +228,14 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]"
+            className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]"
             aria-label="Close pricing"
           >
             <X className="w-5 h-5" />
           </button>
         )}
         <div className="max-w-2xl mx-auto text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#1B2733] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#132F43] tracking-tight">
             {isPostOnboarding ? 'Pick the plan that fits your family' : 'Try Aminy free for 7 days'}
           </h1>
           {!isPostOnboarding && (
@@ -247,7 +247,7 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
 
         {/* Insured users: soften the wall, lead with a coverage check (booking covered care isn't live yet — link only to existing coverage tools, no guarantees) */}
         {isInsured && (
-          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border border-[#C8DDE8]">
+          <div className="max-w-2xl mx-auto mb-5 rounded-2xl p-5 bg-gradient-to-r from-[#F6FBFB] to-[#EDF4F7] border border-[#C8DDE8]">
             <div className="flex items-start gap-3">
               <div className="p-2.5 bg-blue-100 rounded-full flex-shrink-0">
                 <Check className="w-5 h-5 text-blue-600" />
@@ -404,7 +404,7 @@ function TierCardView({
 
       {/* Name + tagline */}
       <div className="mb-4">
-        <h2 className="text-2xl font-bold text-[#1B2733] mb-1">{tier.name}</h2>
+        <h2 className="text-2xl font-bold text-[#132F43] mb-1">{tier.name}</h2>
         <p className="text-sm text-[#5A6B7A] leading-snug">{tier.tagline}</p>
       </div>
 
@@ -413,12 +413,12 @@ function TierCardView({
         {hasPromo && tier.promoFromMonthly ? (
           <div className="flex items-baseline gap-2">
             <span className="text-3xl sm:text-4xl font-bold text-slate-300 line-through">${promoStrikePrice % 1 === 0 ? promoStrikePrice : promoStrikePrice.toFixed(2)}</span>
-            <span className="text-4xl sm:text-5xl font-bold text-[#1B2733]">$0</span>
+            <span className="text-4xl sm:text-5xl font-bold text-[#132F43]">$0</span>
           </div>
         ) : (
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl text-[#1B2733] font-medium">$</span>
-            <span className="text-4xl sm:text-5xl font-bold text-[#1B2733]">
+            <span className="text-2xl text-[#132F43] font-medium">$</span>
+            <span className="text-4xl sm:text-5xl font-bold text-[#132F43]">
               {displayPrice === 0 ? '0' : displayPrice.toFixed(displayPrice % 1 === 0 ? 0 : 2)}
             </span>
           </div>
@@ -451,7 +451,7 @@ function TierCardView({
               ? 'text-white shadow-md hover:shadow-lg'
               : 'bg-slate-900 text-white hover:bg-slate-800'
         }`}
-        style={tier.featured && !tier.ctaCurrent ? { background: 'linear-gradient(135deg, #7c3aed 0%, #4E93A8 100%)' } : undefined}
+        style={tier.featured && !tier.ctaCurrent ? { background: 'linear-gradient(135deg, #7c3aed 0%, #2A7D99 100%)' } : undefined}
       >
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>
           {tier.cta}
@@ -462,7 +462,7 @@ function TierCardView({
       {/* Volume pricing table */}
       {tier.pricingTable && tier.pricingTable.length > 0 && (
         <div className="mb-5">
-          <p className="text-sm font-semibold text-[#1B2733] mb-2">Volume pricing</p>
+          <p className="text-sm font-semibold text-[#132F43] mb-2">Volume pricing</p>
           <div className="rounded-xl border border-[#E8E4DF] overflow-hidden">
             {tier.pricingTable.map((row, i) => (
               <div
@@ -481,7 +481,7 @@ function TierCardView({
 
       {/* Features */}
       {tier.features_heading && (
-        <p className="text-sm font-semibold text-[#1B2733] mb-2">{tier.features_heading}</p>
+        <p className="text-sm font-semibold text-[#132F43] mb-2">{tier.features_heading}</p>
       )}
       <ul className="space-y-2 flex-1">
         {tier.features.map((f, i) => (

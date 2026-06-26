@@ -60,7 +60,7 @@ export function FeedbackButton() {
       {/* Floating button - fixed position, always visible */}
       <button
         onClick={() => setIsOpen(true)}
-        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-[#3A4A57] shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#FAF7F2]"
+        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-[#3A4A57] shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F6FBFB]"
         aria-label="Send feedback"
         title="Send feedback"
       >
@@ -79,11 +79,11 @@ export function FeedbackButton() {
           <div className="bg-white rounded-t-2xl sm:rounded-2xl p-6 w-full sm:max-w-md mx-0 sm:mx-4 shadow-2xl animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 duration-300">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#1B2733]">Share Feedback</h3>
+              <h3 className="text-lg font-semibold text-[#132F43]">Share Feedback</h3>
               <button
                 onClick={handleClose}
                 aria-label="Close feedback"
-                className="h-11 w-11 hover:bg-[#F0EDE8] rounded-full transition-colors flex items-center justify-center"
+                className="h-11 w-11 hover:bg-[#EDF4F7] rounded-full transition-colors flex items-center justify-center"
               >
                 <X className="w-5 h-5 text-[#5A6B7A]" />
               </button>
@@ -98,7 +98,7 @@ export function FeedbackButton() {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                     selectedType === type
                       ? 'bg-gray-900 text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <span className={selectedType === type ? 'text-white' : color}>

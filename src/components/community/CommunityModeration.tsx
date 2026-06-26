@@ -146,7 +146,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
       >
         <div className="flex items-center gap-2 mb-4">
           <Flag className="h-5 w-5 text-red-500" />
-          <h2 className="text-lg font-bold text-[#1B2733]">Report Content</h2>
+          <h2 className="text-lg font-bold text-[#132F43]">Report Content</h2>
         </div>
 
         <p className="text-sm text-[#5A6B7A] mb-4">
@@ -155,14 +155,14 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
 
         <div className="space-y-2 mb-4">
           {(Object.entries(FLAG_REASON_LABELS) as [FlagReason, string][]).map(([key, label]) => (
-            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#E8E4DF] p-3 hover:bg-[#FAF7F2]">
+            <label key={key} className="flex cursor-pointer items-center gap-3 rounded-lg border border-[#E8E4DF] p-3 hover:bg-[#F6FBFB]">
               <input
                 type="radio"
                 name="reason"
                 value={key}
                 checked={reason === key}
                 onChange={() => setReason(key)}
-                className="h-4 w-4 text-[#4E93A8] focus:ring-teal-500"
+                className="h-4 w-4 text-[#2A7D99] focus:ring-teal-500"
               />
               <span className="text-sm text-[#3A4A57]">{label}</span>
               {key === 'self-harm' && (
@@ -177,7 +177,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           onChange={e => setDetails(e.target.value)}
           placeholder="Additional details (optional)"
           rows={3}
-          className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none focus:ring-1 focus:ring-teal-500"
+          className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#2A7D99] focus:outline-none focus:ring-1 focus:ring-teal-500"
         />
 
         {reason === 'self-harm' && (
@@ -197,7 +197,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
           </button>
           <button
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+            className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
           >
             Cancel
           </button>
@@ -252,13 +252,13 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <Shield className="h-6 w-6 text-[#4E93A8]" />
+          <Shield className="h-6 w-6 text-[#2A7D99]" />
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733]">Moderation Queue</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">Moderation Queue</h1>
             <p className="text-sm text-[#5A6B7A]">{pendingCount} pending reports</p>
           </div>
         </div>
@@ -272,14 +272,14 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search reports..."
-              className="w-full rounded-lg border border-[#E8E4DF] py-2 pl-9 pr-3 text-sm focus:border-[#4E93A8] focus:outline-none"
+              className="w-full rounded-lg border border-[#E8E4DF] py-2 pl-9 pr-3 text-sm focus:border-[#2A7D99] focus:outline-none"
             />
           </div>
           <button
             onClick={() => setFilterStatus(filterStatus === 'pending' ? 'all' : 'pending')}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium ${
               filterStatus === 'pending'
-                ? 'border-[#4E93A8]/20 bg-[#4E93A8]/10 text-[#4E93A8]'
+                ? 'border-[#2A7D99]/20 bg-[#2A7D99]/10 text-[#2A7D99]'
                 : 'border-[#E8E4DF] bg-white text-[#5A6B7A]'
             }`}
           >
@@ -329,14 +329,14 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="inline-flex items-center rounded-full bg-[#F0EDE8] px-2 py-0.5 text-xs font-medium text-[#5A6B7A]">
+                      <span className="inline-flex items-center rounded-full bg-[#EDF4F7] px-2 py-0.5 text-xs font-medium text-[#5A6B7A]">
                         {report.contentType}
                       </span>
                       <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                         {FLAG_REASON_LABELS[report.reason]}
                       </span>
                     </div>
-                    <p className="text-sm text-[#1B2733] line-clamp-2">&quot;{report.contentPreview}&quot;</p>
+                    <p className="text-sm text-[#132F43] line-clamp-2">&quot;{report.contentPreview}&quot;</p>
                     <div className="mt-2 flex items-center gap-3 text-sm text-[#5A6B7A]">
                       <span>By: {report.authorName}</span>
                       <span>Reported by: {report.reporterName}</span>
@@ -345,7 +345,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                   </div>
                   <button
                     onClick={() => setActiveReport(report)}
-                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#4E93A8]"
+                    className="ml-3 rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#2A7D99]"
                   >
                     Review
                   </button>
@@ -393,7 +393,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               exit={{ y: 100 }}
               className="w-full max-w-md rounded-t-xl bg-white p-6 shadow-xl sm:rounded-xl"
             >
-              <h3 className="text-lg font-bold text-[#1B2733] mb-2">Review Report</h3>
+              <h3 className="text-lg font-bold text-[#132F43] mb-2">Review Report</h3>
               <p className="text-sm text-[#5A6B7A] mb-1">
                 <strong>Reason:</strong> {FLAG_REASON_LABELS[activeReport.reason]}
               </p>
@@ -410,7 +410,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               <select
                 value={selectedAction}
                 onChange={e => setSelectedAction(e.target.value as ModerationAction)}
-                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none"
+                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#2A7D99] focus:outline-none"
               >
                 {(Object.entries(ACTION_LABELS) as [ModerationAction, string][]).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>
@@ -423,19 +423,19 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                 onChange={e => setModNote(e.target.value)}
                 rows={2}
                 placeholder="Internal note (not visible to users)"
-                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none"
+                className="w-full rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#2A7D99] focus:outline-none"
               />
 
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={handleAction}
-                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#4E93A8]"
+                  className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#2A7D99]"
                 >
                   Apply Action
                 </button>
                 <button
                   onClick={() => { setActiveReport(null); setSelectedAction('none'); setModNote(''); }}
-                  className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#FAF7F2]"
+                  className="flex-1 rounded-lg border border-[#E8E4DF] px-4 py-2.5 text-sm font-semibold text-[#3A4A57] hover:bg-[#F6FBFB]"
                 >
                   Cancel
                 </button>
@@ -453,7 +453,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
 export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
   const guidelines = [
     {
-      icon: <ThumbsUp className="h-5 w-5 text-[#4E93A8]" />,
+      icon: <ThumbsUp className="h-5 w-5 text-[#2A7D99]" />,
       title: 'Be Supportive',
       body: 'This is a community of families navigating autism together. Lead with empathy and kindness. Celebrate wins, offer encouragement during tough times.',
     },
@@ -489,11 +489,11 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF] bg-white px-4 py-3">
         <div className="flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#F0EDE8]">
+            <button onClick={onBack} className="rounded-full p-1 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-[#EDF4F7]">
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-[#1B2733]">Community Guidelines</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Community Guidelines</h1>
         </div>
       </div>
 
@@ -507,14 +507,14 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
           <div key={i} className="flex gap-3 rounded-xl border border-[#E8E4DF] p-4">
             <div className="mt-0.5">{g.icon}</div>
             <div>
-              <h3 className="text-sm font-semibold text-[#1B2733]">{g.title}</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">{g.title}</h3>
               <p className="mt-1 text-sm text-[#5A6B7A]">{g.body}</p>
             </div>
           </div>
         ))}
 
-        <div className="mt-6 rounded-xl bg-[#FAF7F2] p-4">
-          <h3 className="text-sm font-semibold text-[#1B2733]">Enforcement</h3>
+        <div className="mt-6 rounded-xl bg-[#F6FBFB] p-4">
+          <h3 className="text-sm font-semibold text-[#132F43]">Enforcement</h3>
           <p className="mt-1 text-sm text-[#5A6B7A]">
             Content with {AUTO_HIDE_THRESHOLD}+ reports is automatically hidden pending review.
             Violations may result in warnings, content removal, temporary muting, or permanent bans

@@ -188,7 +188,7 @@ function urgencyColor(days: number): string {
   if (days <= 0) return 'text-red-600 bg-red-50 border-red-200';
   if (days <= 7) return 'text-red-600 bg-red-50 border-red-200';
   if (days <= 14) return 'text-amber-600 bg-amber-50 border-amber-200';
-  return 'text-[#5A6B7A] bg-[#FAF7F2] border-[#E8E4DF]';
+  return 'text-[#5A6B7A] bg-[#F6FBFB] border-[#E8E4DF]';
 }
 
 function categoryLabel(cat: Denial['category']): string {
@@ -210,11 +210,11 @@ function categoryColor(cat: Denial['category']): string {
     auth: 'bg-violet-100 text-violet-700',
     coding: 'bg-orange-100 text-orange-700',
     'medical-necessity': 'bg-red-100 text-red-700',
-    'timely-filing': 'bg-[#F0EDE8] text-[#3A4A57]',
+    'timely-filing': 'bg-[#EDF4F7] text-[#3A4A57]',
     eligibility: 'bg-[#6B9080]/10 text-cyan-700',
-    duplicate: 'bg-[#F0EDE8] text-[#5A6B7A]',
+    duplicate: 'bg-[#EDF4F7] text-[#5A6B7A]',
   };
-  return colors[cat] || 'bg-[#F0EDE8] text-[#5A6B7A]';
+  return colors[cat] || 'bg-[#EDF4F7] text-[#5A6B7A]';
 }
 
 function statusConfig(status: Denial['status']) {
@@ -224,7 +224,7 @@ function statusConfig(status: Denial['status']) {
     appealed: { label: 'Appealed', color: 'bg-blue-100 text-blue-700', icon: <Send className="w-3 h-3" /> },
     corrected: { label: 'Corrected', color: 'bg-emerald-100 text-emerald-700', icon: <Edit3 className="w-3 h-3" /> },
     recovered: { label: 'Recovered', color: 'bg-emerald-100 text-emerald-700', icon: <CheckCircle className="w-3 h-3" /> },
-    'written-off': { label: 'Written Off', color: 'bg-[#F0EDE8] text-[#5A6B7A]', icon: <XCircle className="w-3 h-3" /> },
+    'written-off': { label: 'Written Off', color: 'bg-[#EDF4F7] text-[#5A6B7A]', icon: <XCircle className="w-3 h-3" /> },
   };
   return cfg[status] || cfg.new;
 }
@@ -290,7 +290,7 @@ function DenialInbox({
             className={`px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               filterCategory === cat
                 ? 'bg-slate-800 text-white'
-                : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
             }`}
           >
             {cat === 'all' ? 'All' : categoryLabel(cat as Denial['category'])}
@@ -307,7 +307,7 @@ function DenialInbox({
             className={`px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap transition-colors ${
               filterStatus === s
                 ? 'bg-slate-700 text-white'
-                : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#FAF7F2]'
+                : 'bg-white text-[#5A6B7A] border border-[#E8E4DF] hover:bg-[#F6FBFB]'
             }`}
           >
             {s === 'all' ? 'All Status' : s.charAt(0).toUpperCase() + s.slice(1).replace('-', ' ')}
@@ -334,7 +334,7 @@ function DenialInbox({
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1.5">
                       <AlertCircle className={`w-4 h-4 ${denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-amber-500'}`} />
-                      <span className="text-sm font-semibold text-[#1B2733]">{denial.patientName}</span>
+                      <span className="text-sm font-semibold text-[#132F43]">{denial.patientName}</span>
                     </div>
                   </div>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${sc.color}`}>
@@ -373,7 +373,7 @@ function DenialInbox({
 
         {filtered.length === 0 && (
           <div className="text-center py-12">
-            <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
+            <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
               <Inbox className="w-6 h-6 text-slate-400" />
             </div>
             {denials.length === 0 ? (
@@ -462,7 +462,7 @@ NPI: [Your NPI]
       <Card className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h3 className="text-base font-bold text-[#1B2733]">{denial.patientName}</h3>
+            <h3 className="text-base font-bold text-[#132F43]">{denial.patientName}</h3>
             <p className="text-sm text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
           </div>
           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${sc.color}`}>
@@ -561,7 +561,7 @@ NPI: [Your NPI]
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-[#1B2733] flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[#132F43] flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-violet-500" />
                   Generated Appeal Letter
                 </h3>
@@ -569,7 +569,7 @@ NPI: [Your NPI]
                   <Copy className="w-3 h-3 mr-1" /> Copy
                 </Button>
               </div>
-              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#FAF7F2] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
+              <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap bg-[#F6FBFB] rounded-lg p-3 border border-[#E8E4DF] max-h-64 overflow-y-auto leading-relaxed">
                 {appealLetterTemplate}
               </pre>
               <div className="flex gap-2 mt-3">
@@ -587,7 +587,7 @@ NPI: [Your NPI]
 
       {/* Timeline */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Clock className="w-4 h-4 text-blue-500" />
           Appeal Timeline
         </h3>
@@ -635,7 +635,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
   if (denials.length === 0) {
     return (
       <Card className="p-8 text-center">
-        <div className="w-12 h-12 rounded-full bg-[#F0EDE8] flex items-center justify-center mx-auto mb-3">
+        <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
           <BarChart3 className="w-6 h-6 text-slate-400" />
         </div>
         <p className="text-sm font-semibold text-[#3A4A57]">No denial analytics yet</p>
@@ -687,7 +687,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
         <Card className="p-3">
           <p className="text-sm text-[#5A6B7A]">Denial Rate</p>
           <div className="flex items-center gap-1">
-            <p className="text-xl font-bold text-[#1B2733]">{denialRate}%</p>
+            <p className="text-xl font-bold text-[#132F43]">{denialRate}%</p>
             <TrendingDown className="w-4 h-4 text-emerald-500" />
           </div>
           <p className="text-sm text-emerald-500">-2% vs last month</p>
@@ -695,7 +695,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
         <Card className="p-3">
           <p className="text-sm text-[#5A6B7A]">Recovery Rate</p>
           <div className="flex items-center gap-1">
-            <p className="text-xl font-bold text-[#1B2733]">{recoveryRate}%</p>
+            <p className="text-xl font-bold text-[#132F43]">{recoveryRate}%</p>
             <TrendingUp className="w-4 h-4 text-emerald-500" />
           </div>
           <p className="text-sm text-emerald-500">+5% vs last month</p>
@@ -704,7 +704,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
 
       {/* Top Denial Reasons */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-violet-500" />
           Top Denial Reasons
         </h3>
@@ -717,7 +717,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
                   <span className="font-medium text-[#3A4A57]">{categoryLabel(cat as Denial['category'])}</span>
                   <span className="text-[#5A6B7A]">{count} ({Math.round((count / denials.length) * 100)}%)</span>
                 </div>
-                <div className="w-full h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
                   <motion.div
                     className="h-full bg-violet-500 rounded-full"
                     initial={{ width: 0 }}
@@ -733,7 +733,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
 
       {/* Denial by Payer */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Denials by Payer</h3>
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3">Denials by Payer</h3>
         <div className="space-y-2">
           {Object.entries(payerDenials)
             .sort(([, a], [, b]) => b.amount - a.amount)
@@ -777,7 +777,7 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Claims Needing Correction</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Claims Needing Correction</h3>
         <Badge variant="outline" className="text-sm">
           {reworkItems.length} items
         </Badge>
@@ -867,7 +867,7 @@ export default function DenialWorkbench({
             </button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733]">Denial Workbench</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">Denial Workbench</h1>
             <p className="text-sm text-[#5A6B7A]">
               {urgentCount} urgent &middot; ${totalAtRisk.toLocaleString()} at risk
             </p>
@@ -886,7 +886,7 @@ export default function DenialWorkbench({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                     isActive
                       ? 'bg-slate-900 text-white'
-                      : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
                   {v.icon}
@@ -894,7 +894,7 @@ export default function DenialWorkbench({
                   {v.badge != null && v.badge > 0 && (
                     <span
                       className={`ml-1 w-4 h-4 rounded-full text-xs font-bold flex items-center justify-center ${
-                        isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
+                        isActive ? 'bg-white text-[#132F43]' : 'bg-red-500 text-white'
                       }`}
                     >
                       {v.badge}

@@ -573,13 +573,13 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 {onBack && (
                   <button
                     onClick={onBack}
-                    className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                 )}
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+                  <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                     Messages
                   </h1>
                   <h2 className="sr-only">Message overview</h2>
@@ -592,14 +592,14 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowSearch(!showSearch)}
-                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <Search className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
                 <button
                   onClick={handleFindProvider}
                   aria-label="New conversation"
-                  className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 >
                   <Plus className="w-5 h-5 text-[#5A6B7A]" />
                 </button>
@@ -614,7 +614,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   placeholder="Search messages..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#F0EDE8] dark:bg-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-4 py-3 bg-[#EDF4F7] dark:bg-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
                   autoFocus
                 />
               </div>
@@ -637,7 +637,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               <button
                 key={thread.id}
                 onClick={() => setSelectedThread(thread)}
-                className="w-full p-4 border-b border-[#E8E4DF] dark:border-slate-700 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
+                className="w-full p-4 border-b border-[#E8E4DF] dark:border-slate-700 hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors flex items-start gap-3 text-left min-h-[72px]"
               >
                 {/* Avatar */}
                 <div className="relative flex-shrink-0">
@@ -655,7 +655,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-[#1B2733] dark:text-white truncate">
+                      <span className="font-medium text-[#132F43] dark:text-white truncate">
                         {thread.provider.name}
                       </span>
                       {thread.provider.isVerified && (
@@ -695,7 +695,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSelectedThread(null)}
-              className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -714,7 +714,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-[#1B2733] dark:text-white truncate">
+                  <span className="font-medium text-[#132F43] dark:text-white truncate">
                     {selectedThread.provider.name}
                   </span>
                   {selectedThread.provider.isVerified && (
@@ -731,7 +731,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
             <div className="relative">
               <button
                 onClick={() => setShowThreadMenu(!showThreadMenu)}
-                className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 <MoreVertical className="w-5 h-5 text-[#5A6B7A]" />
               </button>
@@ -745,7 +745,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-[#E8E4DF] dark:border-slate-700 z-20 py-2">
                     <button
                       onClick={toggleMute}
-                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
+                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#F6FBFB] dark:hover:bg-slate-700 text-left"
                     >
                       {selectedThread.isMuted ? (
                         <>
@@ -761,7 +761,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                     </button>
                     <button
                       onClick={archiveThread}
-                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-700 text-left"
+                      className="w-full px-4 py-2.5 flex items-center gap-3 hover:bg-[#F6FBFB] dark:hover:bg-slate-700 text-left"
                     >
                       <Archive className="w-4 h-4 text-[#5A6B7A]" />
                       <span className="text-sm">Archive</span>
@@ -803,7 +803,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                       px-4 py-2.5 rounded-2xl
                       ${isOwn
                         ? 'bg-primary text-white rounded-tr-md'
-                        : 'bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white rounded-tl-md shadow-sm'
+                        : 'bg-white dark:bg-slate-800 text-[#132F43] dark:text-white rounded-tl-md shadow-sm'
                       }
                     `}
                   >
@@ -854,13 +854,13 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
             <button
               onClick={() => toast('Attachments are coming soon.')}
               aria-label="Attach a file"
-              className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
+              className="p-2 rounded-full hover:bg-[#EDF4F7] dark:hover:bg-slate-700 min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0"
             >
               <Paperclip className="w-5 h-5 text-[#5A6B7A]" />
             </button>
 
             {/* Input */}
-            <div className="flex-1 bg-[#F0EDE8] dark:bg-slate-700 rounded-2xl px-4 py-2">
+            <div className="flex-1 bg-[#EDF4F7] dark:bg-slate-700 rounded-2xl px-4 py-2">
               <textarea
                 ref={inputRef}
                 value={newMessage}
@@ -881,7 +881,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 p-2 rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center flex-shrink-0 transition-colors
                 ${newMessage.trim()
                   ? 'bg-primary text-white hover:bg-primary'
-                  : 'bg-[#F0EDE8] dark:bg-slate-700 text-[#8A9BA8]'
+                  : 'bg-[#EDF4F7] dark:bg-slate-700 text-[#8A9BA8]'
                 }
               `}
             >

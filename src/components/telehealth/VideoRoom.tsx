@@ -483,7 +483,7 @@ export function VideoRoom({
           <p className="text-sm text-white/60 mt-2">{callState.error}</p>
           <button
             onClick={onEnd}
-            className="mt-4 sm:mt-6 px-6 py-2 bg-white text-[#1B2733] rounded-lg font-medium"
+            className="mt-4 sm:mt-6 px-6 py-2 bg-white text-[#132F43] rounded-lg font-medium"
           >
             Return to Dashboard
           </button>
@@ -698,7 +698,7 @@ export function VideoRoom({
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Phone className="w-6 h-6 text-red-500" style={{ transform: 'rotate(135deg)' }} />
               </div>
-              <h3 className="text-lg font-semibold text-[#1B2733]">End Session?</h3>
+              <h3 className="text-lg font-semibold text-[#132F43]">End Session?</h3>
               <p className="text-sm text-[#5A6B7A] mt-2">
                 Are you sure you want to end this video session?
               </p>
@@ -707,7 +707,7 @@ export function VideoRoom({
             <div className="flex gap-3 mt-4 sm:mt-6">
               <button
                 onClick={() => setShowEndConfirm(false)}
-                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
               >
                 Cancel
               </button>
@@ -732,7 +732,7 @@ export function VideoRoom({
                 <Shield className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-[#1B2733]">Recording Consent Required</h3>
+                <h3 className="text-lg font-semibold text-[#132F43]">Recording Consent Required</h3>
                 <p className="text-sm text-[#5A6B7A]">HIPAA §164.508(a) Authorization</p>
               </div>
             </div>
@@ -777,7 +777,7 @@ export function VideoRoom({
             </div>
 
             {/* Consent checkbox */}
-            <label className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-xl cursor-pointer mb-4">
+            <label className="flex items-start gap-3 p-3 bg-[#F6FBFB] rounded-xl cursor-pointer mb-4">
               <input
                 type="checkbox"
                 checked={consentChecked}
@@ -795,7 +795,7 @@ export function VideoRoom({
             <div className="flex gap-3">
               <button
                 onClick={handleRecordingDeclined}
-                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#FAF7F2] transition-colors"
+                className="flex-1 py-3 px-4 border border-[#E8E4DF] rounded-xl font-medium text-[#3A4A57] hover:bg-[#F6FBFB] transition-colors"
               >
                 Decline
               </button>

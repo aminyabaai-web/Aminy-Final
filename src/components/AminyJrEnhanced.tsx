@@ -375,7 +375,7 @@ export function AminyJrEnhanced({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-3xl text-[#1B2733] mt-4 sm:mt-6 mb-3"
+            className="text-3xl text-[#132F43] mt-4 sm:mt-6 mb-3"
           >
             Hi {childName}! 👋
           </motion.h1>
@@ -454,7 +454,7 @@ export function AminyJrEnhanced({
             ))}
           </div>
           
-          <p className="text-2xl text-[#1B2733] mb-4">You did it!</p>
+          <p className="text-2xl text-[#132F43] mb-4">You did it!</p>
           <p className="text-lg text-[#5A6B7A]">
             You earned {currentActivity?.stars} star{currentActivity?.stars !== 1 ? 's' : ''}!
           </p>
@@ -465,7 +465,7 @@ export function AminyJrEnhanced({
 
   // Main Home View
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F2] via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] via-blue-50 to-purple-50">
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -478,7 +478,7 @@ export function AminyJrEnhanced({
                 <CompassIcon className="w-5 h-5" />
               </div>
               <div>
-                <h1 className="text-lg text-[#1B2733]">Aminy Jr</h1>
+                <h1 className="text-lg text-[#132F43]">Aminy Jr</h1>
                 <p className="text-sm text-[#5A6B7A]">Hi {childName}!</p>
               </div>
             </div>
@@ -509,11 +509,11 @@ export function AminyJrEnhanced({
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-3 sm:space-y-4 sm:space-y-6">
         {/* Mascot Guide */}
         {currentView === 'home' && (
-          <Card className="p-6 bg-gradient-to-r from-[#FAF7F2] to-blue-50 border-[#6B9080]/20">
+          <Card className="p-6 bg-gradient-to-r from-[#F6FBFB] to-blue-50 border-[#6B9080]/20">
             <div className="flex items-center gap-3 sm:gap-4">
               <CompassMascot mood="encouraging" />
               <div className="flex-1">
-                <p className="text-lg text-[#1B2733] mb-2">
+                <p className="text-lg text-[#132F43] mb-2">
                   What do you want to do today?
                 </p>
                 <p className="text-sm text-[#5A6B7A]">
@@ -537,7 +537,7 @@ export function AminyJrEnhanced({
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white mb-4 text-3xl">
                   💬
                 </div>
-                <h3 className="text-xl text-[#1B2733] mb-2">Speech Play</h3>
+                <h3 className="text-xl text-[#132F43] mb-2">Speech Play</h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">Fun games to practice words and sounds!</p>
                 <Badge variant="outline" className="border-blue-300 text-blue-700">
                   <Sparkles className="w-3 h-3 mr-1" />
@@ -556,7 +556,7 @@ export function AminyJrEnhanced({
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white mb-4 text-3xl">
                   🧘
                 </div>
-                <h3 className="text-xl text-[#1B2733] mb-2">Calm Corner</h3>
+                <h3 className="text-xl text-[#132F43] mb-2">Calm Corner</h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">Calming activities when you need a break</p>
                 <Badge variant="outline" className="border-purple-300 text-purple-700">
                   <Heart className="w-3 h-3 mr-1" />
@@ -570,12 +570,12 @@ export function AminyJrEnhanced({
               onClick={() => setCurrentView('mini-missions')}
               className="group relative overflow-hidden rounded-2xl border-2 border-green-200 bg-white hover:border-green-400 transition-all hover:shadow-lg p-6 text-left"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-[#F0EDE8] opacity-50 group-hover:opacity-70 transition-opacity" />
+              <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-[#EDF4F7] opacity-50 group-hover:opacity-70 transition-opacity" />
               <div className="relative">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white mb-4 text-3xl">
                   🎯
                 </div>
-                <h3 className="text-xl text-[#1B2733] mb-2">Mini Missions</h3>
+                <h3 className="text-xl text-[#132F43] mb-2">Mini Missions</h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">Daily challenges to become a super kid!</p>
                 <Badge variant="outline" className="border-green-300 text-green-700">
                   <Target className="w-3 h-3 mr-1" />
@@ -585,10 +585,10 @@ export function AminyJrEnhanced({
             </button>
 
             {/* Badges */}
-            <Card className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-[#F0EDE8]">
+            <Card className="p-6 bg-gradient-to-br from-yellow-50 to-orange-50 border-[#EDF4F7]">
               <div className="flex items-center gap-3 mb-4">
                 <Crown className="w-8 h-8 text-yellow-600" />
-                <h3 className="text-xl text-[#1B2733]">My Badges</h3>
+                <h3 className="text-xl text-[#132F43]">My Badges</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {badgesEarned.length === 0 ? (
@@ -623,7 +623,7 @@ export function AminyJrEnhanced({
               <div className="flex items-center gap-3">
                 <CompassMascot mood="encouraging" />
                 <div>
-                  <p className="text-lg text-[#1B2733]">Pick a game to play!</p>
+                  <p className="text-lg text-[#132F43]">Pick a game to play!</p>
                   <p className="text-sm text-[#5A6B7A]">Each one helps you practice talking</p>
                 </div>
               </div>
@@ -639,7 +639,7 @@ export function AminyJrEnhanced({
                   <div className="flex items-start gap-3 sm:gap-4">
                     <div className="text-5xl">{activity.icon}</div>
                     <div className="flex-1">
-                      <h3 className="text-lg text-[#1B2733] mb-1">{activity.title}</h3>
+                      <h3 className="text-lg text-[#132F43] mb-1">{activity.title}</h3>
                       <p className="text-sm text-[#5A6B7A] mb-3">{activity.description}</p>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-sm">
@@ -661,10 +661,10 @@ export function AminyJrEnhanced({
         {/* Active Activity */}
         {currentView === 'speech-play' && isActivityActive && currentActivity && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-            <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
+            <Card className="p-6 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] border-[#C8DDE8]">
               <div className="text-center mb-4 sm:mb-6">
                 <div className="text-6xl mb-4">{currentActivity.icon}</div>
-                <h2 className="text-2xl text-[#1B2733] mb-2">{currentActivity.title}</h2>
+                <h2 className="text-2xl text-[#132F43] mb-2">{currentActivity.title}</h2>
                 <p className="text-lg text-[#5A6B7A]">{currentActivity.description}</p>
               </div>
 
@@ -675,7 +675,7 @@ export function AminyJrEnhanced({
             <Card className="p-4 sm:p-5 md:p-6">
               <div className="flex items-center gap-3 sm:gap-4">
                 <CompassMascot mood="encouraging" />
-                <p className="text-lg text-[#1B2733]">{currentActivity.voicePrompt}</p>
+                <p className="text-lg text-[#132F43]">{currentActivity.voicePrompt}</p>
               </div>
             </Card>
           </div>
@@ -697,7 +697,7 @@ export function AminyJrEnhanced({
               <div className="flex items-center gap-3">
                 <CompassMascot mood="encouraging" />
                 <div>
-                  <p className="text-lg text-[#1B2733]">Your missions today!</p>
+                  <p className="text-lg text-[#132F43]">Your missions today!</p>
                   <p className="text-sm text-[#5A6B7A]">Complete them to earn lots of stars</p>
                 </div>
               </div>
@@ -719,7 +719,7 @@ export function AminyJrEnhanced({
                         className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                           mission.completed
                             ? 'bg-green-200 text-green-700'
-                            : 'bg-[#F0EDE8] text-[#5A6B7A]'
+                            : 'bg-[#EDF4F7] text-[#5A6B7A]'
                         }`}
                       >
                         {mission.completed ? (
@@ -729,7 +729,7 @@ export function AminyJrEnhanced({
                         )}
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-medium text-[#1B2733] mb-1">
+                        <h3 className="font-medium text-[#132F43] mb-1">
                           {mission.title}
                         </h3>
                         <p className="text-sm text-[#5A6B7A]">{mission.description}</p>

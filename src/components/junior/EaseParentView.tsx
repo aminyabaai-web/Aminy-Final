@@ -197,7 +197,7 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="font-bold text-[#1B2733] text-sm flex items-center gap-2">
+      <h3 className="font-bold text-[#132F43] text-sm flex items-center gap-2">
         <BarChart3 className="w-4 h-4 text-indigo-500" />
         Weekly Ease Report
       </h3>
@@ -224,7 +224,7 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
 
           {/* Parent ratings */}
           {(greatCount + okCount + roughCount) > 0 && (
-            <div className="bg-[#FAF7F2] rounded-xl p-3">
+            <div className="bg-[#F6FBFB] rounded-xl p-3">
               <p className="text-sm font-semibold text-[#5A6B7A] mb-2">Session ratings</p>
               <div className="flex gap-3">
                 <div className="flex items-center gap-1">
@@ -306,11 +306,11 @@ export function PostSessionRatingPrompt({
           <div className="flex items-center gap-2">
             <span className="text-2xl">{toolEmoji}</span>
             <div>
-              <p className="font-bold text-[#1B2733] text-sm">How did that go?</p>
+              <p className="font-bold text-[#132F43] text-sm">How did that go?</p>
               <p className="text-sm text-[#8A9BA8] capitalize">{tool} session</p>
             </div>
           </div>
-          <button onClick={onDismiss} className="p-1.5 rounded-full bg-[#F0EDE8]">
+          <button onClick={onDismiss} className="p-1.5 rounded-full bg-[#EDF4F7]">
             <X className="w-4 h-4 text-[#8A9BA8]" />
           </button>
         </div>

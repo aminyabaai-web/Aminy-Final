@@ -46,7 +46,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-2xl sm:text-3xl font-bold text-[#1B2733] mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-[#132F43] mb-1">
           {minutesSaved}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>
@@ -77,7 +77,7 @@ export function OutcomeSignatureTiles({
           </TooltipProvider>
         </div>
 
-        <p className="text-2xl sm:text-3xl font-bold text-[#1B2733] mb-1">
+        <p className="text-2xl sm:text-3xl font-bold text-[#132F43] mb-1">
           -{deescalationsShortened}
           <span className="text-lg text-muted-foreground ml-1">min</span>
         </p>

@@ -155,35 +155,35 @@ export function ShareInsight({
                 <div className="flex gap-1">
                   <button
                     onClick={handleCopy}
-                    className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                    className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                     title="Copy to clipboard"
                   >
                     {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-[#5A6B7A]" />}
                   </button>
                   <button
                     onClick={handleTwitterShare}
-                    className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                    className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                     title="Share on X"
                   >
                     <X className="w-4 h-4 text-[#5A6B7A]" />
                   </button>
                   <button
                     onClick={handleWhatsAppShare}
-                    className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                    className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                     title="Share on WhatsApp"
                   >
                     <MessageCircle className="w-4 h-4 text-[#5A6B7A]" />
                   </button>
                   <button
                     onClick={handleFacebookShare}
-                    className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                    className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                     title="Share on Facebook"
                   >
                     <Share2 className="w-4 h-4 text-[#5A6B7A]" />
                   </button>
                   <button
                     onClick={() => setShowShareMenu(false)}
-                    className="p-2 hover:bg-[#F0EDE8] rounded-lg transition-colors"
+                    className="p-2 hover:bg-[#EDF4F7] rounded-lg transition-colors"
                   >
                     <X className="w-4 h-4 text-[#8A9BA8]" />
                   </button>
@@ -214,7 +214,7 @@ export function ShareInsight({
         </button>
         <button
           onClick={handleCopy}
-          className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#F0EDE8] rounded-full transition-colors"
+          className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-[#8A9BA8] hover:text-[#5A6B7A] hover:bg-[#EDF4F7] rounded-full transition-colors"
           title="Copy"
         >
           {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -288,28 +288,28 @@ export function ShareInsight({
                 <div className="flex justify-center gap-3">
                   <button
                     onClick={handleCopy}
-                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
+                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#EDF4F7] rounded-xl transition-colors"
                   >
                     {copied ? <Check className="w-6 h-6 text-green-500" /> : <Copy className="w-6 h-6 text-[#5A6B7A]" />}
                     <span className="text-sm text-[#5A6B7A]">{copied ? 'Copied!' : 'Copy'}</span>
                   </button>
                   <button
                     onClick={handleTwitterShare}
-                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
+                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#EDF4F7] rounded-xl transition-colors"
                   >
-                    <X className="w-6 h-6 text-[#1B2733]" />
+                    <X className="w-6 h-6 text-[#132F43]" />
                     <span className="text-sm text-[#5A6B7A]">X</span>
                   </button>
                   <button
                     onClick={handleWhatsAppShare}
-                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
+                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#EDF4F7] rounded-xl transition-colors"
                   >
                     <MessageCircle className="w-6 h-6 text-green-500" />
                     <span className="text-sm text-[#5A6B7A]">WhatsApp</span>
                   </button>
                   <button
                     onClick={handleFacebookShare}
-                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
+                    className="flex flex-col items-center gap-1 p-3 hover:bg-[#EDF4F7] rounded-xl transition-colors"
                   >
                     <Share2 className="w-6 h-6 text-blue-600" />
                     <span className="text-sm text-[#5A6B7A]">Facebook</span>

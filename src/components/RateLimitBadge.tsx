@@ -63,7 +63,7 @@ export function RateLimitBadge({
             ? 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800'
             : runningLow
             ? 'bg-amber-50 dark:bg-amber-950 border-amber-200 dark:border-amber-800'
-            : 'bg-[#FAF7F2] dark:bg-slate-900 border-[#E8E4DF] dark:border-slate-700',
+            : 'bg-[#F6FBFB] dark:bg-slate-900 border-[#E8E4DF] dark:border-slate-700',
           className
         )}
       >
@@ -79,7 +79,7 @@ export function RateLimitBadge({
                   : 'text-[#5A6B7A] dark:text-slate-400'
               )}
             />
-            <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+            <span className="text-sm font-medium text-[#132F43] dark:text-white">
               Daily Messages
             </span>
           </div>
@@ -90,7 +90,7 @@ export function RateLimitBadge({
                 ? 'text-red-600 dark:text-red-400'
                 : runningLow
                 ? 'text-amber-600 dark:text-amber-400'
-                : 'text-[#1B2733] dark:text-white'
+                : 'text-[#132F43] dark:text-white'
             )}
           >
             {dailyUsage.remaining}/{dailyUsage.limit}
@@ -150,7 +150,7 @@ export function RateLimitBadge({
                 ? 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800'
                 : runningLow
                 ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
-                : 'bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400',
+                : 'bg-[#EDF4F7] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400',
               className
             )}
           >

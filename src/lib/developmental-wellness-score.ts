@@ -64,7 +64,7 @@ export function calculateWellnessScore(data: {
 
   // Goal-based domain scores (relative to child's own baseline→target range)
   const domainMap: Record<string, { scores: number[]; icon: string; color: string }> = {
-    'Behavioral': { scores: [], icon: '⭐', color: '#4E93A8' },
+    'Behavioral': { scores: [], icon: '⭐', color: '#2A7D99' },
     'Communication': { scores: [], icon: '💬', color: '#6AA9BC' },
     'Social': { scores: [], icon: '🤝', color: '#E07A5F' },
     'Sensory': { scores: [], icon: '🌈', color: '#D4A373' },
@@ -117,7 +117,7 @@ export function calculateWellnessScore(data: {
     score: engagementScore,
     trend: 0,
     trendLabel: engagementScore >= 70 ? 'Very active' : engagementScore >= 40 ? 'Moderate' : 'Getting started',
-    color: '#4E93A8',
+    color: '#2A7D99',
   });
 
   // Composite: weighted average of all domains

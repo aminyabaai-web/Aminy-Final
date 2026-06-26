@@ -15,7 +15,7 @@ interface LaunchStateBadgeProps {
 }
 
 const STYLES = {
-  hidden: 'border-[#E8E4DF] bg-[#F0EDE8] text-[#3A4A57]',
+  hidden: 'border-[#E8E4DF] bg-[#EDF4F7] text-[#3A4A57]',
   internal: 'border-amber-200 bg-amber-50 text-amber-700',
   pilot: 'border-violet-200 bg-violet-50 text-violet-700',
   limited_launch: 'border-sky-200 bg-sky-50 text-sky-700',

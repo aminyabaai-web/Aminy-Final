@@ -61,7 +61,7 @@ export const SessionPrepModal = ({
 
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Progress indicator */}
-          <Card className="p-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
+          <Card className="p-4 bg-gradient-to-r from-[#F6FBFB] to-cyan-50 border-[#6B9080]/20">
             <div className="flex items-center justify-between mb-2">
               <span className="font-medium text-[#6B9080]">Preparation Progress</span>
               <span className="text-sm text-[#6B9080]">{completionRate}% Complete</span>
@@ -79,16 +79,16 @@ export const SessionPrepModal = ({
 
           {/* Checklist */}
           <div className="space-y-3">
-            <h4 className="font-medium text-[#1B2733]">Preparation Checklist</h4>
+            <h4 className="font-medium text-[#132F43]">Preparation Checklist</h4>
             {prepItems.map((item) => (
-              <label key={item.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-[#FAF7F2]">
+              <label key={item.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-[#F6FBFB]">
                 <Checkbox
                   checked={item.completed}
                   onCheckedChange={() => handleToggle(item.id)}
                   className="mt-1"
                 />
                 <div className="flex-1">
-                  <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
+                  <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#132F43]'} ${item.required ? 'font-medium' : ''}`}>
                     {item.text}
                   </span>
                   {item.required && (
@@ -135,7 +135,7 @@ export const ProviderInfoCard = ({
   onSchedule?: () => void;
   onStartCall?: () => void;
 }) => (
-  <Card className="p-4 mb-4 bg-gradient-to-r from-[#FAF7F2] to-cyan-50 border-[#6B9080]/20">
+  <Card className="p-4 mb-4 bg-gradient-to-r from-[#F6FBFB] to-cyan-50 border-[#6B9080]/20">
     <div className="flex items-start justify-between">
       <div className="flex items-start gap-3">
         <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center">
@@ -195,11 +195,11 @@ export const AppointmentCard = ({
     <div className="flex items-start justify-between mb-3">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-semibold text-[#1B2733]">{appointment.title}</h3>
+          <h3 className="font-semibold text-[#132F43]">{appointment.title}</h3>
           <Badge className={`${
             appointment.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' :
             appointment.status === 'pending_insurance' ? 'bg-amber-100 text-amber-700' :
-            'bg-[#F0EDE8] text-[#3A4A57]'
+            'bg-[#EDF4F7] text-[#3A4A57]'
           }`}>
             {appointment.status === 'confirmed' ? '✓ Confirmed' : 
              appointment.status === 'pending_insurance' ? '⏳ Pending Insurance' : 
@@ -230,7 +230,7 @@ export const AppointmentCard = ({
           <div className="mt-2 flex items-center gap-1 text-sm">
             <Shield className="h-4 w-4 text-emerald-600" />
             <span className="text-[#5A6B7A]">Copay:</span>
-            <span className="font-medium text-[#1B2733]">
+            <span className="font-medium text-[#132F43]">
               {appointment.copay === 0 ? 'Fully Covered' : `$${appointment.copay}`}
             </span>
           </div>
@@ -322,7 +322,7 @@ export const PostSessionModal = ({
                   className={`p-2 rounded-lg transition-colors ${
                     rating >= starRating
                       ? 'bg-amber-100 text-amber-600'
-                      : 'bg-[#F0EDE8] text-slate-400 hover:bg-[#E8E4DF]'
+                      : 'bg-[#EDF4F7] text-slate-400 hover:bg-[#E8E4DF]'
                   }`}
                 >
                   <Star className={`h-5 w-5 ${rating >= starRating ? 'fill-current' : ''}`} />
@@ -364,7 +364,7 @@ export const PostSessionModal = ({
             {uploadedFiles.length > 0 && (
               <div className="mt-3 space-y-2">
                 {uploadedFiles.map((file, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-[#FAF7F2] rounded">
+                  <div key={index} className="flex items-center gap-2 p-2 bg-[#F6FBFB] rounded">
                     <FileText className="h-4 w-4 text-[#5A6B7A]" />
                     <span className="text-sm text-[#3A4A57] flex-1">{file.name}</span>
                     <button

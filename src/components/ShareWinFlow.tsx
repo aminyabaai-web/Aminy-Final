@@ -202,7 +202,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
                     <Heart className="w-5 h-5 text-[#2A7D99]" />
-                    <span className="font-semibold text-[#1B2733]">Aminy</span>
+                    <span className="font-semibold text-[#132F43]">Aminy</span>
                   </div>
                   <Badge variant="outline" className="text-sm">
                     {new Date(win.date).toLocaleDateString()}
@@ -212,7 +212,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                 {/* Win Content */}
                 <div className="text-center py-4">
                   <span className="text-5xl mb-4 block">{template.emoji}</span>
-                  <h3 className="text-xl font-bold text-[#1B2733] mb-2">
+                  <h3 className="text-xl font-bold text-[#132F43] mb-2">
                     {win.title}
                   </h3>
                   {win.metric && (
@@ -234,7 +234,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
             </div>
 
             {/* Share Options */}
-            <div className="p-4 bg-[#FAF7F2] border-t">
+            <div className="p-4 bg-[#F6FBFB] border-t">
               <p className="text-sm text-[#5A6B7A] mb-3 text-center">
                 Share your progress and inspire other parents
               </p>
@@ -245,7 +245,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                   className="flex flex-col items-center gap-1 h-auto py-3"
                   onClick={handleShareTwitter}
                 >
-                  <X className="w-5 h-5 text-[#1B2733]" />
+                  <X className="w-5 h-5 text-[#132F43]" />
                   <span className="text-sm">X</span>
                 </Button>
 
@@ -303,7 +303,7 @@ export function ShareWinFlow({ win, onClose, isOpen = true, userId }: ShareWinFl
                     <div className="flex items-start gap-2 mb-2">
                       <Gift className="w-4 h-4 text-[#2A7D99] shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-semibold text-[#1B2733]">Know another autism family?</p>
+                        <p className="text-sm font-semibold text-[#132F43]">Know another autism family?</p>
                         <p className="text-sm text-[#5A6B7A]">
                           Send them an invite — they get {REFERRAL_PROGRAM_CONFIG.referredReward.description.toLowerCase()}, you get a free month.
                         </p>

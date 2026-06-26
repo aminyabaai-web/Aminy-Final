@@ -139,7 +139,7 @@ export function TrialCountdown({
               )}
             </div>
             <div>
-              <p className="font-semibold text-[#1B2733] dark:text-white">
+              <p className="font-semibold text-[#132F43] dark:text-white">
                 {daysRemaining === 0
                   ? `${hoursRemaining} hours left in your trial`
                   : daysRemaining === 1
@@ -171,7 +171,7 @@ export function TrialCountdown({
             {onInvite && (urgencyLevel === 'critical' || urgencyLevel === 'high') && (
               <button
                 onClick={onInvite}
-                className="text-sm text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#4E93A8] transition-colors"
+                className="text-sm text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#2A7D99] transition-colors"
               >
                 Or invite a friend → get 7 more days free
               </button>

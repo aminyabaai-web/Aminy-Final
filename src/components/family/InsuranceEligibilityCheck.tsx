@@ -129,7 +129,7 @@ function ResultCard({ result }: { result: EligibilityResult }) {
               <DollarSign className="w-3 h-3" /> Deductible
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
+              <div className="flex-1 bg-[#EDF4F7] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 rounded-full transition-all"
                   style={{
@@ -152,7 +152,7 @@ function ResultCard({ result }: { result: EligibilityResult }) {
               <DollarSign className="w-3 h-3" /> Out-of-Pocket Max
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-[#F0EDE8] rounded-full h-2 overflow-hidden">
+              <div className="flex-1 bg-[#EDF4F7] rounded-full h-2 overflow-hidden">
                 <div
                   className="h-full bg-blue-400 rounded-full transition-all"
                   style={{
@@ -172,12 +172,12 @@ function ResultCard({ result }: { result: EligibilityResult }) {
         {(result.copay !== undefined || result.coinsurance !== undefined) && (
           <div className="flex items-center gap-3 text-sm text-[#5A6B7A]">
             {result.copay !== undefined && (
-              <span className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg px-2 py-1">
+              <span className="bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg px-2 py-1">
                 Copay: <strong>{fmt(result.copay)}</strong>
               </span>
             )}
             {result.coinsurance !== undefined && (
-              <span className="bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg px-2 py-1">
+              <span className="bg-[#F6FBFB] border border-[#E8E4DF] rounded-lg px-2 py-1">
                 Coinsurance: <strong>{Math.round(result.coinsurance * 100)}%</strong>
               </span>
             )}
@@ -190,7 +190,7 @@ function ResultCard({ result }: { result: EligibilityResult }) {
             <p className="text-sm font-semibold text-[#5A6B7A] mb-1">Covered Services</p>
             <div className="flex flex-wrap gap-1">
               {result.coveredServices.map(s => (
-                <span key={s} className="bg-[#F0EDE8] text-[#5A6B7A] text-xs px-2 py-0.5 rounded-full">{s}</span>
+                <span key={s} className="bg-[#EDF4F7] text-[#5A6B7A] text-xs px-2 py-0.5 rounded-full">{s}</span>
               ))}
             </div>
           </div>
