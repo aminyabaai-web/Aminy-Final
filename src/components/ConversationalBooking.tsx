@@ -305,7 +305,7 @@ function ProviderCardMini({
           : 'border border-[#E8E4DF] bg-white/95 hover:border-[#6B9080]/20 hover:bg-[#6B9080]/10/70'
       }`}
     >
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#43AA8B] flex items-center justify-center text-white font-bold text-lg">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#4E93A8] flex items-center justify-center text-white font-bold text-lg">
         {provider.name.split(' ').map(n => n[0]).join('')}
       </div>
       <div className="flex-1 min-w-0">
@@ -650,7 +650,7 @@ export function ConversationalBooking({
   if (isLoading) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-[#43AA8B]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#4E93A8]" />
         <p className="text-sm text-[#5A6B7A]">Finding available providers…</p>
       </div>
     );

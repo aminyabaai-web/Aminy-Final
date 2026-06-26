@@ -676,7 +676,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center gap-3 mb-4">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-              style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #7BA7BC 100%)' }}
             >
               ✦
             </div>
@@ -694,12 +694,12 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                   onClick={() => handlePersonalityChange(p.id)}
                   className={`relative flex flex-col gap-1 p-3 rounded-xl border-2 text-left transition-all ${
                     isActive
-                      ? 'border-[#43AA8B] bg-[#43AA8B]/5'
+                      ? 'border-[#4E93A8] bg-[#4E93A8]/5'
                       : 'border-[#E8E4DF] dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
                   {isActive && (
-                    <span className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#43AA8B] flex items-center justify-center">
+                    <span className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#4E93A8] flex items-center justify-center">
                       <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
                     </span>
                   )}
@@ -1022,7 +1022,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <div className="flex items-center gap-3">
                         <div
                           className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ background: 'linear-gradient(135deg, #43AA8B22 0%, #7BA7BC22 100%)' }}
+                          style={{ background: 'linear-gradient(135deg, #4E93A822 0%, #7BA7BC22 100%)' }}
                         >
                           <span className="text-base">✦</span>
                         </div>
@@ -1074,7 +1074,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                     : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                                 }`}
                                 style={notifications.checkInFrequency === opt.id ? {
-                                  background: 'linear-gradient(135deg, #43AA8B 0%, #7BA7BC 100%)'
+                                  background: 'linear-gradient(135deg, #4E93A8 0%, #7BA7BC 100%)'
                                 } : {}}
                               >
                                 {opt.label}

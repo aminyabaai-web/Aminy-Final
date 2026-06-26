@@ -1654,7 +1654,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
               className={`flex h-11 w-11 items-center justify-center rounded-full border shadow-sm transition-colors ${
                 activeView === 'home'
                   ? 'border-[#E8E4DF] bg-white/90 text-slate-300 cursor-default dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
-                  : 'border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#3A9DBB] dark:hover:bg-slate-700'
+                  : 'border-[#E8E4DF] bg-[#FAF7F2] text-[#2A7D99] hover:bg-[#F0EDE8] dark:bg-slate-800 dark:border-slate-600 dark:text-[#6AA9BC] dark:hover:bg-slate-700'
               }`}
               aria-label="Go to Junior home screen"
               title="🏠 Home"
@@ -1793,7 +1793,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <button
                         type="button"
                         onClick={() => onNavigate('sensory-fidget')}
-                        className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(67,170,139,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
+                        className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(78,147,168,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
                       >
                         <div>
                           <div className="flex items-center gap-2 text-sm font-medium text-[#7BA7BC]">
@@ -1812,7 +1812,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <div className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Quick support</div>
                       <div className="mt-2 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>What helps right now?</div>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <Badge variant="outline" className="border-[#2A7D99]/20 bg-[#2A7D99]/10 text-[#2A7D99] dark:text-[#3A9DBB]">Waiting room mode</Badge>
+                        <Badge variant="outline" className="border-[#2A7D99]/20 bg-[#2A7D99]/10 text-[#2A7D99] dark:text-[#6AA9BC]">Waiting room mode</Badge>
                         <Badge variant="outline" className="border-purple-100 bg-purple-50 text-purple-700 dark:border-purple-900/40 dark:bg-purple-900/20 dark:text-purple-300">Transition timer</Badge>
                         <Badge variant="outline" className="border-amber-100 bg-amber-50 text-amber-700 dark:border-amber-900/40 dark:bg-amber-900/20 dark:text-amber-300">Reward ready</Badge>
                       </div>
@@ -2427,7 +2427,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
                     }`}
                     style={activeTrackFilter === filter.id ? {
-                      background: 'linear-gradient(90deg, #2A7D99, #3A9DBB)',
+                      background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",
                     } : {
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",

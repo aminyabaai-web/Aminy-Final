@@ -111,7 +111,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
           <button
             onClick={onVerifyClick}
             className="shrink-0 text-sm font-semibold px-3 py-2 rounded-xl text-white whitespace-nowrap"
-            style={{ background: 'linear-gradient(135deg, #43AA8B 0%, #577590 100%)' }}
+            style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
           >
             Verify <ChevronRight className="w-3 h-3 inline" />
           </button>
@@ -127,7 +127,7 @@ export function CoverageBanner({ userId, filterService, onVerifyClick, className
 
   return (
     <div className={`rounded-2xl p-4 border ${className}`}
-      style={{ background: 'linear-gradient(135deg, #43AA8B10 0%, #57759010 100%)', borderColor: '#43AA8B30' }}>
+      style={{ background: 'linear-gradient(135deg, #4E93A810 0%, #57759010 100%)', borderColor: '#4E93A830' }}>
       <div className="flex items-center gap-2 mb-2">
         <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
         <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">

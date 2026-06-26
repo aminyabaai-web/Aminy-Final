@@ -37,7 +37,7 @@ function RingChart({ percent, size = 56, label }: { percent: number; size?: numb
   const radius = (size - 10) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
-  const color = percent === 100 ? '#43AA8B' : percent >= 70 ? '#F59E0B' : '#EF4444';
+  const color = percent === 100 ? '#4E93A8' : percent >= 70 ? '#F59E0B' : '#EF4444';
 
   return (
     <div className="flex flex-col items-center gap-1">

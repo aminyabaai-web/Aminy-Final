@@ -110,7 +110,7 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
     label: "How we'll pay",
     subtitle: 'Waivers, grants, out-of-pocket costs',
     icon: DollarSign,
-    color: '#43AA8B',
+    color: '#4E93A8',
   },
   {
     id: 'understanding',
@@ -138,7 +138,7 @@ const OVERWHELM_OPTIONS: OverwhelmOption[] = [
     label: 'DD agency & waivers',
     subtitle: 'DDD/DDS, HCBS waivers, waiver funding',
     icon: HandHeart,
-    color: '#43AA8B',
+    color: '#4E93A8',
   },
 ];
 
@@ -150,7 +150,7 @@ const CATEGORY_CONFIG: Record<string, { icon: React.ElementType; color: string; 
   insurance: { icon: Shield, color: '#7BA7BC', label: 'Benefits & Coverage' },
   therapy:   { icon: Brain,  color: '#6B9080', label: 'Therapy' },
   school:    { icon: GraduationCap, color: '#E07A5F', label: 'School & IEP' },
-  financial: { icon: DollarSign, color: '#43AA8B', label: 'Financial' },
+  financial: { icon: DollarSign, color: '#4E93A8', label: 'Financial' },
   'self-care': { icon: Heart, color: '#E07A5F', label: 'Take care of yourself' },
   community: { icon: Users, color: '#7BA7BC', label: 'Community & AI' },
 };
@@ -410,7 +410,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 icon: Sparkles,
                 title: 'AI that knows autism services',
                 body: 'Ask anything at 2am. Insurance denials, IEP rights, what ABA actually looks like — Aminy has answers.',
-                color: '#43AA8B',
+                color: '#4E93A8',
               },
             ].map(({ icon: Icon, title, body, color }) => (
               <div
@@ -1260,7 +1260,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 },
                 {
                   icon: Users,
-                  color: '#43AA8B',
+                  color: '#4E93A8',
                   title: 'Provider matching',
                   body: 'Find BCBAs, OTs, and SLPs who accept your insurance and are taking new families.',
                 },
@@ -1442,14 +1442,14 @@ function StateInfoRow({
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-      <Icon size={14} color={accent ? '#43AA8B' : '#8A9BA8'} style={{ marginTop: 2, flexShrink: 0 }} />
+      <Icon size={14} color={accent ? '#4E93A8' : '#8A9BA8'} style={{ marginTop: 2, flexShrink: 0 }} />
       <div style={{ flex: 1 }}>
         <span style={{ fontSize: 12, color: '#8A9BA8' }}>{label}: </span>
         <span
           style={{
             fontSize: 12,
             fontWeight: 600,
-            color: accent ? '#43AA8B' : '#3A4A57',
+            color: accent ? '#4E93A8' : '#3A4A57',
           }}
         >
           {value}

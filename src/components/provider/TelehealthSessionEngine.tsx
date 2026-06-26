@@ -569,7 +569,7 @@ export function TelehealthSessionEngine({
               onClick={handleStartSession}
               disabled={!allChecked}
               className="w-full h-14 text-base font-bold bg-gradient-to-r from-teal-500 to-violet-500 hover:from-teal-600 hover:to-violet-600 text-white rounded-2xl border-0 shadow-lg disabled:opacity-40 transition-all"
-              style={{ boxShadow: allChecked ? '0 4px 20px rgba(67,170,139,0.35)' : 'none' }}
+              style={{ boxShadow: allChecked ? '0 4px 20px rgba(78,147,168,0.35)' : 'none' }}
             >
               <Video className="w-5 h-5 mr-2" />
               Start Session

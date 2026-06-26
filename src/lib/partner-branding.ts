@@ -33,7 +33,7 @@ export const PARTNER_BRANDS: Record<string, PartnerBrand> = {
     fullName: 'Aminy LLC',
     shortName: 'Aminy',
     website: 'https://aminy.app',
-    primaryColor: '#43AA8B',
+    primaryColor: '#4E93A8',
     accentColor: '#577590',
     welcomeMessage: 'Welcome to Aminy',
     adminPortalTitle: 'Aminy Admin Portal',
@@ -45,7 +45,7 @@ export const PARTNER_BRANDS: Record<string, PartnerBrand> = {
     shortName: 'AACT',
     website: 'https://aactarizona.com',
     primaryColor: '#2563EB', // AACT blue
-    accentColor: '#43AA8B',
+    accentColor: '#4E93A8',
     welcomeMessage: 'Welcome — AACT family support, powered by Aminy',
     adminPortalTitle: 'AACT Partner Dashboard',
     providerContext: {
@@ -61,7 +61,7 @@ export const PARTNER_BRANDS: Record<string, PartnerBrand> = {
     shortName: 'Rise',
     website: 'https://riseservicesinc.org',
     primaryColor: '#DC2626', // Rise red
-    accentColor: '#43AA8B',
+    accentColor: '#4E93A8',
     welcomeMessage: 'Rise family support, powered by Aminy',
     adminPortalTitle: 'Rise Partner Dashboard',
     providerContext: {

@@ -254,7 +254,7 @@ export function SplashPage({
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                backgroundColor: '#2A7D99',
+                backgroundColor: '#4E93A8',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 500,
@@ -269,10 +269,10 @@ export function SplashPage({
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#1F6080';
+                e.currentTarget.style.backgroundColor = '#376E80';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#2A7D99';
+                e.currentTarget.style.backgroundColor = '#4E93A8';
               }}
             >
               Start free
@@ -348,7 +348,7 @@ export function SplashPage({
                       background: 'rgba(42,125,153,0.07)',
                       border: '1px solid rgba(42,125,153,0.22)',
                       borderRadius: '100px',
-                      color: '#2A7D99',
+                      color: '#4E93A8',
                       fontFamily: fontStack,
                       fontSize: '13px',
                       fontWeight: 600,

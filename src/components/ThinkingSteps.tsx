@@ -142,7 +142,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
                     className="flex items-center gap-2 text-sm"
                   >
                     <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${
-                      step.status === 'complete' ? 'text-[#43AA8B]'
+                      step.status === 'complete' ? 'text-[#4E93A8]'
                         : step.status === 'active' ? 'text-[#6B9080] animate-pulse'
                         : 'text-[#8E9BAA]'
                     }`} />

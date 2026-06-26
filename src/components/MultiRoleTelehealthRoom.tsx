@@ -260,7 +260,7 @@ export function MultiRoleTelehealthRoom({ onLeave, role, patientName = "Patient"
                 </p>
                 <button
                     onClick={onLeave}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', minHeight: '44px', padding: '12px 20px', borderRadius: '12px', border: 'none', backgroundColor: '#43AA8B', color: '#FFF', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', minHeight: '44px', padding: '12px 20px', borderRadius: '12px', border: 'none', backgroundColor: '#4E93A8', color: '#FFF', fontSize: '15px', fontWeight: 600, cursor: 'pointer' }}
                 >
                     <ArrowLeft size={18} /> Back to telehealth
                 </button>

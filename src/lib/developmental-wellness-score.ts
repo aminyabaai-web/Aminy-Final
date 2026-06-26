@@ -117,7 +117,7 @@ export function calculateWellnessScore(data: {
     score: engagementScore,
     trend: 0,
     trendLabel: engagementScore >= 70 ? 'Very active' : engagementScore >= 40 ? 'Moderate' : 'Getting started',
-    color: '#43AA8B',
+    color: '#4E93A8',
   });
 
   // Composite: weighted average of all domains

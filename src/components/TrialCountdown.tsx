@@ -171,7 +171,7 @@ export function TrialCountdown({
             {onInvite && (urgencyLevel === 'critical' || urgencyLevel === 'high') && (
               <button
                 onClick={onInvite}
-                className="text-sm text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#43AA8B] transition-colors"
+                className="text-sm text-[#5A6B7A] dark:text-neutral-400 underline underline-offset-2 hover:text-[#4E93A8] transition-colors"
               >
                 Or invite a friend → get 7 more days free
               </button>

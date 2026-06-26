@@ -144,8 +144,8 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }} aria-label="Goal mastery trend over 12 weeks">
       <defs>
         <linearGradient id="masteryGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#43AA8B" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="#43AA8B" stopOpacity="0.02" />
+          <stop offset="0%" stopColor="#4E93A8" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#4E93A8" stopOpacity="0.02" />
         </linearGradient>
       </defs>
 
@@ -186,7 +186,7 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
       <path d={areaD} fill="url(#masteryGrad)" />
 
       {/* Line */}
-      <path d={pathD} fill="none" stroke="#43AA8B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={pathD} fill="none" stroke="#4E93A8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 
       {/* End point dot */}
       {points.length > 0 && (() => {
@@ -195,7 +195,7 @@ function LineChart({ points }: { points: WeeklyPoint[] }) {
         const ly = yPos(last.masteryPct);
         return (
           <g>
-            <circle cx={lx} cy={ly} r={5} fill="#43AA8B" />
+            <circle cx={lx} cy={ly} r={5} fill="#4E93A8" />
             <circle cx={lx} cy={ly} r={3} fill="white" />
             <text x={lx + 8} y={ly} dominantBaseline="middle" className="fill-emerald-500 font-bold" style={{ fontSize: 10 }}>
               {last.masteryPct}%
@@ -234,7 +234,7 @@ function BarChart({ buckets }: { buckets: FrequencyBucket[] }) {
               x={bX} y={bY}
               width={barW} height={bH}
               rx={4}
-              fill="#43AA8B"
+              fill="#4E93A8"
               opacity={0.85}
             />
             <text

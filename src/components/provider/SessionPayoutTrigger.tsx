@@ -218,7 +218,7 @@ export function SessionPayoutTrigger({
               <Button
                 onClick={handleRelease}
                 className="w-full h-11 rounded-xl font-semibold text-sm text-white flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#43AA8B' }}
+                style={{ backgroundColor: '#4E93A8' }}
               >
                 Release Payment to Provider
                 <ArrowRight className="w-4 h-4" />
@@ -311,7 +311,7 @@ export function SessionPayoutTrigger({
               <Button
                 onClick={handleRetry}
                 className="rounded-xl text-sm text-white"
-                style={{ backgroundColor: '#43AA8B' }}
+                style={{ backgroundColor: '#4E93A8' }}
               >
                 Try Again
               </Button>

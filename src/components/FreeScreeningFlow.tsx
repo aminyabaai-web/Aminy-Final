@@ -53,8 +53,8 @@ import {
 // DESIGN TOKENS — matches brand-system spec
 // ============================================
 
-const TEAL = '#2A7D99';
-const TEAL_HOVER = '#1F6080';
+const TEAL = '#4E93A8';
+const TEAL_HOVER = '#376E80';
 const TEAL_BG_LIGHT = 'rgba(42, 125, 153, 0.07)';
 const TEAL_BORDER = 'rgba(42, 125, 153, 0.18)';
 const MIST_BG = 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)';

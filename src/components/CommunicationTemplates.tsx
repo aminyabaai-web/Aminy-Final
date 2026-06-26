@@ -193,7 +193,7 @@ export function CommunicationTemplates({
             </div>
 
             <Textarea
-              className="w-full min-h-[96px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-neutral-200 dark:border-slate-700 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/40 focus:border-[#43AA8B]"
+              className="w-full min-h-[96px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-neutral-200 dark:border-slate-700 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/40 focus:border-[#4E93A8]"
               value={texts[template.id] ?? ''}
               onChange={(e) => handleTextChange(template.id, e.target.value)}
               aria-label={`Edit ${template.name} message`}
@@ -203,7 +203,7 @@ export function CommunicationTemplates({
               <Button
                 size="sm"
                 disabled={isSendingSMS || isSendingEmail}
-                className="flex items-center gap-1.5 bg-[#43AA8B] hover:bg-[#3a9479] disabled:opacity-50 text-white rounded-xl px-4"
+                className="flex items-center gap-1.5 bg-[#4E93A8] hover:bg-[#3a9479] disabled:opacity-50 text-white rounded-xl px-4"
                 onClick={() => handleSendSMS(template.id)}
               >
                 {isSendingSMS ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquare className="w-4 h-4" />}
@@ -213,7 +213,7 @@ export function CommunicationTemplates({
                 size="sm"
                 variant="outline"
                 disabled={isSendingSMS || isSendingEmail}
-                className="flex items-center gap-1.5 border-[#E8E4DF] text-[#1B2733] dark:text-white hover:border-[#43AA8B]/40 hover:bg-[#43AA8B]/10 disabled:opacity-50 rounded-xl px-4"
+                className="flex items-center gap-1.5 border-[#E8E4DF] text-[#1B2733] dark:text-white hover:border-[#4E93A8]/40 hover:bg-[#4E93A8]/10 disabled:opacity-50 rounded-xl px-4"
                 onClick={() => handleSendEmail(template.id)}
               >
                 {isSendingEmail ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}

@@ -64,7 +64,7 @@ const STATUS_CONFIG: Record<BenefitStatusValue, {
   'not-started': { icon: Clock,         color: '#8A9BA8', bg: '#F5F2EC', label: 'Not started' },
   'submitted':   { icon: Clock,         color: '#7BA7BC', bg: 'rgba(123,167,188,0.12)', label: 'Submitted' },
   'review':      { icon: Clock,         color: '#E0A45F', bg: 'rgba(224,164,95,0.12)',  label: 'In review' },
-  'approved':    { icon: CheckCircle,   color: '#43AA8B', bg: 'rgba(67,170,139,0.12)',  label: 'Approved ✓' },
+  'approved':    { icon: CheckCircle,   color: '#4E93A8', bg: 'rgba(78,147,168,0.12)',  label: 'Approved ✓' },
   'info-requested': { icon: FileQuestion, color: '#E07A5F', bg: 'rgba(224,122,95,0.12)', label: 'Info needed' },
   'denied':      { icon: AlertCircle,   color: '#DC2626', bg: 'rgba(220,38,38,0.10)',   label: 'Denied' },
 };
@@ -277,8 +277,8 @@ export function BenefitsStatusPanel({
       {stateConfig?.waiver.selfDirected && (
         <div
           style={{
-            background: 'rgba(67,170,139,0.08)',
-            border: '1px solid rgba(67,170,139,0.20)',
+            background: 'rgba(78,147,168,0.08)',
+            border: '1px solid rgba(78,147,168,0.20)',
             borderRadius: 12,
             padding: '12px 14px',
             marginTop: 12,
@@ -287,9 +287,9 @@ export function BenefitsStatusPanel({
             alignItems: 'flex-start',
           }}
         >
-          <Star size={15} color="#43AA8B" style={{ flexShrink: 0, marginTop: 2 }} />
+          <Star size={15} color="#4E93A8" style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: '#43AA8B', marginBottom: 3 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: '#4E93A8', marginBottom: 3 }}>
               Self-Directed Option Available
             </div>
             <p style={{ fontSize: 12, color: '#3A5A4A', lineHeight: 1.5, margin: 0 }}>
@@ -361,7 +361,7 @@ function CompactView({ programs, stateConfig }: { programs: BenefitTrackedItem[]
           <span style={{ fontSize: 12, fontWeight: 600, color: '#7BA7BC', background: 'rgba(123,167,188,0.10)', borderRadius: 100, padding: '2px 10px' }}>
             {stateConfig.ddAgency.abbreviation}
           </span>
-          <span style={{ fontSize: 12, fontWeight: 600, color: '#43AA8B', background: 'rgba(67,170,139,0.10)', borderRadius: 100, padding: '2px 10px' }}>
+          <span style={{ fontSize: 12, fontWeight: 600, color: '#4E93A8', background: 'rgba(78,147,168,0.10)', borderRadius: 100, padding: '2px 10px' }}>
             {stateConfig.waiver.abbreviation}
           </span>
         </div>
@@ -369,7 +369,7 @@ function CompactView({ programs, stateConfig }: { programs: BenefitTrackedItem[]
       <div style={{ display: 'flex', gap: 12 }}>
         {approved > 0 && (
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 20, fontWeight: 700, color: '#43AA8B' }}>{approved}</div>
+            <div style={{ fontSize: 20, fontWeight: 700, color: '#4E93A8' }}>{approved}</div>
             <div style={{ fontSize: 11, color: '#8A9BA8' }}>Approved</div>
           </div>
         )}
@@ -402,9 +402,9 @@ function InfoRow({ icon: Icon, label, sublabel, accent = false }: {
 }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      <Icon size={13} color={accent ? '#43AA8B' : '#8A9BA8'} style={{ flexShrink: 0 }} />
+      <Icon size={13} color={accent ? '#4E93A8' : '#8A9BA8'} style={{ flexShrink: 0 }} />
       <span style={{ fontSize: 12, color: '#8A9BA8' }}>{sublabel}: </span>
-      <span style={{ fontSize: 12, fontWeight: 600, color: accent ? '#43AA8B' : '#3A4A57' }}>
+      <span style={{ fontSize: 12, fontWeight: 600, color: accent ? '#4E93A8' : '#3A4A57' }}>
         {label}
       </span>
     </div>

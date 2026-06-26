@@ -2884,7 +2884,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div>
                 <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
                 <textarea
-                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#43AA8B]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#43AA8B]/40 focus:border-[#43AA8B]"
+                  className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#4E93A8]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/40 focus:border-[#4E93A8]"
                   value={reviewResponseText}
                   onChange={(e) => setReviewResponseText(e.target.value)}
                   placeholder="Edit the AI draft or write your own response…"
@@ -2892,7 +2892,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </div>
               <div className="flex gap-3 pt-1">
                 <Button
-                  className="flex-1 bg-[#43AA8B] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
+                  className="flex-1 bg-[#4E93A8] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
                   disabled={isSubmittingResponse || !reviewResponseText.trim()}
                   onClick={async () => {
                     if (!reviewingThread || !reviewResponseText.trim()) return;

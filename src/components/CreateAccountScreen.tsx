@@ -452,7 +452,7 @@ export function CreateAccountScreen({
               justifyContent: 'center',
               gap: '8px',
               backgroundColor: 'rgba(42,125,153,0.07)',
-              color: '#2A7D99',
+              color: '#4E93A8',
               fontFamily: fontStack,
               fontWeight: 500,
               fontSize: '13px',
@@ -716,8 +716,8 @@ export function CreateAccountScreen({
                     minWidth: '18px',
                     marginTop: '1px',
                     borderRadius: '4px',
-                    border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#2A7D99' : 'rgba(17, 24, 39, 0.2)'}`,
-                    backgroundColor: acceptedTerms ? '#2A7D99' : '#FFFFFF',
+                    border: `1.5px solid ${errors.terms ? 'rgba(180, 90, 90, 0.4)' : acceptedTerms ? '#4E93A8' : 'rgba(17, 24, 39, 0.2)'}`,
+                    backgroundColor: acceptedTerms ? '#4E93A8' : '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -742,7 +742,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#2A7D99',
+                      color: '#4E93A8',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -765,7 +765,7 @@ export function CreateAccountScreen({
                     role="button"
                     tabIndex={0}
                     style={{
-                      color: '#2A7D99',
+                      color: '#4E93A8',
                       textDecoration: 'underline',
                       textUnderlineOffset: '2px',
                       fontWeight: 500,
@@ -804,7 +804,7 @@ export function CreateAccountScreen({
                 justifyContent: 'center',
                 gap: '8px',
                 marginTop: '4px',
-                backgroundColor: '#2A7D99',
+                backgroundColor: '#4E93A8',
                 color: '#FFFFFF',
                 fontFamily: fontStack,
                 fontWeight: 600,
@@ -820,10 +820,10 @@ export function CreateAccountScreen({
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
-                if (!isLoading) e.currentTarget.style.backgroundColor = '#1F6080';
+                if (!isLoading) e.currentTarget.style.backgroundColor = '#376E80';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#2A7D99';
+                e.currentTarget.style.backgroundColor = '#4E93A8';
               }}
             >
               {isLoading ? (

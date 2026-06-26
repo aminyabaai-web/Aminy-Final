@@ -170,7 +170,7 @@ export function NotificationPreferences() {
       {/* Aminy AI Notifications */}
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
-          <Brain className="w-4 h-4 text-[#43AA8B]" />
+          <Brain className="w-4 h-4 text-[#4E93A8]" />
           <h3 className="font-semibold">Aminy AI</h3>
         </div>
         <div className="space-y-3 sm:space-y-4">
