@@ -1,0 +1,23 @@
+<!-- @dsCard group="Spacing" viewport="700x170" name="Motion" subtitle="Calm easing, breath-timed. Everything exhales — nothing bounces hard." -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;background:var(--aminy-mist);padding:22px;font-family:var(--font-ui);color:var(--color-text);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;max-width:600px;}
+  .r{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px solid var(--color-border);padding:7px 0;}
+  .r .k{color:var(--color-text-strong);font-weight:600;}
+  .r .v{font-family:var(--font-mono);font-size:11px;color:var(--color-text-muted);}
+  .ring{margin:14px auto 0;width:40px;height:40px;border-radius:50%;border:2px solid var(--aminy-teal-400);background:linear-gradient(135deg,var(--aminy-teal-300),var(--aminy-teal-600));animation:br var(--dur-breath) var(--ease-breath) infinite;}
+  @keyframes br{0%,100%{transform:scale(.82);opacity:.5}50%{transform:scale(1.05);opacity:1}}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="r"><span class="k">fast</span><span class="v">120ms</span></div>
+    <div class="r"><span class="k">base</span><span class="v">200ms</span></div>
+    <div class="r"><span class="k">slow</span><span class="v">360ms</span></div>
+    <div class="r"><span class="k">breath</span><span class="v">4000ms</span></div>
+    <div class="r"><span class="k">calm</span><span class="v">cubic(.4,0,.2,1)</span></div>
+    <div class="r"><span class="k">lift</span><span class="v">cubic(.2,.8,.2,1)</span></div>
+  </div>
+  <div class="ring" title="breathing ring"></div>
+</body></html>

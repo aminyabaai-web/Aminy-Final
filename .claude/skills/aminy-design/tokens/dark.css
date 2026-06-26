@@ -1,0 +1,79 @@
+/* ============================================================
+   AMINY · DARK MODE
+   A token-only overlay — components need ZERO changes because the
+   whole system is built on semantic CSS variables. Applies on system
+   preference OR a manual [data-theme="dark"] on <html>/<body>.
+   Surfaces: deep navy (not black). Teal slightly desaturated so the
+   needle color doesn't vibrate on dark.
+   ============================================================ */
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  /* Surfaces — deep navy, never pure black */
+  --aminy-mist:      #0C1620;
+  --aminy-mist-deep: #0A131C;
+  --aminy-paper:     #111E2A;
+  --aminy-warm:      #0F1B26;
+
+  /* Semantic surfaces */
+  --color-bg:            #0C1620;
+  --color-bg-elevated:   #142430;   /* cards float above bg */
+  --color-bg-soft:       #0F1B26;
+
+  /* Text — warm off-whites, never #fff harsh */
+  --color-text:          #D6E2EA;
+  --color-text-strong:   #F1F6F9;
+  --color-text-muted:    #8FA3B2;
+  --color-text-subtle:   #5E7488;
+
+  /* Borders — low-contrast hairlines */
+  --color-border:        #213341;
+  --color-border-strong: #2C4253;
+
+  /* Teal — slightly lifted + desaturated for dark surfaces */
+  --aminy-teal-600: #3E97B5;   /* primary on dark */
+  --aminy-teal-700: #2A7D99;
+  --aminy-teal-50:  #14242E;   /* tinted "soft teal" surface */
+  --aminy-teal-100: #1B313D;
+  --color-primary:       var(--aminy-teal-600);
+  --color-primary-hover: #4DA7C4;
+  --color-primary-soft:  #14242E;
+
+  /* Earned-state soft fills re-tinted for dark */
+  --aminy-win-50:  #241C0A;  --aminy-win-100: #3A2D0F;
+  --aminy-grow-50: #0E2417;  --aminy-grow-100:#15351F;
+  --aminy-care-50: #1B1630;  --aminy-care-100:#251C42;
+  --aminy-navy-50: #142430;  --aminy-navy-100:#213341;
+}
+
+/* Auto dark on system preference, unless an explicit light theme is set.
+   Consumers that want OS-driven dark add `data-theme="auto"` on <html>;
+   the manual [data-theme="dark"] scope above is the registered token home. */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --aminy-mist:      #0C1620;
+    --aminy-mist-deep: #0A131C;
+    --aminy-paper:     #111E2A;
+    --aminy-warm:      #0F1B26;
+    --color-bg:            #0C1620;
+    --color-bg-elevated:   #142430;
+    --color-bg-soft:       #0F1B26;
+    --color-text:          #D6E2EA;
+    --color-text-strong:   #F1F6F9;
+    --color-text-muted:    #8FA3B2;
+    --color-text-subtle:   #5E7488;
+    --color-border:        #213341;
+    --color-border-strong: #2C4253;
+    --aminy-teal-600: #3E97B5;
+    --aminy-teal-700: #2A7D99;
+    --aminy-teal-50:  #14242E;
+    --aminy-teal-100: #1B313D;
+    --color-primary:       #3E97B5;
+    --color-primary-hover: #4DA7C4;
+    --color-primary-soft:  #14242E;
+    --aminy-win-50:  #241C0A;  --aminy-win-100: #3A2D0F;
+    --aminy-grow-50: #0E2417;  --aminy-grow-100:#15351F;
+    --aminy-care-50: #1B1630;  --aminy-care-100:#251C42;
+    --aminy-navy-50: #142430;  --aminy-navy-100:#213341;
+  }
+}

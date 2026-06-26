@@ -1,0 +1,35 @@
+<!-- @dsCard group="Spacing" viewport="700x230" name="Motion" subtitle="Calm, purposeful. One moving thing per view. Always honors reduced-motion." -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<link rel="stylesheet" href="../styles.css"/>
+<style>
+  body{margin:0;background:var(--aminy-mist);font-family:var(--font-ui);color:var(--color-text);padding:20px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;max-width:640px;}
+  .r{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px solid var(--color-border);padding:7px 0;}
+  .r .k{color:var(--color-text-strong);font-weight:600;}
+  .r .v{font-family:var(--font-mono);font-size:11px;color:var(--color-text-muted);}
+  .demo{display:flex;align-items:center;gap:18px;margin-top:16px;}
+  .ring{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--aminy-teal-300),var(--aminy-teal-600));animation:aminy-breathe var(--dur-breath) var(--ease-breath) infinite;}
+  .think{display:flex;gap:5px;}
+  .think span{width:8px;height:8px;border-radius:50%;background:var(--aminy-teal-600);}
+  .think span:nth-child(2){animation-delay:.2s;}.think span:nth-child(3){animation-delay:.4s;}
+  .bar{flex:1;max-width:160px;height:8px;background:var(--aminy-navy-50);border-radius:4px;overflow:hidden;}
+  .bar i{display:block;height:100%;width:70%;background:var(--aminy-teal-500);border-radius:4px;animation:grow 1.2s var(--ease-lift) both;}
+  @keyframes grow{from{width:0}to{width:70%}}
+  .lab{font-size:10px;color:var(--color-text-muted);font-family:var(--font-mono);}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="r"><span class="k">micro</span><span class="v">120ms · ease-calm</span></div>
+    <div class="r"><span class="k">standard</span><span class="v">200ms · ease-calm</span></div>
+    <div class="r"><span class="k">entrance</span><span class="v">360ms · ease-lift</span></div>
+    <div class="r"><span class="k">breath</span><span class="v">4000ms · ease-breath</span></div>
+    <div class="r"><span class="k">press</span><span class="v">scale .98</span></div>
+    <div class="r"><span class="k">Jr only</span><span class="v">bounce + sparkle</span></div>
+  </div>
+  <div class="demo">
+    <div class="ring" title="breath ring"></div>
+    <div class="think aminy-stagger"><span class="aminy-think-dot"></span><span class="aminy-think-dot"></span><span class="aminy-think-dot"></span></div>
+    <div class="bar"><i></i></div>
+    <span class="lab">breath · AI-thinking · count-up</span>
+  </div>
+</body></html>

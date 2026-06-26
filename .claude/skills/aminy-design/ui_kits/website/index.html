@@ -1,0 +1,318 @@
+<!-- @dsCard group="Website" viewport="1280x900" name="aminy.ai — marketing site" subtitle="Hero · how it helps · families/providers · Jr · pricing · footer" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aminy — Gentle guidance. Meaningful progress.</title>
+<link rel="icon" href="../../assets/favicon.svg"/>
+<link rel="stylesheet" href="../../styles.css"/>
+<style>
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--font-ui);color:var(--color-text);background:#fff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+  ::-webkit-scrollbar{width:0;height:0;}
+  *{scrollbar-width:none;}
+
+  /* ---- nav ---- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--color-border);}
+  .nav-in{display:flex;align-items:center;gap:34px;height:68px;}
+  .nav-in img{height:30px;display:block;}
+  .nav-links{display:flex;gap:26px;margin-left:8px;}
+  .nav-links a{font-size:14.5px;font-weight:500;color:var(--aminy-navy-500);text-decoration:none;}
+  .nav-links a:hover{color:var(--color-text-strong);}
+  .nav-cta{margin-left:auto;display:flex;align-items:center;gap:18px;}
+  .signin{font-size:14.5px;font-weight:600;color:var(--color-text-strong);text-decoration:none;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:var(--radius-md);font-family:var(--font-ui);font-weight:600;font-size:15.5px;text-decoration:none;cursor:pointer;border:0;transition:background var(--dur-base) var(--ease-calm), transform var(--dur-fast) var(--ease-calm);}
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--aminy-teal-600);color:#fff;box-shadow:var(--shadow-cta);}
+  .btn-primary:hover{background:var(--aminy-teal-700);}
+  .btn-ghost{background:#fff;color:var(--aminy-navy-700);border:1px solid var(--color-border-strong);}
+  .btn-sm{height:42px;padding:0 18px;font-size:14px;}
+
+  /* ---- hero ---- */
+  .hero{background:linear-gradient(180deg,#fff 0%,var(--aminy-mist) 60%,var(--aminy-mist-deep) 100%);overflow:hidden;}
+  .hero-in{display:grid;grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;padding:84px 0 72px;}
+  .kicker{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--aminy-teal-700);background:var(--aminy-teal-50);border:1px solid var(--aminy-teal-100);border-radius:999px;padding:7px 14px;margin-bottom:22px;}
+  h1{font-size:54px;line-height:1.06;letter-spacing:-0.032em;font-weight:800;color:var(--color-text-strong);margin:0 0 20px;text-wrap:balance;}
+  h1 em{font-style:normal;color:var(--aminy-teal-600);}
+  .sub{font-size:19px;line-height:1.6;color:var(--aminy-navy-500);max-width:480px;margin:0 0 30px;text-wrap:pretty;}
+  .hero-ctas{display:flex;gap:14px;align-items:center;margin-bottom:14px;}
+  .fineprint{font-size:13px;color:var(--color-text-muted);}
+  .trust{display:flex;gap:22px;margin-top:34px;flex-wrap:wrap;}
+  .trust span{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--aminy-navy-500);}
+  .trust svg{flex:none;}
+
+  /* phone mock */
+  .phone{width:340px;background:#fff;border-radius:40px;padding:12px;box-shadow:0 30px 70px rgba(12,34,48,0.18),0 4px 14px rgba(12,34,48,0.06);border:1px solid #e5e7eb;margin:0 auto;position:relative;}
+  .phone-screen{border-radius:30px;overflow:hidden;background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));padding:20px 16px 18px;}
+  .ph-hi{font-weight:700;font-size:18px;color:var(--color-text-strong);letter-spacing:-0.02em;}
+  .ph-sub{font-size:11.5px;color:var(--color-text-muted);margin-top:2px;}
+  .ph-affirm{font-size:14px;font-weight:500;color:var(--aminy-navy-700);letter-spacing:-0.01em;line-height:1.4;margin:12px 0;}
+  .ph-nudge{background:linear-gradient(180deg,#fff,var(--aminy-teal-50));border:1px solid var(--aminy-teal-100);border-left:3px solid var(--aminy-teal-600);border-radius:14px;padding:11px 13px;margin-bottom:12px;}
+  .ph-nudge b{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--aminy-teal-700);margin-bottom:4px;}
+  .ph-nudge span{font-size:12.5px;font-weight:600;color:var(--color-text-strong);line-height:1.35;}
+  .ph-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+  .ph-stat{background:#fff;border:1px solid var(--color-border);border-radius:11px;padding:8px 9px;}
+  .ph-stat i{font-style:normal;display:block;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);font-weight:700;}
+  .ph-stat b{font-size:17px;color:var(--aminy-teal-700);letter-spacing:-0.02em;}
+  .ph-stat small{font-size:8.5px;color:var(--color-text-muted);display:block;margin-top:1px;}
+
+  /* ---- sections ---- */
+  section{padding:88px 0;}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:600;color:var(--aminy-teal-700);margin-bottom:14px;}
+  .eyebrow::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--aminy-teal-500);}
+  h2{font-size:38px;line-height:1.12;letter-spacing:-0.028em;font-weight:700;color:var(--color-text-strong);margin:0 0 14px;text-wrap:balance;}
+  .lede{font-size:17px;line-height:1.6;color:var(--aminy-navy-500);max-width:560px;margin:0 0 44px;}
+
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .card{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:28px;box-shadow:var(--shadow-sm);transition:box-shadow var(--dur-base) var(--ease-lift), transform var(--dur-base) var(--ease-lift);}
+  .card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+  .card .ic{width:46px;height:46px;border-radius:14px;background:var(--aminy-teal-50);color:var(--aminy-teal-700);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .card h3{font-size:19px;font-weight:700;letter-spacing:-0.015em;color:var(--color-text-strong);margin:0 0 8px;}
+  .card p{font-size:14.5px;line-height:1.6;color:var(--aminy-navy-500);margin:0;}
+
+  .mist{background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .panel{border-radius:var(--radius-2xl);padding:38px;position:relative;overflow:hidden;}
+  .panel.fam{background:#fff;border:1px solid var(--color-border);box-shadow:var(--shadow-md);}
+  .panel.pro{background:var(--aminy-navy-950);color:#fff;}
+  .panel h3{font-size:24px;font-weight:700;letter-spacing:-0.02em;margin:0 0 6px;}
+  .panel .who{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;display:block;}
+  .panel.fam .who{color:var(--aminy-teal-700);}
+  .panel.pro .who{color:#8EC0CE;}
+  .panel ul{list-style:none;padding:0;margin:0 0 26px;display:flex;flex-direction:column;gap:11px;}
+  .panel li{display:flex;gap:10px;font-size:15px;line-height:1.45;}
+  .panel.fam li{color:var(--aminy-navy-500);}
+  .panel.pro li{color:#B9CCD8;}
+  .panel li::before{content:"✓";font-weight:700;flex:none;}
+  .panel.fam li::before{color:var(--aminy-teal-600);}
+  .panel.pro li::before{color:#4DA7C4;}
+
+  .jr{background:linear-gradient(135deg,#eef2ff,#faf5ff 55%,#e0f2fe);}
+  .jr-in{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;}
+  .jr h2{color:#312e81;}
+  .jr .lede{color:#6366f1;margin-bottom:26px;}
+  .jr-em{display:flex;gap:14px;}
+  .jr-em span{width:84px;height:84px;border-radius:26px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 8px 20px rgba(99,102,241,0.16);}
+
+  /* pricing */
+  .tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch;}
+  .tier{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:26px 22px;display:flex;flex-direction:column;}
+  .tier.rec{border:2px solid var(--aminy-teal-600);box-shadow:var(--shadow-lg);position:relative;}
+  .tier .tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--aminy-teal-600);color:#fff;font-size:11px;font-weight:700;letter-spacing:.06em;border-radius:999px;padding:4px 12px;white-space:nowrap;}
+  .tier h4{font-size:17px;font-weight:700;color:var(--color-text-strong);margin:0 0 4px;}
+  .tier .pr{font-size:30px;font-weight:800;letter-spacing:-0.03em;color:var(--color-text-strong);}
+  .tier .pr small{font-size:13px;font-weight:500;color:var(--color-text-muted);}
+  .tier .sv{font-size:11.5px;color:var(--aminy-grow-600);font-weight:600;min-height:16px;margin:2px 0 14px;}
+  .tier ul{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:8px;flex:1;}
+  .tier li{font-size:13px;line-height:1.45;color:var(--aminy-navy-500);display:flex;gap:7px;}
+  .tier li::before{content:"·";font-weight:900;color:var(--aminy-teal-500);}
+
+  /* cta + footer */
+  .cta-band{background:var(--aminy-navy-950);border-radius:var(--radius-2xl);padding:64px;text-align:center;color:#fff;}
+  .cta-band h2{color:#fff;}
+  .cta-band p{color:#B9CCD8;font-size:17px;margin:0 auto 30px;max-width:480px;line-height:1.6;}
+  footer{padding:48px 0 56px;border-top:1px solid var(--color-border);}
+  .foot{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+  .foot img{height:26px;}
+  .foot-col{display:flex;flex-direction:column;gap:9px;}
+  .foot-col b{font-size:13px;color:var(--color-text-strong);margin-bottom:3px;}
+  .foot-col a{font-size:13.5px;color:var(--aminy-navy-500);text-decoration:none;}
+  .legal{margin-top:36px;font-size:12px;color:var(--color-text-subtle);line-height:1.6;max-width:760px;}
+
+  /* reveals */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease-lift), transform .6s var(--ease-lift);}
+  .rv.on{opacity:1;transform:none;}
+  /* Hero is never transition-gated — instantly visible in every context (embeds, print, throttled iframes) */
+  .hero .rv, nav .rv{opacity:1;transform:none;transition:none;}
+  @media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none;}}
+  @media (max-width:980px){
+    .hero-in{grid-template-columns:1fr;padding:56px 0;}
+    .phone{display:none;}
+    h1{font-size:38px;}
+    .nav-links{display:none;}
+    .signin{display:none;}
+    .cards3,.tiers,.split{grid-template-columns:1fr;}
+    .jr-in{grid-template-columns:1fr;}
+    .wrap{padding:0 20px;}
+    section{padding:60px 0;}
+    h2{font-size:30px;}
+    .cta-band{padding:44px 24px;}
+    .panel{padding:28px;}
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <img src="../../assets/aminy_logo.png" alt="aminy"/>
+  <div class="nav-links">
+    <a href="#families">For families</a>
+    <a href="#providers">For providers</a>
+    <a href="#teleaba">TeleABA</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <div class="nav-cta">
+    <a class="signin" href="#">Sign in</a>
+    <a class="btn btn-primary btn-sm" href="#pricing">Start free</a>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap hero-in">
+  <div>
+    <span class="kicker rv">For families raising kids with autism & ADHD</span>
+    <h1 class="rv">The calm center of your child's care.</h1>
+    <p class="sub rv">An AI coach that knows your child and never sleeps — 2 a.m. questions answered, routines held, real BCBAs signing off, and therapy that comes to you. All of it in your pocket.</p>
+    <div class="hero-ctas rv">
+      <a class="btn btn-primary" href="#pricing">Start your 14-day free trial</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="fineprint rv">No card required · cancel anytime</div>
+    <div class="trust rv">
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> HIPAA-conscious</span>
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> Every plan BCBA-reviewed</span>
+      <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--aminy-teal-600)" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M20 10c0 4.4-8 12-8 12s-8-7.6-8-12a8 8 0 0 1 16 0Z"/></svg> Serving AZ · MT · TX</span>
+    </div>
+  </div>
+  <div class="phone rv" aria-hidden="true">
+    <div class="phone-screen">
+      <div class="ph-hi">Hi Sarah.</div>
+      <div class="ph-sub">Here's Kai's calm start today.</div>
+      <div class="ph-affirm">Mornings have been the hard part lately. Showing up for this one already counts.</div>
+      <div class="ph-nudge"><b>From Aminy</b><span>Try teeth <u>before</u> dressed this week. Small change, big difference.</span></div>
+      <div class="ph-stats">
+        <div class="ph-stat"><i>This week</i><b>5<small>/7 routine days</small></b></div>
+        <div class="ph-stat"><i>Calm streak</i><b>3<small>days · longest yet</small></b></div>
+        <div class="ph-stat"><i>Goals</i><b>2<small>/3 · no rush</small></b></div>
+      </div>
+    </div>
+  </div>
+</div></header>
+
+<section id="how"><div class="wrap">
+  <span class="eyebrow rv">How Aminy helps</span>
+  <h2 class="rv">Like having a BCBA in the family.</h2>
+  <p class="lede rv">Not another tracker. Aminy learns your child — then meets every hard moment with something you can actually do.</p>
+  <div class="cards3">
+    <div class="card rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg></div>
+      <h3>Ask Aminy, any hour</h3><p>A meltdown at 6am or a question at 11pm — your AI coach knows Kai's history and answers like someone who's been there all along.</p></div>
+    <div class="card rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+      <h3>Real experts sign off</h3><p>Every plan and answer can be reviewed and signed by a licensed BCBA — typically within 24 hours. AI speed, human accountability.</p></div>
+    <div class="card rv"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg></div>
+      <h3>Therapy that comes to you</h3><p>Book TeleABA, speech, and OT visits in two taps. Find your guide in the marketplace — insurance or cash-pay, your choice.</p></div>
+  </div>
+</div></section>
+
+<section class="mist" id="families"><div class="wrap">
+  <span class="eyebrow rv">Two sides, one team</span>
+  <h2 class="rv">Built for the family. Loved by the clinic.</h2>
+  <p class="lede rv">The same calm system powers your home and your child's care team — so nothing gets lost between sessions.</p>
+  <div class="split">
+    <div class="panel fam rv" id="fam-panel">
+      <span class="who">For families</span>
+      <h3>Your pocket co-parent</h3>
+      <ul>
+        <li>AI coach that remembers what works for your child</li>
+        <li>Visual routines, calm tools, and gentle weekly progress</li>
+        <li>Ask-a-BCBA: signed answers, usually within 24 hours</li>
+        <li>Insurance coverage checks & document vault</li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="#pricing">Start free</a>
+    </div>
+    <div class="panel pro rv" id="providers">
+      <span class="who">For providers</span>
+      <h3>The practice OS that gives you your evenings back</h3>
+      <ul>
+        <li>AI session notes drafted from your data — you review & sign</li>
+        <li>Credentialing, claims & denial management in one place</li>
+        <li>EVV visit verification and RBT supervision tracking</li>
+        <li>A marketplace of families looking for exactly you</li>
+      </ul>
+      <a class="btn btn-ghost btn-sm" href="#" style="background:#fff;border:0;">Apply as a provider</a>
+    </div>
+  </div>
+</div></section>
+
+<section id="teleaba"><div class="wrap">
+  <span class="eyebrow rv">TeleABA · Speech · OT</span>
+  <h2 class="rv">Therapy that comes to you.</h2>
+  <p class="lede rv">Two taps to book — insurance or cash-pay. Text reminders, calendar invites for every caregiver, and a calm waiting room when it's time.</p>
+  <div class="cards3">
+    <div class="card rv"><div class="ic" style="font-weight:800;font-size:18px;">1</div><h3>Pick your guide</h3><p>Browse BCBAs, SLPs, and OTs in the marketplace — or keep your designated provider on every booking.</p></div>
+    <div class="card rv"><div class="ic" style="font-weight:800;font-size:18px;">2</div><h3>Pick a time</h3><p>Live availability with open slots by morning, afternoon, and evening. Confirmed in seconds.</p></div>
+    <div class="card rv"><div class="ic" style="font-weight:800;font-size:18px;">3</div><h3>Join from anywhere</h3><p>A text 10 minutes before, one tap to join, and a session summary in your plan afterward.</p></div>
+  </div>
+  <div class="rv" style="margin-top:34px;"><a class="btn btn-primary" href="#pricing">Book your first visit</a></div>
+</div></section>
+
+<section class="mist" id="always"><div class="wrap" style="text-align:center;">
+  <span class="eyebrow rv" style="justify-content:center;">Always there. Always learning.</span>
+  <h2 class="rv" style="max-width:640px;margin-left:auto;margin-right:auto;">This is what hope feels like when it's organized.</h2>
+  <p class="lede rv" style="margin:0 auto 44px;">Aminy is changing how neurodivergent families get help — the developmental expertise, the BCBA, the plan, and the friend who gets it, together in one calm place that never closes.</p>
+  <div class="cards3" style="text-align:left;">
+    <div class="card rv"><h3>2:47 a.m.? We're up.</h3><p>The hard moments don't keep office hours. Your AI coach answers in seconds, any hour — and it already knows the context.</p></div>
+    <div class="card rv"><h3>It remembers everything that works.</h3><p>Every win, every trigger, every strategy that landed. Aminy gets smarter about your child every single day.</p></div>
+    <div class="card rv"><h3>You, empowered.</h3><p>Not another thing to manage — a partner that hands you the next small step and cheers when you take it. Parents do the changing; we make it doable.</p></div>
+  </div>
+</div></section>
+
+<section class="jr" id="jr"><div class="wrap jr-in">
+  <div>
+    <span class="eyebrow rv" style="color:#7c3aed;">Ease</span>
+    <h2 class="rv">Calm that's theirs — instantly.</h2>
+    <p class="lede rv">Mid-meltdown? Hand the phone over. Ease starts calming the moment it opens — breathing, bubbles, and gentle play that help them settle. Then the skills practice begins.</p>
+    <a class="btn btn-sm rv" style="background:#7c3aed;color:#fff;" href="#pricing">Included in every plan</a>
+  </div>
+  <div class="jr-em rv"><span>🫧</span><span>🦄</span><span>🎨</span><span>⭐</span></div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <span class="eyebrow rv">Pricing</span>
+  <h2 class="rv">Start free. Grow when you're ready.</h2>
+  <p class="lede rv">Every paid plan starts with a 14-day free trial — no card required. HSA/FSA eligible.</p>
+  <div class="tiers">
+    <div class="tier rv"><h4>Free</h4><div class="pr">$0</div><div class="sv"></div>
+      <ul><li>Book & attend TeleABA visits</li><li>3 Ask Aminy messages a day</li><li>Exhale basics</li><li>1 child profile</li></ul>
+      <a class="btn btn-ghost btn-sm" href="#">Get started</a></div>
+    <div class="tier rec rv"><span class="tag">Most popular</span><h4>Core</h4><div class="pr">$14.99<small>/mo</small></div><div class="sv">$129/yr — save 28%</div>
+      <ul><li>Unlimited Ask Aminy, text & voice</li><li>AI reads IEPs & records</li><li>Adaptive practice plans</li><li>10% off marketplace sessions</li></ul>
+      <a class="btn btn-primary btn-sm" href="#">Start 14-day trial</a></div>
+    <div class="tier rv"><h4>Pro</h4><div class="pr">$29.99<small>/mo</small></div><div class="sv">$279/yr — save 22%</div>
+      <ul><li>Everything in Core</li><li>Ask-a-BCBA signed reviews</li><li>Priority booking</li><li>Up to 3 children</li></ul>
+      <a class="btn btn-ghost btn-sm" href="#">Start 14-day trial</a></div>
+    <div class="tier rv"><h4>Family</h4><div class="pr">$49.99<small>/mo</small></div><div class="sv">$479/yr — save 20%</div>
+      <ul><li>Everything in Pro</li><li>Unlimited children & caregivers</li><li>Quarterly BCBA plan review</li><li>Concierge coverage help</li></ul>
+      <a class="btn btn-ghost btn-sm" href="#">Start 14-day trial</a></div>
+  </div>
+</div></section>
+
+<section style="padding-top:0;"><div class="wrap">
+  <div class="cta-band rv">
+    <h2>Tonight can go a little easier.</h2>
+    <p>Two minutes to set up. One small suggestion for tonight. That's how it starts.</p>
+    <a class="btn btn-primary" href="#pricing">Start your free trial</a>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div><img src="../../assets/aminy_logo.png" alt="aminy"/><div style="font-size:12.5px;color:var(--color-text-muted);margin-top:10px;">Gentle guidance. Meaningful progress.</div></div>
+    <div class="foot-col"><b>Product</b><a href="#families">For families</a><a href="#teleaba">TeleABA</a><a href="#providers">For providers</a><a href="#jr">Ease</a><a href="#pricing">Pricing</a></div>
+    <div class="foot-col"><b>Company</b><a href="#">About</a><a href="#">Careers</a><a href="#">Contact</a></div>
+    <div class="foot-col"><b>Legal</b><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="#">Notice of privacy practices</a></div>
+  </div>
+  <div class="legal">Aminy is a HIPAA-conscious care platform. Aminy's AI coach supports — and never replaces — the clinical judgment of licensed professionals. Telehealth services available in Arizona, Montana, and Texas. © 2026 Aminy LLC.</div>
+</div></footer>
+
+<script>
+  (function(){
+    var io = new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{threshold:0.12});
+    document.querySelectorAll('.rv').forEach(function(el,i){el.style.transitionDelay=(i%4)*60+'ms';io.observe(el);});
+    // Safety: never leave content hidden (print, odd embeds, IO failures)
+    setTimeout(function(){document.querySelectorAll('.rv:not(.on)').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<window.innerHeight)el.classList.add('on');});},700);
+  })();
+</script>
+</body>
+</html>

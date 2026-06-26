@@ -1,0 +1,46 @@
+/* ============================================================
+   AMINY · TYPOGRAPHY TOKENS
+   Schibsted Grotesk = UI + Ease workhorse
+   Fredoka     = wordmark + brand voice: display headlines + affirmations
+                 (rounded geometric, matches the aminy logo)
+   Newsreader  = optional editorial serif (long-form reports)
+   ============================================================ */
+
+:root {
+  /* ---------- FAMILIES ---------- */
+  --font-ui:    "Schibsted Grotesk", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-brand: "Fredoka", "Schibsted Grotesk", ui-rounded, system-ui, sans-serif;
+  --font-jr:    "Fredoka", "Schibsted Grotesk", ui-rounded, system-ui, sans-serif;
+  --font-mono:  ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---------- SIZE SCALE ---------- */
+  --text-xs:    0.75rem;    /* 12 — metadata, legal */
+  --text-sm:    0.875rem;   /* 14 — secondary, labels */
+  --text-base:  1rem;       /* 16 — body, form fields (iOS-zoom floor) */
+  --text-md:    1.0625rem;  /* 17 — primary actions */
+  --text-lg:    1.125rem;   /* 18 — subheads */
+  --text-xl:    1.25rem;    /* 20 — section titles */
+  --text-2xl:   1.5rem;     /* 24 — screen titles */
+  --text-3xl:   1.875rem;   /* 30 — h1 */
+  --text-4xl:   2.25rem;    /* 36 — hero */
+  --text-5xl:   3rem;       /* 48 — marketing only */
+
+  /* ---------- LINE HEIGHT ---------- */
+  --lh-tight:   1.15;       /* @kind font */
+  --lh-snug:    1.3;        /* @kind font */
+  --lh-normal:  1.5;        /* @kind font */
+  --lh-relaxed: 1.625;      /* @kind font */
+
+  /* ---------- LETTER SPACING ---------- */
+  --ls-tight:   -0.025em;   /* @kind font */
+  --ls-normal:  0;          /* @kind font */
+  --ls-wide:    0.02em;     /* @kind font */
+
+  /* ---------- WEIGHTS ---------- */
+  --fw-regular: 400;        /* @kind font */
+  --fw-medium:  500;        /* @kind font */
+  --fw-semibold:600;        /* @kind font */
+  --fw-bold:    700;        /* @kind font */
+  --fw-black:   800;        /* @kind font */
+}

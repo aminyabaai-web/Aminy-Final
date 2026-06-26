@@ -1,0 +1,59 @@
+<!-- @dsCard group="Review" viewport="1280x980" name="Master review index" subtitle="Every designed surface, linked, with what to check on each" -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Aminy — Design Review Index</title>
+<link rel="icon" href="assets/favicon.svg"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font-ui);background:linear-gradient(180deg,var(--aminy-mist),var(--aminy-mist-deep));color:var(--color-text);-webkit-font-smoothing:antialiased;padding:40px 24px 64px;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  header{display:flex;align-items:center;gap:18px;margin-bottom:8px;}
+  header img{height:34px;}
+  h1{font-size:28px;font-weight:800;letter-spacing:-0.025em;color:var(--color-text-strong);margin:0;}
+  .lede{font-size:15px;color:var(--aminy-navy-500);margin:6px 0 28px;max-width:680px;line-height:1.6;}
+  .grp{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--aminy-teal-700);margin:26px 0 10px;display:flex;align-items:center;gap:8px;}
+  .grp::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--aminy-teal-500);}
+  .row{display:grid;grid-template-columns:230px 1fr auto;gap:18px;align-items:center;background:#fff;border:1px solid var(--color-border);border-radius:16px;padding:16px 20px;margin-bottom:8px;box-shadow:var(--shadow-sm);}
+  .row b{font-size:15px;color:var(--color-text-strong);letter-spacing:-0.01em;display:block;}
+  .row small{font-size:12px;color:var(--color-text-muted);}
+  .chk{font-size:13px;color:var(--aminy-navy-500);line-height:1.55;}
+  .open{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 18px;border-radius:11px;background:var(--aminy-teal-600);color:#fff;font-weight:600;font-size:13.5px;text-decoration:none;white-space:nowrap;box-shadow:var(--shadow-cta);}
+  .open.alt{background:#fff;color:var(--aminy-navy-700);border:1px solid var(--color-border-strong);box-shadow:none;}
+  .note{background:var(--aminy-teal-50);border:1px solid var(--aminy-teal-100);border-radius:14px;padding:14px 18px;font-size:13.5px;color:var(--aminy-teal-800);line-height:1.6;margin-bottom:6px;}
+  .note code{background:#fff;border-radius:6px;padding:1px 6px;font-size:12px;}
+  @media (max-width:760px){
+    body{padding:24px 14px 48px;}
+    .row{grid-template-columns:1fr;gap:10px;}
+    .open{justify-self:start;}
+    h1{font-size:22px;}
+  }
+</style></head>
+<body><div class="wrap">
+  <header><img src="assets/aminy_logo.png" alt="aminy"/><h1>Design review index</h1></header>
+  <p class="lede">Every designed surface, one click each. Foundations (colors, type, spacing, motion, brand) live in the <b>Design System tab</b> as 26 cards. Comment on anything — each row says what to look at.</p>
+
+  <div class="note">💡 To replay the <b>boot sequence</b> (splash → "Why Aminy" story → onboarding) inside the parent app: open it, go to <b>More → Replay onboarding</b>, or clear the site's saved state. The splash also has its own card below.</div>
+
+  <div class="grp">Marketing</div>
+  <div class="row"><div><b>aminy.ai website</b><small>ui_kits/website</small></div><div class="chk">Hero + phone mock · families/providers split · Jr band · 4-tier pricing ($0 / 14.99 / 29.99 / 49.99) · footer compliance · fully responsive</div><a class="open" href="ui_kits/website/index.html">Open</a></div>
+  <div class="row"><div><b>aminy.ai/providers — B2B recruiting</b><small>website/providers.html</small></div><div class="chk">"Grow your practice, get your evenings back" · roles · practice-OS tools · earnings example · apply — teal/navy, not sage</div><a class="open" href="ui_kits/website/providers.html">Open</a></div>
+  <div class="row"><div><b>Revenue tools</b><small>provider/tools.html</small></div><div class="chk">Denial Workbench (inbox · analytics · rework · AI appeal letters) · Stripe Connect payouts (90/10 split)</div><a class="open alt" href="ui_kits/provider/tools.html">Open</a></div>
+  <div class="row"><div><b>Legal &amp; static pages</b><small>legal.html</small></div><div class="chk">Terms · Privacy · HIPAA Notice of Privacy Practices — "short version" TLDRs, counsel-review flag, mobile pill nav</div><a class="open alt" href="ui_kits/website/legal.html">Open</a></div>
+  <div class="row"><div><b>Email templates</b><small>emails.html</small></div><div class="chk">Welcome · session reminder · BCBA answer · weekly progress · trial ending · receipt — 600px fluid, email-safe</div><a class="open alt" href="ui_kits/website/emails.html">Open</a></div>
+
+  <div class="grp">Parent app — first run</div>
+  <div class="row"><div><b>Splash</b><small>2s · auto-advance</small></div><div class="chk">Logo pop, tagline rise, breathing dots — the literal first impression</div><a class="open" href="ui_kits/parent/splash.html">Open</a></div>
+  <div class="row"><div><b>Full app (boot → tabs)</b><small>ui_kits/parent</small></div><div class="chk">Splash → Why-Aminy story → conversational onboarding → Home / My Plan / Aminy / Exhale / More — More now opens <b>Insights</b> (progress trends, mood, patterns), <b>Check-ins</b> (conversational AI), <b>AI reports</b> (IEP/progress/BCBA/insurance), <b>Reminders</b> (AI-suggested times), plus Ease, BCBA, TeleABA, session, marketplace, plans, settings, vault, coverage, community, report</div><a class="open" href="ui_kits/parent/index.html">Open</a></div>
+  <div class="row"><div><b>Auth &amp; free screening</b><small>auth.html</small></div><div class="chk">Welcome (Apple/Google/email) · create · sign in · forgot · 5-question M-CHAT-style check-in → gentle result</div><a class="open alt" href="ui_kits/parent/auth.html">Open</a></div>
+  <div class="row"><div><b>Utility screens</b><small>utility.html</small></div><div class="chk">Stripe checkout (trial-aware) · notifications center · medication tracker · family outcomes</div><a class="open alt" href="ui_kits/parent/utility.html">Open</a></div>
+  <div class="row"><div><b>iOS system surfaces</b><small>ios.html</small></div><div class="chk">Lock-screen push · iMessage reminders (reply C to confirm) · auto calendar invite (.ics) · App Store page</div><a class="open alt" href="ui_kits/parent/ios.html">Open</a></div>
+  <div class="row"><div><b>Retention &amp; growth</b><small>retention.html</small></div><div class="chk">Cancel-save flow (recap → pause / 50% off / downgrade → survey → graceful exit) · delete account · give-get referral + share-a-win</div><a class="open alt" href="ui_kits/parent/retention.html">Open</a></div>
+
+  <div class="grp">Provider OS</div>
+  <div class="row"><div><b>Practice OS</b><small>ui_kits/provider</small></div><div class="chk">Dashboard · clients · credentialing · AI notes sign-off · billing · EVV clock/records/budget · RBT supervision · schedule + join room</div><a class="open" href="ui_kits/provider/index.html">Open</a></div>
+  <div class="row"><div><b>Org · Payer · Application</b><small>extras.html</small></div><div class="chk">Org admin (seats, locations, compliance) · MCO outcomes report · 4-step provider application</div><a class="open alt" href="ui_kits/provider/extras.html">Open</a></div>
+
+  <div class="grp">Ease</div>
+  <div class="row"><div><b>Ease — kid co-regulator</b><small>ui_kits/ease</small></div><div class="chk">Rescue mode (auto-calming) · check-in · 6 playable activities (pop, branching story, timed stretch, draw+stickers+send, sounds, tilt glitter jar) · star reward burst</div><a class="open" href="ui_kits/ease/index.html">Open</a></div>
+</div></body></html>

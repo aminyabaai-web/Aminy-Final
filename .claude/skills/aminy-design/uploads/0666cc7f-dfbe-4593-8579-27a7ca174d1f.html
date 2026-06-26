@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Amy">
+<title>Loving Amy Well</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf6f0;
+  --card: #fdf9f4;
+  --border: rgba(44,33,24,0.1);
+  --ink: #2c2118;
+  --muted: #8c7a66;
+  --light: #b8a898;
+  --amber: #c17f5a;
+  --green: #6b8f71;
+  --purple: #8a7b9e;
+  --red: #b85c50;
+  --blue: #5a7fa3;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Georgia',serif;background:var(--cream);color:var(--ink);min-height:100vh;overscroll-behavior:none;}
+button{cursor:pointer;font-family:inherit;}
+
+/* ── HEADER ── */
+.hdr{background:var(--card);border-bottom:1px solid var(--border);padding:20px 20px 14px;position:sticky;top:0;z-index:100;}
+.hdr-eye{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:4px;}
+.hdr-title{font-size:22px;font-style:italic;font-weight:300;line-height:1.1;}
+.hdr-meta{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);margin-top:5px;}
+.hdr-streak{color:var(--amber);font-weight:600;}
+
+/* ── NAV ── */
+.nav{display:flex;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;padding:0 20px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:11px 12px;border:none;border-bottom:2px solid transparent;background:none;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:color .15s;}
+.nav-btn.active{color:var(--ink);border-bottom-color:var(--amber);}
+.nav-dot{width:6px;height:6px;border-radius:50%;opacity:.35;}
+.nav-btn.active .nav-dot{opacity:1;}
+
+/* ── PAGE ── */
+.page{padding:20px 20px 80px;max-width:660px;display:none;}
+.page.active{display:block;}
+
+/* ── TODAY ── */
+.progress-bar-wrap{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,.6);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;}
+.pct-num{font-family:'Libre Baskerville',serif;font-size:30px;font-weight:700;color:var(--amber);line-height:1;}
+.pct-sub{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);margin-top:3px;}
+.bar-track{flex:1;height:4px;background:rgba(44,33,24,.08);border-radius:2px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--amber),var(--purple));border-radius:2px;transition:width .4s ease;}
+
+.mini-bars{display:flex;gap:4px;margin-bottom:20px;align-items:flex-end;}
+.mini-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.mini-bar-wrap{width:100%;height:28px;background:rgba(44,33,24,.06);border-radius:3px;display:flex;align-items:flex-end;overflow:hidden;}
+.mini-bar-fill{width:100%;border-radius:3px;transition:height .4s;}
+.mini-bar-lbl{font-family:'DM Sans',sans-serif;font-size:8px;color:var(--muted);letter-spacing:.05em;}
+.mini-bar-col.today .mini-bar-lbl{color:var(--amber);font-weight:600;}
+
+.section-group{margin-bottom:22px;}
+.section-hdr{display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+.section-icon{font-size:12px;}
+.section-name{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;}
+.section-opt{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--light);}
+
+.habit{display:flex;align-items:center;gap:12px;padding:11px 13px;background:rgba(255,255,255,.6);border:1px solid rgba(44,33,24,.07);border-radius:8px;margin-bottom:5px;transition:all .15s;user-select:none;}
+.habit.done{background:rgba(255,255,255,.85);border-color:rgba(193,127,90,.3);}
+.check{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(44,33,24,.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.check.done{background:var(--amber);border-color:var(--amber);}
+.check-mark{color:#fff;font-size:10px;font-weight:700;}
+.habit-lbl{font-family:'DM Sans',sans-serif;font-size:13px;color:#3a2c20;line-height:1.4;}
+.habit-lbl.done{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(154,128,112,.4);}
+
+.note-lbl{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.note-input{width:100%;background:rgba(255,255,255,.6);border:1px solid rgba(44,33,24,.1);border-radius:10px;padding:12px 14px;font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--ink);resize:none;outline:none;line-height:1.6;}
+.note-input:focus{border-color:rgba(193,127,90,.4);background:rgba(255,255,255,.9);}
+.note-input::placeholder{color:var(--light);}
+
+.quote-block{margin-top:22px;padding:16px 18px;border-left:3px solid var(--amber);background:rgba(193,127,90,.05);border-radius:0 8px 8px 0;}
+.quote-text{font-family:'Lora',serif;font-style:italic;font-size:13px;line-height:1.7;color:#6b5040;}
+
+/* history toggle */
+.toggle-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.day-label{font-size:17px;font-style:italic;color:var(--ink);}
+
+/* history list */
+.hist-item{display:flex;align-items:center;padding:10px 13px;background:rgba(255,255,255,.55);border:1px solid rgba(44,33,24,.07);border-radius:8px;margin-bottom:5px;}
+.hist-date{font-family:'DM Sans',sans-serif;font-size:12px;color:#5a4535;min-width:90px;}
+.hist-bar-wrap{flex:1;height:4px;background:rgba(44,33,24,.08);border-radius:2px;margin:0 12px;overflow:hidden;}
+.hist-bar-fill{height:100%;border-radius:2px;transition:width .5s;}
+.hist-score{font-family:'Libre Baskerville',serif;font-size:13px;font-weight:700;color:var(--amber);}
+
+/* ── SHARED ── */
+.page-title{font-size:20px;font-style:italic;font-weight:400;margin-bottom:16px;}
+.pill-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.pill{font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.09em;text-transform:uppercase;padding:5px 11px;border-radius:20px;border:1.5px solid rgba(44,33,24,.15);background:transparent;color:var(--muted);transition:all .15s;}
+.pill.active{border-color:var(--amber);background:rgba(193,127,90,.1);color:var(--amber);}
+
+.input-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:18px;}
+.input-col{display:flex;flex-direction:column;gap:6px;flex:1;}
+.inp{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;padding:9px 12px;border:1px solid rgba(44,33,24,.15);border-radius:6px;background:var(--card);color:var(--ink);outline:none;width:100%;}
+.inp:focus{border-color:rgba(193,127,90,.4);}
+.inp-italic{font-style:italic;font-size:12px;}
+.add-btn{font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:0 16px;height:38px;color:#fff;border:none;border-radius:6px;white-space:nowrap;}
+
+.item-row{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:2px;}
+.item-check{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;margin-top:1px;transition:all .2s;border:1.5px solid rgba(44,33,24,.2);background:transparent;color:transparent;}
+.item-check.done{color:#fff;}
+.item-body{flex:1;min-width:0;}
+.item-text{font-size:13px;color:var(--ink);line-height:1.45;}
+.item-text.done{text-decoration:line-through;color:var(--muted);}
+.item-note{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;}
+.item-tag{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:12px;margin-top:4px;display:inline-block;}
+.del-btn{background:none;border:none;font-size:16px;color:var(--muted);opacity:.15;padding:0 2px;line-height:1;transition:opacity .15s;flex-shrink:0;}
+.del-btn:hover{opacity:.5;}
+
+.empty{text-align:center;padding:36px 16px;color:var(--muted);font-style:italic;font-size:15px;}
+
+/* profile entry */
+.prof-entry{padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px;}
+.prof-body{flex:1;}
+.prof-text{font-size:13px;color:var(--ink);line-height:1.5;}
+.prof-note{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-style:italic;margin-top:3px;}
+.dim-tag{font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:12px;margin-top:5px;display:inline-block;}
+
+/* council / intimacy cards */
+.collapsible{background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden;}
+.coll-hdr{display:flex;align-items:center;gap:10px;padding:12px 13px;cursor:pointer;}
+.coll-type{font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+.coll-sit{font-size:13px;color:var(--ink);line-height:1.4;}
+.coll-date{font-family:'DM Sans',sans-serif;font-size:10px;color:var(--muted);margin-top:2px;}
+.coll-body{padding:0 13px 13px;border-top:1px solid var(--border);display:none;}
+.coll-body.open{display:block;}
+.md-text p{margin:0 0 8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;line-height:1.65;color:var(--ink);}
+.md-text strong{font-weight:600;}
+
+/* council stream */
+.stream-box{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:16px;}
+.stream-thinking{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);font-style:italic;}
+.cursor{display:inline-block;width:7px;height:13px;background:currentColor;opacity:.6;animation:blink 1s infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:.15}50%{opacity:.8}}
+
+/* guide */
+.guide-sec-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px;}
+.guide-card{background:var(--card);border:1px solid rgba(44,33,24,.08);border-radius:8px;padding:16px 18px;margin-bottom:12px;}
+.guide-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.guide-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.guide-point{display:flex;gap:9px;margin-bottom:7px;align-items:flex-start;}
+.guide-point-dot{width:4px;height:4px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+.guide-point-text{font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.65;color:#3a2c20;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:400px){
+  .page{padding:16px 14px 80px;}
+  .hdr{padding:16px 14px 12px;}
+  .nav{padding:0 14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hdr">
+  <div class="hdr-eye">For Ed · Every Day</div>
+  <div class="hdr-title">Loving Amy Well</div>
+  <div class="hdr-meta" id="hdr-meta">Loading…</div>
+</div>
+
+<!-- Nav -->
+<div class="nav" id="main-nav">
+  <button class="nav-btn active" data-tab="today" onclick="switchTab('today')">
+    <span class="nav-dot" style="background:#c17f5a"></span>Today
+  </button>
+  <button class="nav-btn" data-tab="history" onclick="switchTab('history')">
+    <span class="nav-dot" style="background:#6b8f71"></span>History
+  </button>
+  <button class="nav-btn" data-tab="dreams" onclick="switchTab('dreams')">
+    <span class="nav-dot" style="background:#b8973e"></span>Her Dreams
+  </button>
+  <button class="nav-btn" data-tab="profile" onclick="switchTab('profile')">
+    <span class="nav-dot" style="background:#7b68c8"></span>Inner World
+  </button>
+  <button class="nav-btn" data-tab="intimacy" onclick="switchTab('intimacy')">
+    <span class="nav-dot" style="background:#a0536a"></span>Intimacy
+  </button>
+  <button class="nav-btn" data-tab="council" onclick="switchTab('council')">
+    <span class="nav-dot" style="background:#3d7068"></span>Council
+  </button>
+  <button class="nav-btn" data-tab="guide" onclick="switchTab('guide')">
+    <span class="nav-dot" style="background:#5a6fa3"></span>Guide
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TODAY
+══════════════════════════════════════════ -->
+<div class="page active" id="tab-today">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <div class="day-label" id="today-date-label"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap">
+    <div>
+      <div class="pct-num" id="pct-num">0%</div>
+      <div class="pct-sub" id="pct-sub">0 of 10 done</div>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="main-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- 7-day mini bars -->
+  <div class="mini-bars" id="mini-bars"></div>
+
+  <!-- Habit sections -->
+  <div id="habit-sections"></div>
+
+  <!-- Note -->
+  <div style="margin-top:8px;">
+    <div class="note-lbl">Today's note — something you noticed</div>
+    <textarea class="note-input" id="today-note" rows="3" placeholder="She seemed lighter today. She laughed at dinner…" oninput="saveNote(this.value)"></textarea>
+  </div>
+
+  <div class="quote-block" style="margin-top:20px;">
+    <div class="quote-text">"She is watching the baseline, not the highlights. Small, consistent gestures rebuild trust faster than grand gestures. Don't announce the change — be it."</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HISTORY
+══════════════════════════════════════════ -->
+<div class="page" id="tab-history">
+  <div class="page-title">Last 30 Days</div>
+  <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
+    Green = strong day (80%+) · Amber = partial · The pattern is what she feels.
+  </p>
+  <div id="history-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     HER DREAMS
+══════════════════════════════════════════ -->
+<div class="page" id="tab-dreams">
+  <div class="page-title">Her Dreams & Goals</div>
+
+  <!-- Category pills -->
+  <div class="pill-row" id="dream-cat-pills"></div>
+
+  <!-- Add form -->
+  <div class="input-row" id="dream-add-row">
+    <div class="input-col">
+      <input class="inp" id="dream-text" placeholder="Add something…" onkeydown="if(event.key==='Enter')addDream()">
+      <input class="inp inp-italic" id="dream-note" placeholder="Notes, details…" onkeydown="if(event.key==='Enter')addDream()">
+    </div>
+    <button class="add-btn" style="background:#c4674a" onclick="addDream()">Add</button>
+  </div>
+
+  <!-- Travel tag (hidden unless travel) -->
+  <div id="travel-tag-row" style="display:none;margin-bottom:14px;">
+    <select class="inp" id="travel-tag" style="width:auto;">
+      <option value="">Tag…</option>
+      <option>Solo</option><option>Together</option><option>Family</option>
+      <option>Adventure</option><option>Rest</option><option>Culture</option>
+    </select>
+  </div>
+
+  <div id="dream-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     INNER WORLD
+══════════════════════════════════════════ -->
+<div class="page" id="tab-profile">
+  <div class="page-title">◎ Inner World</div>
+
+  <div class="input-row">
+    <div class="input-col">
+      <input class="inp" id="prof-text" placeholder="An observation about her inner world…" onkeydown="if(event.key==='Enter')addProfile()">
+      <div style="display:flex;gap:6px;">
+        <input class="inp inp-italic" id="prof-note" placeholder="Context or example…" style="flex:1" onkeydown="if(event.key==='Enter')addProfile()">
+        <select class="inp" id="prof-dim" style="flex:0 0 160px;">
+          <option value="traits">Personality</option>
+          <option value="values">Values</option>
+          <option value="fears">Fears</option>
+          <option value="patterns">Emotional Patterns</option>
+          <option value="communication">Comm Style</option>
+          <option value="stress">Stress Triggers</option>
+        </select>
+      </div>
+    </div>
+    <button class="add-btn" style="background:#7b68c8" onclick="addProfile()">Add</button>
+  </div>
+
+  <div class="pill-row" id="profile-filter-pills"></div>
+  <div id="profile-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     INTIMACY
+══════════════════════════════════════════ -->
+<div class="page" id="tab-intimacy">
+  <div class="page-title">♡ Intimacy · Empathy · Awareness</div>
+  <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
+    How Amy thinks, what she needs, what brings her close — and what creates distance.
+  </p>
+
+  <div class="pill-row" id="int-dim-pills"></div>
+  <div id="int-dim-hint" style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-style:italic;margin-bottom:12px;padding-left:4px;"></div>
+
+  <div style="display:flex;gap:6px;margin-bottom:14px;">
+    <button class="pill active" id="int-mode-free" onclick="setIntMode('free')">Free observation</button>
+    <button class="pill" id="int-mode-ai" onclick="setIntMode('ai')">✦ AI insight</button>
+  </div>
+
+  <div class="input-row">
+    <div class="input-col">
+      <textarea class="inp" id="int-obs" rows="3" placeholder="Describe what you've noticed…" style="resize:vertical;line-height:1.55;"></textarea>
+      <input class="inp inp-italic" id="int-note" placeholder="Context, when this happened…">
+    </div>
+    <button class="add-btn" id="int-submit-btn" style="background:#a0536a;height:auto;padding:10px 14px;" onclick="submitIntimacy()">Add</button>
+  </div>
+
+  <div id="int-stream" style="display:none;" class="stream-box"></div>
+
+  <div class="pill-row" id="int-filter-pills"></div>
+  <div id="intimacy-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     COUNCIL
+══════════════════════════════════════════ -->
+<div class="page" id="tab-council">
+  <div class="page-title">⚖ Marriage Council</div>
+  <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
+    Direct. Dual-perspective. No padding. Bring the situation — get clarity and a next move.
+  </p>
+
+  <div class="pill-row" id="council-type-pills"></div>
+
+  <div class="input-row" style="align-items:flex-end;">
+    <textarea class="inp" id="council-sit" rows="4" placeholder="Describe the situation…" style="resize:vertical;line-height:1.55;"></textarea>
+    <button class="add-btn" id="council-btn" style="background:#3d7068;height:auto;padding:10px 16px;" onclick="submitCouncil()">Bring it</button>
+  </div>
+
+  <div id="council-stream" style="display:none;" class="stream-box"></div>
+  <div id="council-list"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     GUIDE
+══════════════════════════════════════════ -->
+<div class="page" id="tab-guide">
+  <div class="page-title">How to Love Amy Well — Reference</div>
+  <div class="guide-sec-nav" id="guide-sec-nav"></div>
+  <div id="guide-content"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+// ── DATA DEFINITIONS ──────────────────────────────────────────────────────────
+
+const HABITS = {
+  morning: [
+    { id:'greet_first',    label:'Greeted her before my phone' },
+    { id:'notice_something',label:'Noticed & said something specific about her' },
+    { id:'fixed_something', label:'Fixed or handled something before she saw it' },
+  ],
+  day: [
+    { id:'warm_text',    label:'Sent one non-logistical, warm text' },
+    { id:'handled_task', label:'Handled a household task proactively' },
+    { id:'checked_in',   label:'Checked in — noticed if she seemed off' },
+  ],
+  evening: [
+    { id:'listened',             label:'Asked about her day and actually listened (no advice)' },
+    { id:'created_order',        label:'Created calm and order at home' },
+    { id:'physical_close',       label:'Physical closeness — non-transactional' },
+    { id:'specific_appreciation',label:'Named one specific thing I love about her' },
+  ],
+  repair: [
+    { id:'no_blame',       label:"Didn't blame her or make it her problem" },
+    { id:'repaired_quickly',label:"Repaired quickly — didn't let it sit" },
+    { id:'named_pattern',  label:'Acknowledged the pattern, not just the incident' },
+    { id:'stayed_curious', label:'Stayed curious, not defensive' },
+  ],
+};
+
+const HABIT_SECS = [
+  { id:'morning', label:'Morning',           icon:'◌', color:'#c17f5a' },
+  { id:'day',     label:'Through the Day',   icon:'◎', color:'#6b8f71' },
+  { id:'evening', label:'Evening',           icon:'◉', color:'#8a7b9e' },
+  { id:'repair',  label:'Repair (if needed)',icon:'⟳', color:'#b85c50', optional:true },
+];
+
+const CORE_IDS = [...HABITS.morning,...HABITS.day,...HABITS.evening].map(h=>h.id);
+
+const DREAM_CATS = [
+  { id:'todo',     label:'Things to Do',    icon:'✦', color:'#c4674a', ph:'Something she wants to do…',        nph:'Any details…' },
+  { id:'travel',   label:'Places to Travel',icon:'◈', color:'#7a9e7e', ph:'A place she dreams of…',            nph:'When, who with…' },
+  { id:'projects', label:'Projects',        icon:'◇', color:'#b8973e', ph:'A project she cares about…',       nph:'What would make it happen…' },
+  { id:'growth',   label:'Personal Growth', icon:'◉', color:'#c98b8b', ph:'Something she wants to grow into…',nph:'Why it matters…' },
+];
+
+const PROF_DIMS = [
+  { id:'traits',        label:'Personality',       color:'#7b68c8' },
+  { id:'values',        label:'Values',             color:'#c4674a' },
+  { id:'fears',         label:'Fears',              color:'#5a8fa3' },
+  { id:'patterns',      label:'Emotional Patterns', color:'#c98b8b' },
+  { id:'communication', label:'Comm Style',         color:'#7a9e7e' },
+  { id:'stress',        label:'Stress Triggers',    color:'#b8973e' },
+];
+
+const INT_DIMS = [
+  { id:'love',         label:'Love Language',        color:'#c4674a', icon:'♡', hint:'What fills or drains her — acts, words, touch, time, gifts' },
+  { id:'communication',label:'Communication',         color:'#5a8fa3', icon:'◌', hint:'How she talks, listens, and signals when something\'s off' },
+  { id:'closeness',    label:'What She Needs',       color:'#7a9e7e', icon:'◎', hint:'Conditions under which she feels close, seen, loved' },
+  { id:'distance',     label:'What Creates Distance',color:'#b8973e', icon:'◇', hint:'What shuts her down, makes her pull back, or breeds resentment' },
+];
+
+const COUNCIL_TYPES = [
+  { id:'conflict',      label:'Conflict',          color:'#c4674a' },
+  { id:'misunderstand', label:'Misunderstanding',  color:'#5a8fa3' },
+  { id:'perspective',   label:'Perspective Check', color:'#7b68c8' },
+  { id:'leading',       label:'Leading Well',      color:'#7a9e7e' },
+];
+
+const GUIDE_DATA = [
+  {
+    id:'languages', label:'Love Languages',
+    blocks:[
+      { title:'Quality Time — #1', color:'#c17f5a', points:[
+        'Presence over proximity. Being in the same room while distracted doesn\'t count.',
+        'Eye contact, phone down, body toward her. The physical signals of being chosen matter.',
+        'Planned time shows forethought. Spontaneous attention shows desire. She needs both.',
+        'She doesn\'t need elaborate. She needs undistracted.',
+      ]},
+      { title:'Acts of Service — #2', color:'#6b8f71', points:[
+        'Handle things before she asks. Noticing = love.',
+        'Anticipate, don\'t wait. "Let me know if you need help" puts the burden back on her.',
+        'Invisible effort is still love received. She doesn\'t need you to announce it.',
+        'When she\'s overwhelmed, asking "what do you need?" adds a decision to her load. Just act.',
+        'Specifics: kitchen reset before she sees it, laundry, school bags, dinner handled unexpectedly.',
+      ]},
+      { title:'Physical Touch — #3', color:'#8a7b9e', points:[
+        'Non-sexual touch is deeply important — a hand on her back, holding her hand, a long hug.',
+        'In perimenopause, her body and nervous system may be more sensitive. Read her, don\'t assume.',
+        'Touch that says "I\'m here and I love you" without agenda lands differently.',
+        'When she\'s anxious, physical anchoring can quiet her more than words.',
+      ]},
+    ]
+  },
+  {
+    id:'fuels', label:'Fuels & Drains',
+    blocks:[
+      { title:'What Fuels Her', color:'#6b8f71', points:[
+        'Feeling seen and appreciated — specifically, not generically',
+        'Quiet, uninterrupted time to decompress',
+        'Predictability and calm in the home',
+        'Chai lattes + lavender — small sensory comforts that say you were thinking of her specifically',
+        'Knowing the finances are handled and the path is clear',
+        'A husband who notices what needs doing and does it without being asked',
+        'Physical affection with no pressure attached',
+        'Laughter and lightness with you',
+        'Feeling like your partner, not your employee',
+      ]},
+      { title:'What Drains Her', color:'#b85c50', points:[
+        'Feeling like her work is invisible or taken for granted',
+        'Surprise work intrusions during family time',
+        'Criticism during already-stressful moments',
+        'Being compared to other moms or wives — she hears "you\'re not enough"',
+        'Migraines — especially when unacknowledged',
+        'Carrying the mental load alone',
+        'Isolation — no close friendships, no adult peer time',
+        'Escalation or moral framing during conflict',
+        'Feeling like she\'s parenting solo',
+      ]},
+      { title:'When She Has a Migraine', color:'#b85c50', points:[
+        'Don\'t wait to be asked. When you see the signs — just move.',
+        '"I\'ve got the kids tonight — go lie down." Then do it. No updates, no checking in.',
+        'Dim lights, lower noise, keep kids away from her space.',
+        'Water and medication ready without her asking.',
+        'Don\'t problem-solve. Don\'t coach. Just take the load off.',
+      ]},
+    ]
+  },
+  {
+    id:'practice', label:'Daily Practice',
+    blocks:[
+      { title:'Non-Negotiable Daily Three', color:'#c17f5a', points:[
+        'One specific compliment or thank-you. "The way you handled William at dinner — that was patient." Not "you\'re great."',
+        'One act of service without being asked. Dishwasher, laundry, school bags — pick one, do it before she notices.',
+        '2-minute genuine check-in. "How are you, really?" — then just listen. No fixing, no pivoting to logistics.',
+      ]},
+      { title:'Weekly / Monthly / Quarterly', color:'#6b8f71', points:[
+        'Nightly: Pray with her before bed. 30 seconds. Hold her hand. Out loud.',
+        'Weekly: One no-phone dinner. Phones in another room.',
+        'Weekly (Sunday): Family Ops Meeting — you run it. Protects her mental load.',
+        'Bi-weekly: Date night — you plan it. Sitter booked, reservation made, logistics talk banned.',
+        'Monthly: Marriage debrief — what\'s working / what\'s hard. You lead. Pray to close.',
+        'Monthly: Love language surprise — letter, lavender kit, chai day, or guilt-free morning off.',
+        'Quarterly: Overnight trip — you plan it. Even one night resets everything.',
+      ]},
+    ]
+  },
+  {
+    id:'moments', label:'Key Moments',
+    blocks:[
+      { title:'Morning — Set the Tone', color:'#c17f5a', points:[
+        'How the morning goes sets her emotional temperature for the entire day.',
+        'Be physically present and engaged in the morning rush before disappearing into work.',
+        'Sundays: you lead the family out the door for church — up first, ready first, energy first.',
+        'A brief physical touch — hand on her back, quick kiss — before the chaos starts.',
+      ]},
+      { title:'When She\'s Sharp — Absorb It', color:'#8a7b9e', points:[
+        'When she\'s brittle, it almost never means what it looks like. Usually she\'s overwhelmed.',
+        'Escalation is the worst move. Calm curiosity is the best.',
+        '"It seems like you\'re carrying a lot. What can I take off your plate?"',
+        'Do NOT: diagnose, moralize, bring the kids into it, or try to win the fairness argument.',
+        'Do NOT: over-apologize in a long text after. Stay steady. Behavior over words.',
+      ]},
+      { title:'End of Day — Close It Well', color:'#6b8f71', points:[
+        'The last 30 minutes of the day are disproportionately important. She lies down with this.',
+        'Be present for kids\' bedtime — don\'t disappear to your phone or office.',
+        'Pray with her before sleep — 30 seconds changes the climate.',
+        'Physical touch: back rub, shoulder massage, just holding her — no agenda.',
+        'Don\'t let the day end in tension if one kind word can close the loop.',
+      ]},
+      { title:'High-Stakes Dates', color:'#c17f5a', points:[
+        'Anniversary · July 14 — plan it weeks in advance. Not the morning of.',
+        'Her Birthday · May 20 (born 5/20/1985) — make her feel celebrated, not managed.',
+        'Mother\'s Day — she carries this role every day. This day should feel like she matters deeply.',
+        'Random Tuesdays — flowers, a note, a chai. No reason needed. These are the ones she remembers most.',
+      ]},
+    ]
+  },
+  {
+    id:'words', label:'Words That Land',
+    blocks:[
+      { title:'Say These — Mean Them', color:'#6b8f71', points:[
+        '"I see what you carry. I\'m not taking it for granted."',
+        '"You\'re an incredible mom. I love watching you with our kids."',
+        '"I\'ve got tonight. Go decompress — you\'ve earned it."',
+        '"I want us to work on this together. I\'m not going anywhere."',
+        '"I fell for you the first time I saw you. That hasn\'t changed."',
+        '"I want you to have your own life, your own joy — not just ours."',
+        '"I love how you pull your hair back so I can see your face."',
+        '"You are an amazing mom. You\'re my best friend." — from your 2020 messages to her',
+      ]},
+      { title:'Patterns That Close Her Down', color:'#b85c50', points:[
+        'Comparing her to other moms or wives — she hears "you\'re not enough"',
+        'Diagnosing her ("you\'re overreacting") — shuts down emotional safety immediately',
+        'Moralizing or bringing in faith/character during a conflict',
+        'Long repair texts that over-explain — overwhelming, not reassuring',
+        '"I\'m the one bringing home a paycheck" — she hears: your work doesn\'t count',
+        'Raising your voice in front of the kids',
+      ]},
+      { title:'Repair Phrases', color:'#8a7b9e', points:[
+        '"This morning got messy. I don\'t want to fight. I love you and I need a reset."',
+        '"I came in too hard. That wasn\'t fair to you."',
+        '"I hear you. I\'m not trying to win — I\'m trying to understand."',
+        '"Can we start over? I want to talk about this differently."',
+        '"I don\'t want to leave it here."',
+      ]},
+    ]
+  },
+  {
+    id:'rebuild', label:'Rebuilding',
+    blocks:[
+      { title:'What She Needs to Believe', color:'#c17f5a', points:[
+        'That you see her — not just what she does, but who she is.',
+        'That you\'re not going to keep hurting her. Safety is rebuilt through consistency, not declarations.',
+        'That she doesn\'t have to manage her emotions around you. That it\'s safe to be a mess.',
+        'That she matters to you more than being right.',
+      ]},
+      { title:'The Posture of Repair', color:'#6b8f71', points:[
+        'Lead with curiosity, not defensiveness. When she\'s reactive, ask what\'s underneath it.',
+        'Repair quickly. "I don\'t want to leave it here." Say it, mean it.',
+        '"I know this has happened too many times. I want to change that." — Name the pattern.',
+        'Small, consistent gestures rebuild trust faster than grand gestures. She\'s watching the baseline.',
+      ]},
+      { title:'On Perimenopause', color:'#8a7b9e', points:[
+        'Her emotional responses are amplified, not manufactured. The feelings are real.',
+        'Don\'t make her feel broken or dramatic. This is a season with a physiological basis.',
+        '"I know this time is hard on your body. I\'m not going anywhere. How can I help?"',
+        'Learn what she\'s experiencing. Ask her doctor, read — don\'t leave her to educate you alone.',
+      ]},
+    ]
+  },
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('amy_app_v1') || '{}'); } catch(e) { return {}; }
+}
+function saveState() {
+  try { localStorage.setItem('amy_app_v1', JSON.stringify(STATE)); } catch(e) {}
+}
+
+const STATE = loadState();
+if (!STATE.habits)   STATE.habits   = {};   // { 'YYYY-MM-DD': { habit_id: bool } }
+if (!STATE.notes)    STATE.notes    = {};   // { 'YYYY-MM-DD': string }
+if (!STATE.dreams)   STATE.dreams   = { todo:[], travel:[], projects:[], growth:[] };
+if (!STATE.profile)  STATE.profile  = [];
+if (!STATE.intimacy) STATE.intimacy = [];
+if (!STATE.council)  STATE.council  = [];
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+
+function todayKey() { return new Date().toISOString().split('T')[0]; }
+function makeId()   { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function dayScore(dayData) {
+  if (!dayData) return 0;
+  return CORE_IDS.filter(id => dayData[id]).length;
+}
+function coreTotal() { return CORE_IDS.length; }
+
+function getStreak() {
+  const today = todayKey();
+  let streak = 0;
+  const cursor = new Date(today + 'T12:00:00');
+  for (let i = 0; i < 60; i++) {
+    const key = cursor.toISOString().split('T')[0];
+    const data = key === today ? STATE.habits[key] : STATE.habits[key];
+    if (!data) break;
+    if (dayScore(data) >= Math.floor(coreTotal() * 0.6)) { streak++; cursor.setDate(cursor.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function fmtDate(str) {
+  const d = new Date(str + 'T12:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+}
+
+function el(id) { return document.getElementById(id); }
+
+function mdHtml(text) {
+  return text.split('\n').filter(l=>l.trim()).map(line => {
+    const parts = line.split(/(\*\*[^*]+\*\*)/g).map((p,i) =>
+      p.startsWith('**') && p.endsWith('**') ? `<strong>${p.slice(2,-2)}</strong>` : p
+    ).join('');
+    return `<p>${parts}</p>`;
+  }).join('');
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+
+let currentTab = 'today';
+
+function switchTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === id);
+  });
+  el('tab-' + id).classList.add('active');
+  currentTab = id;
+  if (id === 'today')    renderToday();
+  if (id === 'history')  renderHistory();
+  if (id === 'dreams')   renderDreams();
+  if (id === 'profile')  renderProfile();
+  if (id === 'intimacy') renderIntimacy();
+  if (id === 'council')  renderCouncil();
+  if (id === 'guide')    renderGuide();
+}
+
+// ── HEADER ────────────────────────────────────────────────────────────────────
+
+function renderHeader() {
+  const streak = getStreak();
+  const score = dayScore(STATE.habits[todayKey()]);
+  const total = coreTotal();
+  el('hdr-meta').innerHTML = `Streak: <span class="hdr-streak">${streak} day${streak!==1?'s':''}</span> &nbsp;·&nbsp; Today: ${score}/${total}`;
+}
+
+// ── TODAY ─────────────────────────────────────────────────────────────────────
+
+function renderToday() {
+  const today = todayKey();
+  const checks = STATE.habits[today] || {};
+  const score = dayScore(checks);
+  const total = coreTotal();
+  const pct = Math.round(score / total * 100);
+
+  // Date label
+  el('today-date-label').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+
+  // Progress
+  el('pct-num').textContent = pct + '%';
+  el('pct-sub').textContent = score + ' of ' + total + ' habits done';
+  el('main-bar').style.width = pct + '%';
+
+  // 7-day mini bars
+  const barsEl = el('mini-bars');
+  barsEl.innerHTML = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const isToday = key === today;
+    const s = isToday ? score : dayScore(STATE.habits[key]);
+    const h = Math.max(4, Math.round(s / total * 28));
+    const bg = s >= Math.floor(total*.8) ? '#6b8f71' : s >= Math.floor(total*.5) ? '#c17f5a' : s > 0 ? '#d4a882' : 'rgba(44,33,24,0.1)';
+    const lbl = isToday ? '•' : d.toLocaleDateString('en-US',{weekday:'short'}).slice(0,1);
+    barsEl.innerHTML += `<div class="mini-bar-col ${isToday?'today':''}">
+      <div class="mini-bar-wrap"><div class="mini-bar-fill" style="height:${h}px;background:${bg}"></div></div>
+      <div class="mini-bar-lbl">${lbl}</div>
+    </div>`;
+  }
+
+  // Habit sections
+  const sectEl = el('habit-sections');
+  sectEl.innerHTML = '';
+  HABIT_SECS.forEach(sec => {
+    let html = `<div class="section-group">
+      <div class="section-hdr">
+        <span class="section-icon" style="color:${sec.color}">${sec.icon}</span>
+        <span class="section-name" style="color:${sec.color}">${sec.label}</span>
+        ${sec.optional ? '<span class="section-opt">(if there was conflict today)</span>' : ''}
+      </div>`;
+    HABITS[sec.id].forEach(h => {
+      const done = !!checks[h.id];
+      html += `<div class="habit ${done?'done':''}" onclick="toggleHabit('${h.id}')">
+        <div class="check ${done?'done':''}"><span class="check-mark">${done?'✓':''}</span></div>
+        <div class="habit-lbl ${done?'done':''}">${h.label}</div>
+      </div>`;
+    });
+    html += '</div>';
+    sectEl.innerHTML += html;
+  });
+
+  // Note
+  el('today-note').value = STATE.notes[today] || '';
+
+  renderHeader();
+}
+
+function toggleHabit(id) {
+  const today = todayKey();
+  if (!STATE.habits[today]) STATE.habits[today] = {};
+  STATE.habits[today][id] = !STATE.habits[today][id];
+  saveState();
+  renderToday();
+}
+
+function saveNote(val) {
+  STATE.notes[todayKey()] = val;
+  saveState();
+}
+
+// ── HISTORY ───────────────────────────────────────────────────────────────────
+
+function renderHistory() {
+  const today = todayKey();
+  const total = coreTotal();
+  let html = '';
+  let hasAny = false;
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    const isToday = key === today;
+    const data = STATE.habits[key];
+    if (!isToday && !data) continue;
+    hasAny = true;
+    const s = isToday ? dayScore(STATE.habits[today]) : dayScore(data);
+    const p = Math.round(s / total * 100);
+    const bg = p >= 80 ? '#6b8f71' : p >= 50 ? '#c17f5a' : '#d4a882';
+    html += `<div class="hist-item">
+      <div class="hist-date">${isToday ? 'Today' : fmtDate(key)}</div>
+      <div class="hist-bar-wrap"><div class="hist-bar-fill" style="width:${p}%;background:${bg}"></div></div>
+      <div class="hist-score">${s}/${total}</div>
+    </div>`;
+  }
+  el('history-list').innerHTML = hasAny ? html : '<div class="empty">No history yet. Start today.</div>';
+}
+
+// ── DREAMS ────────────────────────────────────────────────────────────────────
+
+let dreamCat = 'todo';
+
+function renderDreams() {
+  // Pills
+  const pills = el('dream-cat-pills');
+  pills.innerHTML = DREAM_CATS.map(c =>
+    `<button class="pill ${dreamCat===c.id?'active':''}" style="${dreamCat===c.id?`border-color:${c.color};background:${c.color}18;color:${c.color}`:''}" onclick="setDreamCat('${c.id}')">${c.icon} ${c.label}</button>`
+  ).join('');
+
+  const cat = DREAM_CATS.find(c => c.id === dreamCat);
+  el('dream-text').placeholder = cat.ph;
+  el('dream-note').placeholder = cat.nph;
+  el('dream-add-row').querySelector('.add-btn').style.background = cat.color;
+  el('travel-tag-row').style.display = dreamCat === 'travel' ? 'block' : 'none';
+
+  const items = STATE.dreams[dreamCat] || [];
+  const open = items.filter(i => !i.done);
+  const done = items.filter(i => i.done);
+  const all = [...open, ...done];
+
+  if (!all.length) {
+    el('dream-list').innerHTML = '<div class="empty">Nothing here yet — what does she dream of?</div>';
+    return;
+  }
+  el('dream-list').innerHTML = all.map(item => `
+    <div class="item-row" style="opacity:${item.done?.6:1}">
+      <button class="item-check ${item.done?'done':''}" style="${item.done?`background:${cat.color};border-color:${cat.color}`:'border:1.5px solid rgba(44,33,24,.2)'}" onclick="toggleDream('${item.id}')">✓</button>
+      <div class="item-body">
+        <div class="item-text ${item.done?'done':''}">${item.text}</div>
+        ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+        ${item.tag  ? `<div class="item-tag" style="background:${cat.color}22;color:${cat.color}">${item.tag}</div>` : ''}
+      </div>
+      <button class="del-btn" onclick="deleteDream('${item.id}')">×</button>
+    </div>`).join('');
+}
+
+function setDreamCat(id) { dreamCat = id; renderDreams(); }
+
+function addDream() {
+  const text = el('dream-text').value.trim();
+  if (!text) return;
+  const note = el('dream-note').value.trim();
+  const tag  = dreamCat === 'travel' ? (el('travel-tag').value || '') : '';
+  if (!STATE.dreams[dreamCat]) STATE.dreams[dreamCat] = [];
+  STATE.dreams[dreamCat].unshift({ id:makeId(), text, note, tag, done:false, added:Date.now() });
+  el('dream-text').value = ''; el('dream-note').value = ''; el('travel-tag').value = '';
+  saveState(); renderDreams();
+}
+
+function toggleDream(id) {
+  const arr = STATE.dreams[dreamCat];
+  const idx = arr.findIndex(i => i.id === id);
+  if (idx >= 0) { arr[idx].done = !arr[idx].done; saveState(); renderDreams(); }
+}
+function deleteDream(id) {
+  STATE.dreams[dreamCat] = STATE.dreams[dreamCat].filter(i => i.id !== id);
+  saveState(); renderDreams();
+}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────────
+
+let profFilter = 'all';
+
+function renderProfile() {
+  const pills = el('profile-filter-pills');
+  pills.innerHTML = [{ id:'all', label:'All', color:'#2c2118' }, ...PROF_DIMS].map(d => {
+    const cnt = d.id === 'all' ? STATE.profile.length : STATE.profile.filter(e => e.dimension === d.id).length;
+    const active = profFilter === d.id;
+    return `<button class="pill ${active?'active':''}" style="${active?`border-color:${d.color};background:${d.color}18;color:${d.color}`:''}" onclick="setProfFilter('${d.id}')">${d.label}${cnt>0?` (${cnt})`:''}</button>`;
+  }).join('');
+
+  const entries = profFilter === 'all' ? STATE.profile : STATE.profile.filter(e => e.dimension === profFilter);
+  if (!entries.length) { el('profile-list').innerHTML = '<div class="empty">Start noticing her patterns — small observations compound.</div>'; return; }
+
+  el('profile-list').innerHTML = entries.map(e => {
+    const dim = PROF_DIMS.find(d => d.id === e.dimension);
+    return `<div class="prof-entry" style="border-left:3px solid ${dim?.color||'#ccc'}">
+      <div class="prof-body">
+        <div class="prof-text">${e.text}</div>
+        ${e.note ? `<div class="prof-note">${e.note}</div>` : ''}
+        <div class="dim-tag" style="background:${dim?.color||'#ccc'}22;color:${dim?.color||'#ccc'}">${dim?.label||''}</div>
+      </div>
+      <button class="del-btn" onclick="deleteProfile('${e.id}')">×</button>
+    </div>`;
+  }).join('');
+}
+
+function setProfFilter(id) { profFilter = id; renderProfile(); }
+
+function addProfile() {
+  const text = el('prof-text').value.trim();
+  if (!text) return;
+  STATE.profile.unshift({ id:makeId(), text, note:el('prof-note').value.trim(), dimension:el('prof-dim').value, added:Date.now() });
+  el('prof-text').value = ''; el('prof-note').value = '';
+  saveState(); renderProfile();
+}
+function deleteProfile(id) { STATE.profile = STATE.profile.filter(e => e.id !== id); saveState(); renderProfile(); }
+
+// ── INTIMACY ──────────────────────────────────────────────────────────────────
+
+let intDim = 'love', intFilter = 'all', intMode = 'free';
+
+function setIntMode(mode) {
+  intMode = mode;
+  el('int-mode-free').className = 'pill' + (mode==='free'?' active':'');
+  el('int-mode-ai').className   = 'pill' + (mode==='ai' ?' active':'');
+  el('int-submit-btn').textContent = mode === 'ai' ? 'Extract' : 'Add';
+}
+
+function renderIntimacy() {
+  // Dim pills
+  el('int-dim-pills').innerHTML = INT_DIMS.map(d => {
+    const active = intDim === d.id;
+    return `<button class="pill ${active?'active':''}" style="${active?`border-color:${d.color};background:${d.color}18;color:${d.color}`:''}" onclick="setIntDim('${d.id}')">${d.icon} ${d.label}</button>`;
+  }).join('');
+  const dimObj = INT_DIMS.find(d => d.id === intDim);
+  el('int-dim-hint').textContent = dimObj ? dimObj.hint : '';
+
+  // Filter pills
+  const all = [{ id:'all', label:'All', color:'#2c2118' }, ...INT_DIMS];
+  el('int-filter-pills').innerHTML = all.map(d => {
+    const cnt = d.id === 'all' ? STATE.intimacy.length : STATE.intimacy.filter(e => e.dimension === d.id).length;
+    const active = intFilter === d.id;
+    return `<button class="pill ${active?'active':''}" style="${active?`border-color:${d.color};background:${d.color}18;color:${d.color}`:''}" onclick="setIntFilter('${d.id}')">${d.label}${cnt>0?` (${cnt})`:''}</button>`;
+  }).join('');
+
+  const entries = intFilter === 'all' ? STATE.intimacy : STATE.intimacy.filter(e => e.dimension === intFilter);
+  if (!entries.length) { el('intimacy-list').innerHTML = '<div class="empty">No observations yet. Start noticing — then record it here.</div>'; return; }
+
+  el('intimacy-list').innerHTML = entries.map(e => {
+    const dim = INT_DIMS.find(d => d.id === e.dimension);
+    const hasInsight = !!e.insight;
+    return `<div class="collapsible" style="border-left:3px solid ${dim?.color||'#ccc'}">
+      <div class="coll-hdr" onclick="toggleColl(this)">
+        <div style="flex:1">
+          <div class="coll-type" style="color:${dim?.color||'#ccc'}">${dim?.icon||''} ${dim?.label||''}</div>
+          <div class="coll-sit">${e.observation}</div>
+          ${e.note ? `<div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);font-style:italic;margin-top:2px">${e.note}</div>` : ''}
+          <div class="coll-date">${new Date(e.added).toLocaleDateString('en-US',{month:'short',day:'numeric'})}${hasInsight?' · tap for insight':''}</div>
+        </div>
+        <button class="del-btn" onclick="event.stopPropagation();deleteIntimacy('${e.id}')">×</button>
+      </div>
+      ${hasInsight ? `<div class="coll-body"><div class="md-text" style="padding-top:12px">${mdHtml(e.insight)}</div></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function setIntDim(id) { intDim = id; renderIntimacy(); }
+function setIntFilter(id) { intFilter = id; renderIntimacy(); }
+function toggleColl(hdr) {
+  const body = hdr.nextElementSibling;
+  if (body) body.classList.toggle('open');
+}
+function deleteIntimacy(id) { STATE.intimacy = STATE.intimacy.filter(e => e.id !== id); saveState(); renderIntimacy(); }
+
+async function submitIntimacy() {
+  const obs = el('int-obs').value.trim();
+  if (!obs) return;
+  const note = el('int-note').value.trim();
+  if (intMode === 'free') {
+    STATE.intimacy.unshift({ id:makeId(), dimension:intDim, observation:obs, note, insight:'', added:Date.now() });
+    el('int-obs').value = ''; el('int-note').value = '';
+    saveState(); renderIntimacy(); return;
+  }
+  // AI mode
+  const dim = INT_DIMS.find(d => d.id === intDim);
+  el('int-submit-btn').textContent = '…'; el('int-submit-btn').disabled = true;
+  const streamEl = el('int-stream');
+  streamEl.style.display = 'block';
+  streamEl.innerHTML = '<div class="stream-thinking">Drawing out what this reveals…<span class="cursor"></span></div>';
+  const system = `You are helping Ed build deep relational intelligence about his wife Amy. Ed has shared an observation. Extract what it reveals about Amy — her emotional world, what she needs, how she connects, and what creates distance.\n\nStructure your response with bold headers:\n**What This Reveals** — what the observation tells us\n**The Pattern** — how this connects to a broader trait or need\n**What It Means for Ed** — one practical implication\n\nEnd with a one-sentence "pocket insight" Ed can hold onto. Keep it tight. No filler.`;
+  const user = `Dimension: ${dim?.label||intDim}\n\nObservation: ${obs}${note?`\n\nContext: ${note}`:''}`;
+  let full = '';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,stream:true,system,messages:[{role:'user',content:user}]})
+    });
+    const reader = res.body.getReader(); const dec = new TextDecoder();
+    while(true){
+      const {done,value}=await reader.read(); if(done)break;
+      for(const line of dec.decode(value).split('\n')){
+        if(line.startsWith('data:')){try{const d=JSON.parse(line.slice(5).trim());if(d.type==='content_block_delta'&&d.delta?.text){full+=d.delta.text;streamEl.innerHTML=`<div class="md-text">${mdHtml(full)}</div><span class="cursor"></span>`;}}catch(e){}}
+      }
+    }
+    STATE.intimacy.unshift({ id:makeId(), dimension:intDim, observation:obs, note, insight:full, added:Date.now() });
+    el('int-obs').value=''; el('int-note').value='';
+    saveState();
+  } catch(e) { streamEl.innerHTML = '<div class="stream-thinking">Something went wrong — check your connection.</div>'; }
+  el('int-submit-btn').textContent = 'Extract'; el('int-submit-btn').disabled = false;
+  setTimeout(()=>{ streamEl.style.display='none'; streamEl.innerHTML=''; renderIntimacy(); }, 1200);
+}
+
+// ── COUNCIL ───────────────────────────────────────────────────────────────────
+
+let councilType = 'conflict';
+
+function renderCouncil() {
+  el('council-type-pills').innerHTML = COUNCIL_TYPES.map(t => {
+    const active = councilType === t.id;
+    return `<button class="pill ${active?'active':''}" style="${active?`border-color:${t.color};background:${t.color}18;color:${t.color}`:''}" onclick="setCouncilType('${t.id}')">${t.label}</button>`;
+  }).join('');
+
+  const sessions = STATE.council;
+  if (!sessions.length) { el('council-list').innerHTML = '<div class="empty">No sessions yet. Bring a situation when you need a clear read.</div>'; return; }
+  el('council-list').innerHTML = `<div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Past Sessions</div>` +
+    sessions.map(s => {
+      const type = COUNCIL_TYPES.find(t => t.id === s.type);
+      return `<div class="collapsible" style="border-left:3px solid ${type?.color||'#7b68c8'}">
+        <div class="coll-hdr" onclick="toggleColl(this)">
+          <div style="flex:1">
+            <div class="coll-type" style="color:${type?.color||'#7b68c8'}">${type?.label||'Council'}</div>
+            <div class="coll-sit">${s.situation}</div>
+            <div class="coll-date">${new Date(s.added).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+          </div>
+          <span style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);margin-right:4px">▼</span>
+          <button class="del-btn" onclick="event.stopPropagation();deleteCouncil('${s.id}')">×</button>
+        </div>
+        <div class="coll-body"><div class="md-text" style="padding-top:12px">${mdHtml(s.response)}</div></div>
+      </div>`;
+    }).join('');
+}
+
+function setCouncilType(id) { councilType = id; renderCouncil(); }
+function deleteCouncil(id) { STATE.council = STATE.council.filter(s => s.id !== id); saveState(); renderCouncil(); }
+
+async function submitCouncil() {
+  const sit = el('council-sit').value.trim();
+  if (!sit) return;
+  const btn = el('council-btn');
+  btn.textContent = '…'; btn.disabled = true;
+  const streamEl = el('council-stream');
+  streamEl.style.display = 'block';
+  streamEl.innerHTML = '<div class="stream-thinking">Reading the situation…<span class="cursor"></span></div>';
+  const type = COUNCIL_TYPES.find(t => t.id === councilType);
+  const system = `You are a direct, practical marriage coach. The user is Ed — a husband who wants to lead well and help his wife Amy flourish.\n\nPrinciples:\n1. Be direct. Ed doesn't need validation — he needs clarity.\n2. Always represent Amy's perspective fairly.\n3. No therapizing. Practical, tactical, forward-moving.\n4. End with 1–2 concrete next actions.\n\nFormat with bold headers:\n**The Situation** — reframe what Ed described\n**Her Side** — Amy's likely perspective\n**Your Side** — where Ed is right, where he might be off\n**The Real Issue** — what's actually going on\n**Next Move** — 1–2 specific, actionable steps\n\nTight. No filler.`;
+  let full = '';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,stream:true,system,messages:[{role:'user',content:`[${type?.label||councilType}]\n\n${sit}`}]})
+    });
+    const reader = res.body.getReader(); const dec = new TextDecoder();
+    while(true){
+      const {done,value}=await reader.read(); if(done)break;
+      for(const line of dec.decode(value).split('\n')){
+        if(line.startsWith('data:')){try{const d=JSON.parse(line.slice(5).trim());if(d.type==='content_block_delta'&&d.delta?.text){full+=d.delta.text;streamEl.innerHTML=`<div class="md-text">${mdHtml(full)}</div><span class="cursor"></span>`;}}catch(e){}}
+      }
+    }
+    STATE.council.unshift({ id:makeId(), type:councilType, situation:sit, response:full, added:Date.now() });
+    el('council-sit').value = '';
+    saveState();
+  } catch(e) { streamEl.innerHTML = '<div class="stream-thinking">Something went wrong — check your connection.</div>'; }
+  btn.textContent = 'Bring it'; btn.disabled = false;
+  setTimeout(()=>{ streamEl.style.display='none'; streamEl.innerHTML=''; renderCouncil(); }, 1200);
+}
+
+// ── GUIDE ─────────────────────────────────────────────────────────────────────
+
+let guideSec = 'languages';
+
+function renderGuide() {
+  el('guide-sec-nav').innerHTML = GUIDE_DATA.map(s => {
+    const active = guideSec === s.id;
+    return `<button class="pill ${active?'active':''}" style="${active?'border-color:#5a6fa3;background:#5a6fa318;color:#5a6fa3':''}" onclick="setGuideSec('${s.id}')">${s.label}</button>`;
+  }).join('');
+
+  const sec = GUIDE_DATA.find(s => s.id === guideSec);
+  if (!sec) return;
+  el('guide-content').innerHTML = sec.blocks.map(block => `
+    <div class="guide-card" style="border-left:3px solid ${block.color}">
+      <div class="guide-card-title">
+        <div class="guide-dot" style="background:${block.color}"></div>
+        ${block.title}
+      </div>
+      ${block.points.map(pt => `
+        <div class="guide-point">
+          <div class="guide-point-dot" style="background:${block.color}"></div>
+          <div class="guide-point-text">${pt}</div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function setGuideSec(id) { guideSec = id; renderGuide(); }
+
+// ── BOOT ──────────────────────────────────────────────────────────────────────
+
+renderToday();
+renderHeader();
+</script>
+</body>
+</html>

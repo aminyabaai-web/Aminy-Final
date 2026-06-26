@@ -1,0 +1,102 @@
+/* ============================================================
+   AMINY · BRAND HELPERS
+   Logo lockups (compass + wordmark) and composable type styles.
+   The compass mark is hydrated by assets/aminy_mark.js.
+   ============================================================ */
+
+/* ---------- Logo / mark ---------- */
+.aminy-mark{
+  display:inline-flex;align-items:center;gap:0.34em;
+  color:var(--aminy-navy-800);
+  font-family:var(--font-brand);font-weight:700;
+  font-size:3rem;line-height:1;letter-spacing:-0.02em;
+  --aminy-mark-navy: currentColor;
+  --aminy-mark-teal: var(--aminy-teal-600);
+}
+.aminy-mark .compass{ width:1em;height:1em;flex-shrink:0;display:block; }
+.aminy-mark .wm{ display:inline-block;color:currentColor;transform:translateY(0.02em); }
+.aminy-mark.size-sm{font-size:1.5rem;}
+.aminy-mark.size-md{font-size:2.25rem;}
+.aminy-mark.size-lg{font-size:3rem;}
+.aminy-mark.size-xl{font-size:4.5rem;}
+.aminy-mark.size-2xl{font-size:6rem;}
+.aminy-mark.reversed{color:#fff;--aminy-mark-teal:#fff;}
+
+.aminy-compass{
+  width:2em;height:2em;display:inline-block;
+  color:var(--aminy-navy-950);
+  --aminy-mark-navy: currentColor;
+  --aminy-mark-teal: var(--aminy-teal-600);
+}
+.aminy-compass.reversed{color:#fff;--aminy-mark-teal:#fff;}
+
+.aminy-lockup{display:inline-flex;flex-direction:column;align-items:center;gap:0.38em;}
+.aminy-lockup .tagline{
+  font-family:var(--font-ui);font-weight:600;
+  font-size:0.22em;letter-spacing:0.22em;text-transform:uppercase;
+  color:currentColor;text-align:center;line-height:1.3;
+}
+.aminy-lockup .aminy-mark{color:inherit;}
+
+/* ============================================================
+   TYPE STYLES (composable helpers)
+   ============================================================ */
+.aminy-display{
+  /* Sophisticated grotesk — clinical, not playful. Fredoka is logo-only now. */
+  font-family:var(--font-ui);font-size:var(--text-4xl);font-weight:var(--fw-bold);
+  line-height:1.08;letter-spacing:-0.03em;
+  color:var(--color-text-strong);text-wrap:balance;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+}
+.aminy-h1{
+  font-family:var(--font-ui);font-size:var(--text-3xl);font-weight:var(--fw-bold);
+  line-height:1.14;letter-spacing:-0.025em;color:var(--color-text-strong);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+}
+.aminy-h2{
+  /* Crisp grotesk for working headers — Fredoka is reserved for hero/brand moments */
+  font-family:var(--font-ui);font-size:var(--text-xl);font-weight:var(--fw-semibold);
+  line-height:var(--lh-snug);letter-spacing:-0.01em;color:var(--color-text-strong);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+.aminy-h3{
+  font-family:var(--font-ui);font-size:var(--text-lg);font-weight:var(--fw-semibold);
+  line-height:var(--lh-snug);color:var(--color-text-strong);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+.aminy-eyebrow{
+  /* Calm kicker — a teal dot + quiet label, not a shouty all-caps tracked line */
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-semibold);
+  letter-spacing:0;text-transform:none;color:var(--aminy-teal-700);
+}
+.aminy-eyebrow::before{
+  content:"";width:6px;height:6px;border-radius:999px;background:var(--aminy-teal-500);flex:none;
+}
+.aminy-body{
+  font-family:var(--font-ui);font-size:var(--text-base);line-height:var(--lh-relaxed);color:var(--color-text);
+}
+.aminy-body-sm{
+  font-family:var(--font-ui);font-size:var(--text-sm);line-height:var(--lh-normal);color:var(--color-text);
+}
+.aminy-muted{ color:var(--color-text-muted); }
+.aminy-affirm{
+  /* The empathetic "affirmation voice" — clean grotesk, medium weight, calm navy */
+  font-family:var(--font-ui);font-weight:var(--fw-medium);font-size:var(--text-lg);
+  line-height:var(--lh-snug);color:var(--aminy-navy-700);letter-spacing:-0.015em;text-wrap:pretty;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+}
+.aminy-affirm em, .aminy-nudge-tip em{
+  /* Emphasis is teal weight, never italic */
+  font-style:normal;font-weight:700;color:var(--aminy-teal-700);
+}
+.aminy-label{
+  font-family:var(--font-ui);font-size:var(--text-sm);font-weight:var(--fw-medium);color:var(--color-text);
+}
+.aminy-meta{
+  font-family:var(--font-ui);font-size:var(--text-xs);color:var(--color-text-muted);letter-spacing:0;font-weight:var(--fw-medium);
+}
+.aminy-jr-display{
+  font-family:var(--font-jr);font-weight:var(--fw-black);font-size:var(--text-2xl);
+  color:var(--jr-ink);letter-spacing:-0.01em;
+}
