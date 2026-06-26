@@ -58,7 +58,7 @@ const BRAND_CSS = `
   h1 { font-size: 20px; font-weight: 700; color: #0D1B2A; margin: 0 0 12px; }
   p { font-size: 15px; line-height: 1.6; color: #3A4A57; margin: 0 0 16px; }
   .cta { display: block; margin: 28px auto; text-align: center; }
-  .cta a { background: #4E93A8; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 36px; border-radius: 10px; display: inline-block; }
+  .cta a { background: #43AA8B; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; padding: 14px 36px; border-radius: 10px; display: inline-block; }
   .note { font-size: 13px; color: #8A9BB0; margin: 20px 0 0; }
   .divider { border: none; border-top: 1px solid #E8E4DF; margin: 24px 0; }
   .footer { text-align: center; font-size: 12px; color: #8A9BB0; padding-top: 8px; }
@@ -82,7 +82,7 @@ function wrap(inner: string): string {
       ${inner}
     </div>
     <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai">aminy.ai</a> · <a href="mailto:support@aminy.ai">support@aminy.ai</a></p>
+      <p>&copy; 2026 Aminy LLC &bull; <a href="mailto:support@aminy.ai">support@aminy.ai</a> &bull; <a href="https://aminy.ai">aminy.ai</a></p>
     </div>
   </div>
 </body>
@@ -133,7 +133,7 @@ function emailChangeHtml(actionUrl: string, newEmail?: string): string {
     <div class="cta">
       <a href="${actionUrl}">Confirm new email</a>
     </div>
-    <p class="note">This link expires in 24 hours. If you didn't make this change, please contact <a href="mailto:support@aminy.ai" style="color:#4E93A8">support@aminy.ai</a> immediately.</p>
+    <p class="note">This link expires in 24 hours. If you didn't make this change, please contact <a href="mailto:support@aminy.ai" style="color:#43AA8B">support@aminy.ai</a> immediately.</p>
   `);
 }
 

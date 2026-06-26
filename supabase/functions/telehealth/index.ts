@@ -976,7 +976,7 @@ function generateEmailContent(template: string, data: any): { subject: string; t
         <h2>Appointment Starting Soon</h2>
         <p>Hi ${d.userName},</p>
         <p>Your appointment with <strong>${d.providerName}</strong> starts in 1 hour.</p>
-        ${d.videoLink ? `<p><a href="${d.videoLink}" style="background: #0891b2; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px;">Join Video Call</a></p>` : ""}
+        ${d.videoLink ? `<p><a href="${d.videoLink}" style="background: #43AA8B; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px;">Join Video Call</a></p>` : ""}
         <p>Best,<br>The Aminy Team</p>
       `,
     }),

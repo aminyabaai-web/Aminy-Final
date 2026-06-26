@@ -3544,7 +3544,7 @@ app.post("/make-server-8a022548/coverage/email", async (c) => {
       subject: 'Your Coverage Clarity Report - Aminy',
       html: `
         <div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h1 style="color: #0891b2;">Your Coverage Clarity Report</h1>
+          <h1 style="color: #43AA8B;">Your Coverage Clarity Report</h1>
           <p>Here is your insurance coverage analysis from Aminy.</p>
           <p>For the full PDF report, please download it from your Aminy dashboard.</p>
           <p>Best regards,<br>The Aminy Team</p>
