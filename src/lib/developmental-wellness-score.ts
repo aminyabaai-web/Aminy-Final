@@ -64,8 +64,8 @@ export function calculateWellnessScore(data: {
 
   // Goal-based domain scores (relative to child's own baseline→target range)
   const domainMap: Record<string, { scores: number[]; icon: string; color: string }> = {
-    'Behavioral': { scores: [], icon: '⭐', color: '#6B9080' },
-    'Communication': { scores: [], icon: '💬', color: '#7BA7BC' },
+    'Behavioral': { scores: [], icon: '⭐', color: '#4E93A8' },
+    'Communication': { scores: [], icon: '💬', color: '#6AA9BC' },
     'Social': { scores: [], icon: '🤝', color: '#E07A5F' },
     'Sensory': { scores: [], icon: '🌈', color: '#D4A373' },
     'Executive': { scores: [], icon: '🧩', color: '#577590' },
