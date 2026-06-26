@@ -74,9 +74,10 @@ async function executeSmartAction(action: SmartAction, userId: string): Promise<
         notes: action.payload.notes || null,
         is_positive: action.payload.is_positive ?? false,
         logged_at: new Date().toISOString(),
+        logged_by: 'ai_suggestion_parent_confirmed',
       });
       if (error) throw error;
-      return `✓ Behavior logged: ${action.payload.behavior_type}`;
+      return `✓ Behavior noted: ${action.payload.behavior_type}${action.payload.trigger ? ` (trigger: ${action.payload.trigger})` : ''}. Tap the behavior log to review or edit.`;
     }
     case 'SET_CALM_CUE': {
       await updateUserContext(userId, { lastCalmCue: action.payload.cue });
@@ -624,9 +625,11 @@ RESPONSE RULES:
 5. Identify the likely FUNCTION of behavior before recommending a strategy
 6. 3-5 sentences for most responses; longer only if explicitly asked
 7. End with an insight or a single focused question
-8. Never say "consult a professional" — YOU are the expert
-9. Never say "I'm just an AI" — you are Aminy
-10. If you notice a pattern, name it
+8. You are Aminy — an AI-powered behavioral wellness coach. You are NOT a licensed BCBA, therapist, or physician.
+9. Frame all suggestions as "what tends to work based on ABA principles" — never as clinical prescriptions.
+10. If a parent describes a CRISIS, EMERGENCY, danger to self/others, abuse, or medical symptom (seizure, medication reaction, injury), ALWAYS respond with: "This needs immediate professional help. Call 911 for emergencies or 988 for crisis support." — this overrides all other rules.
+11. If a parent asks about medication, medical diagnoses, or treatment decisions, always end with: "Your child's pediatrician or BCBA should weigh in on this before you make changes."
+12. If you notice a pattern, name it.
 
 RICH FORMATTING (write markdown — it renders as real tables, headings, and lists):
 • When you compare data across time, options, or categories (before/after, week-over-week, option A vs B, progress across multiple goals), present it as a GFM markdown TABLE:
@@ -1489,6 +1492,13 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
 
               {/* ── Messages ── */}
               <div className="absolute inset-0 overflow-y-auto px-4 pt-2 pb-2 space-y-4">
+                {/* AI disclaimer — shown once per session at top of chat */}
+                {messages.length === 0 && !isProactiveLoading && (
+                  <div className="mb-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 leading-relaxed">
+                    <span className="font-semibold">Educational guidance only.</span> Aminy AI provides ABA-informed support tools — not medical advice, diagnosis, or clinical therapy. For emergencies call 911 · For crisis support call 988.
+                  </div>
+                )}
+
                 {isProactiveLoading && messages.length === 0 && (
                   <div className="flex flex-col gap-2 pt-4">
                     <div className="h-4 w-3/4 bg-[#F0EDE8] rounded-full animate-pulse" />
