@@ -1049,7 +1049,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="absolute right-0 top-12 w-80 bg-white border border-[#E8E4DF] rounded-2xl shadow-xl z-50 overflow-hidden">
                     <div className="p-3 border-b border-[#E8E4DF] flex items-center justify-between">
                       <p className="text-sm font-semibold text-[#1B2733]">Action required</p>
-                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-slate-600">
+                      <button onClick={() => setShowNotifications(false)} className="text-slate-400 hover:text-slate-600" aria-label="Close notifications">
                         <X className="w-4 h-4" />
                       </button>
                     </div>
@@ -1194,7 +1194,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="lg:col-span-2 overflow-hidden border-[#6B9080]/20/60 bg-gradient-to-br from-[#FAF7F2] via-white to-[#FAF7F2] p-6 shadow-sm">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#6B9080]">
                       Independent practice cockpit
                     </p>
                     <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733]">
@@ -2677,7 +2677,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <Card className="p-5 rounded-2xl border border-neutral-200 dark:border-slate-700 bg-white dark:bg-slate-900/60">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Practice Launch Score</p>
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Practice Launch Score</p>
                     <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mt-1">{practiceSummary.headline}</h3>
                     <p className="text-sm text-neutral-600 dark:text-slate-300 mt-2 max-w-2xl">{practiceSummary.supportingCopy}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -2717,7 +2717,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                 </div>
                 <div className="mt-5 grid gap-3 lg:grid-cols-2">
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Supported Market</p>
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Supported Market</p>
                     <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">
                       {practiceMarketCoverage ? practiceMarketCoverage.label : 'Expand to a supported state'}
                     </h4>
@@ -2733,7 +2733,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     ) : null}
                   </div>
                   <div className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-4">
-                    <p className="text-xs uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Claim-Ready Queue</p>
+                    <p className="text-sm uppercase tracking-[0.18em] text-[#5A6B7A] dark:text-slate-400">Claim-Ready Queue</p>
                     <h4 className="mt-2 text-base font-semibold text-[#1B2733] dark:text-white">{practiceClaimQueueSummary.readyForBiller} ready · {practiceClaimQueueSummary.blocked} blocked</h4>
                     <p className="mt-2 text-sm text-neutral-600 dark:text-slate-300">
                       Aminy assembles claim-ready visit packets for supported-state payer rails. Biller review stays explicit before any submission lane runs.
@@ -2878,11 +2878,11 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             </div>
             <div className="p-5 space-y-4">
               <div>
-                <p className="text-xs font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
+                <p className="text-sm font-semibold text-[#5A6B7A] dark:text-slate-400 uppercase tracking-wide mb-1.5">Parent's question</p>
                 <p className="text-sm text-[#1B2733] dark:text-slate-100 bg-[#FAF7F2] dark:bg-slate-800 rounded-xl p-3 leading-relaxed">{reviewingThread.question}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
+                <p className="text-sm font-semibold text-[#6B9080] uppercase tracking-wide mb-1.5">Your response (edit AI draft below)</p>
                 <textarea
                   className="w-full min-h-[160px] text-sm text-[#1B2733] dark:text-white bg-[#FAF7F2] dark:bg-slate-800 border border-[#4E93A8]/30 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8]/40 focus:border-[#4E93A8]"
                   value={reviewResponseText}

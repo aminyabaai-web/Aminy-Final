@@ -1127,6 +1127,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               <button
                                 onClick={(e) => handleDeleteSession(session.id, e)}
                                 className="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-red-400 hover:bg-red-50 transition-colors shrink-0 mt-0.5"
+                                aria-label="Delete conversation"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -1155,6 +1156,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       <button
                         onClick={() => setShowSettings(false)}
                         className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
+                        aria-label="Close settings"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -1700,6 +1702,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <button
                       onClick={() => setAttachedImage(null)}
                       className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-slate-800 text-white flex items-center justify-center"
+                      aria-label="Remove attachment"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -1872,7 +1875,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 >
                   <div className="flex items-center justify-between px-4 pt-4 pb-2">
                     <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Add to message</p>
-                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center">
+                    <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center" aria-label="Close menu">
                       <X className="w-4 h-4 text-[#5A6B7A]" />
                     </button>
                   </div>
