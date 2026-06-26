@@ -594,7 +594,7 @@ export function ProviderMarketplace({
             <div className="flex items-start justify-between mb-1">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-[#1B2733] group-hover:text-[#6B9080] transition-colors">
+                  <h3 className="font-semibold text-[#132F43] group-hover:text-[#6B9080] transition-colors">
                     {provider.name}, {provider.credentials}
                   </h3>
                   {provider.verificationStatus && (
@@ -728,7 +728,7 @@ export function ProviderMarketplace({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, specialty, or condition..."
-              className="pl-12 h-12 bg-white text-[#1B2733] border-0 shadow-lg"
+              className="pl-12 h-12 bg-white text-[#132F43] border-0 shadow-lg"
             />
           </div>
         </div>
@@ -793,7 +793,7 @@ export function ProviderMarketplace({
                 <Sparkles className="w-5 h-5 text-violet-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-[#1B2733]">Recommended for {childName}</h3>
+                <h3 className="font-medium text-[#132F43]">Recommended for {childName}</h3>
                 <p className="text-sm text-[#5A6B7A]">
                   Based on {childConditions.join(', ')}, we suggest starting with a BCBA consultation
                 </p>
@@ -877,7 +877,7 @@ export function ProviderMarketplace({
         {showFilters && (
           <Card className="p-4 mb-6 border-[#6B9080]/20 bg-gradient-to-br from-[#FAF7F2]/50 to-cyan-50/50">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-[#1B2733] flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] flex items-center gap-2">
                 <Filter className="w-4 h-4 text-[#6B9080]" />
                 Filter Providers
               </h3>
@@ -1113,7 +1113,7 @@ export function ProviderMarketplace({
       <div className="max-w-4xl mx-auto px-4 pb-8">
         <Card className="p-5 sm:p-6 bg-gradient-to-br from-white to-gray-50">
           <div className="text-center mb-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+            <h3 className="text-lg font-semibold text-[#132F43] mb-2">
               Expert Support for Your Family
             </h3>
             <p className="text-sm text-[#5A6B7A] max-w-xl mx-auto">
@@ -1128,33 +1128,33 @@ export function ProviderMarketplace({
                 <div className="p-2 bg-[#6B9080]/10 rounded-lg">
                   <Brain className="w-4 h-4 text-[#6B9080]" />
                 </div>
-                <h4 className="font-medium text-[#1B2733]">Behavioral Support</h4>
+                <h4 className="font-medium text-[#132F43]">Behavioral Support</h4>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">ABA Specialist Consultation</p>
+                    <p className="font-medium text-[#132F43] text-sm">ABA Specialist Consultation</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 60 min with a BCBA</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">ABA Assessment</p>
+                    <p className="font-medium text-[#132F43] text-sm">ABA Assessment</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 90 min comprehensive review</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$269</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">ABA Coaching Session</p>
+                    <p className="font-medium text-[#132F43] text-sm">ABA Coaching Session</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 30 min skill-building</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$49</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">ABA Extended Coaching</p>
+                    <p className="font-medium text-[#132F43] text-sm">ABA Extended Coaching</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 60 min deeper practice</p>
                   </div>
                   <span className="font-semibold text-[#6B9080]">$89</span>
@@ -1168,33 +1168,33 @@ export function ProviderMarketplace({
                 <div className="p-2 bg-violet-100 rounded-lg">
                   <Heart className="w-4 h-4 text-violet-600" />
                 </div>
-                <h4 className="font-medium text-[#1B2733]">Therapy & Wellness</h4>
+                <h4 className="font-medium text-[#132F43]">Therapy & Wellness</h4>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">Family Therapy</p>
+                    <p className="font-medium text-[#132F43] text-sm">Family Therapy</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 45 min with licensed therapist</p>
                   </div>
                   <span className="font-semibold text-violet-600">$129</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">Extended Therapy Session</p>
+                    <p className="font-medium text-[#132F43] text-sm">Extended Therapy Session</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 60 min for complex needs</p>
                   </div>
                   <span className="font-semibold text-violet-600">$149</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-50">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">Speech Therapy</p>
+                    <p className="font-medium text-[#132F43] text-sm">Speech Therapy</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 45 min communication support</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <div>
-                    <p className="font-medium text-[#1B2733] text-sm">Occupational Therapy</p>
+                    <p className="font-medium text-[#132F43] text-sm">Occupational Therapy</p>
                     <p className="text-sm text-[#5A6B7A]">Up to 45 min sensory & motor skills</p>
                   </div>
                   <span className="font-semibold text-violet-600">$139</span>
@@ -1210,23 +1210,23 @@ export function ProviderMarketplace({
                 <Sparkles className="w-4 h-4 text-amber-600" />
               </div>
               <div>
-                <h4 className="font-medium text-[#1B2733]">Diagnostic Evaluations</h4>
+                <h4 className="font-medium text-[#132F43]">Diagnostic Evaluations</h4>
                 <p className="text-sm text-[#5A6B7A]">Skip the 12-month waitlist. Get answers in days.</p>
               </div>
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-[#1B2733] text-sm">ADHD Evaluation</p>
+                <p className="font-medium text-[#132F43] text-sm">ADHD Evaluation</p>
                 <p className="text-sm text-[#5A6B7A] mb-1">Up to 60 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$299</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-[#1B2733] text-sm">Autism Evaluation</p>
+                <p className="font-medium text-[#132F43] text-sm">Autism Evaluation</p>
                 <p className="text-sm text-[#5A6B7A] mb-1">Up to 90 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$799</span>
               </div>
               <div className="bg-white rounded-lg p-3 text-center">
-                <p className="font-medium text-[#1B2733] text-sm">Combined Evaluation</p>
+                <p className="font-medium text-[#132F43] text-sm">Combined Evaluation</p>
                 <p className="text-sm text-[#5A6B7A] mb-1">Up to 120 min</p>
                 <span className="font-semibold text-amber-600 text-lg">$999</span>
               </div>
@@ -1290,7 +1290,7 @@ export function ProviderMarketplace({
 export function ProviderTeamExplainer() {
   return (
     <Card className="p-4 sm:p-5 md:p-6">
-      <h3 className="font-semibold text-[#1B2733] mb-4">Understanding Your Care Team</h3>
+      <h3 className="font-semibold text-[#132F43] mb-4">Understanding Your Care Team</h3>
       <p className="text-[#5A6B7A] mb-4 sm:mb-6">
         Think of your child's care team like building a house:
       </p>
@@ -1298,7 +1298,7 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-[#6B9080]/10 rounded-xl">
           <GraduationCap className="w-6 h-6 text-[#6B9080] mt-1" />
           <div>
-            <h4 className="font-medium text-[#1B2733]">BCBA & RBT - The Architect & Builder</h4>
+            <h4 className="font-medium text-[#132F43]">BCBA & RBT - The Architect & Builder</h4>
             <p className="text-sm text-[#5A6B7A]">
               The BCBA designs the blueprint for behavior support. The RBT helps implement strategies day-to-day.
             </p>
@@ -1307,7 +1307,7 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-violet-50 rounded-xl">
           <Heart className="w-6 h-6 text-violet-600 mt-1" />
           <div>
-            <h4 className="font-medium text-[#1B2733]">LPC/LCSW - The Climate Specialist</h4>
+            <h4 className="font-medium text-[#132F43]">LPC/LCSW - The Climate Specialist</h4>
             <p className="text-sm text-[#5A6B7A]">
               They ensure the emotional "atmosphere" is comfortable and healthy, especially during anxiety or ADHD storms.
             </p>
@@ -1316,7 +1316,7 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl">
           <MessageSquare className="w-6 h-6 text-green-600 mt-1" />
           <div>
-            <h4 className="font-medium text-[#1B2733]">SLP & OT - The Specialists</h4>
+            <h4 className="font-medium text-[#132F43]">SLP & OT - The Specialists</h4>
             <p className="text-sm text-[#5A6B7A]">
               Communication bridge-builders and sensory experts who help with specific skill areas.
             </p>
@@ -1325,7 +1325,7 @@ export function ProviderTeamExplainer() {
         <div className="flex items-start gap-3 p-4 bg-red-50 rounded-xl">
           <Stethoscope className="w-6 h-6 text-red-600 mt-1" />
           <div>
-            <h4 className="font-medium text-[#1B2733]">Psychiatrist & Dev Ped - The Medical Captains</h4>
+            <h4 className="font-medium text-[#132F43]">Psychiatrist & Dev Ped - The Medical Captains</h4>
             <p className="text-sm text-[#5A6B7A]">
               When medication or comprehensive evaluations are needed, they guide the medical aspects.
             </p>

@@ -292,7 +292,7 @@ export function OutcomesTracking({
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Progress & Outcomes</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Progress & Outcomes</h2>
               <AISparkleButton
                 prompt="Analyze our progress and outcomes — what patterns do you see and what should we focus on next?"
                 label="Analyze"
@@ -319,7 +319,7 @@ export function OutcomesTracking({
         <Card className="p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
           <div className="flex items-center gap-2 mb-3">
             <Star className="w-5 h-5 text-amber-500" />
-            <h3 className="font-medium text-[#1B2733]">Recent Wins</h3>
+            <h3 className="font-medium text-[#132F43]">Recent Wins</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {caregiverMetrics.recentWins.map((win, idx) => (
@@ -366,7 +366,7 @@ export function OutcomesTracking({
 
         {/* Improvement Areas */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-green-500" />
             Skill Progress
           </h3>
@@ -374,7 +374,7 @@ export function OutcomesTracking({
             {caregiverMetrics.childProgress.improvementAreas.map((area, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-[#1B2733]">{area.name}</span>
+                  <span className="text-sm font-medium text-[#132F43]">{area.name}</span>
                   <div className="flex items-center gap-2 text-sm">
                     <span className="text-[#8A9BA8]">{area.baseline}%</span>
                     <ArrowUpRight className="w-3 h-3 text-green-500" />
@@ -396,7 +396,7 @@ export function OutcomesTracking({
 
         {/* Parent Wellbeing */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
             Your Wellbeing
           </h3>
@@ -447,7 +447,7 @@ export function OutcomesTracking({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Outcomes Dashboard</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Outcomes Dashboard</h2>
             <p className="text-[#5A6B7A]">Aminy Program Performance</p>
           </div>
           <div className="flex gap-2">
@@ -511,7 +511,7 @@ export function OutcomesTracking({
         {/* Utilization & Outcomes */}
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4">Utilization Metrics</h3>
+            <h3 className="font-medium text-[#132F43] mb-4">Utilization Metrics</h3>
             <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Member Engagement Rate"
@@ -537,7 +537,7 @@ export function OutcomesTracking({
           </Card>
 
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4">Clinical Outcomes</h3>
+            <h3 className="font-medium text-[#132F43] mb-4">Clinical Outcomes</h3>
             <div className="space-y-3 sm:space-y-4">
               <MetricRow
                 label="Behavior Improvement"
@@ -577,7 +577,7 @@ export function OutcomesTracking({
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Investor Dashboard</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">Investor Dashboard</h2>
             <p className="text-[#5A6B7A]">Key Performance Metrics</p>
           </div>
           <div className="flex gap-2">
@@ -651,7 +651,7 @@ export function OutcomesTracking({
         <div className="grid md:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
           {/* Retention */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <Users className="w-4 h-4 text-blue-500" />
               Retention
             </h3>
@@ -673,7 +673,7 @@ export function OutcomesTracking({
 
           {/* Engagement */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <Activity className="w-4 h-4 text-primary" />
               Engagement
             </h3>
@@ -695,7 +695,7 @@ export function OutcomesTracking({
 
           {/* Revenue Mix */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-green-500" />
               Revenue Mix
             </h3>
@@ -718,7 +718,7 @@ export function OutcomesTracking({
 
         {/* Impact Metrics */}
         <Card className="p-4 bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200">
-          <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+          <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
             <Heart className="w-4 h-4 text-pink-500" />
             Impact Metrics
           </h3>
@@ -795,7 +795,7 @@ function MetricCard({
         <span className="text-sm text-[#5A6B7A]">{label}</span>
       </div>
       <div className="flex items-end gap-2">
-        <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">{value}</span>
+        <span className="text-xl sm:text-2xl font-bold text-[#132F43]">{value}</span>
         {suffix && <span className="text-sm text-[#5A6B7A] mb-1">{suffix}</span>}
       </div>
       {trend !== undefined && (
@@ -827,7 +827,7 @@ function MetricRow({
     <div>
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-[#5A6B7A]">{label}</span>
-        <span className="text-sm font-medium text-[#1B2733]">{value}</span>
+        <span className="text-sm font-medium text-[#132F43]">{value}</span>
       </div>
       <Progress value={Math.min(progress, 100)} className="h-1.5" />
     </div>
@@ -853,7 +853,7 @@ export function OutcomesWidget({
   return (
     <Card className="p-3 sm:p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-medium text-[#1B2733]">Your Progress</h3>
+        <h3 className="font-medium text-[#132F43]">Your Progress</h3>
         {onViewDetails && (
           <Button variant="ghost" size="sm" onClick={onViewDetails}>
             View All

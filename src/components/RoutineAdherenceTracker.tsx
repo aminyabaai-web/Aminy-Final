@@ -289,7 +289,7 @@ export function RoutineAdherenceTracker({
       {/* Today's Routines */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-[#1B2733]">Today's Routines</h3>
+          <h3 className="text-lg font-semibold text-[#132F43]">Today's Routines</h3>
           {onAddRoutine && (
             <Button variant="ghost" size="sm" onClick={onAddRoutine}>
               <Plus className="w-4 h-4 mr-1" />
@@ -342,7 +342,7 @@ export function RoutineAdherenceTracker({
                         {/* Routine Info */}
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
-                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-[#5A6B7A] line-through' : 'text-[#1B2733]'}`}>
+                            <span className={`font-medium ${isCompleted || isSkipped ? 'text-[#5A6B7A] line-through' : 'text-[#132F43]'}`}>
                               {routine.name}
                             </span>
                             {isCompleted && completion?.delay_minutes && completion.delay_minutes > 15 && (

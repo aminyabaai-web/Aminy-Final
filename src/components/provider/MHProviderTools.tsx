@@ -126,7 +126,7 @@ function PHQ9Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">PHQ-9 Depression Screen</h4>
+        <h4 className="font-semibold text-[#132F43]">PHQ-9 Depression Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-violet-600 font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
@@ -211,7 +211,7 @@ function GAD7Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">GAD-7 Anxiety Screen</h4>
+        <h4 className="font-semibold text-[#132F43]">GAD-7 Anxiety Screen</h4>
         <button onClick={() => setShowEntry(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showEntry ? 'Cancel' : '+ Log Score'}
         </button>
@@ -307,7 +307,7 @@ function BRIEF2Widget() {
   return (
     <div className="bg-white border border-[#E8E4DF] rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-[#1B2733]">BRIEF-2 Executive Function</h4>
+        <h4 className="font-semibold text-[#132F43]">BRIEF-2 Executive Function</h4>
         <button onClick={() => setShowForm(f => !f)} className="text-sm text-[#6B9080] font-medium">
           {showForm ? 'Cancel' : '+ Screen'}
         </button>
@@ -333,7 +333,7 @@ function BRIEF2Widget() {
               <div key={domain.id}>
                 <div className="flex items-center justify-between mb-1">
                   <div>
-                    <span className="text-sm font-medium text-[#1B2733]">{domain.label}</span>
+                    <span className="text-sm font-medium text-[#132F43]">{domain.label}</span>
                     <span className="text-sm text-[#5A6B7A] ml-1">— {domain.desc}</span>
                   </div>
                 </div>
@@ -619,7 +619,7 @@ export default function MHProviderTools({ onBack }: MHProviderToolsProps) {
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">MH Clinical Tools</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">MH Clinical Tools</h1>
             <p className="text-sm text-[#5A6B7A]">Licensed Clinical Social Work</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-violet-100 text-violet-700 text-xs font-medium rounded-full">

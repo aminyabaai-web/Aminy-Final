@@ -113,7 +113,7 @@ export function AskAminyChatScreen({
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="text-base font-semibold text-[#1B2733] dark:text-slate-100">Aminy AI</h1>
+                <h1 className="text-base font-semibold text-[#132F43] dark:text-slate-100">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today

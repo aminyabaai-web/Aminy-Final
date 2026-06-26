@@ -363,7 +363,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">My Performance</h2>
+        <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">My Performance</h2>
         <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
           Your network scorecard. Aminy uses these metrics to evaluate provider quality and referral eligibility.
         </p>
@@ -454,7 +454,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
               return (
                 <div key={a.id} className="flex items-center justify-between rounded-xl bg-white dark:bg-slate-900/50 px-3 py-2 text-sm">
                   <div>
-                    <span className="font-medium text-[#1B2733] dark:text-white">{a.clientName}</span>
+                    <span className="font-medium text-[#132F43] dark:text-white">{a.clientName}</span>
                     <span className="ml-2 text-[#5A6B7A] dark:text-slate-400">{a.cptCode} · {a.payer}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -492,7 +492,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
                 <IconEl className="w-4 h-4 text-neutral-400" />
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400 leading-tight line-clamp-2">{m.label}</p>
               </div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">
                 {formatVal(m)}
               </p>
               <div className="mt-1 flex items-center justify-between">
@@ -512,20 +512,20 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 overflow-hidden">
           <div className="px-4 py-3 border-b border-neutral-100 dark:border-slate-700 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-500" />
-            <h3 className="font-semibold text-[#1B2733] dark:text-white">Open Denials ({denials.length})</h3>
+            <h3 className="font-semibold text-[#132F43] dark:text-white">Open Denials ({denials.length})</h3>
           </div>
           <div className="divide-y divide-neutral-100 dark:divide-slate-700">
             {denials.map((d) => (
               <div key={d.id} className="px-4 py-3 flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-[#1B2733] dark:text-white">{d.clientName}</p>
+                  <p className="text-sm font-medium text-[#132F43] dark:text-white">{d.clientName}</p>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-0.5">
                     {d.cptCode} · {d.payer} · DOS {d.dateOfService}
                   </p>
                   <p className="text-sm text-red-600 dark:text-red-400 mt-0.5">{d.reason}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-sm font-semibold text-[#1B2733] dark:text-white">${d.amount.toLocaleString()}</p>
+                  <p className="text-sm font-semibold text-[#132F43] dark:text-white">${d.amount.toLocaleString()}</p>
                 </div>
               </div>
             ))}
@@ -537,7 +537,7 @@ export function ProviderPerformanceTab({ providerId }: ProviderPerformanceTabPro
       {denials.length === 0 && (
         <Card className="rounded-2xl border border-neutral-200 dark:border-slate-700 p-6 text-center">
           <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-          <p className="font-medium text-[#1B2733] dark:text-white">No open denials</p>
+          <p className="font-medium text-[#132F43] dark:text-white">No open denials</p>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Your claims are processing cleanly.</p>
         </Card>
       )}

@@ -312,7 +312,7 @@ export const PlaceholderCard = ({ title, description, actions = [] }: {
   actions?: Array<{ label: string; action: string; icon?: React.ReactNode }>;
 }) => (
   <Card className="p-6 text-center">
-    <h3 className="text-lg font-semibold text-[#1B2733] mb-2">{title}</h3>
+    <h3 className="text-lg font-semibold text-[#132F43] mb-2">{title}</h3>
     <p className="text-[#5A6B7A] mb-4">{description}</p>
     <div className="flex flex-wrap gap-2 justify-center">
       {actions.map((actionItem, idx) => (

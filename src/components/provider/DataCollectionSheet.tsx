@@ -215,22 +215,22 @@ function DTTMode({
       {/* Program info */}
       <div className="bg-[#FAF7F2] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
       {/* Running summary */}
       <div className="grid grid-cols-3 gap-3">
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{trials.length}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{trials.length}</p>
           <p className="text-sm text-[#5A6B7A]">Trials</p>
         </div>
         <div className={`border rounded-xl p-3 text-center ${masteryMet ? 'bg-green-50 border-green-300' : 'bg-white border-[#E8E4DF]'}`}>
-          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#1B2733]'}`}>{pct}%</p>
+          <p className={`text-2xl font-bold ${masteryMet ? 'text-green-700' : 'text-[#132F43]'}`}>{pct}%</p>
           <p className="text-sm text-[#5A6B7A]">% Correct</p>
         </div>
         <div className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-[#1B2733]">{trials.filter(t => t.response === 'correct').length}</p>
+          <p className="text-2xl font-bold text-[#132F43]">{trials.filter(t => t.response === 'correct').length}</p>
           <p className="text-sm text-[#5A6B7A]">Correct</p>
         </div>
       </div>
@@ -331,7 +331,7 @@ function NETMode({
     <div className="space-y-4">
       <div className="bg-[#FAF7F2] rounded-xl p-4">
         <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-1">Program / Skill</p>
-        <p className="font-semibold text-[#1B2733]">{programName || 'Untitled Program'}</p>
+        <p className="font-semibold text-[#132F43]">{programName || 'Untitled Program'}</p>
         {goalDescription && <p className="text-sm text-[#5A6B7A] mt-1">{goalDescription}</p>}
       </div>
 
@@ -544,7 +544,7 @@ function BehaviorMode({
       {recordingType === 'frequency' && (
         <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Frequency Count</p>
-          <p className="text-7xl font-bold text-[#1B2733] mb-6">{frequencyCount}</p>
+          <p className="text-7xl font-bold text-[#132F43] mb-6">{frequencyCount}</p>
           <div className="flex items-center justify-center gap-6">
             <button
               onClick={onDecrementFrequency}
@@ -566,7 +566,7 @@ function BehaviorMode({
       {recordingType === 'duration' && (
         <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 text-center">
           <p className="text-xs text-[#5A6B7A] uppercase tracking-wide mb-4">Duration Recording</p>
-          <p className="text-6xl font-mono font-bold text-[#1B2733] mb-2">
+          <p className="text-6xl font-mono font-bold text-[#132F43] mb-2">
             {formatSeconds(isDurationRunning ? durationElapsed : 0)}
           </p>
           {isDurationRunning && (
@@ -594,7 +594,7 @@ function BehaviorMode({
                 {durationRecords.map((d, i) => (
                   <div key={i} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">Episode {i + 1}</span>
-                    <span className="font-medium text-[#1B2733]">{formatSeconds(d)}</span>
+                    <span className="font-medium text-[#132F43]">{formatSeconds(d)}</span>
                   </div>
                 ))}
                 <div className="border-t border-[#E8E4DF] pt-1 flex items-center justify-between text-sm font-semibold">
@@ -633,7 +633,7 @@ function BehaviorMode({
           {/* Timer display */}
           {isIntervalRunning && (
             <div className="text-center mb-4">
-              <p className="text-3xl font-mono font-bold text-[#1B2733]">{intervalTimeLeft}s</p>
+              <p className="text-3xl font-mono font-bold text-[#132F43]">{intervalTimeLeft}s</p>
               <p className="text-sm text-[#5A6B7A]">Interval {currentIntervalIndex + 1} — tap to mark</p>
             </div>
           )}
@@ -1036,7 +1036,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
         {/* Setup card */}
         {!sessionStarted ? (
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF] space-y-4">
-            <h2 className="text-[#1B2733] font-bold text-lg">Session Setup</h2>
+            <h2 className="text-[#132F43] font-bold text-lg">Session Setup</h2>
 
             <div className="grid grid-cols-2 gap-3">
               <div>

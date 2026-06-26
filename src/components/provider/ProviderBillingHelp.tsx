@@ -494,7 +494,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 value={aiQuery}
                 onChange={e => setAiQuery(e.target.value)}
                 placeholder="Type your billing question here…"
-                className="w-full text-sm text-[#1B2733] placeholder:text-[#5A6B7A] resize-none focus:outline-none min-h-[80px]"
+                className="w-full text-sm text-[#132F43] placeholder:text-[#5A6B7A] resize-none focus:outline-none min-h-[80px]"
               />
               <div className="flex justify-end mt-2">
                 <button
@@ -532,7 +532,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                 className="w-full flex items-center justify-between px-4 py-3"
                 onClick={() => setShowCPTRef(!showCPTRef)}
               >
-                <span className="text-sm font-semibold text-[#1B2733]">CPT Quick Reference</span>
+                <span className="text-sm font-semibold text-[#132F43]">CPT Quick Reference</span>
                 <ChevronDown size={16} className={`text-[#8A9BA8] transition-transform ${showCPTRef ? 'rotate-180' : ''}`} />
               </button>
               <AnimatePresence>
@@ -543,7 +543,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                         <div key={ref.code} className="flex items-start gap-3 py-2 border-b border-gray-50">
                           <span className="text-xs font-mono font-bold text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded shrink-0">{ref.code}</span>
                           <div>
-                            <p className="text-sm font-medium text-[#1B2733]">{ref.desc}</p>
+                            <p className="text-sm font-medium text-[#132F43]">{ref.desc}</p>
                             <p className="text-sm text-[#5A6B7A]">{ref.unit} · {ref.payers}</p>
                           </div>
                         </div>
@@ -569,7 +569,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                     className="w-full flex items-start justify-between gap-3 px-4 py-4 text-left"
                     onClick={() => setExpandedFAQ(expandedFAQ === i ? null : i)}
                   >
-                    <p className="text-sm font-medium text-[#1B2733] leading-snug">{faq.q}</p>
+                    <p className="text-sm font-medium text-[#132F43] leading-snug">{faq.q}</p>
                     <ChevronDown
                       size={16}
                       className={`text-[#8A9BA8] shrink-0 mt-0.5 transition-transform ${expandedFAQ === i ? 'rotate-180' : ''}`}
@@ -591,7 +591,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
                                 <Play size={16} className="text-[#5A6B7A]" />
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-[#1B2733]">{faq.videoTitle}</p>
+                                <p className="text-sm font-medium text-[#132F43]">{faq.videoTitle}</p>
                                 <p className="text-sm text-[#8A9BA8]">{faq.videoDuration} explainer</p>
                               </div>
                               <button className="ml-auto text-sm text-[#6B9080] font-medium px-3 py-1.5 rounded-lg border border-[#6B9080]/20 hover:bg-[#6B9080]/10 transition-colors">
@@ -619,7 +619,7 @@ export default function ProviderBillingHelp({ onBack }: ProviderBillingHelpProps
               <Sparkles size={18} className="text-white" />
             </div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-[#1B2733]">Can't find your answer?</p>
+              <p className="text-sm font-semibold text-[#132F43]">Can't find your answer?</p>
               <p className="text-sm text-[#5A6B7A]">Ask our AI billing assistant</p>
             </div>
             <ChevronRight size={16} className="text-[#8A9BA8] ml-auto" />

@@ -152,7 +152,7 @@ export function FeedbackInbox() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Inbox className="w-5 h-5 text-accent" />
-          <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">Feedback Inbox</h2>
+          <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">Feedback Inbox</h2>
         </div>
         <div className="flex items-center gap-2">
           {(['new', 'responded', 'all'] as const).map(f => (
@@ -209,7 +209,7 @@ export function FeedbackInbox() {
                     )}
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        {mood && <span className="text-sm font-semibold text-[#1B2733] dark:text-white">{mood.label}</span>}
+                        {mood && <span className="text-sm font-semibold text-[#132F43] dark:text-white">{mood.label}</span>}
                         {item.context && (
                           <span className="text-xs px-2 py-0.5 bg-[#F0EDE8] dark:bg-slate-800 text-[#5A6B7A] dark:text-slate-400 rounded-full">
                             {item.context}
@@ -272,7 +272,7 @@ export function FeedbackInbox() {
                           value={draftText}
                           onChange={e => setDraftText(e.target.value)}
                           rows={3}
-                          className="w-full text-sm text-[#1B2733] dark:text-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30"
+                          className="w-full text-sm text-[#132F43] dark:text-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-accent/30"
                           placeholder="Your reply to this parent…"
                         />
                         <div className="flex items-center justify-end gap-2 mt-2">

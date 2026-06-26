@@ -68,7 +68,7 @@ function StatusBadge({ status }: { status: string }) {
     underpaid: { bg: 'bg-orange-100', text: 'text-orange-800', label: 'Underpaid' },
     posted: { bg: 'bg-emerald-100', text: 'text-emerald-800', label: 'Posted' },
     pending_review: { bg: 'bg-amber-100', text: 'text-amber-800', label: 'Pending Review' },
-    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-[#1B2733]', label: 'Write Off' },
+    write_off: { bg: 'bg-[#F0EDE8]', text: 'text-[#132F43]', label: 'Write Off' },
     appeal: { bg: 'bg-red-100', text: 'text-red-800', label: 'Appeal' },
   };
 
@@ -93,12 +93,12 @@ function ServiceLineRow({ line }: {
         className="flex w-full items-center justify-between px-4 py-3 text-left hover:bg-[#FAF7F2]"
       >
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm font-semibold text-[#1B2733]">{line.procedureCode}</span>
+          <span className="font-mono text-sm font-semibold text-[#132F43]">{line.procedureCode}</span>
           <StatusBadge status={line.status === 'paid_in_full' ? 'matched' : line.status === 'denied' ? 'unmatched' : 'partial_match'} />
         </div>
         <div className="flex items-center gap-4 text-sm">
           <span className="text-[#5A6B7A]">Charged: ${line.originalCharge.toFixed(2)}</span>
-          <span className="font-semibold text-[#1B2733]">Paid: ${line.paidAmount.toFixed(2)}</span>
+          <span className="font-semibold text-[#132F43]">Paid: ${line.paidAmount.toFixed(2)}</span>
           <span className="text-[#8A9BA8]">{expanded ? '\u25B2' : '\u25BC'}</span>
         </div>
       </button>
@@ -130,7 +130,7 @@ function ServiceLineRow({ line }: {
                       {adj.groupCode}-{adj.reasonCode}
                     </span>
                     <span className="text-[#5A6B7A]">{adj.description}</span>
-                    <span className="ml-auto font-medium text-[#1B2733]">${adj.amount.toFixed(2)}</span>
+                    <span className="ml-auto font-medium text-[#132F43]">${adj.amount.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -169,7 +169,7 @@ function WriteOffCard({ suggestion, onAction }: {
             {suggestion.adjustmentGroupCode}-{suggestion.adjustmentReasonCode}: {suggestion.description}
           </p>
         </div>
-        <span className="text-sm font-bold text-[#1B2733]">${suggestion.amount.toFixed(2)}</span>
+        <span className="text-sm font-bold text-[#132F43]">${suggestion.amount.toFixed(2)}</span>
       </div>
       <p className="mt-2 text-sm text-[#5A6B7A]">{suggestion.rationale}</p>
       <div className="mt-2 flex gap-2">
@@ -320,7 +320,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
               </button>
             )}
             <div>
-              <h1 className="text-lg font-bold text-[#1B2733]">Payment Reconciliation</h1>
+              <h1 className="text-lg font-bold text-[#132F43]">Payment Reconciliation</h1>
               <p className="text-sm text-[#5A6B7A]">ERA 835 Automated Payment Posting</p>
             </div>
           </div>
@@ -333,7 +333,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 rounded-md px-2 py-1.5 text-sm font-medium transition-colors ${
                   activeTab === tab
-                    ? 'bg-white text-[#1B2733] shadow-sm'
+                    ? 'bg-white text-[#132F43] shadow-sm'
                     : 'text-[#5A6B7A] hover:text-[#3A4A57]'
                 }`}
               >
@@ -384,12 +384,12 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Status Breakdown */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-[#1B2733]">Posting Status Breakdown</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">Posting Status Breakdown</h3>
               <div className="mt-3 space-y-2">
                 {Object.entries(summary.byStatus).map(([status, count]) => (
                   <div key={status} className="flex items-center justify-between">
                     <StatusBadge status={status} />
-                    <span className="text-sm font-semibold text-[#1B2733]">{count}</span>
+                    <span className="text-sm font-semibold text-[#132F43]">{count}</span>
                   </div>
                 ))}
               </div>
@@ -397,13 +397,13 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Payer Breakdown */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-[#1B2733]">Payments by Payer</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">Payments by Payer</h3>
               <div className="mt-3 space-y-2">
                 {summary.byPayer.map((payer, idx) => (
                   <div key={idx} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">{payer.payerName}</span>
                     <div className="text-right">
-                      <span className="font-semibold text-[#1B2733]">${payer.totalPaid.toFixed(2)}</span>
+                      <span className="font-semibold text-[#132F43]">${payer.totalPaid.toFixed(2)}</span>
                       <span className="ml-2 text-sm text-[#8A9BA8]">({payer.claimCount} claims)</span>
                     </div>
                   </div>
@@ -414,14 +414,14 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {/* Unreconciled Payments */}
             {unreconciledPayments.length > 0 && (
               <div className="rounded-xl bg-white p-4 shadow-sm">
-                <h3 className="text-sm font-semibold text-[#1B2733]">
+                <h3 className="text-sm font-semibold text-[#132F43]">
                   Unreconciled Payments ({unreconciledPayments.length})
                 </h3>
                 <div className="mt-3 space-y-2">
                   {unreconciledPayments.slice(0, 10).map((payment) => (
                     <div key={payment.id} className="flex items-center justify-between rounded-lg bg-[#FAF7F2] p-2">
                       <div>
-                        <p className="text-sm font-medium text-[#1B2733]">
+                        <p className="text-sm font-medium text-[#132F43]">
                           {payment.claimControlNumber} - {payment.procedureCode}
                         </p>
                         <p className="text-sm text-[#5A6B7A]">{payment.payerName}</p>
@@ -449,7 +449,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             <div className="rounded-xl bg-white p-4 shadow-sm">
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-sm font-semibold text-[#1B2733]">
+                  <h3 className="text-sm font-semibold text-[#132F43]">
                     Claim {reconciliationResult.claimControlNumber}
                   </h3>
                   <StatusBadge status={reconciliationResult.status} />
@@ -487,7 +487,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
             {/* Service Line Breakdown */}
             <div className="rounded-xl bg-white shadow-sm">
               <div className="border-b px-4 py-3">
-                <h3 className="text-sm font-semibold text-[#1B2733]">Service Lines</h3>
+                <h3 className="text-sm font-semibold text-[#132F43]">Service Lines</h3>
               </div>
               {reconciliationResult.serviceLineReconciliation.map((line, idx) => (
                 <ServiceLineRow key={idx} line={line} />
@@ -496,7 +496,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
 
             {/* Timeline */}
             <div className="rounded-xl bg-white p-4 shadow-sm">
-              <h3 className="text-sm font-semibold text-[#1B2733]">Reconciliation Timeline</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">Reconciliation Timeline</h3>
               <div className="mt-3 space-y-3">
                 {reconciliationResult.timeline.map((event, idx) => (
                   <div key={idx} className="flex gap-3">
@@ -507,7 +507,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
                       )}
                     </div>
                     <div className="pb-3">
-                      <p className="text-sm font-medium text-[#1B2733]">{event.event.replace(/_/g, ' ')}</p>
+                      <p className="text-sm font-medium text-[#132F43]">{event.event.replace(/_/g, ' ')}</p>
                       <p className="text-sm text-[#5A6B7A]">{event.details}</p>
                       <p className="text-sm text-[#8A9BA8]">
                         {new Date(event.timestamp).toLocaleString()}
@@ -523,7 +523,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
         {!loading && activeTab === 'write_offs' && reconciliationResult && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-[#1B2733]">
+              <h3 className="text-sm font-semibold text-[#132F43]">
                 Write-Off Suggestions ({reconciliationResult.writeOffSuggestions.length})
               </h3>
               <span className="text-sm text-[#5A6B7A]">
@@ -548,7 +548,7 @@ export default function ERAReconciliation({ onNavigateBack }: ERAReconciliationP
         {!loading && activeTab === 'appeals' && reconciliationResult && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-[#1B2733]">
+              <h3 className="text-sm font-semibold text-[#132F43]">
                 Appeal Recommendations ({reconciliationResult.appealSuggestions.length})
               </h3>
               <span className="text-sm text-[#5A6B7A]">

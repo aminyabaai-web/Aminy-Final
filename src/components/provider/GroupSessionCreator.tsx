@@ -182,7 +182,7 @@ export function GroupSessionCreator({
       {/* Header + CTA */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Group Sessions</h3>
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Group Sessions</h3>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
             $50/family · up to 4 families · Aminy takes 20% · you keep $160–$200/session
           </p>
@@ -221,7 +221,7 @@ export function GroupSessionCreator({
       {showCreator && (
         <Card className="p-5 border-[#6B9080]/30">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-semibold text-[#1B2733] dark:text-white">New group session</h4>
+            <h4 className="font-semibold text-[#132F43] dark:text-white">New group session</h4>
             <button onClick={() => { setShowCreator(false); resetForm(); }} className="text-slate-400 hover:text-slate-600">
               <X className="w-5 h-5" />
             </button>
@@ -230,7 +230,7 @@ export function GroupSessionCreator({
           <div className="space-y-4">
             {/* Format: one-off office hours vs multi-week cohort */}
             <div>
-              <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-2 block">Format</label>
+              <label className="text-sm font-medium text-[#132F43] dark:text-white mb-2 block">Format</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => { setFormat('single'); setSessionCount(1); }}
@@ -239,7 +239,7 @@ export function GroupSessionCreator({
                     ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
-                  <p className="text-sm font-semibold text-[#1B2733]">Single session</p>
+                  <p className="text-sm font-semibold text-[#132F43]">Single session</p>
                   <p className="text-sm text-[#5A6B7A]">One-off office hours, up to 4 families</p>
                 </button>
                 <button
@@ -249,7 +249,7 @@ export function GroupSessionCreator({
                     ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
-                  <p className="text-sm font-semibold text-[#1B2733]">Cohort program</p>
+                  <p className="text-sm font-semibold text-[#132F43]">Cohort program</p>
                   <p className="text-sm text-[#5A6B7A]">Weekly group, 8–12 families, you moderate</p>
                 </button>
               </div>
@@ -271,7 +271,7 @@ export function GroupSessionCreator({
 
             {/* Topic */}
             <div>
-              <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">
+              <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">
                 Session topic <span className="text-red-500">*</span>
               </label>
               <Input
@@ -284,7 +284,7 @@ export function GroupSessionCreator({
 
             {/* Category chips */}
             <div>
-              <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-2 block">Category</label>
+              <label className="text-sm font-medium text-[#132F43] dark:text-white mb-2 block">Category</label>
               <div className="flex flex-wrap gap-2">
                 {TOPIC_CATEGORIES.map(cat => (
                   <button
@@ -303,7 +303,7 @@ export function GroupSessionCreator({
 
             {/* Description */}
             <div>
-              <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">
+              <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">
                 What will families learn? (shown in marketplace)
               </label>
               <Textarea
@@ -317,7 +317,7 @@ export function GroupSessionCreator({
             {/* Date + Time */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">
                   Date <span className="text-red-500">*</span>
                 </label>
                 <Input
@@ -328,7 +328,7 @@ export function GroupSessionCreator({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">
                   Time <span className="text-red-500">*</span>
                 </label>
                 <Input
@@ -342,7 +342,7 @@ export function GroupSessionCreator({
             {/* Capacity + pricing */}
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">Price/family ($)</label>
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">Price/family ($)</label>
                 <Input
                   type="number"
                   min={25}
@@ -352,7 +352,7 @@ export function GroupSessionCreator({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">Max families</label>
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">Max families</label>
                 <Input
                   type="number"
                   min={2}
@@ -362,7 +362,7 @@ export function GroupSessionCreator({
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-[#1B2733] dark:text-white mb-1 block">Min to run</label>
+                <label className="text-sm font-medium text-[#132F43] dark:text-white mb-1 block">Min to run</label>
                 <Input
                   type="number"
                   min={1}
@@ -378,7 +378,7 @@ export function GroupSessionCreator({
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your earnings preview</p>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#3A4A57]">Minimum ({minFamilies} families)</span>
-                <span className="font-semibold text-[#1B2733]">${Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * minFamilies}</span>
+                <span className="font-semibold text-[#132F43]">${Math.round(pricePerFamily * (1 - PLATFORM_FEE_PCT)) * minFamilies}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-1">
                 <span className="text-[#3A4A57]">Full room ({maxFamilies} families)</span>
@@ -404,7 +404,7 @@ export function GroupSessionCreator({
       ) : upcomingSessions.length === 0 && !showCreator ? (
         <Card className="p-8 text-center border-dashed border-[#E8E4DF]">
           <Users className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-[#1B2733] font-medium mb-1">No group sessions yet</p>
+          <p className="text-[#132F43] font-medium mb-1">No group sessions yet</p>
           <p className="text-sm text-[#5A6B7A] mb-4">
             Create your first group session — it'll appear in the marketplace for families to find and book.
           </p>
@@ -469,7 +469,7 @@ function GroupSessionCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             {categoryInfo && <span className="text-lg">{categoryInfo.emoji}</span>}
-            <p className="font-semibold text-[#1B2733] dark:text-white truncate">{session.topic}</p>
+            <p className="font-semibold text-[#132F43] dark:text-white truncate">{session.topic}</p>
             <Badge className={
               session.status === 'open' ? 'bg-emerald-100 text-emerald-700' :
               session.status === 'confirmed' ? 'bg-blue-100 text-blue-700' :

@@ -127,7 +127,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
       <div className="px-4 py-4 space-y-4 pb-24">
         {/* Explainer */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-          <h2 className="text-sm font-semibold text-[#1B2733] mb-2 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#132F43] mb-2 flex items-center gap-2">
             <Sparkles size={15} className="text-[#6B9080]" />
             What Aminy sends to CentralReach
           </h2>
@@ -175,7 +175,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
 
         {/* Value props */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-          <h2 className="text-sm font-semibold text-[#1B2733] mb-3">CentralReach loves this data</h2>
+          <h2 className="text-sm font-semibold text-[#132F43] mb-3">CentralReach loves this data</h2>
           <div className="space-y-3">
             {VALUE_PROPS.map((vp, i) => (
               <motion.div
@@ -190,7 +190,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-[#1B2733]">{vp.title}</p>
+                    <p className="text-sm font-semibold text-[#132F43]">{vp.title}</p>
                     <span className="text-xs font-medium text-[#6B9080] bg-[#6B9080]/10 px-2 py-0.5 rounded-full shrink-0 ml-2">
                       {vp.stat}
                     </span>
@@ -204,7 +204,7 @@ export default function CentralReachFeed({ providerId, onBack }: CentralReachFee
 
         {/* Data Quality */}
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-          <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
             <Shield size={15} className="text-purple-600" />
             Data Quality Score: {syncStatus.dataQualityScore}%
           </h2>

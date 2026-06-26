@@ -358,7 +358,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
             <ArrowLeft className="h-5 w-5" />
             Back
           </button>
-          <div className="text-sm font-semibold text-[#1B2733]">Worry Jar</div>
+          <div className="text-sm font-semibold text-[#132F43]">Worry Jar</div>
           <div className="flex items-center gap-1 text-sm font-medium text-violet-600">
             <Sparkles className="h-4 w-4" />
             {releasedCount} let go
@@ -446,7 +446,7 @@ export default function WorryJar({ onBack, childName = 'Buddy' }: WorryJarProps)
                 exit={{ opacity: 0, y: 20 }}
                 className="rounded-[20px] border border-[#E8E4DF] bg-white p-4 shadow-sm space-y-3"
               >
-                <div className="text-sm font-medium text-[#1B2733]">"{worry.text}"</div>
+                <div className="text-sm font-medium text-[#132F43]">"{worry.text}"</div>
                 {/* Rating */}
                 <div>
                   <div className="text-sm text-[#5A6B7A] mb-1">How big does it feel? (1-5)</div>

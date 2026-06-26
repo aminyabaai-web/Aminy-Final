@@ -253,7 +253,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                 <div className="p-2 bg-red-100 rounded-full">
                   <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
-                <h3 className="font-semibold text-[#1B2733]">We're Here for You</h3>
+                <h3 className="font-semibold text-[#132F43]">We're Here for You</h3>
               </div>
               <p className="text-[#5A6B7A] mb-4">
                 We noticed you're having some difficult thoughts. You're not alone, and help is available right now.
@@ -318,7 +318,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                 <p className="text-sm text-violet-600 font-medium mb-2">
                   Over the past 2 weeks, how often have you been bothered by:
                 </p>
-                <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
+                <p className="text-lg text-[#132F43] font-medium leading-relaxed">
                   {question.text}
                 </p>
                 {question.isCritical && (
@@ -341,7 +341,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                         : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
-                    <span className="font-medium text-[#1B2733]">{option.label}</span>
+                    <span className="font-medium text-[#132F43]">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -354,7 +354,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
               exit={{ opacity: 0, x: -20 }}
             >
               <div className="mb-6">
-                <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
+                <p className="text-lg text-[#132F43] font-medium leading-relaxed">
                   If you checked off any problems, how difficult have these problems made it for you to do your work, take care of things at home, or get along with other people?
                 </p>
               </div>
@@ -370,7 +370,7 @@ export function PHQ9Screener({ onComplete, onCancel, userName }: PHQ9ScreenerPro
                         : 'border-[#E8E4DF] hover:border-violet-300 hover:bg-[#FAF7F2]'
                     }`}
                   >
-                    <span className="font-medium text-[#1B2733]">{option.label}</span>
+                    <span className="font-medium text-[#132F43]">{option.label}</span>
                   </button>
                 ))}
               </div>
@@ -427,7 +427,7 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
         <div className="w-16 h-16 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Heart className="w-8 h-8 text-violet-600" />
         </div>
-        <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Your Results</h2>
+        <h2 className="text-xl font-semibold text-[#132F43] mb-2">Your Results</h2>
         <p className="text-[#5A6B7A]">Thank you for completing this check-in</p>
       </div>
 
@@ -464,7 +464,7 @@ export function PHQ9Results({ result, onClose, onBookTherapist }: PHQ9ResultsPro
 
       {/* Recommendations */}
       <div className="mb-6">
-        <h3 className="font-medium text-[#1B2733] mb-3">Recommendations</h3>
+        <h3 className="font-medium text-[#132F43] mb-3">Recommendations</h3>
         <div className="space-y-2">
           {result.recommendations.map((rec, i) => (
             <div key={i} className="flex items-start gap-2">

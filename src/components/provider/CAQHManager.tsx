@@ -86,7 +86,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
               </button>
             )}
             <div>
-              <h1 className="text-lg font-bold text-[#1B2733] flex items-center gap-2">
+              <h1 className="text-lg font-bold text-[#132F43] flex items-center gap-2">
                 <Shield size={18} className="text-blue-600" />
                 CAQH ProView Manager
               </h1>
@@ -132,7 +132,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733] flex items-center gap-2">
+            <h1 className="text-lg font-bold text-[#132F43] flex items-center gap-2">
               <Shield size={18} className="text-blue-600" />
               CAQH ProView Manager
             </h1>
@@ -185,12 +185,12 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-2xl font-bold text-[#1B2733]">{caqhProfile.completionPercent}%</p>
+              <p className="text-2xl font-bold text-[#132F43]">{caqhProfile.completionPercent}%</p>
               <p className="text-sm text-[#5A6B7A]">Overall Completion</p>
             </div>
             <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
             <div className="text-center">
-              <p className="text-lg font-bold text-[#1B2733]">{caqhProfile.nextAttestationDue}</p>
+              <p className="text-lg font-bold text-[#132F43]">{caqhProfile.nextAttestationDue}</p>
               <p className="text-sm text-[#5A6B7A]">Next Due Date</p>
             </div>
             <div className="h-16 w-px bg-[#F0EDE8] mx-2" />
@@ -293,7 +293,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                       {cat.percent}%
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-medium text-[#1B2733]">{cat.name}</p>
+                      <p className="text-sm font-medium text-[#132F43]">{cat.name}</p>
                       <p className="text-sm text-[#8A9BA8]">{cat.completedFields}/{cat.totalFields} fields</p>
                     </div>
                   </div>
@@ -328,7 +328,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
                                 field.required ? 'border-red-400 bg-red-50' : 'border-[#E8E4DF]'
                               }`} />
                             )}
-                            <span className={`text-sm flex-1 ${field.completed ? 'text-[#5A6B7A]' : 'text-[#1B2733]'}`}>
+                            <span className={`text-sm flex-1 ${field.completed ? 'text-[#5A6B7A]' : 'text-[#132F43]'}`}>
                               {field.name}
                             </span>
                             {!field.completed && (

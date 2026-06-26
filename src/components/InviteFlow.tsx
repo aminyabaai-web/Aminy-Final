@@ -269,7 +269,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
               <UserPlus className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#1B2733]">Invite Friends</h2>
+              <h2 className="text-base font-bold text-[#132F43]">Invite Friends</h2>
               <p className="text-sm text-[#5A6B7A]">Give $25, get 1 free month</p>
             </div>
           </div>
@@ -303,7 +303,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
           <div className="text-center">
             <p className="text-xs text-[#5A6B7A] uppercase tracking-wider mb-1.5">Your referral code</p>
             <div className="inline-flex items-center gap-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl px-4 py-2.5">
-              <code className="text-base font-bold text-[#1B2733] tracking-wide">
+              <code className="text-base font-bold text-[#132F43] tracking-wide">
                 {referralCode}
               </code>
               <button
@@ -337,7 +337,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <MessageCircle className="w-5 h-5 text-green-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-[#1B2733]">Text Message</p>
+                <p className="text-sm font-medium text-[#132F43]">Text Message</p>
                 <p className="text-sm text-[#5A6B7A]">Send a pre-filled SMS invite</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -353,7 +353,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                 <Mail className="w-5 h-5 text-blue-600" />
               </div>
               <div className="flex-1 text-left">
-                <p className="text-sm font-medium text-[#1B2733]">Email</p>
+                <p className="text-sm font-medium text-[#132F43]">Email</p>
                 <p className="text-sm text-[#5A6B7A]">Share via your email app</p>
               </div>
               <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -370,7 +370,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <Share2 className="w-5 h-5 text-purple-600" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-[#1B2733]">More Options</p>
+                  <p className="text-sm font-medium text-[#132F43]">More Options</p>
                   <p className="text-sm text-[#5A6B7A]">WhatsApp, Messenger, and more</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />
@@ -387,7 +387,7 @@ export function InviteFlow({ userId, userName, onClose, onInviteSent }: InviteFl
                   <Users className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div className="flex-1 text-left">
-                  <p className="text-sm font-medium text-[#1B2733]">Choose from Contacts</p>
+                  <p className="text-sm font-medium text-[#132F43]">Choose from Contacts</p>
                   <p className="text-sm text-[#5A6B7A]">Pick friends directly from your address book</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] group-hover:text-primary transition-colors" />

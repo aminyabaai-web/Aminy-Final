@@ -219,7 +219,7 @@ function ReviewCard({
       <div className="flex items-start justify-between mb-2">
         <div>
           <StarRating rating={review.rating} size="sm" />
-          <h4 className="font-medium text-[#1B2733] mt-1">{review.title}</h4>
+          <h4 className="font-medium text-[#132F43] mt-1">{review.title}</h4>
         </div>
         {review.author.verified && (
           <span className="flex items-center gap-1 text-xs text-[#6B9080] bg-[#6B9080]/10 px-2 py-1 rounded-full">
@@ -263,7 +263,7 @@ function ReviewCard({
         <div className="mt-3">
           <button
             onClick={() => setShowResponse(!showResponse)}
-            className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#1B2733]"
+            className="flex items-center gap-2 text-sm text-[#5A6B7A] hover:text-[#132F43]"
           >
             <MessageSquare className="w-4 h-4" />
             Provider responded
@@ -394,13 +394,13 @@ export function ProviderReviews({
       <button
         onClick={onBack}
         aria-label="Go back"
-        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#1B2733] px-1 py-1 rounded-lg hover:bg-[#F0EDE8] transition-colors"
+        className="flex items-center gap-2 text-sm font-medium text-[#5A6B7A] hover:text-[#132F43] px-1 py-1 rounded-lg hover:bg-[#F0EDE8] transition-colors"
         style={{ minHeight: '40px', marginLeft: '-4px' }}
       >
         <ArrowLeft className="w-5 h-5" />
         Back
       </button>
-      <h2 className="text-base font-semibold text-[#1B2733] truncate">{providerName} reviews</h2>
+      <h2 className="text-base font-semibold text-[#132F43] truncate">{providerName} reviews</h2>
     </div>
   ) : null;
 
@@ -415,7 +415,7 @@ export function ProviderReviews({
           className="overflow-hidden"
         >
           <div className="px-4 sm:px-6 py-5 border-t border-[#E8E4DF] bg-[#FAF7F2]">
-            <h3 className="text-base font-semibold text-[#1B2733] mb-4">Write a Review</h3>
+            <h3 className="text-base font-semibold text-[#132F43] mb-4">Write a Review</h3>
 
             {/* Star picker */}
             <div className="mb-4">
@@ -460,7 +460,7 @@ export function ProviderReviews({
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
                 placeholder="Summarize your experience"
-                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#1B2733] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent"
               />
               <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formTitle.length}/100</p>
             </div>
@@ -477,7 +477,7 @@ export function ProviderReviews({
                 value={formComment}
                 onChange={(e) => setFormComment(e.target.value)}
                 placeholder="Share your experience to help other families"
-                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#1B2733] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent resize-none"
+                className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent resize-none"
               />
               <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formComment.length}/500</p>
             </div>
@@ -495,7 +495,7 @@ export function ProviderReviews({
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#1B2733] transition-colors"
+                className="px-4 py-2 text-sm text-[#5A6B7A] hover:text-[#132F43] transition-colors"
               >
                 Cancel
               </button>
@@ -524,7 +524,7 @@ export function ProviderReviews({
             <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#F0EDE8] flex items-center justify-center">
               <Star className="w-6 h-6 text-gray-300" />
             </div>
-            <p className="font-medium text-[#1B2733]">No reviews yet</p>
+            <p className="font-medium text-[#132F43]">No reviews yet</p>
             <p className="text-sm text-[#5A6B7A] mt-1">
               {providerName} hasn't received any reviews yet. Be the first to share your experience.
             </p>
@@ -554,7 +554,7 @@ export function ProviderReviews({
           {/* Overall Rating */}
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="text-center">
-              <div className="text-4xl font-bold text-[#1B2733]">{stats.averageRating.toFixed(1)}</div>
+              <div className="text-4xl font-bold text-[#132F43]">{stats.averageRating.toFixed(1)}</div>
               <StarRating rating={stats.averageRating} size="md" />
               <p className="text-sm text-[#5A6B7A] mt-1">{stats.totalReviews} reviews</p>
             </div>
@@ -704,7 +704,7 @@ export function ProviderRatingBadge({
     <div className="flex items-center gap-1.5">
       <div className="flex items-center gap-1 bg-amber-50 px-2 py-1 rounded-lg">
         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-        <span className="font-semibold text-[#1B2733]">{rating.toFixed(1)}</span>
+        <span className="font-semibold text-[#132F43]">{rating.toFixed(1)}</span>
       </div>
       <span className="text-sm text-[#5A6B7A]">({reviewCount})</span>
     </div>

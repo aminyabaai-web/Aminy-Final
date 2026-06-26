@@ -274,7 +274,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
           >
             {/* Question */}
             <div className="mb-6">
-              <p className="text-lg text-[#1B2733] font-medium leading-relaxed">
+              <p className="text-lg text-[#132F43] font-medium leading-relaxed">
                 {question.text}
               </p>
             </div>
@@ -291,7 +291,7 @@ export function CaregiverBurdenScale({ onComplete, onCancel, userName }: Caregiv
                       : 'border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#FAF7F2]'
                   }`}
                 >
-                  <span className="font-medium text-[#1B2733]">{option.label}</span>
+                  <span className="font-medium text-[#132F43]">{option.label}</span>
                 </button>
               ))}
             </div>
@@ -346,7 +346,7 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
         <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
           <Heart className="w-8 h-8 text-[#6B9080]" />
         </div>
-        <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Your Wellness Results</h2>
+        <h2 className="text-xl font-semibold text-[#132F43] mb-2">Your Wellness Results</h2>
         <p className="text-[#5A6B7A]">Thank you for taking time for yourself</p>
       </div>
 
@@ -385,7 +385,7 @@ export function CaregiverBurdenResults({ result, onClose, onGetSupport }: Caregi
 
       {/* Recommendations */}
       <div className="mb-6">
-        <h3 className="font-medium text-[#1B2733] mb-3">Personalized Suggestions</h3>
+        <h3 className="font-medium text-[#132F43] mb-3">Personalized Suggestions</h3>
         <div className="space-y-2">
           {result.recommendations.map((rec, i) => (
             <div key={i} className="flex items-start gap-2">

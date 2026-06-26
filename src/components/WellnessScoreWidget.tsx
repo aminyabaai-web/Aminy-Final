@@ -113,7 +113,7 @@ export function WellnessScoreWidget({
       {/* Top insight */}
       {topInsight && (
         <div className="rounded-2xl bg-[#FAF7F2] border border-[#F0EDE8] px-3.5 py-2.5">
-          <p className="text-sm text-[#1B2733] leading-snug">{topInsight}</p>
+          <p className="text-sm text-[#132F43] leading-snug">{topInsight}</p>
         </div>
       )}
 

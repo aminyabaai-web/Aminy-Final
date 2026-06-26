@@ -376,7 +376,7 @@ export function SuperbillGenerator({
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] flex items-center gap-2">
             <FileText className="w-5 h-5 text-accent" />
             Generate Superbill
           </h2>
@@ -408,7 +408,7 @@ export function SuperbillGenerator({
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
           {/* Patient Information */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <User className="w-4 h-4 text-accent" />
               Patient Information
             </h3>
@@ -477,7 +477,7 @@ export function SuperbillGenerator({
 
           {/* Provider Information */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <Stethoscope className="w-4 h-4 text-accent" />
               Provider Information
             </h3>
@@ -526,7 +526,7 @@ export function SuperbillGenerator({
 
           {/* Service Date & Payment */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-accent" />
               Service & Payment
             </h3>
@@ -570,7 +570,7 @@ export function SuperbillGenerator({
 
           {/* Diagnosis Codes */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4">Diagnosis Codes (ICD-10)</h3>
+            <h3 className="font-medium text-[#132F43] mb-4">Diagnosis Codes (ICD-10)</h3>
             <p className="text-sm text-[#5A6B7A] mb-3">Select all that apply to this visit</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {COMMON_DIAGNOSIS_CODES.map(diagnosis => (
@@ -608,7 +608,7 @@ export function SuperbillGenerator({
 
           {/* CPT Codes by Category */}
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4">Service Codes (CPT)</h3>
+            <h3 className="font-medium text-[#132F43] mb-4">Service Codes (CPT)</h3>
             <p className="text-sm text-[#5A6B7A] mb-3">Select the services rendered</p>
             <div className="space-y-2">
               {CPT_CATEGORIES.filter(cat => cat !== 'Modifier').map(category => {
@@ -625,7 +625,7 @@ export function SuperbillGenerator({
                       className="w-full px-4 py-3 flex items-center justify-between bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-medium text-[#1B2733]">{category}</span>
+                        <span className="font-medium text-[#132F43]">{category}</span>
                         {selectedCount > 0 && (
                           <Badge className="bg-accent text-white text-sm">
                             {selectedCount} selected
@@ -667,7 +667,7 @@ export function SuperbillGenerator({
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
                                 <span className="text-sm font-mono text-[#5A6B7A]">{cpt.code}</span>
-                                <span className="text-sm font-medium text-[#1B2733]">
+                                <span className="text-sm font-medium text-[#132F43]">
                                   ${cpt.defaultPrice}
                                 </span>
                               </div>
@@ -688,14 +688,14 @@ export function SuperbillGenerator({
           <Card className="p-4 bg-[#FAF7F2]">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="font-medium text-[#1B2733]">Summary</h3>
+                <h3 className="font-medium text-[#132F43]">Summary</h3>
                 <p className="text-sm text-[#5A6B7A]">
                   {formData.selectedCPTCodes.length} service(s), {formData.diagnosisCodes.length} diagnosis code(s)
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-sm text-[#5A6B7A]">Total Billed</p>
-                <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">${calculateTotal().toFixed(2)}</p>
+                <p className="text-xl sm:text-2xl font-bold text-[#132F43]">${calculateTotal().toFixed(2)}</p>
               </div>
             </div>
             <div className="flex gap-3">
@@ -832,7 +832,7 @@ export function SuperbillGenerator({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Superbill Downloaded!</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Superbill Downloaded!</h3>
           <p className="text-[#5A6B7A] mb-4 sm:mb-6">
             Your superbill has been saved. You can submit it to your HSA/FSA administrator
             or insurance provider for reimbursement.
@@ -863,7 +863,7 @@ export function SuperbillGenerator({
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Submitting Claim...</h3>
+          <h3 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Submitting Claim...</h3>
           <p className="text-[#5A6B7A] mb-2">
             Generating EDI 837P and transmitting to clearinghouse.
           </p>
@@ -878,7 +878,7 @@ export function SuperbillGenerator({
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Claim Submitted!</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Claim Submitted!</h3>
               <p className="text-[#5A6B7A] mb-2">
                 Your claim has been accepted by the clearinghouse.
               </p>
@@ -904,7 +904,7 @@ export function SuperbillGenerator({
                   <Clock className="w-8 h-8 text-amber-600" />
                 )}
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
                 {claimError ? 'Submission Issue' : 'Claim Queued'}
               </h3>
               <p className="text-[#5A6B7A] mb-2">

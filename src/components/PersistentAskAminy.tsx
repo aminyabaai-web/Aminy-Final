@@ -534,7 +534,7 @@ export function PersistentAskAminy({
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-[#1B2733] dark:text-gray-100">Aminy</h3>
+                <h3 className="font-semibold text-[#132F43] dark:text-gray-100">Aminy</h3>
                 <Badge className="bg-green-100 text-green-800 border-green-200 text-sm">
                   Always Available
                 </Badge>
@@ -620,7 +620,7 @@ export function PersistentAskAminy({
                       <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                         <Sparkles className="w-8 h-8 text-accent" />
                       </div>
-                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">
+                      <h4 className="text-lg font-semibold text-[#132F43] dark:text-gray-100 mb-2">
                         How can I help with {userData.childName} today?
                       </h4>
                       <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mb-4 sm:mb-6 max-w-md mx-auto">
@@ -662,7 +662,7 @@ export function PersistentAskAminy({
                           "max-w-[85%] rounded-2xl px-4 py-3 text-sm relative",
                           message.role === 'user'
                             ? "bg-accent text-white"
-                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#1B2733] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
+                            : "bg-[#F0EDE8] dark:bg-gray-800 text-[#132F43] dark:text-gray-100 border border-[#E8E4DF] dark:border-gray-700"
                         )}>
                           {/* Message Header */}
                           <div className="flex items-center justify-between mb-2">
@@ -780,7 +780,7 @@ export function PersistentAskAminy({
                     : "Upgrade to continue unlimited conversations"
                   }
                   disabled={!canSendMessage || isTyping || isStreaming}
-                  className="aminy-ai-input-field w-full bg-transparent border-none outline-none resize-none px-4 py-3 pr-32 text-sm placeholder-gray-500 dark:placeholder-gray-400 min-h-[52px] text-[#1B2733] dark:text-gray-100"
+                  className="aminy-ai-input-field w-full bg-transparent border-none outline-none resize-none px-4 py-3 pr-32 text-sm placeholder-gray-500 dark:placeholder-gray-400 min-h-[52px] text-[#132F43] dark:text-gray-100"
                   rows={1}
                 />
                 

@@ -87,7 +87,7 @@ export function CalendarConnectionCard() {
           <Calendar className="w-5 h-5" style={{ color: activeProvider ? '#2A7D99' : '#64748b' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1B2733]">Calendar</p>
+          <p className="text-sm font-semibold text-[#132F43]">Calendar</p>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
             {activeProvider
               ? `Connected to ${PROVIDER_META[activeProvider].label}`
@@ -189,7 +189,7 @@ function ProviderButton({
         {working ? <Loader2 className="w-4 h-4 text-slate-400 animate-spin" /> : icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-[#1B2733]">{title}</p>
+        <p className="text-sm font-medium text-[#132F43]">{title}</p>
         <p className="text-sm text-[#5A6B7A] truncate">{hint}</p>
       </div>
       <span className={`text-sm font-semibold shrink-0 ${isPassive ? 'text-slate-400' : 'text-[#6B9080]'}`}>

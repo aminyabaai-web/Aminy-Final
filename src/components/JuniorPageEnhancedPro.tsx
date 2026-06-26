@@ -1746,7 +1746,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         <div className="text-xs font-medium uppercase tracking-[0.12em] text-amber-600 dark:text-amber-400">
                           {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}, {childName}!
                         </div>
-                        <div className="mt-0.5 text-sm font-semibold text-[#1B2733] dark:text-slate-100">
+                        <div className="mt-0.5 text-sm font-semibold text-[#132F43] dark:text-slate-100">
                           {weekStreak >= 5
                             ? `${weekStreak}-day streak! You're on fire 🔥`
                             : weekStreak >= 3
@@ -1895,7 +1895,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <div className="mt-4 space-y-3">
                         <div className="rounded-2xl border border-[#E8E4DF] bg-white px-4 py-3 dark:bg-slate-700 dark:border-slate-600">
                           <div className="text-xs uppercase tracking-[0.18em] text-slate-400 dark:text-slate-300">First</div>
-                          <div className="mt-1 text-sm font-medium text-[#1B2733] dark:text-slate-200">
+                          <div className="mt-1 text-sm font-medium text-[#132F43] dark:text-slate-200">
                             {homeTransition.first.emoji ? `${homeTransition.first.emoji} ` : ''}{homeTransition.first.label}
                           </div>
                         </div>
@@ -1974,7 +1974,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                             <div className="flex items-center gap-3">
                               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/70">{activity.icon}</div>
                               <div>
-                                <div className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">{activity.title}</div>
+                                <div className="text-sm font-semibold text-[#132F43] dark:text-slate-100">{activity.title}</div>
                                 <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{activity.duration}</div>
                               </div>
                             </div>

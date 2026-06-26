@@ -348,7 +348,7 @@ export function UserManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">User Management</h2>
+          <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">User Management</h2>
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
             {filteredUsers.length} users {filters.search || filters.tier !== 'all' || filters.status !== 'all' ? '(filtered)' : ''}
           </p>
@@ -378,7 +378,7 @@ export function UserManagement() {
               <Users className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalUsers}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.totalUsers}</p>
               <p className="text-sm text-[#5A6B7A]">Total Users</p>
             </div>
           </div>
@@ -389,7 +389,7 @@ export function UserManagement() {
               <Activity className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.activeUsers}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.activeUsers}</p>
               <p className="text-sm text-[#5A6B7A]">Active</p>
             </div>
           </div>
@@ -400,7 +400,7 @@ export function UserManagement() {
               <Crown className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.paidUsers}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.paidUsers}</p>
               <p className="text-sm text-[#5A6B7A]">Paid Users</p>
             </div>
           </div>
@@ -411,7 +411,7 @@ export function UserManagement() {
               <TrendingUp className="w-5 h-5 text-amber-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-[#1B2733] dark:text-white">${stats.mrr.toFixed(0)}</p>
+              <p className="text-2xl font-bold text-[#132F43] dark:text-white">${stats.mrr.toFixed(0)}</p>
               <p className="text-sm text-[#5A6B7A]">Est. MRR</p>
             </div>
           </div>
@@ -522,7 +522,7 @@ export function UserManagement() {
                             {user.name.split(' ').map(n => n[0]).join('')}
                           </div>
                           <div>
-                            <p className="font-medium text-[#1B2733] dark:text-white">{user.name}</p>
+                            <p className="font-medium text-[#132F43] dark:text-white">{user.name}</p>
                             <p className="text-sm text-[#5A6B7A]">{user.email}</p>
                           </div>
                         </div>
@@ -553,11 +553,11 @@ export function UserManagement() {
                         )}
                       </td>
                       <td className="px-4 py-4">
-                        <p className="text-sm text-[#1B2733] dark:text-white">{formatTimeAgo(user.lastActiveAt)}</p>
+                        <p className="text-sm text-[#132F43] dark:text-white">{formatTimeAgo(user.lastActiveAt)}</p>
                         <p className="text-sm text-[#5A6B7A]">Joined {formatDate(user.createdAt)}</p>
                       </td>
                       <td className="px-4 py-4">
-                        <p className="font-medium text-[#1B2733] dark:text-white">${user.totalSpent.toFixed(2)}</p>
+                        <p className="font-medium text-[#132F43] dark:text-white">${user.totalSpent.toFixed(2)}</p>
                         <p className="text-sm text-[#5A6B7A]">{user.totalSessions} sessions</p>
                       </td>
                       <td className="px-4 py-4">
@@ -633,7 +633,7 @@ export function UserManagement() {
                     {selectedUser.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">{selectedUser.name}</h3>
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">{selectedUser.name}</h3>
                     <p className="text-[#5A6B7A]">{selectedUser.email}</p>
                   </div>
                 </div>
@@ -668,11 +668,11 @@ export function UserManagement() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                     <p className="text-sm text-[#5A6B7A]">Total Sessions</p>
-                    <p className="text-xl font-bold text-[#1B2733] dark:text-white">{selectedUser.totalSessions}</p>
+                    <p className="text-xl font-bold text-[#132F43] dark:text-white">{selectedUser.totalSessions}</p>
                   </div>
                   <div className="p-3 bg-neutral-50 dark:bg-slate-800 rounded-lg">
                     <p className="text-sm text-[#5A6B7A]">Total Spent</p>
-                    <p className="text-xl font-bold text-[#1B2733] dark:text-white">${selectedUser.totalSpent.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-[#132F43] dark:text-white">${selectedUser.totalSpent.toFixed(2)}</p>
                   </div>
                 </div>
 

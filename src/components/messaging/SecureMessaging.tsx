@@ -579,7 +579,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                   </button>
                 )}
                 <div>
-                  <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+                  <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                     Messages
                   </h1>
                   <h2 className="sr-only">Message overview</h2>
@@ -655,7 +655,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium text-[#1B2733] dark:text-white truncate">
+                      <span className="font-medium text-[#132F43] dark:text-white truncate">
                         {thread.provider.name}
                       </span>
                       {thread.provider.isVerified && (
@@ -714,7 +714,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-[#1B2733] dark:text-white truncate">
+                  <span className="font-medium text-[#132F43] dark:text-white truncate">
                     {selectedThread.provider.name}
                   </span>
                   {selectedThread.provider.isVerified && (
@@ -803,7 +803,7 @@ export function SecureMessaging({ userId, userRole, onBack, onNavigate }: Secure
                       px-4 py-2.5 rounded-2xl
                       ${isOwn
                         ? 'bg-primary text-white rounded-tr-md'
-                        : 'bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white rounded-tl-md shadow-sm'
+                        : 'bg-white dark:bg-slate-800 text-[#132F43] dark:text-white rounded-tl-md shadow-sm'
                       }
                     `}
                   >

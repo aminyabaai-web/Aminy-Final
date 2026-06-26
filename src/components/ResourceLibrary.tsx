@@ -179,7 +179,7 @@ export function ResourceLibrary({
           <span className="text-white text-base">?</span>
         </div>
         <div className="flex-1">
-          <p className="text-sm font-semibold text-[#1B2733]">Still have questions?</p>
+          <p className="text-sm font-semibold text-[#132F43]">Still have questions?</p>
           <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, clinician-reviewed within 24h.</p>
         </div>
         <button
@@ -211,7 +211,7 @@ function ResourceCard({ resource: r, onOpen, compact = false }: { resource: Reso
             </span>
             {r.ageRange && <span className="text-xs text-slate-400">· {r.ageRange}</span>}
           </div>
-          <p className={`font-semibold text-[#1B2733] leading-snug ${compact ? 'text-sm' : 'text-sm'}`}>{r.title}</p>
+          <p className={`font-semibold text-[#132F43] leading-snug ${compact ? 'text-sm' : 'text-sm'}`}>{r.title}</p>
           {!compact && <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{r.subtitle}</p>}
         </div>
         <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 mt-1" />
@@ -271,9 +271,9 @@ function ArticleView({
       {/* Back header */}
       <div className="sticky top-0 z-10 bg-[#FAF7F2] border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         <button onClick={onBack} className="w-8 h-8 rounded-full flex items-center justify-center bg-white border border-[#E8E4DF]">
-          <ArrowLeft className="w-4 h-4 text-[#1B2733]" />
+          <ArrowLeft className="w-4 h-4 text-[#132F43]" />
         </button>
-        <span className="text-sm font-medium text-[#1B2733] truncate flex-1">{r.title}</span>
+        <span className="text-sm font-medium text-[#132F43] truncate flex-1">{r.title}</span>
       </div>
 
       <div className="px-4 pt-5">
@@ -288,7 +288,7 @@ function ArticleView({
         </div>
 
         {/* Title */}
-        <h1 className="text-xl font-bold text-[#1B2733] leading-snug">{r.title}</h1>
+        <h1 className="text-xl font-bold text-[#132F43] leading-snug">{r.title}</h1>
         <p className="text-sm text-[#5A6B7A] mt-1">{r.subtitle}</p>
 
         {/* Author */}
@@ -296,7 +296,7 @@ function ArticleView({
           <div className="flex items-center gap-2 mt-3 pb-3 border-b border-[#E8E4DF]">
             <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>A</div>
             <div>
-              <p className="text-sm font-medium text-[#1B2733]">{r.author}</p>
+              <p className="text-sm font-medium text-[#132F43]">{r.author}</p>
               {r.authorCredentials && <p className="text-sm text-[#5A6B7A]">{r.authorCredentials}</p>}
             </div>
           </div>
@@ -313,7 +313,7 @@ function ArticleView({
               <div className="mt-2 rounded-2xl bg-white border border-[#E8E4DF] p-5 text-center space-y-3">
                 <Lock className="w-8 h-8 text-slate-300 mx-auto" />
                 <div>
-                  <p className="text-sm font-semibold text-[#1B2733]">Pro+ resource</p>
+                  <p className="text-sm font-semibold text-[#132F43]">Pro+ resource</p>
                   <p className="text-sm text-[#5A6B7A] mt-1">Upgrade to Pro+ Family to unlock all premium guides, printables, and 10 BCBA team questions/month.</p>
                 </div>
                 <button
@@ -365,7 +365,7 @@ function ArticleView({
                       className="w-full text-left bg-white rounded-xl px-3 py-2.5 border border-[#E8E4DF] flex items-center gap-2 hover:bg-[#F8F8F6] transition-colors"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-[#1B2733] truncate">{s.topic}</p>
+                        <p className="text-sm font-semibold text-[#132F43] truncate">{s.topic}</p>
                         <p className="text-sm text-[#5A6B7A]">
                           {new Date(s.session_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                           {s.provider_name ? ` · ${s.provider_name}` : ''}
@@ -400,7 +400,7 @@ function ArticleView({
               <span className="text-white text-base">?</span>
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#1B2733]">
+              <p className="text-sm font-semibold text-[#132F43]">
                 {childName ? `Questions about ${childName}?` : 'Have follow-up questions?'}
               </p>
               <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, reviewed within 24h.</p>
@@ -422,12 +422,12 @@ function ArticleView({
 
 function ArticleBody({ lines }: { lines: string[] }) {
   return (
-    <div className="space-y-3 text-sm text-[#1B2733] leading-relaxed">
+    <div className="space-y-3 text-sm text-[#132F43] leading-relaxed">
       {lines.map((line, i) => {
         if (!line.trim()) return <div key={i} className="h-1" />;
         // Bold headers: **text**
         if (line.startsWith('**') && line.endsWith('**')) {
-          return <p key={i} className="font-bold text-[#1B2733] mt-4">{line.replace(/\*\*/g, '')}</p>;
+          return <p key={i} className="font-bold text-[#132F43] mt-4">{line.replace(/\*\*/g, '')}</p>;
         }
         // Bullet points
         if (line.startsWith('•') || line.startsWith('-') || line.startsWith('*') && !line.startsWith('**')) {

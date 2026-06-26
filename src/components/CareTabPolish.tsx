@@ -274,7 +274,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
       {/* Available appointment slots */}
       <div className="space-y-3">
-        <h4 className="font-medium text-[#1B2733]">Available Times</h4>
+        <h4 className="font-medium text-[#132F43]">Available Times</h4>
         {['2024-12-18', '2024-12-19', '2024-12-20'].map((date) => (
           <div key={date} className="border rounded-lg p-4">
             <h5 className="font-medium mb-2">{new Date(date).toLocaleDateString('en-US', { 
@@ -337,7 +337,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
 
             return (
               <div key={category} className="space-y-3">
-                <h4 className="font-medium text-[#1B2733] capitalize">
+                <h4 className="font-medium text-[#132F43] capitalize">
                   {category === 'preparation' ? 'Session Preparation' : category}
                 </h4>
                 <div className="space-y-2">
@@ -349,7 +349,7 @@ export const CareTabPolish: React.FC<CareTabPolishProps> = ({
                         className="mt-1"
                       />
                       <div className="flex-1">
-                        <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
+                        <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#132F43]'} ${item.required ? 'font-medium' : ''}`}>
                           {item.text}
                         </span>
                         {item.required && (

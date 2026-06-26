@@ -274,7 +274,7 @@ function KPITile({
   return (
     <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
       <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-1">{label}</p>
-      <p className={`text-3xl font-bold ${color ?? 'text-[#1B2733]'}`}>
+      <p className={`text-3xl font-bold ${color ?? 'text-[#132F43]'}`}>
         {value}
         {unit && <span className="text-base font-medium text-[#5A6B7A] ml-1">{unit}</span>}
       </p>
@@ -440,13 +440,13 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               label="Active Clients"
               value={kpi.activeClients}
               sub="enrolled families"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
             <KPITile
               label="Sessions This Month"
               value={kpi.sessionsThisMonth}
               sub="completed sessions"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
             <KPITile
               label="Goals at Mastery"
@@ -460,7 +460,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
               value={kpi.avgWeeksToFirstMastery}
               unit="wks"
               sub="from program start"
-              color="text-[#1B2733]"
+              color="text-[#132F43]"
             />
           </div>
         </section>
@@ -469,7 +469,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-sm font-bold text-[#1B2733]">Goal Mastery Trend</h2>
+              <h2 className="text-sm font-bold text-[#132F43]">Goal Mastery Trend</h2>
               <p className="text-sm text-slate-400 mt-0.5">% goals at mastery over 12 weeks</p>
             </div>
             {weekly.length > 1 && (
@@ -487,7 +487,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {/* ── Section 3: Session Frequency ─────────────────── */}
         <section className="bg-white rounded-2xl p-5 shadow-sm border border-[#E8E4DF]">
           <div className="mb-4">
-            <h2 className="text-sm font-bold text-[#1B2733]">Session Frequency Distribution</h2>
+            <h2 className="text-sm font-bold text-[#132F43]">Session Frequency Distribution</h2>
             <p className="text-sm text-slate-400 mt-0.5">
               {frequency.length > 0 && kpi.activeClients > 0
                 ? `Sessions per week across ${kpi.activeClients} active clients`
@@ -516,7 +516,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {/* ── Section 4: Top Programs ───────────────────────── */}
         <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
           <div className="px-5 py-4 border-b border-[#E8E4DF]">
-            <h2 className="text-sm font-bold text-[#1B2733]">Top Programs by Mastery Rate</h2>
+            <h2 className="text-sm font-bold text-[#132F43]">Top Programs by Mastery Rate</h2>
             <p className="text-sm text-slate-400 mt-0.5">Across all active treatment plans</p>
           </div>
           {programs.length > 0 ? (
@@ -557,7 +557,7 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {!providerId && (
           <section className="bg-white rounded-2xl shadow-sm border border-[#E8E4DF] overflow-hidden">
             <div className="px-5 py-4 border-b border-[#E8E4DF]">
-              <h2 className="text-sm font-bold text-[#1B2733]">Provider Performance</h2>
+              <h2 className="text-sm font-bold text-[#132F43]">Provider Performance</h2>
               <p className="text-sm text-slate-400 mt-0.5">Outcomes score based on mastery rates and session consistency</p>
             </div>
             {providers.length > 0 ? (

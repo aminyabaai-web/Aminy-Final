@@ -78,7 +78,7 @@ export function SmartCue({ userContext, currentPath, onAction }: SmartCueProps) 
               </motion.div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-[#1B2733] leading-relaxed">
+                <p className="text-sm text-[#132F43] leading-relaxed">
                   {currentCue}
                 </p>
               </div>

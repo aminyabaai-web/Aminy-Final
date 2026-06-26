@@ -297,7 +297,7 @@ export function ShareInsight({
                     onClick={handleTwitterShare}
                     className="flex flex-col items-center gap-1 p-3 hover:bg-[#F0EDE8] rounded-xl transition-colors"
                   >
-                    <X className="w-6 h-6 text-[#1B2733]" />
+                    <X className="w-6 h-6 text-[#132F43]" />
                     <span className="text-sm text-[#5A6B7A]">X</span>
                   </button>
                   <button

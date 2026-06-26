@@ -207,7 +207,7 @@ export function CareCoordinationHub({ onBack, onNavigate, userId, childName }: C
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                    <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
                     <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                   </div>
                   <Plus className="w-4 h-4 text-slate-400 shrink-0" />
@@ -302,7 +302,7 @@ function ServiceCard({ row, onNavigate, childName }: { row: ServiceRow; onNaviga
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
-              <p className="text-sm font-semibold text-[#1B2733]">{meta.label}</p>
+              <p className="text-sm font-semibold text-[#132F43]">{meta.label}</p>
               <AuthBadge status={row.authStatus} expiresAt={row.authExpiresAt} />
             </div>
             {row.providerName && (

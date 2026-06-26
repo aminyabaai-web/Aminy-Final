@@ -137,7 +137,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
 
-            <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-3">
               You're on the list!
             </h2>
 
@@ -196,7 +196,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               Coming Soon
             </Badge>
 
-            <h1 className="text-4xl md:text-5xl font-bold text-[#1B2733] mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#132F43] mb-4 sm:mb-6 leading-tight">
               Gentle guidance for
               <br />
               <span className="text-[#6B9080]">calmer parenting days</span>
@@ -252,7 +252,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Benefits Grid */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#132F43] mb-12">
             What makes Aminy different
           </h2>
 
@@ -268,7 +268,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                   <div className="w-12 h-12 bg-[#6B9080]/10 rounded-xl flex items-center justify-center mb-4">
                     <benefit.icon className="w-6 h-6 text-[#6B9080]" />
                   </div>
-                  <h3 className="font-semibold text-lg text-[#1B2733] mb-2">
+                  <h3 className="font-semibold text-lg text-[#132F43] mb-2">
                     {benefit.title}
                   </h3>
                   <p className="text-[#5A6B7A]">
@@ -284,7 +284,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
       {/* Social Proof */}
       <section className="py-16 px-4 bg-[#FAF7F2]">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold text-center text-[#132F43] mb-12">
             Families like yours are waiting
           </h2>
 
@@ -306,7 +306,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
                     "{testimonial.quote}"
                   </p>
                   <div>
-                    <p className="font-medium text-[#1B2733]">{testimonial.author}</p>
+                    <p className="font-medium text-[#132F43]">{testimonial.author}</p>
                     <p className="text-sm text-[#5A6B7A]">{testimonial.role}</p>
                   </div>
                 </Card>
@@ -357,7 +357,7 @@ export function WaitlistPage({ onClose }: WaitlistPageProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-xl text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-4 py-3 rounded-xl text-[#132F43] focus:outline-none focus:ring-2 focus:ring-white"
               disabled={isSubmitting}
             />
             <Button

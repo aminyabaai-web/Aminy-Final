@@ -24,7 +24,7 @@ function Section({ title, id, children }: SectionProps) {
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between text-left"
       >
-        <h2 className="text-lg font-semibold text-[#1B2733]">{title}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43]">{title}</h2>
         {open ? <ChevronUp className="h-5 w-5 text-[#5A6B7A]" /> : <ChevronDown className="h-5 w-5 text-[#5A6B7A]" />}
       </button>
       {open && <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#3A4A57]">{children}</div>}
@@ -45,7 +45,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
             </button>
           )}
           <FileText className="h-6 w-6 text-[#6B9080]" />
-          <h1 className="text-xl font-bold text-[#1B2733]">Terms of Service</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Terms of Service</h1>
         </div>
       </div>
 

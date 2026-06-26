@@ -110,7 +110,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             <div className="w-16 h-16 rounded-full mx-auto mb-5 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}>
               <Sparkles className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-[#1B2733] mb-2">{measure.name}</h1>
+            <h1 className="text-2xl font-bold text-[#132F43] mb-2">{measure.name}</h1>
             <p className="text-sm text-[#5A6B7A] mb-4 leading-relaxed">{measure.description}</p>
             <div className="bg-white rounded-2xl border border-[#E8E4DF] p-4 mb-4 text-left">
               <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">About this assessment</p>
@@ -235,7 +235,7 @@ export function OutcomeMeasureForm({ measure, patientType = 'child', childId, on
             {measure.id === 'phq9' || measure.id === 'gad7' || measure.id === 'phq-a' ? 'Over the last 2 weeks…' : 'How often did this happen?'}
           </p>
         </div>
-        <h2 className="text-lg font-semibold text-[#1B2733] mb-6 leading-snug">{currentItem.text}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43] mb-6 leading-snug">{currentItem.text}</h2>
 
         <div className="space-y-2">
           {currentItem.scaleLabels.map((label, value) => {

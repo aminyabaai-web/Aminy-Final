@@ -49,7 +49,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
       <div className="fixed inset-0 z-[200] flex items-end justify-center pb-8 px-4">
         <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center">
           <div className="text-3xl mb-2">🎉</div>
-          <p className="font-semibold text-[#1B2733]">Thanks for your feedback!</p>
+          <p className="font-semibold text-[#132F43]">Thanks for your feedback!</p>
           <p className="text-sm text-[#5A6B7A] mt-1">It helps families find great providers.</p>
         </div>
       </div>
@@ -61,7 +61,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
       <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="font-semibold text-[#1B2733]">How was your session?</p>
+            <p className="font-semibold text-[#132F43]">How was your session?</p>
             <p className="text-sm text-[#5A6B7A]">with {providerName}</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F0EDE8] text-[#5A6B7A]">

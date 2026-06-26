@@ -151,7 +151,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
           <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
             <DollarSign className="w-4 h-4 text-emerald-600" />
           </div>
-          <span className="text-sm font-bold text-[#1B2733]">Practice Revenue</span>
+          <span className="text-sm font-bold text-[#132F43]">Practice Revenue</span>
         </div>
         {onViewDetails && (
           <button
@@ -167,7 +167,7 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
       {/* This week */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: 'Billed', amount: data.thisWeekBilled, color: 'text-[#1B2733]' },
+          { label: 'Billed', amount: data.thisWeekBilled, color: 'text-[#132F43]' },
           { label: 'Paid', amount: data.thisWeekPaid, color: 'text-emerald-700' },
           { label: 'Pending', amount: data.thisWeekPending, color: 'text-amber-600' },
         ].map((item) => (
@@ -182,17 +182,17 @@ export function PracticeRevenueWidget({ onViewDetails, compact = false }: Practi
       <div className="flex gap-4 border-t border-[#E8E4DF] pt-3">
         <div>
           <p className="text-sm text-[#5A6B7A]">This month</p>
-          <p className="text-sm font-bold text-[#1B2733]">{fmt(data.thisMonthBilled)}</p>
+          <p className="text-sm font-bold text-[#132F43]">{fmt(data.thisMonthBilled)}</p>
           <p className="text-sm text-[#5A6B7A]">{fmt(data.thisMonthPaid)} collected</p>
         </div>
         <div className="border-l border-[#E8E4DF] pl-4">
           <p className="text-sm text-[#5A6B7A]">All-time</p>
-          <p className="text-sm font-bold text-[#1B2733]">{fmt(data.allTimeBilled)}</p>
+          <p className="text-sm font-bold text-[#132F43]">{fmt(data.allTimeBilled)}</p>
           <p className="text-sm text-[#5A6B7A]">{fmt(data.allTimePaid)} collected</p>
         </div>
         <div className="border-l border-[#E8E4DF] pl-4 ml-auto">
           <p className="text-sm text-[#5A6B7A]">Avg/session</p>
-          <p className="text-sm font-bold text-[#1B2733]">${data.avgPerSession}</p>
+          <p className="text-sm font-bold text-[#132F43]">${data.avgPerSession}</p>
         </div>
       </div>
 

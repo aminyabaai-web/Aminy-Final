@@ -397,7 +397,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
         <div className="max-w-2xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                 Access Requests
               </h1>
               {pendingCount > 0 && (
@@ -461,7 +461,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Bell className="w-8 h-8 text-[#8A9BA8]" />
                 </div>
-                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                   No pending requests
                 </h3>
                 <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -495,7 +495,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                         {/* Request Info */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <h3 className="font-medium text-[#1B2733] dark:text-white truncate">
+                            <h3 className="font-medium text-[#132F43] dark:text-white truncate">
                               {request.provider.name}
                             </h3>
                             {request.provider.verifiedAt && (
@@ -535,7 +535,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 <div className="w-16 h-16 bg-[#F0EDE8] dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-[#8A9BA8]" />
                 </div>
-                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                   No active access grants
                 </h3>
                 <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
@@ -555,7 +555,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                       {/* Access Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <h3 className="font-medium text-[#1B2733] dark:text-white truncate">
+                          <h3 className="font-medium text-[#132F43] dark:text-white truncate">
                             {access.provider.name}
                           </h3>
                           {access.provider.verifiedAt && (
@@ -628,7 +628,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
             {/* Modal Header */}
             <div className="sticky top-0 bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 p-4">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+                <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">
                   Review Request
                 </h2>
                 <button
@@ -649,7 +649,7 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-medium text-[#1B2733] dark:text-white">
+                    <h3 className="text-lg font-medium text-[#132F43] dark:text-white">
                       {selectedRequest.provider.name}
                     </h3>
                     {selectedRequest.provider.verifiedAt && (

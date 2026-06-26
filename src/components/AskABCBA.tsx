@@ -267,7 +267,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               <ShieldCheck className="w-5 h-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">Your behaviorist team, on demand</p>
+              <p className="text-sm font-semibold text-[#132F43]">Your behaviorist team, on demand</p>
               <p className="text-sm text-[#5A6B7A] mt-0.5">
                 {isProPlus ? '10 questions/month included with Pro+' : 'Included for 7 days after each 1:1 session · Unlimited on Pro+'}
               </p>
@@ -300,7 +300,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 <Lock className="w-6 h-6 text-slate-400" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-[#1B2733]">Requires a recent telehealth session</p>
+                <p className="text-sm font-semibold text-[#132F43]">Requires a recent telehealth session</p>
                 <p className="text-sm text-[#5A6B7A] mt-1">
                   Behaviorist messaging is included for 7 days after each 1:1 telehealth session — or any time on Pro+ Family. Group sessions don't open the window.
                 </p>
@@ -344,7 +344,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       {showAsk && (
         <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-[#1B2733]">Ask anything</p>
+            <p className="text-sm font-semibold text-[#132F43]">Ask anything</p>
             <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#F0EDE8]">
               <X className="w-4 h-4" />
             </button>
@@ -421,7 +421,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
                 className="w-full text-left bg-white border border-[#E8E4DF] rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
-                  <p className="text-sm text-[#1B2733] line-clamp-2 flex-1">{t.question}</p>
+                  <p className="text-sm text-[#132F43] line-clamp-2 flex-1">{t.question}</p>
                   <StatusPill status={t.status} />
                 </div>
                 <div className="flex items-center gap-3 text-sm text-slate-400">
@@ -494,7 +494,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
       {/* Question */}
       <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
         <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your question</p>
-        <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.question}</p>
+        <p className="text-sm text-[#132F43] whitespace-pre-wrap">{thread.question}</p>
       </div>
 
       {/* AI draft — show the live draft, or a drafting indicator while it's being generated */}
@@ -504,7 +504,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <Sparkles className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">AI Draft — instant response</p>
           </div>
-          <p className="text-sm text-[#1B2733] whitespace-pre-wrap">{thread.ai_draft}</p>
+          <p className="text-sm text-[#132F43] whitespace-pre-wrap">{thread.ai_draft}</p>
         </div>
       ) : aiDrafting ? (
         <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #21698212 100%)', border: '1px solid #2A7D9930' }}>
@@ -523,7 +523,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
             <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">BCBA Reviewed & Signed</p>
           </div>
-          <p className="text-sm text-[#1B2733] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
+          <p className="text-sm text-[#132F43] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (
             <p className="text-sm text-[#5A6B7A]">— {thread.bcba_name}{thread.bcba_credentials ? `, ${thread.bcba_credentials}` : ''}</p>
           )}
@@ -535,7 +535,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">Awaiting behaviorist review</p>
+            <p className="text-sm font-medium text-[#132F43]">Awaiting behaviorist review</p>
             {thread.target_response_at && (
               <p className="text-sm text-[#5A6B7A]">By {new Date(thread.target_response_at).toLocaleString()}</p>
             )}

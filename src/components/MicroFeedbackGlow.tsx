@@ -118,7 +118,7 @@ export function MicroFeedbackGlow({ trigger, onDismiss }: MicroFeedbackGlowProps
               </motion.div>
               
               <div className="flex-1 min-w-0">
-                <p className="text-sm text-[#1B2733] font-medium">
+                <p className="text-sm text-[#132F43] font-medium">
                   {message}
                 </p>
               </div>

@@ -248,7 +248,7 @@ const SimplePieChart: React.FC<{
           <div key={i} className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color }} />
             <span className="text-sm text-[#5A6B7A]">{d.mood}</span>
-            <span className="text-sm font-medium text-[#1B2733]">{d.percentage}%</span>
+            <span className="text-sm font-medium text-[#132F43]">{d.percentage}%</span>
           </div>
         ))}
       </div>
@@ -410,7 +410,7 @@ export function AnalyticsCharts({
         <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
           <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
         </div>
-        <h3 className="text-base font-semibold text-[#1B2733] dark:text-white">No analytics yet</h3>
+        <h3 className="text-base font-semibold text-[#132F43] dark:text-white">No analytics yet</h3>
         <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
           As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
         </p>

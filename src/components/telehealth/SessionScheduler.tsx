@@ -258,7 +258,7 @@ export function SessionScheduler({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-xl font-semibold text-[#1B2733] mb-2">Session Booked!</h2>
+          <h2 className="text-xl font-semibold text-[#132F43] mb-2">Session Booked!</h2>
           <p className="text-sm text-[#5A6B7A] mb-4">
             Your {VISIT_TYPE_LABELS[bookedSession.visitType]} with {providerName} is confirmed.
           </p>
@@ -303,7 +303,7 @@ export function SessionScheduler({
               </button>
             )}
             <div>
-              <h2 className="text-base font-semibold text-[#1B2733]">Schedule Session</h2>
+              <h2 className="text-base font-semibold text-[#132F43]">Schedule Session</h2>
               <p className="text-sm text-[#5A6B7A]">with {providerName}</p>
             </div>
           </div>
@@ -356,7 +356,7 @@ export function SessionScheduler({
                       {VISIT_TYPE_ICONS[vt]}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[vt]}</p>
+                      <p className="text-sm font-medium text-[#132F43]">{VISIT_TYPE_LABELS[vt]}</p>
                       <p className="text-sm text-[#8A9BA8]">
                         {durations.join(' or ')} min
                       </p>
@@ -517,7 +517,7 @@ export function SessionScheduler({
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-semibold text-[#1B2733]">{providerName}</p>
+                  <p className="text-sm font-semibold text-[#132F43]">{providerName}</p>
                   {providerTitle && (
                     <p className="text-sm text-[#5A6B7A]">{providerTitle}</p>
                   )}
@@ -532,7 +532,7 @@ export function SessionScheduler({
                   </div>
                   <div>
                     <span className="text-[#8A9BA8] text-sm">Visit Type</span>
-                    <p className="font-medium text-[#1B2733]">{VISIT_TYPE_LABELS[visitType]}</p>
+                    <p className="font-medium text-[#132F43]">{VISIT_TYPE_LABELS[visitType]}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -541,7 +541,7 @@ export function SessionScheduler({
                   </div>
                   <div>
                     <span className="text-[#8A9BA8] text-sm">Date</span>
-                    <p className="font-medium text-[#1B2733]">{formatDate(selectedDate)}</p>
+                    <p className="font-medium text-[#132F43]">{formatDate(selectedDate)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -550,7 +550,7 @@ export function SessionScheduler({
                   </div>
                   <div>
                     <span className="text-[#8A9BA8] text-sm">Time</span>
-                    <p className="font-medium text-[#1B2733]">
+                    <p className="font-medium text-[#132F43]">
                       {formatTime(selectedSlot.startTime)} &middot; {duration} min
                     </p>
                   </div>
@@ -562,7 +562,7 @@ export function SessionScheduler({
                     </div>
                     <div>
                       <span className="text-[#8A9BA8] text-sm">Child</span>
-                      <p className="font-medium text-[#1B2733]">{childName}</p>
+                      <p className="font-medium text-[#132F43]">{childName}</p>
                     </div>
                   </div>
                 )}

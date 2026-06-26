@@ -148,7 +148,7 @@ export function ThinkingStepsDisplay({ steps, isExpanded = true, onToggle }: Thi
                     }`} />
                     <span className={
                       step.status === 'complete' ? 'text-[#5A6B7A]'
-                        : step.status === 'active' ? 'text-[#1B2733] font-medium'
+                        : step.status === 'active' ? 'text-[#132F43] font-medium'
                         : 'text-[#8E9BAA]'
                     }>
                       {step.label}

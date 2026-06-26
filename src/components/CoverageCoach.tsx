@@ -353,7 +353,7 @@ export function CoverageCoach({
                 <Shield className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Coverage Coach</h1>
+                <h1 className="text-xl text-[#132F43] dark:text-slate-100">Coverage Coach</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Navigate insurance benefits for {safeChildName}</p>
               </div>
             </div>
@@ -362,7 +362,7 @@ export function CoverageCoach({
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowUrgentHelp(true)}
-                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-400 dark:hover:text-slate-100"
               >
                 <Bell className="w-4 h-4" />
               </Button>
@@ -386,7 +386,7 @@ export function CoverageCoach({
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="flex-1">
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Get Your Coverage Clarity Summary</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Get Your Coverage Clarity Summary</h2>
               <p className="text-[#3A4A57] mb-4">
                 Answer a few quick questions and I'll create a personalized report showing exactly what's covered, 
                 estimated costs, and your next steps — all in plain language.
@@ -415,7 +415,7 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-green-600" />
-              <span className="font-medium text-[#1B2733] dark:text-slate-100">Coverage Rate</span>
+              <span className="font-medium text-[#132F43] dark:text-slate-100">Coverage Rate</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-green-600 mb-1">{coveragePercentage}%</div>
             <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -427,7 +427,7 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <DollarSign className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-[#1B2733] dark:text-slate-100">Est. Monthly Cost</span>
+              <span className="font-medium text-[#132F43] dark:text-slate-100">Est. Monthly Cost</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">$340</div>
             <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -438,7 +438,7 @@ export function CoverageCoach({
           <Card className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-2">
               <Calendar className="w-5 h-5 text-purple-600" />
-              <span className="font-medium text-[#1B2733] dark:text-slate-100">Next Review</span>
+              <span className="font-medium text-[#132F43] dark:text-slate-100">Next Review</span>
             </div>
             <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-1">30</div>
             <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -452,7 +452,7 @@ export function CoverageCoach({
           <div className="p-4 sm:p-5 md:p-6">
             <div className="flex items-center gap-3 mb-4">
               <Building className="w-5 h-5 text-blue-600" />
-              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
+              <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100">
                 Insurance Information
               </h2>
             </div>
@@ -461,19 +461,19 @@ export function CoverageCoach({
               <div className="space-y-3 sm:space-y-4">
                 <div>
                   <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Provider</label>
-                  <div className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
+                  <div className="text-lg font-semibold text-[#132F43] dark:text-slate-100">
                     {insuranceProvider.name}
                   </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Member ID</label>
-                  <div className="font-mono text-[#1B2733] dark:text-slate-100">
+                  <div className="font-mono text-[#132F43] dark:text-slate-100">
                     {insuranceProvider.memberId}
                   </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Group Number</label>
-                  <div className="font-mono text-[#1B2733] dark:text-slate-100">
+                  <div className="font-mono text-[#132F43] dark:text-slate-100">
                     {insuranceProvider.groupNumber}
                   </div>
                 </div>
@@ -521,7 +521,7 @@ export function CoverageCoach({
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-green-600" />
-                <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
+                <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100">
                   Benefits Status
                 </h2>
               </div>
@@ -553,7 +553,7 @@ export function CoverageCoach({
                         {getCategoryIcon(benefit.category)}
                       </div>
                       <div className="flex-1">
-                        <h3 className="benefits-card-title font-medium text-[#1B2733] dark:text-slate-100">
+                        <h3 className="benefits-card-title font-medium text-[#132F43] dark:text-slate-100">
                           {benefit.title}
                         </h3>
                         <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
@@ -589,7 +589,7 @@ export function CoverageCoach({
 
                   {benefit.nextSteps && benefit.nextSteps.length > 0 && (
                     <div className="mt-3">
-                      <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">
+                      <h4 className="text-sm font-medium text-[#132F43] dark:text-slate-100 mb-2">
                         Next Steps:
                       </h4>
                       <ul className="space-y-1">
@@ -668,7 +668,7 @@ export function CoverageCoach({
         {/* Quick Actions */}
         <Card>
           <div className="p-4 sm:p-5 md:p-6">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-4">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100 mb-4">
               Quick Actions
             </h2>
             

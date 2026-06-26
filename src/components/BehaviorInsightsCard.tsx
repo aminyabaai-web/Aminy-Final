@@ -101,7 +101,7 @@ export function BehaviorInsightsCard({ childId, childName, onOpenChat, onNavigat
   return (
     <Card className="p-4 bg-white dark:bg-slate-800 shadow-sm border-0">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white text-sm flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] dark:text-white text-sm flex items-center gap-2">
           <TrendIcon className={`w-4 h-4 ${trendColor}`} />
           This Week's Pattern
         </h3>
@@ -113,18 +113,18 @@ export function BehaviorInsightsCard({ childId, childName, onOpenChat, onNavigat
       <div className="space-y-2 mb-3">
         <div className="flex items-center justify-between text-sm">
           <span className="text-[#5A6B7A] dark:text-slate-400">Incidents logged</span>
-          <span className="font-semibold text-[#1B2733] dark:text-white">{insight.totalThisWeek}</span>
+          <span className="font-semibold text-[#132F43] dark:text-white">{insight.totalThisWeek}</span>
         </div>
         {insight.topBehavior && (
           <div className="flex items-center justify-between text-sm">
             <span className="text-[#5A6B7A] dark:text-slate-400">Most frequent</span>
-            <span className="font-semibold text-[#1B2733] dark:text-white capitalize">{insight.topBehavior.replace(/_/g, ' ')}</span>
+            <span className="font-semibold text-[#132F43] dark:text-white capitalize">{insight.topBehavior.replace(/_/g, ' ')}</span>
           </div>
         )}
         {insight.bestTimeOfDay && (
           <div className="flex items-center justify-between text-sm">
             <span className="text-[#5A6B7A] dark:text-slate-400">Peaks in</span>
-            <span className="font-semibold text-[#1B2733] dark:text-white">{TIME_LABELS[insight.bestTimeOfDay] ?? insight.bestTimeOfDay}</span>
+            <span className="font-semibold text-[#132F43] dark:text-white">{TIME_LABELS[insight.bestTimeOfDay] ?? insight.bestTimeOfDay}</span>
           </div>
         )}
       </div>

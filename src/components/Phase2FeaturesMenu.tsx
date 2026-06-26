@@ -68,7 +68,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-4">
         <Sparkles className="w-5 h-5 text-accent" />
-        <h3 className="text-[#1B2733]">New Features</h3>
+        <h3 className="text-[#132F43]">New Features</h3>
         <Badge className="bg-accent/10 text-accent">Phase 2</Badge>
       </div>
 
@@ -86,7 +86,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="text-[#1B2733]">{feature.title}</h4>
+                  <h4 className="text-[#132F43]">{feature.title}</h4>
                   <Badge className={feature.badgeColor}>{feature.badge}</Badge>
                 </div>
                 <p className="text-sm text-[#5A6B7A]">{feature.description}</p>
@@ -102,7 +102,7 @@ export function Phase2FeaturesMenu({ onNavigate, userRole = 'parent' }: Phase2Fe
         <div className="flex items-start gap-3">
           <Shield className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
           <div>
-            <h4 className="text-[#1B2733] mb-1">HIPAA-Conscious Privacy</h4>
+            <h4 className="text-[#132F43] mb-1">HIPAA-Conscious Privacy</h4>
             <p className="text-sm text-[#3A4A57] mb-2">
               Enhanced privacy protections are now available in Settings → Privacy & Security
             </p>

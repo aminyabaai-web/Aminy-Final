@@ -229,7 +229,7 @@ function FAQAccordion({ faqs }: { faqs: FAQItem[] }) {
             className="w-full flex items-start gap-3 p-4 text-left hover:bg-[#FAF7F2] transition-colors"
             onClick={() => setOpenIdx(openIdx === i ? null : i)}
           >
-            <span className="text-sm font-medium text-[#1B2733] flex-1 leading-relaxed">{faq.question}</span>
+            <span className="text-sm font-medium text-[#132F43] flex-1 leading-relaxed">{faq.question}</span>
             {openIdx === i ? (
               <ChevronUp className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
             ) : (
@@ -289,7 +289,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
             <MessageCircle className="w-4 h-4 text-white" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Aminy Support</p>
+            <p className="font-semibold text-[#132F43] text-sm">Aminy Support</p>
             <p className="text-sm text-slate-400">Typically replies in under 2 hours</p>
           </div>
         </div>
@@ -304,7 +304,7 @@ function ChatInterface({ onClose }: { onClose: () => void }) {
             <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
               msg.from === 'parent'
                 ? 'bg-slate-900 text-white rounded-br-sm'
-                : 'bg-[#F0EDE8] text-[#1B2733] rounded-bl-sm'
+                : 'bg-[#F0EDE8] text-[#132F43] rounded-bl-sm'
             }`}>
               {msg.text}
             </div>
@@ -389,13 +389,13 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                 <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
               </button>
               <div className="flex-1">
-                <h1 className="font-bold text-[#1B2733]">{category?.label}</h1>
+                <h1 className="font-bold text-[#132F43]">{category?.label}</h1>
                 <p className="text-sm text-[#5A6B7A]">{category?.faqs.length} topics</p>
               </div>
             </>
           ) : (
             <div className="flex-1">
-              <h1 className="font-bold text-[#1B2733]">Help Center</h1>
+              <h1 className="font-bold text-[#132F43]">Help Center</h1>
               <p className="text-sm text-[#5A6B7A]">Answers for {childName}'s care</p>
             </div>
           )}
@@ -447,7 +447,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                         <Icon className={`w-5 h-5 ${cat.color}`} />
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1B2733] text-sm leading-tight">{cat.label}</p>
+                        <p className="font-semibold text-[#132F43] text-sm leading-tight">{cat.label}</p>
                         <p className="text-sm text-slate-400 mt-0.5">{cat.faqs.length} topics</p>
                       </div>
                       <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -469,7 +469,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="font-semibold text-[#1B2733] text-sm">Talk to Aminy Support</p>
+                    <p className="font-semibold text-[#132F43] text-sm">Talk to Aminy Support</p>
                     <p className="text-sm text-slate-400">Typically responds in under 2 hours</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -488,7 +488,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
                     )}
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="font-semibold text-[#1B2733] text-sm">Get a Benefits Explanation Letter</p>
+                    <p className="font-semibold text-[#132F43] text-sm">Get a Benefits Explanation Letter</p>
                     <p className="text-sm text-slate-400">Letter explaining {memberPlan} coverage for employers or schools</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -519,7 +519,7 @@ export function FamilyHelpCenter({ onBack, childName = 'your child', memberPlan 
               <div key={resource.name} className="p-4 flex items-start gap-3">
                 <Phone className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <p className="font-semibold text-[#1B2733] text-sm">{resource.name}</p>
+                  <p className="font-semibold text-[#132F43] text-sm">{resource.name}</p>
                   <p className={`text-sm font-bold ${resource.color}`}>{resource.number}</p>
                   <p className="text-sm text-[#5A6B7A] mt-0.5">{resource.note}</p>
                 </div>

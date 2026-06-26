@@ -229,7 +229,7 @@ function TaskChunker({ onComplete }: { onComplete: () => void }) {
                   {step.done && <Check className="h-4 w-4" />}
                 </div>
               </button>
-              <span className={`flex-1 text-sm ${step.done ? 'text-slate-400 line-through' : 'text-[#1B2733]'}`}>
+              <span className={`flex-1 text-sm ${step.done ? 'text-slate-400 line-through' : 'text-[#132F43]'}`}>
                 {step.text}
               </span>
               <button type="button" onClick={() => removeStep(step.id)} className="text-slate-400 hover:text-red-400">
@@ -342,7 +342,7 @@ function FocusTimer({ onComplete }: { onComplete: () => void }) {
       </div>
 
       {/* Time display */}
-      <div className="text-4xl font-bold tabular-nums text-[#1B2733]">
+      <div className="text-4xl font-bold tabular-nums text-[#132F43]">
         {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
       </div>
 
@@ -610,7 +610,7 @@ export default function ExecutiveFunctionCoach({ onBack, childName = 'Buddy' }: 
             <ArrowLeft className="h-5 w-5" />
             {activeTool ? 'Tools' : 'Back'}
           </button>
-          <div className="text-sm font-semibold text-[#1B2733]">
+          <div className="text-sm font-semibold text-[#132F43]">
             {activeTool ? TOOLS.find(t => t.id === activeTool)?.label : 'Executive Function Coach'}
           </div>
           <div className="flex items-center gap-1 text-sm font-medium text-amber-600">
@@ -626,7 +626,7 @@ export default function ExecutiveFunctionCoach({ onBack, childName = 'Buddy' }: 
             {/* Welcome */}
             <div className="mb-5 text-center">
               <div className="text-2xl mb-1">🧠</div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Hey {childName}!</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Hey {childName}!</h2>
               <p className="text-sm text-[#5A6B7A] mt-1">Pick a tool to help you get stuff done.</p>
             </div>
 

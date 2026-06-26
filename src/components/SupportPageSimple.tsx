@@ -95,7 +95,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
     <div className="space-y-8">
       {/* Hero Search */}
       <div className="text-center space-y-3 sm:space-y-4">
-        <h1 className="text-2xl font-semibold text-[#1B2733]">How can we help you?</h1>
+        <h1 className="text-2xl font-semibold text-[#132F43]">How can we help you?</h1>
         <div className="relative max-w-lg mx-auto">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input
@@ -117,7 +117,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-[#1B2733]">{tile.title}</h3>
+                  <h3 className="font-semibold text-[#132F43]">{tile.title}</h3>
                   {tile.popular && (
                     <Badge className="bg-orange-100 text-orange-700 text-sm">Popular</Badge>
                   )}
@@ -145,7 +145,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
   const renderContact = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <h1 className="text-2xl font-semibold text-[#1B2733]">Contact Us</h1>
+      <h1 className="text-2xl font-semibold text-[#132F43]">Contact Us</h1>
       
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="space-y-3 sm:space-y-4 sm:space-y-6">
@@ -201,7 +201,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
 
   const renderSafety = () => (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
-      <h1 className="text-2xl font-semibold text-[#1B2733]">Safety & Urgent Guidance</h1>
+      <h1 className="text-2xl font-semibold text-[#132F43]">Safety & Urgent Guidance</h1>
       
       {/* Emergency Notice */}
       <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
@@ -242,7 +242,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                   variant="ghost"
                   size="sm"
                   onClick={() => onNavigate?.('more')}
-                  className="text-[#5A6B7A] hover:text-[#1B2733]"
+                  className="text-[#5A6B7A] hover:text-[#132F43]"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
@@ -251,7 +251,7 @@ export function SupportPageSimple({ onNavigate, userTier = 'core' }: SupportPage
                     <HelpCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733]">Support</h1>
+                    <h1 className="text-lg sm:text-xl font-semibold text-[#132F43]">Support</h1>
                     <p className="text-sm text-[#5A6B7A]">Frictionless help, fast resolution</p>
                   </div>
                 </div>

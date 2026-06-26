@@ -94,7 +94,7 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
       >
         <AlertTriangle size={16} className={`shrink-0 mt-0.5 ${severityColor.split(' ')[0]}`} />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1B2733]">{record.clientName}</p>
+          <p className="text-sm font-semibold text-[#132F43]">{record.clientName}</p>
           <p className="text-xs text-[#5A6B7A]">{record.serviceCode} · {record.serviceDescription} · {record.scheduledStart.split('T')[0]}</p>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {discrepancies.map(d => (
@@ -291,7 +291,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
               {/* Historical trend */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <BarChart3 size={15} className="text-[#6B9080]" />
                   Historical Clean Rate Trend
                 </h2>
@@ -306,7 +306,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
               {/* Stats grid */}
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: 'Total Records', value: report.totalRecords, color: 'text-[#1B2733]' },
+                  { label: 'Total Records', value: report.totalRecords, color: 'text-[#132F43]' },
                   { label: 'Clean Cycles', value: report.cleanCycles, color: 'text-green-600' },
                   { label: 'Discrepancies', value: discrepancyGroups.length, color: 'text-red-600' },
                   { label: 'Discrepancy Rate', value: `${report.discrepancyRate}%`, color: report.discrepancyRate > 15 ? 'text-red-600' : 'text-amber-600' },
@@ -343,7 +343,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
             <motion.div key="fiscal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4">
               {/* Readiness checklist */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <ClipboardList size={15} className="text-[#6B9080]" />
                   Fiscal Agent Submission Readiness
                 </h2>
@@ -355,7 +355,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                       ) : (
                         <XCircle size={16} className="text-red-500 shrink-0" />
                       )}
-                      <span className={`text-sm ${item.done ? 'text-[#5A6B7A]' : 'text-[#1B2733] font-medium'}`}>
+                      <span className={`text-sm ${item.done ? 'text-[#5A6B7A]' : 'text-[#132F43] font-medium'}`}>
                         {item.label}
                       </span>
                     </div>
@@ -383,7 +383,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
 
               {/* Export stats */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E8E4DF]">
-                <h2 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h2 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <FileText size={15} className="text-[#5A6B7A]" />
                   Export Summary
                 </h2>
@@ -398,7 +398,7 @@ export default function EVVReconciliationEnhanced({ providerId, onBack }: EVVRec
                   ].map(row => (
                     <div key={row.label} className="flex items-center justify-between py-1 border-b border-gray-50">
                       <span className="text-[#5A6B7A]">{row.label}</span>
-                      <span className="font-medium text-[#1B2733] text-sm">{row.value}</span>
+                      <span className="font-medium text-[#132F43] text-sm">{row.value}</span>
                     </div>
                   ))}
                 </div>

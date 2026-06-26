@@ -215,7 +215,7 @@ function RosterView({
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm text-[#1B2733] truncate">{rbt.name}</span>
+                  <span className="font-semibold text-sm text-[#132F43] truncate">{rbt.name}</span>
                   <span className={`w-2 h-2 rounded-full ${statusColor}`} />
                 </div>
                 <div className="text-sm text-[#5A6B7A]">{rbt.rbtNumber}</div>
@@ -262,7 +262,7 @@ function ComplianceView({
         return (
           <div key={rbt.id} className="bg-white rounded-xl p-3 border border-[#E8E4DF]">
             <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-sm text-[#1B2733]">{rbt.name}</span>
+              <span className="font-semibold text-sm text-[#132F43]">{rbt.name}</span>
               <span className={`text-sm font-bold ${pctColor}`}>{c.compliancePercent.toFixed(1)}%</span>
             </div>
 
@@ -406,7 +406,7 @@ function CalendarView({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-[#1B2733]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
+                <div className="text-sm font-medium text-[#132F43]">{nameMap[s.rbtId] ?? 'Unknown'}</div>
                 <div className="text-sm text-[#5A6B7A]">
                   {s.date} &middot; {s.durationMinutes}min &middot; {s.type}
                   {s.includesDirectObservation && ' + observation'}
@@ -548,7 +548,7 @@ function AlertsView({ risks }: { risks: ComplianceRisk[] }) {
             }`} />
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-[#1B2733]">{risk.rbtName}</span>
+                <span className="text-sm font-semibold text-[#132F43]">{risk.rbtName}</span>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                   risk.severity === 'critical' ? 'bg-red-200 text-red-800' : 'bg-amber-200 text-amber-800'
                 }`}>
@@ -632,7 +632,7 @@ function QuickLogModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-[#1B2733]">Log Supervision Session</h3>
+          <h3 className="text-lg font-bold text-[#132F43]">Log Supervision Session</h3>
           <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 

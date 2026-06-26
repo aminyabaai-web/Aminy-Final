@@ -263,7 +263,7 @@ export function PaymentFailureBanner({
           {config.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-semibold text-[#1B2733]">{config.title}</h4>
+          <h4 className="text-sm font-semibold text-[#132F43]">{config.title}</h4>
           <p className="text-sm text-[#5A6B7A] mt-0.5 leading-relaxed">
             {config.message}
           </p>

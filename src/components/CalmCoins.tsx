@@ -293,7 +293,7 @@ export function CalmCoins({
               >
                 <Star className="w-10 h-10 text-amber-600 fill-amber-400" />
               </motion.div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
                 +{earnAmount} Calm Coins!
               </h2>
               <p className="text-[#5A6B7A]">Great job! 🎉</p>
@@ -308,8 +308,8 @@ export function CalmCoins({
           onClick={() => setActiveTab('earn')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'earn'
-              ? 'bg-white shadow-sm text-[#1B2733]'
-              : 'text-[#5A6B7A] hover:text-[#1B2733]'
+              ? 'bg-white shadow-sm text-[#132F43]'
+              : 'text-[#5A6B7A] hover:text-[#132F43]'
           }`}
         >
           Earn Coins
@@ -318,8 +318,8 @@ export function CalmCoins({
           onClick={() => setActiveTab('spend')}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             activeTab === 'spend'
-              ? 'bg-white shadow-sm text-[#1B2733]'
-              : 'text-[#5A6B7A] hover:text-[#1B2733]'
+              ? 'bg-white shadow-sm text-[#132F43]'
+              : 'text-[#5A6B7A] hover:text-[#132F43]'
           }`}
         >
           Spend Coins
@@ -329,7 +329,7 @@ export function CalmCoins({
       {/* Earn Tab */}
       {activeTab === 'earn' && (
         <div className="space-y-3 sm:space-y-4">
-          <h3 className="font-semibold text-[#1B2733]">Ways to Earn</h3>
+          <h3 className="font-semibold text-[#132F43]">Ways to Earn</h3>
           {EARNING_OPPORTUNITIES.map((opportunity) => (
             <Card
               key={opportunity.id}
@@ -341,7 +341,7 @@ export function CalmCoins({
                   <opportunity.icon className="w-6 h-6 text-[#6B9080]" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1B2733]">{opportunity.name}</p>
+                  <p className="font-medium text-[#132F43]">{opportunity.name}</p>
                   <p className="text-sm text-[#5A6B7A]">{opportunity.description}</p>
                 </div>
                 <Badge className="bg-amber-100 text-amber-700">
@@ -354,7 +354,7 @@ export function CalmCoins({
           {/* Recent Earnings */}
           {recentEarnings.length > 0 && (
             <div className="mt-4 sm:mt-6">
-              <h3 className="font-semibold text-[#1B2733] mb-3">Recent Earnings</h3>
+              <h3 className="font-semibold text-[#132F43] mb-3">Recent Earnings</h3>
               <div className="space-y-2">
                 {recentEarnings.slice(0, 5).map((earning) => (
                   <div
@@ -376,7 +376,7 @@ export function CalmCoins({
       {/* Spend Tab */}
       {activeTab === 'spend' && (
         <div className="space-y-3 sm:space-y-4">
-          <h3 className="font-semibold text-[#1B2733]">Rewards Shop</h3>
+          <h3 className="font-semibold text-[#132F43]">Rewards Shop</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {rewards.map((reward) => {
               const canAfford = currentBalance >= reward.cost;
@@ -392,7 +392,7 @@ export function CalmCoins({
                 >
                   <div className="text-center">
                     <span className="text-3xl block mb-2">{reward.icon}</span>
-                    <p className="font-medium text-[#1B2733] text-sm mb-1">
+                    <p className="font-medium text-[#132F43] text-sm mb-1">
                       {reward.name}
                     </p>
                     <div className="flex items-center justify-center gap-1">

@@ -274,7 +274,7 @@ export function ConsentFlow({
           )}
           {content.icon}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">{content.title}</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">{content.title}</h1>
             <p className="text-sm text-[#5A6B7A]">Version {content.version}</p>
           </div>
         </div>
@@ -313,7 +313,7 @@ export function ConsentFlow({
         <div className="space-y-4">
           {content.sections.map((section, i) => (
             <div key={i}>
-              <h3 className="text-sm font-semibold text-[#1B2733]">{section.heading}</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">{section.heading}</h3>
               <p className="mt-1 text-sm leading-relaxed text-[#3A4A57]">{section.body}</p>
             </div>
           ))}
@@ -454,7 +454,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-[#1B2733]">Manage Consents</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Manage Consents</h1>
         </div>
       </div>
 
@@ -530,7 +530,7 @@ export function ConsentManager({ consents, onWithdraw, onBack }: ConsentManagerP
               <div className="flex items-start gap-3">
                 <AlertTriangle className="h-6 w-6 text-red-500" />
                 <div>
-                  <h3 className="text-base font-semibold text-[#1B2733]">Withdraw Consent</h3>
+                  <h3 className="text-base font-semibold text-[#132F43]">Withdraw Consent</h3>
                   <p className="mt-2 text-sm text-[#5A6B7A]">
                     Are you sure you want to withdraw your {labelMap[withdrawTarget]} consent?
                     This action will be timestamped and may affect available services.

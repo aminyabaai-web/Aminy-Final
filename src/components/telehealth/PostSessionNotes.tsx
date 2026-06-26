@@ -348,7 +348,7 @@ export function PostSessionNotes({
             value={item.text}
             onChange={e => updateBullet(setter, item.id, e.target.value)}
             placeholder={placeholder}
-            className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+            className="flex-1 px-3 py-2 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
           />
           <button
             onClick={() => removeBullet(setter, item.id)}
@@ -383,7 +383,7 @@ export function PostSessionNotes({
               <FileText className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">
+              <h2 className="text-lg font-semibold text-[#132F43]">
                 Session Notes
               </h2>
               <p className="text-sm text-[#5A6B7A]">
@@ -430,7 +430,7 @@ export function PostSessionNotes({
               value={reason}
               onChange={e => setReason(e.target.value)}
               placeholder="e.g., Behavioral concerns, medication follow-up..."
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             />
           </section>
 
@@ -481,7 +481,7 @@ export function PostSessionNotes({
             <select
               value={followUp}
               onChange={e => setFollowUp(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+              className="w-full px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
             >
               {FOLLOW_UP_OPTIONS.map(opt => (
                 <option key={opt} value={opt}>
@@ -495,7 +495,7 @@ export function PostSessionNotes({
                 value={customFollowUp}
                 onChange={e => setCustomFollowUp(e.target.value)}
                 placeholder="Describe custom follow-up plan..."
-                className="w-full mt-2 px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#1B2733] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                className="w-full mt-2 px-3 py-2.5 bg-[#FAF7F2] border border-[#E8E4DF] rounded-lg text-sm text-[#132F43] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
               />
             )}
           </section>
@@ -631,7 +631,7 @@ export function PostSessionNotes({
           <section>
             <button
               onClick={() => setShowGoalSection(!showGoalSection)}
-              className="flex items-center gap-2 text-sm font-medium text-[#3A4A57] hover:text-[#1B2733] transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-[#3A4A57] hover:text-[#132F43] transition-colors"
             >
               <Target size={14} />
               Update Care-Plan Goals

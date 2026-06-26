@@ -120,7 +120,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
             </button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733] flex items-center gap-2">
+            <h1 className="text-lg font-bold text-[#132F43] flex items-center gap-2">
               <Users size={18} className="text-[#6B9080]" />
               Roster Manager
             </h1>
@@ -152,7 +152,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                 <div key={entry.id} className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm overflow-hidden">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-gray-50">
                     <div>
-                      <p className="text-sm font-semibold text-[#1B2733]">{entry.payer}</p>
+                      <p className="text-sm font-semibold text-[#132F43]">{entry.payer}</p>
                       <p className="text-sm text-[#5A6B7A]">Effective {entry.effectiveDate}</p>
                     </div>
                     <span className="text-xs font-medium text-green-600 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
@@ -173,7 +173,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                             <span className="text-xs font-mono font-medium text-[#3A4A57]">{rate.cptCode}</span>
                             <span className="text-sm text-[#5A6B7A] ml-2">{rate.description}</span>
                           </div>
-                          <span className="text-sm font-semibold text-[#1B2733]">
+                          <span className="text-sm font-semibold text-[#132F43]">
                             ${rate.rate.toFixed(2)}/unit
                           </span>
                         </div>
@@ -221,7 +221,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                   <div key={req.id} className="bg-white rounded-2xl border border-[#E8E4DF] shadow-sm p-4">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <p className="text-sm font-medium text-[#1B2733]">{typeLabels[req.type]}</p>
+                        <p className="text-sm font-medium text-[#132F43]">{typeLabels[req.type]}</p>
                         <p className="text-sm text-[#5A6B7A]">{req.payer} · Submitted {req.submittedDate}</p>
                       </div>
                       <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${statusCfg.bg} ${statusCfg.color}`}>
@@ -308,7 +308,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
               onClick={e => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-semibold text-[#1B2733]">Add to Roster</h2>
+                <h2 className="text-base font-semibold text-[#132F43]">Add to Roster</h2>
                 <button onClick={() => setShowAddFlow(false)} className="p-1 rounded-lg hover:bg-[#F0EDE8]">
                   <XCircle size={20} className="text-[#8A9BA8]" />
                 </button>
@@ -329,7 +329,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                         }`}
                       >
                         <CheckCircle size={16} className={selectedPayer === p.payerId ? 'text-[#6B9080]' : 'text-[#8A9BA8]'} />
-                        <span className="text-sm font-medium text-[#1B2733]">{p.payer}</span>
+                        <span className="text-sm font-medium text-[#132F43]">{p.payer}</span>
                       </button>
                     ))}
                     {credentialedPayers.length === 0 && (
@@ -354,7 +354,7 @@ export default function RosterManager({ providerId = 'prov-001', onBack }: Roste
                     <label className="text-sm font-medium text-[#5A6B7A] block mb-1">Effective Date</label>
                     <input
                       type="date"
-                      className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm text-[#1B2733] focus:outline-none focus:border-[#6B9080]"
+                      className="w-full border border-[#E8E4DF] rounded-xl px-3 py-2 text-sm text-[#132F43] focus:outline-none focus:border-[#6B9080]"
                     />
                   </div>
                   <div>

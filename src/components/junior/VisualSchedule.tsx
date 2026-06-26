@@ -380,7 +380,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
         >
           <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
         </button>
-        <h2 className="text-lg font-semibold text-[#1B2733]">
+        <h2 className="text-lg font-semibold text-[#132F43]">
           {childName}&apos;s Schedule
         </h2>
         <div className="flex gap-1.5">
@@ -567,7 +567,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                       <div className="flex-1 min-w-0">
                         <p
                           className={`font-medium text-sm ${
-                            isDone ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'
+                            isDone ? 'line-through text-[#8A9BA8]' : 'text-[#132F43]'
                           }`}
                         >
                           {item.label}
@@ -717,7 +717,7 @@ export function VisualSchedule({ childName, onBack }: VisualScheduleProps) {
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-3xl">{template.emoji}</span>
                   <div>
-                    <h3 className="font-semibold text-[#1B2733]">
+                    <h3 className="font-semibold text-[#132F43]">
                       {template.name}
                     </h3>
                     <p className="text-sm text-[#5A6B7A]">

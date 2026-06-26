@@ -166,7 +166,7 @@ function SyncRecordCard({
           <DirectionIcon size={14} className={directionColor} />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="text-sm font-medium text-[#1B2733] truncate">
+              <p className="text-sm font-medium text-[#132F43] truncate">
                 {DATA_TYPE_LABELS[record.dataType] || record.dataType}
               </p>
               <StatusBadge status={record.status} />
@@ -209,19 +209,19 @@ function SyncRecordCard({
           <div className="grid grid-cols-2 gap-2">
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Direction</span>
-              <p className="font-medium text-[#1B2733] capitalize">{record.direction}</p>
+              <p className="font-medium text-[#132F43] capitalize">{record.direction}</p>
             </div>
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Records</span>
-              <p className="font-medium text-[#1B2733]">{record.recordsSynced}</p>
+              <p className="font-medium text-[#132F43]">{record.recordsSynced}</p>
             </div>
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Last Sync</span>
-              <p className="font-medium text-[#1B2733]">{timeAgo(record.lastSyncAt)}</p>
+              <p className="font-medium text-[#132F43]">{timeAgo(record.lastSyncAt)}</p>
             </div>
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Next Sync</span>
-              <p className="font-medium text-[#1B2733]">{timeAgo(record.nextSyncAt)}</p>
+              <p className="font-medium text-[#132F43]">{timeAgo(record.nextSyncAt)}</p>
             </div>
           </div>
 
@@ -264,7 +264,7 @@ function ErrorCard({
         <div className="flex items-center gap-3 flex-1 min-w-0">
           <AlertOctagon size={14} className="text-red-500 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[#1B2733] truncate">
+            <p className="text-sm font-medium text-[#132F43] truncate">
               {DATA_TYPE_LABELS[error.data_type] || error.data_type} ({error.direction})
             </p>
             <p className="text-sm text-red-600 mt-0.5 truncate">
@@ -301,26 +301,26 @@ function ErrorCard({
             {error.error_code && (
               <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Error Code</span>
-                <p className="font-mono font-medium text-[#1B2733]">{error.error_code}</p>
+                <p className="font-mono font-medium text-[#132F43]">{error.error_code}</p>
               </div>
             )}
             {error.record_id && (
               <div className="text-sm bg-[#FAF7F2] rounded p-2">
                 <span className="text-[#5A6B7A]">Record ID</span>
-                <p className="font-mono font-medium text-[#1B2733] truncate">
+                <p className="font-mono font-medium text-[#132F43] truncate">
                   {error.record_id}
                 </p>
               </div>
             )}
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Retries</span>
-              <p className="font-medium text-[#1B2733]">
+              <p className="font-medium text-[#132F43]">
                 {error.retry_count} / {error.max_retries}
               </p>
             </div>
             <div className="text-sm bg-[#FAF7F2] rounded p-2">
               <span className="text-[#5A6B7A]">Created</span>
-              <p className="font-medium text-[#1B2733]">
+              <p className="font-medium text-[#132F43]">
                 {formatDate(error.created_at)}
               </p>
             </div>
@@ -372,7 +372,7 @@ function HistoryTimeline({ entries }: { entries: SyncLogEntry[] }) {
             <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${statusColor}`} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-[#1B2733]">
+                <p className="text-sm font-medium text-[#132F43]">
                   {DATA_TYPE_LABELS[entry.data_type] || entry.data_type}
                 </p>
                 <span className="text-sm text-[#8A9BA8]">
@@ -598,7 +598,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
         <nav aria-label="CentralReach navigation" className="flex items-center justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.18em] text-[#6B9080]">CentralReach operator lane</p>
-            <h1 className="mt-1 text-xl font-bold tracking-tight text-[#1B2733]">Sync Dashboard</h1>
+            <h1 className="mt-1 text-xl font-bold tracking-tight text-[#132F43]">Sync Dashboard</h1>
             <h2 className="sr-only">CentralReach sync overview</h2>
             <h3 className="sr-only">Import, export, and reconciliation status</h3>
             <p className="mt-1 text-sm text-[#5A6B7A]">
@@ -638,14 +638,14 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Activity size={16} className="text-primary mx-auto mb-1" />
-            <p className="text-lg font-bold text-[#1B2733]">
+            <p className="text-lg font-bold text-[#132F43]">
               {history.totalSyncs}
             </p>
             <p className="text-sm text-[#5A6B7A]">Total Syncs</p>
           </div>
           <div className="rounded-2xl border border-white/80 bg-white/92 p-4 text-center shadow-sm">
             <Zap size={16} className="text-green-500 mx-auto mb-1" />
-            <p className="text-lg font-bold text-[#1B2733]">
+            <p className="text-lg font-bold text-[#132F43]">
               {history.totalRecordsProcessed}
             </p>
             <p className="text-sm text-[#5A6B7A]">Records</p>
@@ -656,7 +656,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
               className={`mx-auto mb-1 ${errorCount > 0 ? 'text-red-500' : 'text-[#8A9BA8]'}`}
             />
             <p
-              className={`text-lg font-bold ${errorCount > 0 ? 'text-red-600' : 'text-[#1B2733]'}`}
+              className={`text-lg font-bold ${errorCount > 0 ? 'text-red-600' : 'text-[#132F43]'}`}
             >
               {errorCount}
             </p>
@@ -694,7 +694,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-[#1B2733]">Clinic Workflow Proof</p>
+                <p className="text-sm font-semibold text-[#132F43]">Clinic Workflow Proof</p>
                 <p className="text-sm text-[#5A6B7A] mt-1">
                   This is the operational read on whether your clinic can trust the current CentralReach pull/export workflow in daily use.
                 </p>
@@ -736,7 +736,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                 <div key={`${lane.lane}:${lane.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-medium text-[#1B2733]">{lane.label}</p>
+                      <p className="text-sm font-medium text-[#132F43]">{lane.label}</p>
                       <p className="mt-0.5 text-sm text-[#5A6B7A]">{lane.operatorMessage}</p>
                     </div>
                     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -766,7 +766,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
           <div className="rounded-3xl border border-white/80 bg-white/92 p-5 shadow-sm">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-semibold text-[#1B2733]">Operator Reconciliation Queue</p>
+                <p className="text-sm font-semibold text-[#132F43]">Operator Reconciliation Queue</p>
                 <p className="text-sm text-[#5A6B7A] mt-1">Pull and export jobs stay visible until retries are exhausted or the latest sync is healthy.</p>
               </div>
               <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${attentionJobs.length > 0 ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700'}`}>
@@ -779,7 +779,7 @@ export function CRSyncDashboard({ userId, onBack }: CRSyncDashboardProps) {
                   <div key={`${job.dataType}:${job.direction}`} className="rounded-2xl border border-[#E8E4DF] bg-[#FAF7F2]/80 px-3 py-3">
                     <div className="flex items-center justify-between gap-3">
                       <div>
-                        <p className="text-sm font-medium text-[#1B2733]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
+                        <p className="text-sm font-medium text-[#132F43]">{DATA_TYPE_LABELS[job.dataType] || job.dataType}</p>
                         <p className="text-sm text-[#5A6B7A] mt-0.5">{job.direction === 'pull' ? 'CentralReach to Aminy' : 'Aminy to CentralReach'} • {job.operatorMessage}</p>
                       </div>
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${job.reconciliationState === 'healthy' ? 'bg-emerald-50 text-emerald-700' : job.reconciliationState === 'retry_required' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>

@@ -279,7 +279,7 @@ export function HealthDataIntegration({
               <Moon className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h3 className="font-semibold text-[#1B2733]">Sleep Insights</h3>
+              <h3 className="font-semibold text-[#132F43]">Sleep Insights</h3>
               <p className="text-sm text-[#5A6B7A]">Connect to see how sleep affects behavior</p>
             </div>
           </div>
@@ -348,7 +348,7 @@ export function HealthDataIntegration({
               <Moon className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h3 className="font-semibold text-[#1B2733]">Last Night's Sleep</h3>
+              <h3 className="font-semibold text-[#132F43]">Last Night's Sleep</h3>
               {recentSleep ? (
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className={`text-lg font-bold ${
@@ -411,17 +411,17 @@ export function HealthDataIntegration({
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Clock className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Bedtime</p>
-                  <p className="font-semibold text-[#1B2733]">{recentSleep?.bedtime || '--'}</p>
+                  <p className="font-semibold text-[#132F43]">{recentSleep?.bedtime || '--'}</p>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <Sun className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Wake</p>
-                  <p className="font-semibold text-[#1B2733]">{recentSleep?.wakeTime || '--'}</p>
+                  <p className="font-semibold text-[#132F43]">{recentSleep?.wakeTime || '--'}</p>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] rounded-xl">
                   <AlertTriangle className="w-4 h-4 text-[#8A9BA8] mx-auto mb-1" />
                   <p className="text-sm text-[#5A6B7A]">Wakeups</p>
-                  <p className="font-semibold text-[#1B2733]">{recentSleep?.interruptions ?? '--'}</p>
+                  <p className="font-semibold text-[#132F43]">{recentSleep?.interruptions ?? '--'}</p>
                 </div>
               </div>
 
@@ -429,7 +429,7 @@ export function HealthDataIntegration({
               {weeklyAverage && (
                 <div className="flex items-center justify-between p-3 bg-[#FAF7F2] rounded-xl">
                   <span className="text-sm text-[#5A6B7A]">7-Day Average</span>
-                  <span className="font-semibold text-[#1B2733]">{weeklyAverage.toFixed(1)} hours</span>
+                  <span className="font-semibold text-[#132F43]">{weeklyAverage.toFixed(1)} hours</span>
                 </div>
               )}
 

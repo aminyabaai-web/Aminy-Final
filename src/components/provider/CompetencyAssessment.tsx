@@ -74,7 +74,7 @@ export function CompetencyAssessment({ onBack, rbtId: initialRbtId }: Competency
           className="w-full bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg px-3 py-2 text-sm mt-2"
         >
           {profiles.map((p) => (
-            <option key={p.id} value={p.id} className="text-[#1B2733]">{p.name} — {p.rbtNumber}</option>
+            <option key={p.id} value={p.id} className="text-[#132F43]">{p.name} — {p.rbtNumber}</option>
           ))}
         </select>
       </div>
@@ -206,7 +206,7 @@ function AssessmentForm({
       {/* Summary */}
       <div className="bg-white rounded-xl p-3 border border-[#E8E4DF] flex items-center justify-between">
         <div>
-          <div className="text-sm font-semibold text-[#1B2733]">Assessing: {rbtName}</div>
+          <div className="text-sm font-semibold text-[#132F43]">Assessing: {rbtName}</div>
           <div className="text-sm text-[#5A6B7A]">{today}</div>
         </div>
         <div className="text-center">
@@ -400,7 +400,7 @@ function HistoryView({
                 <Star className="w-5 h-5 text-violet-600" />
               </div>
               <div className="flex-1">
-                <div className="text-sm font-semibold text-[#1B2733]">{a.date}</div>
+                <div className="text-sm font-semibold text-[#132F43]">{a.date}</div>
                 <div className="text-sm text-[#5A6B7A]">
                   Avg: {avg.toFixed(1)} &middot; {highCount} strong &middot; {lowCount} needs work
                 </div>
@@ -488,7 +488,7 @@ function DevelopmentPlanView({
             {lowAreas.map((r) => (
               <div key={r.areaId} className="bg-white rounded-lg p-2 border border-red-100">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-[#1B2733]">{r.areaName}</span>
+                  <span className="text-sm font-medium text-[#132F43]">{r.areaName}</span>
                   <span className="text-sm font-bold text-red-600">{r.rating}/5</span>
                 </div>
                 <p className="text-sm text-[#5A6B7A] mt-1">

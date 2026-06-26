@@ -89,7 +89,7 @@ function MatchingProgress() {
               ) : (
                 <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
               )}
-              <span className={`text-sm ${i === activeStep ? 'text-[#1B2733] font-medium' : 'text-[#5A6B7A]'}`}>
+              <span className={`text-sm ${i === activeStep ? 'text-[#132F43] font-medium' : 'text-[#5A6B7A]'}`}>
                 {step.label}
               </span>
             </motion.div>
@@ -200,7 +200,7 @@ export function MatchingInProgress({
           >
             <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
           </button>
-          <h1 className="text-base font-semibold text-[#1B2733]">Finding Your Match</h1>
+          <h1 className="text-base font-semibold text-[#132F43]">Finding Your Match</h1>
         </div>
       </div>
 
@@ -216,7 +216,7 @@ export function MatchingInProgress({
               <PulsingDots />
             </div>
             <div>
-              <h2 className="text-base font-bold text-[#1B2733]">Matching in Progress</h2>
+              <h2 className="text-base font-bold text-[#132F43]">Matching in Progress</h2>
               <p className="text-sm text-[#6B9080] mt-0.5">You'll hear from us within 24-48 hours</p>
             </div>
           </div>
@@ -241,7 +241,7 @@ export function MatchingInProgress({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
         >
-          <h3 className="text-sm font-bold text-[#1B2733] mb-3">While we search for you</h3>
+          <h3 className="text-sm font-bold text-[#132F43] mb-3">While we search for you</h3>
           <div className="space-y-2.5">
             {BRIDGE_CARDS.map((card, i) => (
               <motion.button
@@ -256,7 +256,7 @@ export function MatchingInProgress({
                   {card.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#1B2733]">{card.title}</p>
+                  <p className="text-sm font-semibold text-[#132F43]">{card.title}</p>
                   <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{card.description}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
@@ -274,7 +274,7 @@ export function MatchingInProgress({
         >
           <div className="flex items-center gap-2">
             <Bell className="w-4 h-4 text-[#6B9080]" />
-            <h3 className="text-sm font-bold text-[#1B2733]">Get notified when your match is ready</h3>
+            <h3 className="text-sm font-bold text-[#132F43]">Get notified when your match is ready</h3>
           </div>
 
           {submitted ? (

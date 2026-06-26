@@ -339,7 +339,7 @@ export function MilestoneShareCard({
         <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-500" />
-            <h3 className="font-semibold text-[#1B2733] text-base">
+            <h3 className="font-semibold text-[#132F43] text-base">
               Share This Milestone!
             </h3>
           </div>

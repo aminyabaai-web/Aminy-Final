@@ -147,7 +147,7 @@ export function ShareWinCard({
           className="bg-white/60 dark:bg-black/20 hover:bg-sky-50 dark:hover:bg-sky-900/30"
           aria-label="Share on X"
         >
-          <X className="w-4 h-4 text-[#1B2733]" />
+          <X className="w-4 h-4 text-[#132F43]" />
         </Button>
         <Button
           onClick={shareToFacebook}

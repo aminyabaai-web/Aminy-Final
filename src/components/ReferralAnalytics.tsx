@@ -183,7 +183,7 @@ export function ReferralAnalytics({
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold text-[#1B2733]">Referral Performance</h3>
+        <h3 className="text-lg font-bold text-[#132F43]">Referral Performance</h3>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
@@ -238,7 +238,7 @@ export function ReferralAnalytics({
                       {stage.icon}
                       {stage.label}
                     </span>
-                    <span className="font-bold text-[#1B2733]">{stage.value}</span>
+                    <span className="font-bold text-[#132F43]">{stage.value}</span>
                   </div>
                   <div className="w-full bg-[#F0EDE8] rounded-full h-2.5 overflow-hidden">
                     <div
@@ -281,7 +281,7 @@ export function ReferralAnalytics({
             {trendIcon}
           </div>
           <div className="flex items-end gap-2 mb-2">
-            <span className="text-3xl font-bold text-[#1B2733]">
+            <span className="text-3xl font-bold text-[#132F43]">
               {viralMetrics.kFactor.toFixed(2)}
             </span>
             {viralMetrics.weekOverWeekGrowth !== 0 && (
@@ -346,7 +346,7 @@ export function ReferralAnalytics({
                 {currentTier.badgeIcon}
               </div>
               <div>
-                <p className="text-sm font-bold text-[#1B2733]">
+                <p className="text-sm font-bold text-[#132F43]">
                   {currentTier.name}
                 </p>
                 <p className="text-sm text-[#5A6B7A]">

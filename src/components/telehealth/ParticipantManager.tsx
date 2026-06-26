@@ -181,7 +181,7 @@ function ParticipantTile({
         {/* Name & role */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="font-medium text-[#1B2733] truncate text-sm">
+            <p className="font-medium text-[#132F43] truncate text-sm">
               {participant.userName}
               {participant.isLocal && (
                 <span className="text-slate-400 font-normal"> (You)</span>
@@ -346,7 +346,7 @@ function InviteModal({ roomUrl, sessionId, onInvite, onClose }: InviteModalProps
         <div className="flex items-center justify-between p-4 border-b border-[#E8E4DF]">
           <div className="flex items-center gap-2">
             <UserPlus className="w-5 h-5 text-[#6B9080]" />
-            <h3 className="font-semibold text-[#1B2733]">Invite Participant</h3>
+            <h3 className="font-semibold text-[#132F43]">Invite Participant</h3>
           </div>
           <button
             onClick={onClose}
@@ -486,7 +486,7 @@ export function ParticipantManager({
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E4DF] bg-[#FAF7F2]">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-[#6B9080]" />
-            <h3 className="font-semibold text-[#1B2733] text-sm">
+            <h3 className="font-semibold text-[#132F43] text-sm">
               Participants ({participants.length})
             </h3>
           </div>

@@ -152,7 +152,7 @@ export function SubscriptionPauseFlow({
           ) : (
             <PauseCircle className="w-4 h-4 text-[#8A9BA8]" />
           )}
-          <h3 className="text-sm font-semibold text-[#1B2733]">
+          <h3 className="text-sm font-semibold text-[#132F43]">
             {pauseStatus?.isPaused ? 'Subscription Paused' : 'Pause Subscription'}
           </h3>
         </div>
@@ -208,7 +208,7 @@ export function SubscriptionPauseFlow({
                         )}
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-medium text-[#1B2733]">{opt.label}</p>
+                        <p className="text-sm font-medium text-[#132F43]">{opt.label}</p>
                         <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
                       </div>
                     </div>
@@ -291,7 +291,7 @@ export function SubscriptionPauseFlow({
                     <Calendar size={12} />
                     Resumes on
                   </span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {formatResumeDate(pauseStatus.resumeDate)}
                   </span>
                 </div>
@@ -300,7 +300,7 @@ export function SubscriptionPauseFlow({
                     <Clock size={12} />
                     Days remaining
                   </span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {daysUntilResume(pauseStatus.resumeDate)} days
                   </span>
                 </div>
@@ -333,7 +333,7 @@ export function SubscriptionPauseFlow({
               <Check className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">Subscription Resumed!</p>
+              <p className="text-sm font-semibold text-[#132F43]">Subscription Resumed!</p>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 Your premium features are now active again.
               </p>

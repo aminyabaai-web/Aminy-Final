@@ -412,7 +412,7 @@ export function RecordingPlayback({
               <Video className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-[#1B2733]">Session Recordings</h2>
+              <h2 className="text-base font-semibold text-[#132F43]">Session Recordings</h2>
               <p className="text-sm text-[#5A6B7A]">{recordings.length} recording{recordings.length !== 1 ? 's' : ''} available</p>
             </div>
           </div>

@@ -189,7 +189,7 @@ function SessionsList({ sessions }: { sessions: RBTDirectSession[] }) {
               <User className="w-5 h-5 text-[#6B9080]" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold text-[#1B2733]">{s.clientName}</div>
+              <div className="text-sm font-semibold text-[#132F43]">{s.clientName}</div>
               <div className="text-sm text-[#5A6B7A]">
                 {s.date} &middot; {s.startTime}-{s.endTime} &middot; {s.sessionType}
               </div>
@@ -265,7 +265,7 @@ function ReviewQueue({
           {flagged.map((s) => (
             <div key={s.id} className="bg-red-50 rounded-xl p-3 border border-red-200 mb-2">
               <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-[#1B2733]">{s.clientName}</span>
+                <span className="text-sm font-medium text-[#132F43]">{s.clientName}</span>
                 <span className="text-sm text-[#5A6B7A]">{s.date}</span>
               </div>
               {s.bcbaFlagReason && (
@@ -292,7 +292,7 @@ function ReviewQueue({
           <div key={s.id} className="bg-white rounded-xl p-3 border border-[#E8E4DF] mb-2">
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-[#1B2733]">{s.clientName}</div>
+                <div className="text-sm font-medium text-[#132F43]">{s.clientName}</div>
                 <div className="text-sm text-[#5A6B7A]">{s.date} &middot; {s.durationMinutes}m</div>
               </div>
               <span className="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">
@@ -362,7 +362,7 @@ function HoursView({ rbtId, sessions, demo }: { rbtId: string; sessions: RBTDire
                   <div className="text-sm text-[#5A6B7A]">{data.sessions} sessions</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-bold text-[#1B2733]">{(data.minutes / 60).toFixed(1)}h</div>
+                  <div className="text-sm font-bold text-[#132F43]">{(data.minutes / 60).toFixed(1)}h</div>
                   <div className="text-sm text-slate-400">{data.minutes}min</div>
                 </div>
               </div>
@@ -475,7 +475,7 @@ function NewSessionModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-[#1B2733]">Log Session</h3>
+          <h3 className="text-lg font-bold text-[#132F43]">Log Session</h3>
           <button onClick={onClose} className="p-1 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-5 h-5 text-slate-400" /></button>
         </div>
 

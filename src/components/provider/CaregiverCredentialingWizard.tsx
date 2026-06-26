@@ -68,7 +68,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
                             <ShieldCheck className="w-10 h-10 text-[#6B9080]" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Fast-Track Credentialing</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-[#132F43]">Fast-Track Credentialing</h2>
                         <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Aminy helps you assemble the paperwork required by state Medicaid and insurance networks — guiding you through identity verification, NPI validation, and waiver assembly.
                         </p>
@@ -89,7 +89,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 1 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-[#1B2733]">Identity Verification</h2>
+                                <h2 className="text-2xl font-bold text-[#132F43]">Identity Verification</h2>
                             </div>
                             <p className="text-[#5A6B7A] text-lg">
                                 Please upload a photo of your valid government ID. Your documents are uploaded over an encrypted connection.
@@ -125,7 +125,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                                         : <Camera className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
                                 </div>
-                                <h3 className="font-semibold text-[#1B2733]">Front of ID</h3>
+                                <h3 className="font-semibold text-[#132F43]">Front of ID</h3>
                                 <p className="text-sm text-[#5A6B7A] mt-1 truncate">
                                     {idFront ? idFront.name : 'Tap to capture'}
                                 </p>
@@ -142,7 +142,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                                         ? <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                                         : <UploadCloud className="w-8 h-8 text-[#5A6B7A] group-hover:text-[#6B9080]" />}
                                 </div>
-                                <h3 className="font-semibold text-[#1B2733]">Back of ID</h3>
+                                <h3 className="font-semibold text-[#132F43]">Back of ID</h3>
                                 <p className="text-sm text-[#5A6B7A] mt-1 truncate">
                                     {idBack ? idBack.name : 'Tap to select file'}
                                 </p>
@@ -167,7 +167,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 2 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-[#1B2733]">Clinical Credentials</h2>
+                                <h2 className="text-2xl font-bold text-[#132F43]">Clinical Credentials</h2>
                             </div>
                             <p className="text-[#5A6B7A] text-lg">
                                 If you are a BCBA or RBT, enter your 10-digit National Provider Identifier (NPI).
@@ -236,7 +236,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <Badge className="bg-indigo-100 text-indigo-700">Step 3 of 4</Badge>
-                                <h2 className="text-2xl font-bold text-[#1B2733]">Background Clearances</h2>
+                                <h2 className="text-2xl font-bold text-[#132F43]">Background Clearances</h2>
                             </div>
                             <p className="text-[#5A6B7A] text-lg">
                                 State Medicaid programs require Tier 2 background checks. Aminy helps coordinate these.
@@ -246,7 +246,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="space-y-4">
                             <div className="bg-white border-2 border-[#E8E4DF] rounded-2xl p-6 flex items-center justify-between">
                                 <div>
-                                    <h3 className="font-bold text-[#1B2733]">National Criminal DB</h3>
+                                    <h3 className="font-bold text-[#132F43]">National Criminal DB</h3>
                                     <p className="text-sm text-[#5A6B7A]">Automated check via SSN</p>
                                 </div>
                                 {demo ? (
@@ -259,7 +259,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                             <div className="bg-white border-2 border-indigo-600 ring-2 ring-indigo-600/20 rounded-2xl p-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <div>
-                                        <h3 className="font-bold text-[#1B2733]">State Fingerprinting (Livescan)</h3>
+                                        <h3 className="font-bold text-[#132F43]">State Fingerprinting (Livescan)</h3>
                                         <p className="text-sm text-[#5A6B7A]">Requires physical visit</p>
                                     </div>
                                     <Badge className="bg-amber-100 text-amber-700 px-3 py-1">Action Required</Badge>
@@ -296,13 +296,13 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="bg-emerald-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
                             <FileText className="w-12 h-12 text-emerald-600" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Ready to Assemble</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-[#132F43]">Ready to Assemble</h2>
                         <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Aminy maps your information into the official state Medicaid waiver packets and CAQH provider roster forms.
                         </p>
 
                         <div className="bg-white border border-[#E8E4DF] rounded-2xl p-6 max-w-md mx-auto text-left shadow-sm">
-                            <h3 className="font-bold text-[#1B2733] mb-4 border-b pb-2">Forms to Prepare</h3>
+                            <h3 className="font-bold text-[#132F43] mb-4 border-b pb-2">Forms to Prepare</h3>
                             <ul className="space-y-3">
                                 <li className="flex items-center gap-3 text-sm text-[#3A4A57]">
                                     <CheckCircle2 className="w-5 h-5 text-emerald-500" /> CAQH ProView Initial Roster
@@ -338,7 +338,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         <div className="bg-emerald-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
                             <CheckCircle2 className="w-12 h-12 text-emerald-600" />
                         </div>
-                        <h2 className="text-3xl font-bold tracking-tight text-[#1B2733]">Application Submitted</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-[#132F43]">Application Submitted</h2>
                         <p className="text-lg text-[#5A6B7A] max-w-lg mx-auto leading-relaxed">
                             Your credentialing packet is queued for review. We'll email you the next steps, including any background-check actions and required signatures.
                         </p>
@@ -371,7 +371,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                 {onBack && (
                     <button
                         onClick={onBack}
-                        className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-6 hover:text-[#1B2733] transition-colors min-h-[44px]"
+                        className="flex items-center gap-1 text-sm text-[#5A6B7A] mb-6 hover:text-[#132F43] transition-colors min-h-[44px]"
                     >
                         <ChevronLeft className="w-4 h-4" />
                         Back

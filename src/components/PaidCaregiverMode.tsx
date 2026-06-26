@@ -293,7 +293,7 @@ export function PaidCaregiverMode({
             <>
               <div className="mb-4">
                 <Timer className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
-                <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+                <h3 className="text-lg font-semibold text-[#132F43] mb-2">
                   Ready to Start Your Shift?
                 </h3>
                 <p className="text-sm text-[#5A6B7A] mb-4">
@@ -335,7 +335,7 @@ export function PaidCaregiverMode({
       {/* Weekly Hours Summary */}
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-semibold text-[#1B2733] flex items-center gap-2">
+          <h4 className="font-semibold text-[#132F43] flex items-center gap-2">
             <Calendar className="w-4 h-4 text-[#6B9080]" />
             This Week's Hours
           </h4>
@@ -371,7 +371,7 @@ export function PaidCaregiverMode({
       {/* Recent Time Entries */}
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-semibold text-[#1B2733]">Recent Entries</h4>
+          <h4 className="font-semibold text-[#132F43]">Recent Entries</h4>
           <Button variant="ghost" size="sm">
             View All
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -407,7 +407,7 @@ export function PaidCaregiverMode({
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-sm text-[#1B2733]">
+                      <div className="font-medium text-sm text-[#132F43]">
                         {service.description}
                       </div>
                       <div className="text-sm text-[#5A6B7A]">
@@ -427,7 +427,7 @@ export function PaidCaregiverMode({
 
       {/* Export Actions */}
       <Card className="p-3 sm:p-4">
-        <h4 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h4 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <FileText className="w-4 h-4 text-[#6B9080]" />
           Export Documentation
         </h4>
@@ -508,7 +508,7 @@ export function WaiverSetupFlow({
   return (
     <div className="p-4 sm:p-5 md:p-6">
       <div className="mb-4 sm:mb-6">
-        <h2 className="text-xl font-bold text-[#1B2733] mb-2">
+        <h2 className="text-xl font-bold text-[#132F43] mb-2">
           Set Up Waiver Profile
         </h2>
         <p className="text-[#5A6B7A]">

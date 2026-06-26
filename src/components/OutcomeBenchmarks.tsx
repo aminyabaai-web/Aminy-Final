@@ -116,7 +116,7 @@ export function OutcomeBenchmarks({
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-[#1B2733]">Progress Benchmarks</h3>
+            <h3 className="font-semibold text-[#132F43]">Progress Benchmarks</h3>
             <p className="text-sm text-[#5A6B7A]">
               How {childName} compares to similar families
             </p>
@@ -220,7 +220,7 @@ function BenchmarkRow({
         <div className="flex items-center gap-2">
           <span className="text-lg">{display.icon}</span>
           <div>
-            <span className="font-medium text-[#1B2733]">{display.displayName}</span>
+            <span className="font-medium text-[#132F43]">{display.displayName}</span>
             <p className="text-sm text-[#5A6B7A]">{display.description}</p>
           </div>
         </div>

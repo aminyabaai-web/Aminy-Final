@@ -378,7 +378,7 @@ export function JrCalmCorner({
                     className={`bg-gradient-to-br ${activity.color} rounded-2xl p-4 text-left border border-white/50 shadow-sm`}
                   >
                     <span className="text-3xl block mb-2">{activity.emoji}</span>
-                    <p className="font-semibold text-[#1B2733] text-sm">{activity.label}</p>
+                    <p className="font-semibold text-[#132F43] text-sm">{activity.label}</p>
                     <p className="text-sm text-[#5A6B7A]">{activity.desc}</p>
                   </motion.button>
                 ))}

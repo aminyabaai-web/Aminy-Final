@@ -336,14 +336,14 @@ export function CoverageClaritySummary({
 
         {/* Personalized Recommendations */}
         <div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-4">Your Personalized Coverage Recommendations</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-4">Your Personalized Coverage Recommendations</h2>
           <div className="space-y-3 sm:space-y-4">
             {recommendations.map((rec, index) => (
               <Card key={index} className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg text-[#1B2733]">{rec.title}</h3>
+                      <h3 className="font-semibold text-lg text-[#132F43]">{rec.title}</h3>
                       <Badge className={getPriorityColor(rec.priority)}>
                         {rec.priority} priority
                       </Badge>
@@ -363,7 +363,7 @@ export function CoverageClaritySummary({
                 )}
 
                 <div>
-                  <h4 className="font-medium text-[#1B2733] mb-2">Action Items:</h4>
+                  <h4 className="font-medium text-[#132F43] mb-2">Action Items:</h4>
                   <ul className="space-y-2">
                     {rec.actionItems.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
@@ -401,7 +401,7 @@ export function CoverageClaritySummary({
           <div className="flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-500 mt-0.5" />
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1B2733] mb-2">Important Reminders</h3>
+              <h3 className="font-semibold text-[#132F43] mb-2">Important Reminders</h3>
               <ul className="space-y-2 text-sm text-[#3A4A57]">
                 <li>• Coverage details can vary — always verify with your specific plan</li>
                 <li>• Get coverage confirmations in writing (email is best)</li>

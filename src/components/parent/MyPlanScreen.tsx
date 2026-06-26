@@ -205,7 +205,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-[#1B2733]">{update.provider}</p>
+                      <p className="text-sm font-semibold text-[#132F43]">{update.provider}</p>
                       <p className="text-sm text-[#5A6B7A]">{formatDate(update.date)}</p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-[#8A9BA8]" />
@@ -256,7 +256,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   className="rounded-2xl border border-[#E8E4DF] bg-white p-4 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-semibold text-[#1B2733]">{goal.title}</p>
+                    <p className="text-sm font-semibold text-[#132F43]">{goal.title}</p>
                     <div className="flex items-center gap-1">
                       {goal.change > 0 ? (
                         <TrendingUp className="h-4 w-4 text-green-500" />
@@ -396,7 +396,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                     className={`text-sm ${
                       checkedActions.has(i)
                         ? 'text-[#8A9BA8] line-through'
-                        : 'text-[#1B2733]'
+                        : 'text-[#132F43]'
                     }`}
                   >
                     {action.action}

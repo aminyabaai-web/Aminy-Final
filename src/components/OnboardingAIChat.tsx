@@ -253,7 +253,7 @@ Generate a personalized summary for this parent.`,
               <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#6B9080]" />
             </div>
             <div>
-              <p className="font-medium text-sm sm:text-base text-[#1B2733]">Aminy</p>
+              <p className="font-medium text-sm sm:text-base text-[#132F43]">Aminy</p>
               <p className="text-sm text-[#5A6B7A]">Getting to know you</p>
             </div>
           </div>

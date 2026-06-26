@@ -234,7 +234,7 @@ export function OutcomesDashboardWidget({
               <Activity className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-sm font-semibold text-[#1B2733]">Progress will feel clearer soon</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">Progress will feel clearer soon</h3>
               <p className="mt-1 text-sm leading-6 text-[#5A6B7A]">
                 Once you log a few moments, complete a screening, or start a goal, Aminy will turn
                 those patterns into a calmer weekly view instead of pushing noisy charts too early.
@@ -286,7 +286,7 @@ export function OutcomesDashboardWidget({
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                  <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                     {metric.value}
                   </span>
                   <span className="text-sm text-[#5A6B7A]">{metric.unit}</span>

@@ -298,7 +298,7 @@ export function AskAminyWithBrain({
                       "max-w-[85%] rounded-2xl px-4 py-3 text-sm",
                       message.role === 'user'
                         ? "bg-accent text-white"
-                        : "bg-[#F0EDE8] text-[#1B2733]"
+                        : "bg-[#F0EDE8] text-[#132F43]"
                     )}
                   >
                     {message.contextAware && (

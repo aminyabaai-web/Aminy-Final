@@ -170,7 +170,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #4795AE 100%)' }}>
               <Building2 className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-lg font-semibold text-[#1B2733] mb-2">No organization yet</h1>
+            <h1 className="text-lg font-semibold text-[#132F43] mb-2">No organization yet</h1>
             <p className="text-sm text-[#5A6B7A] mb-4">Organizations are for solo BCBAs, clinics, schools, agencies, and AACT-style pilots — from a single seat to enterprise, under one billing account.</p>
             <p className="text-sm text-slate-400">Contact <a href="mailto:hello@aminy.ai" className="text-[#6B9080] underline">hello@aminy.ai</a> to set up your organization.</p>
           </div>
@@ -267,7 +267,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             </div>
           ) : (
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-[#1B2733]">{usage.seatsUsed}</span>
+              <span className="text-3xl font-bold text-[#132F43]">{usage.seatsUsed}</span>
               <span className="text-sm text-[#5A6B7A]">of {usage.seatsAllocated} used</span>
             </div>
           )}
@@ -296,7 +296,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-[#1B2733]">EVV sync</p>
+              <p className="text-sm text-[#132F43]">EVV sync</p>
               <p className="text-sm text-slate-400">Electronic Visit Verification (DCI)</p>
             </div>
             <span className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A]">
@@ -305,11 +305,11 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-[#1B2733]">BCBA supervision</p>
+              <p className="text-sm text-[#132F43]">BCBA supervision</p>
               <p className="text-sm text-slate-400">Hours logged this billing period</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-semibold text-[#1B2733]">{usage?.seatsUsed ?? 0} <span className="text-sm font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
+              <p className="text-sm font-semibold text-[#132F43]">{usage?.seatsUsed ?? 0} <span className="text-sm font-normal text-slate-400">/ {(usage?.seatsAllocated ?? 0) * 2}h</span></p>
               <p className="text-sm text-slate-400">2h/seat/mo</p>
             </div>
           </div>
@@ -375,7 +375,7 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
             <div key={member.id} className="px-4 py-3 flex items-center gap-3">
               <RoleIcon role={member.role} />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1B2733] truncate">{member.email}</p>
+                <p className="text-sm font-medium text-[#132F43] truncate">{member.email}</p>
                 <p className="text-sm text-[#5A6B7A] capitalize">{member.role} · {member.status}</p>
               </div>
               {member.role !== 'owner' && (
@@ -395,10 +395,10 @@ function Row({ label, value, subtitle }: { label: string; value: string; subtitl
   return (
     <div className="flex items-baseline justify-between">
       <div>
-        <p className="text-sm text-[#1B2733]">{label}</p>
+        <p className="text-sm text-[#132F43]">{label}</p>
         {subtitle && <p className="text-sm text-slate-400">{subtitle}</p>}
       </div>
-      <p className="text-sm font-semibold text-[#1B2733]">{value}</p>
+      <p className="text-sm font-semibold text-[#132F43]">{value}</p>
     </div>
   );
 }

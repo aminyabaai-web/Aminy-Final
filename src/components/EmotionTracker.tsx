@@ -170,7 +170,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
               {currentFeeling === 4 && '🙂'}
               {currentFeeling === 5 && '😊'}
             </div>
-            <p className="text-lg font-semibold text-[#1B2733]">
+            <p className="text-lg font-semibold text-[#132F43]">
               {FEELING_LABELS[currentFeeling - 1]}
             </p>
           </div>
@@ -244,7 +244,7 @@ export function EmotionTracker({ userId }: { userId: string }) {
                 className="p-4 bg-accent/5 border border-accent/20 rounded-lg"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-[#1B2733]">{insight.week}</span>
+                  <span className="font-semibold text-[#132F43]">{insight.week}</span>
                   <span className="text-sm text-accent">
                     {FEELING_LABELS[insight.feeling - 1]}
                   </span>

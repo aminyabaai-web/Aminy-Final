@@ -119,7 +119,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
             </button>
           )}
           <Gift className="h-6 w-6 text-[#2A7D99]" />
-          <h1 className="text-lg font-bold text-[#1B2733]">Invite & Earn</h1>
+          <h1 className="text-lg font-bold text-[#132F43]">Invite & Earn</h1>
         </div>
       </div>
 
@@ -229,7 +229,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
 
         {/* Milestones */}
         <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
-          <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Reward Milestones</h3>
+          <h3 className="text-sm font-semibold text-[#132F43] mb-3">Reward Milestones</h3>
           <div className="space-y-3">
             {milestones.map((m, i) => (
               <div key={i} className="flex items-center gap-3">
@@ -239,7 +239,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                   {m.reached ? <Check className="h-4 w-4" /> : m.count}
                 </div>
                 <div className="flex-1">
-                  <p className={`text-sm font-medium ${m.reached ? 'text-[#1B2733]' : 'text-[#5A6B7A]'}`}>
+                  <p className={`text-sm font-medium ${m.reached ? 'text-[#132F43]' : 'text-[#5A6B7A]'}`}>
                     {m.count} referral{m.count > 1 ? 's' : ''}
                   </p>
                   <p className="text-sm text-[#5A6B7A]">{m.reward}</p>
@@ -255,7 +255,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
         {/* Rewards Earned */}
         {referral.rewardsEarned.length > 0 && (
           <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
-            <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Your Rewards</h3>
+            <h3 className="text-sm font-semibold text-[#132F43] mb-3">Your Rewards</h3>
             <div className="space-y-2">
               {referral.rewardsEarned.map(reward => (
                 <div key={reward.id} className="flex items-center justify-between rounded-lg bg-amber-50 p-3">
@@ -289,15 +289,15 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
     <div className="rounded-xl border border-[#E8E4DF] bg-white p-4">
       <div className="flex items-center gap-4 text-center">
         <div className="flex-1">
-          <p className="text-xl font-bold text-[#1B2733]">{proof.totalFamilies.toLocaleString()}</p>
+          <p className="text-xl font-bold text-[#132F43]">{proof.totalFamilies.toLocaleString()}</p>
           <p className="text-sm text-[#5A6B7A]">Families</p>
         </div>
         <div className="flex-1">
-          <p className="text-xl font-bold text-[#1B2733]">{proof.totalProviders.toLocaleString()}</p>
+          <p className="text-xl font-bold text-[#132F43]">{proof.totalProviders.toLocaleString()}</p>
           <p className="text-sm text-[#5A6B7A]">Providers</p>
         </div>
         <div className="flex-1">
-          <p className="text-xl font-bold text-[#1B2733]">{proof.totalSessions.toLocaleString()}</p>
+          <p className="text-xl font-bold text-[#132F43]">{proof.totalSessions.toLocaleString()}</p>
           <p className="text-sm text-[#5A6B7A]">Sessions</p>
         </div>
       </div>
@@ -342,7 +342,7 @@ export function AchievementCard({ achievement, onShare }: AchievementCardProps) 
             {achievement.icon}
           </div>
           <div>
-            <h3 className="text-sm font-bold text-[#1B2733]">{achievement.title}</h3>
+            <h3 className="text-sm font-bold text-[#132F43]">{achievement.title}</h3>
             <p className="text-sm text-[#5A6B7A]">{achievement.description}</p>
             <p className="mt-1 text-sm text-[#8A9BA8]">
               Earned {new Date(achievement.earnedAt).toLocaleDateString()}
@@ -388,7 +388,7 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
             </button>
           )}
           <Trophy className="h-6 w-6 text-amber-500" />
-          <h1 className="text-lg font-bold text-[#1B2733]">Community Challenges</h1>
+          <h1 className="text-lg font-bold text-[#132F43]">Community Challenges</h1>
         </div>
       </div>
 
@@ -412,7 +412,7 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                 <span className="text-sm text-[#8A9BA8]">{daysLeft}d left</span>
               </div>
 
-              <h3 className="text-sm font-bold text-[#1B2733]">{challenge.title}</h3>
+              <h3 className="text-sm font-bold text-[#132F43]">{challenge.title}</h3>
               <p className="mt-1 text-sm text-[#5A6B7A]">{challenge.description}</p>
 
               {/* Progress Bar */}
@@ -483,7 +483,7 @@ export function ShareGateOverlay({ gate, onShare }: ShareGateProps) {
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#2A7D99]/30 bg-[#2A7D99]/10/50 p-6 text-center">
       <Heart className="h-10 w-10 text-primary mb-3" />
-      <h3 className="text-sm font-bold text-[#1B2733]">{gate.feature}</h3>
+      <h3 className="text-sm font-bold text-[#132F43]">{gate.feature}</h3>
       <p className="mt-1 text-sm text-[#5A6B7A]">{gate.description}</p>
       <button
         onClick={onShare}

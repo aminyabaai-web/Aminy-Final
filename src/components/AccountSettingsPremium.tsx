@@ -362,8 +362,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     <Icon size={18} color={color} />
                 </div>
                 <div className="text-left">
-                    <h3 className="text-[15px] font-medium text-[#1B2733]/90">{title}</h3>
-                    <p className="text-[13px] text-[#1B2733]/45 mt-0.5">{subtitle}</p>
+                    <h3 className="text-[15px] font-medium text-[#132F43]/90">{title}</h3>
+                    <p className="text-[13px] text-[#132F43]/45 mt-0.5">{subtitle}</p>
                 </div>
             </div>
             <ChevronRight size={18} color="rgba(17, 24, 39, 0.3)" style={{
@@ -387,7 +387,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                         </button>
                     )}
                     <div>
-                        <h1 className="text-[20px] font-semibold text-[#1B2733]/90 tracking-[-0.01em]">Account</h1>
+                        <h1 className="text-[20px] font-semibold text-[#132F43]/90 tracking-[-0.01em]">Account</h1>
                     </div>
                 </div>
             </div>
@@ -402,7 +402,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                         </div>
                         <div>
                             <div className="flex items-center gap-2 mb-1">
-                                <h2 className="text-[17px] font-semibold text-[#1B2733]/90">
+                                <h2 className="text-[17px] font-semibold text-[#132F43]/90">
                                     {subscription.tier.charAt(0).toUpperCase() + subscription.tier.slice(1)} Plan
                                 </h2>
                                 <span className={`px-2 py-0.5 rounded-lg text-xs font-medium ${
@@ -414,7 +414,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                 </span>
                             </div>
                             {subscription.currentPeriodEnd && !isNaN(new Date(subscription.currentPeriodEnd).getTime()) && (
-                                <p className="text-[13px] text-[#1B2733]/45">
+                                <p className="text-[13px] text-[#132F43]/45">
                                     {subscription.cancelAtPeriodEnd ? 'Cancels on' : 'Renews on'} {new Date(subscription.currentPeriodEnd).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                                 </p>
                             )}
@@ -422,7 +422,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     </div>
                     <button
                         onClick={() => onNavigate?.('paywall')}
-                        className="px-4 py-2 rounded-[12px] border border-gray-900/10 bg-white text-[13px] font-medium text-[#1B2733]/80 cursor-pointer"
+                        className="px-4 py-2 rounded-[12px] border border-gray-900/10 bg-white text-[13px] font-medium text-[#132F43]/80 cursor-pointer"
                     >
                         Manage
                     </button>
@@ -451,8 +451,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                     {/* HIPAA Notice */}
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className="text-sm font-medium text-[#1B2733]/90">HIPAA Data Privacy</p>
-                                            <p className="text-[13px] text-[#1B2733]/50 mt-0.5">Your data is encrypted and handled under our HIPAA-conscious privacy program.</p>
+                                            <p className="text-sm font-medium text-[#132F43]/90">HIPAA Data Privacy</p>
+                                            <p className="text-[13px] text-[#132F43]/50 mt-0.5">Your data is encrypted and handled under our HIPAA-conscious privacy program.</p>
                                         </div>
                                         <span className="px-2.5 py-1 rounded-lg text-sm font-medium bg-primary/10 text-[#6B9080] flex items-center gap-1">
                                             <Check size={12} /> Active
@@ -462,12 +462,12 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                     {/* BAA Document */}
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className="text-sm font-medium text-[#1B2733]/90">Business Associate Agreement</p>
-                                            <p className="text-[13px] text-[#1B2733]/50 mt-0.5">For clinical providers & agencies.</p>
+                                            <p className="text-sm font-medium text-[#132F43]/90">Business Associate Agreement</p>
+                                            <p className="text-[13px] text-[#132F43]/50 mt-0.5">For clinical providers & agencies.</p>
                                         </div>
                                         <button
                                             onClick={() => toast.info('Business Associate Agreements are issued during provider/agency onboarding. Contact support@aminy.ai to request a copy.')}
-                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-[#1B2733]/80 cursor-pointer flex items-center gap-1"
+                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-[#132F43]/80 cursor-pointer flex items-center gap-1"
                                         >
                                             <FileSignature size={14} /> View BAA
                                         </button>
@@ -476,12 +476,12 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                     {/* Export */}
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className="text-sm font-medium text-[#1B2733]/90">Export Account Data</p>
-                                            <p className="text-[13px] text-[#1B2733]/50 mt-0.5">Download a complete JSON archive of all logs.</p>
+                                            <p className="text-sm font-medium text-[#132F43]/90">Export Account Data</p>
+                                            <p className="text-[13px] text-[#132F43]/50 mt-0.5">Download a complete JSON archive of all logs.</p>
                                         </div>
                                         <button
                                             onClick={() => setShowExportDialog(true)}
-                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-[#1B2733]/80 cursor-pointer flex items-center gap-1"
+                                            className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium text-[#132F43]/80 cursor-pointer flex items-center gap-1"
                                         >
                                             <Download size={14} /> Request
                                         </button>
@@ -518,8 +518,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                         <div className="flex items-center gap-3">
                                             <Smartphone size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p className="text-sm font-medium text-[#1B2733]/90">Push Notifications</p>
-                                                <p className="text-[13px] text-[#1B2733]/50">Instant alerts on your device</p>
+                                                <p className="text-sm font-medium text-[#132F43]/90">Push Notifications</p>
+                                                <p className="text-[13px] text-[#132F43]/50">Instant alerts on your device</p>
                                             </div>
                                         </div>
                                         <Switch checked={notifications.pushEnabled} onCheckedChange={(checked) => saveNotificationSettings({ ...notifications, pushEnabled: checked })} />
@@ -529,8 +529,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                         <div className="flex items-center gap-3">
                                             <Mail size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p className="text-sm font-medium text-[#1B2733]/90">Weekly AI Digest</p>
-                                                <p className="text-[13px] text-[#1B2733]/50">Summaries of your child's progress</p>
+                                                <p className="text-sm font-medium text-[#132F43]/90">Weekly AI Digest</p>
+                                                <p className="text-[13px] text-[#132F43]/50">Summaries of your child's progress</p>
                                             </div>
                                         </div>
                                         <Switch checked={notifications.emailDigest} onCheckedChange={(checked) => saveNotificationSettings({ ...notifications, emailDigest: checked })} />
@@ -561,8 +561,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                         <div className="flex items-center gap-3">
                                             <Key size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p className="text-sm font-medium text-[#1B2733]/90">Change Password</p>
-                                                <p className="text-[13px] text-[#1B2733]/50">Update your login credentials</p>
+                                                <p className="text-sm font-medium text-[#132F43]/90">Change Password</p>
+                                                <p className="text-[13px] text-[#132F43]/50">Update your login credentials</p>
                                             </div>
                                         </div>
                                         <button onClick={() => setShowPasswordDialog(true)} className="px-3 py-1.5 rounded-lg border border-gray-900/10 bg-white text-[12px] font-medium cursor-pointer">Update</button>
@@ -572,8 +572,8 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                                         <div className="flex items-center gap-3">
                                             <Fingerprint size={16} color="rgba(17, 24, 39, 0.4)" />
                                             <div>
-                                                <p className="text-sm font-medium text-[#1B2733]/90">Two-Factor Authentication (2FA)</p>
-                                                <p className="text-[13px] text-[#1B2733]/50">{mfaEnabled ? 'Extra security active' : 'Add extra security'}</p>
+                                                <p className="text-sm font-medium text-[#132F43]/90">Two-Factor Authentication (2FA)</p>
+                                                <p className="text-[13px] text-[#132F43]/50">{mfaEnabled ? 'Extra security active' : 'Add extra security'}</p>
                                             </div>
                                         </div>
                                         <Switch checked={mfaEnabled} onCheckedChange={(checked) => checked ? toast.info('Authenticator-app two-factor setup is coming soon. We will notify you when it is available.') : handleDisableMfa()} />
@@ -592,7 +592,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     >
                         <div className="flex items-center gap-3">
                             <HelpCircle size={18} color="rgba(17, 24, 39, 0.6)" />
-                            <span className="text-[15px] font-medium text-[#1B2733]/90">Contact Support</span>
+                            <span className="text-[15px] font-medium text-[#132F43]/90">Contact Support</span>
                         </div>
                         <ExternalLink size={16} color="rgba(17, 24, 39, 0.3)" />
                     </button>
@@ -609,7 +609,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                 </div>
 
                 {/* App Version — kept consistent with SettingsScreen; derived from VITE_APP_VERSION (same source as production.config / env-config), default 1.0.0 */}
-                <p className="text-center text-[12px] text-[#1B2733]/30 mt-2">
+                <p className="text-center text-[12px] text-[#132F43]/30 mt-2">
                     Aminy v{import.meta.env.VITE_APP_VERSION || '1.0.0'} • Made with care
                 </p>
 
@@ -626,10 +626,10 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                         {isExporting ? (
                             <div className="text-center">
                                 <Loader2 className="animate-spin mx-auto mb-4" color="#5a7380" />
-                                <p className="text-sm text-[#1B2733]/60">Generating your archive... {exportProgress}%</p>
+                                <p className="text-sm text-[#132F43]/60">Generating your archive... {exportProgress}%</p>
                             </div>
                         ) : (
-                            <p className="text-sm text-[#1B2733]/70">This will export all child profiles, chat logs, forms, and vault documents.</p>
+                            <p className="text-sm text-[#132F43]/70">This will export all child profiles, chat logs, forms, and vault documents.</p>
                         )}
                     </div>
                     <DialogFooter>

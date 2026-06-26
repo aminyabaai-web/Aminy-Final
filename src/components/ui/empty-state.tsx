@@ -80,7 +80,7 @@ export function EmptyState({
       {/* Headline */}
       <h3
         className={cn(
-          'font-semibold text-[#1B2733] dark:text-white mb-2',
+          'font-semibold text-[#132F43] dark:text-white mb-2',
           isCompact ? 'text-base' : 'text-lg'
         )}
       >

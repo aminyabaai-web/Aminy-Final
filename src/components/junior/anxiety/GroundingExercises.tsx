@@ -157,7 +157,7 @@ function FiveSenses({ onFinish }: { onFinish: () => void }) {
         className="space-y-3"
       >
         <div className={`${step.color}`}>{step.icon}</div>
-        <div className="text-lg font-bold text-[#1B2733]">
+        <div className="text-lg font-bold text-[#132F43]">
           Name <span className="text-2xl">{step.count}</span> {step.prompt}
         </div>
         <div className="text-xs text-slate-400 uppercase tracking-wider">{step.sense}</div>
@@ -630,7 +630,7 @@ function CompletionOverlay({ onDismiss }: { onDismiss: () => void }) {
         >
           🌟
         </motion.div>
-        <h3 className="text-lg font-bold text-[#1B2733] mb-1">Great job!</h3>
+        <h3 className="text-lg font-bold text-[#132F43] mb-1">Great job!</h3>
         <p className="text-sm text-[#5A6B7A] mb-5">You did amazing grounding yourself.</p>
         <button
           type="button"
@@ -670,7 +670,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
             <ArrowLeft className="h-5 w-5" />
             {activeExercise ? 'Exercises' : 'Back'}
           </button>
-          <div className="text-sm font-semibold text-[#1B2733]">
+          <div className="text-sm font-semibold text-[#132F43]">
             {activeExercise ? EXERCISES.find(e => e.id === activeExercise)?.label : 'Grounding Exercises'}
           </div>
           <div className="w-10" />
@@ -682,7 +682,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
           <>
             <div className="mb-5 text-center">
               <div className="text-2xl mb-1">🌿</div>
-              <h2 className="text-lg font-semibold text-[#1B2733]">Feel grounded</h2>
+              <h2 className="text-lg font-semibold text-[#132F43]">Feel grounded</h2>
               <p className="text-sm text-[#5A6B7A] mt-1">Pick an exercise to calm your body and mind.</p>
             </div>
 
@@ -697,7 +697,7 @@ export default function GroundingExercises({ onBack, childName = 'Buddy' }: Grou
                 >
                   <div className="text-2xl">{ex.emoji}</div>
                   <div className="flex-1">
-                    <div className="text-sm font-semibold text-[#1B2733]">{ex.label}</div>
+                    <div className="text-sm font-semibold text-[#132F43]">{ex.label}</div>
                     <div className="text-sm text-[#5A6B7A]">{ex.description}</div>
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />

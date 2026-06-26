@@ -104,11 +104,11 @@ function ClaimCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-sm font-semibold text-[#1B2733]">{item.clientName}</p>
+                <p className="text-sm font-semibold text-[#132F43]">{item.clientName}</p>
                 <p className="text-sm text-[#5A6B7A]">{item.dateOfService} · {PLACE_OF_SERVICE_LABELS[item.placeOfService] ?? item.placeOfService}</p>
               </div>
               <div className="text-right shrink-0">
-                <p className="text-sm font-bold text-[#1B2733]">${item.billedAmount.toFixed(2)}</p>
+                <p className="text-sm font-bold text-[#132F43]">${item.billedAmount.toFixed(2)}</p>
                 <p className="text-sm text-[#8A9BA8]">{item.units} units</p>
               </div>
             </div>
@@ -382,7 +382,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         >
           <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-sm font-semibold text-[#1B2733]">{selectedIds.size} claims selected</p>
+              <p className="text-sm font-semibold text-[#132F43]">{selectedIds.size} claims selected</p>
               <p className="text-sm text-[#5A6B7A]">Total billed: ${totalSelected.toFixed(2)}</p>
             </div>
             <button
@@ -411,10 +411,10 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
             >
-              <h2 className="text-base font-bold text-[#1B2733] mb-1">Confirm Batch Submission</h2>
+              <h2 className="text-base font-bold text-[#132F43] mb-1">Confirm Batch Submission</h2>
               <p className="text-sm text-[#5A6B7A] mb-4">
                 You're submitting {selectedIds.size} claims totaling{' '}
-                <strong className="text-[#1B2733]">${totalSelected.toFixed(2)}</strong> to{' '}
+                <strong className="text-[#132F43]">${totalSelected.toFixed(2)}</strong> to{' '}
                 {Array.from(new Set(selectedClaims.map(c => c.payerName))).join(', ')}.
               </p>
 
@@ -422,7 +422,7 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
                 {selectedClaims.map(c => (
                   <div key={c.id} className="flex items-center justify-between text-sm">
                     <span className="text-[#5A6B7A]">{c.clientName} · {c.cptCode}</span>
-                    <span className="font-medium text-[#1B2733]">${c.billedAmount.toFixed(2)}</span>
+                    <span className="font-medium text-[#132F43]">${c.billedAmount.toFixed(2)}</span>
                   </div>
                 ))}
               </div>

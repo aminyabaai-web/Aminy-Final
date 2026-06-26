@@ -235,7 +235,7 @@ export function EmptyState({
         </div>
       )}
 
-      <h3 className={`font-semibold text-[#1B2733] dark:text-white ${sizeClasses.title} mb-2`}>
+      <h3 className={`font-semibold text-[#132F43] dark:text-white ${sizeClasses.title} mb-2`}>
         {title}
       </h3>
 

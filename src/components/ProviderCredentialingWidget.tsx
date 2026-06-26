@@ -148,7 +148,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           }
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-[#1B2733]">
+          <p className="text-sm font-semibold text-[#132F43]">
             {status.overallStatus === 'verified'
               ? 'Fully verified — accepting patients'
               : status.overallStatus === 'failed'
@@ -191,7 +191,7 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
                 <Icon className="w-4 h-4 text-[#5A6B7A]" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#1B2733]">{meta.label}</p>
+                <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
                 <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
                   <p className="text-sm text-red-600 mt-0.5">{row.check.failureReason}</p>

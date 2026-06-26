@@ -258,7 +258,7 @@ function DateSelector({
     <div className="relative">
       {/* Month Header */}
       <div className="flex items-center justify-between mb-3">
-        <h4 className="font-medium text-[#1B2733]">
+        <h4 className="font-medium text-[#132F43]">
           {formatMonthYear(selectedDate)}
         </h4>
         <div className="flex items-center gap-1">
@@ -305,7 +305,7 @@ function DateSelector({
               <div className={`text-sm font-medium ${isSelected ? 'text-teal-100' : 'text-[#5A6B7A]'}`}>
                 {isToday(day.date) ? 'Today' : isTomorrow(day.date) ? 'Tmrw' : formatDayOfWeek(day.date)}
               </div>
-              <div className={`text-lg font-bold ${isSelected ? 'text-white' : hasAvailability ? 'text-[#1B2733]' : 'text-[#8A9BA8]'}`}>
+              <div className={`text-lg font-bold ${isSelected ? 'text-white' : hasAvailability ? 'text-[#132F43]' : 'text-[#8A9BA8]'}`}>
                 {formatDayNumber(day.date)}
               </div>
               {hasAvailability && (
@@ -390,7 +390,7 @@ export function AvailabilityPicker({
             <Calendar className="w-5 h-5 text-[#6B9080]" />
           </div>
           <div>
-            <h3 className="font-semibold text-[#1B2733]">Select a Time</h3>
+            <h3 className="font-semibold text-[#132F43]">Select a Time</h3>
             <p className="text-sm text-[#5A6B7A]">
               {sessionDuration} min {sessionType}
               {providerName && ` with ${providerName}`}

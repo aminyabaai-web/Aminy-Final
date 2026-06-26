@@ -176,7 +176,7 @@ export function StressCheckIn({
                 <Moon className="w-6 h-6 text-[#6B9080]" />
               )}
               <div>
-                <h2 className="text-lg font-semibold text-[#1B2733]">
+                <h2 className="text-lg font-semibold text-[#132F43]">
                   {context === 'morning' ? 'Good Morning' : 'Evening Reflection'}
                 </h2>
                 <p className="text-sm text-[#5A6B7A]">

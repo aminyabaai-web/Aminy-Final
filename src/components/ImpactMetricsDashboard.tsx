@@ -276,7 +276,7 @@ export function ImpactMetricsDashboard({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white flex items-center gap-2">
             <Target className="w-7 h-7 text-[#6B9080]" />
             Impact Dashboard
           </h1>
@@ -314,7 +314,7 @@ export function ImpactMetricsDashboard({
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               activeView === view.id
                 ? 'border-[#6B9080] text-[#6B9080] dark:text-primary'
-                : 'border-transparent text-[#5A6B7A] dark:text-[#8A9BA8] hover:text-[#1B2733] dark:hover:text-white'
+                : 'border-transparent text-[#5A6B7A] dark:text-[#8A9BA8] hover:text-[#132F43] dark:hover:text-white'
             }`}
           >
             {view.label}
@@ -394,7 +394,7 @@ export function ImpactMetricsDashboard({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
             {/* Beneficiary Demographics */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-[#6B9080]" />
                 Beneficiary Breakdown
               </h3>
@@ -429,7 +429,7 @@ export function ImpactMetricsDashboard({
 
             {/* Outcomes */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-[#6B9080]" />
                 Outcome Metrics
               </h3>
@@ -467,31 +467,31 @@ export function ImpactMetricsDashboard({
 
             {/* Operations */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-[#6B9080]" />
                 Operational Metrics
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.sessionsDelivered.toLocaleString()}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Delivered</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.aiInteractions.toLocaleString()}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">AI Interactions</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.averageSessionLength}min
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Avg Session</div>
                 </div>
                 <div className="text-center p-3 bg-[#FAF7F2] dark:bg-slate-900 rounded-lg">
-                  <div className="text-xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-xl font-bold text-[#132F43] dark:text-white">
                     {metrics.operations.contentEngagement}%
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Engagement</div>
@@ -501,7 +501,7 @@ export function ImpactMetricsDashboard({
 
             {/* Financial Sustainability */}
             <Card className="p-5 dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
                 <DollarSign className="w-5 h-5 text-[#6B9080]" />
                 Unit Economics
               </h3>
@@ -539,7 +539,7 @@ export function ImpactMetricsDashboard({
 
       {activeView === 'toc' && (
         <Card className="p-6 dark:bg-slate-800 dark:border-slate-700">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 sm:mb-6 text-lg">
+          <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 sm:mb-6 text-lg">
             Theory of Change
           </h3>
           <div className="overflow-x-auto">
@@ -625,7 +625,7 @@ export function ImpactMetricsDashboard({
 
       {activeView === 'iris' && (
         <Card className="p-6 dark:bg-slate-800 dark:border-slate-700">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 text-lg flex items-center gap-2">
+          <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 text-lg flex items-center gap-2">
             <Globe className="w-5 h-5 text-[#6B9080]" />
             IRIS+ Catalog Alignment
           </h3>
@@ -644,7 +644,7 @@ export function ImpactMetricsDashboard({
                     <Badge variant="outline" className="text-xs font-mono">
                       {metric.code}
                     </Badge>
-                    <span className="font-medium text-[#1B2733] dark:text-white">{metric.name}</span>
+                    <span className="font-medium text-[#132F43] dark:text-white">{metric.name}</span>
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
                     Category: {metric.category}

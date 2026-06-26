@@ -201,7 +201,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
           </button>
         )}
         <div className="flex-1">
-          <h1 className="font-semibold text-[#1B2733] text-base">Session Note Approval</h1>
+          <h1 className="font-semibold text-[#132F43] text-base">Session Note Approval</h1>
           <p className="text-sm text-[#5A6B7A]">{sessionData.providerName} sent you a note to review</p>
         </div>
         <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
@@ -224,7 +224,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 </span>
               </div>
               <div>
-                <p className="font-medium text-[#1B2733] text-sm">{sessionData.providerName}</p>
+                <p className="font-medium text-[#132F43] text-sm">{sessionData.providerName}</p>
                 <p className="text-sm text-[#5A6B7A]">
                   Session on {new Date(sessionData.dateOfService).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} · {sessionData.durationMinutes} min
                 </p>
@@ -242,7 +242,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 <div className="w-8 h-8 rounded-xl bg-[#EEF4F8] flex items-center justify-center">
                   <Star className="w-4 h-4 text-blue-500" />
                 </div>
-                <h2 className="font-semibold text-[#1B2733]">What happened today</h2>
+                <h2 className="font-semibold text-[#132F43]">What happened today</h2>
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed">{summary.whatHappenedToday}</p>
             </div>
@@ -253,7 +253,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center">
                   <BookOpen className="w-4 h-4 text-emerald-500" />
                 </div>
-                <h2 className="font-semibold text-[#1B2733]">What we're working on</h2>
+                <h2 className="font-semibold text-[#132F43]">What we're working on</h2>
               </div>
               <div className="space-y-2">
                 {sessionData.goals.map((g) => (
@@ -284,7 +284,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                 <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center">
                   <Home className="w-4 h-4 text-purple-500" />
                 </div>
-                <h2 className="font-semibold text-[#1B2733]">Your homework this week</h2>
+                <h2 className="font-semibold text-[#132F43]">Your homework this week</h2>
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed">{summary.yourHomeworkThisWeek}</p>
             </div>
@@ -320,7 +320,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
             className="p-4 space-y-5 max-w-lg mx-auto"
           >
             <div>
-              <h2 className="text-lg font-bold text-[#1B2733]">Add your signature</h2>
+              <h2 className="text-lg font-bold text-[#132F43]">Add your signature</h2>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 Your signature confirms you've reviewed this session note. This is kept on file for insurance purposes.
               </p>
@@ -356,7 +356,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
                   value={typedName}
                   onChange={(e) => setTypedName(e.target.value)}
                   placeholder="Jane Smith"
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl text-base text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent font-serif italic"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl text-base text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent font-serif italic"
                   style={{ fontFamily: 'Georgia, serif' }}
                 />
               </div>
@@ -404,7 +404,7 @@ export function SessionApproval({ draft, onApproved, onAskQuestion, onBack }: Se
               <CheckCircle className="w-10 h-10 text-white" />
             </motion.div>
 
-            <h2 className="text-2xl font-bold text-[#1B2733] mb-2">Note approved!</h2>
+            <h2 className="text-2xl font-bold text-[#132F43] mb-2">Note approved!</h2>
             <p className="text-[#5A6B7A] text-sm leading-relaxed mb-8">
               {sessionData.providerName} will be notified. The note is now on file and your insurance claim will be processed.
             </p>

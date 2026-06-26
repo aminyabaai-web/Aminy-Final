@@ -244,7 +244,7 @@ function ChatMessage({
       <div
         className={`max-w-[85%] rounded-2xl px-4 py-3 ${
           isAI
-            ? 'border border-[#E8E4DF] bg-white/95 text-[#1B2733] shadow-sm'
+            ? 'border border-[#E8E4DF] bg-white/95 text-[#132F43] shadow-sm'
             : 'bg-primary text-white shadow-sm'
         }`}
       >
@@ -310,7 +310,7 @@ function ProviderCardMini({
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="font-semibold text-[#1B2733] truncate">{provider.name}</p>
+          <p className="font-semibold text-[#132F43] truncate">{provider.name}</p>
           {provider.isAssigned && (
             <span className="text-xs bg-[#2A7D99]/10 text-[#2A7D99] px-2 py-0.5 rounded-full">
               Your Provider
@@ -677,7 +677,7 @@ export function ConversationalBooking({
             <div className="flex flex-wrap items-center gap-3">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#2A7D99]">Guided booking</p>
-                <h2 className="text-lg font-semibold text-[#1B2733] sm:text-xl">Book calm, supportive care</h2>
+                <h2 className="text-lg font-semibold text-[#132F43] sm:text-xl">Book calm, supportive care</h2>
                 <p className="mt-1 text-sm text-[#5A6B7A]">
                   We will keep this simple for {childName} and only show providers available in supported states.
                 </p>

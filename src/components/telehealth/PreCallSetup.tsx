@@ -412,7 +412,7 @@ export function PreCallSetup({
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-700 px-4 py-4">
         <div className="max-w-2xl mx-auto">
-          <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+          <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
             Pre-Call Setup
           </h1>
           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-1">
@@ -474,7 +474,7 @@ export function PreCallSetup({
           {/* Device Status */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden">
             <div className="p-4 border-b border-[#E8E4DF] dark:border-slate-700 flex items-center justify-between">
-              <h2 className="font-semibold text-[#1B2733] dark:text-white">Device Check</h2>
+              <h2 className="font-semibold text-[#132F43] dark:text-white">Device Check</h2>
               <button
                 onClick={() => setShowDeviceSettings(!showDeviceSettings)}
                 className="flex items-center text-sm text-[#6B9080] dark:text-primary"
@@ -497,7 +497,7 @@ export function PreCallSetup({
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Camera</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Camera</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.camera, 'Camera')}
                     </p>
@@ -517,7 +517,7 @@ export function PreCallSetup({
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Microphone</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Microphone</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.microphone, 'Microphone')}
                     </p>
@@ -537,7 +537,7 @@ export function PreCallSetup({
                     }`} />
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Speaker</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Speaker</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.speaker, 'Speaker')}
                     </p>
@@ -574,7 +574,7 @@ export function PreCallSetup({
                     )}
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white">Network</p>
+                    <p className="font-medium text-[#132F43] dark:text-white">Network</p>
                     <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                       {getStatusText(status.network, 'Network')}
                     </p>
@@ -619,7 +619,7 @@ export function PreCallSetup({
                     value={selectedDevices.camera}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, camera: e.target.value }))}
                     aria-label="Select camera"
-                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                   >
                     {devices.cameras.map(device => (
                       <option key={device.deviceId} value={device.deviceId}>
@@ -638,7 +638,7 @@ export function PreCallSetup({
                     value={selectedDevices.microphone}
                     onChange={(e) => setSelectedDevices(prev => ({ ...prev, microphone: e.target.value }))}
                     aria-label="Select microphone"
-                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                    className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                   >
                     {devices.microphones.map(device => (
                       <option key={device.deviceId} value={device.deviceId}>
@@ -658,7 +658,7 @@ export function PreCallSetup({
                       value={selectedDevices.speaker}
                       onChange={(e) => setSelectedDevices(prev => ({ ...prev, speaker: e.target.value }))}
                       aria-label="Select speaker"
-                      className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#1B2733] dark:text-white"
+                      className="w-full p-2 rounded-lg border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 text-[#132F43] dark:text-white"
                     >
                       {devices.speakers.map(device => (
                         <option key={device.deviceId} value={device.deviceId}>

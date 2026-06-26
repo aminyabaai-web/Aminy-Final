@@ -79,7 +79,7 @@ export function FeedbackButton() {
           <div className="bg-white rounded-t-2xl sm:rounded-2xl p-6 w-full sm:max-w-md mx-0 sm:mx-4 shadow-2xl animate-in slide-in-from-bottom-4 sm:slide-in-from-bottom-0 duration-300">
             {/* Header */}
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-[#1B2733]">Share Feedback</h3>
+              <h3 className="text-lg font-semibold text-[#132F43]">Share Feedback</h3>
               <button
                 onClick={handleClose}
                 aria-label="Close feedback"

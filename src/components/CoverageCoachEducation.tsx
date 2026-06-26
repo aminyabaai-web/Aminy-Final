@@ -131,7 +131,7 @@ export function CoverageCoachEducation({ onBack, userState = 'AZ' }: CoverageCoa
               </Button>
             ) : null}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-[#1B2733]">
+              <h1 className="text-lg font-semibold text-[#132F43]">
                 {activeSection === 'overview' ? 'Insurance Education' : sections.find(s => s.id === activeSection)?.label}
               </h1>
             </div>
@@ -155,7 +155,7 @@ function OverviewSection({ sections, onSelectSection }: { sections: { id: string
         <div className="flex items-start gap-3">
           <HelpCircle className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
           <div>
-            <h2 className="font-semibold text-[#1B2733] mb-1">Your Insurance Navigation Guide</h2>
+            <h2 className="font-semibold text-[#132F43] mb-1">Your Insurance Navigation Guide</h2>
             <p className="text-sm text-[#5A6B7A]">
               Everything you need to understand your coverage, file appeals, and navigate the system — all in plain language.
             </p>
@@ -175,7 +175,7 @@ function OverviewSection({ sections, onSelectSection }: { sections: { id: string
                 <section.icon className="w-6 h-6" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-[#1B2733]">{section.label}</h3>
+                <h3 className="font-medium text-[#132F43]">{section.label}</h3>
                 <p className="text-sm text-[#5A6B7A]">
                   {section.id === 'questions' && 'Questions to ask your insurance company'}
                   {section.id === 'cpt-codes' && 'What ABA billing codes mean'}
@@ -252,7 +252,7 @@ function InsuranceQuestionsSection({ onCopy, copiedItem }: { onCopy: (text: stri
         <Card key={idx} className="p-3 sm:p-4">
           <div className="flex items-center gap-2 mb-4">
             <category.icon className="w-5 h-5 text-accent" />
-            <h3 className="font-semibold text-[#1B2733]">{category.category}</h3>
+            <h3 className="font-semibold text-[#132F43]">{category.category}</h3>
           </div>
           <div className="space-y-3">
             {category.items.map((question, qIdx) => {
@@ -346,7 +346,7 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
                 <span className="text-lg font-bold text-purple-700">{cpt.code}</span>
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-[#1B2733]">{cpt.name}</h3>
+                <h3 className="font-semibold text-[#132F43]">{cpt.name}</h3>
                 <p className="text-sm text-[#5A6B7A] mt-1">{cpt.description}</p>
               </div>
               {isExpanded ? (
@@ -363,11 +363,11 @@ function CPTCodesSection({ expandedItems, toggleExpand }: { expandedItems: Set<s
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-3">
                     <div className="bg-[#FAF7F2] p-3 rounded-lg">
                       <p className="text-sm font-medium text-[#5A6B7A] mb-1">Who Provides</p>
-                      <p className="text-sm text-[#1B2733]">{cpt.whoProvides}</p>
+                      <p className="text-sm text-[#132F43]">{cpt.whoProvides}</p>
                     </div>
                     <div className="bg-[#FAF7F2] p-3 rounded-lg">
                       <p className="text-sm font-medium text-[#5A6B7A] mb-1">Typical Amount</p>
-                      <p className="text-sm text-[#1B2733]">{cpt.typical}</p>
+                      <p className="text-sm text-[#132F43]">{cpt.typical}</p>
                     </div>
                   </div>
                 </div>
@@ -444,7 +444,7 @@ Enclosures: [List all attachments]`;
 
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-[#1B2733]">Insurance Appeal Letter Template</h3>
+          <h3 className="font-semibold text-[#132F43]">Insurance Appeal Letter Template</h3>
           <Button
             onClick={() => onCopy(appealTemplate, 'appeal-template')}
             size="sm"
@@ -472,7 +472,7 @@ Enclosures: [List all attachments]`;
       </Card>
 
       <Card className="p-3 sm:p-4">
-        <h3 className="font-semibold text-[#1B2733] mb-3">Appeal Tips</h3>
+        <h3 className="font-semibold text-[#132F43] mb-3">Appeal Tips</h3>
         <ul className="space-y-2">
           {[
             'File your appeal within the required timeframe (usually 60-180 days)',
@@ -554,7 +554,7 @@ function SingleCaseAgreementSection() {
                 {idx + 1}
               </span>
               <div className="flex-1">
-                <h3 className="font-semibold text-[#1B2733] mb-1">{step.title}</h3>
+                <h3 className="font-semibold text-[#132F43] mb-1">{step.title}</h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">{step.description}</p>
                 <ul className="space-y-2">
                   {step.tips.map((tip, tipIdx) => (
@@ -612,7 +612,7 @@ function MedicaidWaiverSection() {
 
       {waiverTypes.map((waiver, idx) => (
         <Card key={idx} className="p-3 sm:p-4">
-          <h3 className="font-semibold text-[#1B2733] mb-2">{waiver.name}</h3>
+          <h3 className="font-semibold text-[#132F43] mb-2">{waiver.name}</h3>
           <p className="text-sm text-[#5A6B7A] mb-3">{waiver.description}</p>
 
           <div className="space-y-3">
@@ -720,7 +720,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
 
           <div className="bg-white p-3 rounded-lg">
             <p className="text-sm font-medium text-[#5A6B7A] mb-1">Contact</p>
-            <p className="text-sm text-[#1B2733] font-mono">{currentStateData.contact}</p>
+            <p className="text-sm text-[#132F43] font-mono">{currentStateData.contact}</p>
           </div>
 
           <p className="text-sm text-indigo-800">{currentStateData.notes}</p>
@@ -728,7 +728,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
       </Card>
 
       {/* Other States */}
-      <h3 className="font-semibold text-[#1B2733] mt-4 sm:mt-6 mb-3">Other States</h3>
+      <h3 className="font-semibold text-[#132F43] mt-4 sm:mt-6 mb-3">Other States</h3>
       {Object.entries(stateWaivers).filter(([state]) => state !== userState).map(([state, data]) => {
         const isExpanded = expandedItems.has(state);
         return (
@@ -739,7 +739,7 @@ function StateWaiversSection({ userState, expandedItems, toggleExpand }: { userS
             >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-slate-400" />
-                <span className="font-medium text-[#1B2733]">{state}</span>
+                <span className="font-medium text-[#132F43]">{state}</span>
                 <Badge variant="outline" className="text-sm">{data.waivers.length} waivers</Badge>
               </div>
               {isExpanded ? <ChevronUp className="w-5 h-5 text-slate-400" /> : <ChevronDown className="w-5 h-5 text-slate-400" />}

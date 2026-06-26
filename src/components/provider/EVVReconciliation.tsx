@@ -150,7 +150,7 @@ export default function EVVReconciliation({
             </button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733]">EVV Reconciliation</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">EVV Reconciliation</h1>
             <p className="text-sm text-[#5A6B7A]">Electronic Visit Verification</p>
           </div>
           <button
@@ -182,14 +182,14 @@ export default function EVVReconciliation({
               >
                 <div className="flex items-center gap-2 mb-1">
                   <div className={`h-2.5 w-2.5 rounded-full ${colors.dot}`} />
-                  <span className="text-sm font-semibold text-[#1B2733]">{cycle.label}</span>
+                  <span className="text-sm font-semibold text-[#132F43]">{cycle.label}</span>
                 </div>
                 <p className="text-sm text-[#5A6B7A]">
                   {new Date(cycle.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} -{' '}
                   {new Date(cycle.endDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1">
-                  <span className="text-lg font-bold text-[#1B2733]">{cycle.cleanRate}%</span>
+                  <span className="text-lg font-bold text-[#132F43]">{cycle.cleanRate}%</span>
                   <span className="text-sm text-[#5A6B7A]">clean</span>
                 </div>
                 <p className="text-sm text-[#5A6B7A]">
@@ -205,17 +205,17 @@ export default function EVVReconciliation({
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <CheckCircle className="mx-auto h-5 w-5 text-green-500 mb-1" />
-              <p className="text-lg font-bold text-[#1B2733]">{currentCycle.reconciled}</p>
+              <p className="text-lg font-bold text-[#132F43]">{currentCycle.reconciled}</p>
               <p className="text-sm text-[#5A6B7A]">Verified</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <AlertTriangle className="mx-auto h-5 w-5 text-amber-500 mb-1" />
-              <p className="text-lg font-bold text-[#1B2733]">{discrepancyCount}</p>
+              <p className="text-lg font-bold text-[#132F43]">{discrepancyCount}</p>
               <p className="text-sm text-[#5A6B7A]">Discrepancies</p>
             </div>
             <div className="rounded-xl border border-[#E8E4DF] bg-white p-3 text-center">
               <Clock className="mx-auto h-5 w-5 text-blue-500 mb-1" />
-              <p className="text-lg font-bold text-[#1B2733]">
+              <p className="text-lg font-bold text-[#132F43]">
                 {currentCycle.totalVisits - currentCycle.reconciled - discrepancyCount}
               </p>
               <p className="text-sm text-[#5A6B7A]">Pending</p>
@@ -280,7 +280,7 @@ export default function EVVReconciliation({
                           {visit.reconciliationStatus === 'discrepancy' && <XCircle className="h-4 w-4 text-red-500" />}
                           {visit.reconciliationStatus === 'pending' && <Clock className="h-4 w-4 text-[#8A9BA8]" />}
                           {visit.reconciliationStatus === 'resolved' && <CheckCircle className="h-4 w-4 text-blue-500" />}
-                          <span className="text-sm font-semibold text-[#1B2733] truncate">{visit.clientName}</span>
+                          <span className="text-sm font-semibold text-[#132F43] truncate">{visit.clientName}</span>
                         </div>
                         <p className="text-sm text-[#5A6B7A] mt-0.5">
                           {new Date(visit.serviceDate).toLocaleDateString()} | {visit.serviceCode} | {visit.providerName}
@@ -313,11 +313,11 @@ export default function EVVReconciliation({
                           <div className="grid grid-cols-2 gap-3">
                             <div>
                               <p className="text-sm font-medium text-[#5A6B7A]">Scheduled</p>
-                              <p className="text-sm text-[#1B2733]">{visit.scheduledStart} - {visit.scheduledEnd}</p>
+                              <p className="text-sm text-[#132F43]">{visit.scheduledStart} - {visit.scheduledEnd}</p>
                             </div>
                             <div>
                               <p className="text-sm font-medium text-[#5A6B7A]">Actual</p>
-                              <p className="text-sm text-[#1B2733]">
+                              <p className="text-sm text-[#132F43]">
                                 {visit.actualStart ?? '—'} - {visit.actualEnd ?? '—'}
                               </p>
                             </div>

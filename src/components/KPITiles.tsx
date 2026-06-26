@@ -183,7 +183,7 @@ function KPITile({
 
       <div className="mb-2">
         <div className="flex items-baseline gap-2">
-          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-[#1B2733] tracking-tight`}>
+          <span className={`${compact ? 'text-2xl' : 'text-3xl'} font-bold text-[#132F43] tracking-tight`}>
             {kpi.label}
           </span>
           {kpi.change !== 0 && (
@@ -235,12 +235,12 @@ function KPIExplainerModal({
 
         <div className="space-y-4">
           <div>
-            <h4 className="text-sm font-medium text-[#1B2733] mb-2">What this measures:</h4>
+            <h4 className="text-sm font-medium text-[#132F43] mb-2">What this measures:</h4>
             <p className="text-sm text-[#3A4A57]">{explanation.description}</p>
           </div>
 
           <div>
-            <h4 className="text-sm font-medium text-[#1B2733] mb-2">How to improve:</h4>
+            <h4 className="text-sm font-medium text-[#132F43] mb-2">How to improve:</h4>
             <ul className="space-y-1">
               {explanation.howToImprove.map((tip: string, idx: number) => (
                 <li key={idx} className="text-sm text-[#3A4A57] flex items-start gap-2">
@@ -286,7 +286,7 @@ export function KPISummaryForReport({ userId, childId, timeframe = '30d' }: {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-medium text-[#1B2733] mb-3">Key Progress Indicators ({timeframe})</h3>
+      <h3 className="text-sm font-medium text-[#132F43] mb-3">Key Progress Indicators ({timeframe})</h3>
 
       <div className="grid grid-cols-2 gap-3">
         <SummaryMetric

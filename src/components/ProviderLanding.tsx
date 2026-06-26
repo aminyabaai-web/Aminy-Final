@@ -65,9 +65,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
   // are only shown in demo walkthroughs. Real users never see fabricated endorsements.
   const showSampleTestimonials = isDemoMode();
   return (
-    <div className="min-h-screen min-h-[100dvh] bg-white dark:bg-slate-900">
+    <div className="min-h-screen min-h-[100dvh] bg-app dark:bg-slate-900">
       {/* Header — compact on mobile */}
-      <header className="bg-white dark:bg-slate-900 sticky top-0 z-50" style={{ borderBottom: '1px solid #e5e5e5' }}>
+      <header className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50" style={{ borderBottom: '1px solid #e5e5e5' }}>
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
           <button onClick={onBack} className="flex items-center gap-2 flex-shrink-0">
             <CompassIcon size={32} />
@@ -92,7 +92,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-3 sm:mb-4 text-sm sm:text-sm">
                 For ABA & Mental Health Providers
               </Badge>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1B2733] dark:text-white leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#132F43] dark:text-white leading-tight">
                 Grow Your Practice,
                 <br />
                 <span className="text-[#6B9080]">Empower Families</span>
@@ -142,7 +142,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                     SM
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1B2733] dark:text-white text-sm sm:text-base">Dr. Sarah Mitchell</h3>
+                    <h3 className="font-semibold text-[#132F43] dark:text-white text-sm sm:text-base">Dr. Sarah Mitchell</h3>
                     <p className="text-[#5A6B7A] dark:text-slate-400 text-sm sm:text-sm">BCBA, LBA</p>
                     <div className="flex items-center gap-1 mt-1">
                       <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 fill-amber-500" />
@@ -153,15 +153,15 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 </div>
                 <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                    <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">42</p>
+                    <p className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">42</p>
                     <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">Active Clients</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                    <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">$8.2k</p>
+                    <p className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">$8.2k</p>
                     <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">This Month</p>
                   </div>
                   <div className="text-center p-2 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg">
-                    <p className="text-xl sm:text-2xl font-bold text-[#1B2733] dark:text-white">98%</p>
+                    <p className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">98%</p>
                     <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">Satisfaction</p>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               We're Looking For
             </h2>
             <p className="text-sm sm:text-base text-neutral-600 dark:text-slate-400 mt-2 sm:mt-3">
@@ -205,7 +205,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#6B9080]/10 dark:bg-[#6B9080]/15 flex items-center justify-center mx-auto mb-2 sm:mb-3">
                   <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-[#6B9080]" />
                 </div>
-                <h3 className="font-semibold text-[#1B2733] dark:text-white text-sm sm:text-base">{title}</h3>
+                <h3 className="font-semibold text-[#132F43] dark:text-white text-sm sm:text-base">{title}</h3>
                 <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400 mt-1 hidden sm:block">{desc}</p>
               </Card>
             ))}
@@ -217,7 +217,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <section className="py-12 sm:py-16 lg:py-24 bg-neutral-50 dark:bg-slate-800">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               Everything You Need to Grow
             </h2>
             <p className="text-sm sm:text-base text-neutral-600 dark:text-slate-400 mt-2 sm:mt-3 max-w-2xl mx-auto">
@@ -270,7 +270,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 }`}>
                   <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${highlight ? 'text-white' : 'text-neutral-600 dark:text-slate-400'}`} />
                 </div>
-                <h3 className="font-semibold text-[#1B2733] dark:text-white mb-1 sm:mb-2 text-sm sm:text-base">{title}</h3>
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-1 sm:mb-2 text-sm sm:text-base">{title}</h3>
                 <p className="text-neutral-600 dark:text-slate-400 text-sm sm:text-sm">{desc}</p>
               </Card>
             ))}
@@ -282,7 +282,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               Getting Started is Easy
             </h2>
           </div>
@@ -303,7 +303,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-[#6B9080] bg-[#6B9080]/10 dark:bg-[#6B9080]/15 rounded-full px-2 py-0.5">Step {index + 1}</span>
                   </div>
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white mt-1">{title}</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white mt-1">{title}</h3>
                   <p className="text-neutral-600 dark:text-slate-400 text-sm mt-0.5">{desc}</p>
                 </div>
               </div>
@@ -323,7 +323,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                   <div className="w-16 h-16 rounded-full bg-[#6B9080]/10 dark:bg-[#6B9080]/15 flex items-center justify-center mx-auto mb-3">
                     <Icon className="w-8 h-8 text-[#6B9080]" />
                   </div>
-                  <h3 className="font-semibold text-[#1B2733] dark:text-white mb-1">{title}</h3>
+                  <h3 className="font-semibold text-[#132F43] dark:text-white mb-1">{title}</h3>
                   <p className="text-neutral-600 dark:text-slate-400 text-sm">{desc}</p>
                 </div>
                 {index < arr.length - 1 && (
@@ -369,17 +369,17 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
           </div>
 
           <Card className="p-4 sm:p-6 bg-white dark:bg-slate-800 max-w-lg mx-auto">
-            <h3 className="font-semibold text-[#1B2733] dark:text-white mb-3 sm:mb-4 text-center text-sm sm:text-base">
+            <h3 className="font-semibold text-[#132F43] dark:text-white mb-3 sm:mb-4 text-center text-sm sm:text-base">
               BCBA Earnings Example
             </h3>
             <div className="space-y-2 sm:space-y-3">
               <div className="flex justify-between p-2.5 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg text-sm">
                 <span className="text-neutral-600 dark:text-slate-400">20 consults/wk @ $65</span>
-                <span className="font-semibold text-[#1B2733] dark:text-white">$1,300</span>
+                <span className="font-semibold text-[#132F43] dark:text-white">$1,300</span>
               </div>
               <div className="flex justify-between p-2.5 sm:p-3 bg-neutral-50 dark:bg-slate-700 rounded-lg text-sm">
                 <span className="text-neutral-600 dark:text-slate-400">10 assessments/wk @ $95</span>
-                <span className="font-semibold text-[#1B2733] dark:text-white">$950</span>
+                <span className="font-semibold text-[#132F43] dark:text-white">$950</span>
               </div>
               <div className="flex justify-between p-3 sm:p-4 bg-[#6B9080]/10 dark:bg-[#6B9080]/15 rounded-lg border-2 border-[#6B9080]/20 dark:border-teal-700">
                 <span className="font-semibold text-[#6B9080] dark:text-[#7BA7BC] text-sm sm:text-base">Weekly Earnings</span>
@@ -401,7 +401,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <section className="py-12 sm:py-16 lg:py-24 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-8 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               What Providers Say
             </h2>
           </div>
@@ -441,7 +441,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                     {testimonial.name.split(' ').map(n => n[0]).join('')}
                   </div>
                   <div>
-                    <p className="font-medium text-[#1B2733] dark:text-white text-sm">{testimonial.name}</p>
+                    <p className="font-medium text-[#132F43] dark:text-white text-sm">{testimonial.name}</p>
                     <p className="text-sm sm:text-sm text-[#5A6B7A] dark:text-slate-400">{testimonial.role}</p>
                   </div>
                 </div>

@@ -165,7 +165,7 @@ export function EnhancedReferralDashboard({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-[#1B2733] flex items-center gap-2">
+          <h2 className="text-xl font-bold text-[#132F43] flex items-center gap-2">
             <Gift className="w-6 h-6 text-[#6B9080]" />
             Refer & Earn
           </h2>
@@ -244,7 +244,7 @@ export function EnhancedReferralDashboard({
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#1B2733] text-sm">Pre-written Messages</h3>
+                <h3 className="font-semibold text-[#132F43] text-sm">Pre-written Messages</h3>
                 <button onClick={() => setShowShareOptions(false)} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
                   <X className="w-4 h-4" />
                 </button>
@@ -328,7 +328,7 @@ export function EnhancedReferralDashboard({
             onClick={() => setActiveTab(tab)}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-white text-[#1B2733] shadow-sm'
+                ? 'bg-white text-[#132F43] shadow-sm'
                 : 'text-[#5A6B7A] hover:text-[#3A4A57]'
             }`}
           >
@@ -351,29 +351,29 @@ export function EnhancedReferralDashboard({
             <div className="grid grid-cols-2 gap-3">
               <Card className="p-3 text-center">
                 <Users className="w-5 h-5 mx-auto mb-1 text-blue-500" />
-                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalShares}</div>
+                <div className="text-2xl font-bold text-[#132F43]">{stats.totalShares}</div>
                 <div className="text-sm text-[#5A6B7A]">Shared</div>
               </Card>
               <Card className="p-3 text-center">
                 <TrendingUp className="w-5 h-5 mx-auto mb-1 text-primary" />
-                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalSignups}</div>
+                <div className="text-2xl font-bold text-[#132F43]">{stats.totalSignups}</div>
                 <div className="text-sm text-[#5A6B7A]">Signed Up</div>
               </Card>
               <Card className="p-3 text-center">
                 <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-                <div className="text-2xl font-bold text-[#1B2733]">{stats.totalConverted}</div>
+                <div className="text-2xl font-bold text-[#132F43]">{stats.totalConverted}</div>
                 <div className="text-sm text-[#5A6B7A]">Converted</div>
               </Card>
               <Card className="p-3 text-center">
                 <Gift className="w-5 h-5 mx-auto mb-1 text-purple-500" />
-                <div className="text-2xl font-bold text-[#1B2733]">{stats.rewardsEarned.length}</div>
+                <div className="text-2xl font-bold text-[#132F43]">{stats.rewardsEarned.length}</div>
                 <div className="text-sm text-[#5A6B7A]">Rewards Earned</div>
               </Card>
             </div>
 
             {/* Conversion Funnel */}
             <Card className="p-4">
-              <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-[#6B9080]" />
                 Your Funnel
               </h3>
@@ -433,7 +433,7 @@ export function EnhancedReferralDashboard({
             {/* Pending Rewards */}
             {stats.pendingRewards.length > 0 && (
               <Card className="p-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+                <h3 className="font-semibold text-[#132F43] mb-3 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-amber-500" />
                   Pending Rewards
                 </h3>
@@ -492,7 +492,7 @@ export function EnhancedReferralDashboard({
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-sm text-[#1B2733]">{chain.refereeName}</p>
+                      <p className="font-medium text-sm text-[#132F43]">{chain.refereeName}</p>
                       <p className="text-sm text-[#5A6B7A]">
                         Joined {new Date(chain.createdAt).toLocaleDateString()}
                       </p>
@@ -540,7 +540,7 @@ export function EnhancedReferralDashboard({
             className="space-y-3"
           >
             <Card className="p-4">
-              <h3 className="font-semibold text-[#1B2733] mb-1 flex items-center gap-2">
+              <h3 className="font-semibold text-[#132F43] mb-1 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-500" />
                 Top Referrers This Month
               </h3>
@@ -577,7 +577,7 @@ export function EnhancedReferralDashboard({
                         ) : entry.rank}
                       </div>
                       <div className="flex-1">
-                        <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-[#6B9080]' : 'text-[#1B2733]'}`}>
+                        <p className={`text-sm font-medium ${entry.isCurrentUser ? 'text-[#6B9080]' : 'text-[#132F43]'}`}>
                           {entry.name}
                           {entry.isCurrentUser && <span className="text-[#6B9080] ml-1">(You)</span>}
                         </p>

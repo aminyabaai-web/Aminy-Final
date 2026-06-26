@@ -215,7 +215,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
           </div>
 
           <div className="text-left">
-            <div className={`text-sm ${accent ? 'text-teal-800 dark:text-teal-200 font-medium' : 'text-[#1B2733] dark:text-slate-100'}`}>{item.label}</div>
+            <div className={`text-sm ${accent ? 'text-teal-800 dark:text-teal-200 font-medium' : 'text-[#132F43] dark:text-slate-100'}`}>{item.label}</div>
             <div className={`text-sm ${accent ? 'text-teal-600 dark:text-teal-400' : 'text-[#5A6B7A] dark:text-slate-400'}`}>{item.sublabel}</div>
           </div>
         </div>
@@ -231,7 +231,7 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
       <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] dark:border-slate-600">
         <div className="px-4 py-6 sm:px-6">
           <div className="max-w-2xl mx-auto">
-            <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Settings</h1>
+            <h1 className="text-xl text-[#132F43] dark:text-slate-100">Settings</h1>
             <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">Manage your account and preferences</p>
           </div>
         </div>

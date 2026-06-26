@@ -162,7 +162,7 @@ function ServiceCard({ service }: { service: ServiceCode }) {
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <p className="font-semibold text-[#1B2733] text-sm leading-snug">{service.name}</p>
+              <p className="font-semibold text-[#132F43] text-sm leading-snug">{service.name}</p>
               <span className={`text-xs px-2 py-0.5 rounded-full mt-1 inline-block ${CATEGORY_COLORS[service.category]}`}>
                 {CATEGORY_LABELS[service.category]}
               </span>
@@ -253,7 +253,7 @@ export default function MedicaidServiceCatalog({ onBack }: MedicaidServiceCatalo
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">Medicaid Service Catalog</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">Medicaid Service Catalog</h1>
             <p className="text-sm text-[#5A6B7A]">HCBS / DDD Waiver — Arizona (Acumen/DCI compatible)</p>
           </div>
         </div>

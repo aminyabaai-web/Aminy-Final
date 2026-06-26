@@ -345,7 +345,7 @@ export function ABCTrendAnalysis({
     return (
       <Card className="p-8 text-center">
         <BarChart3 className="w-12 h-12 text-[#8A9BA8] mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">No Data to Analyze</h3>
+        <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">No Data to Analyze</h3>
         <p className="text-[#5A6B7A] dark:text-slate-400">
           Start logging ABC entries to see trend analysis and insights.
         </p>
@@ -384,7 +384,7 @@ export function ABCTrendAnalysis({
       <Card className="p-6 bg-gradient-to-br from-[#FAF7F2] to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border-[#6B9080]/20 dark:border-[#6B9080]/30">
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white mb-1">
+            <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white mb-1">
               Trend Analysis for {childName}
             </h2>
             <p className="text-[#5A6B7A] dark:text-slate-400">
@@ -403,7 +403,7 @@ export function ABCTrendAnalysis({
             {getTrendIcon(analytics.frequencyTrend.trend)}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <span className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               {analytics.frequencyTrend.current}
             </span>
             <span className={`text-sm ${getTrendColor(analytics.frequencyTrend.trend)}`}>
@@ -421,7 +421,7 @@ export function ABCTrendAnalysis({
             {getTrendIcon(analytics.intensityTrend.trend)}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-bold text-[#1B2733] dark:text-white">
+            <span className="text-2xl sm:text-3xl font-bold text-[#132F43] dark:text-white">
               {analytics.intensityTrend.current}
             </span>
             <span className={`text-sm ${getTrendColor(analytics.intensityTrend.trend)}`}>
@@ -436,7 +436,7 @@ export function ABCTrendAnalysis({
 
       {/* Peak Times */}
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
           <Clock className="w-5 h-5 text-[#6B9080]" />
           Peak Times
         </h3>
@@ -501,7 +501,7 @@ export function ABCTrendAnalysis({
 
       {/* Function Analysis */}
       <Card className="p-6 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/20 dark:to-purple-900/20 border-violet-200 dark:border-violet-800">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
           <Target className="w-5 h-5 text-violet-600" />
           Likely Function of Behavior
         </h3>
@@ -528,7 +528,7 @@ export function ABCTrendAnalysis({
               key={f.consequence}
               className="p-3 bg-white dark:bg-slate-800 rounded-lg text-center"
             >
-              <div className="text-lg font-semibold text-[#1B2733] dark:text-white">{f.count}</div>
+              <div className="text-lg font-semibold text-[#132F43] dark:text-white">{f.count}</div>
               <div className="text-sm text-[#5A6B7A] dark:text-slate-400">{f.label}</div>
               <div className="text-sm text-violet-600 dark:text-violet-400">{f.percentage.toFixed(0)}%</div>
             </div>
@@ -538,7 +538,7 @@ export function ABCTrendAnalysis({
 
       {/* Top Patterns (Correlations) */}
       <Card className="p-4 sm:p-5 md:p-6">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
           <Brain className="w-5 h-5 text-[#6B9080]" />
           Pattern Analysis & Insights
         </h3>
@@ -588,7 +588,7 @@ export function ABCTrendAnalysis({
       <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
         {/* Top Antecedents */}
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Top Triggers</h3>
+          <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">Top Triggers</h3>
           <div className="space-y-3">
             {analytics.topAntecedents.map((a, i) => (
               <div key={a.antecedent} className="flex items-center gap-3">
@@ -616,7 +616,7 @@ export function ABCTrendAnalysis({
 
         {/* Top Behaviors */}
         <Card className="p-4 sm:p-5 md:p-6">
-          <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4">Top Behaviors</h3>
+          <h3 className="font-semibold text-[#132F43] dark:text-white mb-4">Top Behaviors</h3>
           <div className="space-y-3">
             {analytics.topBehaviors.map((b, i) => (
               <div key={b.behavior} className="flex items-center gap-3">
@@ -645,7 +645,7 @@ export function ABCTrendAnalysis({
 
       {/* Clinical Recommendations */}
       <Card className="p-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+        <h3 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
           <CheckCircle className="w-5 h-5 text-green-600" />
           Recommendations Based on Data
         </h3>
@@ -657,7 +657,7 @@ export function ABCTrendAnalysis({
                 <span className="text-green-600 text-sm font-bold">1</span>
               </div>
               <div>
-                <p className="font-medium text-[#1B2733] dark:text-white">Teach Break Requesting</p>
+                <p className="font-medium text-[#132F43] dark:text-white">Teach Break Requesting</p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Since escape appears to be a primary function, teach {childName} to appropriately request breaks using words, signs, or a break card.
                 </p>
@@ -671,7 +671,7 @@ export function ABCTrendAnalysis({
                 <span className="text-green-600 text-sm font-bold">1</span>
               </div>
               <div>
-                <p className="font-medium text-[#1B2733] dark:text-white">Increase Positive Attention</p>
+                <p className="font-medium text-[#132F43] dark:text-white">Increase Positive Attention</p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Provide frequent positive attention when {childName} is engaged appropriately. Consider planned ignoring for minor attention-seeking behaviors.
                 </p>
@@ -685,7 +685,7 @@ export function ABCTrendAnalysis({
                 <span className="text-green-600 text-sm font-bold">2</span>
               </div>
               <div>
-                <p className="font-medium text-[#1B2733] dark:text-white">Address Peak Times</p>
+                <p className="font-medium text-[#132F43] dark:text-white">Address Peak Times</p>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Incidents peak at {analytics.peakHours.map(h => h.label).join(', ')}. Consider environmental modifications, increased support, or schedule adjustments during these times.
                 </p>
@@ -698,7 +698,7 @@ export function ABCTrendAnalysis({
               <span className="text-green-600 text-sm font-bold">3</span>
             </div>
             <div>
-              <p className="font-medium text-[#1B2733] dark:text-white">Continue Data Collection</p>
+              <p className="font-medium text-[#132F43] dark:text-white">Continue Data Collection</p>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                 Keep collecting ABC data consistently. Share these trends with {childName}'s BCBA or behavior specialist for a comprehensive functional behavior assessment.
               </p>

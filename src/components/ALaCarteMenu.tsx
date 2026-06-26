@@ -117,7 +117,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">Book a Session</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">Book a Session</h2>
         <p className="text-[#5A6B7A] text-sm max-w-md mx-auto">
           Cash-pay telehealth sessions with verified behavioral health experts.
           All sessions include a summary added to your care plan.
@@ -161,7 +161,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-1">
                     <div>
-                      <h3 className="font-semibold text-[#1B2733]">{session.title}</h3>
+                      <h3 className="font-semibold text-[#132F43]">{session.title}</h3>
                       <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                         <Clock className="w-3 h-3" />
                         <span>{session.duration} minutes</span>
@@ -171,7 +171,7 @@ export function ALaCarteMenu({ onBookSession, userTier = 'free', isProUser = fal
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-bold text-[#1B2733]">
+                      <div className="text-xl font-bold text-[#132F43]">
                         ${displayPrice}
                       </div>
                       {isProUser && (

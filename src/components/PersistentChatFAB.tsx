@@ -173,7 +173,7 @@ export function PersistentChatFAB({ userData, isAuthenticated = false }: Persist
                 <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mb-4">
                   <MessageCircle className="w-8 h-8 text-accent" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+                <h3 className="text-lg font-semibold text-[#132F43] mb-2">
                   Sign in to chat with Aminy
                 </h3>
                 <p className="text-sm text-[#5A6B7A] mb-4 sm:mb-6 max-w-sm">

@@ -146,7 +146,7 @@ export function ReportContent({ onSubmit, onCancel }: ReportContentProps) {
       >
         <div className="flex items-center gap-2 mb-4">
           <Flag className="h-5 w-5 text-red-500" />
-          <h2 className="text-lg font-bold text-[#1B2733]">Report Content</h2>
+          <h2 className="text-lg font-bold text-[#132F43]">Report Content</h2>
         </div>
 
         <p className="text-sm text-[#5A6B7A] mb-4">
@@ -258,7 +258,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
           )}
           <Shield className="h-6 w-6 text-[#2A7D99]" />
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733]">Moderation Queue</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">Moderation Queue</h1>
             <p className="text-sm text-[#5A6B7A]">{pendingCount} pending reports</p>
           </div>
         </div>
@@ -336,7 +336,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
                         {FLAG_REASON_LABELS[report.reason]}
                       </span>
                     </div>
-                    <p className="text-sm text-[#1B2733] line-clamp-2">&quot;{report.contentPreview}&quot;</p>
+                    <p className="text-sm text-[#132F43] line-clamp-2">&quot;{report.contentPreview}&quot;</p>
                     <div className="mt-2 flex items-center gap-3 text-sm text-[#5A6B7A]">
                       <span>By: {report.authorName}</span>
                       <span>Reported by: {report.reporterName}</span>
@@ -393,7 +393,7 @@ export function ModeratorQueue({ reports, onAction, onBack }: CommunityModeratio
               exit={{ y: 100 }}
               className="w-full max-w-md rounded-t-xl bg-white p-6 shadow-xl sm:rounded-xl"
             >
-              <h3 className="text-lg font-bold text-[#1B2733] mb-2">Review Report</h3>
+              <h3 className="text-lg font-bold text-[#132F43] mb-2">Review Report</h3>
               <p className="text-sm text-[#5A6B7A] mb-1">
                 <strong>Reason:</strong> {FLAG_REASON_LABELS[activeReport.reason]}
               </p>
@@ -493,7 +493,7 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <h1 className="text-xl font-bold text-[#1B2733]">Community Guidelines</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Community Guidelines</h1>
         </div>
       </div>
 
@@ -507,14 +507,14 @@ export function CommunityGuidelines({ onBack }: CommunityGuidelinesProps) {
           <div key={i} className="flex gap-3 rounded-xl border border-[#E8E4DF] p-4">
             <div className="mt-0.5">{g.icon}</div>
             <div>
-              <h3 className="text-sm font-semibold text-[#1B2733]">{g.title}</h3>
+              <h3 className="text-sm font-semibold text-[#132F43]">{g.title}</h3>
               <p className="mt-1 text-sm text-[#5A6B7A]">{g.body}</p>
             </div>
           </div>
         ))}
 
         <div className="mt-6 rounded-xl bg-[#FAF7F2] p-4">
-          <h3 className="text-sm font-semibold text-[#1B2733]">Enforcement</h3>
+          <h3 className="text-sm font-semibold text-[#132F43]">Enforcement</h3>
           <p className="mt-1 text-sm text-[#5A6B7A]">
             Content with {AUTO_HIDE_THRESHOLD}+ reports is automatically hidden pending review.
             Violations may result in warnings, content removal, temporary muting, or permanent bans

@@ -131,7 +131,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                 <div className="w-12 h-12 rounded-2xl bg-[#2A7D99]/10 flex items-center justify-center mb-4">
                   <Target className="w-6 h-6 text-[#2A7D99]" />
                 </div>
-                <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Set a starting point</h2>
+                <h2 className="text-lg font-semibold text-[#132F43] mb-2">Set a starting point</h2>
                 <p className="text-sm text-[#5A6B7A] mb-6">
                   5 quick questions helps your AI coach and any providers see where {name} is starting — so progress is real, not guessed.
                 </p>
@@ -151,7 +151,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
             {step === 'behavior' && (
               <motion.div key="behavior" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-xs font-medium text-[#2A7D99] uppercase tracking-wide mb-1">Question 1 of 5</p>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-3">
+                <h3 className="text-base font-semibold text-[#132F43] mb-3">
                   What behavior would you most like to improve for {name}?
                 </h3>
                 <textarea
@@ -159,7 +159,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                   onChange={(e) => setBehavior(e.target.value)}
                   placeholder="e.g., Meltdowns during transitions, hitting siblings, difficulty sleeping..."
                   rows={3}
-                  className="w-full text-sm border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:border-[#2A7D99] text-[#1B2733] placeholder:text-slate-300"
+                  className="w-full text-sm border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:border-[#2A7D99] text-[#132F43] placeholder:text-slate-300"
                 />
                 <button
                   onClick={() => { if (behavior.trim()) setStep('frequency'); }}
@@ -175,7 +175,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
             {step === 'frequency' && (
               <motion.div key="freq" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-xs font-medium text-[#2A7D99] uppercase tracking-wide mb-1">Question 2 of 5</p>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-3">
+                <h3 className="text-base font-semibold text-[#132F43] mb-3">
                   How often does this happen right now?
                 </h3>
                 <div className="space-y-2">
@@ -196,7 +196,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
             {step === 'intensity' && (
               <motion.div key="int" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-xs font-medium text-[#2A7D99] uppercase tracking-wide mb-1">Question 3 of 5</p>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-3">
+                <h3 className="text-base font-semibold text-[#132F43] mb-3">
                   How intense is it typically?
                 </h3>
                 <div className="flex gap-2 mb-2">
@@ -224,7 +224,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
             {step === 'trigger' && (
               <motion.div key="trig" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-xs font-medium text-[#2A7D99] uppercase tracking-wide mb-1">Question 4 of 5</p>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-3">
+                <h3 className="text-base font-semibold text-[#132F43] mb-3">
                   What usually triggers it?
                 </h3>
                 <div className="space-y-1.5">
@@ -245,7 +245,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
             {step === 'goal' && (
               <motion.div key="goal" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <p className="text-xs font-medium text-[#2A7D99] uppercase tracking-wide mb-1">Question 5 of 5</p>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-3">
+                <h3 className="text-base font-semibold text-[#132F43] mb-3">
                   What does success look like for {name} in 90 days?
                 </h3>
                 <textarea
@@ -253,7 +253,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                   onChange={(e) => setGoalText(e.target.value)}
                   placeholder="e.g., Meltdowns reduced to once a week, able to transition with just a 5-minute warning..."
                   rows={3}
-                  className="w-full text-sm border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:border-[#2A7D99] text-[#1B2733] placeholder:text-slate-300"
+                  className="w-full text-sm border border-[#E8E4DF] rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:border-[#2A7D99] text-[#132F43] placeholder:text-slate-300"
                 />
                 <button
                   onClick={handleGoalSubmit}
@@ -276,7 +276,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                 >
                   <Sparkles className="w-8 h-8 text-[#2A7D99]" />
                 </motion.div>
-                <h3 className="text-base font-semibold text-[#1B2733] mb-2">Baseline set.</h3>
+                <h3 className="text-base font-semibold text-[#132F43] mb-2">Baseline set.</h3>
                 <p className="text-sm text-[#5A6B7A]">
                   Your AI coach and any providers can now see real progress — not just guesses.
                 </p>

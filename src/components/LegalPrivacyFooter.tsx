@@ -63,7 +63,7 @@ export function LegalPrivacyFooter({
                 <Info className="w-5 h-5 text-amber-700" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733] mb-1">Important Disclosure</h3>
+                <h3 className="font-semibold text-[#132F43] mb-1">Important Disclosure</h3>
                 <p className="text-sm text-[#5A6B7A]">What Aminy is and is not</p>
               </div>
             </div>
@@ -95,7 +95,7 @@ export function LegalPrivacyFooter({
                 <Lock className="w-5 h-5 text-blue-700" />
               </div>
               <div>
-                <h3 className="font-semibold text-[#1B2733] mb-1">Your Privacy & Data</h3>
+                <h3 className="font-semibold text-[#132F43] mb-1">Your Privacy & Data</h3>
                 <p className="text-sm text-[#5A6B7A]">We take security seriously</p>
               </div>
             </div>

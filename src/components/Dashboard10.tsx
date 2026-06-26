@@ -611,7 +611,7 @@ export function Dashboard10({
       fireConfetti('goal');
       toast.success(triggered.message, {
         duration: 5000,
-        style: { background: '#F6FBFB', border: '1px solid #2A7D99', color: '#1B2733' },
+        style: { background: '#F6FBFB', border: '1px solid #2A7D99', color: '#132F43' },
       });
     }, 2500); // slight delay — feels like a surprise, not an alert
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -706,7 +706,7 @@ export function Dashboard10({
 <meta charset="UTF-8" />
 <title>Aminy Progress Report — ${childName}</title>
 <style>
-  body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #1B2733; }
+  body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #132F43; }
   h1 { color: #0D1B2A; font-size: 1.5rem; margin-bottom: 4px; }
   .subtitle { color: #5A6B7A; font-size: 0.9rem; margin-bottom: 32px; }
   h2 { font-size: 1rem; color: #2A7D99; margin-bottom: 8px; }
@@ -969,13 +969,13 @@ export function Dashboard10({
             <div className="mb-3 flex flex-wrap items-center gap-2">
               {aiMemorySync ? (
                 <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-slate-100">AI memory</span>
+                  <span className="font-medium text-[#132F43] dark:text-slate-100">AI memory</span>
                   <SyncStatusBadge status={aiMemorySync.status} />
                 </div>
               ) : null}
               {juniorProgressSync ? (
                 <div className="flex items-center gap-2 rounded-full border border-[#E8E4DF] dark:border-slate-600 bg-white/80 dark:bg-slate-700/80 px-3 py-1.5 text-sm text-[#5A6B7A] dark:text-slate-300 shadow-sm">
-                  <span className="font-medium text-[#1B2733] dark:text-slate-100">Ease progress</span>
+                  <span className="font-medium text-[#132F43] dark:text-slate-100">Ease progress</span>
                   <SyncStatusBadge status={juniorProgressSync.status} />
                 </div>
               ) : null}
@@ -1072,7 +1072,7 @@ export function Dashboard10({
                     )}
                   </span>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-[#1B2733] dark:text-slate-100">{event.title}</div>
+                    <div className="text-sm font-medium text-[#132F43] dark:text-slate-100">{event.title}</div>
                     <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{event.time}</div>
                   </div>
                 </button>
@@ -1280,7 +1280,7 @@ export function Dashboard10({
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">
+                <h3 className="text-sm font-semibold text-[#132F43] dark:text-slate-100">
                   Start gently today
                 </h3>
                 <p className="mt-1 text-sm leading-6 text-[#5A6B7A] dark:text-slate-300">
@@ -1401,7 +1401,7 @@ export function Dashboard10({
             data-plan-snapshot-id={activePlanSnapshotId || ''}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-[#1B2733] dark:text-white flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
+              <h2 className="font-semibold text-[#132F43] dark:text-white flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
                 {currentRoutine.icon}
                 {currentRoutine.label}
               </h2>
@@ -1429,7 +1429,7 @@ export function Dashboard10({
                 >
                   <span className="text-2xl">{getRoutineTaskIcon(task)}</span>
                   <div className="flex-1 text-left">
-                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#1B2733] dark:text-white'}`}>
+                    <div className={`font-medium ${task.completed ? 'text-green-700 dark:text-green-300' : 'text-[#132F43] dark:text-white'}`}>
                       {task.title}
                     </div>
                     <div className="text-sm text-[#5A6B7A] dark:text-slate-300">{task.description}</div>
@@ -1481,7 +1481,7 @@ export function Dashboard10({
           <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">4-week trend</p>
+                <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">4-week trend</p>
                 {trendData.length >= 2 && (
                   <p className="text-sm text-[#8A9BA8] dark:text-slate-400 mt-0.5">
                     {new Date(trendData[0].recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -1700,7 +1700,7 @@ export function Dashboard10({
             5. QUICK ACTION GRID (15%)
             ======================================== */}
         <section>
-          <h2 className="font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
+          <h2 className="font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
             <Zap className="w-5 h-5 text-[#2A7D99]" />
             Quick Actions
           </h2>
@@ -1819,7 +1819,7 @@ export function Dashboard10({
             }`}
           >
             {/* Chat Header - Branded with Full-Screen Toggle */}
-            <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#1B2733] to-[#2D3F4F] text-white">
+            <div className="flex-shrink-0 p-4 bg-gradient-to-r from-[#132F43] to-[#2D3F4F] text-white">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold flex items-center gap-2 text-lg">
                   <Sparkles className="w-5 h-5 text-[#E07A5F]" />

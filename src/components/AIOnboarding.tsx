@@ -219,7 +219,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-[#1B2733]">Setting up your profile</h1>
+              <h1 className="text-sm font-semibold text-[#132F43]">Setting up your profile</h1>
               <p className="text-sm text-[#8E9BAA]">
                 Step {Math.min(currentStep + 1, ONBOARDING_QUESTIONS.length)} of {ONBOARDING_QUESTIONS.length}
               </p>
@@ -282,7 +282,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'parent'
                     ? 'bg-primary text-white rounded-br-md'
-                    : 'bg-white text-[#1B2733] rounded-bl-md shadow-sm border border-[#F0EDE8]'
+                    : 'bg-white text-[#132F43] rounded-bl-md shadow-sm border border-[#F0EDE8]'
                 }`}
               >
                 {msg.text}
@@ -334,7 +334,7 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Type your answer..."
-                className="flex-1 bg-white border border-[#F0EDE8] rounded-xl px-4 py-3 text-sm text-[#1B2733] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/30 focus:border-[#2A7D99]"
+                className="flex-1 bg-white border border-[#F0EDE8] rounded-xl px-4 py-3 text-sm text-[#132F43] placeholder-[#8E9BAA] focus:outline-none focus:ring-2 focus:ring-[#2A7D99]/30 focus:border-[#2A7D99]"
                 disabled={isTyping}
                 autoFocus
               />

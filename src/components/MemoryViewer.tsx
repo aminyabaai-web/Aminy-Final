@@ -96,7 +96,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
             <Brain className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-bold text-[#1B2733]">What Aminy knows</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">What Aminy knows</h1>
             <p className="text-sm text-[#5A6B7A] mt-0.5">
               {childName ? `Everything Aminy remembers about ${childName}` : 'Your family memory'}
             </p>
@@ -115,7 +115,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
       <div className="px-4 mt-4">
         <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #57759012 100%)', border: '1px solid #2A7D9925' }}>
           <div className="flex items-baseline gap-2">
-            <p className="text-3xl font-bold text-[#1B2733]">{facts.length}</p>
+            <p className="text-3xl font-bold text-[#132F43]">{facts.length}</p>
             <p className="text-sm text-[#5A6B7A]">things remembered</p>
           </div>
           <p className="text-sm text-[#5A6B7A] mt-1">
@@ -170,7 +170,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-[#1B2733] leading-snug">{fact.content}</p>
+                    <p className="text-sm text-[#132F43] leading-snug">{fact.content}</p>
                     <div className="flex items-center gap-2 mt-1.5">
                       <span className="text-xs uppercase tracking-wide font-semibold" style={{ color: meta.color }}>
                         {meta.label}

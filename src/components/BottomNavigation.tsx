@@ -386,7 +386,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
 
               {/* Header */}
               <div className="flex items-center justify-between px-4 pb-3 border-b border-[#E8E4DF] dark:border-slate-700">
-                <h2 id="more-menu-title" className="text-lg font-semibold text-[#1B2733] dark:text-gray-100">More</h2>
+                <h2 id="more-menu-title" className="text-lg font-semibold text-[#132F43] dark:text-gray-100">More</h2>
                 <button
                   onClick={() => setShowMoreMenu(false)}
                   className="p-2 rounded-full hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
@@ -439,7 +439,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         </div>
 
                         <div className="text-left">
-                          <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#1B2733] dark:text-gray-100'}`}>
+                          <div className={`text-sm font-medium ${item.id === 'junior' ? 'text-purple-700 dark:text-purple-300' : isItemActive ? 'text-[#6B9080] dark:text-[#7BA7BC]' : 'text-[#132F43] dark:text-gray-100'}`}>
                             {item.label}
                           </div>
                           <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">{item.description}</div>

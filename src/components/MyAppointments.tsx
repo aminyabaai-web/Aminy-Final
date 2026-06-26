@@ -348,7 +348,7 @@ function AppointmentCard({
               {appointment.provider.name.split(' ').map(n => n[0]).join('')}
             </div>
             <div>
-              <h3 className="font-semibold text-[#1B2733]">{appointment.provider.name}</h3>
+              <h3 className="font-semibold text-[#132F43]">{appointment.provider.name}</h3>
               <p className="text-sm text-[#5A6B7A]">{appointment.provider.title}</p>
             </div>
           </div>
@@ -564,8 +564,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('upcoming')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'upcoming'
-                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
-                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-200'
               }`}
             >
               Upcoming ({upcomingAppointments.length})
@@ -574,8 +574,8 @@ export function MyAppointments({
               onClick={() => setActiveTab('past')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 activeTab === 'past'
-                  ? 'bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 shadow-sm'
-                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-200'
+                  ? 'bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 shadow-sm'
+                  : 'text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-200'
               }`}
             >
               Past ({pastAppointments.length})

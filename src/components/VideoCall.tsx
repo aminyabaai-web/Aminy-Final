@@ -558,7 +558,7 @@ export function VideoCall({
           <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Video className="w-8 h-8 text-[#6B9080]" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
             Ready to Join?
           </h2>
           <p className="text-[#5A6B7A] mb-4 sm:mb-6">
@@ -616,7 +616,7 @@ export function VideoCall({
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-8 h-8 text-red-600" />
           </div>
-          <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-2">
             Connection Error
           </h2>
           <p className="text-[#5A6B7A] mb-4 sm:mb-6">

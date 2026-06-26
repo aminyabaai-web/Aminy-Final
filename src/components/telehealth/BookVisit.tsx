@@ -377,7 +377,7 @@ export function BookVisitScreen({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Choose a visit</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Choose a visit</h1>
               <p className="max-w-[320px] truncate text-sm text-[#5A6B7A]">{intake.visitReason}</p>
           </div>
         </div>
@@ -490,7 +490,7 @@ export function BookVisitScreen({
             <span className="text-lg">💳</span>
           </div>
           <div className="flex-1">
-            <p className="text-sm font-medium text-[#1B2733]">
+            <p className="text-sm font-medium text-[#132F43]">
               Cash-pay stays simple here
             </p>
             <p className="text-sm text-[#5A6B7A]">
@@ -611,13 +611,13 @@ function ProviderCard({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
-              <h3 className="font-semibold text-[#1B2733]">
+              <h3 className="font-semibold text-[#132F43]">
                 {provider.firstName} {provider.lastName}, {provider.credentials}
               </h3>
               <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
             </div>
             <div className="text-right">
-              <span className="text-lg font-bold text-[#1B2733]">${price}</span>
+              <span className="text-lg font-bold text-[#132F43]">${price}</span>
               <p className="text-sm text-green-600 font-medium">HSA/FSA eligible</p>
             </div>
           </div>
@@ -724,7 +724,7 @@ function NoProvidersCard({
         <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <AlertCircle className="w-8 h-8 text-amber-600" />
         </div>
-        <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+        <h3 className="text-lg font-semibold text-[#132F43] mb-2">
           No telehealth available within 72 hours
         </h3>
         <p className="text-[#5A6B7A] mb-2">
@@ -789,14 +789,14 @@ function NoProvidersCard({
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">🎥</span>
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">Monthly Q&A Sessions</p>
+                  <p className="text-sm font-medium text-[#132F43]">Monthly Q&A Sessions</p>
                   <p className="text-sm text-[#5A6B7A]">Live sessions with providers (included)</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-xl">
                 <span className="text-lg">📚</span>
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">Evidence-Based Resources</p>
+                  <p className="text-sm font-medium text-[#132F43]">Evidence-Based Resources</p>
                   <p className="text-sm text-[#5A6B7A]">Guides and strategies library</p>
                 </div>
               </div>
@@ -808,7 +808,7 @@ function NoProvidersCard({
                 >
                   <span className="text-lg">🔍</span>
                   <div>
-                    <p className="text-sm font-medium text-[#1B2733]">Find Local Care</p>
+                    <p className="text-sm font-medium text-[#132F43]">Find Local Care</p>
                     <p className="text-sm text-[#5A6B7A]">Provider directory & referrals</p>
                   </div>
                 </button>

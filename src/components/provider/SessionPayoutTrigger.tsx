@@ -170,7 +170,7 @@ export function SessionPayoutTrigger({
               <div className="rounded-xl bg-[#FAF7F2] p-4 space-y-2">
                 <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
                   <User className="w-3.5 h-3.5 text-[#8A9BA8]" />
-                  <span className="font-medium text-[#1B2733]">{providerName}</span>
+                  <span className="font-medium text-[#132F43]">{providerName}</span>
                 </div>
                 {sessionDescription && (
                   <div className="flex items-center gap-2 text-sm text-[#5A6B7A]">
@@ -268,7 +268,7 @@ export function SessionPayoutTrigger({
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
             <div>
-              <h3 className="font-bold text-[#1B2733] text-base">Payment Released</h3>
+              <h3 className="font-bold text-[#132F43] text-base">Payment Released</h3>
               <p className="text-[#6B9080] font-semibold text-xl mt-1">{formatCents(payoutRecord.providerAmountCents)}</p>
               <p className="text-sm text-[#8A9BA8] mt-1">Transfer ID: {payoutRecord.transferId}</p>
             </div>
@@ -302,7 +302,7 @@ export function SessionPayoutTrigger({
               <AlertCircle className="w-8 h-8 text-red-400" />
             </div>
             <div>
-              <h3 className="font-bold text-[#1B2733] text-base">Payout Failed</h3>
+              <h3 className="font-bold text-[#132F43] text-base">Payout Failed</h3>
               {errorMessage && (
                 <p className="text-sm text-red-500 mt-1 max-w-xs">{errorMessage}</p>
               )}

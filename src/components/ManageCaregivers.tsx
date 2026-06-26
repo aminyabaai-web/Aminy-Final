@@ -286,7 +286,7 @@ export function ManageCaregivers({
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-[#1B2733]">{caregiver.name}</p>
+                    <p className="font-medium text-[#132F43]">{caregiver.name}</p>
                     {caregiver.role === 'owner' && (
                       <Crown className="w-4 h-4 text-purple-600" />
                     )}

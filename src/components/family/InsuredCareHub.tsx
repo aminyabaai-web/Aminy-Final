@@ -98,7 +98,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
             <Shield className="w-5 h-5 text-blue-500" />
           </div>
           <div className="flex-1">
-            <p className="font-semibold text-[#1B2733] text-sm">Your Coverage</p>
+            <p className="font-semibold text-[#132F43] text-sm">Your Coverage</p>
             <p className="text-sm text-[#5A6B7A]">{benefits.planName}</p>
           </div>
           <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
@@ -177,7 +177,7 @@ function CoverageCard({ benefits }: { benefits: BenefitsVerification }) {
                     <span className="text-lg">{item.icon}</span>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-[#1B2733]">{item.label}</span>
+                        <span className="text-sm font-medium text-[#132F43]">{item.label}</span>
                         {item.data.covered ? (
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                         ) : (
@@ -219,7 +219,7 @@ function PriorAuthTracker() {
             <FileText className="w-5 h-5 text-amber-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Prior Authorization — ABA Therapy</p>
+            <p className="font-semibold text-[#132F43] text-sm">Prior Authorization — ABA Therapy</p>
             <p className="text-sm text-[#5A6B7A]">Auth #PA-8X2K9M · 240 units approved</p>
           </div>
         </div>
@@ -247,7 +247,7 @@ function PriorAuthTracker() {
                     {(isPast || isActive) && <Check className="w-2.5 h-2.5 text-white" />}
                   </div>
                   <div className="flex-1">
-                    <p className={`text-sm font-medium ${isActive ? 'text-[#1B2733]' : isPast ? 'text-[#5A6B7A]' : 'text-slate-400'}`}>
+                    <p className={`text-sm font-medium ${isActive ? 'text-[#132F43]' : isPast ? 'text-[#5A6B7A]' : 'text-slate-400'}`}>
                       {stage.label}
                     </p>
                     <p className="text-sm text-slate-400">{stage.date}</p>
@@ -264,7 +264,7 @@ function PriorAuthTracker() {
         <div className="mt-4 pt-4 border-t border-slate-50">
           <div className="flex items-center justify-between">
             <span className="text-sm text-[#5A6B7A]">Sessions used</span>
-            <span className="text-sm font-bold text-[#1B2733]">24 of 60</span>
+            <span className="text-sm font-bold text-[#132F43]">24 of 60</span>
           </div>
           <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden mt-2">
             <div className="h-full rounded-full bg-emerald-500" style={{ width: '40%' }} />
@@ -285,7 +285,7 @@ function UpcomingSessionCosts() {
             <Calendar className="w-5 h-5 text-green-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Upcoming Session Costs</p>
+            <p className="font-semibold text-[#132F43] text-sm">Upcoming Session Costs</p>
             <p className="text-sm text-[#5A6B7A]">Estimated — final amounts may vary</p>
           </div>
         </div>
@@ -297,12 +297,12 @@ function UpcomingSessionCosts() {
               <Clock className="w-4 h-4 text-slate-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#1B2733]">{session.type}</p>
+              <p className="text-sm font-medium text-[#132F43]">{session.type}</p>
               <p className="text-sm text-[#5A6B7A]">{session.provider}</p>
               <p className="text-sm text-slate-400 mt-0.5">{session.date} at {session.time}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="text-base font-bold text-[#1B2733]">${session.estimatedCost}</p>
+              <p className="text-base font-bold text-[#132F43]">${session.estimatedCost}</p>
               <p className="text-sm text-slate-400">
                 {session.coinsurance ? session.coinsurance + ' coinsurance' : `$${session.copay} copay`}
               </p>
@@ -329,7 +329,7 @@ function EOBTranslations() {
             <DollarSign className="w-5 h-5 text-purple-500" />
           </div>
           <div>
-            <p className="font-semibold text-[#1B2733] text-sm">Recent Payments</p>
+            <p className="font-semibold text-[#132F43] text-sm">Recent Payments</p>
             <p className="text-sm text-[#5A6B7A]">Plain-English EOB breakdown</p>
           </div>
         </div>
@@ -339,7 +339,7 @@ function EOBTranslations() {
           <div key={i} className="p-4 space-y-2">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-sm font-medium text-[#1B2733] capitalize">{item.service}</p>
+                <p className="text-sm font-medium text-[#132F43] capitalize">{item.service}</p>
                 <p className="text-sm text-slate-400">{item.date}</p>
               </div>
               <div className="text-right">
@@ -411,7 +411,7 @@ export function InsuredCareHub({ memberId = 'BCBS123456', planId = 'BCBS-AZ', ch
             </button>
           )}
           <div className="flex-1">
-            <h1 className="font-bold text-[#1B2733]">Insurance Care Hub</h1>
+            <h1 className="font-bold text-[#132F43]">Insurance Care Hub</h1>
             <p className="text-sm text-[#5A6B7A]">{childName}'s benefits & coverage</p>
           </div>
           {benefits && (

@@ -125,7 +125,7 @@ export function AttachmentPicker({
 
         {/* Header */}
         <div className="flex items-center justify-between px-4 pb-4">
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">
             Add Attachment
           </h3>
           <Button
@@ -149,7 +149,7 @@ export function AttachmentPicker({
               <Camera className="w-6 h-6 text-accent" />
             </div>
             <div className="text-left">
-              <p className="font-medium text-[#1B2733] dark:text-white">Take a photo</p>
+              <p className="font-medium text-[#132F43] dark:text-white">Take a photo</p>
               <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 Use your camera to capture an image
               </p>
@@ -165,7 +165,7 @@ export function AttachmentPicker({
               <Image className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="text-left">
-              <p className="font-medium text-[#1B2733] dark:text-white">Select from library</p>
+              <p className="font-medium text-[#132F43] dark:text-white">Select from library</p>
               <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 Choose an existing photo or image
               </p>
@@ -181,7 +181,7 @@ export function AttachmentPicker({
               <FileText className="w-6 h-6 text-red-600 dark:text-red-400" />
             </div>
             <div className="text-left">
-              <p className="font-medium text-[#1B2733] dark:text-white">Attach a PDF</p>
+              <p className="font-medium text-[#132F43] dark:text-white">Attach a PDF</p>
               <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                 Share a document or report
               </p>

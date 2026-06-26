@@ -210,7 +210,7 @@ export function JuniorMilestoneShare({
             <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${config.gradient} text-white shadow-lg mb-3`}>
               {config.icon}
             </div>
-            <h2 className="text-2xl font-bold text-[#1B2733]">{title}</h2>
+            <h2 className="text-2xl font-bold text-[#132F43]">{title}</h2>
             <div className="flex items-center justify-center gap-2 mt-1">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center text-white text-sm font-bold">
                 {milestone.childInitial}

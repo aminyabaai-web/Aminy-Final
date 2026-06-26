@@ -62,7 +62,7 @@ export function VisitSummaryDetailScreen({
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Visit Summary</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Visit Summary</h1>
               <p className="text-sm text-[#5A6B7A]">{formatDate(summary.createdAt)}</p>
             </div>
           </div>
@@ -110,7 +110,7 @@ export function VisitSummaryDetailScreen({
               )}
             </div>
             <div>
-              <p className="font-semibold text-[#1B2733]">
+              <p className="font-semibold text-[#132F43]">
                 {provider.firstName} {provider.lastName}, {provider.credentials}
               </p>
               <p className="text-sm text-[#5A6B7A] flex items-center gap-1">
@@ -127,7 +127,7 @@ export function VisitSummaryDetailScreen({
             <Calendar className="w-4 h-4" />
             Reason for Visit
           </h3>
-          <p className="text-[#1B2733]">{summary.reasonForVisit}</p>
+          <p className="text-[#132F43]">{summary.reasonForVisit}</p>
         </section>
 
         {/* What We Discussed */}

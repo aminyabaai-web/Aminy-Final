@@ -281,7 +281,7 @@ function Section({
       >
         <div className="flex items-center gap-3">
           {icon && <span className="text-emerald-500">{icon}</span>}
-          <span className="font-bold text-[#1B2733] text-base">{title}</span>
+          <span className="font-bold text-[#132F43] text-base">{title}</span>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
       </button>
@@ -289,7 +289,7 @@ function Section({
       <div className={`tpe-section-body ${open ? 'block' : 'hidden'}`}>
         <div className="px-5 pb-5 space-y-3">
           {/* Print-only section title (the interactive toggle header is no-print) */}
-          <p className="tpe-print-title hidden font-bold text-[#1B2733] text-base">{title}</p>
+          <p className="tpe-print-title hidden font-bold text-[#132F43] text-base">{title}</p>
           {children}
         </div>
       </div>
@@ -631,7 +631,7 @@ function VersionHistoryModal({
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end justify-center">
       <div className="bg-white rounded-t-2xl w-full max-w-lg max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E4DF]">
-          <h3 className="font-bold text-[#1B2733]">Version History</h3>
+          <h3 className="font-bold text-[#132F43]">Version History</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-[#5A6B7A]">
             <X className="w-5 h-5" />
           </button>
@@ -643,7 +643,7 @@ function VersionHistoryModal({
             versions.map(v => (
               <div key={v.versionId} className="border border-[#E8E4DF] rounded-xl p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-[#1B2733]">
+                  <p className="text-sm font-medium text-[#132F43]">
                     {new Date(v.createdAt).toLocaleString()}
                   </p>
                   <p className="text-sm text-[#5A6B7A]">{v.createdBy || 'Unknown author'}</p>
@@ -1305,7 +1305,7 @@ export function TreatmentPlanEditor({
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
             <div className="flex items-center gap-3 mb-4">
               <Lock className="w-6 h-6 text-amber-600" />
-              <h3 className="font-bold text-[#1B2733] text-lg">Finalize Plan?</h3>
+              <h3 className="font-bold text-[#132F43] text-lg">Finalize Plan?</h3>
             </div>
             <p className="text-sm text-[#5A6B7A] mb-6">
               Finalizing will lock this plan for editing. You will be able to view and print it, but cannot make changes. This action triggers the parent review flow.

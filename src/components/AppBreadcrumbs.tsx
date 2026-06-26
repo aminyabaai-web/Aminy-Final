@@ -66,7 +66,7 @@ export function AppBreadcrumbs({ items, onNavigate, className = '' }: AppBreadcr
                 </button>
               ) : (
                 <span
-                  className={isLast ? 'text-[#1B2733] font-medium' : 'text-[#5A6B7A]'}
+                  className={isLast ? 'text-[#132F43] font-medium' : 'text-[#5A6B7A]'}
                   aria-current={isLast ? 'page' : undefined}
                 >
                   {item.label}

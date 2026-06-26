@@ -129,7 +129,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-[#1B2733] text-base">{service.name}</h3>
+          <h3 className="font-semibold text-[#132F43] text-base">{service.name}</h3>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <span className="text-sm text-slate-400 font-mono">CPT {service.cptCode}</span>
             <span className="text-sm text-slate-400 flex items-center gap-1">
@@ -145,7 +145,7 @@ function ServiceCard({ service, tier, onBook, onViewPackages }: ServiceCardProps
           {hasDiscount && (
             <span className="text-sm text-slate-400 line-through block">${service.familyPays.toLocaleString()}</span>
           )}
-          <span className="text-2xl font-bold text-[#1B2733]">${price.finalPrice.toLocaleString()}</span>
+          <span className="text-2xl font-bold text-[#132F43]">${price.finalPrice.toLocaleString()}</span>
         </div>
       </div>
 
@@ -218,7 +218,7 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
       >
         <div className="flex items-center gap-2 mb-1">
           <Package className="w-5 h-5 text-[#6B9080]" />
-          <h3 className="font-semibold text-lg text-[#1B2733]">Session Packages</h3>
+          <h3 className="font-semibold text-lg text-[#132F43]">Session Packages</h3>
         </div>
         <p className="text-sm text-[#5A6B7A] mb-5">{service.name} — Buy more, save more</p>
 
@@ -230,13 +230,13 @@ function PackageModal({ serviceId, tier, onClose, onBook }: PackageModalProps) {
               className="w-full flex items-center justify-between p-4 rounded-xl border border-[#E8E4DF] hover:border-[#6B9080]/30 hover:bg-[#6B9080]/10/50 transition-all text-left"
             >
               <div>
-                <div className="font-medium text-[#1B2733]">{opt.label}</div>
+                <div className="font-medium text-[#132F43]">{opt.label}</div>
                 <div className="text-sm text-[#5A6B7A]">
                   ${opt.pricePerSession}/session
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-[#1B2733]">${opt.totalPrice.toFixed(2)}</div>
+                <div className="font-bold text-[#132F43]">${opt.totalPrice.toFixed(2)}</div>
                 <div className="text-sm text-[#6B9080] font-medium">Save ${opt.savings.toFixed(2)}</div>
               </div>
             </button>
@@ -311,7 +311,7 @@ function TierSelector({ tier, onSelect }: TierSelectorProps) {
           onClick={() => onSelect(m.tier)}
           className={`flex-1 text-center py-2 px-3 rounded-lg text-sm font-medium transition-all ${
             tier === m.tier
-              ? 'bg-white text-[#1B2733] shadow-sm'
+              ? 'bg-white text-[#132F43] shadow-sm'
               : 'text-[#5A6B7A] hover:text-[#3A4A57]'
           }`}
         >
@@ -355,7 +355,7 @@ export default function CashPayPricing({
     <div className="max-w-lg mx-auto pb-8">
       {/* Header */}
       <div className="px-5 pt-6 pb-4">
-        <h1 className="text-2xl font-bold text-[#1B2733]">Transparent Pricing</h1>
+        <h1 className="text-2xl font-bold text-[#132F43]">Transparent Pricing</h1>
         <p className="text-sm text-[#5A6B7A] mt-1">
           No insurance needed. No surprise bills. Just clear, honest pricing for your family.
         </p>

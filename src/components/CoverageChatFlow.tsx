@@ -353,7 +353,7 @@ export function CoverageChatFlow({
               <Shield className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="font-semibold text-[#1B2733]">Coverage Chat</h2>
+              <h2 className="font-semibold text-[#132F43]">Coverage Chat</h2>
               <p className="text-sm text-[#5A6B7A]">Question {Math.min(currentQuestionIndex + 1, questions.length)} of {questions.length}</p>
             </div>
           </div>
@@ -383,7 +383,7 @@ export function CoverageChatFlow({
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-[#F0EDE8] rounded-2xl rounded-tl-none px-4 py-3">
-                  <p className="text-sm text-[#1B2733] leading-relaxed">{message.content}</p>
+                  <p className="text-sm text-[#132F43] leading-relaxed">{message.content}</p>
                 </div>
               </div>
             )}
@@ -454,7 +454,7 @@ export function CoverageChatFlow({
                   onClick={() => handleRadioSelect(option.value)}
                   className="w-full text-left p-4 rounded-lg border-2 border-[#E8E4DF] hover:border-[#6B9080] hover:bg-[#6B9080]/10 transition-all"
                 >
-                  <div className="font-medium text-[#1B2733]">{option.label}</div>
+                  <div className="font-medium text-[#132F43]">{option.label}</div>
                   {option.description && (
                     <div className="text-sm text-[#5A6B7A] mt-1">{option.description}</div>
                   )}
@@ -488,7 +488,7 @@ export function CoverageChatFlow({
                       className="mt-1"
                     />
                     <div className="flex-1">
-                      <div className="font-medium text-[#1B2733]">{option.label}</div>
+                      <div className="font-medium text-[#132F43]">{option.label}</div>
                       {option.description && (
                         <div className="text-sm text-[#5A6B7A] mt-1">{option.description}</div>
                       )}

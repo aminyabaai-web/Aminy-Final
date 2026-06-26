@@ -49,7 +49,7 @@ export function BrandGuideComponent() {
             </div>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-semibold text-[#1B2733] mb-4">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-[#132F43] mb-4">
             Aminy Brand Guide
           </h1>
           
@@ -79,7 +79,7 @@ export function BrandGuideComponent() {
                   <Shield className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Brand Identity</h2>
+                  <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Brand Identity</h2>
                   <p className="text-[#5A6B7A]">Core positioning and messaging framework</p>
                 </div>
               </div>
@@ -87,7 +87,7 @@ export function BrandGuideComponent() {
               <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                 {/* Tagline */}
                 <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-xl p-6 border border-accent/20">
-                  <h3 className="font-semibold text-[#1B2733] mb-2">Official Tagline</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-2">Official Tagline</h3>
                   <p className="text-2xl font-semibold text-accent mb-3">
                     Guided by AI. Grounded in ABA. Built for Family Life.
                   </p>
@@ -107,7 +107,7 @@ export function BrandGuideComponent() {
 
                 {/* Positioning Statement */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">Positioning Statement</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">Positioning Statement</h3>
                   <p className="text-[#3A4A57] leading-relaxed bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
                     Aminy is an AI-powered behavioral wellness app that uses the proven principles of 
                     Applied Behavior Analysis (ABA) to help families create calm routines, improve 
@@ -118,18 +118,18 @@ export function BrandGuideComponent() {
                 {/* Category */}
                 <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <h3 className="font-semibold text-[#1B2733] mb-2">Category</h3>
+                    <h3 className="font-semibold text-[#132F43] mb-2">Category</h3>
                     <Badge className="bg-accent text-white">AI Behavioral Wellness</Badge>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1B2733] mb-2">Subcategory</h3>
+                    <h3 className="font-semibold text-[#132F43] mb-2">Subcategory</h3>
                     <Badge variant="outline">AI Family Coaching</Badge>
                   </div>
                 </div>
 
                 {/* Value Pillars */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-4">Three Value Pillars</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-4">Three Value Pillars</h3>
                   <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
                     <Card className="p-4 bg-[#EEF4F8] border-[#C8DDE8]">
                       <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mb-3">
@@ -174,7 +174,7 @@ export function BrandGuideComponent() {
                   <Palette className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Color Palette</h2>
+                  <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Color Palette</h2>
                   <p className="text-[#5A6B7A]">AI gradient system and brand colors</p>
                 </div>
               </div>
@@ -182,12 +182,12 @@ export function BrandGuideComponent() {
               <div className="space-y-8">
                 {/* AI Gradient Colors */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-4">AI Gradient Palette</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-4">AI Gradient Palette</h3>
                   <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#C9EAD9] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Aminy Mint</p>
+                        <p className="font-semibold text-[#132F43]">Aminy Mint</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#C9EAD9</p>
                         <Button
                           variant="ghost"
@@ -203,7 +203,7 @@ export function BrandGuideComponent() {
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#FFE2B6] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Aminy Amber</p>
+                        <p className="font-semibold text-[#132F43]">Aminy Amber</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#FFE2B6</p>
                         <Button
                           variant="ghost"
@@ -219,7 +219,7 @@ export function BrandGuideComponent() {
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#E6E0F8] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Aminy Lavender</p>
+                        <p className="font-semibold text-[#132F43]">Aminy Lavender</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#E6E0F8</p>
                         <Button
                           variant="ghost"
@@ -249,12 +249,12 @@ export function BrandGuideComponent() {
 
                 {/* Primary Accent */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-4">Primary Accent</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-4">Primary Accent</h3>
                   <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#2A7D99] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Teal Accent</p>
+                        <p className="font-semibold text-[#132F43]">Teal Accent</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#2A7D99</p>
                         <Button
                           variant="ghost"
@@ -270,7 +270,7 @@ export function BrandGuideComponent() {
                     <div className="space-y-2">
                       <div className="h-24 rounded-lg bg-[#F9F8F4] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Neutral Base</p>
+                        <p className="font-semibold text-[#132F43]">Neutral Base</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#F9F8F4</p>
                         <Button
                           variant="ghost"
@@ -287,12 +287,12 @@ export function BrandGuideComponent() {
 
                 {/* Tier Colors */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-4">Tier Colors</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-4">Tier Colors</h3>
                   <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
                     <div className="space-y-2">
                       <div className="h-16 rounded-lg bg-[#3B82F6] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Starter Blue</p>
+                        <p className="font-semibold text-[#132F43]">Starter Blue</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#3B82F6</p>
                       </div>
                     </div>
@@ -300,7 +300,7 @@ export function BrandGuideComponent() {
                     <div className="space-y-2">
                       <div className="h-16 rounded-lg bg-[#2A7D99] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Core Teal</p>
+                        <p className="font-semibold text-[#132F43]">Core Teal</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#2A7D99</p>
                       </div>
                     </div>
@@ -308,7 +308,7 @@ export function BrandGuideComponent() {
                     <div className="space-y-2">
                       <div className="h-16 rounded-lg bg-[#9333EA] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
-                        <p className="font-semibold text-[#1B2733]">Plus Purple</p>
+                        <p className="font-semibold text-[#132F43]">Plus Purple</p>
                         <p className="text-[#5A6B7A] font-mono text-xs">#9333EA</p>
                       </div>
                     </div>
@@ -326,14 +326,14 @@ export function BrandGuideComponent() {
                   <MessageSquare className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Voice & Tone</h2>
+                  <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Voice & Tone</h2>
                   <p className="text-[#5A6B7A]">How Aminy communicates with families</p>
                 </div>
               </div>
 
               {/* Voice Description */}
               <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-xl p-6 border border-accent/20 mb-4 sm:mb-6">
-                <h3 className="font-semibold text-[#1B2733] mb-2">Voice: Warm-Expert</h3>
+                <h3 className="font-semibold text-[#132F43] mb-2">Voice: Warm-Expert</h3>
                 <p className="text-[#3A4A57] mb-3">
                   60% compassionate coach, 40% intelligent assistant
                 </p>
@@ -348,9 +348,9 @@ export function BrandGuideComponent() {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-b-2 border-[#E8E4DF]">
-                      <th className="text-left py-3 px-4 font-semibold text-[#1B2733]">Tone</th>
-                      <th className="text-left py-3 px-4 font-semibold text-[#1B2733]">When to Use</th>
-                      <th className="text-left py-3 px-4 font-semibold text-[#1B2733]">Example</th>
+                      <th className="text-left py-3 px-4 font-semibold text-[#132F43]">Tone</th>
+                      <th className="text-left py-3 px-4 font-semibold text-[#132F43]">When to Use</th>
+                      <th className="text-left py-3 px-4 font-semibold text-[#132F43]">Example</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -405,7 +405,7 @@ export function BrandGuideComponent() {
               {/* Characteristics */}
               <div className="mt-4 sm:mt-6 grid md:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">✓ Do This</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">✓ Do This</h3>
                   <ul className="space-y-2 text-sm text-[#3A4A57]">
                     <li className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
@@ -427,7 +427,7 @@ export function BrandGuideComponent() {
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">✗ Avoid This</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">✗ Avoid This</h3>
                   <ul className="space-y-2 text-sm text-[#3A4A57]">
                     <li className="flex items-start gap-2">
                       <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
@@ -459,7 +459,7 @@ export function BrandGuideComponent() {
                   <Type className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Language Framework</h2>
+                  <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Language Framework</h2>
                   <p className="text-[#5A6B7A]">Words to use and avoid</p>
                 </div>
               </div>
@@ -471,7 +471,7 @@ export function BrandGuideComponent() {
                     <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
                       <Check className="w-5 h-5 text-green-600" />
                     </div>
-                    <h3 className="font-semibold text-[#1B2733]">Use These Words</h3>
+                    <h3 className="font-semibold text-[#132F43]">Use These Words</h3>
                   </div>
 
                   <div className="space-y-3">
@@ -510,7 +510,7 @@ export function BrandGuideComponent() {
                     <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
                       <X className="w-5 h-5 text-red-600" />
                     </div>
-                    <h3 className="font-semibold text-[#1B2733]">Avoid These Words</h3>
+                    <h3 className="font-semibold text-[#132F43]">Avoid These Words</h3>
                   </div>
 
                   <div className="space-y-3">
@@ -546,7 +546,7 @@ export function BrandGuideComponent() {
 
               {/* Replacement Guide */}
               <div className="mt-4 sm:mt-6 bg-[#FAF7F2] rounded-xl p-6 border border-[#E8E4DF]">
-                <h3 className="font-semibold text-[#1B2733] mb-4">Say This Instead</h3>
+                <h3 className="font-semibold text-[#132F43] mb-4">Say This Instead</h3>
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center gap-3 sm:gap-4">
                     <Badge variant="destructive" className="min-w-[100px]">therapy</Badge>
@@ -585,7 +585,7 @@ export function BrandGuideComponent() {
                   <Eye className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">Microcopy Examples</h2>
+                  <h2 className="text-2xl font-semibold text-[#132F43] mb-2">Microcopy Examples</h2>
                   <p className="text-[#5A6B7A]">Real-world usage across the app</p>
                 </div>
               </div>
@@ -593,18 +593,18 @@ export function BrandGuideComponent() {
               <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                 {/* Headlines */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">Headlines</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">Headlines</h3>
                   <div className="space-y-2">
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
-                      <p className="text-lg font-semibold text-[#1B2733]">"Finally, calm that works."</p>
+                      <p className="text-lg font-semibold text-[#132F43]">"Finally, calm that works."</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Splash screen hero</p>
                     </div>
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
-                      <p className="text-lg font-semibold text-[#1B2733]">"Today's Calm Plan"</p>
+                      <p className="text-lg font-semibold text-[#132F43]">"Today's Calm Plan"</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Dashboard header</p>
                     </div>
                     <div className="bg-[#FAF7F2] rounded-lg p-4 border border-[#E8E4DF]">
-                      <p className="text-lg font-semibold text-[#1B2733]">"Progress You Can See"</p>
+                      <p className="text-lg font-semibold text-[#132F43]">"Progress You Can See"</p>
                       <p className="text-sm text-[#5A6B7A] mt-1">Reports section</p>
                     </div>
                   </div>
@@ -612,7 +612,7 @@ export function BrandGuideComponent() {
 
                 {/* Supportive Messages */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">Supportive Messages</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">Supportive Messages</h3>
                   <div className="space-y-2">
                     <div className="bg-[#EEF4F8] rounded-lg p-4 border border-[#C8DDE8]">
                       <p className="text-sm text-blue-900">"Small steps. Big calm."</p>
@@ -628,7 +628,7 @@ export function BrandGuideComponent() {
 
                 {/* CTAs */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">Calls to Action</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">Calls to Action</h3>
                   <div className="grid sm:grid-cols-2 gap-3">
                     <Button className="bg-accent hover:bg-accent/90">
                       Start Your 7-Day Free Trial
@@ -647,16 +647,16 @@ export function BrandGuideComponent() {
 
                 {/* AI + ABA Pairings */}
                 <div>
-                  <h3 className="font-semibold text-[#1B2733] mb-3">AI + ABA Pairings</h3>
+                  <h3 className="font-semibold text-[#132F43] mb-3">AI + ABA Pairings</h3>
                   <div className="space-y-2">
                     <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-lg p-4 border border-accent/20">
-                      <p className="text-sm text-[#1B2733]">"Powered by adaptive AI and grounded in ABA behavioral science."</p>
+                      <p className="text-sm text-[#132F43]">"Powered by adaptive AI and grounded in ABA behavioral science."</p>
                     </div>
                     <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-lg p-4 border border-accent/20">
-                      <p className="text-sm text-[#1B2733]">"Using proven ABA principles, Aminy's AI creates calm routines."</p>
+                      <p className="text-sm text-[#132F43]">"Using proven ABA principles, Aminy's AI creates calm routines."</p>
                     </div>
                     <div className="bg-gradient-to-r from-accent/5 to-teal-50 rounded-lg p-4 border border-accent/20">
-                      <p className="text-sm text-[#1B2733]">"AI-guided plans based on ABA behavioral science."</p>
+                      <p className="text-sm text-[#132F43]">"AI-guided plans based on ABA behavioral science."</p>
                     </div>
                   </div>
                 </div>
@@ -667,7 +667,7 @@ export function BrandGuideComponent() {
 
         {/* Download Guide CTA */}
         <Card className="p-6 bg-gradient-to-r from-accent/5 to-teal-50 border-accent/20 text-center mt-8">
-          <h3 className="font-semibold text-[#1B2733] mb-2">Ready to use this system?</h3>
+          <h3 className="font-semibold text-[#132F43] mb-2">Ready to use this system?</h3>
           <p className="text-sm text-[#5A6B7A] mb-4">
             All brand assets, tokens, and guidelines are available in the codebase.
           </p>

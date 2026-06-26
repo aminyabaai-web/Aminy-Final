@@ -219,7 +219,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
   return (
     <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="font-semibold text-[#132F43] dark:text-white">
           Cohort Retention Analysis
         </h3>
         <Badge variant="outline" className="text-sm">
@@ -245,7 +245,7 @@ export function CohortAnalysis({ period = 'weekly', limit = 8 }: CohortAnalysisP
               const prevCohort = cohorts[index + 1] || null;
               return (
                 <tr key={cohort.cohort} className="border-b border-[#E8E4DF] dark:border-slate-800">
-                  <td className="py-3 px-2 font-medium text-[#1B2733] dark:text-white">
+                  <td className="py-3 px-2 font-medium text-[#132F43] dark:text-white">
                     {cohort.cohort}
                   </td>
                   <td className="py-3 px-2 text-center text-[#5A6B7A] dark:text-slate-400">

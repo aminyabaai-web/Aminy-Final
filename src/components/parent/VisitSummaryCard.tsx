@@ -129,7 +129,7 @@ export function VisitSummaryCard({
         {/* Goal Progress */}
         {goals.length > 0 && (
           <div>
-            <h4 className="text-sm font-semibold text-[#1B2733] flex items-center gap-2 mb-3">
+            <h4 className="text-sm font-semibold text-[#132F43] flex items-center gap-2 mb-3">
               <TrendingUp className="w-4 h-4 text-blue-600" />
               Goal Progress
             </h4>
@@ -205,7 +205,7 @@ function GoalMeter({ title, progressPct }: { title: string; progressPct: number 
     <div>
       <div className="flex items-center justify-between mb-1">
         <span className="text-sm text-[#3A4A57] truncate pr-2">{title}</span>
-        <span className="text-sm font-medium text-[#1B2733] whitespace-nowrap">{clamped}%</span>
+        <span className="text-sm font-medium text-[#132F43] whitespace-nowrap">{clamped}%</span>
       </div>
       <div className="h-2.5 bg-[#F0EDE8] rounded-full overflow-hidden">
         <div

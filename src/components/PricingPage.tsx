@@ -142,7 +142,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             <span className="text-sm font-medium text-accent">Powered by AI and ABA Science</span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-semibold text-[#1B2733] dark:text-white mb-4">
+          <h1 className="text-4xl sm:text-5xl font-semibold text-[#132F43] dark:text-white mb-4">
             Choose Your Calm Plan
           </h1>
           
@@ -203,22 +203,22 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               <CreditCard className="w-6 h-6 text-accent" />
             </div>
             <div className="flex-1 space-y-2">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">What happens after your trial?</h3>
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">What happens after your trial?</h3>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-300">
                 Your {TRIAL_CONFIG.durationDays}-day trial includes full {getTierDisplayName(TRIAL_CONFIG.trialTier)} access.
                 When it ends, you can pick any plan or stay on Free — no surprises.
               </p>
               <div className="grid gap-3 sm:grid-cols-3 text-sm">
                 <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
-                  <p className="font-semibold text-[#1B2733] dark:text-white">Choose Core</p>
+                  <p className="font-semibold text-[#132F43] dark:text-white">Choose Core</p>
                   <p className="text-[#5A6B7A] dark:text-slate-300">${tierPricing.core.monthly}/mo after trial</p>
                 </div>
                 <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
-                  <p className="font-semibold text-[#1B2733] dark:text-white">Upgrade to Pro</p>
+                  <p className="font-semibold text-[#132F43] dark:text-white">Upgrade to Pro</p>
                   <p className="text-[#5A6B7A] dark:text-slate-300">${tierPricing.pro.monthly}/mo with BCBA support</p>
                 </div>
                 <div className="rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-3">
-                  <p className="font-semibold text-[#1B2733] dark:text-white">Stay on Free</p>
+                  <p className="font-semibold text-[#132F43] dark:text-white">Stay on Free</p>
                   <p className="text-[#5A6B7A] dark:text-slate-300">Limited features, always $0</p>
                 </div>
               </div>
@@ -266,17 +266,17 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                     <div className={`w-8 h-8 rounded-full bg-white flex items-center justify-center`}>
                       <Icon className={`w-4 h-4 ${tier.accentColor}`} />
                     </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">{tier.name}</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-[#132F43]">{tier.name}</h3>
                   </div>
 
                   <p className="text-sm text-[#5A6B7A] mb-3">{tier.description}</p>
 
                   <div className="flex items-baseline gap-1">
                     {tier.price === 0 ? (
-                      <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">Free</span>
+                      <span className="text-2xl sm:text-3xl font-bold text-[#132F43]">Free</span>
                     ) : (
                       <>
-                        <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">${tier.price}</span>
+                        <span className="text-2xl sm:text-3xl font-bold text-[#132F43]">${tier.price}</span>
                         <span className="text-[#5A6B7A] text-sm">/{tier.period}</span>
                       </>
                     )}
@@ -355,7 +355,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
         <div className="mb-12">
           <div className="text-center mb-4 sm:mb-6">
             <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-3">Why Aminy Works</Badge>
-            <h2 className="text-2xl font-semibold text-[#1B2733] mb-2">
+            <h2 className="text-2xl font-semibold text-[#132F43] mb-2">
               Built specifically for your family's journey
             </h2>
             <p className="text-[#5A6B7A]">
@@ -373,7 +373,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                       <Icon className="w-5 h-5 text-[#6B9080]" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-[#1B2733] text-sm">{item.feature}</h3>
+                      <h3 className="font-medium text-[#132F43] text-sm">{item.feature}</h3>
                       <p className="text-sm text-[#5A6B7A] mt-1">{item.description}</p>
                     </div>
                   </div>
@@ -394,7 +394,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
               <Shield className="w-6 h-6 text-accent" />
             </div>
             <div>
-              <h3 className="font-semibold text-[#1B2733] mb-2">Our Calm Guarantee</h3>
+              <h3 className="font-semibold text-[#132F43] mb-2">Our Calm Guarantee</h3>
               <p className="text-[#3A4A57] mb-4">
                 <strong>Noticeably calmer routines in 7 days — or cancel anytime.</strong>
               </p>
@@ -424,11 +424,11 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
 
         {/* FAQ Section */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-[#1B2733] mb-4 sm:mb-6 text-center">Common Questions</h2>
+          <h2 className="text-2xl font-semibold text-[#132F43] mb-4 sm:mb-6 text-center">Common Questions</h2>
           
           <div className="space-y-3 sm:space-y-4">
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-[#1B2733] mb-2">What happens after my free trial?</h4>
+              <h4 className="font-semibold text-[#132F43] mb-2">What happens after my free trial?</h4>
               <p className="text-sm text-[#5A6B7A]">
                 After your 7-day trial, you'll continue on your chosen plan (Core ${tierPricing.core.monthly}/mo, Pro ${tierPricing.pro.monthly}/mo, or Pro+ ${tierPricing.proplus.monthly}/mo).
                 You'll receive reminder emails at days 4 and 6, and can cancel anytime before the trial ends.
@@ -436,7 +436,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-[#1B2733] mb-2">Can I switch plans later?</h4>
+              <h4 className="font-semibold text-[#132F43] mb-2">Can I switch plans later?</h4>
               <p className="text-sm text-[#5A6B7A]">
                 Absolutely! You can upgrade or downgrade anytime from your account settings. 
                 Changes take effect immediately.
@@ -444,7 +444,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-[#1B2733] mb-2">Is my insurance accepted?</h4>
+              <h4 className="font-semibold text-[#132F43] mb-2">Is my insurance accepted?</h4>
               <p className="text-sm text-[#5A6B7A]">
                 Most plans cover ABA services under behavioral health. Plus tier includes insurance
                 authorization letters and BCBA documentation to maximize your benefits.
@@ -457,7 +457,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   <Wallet className="w-4 h-4 text-green-700" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-[#1B2733] mb-2">Can I use my HSA or FSA?</h4>
+                  <h4 className="font-semibold text-[#132F43] mb-2">Can I use my HSA or FSA?</h4>
                   <p className="text-sm text-[#5A6B7A] mb-2">
                     <strong className="text-green-700">Yes!</strong> All Aminy plans are eligible for HSA/FSA reimbursement.
                     Aminy qualifies as a behavioral health and wellness expense under IRS guidelines.
@@ -472,7 +472,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
             </Card>
 
             <Card className="p-3 sm:p-4">
-              <h4 className="font-semibold text-[#1B2733] mb-2">What's included in "ABA principles"?</h4>
+              <h4 className="font-semibold text-[#132F43] mb-2">What's included in "ABA principles"?</h4>
               <p className="text-sm text-[#5A6B7A]">
                 Applied Behavior Analysis (ABA) includes positive reinforcement, visual cues, 
                 predictable routines, and data-driven progress tracking — all simplified for everyday family life.

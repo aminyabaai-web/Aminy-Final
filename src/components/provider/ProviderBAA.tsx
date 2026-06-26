@@ -74,7 +74,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
             <Shield className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#1B2733]">HIPAA Business Associate Agreement</h1>
+            <h1 className="text-xl font-bold text-[#132F43]">HIPAA Business Associate Agreement</h1>
             <p className="text-sm text-[#5A6B7A]">Required before accessing protected health information</p>
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
 
       {/* Summary of Key Points */}
       <div className="px-5 py-5 space-y-3">
-        <h2 className="text-base font-semibold text-[#1B2733]">Key Obligations</h2>
+        <h2 className="text-base font-semibold text-[#132F43]">Key Obligations</h2>
         {[
           'You may only use client PHI to provide services through the Aminy platform',
           'You must implement appropriate safeguards for all electronic PHI (ePHI)',

@@ -204,7 +204,7 @@ function BreathStep({
     return (
       <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
         <Cloud className="w-16 h-16 text-blue-500 mx-auto mb-4" />
-        <h2 className="text-2xl text-[#1B2733] mb-4">
+        <h2 className="text-2xl text-[#132F43] mb-4">
           Let's breathe, {parentName}
         </h2>
         <p className="text-sm text-[#5A6B7A] mb-6">
@@ -242,7 +242,7 @@ function BreathStep({
         >
           <Heart className="w-16 h-16 text-green-500 mx-auto mb-4" />
         </motion.div>
-        <p className="text-lg text-[#1B2733]">Nice work</p>
+        <p className="text-lg text-[#132F43]">Nice work</p>
       </motion.div>
     );
   }
@@ -305,7 +305,7 @@ function GroundStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
-      <h3 className="text-xl text-[#1B2733] mb-6">
+      <h3 className="text-xl text-[#132F43] mb-6">
         Ground yourself, {parentName}
       </h3>
 
@@ -364,7 +364,7 @@ function IdentifyStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-[#1B2733] mb-2 text-center">
+      <h3 className="text-xl text-[#132F43] mb-2 text-center">
         What's hardest right now?
       </h3>
       <p className="text-sm text-[#5A6B7A] mb-6 text-center">
@@ -379,7 +379,7 @@ function IdentifyStep({
             className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-blue-500 hover:bg-[#EEF4F8] transition-all text-left"
           >
             <div className="text-2xl mb-2">{challenge.emoji}</div>
-            <div className="text-sm text-[#1B2733]">{challenge.label}</div>
+            <div className="text-sm text-[#132F43]">{challenge.label}</div>
           </button>
         ))}
       </div>
@@ -415,7 +415,7 @@ function NextStepsStep({
 
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="p-6">
-      <h3 className="text-xl text-[#1B2733] mb-4 text-center">
+      <h3 className="text-xl text-[#132F43] mb-4 text-center">
         How do you feel now?
       </h3>
 

@@ -125,7 +125,7 @@ export function KeyboardHelpModal() {
             </div>
             <h2
               id="keyboard-help-title"
-              className="text-lg font-semibold text-[#1B2733] dark:text-gray-100"
+              className="text-lg font-semibold text-[#132F43] dark:text-gray-100"
             >
               Keyboard Shortcuts
             </h2>

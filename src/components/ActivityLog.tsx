@@ -144,7 +144,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       {showLogForm && (
         <div className="mb-4 p-3 rounded-xl border border-[#E8E4DF] dark:border-slate-600 bg-[#FAF7F2] dark:bg-slate-800 space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-200">Describe the behavior</p>
+            <p className="text-sm font-semibold text-[#132F43] dark:text-slate-200">Describe the behavior</p>
             <button onClick={() => { setShowLogForm(false); setLogText(''); }} className="text-slate-400 hover:text-slate-600">
               <X className="w-4 h-4" />
             </button>
@@ -153,7 +153,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
             value={logText}
             onChange={e => setLogText(e.target.value)}
             placeholder="What happened? When, where, what triggered it…"
-            className="w-full text-sm rounded-lg border border-[#E8E4DF] dark:border-slate-600 p-2 bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 resize-none"
+            className="w-full text-sm rounded-lg border border-[#E8E4DF] dark:border-slate-600 p-2 bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 resize-none"
             rows={3}
           />
           <button

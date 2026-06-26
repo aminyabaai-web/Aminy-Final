@@ -458,7 +458,7 @@ export function PlaybooksLibrary({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">Evidence-Based Playbooks</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Evidence-Based Playbooks</h1>
             <p className="text-sm text-[#5A6B7A]">Strategies & guidance from experts</p>
           </div>
         </div>
@@ -587,7 +587,7 @@ function PlaybookCard({ playbook, onSelect, onToggleBookmark }: PlaybookCardProp
             </div>
 
             {/* Title & Subtitle */}
-            <h3 className="font-semibold text-[#1B2733] mb-1">{playbook.title}</h3>
+            <h3 className="font-semibold text-[#132F43] mb-1">{playbook.title}</h3>
             <p className="text-sm text-[#6B9080] mb-2">{playbook.subtitle}</p>
 
             {/* Description */}

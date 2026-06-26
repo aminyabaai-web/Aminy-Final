@@ -232,7 +232,7 @@ export function InsightNavigator({
               size="sm"
               onClick={() => setShowUrgentHelp(true)}
               aria-label="Get urgent help"
-              className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
+              className="text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-400 dark:hover:text-slate-100"
             >
               <Bell className="w-4 h-4" />
             </Button>
@@ -241,7 +241,7 @@ export function InsightNavigator({
               size="sm"
               onClick={() => setShowHelpCenter(true)}
               aria-label="Help center"
-              className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
+              className="text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-400 dark:hover:text-slate-100"
             >
               <HelpCircle className="w-4 h-4" />
             </Button>
@@ -309,7 +309,7 @@ export function InsightNavigator({
               <div className="w-14 h-14 bg-[#EEF4F8] dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Brain className="w-7 h-7 text-blue-600 dark:text-blue-400" />
               </div>
-              <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100 mb-2">
+              <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100 mb-2">
                 No insights yet
               </h2>
               <p className="text-sm text-[#5A6B7A] dark:text-slate-400 max-w-md mx-auto">
@@ -357,7 +357,7 @@ export function InsightNavigator({
                       {getCategoryIcon(insight.category)}
                     </div>
                     <div>
-                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
+                      <h3 className="font-medium text-[#132F43] dark:text-slate-100">
                         {insight.title}
                       </h3>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400 capitalize">
@@ -370,7 +370,7 @@ export function InsightNavigator({
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl font-semibold text-[#1B2733] dark:text-slate-100">
+                    <span className="text-2xl font-semibold text-[#132F43] dark:text-slate-100">
                       {insight.value}
                     </span>
                     <Badge 
@@ -390,7 +390,7 @@ export function InsightNavigator({
                   </p>
 
                   <div className="pt-3 border-t border-[#E8E4DF] dark:border-slate-700">
-                    <h4 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-2">
+                    <h4 className="text-sm font-medium text-[#132F43] dark:text-slate-100 mb-2">
                       Recommendations
                     </h4>
                     <ul className="space-y-1">
@@ -425,7 +425,7 @@ export function InsightNavigator({
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                  <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
+                  <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100">
                     Weekly Summary
                   </h2>
                 </div>
@@ -455,7 +455,7 @@ export function InsightNavigator({
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
-                  <h2 className="text-lg font-semibold text-[#1B2733] dark:text-slate-100">
+                  <h2 className="text-lg font-semibold text-[#132F43] dark:text-slate-100">
                     Recommended Next Steps
                   </h2>
                 </div>
@@ -464,7 +464,7 @@ export function InsightNavigator({
                   <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
+                      <h3 className="font-medium text-[#132F43] dark:text-slate-100">
                         Continue Sensory Schedule
                       </h3>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -476,7 +476,7 @@ export function InsightNavigator({
                   <div className="flex items-start gap-3 p-3 bg-[#EEF4F8] dark:bg-blue-900/20 rounded-lg">
                     <Brain className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
+                      <h3 className="font-medium text-[#132F43] dark:text-slate-100">
                         Expand Communication Practice
                       </h3>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -488,7 +488,7 @@ export function InsightNavigator({
                   <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg">
                     <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-medium text-[#1B2733] dark:text-slate-100">
+                      <h3 className="font-medium text-[#132F43] dark:text-slate-100">
                         Monitor Sensory Needs
                       </h3>
                       <p className="text-sm text-[#5A6B7A] dark:text-slate-400">

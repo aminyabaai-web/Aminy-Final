@@ -359,7 +359,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
         </Button>
 
         <div className="text-center">
-          <h2 className="text-lg font-semibold text-[#1B2733]">Weekly Outcomes Report</h2>
+          <h2 className="text-lg font-semibold text-[#132F43]">Weekly Outcomes Report</h2>
           <p className="text-sm text-[#5A6B7A]">
             {formatDateRange(reportData.weekStart, reportData.weekEnd)}
           </p>
@@ -379,12 +379,12 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Heart className="w-5 h-5 text-pink-500" />
-          <h3 className="font-semibold text-[#1B2733]">Stress & Wellness</h3>
+          <h3 className="font-semibold text-[#132F43]">Stress & Wellness</h3>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
           <div>
-            <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
+            <p className="text-2xl sm:text-3xl font-bold text-[#132F43]">
               {reportData.stressMetrics.currentAvg.toFixed(1)}
             </p>
             <p className="text-sm text-[#5A6B7A]">Average this week</p>
@@ -421,12 +421,12 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <CheckCircle className="w-5 h-5 text-green-500" />
-          <h3 className="font-semibold text-[#1B2733]">Routine Adherence</h3>
+          <h3 className="font-semibold text-[#132F43]">Routine Adherence</h3>
         </div>
 
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl sm:text-3xl font-bold text-[#1B2733]">
+            <span className="text-2xl sm:text-3xl font-bold text-[#132F43]">
               {reportData.routineMetrics.adherencePercent}%
             </span>
             <div className="flex items-center gap-1">
@@ -448,25 +448,25 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       <Card className="p-3 sm:p-4">
         <div className="flex items-center gap-2 mb-4">
           <Target className="w-5 h-5 text-purple-500" />
-          <h3 className="font-semibold text-[#1B2733]">Goals Progress</h3>
+          <h3 className="font-semibold text-[#132F43]">Goals Progress</h3>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <Award className="w-8 h-8 text-yellow-500" />
             <div>
-              <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{reportData.goalsMetrics.achieved}</p>
+              <p className="text-xl sm:text-2xl font-bold text-[#132F43]">{reportData.goalsMetrics.achieved}</p>
               <p className="text-sm text-[#5A6B7A]">Achieved</p>
             </div>
           </div>
           <div className="h-12 w-px bg-[#E8E4DF]"></div>
           <div>
-            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{reportData.goalsMetrics.total}</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#132F43]">{reportData.goalsMetrics.total}</p>
             <p className="text-sm text-[#5A6B7A]">Active Goals</p>
           </div>
           <div className="h-12 w-px bg-[#E8E4DF]"></div>
           <div>
-            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">+{reportData.goalsMetrics.newGoals}</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#132F43]">+{reportData.goalsMetrics.newGoals}</p>
             <p className="text-sm text-[#5A6B7A]">New This Week</p>
           </div>
         </div>
@@ -475,7 +475,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
       {/* Highlights */}
       {reportData.highlights.length > 0 && (
         <Card className="p-4 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
-          <h3 className="font-semibold text-[#1B2733] mb-3">This Week's Wins</h3>
+          <h3 className="font-semibold text-[#132F43] mb-3">This Week's Wins</h3>
           <ul className="space-y-2">
             {reportData.highlights.map((highlight, idx) => (
               <li key={idx} className="flex items-start gap-2 text-sm text-[#3A4A57]">
@@ -494,7 +494,7 @@ export function WeeklyOutcomesReport({ onShare, onClose }: WeeklyOutcomesReportP
             <Sparkles className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-[#1B2733] mb-2">Aminy's Insight</h3>
+            <h3 className="font-semibold text-[#132F43] mb-2">Aminy's Insight</h3>
             <p className="text-sm text-[#3A4A57] leading-relaxed">
               {reportData.aiInsight}
             </p>

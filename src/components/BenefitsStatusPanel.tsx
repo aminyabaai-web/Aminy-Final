@@ -192,7 +192,7 @@ export function BenefitsStatusPanel({
 
       {/* Program tracker */}
       <div style={{ marginBottom: 8 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2733', marginBottom: 12 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#132F43', marginBottom: 12 }}>
           Application Tracker
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -228,7 +228,7 @@ export function BenefitsStatusPanel({
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: '#1B2733' }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: '#132F43' }}>
                       {item.program}
                     </span>
                     <span

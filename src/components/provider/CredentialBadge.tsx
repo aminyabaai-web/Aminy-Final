@@ -268,7 +268,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
             <Shield className={`w-4 h-4 ${STATUS_CONFIG[overallStatus].color}`} />
           </div>
           <div>
-            <p className="font-medium text-[#1B2733] dark:text-white text-sm">
+            <p className="font-medium text-[#132F43] dark:text-white text-sm">
               Credential Verification
             </p>
             <p className={`text-sm ${STATUS_CONFIG[overallStatus].color}`}>
@@ -309,7 +309,7 @@ export function CredentialBadge({ providerId, showDetails = false, compact = fal
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-[#1B2733] dark:text-white text-sm">
+                      <p className="font-medium text-[#132F43] dark:text-white text-sm">
                         {config?.shortLabel || cred.credential_type.toUpperCase()}
                       </p>
                       <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />

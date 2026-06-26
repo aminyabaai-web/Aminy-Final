@@ -127,7 +127,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-600 rounded-2xl mb-4">
             <Gift className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
             You've Been Invited!
           </h1>
           <p className="text-[#5A6B7A]">
@@ -170,7 +170,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
 
       {/* What is Aminy */}
       <div className="px-6 mb-8">
-        <h2 className="text-lg font-semibold text-[#1B2733] mb-4">
+        <h2 className="text-lg font-semibold text-[#132F43] mb-4">
           What is Aminy?
         </h2>
         <div className="space-y-3">
@@ -205,7 +205,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
                 <item.Icon className={`w-5 h-5 ${item.color}`} />
               </div>
               <div>
-                <p className="font-medium text-[#1B2733]">{item.title}</p>
+                <p className="font-medium text-[#132F43]">{item.title}</p>
                 <p className="text-sm text-[#5A6B7A]">{item.desc}</p>
               </div>
             </div>

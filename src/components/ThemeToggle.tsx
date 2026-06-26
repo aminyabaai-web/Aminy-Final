@@ -64,7 +64,7 @@ export function ThemeToggle({ className = '' }: ThemeToggleProps) {
           </div>
           
           <div className="text-left">
-            <div className="text-sm text-[#1B2733] dark:text-slate-100">Appearance</div>
+            <div className="text-sm text-[#132F43] dark:text-slate-100">Appearance</div>
             <div className="text-sm text-[#5A6B7A] dark:text-slate-400">
               {currentTheme?.description}
             </div>

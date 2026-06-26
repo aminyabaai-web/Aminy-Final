@@ -255,7 +255,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
                   {(p.full_name || p.email)[0].toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
-                  {p.full_name && <p className="text-sm font-medium text-[#1B2733] truncate">{p.full_name}</p>}
+                  {p.full_name && <p className="text-sm font-medium text-[#132F43] truncate">{p.full_name}</p>}
                   <p className="text-sm text-[#5A6B7A] truncate">{p.email}</p>
                 </div>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-[#F0EDE8] text-[#5A6B7A] capitalize shrink-0">{p.status || 'invited'}</span>

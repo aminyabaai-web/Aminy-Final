@@ -136,12 +136,12 @@ function AACGoalTracker() {
 
       <div className="bg-white border border-[#E8E4DF] rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-[#1B2733]">Spontaneous Communication Goal</h4>
+          <h4 className="font-medium text-[#132F43]">Spontaneous Communication Goal</h4>
           <div className="flex items-center gap-2">
             <button onClick={() => setSpontTarget(t => Math.max(1, t - 1))} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Minus className="w-3 h-3" />
             </button>
-            <span className="font-bold text-[#1B2733] w-8 text-center">{spontTarget}</span>
+            <span className="font-bold text-[#132F43] w-8 text-center">{spontTarget}</span>
             <button onClick={() => setSpontTarget(t => t + 1)} className="w-7 h-7 rounded-full bg-[#F0EDE8] flex items-center justify-center hover:bg-[#E8E4DF]">
               <Plus className="w-3 h-3" />
             </button>
@@ -162,7 +162,7 @@ function AACGoalTracker() {
       </div>
 
       <div>
-        <h4 className="font-medium text-[#1B2733] mb-2">Most Used Symbols</h4>
+        <h4 className="font-medium text-[#132F43] mb-2">Most Used Symbols</h4>
         <div className="space-y-2">
           {topSymbols.map((u) => (
             <div key={u.symbol} className="flex items-center gap-3">
@@ -303,7 +303,7 @@ function LanguageSampleAnalysis() {
         {history.map((entry, i) => (
           <div key={i} className="flex items-center justify-between py-2 border-b border-[#E8E4DF] last:border-0">
             <div>
-              <span className="text-sm font-medium text-[#1B2733]">MLU {entry.mlu}</span>
+              <span className="text-sm font-medium text-[#132F43]">MLU {entry.mlu}</span>
               <span className="text-sm text-[#8A9BA8] ml-2">({entry.utteranceCount} utterances)</span>
             </div>
             <div className="text-right">
@@ -354,7 +354,7 @@ function ArticulationProgress() {
               onClick={() => { setEditingSound(sound); setPctInput(String(pct)); }}
               className="bg-white border border-[#E8E4DF] rounded-xl p-3 text-center hover:border-[#6B9080]/30 transition-colors"
             >
-              <p className="text-xl font-bold text-[#1B2733]">/{sound}/</p>
+              <p className="text-xl font-bold text-[#132F43]">/{sound}/</p>
               <p className="text-sm font-medium text-[#3A4A57] mt-1">{pct}%</p>
               <span className={`text-xs px-1.5 py-0.5 rounded-full ${cls}`}>{label}</span>
             </button>
@@ -370,7 +370,7 @@ function ArticulationProgress() {
             exit={{ opacity: 0, y: 8 }}
             className="bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl p-4"
           >
-            <p className="font-medium text-[#1B2733] mb-2">/{editingSound}/ — % correct today</p>
+            <p className="font-medium text-[#132F43] mb-2">/{editingSound}/ — % correct today</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -643,7 +643,7 @@ export default function SLPProviderTools({ onBack }: SLPProviderToolsProps) {
             </button>
           )}
           <div>
-            <h1 className="text-lg font-bold text-[#1B2733]">SLP Clinical Tools</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">SLP Clinical Tools</h1>
             <p className="text-sm text-[#5A6B7A]">Speech-Language Pathology</p>
           </div>
           <div className="ml-auto px-2 py-1 bg-[#6B9080]/10 text-[#6B9080] text-xs font-medium rounded-full">

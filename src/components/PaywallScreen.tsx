@@ -221,7 +221,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
       {showCloseConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
               {childName ? `${childName}'s plan is ready` : 'Your personalized plan is ready'}
             </h3>
             <p className="text-[#5A6B7A] dark:text-slate-300 mb-4 text-sm leading-relaxed">
@@ -274,7 +274,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </button>
             )}
             <div className="flex-1 text-center">
-              <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+              <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                 {isPostOnboarding && childName
                   ? `${childName}'s Plan is Ready!`
                   : 'Choose Your Plan'}
@@ -399,7 +399,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
               </div>
               <p className="text-sm text-[#3A4A57] leading-relaxed mb-3 italic">&ldquo;{t.quote}&rdquo;</p>
               <div className="border-t border-[#E8E4DF] pt-2">
-                <p className="text-sm font-semibold text-[#1B2733]">{t.name}</p>
+                <p className="text-sm font-semibold text-[#132F43]">{t.name}</p>
                 <p className="text-sm text-[#5A6B7A]">{t.role}</p>
                 <p className="text-sm text-[#2A7D99] font-medium mt-1">✓ {t.outcome}</p>
               </div>
@@ -413,7 +413,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             <Gift className="w-5 h-5 text-[#2A7D99]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#1B2733]">Give a month, get a month</p>
+            <p className="text-sm font-semibold text-[#132F43]">Give a month, get a month</p>
             <p className="text-sm text-[#5A6B7A]">
               Refer a friend — you both get Core free for 30 days when they join.
             </p>
@@ -426,7 +426,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             onClick={() => setBillingPeriod('monthly')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               billingPeriod === 'monthly'
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#1B2733]'
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
             }`}
           >
@@ -436,7 +436,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             onClick={() => setBillingPeriod('yearly')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
               billingPeriod === 'yearly'
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#1B2733]'
+                ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
                 : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
             }`}
           >
@@ -494,10 +494,10 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline justify-between mb-1">
-                      <h3 className="text-lg font-semibold text-[#1B2733]">{tier.name}</h3>
+                      <h3 className="text-lg font-semibold text-[#132F43]">{tier.name}</h3>
                       <div className="text-right">
                         {price === 0 ? (
-                          <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">Free</span>
+                          <span className="text-xl sm:text-2xl font-bold text-[#132F43]">Free</span>
                         ) : (
                           <>
                             {/* Annual pricing anchor — show strikethrough monthly equivalent when yearly */}
@@ -511,7 +511,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                                     ${monthlyEquivalent}/yr
                                   </span>
                                   <div className="flex items-baseline gap-1">
-                                    <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                                    <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                                       ${price.toFixed(2)}
                                     </span>
                                     <span className="text-sm text-[#5A6B7A]">/yr</span>
@@ -524,7 +524,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                             })()}
                             {billingPeriod === 'monthly' && (
                               <>
-                                <span className="text-xl sm:text-2xl font-bold text-[#1B2733]">
+                                <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
                                   ${price.toFixed(2)}
                                 </span>
                                 <span className="text-sm text-[#5A6B7A]">/mo</span>

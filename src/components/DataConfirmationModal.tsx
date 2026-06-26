@@ -130,7 +130,7 @@ export function DataConfirmationModal({
                   <Sparkles className="w-3 h-3" />
                   Ready for review
                 </div>
-                <h2 id="data-confirm-title" className="text-lg font-semibold text-[#1B2733] leading-tight">
+                <h2 id="data-confirm-title" className="text-lg font-semibold text-[#132F43] leading-tight">
                   {pending.length === 1
                     ? 'Aminy heard something — want to save it?'
                     : `Aminy heard ${pending.length} things — want to save them?`}
@@ -155,7 +155,7 @@ export function DataConfirmationModal({
                   <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
                     <Check className="w-5 h-5 text-[#2A7D99]" />
                   </div>
-                  <p className="text-sm font-medium text-[#1B2733]">All caught up</p>
+                  <p className="text-sm font-medium text-[#132F43]">All caught up</p>
                   <p className="mt-1 text-sm text-[#8E9BAA]">Nothing waiting on your review.</p>
                 </div>
               ) : (
@@ -242,7 +242,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <p className="text-sm font-semibold text-[#1B2733]">{style.label}</p>
+            <p className="text-sm font-semibold text-[#132F43]">{style.label}</p>
             <span
               className="text-xs font-medium px-1.5 py-0.5 rounded-full"
               style={{ background: `${confidenceColor}15`, color: confidenceColor }}
@@ -266,7 +266,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
             <p className="text-xs font-semibold tracking-wider text-[#8E9BAA] uppercase mb-1">
               You said
             </p>
-            <p className="text-sm text-[#1B2733] leading-snug italic">
+            <p className="text-sm text-[#132F43] leading-snug italic">
               "{item.rawText}"
             </p>
           </div>
@@ -283,7 +283,7 @@ function ItemCard({ item, expanded, onToggle, onConfirm, onSkip, isProcessing }:
                     <dt className="text-sm text-[#8E9BAA] capitalize truncate">
                       {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
                     </dt>
-                    <dd className="text-sm font-medium text-[#1B2733] truncate">
+                    <dd className="text-sm font-medium text-[#132F43] truncate">
                       {String(value)}
                     </dd>
                   </div>

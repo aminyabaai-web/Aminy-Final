@@ -216,7 +216,7 @@ export function InsuranceVerification({
             <Shield className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-[#1B2733]">Insurance Verification</h2>
+            <h2 className="text-lg font-bold text-[#132F43]">Insurance Verification</h2>
             <p className="text-sm text-[#5A6B7A]">
               Check your coverage for Aminy services
             </p>
@@ -252,14 +252,14 @@ export function InsuranceVerification({
               </Card>
 
               <Card className="p-3 sm:p-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3">What you'll need:</h3>
+                <h3 className="font-semibold text-[#132F43] mb-3">What you'll need:</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
                       <CreditCard className="w-4 h-4 text-[#6B9080]" />
                     </div>
                     <div>
-                      <p className="font-medium text-[#1B2733]">Insurance Card</p>
+                      <p className="font-medium text-[#132F43]">Insurance Card</p>
                       <p className="text-sm text-[#5A6B7A]">Front and back photos</p>
                     </div>
                   </div>
@@ -268,7 +268,7 @@ export function InsuranceVerification({
                       <FileText className="w-4 h-4 text-[#6B9080]" />
                     </div>
                     <div>
-                      <p className="font-medium text-[#1B2733]">Member ID & Group Number</p>
+                      <p className="font-medium text-[#132F43]">Member ID & Group Number</p>
                       <p className="text-sm text-[#5A6B7A]">Found on your card</p>
                     </div>
                   </div>
@@ -313,7 +313,7 @@ export function InsuranceVerification({
             >
               <div className="text-center mb-4">
                 <Badge className="bg-blue-100 text-[#4A6478] mb-2">Step 1 of 3</Badge>
-                <h3 className="text-lg font-semibold text-[#1B2733]">
+                <h3 className="text-lg font-semibold text-[#132F43]">
                   Capture Front of Card
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">
@@ -350,7 +350,7 @@ export function InsuranceVerification({
                 ) : (
                   <div className="text-center p-6">
                     <Camera className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
-                    <p className="font-medium text-[#1B2733]">Take Photo or Upload</p>
+                    <p className="font-medium text-[#132F43]">Take Photo or Upload</p>
                     <p className="text-sm text-[#5A6B7A]">Front of insurance card</p>
                   </div>
                 )}
@@ -390,7 +390,7 @@ export function InsuranceVerification({
             >
               <div className="text-center mb-4">
                 <Badge className="bg-blue-100 text-[#4A6478] mb-2">Step 2 of 3</Badge>
-                <h3 className="text-lg font-semibold text-[#1B2733]">
+                <h3 className="text-lg font-semibold text-[#132F43]">
                   Capture Back of Card
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">
@@ -442,7 +442,7 @@ export function InsuranceVerification({
                 ) : (
                   <div className="text-center p-6">
                     <RotateCcw className="w-12 h-12 mx-auto mb-3 text-[#8A9BA8]" />
-                    <p className="font-medium text-[#1B2733]">Flip Card Over</p>
+                    <p className="font-medium text-[#132F43]">Flip Card Over</p>
                     <p className="text-sm text-[#5A6B7A]">Back of insurance card</p>
                   </div>
                 )}
@@ -481,7 +481,7 @@ export function InsuranceVerification({
               className="py-12 text-center"
             >
               <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-[#6B9080]" />
-              <h3 className="text-lg font-semibold text-[#1B2733] mb-2">
+              <h3 className="text-lg font-semibold text-[#132F43] mb-2">
                 Reading Your Card
               </h3>
               <p className="text-[#5A6B7A] mb-4">
@@ -517,7 +517,7 @@ export function InsuranceVerification({
                   <CheckCircle className="w-3 h-3 mr-1" />
                   Card Scanned
                 </Badge>
-                <h3 className="text-lg font-semibold text-[#1B2733]">
+                <h3 className="text-lg font-semibold text-[#132F43]">
                   Verify Your Information
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">
@@ -634,7 +634,7 @@ export function InsuranceVerification({
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
-                <h3 className="text-xl font-bold text-[#1B2733] mb-2">
+                <h3 className="text-xl font-bold text-[#132F43] mb-2">
                   Insurance Verified!
                 </h3>
                 <p className="text-[#5A6B7A]">
@@ -672,7 +672,7 @@ export function InsuranceVerification({
 
               {/* Covered Services */}
               <Card className="p-3 sm:p-4">
-                <h4 className="font-semibold text-[#1B2733] mb-3">Covered Services</h4>
+                <h4 className="font-semibold text-[#132F43] mb-3">Covered Services</h4>
                 <div className="space-y-2">
                   {verificationResult.coveredServices?.map((service, i) => (
                     <div key={i} className="flex items-center gap-2">

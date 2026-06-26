@@ -253,7 +253,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                       <span className="absolute -top-1 -right-1 w-2 h-2 bg-gradient-to-r from-emerald-400 via-amber-400 to-violet-400 rounded-full animate-pulse" />
                     )}
                   </div>
-                  <h2 className="text-[#1B2733]">Aminy</h2>
+                  <h2 className="text-[#132F43]">Aminy</h2>
                 </div>
                 <Button
                   variant="ghost"
@@ -355,7 +355,7 @@ Respond naturally, showing you remember their journey. Be brief (2-3 sentences) 
                     className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                       message.role === 'user'
                         ? 'bg-primary text-white'
-                        : 'bg-[#FAF7F2] text-[#1B2733]'
+                        : 'bg-[#FAF7F2] text-[#132F43]'
                     }`}
                   >
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">

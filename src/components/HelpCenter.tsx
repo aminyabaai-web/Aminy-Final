@@ -206,7 +206,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <HelpCircle className="w-5 h-5 text-[#6B9080]" />
               </div>
               <div>
-                <h2 id="help-center-title" className="text-xl text-[#1B2733]">
+                <h2 id="help-center-title" className="text-xl text-[#132F43]">
                   Help & Support
                 </h2>
                 <p className="text-sm text-[#5A6B7A]">
@@ -264,8 +264,8 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                       onClick={() => handleTabChange(tab.id)}
                       className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-colors ${
                         activeTab === tab.id
-                          ? 'bg-white text-[#1B2733] shadow-sm'
-                          : 'text-[#5A6B7A] hover:text-[#1B2733] hover:bg-white/50'
+                          ? 'bg-white text-[#132F43] shadow-sm'
+                          : 'text-[#5A6B7A] hover:text-[#132F43] hover:bg-white/50'
                       }`}
                     >
                       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
@@ -296,7 +296,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedArticle(null)}
-                  className="flex items-center space-x-2 w-full justify-start mb-4 text-[#5A6B7A] hover:text-[#1B2733]"
+                  className="flex items-center space-x-2 w-full justify-start mb-4 text-[#5A6B7A] hover:text-[#132F43]"
                 >
                   <ChevronRight className="w-4 h-4 rotate-180" />
                   <span>Back to {currentTab?.label}</span>
@@ -311,7 +311,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Contact Form */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
-                  <h3 className="text-lg text-[#1B2733] mb-4">Contact Support</h3>
+                  <h3 className="text-lg text-[#132F43] mb-4">Contact Support</h3>
                   <form className="space-y-3 sm:space-y-4" onSubmit={(e) => {
                     e.preventDefault();
                     const form = e.currentTarget;
@@ -364,7 +364,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Article View */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="max-w-2xl">
-                  <h3 className="text-xl text-[#1B2733] mb-4">{selectedArticle.title}</h3>
+                  <h3 className="text-xl text-[#132F43] mb-4">{selectedArticle.title}</h3>
                   <div className="space-y-3">
                     {selectedArticle.bullets.map((bullet: string, index: number) => (
                       <div key={index} className="flex items-start space-x-3">
@@ -391,7 +391,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
               /* Articles Grid */
               <div className="p-4 sm:p-5 md:p-6">
                 <div className="mb-4">
-                  <h3 className="text-lg text-[#1B2733]">{currentTab?.label}</h3>
+                  <h3 className="text-lg text-[#132F43]">{currentTab?.label}</h3>
                   <p className="text-sm text-[#5A6B7A]">{currentTab?.description}</p>
                 </div>
                 
@@ -404,7 +404,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="text-[#1B2733] mb-2">{article.title}</h4>
+                          <h4 className="text-[#132F43] mb-2">{article.title}</h4>
                           <div className="space-y-1">
                             {article.bullets.slice(0, 2).map((bullet: string, bulletIndex: number) => (
                               <p key={bulletIndex} className="text-sm text-[#5A6B7A] line-clamp-1">
@@ -462,7 +462,7 @@ export function HelpCenter({ onClose, onAnalytics }: HelpCenterProps) {
                   <AlertTriangle className="w-5 h-5 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg text-[#1B2733]">Urgent Help</h3>
+                  <h3 className="text-lg text-[#132F43]">Urgent Help</h3>
                   <p className="text-sm text-[#5A6B7A]">Emergency resources & support</p>
                 </div>
               </div>

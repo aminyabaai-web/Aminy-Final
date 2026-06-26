@@ -136,7 +136,7 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-[#1B2733] dark:text-white">Telehealth Consent Required</h1>
+                <h1 className="text-[#132F43] dark:text-white">Telehealth Consent Required</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Please review and accept before booking sessions
                 </p>
@@ -182,7 +182,7 @@ export function TelehealthScreen({
                 </Button>
               )}
               <div>
-                <h1 className="text-[#1B2733] dark:text-white">Telehealth Sessions</h1>
+                <h1 className="text-[#132F43] dark:text-white">Telehealth Sessions</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
                   Professional guidance for {childName}'s development
                 </p>
@@ -310,7 +310,7 @@ export function TelehealthScreen({
 
         {activeView === 'history' && (
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="text-lg text-[#1B2733] mb-2">Progress Report Integration</h3>
+            <h3 className="text-lg text-[#132F43] mb-2">Progress Report Integration</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
               All telehealth session notes are automatically included in your AI-generated progress reports, 
               IEP documents, and BCBA notes. No need to manually transfer information.

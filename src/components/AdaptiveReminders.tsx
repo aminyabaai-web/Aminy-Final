@@ -306,7 +306,7 @@ function TimeInput({ time, onChange }: TimeInputProps) {
       <select
         value={time.hour}
         onChange={(e) => onChange('hour', parseInt(e.target.value))}
-        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#132F43] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
           <option key={hour} value={hour}>
@@ -321,7 +321,7 @@ function TimeInput({ time, onChange }: TimeInputProps) {
       <select
         value={time.minute}
         onChange={(e) => onChange('minute', parseInt(e.target.value))}
-        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#132F43] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         {[0, 15, 30, 45].map((minute) => (
           <option key={minute} value={minute}>
@@ -334,7 +334,7 @@ function TimeInput({ time, onChange }: TimeInputProps) {
       <select
         value={time.period}
         onChange={(e) => onChange('period', e.target.value as 'AM' | 'PM')}
-        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#1B2733] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
+        className="px-3 py-2 border border-[#E8E4DF] rounded-lg bg-white text-[#132F43] focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all"
       >
         <option value="AM">AM</option>
         <option value="PM">PM</option>
@@ -446,7 +446,7 @@ function ReminderNotification({ childName, tone, onClose }: ReminderNotification
               <Bell className="w-5 h-5 text-accent" />
             </div>
             <div className="flex-1">
-              <p className="text-base font-medium text-[#1B2733] leading-relaxed">
+              <p className="text-base font-medium text-[#132F43] leading-relaxed">
                 {getMessage()}
               </p>
             </div>

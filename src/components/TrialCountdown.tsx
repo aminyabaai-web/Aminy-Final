@@ -139,7 +139,7 @@ export function TrialCountdown({
               )}
             </div>
             <div>
-              <p className="font-semibold text-[#1B2733] dark:text-white">
+              <p className="font-semibold text-[#132F43] dark:text-white">
                 {daysRemaining === 0
                   ? `${hoursRemaining} hours left in your trial`
                   : daysRemaining === 1

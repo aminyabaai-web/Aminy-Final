@@ -133,7 +133,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
         <motion.div {...ANIMATIONS.pageEnter}>
           <Card className="max-w-md p-8 text-center">
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
-            <h2 className="text-xl text-[#1B2733] mb-2">Unable to Load Share</h2>
+            <h2 className="text-xl text-[#132F43] mb-2">Unable to Load Share</h2>
             <p className="text-sm text-[#5A6B7A] mb-6">{error}</p>
             <Button onClick={onStartTrial} className="w-full bg-accent text-white">
               Start Your Free Trial
@@ -156,7 +156,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
               <span className="text-xl">{getContentIcon(content.type)}</span>
             </div>
             <div>
-              <h1 className="text-sm text-[#1B2733]">
+              <h1 className="text-sm text-[#132F43]">
                 {shareToken.metadata.parentFirstName}'s Share
               </h1>
               <p className="text-sm text-[#5A6B7A]">
@@ -208,7 +208,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm text-[#1B2733] mb-1">
+                <h3 className="text-sm text-[#132F43] mb-1">
                   Create Your Own Progress Snapshots
                 </h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">
@@ -244,7 +244,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
       <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h2 className="text-lg text-[#1B2733] mb-1">
+            <h2 className="text-lg text-[#132F43] mb-1">
               {childName}'s Weekly Progress
             </h2>
             <p className="text-sm text-[#5A6B7A]">
@@ -276,7 +276,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
 
       {/* Highlights */}
       <Card className="p-5">
-        <h3 className="text-sm text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm text-[#132F43] mb-3 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-accent" />
           Week Highlights
         </h3>
@@ -293,7 +293,7 @@ function WeeklySnapshotView({ data, childName, onStartTrial }: { data: WeeklySna
       {/* Goals Progress */}
       {data.goals && data.goals.length > 0 && (
         <Card className="p-5">
-          <h3 className="text-sm text-[#1B2733] mb-3 flex items-center gap-2">
+          <h3 className="text-sm text-[#132F43] mb-3 flex items-center gap-2">
             <Target className="w-4 h-4 text-accent" />
             Goals Progress
           </h3>
@@ -341,7 +341,7 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
   return (
     <div className="space-y-4">
       <Card className="p-6">
-        <h2 className="text-lg text-[#1B2733] mb-2">
+        <h2 className="text-lg text-[#132F43] mb-2">
           {childName}'s Care Plan
         </h2>
         <p className="text-sm text-[#5A6B7A] mb-4">
@@ -359,12 +359,12 @@ function PlanSummaryView({ data, childName }: { data: PlanSummaryData; childName
         {/* Routines */}
         {data.routines && data.routines.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-sm text-[#1B2733]">Active Routines</h3>
+            <h3 className="text-sm text-[#132F43]">Active Routines</h3>
             {data.routines.map((routine: PlanRoutine, idx: number) => (
               <Card key={`${routine.name}-${idx}`} className="p-4 bg-[#FAF7F2]">
                 <div className="flex items-center gap-2 mb-2">
                   <Calendar className="w-4 h-4 text-accent" />
-                  <span className="text-sm text-[#1B2733]">{routine.name}</span>
+                  <span className="text-sm text-[#132F43]">{routine.name}</span>
                 </div>
                 <div className="space-y-1">
                   {routine.steps?.slice(0, 3).map((step: string, sIdx: number) => (
@@ -407,14 +407,14 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
       <Card className="p-6 bg-gradient-to-br from-orange-50 to-red-50">
         <div className="text-center mb-6">
           <div className="text-6xl mb-2">🔥</div>
-          <h2 className="text-3xl text-[#1B2733] mb-1">{data.streakCount || 0} Days</h2>
+          <h2 className="text-3xl text-[#132F43] mb-1">{data.streakCount || 0} Days</h2>
           <p className="text-sm text-[#5A6B7A]">{childName}'s Current Streak</p>
         </div>
 
         {/* Streak Calendar */}
         {data.streakDays && (
           <div className="bg-white rounded-lg p-4">
-            <h3 className="text-sm text-[#1B2733] mb-3">Recent Activity</h3>
+            <h3 className="text-sm text-[#132F43] mb-3">Recent Activity</h3>
             <div className="grid grid-cols-7 gap-2">
               {data.streakDays.slice(-14).map((day: StreakDay, idx: number) => (
                 <div
@@ -434,7 +434,7 @@ function StreakCardView({ data, childName }: { data: StreakCardData; childName: 
         {/* Achievements */}
         {data.milestones && data.milestones.length > 0 && (
           <div className="mt-4 space-y-2">
-            <h3 className="text-sm text-[#1B2733]">Milestones</h3>
+            <h3 className="text-sm text-[#132F43]">Milestones</h3>
             {data.milestones.map((milestone: string, idx: number) => (
               <div key={idx} className="flex items-center gap-2 bg-white rounded-lg p-3">
                 <CheckCircle2 className="w-4 h-4 text-green-600" />

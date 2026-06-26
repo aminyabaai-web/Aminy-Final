@@ -225,7 +225,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
             <ShieldCheck className="w-5 h-5 text-teal-600 dark:text-teal-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Provider Quality</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Provider Quality</h3>
             <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
               Verification status, satisfaction, and outcomes for payors
             </p>
@@ -248,7 +248,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
         <>
           {/* Verification Status */}
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-5">
-            <h4 className="text-sm font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
               <Users className="w-4 h-4 text-[#577590]" />
               Provider Verification Status
             </h4>
@@ -279,7 +279,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
 
           {/* Provider NPS */}
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-5">
-            <h4 className="text-sm font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
               <Star className="w-4 h-4 text-amber-500" />
               Provider Satisfaction NPS
               {providerNPSRows.length === 0 && (
@@ -337,7 +337,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
 
           {/* Outcomes for Payors */}
           <div className="bg-white dark:bg-slate-900 rounded-xl border border-[#E8E4DF] dark:border-slate-700 p-5">
-            <h4 className="text-sm font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
               <Target className="w-4 h-4 text-violet-600" />
               Outcomes for Payors
             </h4>
@@ -349,21 +349,21 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
               <div className="grid grid-cols-3 gap-3 mb-5">
                 <div className="text-center p-3 bg-[#EEF4F8] dark:bg-slate-800 rounded-lg">
                   <FileText className="w-4 h-4 text-[#577590] mx-auto mb-1" />
-                  <div className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-2xl font-bold text-[#132F43] dark:text-white">
                     {outcomes?.totalSessions ?? 0}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Sessions Completed</div>
                 </div>
                 <div className="text-center p-3 bg-[#EEF4F8] dark:bg-slate-800 rounded-lg">
                   <Target className="w-4 h-4 text-violet-600 mx-auto mb-1" />
-                  <div className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-2xl font-bold text-[#132F43] dark:text-white">
                     {goalAttainmentRate !== null ? `${goalAttainmentRate}%` : '—'}
                   </div>
                   <div className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">Goal Attainment</div>
                 </div>
                 <div className="text-center p-3 bg-[#EEF4F8] dark:bg-slate-800 rounded-lg">
                   <Star className="w-4 h-4 text-amber-500 mx-auto mb-1" />
-                  <div className="text-2xl font-bold text-[#1B2733] dark:text-white">
+                  <div className="text-2xl font-bold text-[#132F43] dark:text-white">
                     {outcomes?.consumerNPS !== null && outcomes?.consumerNPS !== undefined
                       ? outcomes.consumerNPS
                       : '—'}
@@ -392,7 +392,7 @@ The report is for sharing with insurance payors (AACT / AHCCCS). Emphasize quali
                 <div className="mt-4 p-4 bg-neutral-50 dark:bg-slate-800 rounded-lg border border-neutral-200 dark:border-slate-700">
                   <div className="flex items-center gap-2 mb-2">
                     <FileText className="w-4 h-4 text-[#577590]" />
-                    <span className="text-sm font-semibold text-[#1B2733] dark:text-white">
+                    <span className="text-sm font-semibold text-[#132F43] dark:text-white">
                       Payor Quality Report
                     </span>
                   </div>

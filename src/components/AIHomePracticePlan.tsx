@@ -153,7 +153,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
       <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9918 0%, #57759018 100%)', border: '1px solid #2A7D9935' }}>
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-sm font-semibold text-[#1B2733]">✦ 2-Week Practice Plan</p>
+            <p className="text-sm font-semibold text-[#132F43]">✦ 2-Week Practice Plan</p>
             <p className="text-sm text-[#5A6B7A] mt-0.5">Target: {plan.target}</p>
           </div>
           <button onClick={copyPlan} className="p-1.5 rounded-lg hover:bg-white/60 transition-colors">
@@ -183,7 +183,7 @@ export function AIHomePracticePlan({ childName, targets, onPlanGenerated }: AIHo
                 {day.activities.map((a, ai) => (
                   <div key={ai} className="bg-white rounded-xl p-3 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-[#1B2733]">{a.title}</span>
+                      <span className="text-sm font-semibold text-[#132F43]">{a.title}</span>
                       <div className="flex items-center gap-1.5">
                         <span className="text-sm text-slate-400">{a.time}</span>
                         <Badge variant="outline" className="text-sm">{a.durationMinutes}m</Badge>

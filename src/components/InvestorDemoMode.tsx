@@ -216,7 +216,7 @@ export function InvestorDemoMode({ onNavigate, onClose, currentScreen }: Investo
             exit={{ opacity: 0, x: -20 }}
             className="p-5"
           >
-            <h3 className="text-lg font-bold text-[#1B2733] mb-1">
+            <h3 className="text-lg font-bold text-[#132F43] mb-1">
               {currentStep.title}
             </h3>
             <p className="text-sm text-[#5A6B7A] mb-3 leading-relaxed">

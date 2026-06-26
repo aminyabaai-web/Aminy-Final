@@ -191,10 +191,10 @@ const S = {
   // Typography — hardcoded because screen always renders on light mist background
   h1: { fontSize: 26, fontWeight: 700, color: '#0C2230', lineHeight: 1.25, letterSpacing: '-0.025em', margin: 0 },
   h2: { fontSize: 20, fontWeight: 700, color: '#0C2230', lineHeight: 1.3, letterSpacing: '-0.02em', margin: 0 },
-  h3: { fontSize: 14, fontWeight: 600, color: '#1B2733', margin: '0 0 12px 0' },
+  h3: { fontSize: 14, fontWeight: 600, color: '#132F43', margin: '0 0 12px 0' },
   body: { fontSize: 15, color: '#5A6B7A', lineHeight: 1.65, margin: '10px 0 0' },
   caption: { fontSize: 12, color: '#7A8C9A', lineHeight: 1.5 },
-  label: { fontSize: 14, fontWeight: 500, color: '#1B2733', marginBottom: 8, display: 'block' as const },
+  label: { fontSize: 14, fontWeight: 500, color: '#132F43', marginBottom: 8, display: 'block' as const },
 
   // Cards / Buttons
   concernCard: {
@@ -220,14 +220,14 @@ const S = {
     padding: '12px 16px', borderRadius: 12,
     border: selected ? `2px solid ${TEAL}` : `1px solid #E2E8F0`,
     backgroundColor: selected ? TEAL_BG_LIGHT : 'rgba(255,255,255,0.92)',
-    color: selected ? TEAL : '#1B2733',
+    color: selected ? TEAL : '#132F43',
     fontSize: 14, fontWeight: 500, cursor: 'pointer', transition: 'all 0.15s',
   }),
   yesNoBtn: (variant: 'yes' | 'no') => ({
     flex: 1, padding: '16px 24px', borderRadius: 18,
     border: variant === 'yes' ? `2px solid ${TEAL_BORDER}` : `2px solid #E2E8F0`,
     backgroundColor: variant === 'yes' ? TEAL_BG_LIGHT : 'rgba(255,255,255,0.92)',
-    color: variant === 'yes' ? TEAL : '#1B2733',
+    color: variant === 'yes' ? TEAL : '#132F43',
     fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s',
   }),
 
@@ -373,7 +373,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                 <Icon style={{ width: 24, height: 24, color: c.color }} strokeWidth={1.5} />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>{c.label}</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>{c.label}</div>
                 <div style={{ fontSize: 12, color: '#5A6B7A', marginTop: 2 }}>{c.description}</div>
               </div>
               <ChevronRight style={{ width: 16, height: 16, color: '#d1d5db', flexShrink: 0 }} />
@@ -414,7 +414,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
                 border: '1px solid rgba(209, 213, 219, 1)',
                 backgroundColor: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
-                fontSize: 14, color: '#1B2733', outline: 'none', boxSizing: 'border-box',
+                fontSize: 14, color: '#132F43', outline: 'none', boxSizing: 'border-box',
                 transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
               }}
               onFocus={(e) => { e.currentTarget.style.borderColor = TEAL; e.currentTarget.style.boxShadow = `0 0 0 3px rgba(42,125,153,0.12)`; }}
@@ -437,7 +437,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             <div style={{ padding: 16, borderRadius: 12, backgroundColor: 'rgba(255,255,255,0.92)', border: '1px solid #E2E8F0', marginBottom: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <CheckCircle style={{ width: 16, height: 16, color: TEAL }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>{selectedInstrument.shortName}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>{selectedInstrument.shortName}</span>
               </div>
               <p style={{ fontSize: 12, color: '#7A8C9A', margin: 0, lineHeight: 1.5 }}>
                 {selectedInstrument.questions.length} questions · About {selectedInstrument.estimatedMinutes} minutes · Used by pediatricians worldwide
@@ -620,7 +620,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
           <div style={S.lureBanner}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
               <Sparkles style={{ width: 16, height: 16, color: TEAL }} />
-              <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>What Aminy does next</span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>What Aminy does next</span>
             </div>
             {[
               result.riskLevel !== 'low' && `Match you with ${result.recommendedProviders[0]?.toLowerCase() || 'specialist'}s who accept your insurance`,
@@ -678,7 +678,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
           <Sparkles style={{ width: 15, height: 15, color: TEAL }} />
-          <span style={{ fontSize: 14, fontWeight: 600, color: '#1B2733' }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>
             {phase === 'results' ? 'Screening Results' : 'Free Screening'}
           </span>
         </div>

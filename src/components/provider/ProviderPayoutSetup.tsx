@@ -140,7 +140,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
           <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
             <Building2 className="w-4 h-4 text-[#6B9080]" />
           </div>
-          <span className="font-semibold text-[#1B2733] text-sm">Practice Information</span>
+          <span className="font-semibold text-[#132F43] text-sm">Practice Information</span>
         </div>
         {!editing && info.npi && (
           <button
@@ -186,7 +186,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               value={draft.practiceName}
               onChange={(e) => setDraft((d) => ({ ...d, practiceName: e.target.value }))}
               placeholder="e.g. Sunshine ABA Therapy"
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
           </div>
 
@@ -202,7 +202,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
               onChange={(e) => setDraft((d) => ({ ...d, npi: e.target.value.replace(/[^\d]/g, '').slice(0, 10) }))}
               placeholder="1234567890"
               maxLength={10}
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm font-mono text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm font-mono text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             />
             {draft.npi.length > 0 && draft.npi.length < 10 && (
               <p className="text-sm text-amber-600 mt-1">{10 - draft.npi.length} more digit{10 - draft.npi.length !== 1 ? 's' : ''} needed</p>
@@ -218,7 +218,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
             <select
               value={draft.taxonomyCode}
               onChange={(e) => setDraft((d) => ({ ...d, taxonomyCode: e.target.value }))}
-              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
+              className="w-full rounded-xl border border-[#E8E4DF] px-3 py-2.5 text-sm text-[#132F43] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent bg-[#FAF7F2]"
             >
               <option value="">Select taxonomy code…</option>
               {ABA_TAXONOMY_CODES.map((t) => (
@@ -460,7 +460,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
               <div className="w-8 h-8 rounded-full bg-[#6B9080]/10 flex items-center justify-center">
                 <CreditCard className="w-4 h-4 text-[#6B9080]" />
               </div>
-              <span className="font-semibold text-[#1B2733] text-sm">Stripe Connect</span>
+              <span className="font-semibold text-[#132F43] text-sm">Stripe Connect</span>
             </div>
             {accountStatus && <StatusBadge status={accountStatus.status} />}
           </div>
@@ -529,7 +529,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
         <Card className="p-4 rounded-2xl border-0 shadow-sm bg-white">
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <span className="font-semibold text-[#1B2733] text-sm">Payout Schedule</span>
+            <span className="font-semibold text-[#132F43] text-sm">Payout Schedule</span>
           </div>
           <div className="space-y-2">
             {[
@@ -554,7 +554,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
           >
             <div className="flex items-center gap-2">
               <History className="w-4 h-4 text-[#5A6B7A]" />
-              <span className="font-semibold text-[#1B2733] text-sm">Payout History</span>
+              <span className="font-semibold text-[#132F43] text-sm">Payout History</span>
               {payouts.length > 0 && (
                 <Badge className="bg-[#6B9080]/10 text-[#6B9080] border-0 text-sm">
                   {payouts.length}
@@ -588,7 +588,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                           </p>
                         </div>
                         <div className="flex flex-col items-end gap-1 shrink-0">
-                          <span className="text-sm font-semibold text-[#1B2733]">
+                          <span className="text-sm font-semibold text-[#132F43]">
                             {formatCents(payout.providerAmountCents)}
                           </span>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cls}`}>

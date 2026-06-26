@@ -79,7 +79,7 @@ export function ChildSwitcher({
     <div className="relative">
       {/* Label above switcher */}
       <div className="flex items-center justify-between mb-2">
-        <label className="text-sm font-semibold text-[#1B2733]">
+        <label className="text-sm font-semibold text-[#132F43]">
           Your children
         </label>
         {!isUnlimited && (

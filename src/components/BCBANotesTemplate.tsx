@@ -97,7 +97,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
   return (
     <div className="space-y-3 sm:space-y-4 sm:space-y-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg sm:text-xl font-semibold text-[#1B2733]">BCBA/RBT Session Notes</h3>
+        <h3 className="text-lg sm:text-xl font-semibold text-[#132F43]">BCBA/RBT Session Notes</h3>
         <Badge variant="outline" className="text-sm">
           Auto-saved to Vault
         </Badge>
@@ -119,7 +119,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
 
       {/* Quick Taps */}
       <div className="space-y-3">
-        <Label className="text-sm font-semibold text-[#1B2733]">Session Status</Label>
+        <Label className="text-sm font-semibold text-[#132F43]">Session Status</Label>
         <div className="flex gap-2 flex-wrap">
           {quickTaps.map((tap) => (
             <Button
@@ -139,7 +139,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Reason Chips (shown if "Couldn't do" is selected) */}
       {selectedQuickTap === 'couldnt-do' && (
         <div className="space-y-3">
-          <Label className="text-sm font-semibold text-[#1B2733]">Reason</Label>
+          <Label className="text-sm font-semibold text-[#132F43]">Reason</Label>
           <div className="flex gap-2 flex-wrap">
             {reasonChips.map((reason) => (
               <Badge
@@ -162,7 +162,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Session Details Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <Label htmlFor="goal" className="text-sm font-semibold text-[#1B2733]">Goal</Label>
+          <Label htmlFor="goal" className="text-sm font-semibold text-[#132F43]">Goal</Label>
           <Textarea
             id="goal"
             rows={3}
@@ -174,7 +174,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="prompting" className="text-sm font-semibold text-[#1B2733]">Prompting level</Label>
+          <Label htmlFor="prompting" className="text-sm font-semibold text-[#132F43]">Prompting level</Label>
           <Textarea
             id="prompting"
             rows={3}
@@ -186,7 +186,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="mastery" className="text-sm font-semibold text-[#1B2733]">Mastery criteria</Label>
+          <Label htmlFor="mastery" className="text-sm font-semibold text-[#132F43]">Mastery criteria</Label>
           <Textarea
             id="mastery"
             rows={3}
@@ -198,7 +198,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="trials" className="text-sm font-semibold text-[#1B2733]">Trials</Label>
+          <Label htmlFor="trials" className="text-sm font-semibold text-[#132F43]">Trials</Label>
           <Textarea
             id="trials"
             rows={3}
@@ -213,7 +213,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
       {/* Full Width Fields */}
       <div className="space-y-3 sm:space-y-4">
         <div>
-          <Label htmlFor="abc" className="text-sm font-semibold text-[#1B2733]">ABC events</Label>
+          <Label htmlFor="abc" className="text-sm font-semibold text-[#132F43]">ABC events</Label>
           <Textarea
             id="abc"
             rows={4}
@@ -225,7 +225,7 @@ export function BCBANotesTemplate({ childName, onSave }: BCBANotesTemplateProps)
         </div>
 
         <div>
-          <Label htmlFor="dosage" className="text-sm font-semibold text-[#1B2733]">Dosage</Label>
+          <Label htmlFor="dosage" className="text-sm font-semibold text-[#132F43]">Dosage</Label>
           <Textarea
             id="dosage"
             rows={2}

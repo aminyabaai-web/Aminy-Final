@@ -1026,7 +1026,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   ✦
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
+                  <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
                   <p className="text-sm text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
                     <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
@@ -1068,7 +1068,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   >
                     {/* Drawer header */}
                     <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] dark:border-slate-700 shrink-0">
-                      <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Chat History</p>
+                      <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Chat History</p>
                       <button
                         onClick={startNewChat}
                         className="flex items-center gap-1.5 text-xs text-[#6B9080] font-medium px-3 py-1.5 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
@@ -1090,7 +1090,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           className="w-full flex items-center gap-3 px-4 py-3 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 transition-colors text-left"
                         >
                           <item.icon className="w-4 h-4 text-[#6B9080]" />
-                          <span className="text-sm text-[#1B2733] dark:text-slate-100">{item.label}</span>
+                          <span className="text-sm text-[#132F43] dark:text-slate-100">{item.label}</span>
                           <ChevronRight className="w-4 h-4 text-slate-400 ml-auto" />
                         </button>
                       ))}
@@ -1121,7 +1121,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 ✦
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm text-[#1B2733] dark:text-slate-200 leading-snug line-clamp-2">{session.preview}</p>
+                                <p className="text-sm text-[#132F43] dark:text-slate-200 leading-snug line-clamp-2">{session.preview}</p>
                                 <p className="text-sm text-slate-400 dark:text-slate-400 mt-0.5">{formatSessionTime(session.timestamp)}</p>
                               </div>
                               <button
@@ -1152,7 +1152,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   >
                     {/* Panel header */}
                     <div className="px-4 pt-3 pb-2 flex items-center justify-between border-b border-[#E8E4DF] dark:border-slate-700 shrink-0">
-                      <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Aminy Settings</p>
+                      <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Aminy Settings</p>
                       <button
                         onClick={() => setShowSettings(false)}
                         className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-[#F0EDE8] dark:hover:bg-slate-700 transition-colors"
@@ -1175,7 +1175,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {(userContext?.childName || propChildName || '?')[0].toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">
+                            <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100 leading-tight">
                               {userContext?.childName || propChildName || 'Your child'}
                             </p>
                             {userContext?.childAge && (
@@ -1197,15 +1197,15 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         {(userContext?.progressThisWeek?.sessionsCompleted ?? 0) > 0 && (
                           <div className="flex gap-3 mt-3 pt-3 border-t border-[#6B9080]/20">
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.sessionsCompleted}</p>
+                              <p className="text-lg font-bold text-[#132F43] dark:text-slate-100">{userContext?.progressThisWeek?.sessionsCompleted}</p>
                               <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Sessions</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.calmMoments}</p>
+                              <p className="text-lg font-bold text-[#132F43] dark:text-slate-100">{userContext?.progressThisWeek?.calmMoments}</p>
                               <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Calm moments</p>
                             </div>
                             <div className="text-center flex-1">
-                              <p className="text-lg font-bold text-[#1B2733] dark:text-slate-100">{userContext?.progressThisWeek?.newStrategies}</p>
+                              <p className="text-lg font-bold text-[#132F43] dark:text-slate-100">{userContext?.progressThisWeek?.newStrategies}</p>
                               <p className="text-xs text-slate-400 dark:text-slate-400 uppercase tracking-wide">Strategies</p>
                             </div>
                           </div>
@@ -1235,7 +1235,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
-                                  <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">{p.name}</p>
+                                  <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">{p.name}</p>
                                   {personality === p.id && <Check className="w-3 h-3 text-[#6B9080] shrink-0" />}
                                 </div>
                                 <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5 line-clamp-2">{p.tagline}</p>
@@ -1264,7 +1264,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
                             <div className="pr-4">
-                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Show thinking steps</p>
+                              <p className="text-sm font-medium text-[#132F43] dark:text-slate-100">Show thinking steps</p>
                               <p className="text-sm text-[#5A6B7A] leading-tight">Display reasoning steps while processing</p>
                             </div>
                             <Switch
@@ -1277,7 +1277,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="pr-4">
-                              <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Suggested follow-ups</p>
+                              <p className="text-sm font-medium text-[#132F43] dark:text-slate-100">Suggested follow-ups</p>
                               <p className="text-sm text-[#5A6B7A] leading-tight">Show quick questions after each response</p>
                             </div>
                             <Switch
@@ -1326,7 +1326,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
-                              className="w-full text-sm text-[#1B2733] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#132F43] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={4}
                             />
                           </div>
@@ -1347,7 +1347,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."
-                              className="w-full text-sm text-[#1B2733] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
+                              className="w-full text-sm text-[#132F43] dark:text-slate-100 placeholder-slate-400 dark:placeholder:text-slate-500 border border-[#E8E4DF] dark:border-slate-600 bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#6B9080]/30 focus:border-[#6B9080]"
                               rows={3}
                             />
                           </div>
@@ -1385,12 +1385,12 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                             {userContext.lastCalmCue && (
                               <div className="px-3 py-2.5 flex items-center gap-2">
                                 <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
-                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Last calm cue: <span className="font-medium text-[#1B2733] dark:text-slate-100">{userContext.lastCalmCue}</span></p>
+                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Last calm cue: <span className="font-medium text-[#132F43] dark:text-slate-100">{userContext.lastCalmCue}</span></p>
                               </div>
                             )}
                             {userContext.bestTimeOfDay && (
                               <div className="px-3 py-2.5">
-                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Best time of day: <span className="font-medium text-[#1B2733] dark:text-slate-100 capitalize">{userContext.bestTimeOfDay}</span></p>
+                                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Best time of day: <span className="font-medium text-[#132F43] dark:text-slate-100 capitalize">{userContext.bestTimeOfDay}</span></p>
                               </div>
                             )}
                             {!userContext.strugglingWith?.length && !userContext.celebratingWins?.length && !userContext.lastCalmCue && !userContext.bestTimeOfDay && (
@@ -1437,7 +1437,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                       <div key={fact.id} className="flex items-start justify-between gap-2">
                                         <div className="min-w-0">
                                           <span className="text-sm text-[#5A6B7A] font-medium">{fact.key.replace(/_/g, ' ')}: </span>
-                                          <span className="text-sm text-[#1B2733] dark:text-slate-100">{fact.value}</span>
+                                          <span className="text-sm text-[#132F43] dark:text-slate-100">{fact.value}</span>
                                         </div>
                                         <button
                                           onClick={async () => {
@@ -1524,7 +1524,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                         className={`max-w-[78%] rounded-2xl text-sm leading-relaxed overflow-hidden ${
                           msg.role === 'user'
                             ? 'bg-slate-900 text-white rounded-br-md'
-                            : 'bg-[#FAF7F2] dark:bg-slate-800 text-[#1B2733] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
+                            : 'bg-[#FAF7F2] dark:bg-slate-800 text-[#132F43] dark:text-slate-100 rounded-bl-md border border-[#E8E4DF] dark:border-slate-700'
                         }`}
                       >
                         {/* Attached image */}
@@ -1770,7 +1770,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     >
                       <chip.icon className="w-4 h-4 text-[#6B9080] shrink-0 mt-0.5" />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100 leading-tight">{chip.label}</p>
+                        <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100 leading-tight">{chip.label}</p>
                         <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5">{chip.sub}</p>
                       </div>
                     </button>
@@ -1814,7 +1814,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Ask Aminy anything…"
-                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm text-[#1B2733] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full px-4 py-3 pr-24 bg-[#FAF7F2] dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent text-sm text-[#132F43] dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     style={{ minHeight: '48px', maxHeight: '120px' }}
                     rows={1}
                   />
@@ -1874,7 +1874,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   className="fixed bottom-0 left-0 right-0 z-[9999] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl pb-safe"
                 >
                   <div className="flex items-center justify-between px-4 pt-4 pb-2">
-                    <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Add to message</p>
+                    <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Add to message</p>
                     <button onClick={() => setShowActionSheet(false)} className="w-7 h-7 rounded-full bg-[#F0EDE8] dark:bg-slate-700 flex items-center justify-center" aria-label="Close menu">
                       <X className="w-4 h-4 text-[#5A6B7A]" />
                     </button>
@@ -1952,7 +1952,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <item.icon className="w-4 h-4 text-[#6B9080]" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-[#1B2733] dark:text-slate-100 leading-tight">{item.label}</p>
+                          <p className="text-sm font-medium text-[#132F43] dark:text-slate-100 leading-tight">{item.label}</p>
                           <p className="text-sm text-[#5A6B7A] leading-tight mt-0.5">{item.desc}</p>
                         </div>
                       </button>

@@ -140,7 +140,7 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2 mb-1">
-              <h3 className="font-semibold text-[#1B2733] text-sm leading-snug">{goal.plainEnglishTitle}</h3>
+              <h3 className="font-semibold text-[#132F43] text-sm leading-snug">{goal.plainEnglishTitle}</h3>
               {expanded ? <ChevronUp className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" /> : <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />}
             </div>
             <div className="flex items-center gap-2">
@@ -263,7 +263,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#132F43]">{childName}&apos;s Plan</h1>
               <p className="text-sm text-slate-400">Treatment plan summary</p>
             </div>
           </div>
@@ -293,7 +293,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
               </button>
             )}
             <div>
-              <h1 className="text-base font-semibold text-[#1B2733]">{childName}&apos;s Plan</h1>
+              <h1 className="text-base font-semibold text-[#132F43]">{childName}&apos;s Plan</h1>
               <p className="text-sm text-slate-400">{plan.periodLabel}</p>
             </div>
           </div>
@@ -346,7 +346,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
               </div>
               <div>
                 <p className="text-sm text-slate-400">Next session</p>
-                <p className="text-sm font-semibold text-[#1B2733]">
+                <p className="text-sm font-semibold text-[#132F43]">
                   {new Date(plan.nextSessionDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                 </p>
               </div>

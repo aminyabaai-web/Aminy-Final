@@ -111,7 +111,7 @@ function ClaimRow({
     <div className={`flex items-center gap-3 ${compact ? 'py-2' : 'py-3'} px-3 rounded-xl ${cfg.bg} border ${cfg.border} mb-2`}>
       <Icon className={`w-4 h-4 shrink-0 ${cfg.iconColor}`} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#1B2733] truncate">
+        <p className="text-sm font-semibold text-[#132F43] truncate">
           {filing.claimId.length > 12 ? `…${filing.claimId.slice(-10)}` : filing.claimId}
         </p>
         {!compact && (
@@ -217,7 +217,7 @@ export function TimelyFilingAlert({ claims, onFileClaim, compact = false }: Time
             <AlertTriangle className="w-4 h-4 text-red-500" />
           </div>
           <div>
-            <h3 className={`font-semibold text-[#1B2733] ${compact ? 'text-sm' : 'text-sm'}`}>
+            <h3 className={`font-semibold text-[#132F43] ${compact ? 'text-sm' : 'text-sm'}`}>
               Timely Filing Risk
             </h3>
             {!compact && (

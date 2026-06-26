@@ -144,7 +144,7 @@ export function CarePlanTabScreen({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">My Plan</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">My Plan</h1>
             <p className="text-sm text-[#5A6B7A]">Goals, routines, and progress</p>
           </div>
         </div>
@@ -355,7 +355,7 @@ function VisitSummaryCard({ summary, provider, onClick, formatDate }: VisitSumma
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <p className="font-medium text-[#1B2733] truncate">
+            <p className="font-medium text-[#132F43] truncate">
               {provider.firstName} {provider.lastName}
             </p>
             <ChevronRight className="w-4 h-4 text-[#8A9BA8] flex-shrink-0" />
@@ -410,7 +410,7 @@ function ActionItemCard({ item, onToggle, formatDate }: ActionItemCardProps) {
         </button>
 
         <div className="flex-1 min-w-0">
-          <p className={`font-medium ${item.completed ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
+          <p className={`font-medium ${item.completed ? 'line-through text-[#8A9BA8]' : 'text-[#132F43]'}`}>
             {item.title}
           </p>
           {item.description && (
@@ -442,7 +442,7 @@ function EmptyVisitSummaries({ onBookVisit }: { onBookVisit: () => void }) {
       <div className="w-16 h-16 bg-[#F0EDE8] rounded-full flex items-center justify-center mx-auto mb-4">
         <FileText className="w-8 h-8 text-[#8A9BA8]" />
       </div>
-      <h3 className="text-lg font-medium text-[#1B2733] mb-2">No visit summaries yet</h3>
+      <h3 className="text-lg font-medium text-[#132F43] mb-2">No visit summaries yet</h3>
       <p className="text-[#5A6B7A] mb-4">
         After your first consultation, your visit summary will appear here.
       </p>
@@ -463,7 +463,7 @@ function NoActionItems() {
       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
         <PartyPopper className="w-8 h-8 text-green-600" />
       </div>
-      <h3 className="text-lg font-medium text-[#1B2733] mb-2">All caught up!</h3>
+      <h3 className="text-lg font-medium text-[#132F43] mb-2">All caught up!</h3>
       <p className="text-[#5A6B7A]">
         You've completed all your action items. Great work!
       </p>
@@ -565,7 +565,7 @@ function GoalsTabContent({ goals, userId, onRefresh }: GoalsTabContentProps) {
               <BarChart3 className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-[#1B2733]">
+              <p className="text-sm font-semibold text-[#132F43]">
                 {activeGoals.length} Active Goal{activeGoals.length !== 1 ? 's' : ''}
               </p>
               <p className="text-sm text-[#5A6B7A]">
@@ -644,7 +644,7 @@ function GoalCard({ goal, categoryColor, categoryLabel, onProgressUpdate, onStat
               <span className="text-sm text-[#8A9BA8]">{goal.targetFrequency}</span>
             )}
           </div>
-          <h4 className={`font-medium ${isCompleted ? 'line-through text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
+          <h4 className={`font-medium ${isCompleted ? 'line-through text-[#8A9BA8]' : 'text-[#132F43]'}`}>
             {goal.title}
           </h4>
           {goal.description && (
@@ -742,7 +742,7 @@ function EmptyGoals() {
       <div className="w-16 h-16 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
         <Target className="w-8 h-8 text-[#6B9080]" />
       </div>
-      <h3 className="text-lg font-medium text-[#1B2733] mb-2">No goals yet</h3>
+      <h3 className="text-lg font-medium text-[#132F43] mb-2">No goals yet</h3>
       <p className="text-[#5A6B7A] mb-2 max-w-xs mx-auto">
         Goals help track progress on specific developmental milestones. Ask your provider to set up SMART goals during your next visit.
       </p>

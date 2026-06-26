@@ -304,7 +304,7 @@ export function JuniorReportCard({
               {data.childInitial}
             </div>
             <div className="flex-1">
-              <h2 className="text-lg font-bold text-[#1B2733]">Weekly Report Card</h2>
+              <h2 className="text-lg font-bold text-[#132F43]">Weekly Report Card</h2>
               <div className="flex items-center gap-1 text-sm text-[#5A6B7A]">
                 <Calendar className="w-3 h-3" />
                 {data.weekLabel}

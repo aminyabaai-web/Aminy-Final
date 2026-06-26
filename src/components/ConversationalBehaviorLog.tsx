@@ -166,7 +166,7 @@ export function ConversationalBehaviorLog({ userId, childName, onLogged }: Conve
       {/* Parsed preview card */}
       {parsed && (
         <div className={`rounded-2xl border-2 p-4 space-y-2 ${parsed.is_positive ? 'border-green-300 bg-green-50' : 'border-[#6B9080]/30 bg-[#6B9080]/10'}`}>
-          <p className="text-sm font-semibold text-[#1B2733]">
+          <p className="text-sm font-semibold text-[#132F43]">
             {parsed.is_positive ? '🎉' : '📋'} {parsed.behavior_type}
           </p>
 

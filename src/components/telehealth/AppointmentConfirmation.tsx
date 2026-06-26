@@ -360,7 +360,7 @@ export function AppointmentConfirmationScreen({
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Confirm your visit</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Confirm your visit</h1>
               <p className="text-sm text-[#5A6B7A]">Take one last quiet look before checkout</p>
             </div>
           </div>
@@ -388,7 +388,7 @@ export function AppointmentConfirmationScreen({
               </div>
 
               <div className="flex-1">
-                <h3 className="font-semibold text-[#1B2733]">
+                <h3 className="font-semibold text-[#132F43]">
                   {provider.firstName} {provider.lastName}, {provider.credentials}
                 </h3>
                 <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
@@ -408,14 +408,14 @@ export function AppointmentConfirmationScreen({
 
           {/* Appointment Details */}
           <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
-            <h4 className="font-medium text-[#1B2733]">Appointment Details</h4>
+            <h4 className="font-medium text-[#132F43]">Appointment Details</h4>
 
             <div className="space-y-3">
               {/* Date & Time */}
               <div className="flex items-start gap-3">
                 <Calendar className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-[#1B2733]">{formatDate(slot.startTime)}</p>
+                  <p className="text-[#132F43]">{formatDate(slot.startTime)}</p>
                   <p className="text-sm text-[#5A6B7A]">{formatTime(slot.startTime)}</p>
                 </div>
               </div>
@@ -424,7 +424,7 @@ export function AppointmentConfirmationScreen({
               <div className="flex items-start gap-3">
                 <Clock className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-[#1B2733]">{visitConfig.displayName}</p>
+                  <p className="text-[#132F43]">{visitConfig.displayName}</p>
                   <p className="text-sm text-[#5A6B7A]">{visitConfig.duration} minutes</p>
                 </div>
               </div>
@@ -433,7 +433,7 @@ export function AppointmentConfirmationScreen({
               <div className="flex items-start gap-3">
                 <Video className="w-5 h-5 text-[#8A9BA8] mt-0.5" />
                 <div>
-                  <p className="text-[#1B2733]">Remote Visit</p>
+                  <p className="text-[#132F43]">Remote Visit</p>
                   <p className="text-sm text-[#5A6B7A]">Secure Aminy video room, reminders, and a join link that stays easy to find later</p>
                 </div>
               </div>
@@ -442,7 +442,7 @@ export function AppointmentConfirmationScreen({
             {/* Visit Reason */}
             <div className="pt-3 border-t border-[#E8E4DF]">
               <p className="text-sm text-[#5A6B7A] mb-1">Reason for visit</p>
-              <p className="text-[#1B2733]">{intake.visitReason}</p>
+              <p className="text-[#132F43]">{intake.visitReason}</p>
             </div>
           </div>
 
@@ -450,7 +450,7 @@ export function AppointmentConfirmationScreen({
           <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[#3A4A57]">{visitConfig.displayName}</span>
-              <span className="text-[#1B2733]">{formatPrice(pricing.subtotalCents)}</span>
+              <span className="text-[#132F43]">{formatPrice(pricing.subtotalCents)}</span>
             </div>
 
             {/* Show discounts */}
@@ -494,14 +494,14 @@ export function AppointmentConfirmationScreen({
             </div>
 
             <div className="pt-3 mt-3 border-t border-[#E8E4DF] flex items-center justify-between">
-              <span className="font-medium text-[#1B2733]">Total</span>
+              <span className="font-medium text-[#132F43]">Total</span>
               <div className="text-right">
                 {(pricing.memberDiscountCents > 0 || promoDiscountCents > 0) && (
                   <span className="text-sm text-[#8A9BA8] line-through mr-2">
                     {formatPrice(pricing.subtotalCents)}
                   </span>
                 )}
-                <span className="text-xl font-bold text-[#1B2733]">{formatPrice(pricing.totalCents)}</span>
+                <span className="text-xl font-bold text-[#132F43]">{formatPrice(pricing.totalCents)}</span>
               </div>
             </div>
             {/* HSA/FSA and Superbill Info */}
@@ -597,7 +597,7 @@ export function AppointmentConfirmationScreen({
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Secure checkout</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Secure checkout</h1>
               <p className="text-sm text-[#5A6B7A]">Finish booking in one calm step</p>
             </div>
           </div>
@@ -609,12 +609,12 @@ export function AppointmentConfirmationScreen({
           {/* Amount */}
           <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 text-center shadow-sm">
             <p className="text-[#5A6B7A] mb-1">Amount due</p>
-            <p className="text-4xl font-bold text-[#1B2733]">{formatPrice(pricing.totalCents)}</p>
+            <p className="text-4xl font-bold text-[#132F43]">{formatPrice(pricing.totalCents)}</p>
           </div>
 
           {/* Stripe Checkout Info */}
           <div className="bg-white rounded-3xl border border-[#E8E4DF]/80 p-4 space-y-3 sm:space-y-4 shadow-sm">
-            <h4 className="font-medium text-[#1B2733] flex items-center gap-2">
+            <h4 className="font-medium text-[#132F43] flex items-center gap-2">
               <CreditCard className="w-5 h-5" />
               Secure Payment
             </h4>
@@ -686,7 +686,7 @@ export function AppointmentConfirmationScreen({
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce-in">
             <CheckCircle className="w-12 h-12 text-green-600" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">Your visit is confirmed</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">Your visit is confirmed</h1>
           <p className="text-[#5A6B7A]">
             Confirmation and reminders are on the way to your email and inside Aminy.
           </p>
@@ -709,7 +709,7 @@ export function AppointmentConfirmationScreen({
               )}
             </div>
             <div>
-              <p className="font-semibold text-[#1B2733]">
+              <p className="font-semibold text-[#132F43]">
                 {provider.firstName} {provider.lastName}, {provider.credentials}
               </p>
               <p className="text-sm text-[#5A6B7A]">{visitConfig.displayName}</p>
@@ -769,7 +769,7 @@ export function AppointmentConfirmationScreen({
                     className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3"
                   >
                     <span className="text-lg">{option.icon}</span>
-                    <span className="text-[#1B2733]">{option.name}</span>
+                    <span className="text-[#132F43]">{option.name}</span>
                   </button>
                 ))}
                 <button
@@ -777,7 +777,7 @@ export function AppointmentConfirmationScreen({
                   className="w-full px-4 py-3 text-left hover:bg-[#FAF7F2] transition-colors flex items-center gap-3 border-t border-[#E8E4DF]"
                 >
                   <span className="text-lg">📥</span>
-                  <span className="text-[#1B2733]">Download .ics file</span>
+                  <span className="text-[#132F43]">Download .ics file</span>
                 </button>
               </div>
             )}
@@ -787,7 +787,7 @@ export function AppointmentConfirmationScreen({
             <div className="flex items-start gap-3">
               <MessageCircle className="mt-0.5 h-5 w-5 text-[#5A6B7A]" />
               <div>
-                <p className="text-sm font-medium text-[#1B2733]">Need to change something?</p>
+                <p className="text-sm font-medium text-[#132F43]">Need to change something?</p>
                 <p className="mt-1 text-sm text-[#5A6B7A]">
                   Reschedule or cancel free up to 24 hours before the visit. Late cancellations are charged 50% and no-shows are charged the full visit amount.
                 </p>

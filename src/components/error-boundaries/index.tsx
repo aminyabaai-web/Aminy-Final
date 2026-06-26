@@ -158,7 +158,7 @@ function VideoCallErrorFallback({ error, retry, errorId }: FallbackProps) {
         </svg>
       </div>
 
-      <h2 className="text-xl font-semibold text-[#1B2733] mb-2">
+      <h2 className="text-xl font-semibold text-[#132F43] mb-2">
         Video Connection Lost
       </h2>
 
@@ -240,7 +240,7 @@ function PaymentErrorFallback({ error, retry, errorId }: FallbackProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
           </svg>
         </div>
-        <h2 className="text-lg font-semibold text-[#1B2733]">
+        <h2 className="text-lg font-semibold text-[#132F43]">
           Payment Processing Issue
         </h2>
       </div>
@@ -459,7 +459,7 @@ function DataLoadingErrorFallback({
         )}
       </div>
 
-      <h3 className="text-[#1B2733] font-medium mb-1">
+      <h3 className="text-[#132F43] font-medium mb-1">
         {isNetworkError ? "Connection issue" : `Couldn't load ${resourceName}`}
       </h3>
 
@@ -518,7 +518,7 @@ function CriticalSectionErrorFallback({ error, retry, errorId }: FallbackProps) 
           </svg>
         </div>
 
-        <h2 className="text-2xl font-semibold text-[#1B2733] mb-3">
+        <h2 className="text-2xl font-semibold text-[#132F43] mb-3">
           Something's not quite right
         </h2>
 

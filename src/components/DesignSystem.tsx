@@ -93,7 +93,7 @@ export function DesignSystem() {
   const renderTokenCard = (tokenName: string, token: { value: string; description: string }, category: string) => (
     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-2">
-        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
           {tokenName}
         </code>
         <button
@@ -135,7 +135,7 @@ export function DesignSystem() {
                 <Heart className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg sm:text-xl font-semibold text-[#1B2733] dark:text-white">
+                <h1 className="text-lg sm:text-xl font-semibold text-[#132F43] dark:text-white">
                   Aminy Design System
                 </h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
@@ -190,7 +190,7 @@ export function DesignSystem() {
             {selectedSection === 'overview' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#132F43] dark:text-white mb-4">
                     Design System Overview
                   </h2>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
@@ -204,7 +204,7 @@ export function DesignSystem() {
                     <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c] rounded-lg flex items-center justify-center mb-4">
                       <Palette className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                       Calm Color Palette
                     </h3>
                     <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
@@ -216,7 +216,7 @@ export function DesignSystem() {
                     <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center mb-4">
                       <Type className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                       Clear Typography
                     </h3>
                     <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
@@ -228,7 +228,7 @@ export function DesignSystem() {
                     <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center mb-4">
                       <Shield className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                       AA+ Accessibility
                     </h3>
                     <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
@@ -238,7 +238,7 @@ export function DesignSystem() {
                 </div>
 
                 <div className="bg-gradient-to-r from-[#FAF7F2] to-orange-50 dark:from-teal-950 dark:to-orange-950 p-6 rounded-lg border border-[#6B9080]/20 dark:border-[#6B9080]/30">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                     Mobile-First Grid System
                   </h3>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4">
@@ -259,7 +259,7 @@ export function DesignSystem() {
             {selectedSection === 'colors' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#132F43] dark:text-white mb-4">
                     Color Tokens
                   </h2>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
@@ -269,7 +269,7 @@ export function DesignSystem() {
 
                 {Object.entries(colorTokens).map(([category, tokens]) => (
                   <div key={category}>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4 capitalize">
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4 capitalize">
                       {category} Colors
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -285,7 +285,7 @@ export function DesignSystem() {
             {selectedSection === 'typography' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#132F43] dark:text-white mb-4">
                     Typography Scale
                   </h2>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
@@ -297,7 +297,7 @@ export function DesignSystem() {
                   {Object.entries(typeTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
@@ -313,7 +313,7 @@ export function DesignSystem() {
                       </div>
                       
                       <div 
-                        className="text-[#1B2733] dark:text-white mb-2"
+                        className="text-[#132F43] dark:text-white mb-2"
                         style={{ 
                           fontSize: token.value.split('/')[0], 
                           lineHeight: token.value.split('/')[1],
@@ -338,7 +338,7 @@ export function DesignSystem() {
             {selectedSection === 'spacing' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#132F43] dark:text-white mb-4">
                     Spacing System
                   </h2>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
@@ -350,7 +350,7 @@ export function DesignSystem() {
                   {Object.entries(spacingTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
@@ -386,7 +386,7 @@ export function DesignSystem() {
                   {Object.entries(radiusTokens).map(([tokenName, token]) => (
                     <div key={tokenName} className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
-                        <code className="text-sm font-mono text-[#1B2733] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
+                        <code className="text-sm font-mono text-[#132F43] dark:text-slate-100 bg-[#F0EDE8] dark:bg-slate-700 px-2 py-1 rounded">
                           {tokenName}
                         </code>
                         <button
@@ -423,7 +423,7 @@ export function DesignSystem() {
             {selectedSection === 'components' && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-2xl font-semibold text-[#1B2733] dark:text-white mb-4">
+                  <h2 className="text-2xl font-semibold text-[#132F43] dark:text-white mb-4">
                     Component Library
                   </h2>
                   <p className="text-[#5A6B7A] dark:text-slate-400 mb-4 sm:mb-6">
@@ -433,7 +433,7 @@ export function DesignSystem() {
 
                 {/* Buttons */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Buttons</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Buttons</h3>
                   <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                       <div className="space-y-3">
@@ -449,7 +449,7 @@ export function DesignSystem() {
                       
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Secondary</h4>
-                        <button className="w-full bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#1B2733] dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full bg-[#F0EDE8] dark:bg-slate-700 hover:bg-[#E8E4DF] dark:hover:bg-slate-600 text-[#132F43] dark:text-slate-100 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
                           Secondary Button
                         </button>
                         <button className="w-full border border-slate-300 dark:border-slate-600 hover:bg-[#FAF7F2] dark:hover:bg-slate-800 text-[#3A4A57] dark:text-slate-300 font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
@@ -459,7 +459,7 @@ export function DesignSystem() {
                       
                       <div className="space-y-3">
                         <h4 className="text-sm font-medium text-[#3A4A57] dark:text-slate-300">Quiet</h4>
-                        <button className="w-full text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <button className="w-full text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-100 hover:bg-[#F0EDE8] dark:hover:bg-slate-800 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
                           Quiet Button
                         </button>
                         <button className="w-full text-[#6B9080] dark:text-primary hover:text-[#6B9080] dark:hover:text-[#7BA7BC] hover:bg-[#6B9080]/10 dark:hover:bg-teal-950 font-medium py-3 px-4 rounded-lg transition-colors duration-200">
@@ -472,7 +472,7 @@ export function DesignSystem() {
 
                 {/* Inputs */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Form Elements</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Form Elements</h3>
                   <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
                       <div className="space-y-3 sm:space-y-4">
@@ -483,7 +483,7 @@ export function DesignSystem() {
                           <input 
                             type="text" 
                             placeholder="Enter text here..."
-                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                           />
                         </div>
                         
@@ -494,7 +494,7 @@ export function DesignSystem() {
                           <textarea 
                             placeholder="Enter longer text here..."
                             rows={3}
-                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                            className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
                           />
                         </div>
                       </div>
@@ -504,7 +504,7 @@ export function DesignSystem() {
                           <label className="block text-sm font-medium text-[#3A4A57] dark:text-slate-300 mb-2">
                             Select
                           </label>
-                          <select className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#1B2733] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                          <select className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-[#132F43] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option>Choose an option</option>
                             <option>Option 1</option>
                             <option>Option 2</option>
@@ -532,13 +532,13 @@ export function DesignSystem() {
 
                 {/* Cards */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Cards</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Cards</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 sm:gap-6">
                     <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6 hover:shadow-lg transition-shadow">
                       <div className="w-12 h-12 bg-[#6B9080]/10 dark:bg-[#1a3a5c] rounded-lg flex items-center justify-center mb-4">
                         <Heart className="w-6 h-6 text-[#6B9080] dark:text-primary" />
                       </div>
-                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Basic Card</h4>
+                      <h4 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Basic Card</h4>
                       <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                         A simple card component with icon, title, and description.
                       </p>
@@ -548,7 +548,7 @@ export function DesignSystem() {
                       <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mb-4">
                         <Star className="w-6 h-6 text-white" />
                       </div>
-                      <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Featured Card</h4>
+                      <h4 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Featured Card</h4>
                       <p className="text-[#3A4A57] dark:text-slate-300 text-sm">
                         A highlighted card with gradient background for important content.
                       </p>
@@ -557,7 +557,7 @@ export function DesignSystem() {
                     <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg overflow-hidden">
                       <div className="h-32 bg-gradient-to-r from-teal-400 to-blue-500"></div>
                       <div className="p-4 sm:p-5 md:p-6">
-                        <h4 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">Media Card</h4>
+                        <h4 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">Media Card</h4>
                         <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
                           Card with image header and content section.
                         </p>
@@ -568,7 +568,7 @@ export function DesignSystem() {
 
                 {/* Status Badges */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Status Badges</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Status Badges</h3>
                   <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                       <div className="space-y-3">
@@ -608,7 +608,7 @@ export function DesignSystem() {
 
                 {/* Navigation */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Navigation</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Navigation</h3>
                   <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="space-y-3 sm:space-y-4 sm:space-y-6">
                       <div>
@@ -617,10 +617,10 @@ export function DesignSystem() {
                           <button className="flex-1 py-2 px-3 text-sm font-medium text-white bg-primary rounded-md transition-colors">
                             Active
                           </button>
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 transition-colors">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-100 transition-colors">
                             Inactive
                           </button>
-                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#1B2733] dark:hover:text-slate-100 transition-colors">
+                          <button className="flex-1 py-2 px-3 text-sm font-medium text-[#5A6B7A] dark:text-slate-400 hover:text-[#132F43] dark:hover:text-slate-100 transition-colors">
                             Inactive
                           </button>
                         </div>
@@ -655,7 +655,7 @@ export function DesignSystem() {
 
                 {/* Chips */}
                 <div className="space-y-3 sm:space-y-4">
-                  <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Chips</h3>
+                  <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Chips</h3>
                   <div className="bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-lg p-6">
                     <div className="space-y-3 sm:space-y-4">
                       <div>

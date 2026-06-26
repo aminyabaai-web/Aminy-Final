@@ -79,7 +79,7 @@ export const SessionPrepModal = ({
 
           {/* Checklist */}
           <div className="space-y-3">
-            <h4 className="font-medium text-[#1B2733]">Preparation Checklist</h4>
+            <h4 className="font-medium text-[#132F43]">Preparation Checklist</h4>
             {prepItems.map((item) => (
               <label key={item.id} className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-[#FAF7F2]">
                 <Checkbox
@@ -88,7 +88,7 @@ export const SessionPrepModal = ({
                   className="mt-1"
                 />
                 <div className="flex-1">
-                  <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#1B2733]'} ${item.required ? 'font-medium' : ''}`}>
+                  <span className={`${item.completed ? 'line-through text-[#5A6B7A]' : 'text-[#132F43]'} ${item.required ? 'font-medium' : ''}`}>
                     {item.text}
                   </span>
                   {item.required && (
@@ -195,7 +195,7 @@ export const AppointmentCard = ({
     <div className="flex items-start justify-between mb-3">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-semibold text-[#1B2733]">{appointment.title}</h3>
+          <h3 className="font-semibold text-[#132F43]">{appointment.title}</h3>
           <Badge className={`${
             appointment.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' :
             appointment.status === 'pending_insurance' ? 'bg-amber-100 text-amber-700' :
@@ -230,7 +230,7 @@ export const AppointmentCard = ({
           <div className="mt-2 flex items-center gap-1 text-sm">
             <Shield className="h-4 w-4 text-emerald-600" />
             <span className="text-[#5A6B7A]">Copay:</span>
-            <span className="font-medium text-[#1B2733]">
+            <span className="font-medium text-[#132F43]">
               {appointment.copay === 0 ? 'Fully Covered' : `$${appointment.copay}`}
             </span>
           </div>

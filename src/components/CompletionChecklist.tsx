@@ -204,7 +204,7 @@ export function CompletionChecklist({ onNavigate, onBack }: CompletionChecklistP
                         )}
                         <div className="flex-1">
                           <p className={`text-sm ${
-                            item.complete ? 'text-[#1B2733]' : 'text-[#5A6B7A]'
+                            item.complete ? 'text-[#132F43]' : 'text-[#5A6B7A]'
                           }`}>
                             {item.label}
                           </p>

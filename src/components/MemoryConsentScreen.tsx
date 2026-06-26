@@ -35,7 +35,7 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
         <div className="border border-[#E8E4DF] rounded-xl p-5 mb-8">
           <label className="flex flex-row items-center justify-between cursor-pointer">
             <div className="space-y-1 pr-4">
-              <h3 className="font-medium leading-none text-[#1B2733]">Save helpful memories</h3>
+              <h3 className="font-medium leading-none text-[#132F43]">Save helpful memories</h3>
               <p className="text-sm text-[#5A6B7A] pt-1">
                 Remembers important details like your child's name, preferences, and routines.
               </p>
@@ -60,21 +60,21 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-[#1B2733]">Essential info:</span> Child's name, age, activities
+                <span className="font-medium text-[#132F43]">Essential info:</span> Child's name, age, activities
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-[#1B2733]">Patterns:</span> What calms your child, successful routines
+                <span className="font-medium text-[#132F43]">Patterns:</span> What calms your child, successful routines
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-[#1B2733]">Goals:</span> Family priorities, therapy goals
+                <span className="font-medium text-[#132F43]">Goals:</span> Family priorities, therapy goals
               </div>
             </div>
           </div>
@@ -91,14 +91,14 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-[#1B2733]">Never stored:</span> Medical diagnoses, addresses, payment info
+                <span className="font-medium text-[#132F43]">Never stored:</span> Medical diagnoses, addresses, payment info
               </div>
             </div>
 
             <div className="flex gap-3">
               <span>•</span>
               <div>
-                <span className="font-medium text-[#1B2733]">Full control:</span> View, edit, or delete memories anytime
+                <span className="font-medium text-[#132F43]">Full control:</span> View, edit, or delete memories anytime
               </div>
             </div>
           </div>
@@ -114,9 +114,9 @@ export const MemoryConsentScreen: React.FC<MemoryConsentScreenProps> = ({
 
         {/* Fine Print */}
         <p className="text-sm text-center text-[#5A6B7A] mt-6">
-          <a href="/privacy" className="hover:text-[#1B2733]">Privacy Policy</a>
+          <a href="/privacy" className="hover:text-[#132F43]">Privacy Policy</a>
           {' · '}
-          <a href="/terms" className="hover:text-[#1B2733]">Terms</a>
+          <a href="/terms" className="hover:text-[#132F43]">Terms</a>
         </p>
       </div>
     </div>

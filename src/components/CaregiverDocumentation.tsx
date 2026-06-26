@@ -365,7 +365,7 @@ export function CaregiverDocumentation({
               </Button>
             )}
             <div className="flex-1">
-              <h1 className="text-lg font-semibold text-[#1B2733]">Caregiver Timesheet</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Caregiver Timesheet</h1>
               <p className="text-sm text-[#5A6B7A]">For {clientName}</p>
             </div>
             <Badge variant="outline" className="gap-1">
@@ -380,11 +380,11 @@ export function CaregiverDocumentation({
         {/* Timer Card */}
         <Card className="p-6 bg-gradient-to-r from-accent/10 to-teal-50 border-accent/20">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-[#1B2733] flex items-center gap-2">
+            <h2 className="font-semibold text-[#132F43] flex items-center gap-2">
               <Clock className="w-5 h-5 text-accent" />
               Quick Timer
             </h2>
-            <div className="text-3xl font-mono font-bold text-[#1B2733]">
+            <div className="text-3xl font-mono font-bold text-[#132F43]">
               {formatTimerDisplay(timerElapsed)}
             </div>
           </div>
@@ -417,7 +417,7 @@ export function CaregiverDocumentation({
             <p className="text-sm text-[#5A6B7A]">Total Hours</p>
           </Card>
           <Card className="p-4 text-center">
-            <p className="text-xl sm:text-2xl font-bold text-[#1B2733]">{entries.length}</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#132F43]">{entries.length}</p>
             <p className="text-sm text-[#5A6B7A]">Entries</p>
           </Card>
           <Card className="p-4 text-center">
@@ -460,7 +460,7 @@ export function CaregiverDocumentation({
         {/* Add Entry Form */}
         {showAddEntry && (
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4">Add Time Entry</h3>
+            <h3 className="font-medium text-[#132F43] mb-4">Add Time Entry</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4">
               <div>
                 <label className="text-sm text-[#5A6B7A] mb-1 block">Date</label>
@@ -525,7 +525,7 @@ export function CaregiverDocumentation({
 
         {/* Time Entries */}
         <div className="space-y-3">
-          <h3 className="font-medium text-[#1B2733]">Time Entries</h3>
+          <h3 className="font-medium text-[#132F43]">Time Entries</h3>
 
           {entries.length === 0 ? (
             <Card className="p-8 text-center">
@@ -538,7 +538,7 @@ export function CaregiverDocumentation({
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[#1B2733]">{entry.date}</span>
+                      <span className="font-medium text-[#132F43]">{entry.date}</span>
                       <Badge variant="secondary" className="text-sm">
                         {ACTIVITY_TYPES.find(a => a.id === entry.activity_type)?.label}
                       </Badge>

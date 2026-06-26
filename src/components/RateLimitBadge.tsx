@@ -79,7 +79,7 @@ export function RateLimitBadge({
                   : 'text-[#5A6B7A] dark:text-slate-400'
               )}
             />
-            <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+            <span className="text-sm font-medium text-[#132F43] dark:text-white">
               Daily Messages
             </span>
           </div>
@@ -90,7 +90,7 @@ export function RateLimitBadge({
                 ? 'text-red-600 dark:text-red-400'
                 : runningLow
                 ? 'text-amber-600 dark:text-amber-400'
-                : 'text-[#1B2733] dark:text-white'
+                : 'text-[#132F43] dark:text-white'
             )}
           >
             {dailyUsage.remaining}/{dailyUsage.limit}

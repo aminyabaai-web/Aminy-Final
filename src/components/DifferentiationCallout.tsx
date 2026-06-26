@@ -124,7 +124,7 @@ export function DifferentiationCallout({
         <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-3">
           Why Aminy Works
         </Badge>
-        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
           {getContextMessage()}
         </h2>
         <p className="text-[#5A6B7A] max-w-xl mx-auto">
@@ -151,7 +151,7 @@ export function DifferentiationCallout({
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="font-semibold text-[#1B2733]">
+                        <h3 className="font-semibold text-[#132F43]">
                           {item.title}
                         </h3>
                         <p className="text-sm text-[#5A6B7A] mt-1">

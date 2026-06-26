@@ -54,7 +54,7 @@ export function ProviderInviteShare(): React.JSX.Element {
         <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
           <Mail className="w-4 h-4 text-emerald-500" />
         </div>
-        <h3 className="text-sm font-semibold text-[#1B2733] dark:text-white">
+        <h3 className="text-sm font-semibold text-[#132F43] dark:text-white">
           Invite Providers
         </h3>
       </div>

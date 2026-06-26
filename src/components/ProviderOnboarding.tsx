@@ -478,7 +478,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             </button>
           )}
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">Join Aminy as a Provider</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Join Aminy as a Provider</h1>
             <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
           </div>
           {currentStep !== 'agreement' && currentStep !== 'baa' && (
@@ -539,7 +539,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           <div className="space-y-6">
             {/* Practice mode — own independent practice vs. join under an organization */}
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-1">How do you want to practice?</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-1">How do you want to practice?</h2>
               <p className="text-sm text-[#5A6B7A] mb-5">This shapes your portal. You can change it later.</p>
               <div className="grid gap-3 sm:grid-cols-2">
                 {([
@@ -567,7 +567,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   >
                     <div className="flex items-center gap-2 mb-1">
                       {form.practiceMode === opt.id && <CheckCircle className="w-4 h-4 text-[#2A7D99] shrink-0" />}
-                      <span className="font-semibold text-[#1B2733]">{opt.title}</span>
+                      <span className="font-semibold text-[#132F43]">{opt.title}</span>
                     </div>
                     <p className="text-sm text-[#5A6B7A]">{opt.description}</p>
                   </button>
@@ -576,7 +576,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             </div>
 
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Basic Information</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-6">Basic Information</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor={fieldId('first-name')} className="mb-1 block text-sm font-medium text-[#3A4A57]">First Name *</label>
@@ -661,7 +661,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
         {currentStep === 'licensing' && (
           <div className="space-y-6">
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-2">Licensing & Credentials</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-2">Licensing & Credentials</h2>
               <p className="text-sm text-[#5A6B7A] mb-6">Select every state where you hold an active license or certification. Aminy only lists providers after verification clears and at least one supported market is live.</p>
 
               <div className="grid gap-4 mb-6 sm:grid-cols-2">
@@ -691,7 +691,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
               </div>
 
               <div className="mb-6 rounded-2xl border border-[#E8E4DF] bg-[#2A7D99]/10/70 px-4 py-3 text-sm text-[#3A4A57]">
-                <p className="font-medium text-[#1B2733]">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
+                <p className="font-medium text-[#132F43]">Supported launch states: {SUPPORTED_PROVIDER_STATES.join(' · ')}</p>
                 <p className="mt-1">You can add any licensed state now. Aminy keeps you off the marketplace until your credentials are validated, then turns on live booking only in supported markets where you are actually licensed.</p>
               </div>
 
@@ -732,7 +732,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
             {/* Billing Track Selection */}
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-1">Choose Your Practice Track</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-1">Choose Your Practice Track</h2>
               <p className="text-sm text-[#5A6B7A] mb-5">This determines how you get credentialed and paid. You can change tracks later.</p>
               <div className="space-y-3">
                 {([
@@ -772,7 +772,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-[#1B2733]">{track.title}</span>
+                      <span className="font-semibold text-[#132F43]">{track.title}</span>
                       {track.badge && (
                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${track.badgeClass}`}>
                           {track.badge}
@@ -786,7 +786,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             </div>
 
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Services & Pricing</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-6">Services & Pricing</h2>
 
               <div className="space-y-4">
                 <label className="flex items-center justify-between p-4 bg-[#FAF7F2] rounded-lg">
@@ -798,7 +798,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       className="rounded border-[#E8E4DF] text-[#2A7D99] focus:ring-cyan-600"
                     />
                     <div>
-                      <p className="font-medium text-[#1B2733]">25-min Consult</p>
+                      <p className="font-medium text-[#132F43]">25-min Consult</p>
                       <p className="text-sm text-[#5A6B7A]">Quick guidance session for specific questions</p>
                     </div>
                   </div>
@@ -822,7 +822,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                       className="rounded border-[#E8E4DF] text-[#2A7D99] focus:ring-cyan-600"
                     />
                     <div>
-                      <p className="font-medium text-[#1B2733]">50-min Deep Review</p>
+                      <p className="font-medium text-[#132F43]">50-min Deep Review</p>
                       <p className="text-sm text-[#5A6B7A]">Comprehensive session for complex challenges</p>
                     </div>
                   </div>
@@ -881,7 +881,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-lg font-semibold text-[#1B2733]">Weekly Availability</h2>
+                  <h2 className="text-lg font-semibold text-[#132F43]">Weekly Availability</h2>
                   <p className="text-sm text-[#5A6B7A]">Set your recurring weekly schedule (you can change this anytime)</p>
                 </div>
                 <button
@@ -947,12 +947,12 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
         {currentStep === 'review' && (
           <div className="space-y-6">
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
-              <h2 className="text-lg font-semibold text-[#1B2733] mb-6">Review Your Profile</h2>
+              <h2 className="text-lg font-semibold text-[#132F43] mb-6">Review Your Profile</h2>
 
               <div className="space-y-4">
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Profile</h3>
-                  <p className="font-semibold text-[#1B2733]">
+                  <p className="font-semibold text-[#132F43]">
                     {form.firstName} {form.lastName}, {form.credentials}
                   </p>
                   <p className="text-sm text-[#5A6B7A]">{PROVIDER_ROLE_DISPLAY[form.role]}</p>
@@ -979,10 +979,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 <div className="p-4 bg-[#FAF7F2] rounded-lg">
                   <h3 className="text-sm font-medium text-[#5A6B7A] mb-2">Services</h3>
                   {form.offersConsult && (
-                    <p className="text-sm text-[#1B2733]">25-min Consult — ${form.consultPrice}</p>
+                    <p className="text-sm text-[#132F43]">25-min Consult — ${form.consultPrice}</p>
                   )}
                   {form.offersDeepReview && (
-                    <p className="text-sm text-[#1B2733]">50-min Deep Review — ${form.deepReviewPrice}</p>
+                    <p className="text-sm text-[#132F43]">50-min Deep Review — ${form.deepReviewPrice}</p>
                   )}
                   <p className="text-sm text-[#5A6B7A] mt-2">Accepted rails: {form.acceptedInsurance.join(', ')}</p>
                 </div>
@@ -992,7 +992,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   {form.availability.length > 0 ? (
                     <div className="space-y-1">
                       {form.availability.map((slot, idx) => (
-                        <p key={idx} className="text-sm text-[#1B2733]">
+                        <p key={idx} className="text-sm text-[#132F43]">
                           {DAYS[slot.dayOfWeek]}: {slot.startTime} – {slot.endTime}
                         </p>
                       ))}
@@ -1003,7 +1003,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                 </div>
 
                 <div className="rounded-2xl border border-[#E8E4DF] bg-[#2A7D99]/10/70 px-4 py-4">
-                  <h3 className="text-sm font-semibold text-[#1B2733]">Before you go live</h3>
+                  <h3 className="text-sm font-semibold text-[#132F43]">Before you go live</h3>
                   <p className="mt-2 text-sm text-[#3A4A57]">
                     Aminy verifies your primary credential, matches your licensed states, and only turns on marketplace discovery after those checks pass. If you add states outside the live launch footprint, they stay saved on your profile and become bookable when that market is opened.
                   </p>
@@ -1020,7 +1020,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                     className="mt-0.5 h-4 w-4 rounded border-[#E8E4DF] text-[#2A7D99] focus:ring-teal-500"
                   />
                   <span className="text-sm text-[#3A4A57]">
-                    <span className="font-semibold text-[#1B2733]">Non-Solicitation Agreement — </span>
+                    <span className="font-semibold text-[#132F43]">Non-Solicitation Agreement — </span>
                     I understand that families I connect with through the Aminy marketplace may not be solicited to continue or initiate services outside of the Aminy platform for a period of 12 months following our last session on Aminy. This protects both the family and the integrity of the Aminy network.
                   </span>
                 </label>

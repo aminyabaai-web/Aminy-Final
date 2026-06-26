@@ -161,7 +161,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
             <div className="flex items-center space-x-3">
               {getTimeIcon()}
               <div>
-                <h1 className="text-xl text-[#1B2733] dark:text-slate-100">Good {getTimeOfDay()}, {caregiverShort}</h1>
+                <h1 className="text-xl text-[#132F43] dark:text-slate-100">Good {getTimeOfDay()}, {caregiverShort}</h1>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Your digital medical binder for {childShort}</p>
               </div>
             </div>
@@ -169,7 +169,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-[#5A6B7A] hover:text-[#1B2733] dark:text-slate-400 dark:hover:text-slate-100"
+                className="text-[#5A6B7A] hover:text-[#132F43] dark:text-slate-400 dark:hover:text-slate-100"
                 aria-label="Open vault notifications"
               >
                 <Bell className="w-4 h-4" />
@@ -193,7 +193,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                   <FolderOpen className="w-4 h-4 text-[#6B9080] dark:text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Vault Storage</h3>
+                  <h3 className="text-sm font-medium text-[#132F43] dark:text-slate-100">Vault Storage</h3>
                   <p className="text-sm text-[#5A6B7A]">{userTier || 'Starter'} Plan</p>
                 </div>
               </div>
@@ -202,7 +202,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 <div>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-[#5A6B7A] dark:text-slate-400">Storage</span>
-                    <span className="text-[#1B2733] dark:text-slate-100">
+                    <span className="text-[#132F43] dark:text-slate-100">
                       {stats.storageUsed} MB / {stats.storageLimit} MB
                     </span>
                   </div>
@@ -217,7 +217,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                 <div>
                   <div className="flex justify-between text-sm mb-1">
                     <span className="text-[#5A6B7A] dark:text-slate-400">Files</span>
-                    <span className="text-[#1B2733] dark:text-slate-100">
+                    <span className="text-[#132F43] dark:text-slate-100">
                       {stats.filesCount} / {stats.filesLimit}
                     </span>
                   </div>
@@ -242,7 +242,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
 
             {/* Quick Actions */}
             <Card className="p-4 border-0 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-              <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100 mb-3">Quick Actions</h3>
+              <h3 className="text-sm font-medium text-[#132F43] dark:text-slate-100 mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 <Button variant="outline" size="sm" className="w-full justify-start">
                   <Upload className="w-3 h-3 mr-2" />
@@ -266,7 +266,7 @@ export function DocumentVaultPage({ userTier, onNavigate }: DocumentVaultPagePro
                   <CompassIcon className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-medium text-[#1B2733] dark:text-slate-100">Aminy</h3>
+                  <h3 className="text-sm font-medium text-[#132F43] dark:text-slate-100">Aminy</h3>
                   <p className="text-sm text-[#5A6B7A]">Search your records</p>
                 </div>
               </div>

@@ -218,7 +218,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             <div className="w-7 h-7 bg-[#2A7D99]/10 rounded-lg flex items-center justify-center">
               <Shield className="w-4 h-4 text-[#2A7D99]" />
             </div>
-            <h1 className="text-base font-semibold text-[#1B2733]">Coverage Coach</h1>
+            <h1 className="text-base font-semibold text-[#132F43]">Coverage Coach</h1>
           </div>
         </div>
       </div>
@@ -237,7 +237,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
               <div className="w-14 h-14 bg-[#2A7D99]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-7 h-7 text-[#2A7D99]" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1B2733] mb-3">
+              <h2 className="text-2xl font-bold text-[#132F43] mb-3">
                 Does your insurance cover ABA therapy?
               </h2>
               <p className="text-[#5A6B7A] text-sm leading-relaxed">
@@ -256,7 +256,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#1B2733] text-sm">Yes, I believe so</div>
+                    <div className="font-semibold text-[#132F43] text-sm">Yes, I believe so</div>
                     <div className="text-sm text-slate-400 mt-0.5">Let's maximize your benefits</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-primary transition-colors" />
@@ -272,7 +272,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <AlertCircle className="w-5 h-5 text-orange-500" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#1B2733] text-sm">No, it doesn't</div>
+                    <div className="font-semibold text-[#132F43] text-sm">No, it doesn't</div>
                     <div className="text-sm text-slate-400 mt-0.5">Let's explore your options</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-orange-400 transition-colors" />
@@ -288,7 +288,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     <HelpCircle className="w-5 h-5 text-blue-500" />
                   </div>
                   <div>
-                    <div className="font-semibold text-[#1B2733] text-sm">I'm not sure</div>
+                    <div className="font-semibold text-[#132F43] text-sm">I'm not sure</div>
                     <div className="text-sm text-slate-400 mt-0.5">We'll help you find out in 3 minutes</div>
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-400 ml-auto group-hover:text-blue-400 transition-colors" />
@@ -326,29 +326,29 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               <div className="flex items-center gap-2 mb-6">
                 <CheckCircle className="w-6 h-6 text-green-500" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Great! Let's maximize your benefits.</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Great! Let's maximize your benefits.</h2>
               </div>
 
               {/* Benefits breakdown in plain English */}
               <Card className="p-5 bg-white border-[#E8E4DF] mb-4">
-                <h3 className="font-semibold text-[#1B2733] mb-3 text-sm">Your estimated ABA coverage</h3>
+                <h3 className="font-semibold text-[#132F43] mb-3 text-sm">Your estimated ABA coverage</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-green-400 rounded-full mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-[#5A6B7A] leading-relaxed">
-                      <strong className="text-[#1B2733]">60 ABA sessions per year</strong> — You've used 12 so far. That's <strong>48 sessions remaining</strong> — about 3 months of weekly therapy.
+                      <strong className="text-[#132F43]">60 ABA sessions per year</strong> — You've used 12 so far. That's <strong>48 sessions remaining</strong> — about 3 months of weekly therapy.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-green-400 rounded-full mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-[#5A6B7A] leading-relaxed">
-                      <strong className="text-[#1B2733]">$25 copay per session</strong> after deductible is met.
+                      <strong className="text-[#132F43]">$25 copay per session</strong> after deductible is met.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-amber-400 rounded-full mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-[#5A6B7A] leading-relaxed">
-                      <strong className="text-[#1B2733]">Prior authorization required</strong> — Most plans need pre-approval before ABA starts. We'll handle the paperwork.
+                      <strong className="text-[#132F43]">Prior authorization required</strong> — Most plans need pre-approval before ABA starts. We'll handle the paperwork.
                     </p>
                   </div>
                 </div>
@@ -492,7 +492,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               <div className="flex items-center gap-2 mb-2">
                 <AlertCircle className="w-6 h-6 text-orange-500" />
-                <h2 className="text-xl font-bold text-[#1B2733]">Let's explore your options.</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">Let's explore your options.</h2>
               </div>
               <p className="text-[#5A6B7A] text-sm mb-6">No insurance coverage doesn't mean no access. Here's what families do.</p>
 
@@ -529,7 +529,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                         {option.icon}
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1B2733] text-sm mb-0.5">{option.title}</p>
+                        <p className="font-semibold text-[#132F43] text-sm mb-0.5">{option.title}</p>
                         <p className="text-sm text-[#5A6B7A] leading-relaxed">{option.desc}</p>
                       </div>
                     </div>
@@ -566,7 +566,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               <div className="flex items-center gap-2 mb-2">
                 <HelpCircle className="w-6 h-6 text-blue-500" />
-                <h2 className="text-xl font-bold text-[#1B2733]">We'll help you find out in 3 minutes.</h2>
+                <h2 className="text-xl font-bold text-[#132F43]">We'll help you find out in 3 minutes.</h2>
               </div>
               <p className="text-[#5A6B7A] text-sm mb-6">Most families are surprised — ABA is often covered more than you'd think.</p>
 
@@ -594,7 +594,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                         {item.step}
                       </div>
                       <div>
-                        <p className="font-semibold text-[#1B2733] text-sm mb-0.5">{item.title}</p>
+                        <p className="font-semibold text-[#132F43] text-sm mb-0.5">{item.title}</p>
                         <p className="text-sm text-[#5A6B7A] leading-relaxed">{item.desc}</p>
                       </div>
                     </div>
@@ -646,7 +646,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
             <div className="flex items-center gap-2 mb-2">
               <Shield className="w-6 h-6 text-violet-500" />
-              <h2 className="text-xl font-bold text-[#1B2733]">Arizona Medicaid Waivers</h2>
+              <h2 className="text-xl font-bold text-[#132F43]">Arizona Medicaid Waivers</h2>
             </div>
             <p className="text-[#5A6B7A] text-sm mb-6">
               These programs can cover therapy services even if you don't have private insurance — or supplement what your insurance doesn't cover.
@@ -660,7 +660,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     className="w-full text-left p-4 flex items-center justify-between"
                   >
                     <div>
-                      <p className="font-semibold text-[#1B2733] text-sm">{waiver.name}</p>
+                      <p className="font-semibold text-[#132F43] text-sm">{waiver.name}</p>
                       <p className="text-sm text-slate-400 mt-0.5">Wait: {waiver.waitlistMonths}</p>
                     </div>
                     <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expandedWaiver === waiver.code ? 'rotate-90' : ''}`} />
@@ -726,7 +726,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
             <div className="flex items-center gap-2 mb-2">
               <HelpCircle className="w-6 h-6 text-primary" />
-              <h2 className="text-xl font-bold text-[#1B2733]">Is This Covered?</h2>
+              <h2 className="text-xl font-bold text-[#132F43]">Is This Covered?</h2>
             </div>
             <p className="text-[#5A6B7A] text-sm mb-4">Quick lookup for common therapy services and their typical coverage status.</p>
 
@@ -754,7 +754,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-[#1B2733] text-sm">{item.service}</p>
+                      <p className="font-semibold text-[#132F43] text-sm">{item.service}</p>
                       <p className="text-sm text-[#5A6B7A] mt-1 leading-relaxed">{item.notes}</p>
                       {item.cptCodes.length > 0 && (
                         <div className="flex items-center gap-1.5 mt-2">
@@ -794,12 +794,12 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
             <div className="grid grid-cols-2 gap-2">
               <button onClick={() => setStep('lookup')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-[#2A7D99]/30 transition-all text-left">
                 <HelpCircle className="w-5 h-5 text-primary mb-1.5" />
-                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Is This Covered?</p>
+                <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Is This Covered?</p>
                 <p className="text-sm text-slate-400 dark:text-slate-400">Service lookup</p>
               </button>
               <button onClick={() => setStep('waiver')} className="p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 rounded-xl hover:border-violet-300 transition-all text-left">
                 <Shield className="w-5 h-5 text-violet-500 mb-1.5" />
-                <p className="text-sm font-semibold text-[#1B2733] dark:text-slate-100">Medicaid Waivers</p>
+                <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">Medicaid Waivers</p>
                 <p className="text-sm text-slate-400 dark:text-slate-400">AZ programs</p>
               </button>
             </div>

@@ -282,7 +282,7 @@ export function BCBASessionBriefing({
         <div className={`p-2 rounded-lg ${color}`}>
           <Icon className="w-4 h-4" />
         </div>
-        <span className="font-medium text-[#1B2733]">{title}</span>
+        <span className="font-medium text-[#132F43]">{title}</span>
         {count !== undefined && (
           <Badge variant="outline" className="text-sm">{count}</Badge>
         )}
@@ -315,7 +315,7 @@ export function BCBASessionBriefing({
           <Card className="p-8">
             <div className="flex flex-col items-center justify-center text-center">
               <div className="w-12 h-12 border-3 border-[#6B9080] border-t-transparent rounded-full animate-spin mb-4" />
-              <h3 className="font-medium text-[#1B2733] mb-2">Preparing Your Briefing</h3>
+              <h3 className="font-medium text-[#132F43] mb-2">Preparing Your Briefing</h3>
               <p className="text-sm text-[#5A6B7A]">
                 Analyzing {childName}'s data, progress, and recent activity...
               </p>
@@ -333,7 +333,7 @@ export function BCBASessionBriefing({
         <div className="px-4 mt-4">
           <Card className="p-8 text-center">
             <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h3 className="font-medium text-[#1B2733] mb-2">Briefing not available yet</h3>
+            <h3 className="font-medium text-[#132F43] mb-2">Briefing not available yet</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
               AI session briefings for {childName} will appear here once enough
               session and progress data has been recorded.
@@ -362,7 +362,7 @@ export function BCBASessionBriefing({
               <Brain className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div>
-              <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733]">
+              <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">
                 Session Briefing: {childName}
               </h2>
               <p className="text-sm text-[#5A6B7A]">
@@ -418,7 +418,7 @@ export function BCBASessionBriefing({
 
       {/* Progress At A Glance */}
       <Card className="p-3 sm:p-4">
-        <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+        <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-[#6B9080]" />
           Recent Progress
         </h3>
@@ -584,7 +584,7 @@ export function BCBASessionBriefing({
 
       {/* Suggested Session Topics */}
       <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
-        <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="font-medium text-[#132F43] mb-3 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-violet-600" />
           Suggested Session Topics
         </h3>

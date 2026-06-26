@@ -226,7 +226,7 @@ export function MorningMission({
             >
               <CheckCircle2 className="w-10 h-10" />
             </motion.div>
-            <h3 className="mb-2 text-xl font-bold text-[#1B2733]">Morning Mission Complete!</h3>
+            <h3 className="mb-2 text-xl font-bold text-[#132F43]">Morning Mission Complete!</h3>
             <p className="text-sm text-[#5A6B7A]">
               You're set for a great day with {childName}
             </p>
@@ -259,7 +259,7 @@ export function MorningMission({
               <div className={cn('inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em]', template.badge)}>
                 {template.theme}
               </div>
-              <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-[#1B2733]">
+              <h3 className="mt-3 text-lg font-semibold tracking-[-0.02em] text-[#132F43]">
                 {getTimeOfDayGreeting()}, {parentName.split(' ')[0]}!
               </h3>
               <p className="mt-1 text-sm leading-6 text-[#5A6B7A]">{template.greeting}</p>
@@ -316,7 +316,7 @@ export function MorningMission({
                 <div className="flex-1 min-w-0">
                   <p className={cn(
                     'font-medium text-sm',
-                    step.completed ? 'text-emerald-700' : 'text-[#1B2733]'
+                    step.completed ? 'text-emerald-700' : 'text-[#132F43]'
                   )}>
                     {step.title}
                   </p>

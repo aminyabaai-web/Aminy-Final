@@ -168,7 +168,7 @@ export function SocialProofToast({ disabled = false }: SocialProofToastProps) {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-[#1B2733] leading-snug">
+                  <p className="text-sm text-[#132F43] leading-snug">
                     {milestoneMessage || currentMessage?.message}
                   </p>
                   {currentMessage && !milestoneMessage && (

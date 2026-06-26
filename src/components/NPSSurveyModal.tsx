@@ -137,7 +137,7 @@ export function NPSSurveyModal({
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="font-semibold text-[#1B2733] dark:text-white">Quick Feedback</h2>
+                  <h2 className="font-semibold text-[#132F43] dark:text-white">Quick Feedback</h2>
                   <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Help us improve Aminy</p>
                 </div>
               </div>
@@ -266,7 +266,7 @@ export function NPSSurveyModal({
                 <div className="w-16 h-16 bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2">
                   Thank you!
                 </h3>
                 <p className="text-[#5A6B7A] dark:text-slate-400">

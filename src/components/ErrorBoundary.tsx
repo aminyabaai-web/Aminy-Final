@@ -242,7 +242,7 @@ function DefaultErrorFallback({
           </svg>
         </div>
         
-        <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] mb-3">
+        <h2 className="text-lg sm:text-xl font-semibold text-[#132F43] mb-3">
           We hit an unexpected bump
         </h2>
 

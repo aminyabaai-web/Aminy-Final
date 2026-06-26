@@ -203,7 +203,7 @@ export function VisualTimer({
         <div className="w-24 h-24 mx-auto mb-4 sm:mb-6 bg-green-100 rounded-full flex items-center justify-center">
           <Check className="w-12 h-12 text-green-600" />
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">
           {childFriendly ? 'Amazing job! 🎉' : 'Time complete!'}
         </h2>
         {rewardCoins > 0 && (
@@ -243,7 +243,7 @@ export function VisualTimer({
 
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-6">
-        <h2 className="text-lg font-semibold text-[#1B2733]">{label}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43]">{label}</h2>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
@@ -298,7 +298,7 @@ export function VisualTimer({
         {/* Time display */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <motion.span
-            className="text-5xl font-bold text-[#1B2733]"
+            className="text-5xl font-bold text-[#132F43]"
             key={remainingSeconds}
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
@@ -327,7 +327,7 @@ export function VisualTimer({
               onClick={() => handleSetTime(preset.minutes)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 totalSeconds === preset.minutes * 60
-                  ? 'bg-white shadow-md text-[#1B2733]'
+                  ? 'bg-white shadow-md text-[#132F43]'
                   : 'bg-white/50 text-[#5A6B7A] hover:bg-white/80'
               }`}
             >

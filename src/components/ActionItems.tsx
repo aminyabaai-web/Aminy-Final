@@ -556,7 +556,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ClipboardList className="w-5 h-5 text-[#6B9080]" />
-              <h3 className="font-semibold text-[#1B2733]">Action Items</h3>
+              <h3 className="font-semibold text-[#132F43]">Action Items</h3>
             </div>
             {incompleteCount > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-primary text-white text-xs font-medium">
@@ -599,7 +599,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`font-medium ${item.completed ? 'text-[#8A9BA8]' : 'text-[#1B2733]'}`}>
+                  <p className={`font-medium ${item.completed ? 'text-[#8A9BA8]' : 'text-[#132F43]'}`}>
                     {item.title}
                   </p>
                   <p className={`text-sm ${item.completed ? 'text-[#8A9BA8]' : 'text-[#5A6B7A]'}`}>
@@ -650,7 +650,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                     {React.createElement(activeItem.icon, { className: 'w-5 h-5 text-[#6B9080]' })}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#1B2733]">{activeItem.title}</h3>
+                    <h3 className="font-semibold text-[#132F43]">{activeItem.title}</h3>
                     <p className="text-sm text-[#5A6B7A]">~{activeItem.estimatedMinutes} min</p>
                   </div>
                 </div>
@@ -678,7 +678,7 @@ You're starting this check-in now. Begin with a warm greeting and your first que
                       className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                         msg.role === 'user'
                           ? 'bg-primary text-white'
-                          : 'bg-[#F0EDE8] text-[#1B2733]'
+                          : 'bg-[#F0EDE8] text-[#132F43]'
                       }`}
                     >
                       <p className="text-sm whitespace-pre-wrap">{msg.content}</p>

@@ -604,7 +604,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
-                <h1 className="text-lg text-[#1B2733]">Calm Corner</h1>
+                <h1 className="text-lg text-[#132F43]">Calm Corner</h1>
                 <p className="text-sm text-[#5A6B7A]">Sensory tools for {childName}</p>
               </div>
             </div>
@@ -628,7 +628,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               exit={{ opacity: 0, height: 0 }}
             >
               <Card className="p-4 bg-white/80 border-purple-200">
-                <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+                <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   Accessibility Settings
                 </h3>
@@ -696,7 +696,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                       {tool.icon}
                     </div>
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium text-[#1B2733] mb-1">{tool.name}</h3>
+                      <h3 className="font-medium text-[#132F43] mb-1">{tool.name}</h3>
                       <p className="text-sm text-[#5A6B7A]">{tool.description}</p>
                     </div>
                   </div>

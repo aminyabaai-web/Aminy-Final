@@ -24,7 +24,7 @@ function Section({ title, id, children }: SectionProps) {
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between text-left"
       >
-        <h2 className="text-lg font-semibold text-[#1B2733]">{title}</h2>
+        <h2 className="text-lg font-semibold text-[#132F43]">{title}</h2>
         {open ? <ChevronUp className="h-5 w-5 text-[#5A6B7A]" /> : <ChevronDown className="h-5 w-5 text-[#5A6B7A]" />}
       </button>
       {open && <div className="mt-3 space-y-3 text-sm leading-relaxed text-[#3A4A57]">{children}</div>}
@@ -47,7 +47,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
             </button>
           )}
           <Shield className="h-6 w-6 text-[#6B9080]" />
-          <h1 className="text-xl font-bold text-[#1B2733]">Privacy Policy</h1>
+          <h1 className="text-xl font-bold text-[#132F43]">Privacy Policy</h1>
         </div>
       </div>
 
@@ -65,7 +65,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
         {/* Table of Contents */}
         <nav className="mb-6 rounded-lg bg-[#FAF7F2] p-4">
-          <p className="mb-2 text-sm font-semibold text-[#1B2733]">Contents</p>
+          <p className="mb-2 text-sm font-semibold text-[#132F43]">Contents</p>
           <ol className="space-y-1 text-sm text-[#6B9080]">
             {[
               ['#info-collect', '1. Information We Collect'],

@@ -98,7 +98,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
           <div className="w-7 h-7 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
             <CheckCircle className="w-4 h-4 text-[#2A7D99]" />
           </div>
-          <span className="text-sm font-semibold text-[#1B2733]">Weekly check-in</span>
+          <span className="text-sm font-semibold text-[#132F43]">Weekly check-in</span>
         </div>
         <button onClick={onDismiss} className="p-1 rounded-full hover:bg-slate-100 transition-colors">
           <X className="w-4 h-4 text-slate-400" />
@@ -177,7 +177,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
           {step === 'done' && (
             <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-2 text-center">
               <CheckCircle className="w-8 h-8 text-[#2A7D99] mx-auto mb-2" />
-              <p className="text-sm font-semibold text-[#1B2733]">Check-in recorded.</p>
+              <p className="text-sm font-semibold text-[#132F43]">Check-in recorded.</p>
               <p className="aminy-affirm text-slate-500 mt-0.5" style={{ fontSize: '0.9rem' }}>See you next week.</p>
             </motion.div>
           )}

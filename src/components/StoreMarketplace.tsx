@@ -1055,7 +1055,7 @@ export function StoreMarketplace({
     return (
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-[#1B2733]">
+          <span className="font-bold text-[#132F43]">
             ${discounted ?? product.price}
           </span>
           {(discounted || product.originalPrice) && (
@@ -1085,7 +1085,7 @@ export function StoreMarketplace({
               )}
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-[#1B2733] dark:text-white">Resource Store</h1>
+                  <h1 className="text-xl font-bold text-[#132F43] dark:text-white">Resource Store</h1>
                   {usingCuratedFallback && (
                     <span
                       className="inline-flex items-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300/70 font-medium px-2 py-0.5 shrink-0"
@@ -1237,7 +1237,7 @@ export function StoreMarketplace({
         {/* AI-Recommended Section (when child profile is available) */}
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && aiRecommendedProducts.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-2 flex items-center gap-2">
               <Zap className="w-5 h-5 text-primary" />
               Recommended for {childProfile?.name || 'Your Child'}
             </h2>
@@ -1284,7 +1284,7 @@ export function StoreMarketplace({
                     </button>
                   </div>
                   <div className="p-4">
-                    <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-1">
+                    <h3 className="font-medium text-[#132F43] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
                     <p className="text-sm text-[#5A6B7A] line-clamp-2 mt-1">{product.description}</p>
@@ -1308,7 +1308,7 @@ export function StoreMarketplace({
         {/* Featured Section (only on "all" category) */}
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
               Featured Resources
             </h2>
@@ -1334,7 +1334,7 @@ export function StoreMarketplace({
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-1">
+                    <h3 className="font-medium text-[#132F43] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
                     <div className="flex items-center gap-1 mt-1">
@@ -1353,7 +1353,7 @@ export function StoreMarketplace({
         {/* Product Grid */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+            <h2 className="text-lg font-semibold text-[#132F43] dark:text-white">
               {selectedCategory === 'all' ? 'All Resources' : CATEGORIES.find(c => c.id === selectedCategory)?.name}
             </h2>
             <span className="text-sm text-[#5A6B7A]">
@@ -1365,7 +1365,7 @@ export function StoreMarketplace({
             products.length === 0 ? (
               <Card className="p-12 text-center">
                 <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                   No resources yet
                 </h3>
                 <p className="text-[#5A6B7A]">
@@ -1375,7 +1375,7 @@ export function StoreMarketplace({
             ) : (
               <Card className="p-12 text-center">
                 <Package className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
                   No resources found
                 </h3>
                 <p className="text-[#5A6B7A] mb-4">
@@ -1436,7 +1436,7 @@ export function StoreMarketplace({
                   </div>
                   <div className="p-4">
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-medium text-[#1B2733] dark:text-white line-clamp-2">
+                      <h3 className="font-medium text-[#132F43] dark:text-white line-clamp-2">
                         {product.name}
                       </h3>
                       {product.bcbaRecommended && (

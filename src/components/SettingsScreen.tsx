@@ -1027,7 +1027,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                           <span className="text-base">✦</span>
                         </div>
                         <div>
-                          <p className="font-medium text-[#1B2733] text-sm">AI Check-ins</p>
+                          <p className="font-medium text-[#132F43] text-sm">AI Check-ins</p>
                           <p className="text-sm text-muted-foreground">Proactive insights from Aminy</p>
                         </div>
                       </div>
@@ -1103,7 +1103,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                 }}
                                 className={`flex-1 py-2 px-1 rounded-xl text-center transition-all border ${
                                   notifications.checkInTime === opt.id
-                                    ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#1B2733]'
+                                    ? 'border-[#6B9080] bg-[#6B9080]/10 text-[#132F43]'
                                     : 'border-[#E8E4DF] bg-[#FAF7F2] text-foreground hover:border-[#6B9080]'
                                 }`}
                               >

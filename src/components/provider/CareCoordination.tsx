@@ -329,7 +329,7 @@ export function CareCoordination({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white">
+          <h2 className="text-xl font-semibold text-[#132F43] dark:text-white">
             Care Team for {patientName}
           </h2>
           <p className="text-[#5A6B7A] dark:text-slate-400 text-sm">
@@ -378,7 +378,7 @@ export function CareCoordination({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-medium text-[#1B2733] dark:text-white">
+                      <h4 className="font-medium text-[#132F43] dark:text-white">
                         {member.name}
                       </h4>
                       {member.credentials && (
@@ -507,7 +507,7 @@ export function CareCoordination({
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[#1B2733] dark:text-white">
+                      <span className="font-medium text-[#132F43] dark:text-white">
                         {note.authorName}
                       </span>
                       <span className="text-sm text-[#5A6B7A]">•</span>
@@ -572,7 +572,7 @@ export function CareCoordination({
                         {item.status}
                       </Badge>
                     </div>
-                    <h4 className="font-medium text-[#1B2733] dark:text-white">
+                    <h4 className="font-medium text-[#132F43] dark:text-white">
                       {item.goal}
                     </h4>
                     <div className="flex items-center gap-4 mt-2">
@@ -669,7 +669,7 @@ export function CareCoordination({
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">
                 Invite Provider
               </h3>
               <Button variant="ghost" size="sm" onClick={() => setShowAddTeamMember(false)}>
@@ -708,14 +708,14 @@ export function CareCoordination({
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
                     <input type="radio" name="access" defaultChecked className="text-[#6B9080]" />
                     <div>
-                      <p className="font-medium text-[#1B2733] dark:text-white">Full Access</p>
+                      <p className="font-medium text-[#132F43] dark:text-white">Full Access</p>
                       <p className="text-sm text-[#5A6B7A]">View and contribute to all care coordination</p>
                     </div>
                   </label>
                   <label className="flex items-center gap-3 p-3 rounded-lg border border-neutral-200 dark:border-slate-600 cursor-pointer hover:bg-neutral-50 dark:hover:bg-slate-800">
                     <input type="radio" name="access" className="text-[#6B9080]" />
                     <div>
-                      <p className="font-medium text-[#1B2733] dark:text-white">Limited Access</p>
+                      <p className="font-medium text-[#132F43] dark:text-white">Limited Access</p>
                       <p className="text-sm text-[#5A6B7A]">View notes and care plan only</p>
                     </div>
                   </label>

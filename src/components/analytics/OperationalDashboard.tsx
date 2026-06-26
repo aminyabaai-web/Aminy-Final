@@ -70,7 +70,7 @@ function MiniBarChart({ items, colorClass }: { items: Array<{ label: string; val
         <div key={item.label}>
           <div className="flex items-center justify-between text-sm mb-0.5">
             <span className="text-[#5A6B7A]">{item.label}</span>
-            <span className="text-[#1B2733] font-medium">{item.value}{item.unit || '%'}</span>
+            <span className="text-[#132F43] font-medium">{item.value}{item.unit || '%'}</span>
           </div>
           <div className="h-2 rounded-full bg-[#F0EDE8] overflow-hidden">
             <div
@@ -115,7 +115,7 @@ function KPICardView({ kpi, sparkData }: { kpi: KPICard; sparkData?: TimeSeriesP
       <p className="text-sm font-medium text-[#5A6B7A] truncate">{kpi.label}</p>
       <div className="mt-1 flex items-end justify-between">
         <div className="flex items-baseline gap-0.5">
-          <span className="text-xl font-bold text-[#1B2733]">
+          <span className="text-xl font-bold text-[#132F43]">
             {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
           </span>
           {kpi.unit && <span className="text-sm text-[#5A6B7A]">{kpi.unit}</span>}
@@ -147,7 +147,7 @@ function SectionHeader({ icon, title }: { icon: React.ReactNode; title: string }
   return (
     <div className="flex items-center gap-2 mt-6 mb-3">
       {icon}
-      <h2 className="text-sm font-bold text-[#1B2733] uppercase tracking-wide">{title}</h2>
+      <h2 className="text-sm font-bold text-[#132F43] uppercase tracking-wide">{title}</h2>
     </div>
   );
 }
@@ -182,7 +182,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
         <div className="flex items-center gap-2">
           {config.icon}
           <div>
-            <h3 className="text-sm font-bold text-[#1B2733]">Platform Health</h3>
+            <h3 className="text-sm font-bold text-[#132F43]">Platform Health</h3>
             <p className={`text-sm font-medium ${trendColors[health.trend]}`}>{trendLabels[health.trend]}</p>
           </div>
         </div>
@@ -201,7 +201,7 @@ function HealthScoreBanner({ health }: { health: OverallHealthScore }) {
               />
             </div>
             <p className="text-sm text-[#5A6B7A]">{cat.label}</p>
-            <p className="text-sm font-bold text-[#1B2733]">{cat.score}</p>
+            <p className="text-sm font-bold text-[#132F43]">{cat.score}</p>
           </div>
         ))}
       </div>
@@ -287,7 +287,7 @@ export default function OperationalDashboard({
           )}
           <div className="flex-1">
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-[#1B2733]">Operational Metrics</h1>
+              <h1 className="text-lg font-bold text-[#132F43]">Operational Metrics</h1>
               {/* Live vs Demo badge */}
               <span
                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -390,7 +390,7 @@ export default function OperationalDashboard({
               { label: '90-Day', value: data.familyRetention.retention90Day },
             ].map(p => (
               <div key={p.label} className="rounded-lg bg-[#FAF7F2] p-2">
-                <p className="text-lg font-bold text-[#1B2733]">{p.value}%</p>
+                <p className="text-lg font-bold text-[#132F43]">{p.value}%</p>
                 <p className="text-sm text-[#5A6B7A]">{p.label}</p>
               </div>
             ))}
@@ -550,11 +550,11 @@ export default function OperationalDashboard({
           <div className="text-sm text-[#5A6B7A] space-y-1">
             <div className="flex justify-between">
               <span>Avg days to 1st session</span>
-              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysToFirstSession} days</span>
+              <span className="font-medium text-[#132F43]">{data.providerLaunch.averageDaysToFirstSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Avg days to 10th session</span>
-              <span className="font-medium text-[#1B2733]">{data.providerLaunch.averageDaysTo10thSession} days</span>
+              <span className="font-medium text-[#132F43]">{data.providerLaunch.averageDaysTo10thSession} days</span>
             </div>
             <div className="flex justify-between">
               <span>Top complaint</span>

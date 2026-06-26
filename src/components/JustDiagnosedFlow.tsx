@@ -377,7 +377,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   fontWeight: 400,
                   fontFamily: "'Newsreader', Georgia, serif",
                   fontStyle: 'italic',
-                  color: '#1B2733',
+                  color: '#132F43',
                   lineHeight: 1.25,
                   margin: '0 0 12px',
                   letterSpacing: '-0.01em',
@@ -443,7 +443,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   <Icon size={20} color={color} />
                 </div>
                 <div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: '#1B2733', marginBottom: 4 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#132F43', marginBottom: 4 }}>
                     {title}
                   </div>
                   <div style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.55 }}>
@@ -496,7 +496,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── STATE SELECT ──────────────────────────────────────────────── */}
         {phase === 'state-select' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               Which state are you in?
             </h2>
             <p style={{ fontSize: 14, color: '#5A6B7A', margin: '0 0 20px', lineHeight: 1.55 }}>
@@ -528,7 +528,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   border: 'none',
                   outline: 'none',
                   fontSize: 15,
-                  color: '#1B2733',
+                  color: '#132F43',
                   background: 'transparent',
                 }}
               />
@@ -563,7 +563,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   }}
                 >
                   <div>
-                    <span style={{ fontSize: 15, fontWeight: 500, color: '#1B2733' }}>
+                    <span style={{ fontSize: 15, fontWeight: 500, color: '#132F43' }}>
                       {state.name}
                     </span>
                     <span style={{ fontSize: 12, color: '#8A9BA8', marginLeft: 8 }}>
@@ -647,7 +647,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── CHILD INFO ────────────────────────────────────────────────── */}
         {phase === 'child-info' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               Tell us about your child
             </h2>
             <p style={{ fontSize: 14, color: '#5A6B7A', margin: '0 0 24px', lineHeight: 1.55 }}>
@@ -670,7 +670,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   border: '1.5px solid #E8E4DF',
                   borderRadius: 12,
                   background: '#fff',
-                  color: '#1B2733',
+                  color: '#132F43',
                   outline: 'none',
                   boxSizing: 'border-box',
                   transition: 'border-color 0.2s',
@@ -785,7 +785,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
         {/* ── OVERWHELMS ────────────────────────────────────────────────── */}
         {phase === 'overwhelms' && (
           <div style={{ paddingTop: 24 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#1B2733', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
+            <h2 style={{ fontSize: 22, fontWeight: 700, color: '#132F43', margin: '0 0 8px', letterSpacing: '-0.3px' }}>
               {childInfo.name
                 ? `What are you most overwhelmed about for ${childInfo.name}?`
                 : 'What are you most overwhelmed about right now?'}
@@ -837,7 +837,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                         style={{
                           fontSize: 15,
                           fontWeight: 600,
-                          color: sel ? '#1B2733' : '#3A4A57',
+                          color: sel ? '#132F43' : '#3A4A57',
                           marginBottom: 2,
                         }}
                       >
@@ -932,7 +932,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: '#1B2733',
+                  color: '#132F43',
                   margin: '0 0 6px',
                   letterSpacing: '-0.3px',
                 }}
@@ -1044,7 +1044,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                                 style={{
                                   fontSize: 14,
                                   fontWeight: 600,
-                                  color: '#1B2733',
+                                  color: '#132F43',
                                   lineHeight: 1.4,
                                   marginBottom: 2,
                                 }}
@@ -1144,7 +1144,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 >
                   {stateConfig.ddAgency.abbreviation} QUICK CONTACT
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#1B2733', marginBottom: 4 }}>
+                <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43', marginBottom: 4 }}>
                   {stateConfig.ddAgency.name}
                 </div>
                 {stateConfig.ddAgency.phone && (
@@ -1219,7 +1219,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   fontSize: 24,
                   fontWeight: 700,
-                  color: '#1B2733',
+                  color: '#132F43',
                   margin: '0 0 10px',
                   letterSpacing: '-0.4px',
                   lineHeight: 1.25,
@@ -1299,7 +1299,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     <Icon size={18} color={color} />
                   </div>
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: '#1B2733', marginBottom: 2 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43', marginBottom: 2 }}>
                       {title}
                     </div>
                     <div style={{ fontSize: 12, color: '#5A6B7A', lineHeight: 1.5 }}>
@@ -1326,7 +1326,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 marginBottom: 24,
               }}
             >
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#1B2733', marginBottom: 14, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#132F43', marginBottom: 14, letterSpacing: '0.02em', textTransform: 'uppercase' }}>
                 Your Journey — 6 Steps
               </div>
               {[
@@ -1351,7 +1351,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   <div style={{ fontSize: 18, width: 28, textAlign: 'center', flexShrink: 0 }}>{icon}</div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, color: '#8A9BA8', fontWeight: 600 }}>Step {step}</div>
-                    <div style={{ fontSize: 14, color: '#1B2733', fontWeight: 500 }}>{label}</div>
+                    <div style={{ fontSize: 14, color: '#132F43', fontWeight: 500 }}>{label}</div>
                   </div>
                   <ChevronRight size={16} color="#C0CDD4" />
                 </div>

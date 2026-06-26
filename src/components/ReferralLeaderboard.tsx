@@ -386,7 +386,7 @@ export function ReferralLeaderboard({
                         className={`font-medium text-sm truncate ${
                           entry.isCurrentUser
                             ? 'text-[#6B9080]'
-                            : 'text-[#1B2733]'
+                            : 'text-[#132F43]'
                         }`}
                       >
                         {entry.isCurrentUser
@@ -407,7 +407,7 @@ export function ReferralLeaderboard({
 
                   {/* Referral count */}
                   <div className="text-right">
-                    <span className="font-bold text-sm text-[#1B2733]">
+                    <span className="font-bold text-sm text-[#132F43]">
                       {entry.referralCount}
                     </span>
                     <p className="text-sm text-[#8A9BA8]">
@@ -437,7 +437,7 @@ export function ReferralLeaderboard({
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-sm text-[#1B2733]">
+                      <span className="font-bold text-sm text-[#132F43]">
                         {data.currentUserEntry.referralCount}
                       </span>
                       <p className="text-sm text-[#8A9BA8]">

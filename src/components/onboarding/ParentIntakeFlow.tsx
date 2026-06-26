@@ -395,8 +395,8 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
   const canAdvanceStep3 = serviceSettings.length > 0 && sessionFrequency.length > 0;
   const canAdvanceStep4 = selectedProviderId.length > 0;
 
-  const inputCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#1B2733] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-colors bg-white';
-  const selectCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#1B2733] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 bg-white transition-colors';
+  const inputCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#132F43] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 transition-colors bg-white';
+  const selectCls = 'w-full border border-[#E8E4DF] rounded-xl px-3 py-2.5 text-sm text-[#132F43] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 bg-white transition-colors';
   const labelCls = 'block text-xs font-semibold text-[#5A6B7A] mb-1 uppercase tracking-wide';
 
   return (
@@ -424,7 +424,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 1 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Let's get you matched<br />with the right provider</h1>
+              <h1 className="text-2xl font-bold text-[#132F43] mb-2">Let's get you matched<br />with the right provider</h1>
               <p className="text-sm text-[#5A6B7A]">Tell us about your child so we can find the best fit.</p>
             </div>
 
@@ -477,7 +477,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 2 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Check your coverage</h1>
+              <h1 className="text-2xl font-bold text-[#132F43] mb-2">Check your coverage</h1>
               <p className="text-sm text-[#5A6B7A]">Most families use insurance for ABA therapy. Let's see what's covered.</p>
             </div>
 
@@ -520,7 +520,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 3 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">What does {childName || 'your child'} need?</h1>
+              <h1 className="text-2xl font-bold text-[#132F43] mb-2">What does {childName || 'your child'} need?</h1>
               <p className="text-sm text-[#5A6B7A]">Select all that apply — we'll match you accordingly.</p>
             </div>
 
@@ -590,7 +590,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
         {step === 4 && (
           <div className="space-y-6">
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">Your matched providers</h1>
+              <h1 className="text-2xl font-bold text-[#132F43] mb-2">Your matched providers</h1>
               <p className="text-sm text-[#5A6B7A]">These providers match {childName || 'your child'}'s needs and are accepting new clients.</p>
             </div>
 
@@ -653,7 +653,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="font-semibold text-[#1B2733] text-sm">{prov.name}</p>
+                      <p className="font-semibold text-[#132F43] text-sm">{prov.name}</p>
                       <p className="text-sm text-[#5A6B7A]">{prov.credentials}</p>
                     </div>
                     {prov.accepting && (
@@ -722,7 +722,7 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8" style={{ color: EMERALD }} />
               </div>
-              <h1 className="text-2xl font-bold text-[#1B2733] mb-2">You're all set!</h1>
+              <h1 className="text-2xl font-bold text-[#132F43] mb-2">You're all set!</h1>
               <p className="text-sm text-[#5A6B7A]">Here's a summary of your profile. We'll match {childName || 'your child'} with the best care team.</p>
             </div>
 
@@ -732,34 +732,34 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-[#5A6B7A]">Child</span>
-                  <span className="font-medium text-[#1B2733]">{childName}, age {childAge}</span>
+                  <span className="font-medium text-[#132F43]">{childName}, age {childAge}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#5A6B7A]">Focus area</span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {DIAGNOSIS_OPTIONS.find(d => d.value === diagnosis)?.label ?? diagnosis}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#5A6B7A]">Insurance</span>
-                  <span className="font-medium text-[#1B2733]">{insuranceSkipped ? 'Out of pocket' : 'Checked'}</span>
+                  <span className="font-medium text-[#132F43]">{insuranceSkipped ? 'Out of pocket' : 'Checked'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#5A6B7A]">Session setting</span>
-                  <span className="font-medium text-[#1B2733] text-right max-w-[55%]">
+                  <span className="font-medium text-[#132F43] text-right max-w-[55%]">
                     {serviceSettings.map(s => SERVICE_SETTINGS.find(o => o.value === s)?.label ?? s).join(', ')}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#5A6B7A]">Frequency</span>
-                  <span className="font-medium text-[#1B2733]">
+                  <span className="font-medium text-[#132F43]">
                     {FREQUENCIES.find(f => f.value === sessionFrequency)?.label ?? sessionFrequency}
                   </span>
                 </div>
                 {selectedProviderName && (
                   <div className="flex justify-between">
                     <span className="text-[#5A6B7A]">Requested provider</span>
-                    <span className="font-medium text-[#1B2733] text-right max-w-[55%]">{selectedProviderName}</span>
+                    <span className="font-medium text-[#132F43] text-right max-w-[55%]">{selectedProviderName}</span>
                   </div>
                 )}
               </div>

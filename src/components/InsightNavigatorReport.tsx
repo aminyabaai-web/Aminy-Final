@@ -95,7 +95,7 @@ export function InsightNavigatorReport({
       <div className="flex items-center justify-center py-16">
         <div className="text-center">
           <RefreshCw className="w-10 h-10 animate-spin text-primary mx-auto mb-4" />
-          <h3 className="font-medium text-[#1B2733] mb-2">Loading Profile</h3>
+          <h3 className="font-medium text-[#132F43] mb-2">Loading Profile</h3>
           <p className="text-sm text-[#5A6B7A]">Preparing {childProfile?.firstName || 'child'}'s intake document...</p>
         </div>
       </div>
@@ -165,7 +165,7 @@ export function InsightNavigatorReport({
           <div className="w-14 h-14 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mx-auto mb-4">
             <BookOpen className="w-7 h-7 text-[#6B9080]" />
           </div>
-          <h2 className="text-lg font-semibold text-[#1B2733] mb-2">
+          <h2 className="text-lg font-semibold text-[#132F43] mb-2">
             {childProfile?.firstName ? `${childProfile.firstName}'s` : "Your child's"} Insight Navigator builds as you use Aminy
           </h2>
           <p className="text-sm text-[#5A6B7A] max-w-md mx-auto leading-relaxed">
@@ -253,7 +253,7 @@ export function InsightNavigatorReport({
       {/* Provider Quick Start */}
       {mode === 'provider' && (
         <Card className="p-6 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
-          <h2 className="font-semibold text-[#1B2733] mb-4 flex items-center gap-2">
+          <h2 className="font-semibold text-[#132F43] mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-violet-600" />
             Provider Quick Start
           </h2>
@@ -289,7 +289,7 @@ export function InsightNavigatorReport({
       {/* Executive Summary */}
       <Card className="p-4 sm:p-5 md:p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-[#1B2733] flex items-center gap-2">
+          <h2 className="font-semibold text-[#132F43] flex items-center gap-2">
             <FileText className="w-5 h-5 text-[#6B9080]" />
             Executive Summary
           </h2>
@@ -363,7 +363,7 @@ export function InsightNavigatorReport({
         <TabsContent value="history" className="space-y-3 sm:space-y-4 mt-4">
           {Object.entries(navigator.background).map(([key, value]) => (
             <Card key={key} className="p-3 sm:p-4">
-              <h3 className="font-medium text-[#1B2733] mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h3>
+              <h3 className="font-medium text-[#132F43] mb-2 capitalize">{key.replace(/([A-Z])/g, ' $1')}</h3>
               <p className="text-sm text-[#3A4A57]">{value}</p>
             </Card>
           ))}
@@ -377,7 +377,7 @@ export function InsightNavigatorReport({
             <div className="space-y-2">
               {navigator.insights.whatsWorking.map((item) => (
                 <div key={item.id} className="p-3 bg-green-50 rounded-lg border border-green-200">
-                  <p className="text-sm text-[#1B2733]">{item.content}</p>
+                  <p className="text-sm text-[#132F43]">{item.content}</p>
                   <Badge variant="outline" className="mt-2 text-sm">{item.category}</Badge>
                 </div>
               ))}
@@ -391,7 +391,7 @@ export function InsightNavigatorReport({
             <div className="space-y-2">
               {navigator.insights.whatsNotWorking.map((item) => (
                 <div key={item.id} className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-sm text-[#1B2733]">{item.content}</p>
+                  <p className="text-sm text-[#132F43]">{item.content}</p>
                   <Badge variant="outline" className="mt-2 text-sm">{item.category}</Badge>
                 </div>
               ))}
@@ -405,7 +405,7 @@ export function InsightNavigatorReport({
             <div className="space-y-2">
               {navigator.insights.recommendations.map((item) => (
                 <div key={item.id} className="p-3 bg-white rounded-lg border border-[#6B9080]/20">
-                  <p className="text-sm text-[#1B2733]">{item.content}</p>
+                  <p className="text-sm text-[#132F43]">{item.content}</p>
                   <div className="flex gap-2 mt-2">
                     <Badge variant="outline" className="text-sm">{item.category}</Badge>
                     <Badge className={`text-sm ${item.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-[#F0EDE8] text-[#3A4A57]'}`}>
@@ -420,14 +420,14 @@ export function InsightNavigatorReport({
 
         <TabsContent value="providers" className="space-y-3 sm:space-y-4 mt-4">
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-3 flex items-center gap-2">
               <MessageSquare className="w-4 h-4" />Communication Style
             </h3>
             <p className="text-sm text-[#3A4A57]">{navigator.currentPresentation.communicationStyle}</p>
           </Card>
 
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-3 flex items-center gap-2">
               <Hand className="w-4 h-4" />Sensory Profile
             </h3>
             <p className="text-sm text-[#3A4A57]">{navigator.currentPresentation.sensoryProfile}</p>
@@ -456,7 +456,7 @@ export function InsightNavigatorReport({
           </Card>
 
           <Card className="p-3 sm:p-4">
-            <h3 className="font-medium text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
               <TrendingUp className="w-4 h-4" />Recent Progress
             </h3>
             <div className="space-y-3">
@@ -465,7 +465,7 @@ export function InsightNavigatorReport({
                   <div className={`w-2 h-2 rounded-full mt-2 ${entry.type === 'milestone' ? 'bg-green-500' : 'bg-gray-400'}`} />
                   <div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="font-medium text-[#1B2733]">{entry.area}</span>
+                      <span className="font-medium text-[#132F43]">{entry.area}</span>
                       <Badge variant="outline" className="text-sm">{entry.type}</Badge>
                     </div>
                     <p className="text-sm text-[#5A6B7A]">{entry.description}</p>

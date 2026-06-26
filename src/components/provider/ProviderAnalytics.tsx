@@ -769,7 +769,7 @@ export function ProviderAnalytics({
           {Math.abs(metric.change)}%
         </div>
       </div>
-      <h3 className="text-2xl font-bold text-[#1B2733] dark:text-white">{metric.value}</h3>
+      <h3 className="text-2xl font-bold text-[#132F43] dark:text-white">{metric.value}</h3>
       <p className="text-sm text-[#5A6B7A] mt-1">{metric.title}</p>
       <p className="text-sm text-slate-400 mt-0.5">{metric.changeLabel}</p>
     </Card>
@@ -795,7 +795,7 @@ export function ProviderAnalytics({
             <span className="font-medium text-[#5A6B7A]">{patient.name.charAt(0)}</span>
           </div>
           <div>
-            <p className="font-medium text-[#1B2733] dark:text-white">{patient.name}</p>
+            <p className="font-medium text-[#132F43] dark:text-white">{patient.name}</p>
             <p className="text-sm text-[#5A6B7A]">
               Last session: {patient.lastSession.toLocaleDateString()}
             </p>
@@ -882,7 +882,7 @@ export function ProviderAnalytics({
             </button>
           )}
           <div>
-            <h2 className="text-2xl font-bold text-[#1B2733] dark:text-white">Analytics Dashboard</h2>
+            <h2 className="text-2xl font-bold text-[#132F43] dark:text-white">Analytics Dashboard</h2>
             <p className="text-[#5A6B7A]">Performance overview for {resolvedProviderName}</p>
           </div>
         </div>
@@ -952,7 +952,7 @@ export function ProviderAnalytics({
         {/* Session Distribution Chart */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Session Distribution</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Session Distribution</h3>
             <Badge className="bg-[#F0EDE8] text-[#5A6B7A]">This Week</Badge>
           </div>
           <div className="space-y-4">
@@ -1006,7 +1006,7 @@ export function ProviderAnalytics({
         {/* Patient Status Overview */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Status</h3>
+            <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Patient Status</h3>
             <Button variant="ghost" size="sm" disabled title="Coming soon">View All</Button>
           </div>
 
@@ -1077,7 +1077,7 @@ export function ProviderAnalytics({
       {/* Patient List */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Patient Overview</h3>
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Patient Overview</h3>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
@@ -1111,7 +1111,7 @@ export function ProviderAnalytics({
       {/* Documentation Compliance */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">Documentation Compliance</h3>
+          <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">Documentation Compliance</h3>
           <Badge className="bg-green-100 text-green-700">{docCompliance.overallCompliance}% Complete</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

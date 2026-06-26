@@ -315,7 +315,7 @@ export function LaunchReadinessDashboard() {
           <Card className="p-8 bg-white/95 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-[#1B2733] mb-2">Overall Readiness</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#132F43] mb-2">Overall Readiness</h2>
                 <p className="text-[#5A6B7A]">All systems evaluated and ready for launch</p>
               </div>
               <div className="text-center">
@@ -333,7 +333,7 @@ export function LaunchReadinessDashboard() {
               {categories.map((cat, idx) => (
                 <div key={idx} className="text-center">
                   <div className="mb-2">{cat.icon}</div>
-                  <p className="text-sm font-medium text-[#1B2733] mb-1">{cat.title}</p>
+                  <p className="text-sm font-medium text-[#132F43] mb-1">{cat.title}</p>
                   <p className="text-xl sm:text-2xl font-bold text-accent">{cat.overallScore}%</p>
                 </div>
               ))}
@@ -350,7 +350,7 @@ export function LaunchReadinessDashboard() {
               <div className="flex items-center gap-3 mb-4 sm:mb-6">
                 {category.icon}
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-[#1B2733]">{category.title}</h3>
+                  <h3 className="text-xl font-bold text-[#132F43]">{category.title}</h3>
                   <p className="text-sm text-[#5A6B7A]">Score: {category.overallScore}%</p>
                 </div>
                 <Badge className={getStatusColor('complete')}>
@@ -363,7 +363,7 @@ export function LaunchReadinessDashboard() {
                   <div key={itemIdx} className="border-l-4 border-accent pl-4 py-2">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h4 className="font-semibold text-[#1B2733]">{item.name}</h4>
+                        <h4 className="font-semibold text-[#132F43]">{item.name}</h4>
                         <p className="text-sm text-[#5A6B7A]">Score: {item.score}%</p>
                       </div>
                       <span className="text-2xl">{getStatusIcon(item.status)}</span>
@@ -394,33 +394,33 @@ export function LaunchReadinessDashboard() {
 
         {/* Next Steps */}
         <Card className="p-6 mt-8 bg-gradient-to-r from-[#FAF7F2] to-[#F0EDE8] border-[#C8DDE8]">
-          <h3 className="text-xl font-bold text-[#1B2733] mb-4">✨ Next Steps</h3>
+          <h3 className="text-xl font-bold text-[#132F43] mb-4">✨ Next Steps</h3>
           <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
             <div className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733]">Deploy to Production</p>
+                <p className="font-medium text-[#132F43]">Deploy to Production</p>
                 <p className="text-sm text-[#5A6B7A]">All systems ready for deployment</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733]">Launch Public Beta</p>
+                <p className="font-medium text-[#132F43]">Launch Public Beta</p>
                 <p className="text-sm text-[#5A6B7A]">Send invites to 10 trusted families</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733]">Submit to App Store</p>
+                <p className="font-medium text-[#132F43]">Submit to App Store</p>
                 <p className="text-sm text-[#5A6B7A]">Marketing assets ready for TestFlight</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733]">Monitor Analytics</p>
+                <p className="font-medium text-[#132F43]">Monitor Analytics</p>
                 <p className="text-sm text-[#5A6B7A]">Dashboard tracking 5 core events</p>
               </div>
             </div>
@@ -430,7 +430,7 @@ export function LaunchReadinessDashboard() {
         {/* Final Message */}
         <div className="text-center mt-12 p-8 bg-gradient-to-r from-accent/10 to-teal-50 rounded-2xl">
           <Sparkles className="w-16 h-16 text-accent mx-auto mb-4" />
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#1B2733] mb-3">🎉 Phase 2 Complete!</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#132F43] mb-3">🎉 Phase 2 Complete!</h2>
           <p className="text-lg text-[#3A4A57] mb-4 sm:mb-6 max-w-2xl mx-auto">
             Aminy is now a comprehensive behavioral wellness ecosystem with 97% brand compliance, 
             100% mobile responsiveness, and production-ready features across all modules.

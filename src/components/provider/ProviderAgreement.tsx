@@ -258,7 +258,7 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
         onClick={() => setExpanded(!expanded)}
         className="w-full flex items-center justify-between px-5 py-4 bg-[#FAF7F2] hover:bg-[#F0EDE8] transition-colors text-left"
       >
-        <span className="font-semibold text-[#1B2733] text-sm">{section.title}</span>
+        <span className="font-semibold text-[#132F43] text-sm">{section.title}</span>
         {expanded ? (
           <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
         ) : (
@@ -366,7 +366,7 @@ export default function ProviderAgreement({
             <Scale className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-[#1B2733]">Provider Services Agreement</h1>
+            <h1 className="text-xl font-bold text-[#132F43]">Provider Services Agreement</h1>
             <p className="text-sm text-[#5A6B7A]">Aminy, Inc. — Effective Date: Upon Acceptance</p>
           </div>
         </div>

@@ -133,7 +133,7 @@ export function SupplementingServicesInfo({
           <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <Users className="w-6 h-6 text-[#6B9080]" />
           </div>
-          <h2 className="text-xl font-bold text-[#1B2733] mb-2">
+          <h2 className="text-xl font-bold text-[#132F43] mb-2">
             Your AI Companion, Not Replacement
           </h2>
           <p className="text-[#5A6B7A]">
@@ -159,7 +159,7 @@ export function SupplementingServicesInfo({
             <div key={index} className="flex items-start gap-3 p-3 bg-[#FAF7F2] rounded-lg">
               <area.icon className="w-5 h-5 text-[#6B9080] mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733]">{area.title}</p>
+                <p className="font-medium text-[#132F43]">{area.title}</p>
                 <p className="text-sm text-[#5A6B7A]">{area.description}</p>
               </div>
             </div>
@@ -183,7 +183,7 @@ export function SupplementingServicesInfo({
         <Badge className="bg-[#6B9080]/10 text-[#6B9080] mb-4">
           How Aminy Works
         </Badge>
-        <h1 className="text-3xl md:text-4xl font-bold text-[#1B2733] mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#132F43] mb-4">
           Your Companion for the Hours
           <br />
           <span className="text-[#6B9080]">Between Therapy</span>
@@ -207,7 +207,7 @@ export function SupplementingServicesInfo({
               <div className="text-4xl font-bold text-[#6B9080] mb-1">
                 {item.stat}
               </div>
-              <div className="text-sm font-medium text-[#1B2733] mb-2">
+              <div className="text-sm font-medium text-[#132F43] mb-2">
                 {item.label}
               </div>
               <p className="text-sm text-[#5A6B7A]">
@@ -220,7 +220,7 @@ export function SupplementingServicesInfo({
 
       {/* What We Supplement */}
       <section className="max-w-5xl mx-auto">
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#132F43] mb-8">
           How Aminy Supplements Your Care Team
         </h2>
 
@@ -236,7 +236,7 @@ export function SupplementingServicesInfo({
                 <div className="w-10 h-10 bg-[#6B9080]/10 rounded-xl flex items-center justify-center mb-4">
                   <area.icon className="w-5 h-5 text-[#6B9080]" />
                 </div>
-                <h3 className="font-semibold text-[#1B2733] mb-2">
+                <h3 className="font-semibold text-[#132F43] mb-2">
                   {area.title}
                 </h3>
                 <p className="text-sm text-[#5A6B7A] mb-3">
@@ -296,13 +296,13 @@ export function SupplementingServicesInfo({
 
       {/* How We Work Together */}
       <section className="max-w-4xl mx-auto">
-        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#1B2733] mb-8">
+        <h2 className="text-xl sm:text-2xl font-bold text-center text-[#132F43] mb-8">
           Better Together
         </h2>
 
         <div className="grid md:grid-cols-2 gap-3 sm:gap-4 sm:gap-6">
           <Card className="p-4 sm:p-5 md:p-6">
-            <h3 className="font-semibold text-[#1B2733] mb-4 flex items-center gap-2">
+            <h3 className="font-semibold text-[#132F43] mb-4 flex items-center gap-2">
               <Users className="w-5 h-5 text-[#6B9080]" />
               Your Therapy Team
             </h3>

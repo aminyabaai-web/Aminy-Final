@@ -361,7 +361,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
         >
           <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
         </button>
-        <h2 className="text-lg font-semibold text-[#1B2733]">
+        <h2 className="text-lg font-semibold text-[#132F43]">
           {childName}&apos;s Words
         </h2>
         <button
@@ -577,7 +577,7 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       {symbol.emoji}
                     </span>
                   )}
-                  <span className="text-sm font-semibold text-[#1B2733] mt-1 leading-tight text-center truncate w-full">
+                  <span className="text-sm font-semibold text-[#132F43] mt-1 leading-tight text-center truncate w-full">
                     {symbol.label}
                   </span>
                 </button>

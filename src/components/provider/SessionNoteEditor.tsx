@@ -196,7 +196,7 @@ export function SessionNoteEditor({
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-semibold text-[#1B2733]">Session Note</h2>
+            <h2 className="text-xl font-semibold text-[#132F43]">Session Note</h2>
             <Badge className="bg-violet-100 text-violet-800 flex items-center gap-1 px-2 py-0.5">
               <Sparkles className="w-3 h-3" />
               AI Draft
@@ -245,7 +245,7 @@ export function SessionNoteEditor({
                 <div
                   className={`flex items-center gap-1 px-2 py-1 rounded-full whitespace-nowrap ${
                     isActive
-                      ? 'bg-white shadow-sm font-medium text-[#1B2733]'
+                      ? 'bg-white shadow-sm font-medium text-[#132F43]'
                       : isPast
                       ? 'text-green-700'
                       : 'text-slate-400'
@@ -371,7 +371,7 @@ export function SessionNoteEditor({
         <div className={`md:col-span-2 space-y-4 ${activePanel !== 'meta' ? 'hidden md:block' : ''}`}>
           {/* CPT Codes */}
           <Card className="p-4">
-            <h3 className="font-medium text-[#1B2733] mb-3 flex items-center gap-2 text-sm">
+            <h3 className="font-medium text-[#132F43] mb-3 flex items-center gap-2 text-sm">
               <FileText className="w-4 h-4 text-[#5A6B7A]" />
               CPT Code Suggestions
             </h3>
@@ -394,7 +394,7 @@ export function SessionNoteEditor({
               onClick={() => setShowMetrics(!showMetrics)}
               className="flex items-center justify-between w-full text-left"
             >
-              <h3 className="font-medium text-[#1B2733] flex items-center gap-2 text-sm">
+              <h3 className="font-medium text-[#132F43] flex items-center gap-2 text-sm">
                 <AlertCircle className="w-4 h-4 text-[#5A6B7A]" />
                 Session Metrics
               </h3>
@@ -514,7 +514,7 @@ function SOAPSection({
     <Card className={`p-4 border-l-4 ${borderColors[color] || 'border-l-slate-300'}`}>
       <div className="mb-2 flex items-start justify-between gap-2">
         <div>
-          <h3 className="font-medium text-[#1B2733] text-sm">{label}</h3>
+          <h3 className="font-medium text-[#132F43] text-sm">{label}</h3>
           <p className="text-sm text-[#5A6B7A]">{sublabel}</p>
         </div>
         {isEdited && (
@@ -528,7 +528,7 @@ function SOAPSection({
         onChange={e => onChange(e.target.value)}
         disabled={disabled}
         rows={4}
-        className="w-full rounded-md border border-[#E8E4DF] bg-white px-3 py-2 text-sm text-[#1B2733] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full rounded-md border border-[#E8E4DF] bg-white px-3 py-2 text-sm text-[#132F43] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y disabled:opacity-60 disabled:cursor-not-allowed"
         placeholder={`Enter ${label.toLowerCase()}...`}
       />
     </Card>
@@ -568,7 +568,7 @@ function CPTRow({
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-sm font-medium text-[#1B2733]">{cpt.code}</span>
+          <span className="font-mono text-sm font-medium text-[#132F43]">{cpt.code}</span>
           <span className="text-sm text-[#5A6B7A] truncate">{cpt.description}</span>
         </div>
         <span className="text-sm text-[#5A6B7A]">{cpt.units} unit{cpt.units !== 1 ? 's' : ''}</span>
@@ -588,7 +588,7 @@ function MetricBar({ label, value }: { label: string; value: number }) {
     <div>
       <div className="flex items-center justify-between text-sm mb-1">
         <span className="text-[#3A4A57]">{label}</span>
-        <span className="font-medium text-[#1B2733]">{value}%</span>
+        <span className="font-medium text-[#132F43]">{value}%</span>
       </div>
       <div className="h-2 bg-[#F0EDE8] rounded-full overflow-hidden">
         <div

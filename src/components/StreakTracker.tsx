@@ -84,7 +84,7 @@ export function StreakTracker({
           <Flame className="w-8 h-8 text-orange-600" />
         </div>
         <div>
-          <p className="text-2xl sm:text-3xl font-bold text-[#1B2733]">{currentStreak}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-[#132F43]">{currentStreak}</p>
           <p className="text-sm text-muted-foreground">
             {currentStreak === 1 ? 'day' : 'days'} this week
           </p>

@@ -95,7 +95,7 @@ export function UpgradeModal({
               </span>
 
               {/* Headline */}
-              <h3 className="text-base font-bold text-[#1B2733] mb-1 pr-4">
+              <h3 className="text-base font-bold text-[#132F43] mb-1 pr-4">
                 {prompt.headline}
               </h3>
 

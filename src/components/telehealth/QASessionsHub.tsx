@@ -271,7 +271,7 @@ export function QASessionsHub({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">Monthly Q&A Sessions</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Monthly Q&A Sessions</h1>
             <p className="text-sm text-[#5A6B7A]">Live sessions with our provider team</p>
           </div>
         </div>
@@ -411,7 +411,7 @@ function UpcomingSessionCard({
 
       {/* Content */}
       <div className="p-3 sm:p-4">
-        <h3 className="font-semibold text-[#1B2733] text-lg mb-2">{session.title}</h3>
+        <h3 className="font-semibold text-[#132F43] text-lg mb-2">{session.title}</h3>
         <p className="text-sm text-[#5A6B7A] mb-4">{session.description}</p>
 
         {/* Hosts */}
@@ -555,7 +555,7 @@ function ReplayCard({ session, onWatch, formatDate }: ReplayCardProps) {
           )}
         </div>
 
-        <h3 className="font-semibold text-[#1B2733] mb-2">{session.title}</h3>
+        <h3 className="font-semibold text-[#132F43] mb-2">{session.title}</h3>
 
         {/* Hosts */}
         <div className="flex items-center gap-2 mb-3">

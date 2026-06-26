@@ -1050,7 +1050,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               <div className="flex items-start gap-3">
                 <Shield className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-[#1B2733] dark:text-white mb-1">
+                  <h4 className="font-medium text-[#132F43] dark:text-white mb-1">
                     Keep your account secure
                   </h4>
                   <ul className="text-sm text-[#5A6B7A] dark:text-slate-300 space-y-1">

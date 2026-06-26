@@ -86,7 +86,7 @@ export function PostVisitSummary({
     <Card className="p-4 sm:p-5 md:p-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-lg font-semibold text-[#1B2733]">Visit Summary</h3>
+          <h3 className="text-lg font-semibold text-[#132F43]">Visit Summary</h3>
           <p className="text-sm text-[#5A6B7A] mt-0.5">
             {sessionType} with {providerName}{providerCredentials ? `, ${providerCredentials}` : ''}
           </p>
@@ -117,7 +117,7 @@ export function PostVisitSummary({
       {/* Key Takeaways */}
       {keyTakeaways.length > 0 && (
         <div className="mb-4">
-          <h4 className="text-sm font-semibold text-[#1B2733] mb-2">Key Takeaways</h4>
+          <h4 className="text-sm font-semibold text-[#132F43] mb-2">Key Takeaways</h4>
           <ul className="space-y-2">
             {keyTakeaways.map((takeaway, index) => (
               <li key={index} className="flex items-start gap-2">
@@ -154,7 +154,7 @@ export function PostVisitSummary({
       {actionItems.length > 0 && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
-            <h4 className="text-sm font-semibold text-[#1B2733]">Action Items</h4>
+            <h4 className="text-sm font-semibold text-[#132F43]">Action Items</h4>
             <span className="text-sm text-[#5A6B7A]">{completedCount}/{totalItems} done</span>
           </div>
           <div className="space-y-2">
@@ -168,7 +168,7 @@ export function PostVisitSummary({
                   ? <CheckCircle className="w-4 h-4 text-[#6B9080] shrink-0" />
                   : <Circle className="w-4 h-4 text-slate-300 shrink-0" />
                 }
-                <span className={`text-sm ${completedItems.has(index) ? 'line-through text-slate-400' : 'text-[#1B2733]'}`}>
+                <span className={`text-sm ${completedItems.has(index) ? 'line-through text-slate-400' : 'text-[#132F43]'}`}>
                   {item.task}
                 </span>
               </button>

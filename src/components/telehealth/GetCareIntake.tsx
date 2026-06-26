@@ -82,7 +82,7 @@ export function GetCareIntakeScreen({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">Get Care</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Get Care</h1>
             <p className="text-sm text-[#5A6B7A]">Find a provider for your needs</p>
           </div>
         </div>
@@ -107,7 +107,7 @@ export function GetCareIntakeScreen({
                   setConcernId(undefined);
                 }
               }}
-              className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
           {preselectedConcern && concernId === preselectedConcern.id && (
@@ -157,7 +157,7 @@ export function GetCareIntakeScreen({
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8A9BA8]" />
             <button
               onClick={() => setShowStateDropdown(!showStateDropdown)}
-              className="w-full pl-10 pr-10 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-left text-[#1B2733] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full pl-10 pr-10 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-left text-[#132F43] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             >
               {userState ? getStateName(userState) : 'Select your state'}
             </button>
@@ -204,7 +204,7 @@ export function GetCareIntakeScreen({
               placeholder="City (optional)"
               value={userCity}
               onChange={(e) => setUserCity(e.target.value)}
-              className="w-full px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+              className="w-full px-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
             />
           </div>
         </section>

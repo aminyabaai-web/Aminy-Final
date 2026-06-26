@@ -222,7 +222,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 sm:px-6 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-semibold text-[#1B2733] mb-2">Hub</h1>
+          <h1 className="text-3xl font-semibold text-[#132F43] mb-2">Hub</h1>
           <p className="text-[#5A6B7A]">Connect, learn, and grow together</p>
         </div>
       </div>
@@ -234,7 +234,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
             <div className="flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-accent mt-0.5" />
               <div>
-                <p className="font-medium text-[#1B2733] mb-1">
+                <p className="font-medium text-[#132F43] mb-1">
                   New tip based on your week's progress
                 </p>
                 <p className="text-sm text-[#5A6B7A]">
@@ -314,7 +314,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                         {tip.readTime}
                       </div>
                     </div>
-                    <h3 className="font-semibold text-[#1B2733] mb-2">{tip.title}</h3>
+                    <h3 className="font-semibold text-[#132F43] mb-2">{tip.title}</h3>
                     <p className="text-sm text-[#3A4A57] leading-relaxed">{tip.content}</p>
                   </div>
                 </div>
@@ -367,7 +367,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[#1B2733]">{story.author}</span>
+                      <span className="font-medium text-[#132F43]">{story.author}</span>
                       <span className="text-sm text-[#5A6B7A]">{story.timestamp}</span>
                     </div>
                     <p className="text-sm text-[#3A4A57] leading-relaxed mb-3">
@@ -415,7 +415,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
               <div className="mb-4 sm:mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-[#1B2733]">Suggested for You</h3>
+                  <h3 className="font-semibold text-[#132F43]">Suggested for You</h3>
                   <Badge className="bg-accent/10 text-accent border-accent/20">
                     AI Powered
                   </Badge>
@@ -431,7 +431,7 @@ export function HubPageExpanded({ userData, weekProgress = [] }: HubPageExpanded
 
             {/* All Resources */}
             <div>
-              <h3 className="font-semibold text-[#1B2733] mb-4">All Resources</h3>
+              <h3 className="font-semibold text-[#132F43] mb-4">All Resources</h3>
               <div className="space-y-3">
                 {resources.filter(r => !r.aiSuggested).map(resource => (
                   <ResourceCard key={resource.id} resource={resource} onShare={handleShare} />
@@ -485,7 +485,7 @@ function ResourceCard({
         <div className="flex-1">
           <div className="flex items-start justify-between mb-2">
             <div>
-              <h4 className="font-semibold text-[#1B2733] mb-1">{resource.title}</h4>
+              <h4 className="font-semibold text-[#132F43] mb-1">{resource.title}</h4>
               <p className="text-sm text-[#5A6B7A]">{resource.description}</p>
             </div>
           </div>

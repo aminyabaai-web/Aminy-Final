@@ -271,7 +271,7 @@ export function VoiceInput({
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold text-center text-[#1B2733] dark:text-white mb-2">
+            <h3 className="text-lg font-semibold text-center text-[#132F43] dark:text-white mb-2">
               "Aminy" would like to access the Microphone
             </h3>
 
@@ -313,7 +313,7 @@ export function VoiceInput({
           <Card className="px-4 py-3 bg-white dark:bg-slate-900 shadow-lg rounded-full flex items-center gap-3">
             {/* Recording indicator */}
             <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-            <span className="text-sm font-medium text-[#1B2733] dark:text-white">
+            <span className="text-sm font-medium text-[#132F43] dark:text-white">
               Listening...
             </span>
             {transcript && (

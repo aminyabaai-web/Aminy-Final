@@ -369,7 +369,7 @@ export function ShareToUnlock({
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#1B2733]">
+                      <p className="text-sm font-medium text-[#132F43]">
                         {achievement.unlockLabel}
                       </p>
                       <p className="text-sm text-[#5A6B7A]">
@@ -439,7 +439,7 @@ export function ShareToUnlock({
                   >
                     <CheckCircle className="w-8 h-8 text-green-600" />
                   </motion.div>
-                  <h3 className="text-lg font-bold text-[#1B2733] mb-1">Unlocked!</h3>
+                  <h3 className="text-lg font-bold text-[#132F43] mb-1">Unlocked!</h3>
                   <p className="text-sm text-[#5A6B7A] mb-3">{achievement.unlockLabel}</p>
                   <Badge className="bg-green-100 text-green-700 border-green-200">
                     <Gift className="w-3 h-3 mr-1" />

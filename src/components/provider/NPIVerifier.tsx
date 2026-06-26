@@ -92,7 +92,7 @@ export function NPIVerifier({ providerId, providerName, initialNPI = '', onVerif
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-[#1B2733] dark:text-white block">
+      <label className="text-sm font-medium text-[#132F43] dark:text-white block">
         NPI Number
         <span className="text-sm font-normal text-[#5A6B7A] ml-2">10-digit · auto-verified via NPPES</span>
       </label>

@@ -334,7 +334,7 @@ function DenialInbox({
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1.5">
                       <AlertCircle className={`w-4 h-4 ${denial.daysUntilDeadline <= 7 ? 'text-red-500' : 'text-amber-500'}`} />
-                      <span className="text-sm font-semibold text-[#1B2733]">{denial.patientName}</span>
+                      <span className="text-sm font-semibold text-[#132F43]">{denial.patientName}</span>
                     </div>
                   </div>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${sc.color}`}>
@@ -462,7 +462,7 @@ NPI: [Your NPI]
       <Card className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h3 className="text-base font-bold text-[#1B2733]">{denial.patientName}</h3>
+            <h3 className="text-base font-bold text-[#132F43]">{denial.patientName}</h3>
             <p className="text-sm text-[#5A6B7A]">{denial.claimId} &middot; {denial.dateOfService}</p>
           </div>
           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${sc.color}`}>
@@ -561,7 +561,7 @@ NPI: [Your NPI]
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-[#1B2733] flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-[#132F43] flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-violet-500" />
                   Generated Appeal Letter
                 </h3>
@@ -587,7 +587,7 @@ NPI: [Your NPI]
 
       {/* Timeline */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <Clock className="w-4 h-4 text-blue-500" />
           Appeal Timeline
         </h3>
@@ -687,7 +687,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
         <Card className="p-3">
           <p className="text-sm text-[#5A6B7A]">Denial Rate</p>
           <div className="flex items-center gap-1">
-            <p className="text-xl font-bold text-[#1B2733]">{denialRate}%</p>
+            <p className="text-xl font-bold text-[#132F43]">{denialRate}%</p>
             <TrendingDown className="w-4 h-4 text-emerald-500" />
           </div>
           <p className="text-sm text-emerald-500">-2% vs last month</p>
@@ -695,7 +695,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
         <Card className="p-3">
           <p className="text-sm text-[#5A6B7A]">Recovery Rate</p>
           <div className="flex items-center gap-1">
-            <p className="text-xl font-bold text-[#1B2733]">{recoveryRate}%</p>
+            <p className="text-xl font-bold text-[#132F43]">{recoveryRate}%</p>
             <TrendingUp className="w-4 h-4 text-emerald-500" />
           </div>
           <p className="text-sm text-emerald-500">+5% vs last month</p>
@@ -704,7 +704,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
 
       {/* Top Denial Reasons */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3 flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3 flex items-center gap-2">
           <BarChart3 className="w-4 h-4 text-violet-500" />
           Top Denial Reasons
         </h3>
@@ -733,7 +733,7 @@ function AnalyticsPanel({ denials }: { denials: Denial[] }) {
 
       {/* Denial by Payer */}
       <Card className="p-4">
-        <h3 className="text-sm font-semibold text-[#1B2733] mb-3">Denials by Payer</h3>
+        <h3 className="text-sm font-semibold text-[#132F43] mb-3">Denials by Payer</h3>
         <div className="space-y-2">
           {Object.entries(payerDenials)
             .sort(([, a], [, b]) => b.amount - a.amount)
@@ -777,7 +777,7 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-[#1B2733]">Claims Needing Correction</h3>
+        <h3 className="text-sm font-semibold text-[#132F43]">Claims Needing Correction</h3>
         <Badge variant="outline" className="text-sm">
           {reworkItems.length} items
         </Badge>
@@ -867,7 +867,7 @@ export default function DenialWorkbench({
             </button>
           )}
           <div className="flex-1">
-            <h1 className="text-lg font-bold text-[#1B2733]">Denial Workbench</h1>
+            <h1 className="text-lg font-bold text-[#132F43]">Denial Workbench</h1>
             <p className="text-sm text-[#5A6B7A]">
               {urgentCount} urgent &middot; ${totalAtRisk.toLocaleString()} at risk
             </p>
@@ -894,7 +894,7 @@ export default function DenialWorkbench({
                   {v.badge != null && v.badge > 0 && (
                     <span
                       className={`ml-1 w-4 h-4 rounded-full text-xs font-bold flex items-center justify-center ${
-                        isActive ? 'bg-white text-[#1B2733]' : 'bg-red-500 text-white'
+                        isActive ? 'bg-white text-[#132F43]' : 'bg-red-500 text-white'
                       }`}
                     >
                       {v.badge}

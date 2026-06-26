@@ -83,7 +83,7 @@ export function BrowseTopConcerns({
             <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
           </button>
           <div>
-            <h1 className="text-lg font-semibold text-[#1B2733]">Browse Top Concerns</h1>
+            <h1 className="text-lg font-semibold text-[#132F43]">Browse Top Concerns</h1>
             <p className="text-sm text-[#5A6B7A]">Find the right support for your needs</p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function BrowseTopConcerns({
             placeholder="Search concerns..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#1B2733] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
+            className="w-full pl-10 pr-4 py-3 bg-[#FAF7F2] border border-[#E8E4DF] rounded-xl text-[#132F43] placeholder:text-[#5A6B7A] focus:outline-none focus:ring-2 focus:ring-cyan-600/20 focus:border-cyan-600 transition-all"
           />
         </div>
       </div>
@@ -144,7 +144,7 @@ export function BrowseTopConcerns({
               return (
                 <section key={category}>
                   <div className="mb-4">
-                    <h2 className="text-lg font-semibold text-[#1B2733]">
+                    <h2 className="text-lg font-semibold text-[#132F43]">
                       {categoryInfo.title}
                     </h2>
                     <p className="text-sm text-[#5A6B7A]">{categoryInfo.description}</p>
@@ -166,7 +166,7 @@ export function BrowseTopConcerns({
 
         {/* Not seeing what you need */}
         <div className="mt-8 p-4 bg-white rounded-2xl border border-[#E8E4DF]">
-          <h3 className="font-medium text-[#1B2733] mb-1">Not seeing what you need?</h3>
+          <h3 className="font-medium text-[#132F43] mb-1">Not seeing what you need?</h3>
           <p className="text-sm text-[#5A6B7A] mb-3">
             Describe your concern and we'll match you with the right support.
           </p>
@@ -211,7 +211,7 @@ export function BrowseTopConcerns({
                 <AlertTriangle className="w-6 h-6 text-amber-600" />
               </div>
             </div>
-            <h3 className="text-lg font-semibold text-[#1B2733] text-center mb-2">
+            <h3 className="text-lg font-semibold text-[#132F43] text-center mb-2">
               Safety First
             </h3>
             <p className="text-[#5A6B7A] text-center text-sm mb-4">
@@ -284,7 +284,7 @@ function ConcernTile({ concern, onClick }: ConcernTileProps) {
       </div>
 
       {/* Content */}
-      <h3 className="font-medium text-[#1B2733] text-sm leading-tight mb-1">
+      <h3 className="font-medium text-[#132F43] text-sm leading-tight mb-1">
         {concern.name}
       </h3>
       <p className="text-sm text-[#5A6B7A] line-clamp-2">

@@ -536,7 +536,7 @@ export function SearchAndDiscovery({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium text-[#1B2733] dark:text-white">
+                        <span className="font-medium text-[#132F43] dark:text-white">
                           {result.authorName}
                         </span>
                         {result.isExpert && (
@@ -546,7 +546,7 @@ export function SearchAndDiscovery({
                           {formatTimeAgo(result.createdAt)}
                         </span>
                       </div>
-                      <p className="text-[#1B2733] dark:text-white mb-2">{result.content}</p>
+                      <p className="text-[#132F43] dark:text-white mb-2">{result.content}</p>
                       {result.excerpt && (
                         <p className="text-sm text-[#5A6B7A] mb-2 line-clamp-2">{result.excerpt}</p>
                       )}
@@ -588,7 +588,7 @@ export function SearchAndDiscovery({
           <Card className="p-4 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-5 h-5 text-[#2A7D99]" />
-              <h3 className="font-semibold text-[#1B2733] dark:text-white">Trending Topics</h3>
+              <h3 className="font-semibold text-[#132F43] dark:text-white">Trending Topics</h3>
             </div>
             <div className="space-y-3">
               {trending.map((topic, idx) => (
@@ -600,7 +600,7 @@ export function SearchAndDiscovery({
                   <div className="flex items-center gap-3">
                     <span className="text-neutral-400 text-sm">{idx + 1}</span>
                     <div>
-                      <p className="font-medium text-[#1B2733] dark:text-white">#{topic.tag}</p>
+                      <p className="font-medium text-[#132F43] dark:text-white">#{topic.tag}</p>
                       <p className="text-sm text-[#5A6B7A]">{topic.postCount} posts</p>
                     </div>
                   </div>
@@ -621,7 +621,7 @@ export function SearchAndDiscovery({
           <Card className="p-4 lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-amber-500" />
-              <h3 className="font-semibold text-[#1B2733] dark:text-white">Recommended for You</h3>
+              <h3 className="font-semibold text-[#132F43] dark:text-white">Recommended for You</h3>
             </div>
             <div className="space-y-4">
               {recommended.map(post => (
@@ -635,7 +635,7 @@ export function SearchAndDiscovery({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium text-[#1B2733] dark:text-white text-sm">
+                      <span className="font-medium text-[#132F43] dark:text-white text-sm">
                         {post.authorName}
                       </span>
                       {post.isExpert && (

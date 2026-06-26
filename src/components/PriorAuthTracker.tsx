@@ -200,7 +200,7 @@ export function PriorAuthTracker({
       >
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-[#6B9080]" />
-          <span className="text-sm font-medium text-[#1B2733] dark:text-slate-100">
+          <span className="text-sm font-medium text-[#132F43] dark:text-slate-100">
             Prior Authorization Status
           </span>
           {timeline && (
@@ -244,7 +244,7 @@ export function PriorAuthTracker({
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm text-[#1B2733] dark:text-slate-200">{phase.label}</p>
+                      <p className="text-sm text-[#132F43] dark:text-slate-200">{phase.label}</p>
                       <p className="text-sm text-slate-500 dark:text-slate-400">{phase.days}</p>
                     </div>
                   </div>

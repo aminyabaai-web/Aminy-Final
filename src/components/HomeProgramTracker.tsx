@@ -398,7 +398,7 @@ export function HomeProgramTracker({
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl font-semibold text-[#1B2733] dark:text-white flex items-center gap-2">
+            <h2 className="text-xl font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
               <Home className="w-5 h-5 text-[#6B9080]" />
               Home Program
             </h2>
@@ -423,7 +423,7 @@ export function HomeProgramTracker({
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="p-4 text-center">
-          <p className="text-2xl font-bold text-[#1B2733] dark:text-white">{stats.totalActivities}</p>
+          <p className="text-2xl font-bold text-[#132F43] dark:text-white">{stats.totalActivities}</p>
           <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">Active Activities</p>
         </Card>
         <Card className="p-4 text-center">
@@ -480,7 +480,7 @@ export function HomeProgramTracker({
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-medium text-[#1B2733] dark:text-white truncate">
+                      <h3 className="font-medium text-[#132F43] dark:text-white truncate">
                         {activity.title}
                       </h3>
                       <Badge className={categoryInfo.color}>
@@ -698,7 +698,7 @@ export function HomeProgramTracker({
       {activities.length === 0 && (
         <Card className="p-12 text-center">
           <Home className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
-          <h3 className="text-lg font-medium text-[#1B2733] dark:text-white mb-2">
+          <h3 className="text-lg font-medium text-[#132F43] dark:text-white mb-2">
             No home activities yet
           </h3>
           <p className="text-[#5A6B7A] dark:text-neutral-400 mb-4">
@@ -720,7 +720,7 @@ export function HomeProgramTracker({
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 dark:border-slate-800">
-              <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white">
+              <h3 className="text-lg font-semibold text-[#132F43] dark:text-white">
                 Assign Home Activity
               </h3>
             </div>

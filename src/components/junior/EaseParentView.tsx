@@ -197,7 +197,7 @@ function WeeklyReport({ sessions }: { sessions: EaseSessionEntry[] }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="font-bold text-[#1B2733] text-sm flex items-center gap-2">
+      <h3 className="font-bold text-[#132F43] text-sm flex items-center gap-2">
         <BarChart3 className="w-4 h-4 text-indigo-500" />
         Weekly Ease Report
       </h3>
@@ -306,7 +306,7 @@ export function PostSessionRatingPrompt({
           <div className="flex items-center gap-2">
             <span className="text-2xl">{toolEmoji}</span>
             <div>
-              <p className="font-bold text-[#1B2733] text-sm">How did that go?</p>
+              <p className="font-bold text-[#132F43] text-sm">How did that go?</p>
               <p className="text-sm text-[#8A9BA8] capitalize">{tool} session</p>
             </div>
           </div>

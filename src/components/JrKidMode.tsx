@@ -228,7 +228,7 @@ export const JrKidMode: React.FC<JrKidModeProps> = ({
                     }}
                   >
                     <div className="text-4xl mb-3" aria-hidden="true">{reward.icon}</div>
-                    <h3 className="text-lg font-semibold text-[#1B2733] dark:text-gray-100 mb-2">{reward.name}</h3>
+                    <h3 className="text-lg font-semibold text-[#132F43] dark:text-gray-100 mb-2">{reward.name}</h3>
                     <div className="flex items-center justify-center gap-2">
                       <Star className="w-4 h-4 text-yellow-500" aria-hidden="true" />
                       <span className="font-medium">{reward.cost} tokens</span>
@@ -581,7 +581,7 @@ const ModuleInterface: React.FC<ModuleInterfaceProps> = ({
           <config.icon className="w-16 h-16 text-white" />
         </div>
 
-        <h2 className="text-2xl font-semibold text-[#1B2733] mb-4">
+        <h2 className="text-2xl font-semibold text-[#132F43] mb-4">
           {currentActivityData.name}
         </h2>
 

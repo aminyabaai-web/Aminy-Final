@@ -317,7 +317,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
           <AlertTriangle className="w-8 h-8 text-red-600" />
         </div>
 
-        <h1 className="text-2xl font-semibold text-[#1B2733] mb-2">
+        <h1 className="text-2xl font-semibold text-[#132F43] mb-2">
           Oops! Something went wrong
         </h1>
 
@@ -346,7 +346,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
           <Button
             variant="ghost"
             onClick={() => window.location.replace('/care')}
-            className="w-full text-[#5A6B7A] hover:text-[#1B2733]"
+            className="w-full text-[#5A6B7A] hover:text-[#132F43]"
           >
             <MessageCircle className="w-4 h-4 mr-2" />
             Contact Support
@@ -367,7 +367,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; reset: () => void }> = ({ e
             
             {showDetails && (
               <div className="mt-4 p-4 bg-[#F0EDE8] rounded-lg text-left">
-                <h3 className="font-medium text-[#1B2733] mb-2">Error Details:</h3>
+                <h3 className="font-medium text-[#132F43] mb-2">Error Details:</h3>
                 <pre className="text-sm text-[#3A4A57] whitespace-pre-wrap overflow-auto max-h-40">
                   {error.stack}
                 </pre>

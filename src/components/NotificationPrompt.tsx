@@ -255,7 +255,7 @@ export function NotificationPrompt({
           <ValueIcon className="w-6 h-6 text-purple-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-[#1B2733] mb-1">
+          <h3 className="font-semibold text-[#132F43] mb-1">
             Never miss a moment
           </h3>
           <p className="text-sm text-[#5A6B7A] mb-3">

@@ -266,7 +266,7 @@ function DataTypeRow({
     <div className="flex items-center gap-3 py-2">
       <Icon size={16} className="text-[#8A9BA8] flex-shrink-0" />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-[#1B2733]">{display.label}</p>
+        <p className="text-sm text-[#132F43]">{display.label}</p>
         <p className="text-sm text-[#8A9BA8]">
           {record?.lastSyncAt
             ? timeAgoFriendly(record.lastSyncAt)
@@ -387,7 +387,7 @@ export function CRSyncStatus({
         <div className="flex items-center gap-3">
           <FreshnessIcon className={`w-6 h-6 ${freshCfg.color}`} />
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#1B2733]">
+            <p className="text-sm font-semibold text-[#132F43]">
               {overallFreshness === 'fresh'
                 ? `Connected with ${providerLabel}`
                 : overallFreshness === 'aging'

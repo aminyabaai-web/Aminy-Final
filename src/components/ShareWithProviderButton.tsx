@@ -362,7 +362,7 @@ function ShareModal({
                   <User className="w-5 h-5 text-[#6B9080]" />
                 </div>
                 <div>
-                  <p className="font-medium text-[#1B2733]">{report.childName}'s Progress Report</p>
+                  <p className="font-medium text-[#132F43]">{report.childName}'s Progress Report</p>
                   <p className="text-sm text-[#5A6B7A]">
                     {report.dateRange.start.toLocaleDateString()} - {report.dateRange.end.toLocaleDateString()}
                   </p>
@@ -372,13 +372,13 @@ function ShareModal({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                 <div className="p-2 bg-white rounded border">
                   <span className="text-[#5A6B7A]">Stress Level</span>
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {report.metrics.stressLevel.current}/10
                   </p>
                 </div>
                 <div className="p-2 bg-white rounded border">
                   <span className="text-[#5A6B7A]">Routine Adherence</span>
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {report.metrics.routineAdherence.current}%
                   </p>
                 </div>
@@ -404,7 +404,7 @@ function ShareModal({
                   <Download className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1B2733]">Download PDF</p>
+                  <p className="font-medium text-[#132F43]">Download PDF</p>
                   <p className="text-sm text-[#5A6B7A]">Save to your device</p>
                 </div>
                 {generating && shareMethod === 'download' && (
@@ -422,7 +422,7 @@ function ShareModal({
                     <Mail className="w-5 h-5 text-blue-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-[#1B2733]">Email to Provider</p>
+                    <p className="font-medium text-[#132F43]">Email to Provider</p>
                     <p className="text-sm text-[#5A6B7A]">Send directly via email</p>
                   </div>
                 </button>
@@ -467,7 +467,7 @@ function ShareModal({
                   )}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium text-[#1B2733]">
+                  <p className="font-medium text-[#132F43]">
                     {linkCopied ? 'Link Copied!' : 'Copy Shareable Link'}
                   </p>
                   <p className="text-sm text-[#5A6B7A]">Valid for 7 days, view-only access</p>

@@ -211,7 +211,7 @@ export function TelehealthHome({
               <ArrowLeft className="w-5 h-5 text-[#3A4A57]" />
             </button>
             <div>
-              <h1 className="text-lg font-semibold text-[#1B2733]">Care Visits</h1>
+              <h1 className="text-lg font-semibold text-[#132F43]">Care Visits</h1>
               <p className="text-sm text-[#5A6B7A]">Calm booking, reminders, and secure join links in supported states</p>
             </div>
           </div>
@@ -251,7 +251,7 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <Calendar className="w-6 h-6 text-[#6B9080]" />
             </div>
-            <h3 className="font-semibold text-[#1B2733]">Book a Visit</h3>
+            <h3 className="font-semibold text-[#132F43]">Book a Visit</h3>
             <p className="text-sm text-[#5A6B7A] mt-1">1:1 with an expert</p>
           </button>
 
@@ -262,7 +262,7 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <MessageCircle className="w-6 h-6 text-[#6B9080]" />
             </div>
-            <h3 className="font-semibold text-[#1B2733]">Aminy</h3>
+            <h3 className="font-semibold text-[#132F43]">Aminy</h3>
             <p className="text-sm text-[#5A6B7A] mt-1">AI guidance 24/7</p>
           </button>
 
@@ -273,7 +273,7 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <FileText className="w-6 h-6 text-[#6B9080]" />
             </div>
-            <h3 className="font-semibold text-[#1B2733]">My Plan</h3>
+            <h3 className="font-semibold text-[#132F43]">My Plan</h3>
             <p className="text-sm text-[#5A6B7A] mt-1">Goals, routines & progress</p>
           </button>
 
@@ -284,7 +284,7 @@ export function TelehealthHome({
             <div className="w-12 h-12 bg-[#6B9080]/10 rounded-full flex items-center justify-center mb-3">
               <BookOpen className="w-6 h-6 text-[#6B9080]" />
             </div>
-            <h3 className="font-semibold text-[#1B2733]">Resources</h3>
+            <h3 className="font-semibold text-[#132F43]">Resources</h3>
             <p className="text-sm text-[#5A6B7A] mt-1">Guides & tools</p>
           </button>
         </div>
@@ -292,7 +292,7 @@ export function TelehealthHome({
         {/* Browse common starting points */}
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-[#1B2733]">Common starting points</h3>
+            <h3 className="font-semibold text-[#132F43]">Common starting points</h3>
             <button
               onClick={() => startFlow('browse-concerns')}
               className="text-sm text-[#6B9080] font-medium flex items-center gap-1 hover:underline"
@@ -314,7 +314,7 @@ export function TelehealthHome({
                 <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#6B9080]/10 text-xl">
                   {concern.icon}
                 </span>
-                <span className="text-sm font-medium leading-5 text-[#1B2733] line-clamp-2">{concern.name}</span>
+                <span className="text-sm font-medium leading-5 text-[#132F43] line-clamp-2">{concern.name}</span>
                 <span className="mt-2 text-sm text-[#5A6B7A]">Tap to see the safest next step</span>
               </button>
             ))}
@@ -332,7 +332,7 @@ export function TelehealthHome({
             </div>
             <div className="flex-1">
               <span className="text-xs font-medium text-amber-600 uppercase tracking-wide">Included</span>
-              <h3 className="font-semibold text-[#1B2733] mt-1">Monthly Live Q&A Sessions</h3>
+              <h3 className="font-semibold text-[#132F43] mt-1">Monthly Live Q&A Sessions</h3>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 Join live sessions with BCBAs, therapists, and parent coaches. Ask questions, get answers.
               </p>
@@ -355,7 +355,7 @@ export function TelehealthHome({
             </div>
             <div className="flex-1">
               <span className="text-xs font-medium text-green-600 uppercase tracking-wide">New</span>
-              <h3 className="font-semibold text-[#1B2733] mt-1">Evidence-Based Playbooks</h3>
+              <h3 className="font-semibold text-[#132F43] mt-1">Evidence-Based Playbooks</h3>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 Expert strategies for meltdowns, communication, sensory needs, and more. Research-backed.
               </p>
@@ -371,7 +371,7 @@ export function TelehealthHome({
         {featuredProviders.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-[#1B2733]">Available Providers</h3>
+              <h3 className="font-semibold text-[#132F43]">Available Providers</h3>
               <button
                 onClick={() => startFlow('browse-concerns')}
                 className="text-sm text-[#6B9080] font-medium flex items-center gap-1 hover:underline"
@@ -402,7 +402,7 @@ export function TelehealthHome({
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-[#1B2733]">
+                      <p className="font-medium text-[#132F43]">
                         {provider.firstName} {provider.lastName}, {provider.credentials}
                       </p>
                       <p className="text-sm text-[#5A6B7A]">{provider.roleDisplayName}</p>
@@ -434,7 +434,7 @@ export function TelehealthHome({
               <Search className="w-5 h-5 text-[#5A6B7A]" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-[#1B2733]">Find Local Care</h3>
+              <h3 className="font-semibold text-[#132F43]">Find Local Care</h3>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 If telehealth is not the right fit, browse local therapists, BCBAs, and specialists near you.
               </p>

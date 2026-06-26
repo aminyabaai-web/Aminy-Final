@@ -130,7 +130,7 @@ export function OnboardingQuickStart({
               <Sparkles className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="text-2xl font-bold text-[#1B2733] mb-2">
+            <h1 className="text-2xl font-bold text-[#132F43] mb-2">
               Let&apos;s meet your child
             </h1>
             <p className="text-[#5A6B7A] text-sm mb-8">
@@ -200,7 +200,7 @@ export function OnboardingQuickStart({
         {/* STEP 2: Primary concern */}
         {step === 2 && (
           <div className="w-full max-w-sm text-center animate-in fade-in slide-in-from-right duration-500">
-            <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
+            <h2 className="text-2xl font-bold text-[#132F43] mb-2">
               What&apos;s on your mind most?
             </h2>
             <p className="text-[#5A6B7A] text-sm mb-8">
@@ -217,7 +217,7 @@ export function OnboardingQuickStart({
                   <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition-transform`}>
                     <c.icon className="w-5 h-5 text-white" />
                   </div>
-                  <span className="font-medium text-[#1B2733]">{c.label}</span>
+                  <span className="font-medium text-[#132F43]">{c.label}</span>
                   <ArrowRight size={16} className="ml-auto text-[#8A9BA8] group-hover:text-primary transition-colors" />
                 </button>
               ))}
@@ -240,7 +240,7 @@ export function OnboardingQuickStart({
               <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-7 h-7 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#1B2733] mb-2">
+              <h2 className="text-2xl font-bold text-[#132F43] mb-2">
                 Perfect. Let&apos;s start helping {childName}.
               </h2>
               <p className="text-[#5A6B7A] text-sm">
@@ -276,7 +276,7 @@ export function OnboardingQuickStart({
                 <div className="flex items-start gap-3">
                   <MessageCircle className="w-6 h-6 text-[#6B9080] flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-semibold text-[#1B2733] text-base">Talk to Aminy AI</div>
+                    <div className="font-semibold text-[#132F43] text-base">Talk to Aminy AI</div>
                     <div className="text-sm text-[#5A6B7A] mt-0.5">
                       Get personalized guidance about {concern === 'speech' ? 'speech' : concern === 'behavior' ? 'behavior' : concern === 'social' ? 'social skills' : 'routines'}
                     </div>

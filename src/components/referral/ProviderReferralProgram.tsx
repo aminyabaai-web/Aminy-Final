@@ -181,7 +181,7 @@ export function ProviderReferralProgram({
     <div className="space-y-4 pb-8">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-[#1B2733] flex items-center gap-2">
+        <h2 className="text-xl font-bold text-[#132F43] flex items-center gap-2">
           <Users className="w-6 h-6 text-[#6B9080]" />
           Provider Referral Program
         </h2>
@@ -252,7 +252,7 @@ export function ProviderReferralProgram({
           >
             <Card className="p-4">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="font-semibold text-[#1B2733] text-sm">Share with Colleagues</h3>
+                <h3 className="font-semibold text-[#132F43] text-sm">Share with Colleagues</h3>
                 <button onClick={() => setShowSharePanel(false)} className="text-[#8A9BA8] hover:text-[#5A6B7A]">
                   <X className="w-4 h-4" />
                 </button>
@@ -289,17 +289,17 @@ export function ProviderReferralProgram({
       <div className="grid grid-cols-3 gap-3">
         <Card className="p-3 text-center">
           <Users className="w-5 h-5 mx-auto mb-1 text-indigo-500" />
-          <div className="text-2xl font-bold text-[#1B2733]">{referrals.length}</div>
+          <div className="text-2xl font-bold text-[#132F43]">{referrals.length}</div>
           <div className="text-sm text-[#5A6B7A]">Referred</div>
         </Card>
         <Card className="p-3 text-center">
           <CheckCircle className="w-5 h-5 mx-auto mb-1 text-green-500" />
-          <div className="text-2xl font-bold text-[#1B2733]">{completedReferrals}</div>
+          <div className="text-2xl font-bold text-[#132F43]">{completedReferrals}</div>
           <div className="text-sm text-[#5A6B7A]">Onboarded</div>
         </Card>
         <Card className="p-3 text-center">
           <DollarSign className="w-5 h-5 mx-auto mb-1 text-emerald-500" />
-          <div className="text-2xl font-bold text-[#1B2733]">${totalCreditsEarned}</div>
+          <div className="text-2xl font-bold text-[#132F43]">${totalCreditsEarned}</div>
           <div className="text-sm text-[#5A6B7A]">Earned</div>
         </Card>
       </div>
@@ -309,7 +309,7 @@ export function ProviderReferralProgram({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <Award className={`w-5 h-5 ${hasFeaturedBadge ? 'text-amber-500' : 'text-[#8A9BA8]'}`} />
-            <span className="font-semibold text-[#1B2733] text-sm">
+            <span className="font-semibold text-[#132F43] text-sm">
               {hasFeaturedBadge ? 'Featured Provider Badge Earned!' : 'Featured Provider Badge'}
             </span>
           </div>
@@ -344,7 +344,7 @@ export function ProviderReferralProgram({
 
       {/* Referral List */}
       <Card className="p-4">
-        <h3 className="font-semibold text-[#1B2733] mb-3">Your Provider Referrals</h3>
+        <h3 className="font-semibold text-[#132F43] mb-3">Your Provider Referrals</h3>
         {referrals.length === 0 && (
           <div className="text-center py-8">
             <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
@@ -375,7 +375,7 @@ export function ProviderReferralProgram({
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm text-[#1B2733]">{referral.name}</p>
+                <p className="font-medium text-sm text-[#132F43]">{referral.name}</p>
                 <p className="text-sm text-[#5A6B7A]">{referral.specialty}</p>
               </div>
 
