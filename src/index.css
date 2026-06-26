@@ -16801,6 +16801,10 @@ button[class*="bg-primary"] {
 .bg-\[\#1f6180\] { background-color: #376E80; }
 .hover\:bg-\[\#1f6180\]:hover { background-color: #376E80; }
 
+/* #216982 legacy hover → DS teal-700 #376E80 */
+.bg-\[\#216982\] { background-color: #376E80; }
+.hover\:bg-\[\#216982\]:hover { background-color: #376E80; }
+
 /* #4E93A8 — canonical logo teal utilities */
 .bg-\[\#4E93A8\] { background-color: #4E93A8; }
 .text-\[\#4E93A8\] { color: #4E93A8; }

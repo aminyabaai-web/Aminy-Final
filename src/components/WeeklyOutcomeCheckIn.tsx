@@ -161,7 +161,7 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
                     key={val}
                     onClick={() => handleConfidence(val)}
                     disabled={saving}
-                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#2A7D99] hover:bg-[#2A7D99]/5 transition-all disabled:opacity-50"
+                    className="flex-1 aspect-square rounded-xl border border-[#E8E4DF] text-sm font-semibold text-[#3A4A57] hover:border-[#4E93A8] hover:bg-[#4E93A8]/5 transition-all disabled:opacity-50"
                   >
                     {val}
                   </button>
@@ -177,8 +177,8 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
           {step === 'done' && (
             <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-2 text-center">
               <CheckCircle className="w-8 h-8 text-[#4E93A8] mx-auto mb-2" />
-              <p className="text-sm font-medium text-[#1B2733]">Check-in recorded.</p>
-              <p className="text-sm text-slate-400 mt-0.5">See you next week.</p>
+              <p className="text-sm font-semibold text-[#1B2733]">Check-in recorded.</p>
+              <p className="aminy-affirm text-slate-500 mt-0.5" style={{ fontSize: '0.9rem' }}>See you next week.</p>
             </motion.div>
           )}
         </AnimatePresence>
