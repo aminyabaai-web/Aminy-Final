@@ -222,7 +222,7 @@ export function PayerOutcomesDashboard({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">
-                <Building2 className="w-5 h-5 text-[#6B9080]" />
+                <Building2 className="w-5 h-5 text-[#4E93A8]" />
                 <Badge variant="outline" className="text-sm">
                   {getOrgTypeLabel()}
                 </Badge>
@@ -252,14 +252,14 @@ export function PayerOutcomesDashboard({
                     className={`px-3 py-1.5 text-sm font-medium transition-colors ${
                       selectedTimeframe === tf
                         ? 'bg-primary text-white'
-                        : 'bg-white text-[#5A6B7A] hover:bg-[#6B9080]/10'
+                        : 'bg-white text-[#5A6B7A] hover:bg-[#4E93A8]/10'
                     }`}
                   >
                     {tf === '30d' ? '30 Days' : tf === '90d' ? '90 Days' : '1 Year'}
                   </button>
                 ))}
               </div>
-              <Button onClick={onExportReport} className="rounded-2xl bg-primary text-white hover:bg-[#6B9080]">
+              <Button onClick={onExportReport} className="rounded-2xl bg-primary text-white hover:bg-[#4E93A8]">
                 <Download className="w-4 h-4 mr-2" />
                 Export Report
               </Button>
@@ -495,7 +495,7 @@ export function PayerOutcomesDashboard({
                   </Badge>
                 </div>
                 <div className="text-center py-4">
-                  <p className="text-5xl font-bold text-[#6B9080]">{metrics.memberSatisfaction}%</p>
+                  <p className="text-5xl font-bold text-[#4E93A8]">{metrics.memberSatisfaction}%</p>
                   <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8] mt-2">
                     {providedMetrics ? 'Based on quarterly CAHPS surveys' : 'Pilot sample metric — not yet sourced from CAHPS surveys'}
                   </p>
@@ -840,7 +840,7 @@ export function PayerOutcomesDashboard({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-4 bg-[#FAF7F2] dark:bg-slate-800 rounded-lg">
-                      <Activity className="w-5 h-5 text-[#6B9080] mb-2" />
+                      <Activity className="w-5 h-5 text-[#4E93A8] mb-2" />
                       <p className="text-2xl font-bold text-[#1B2733] dark:text-white">
                         {metrics.avgSessionsPerWeek}
                       </p>
@@ -950,7 +950,7 @@ function MetricCard({
     blue: 'bg-[#EEF4F8] text-blue-600',
     pink: 'bg-pink-50 text-pink-600',
     purple: 'bg-purple-50 text-purple-600',
-    teal: 'bg-[#6B9080]/10 text-[#6B9080]',
+    teal: 'bg-[#4E93A8]/10 text-[#4E93A8]',
   };
 
   return (

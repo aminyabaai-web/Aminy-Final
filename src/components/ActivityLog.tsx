@@ -92,7 +92,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'goal':
         return 'text-amber-600 bg-amber-50';
       case 'plan':
-        return 'text-[#6B9080] bg-[#6B9080]/10';
+        return 'text-[#4E93A8] bg-[#4E93A8]/10';
       default:
         return 'text-[#5A6B7A] bg-[#FAF7F2]';
     }
@@ -133,7 +133,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           )}
           <button
             onClick={() => setShowLogForm(v => !v)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#216982] transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#376E80] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             Log behavior
@@ -159,7 +159,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           <button
             onClick={handleAddLog}
             disabled={!logText.trim()}
-            className="w-full py-2 rounded-lg bg-[#6B9080] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#216982]"
+            className="w-full py-2 rounded-lg bg-[#4E93A8] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#376E80]"
           >
             Save
           </button>

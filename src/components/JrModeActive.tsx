@@ -431,7 +431,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <Card className="p-6 text-center">
             <div className="mb-4 sm:mb-6">
               <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-teal-100 to-cyan-100 rounded-2xl flex items-center justify-center">
-                <Play className="w-8 h-8 text-[#6B9080]" />
+                <Play className="w-8 h-8 text-[#4E93A8]" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-primary mb-2">Ready to Learn, {childName}?</h2>
               <p className="text-muted-foreground">
@@ -444,7 +444,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
               <div className="grid gap-2">
                 {activities.map((activity, index) => (
                   <div key={activity.id} className="flex items-center gap-3 p-3 bg-[#FAF7F2] rounded-lg">
-                    <div className="text-[#6B9080]">{activity.icon}</div>
+                    <div className="text-[#4E93A8]">{activity.icon}</div>
                     <div className="flex-1 text-left">
                       <div className="text-sm font-medium text-primary">{activity.title}</div>
                       <div className="text-sm text-muted-foreground">{activity.expectedDuration}s</div>
@@ -479,7 +479,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
             
             <Button 
               onClick={startSession}
-              className="w-full bg-primary hover:bg-[#216982]"
+              className="w-full bg-primary hover:bg-[#376E80]"
               size="lg"
             >
               <Play className="w-5 h-5 mr-2" />
@@ -500,7 +500,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
       <Card className="p-3 sm:p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-[#6B9080] border-[#6B9080]">
+            <Badge variant="outline" className="text-[#4E93A8] border-[#4E93A8]">
               Session Active
             </Badge>
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
@@ -610,7 +610,7 @@ export function JrModeActive({ childName, onSessionComplete, onPlanMasteryUpdate
           <p className="text-muted-foreground mb-4">Take your time. Resume when ready!</p>
           <Button 
             onClick={() => setSessionPaused(false)}
-            className="bg-primary hover:bg-[#216982]"
+            className="bg-primary hover:bg-[#376E80]"
           >
             <Play className="w-4 h-4 mr-2" />
             Resume Session

@@ -252,14 +252,14 @@ export function BrandGuideComponent() {
                   <h3 className="font-semibold text-[#1B2733] mb-4">Primary Accent</h3>
                   <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-2">
-                      <div className="h-24 rounded-lg bg-[#6B9080] border-2 border-[#E8E4DF]"></div>
+                      <div className="h-24 rounded-lg bg-[#4E93A8] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-[#1B2733]">Teal Accent</p>
-                        <p className="text-[#5A6B7A] font-mono text-xs">#6B9080</p>
+                        <p className="text-[#5A6B7A] font-mono text-xs">#4E93A8</p>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("#6B9080", "Accent color")}
+                          onClick={() => copyToClipboard("#4E93A8", "Accent color")}
                           className="h-6 px-2 mt-1"
                         >
                           <Copy className="w-3 h-3" />
@@ -298,10 +298,10 @@ export function BrandGuideComponent() {
                     </div>
 
                     <div className="space-y-2">
-                      <div className="h-16 rounded-lg bg-[#6B9080] border-2 border-[#E8E4DF]"></div>
+                      <div className="h-16 rounded-lg bg-[#4E93A8] border-2 border-[#E8E4DF]"></div>
                       <div className="text-sm">
                         <p className="font-semibold text-[#1B2733]">Core Teal</p>
-                        <p className="text-[#5A6B7A] font-mono text-xs">#6B9080</p>
+                        <p className="text-[#5A6B7A] font-mono text-xs">#4E93A8</p>
                       </div>
                     </div>
 
