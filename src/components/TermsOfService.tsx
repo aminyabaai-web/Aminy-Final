@@ -187,11 +187,27 @@ export function TermsOfService({ onBack }: TermsOfServiceProps) {
             <p className="text-[#5A6B7A] leading-relaxed">
               The Service and its original content (excluding user-provided content) are and will remain
               the exclusive property of Aminy, LLC and its licensors. The Service is protected by
-              copyright, trademark, and other laws.
+              copyright, trademark, and other laws. Aminy's AI models, behavioral frameworks, scoring
+              algorithms, and prompt architecture constitute trade secrets under the Defend Trade Secrets
+              Act of 2016 (18 U.S.C. § 1836).
             </p>
             <p className="text-[#5A6B7A] leading-relaxed mt-4">
               You retain ownership of any content you submit to the Service, but grant us a license
               to use it to provide and improve our services.
+            </p>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">AI-Generated Content</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              All AI-generated recommendations, session plans, behavior summaries, and reports produced
+              by the Service are the property of Aminy, LLC. You may use such outputs solely for personal,
+              non-commercial purposes in caring for your child. You may not reproduce, redistribute,
+              sell, or use AI outputs to build or train any competing product or service.
+            </p>
+            <h3 className="font-medium text-[#1B2733] mt-4 mb-2">Prohibited Uses</h3>
+            <p className="text-[#5A6B7A] leading-relaxed">
+              You may not: (a) reverse-engineer or attempt to derive the source code or algorithms
+              of the Service; (b) use automated tools to scrape, index, or collect data from the Service;
+              (c) use the Service or its outputs to build, train, or improve any competing product;
+              (d) sublicense, sell, or commercially exploit any portion of the Service or its outputs.
             </p>
           </section>
 
