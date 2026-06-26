@@ -583,7 +583,7 @@ export function LoginScreen({
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: '#4E93A8',
+                    color: '#376E80',
                     fontSize: '13px',
                     fontWeight: 500,
                     cursor: 'pointer',
@@ -676,7 +676,7 @@ export function LoginScreen({
                 background: 'none',
                 border: 'none',
                 padding: 0,
-                color: '#4E93A8',
+                color: '#376E80',
                 fontSize: '14px',
                 fontWeight: 500,
                 cursor: 'pointer',
