@@ -462,7 +462,7 @@ export function ProviderReviews({
                 placeholder="Summarize your experience"
                 className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent"
               />
-              <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formTitle.length}/100</p>
+              <p className="text-sm text-[#8A9BA8] mt-1 text-right">{formTitle.length}/100</p>
             </div>
 
             {/* Comment */}
@@ -479,7 +479,7 @@ export function ProviderReviews({
                 placeholder="Share your experience to help other families"
                 className="w-full px-3 py-2 rounded-lg border border-[#D8D4CF] bg-white text-sm text-[#132F43] placeholder-[#A0ADB8] focus:outline-none focus:ring-2 focus:ring-[#6B9080] focus:border-transparent resize-none"
               />
-              <p className="text-xs text-[#8A9BA8] mt-1 text-right">{formComment.length}/500</p>
+              <p className="text-sm text-[#8A9BA8] mt-1 text-right">{formComment.length}/500</p>
             </div>
 
             {/* Actions */}

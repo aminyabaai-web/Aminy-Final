@@ -275,7 +275,7 @@ export function CommunicationTemplates() {
             ))}
           </select>
           {selectedPatient && (
-            <p className="text-xs" style={{ color: "#43AA8B" }}>
+            <p className="text-sm" style={{ color: "#43AA8B" }}>
               Tokens will be filled for {selectedPatient.childName} / {selectedPatient.parentFirstName}.
             </p>
           )}
@@ -307,7 +307,7 @@ export function CommunicationTemplates() {
           >
             {"{token}"}
           </span>
-          <p className="text-xs" style={{ color: "#466379" }}>
+          <p className="text-sm" style={{ color: "#466379" }}>
             Teal tokens are auto-replaced when a patient is selected. You can also edit any template body inline.
           </p>
         </div>

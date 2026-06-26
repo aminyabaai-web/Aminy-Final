@@ -95,7 +95,7 @@ function DiscrepancyRow({ record, discrepancies }: { record: EVVRecord; discrepa
         <AlertTriangle size={16} className={`shrink-0 mt-0.5 ${severityColor.split(' ')[0]}`} />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-[#132F43]">{record.clientName}</p>
-          <p className="text-xs text-[#5A6B7A]">{record.serviceCode} · {record.serviceDescription} · {record.scheduledStart.split('T')[0]}</p>
+          <p className="text-sm text-[#5A6B7A]">{record.serviceCode} · {record.serviceDescription} · {record.scheduledStart.split('T')[0]}</p>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {discrepancies.map(d => (
               <span

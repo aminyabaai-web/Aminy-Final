@@ -209,7 +209,7 @@ function ResourceCard({ resource: r, onOpen, compact = false }: { resource: Reso
             <span className="text-sm text-slate-400 flex items-center gap-0.5">
               <Clock className="w-3 h-3" />{r.readTimeMinutes} min
             </span>
-            {r.ageRange && <span className="text-xs text-slate-400">· {r.ageRange}</span>}
+            {r.ageRange && <span className="text-sm text-slate-400">· {r.ageRange}</span>}
           </div>
           <p className={`font-semibold text-[#132F43] leading-snug ${compact ? 'text-sm' : 'text-sm'}`}>{r.title}</p>
           {!compact && <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{r.subtitle}</p>}
@@ -284,7 +284,7 @@ function ArticleView({
           <span className="text-sm text-slate-400 flex items-center gap-1">
             <Clock className="w-3 h-3" />{r.readTimeMinutes} min read
           </span>
-          {r.ageRange && <span className="text-xs text-slate-400">· Ages {r.ageRange}</span>}
+          {r.ageRange && <span className="text-sm text-slate-400">· Ages {r.ageRange}</span>}
         </div>
 
         {/* Title */}

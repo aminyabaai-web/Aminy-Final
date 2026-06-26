@@ -136,7 +136,7 @@ export default function CAQHManager({ providerId = 'prov-001', onBack }: CAQHMan
               <Shield size={18} className="text-blue-600" />
               CAQH ProView Manager
             </h1>
-            <p className="text-xs text-[#5A6B7A]">ID: {caqhProfile.caqhId} · Last attested {caqhProfile.lastAttestedDate}</p>
+            <p className="text-sm text-[#5A6B7A]">ID: {caqhProfile.caqhId} · Last attested {caqhProfile.lastAttestedDate}</p>
           </div>
         </div>
       </div>

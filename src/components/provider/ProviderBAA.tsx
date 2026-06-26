@@ -159,7 +159,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
           style={{ borderColor: nameMatches && signedName ? '#2A7D99' : '#E8E4DF' }}
         />
         {signedName && !nameMatches && (
-          <p className="text-xs text-red-600 mb-3 flex items-center gap-1">
+          <p className="text-sm text-red-600 mb-3 flex items-center gap-1">
             <AlertTriangle className="w-3.5 h-3.5" />
             Name must match your registered name exactly: {providerName}
           </p>
@@ -181,7 +181,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
             Sign BAA Electronically
           </button>
         </div>
-        <p className="text-xs text-[#5A6B7A] text-center mt-3">
+        <p className="text-sm text-[#5A6B7A] text-center mt-3">
           Your signature, email ({providerEmail}), and IP address will be logged as your e-signature.
         </p>
       </div>

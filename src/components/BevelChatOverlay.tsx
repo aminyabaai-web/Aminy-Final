@@ -1496,7 +1496,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               <div className="absolute inset-0 overflow-y-auto px-4 pt-2 pb-2 space-y-4">
                 {/* AI disclaimer — shown once per session at top of chat */}
                 {messages.length === 0 && !isProactiveLoading && (
-                  <div className="mb-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800 leading-relaxed">
+                  <div className="mb-3 px-3 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 leading-relaxed">
                     <span className="font-semibold">Educational guidance only.</span> Aminy AI provides ABA-informed support tools — not medical advice, diagnosis, or clinical therapy. For emergencies call 911 · For crisis support call 988.
                   </div>
                 )}

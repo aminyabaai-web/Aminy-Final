@@ -313,7 +313,7 @@ export function TelehealthSessionEngine({
                         <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                           <Users className="w-3 h-3 text-slate-400 shrink-0" />
                           {modality.participants.map((p, i) => (
-                            <span key={i} className="text-xs text-[#5A6B7A]">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
+                            <span key={i} className="text-sm text-[#5A6B7A]">{p}{i < modality.participants.length - 1 ? ' ·' : ''}</span>
                           ))}
                         </div>
 

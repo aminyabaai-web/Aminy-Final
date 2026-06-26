@@ -114,7 +114,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
             {submitting ? 'Saving...' : 'Submit'}
           </button>
         </div>
-        <p className="text-xs text-[#5A6B7A] text-center mt-3">Your review is anonymous and helps other families.</p>
+        <p className="text-sm text-[#5A6B7A] text-center mt-3">Your review is anonymous and helps other families.</p>
       </div>
     </div>
   );
