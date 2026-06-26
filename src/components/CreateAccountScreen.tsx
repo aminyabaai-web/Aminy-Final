@@ -420,7 +420,7 @@ export function CreateAccountScreen({
                 fontWeight: 500,
                 fontSize: '14px',
                 borderRadius: '14px',
-                border: '1.5px solid #2A7D99',
+                border: '1.5px solid #4E93A8',
                 cursor: socialAuthLoading ? 'default' : 'pointer',
                 opacity: socialAuthLoading && socialAuthLoading !== 'google' ? 0.5 : 1,
                 transition: 'opacity 0.2s ease',
@@ -904,7 +904,7 @@ export function CreateAccountScreen({
           color: rgba(17, 24, 39, 0.35);
         }
         input:focus {
-          border-color: #2A7D99 !important;
+          border-color: #4E93A8 !important;
           box-shadow: 0 0 0 3px rgba(78,147,168,0.12);
         }
       `}</style>

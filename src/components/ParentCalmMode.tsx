@@ -262,7 +262,7 @@ function BreathingCircle({ phase }: { phase: 'inhale' | 'hold' | 'exhale' }) {
   const phaseConfig = {
     inhale: { scale: 1.5, color: '#3b82f6', text: 'Breathe in...', duration: 4 },
     hold: { scale: 1.5, color: '#8b5cf6', text: 'Hold...', duration: 4 },
-    exhale: { scale: 1, color: '#7BA7BC', text: 'Breathe out...', duration: 6 }
+    exhale: { scale: 1, color: '#6AA9BC', text: 'Breathe out...', duration: 6 }
   };
 
   const config = phaseConfig[phase];

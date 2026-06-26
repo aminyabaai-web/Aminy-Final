@@ -163,7 +163,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
                             padding: '20px', borderRadius: '16px', border: '1px solid #E5E7EB', display: 'flex', gap: '16px', cursor: 'pointer',
                             transition: 'all 0.2s', backgroundColor: '#FAFAFA'
                         }}
-                        onMouseOver={e => e.currentTarget.style.borderColor = '#6B9080'}
+                        onMouseOver={e => e.currentTarget.style.borderColor = '#4E93A8'}
                         onMouseOut={e => e.currentTarget.style.borderColor = '#E5E7EB'}
                     >
                         <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(13, 148, 136, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -322,7 +322,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
                         <button
                             onClick={handleSaveBip}
                             style={{
-                                padding: '10px 24px', borderRadius: '12px', backgroundColor: '#6B9080', border: 'none', color: '#FFF',
+                                padding: '10px 24px', borderRadius: '12px', backgroundColor: '#4E93A8', border: 'none', color: '#FFF',
                                 fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
                                 boxShadow: '0 2px 8px rgba(13, 148, 136, 0.3)'
                             }}

@@ -34,7 +34,7 @@ const SLATE_400 = '#94a3b8';
 /** Tailwind teal-300 (#5eead4) — body part completed fill */
 const TEAL_300 = '#5eead4';
 /** Tailwind teal-600 (#6B9080) — face detail accent */
-const TEAL_600 = '#6B9080';
+const TEAL_600 = '#4E93A8';
 /** Tailwind indigo-100 (#e0e7ff) — inactive corner fill */
 const INDIGO_100 = '#e0e7ff';
 /** Tailwind indigo-200 (#c7d2fe) — square border stroke */

@@ -132,7 +132,7 @@ export function MFAEnrollment({
                 className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
                 style={{ backgroundColor: 'rgba(87, 117, 144, 0.1)' }}
               >
-                <Shield className="w-8 h-8" style={{ color: '#6B9080' }} />
+                <Shield className="w-8 h-8" style={{ color: '#4E93A8' }} />
               </div>
 
               <h1
@@ -163,7 +163,7 @@ export function MFAEnrollment({
 
             <div className="space-y-4 mb-8">
               <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-                <Smartphone className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#6B9080' }} />
+                <Smartphone className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#4E93A8' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Use an authenticator app
@@ -175,7 +175,7 @@ export function MFAEnrollment({
               </div>
 
               <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-                <QrCode className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#6B9080' }} />
+                <QrCode className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#4E93A8' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Scan a QR code
@@ -204,7 +204,7 @@ export function MFAEnrollment({
               onClick={handleStartEnrollment}
               disabled={isLoading}
               className="w-full h-12 rounded-xl font-medium text-white"
-              style={{ backgroundColor: '#6B9080' }}
+              style={{ backgroundColor: '#4E93A8' }}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -223,7 +223,7 @@ export function MFAEnrollment({
               <button
                 onClick={onSkip}
                 className="w-full mt-4 text-sm font-medium hover:opacity-70 transition-opacity"
-                style={{ color: '#6B9080' }}
+                style={{ color: '#4E93A8' }}
               >
                 Skip for now
               </button>
@@ -283,7 +283,7 @@ export function MFAEnrollment({
                   {copiedSecret ? (
                     <Check className="w-4 h-4" style={{ color: '#4CAF50' }} />
                   ) : (
-                    <Copy className="w-4 h-4" style={{ color: '#6B9080' }} />
+                    <Copy className="w-4 h-4" style={{ color: '#4E93A8' }} />
                   )}
                 </button>
               </div>
@@ -292,7 +292,7 @@ export function MFAEnrollment({
             <Button
               onClick={() => setStep('verify')}
               className="w-full h-12 rounded-xl font-medium text-white"
-              style={{ backgroundColor: '#6B9080' }}
+              style={{ backgroundColor: '#4E93A8' }}
             >
               Continue
             </Button>
@@ -351,7 +351,7 @@ export function MFAEnrollment({
               onClick={handleVerify}
               disabled={isLoading || verificationCode.length !== 6}
               className="w-full h-12 rounded-xl font-medium text-white"
-              style={{ backgroundColor: '#6B9080' }}
+              style={{ backgroundColor: '#4E93A8' }}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
@@ -366,7 +366,7 @@ export function MFAEnrollment({
             <button
               onClick={() => setStep('scan')}
               className="w-full mt-4 text-sm font-medium hover:opacity-70 transition-opacity"
-              style={{ color: '#6B9080' }}
+              style={{ color: '#4E93A8' }}
             >
               Back to QR code
             </button>
@@ -412,7 +412,7 @@ export function MFAEnrollment({
             <Button
               onClick={onComplete}
               className="w-full h-12 rounded-xl font-medium text-white"
-              style={{ backgroundColor: '#6B9080' }}
+              style={{ backgroundColor: '#4E93A8' }}
             >
               Continue
             </Button>

@@ -17569,10 +17569,11 @@ button, a, [role="button"] {
 .hover\:bg-\[\#F0EDE8\]:hover { background-color: #F0EDE8; }
 /* #FAF7F2 — warm cream background */
 .bg-\[\#FAF7F2\] { background-color: #FAF7F2; }
-/* #6B9080 utilities already defined above, but hover/active states */
-.hover\:bg-\[\#6B9080\]:hover { background-color: #6B9080; }
-.active\:bg-\[\#6B9080\]:active { background-color: #6B9080; }
-.border-\[\#6B9080\] { border-color: #6B9080; }
+/* #6B9080 → #4E93A8 redirects: hover/active/border states */
+.hover\:bg-\[\#6B9080\]:hover { background-color: #4E93A8; }
+.active\:bg-\[\#6B9080\]:active { background-color: #4E93A8; }
+.border-\[\#6B9080\] { border-color: #4E93A8; }
+.border-l-\[\#6B9080\] { border-left-color: #4E93A8; }
 /* opacity utilities for brand colors */
 .bg-\[\#6B9080\]\/10 { background-color: rgba(78,147,168,0.10); }
 .bg-\[\#6B9080\]\/20 { background-color: rgba(78,147,168,0.20); }
@@ -17612,7 +17613,7 @@ button, a, [role="button"] {
 /* Input premium feel: warm background tint on focus */
 [data-slot="input"]:focus {
   background-color: #FDFAF7;
-  border-color: #6B9080;
+  border-color: #4E93A8;
   box-shadow: 0 0 0 3px rgba(78, 147, 168, 0.12);
 }
 
@@ -17629,7 +17630,7 @@ button, a, [role="button"] {
 
 /* Progress bar brand animation */
 [data-slot="progress-indicator"] {
-  background: linear-gradient(90deg, #6B9080, #7BA7BC);
+  background: linear-gradient(90deg, #4E93A8, #6AA9BC);
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -17706,13 +17707,13 @@ tr:hover td, .hover-row:hover {
   font-size: 12px;
   font-weight: 500;
   background-color: rgba(78, 147, 168, 0.10);
-  color: #6B9080;
+  color: #4E93A8;
   border: 1px solid rgba(78, 147, 168, 0.18);
 }
 
 /* Gradient text utility for headlines */
 .text-gradient-brand {
-  background: linear-gradient(135deg, #6B9080, #7BA7BC);
+  background: linear-gradient(135deg, #4E93A8, #6AA9BC);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

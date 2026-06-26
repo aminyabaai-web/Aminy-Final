@@ -989,7 +989,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   {branding.logoUrl ? (
                     <img src={branding.logoUrl} alt={branding.orgName} className="w-8 h-8 rounded-lg object-contain" />
                   ) : (
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
                       {branding.orgName.slice(0, 2).toUpperCase()}
                     </div>
                   )}
@@ -2037,14 +2037,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <div className="flex items-center gap-2">
                     <input
                       type="color"
-                      value={brandingForm.primaryColor || '#6B9080'}
+                      value={brandingForm.primaryColor || '#4E93A8'}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
                       className="w-10 h-10 rounded-lg border border-neutral-200 cursor-pointer"
                     />
                     <Input
                       value={brandingForm.primaryColor}
                       onChange={e => setBrandingForm(prev => ({ ...prev, primaryColor: e.target.value }))}
-                      placeholder="#6B9080"
+                      placeholder="#4E93A8"
                       className="flex-1"
                     />
                   </div>
@@ -2085,7 +2085,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       {branding.logoUrl ? (
                         <img src={branding.logoUrl} alt="Provider branding logo" className="w-6 h-6 rounded object-contain" />
                       ) : (
-                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#6B9080' }}>
+                        <div className="w-6 h-6 rounded flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: branding.primaryColor || '#4E93A8' }}>
                           {branding.orgName.slice(0, 2).toUpperCase()}
                         </div>
                       )}

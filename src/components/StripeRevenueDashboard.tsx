@@ -580,7 +580,7 @@ function StripeRevenueDashboardInner({ onBack }: StripeRevenueDashboardProps) {
                   const colorMap: Record<string, string> = {
                     free: '#d1d5db',
                     starter: '#2dd4bf',
-                    core: '#6B9080',
+                    core: '#4E93A8',
                     pro: '#3b82f6',
                     proplus: '#a855f7',
                   };

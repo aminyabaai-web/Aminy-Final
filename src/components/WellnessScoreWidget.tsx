@@ -158,7 +158,7 @@ function TrendBadge({
 
 function colorForScore(score: number): string {
   if (score >= 75) return '#4E93A8';
-  if (score >= 50) return '#6B9080';
+  if (score >= 50) return '#4E93A8';
   if (score >= 30) return '#D4A373';
   return '#E07A5F';
 }

@@ -86,7 +86,7 @@ export function StreakCelebration({
         const duration = milestone === 'hundred' || milestone === 'year' ? 3000 : 1500;
         const end = Date.now() + duration;
 
-        const colors = ['#6B9080', '#90BE6D', '#F9C74F', '#F8961E', '#F94144'];
+        const colors = ['#4E93A8', '#90BE6D', '#F9C74F', '#F8961E', '#F94144'];
 
         (function frame() {
           confetti({

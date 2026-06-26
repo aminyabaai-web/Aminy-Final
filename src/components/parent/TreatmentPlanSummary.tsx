@@ -111,7 +111,7 @@ function ProgressMiniChart({ data }: { data: number[] }) {
             flex: 1,
             height: `${(val / max) * 100}%`,
             minHeight: '3px',
-            backgroundColor: i === data.length - 1 ? '#6B9080' : '#d1fae5',
+            backgroundColor: i === data.length - 1 ? '#4E93A8' : '#d1fae5',
             borderRadius: '2px 2px 0 0',
             transition: 'height 0.5s ease',
           }}

@@ -239,11 +239,11 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                         <Activity size={18} color="#4E93A8" />
                                         <h3 style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Clinical Progress</h3>
                                     </div>
-                                    <div style={{ fontSize: '36px', fontWeight: 700, color: '#6B9080', marginBottom: '8px', letterSpacing: '-0.03em' }}>
+                                    <div style={{ fontSize: '36px', fontWeight: 700, color: '#4E93A8', marginBottom: '8px', letterSpacing: '-0.03em' }}>
                                         {selectedPatient.progressScore}%
                                     </div>
                                     <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(78, 147, 168, 0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                                        <div style={{ width: selectedPatient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '4px' }} />
+                                        <div style={{ width: selectedPatient.progressScore + '%', height: '100%', backgroundColor: '#4E93A8', borderRadius: '4px' }} />
                                     </div>
                                 </div>
 
@@ -347,7 +347,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                     setSignatureHash(hash);
                                                     setIsSoapLocked(true);
                                                     toast.success('Note cryptographically signed and locked.');
-                                                }} style={{ padding: '10px 20px', borderRadius: '12px', backgroundColor: '#6B9080', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                }} style={{ padding: '10px 20px', borderRadius: '12px', backgroundColor: '#4E93A8', border: 'none', color: '#FFF', fontSize: '14px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                     <FileSignature size={16} /> Sign & Lock Note
                                                 </button>
                                             </>
@@ -446,7 +446,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                         toast.dismiss();
                                                     }
                                                 }}
-                                                style={{ backgroundColor: '#6B9080', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
+                                                style={{ backgroundColor: '#4E93A8', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
                                                 Request Authorization (97153)
                                             </button>
                                         </div>
@@ -476,7 +476,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                         toast.dismiss();
                                                     }
                                                 }}
-                                                style={{ backgroundColor: '#6B9080', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
+                                                style={{ backgroundColor: '#4E93A8', color: '#FFF', border: 'none', padding: '8px 16px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, cursor: 'pointer' }}>
                                                 Check Remittance (835)
                                             </button>
                                         </div>
@@ -663,7 +663,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                     <span style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>{patient.progressScore}%</span>
                                                     <div style={{ width: '40px', height: '4px', backgroundColor: 'rgba(78, 147, 168, 0.2)', borderRadius: '2px' }}>
-                                                        <div style={{ width: patient.progressScore + '%', height: '100%', backgroundColor: '#6B9080', borderRadius: '2px' }} />
+                                                        <div style={{ width: patient.progressScore + '%', height: '100%', backgroundColor: '#4E93A8', borderRadius: '2px' }} />
                                                     </div>
                                                 </div>
                                             </div>

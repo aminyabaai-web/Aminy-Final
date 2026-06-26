@@ -707,7 +707,7 @@ export function Dashboard10({
   body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #1B2733; }
   h1 { color: #0D1B2A; font-size: 1.5rem; margin-bottom: 4px; }
   .subtitle { color: #5A6B7A; font-size: 0.9rem; margin-bottom: 32px; }
-  h2 { font-size: 1rem; color: #2A7D99; margin-bottom: 8px; }
+  h2 { font-size: 1rem; color: #4E93A8; margin-bottom: 8px; }
   table { border-collapse: collapse; width: 100%; }
   th { text-align: left; padding: 6px 12px; background: #F0F4F8; color: #3A4A57; font-size: 0.85rem; }
   td { border-bottom: 1px solid #E8E4DF; font-size: 0.9rem; }

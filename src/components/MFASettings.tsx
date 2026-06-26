@@ -160,7 +160,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
             {status?.isEnrolled ? (
               <ShieldCheck className="w-6 h-6" style={{ color: '#4CAF50' }} />
             ) : (
-              <Shield className="w-6 h-6" style={{ color: '#6B9080' }} />
+              <Shield className="w-6 h-6" style={{ color: '#4E93A8' }} />
             )}
           </div>
           <div>
@@ -230,7 +230,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
           {status?.isEnrolled ? (
             <>
               <div className="flex items-center gap-3 mb-4">
-                <Smartphone className="w-5 h-5" style={{ color: '#6B9080' }} />
+                <Smartphone className="w-5 h-5" style={{ color: '#4E93A8' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
                     Authenticator App
@@ -272,7 +272,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
               <Button
                 onClick={() => setShowEnrollment(true)}
                 className="w-full h-12 rounded-xl font-medium text-white"
-                style={{ backgroundColor: '#6B9080' }}
+                style={{ backgroundColor: '#4E93A8' }}
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Enable Two-Factor Authentication
@@ -425,7 +425,7 @@ export function MFASettings({ onClose }: MFASettingsProps) {
                 <Button
                   onClick={() => setShowBackupCodes(false)}
                   className="w-full h-10 rounded-lg font-medium text-white"
-                  style={{ backgroundColor: '#6B9080' }}
+                  style={{ backgroundColor: '#4E93A8' }}
                 >
                   Done
                 </Button>
