@@ -113,7 +113,7 @@ const CREDENTIAL_TEMPLATES: Record<ProviderTypeKey, CredentialTemplate[]> = {
 const STATUS_CONFIG: Record<CredentialStatus, { label: string; color: string; bg: string; icon: string }> = {
   pending: { label: 'Not Started', color: '#999', bg: '#f5f5f5', icon: '\u25cb' },
   submitted: { label: 'Submitted', color: '#4285f4', bg: '#e8f0fe', icon: '\u23f3' },
-  verified: { label: 'Verified', color: '#4E93A8', bg: '#e8f5f0', icon: '\u2713' },
+  verified: { label: 'Verified', color: '#2A7D99', bg: '#e8f5f0', icon: '\u2713' },
   expired: { label: 'Expired', color: '#E07A5F', bg: '#fff5f5', icon: '\u26a0' },
   rejected: { label: 'Rejected', color: '#be123c', bg: '#ffe4e6', icon: '\u2717' },
 };
@@ -395,7 +395,7 @@ export default function CredentialingTracker({ providerId }: CredentialingTracke
             <circle cx="18" cy="18" r="16" fill="none" stroke="#e9ecef" strokeWidth="3" />
             <circle
               cx="18" cy="18" r="16" fill="none"
-              stroke={completionPct >= 80 ? '#4E93A8' : completionPct >= 50 ? '#F4A261' : '#E07A5F'}
+              stroke={completionPct >= 80 ? '#2A7D99' : completionPct >= 50 ? '#F4A261' : '#E07A5F'}
               strokeWidth="3"
               strokeDasharray={`${completionPct} ${100 - completionPct}`}
               strokeLinecap="round"
@@ -413,7 +413,7 @@ export default function CredentialingTracker({ providerId }: CredentialingTracke
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '12px', color: '#577590' }}>Verified</span>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#4E93A8' }}>{verified}/{credentials.length}</span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: '#2A7D99' }}>{verified}/{credentials.length}</span>
           </div>
           {alerts > 0 && (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -603,7 +603,7 @@ function CredentialCard({
               <ActionBtn label="Mark Submitted" color="#4285f4" onClick={() => onUpdateStatus('submitted')} />
             )}
             {credential.status === 'submitted' && (
-              <ActionBtn label="Mark Verified" color="#4E93A8" onClick={() => onUpdateStatus('verified')} />
+              <ActionBtn label="Mark Verified" color="#2A7D99" onClick={() => onUpdateStatus('verified')} />
             )}
             {(credential.status === 'expired' || credential.status === 'rejected') && (
               <ActionBtn label="Renew" color="#F4A261" onClick={() => onUpdateStatus('submitted')} />
@@ -700,7 +700,7 @@ function UploadDocumentModal({
             if (file) handleFileSelect(file);
           }}
           style={{
-            border: `2px dashed ${dragOver ? '#4E93A8' : '#e0e0e0'}`,
+            border: `2px dashed ${dragOver ? '#2A7D99' : '#e0e0e0'}`,
             borderRadius: '12px', padding: '30px', textAlign: 'center',
             backgroundColor: dragOver ? '#e8f5f0' : '#fafafa',
             cursor: 'pointer', transition: 'all 0.2s',

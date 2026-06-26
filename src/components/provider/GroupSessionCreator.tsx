@@ -236,7 +236,7 @@ export function GroupSessionCreator({
                   onClick={() => { setFormat('single'); setSessionCount(1); }}
                   className="text-left px-3 py-2.5 rounded-xl border transition-all"
                   style={format === 'single'
-                    ? { background: '#4E93A820', borderColor: '#4E93A8' }
+                    ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
                   <p className="text-sm font-semibold text-[#1B2733]">Single session</p>
@@ -246,7 +246,7 @@ export function GroupSessionCreator({
                   onClick={() => { setFormat('cohort'); setSessionCount(6); setMaxFamilies(10); setPricePerFamily(199); }}
                   className="text-left px-3 py-2.5 rounded-xl border transition-all"
                   style={format === 'cohort'
-                    ? { background: '#4E93A820', borderColor: '#4E93A8' }
+                    ? { background: '#2A7D9920', borderColor: '#2A7D99' }
                     : { background: 'white', borderColor: '#E8E4DF' }}
                 >
                   <p className="text-sm font-semibold text-[#1B2733]">Cohort program</p>
@@ -292,7 +292,7 @@ export function GroupSessionCreator({
                     onClick={() => setCategory(category === cat.id ? '' : cat.id)}
                     className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all"
                     style={category === cat.id
-                      ? { background: '#4E93A820', borderColor: '#4E93A8', color: '#2D7A5E', fontWeight: 600 }
+                      ? { background: '#2A7D9920', borderColor: '#2A7D99', color: '#2D7A5E', fontWeight: 600 }
                       : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
                   >
                     <span>{cat.emoji}</span>{cat.label}

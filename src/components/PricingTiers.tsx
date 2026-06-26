@@ -451,7 +451,7 @@ function TierCardView({
               ? 'text-white shadow-md hover:shadow-lg'
               : 'bg-slate-900 text-white hover:bg-slate-800'
         }`}
-        style={tier.featured && !tier.ctaCurrent ? { background: 'linear-gradient(135deg, #7c3aed 0%, #4E93A8 100%)' } : undefined}
+        style={tier.featured && !tier.ctaCurrent ? { background: 'linear-gradient(135deg, #7c3aed 0%, #2A7D99 100%)' } : undefined}
       >
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <>
           {tier.cta}

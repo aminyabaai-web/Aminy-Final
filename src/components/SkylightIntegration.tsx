@@ -176,7 +176,7 @@ export function SkylightIntegration({
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg sm:text-xl font-semibold text-[#1B2733] flex items-center gap-2">
-            <Smartphone className="w-5 h-5 text-[#4E93A8]" />
+            <Smartphone className="w-5 h-5 text-[#2A7D99]" />
             Skylight Display
           </h2>
           <p className="text-sm text-[#5A6B7A] mt-1">
@@ -286,7 +286,7 @@ export function SkylightIntegration({
               key={routine.id}
               className={`p-4 cursor-pointer transition-all ${
                 selectedRoutines.includes(routine.id)
-                  ? 'ring-2 ring-teal-500 bg-[#4E93A8]/10/50'
+                  ? 'ring-2 ring-teal-500 bg-[#2A7D99]/10/50'
                   : 'hover:bg-[#FAF7F2]'
               }`}
               onClick={() => toggleRoutineSelection(routine.id)}
@@ -314,7 +314,7 @@ export function SkylightIntegration({
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
                     selectedRoutines.includes(routine.id)
-                      ? 'bg-primary border-[#4E93A8]'
+                      ? 'bg-primary border-[#2A7D99]'
                       : 'border-[#E8E4DF]'
                   }`}
                 >

@@ -240,7 +240,7 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
             onClick={handleSave}
             disabled={saving || draft.npi.length !== 10}
             className="w-full flex items-center justify-center gap-2 h-10 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-50"
-            style={{ backgroundColor: '#4E93A8' }}
+            style={{ backgroundColor: '#2A7D99' }}
           >
             {saving ? (
               <><Loader2 className="w-4 h-4 animate-spin" />Saving…</>
@@ -505,7 +505,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
               onClick={handleSetupPayouts}
               disabled={onboarding}
               className="w-full h-10 rounded-xl font-semibold text-sm text-white"
-              style={{ backgroundColor: '#4E93A8' }}
+              style={{ backgroundColor: '#2A7D99' }}
             >
               {onboarding ? (
                 <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Redirecting to Stripe…</>

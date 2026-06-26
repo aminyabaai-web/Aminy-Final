@@ -75,7 +75,7 @@ function ReadinessGauge({ percent }: { percent: number }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
-  const color = percent >= 80 ? '#4E93A8' : percent >= 50 ? '#F59E0B' : '#EF4444';
+  const color = percent >= 80 ? '#2A7D99' : percent >= 50 ? '#F59E0B' : '#EF4444';
 
   return (
     <div className="flex flex-col items-center">

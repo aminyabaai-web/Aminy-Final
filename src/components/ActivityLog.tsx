@@ -92,7 +92,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
       case 'goal':
         return 'text-amber-600 bg-amber-50';
       case 'plan':
-        return 'text-[#4E93A8] bg-[#4E93A8]/10';
+        return 'text-[#2A7D99] bg-[#2A7D99]/10';
       default:
         return 'text-[#5A6B7A] bg-[#FAF7F2]';
     }
@@ -159,7 +159,7 @@ export function ActivityLog({ activities = [], maxItems = 10, onBack }: Activity
           <button
             onClick={handleAddLog}
             disabled={!logText.trim()}
-            className="w-full py-2 rounded-lg bg-[#4E93A8] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#376E80]"
+            className="w-full py-2 rounded-lg bg-[#2A7D99] disabled:opacity-40 text-white text-sm font-semibold transition-colors hover:bg-[#376E80]"
           >
             Save
           </button>

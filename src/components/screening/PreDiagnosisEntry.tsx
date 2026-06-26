@@ -66,8 +66,8 @@ export function PreDiagnosisEntry({ onNavigate, childName, childAge }: PreDiagno
     },
     {
       icon: MessageCircle,
-      iconColor: '#4E93A8',
-      iconBg: 'rgba(78,147,168,0.10)',
+      iconColor: '#2A7D99',
+      iconBg: 'rgba(42,125,153,0.10)',
       title: 'Talk to Aminy AI about your concerns',
       description: 'Describe what you\'re noticing. Aminy can help you make sense of it and know what questions to ask.',
       cta: 'Start a conversation',
@@ -296,8 +296,8 @@ export function PreDiagnosisEntry({ onNavigate, childName, childAge }: PreDiagno
             style={{
               textAlign: 'center',
               padding: '16px',
-              backgroundColor: 'rgba(78,147,168,0.06)',
-              border: '1px solid rgba(78,147,168,0.15)',
+              backgroundColor: 'rgba(42,125,153,0.06)',
+              border: '1px solid rgba(42,125,153,0.15)',
               borderRadius: '14px',
             }}
           >

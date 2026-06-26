@@ -1021,7 +1021,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
               <div className="flex items-center gap-2 flex-1 min-w-0">
                 <div
                   className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)', boxShadow: '0 2px 8px rgba(78,147,168,0.35)' }}
+                  style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)', boxShadow: '0 2px 8px rgba(42,125,153,0.35)' }}
                 >
                   ✦
                 </div>
@@ -1166,7 +1166,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                     <div className="flex-1 overflow-y-auto">
 
                       {/* ── Profile card ── */}
-                      <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A825' }}>
+                      <div className="mx-4 mt-4 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #57759012 100%)', border: '1px solid #2A7D9925' }}>
                         <div className="flex items-center gap-3">
                           <div
                             className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0"
@@ -1188,7 +1188,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <div className="ml-auto shrink-0 text-right">
                             <div
                               className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                              style={{ background: 'linear-gradient(135deg, #4E93A822 0%, #57759022 100%)', color: '#4E93A8' }}
+                              style={{ background: 'linear-gradient(135deg, #2A7D9922 0%, #57759022 100%)', color: '#2A7D99' }}
                             >
                               ✦ AI Active
                             </div>
@@ -1225,8 +1225,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               }}
                               className="flex items-start gap-2 p-3 rounded-xl border transition-all text-left"
                               style={personality === p.id ? {
-                                background: 'linear-gradient(135deg, #4E93A815 0%, #57759015 100%)',
-                                borderColor: '#4E93A8',
+                                background: 'linear-gradient(135deg, #2A7D9915 0%, #57759015 100%)',
+                                borderColor: '#2A7D99',
                               } : {
                                 background: 'white',
                                 borderColor: '#e2e8f0',
@@ -1656,7 +1656,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                   <div className="flex items-start gap-2">
                     <div
                       className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-white text-xs font-bold"
-                      style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
                     >
                       ✦
                     </div>
@@ -1842,9 +1842,9 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                       className="w-8 h-8 rounded-full flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{
                         background: (input.trim() || attachedImage)
-                          ? 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)'
+                          ? 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)'
                           : '#e2e8f0',
-                        boxShadow: (input.trim() || attachedImage) ? '0 2px 8px rgba(78,147,168,0.4)' : 'none'
+                        boxShadow: (input.trim() || attachedImage) ? '0 2px 8px rgba(42,125,153,0.4)' : 'none'
                       }}
                     >
                       <ArrowUp className="w-4 h-4 text-white" />

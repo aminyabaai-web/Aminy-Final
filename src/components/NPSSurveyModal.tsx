@@ -133,7 +133,7 @@ export function NPSSurveyModal({
             {/* Header */}
             <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] rounded-full flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] rounded-full flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
@@ -263,7 +263,7 @@ export function NPSSurveyModal({
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center py-8"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#4E93A8] to-[#6AA9BC] rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Heart className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-[#1B2733] dark:text-white mb-2">

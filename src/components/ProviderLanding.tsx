@@ -47,7 +47,7 @@ function CompassIcon({ size = 32, className = '' }: { size?: number; className?:
       <circle cx="32" cy="32" r="28" fill="none" stroke="#0D1B2A" strokeWidth="5" />
       <g transform="rotate(-45 32 32)">
         <path d="M32 32 L28 34 L32 10 L36 34 Z" fill="#0D1B2A" />
-        <path d="M32 32 L28 30 L32 54 L36 30 Z" fill="#4E93A8" />
+        <path d="M32 32 L28 30 L32 54 L36 30 Z" fill="#2A7D99" />
       </g>
       <circle cx="32" cy="32" r="2.2" fill="#ffffff" />
     </svg>

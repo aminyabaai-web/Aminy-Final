@@ -60,7 +60,7 @@ export function ScreenHeader({
       )}
       <div className="flex items-start gap-3">
         {icon && (
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}>
             {icon}
           </div>
         )}

@@ -118,7 +118,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
               <ArrowLeft className="h-5 w-5 text-[#5A6B7A]" />
             </button>
           )}
-          <Gift className="h-6 w-6 text-[#4E93A8]" />
+          <Gift className="h-6 w-6 text-[#2A7D99]" />
           <h1 className="text-lg font-bold text-[#1B2733]">Invite & Earn</h1>
         </div>
       </div>
@@ -159,7 +159,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
             </div>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-[#4E93A8]"
+              className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-[#2A7D99]"
             >
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               {copied ? 'Copied' : 'Copy'}
@@ -212,12 +212,12 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                     value={inviteTarget}
                     onChange={e => setInviteTarget(e.target.value)}
                     placeholder={inviteMode === 'sms' ? '(555) 123-4567' : 'friend@example.com'}
-                    className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#4E93A8] focus:outline-none"
+                    className="flex-1 rounded-lg border border-[#E8E4DF] px-3 py-2 text-sm focus:border-[#2A7D99] focus:outline-none"
                   />
                   <button
                     onClick={handleInvite}
                     disabled={!inviteTarget.trim()}
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-[#4E93A8] disabled:opacity-40"
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-[#2A7D99] disabled:opacity-40"
                   >
                     {inviteSent ? 'Sent!' : 'Send'}
                   </button>
@@ -234,7 +234,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
             {milestones.map((m, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                  m.reached ? 'bg-[#4E93A8]/10 text-[#4E93A8]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
+                  m.reached ? 'bg-[#2A7D99]/10 text-[#2A7D99]' : 'bg-[#F0EDE8] text-[#8A9BA8]'
                 }`}>
                   {m.reached ? <Check className="h-4 w-4" /> : m.count}
                 </div>
@@ -245,7 +245,7 @@ export function ReferralSystem({ referral, onInviteSMS, onInviteEmail, onBack }:
                   <p className="text-sm text-[#5A6B7A]">{m.reward}</p>
                 </div>
                 {m.reached && (
-                  <span className="text-sm font-semibold text-[#4E93A8]">Earned</span>
+                  <span className="text-sm font-semibold text-[#2A7D99]">Earned</span>
                 )}
               </div>
             ))}
@@ -303,7 +303,7 @@ export function SocialProofBanner({ proof }: SocialProofBannerProps) {
       </div>
 
       {proof.recentSignups > 0 && (
-        <div className="mt-3 flex items-center justify-center gap-1.5 text-sm text-[#4E93A8]">
+        <div className="mt-3 flex items-center justify-center gap-1.5 text-sm text-[#2A7D99]">
           <Zap className="h-3.5 w-3.5" />
           <span>{proof.recentSignups} families joined this week</span>
         </div>
@@ -442,13 +442,13 @@ export function CommunityChallenges({ challenges, onJoin, onBack }: CommunityCha
                     {challenge.reward}
                   </span>
                   {challenge.joined ? (
-                    <span className="rounded-full bg-[#4E93A8]/10 px-2.5 py-1 text-xs font-semibold text-[#4E93A8]">
+                    <span className="rounded-full bg-[#2A7D99]/10 px-2.5 py-1 text-xs font-semibold text-[#2A7D99]">
                       Joined
                     </span>
                   ) : (
                     <button
                       onClick={() => onJoin(challenge.id)}
-                      className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white hover:bg-[#4E93A8]"
+                      className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white hover:bg-[#2A7D99]"
                     >
                       Join
                     </button>
@@ -481,13 +481,13 @@ export function ShareGateOverlay({ gate, onShare }: ShareGateProps) {
   if (gate.unlocked) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#4E93A8]/30 bg-[#4E93A8]/10/50 p-6 text-center">
+    <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#2A7D99]/30 bg-[#2A7D99]/10/50 p-6 text-center">
       <Heart className="h-10 w-10 text-primary mb-3" />
       <h3 className="text-sm font-bold text-[#1B2733]">{gate.feature}</h3>
       <p className="mt-1 text-sm text-[#5A6B7A]">{gate.description}</p>
       <button
         onClick={onShare}
-        className="mt-4 flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#4E93A8]"
+        className="mt-4 flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#2A7D99]"
       >
         <Share2 className="h-4 w-4" />
         Share to Unlock

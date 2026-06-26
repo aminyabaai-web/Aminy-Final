@@ -93,7 +93,7 @@ function getNextSteps(serviceType: ServiceType): NextStep[] {
 // ---------------------------------------------------------------------------
 
 const CONFETTI_COLORS = [
-  '#4E93A8', '#E07A5F', '#3D5A80', '#F9C74F',
+  '#2A7D99', '#E07A5F', '#3D5A80', '#F9C74F',
   '#90BE6D', '#F8961E', '#577590', '#F94144',
 ];
 

@@ -434,7 +434,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                         title="Privacy & Data Control"
                         subtitle="HIPAA, BAA, Export"
                         icon={ShieldCheck}
-                        color="#4E93A8"
+                        color="#2A7D99"
                         active={activeSection === 'privacy'}
                         onClick={() => setActiveSection(activeSection === 'privacy' ? null : 'privacy')}
                     />

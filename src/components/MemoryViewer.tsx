@@ -33,9 +33,9 @@ interface MemoryViewerProps {
 const CATEGORY_META: Record<MemoryFact['category'], { label: string; icon: React.ComponentType<{ className?: string }>; color: string }> = {
   preference:  { label: 'Preferences',  icon: Heart,          color: '#E07A5F' },
   trigger:     { label: 'Triggers',     icon: AlertTriangle,  color: '#F8B400' },
-  strength:    { label: 'Strengths',    icon: Award,          color: '#4E93A8' },
+  strength:    { label: 'Strengths',    icon: Award,          color: '#2A7D99' },
   challenge:   { label: 'Challenges',   icon: Target,         color: '#9B5DE5' },
-  milestone:   { label: 'Milestones',   icon: Sparkles,       color: '#4E93A8' },
+  milestone:   { label: 'Milestones',   icon: Sparkles,       color: '#2A7D99' },
   strategy:    { label: 'Strategies',   icon: Lightbulb,      color: '#577590' },
   medical:     { label: 'Medical',      icon: Pill,           color: '#1a3a5c' },
   educational: { label: 'Educational',  icon: GraduationCap,  color: '#577590' },
@@ -92,7 +92,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
           </button>
         )}
         <div className="flex items-start gap-3">
-          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}>
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}>
             <Brain className="w-6 h-6" />
           </div>
           <div className="flex-1 min-w-0">
@@ -113,7 +113,7 @@ export function MemoryViewer({ onBack, childId, childName, tier }: MemoryViewerP
 
       {/* Total + filter chips */}
       <div className="px-4 mt-4">
-        <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A825' }}>
+        <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #57759012 100%)', border: '1px solid #2A7D9925' }}>
           <div className="flex items-baseline gap-2">
             <p className="text-3xl font-bold text-[#1B2733]">{facts.length}</p>
             <p className="text-sm text-[#5A6B7A]">things remembered</p>
@@ -224,7 +224,7 @@ function FilterChip({ active, onClick, label, color }: { active: boolean; onClic
       onClick={onClick}
       className="text-xs font-medium px-3 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0"
       style={active
-        ? { background: color || '#4E93A8', color: 'white' }
+        ? { background: color || '#2A7D99', color: 'white' }
         : { background: 'white', border: '1px solid #e2e8f0', color: '#64748b' }}
     >
       {label}

@@ -16,8 +16,8 @@ import jsPDF from 'jspdf';
 // ============================================================================
 // PDF Generation Constants
 // ============================================================================
-const AMINY_BLUE = '#4E93A8';
-const AMINY_GREEN = '#4E93A8';
+const AMINY_BLUE = '#2A7D99';
+const AMINY_GREEN = '#2A7D99';
 const GRAY_600 = '#4B5563';
 const GRAY_400 = '#9CA3AF';
 

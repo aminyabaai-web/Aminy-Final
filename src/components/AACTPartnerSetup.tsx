@@ -168,7 +168,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       </div>
 
       {/* What they'll get */}
-      <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #4E93A812 0%, #57759012 100%)', border: '1px solid #4E93A830' }}>
+      <div className="mx-4 mt-3 rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #2A7D9912 0%, #57759012 100%)', border: '1px solid #2A7D9930' }}>
         <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide mb-2">What your providers get</p>
         <ul className="space-y-1.5 text-sm text-[#3A4A57]">
           <li className="flex items-start gap-2"><Check className="w-4 h-4 text-[#6B9080] mt-0.5 shrink-0" /><span>Pre-contracted with {config.payers.length} payers (no credentialing wait)</span></li>
@@ -206,7 +206,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
                 onClick={importCsv}
                 disabled={isImporting || !csvText.trim()}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold disabled:opacity-50"
-                style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #577590 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #577590 100%)' }}
               >
                 {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                 {isImporting ? 'Importing…' : 'Import'}

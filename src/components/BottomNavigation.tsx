@@ -264,7 +264,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     className={`
                       flex items-center justify-center w-14 h-14 rounded-full -mt-6 shadow-lg transition-all duration-200
                       ${isActive
-                        ? 'bg-gradient-to-br from-[#4E93A8] to-[#577590] scale-110'
+                        ? 'bg-gradient-to-br from-[#2A7D99] to-[#577590] scale-110'
                         : 'bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] hover:scale-105 active:scale-95'
                       }
                     `}
@@ -273,7 +273,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   </div>
                   <span
                     className={`text-sm font-semibold mt-1 transition-colors ${
-                      isActive ? 'text-[#4E93A8] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
+                      isActive ? 'text-[#2A7D99] dark:text-[#6B9080]' : 'text-[#5A6B7A] dark:text-slate-400'
                     }`}
                   >
                     {tab.label}
@@ -328,7 +328,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                     style={{
                       width: 28,
                       height: 3,
-                      background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
+                      background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
                       transform: 'translateX(-50%)',
                       animation: 'navIndicatorIn 0.25s cubic-bezier(0.34,1.56,0.64,1) forwards',
                     }}

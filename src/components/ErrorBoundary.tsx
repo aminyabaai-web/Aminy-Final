@@ -465,7 +465,7 @@ export function AsyncBoundary({
 function DefaultLoadingFallback() {
   return (
     <div className="flex items-center justify-center p-8">
-      <div className="w-8 h-8 border-4 border-[#4E93A8]/20 border-t-indigo-600 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-4 border-[#2A7D99]/20 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
 }

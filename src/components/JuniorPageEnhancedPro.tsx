@@ -1793,7 +1793,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                       <button
                         type="button"
                         onClick={() => onNavigate('sensory-fidget')}
-                        className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(78,147,168,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
+                        className="group flex items-center justify-between rounded-[24px] border border-teal-900/30 bg-gradient-to-br from-teal-950 to-slate-950 px-5 py-4 text-left text-white shadow-[0_8px_24px_rgba(42,125,153,0.18)] transition-transform duration-200 hover:-translate-y-0.5"
                       >
                         <div>
                           <div className="flex items-center gap-2 text-sm font-medium text-[#7BA7BC]">
@@ -2427,7 +2427,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
                     }`}
                     style={activeTrackFilter === filter.id ? {
-                      background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
+                      background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",
                     } : {
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",

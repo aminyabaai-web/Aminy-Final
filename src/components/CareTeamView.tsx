@@ -44,7 +44,7 @@ const ROLE_COLORS: Record<string, { bg: string; text: string; icon: string }> = 
 };
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  active: { label: 'Active', color: '#4E93A8' },
+  active: { label: 'Active', color: '#2A7D99' },
   inactive: { label: 'Inactive', color: '#999' },
   pending: { label: 'Pending', color: '#F4A261' },
 };
@@ -187,8 +187,8 @@ export default function CareTeamView() {
             onClick={() => setShowAddFlow(true)}
             style={{
               width: '100%', padding: '14px', marginTop: '16px',
-              borderRadius: '12px', border: '2px dashed #4E93A8',
-              backgroundColor: 'transparent', color: '#4E93A8',
+              borderRadius: '12px', border: '2px dashed #2A7D99',
+              backgroundColor: 'transparent', color: '#2A7D99',
               fontSize: '14px', fontWeight: 700, cursor: 'pointer',
             }}
           >
@@ -465,7 +465,7 @@ function AddProviderModal({
                   }}
                   style={{
                     padding: '6px 14px', borderRadius: '6px', border: 'none',
-                    backgroundColor: '#4E93A8', color: '#fff', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                    backgroundColor: '#2A7D99', color: '#fff', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
                   }}
                 >
                   Add
@@ -509,7 +509,7 @@ function EmptyState({ onAdd }: { onAdd: () => void }) {
         onClick={onAdd}
         style={{
           padding: '10px 24px', borderRadius: '8px', border: 'none',
-          backgroundColor: '#4E93A8', color: '#fff', fontSize: '14px', fontWeight: 700, cursor: 'pointer',
+          backgroundColor: '#2A7D99', color: '#fff', fontSize: '14px', fontWeight: 700, cursor: 'pointer',
         }}
       >
         Find Providers

@@ -3413,7 +3413,7 @@ export default function App() {
                   </p>
                   <button
                     onClick={() => navigateToScreen("login")}
-                    className="px-4 py-2 bg-[#4E93A8] text-white rounded-xl text-sm font-medium"
+                    className="px-4 py-2 bg-[#2A7D99] text-white rounded-xl text-sm font-medium"
                   >
                     Sign In
                   </button>

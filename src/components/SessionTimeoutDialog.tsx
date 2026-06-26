@@ -224,7 +224,7 @@ export const SessionTimeoutDialog: React.FC<SessionTimeoutDialogProps> = ({
               fontSize: '16px',
               fontWeight: 600,
               color: '#ffffff',
-              backgroundColor: '#4E93A8',
+              backgroundColor: '#2A7D99',
               border: 'none',
               borderRadius: '12px',
               cursor: 'pointer',

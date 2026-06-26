@@ -611,7 +611,7 @@ export function Dashboard10({
       fireConfetti('goal');
       toast.success(triggered.message, {
         duration: 5000,
-        style: { background: '#F6FBFB', border: '1px solid #4E93A8', color: '#1B2733' },
+        style: { background: '#F6FBFB', border: '1px solid #2A7D99', color: '#1B2733' },
       });
     }, 2500); // slight delay — feels like a surprise, not an alert
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -695,7 +695,7 @@ export function Dashboard10({
           const weekLabel = pt.recordedAt
             ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             : `Week ${i + 1}`;
-          const color = pt.rating >= 4 ? '#4E93A8' : pt.rating === 3 ? '#F59E0B' : '#E07A5F';
+          const color = pt.rating >= 4 ? '#2A7D99' : pt.rating === 3 ? '#F59E0B' : '#E07A5F';
           return `<tr><td style="padding:6px 12px;">${weekLabel}</td><td style="padding:6px 12px;"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${color};vertical-align:middle;margin-right:6px;"></span>${pt.rating}/5</td></tr>`;
         }).join('')
       : '<tr><td colspan="2" style="padding:6px 12px;color:#888;">No check-in data yet</td></tr>';
@@ -709,7 +709,7 @@ export function Dashboard10({
   body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; color: #1B2733; }
   h1 { color: #0D1B2A; font-size: 1.5rem; margin-bottom: 4px; }
   .subtitle { color: #5A6B7A; font-size: 0.9rem; margin-bottom: 32px; }
-  h2 { font-size: 1rem; color: #4E93A8; margin-bottom: 8px; }
+  h2 { font-size: 1rem; color: #2A7D99; margin-bottom: 8px; }
   table { border-collapse: collapse; width: 100%; }
   th { text-align: left; padding: 6px 12px; background: #F0F4F8; color: #3A4A57; font-size: 0.85rem; }
   td { border-bottom: 1px solid #E8E4DF; font-size: 0.9rem; }
@@ -743,7 +743,7 @@ export function Dashboard10({
     {
       id: 'plan',
       label: 'My Plan',
-      icon: <FileText className="w-5 h-5 text-[#2A7D99] dark:text-[#6AA9BC]" />,
+      icon: <FileText className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />,
       accent: 'bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15',
     },
     {
@@ -956,7 +956,7 @@ export function Dashboard10({
                       : 'border border-[#E8E4DF] bg-white/85 text-[#5A6B7A] dark:text-slate-300 dark:bg-slate-700/50 dark:border-slate-600 hover:bg-white dark:hover:bg-slate-700'
                   }`}
                 >
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#6AA9BC] flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#4795AE] flex items-center justify-center text-sm font-bold text-white">
                     {c.name?.[0] || '?'}
                   </span>
                   {c.name}
@@ -990,7 +990,7 @@ export function Dashboard10({
                 onClick={() => onNavigate?.('profile')}
                 aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)', border: 'none', cursor: 'pointer' }}
+                style={{ background: 'linear-gradient(135deg, #2A7D99, #4795AE)', border: 'none', cursor: 'pointer' }}
               >
                 {child.photoUrl ? (
                   <img src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />
@@ -1004,7 +1004,7 @@ export function Dashboard10({
                   style={{
                     position: 'absolute', bottom: -2, right: -2,
                     width: 16, height: 16, borderRadius: 9999,
-                    background: '#fff', color: '#4E93A8',
+                    background: '#fff', color: '#2A7D99',
                     fontSize: 12, lineHeight: '14px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
@@ -1064,7 +1064,7 @@ export function Dashboard10({
                   }
                   className="flex items-center gap-3 flex-shrink-0 rounded-2xl border border-[#E8E4DF] dark:border-slate-700 bg-white/85 dark:bg-slate-800/85 px-4 py-3 shadow-sm transition-colors hover:bg-white dark:hover:bg-slate-800"
                 >
-                  <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#4E93A815' : '#F8B40015' }}>
+                  <span className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: event.type === 'telehealth' ? '#2A7D9915' : '#F8B40015' }}>
                     {event.type === 'telehealth' ? (
                       <Video className="w-4 h-4 text-[#2A7D99]" />
                     ) : (
@@ -1276,7 +1276,7 @@ export function Dashboard10({
         {shouldShowStarterSummary ? (
           <div className="rounded-2xl border border-[#E8E4DF] bg-gradient-to-br from-white via-transparent/60 to-sky-50/70 p-5 shadow-sm dark:border-teal-900/40 dark:from-slate-800 dark:via-teal-950/20 dark:to-slate-900">
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2A7D99]/10 text-[#2A7D99] dark:bg-[#2A7D99]/15 dark:text-[#6AA9BC]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#2A7D99]/10 text-[#2A7D99] dark:bg-[#2A7D99]/15 dark:text-[#4795AE]">
                 <Wind className="h-5 w-5" />
               </div>
               <div className="flex-1">
@@ -1519,7 +1519,7 @@ export function Dashboard10({
                 {trendData.map((pt, i) => {
                   const dotColor =
                     pt.rating >= 4
-                      ? 'bg-[#4E93A8]'
+                      ? 'bg-[#2A7D99]'
                       : pt.rating === 3
                       ? 'bg-amber-400'
                       : 'bg-[#E07A5F]';
@@ -1533,7 +1533,7 @@ export function Dashboard10({
                       : null;
                   const arrowColor =
                     arrow === '↑'
-                      ? 'text-[#4E93A8]'
+                      ? 'text-[#2A7D99]'
                       : arrow === '↓'
                       ? 'text-[#E07A5F]'
                       : 'text-[#8A9BA8]';
@@ -1730,11 +1730,11 @@ export function Dashboard10({
               onKeyDown={(e) => e.key === 'Enter' && onNavigate?.('clinical-reports')}
             >
               <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-teal-800/50 flex items-center justify-center flex-shrink-0">
-                <Stethoscope className="w-5 h-5 text-[#2A7D99] dark:text-[#6AA9BC]" />
+                <Stethoscope className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-sm text-[#2A7D99] dark:text-teal-100">Provider Reports</h3>
-                <p className="text-sm text-[#2A7D99] dark:text-[#6AA9BC]">Generate clinical PDFs for your child's care team</p>
+                <p className="text-sm text-[#2A7D99] dark:text-[#4795AE]">Generate clinical PDFs for your child's care team</p>
               </div>
               <ChevronRight className="w-4 h-4 text-primary flex-shrink-0" />
             </div>
@@ -1792,7 +1792,7 @@ export function Dashboard10({
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'
           }`}
-          style={!showAIChat ? { boxShadow: '0 0 20px rgba(78,147,168,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
+          style={!showAIChat ? { boxShadow: '0 0 20px rgba(42,125,153,0.15), 0 4px 12px rgba(0,0,0,0.12)' } : undefined}
           aria-label={showAIChat ? 'Minimize chat' : 'Open chat with Aminy'}
           aria-expanded={showAIChat}
         >

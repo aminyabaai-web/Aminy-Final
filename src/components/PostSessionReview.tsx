@@ -81,8 +81,8 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
             >
               <Star
                 className="w-9 h-9"
-                fill={(hovered || rating) >= star ? '#4E93A8' : 'none'}
-                stroke={(hovered || rating) >= star ? '#4E93A8' : '#CBD5E1'}
+                fill={(hovered || rating) >= star ? '#2A7D99' : 'none'}
+                stroke={(hovered || rating) >= star ? '#2A7D99' : '#CBD5E1'}
                 strokeWidth={1.5}
               />
             </button>
@@ -94,7 +94,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Anything you'd like to share? (optional)"
-            className="w-full px-3 py-2.5 text-sm border border-[#E8E4DF] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#4E93A8] mb-4"
+            className="w-full px-3 py-2.5 text-sm border border-[#E8E4DF] rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#2A7D99] mb-4"
             rows={3}
             maxLength={500}
           />
@@ -108,7 +108,7 @@ export default function PostSessionReview({ providerId, providerName, sessionDat
             onClick={handleSubmit}
             disabled={!rating || submitting}
             className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: rating ? '#4E93A8' : undefined, color: rating ? 'white' : undefined }}
+            style={{ backgroundColor: rating ? '#2A7D99' : undefined, color: rating ? 'white' : undefined }}
           >
             <Send className="w-4 h-4" />
             {submitting ? 'Saving...' : 'Submit'}

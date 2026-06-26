@@ -1045,7 +1045,7 @@ export function StoreMarketplace({
     }
     if (product.price === 'included') {
       return (
-        <Badge className="bg-[#4E93A8]/10 text-[#4E93A8]">
+        <Badge className="bg-[#2A7D99]/10 text-[#2A7D99]">
           <Crown className="w-3 h-3 mr-1" />
           Included
         </Badge>
@@ -1065,7 +1065,7 @@ export function StoreMarketplace({
           )}
         </div>
         {discounted && tierLabel && (
-          <span className="text-sm text-[#4E93A8] font-medium">{tierLabel}</span>
+          <span className="text-sm text-[#2A7D99] font-medium">{tierLabel}</span>
         )}
       </div>
     );
@@ -1248,10 +1248,10 @@ export function StoreMarketplace({
               {aiRecommendedProducts.map((product) => (
                 <Card
                   key={`ai-${product.id}`}
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-[#4E93A8]/20 dark:border-[#4E93A8]/30"
+                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer border-[#2A7D99]/20 dark:border-[#2A7D99]/30"
                   onClick={() => handleProductAction(product)}
                 >
-                  <div className="aspect-video bg-[#4E93A8]/10 dark:bg-[#4E93A8]/15 relative">
+                  <div className="aspect-video bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15 relative">
                     <div className="absolute inset-0 flex items-center justify-center text-[#6AA9BC]">
                       {CATEGORIES.find(c => c.id === product.category)?.icon}
                     </div>
@@ -1461,7 +1461,7 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                       {product.matchesChildNeeds && (
-                        <Badge className="bg-[#4E93A8]/10 text-[#4E93A8] text-sm">
+                        <Badge className="bg-[#2A7D99]/10 text-[#2A7D99] text-sm">
                           <Zap className="w-3 h-3 mr-0.5" />
                           Matches needs
                         </Badge>

@@ -79,7 +79,7 @@ export function VisitSummaryCard({
   return (
     <Card className="overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#6B9080] to-[#4E93A8] px-5 py-4 text-white">
+      <div className="bg-gradient-to-r from-[#6B9080] to-[#2A7D99] px-5 py-4 text-white">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h3 className="text-lg font-semibold">{childName}'s Visit Summary</h3>

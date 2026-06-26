@@ -428,7 +428,7 @@ export function ComprehensiveDesignSystem() {
         <h4 className="text-sm font-medium text-muted-foreground">Colors</h4>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {[
-            { name: 'Primary Teal', value: '#4E93A8', class: 'bg-[#6B9080]' },
+            { name: 'Primary Teal', value: '#2A7D99', class: 'bg-[#6B9080]' },
             { name: 'White', value: '#FFFFFF', class: 'bg-white border' },
             { name: 'Navy', value: '#111827', class: 'bg-[#111827]' },
             { name: 'Gray 50', value: '#F9FAFB', class: 'bg-[#F9FAFB] border' },

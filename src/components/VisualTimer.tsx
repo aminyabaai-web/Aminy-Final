@@ -123,7 +123,7 @@ export function VisualTimer({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#4E93A8', '#8b5cf6', '#ec4899', '#f59e0b'],
+        colors: ['#2A7D99', '#8b5cf6', '#ec4899', '#f59e0b'],
       });
     }
 

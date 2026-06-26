@@ -25,9 +25,9 @@ export function DesignSystem() {
   // Design Tokens
   const colorTokens = {
     primary: {
-      'color.bg.primary': { value: '#4E93A8', description: 'Primary teal brand color' },
+      'color.bg.primary': { value: '#2A7D99', description: 'Primary teal brand color' },
       'color.text.primary-contrast': { value: '#ffffff', description: 'Text on primary backgrounds' },
-      'color.border.primary': { value: '#4E93A8', description: 'Primary borders and dividers' },
+      'color.border.primary': { value: '#2A7D99', description: 'Primary borders and dividers' },
     },
     surface: {
       'color.bg.surface': { value: '#ffffff', description: 'Main surface background' },

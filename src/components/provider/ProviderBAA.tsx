@@ -106,7 +106,7 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
           'You must comply with all applicable HIPAA Security and Privacy Rules',
         ].map((point, i) => (
           <div key={i} className="flex items-start gap-3 text-sm text-[#5A6B7A]">
-            <Check className="w-4 h-4 text-[#4E93A8] mt-0.5 shrink-0" />
+            <Check className="w-4 h-4 text-[#2A7D99] mt-0.5 shrink-0" />
             <span>{point}</span>
           </div>
         ))}
@@ -155,8 +155,8 @@ export default function ProviderBAA({ providerName, providerEmail, onAccept, onB
           value={signedName}
           onChange={(e) => setSignedName(e.target.value)}
           placeholder="Type your full legal name to sign"
-          className="w-full px-4 py-3 border rounded-xl text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-[#4E93A8]"
-          style={{ borderColor: nameMatches && signedName ? '#4E93A8' : '#E8E4DF' }}
+          className="w-full px-4 py-3 border rounded-xl text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-[#2A7D99]"
+          style={{ borderColor: nameMatches && signedName ? '#2A7D99' : '#E8E4DF' }}
         />
         {signedName && !nameMatches && (
           <p className="text-xs text-red-600 mb-3 flex items-center gap-1">
