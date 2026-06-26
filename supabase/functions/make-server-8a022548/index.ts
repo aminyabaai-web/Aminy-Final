@@ -2533,16 +2533,16 @@ app.post("/make-server-8a022548/sessions/:sessionId/notes", async (c) => {
         html: `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/></head><body style="font-family:sans-serif;background:#F8F8F6;margin:0;padding:32px 16px">
 <div style="max-width:560px;margin:0 auto">
 <div style="background:#0D1B2A;border-radius:14px 14px 0 0;padding:24px;text-align:center">
-<span style="font-size:22px;font-weight:700;color:#fff">Aminy<span style="color:#43AA8B">.</span></span>
+<span style="font-size:22px;font-weight:700;color:#fff">Aminy<span style="color:#4E93A8">.</span></span>
 </div>
 <div style="background:#fff;border:1px solid #E8E4DF;border-radius:0 0 14px 14px;padding:32px 28px">
 <h1 style="font-size:18px;color:#0D1B2A;margin:0 0 12px">Session notes are ready</h1>
 <p style="font-size:15px;color:#3A4A57;line-height:1.6">Notes from ${date}'s session are now available in your Aminy dashboard.</p>
 <div style="text-align:center;margin:28px 0">
-<a href="https://aminy.ai" style="background:#43AA8B;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px 36px;border-radius:10px;display:inline-block">View session notes</a>
+<a href="https://aminy.ai" style="background:#4E93A8;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:14px 36px;border-radius:10px;display:inline-block">View session notes</a>
 </div>
 </div>
-<p style="text-align:center;font-size:12px;color:#8A9BB0;margin-top:16px">&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai" style="color:#43AA8B;text-decoration:none">aminy.ai</a></p>
+<p style="text-align:center;font-size:12px;color:#8A9BB0;margin-top:16px">&copy; ${new Date().getFullYear()} Aminy LLC · <a href="https://aminy.ai" style="color:#4E93A8;text-decoration:none">aminy.ai</a></p>
 </div></body></html>`,
       });
       console.log(`[SessionNotes] Notified parent ${user.email} for session ${sessionId}`);
@@ -4492,13 +4492,13 @@ app.post("/make-server-8a022548/email/provider-message", async (c) => {
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F8F8F6;margin:0;padding:0}
 .wrap{max-width:560px;margin:32px auto;padding:0 16px 40px}
 .header{background:#0D1B2A;border-radius:14px 14px 0 0;padding:28px 32px 24px;text-align:center}
-.logo{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.5px}.logo span{color:#43AA8B}
+.logo{font-size:26px;font-weight:700;color:#fff;letter-spacing:-.5px}.logo span{color:#4E93A8}
 .card{background:#fff;border:1px solid #E8E4DF;border-top:none;border-radius:0 0 14px 14px;padding:36px 32px 28px}
 h1{font-size:20px;font-weight:700;color:#0D1B2A;margin:0 0 12px}
 p{font-size:15px;line-height:1.6;color:#3A4A57;margin:0 0 16px}
-.msg{background:#F8F8F6;border-left:3px solid #43AA8B;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:15px;color:#1B2733}
+.msg{background:#F8F8F6;border-left:3px solid #4E93A8;padding:16px;border-radius:8px;white-space:pre-wrap;font-size:15px;color:#1B2733}
 .footer{text-align:center;font-size:12px;color:#8A9BB0;padding-top:8px}
-.footer a{color:#43AA8B;text-decoration:none}
+.footer a{color:#4E93A8;text-decoration:none}
 </style></head><body>
 <div class="wrap">
 <div class="header"><div class="logo">Aminy<span>.</span></div></div>

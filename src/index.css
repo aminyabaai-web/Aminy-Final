@@ -16794,10 +16794,18 @@ button[class*="bg-primary"] {
 .focus\:ring-\[\#2A7D99\]:focus { --tw-ring-color: #4E93A8; }
 .focus\:border-\[\#2A7D99\]:focus { border-color: #4E93A8; }
 .hover\:bg-\[\#2A7D99\]:hover { background-color: #4E93A8; }
+.hover\:bg-\[\#2A7D99\]\/5:hover { background-color: rgba(78,147,168,0.05); }
+.hover\:bg-\[\#2A7D99\]\/8:hover { background-color: rgba(78,147,168,0.08); }
 .hover\:bg-\[\#2A7D99\]\/20:hover { background-color: color-mix(in oklab, #4E93A8 20%, transparent); }
+.hover\:border-\[\#2A7D99\]:hover { border-color: #4E93A8; }
 .hover\:border-\[\#2A7D99\]\/20:hover { border-color: color-mix(in oklab, #4E93A8 20%, transparent); }
+.hover\:text-\[\#2A7D99\]:hover { color: #4E93A8; }
+/* #1F6080 / #1f6180 legacy → DS teal-700 #376E80 */
+.bg-\[\#1F6080\] { background-color: #376E80; }
+.hover\:bg-\[\#1F6080\]:hover { background-color: #376E80; }
+.hover\:text-\[\#1F6080\]:hover { color: #376E80; }
+.text-\[\#1F6080\] { color: #376E80; }
 .hover\:text-\[\#1f6180\]:hover { color: #376E80; }
-/* #1f6180 legacy → updated to DS teal-700 #376E80 */
 .bg-\[\#1f6180\] { background-color: #376E80; }
 .hover\:bg-\[\#1f6180\]:hover { background-color: #376E80; }
 
