@@ -16826,11 +16826,25 @@ button[class*="bg-primary"] {
 .from-\[\#4E93A8\] { --tw-gradient-from: #4E93A8; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
 .to-\[\#4E93A8\] { --tw-gradient-to: #4E93A8; --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
 .via-\[\#4E93A8\] { --tw-gradient-via: #4E93A8; }
-.bg-\[\#4E93A8\]\/10 { background-color: color-mix(in oklab, #4E93A8 10%, transparent); }
-.bg-\[\#4E93A8\]\/15 { background-color: color-mix(in oklab, #4E93A8 15%, transparent); }
-.bg-\[\#4E93A8\]\/20 { background-color: color-mix(in oklab, #4E93A8 20%, transparent); }
-.border-\[\#4E93A8\]\/20 { border-color: color-mix(in oklab, #4E93A8 20%, transparent); }
+.bg-\[\#4E93A8\]\/5  { background-color: rgba(78,147,168,0.05); }
+.bg-\[\#4E93A8\]\/10 { background-color: rgba(78,147,168,0.10); }
+.bg-\[\#4E93A8\]\/15 { background-color: rgba(78,147,168,0.15); }
+.bg-\[\#4E93A8\]\/20 { background-color: rgba(78,147,168,0.20); }
+.bg-\[\#4E93A8\]\/90 { background-color: rgba(78,147,168,0.90); }
+.border-\[\#4E93A8\]\/20 { border-color: rgba(78,147,168,0.20); }
+.border-\[\#4E93A8\]\/30 { border-color: rgba(78,147,168,0.30); }
+.border-\[\#4E93A8\]\/40 { border-color: rgba(78,147,168,0.40); }
 .hover\:bg-\[\#4E93A8\]:hover { background-color: #4E93A8; }
+.hover\:bg-\[\#4E93A8\]\/5:hover  { background-color: rgba(78,147,168,0.05); }
+.hover\:bg-\[\#4E93A8\]\/10:hover { background-color: rgba(78,147,168,0.10); }
+.hover\:bg-\[\#4E93A8\]\/90:hover { background-color: rgba(78,147,168,0.90); }
+.hover\:border-\[\#4E93A8\]:hover { border-color: #4E93A8; }
+.hover\:border-\[\#4E93A8\]\/20:hover { border-color: rgba(78,147,168,0.20); }
+.hover\:border-\[\#4E93A8\]\/30:hover { border-color: rgba(78,147,168,0.30); }
+.hover\:text-\[\#4E93A8\]:hover { color: #4E93A8; }
+.focus\:border-\[\#4E93A8\]:focus { border-color: #4E93A8; }
+.focus\:ring-\[\#4E93A8\]:focus { --tw-ring-color: #4E93A8; }
+.ring-\[\#4E93A8\] { --tw-ring-color: #4E93A8; }
 /* Mist background variants for teal system */
 .bg-\[\#EAF3F7\] { background-color: #EAF3F7; }
 .hover\:bg-\[\#EAF3F7\]:hover { background-color: #EAF3F7; }
