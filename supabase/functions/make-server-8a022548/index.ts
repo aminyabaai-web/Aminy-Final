@@ -1988,6 +1988,73 @@ RESPONSE REQUIREMENTS:
   }
 });
 
+// ─── Ask BCBA — BCBA submits final response ──────────────────────────────────
+// BCBA reviews AI draft, edits it, and submits. We update the thread status to
+// 'answered' and fire a notification email to the parent.
+app.post("/make-server-8a022548/ask-bcba/respond", async (c) => {
+  try {
+    const { threadId, response, bcbaId, bcbaName } = await c.req.json();
+    if (!threadId || !response) {
+      return c.json({ error: 'threadId and response required' }, 400);
+    }
+
+    const { createClient } = await import('jsr:@supabase/supabase-js@2');
+    const sb = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    );
+
+    // Load thread to get parent email + child info
+    const { data: thread } = await sb
+      .from('ask_bcba_threads')
+      .select('user_id, child_name, question')
+      .eq('id', threadId)
+      .single();
+
+    if (!thread) return c.json({ error: 'Thread not found' }, 404);
+
+    // Update thread with final response
+    await sb
+      .from('ask_bcba_threads')
+      .update({
+        bcba_response: response,
+        bcba_id: bcbaId || null,
+        bcba_name: bcbaName || null,
+        responded_at: new Date().toISOString(),
+        status: 'answered',
+      })
+      .eq('id', threadId);
+
+    // Notify parent via email
+    const { data: parentProfile } = await sb
+      .from('profiles')
+      .select('email, first_name')
+      .eq('id', thread.user_id)
+      .maybeSingle();
+
+    if (parentProfile?.email) {
+      const { sendBCBAResponseEmail } = await import('./email-service.ts');
+      try {
+        await sendBCBAResponseEmail(
+          parentProfile.email,
+          parentProfile.first_name || 'there',
+          thread.child_name || 'your child',
+          bcbaName || 'a BCBA',
+          thread.question,
+          response,
+        );
+      } catch (emailErr) {
+        console.error('[ask-bcba/respond] Email failed (non-fatal):', emailErr);
+      }
+    }
+
+    return c.json({ success: true });
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : 'Respond failed';
+    return c.json({ error: msg.slice(0, 200) }, 500);
+  }
+});
+
 // ─── Voice transcription (Whisper) ──────────────────────────────────────────
 // Parent records audio in BevelChatOverlay (hands-busy moments mid-meltdown,
 // driving, holding a baby, etc.). We send to OpenAI Whisper for STT and

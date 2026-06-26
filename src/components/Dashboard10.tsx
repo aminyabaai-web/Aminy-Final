@@ -89,6 +89,7 @@ import { triggerHaptic } from '../lib/haptics';
 import { fireConfetti } from '../lib/confetti';
 import { WeeklyOutcomeCheckIn, shouldShowWeeklyCheckIn } from './WeeklyOutcomeCheckIn';
 import { BaselineAssessment, needsBaseline } from './BaselineAssessment';
+import PostSessionReview from './PostSessionReview';
 
 // Types
 interface ChildProfile {
@@ -220,6 +221,7 @@ export function Dashboard10({
   const [trialDaysRemaining, setTrialDaysRemaining] = useState<number>(99);
   const [showWeeklyCheckIn, setShowWeeklyCheckIn] = useState(false);
   const [showBaselineAssessment, setShowBaselineAssessment] = useState(false);
+  const [postSessionReview, setPostSessionReview] = useState<{ providerId: string; providerName: string; sessionDate: string } | null>(null);
 
   // 4-week outcome trend data
   interface TrendPoint {
@@ -1136,13 +1138,28 @@ export function Dashboard10({
                 </p>
               </div>
             </div>
-            <button
-              onClick={() => onNavigate?.('parent-approval')}
-              className="w-full mt-2 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Review & Approve
-            </button>
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => onNavigate?.('parent-approval')}
+                className="flex-1 py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Review & Approve
+              </button>
+              {userId && pendingReviews[0] && (
+                <button
+                  onClick={() => setPostSessionReview({
+                    providerId: pendingReviews[0].id,
+                    providerName: pendingReviews[0].providerName || 'Your Provider',
+                    sessionDate: pendingReviews[0].sessionDate,
+                  })}
+                  className="py-2.5 px-3 bg-white border border-violet-300 text-violet-700 rounded-lg text-sm font-medium transition-colors hover:bg-violet-50 flex items-center gap-1.5"
+                >
+                  <Star className="w-4 h-4" />
+                  Rate
+                </button>
+              )}
+            </div>
           </motion.div>
         )}
 
@@ -1992,6 +2009,17 @@ export function Dashboard10({
       {/* ========================================
           TRIAL MODALS - Soft nudge & hard paywall
           ======================================== */}
+
+      {/* Post-session review modal — shown when parent taps "Rate" on a pending review */}
+      {postSessionReview && userId && (
+        <PostSessionReview
+          providerId={postSessionReview.providerId}
+          providerName={postSessionReview.providerName}
+          sessionDate={postSessionReview.sessionDate}
+          userId={userId}
+          onClose={() => setPostSessionReview(null)}
+        />
+      )}
 
       {/* Baseline assessment — modal overlay, shown once per user */}
       <AnimatePresence>
