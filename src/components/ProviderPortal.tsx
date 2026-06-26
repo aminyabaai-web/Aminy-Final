@@ -2892,7 +2892,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               </div>
               <div className="flex gap-3 pt-1">
                 <Button
-                  className="flex-1 bg-[#4E93A8] hover:bg-[#3a9479] text-white rounded-xl disabled:opacity-50"
+                  className="flex-1 bg-[#4E93A8] hover:bg-[#376E80] text-white rounded-xl disabled:opacity-50"
                   disabled={isSubmittingResponse || !reviewResponseText.trim()}
                   onClick={async () => {
                     if (!reviewingThread || !reviewResponseText.trim()) return;

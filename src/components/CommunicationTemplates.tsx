@@ -203,7 +203,7 @@ export function CommunicationTemplates({
               <Button
                 size="sm"
                 disabled={isSendingSMS || isSendingEmail}
-                className="flex items-center gap-1.5 bg-[#4E93A8] hover:bg-[#3a9479] disabled:opacity-50 text-white rounded-xl px-4"
+                className="flex items-center gap-1.5 bg-[#4E93A8] hover:bg-[#376E80] disabled:opacity-50 text-white rounded-xl px-4"
                 onClick={() => handleSendSMS(template.id)}
               >
                 {isSendingSMS ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageSquare className="w-4 h-4" />}
