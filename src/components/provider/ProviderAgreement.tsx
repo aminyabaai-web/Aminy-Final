@@ -39,6 +39,8 @@ export interface AgreementAcceptance {
     nonSolicitation: boolean;
     payment: boolean;
     liability: boolean;
+    arbitration: boolean;   // NEW
+    indemnification: boolean; // NEW
   };
 }
 
@@ -56,7 +58,7 @@ interface ProviderAgreementProps {
 interface AgreementSection {
   id: string;
   title: string;
-  requiresCheckbox?: 'nonSolicitation' | 'payment' | 'liability';
+  requiresCheckbox?: 'nonSolicitation' | 'payment' | 'liability' | 'arbitration' | 'indemnification';
   content: string;
 }
 
@@ -169,12 +171,45 @@ Aminy may terminate this Agreement immediately for cause, including but not limi
   },
   {
     id: 'governing-law',
-    title: '11. Governing Law',
+    title: '11. Governing Law & Dispute Resolution',
+    requiresCheckbox: 'arbitration' as const,
     content: `This Agreement shall be governed by and construed in accordance with the laws of the State of Arizona, without regard to conflict of law principles.
 
-Any dispute arising under or in connection with this Agreement shall be resolved exclusively in the state or federal courts located in Maricopa County, Arizona. Each party consents to the personal jurisdiction of such courts.
+MANDATORY ARBITRATION: Any dispute, claim, or controversy arising out of or relating to this Agreement, or the breach, termination, enforcement, interpretation, or validity thereof, shall be resolved exclusively by binding arbitration administered by the American Arbitration Association ("AAA") under its Commercial Arbitration Rules. Judgment on the award rendered by the arbitrator(s) may be entered in any court having jurisdiction.
 
-The prevailing party in any legal action arising from this Agreement shall be entitled to recover reasonable attorneys' fees and costs from the non-prevailing party.`,
+The arbitration shall take place in Maricopa County, Arizona. The arbitrator(s) shall have authority to award any remedy or relief that a court could order or grant, including injunctive relief.
+
+CLASS ACTION WAIVER: Each party waives any right to bring or participate in any class action, collective action, or representative proceeding, whether in court or in arbitration.
+
+JURY TRIAL WAIVER: EACH PARTY HEREBY IRREVOCABLY WAIVES, TO THE FULLEST EXTENT PERMITTED BY LAW, ANY RIGHT TO A TRIAL BY JURY IN ANY ACTION, PROCEEDING, OR COUNTERCLAIM ARISING OUT OF OR RELATING TO THIS AGREEMENT OR THE TRANSACTIONS CONTEMPLATED HEREBY.
+
+The prevailing party in any arbitration or legal action arising from this Agreement shall be entitled to recover reasonable attorneys' fees and costs from the non-prevailing party.`,
+  },
+  {
+    id: 'limitation-of-liability',
+    title: '12. Limitation of Liability',
+    content: `TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL AMINY BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, LOSS OF DATA, OR LOSS OF GOODWILL, ARISING OUT OF OR RELATED TO THIS AGREEMENT OR THE USE OF THE PLATFORM, EVEN IF AMINY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+AMINY'S TOTAL CUMULATIVE LIABILITY TO PROVIDER ARISING OUT OF OR RELATED TO THIS AGREEMENT SHALL NOT EXCEED THE LESSER OF: (A) THE TOTAL PLATFORM FEES PAID TO AMINY BY PROVIDER IN THE TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE CLAIM; OR (B) FIVE THOUSAND DOLLARS ($5,000).
+
+The foregoing limitations apply regardless of the form of action, whether based on contract, tort (including negligence), strict liability, or any other legal or equitable theory. Provider acknowledges that these limitations are an essential element of the basis of the bargain between the parties.`,
+  },
+  {
+    id: 'indemnification',
+    title: '13. Indemnification',
+    requiresCheckbox: 'indemnification' as const,
+    content: `Provider shall indemnify, defend, and hold harmless Aminy and its officers, directors, employees, agents, licensors, and successors ("Aminy Indemnitees") from and against any and all claims, damages, losses, liabilities, costs, and expenses (including reasonable attorneys' fees) arising out of or relating to:
+
+(a) Provider's clinical services, treatment decisions, or interactions with Clients, including any malpractice or professional liability claims;
+(b) Provider's breach of this Agreement or any representation or warranty made herein;
+(c) Provider's violation of any applicable law, regulation, or professional standard;
+(d) Provider's acts or omissions that cause injury to any Client, third party, or Aminy;
+(e) Any claim that Provider infringed any intellectual property right in connection with services rendered through the Platform;
+(f) Provider's failure to maintain adequate professional liability insurance as required by Section 8.
+
+Aminy shall: (i) promptly notify Provider in writing of any claim for which indemnification is sought; (ii) grant Provider sole control of the defense and settlement of the claim; and (iii) provide reasonable cooperation at Provider's expense.
+
+Provider shall not settle any claim that imposes any obligation, restriction, or liability on Aminy without Aminy's prior written consent, which shall not be unreasonably withheld.`,
   },
   {
     id: 'intellectual-property',
@@ -255,6 +290,10 @@ function SectionBlock({ section, index, checked, onCheck }: SectionBlockProps) {
                       'the Payment Terms and Platform Fee structure'}
                     {section.requiresCheckbox === 'liability' &&
                       'the Liability and Insurance requirements'}
+                    {section.requiresCheckbox === 'arbitration' &&
+                      'the mandatory arbitration, jury trial waiver, and class action waiver provisions'}
+                    {section.requiresCheckbox === 'indemnification' &&
+                      'the Indemnification obligations, including my duty to defend Aminy against clinical claims'}
                   </span>
                 </label>
               )}
@@ -280,13 +319,15 @@ export default function ProviderAgreement({
     nonSolicitation: false,
     payment: false,
     liability: false,
+    arbitration: false,
+    indemnification: false,
   });
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const allChecked = checks.nonSolicitation && checks.payment && checks.liability;
+  const allChecked = checks.nonSolicitation && checks.payment && checks.liability && checks.arbitration && checks.indemnification;
 
   const handleCheck = useCallback(
-    (key: 'nonSolicitation' | 'payment' | 'liability', value: boolean) => {
+    (key: 'nonSolicitation' | 'payment' | 'liability' | 'arbitration' | 'indemnification', value: boolean) => {
       setChecks((prev) => ({ ...prev, [key]: value }));
     },
     []
@@ -325,7 +366,7 @@ export default function ProviderAgreement({
         <div className="flex items-center gap-4 text-sm text-slate-400">
           <span className="flex items-center gap-1">
             <FileText className="w-3.5 h-3.5" />
-            11 Sections
+            14 Sections
           </span>
           <span className="flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" />
@@ -372,7 +413,7 @@ export default function ProviderAgreement({
       <div className="px-5 pt-4 pb-6 border-t border-[#E8E4DF] bg-white sticky bottom-0">
         {/* Checklist status */}
         <div className="flex items-center gap-4 mb-4 text-sm">
-          {(['nonSolicitation', 'payment', 'liability'] as const).map((key) => (
+          {(['nonSolicitation', 'payment', 'liability', 'arbitration', 'indemnification'] as const).map((key) => (
             <span
               key={key}
               className={`flex items-center gap-1 ${
@@ -387,6 +428,8 @@ export default function ProviderAgreement({
               {key === 'nonSolicitation' && 'Non-Solicitation'}
               {key === 'payment' && 'Payment'}
               {key === 'liability' && 'Liability'}
+              {key === 'arbitration' && 'Arbitration/Jury'}
+              {key === 'indemnification' && 'Indemnification'}
             </span>
           ))}
         </div>

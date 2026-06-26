@@ -783,6 +783,7 @@ export function CreateAccountScreen({
                       }
                     }}
                   >Privacy Policy</span>
+                  {'. By providing your phone number, you agree to receive appointment reminders and service notifications via SMS. Msg & data rates may apply. Reply STOP anytime to opt out.'}
                 </span>
               </div>
               {errors.terms && (
