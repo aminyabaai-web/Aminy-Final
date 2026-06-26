@@ -85,7 +85,7 @@ export function WellnessScoreWidget({
             animate={{ width: `${score.confidence}%` }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, #6B9080 0%, #7BA7BC 100%)' }}
+            style={{ background: 'linear-gradient(90deg, #4E93A8 0%, #6AA9BC 100%)' }}
           />
         </div>
       </div>

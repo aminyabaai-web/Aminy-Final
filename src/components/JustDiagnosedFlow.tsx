@@ -180,7 +180,7 @@ function ProgressBar({ phase }: { phase: FlowPhase }) {
           top: 0,
           height: '100%',
           width: `${pct}%`,
-          background: 'linear-gradient(90deg, #6B9080, #7BA7BC)',
+          background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
           borderRadius: 99,
           transition: 'width 0.4s cubic-bezier(0.4,0,0.2,1)',
         }}
@@ -369,16 +369,18 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   boxShadow: '0 4px 24px rgba(78,147,168,0.12)',
                 }}
               >
-                <Heart size={36} color="#6B9080" strokeWidth={1.5} />
+                <Heart size={36} color="#4E93A8" strokeWidth={1.5} />
               </div>
               <h1
                 style={{
                   fontSize: 28,
-                  fontWeight: 700,
+                  fontWeight: 400,
+                  fontFamily: "'Newsreader', Georgia, serif",
+                  fontStyle: 'italic',
                   color: '#1B2733',
                   lineHeight: 1.25,
                   margin: '0 0 12px',
-                  letterSpacing: '-0.5px',
+                  letterSpacing: '-0.01em',
                 }}
               >
                 You just got the news.
@@ -469,7 +471,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -569,7 +571,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                     </span>
                   </div>
                   {selectedState === state.abbreviation && (
-                    <CheckCircle size={18} color="#6B9080" />
+                    <CheckCircle size={18} color="#4E93A8" />
                   )}
                 </button>
               ))}
@@ -620,7 +622,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 width: '100%',
                 padding: '15px 20px',
                 background: selectedState
-                  ? 'linear-gradient(135deg, #6B9080, #7BA7BC)'
+                  ? 'linear-gradient(135deg, #4E93A8, #6AA9BC)'
                   : '#E8E4DF',
                 color: selectedState ? '#fff' : '#8A9BA8',
                 border: 'none',
@@ -727,7 +729,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   alignItems: 'flex-start',
                 }}
               >
-                <Star size={16} color="#7BA7BC" style={{ flexShrink: 0, marginTop: 2 }} />
+                <Star size={16} color="#6AA9BC" style={{ flexShrink: 0, marginTop: 2 }} />
                 <p style={{ fontSize: 13, color: '#4A6478', lineHeight: 1.55, margin: 0 }}>
                   <strong>Early Intervention (Part C of IDEA)</strong> — For children under 3,
                   the state must provide free developmental services. Contact your {selectedState
@@ -759,7 +761,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 style={{
                   flex: 2,
                   padding: '15px 20px',
-                  background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                   color: '#fff',
                   border: 'none',
                   borderRadius: 14,
@@ -877,7 +879,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -916,7 +918,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: 52,
                   height: 52,
                   borderRadius: 16,
-                  background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1174,7 +1176,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '15px 20px',
-                background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,
@@ -1203,7 +1205,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                   width: 72,
                   height: 72,
                   borderRadius: 22,
-                  background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                  background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -1307,7 +1309,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
                 </div>
               ))}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <CheckCircle size={16} color="#6B9080" />
+                <CheckCircle size={16} color="#4E93A8" />
                 <span style={{ fontSize: 13, color: '#5A6B7A' }}>
                   Free to start — no credit card required
                 </span>
@@ -1361,7 +1363,7 @@ export default function JustDiagnosedFlow({ onBack, onSignUp, onOpenAI }: JustDi
               style={{
                 width: '100%',
                 padding: '16px 20px',
-                background: 'linear-gradient(135deg, #6B9080, #7BA7BC)',
+                background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)',
                 color: '#fff',
                 border: 'none',
                 borderRadius: 14,

@@ -326,7 +326,7 @@ export function BenefitsStatusPanel({
                   borderRadius: 10,
                 }}
               >
-                <Globe size={13} color="#7BA7BC" />
+                <Globe size={13} color="#6AA9BC" />
                 {r.label}
                 <ChevronRight size={13} color="#8A9BA8" style={{ marginLeft: 'auto' }} />
               </a>

@@ -988,7 +988,7 @@ export function Dashboard10({
                 onClick={() => onNavigate?.('profile')}
                 aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, #2A7D99, #6AA9BC)', border: 'none', cursor: 'pointer' }}
+                style={{ background: 'linear-gradient(135deg, #4E93A8, #6AA9BC)', border: 'none', cursor: 'pointer' }}
               >
                 {child.photoUrl ? (
                   <img src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />

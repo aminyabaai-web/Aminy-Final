@@ -265,14 +265,17 @@ export function SplashPage({
                 borderRadius: '14px',
                 border: 'none',
                 cursor: 'pointer',
-                transition: 'background-color 0.2s ease',
+                boxShadow: '0 2px 8px rgba(78,147,168,0.22), 0 4px 12px rgba(78,147,168,0.14)',
+                transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
                 ...fontSmoothing,
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#376E80';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(78,147,168,0.32), 0 8px 20px rgba(78,147,168,0.18)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#4E93A8';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(78,147,168,0.22), 0 4px 12px rgba(78,147,168,0.14)';
               }}
             >
               Start free

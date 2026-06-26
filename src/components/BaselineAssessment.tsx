@@ -138,7 +138,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                 <button
                   onClick={() => setStep('behavior')}
                   className="w-full py-3 rounded-xl text-sm font-semibold text-white transition-colors"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #2A7D99 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #376E80 100%)' }}
                 >
                   Let's do it
                 </button>
@@ -259,7 +259,7 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
                   onClick={handleGoalSubmit}
                   disabled={!goalText.trim() || saving}
                   className="w-full mt-3 py-3 rounded-xl text-sm font-semibold text-white disabled:opacity-40 transition-all"
-                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #2A7D99 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #376E80 100%)' }}
                 >
                   {saving ? 'Saving…' : 'Save baseline'}
                 </button>

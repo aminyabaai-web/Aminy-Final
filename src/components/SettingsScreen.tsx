@@ -676,7 +676,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           <div className="flex items-center gap-3 mb-4">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #7BA7BC 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)' }}
             >
               ✦
             </div>
@@ -729,7 +729,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center text-white text-base shrink-0"
-                style={{ background: 'linear-gradient(135deg, #7BA7BC 0%, #0D1B2A 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #6AA9BC 0%, #0D1B2A 100%)' }}
               >
                 🧠
               </div>
@@ -1022,7 +1022,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <div className="flex items-center gap-3">
                         <div
                           className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                          style={{ background: 'linear-gradient(135deg, #4E93A822 0%, #7BA7BC22 100%)' }}
+                          style={{ background: 'linear-gradient(135deg, #4E93A822 0%, #6AA9BC22 100%)' }}
                         >
                           <span className="text-base">✦</span>
                         </div>
@@ -1074,7 +1074,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                                     : 'bg-[#F0EDE8] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                                 }`}
                                 style={notifications.checkInFrequency === opt.id ? {
-                                  background: 'linear-gradient(135deg, #4E93A8 0%, #7BA7BC 100%)'
+                                  background: 'linear-gradient(135deg, #4E93A8 0%, #6AA9BC 100%)'
                                 } : {}}
                               >
                                 {opt.label}

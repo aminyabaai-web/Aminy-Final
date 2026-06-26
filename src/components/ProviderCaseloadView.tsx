@@ -236,7 +236,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
                                 <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                        <Activity size={18} color="#6B9080" />
+                                        <Activity size={18} color="#4E93A8" />
                                         <h3 style={{ fontSize: '15px', fontWeight: 500, color: 'rgba(17, 24, 39, 0.9)' }}>Clinical Progress</h3>
                                     </div>
                                     <div style={{ fontSize: '36px', fontWeight: 700, color: '#6B9080', marginBottom: '8px', letterSpacing: '-0.03em' }}>
@@ -414,7 +414,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Prior Auth Section */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '16px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                            <FileSignature size={18} color="#6B9080" />
+                                            <FileSignature size={18} color="#4E93A8" />
                                             <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>EDI 278 Prior Authorization</h4>
                                         </div>
                                         <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '16px' }}>
@@ -455,7 +455,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Remittance Advice Section */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '16px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                            <Award size={18} color="#6B9080" />
+                                            <Award size={18} color="#4E93A8" />
                                             <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>EDI 835 Remittance Advice</h4>
                                         </div>
                                         <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '16px' }}>
@@ -531,7 +531,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                     {/* Patient Portal Setup */}
                                     <div style={{ border: '1px solid rgba(17, 24, 39, 0.1)', borderRadius: '16px', padding: '20px' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                                            <Globe size={20} color="#6B9080" />
+                                            <Globe size={20} color="#4E93A8" />
                                             <div>
                                                 <h4 style={{ fontSize: '16px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)' }}>Patient Sub-domain Setup</h4>
                                                 <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Give parents a dedicated, branded link to log in.</p>
@@ -678,7 +678,7 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                 {filteredPatients.length === 0 && (
                                     <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#FFFFFF', borderRadius: '20px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
                                         <div style={{ width: '64px', height: '64px', borderRadius: '32px', backgroundColor: 'rgba(78, 147, 168, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Users size={32} color="#6B9080" />
+                                            <Users size={32} color="#4E93A8" />
                                         </div>
                                         <div>
                                             <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', marginBottom: '8px' }}>Your Caseload is Empty</h3>

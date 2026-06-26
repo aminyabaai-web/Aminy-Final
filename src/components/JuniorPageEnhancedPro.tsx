@@ -2427,7 +2427,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         : 'bg-[#F0EDE8] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
                     }`}
                     style={activeTrackFilter === filter.id ? {
-                      background: 'linear-gradient(90deg, #2A7D99, #6AA9BC)',
+                      background: 'linear-gradient(90deg, #4E93A8, #6AA9BC)',
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",
                     } : {
                       fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif",

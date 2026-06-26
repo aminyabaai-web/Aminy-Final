@@ -167,7 +167,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
                         onMouseOut={e => e.currentTarget.style.borderColor = '#E5E7EB'}
                     >
                         <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: 'rgba(13, 148, 136, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <BrainCircuit size={24} color="#6B9080" />
+                            <BrainCircuit size={24} color="#4E93A8" />
                         </div>
                         <div>
                             <h4 style={{ fontSize: '15px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', marginBottom: '4px' }}>Behavior Intervention Plan</h4>
@@ -291,7 +291,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
             {activeTemplate === 'bip' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <div style={{ padding: '16px', backgroundColor: 'rgba(13, 148, 136, 0.05)', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                        <AlertCircle size={18} color="#6B9080" style={{ marginTop: '2px', flexShrink: 0 }} />
+                        <AlertCircle size={18} color="#4E93A8" style={{ marginTop: '2px', flexShrink: 0 }} />
                         <div>
                             <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.8)', lineHeight: 1.5 }}>
                                 <strong>Note:</strong> Saving stores a draft on this device. Drafts are not yet synced to a shared chart — export or copy the finalized plan into the patient record.
