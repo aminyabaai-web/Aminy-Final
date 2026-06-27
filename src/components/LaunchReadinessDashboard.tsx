@@ -15,6 +15,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface ChecklistItem {
   name: string;
@@ -282,14 +283,29 @@ export function LaunchReadinessDashboard() {
     }
   };
 
-  const handleGeneratePDF = async () => {
-    toast.success('Generating Launch Summary PDF...');
-    
-    // In production, call backend to generate PDF
-    setTimeout(() => {
-      toast.success('PDF downloaded! 📄');
-    }, 2000);
+  const handleGeneratePDF = () => {
+    // PDF export is not wired up yet — do NOT claim a PDF was generated.
+    toast.info('PDF export is coming soon.');
   };
+
+  // The readiness scores, category breakdowns, and "Next Steps" below are
+  // hardcoded sample content for demos/walk-throughs. Real (non-demo) users
+  // must not see fabricated readiness numbers presented as live status.
+  if (!isDemoMode()) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white flex flex-col items-center justify-center px-6 py-16 text-center">
+        <div className="w-12 h-12 rounded-full bg-[#F6FBFB] flex items-center justify-center mb-3">
+          <CheckCircle className="w-6 h-6 text-[#577590]" />
+        </div>
+        <h1 className="text-[15px] font-bold text-[#0D1B2A] mb-1">Launch readiness not available</h1>
+        <p className="text-[13px] text-[#577590] max-w-sm">
+          This dashboard shows sample launch-readiness scores for internal demos only.
+          Live readiness reporting will appear here once it is wired to real build and
+          QA status.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white pb-20">

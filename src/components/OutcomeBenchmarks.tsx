@@ -34,6 +34,18 @@ import {
   calculateRealBenchmarks,
   generateMockBenchmarks,
 } from '../lib/outcome-benchmarks';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { createDataProvenance } from '../lib/product-truth';
+import { isDemoMode } from '../lib/demo-seed';
+
+// Percentiles here are computed against synthetic cohort constants (and a
+// Math.random fallback when no real progress data exists), so they are
+// illustrative — not verified clinical outcomes. Label them honestly.
+const BENCHMARK_PROVENANCE = createDataProvenance(
+  'sample',
+  'Illustrative benchmarks',
+  { isVerified: false },
+);
 
 interface OutcomeBenchmarksProps {
   childId: string;
@@ -62,8 +74,9 @@ export function OutcomeBenchmarks({
         setBenchmarks(data);
       } catch (error) {
         console.error('Failed to calculate benchmarks:', error);
-        // Fall back to mock data if calculation fails
-        setBenchmarks(generateMockBenchmarks(childId, childAge, daysOnPlatform));
+        // Only fall back to fabricated mock benchmarks in demo mode. Real
+        // users should see nothing rather than invented percentiles.
+        setBenchmarks(isDemoMode() ? generateMockBenchmarks(childId, childAge, daysOnPlatform) : null);
       } finally {
         setLoading(false);
       }
@@ -116,7 +129,10 @@ export function OutcomeBenchmarks({
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-[#132F43]">Progress Benchmarks</h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="font-semibold text-[#132F43]">Progress Benchmarks</h3>
+              <DataProvenanceBadge provenance={BENCHMARK_PROVENANCE} />
+            </div>
             <p className="text-sm text-[#5A6B7A]">
               How {childName} compares to similar families
             </p>

@@ -36,6 +36,7 @@ import {
 import { Button } from '../ui/button';
 import { supabase } from '../../utils/supabase/client';
 import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface Insight {
   id: string;
@@ -266,60 +267,69 @@ export function AIInsights() {
     // ── 4. Set insights (AI or fallback) ─────────────────────────────────
     setInsights(aiInsights ?? buildFallbackInsights(npsData, feedbackData, providerCount));
 
-    // ── 5. Feature usage and churn remain static/illustrative ─────────────
-    setFeatureUsage([
-      { feature: 'AI Chat', usagePercent: 94, trend: 'up', recommendation: 'Core feature - maintain quality' },
-      { feature: 'Daily Routines', usagePercent: 67, trend: 'up', recommendation: 'Growing - add more templates' },
-      { feature: 'Incident Logging', usagePercent: 45, trend: 'stable', recommendation: 'Add quick-log shortcuts' },
-      { feature: 'Community', usagePercent: 38, trend: 'up', recommendation: 'Boost with expert Q&As' },
-      { feature: 'Telehealth Booking', usagePercent: 23, trend: 'stable', recommendation: 'Surface in AI responses' },
-      { feature: 'Document Vault', usagePercent: 12, trend: 'down', recommendation: 'URGENT: Add onboarding prompt' },
-      { feature: 'Outcomes Tracking', usagePercent: 19, trend: 'down', recommendation: 'Simplify UI, add reminders' },
-      { feature: 'Provider Sharing', usagePercent: 8, trend: 'stable', recommendation: 'Add after-session prompt' },
-    ]);
+    // ── 5. Feature usage and churn are illustrative sample data ───────────
+    // These are hardcoded sample figures (including real-sounding names). Real
+    // (non-demo) admins must NOT see fabricated usage bars or churn names —
+    // only show them in demo mode. Otherwise leave empty and render honest
+    // "no data yet" states in the tabs below.
+    if (isDemoMode()) {
+      setFeatureUsage([
+        { feature: 'AI Chat', usagePercent: 94, trend: 'up', recommendation: 'Core feature - maintain quality' },
+        { feature: 'Daily Routines', usagePercent: 67, trend: 'up', recommendation: 'Growing - add more templates' },
+        { feature: 'Incident Logging', usagePercent: 45, trend: 'stable', recommendation: 'Add quick-log shortcuts' },
+        { feature: 'Community', usagePercent: 38, trend: 'up', recommendation: 'Boost with expert Q&As' },
+        { feature: 'Telehealth Booking', usagePercent: 23, trend: 'stable', recommendation: 'Surface in AI responses' },
+        { feature: 'Document Vault', usagePercent: 12, trend: 'down', recommendation: 'URGENT: Add onboarding prompt' },
+        { feature: 'Outcomes Tracking', usagePercent: 19, trend: 'down', recommendation: 'Simplify UI, add reminders' },
+        { feature: 'Provider Sharing', usagePercent: 8, trend: 'stable', recommendation: 'Add after-session prompt' },
+      ]);
 
-    setChurnRisks([
-      {
-        userId: 'user-1',
-        userName: 'Sarah M.',
-        riskScore: 0.89,
-        lastActive: '12 days ago',
-        reason: 'No AI chat in 12 days, was daily user',
-        suggestedAction: 'Personal check-in email + 7-day Pro trial'
-      },
-      {
-        userId: 'user-2',
-        userName: 'Michael T.',
-        riskScore: 0.82,
-        lastActive: '8 days ago',
-        reason: 'Downgraded from Pro to Starter last week',
-        suggestedAction: 'Win-back offer: 50% off Pro for 3 months'
-      },
-      {
-        userId: 'user-3',
-        userName: 'Jennifer L.',
-        riskScore: 0.76,
-        lastActive: '5 days ago',
-        reason: 'Multiple negative feedback ratings on AI responses',
-        suggestedAction: 'Personal outreach to understand issues'
-      },
-      {
-        userId: 'user-4',
-        userName: 'David R.',
-        riskScore: 0.71,
-        lastActive: '7 days ago',
-        reason: 'Hit message limit 3x but never upgraded',
-        suggestedAction: 'Extended trial with 50 messages'
-      },
-      {
-        userId: 'user-5',
-        userName: 'Amanda K.',
-        riskScore: 0.68,
-        lastActive: '4 days ago',
-        reason: 'Only uses app on weekends, engagement dropping',
-        suggestedAction: 'Push notification strategy adjustment'
-      }
-    ]);
+      setChurnRisks([
+        {
+          userId: 'user-1',
+          userName: 'Sarah M.',
+          riskScore: 0.89,
+          lastActive: '12 days ago',
+          reason: 'No AI chat in 12 days, was daily user',
+          suggestedAction: 'Personal check-in email + 7-day Pro trial'
+        },
+        {
+          userId: 'user-2',
+          userName: 'Michael T.',
+          riskScore: 0.82,
+          lastActive: '8 days ago',
+          reason: 'Downgraded from Pro to Starter last week',
+          suggestedAction: 'Win-back offer: 50% off Pro for 3 months'
+        },
+        {
+          userId: 'user-3',
+          userName: 'Jennifer L.',
+          riskScore: 0.76,
+          lastActive: '5 days ago',
+          reason: 'Multiple negative feedback ratings on AI responses',
+          suggestedAction: 'Personal outreach to understand issues'
+        },
+        {
+          userId: 'user-4',
+          userName: 'David R.',
+          riskScore: 0.71,
+          lastActive: '7 days ago',
+          reason: 'Hit message limit 3x but never upgraded',
+          suggestedAction: 'Extended trial with 50 messages'
+        },
+        {
+          userId: 'user-5',
+          userName: 'Amanda K.',
+          riskScore: 0.68,
+          lastActive: '4 days ago',
+          reason: 'Only uses app on weekends, engagement dropping',
+          suggestedAction: 'Push notification strategy adjustment'
+        }
+      ]);
+    } else {
+      setFeatureUsage([]);
+      setChurnRisks([]);
+    }
 
     setLastAnalyzed(new Date());
     setIsAnalyzing(false);
@@ -469,6 +479,15 @@ export function AIInsights() {
 
           {activeTab === 'features' && (
             <div className="space-y-3">
+              {featureUsage.length === 0 && (
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-8 text-center">
+                  <Target className="w-8 h-8 text-[#8A9BA8] mx-auto mb-3" />
+                  <h3 className="font-semibold text-[#132F43] dark:text-white mb-1">No feature-usage data yet</h3>
+                  <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
+                    Feature adoption metrics will populate here once product-analytics events start flowing in.
+                  </p>
+                </div>
+              )}
               {featureUsage.map(feature => (
                 <div
                   key={feature.feature}
@@ -509,17 +528,27 @@ export function AIInsights() {
 
           {activeTab === 'churn' && (
             <div className="space-y-3">
-              <div className="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg p-4 mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <AlertTriangle className="w-5 h-5 text-rose-600" />
-                  <span className="font-semibold text-rose-800 dark:text-rose-200">
-                    {churnRisks.length} users at risk of churning
-                  </span>
+              {churnRisks.length === 0 ? (
+                <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-8 text-center">
+                  <AlertTriangle className="w-8 h-8 text-[#8A9BA8] mx-auto mb-3" />
+                  <h3 className="font-semibold text-[#132F43] dark:text-white mb-1">No churn-risk data yet</h3>
+                  <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
+                    At-risk users will appear here once engagement and retention signals are connected to the analytics backend.
+                  </p>
                 </div>
-                <p className="text-sm text-rose-700 dark:text-rose-300">
-                  Estimated revenue impact: -${(churnRisks.length * 15).toLocaleString()}/month if all churn
-                </p>
-              </div>
+              ) : (
+                <div className="bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-lg p-4 mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertTriangle className="w-5 h-5 text-rose-600" />
+                    <span className="font-semibold text-rose-800 dark:text-rose-200">
+                      {churnRisks.length} users at risk of churning
+                    </span>
+                  </div>
+                  <p className="text-sm text-rose-700 dark:text-rose-300">
+                    Estimated revenue impact: -${(churnRisks.length * 15).toLocaleString()}/month if all churn
+                  </p>
+                </div>
+              )}
 
               {churnRisks.map(user => (
                 <div
@@ -561,6 +590,7 @@ export function AIInsights() {
           )}
 
           {activeTab === 'revenue' && (
+            isDemoMode() ? (
             <div className="space-y-4">
               <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
                 <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
@@ -617,6 +647,15 @@ export function AIInsights() {
                 ))}
               </div>
             </div>
+            ) : (
+              <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-8 text-center">
+                <DollarSign className="w-8 h-8 text-[#8A9BA8] mx-auto mb-3" />
+                <h3 className="font-semibold text-[#132F43] dark:text-white mb-1">No revenue insights yet</h3>
+                <p className="text-sm text-[#5A6B7A] dark:text-neutral-400">
+                  Revenue-optimization opportunities will appear here once monetization and engagement analytics are connected.
+                </p>
+              </div>
+            )
           )}
 
           {activeTab === 'provider' && (

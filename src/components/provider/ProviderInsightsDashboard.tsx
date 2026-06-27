@@ -37,6 +37,7 @@ import {
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { isDemoMode } from '../../lib/demo-seed';
 import {
   getProviderAggregateOutcomes,
   getProviderGoals,
@@ -111,8 +112,9 @@ export function ProviderInsightsDashboard({
 
       if (aggregates) {
         setAggregateData(aggregates);
-      } else {
-        // Use demo data if no real data
+      } else if (isDemoMode()) {
+        // Illustrative sample data — demo walkthroughs only. Real providers
+        // with no data must NOT see fabricated goal/progress numbers.
         setAggregateData({
           providerId,
           period: { start: startDate.toISOString(), end: endDate.toISOString() },
@@ -131,20 +133,44 @@ export function ProviderInsightsDashboard({
           },
           patientImprovementRate: 85,
         });
+      } else {
+        // Real provider, no aggregated data yet → honest empty state.
+        setAggregateData({
+          providerId,
+          period: { start: startDate.toISOString(), end: endDate.toISOString() },
+          totalPatients: patients.length,
+          activeGoals: 0,
+          completedGoals: 0,
+          averageProgressPercent: 0,
+          categoryBreakdown: {
+            behavior: { goals: 0, avgProgress: 0, completionRate: 0 },
+            communication: { goals: 0, avgProgress: 0, completionRate: 0 },
+            social: { goals: 0, avgProgress: 0, completionRate: 0 },
+            'self-care': { goals: 0, avgProgress: 0, completionRate: 0 },
+            academic: { goals: 0, avgProgress: 0, completionRate: 0 },
+            motor: { goals: 0, avgProgress: 0, completionRate: 0 },
+            emotional: { goals: 0, avgProgress: 0, completionRate: 0 },
+          },
+          patientImprovementRate: 0,
+        });
       }
 
-      // Generate patient-level outcomes
-      const outcomes: PatientOutcome[] = patients
-        .filter(p => p.profileAccess === 'granted')
-        .map((p, idx) => ({
-          patientId: p.id,
-          patientName: p.childName,
-          activeGoals: Math.floor(Math.random() * 4) + 1,
-          completedGoals: Math.floor(Math.random() * 3),
-          avgProgress: 50 + Math.floor(Math.random() * 40),
-          trend: ['improving', 'improving', 'stable', 'declining'][Math.floor(Math.random() * 4)] as 'improving' | 'stable' | 'declining',
-          lastUpdate: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
-        }));
+      // Patient-level outcomes. The random generator below is illustrative ONLY
+      // (there is no real per-patient outcome source wired here yet), so real
+      // providers must see an empty list rather than fabricated trends.
+      const outcomes: PatientOutcome[] = !isDemoMode()
+        ? []
+        : patients
+            .filter(p => p.profileAccess === 'granted')
+            .map((p) => ({
+              patientId: p.id,
+              patientName: p.childName,
+              activeGoals: Math.floor(Math.random() * 4) + 1,
+              completedGoals: Math.floor(Math.random() * 3),
+              avgProgress: 50 + Math.floor(Math.random() * 40),
+              trend: ['improving', 'improving', 'stable', 'declining'][Math.floor(Math.random() * 4)] as 'improving' | 'stable' | 'declining',
+              lastUpdate: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+            }));
 
       setPatientOutcomes(outcomes);
     } catch (error) {

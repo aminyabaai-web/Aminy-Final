@@ -37,6 +37,8 @@ import {
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
+import { DataProvenanceBadge } from './ui/DataProvenanceBadge';
+import { createDataProvenance } from '../lib/product-truth';
 import {
   getPayorDashboardData,
   getQualityMetrics,
@@ -44,6 +46,15 @@ import {
   type PayorDashboardData,
   type QualityMetrics,
 } from '../lib/payor-reporting';
+
+// Payor reporting is currently backed by illustrative sample data
+// (see ../lib/payor-reporting). Label it honestly so trend badges and ROI
+// prose are not mistaken for verified live payer metrics.
+const PAYOR_DATA_PROVENANCE = createDataProvenance(
+  'sample',
+  'Sample data — not live payer metrics',
+  { isVerified: false },
+);
 
 interface PayorDashboardProps {
   payorId: string;
@@ -143,9 +154,12 @@ export function PayorDashboard({ payorId, payorName = 'Health Plan' }: PayorDash
                 <Shield className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-[#132F43] dark:text-white">
-                  {payorName} Analytics
-                </h1>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-lg font-semibold text-[#132F43] dark:text-white">
+                    {payorName} Analytics
+                  </h1>
+                  <DataProvenanceBadge provenance={PAYOR_DATA_PROVENANCE} />
+                </div>
                 <p className="text-sm text-[#5A6B7A] dark:text-slate-400">Aminy Payor Portal</p>
               </div>
             </div>

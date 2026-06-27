@@ -34,6 +34,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { supabase } from '../utils/supabase/client';
+import { isDemoMode } from '../lib/demo-seed';
 
 interface CohortData {
   cohortWeek: string; // e.g., "2024-W01"
@@ -79,10 +80,17 @@ export function CohortAnalytics({ organizationId }: CohortAnalyticsProps) {
   const loadAnalytics = async () => {
     setIsLoading(true);
     try {
-      // In production, these would be real Supabase queries
-      // For now, using realistic demo data
+      // In production, these would be real Supabase queries. Until that path is
+      // wired, real users must NOT see fabricated cohort/funnel/feature numbers
+      // (they re-randomize on refresh). Only demo mode renders sample data.
+      if (!isDemoMode()) {
+        setCohortData([]);
+        setFunnelData([]);
+        setFeatureData([]);
+        return;
+      }
 
-      // Simulate loading
+      // Simulate loading (demo only)
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Generate cohort data for last 12 weeks

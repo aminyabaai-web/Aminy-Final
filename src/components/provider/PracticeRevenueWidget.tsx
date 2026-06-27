@@ -14,6 +14,7 @@
 import React, { useMemo } from 'react';
 import { motion } from 'motion/react';
 import { DollarSign, TrendingUp, CheckCircle, Clock, ArrowRight } from 'lucide-react';
+import { isDemoMode } from '../../lib/demo-seed';
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -36,13 +37,37 @@ interface RevenueData {
 
 // ─── Load / initialize demo data ─────────────────────────────────────
 
+const ZERO_REVENUE: RevenueData = {
+  thisWeekBilled: 0,
+  thisWeekPaid: 0,
+  thisWeekPending: 0,
+  thisMonthBilled: 0,
+  thisMonthPaid: 0,
+  allTimeBilled: 0,
+  allTimePaid: 0,
+  avgPerSession: 0,
+  cleanClaimsThisWeek: 0,
+  totalClaimsThisWeek: 0,
+  topPayer: '—',
+  topPayerAvgDays: 0,
+  nextDepositDate: '—',
+  nextDepositAmount: 0,
+};
+
 function loadRevenueData(): RevenueData {
   try {
     const stored = localStorage.getItem('aminy_provider_revenue');
     if (stored) return JSON.parse(stored) as RevenueData;
   } catch { /* ignore */ }
 
-  // Default demo data
+  // Real providers start at zero — no Stripe wiring yet, so we must NOT fabricate
+  // revenue. Only demo mode shows illustrative sample figures (and never persists
+  // them, so they can't leak into a real account later).
+  if (!isDemoMode()) {
+    return ZERO_REVENUE;
+  }
+
+  // Illustrative sample data — demo walkthroughs only.
   const data: RevenueData = {
     thisWeekBilled: 2100,
     thisWeekPaid: 1680,
@@ -59,10 +84,6 @@ function loadRevenueData(): RevenueData {
     nextDepositDate: new Date(Date.now() + 14 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     nextDepositAmount: 420,
   };
-
-  try {
-    localStorage.setItem('aminy_provider_revenue', JSON.stringify(data));
-  } catch { /* ignore */ }
 
   return data;
 }
