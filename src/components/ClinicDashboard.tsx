@@ -270,12 +270,12 @@ function LocationCard({
   onClick,
 }: {
   location: ClinicLocation;
-  onClick: () => void;
+  onClick?: () => void;
 }) {
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-xl border border-[#E8E4DF] p-4 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer"
+      className={`bg-white rounded-xl border border-[#E8E4DF] p-4 transition-all ${onClick ? 'hover:border-indigo-300 hover:shadow-md cursor-pointer' : ''}`}
     >
       <div className="flex items-start justify-between mb-2">
         <div>
@@ -621,7 +621,6 @@ export function ClinicDashboard({
               <LocationCard
                 key={location.id}
                 location={location}
-                onClick={() => {}}
               />
             ))}
           </div>

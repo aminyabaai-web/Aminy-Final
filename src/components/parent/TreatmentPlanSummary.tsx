@@ -129,7 +129,7 @@ function GoalCard({ goal }: { goal: ParentFriendlyGoal }) {
   const sparkline = [10, 18, 25, 30, goal.currentProgressPercent - 10, goal.currentProgressPercent];
 
   return (
-    <Card className="overflow-hidden border border-[#E8E4DF] bg-white">
+    <Card className="overflow-hidden border border-[#E8E4DF] bg-white dark:bg-slate-800">
       {/* Card header - always visible */}
       <button
         onClick={() => setExpanded(!expanded)}
@@ -255,7 +255,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
   if (!plan) {
     return (
       <div className="min-h-screen bg-mist" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
+        <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 backdrop-blur-md border-b border-[#E8E4DF]">
           <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
             {onBack && (
               <button onClick={onBack} className="p-1.5 rounded-lg hover:bg-[#EDF4F7] transition-colors">
@@ -301,7 +301,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
             variant="outline"
             size="sm"
             className="text-sm border-[#E8E4DF]"
-            onClick={() => toast.success('Generating PDF for school sharing...')}
+            onClick={() => toast.info('PDF sharing coming soon')}
           >
             <Share2 className="w-3.5 h-3.5 mr-1.5" />
             Share with school
@@ -339,7 +339,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
 
         {/* Next session */}
         {plan.nextSessionDate && (
-          <Card className="p-3 bg-white border-[#E8E4DF]">
+          <Card className="p-3 bg-white dark:bg-slate-800 border-[#E8E4DF]">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 bg-[#6B9080]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                 <Calendar className="w-5 h-5 text-[#6B9080]" style={{ width: 18, height: 18 }} />
@@ -380,7 +380,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
             <h2 className="text-sm font-semibold text-[#3A4A57] mb-3">Recent Updates</h2>
             <div className="space-y-2">
               {plan.recentUpdates.map((update, i) => (
-                <Card key={i} className="p-3 bg-white border-[#E8E4DF]">
+                <Card key={i} className="p-3 bg-white dark:bg-slate-800 border-[#E8E4DF]">
                   <div className="flex items-start gap-3">
                     <div className="w-1.5 h-1.5 bg-teal-400 rounded-full mt-1.5 flex-shrink-0" />
                     <div className="min-w-0">
@@ -400,7 +400,7 @@ export function TreatmentPlanSummary({ onBack, childName = 'Your Child' }: Treat
         <div className="pt-2">
           <Button
             className="w-full bg-slate-900 hover:bg-slate-800 text-white"
-            onClick={() => toast.success('Generating PDF summary for school or pediatrician...')}
+            onClick={() => toast.info('PDF summary sharing coming soon')}
           >
             <Share2 className="w-4 h-4 mr-2" />
             Share with school or pediatrician

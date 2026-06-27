@@ -436,7 +436,7 @@ export function OnDemandTelehealth({
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+        <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               {onBack && (
@@ -610,7 +610,7 @@ export function OnDemandTelehealth({
   if (step === 'confirm' && selectedProvider) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
-        <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+        <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="sm" onClick={() => setStep('browse')}>
@@ -749,7 +749,7 @@ export function OnDemandTelehealth({
   if (step === 'consent') {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
-        <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+        <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="sm" onClick={() => setStep('confirm')}>
@@ -938,7 +938,7 @@ export function OnDemandTelehealth({
   if (step === 'summary' && session) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
-        <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
+        <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <h1 className="text-lg font-semibold text-[#132F43]">Session Complete</h1>
           </div>

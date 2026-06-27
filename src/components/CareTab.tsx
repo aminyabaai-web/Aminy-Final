@@ -625,7 +625,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           <h3 className="font-semibold text-[#132F43] mb-3">Upcoming Sessions</h3>
           <div className="space-y-3">
             {upcomingSessions.map((session) => (
-              <div key={session.id} className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
+              <div key={session.id} className="p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF]">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
@@ -743,7 +743,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         <div>
           <h3 className="font-semibold text-[#132F43] mb-3">Buy Additional Minutes</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
+            <div className="p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF]">
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">25 min</div>
                 <div className="text-lg font-semibold text-accent">$49</div>
@@ -758,7 +758,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 Purchase
               </Button>
             </div>
-            <div className="p-4 bg-white rounded-lg border border-[#E8E4DF]">
+            <div className="p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF]">
               <div className="text-center mb-3">
                 <div className="text-xl sm:text-2xl font-bold">50 min</div>
                 <div className="text-lg font-semibold text-accent">$89</div>
@@ -783,7 +783,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         <h3 className="font-semibold text-[#132F43] mb-3">Recent Usage</h3>
         <div className="space-y-3">
           {minutesUsage.map((usage) => (
-            <div key={usage.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-[#E8E4DF]">
+            <div key={usage.id} className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF]">
               <div>
                 <div className="font-medium text-sm">{usage.activity}</div>
                 <div className="text-sm text-[#5A6B7A]">
@@ -817,7 +817,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
           {/* Session Header */}
           <button
             onClick={() => setSelectedSession(selectedSession?.id === session.id ? null : session)}
-            className="w-full p-4 bg-white rounded-lg border border-[#E8E4DF] hover:border-[#E8E4DF] transition-colors text-left"
+            className="w-full p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF] hover:border-[#E8E4DF] transition-colors text-left"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -896,7 +896,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                   <Brain className="w-4 h-4 text-orange-600" />
                   Key Insights
                 </h4>
-                <p className="text-sm text-[#3A4A57] bg-white p-3 rounded border">
+                <p className="text-sm text-[#3A4A57] bg-white dark:bg-slate-800 p-3 rounded border">
                   {session.summary.keyInsights}
                 </p>
               </div>
@@ -971,7 +971,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
         ) : undefined}
       />
       {/* Compliance disclaimer — subtle inline (full text on tap) */}
-      <div className="bg-white border-b border-[#E8E4DF] px-4 pb-3">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] px-4 pb-3">
         <div className="max-w-md mx-auto">
           <DisclaimerFooter variant="subtle" />
         </div>

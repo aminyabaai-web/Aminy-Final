@@ -352,7 +352,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
     }) => (
         <button
             onClick={onClick}
-            className="w-full px-5 py-4 flex items-center justify-between bg-white border-b border-gray-900/4 cursor-pointer transition-colors duration-200 font-sans antialiased hover:bg-[#FAFAFA]"
+            className="w-full px-5 py-4 flex items-center justify-between bg-white dark:bg-slate-800 border-b border-gray-900/4 cursor-pointer transition-colors duration-200 font-sans antialiased hover:bg-[#FAFAFA]"
         >
             <div className="flex items-center gap-4">
                 <div
@@ -395,7 +395,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
             <div className="max-w-[640px] mx-auto px-5 py-6 flex flex-col gap-6">
 
                 {/* Plan & Subscription Card */}
-                <div className="bg-white rounded-[20px] p-5 shadow-card flex items-center justify-between">
+                <div className="bg-white dark:bg-slate-800 rounded-[20px] p-5 shadow-card flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="w-11 h-11 rounded-[12px] bg-gradient-to-br from-[#5a7380] to-[#4a6370] flex items-center justify-center">
                             <Crown size={22} color="#FFFFFF" />
@@ -429,7 +429,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                 </div>
 
                 {/* Trust Engine Settings Group */}
-                <div className="bg-white rounded-[20px] shadow-card overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-[20px] shadow-card overflow-hidden">
                     <SectionButton
                         title="Privacy & Data Control"
                         subtitle="HIPAA, BAA, Export"
@@ -585,10 +585,10 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                 </div>
 
                 {/* Support & Logout */}
-                <div className="bg-white rounded-[20px] shadow-card overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-[20px] shadow-card overflow-hidden">
                     <button
                         onClick={() => window.open('mailto:support@aminy.ai', '_blank')}
-                        className="w-full px-5 py-4 flex items-center justify-between bg-white border-b border-gray-900/4 cursor-pointer"
+                        className="w-full px-5 py-4 flex items-center justify-between bg-white dark:bg-slate-800 border-b border-gray-900/4 cursor-pointer"
                     >
                         <div className="flex items-center gap-3">
                             <HelpCircle size={18} color="rgba(17, 24, 39, 0.6)" />
@@ -600,7 +600,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     {onLogout && (
                         <button
                             onClick={onLogout}
-                            className="w-full px-5 py-4 flex items-center gap-3 bg-white cursor-pointer border-none"
+                            className="w-full px-5 py-4 flex items-center gap-3 bg-white dark:bg-slate-800 cursor-pointer border-none"
                         >
                             <LogOut size={18} color="rgba(220, 38, 38, 0.8)" />
                             <span className="text-[15px] font-medium text-red-600/90">Sign Out</span>

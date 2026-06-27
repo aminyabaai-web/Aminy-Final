@@ -32,6 +32,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Slider } from './ui/slider';
+import { toast } from 'sonner';
 
 interface ROIInputs {
   memberCount: number;
@@ -140,10 +141,11 @@ export function ROICalculator() {
   };
 
   const handleSubmitEmail = () => {
-    // In production, this would send the email and generate a PDF
     if (import.meta.env.DEV) console.log('Email submitted:', email);
     setShowEmailCapture(false);
-    // Show success toast or download PDF
+    setEmail('');
+    // PDF generation/email delivery is not yet wired up — be honest.
+    toast.info('Report delivery coming soon — our team will follow up');
   };
 
   return (
@@ -373,7 +375,11 @@ export function ROICalculator() {
                   <Download className="w-4 h-4 mr-2" />
                   Download Report
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => toast.info('Sales contact coming soon — email hello@aminy.ai')}
+                >
                   <Mail className="w-4 h-4 mr-2" />
                   Contact Sales
                 </Button>

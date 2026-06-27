@@ -107,7 +107,7 @@ export function ResourceLibrary({
             value={searchQuery}
             onChange={e => { setSearchQuery(e.target.value); setSelectedCategory('all'); }}
             placeholder="Search guides, topics, strategies…"
-            className="w-full pl-9 pr-4 py-2.5 text-sm border border-[#E8E4DF] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
+            className="w-full pl-9 pr-4 py-2.5 text-sm border border-[#E8E4DF] rounded-xl bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/30 focus:border-[#6B9080]"
           />
           {searchQuery && (
             <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
@@ -160,7 +160,7 @@ export function ResourceLibrary({
           </p>
         )}
         {filteredResources.length === 0 ? (
-          <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 border border-dashed border-[#E8E4DF] p-6 text-center">
             <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-2" />
             <p className="text-sm text-[#5A6B7A]">No guides found. Try a different search or category.</p>
           </div>
@@ -174,7 +174,7 @@ export function ResourceLibrary({
       </div>
 
       {/* Bottom CTA — Ask BCBA team */}
-      <div className="mx-4 mt-6 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
+      <div className="mx-4 mt-6 rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-4 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
           <span className="text-white text-base">?</span>
         </div>
@@ -199,7 +199,7 @@ function ResourceCard({ resource: r, onOpen, compact = false }: { resource: Reso
   return (
     <button
       onClick={() => onOpen(r)}
-      className={`w-full text-left bg-white border border-[#E8E4DF] rounded-2xl hover:border-[#6B9080]/30 transition-colors ${compact ? 'p-3' : 'p-4'}`}
+      className={`w-full text-left bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-2xl hover:border-[#6B9080]/30 transition-colors ${compact ? 'p-3' : 'p-4'}`}
     >
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
@@ -310,7 +310,7 @@ function ArticleView({
               {/* Fade overlay */}
               <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F6FBFB] to-transparent pointer-events-none" />
               {/* Lock CTA */}
-              <div className="mt-2 rounded-2xl bg-white border border-[#E8E4DF] p-5 text-center space-y-3">
+              <div className="mt-2 rounded-2xl bg-white dark:bg-slate-800 border border-[#E8E4DF] p-5 text-center space-y-3">
                 <Lock className="w-8 h-8 text-slate-300 mx-auto" />
                 <div>
                   <p className="text-sm font-semibold text-[#132F43]">Pro+ resource</p>
@@ -330,7 +330,7 @@ function ArticleView({
 
         {/* Related questions */}
         {!isLocked && r.relatedQuestions && r.relatedQuestions.length > 0 && (
-          <div className="mt-6 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+          <div className="mt-6 rounded-2xl bg-white dark:bg-slate-800 border border-[#E8E4DF] p-4">
             <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-3">Common questions from families</p>
             <div className="space-y-2">
               {r.relatedQuestions.map((q, i) => (
@@ -362,7 +362,7 @@ function ArticleView({
                     <button
                       key={s.id}
                       onClick={() => onNavigate?.('group-sessions')}
-                      className="w-full text-left bg-white rounded-xl px-3 py-2.5 border border-[#E8E4DF] flex items-center gap-2 hover:bg-[#F8F8F6] transition-colors"
+                      className="w-full text-left bg-white dark:bg-slate-800 rounded-xl px-3 py-2.5 border border-[#E8E4DF] flex items-center gap-2 hover:bg-[#F8F8F6] transition-colors"
                     >
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-[#132F43] truncate">{s.topic}</p>
@@ -395,7 +395,7 @@ function ArticleView({
 
         {/* Ask BCBA CTA */}
         {!isLocked && (
-          <div className="mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4 flex items-center gap-3">
+          <div className="mt-4 rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full shrink-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <span className="text-white text-base">?</span>
             </div>

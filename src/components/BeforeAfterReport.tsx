@@ -21,6 +21,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Download, Share2, TrendingUp, TrendingDown, Check } from 'lucide-react';
 import { OutcomesEngine } from '../lib/outcomes-engine';
+import { toast } from 'sonner';
 
 /** Shape the component actually consumes (engine stub returns a simpler shape for now) */
 interface BeforeAfterMetric {
@@ -71,15 +72,15 @@ export function BeforeAfterReport({ userId, childId, childName, parentName, days
   };
 
   const handleExportPDF = () => {
-    HAPTICS.success();
-    // Would generate PDF
-    alert('PDF export would happen here - integrate with pdf-generator.ts');
+    HAPTICS.light();
+    // PDF export not yet wired up
+    toast.info('PDF export coming soon');
   };
 
   const handleShare = () => {
-    HAPTICS.success();
-    // Would create shareable link
-    alert('Share link would be generated here');
+    HAPTICS.light();
+    // Shareable link generation not yet wired up
+    toast.info('Shareable report link coming soon');
   };
 
   if (loading) {

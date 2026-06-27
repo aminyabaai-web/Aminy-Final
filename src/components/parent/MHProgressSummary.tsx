@@ -159,7 +159,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
   return (
     <div className="min-h-screen bg-mist pb-8">
       {/* Header */}
-      <div className="bg-white border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF] px-4 py-3 flex items-center gap-3">
         {onBack && (
           <button onClick={onBack} className="p-2 rounded-lg hover:bg-[#EDF4F7] text-[#5A6B7A]">
             <ArrowLeft className="w-5 h-5" />
@@ -175,7 +175,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
       <div className="px-4 pt-4 space-y-4">
         {/* Mood trend */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
+          className="bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{phqHistory[0]?.score !== undefined && phqHistory[0].score < 5 ? '😊' : phqHistory[0]?.score !== undefined && phqHistory[0].score < 10 ? '😐' : '😔'}</span>
             <h2 className="font-semibold text-[#132F43]">Mood Check-In</h2>
@@ -198,7 +198,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
 
         {/* Anxiety trend */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
+          className="bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-lg">{gadHistory[0]?.score !== undefined && gadHistory[0].score < 5 ? '😌' : gadHistory[0]?.score !== undefined && gadHistory[0].score < 10 ? '😬' : '😰'}</span>
             <h2 className="font-semibold text-[#132F43]">Anxiety Check-In</h2>
@@ -221,7 +221,7 @@ export default function MHProgressSummary({ childName = 'your child', childId = 
 
         {/* Skills practiced this month */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-          className="bg-white border border-[#E8E4DF] rounded-2xl p-4">
+          className="bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-2xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <Star className="w-5 h-5 text-amber-400" />
             <h2 className="font-semibold text-[#132F43]">What we worked on this month</h2>
