@@ -1,0 +1,44 @@
+# Supabase project config (CLI-managed).
+# Only settings that must differ from CLI defaults are declared here.
+#
+# Edge Function JWT verification:
+#   Default is verify_jwt = true. The functions below MUST run with
+#   verify_jwt = false because they are public/webhook endpoints or
+#   implement their own auth (Stripe webhooks, scheduled cron jobs,
+#   partner webhooks, and the make-server gateway's own auth-middleware).
+#   Declaring them here prevents a plain `supabase functions deploy`
+#   from silently re-enabling JWT and breaking those endpoints.
+
+project_id = "qpzsvafwcwyrkdolrjbu"
+
+# Main API gateway — public + webhook routes, auth handled in auth-middleware.ts
+[functions.make-server-8a022548]
+verify_jwt = false
+
+# Stripe checkout session creator (called from external browser flows)
+[functions.stripe-checkout]
+verify_jwt = false
+
+# Stripe webhook receiver (signature-verified, no Supabase JWT)
+[functions.stripe-webhook]
+verify_jwt = false
+
+# Scheduled cron — daily coaching notifications
+[functions.daily-coaching]
+verify_jwt = false
+
+# Rethink EMR partner webhook
+[functions.rethink]
+verify_jwt = false
+
+# Daily.co video webhook receiver
+[functions.daily-webhook]
+verify_jwt = false
+
+# Appointment-cancelled DB webhook (cancellation SMS)
+[functions.appointment-cancelled]
+verify_jwt = false
+
+# Scheduled cron — lifecycle emails (welcome, trial, churn, digest)
+[functions.lifecycle-emails]
+verify_jwt = false
