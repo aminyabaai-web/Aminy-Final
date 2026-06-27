@@ -170,6 +170,11 @@ const PricingTiers = lazy(() =>
     default: m.PricingTiers,
   })),
 );
+const UsageUpgradeTrigger = lazy(() =>
+  import("./components/UsageUpgradeTrigger").then((m) => ({
+    default: m.UsageUpgradeTrigger,
+  })),
+);
 const BenefitsNavigatorScreen = lazy(() =>
   import("./components/BenefitsNavigatorScreen").then((m) => ({
     default: m.BenefitsNavigatorScreen,
@@ -4228,6 +4233,15 @@ export default function App() {
                   )}
 
                   </AISparkleProvider>
+
+                  {/* Usage-triggered upgrade nudge (Google-One-style) — global,
+                      surfaces only when a free user nears/hits their daily AI
+                      limit. Paid/unlimited users never see it. */}
+                  {userData.id && (
+                    <Suspense fallback={null}>
+                      <UsageUpgradeTrigger onUpgrade={() => navigateToScreen('paywall')} />
+                    </Suspense>
+                  )}
 
                   {/* Investor demo mode overlay — activate with ?demo=investor */}
                   {investorDemoActive && (
