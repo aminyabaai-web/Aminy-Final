@@ -17,6 +17,7 @@ import {
   RevenueEvent,
   PRICING,
 } from '@/lib/stripe-revenue';
+import { isDemoMode } from '@/lib/demo-seed';
 
 // ============================================================================
 // Types
@@ -423,8 +424,12 @@ export function MRRDashboard({
     return () => clearInterval(interval);
   }, [refreshInterval, showCohorts]);
 
-  // Generate mock trend data for chart
+  // Trend chart data. There is no real MRR history source yet — the series
+  // below is SYNTHESIZED from the current MRR, so we only show it in demo mode.
+  // Real users get an empty series (honest "no history yet") rather than a
+  // fabricated growth curve presented as real.
   const trendData = useMemo(() => {
+    if (!isDemoMode()) return [];
     const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const currentMRR = mrr?.currentMRR || 0;
 
