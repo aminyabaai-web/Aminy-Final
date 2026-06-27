@@ -22,6 +22,9 @@ import {
   Eye, EyeOff, ClipboardList, Clock, Target, MessageSquare, ChevronDown, ChevronUp,
   BarChart3, ThumbsUp, Minus, ThumbsDown, Star, CheckCircle, X, Brain, Heart
 } from 'lucide-react';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from 'recharts';
 import { playTap, haptic } from './activities/sounds';
 
 // ============================================
@@ -164,6 +167,121 @@ export function updateLastSessionRating(rating: SessionRating, note: string = ''
     sessions[0].parentNote = note;
     saveSessions(sessions);
   }
+}
+
+// ============================================
+// MOOD TREND (reads MoodJournal's localStorage)
+// ============================================
+
+// MoodJournal stores its check-in state under this key (see MoodJournal.tsx STORAGE_KEY).
+const MOOD_CHECKIN_KEY = 'aminy-ease-checkin';
+
+// MoodJournal's MOOD_FACES scale: 5=Great, 4=Good, 3=Okay, 2=Not great, 1=Tough.
+const MOOD_EMOJI: Record<number, string> = { 5: '😄', 4: '🙂', 3: '😐', 2: '😟', 1: '😢' };
+
+interface StoredMoodEntry { date: string; mood: number }
+
+function loadMoodMap(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(MOOD_CHECKIN_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as { moods?: StoredMoodEntry[] };
+    const map: Record<string, number> = {};
+    for (const m of parsed.moods || []) {
+      if (typeof m?.mood === 'number' && typeof m?.date === 'string') map[m.date] = m.mood;
+    }
+    return map;
+  } catch { return {}; }
+}
+
+function last14DaysKeys(): string[] {
+  const days: string[] = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    days.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+  }
+  return days;
+}
+
+function MoodTrendChart({ childName }: { childName: string }) {
+  const moodMap = loadMoodMap();
+  const days = last14DaysKeys();
+  const hasData = days.some(d => moodMap[d] != null);
+
+  const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  const axisColor = isDark ? '#94a3b8' : '#8A9BA8';
+  const gridColor = isDark ? '#334155' : '#EEF2F4';
+
+  const chartData = days.map(d => ({
+    label: new Date(d + 'T12:00:00').toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' }),
+    // recharts skips null y-values, leaving gaps for days with no check-in (honest).
+    mood: moodMap[d] ?? null,
+  }));
+
+  return (
+    <div className="rounded-2xl p-3 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-600 shadow-sm">
+      <div className="flex items-center gap-2 mb-2">
+        <Heart className="w-4 h-4 text-[#2A7D99]" />
+        <h3 className="font-bold text-[#132F43] dark:text-slate-100 text-sm">{childName}'s mood — last 14 days</h3>
+      </div>
+
+      {!hasData ? (
+        <p className="text-sm text-[#8A9BA8] dark:text-slate-400 text-center py-6">No mood check-ins yet</p>
+      ) : (
+        <>
+          <div className="w-full" style={{ height: 144 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={chartData} margin={{ top: 8, right: 8, left: -28, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+                <XAxis
+                  dataKey="label"
+                  tick={{ fontSize: 10, fill: axisColor }}
+                  axisLine={{ stroke: gridColor }}
+                  tickLine={false}
+                  interval={1}
+                />
+                <YAxis
+                  domain={[1, 5]}
+                  ticks={[1, 2, 3, 4, 5]}
+                  tick={{ fontSize: 11, fill: axisColor }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={28}
+                  tickFormatter={(v: number) => MOOD_EMOJI[v] ?? String(v)}
+                />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
+                    background: isDark ? '#1e293b' : '#ffffff',
+                    color: isDark ? '#e2e8f0' : '#132F43',
+                  }}
+                  formatter={(value) => {
+                    const n = Number(value);
+                    return [`${MOOD_EMOJI[n] ?? ''} ${n}/5`, 'Mood'] as [string, string];
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="mood"
+                  stroke="#2A7D99"
+                  strokeWidth={2.5}
+                  connectNulls
+                  dot={{ r: 3, fill: '#2A7D99', stroke: isDark ? '#1e293b' : '#ffffff', strokeWidth: 1.5 }}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          <p className="mt-1 text-sm text-[#8A9BA8] dark:text-slate-400 text-center">
+            From {childName}'s daily check-ins
+          </p>
+        </>
+      )}
+    </div>
+  );
 }
 
 // ============================================
@@ -446,6 +564,11 @@ export function EaseParentView({
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Mood trend — surfaced prominently for parents */}
+            <div className="px-4 pt-4">
+              <MoodTrendChart childName={childName} />
             </div>
 
             {/* Sections */}

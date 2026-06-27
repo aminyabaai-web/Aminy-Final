@@ -54,6 +54,10 @@ import {
   Camera,
   Download,
 } from 'lucide-react';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from 'recharts';
+import { StreakTracker } from './StreakTracker';
 import { useConversation } from '../context/ConversationContext';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { useWorkflowSyncState } from '../lib/core-workflow-sync';
@@ -1333,6 +1337,15 @@ export function Dashboard10({
                 <p className="text-sm text-muted-foreground">Goals Met</p>
               </div>
             </div>
+
+            {/* Gentle 7-day streak grid */}
+            <div className="mt-4">
+              <StreakTracker
+                currentStreak={streakDays}
+                longestStreak={streakDays}
+                isPaused={false}
+              />
+            </div>
           </div>
         )}
 
@@ -1514,61 +1527,70 @@ export function Dashboard10({
                   Complete your first check-in to see trends
                 </p>
               </div>
-            ) : (
-              <div className="flex items-center gap-1.5 flex-wrap">
-                {trendData.map((pt, i) => {
-                  const dotColor =
-                    pt.rating >= 4
-                      ? 'bg-[#2A7D99]'
-                      : pt.rating === 3
-                      ? 'bg-amber-400'
-                      : 'bg-[#E07A5F]';
-                  const arrow =
-                    i > 0
-                      ? trendData[i].rating > trendData[i - 1].rating
-                        ? '↑'
-                        : trendData[i].rating < trendData[i - 1].rating
-                        ? '↓'
-                        : '→'
-                      : null;
-                  const arrowColor =
-                    arrow === '↑'
-                      ? 'text-[#2A7D99]'
-                      : arrow === '↓'
-                      ? 'text-[#E07A5F]'
-                      : 'text-[#8A9BA8]';
-                  const weekLabel = pt.recordedAt
-                    ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                    : `Wk ${i + 1}`;
-                  return (
-                    <React.Fragment key={i}>
-                      {arrow && (
-                        <span className={`text-sm font-medium ${arrowColor}`}>{arrow}</span>
-                      )}
-                      <div className="flex flex-col items-center gap-1">
-                        <div
-                          className={`w-5 h-5 rounded-full ${dotColor} shadow-sm`}
-                          title={`${weekLabel}: ${pt.rating}/5`}
+            ) : (() => {
+              const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+              const axisColor = isDark ? '#94a3b8' : '#8A9BA8';
+              const gridColor = isDark ? '#334155' : '#EEF2F4';
+              const chartData = trendData.map((pt, i) => ({
+                label: pt.recordedAt
+                  ? new Date(pt.recordedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                  : `Wk ${i + 1}`,
+                rating: pt.rating,
+              }));
+              return (
+                <div>
+                  <div className="w-full" style={{ height: 160 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
+                        <defs>
+                          <linearGradient id="dashTrendFill" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#2A7D99" stopOpacity={0.32} />
+                            <stop offset="100%" stopColor="#2A7D99" stopOpacity={0.02} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke={gridColor} vertical={false} />
+                        <XAxis
+                          dataKey="label"
+                          tick={{ fontSize: 11, fill: axisColor }}
+                          axisLine={{ stroke: gridColor }}
+                          tickLine={false}
                         />
-                        <span className="text-sm text-[#8A9BA8] dark:text-slate-400 whitespace-nowrap">{weekLabel}</span>
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-                {/* Pad to 4 dots if fewer results */}
-                {trendData.length < 4 && Array.from({ length: 4 - trendData.length }).map((_, i) => (
-                  <React.Fragment key={`pad-${i}`}>
-                    {(trendData.length + i) > 0 && (
-                      <span className="text-sm text-[#E8E4DF] dark:text-slate-600">→</span>
-                    )}
-                    <div className="flex flex-col items-center gap-1">
-                      <div className="w-5 h-5 rounded-full bg-[#E8E4DF] dark:bg-slate-600" />
-                      <span className="text-sm text-[#E8E4DF] dark:text-slate-600">—</span>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
+                        <YAxis
+                          domain={[0, 5]}
+                          ticks={[0, 1, 2, 3, 4, 5]}
+                          tick={{ fontSize: 11, fill: axisColor }}
+                          axisLine={false}
+                          tickLine={false}
+                          width={28}
+                        />
+                        <Tooltip
+                          contentStyle={{
+                            fontSize: 12,
+                            borderRadius: 8,
+                            border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
+                            background: isDark ? '#1e293b' : '#ffffff',
+                            color: isDark ? '#e2e8f0' : '#132F43',
+                          }}
+                          formatter={(value) => [`${value}/5`, 'Goal progress'] as [string, string]}
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="rating"
+                          stroke="#2A7D99"
+                          strokeWidth={2.5}
+                          fill="url(#dashTrendFill)"
+                          dot={{ r: 4, fill: '#2A7D99', stroke: isDark ? '#1e293b' : '#ffffff', strokeWidth: 2 }}
+                          activeDot={{ r: 6 }}
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <p className="mt-1 text-sm text-[#8A9BA8] dark:text-slate-400 text-center">
+                    Goal progress, last 4 check-ins
+                  </p>
+                </div>
+              );
+            })()}
           </div>
         )}
 
