@@ -17808,6 +17808,21 @@ tr:hover td, .hover-row:hover {
 .dark .border-\[\#E8E4DF\] { border-color: #334155 !important; }
 .dark .border-\[\#F0EDE8\] { border-color: #1e293b !important; }
 .dark .border-\[\#E2E8F0\] { border-color: #334155 !important; }
+/* Design-system v3 renamed hexes — restore the dark-mode flips that the
+   #1B2733→#132F43 / #F0EDE8→#EDF4F7 / #FAF7F2→#F6FBFB markup rename orphaned.
+   Without these, navy headings render invisible (navy-on-dark) and mist
+   surfaces stay light (white bands) in dark mode. */
+.dark .text-\[\#132F43\] { color: #f1f5f9 !important; }
+.dark .text-\[\#132F43\]\/90 { color: #f1f5f9 !important; }
+.dark .text-\[\#132F43\]\/80 { color: #e2e8f0 !important; }
+.dark .text-\[\#132F43\]\/70 { color: #cbd5e1 !important; }
+.dark .text-\[\#132F43\]\/60 { color: #cbd5e1 !important; }
+.dark .text-\[\#132F43\]\/50 { color: #94a3b8 !important; }
+.dark .text-\[\#132F43\]\/45 { color: #94a3b8 !important; }
+.dark .text-\[\#132F43\]\/30 { color: #64748b !important; }
+.dark .bg-\[\#F6FBFB\] { background-color: #0f172a !important; }
+.dark .bg-\[\#EDF4F7\] { background-color: #1e293b !important; }
+.dark .border-\[\#EDF4F7\] { border-color: #1e293b !important; }
 
 /* Dark mode inputs/forms */
 .dark input:not([type="checkbox"]):not([type="radio"]),
