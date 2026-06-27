@@ -201,7 +201,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 + i * 0.1 }}
-                  className="rounded-2xl border border-[#E8E4DF] bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-4 shadow-sm"
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -253,7 +253,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="rounded-2xl border border-[#E8E4DF] bg-white p-4 shadow-sm"
+                  className="rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-4 shadow-sm"
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-[#132F43]">{goal.title}</p>
@@ -371,7 +371,7 @@ export default function MyPlanScreen({ onBack, childName = 'Maya', onAskAminy }:
             </h2>
             <CheckCircle className="h-4 w-4 text-[#8A9BA8]" />
           </div>
-          <div className="rounded-2xl border border-[#E8E4DF] bg-white shadow-sm">
+          <div className="rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 shadow-sm">
             {plan.nextActions.map((action, i) => (
               <button
                 key={i}

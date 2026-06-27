@@ -466,7 +466,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                       {/* Action buttons */}
                       <div className="flex items-center gap-1.5 mt-2.5">
                         <button
-                          onClick={() => toast.info('Opening document preview...')}
+                          onClick={() => toast.info('Document preview coming soon')}
                           className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Eye className="w-3 h-3" />
@@ -480,7 +480,7 @@ export function DocumentVaultElite({ onBack }: DocumentVaultEliteProps) {
                           Share
                         </button>
                         <button
-                          onClick={() => toast.success('Download started!')}
+                          onClick={() => toast.info('Document download coming soon')}
                           className="flex items-center gap-1 px-2 py-1 text-sm text-[#5A6B7A] bg-[#EDF4F7] rounded-lg hover:bg-[#E8E4DF] transition-colors"
                         >
                           <Download className="w-3 h-3" />

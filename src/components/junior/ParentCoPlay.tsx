@@ -325,19 +325,19 @@ export function ParentCoPlay({
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-3 w-full max-w-xs mb-6">
-            <div className="bg-white rounded-xl p-3 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
               <div className="text-2xl font-bold text-[#2A7D99]">{accuracy}%</div>
               <div className="text-sm text-[#5A6B7A]">Accuracy</div>
             </div>
-            <div className="bg-white rounded-xl p-3 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
               <div className="text-2xl font-bold text-[#2A7D99]">{independentCount}/{trials.length}</div>
               <div className="text-sm text-[#5A6B7A]">Independent</div>
             </div>
-            <div className="bg-white rounded-xl p-3 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
               <div className="text-2xl font-bold text-[#5A6B7A]">{avgPromptLabel}</div>
               <div className="text-sm text-[#5A6B7A]">Avg Prompt</div>
             </div>
-            <div className="bg-white rounded-xl p-3 shadow-sm">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm">
               <div className="text-2xl font-bold text-[#5A6B7A]">{formatTime(elapsedSeconds)}</div>
               <div className="text-sm text-[#5A6B7A]">Duration</div>
             </div>
@@ -415,7 +415,7 @@ export function ParentCoPlay({
       {/* ================================================================ */}
       {/* Header Bar */}
       {/* ================================================================ */}
-      <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-[#E8E4DF]">
+      <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
         <button
           onClick={onExit}
           className="flex items-center gap-1 text-sm text-[#5A6B7A] active:scale-95 transition-transform"
@@ -448,7 +448,7 @@ export function ParentCoPlay({
             exit={{ opacity: 0 }}
             className="absolute inset-0 z-50 bg-[#0D1B2A]/70 flex items-center justify-center"
           >
-            <div className="bg-white rounded-2xl p-6 text-center max-w-[280px]">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 text-center max-w-[280px]">
               <Pause className="w-8 h-8 text-[#5A6B7A] mx-auto mb-3" />
               <h3 className="font-bold text-[#0D1B2A] mb-1">Session Paused</h3>
               <p className="text-sm text-[#5A6B7A] mb-4">Take a break. {childName} is doing great!</p>
@@ -466,7 +466,7 @@ export function ParentCoPlay({
       {/* ================================================================ */}
       {/* Progress Bar */}
       {/* ================================================================ */}
-      <div className="px-4 py-2 bg-white">
+      <div className="px-4 py-2 bg-white dark:bg-slate-800">
         <div className="flex items-center gap-2">
           <div className="flex-1 h-2 bg-[#EDF4F7] rounded-full overflow-hidden">
             <motion.div
@@ -498,7 +498,7 @@ export function ParentCoPlay({
       {/* ================================================================ */}
       {isSplitMode && (
         <div className="flex-1 min-h-0 p-4 flex items-center justify-center">
-          <div className="bg-white rounded-2xl p-6 shadow-sm w-full max-w-xs text-center">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm w-full max-w-xs text-center">
             <div className="text-3xl mb-3">{getDomainEmoji(skillDomain)}</div>
             <h3 className="font-bold text-[#0D1B2A] text-lg mb-1">{activityTitle}</h3>
             {activityDescription && (
@@ -513,7 +513,7 @@ export function ParentCoPlay({
       {/* ================================================================ */}
       {/* Parent Controls Panel */}
       {/* ================================================================ */}
-      <div className={`${isSplitMode ? '' : 'flex-1'} bg-white rounded-t-2xl shadow-lg border-t border-[#E8E4DF] p-4`}>
+      <div className={`${isSplitMode ? '' : 'flex-1'} bg-white dark:bg-slate-800 rounded-t-2xl shadow-lg border-t border-[#E8E4DF] p-4`}>
 
         {/* Domain Tip */}
         <AnimatePresence>

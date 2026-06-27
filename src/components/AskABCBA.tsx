@@ -242,7 +242,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       <div className="min-h-screen bg-mist pb-20">
         <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />
         <div className="px-4 mt-4 space-y-3">
-          {[1,2,3].map(i => <div key={i} className="h-16 bg-white rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
+          {[1,2,3].map(i => <div key={i} className="h-16 bg-white dark:bg-slate-800 rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
         </div>
       </div>
     );
@@ -261,7 +261,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
 
       {/* Value prop — shown before first question is asked */}
       {!showAsk && !isLoading && threads.length === 0 && (
-        <div className="mx-4 mt-4 rounded-2xl border border-[#E8E4DF] bg-white p-4">
+        <div className="mx-4 mt-4 rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-4">
           <div className="flex items-start gap-3 mb-3">
             <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #2A7D99 0%, #216982 100%)' }}>
               <ShieldCheck className="w-5 h-5 text-white" />
@@ -295,7 +295,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         <div className="px-4 mt-4">
           {!canAccess ? (
             /* Hard gate: Core/Pro user with no recent session */
-            <div className="rounded-2xl border border-[#E8E4DF] bg-white p-5 text-center space-y-3">
+            <div className="rounded-2xl border border-[#E8E4DF] bg-white dark:bg-slate-800 p-5 text-center space-y-3">
               <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto">
                 <Lock className="w-6 h-6 text-slate-400" />
               </div>
@@ -342,7 +342,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
 
       {/* Compose form */}
       {showAsk && (
-        <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4 space-y-3">
+        <div className="mx-4 mt-4 rounded-2xl bg-white dark:bg-slate-800 border border-[#E8E4DF] p-4 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-[#132F43]">Ask anything</p>
             <button onClick={() => { setShowAsk(false); setQuestion(''); }} className="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:bg-[#EDF4F7]">
@@ -408,7 +408,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
         {isLoading ? (
           <div className="text-center py-6"><Loader2 className="w-5 h-5 text-slate-400 animate-spin mx-auto" /></div>
         ) : threads.length === 0 ? (
-          <div className="rounded-2xl bg-white border border-dashed border-[#E8E4DF] p-6 text-center">
+          <div className="rounded-2xl bg-white dark:bg-slate-800 border border-dashed border-[#E8E4DF] p-6 text-center">
             <MessageCircle className="w-10 h-10 text-slate-300 mx-auto mb-2" />
             <p className="text-sm text-[#5A6B7A]">No questions yet. Ask anything — instant AI draft, behaviorist review typically within 24 hours.</p>
           </div>
@@ -418,7 +418,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
               <button
                 key={t.id}
                 onClick={() => setActiveThread(t)}
-                className="w-full text-left bg-white border border-[#E8E4DF] rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
+                className="w-full text-left bg-white dark:bg-slate-800 border border-[#E8E4DF] rounded-2xl p-3 hover:border-[#6B9080]/30 transition-colors"
               >
                 <div className="flex items-start justify-between gap-2 mb-1.5">
                   <p className="text-sm text-[#132F43] line-clamp-2 flex-1">{t.question}</p>
@@ -483,7 +483,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         backLabel="Back to all questions"
         variant="flat"
       />
-      <div className="px-4 pt-3 pb-4 bg-white border-b border-[#E8E4DF]">
+      <div className="px-4 pt-3 pb-4 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
         <div className="flex items-center gap-2 mb-1">
           {thread.category && <span className="text-xs bg-[#EDF4F7] text-[#5A6B7A] px-2 py-0.5 rounded-full capitalize">{thread.category}</span>}
           <StatusPill status={thread.status} />
@@ -492,7 +492,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
       </div>
 
       {/* Question */}
-      <div className="mx-4 mt-4 rounded-2xl bg-white border border-[#E8E4DF] p-4">
+      <div className="mx-4 mt-4 rounded-2xl bg-white dark:bg-slate-800 border border-[#E8E4DF] p-4">
         <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide mb-2">Your question</p>
         <p className="text-sm text-[#132F43] whitespace-pre-wrap">{thread.question}</p>
       </div>
@@ -518,7 +518,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
 
       {/* BCBA response */}
       {thread.bcba_response ? (
-        <div className="mx-4 mt-3 rounded-2xl bg-white border-2 border-[#6B9080] p-4">
+        <div className="mx-4 mt-3 rounded-2xl bg-white dark:bg-slate-800 border-2 border-[#6B9080] p-4">
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
             <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">BCBA Reviewed & Signed</p>
@@ -532,7 +532,7 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
           )}
         </div>
       ) : (
-        <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4 flex items-center gap-3">
+        <div className="mx-4 mt-3 rounded-2xl bg-white dark:bg-slate-800 border border-[#E8E4DF] p-4 flex items-center gap-3">
           <Clock className="w-5 h-5 text-amber-500 shrink-0" />
           <div className="flex-1">
             <p className="text-sm font-medium text-[#132F43]">Awaiting behaviorist review</p>

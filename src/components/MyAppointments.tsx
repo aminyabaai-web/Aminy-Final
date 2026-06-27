@@ -337,7 +337,7 @@ function AppointmentCard({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl border border-[#E8E4DF] overflow-hidden hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-slate-800 rounded-xl border border-[#E8E4DF] overflow-hidden hover:shadow-md transition-shadow"
     >
       {/* Card Header */}
       <div className="p-3 sm:p-4">
@@ -539,7 +539,7 @@ export function MyAppointments({
   return (
     <div className="min-h-screen bg-mist">
       {/* Header — shared chrome with back control */}
-      <div className="bg-white border-b border-[#E8E4DF]">
+      <div className="bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
         <ScreenHeader
           title="My Appointments"
           subtitle={childName ? `for ${childName}` : undefined}

@@ -250,7 +250,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b bg-[#FFF8F0] p-5 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-purple-900 to-indigo-900 p-5 pb-24">
       {/* Greeting */}
       <div className="flex items-center gap-3 mb-6">
         {greeting.icon}
@@ -303,7 +303,7 @@ export default function DailyLoop({ childName = 'friend', onStartChallenge, onOp
           haptic(30);
           onStartChallenge?.(challenge);
         }}
-        className="w-full bg-gradient-to-r bg-[#6B9080] rounded-2xl p-5 mb-5 text-left"
+        className="w-full bg-[#6B9080] rounded-2xl p-5 mb-5 text-left"
       >
         <p className="text-white/70 text-xs uppercase tracking-wider mb-2">Today's Challenge</p>
         <div className="flex items-center gap-3">
