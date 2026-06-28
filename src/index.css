@@ -18100,3 +18100,65 @@ tr:hover td, .hover-row:hover {
 .from-\[\#F6FBFB\]\/50 { --tw-gradient-from: color-mix(in oklab, #F6FBFB 50%, transparent); --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position)); }
 .hover\:bg-\[\#F6FBFB\]\/50:hover { background-color: color-mix(in oklab, #F6FBFB 50%, transparent); }
 .active\:bg-\[\#F6FBFB\]:active { background-color: #F6FBFB; }
+
+/* ============================================================
+   Precompiled dark: utilities used in components but absent from
+   the JIT-less build. Without these, authored dark: variants
+   (e.g. dark:text-gray-100 on GatedScreenPlaceholder) silently
+   fail and text renders invisible in dark mode. Generated to
+   match the file's existing .dark\:x:is(.dark *) format.
+   ============================================================ */
+.dark\:bg-cyan-900\/20:is(.dark *) { background-color: color-mix(in oklab, #164e63 20%, transparent); }
+.dark\:bg-gray-600:is(.dark *) { background-color: #4b5563; }
+.dark\:bg-gray-800:is(.dark *) { background-color: #1f2937; }
+.dark\:bg-slate-600:is(.dark *) { background-color: #475569; }
+.dark\:bg-slate-700\/40:is(.dark *) { background-color: color-mix(in oklab, #334155 40%, transparent); }
+.dark\:bg-slate-700\/50:is(.dark *) { background-color: color-mix(in oklab, #334155 50%, transparent); }
+.dark\:bg-slate-700\/80:is(.dark *) { background-color: color-mix(in oklab, #334155 80%, transparent); }
+.dark\:bg-slate-750:is(.dark *) { background-color: #283548; }
+.dark\:bg-slate-800\/40:is(.dark *) { background-color: color-mix(in oklab, #1e293b 40%, transparent); }
+.dark\:bg-slate-800\/50:is(.dark *) { background-color: color-mix(in oklab, #1e293b 50%, transparent); }
+.dark\:bg-slate-800\/70:is(.dark *) { background-color: color-mix(in oklab, #1e293b 70%, transparent); }
+.dark\:bg-slate-800\/85:is(.dark *) { background-color: color-mix(in oklab, #1e293b 85%, transparent); }
+.dark\:bg-slate-800\/90:is(.dark *) { background-color: color-mix(in oklab, #1e293b 90%, transparent); }
+.dark\:bg-slate-800\/95:is(.dark *) { background-color: color-mix(in oklab, #1e293b 95%, transparent); }
+.dark\:bg-slate-900\/30:is(.dark *) { background-color: color-mix(in oklab, #0f172a 30%, transparent); }
+.dark\:bg-slate-900\/40:is(.dark *) { background-color: color-mix(in oklab, #0f172a 40%, transparent); }
+.dark\:bg-slate-900\/50:is(.dark *) { background-color: color-mix(in oklab, #0f172a 50%, transparent); }
+.dark\:bg-slate-900\/60:is(.dark *) { background-color: color-mix(in oklab, #0f172a 60%, transparent); }
+.dark\:bg-slate-900\/70:is(.dark *) { background-color: color-mix(in oklab, #0f172a 70%, transparent); }
+.dark\:bg-slate-900\/80:is(.dark *) { background-color: color-mix(in oklab, #0f172a 80%, transparent); }
+.dark\:bg-slate-900\/90:is(.dark *) { background-color: color-mix(in oklab, #0f172a 90%, transparent); }
+.dark\:bg-slate-950\/80:is(.dark *) { background-color: color-mix(in oklab, #020617 80%, transparent); }
+.dark\:bg-teal-700:is(.dark *) { background-color: #0f766e; }
+.dark\:bg-teal-800:is(.dark *) { background-color: #115e59; }
+.dark\:bg-teal-800\/50:is(.dark *) { background-color: color-mix(in oklab, #115e59 50%, transparent); }
+.dark\:bg-teal-900\/20:is(.dark *) { background-color: color-mix(in oklab, #134e4a 20%, transparent); }
+.dark\:bg-teal-950\/30:is(.dark *) { background-color: color-mix(in oklab, #042f2e 30%, transparent); }
+.dark\:border-gray-600:is(.dark *) { border-color: #4b5563; }
+.dark\:border-gray-700:is(.dark *) { border-color: #374151; }
+.dark\:border-slate-600\/50:is(.dark *) { border-color: color-mix(in oklab, #475569 50%, transparent); }
+.dark\:border-slate-700:is(.dark *) { border-color: #334155; }
+.dark\:border-slate-700\/50:is(.dark *) { border-color: color-mix(in oklab, #334155 50%, transparent); }
+.dark\:border-slate-700\/70:is(.dark *) { border-color: color-mix(in oklab, #334155 70%, transparent); }
+.dark\:border-slate-700\/80:is(.dark *) { border-color: color-mix(in oklab, #334155 80%, transparent); }
+.dark\:border-teal-700:is(.dark *) { border-color: #0f766e; }
+.dark\:border-teal-700\/50:is(.dark *) { border-color: color-mix(in oklab, #0f766e 50%, transparent); }
+.dark\:border-teal-900\/40:is(.dark *) { border-color: color-mix(in oklab, #134e4a 40%, transparent); }
+.dark\:text-cyan-200:is(.dark *) { color: #a5f3fc; }
+.dark\:text-cyan-300:is(.dark *) { color: #67e8f9; }
+.dark\:text-cyan-400:is(.dark *) { color: #22d3ee; }
+.dark\:text-gray-100:is(.dark *) { color: #f3f4f6; }
+.dark\:text-gray-200:is(.dark *) { color: #e5e7eb; }
+.dark\:text-gray-300:is(.dark *) { color: #d1d5db; }
+.dark\:text-neutral-200:is(.dark *) { color: #e5e5e5; }
+.dark\:text-neutral-300:is(.dark *) { color: #d4d4d4; }
+.dark\:text-neutral-400:is(.dark *) { color: #a3a3a3; }
+.dark\:text-slate-200:is(.dark *) { color: #e2e8f0; }
+.dark\:text-slate-50:is(.dark *) { color: #f8fafc; }
+.dark\:text-slate-500:is(.dark *) { color: #64748b; }
+.dark\:text-slate-600:is(.dark *) { color: #475569; }
+.dark\:text-teal-100:is(.dark *) { color: #ccfbf1; }
+.dark\:text-teal-200:is(.dark *) { color: #99f6e4; }
+.dark\:text-teal-300:is(.dark *) { color: #5eead4; }
+.dark\:text-teal-500:is(.dark *) { color: #14b8a6; }
