@@ -298,7 +298,7 @@ const POST_CATEGORIES: { id: PostCategory; name: string; icon: React.ReactNode; 
   { id: 'tips', name: 'Tips', icon: <Sparkles className="w-4 h-4" />, color: 'bg-green-100 text-green-700' },
   { id: 'support', name: 'Support', icon: <Heart className="w-4 h-4" />, color: 'bg-pink-100 text-pink-700' },
   { id: 'resources', name: 'Resources', icon: <Bookmark className="w-4 h-4" />, color: 'bg-violet-100 text-violet-700' },
-  { id: 'bcba-qa', name: 'BCBA Q&A', icon: <Award className="w-4 h-4" />, color: 'bg-[#6B9080]/10 text-[#6B9080]' },
+  { id: 'bcba-qa', name: 'Ask a specialist', icon: <Award className="w-4 h-4" />, color: 'bg-[#6B9080]/10 text-[#6B9080]' },
 ];
 
 export function CommunityHub({
@@ -868,7 +868,7 @@ export function CommunityHub({
               </span>
               {post.isBCBA && (
                 <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-sm shrink-0">
-                  ✓ Verified BCBA
+                  ✓ Verified specialist
                 </Badge>
               )}
             </div>
@@ -1007,7 +1007,7 @@ export function CommunityHub({
               { id: 'feed', name: 'Feed', icon: <MessageCircle className="w-4 h-4" /> },
               { id: 'groups', name: 'Groups', icon: <Users className="w-4 h-4" /> },
               { id: 'events', name: 'Events', icon: <Calendar className="w-4 h-4" /> },
-              { id: 'bcba-qa', name: 'BCBA Q&A', icon: <Award className="w-4 h-4" /> },
+              { id: 'bcba-qa', name: 'Ask a specialist', icon: <Award className="w-4 h-4" /> },
             ].map((tab) => (
               <Button
                 key={tab.id}
@@ -1268,12 +1268,12 @@ export function CommunityHub({
                   <Award className="w-6 h-6 text-[#6B9080] shrink-0" />
                   <div>
                     <h3 className="font-semibold text-[#6B9080] dark:text-teal-100">
-                      Ask Your BCBA Team
+                      Ask Your Behavior Specialist Team
                     </h3>
                     <p className="text-sm text-[#6B9080] dark:text-teal-200 mt-1">
                       {onNavigate
-                        ? 'Send a question to your BCBA team — instant AI draft, clinician-reviewed reply within 24 hours.'
-                        : 'Read answers to questions other parents have asked their BCBA teams below.'}
+                        ? 'Send a question to your behavior specialist team — instant AI draft, clinician-reviewed reply within 24 hours.'
+                        : 'Read answers to questions other parents have asked their behavior specialist teams below.'}
                     </p>
                   </div>
                 </div>
@@ -1409,7 +1409,7 @@ export function CommunityHub({
                   </span>
                   {activeThread.isBCBA && (
                     <Badge className="bg-[#6B9080]/10 dark:bg-[#6B9080]/10 text-[#6B9080] dark:text-teal-200 text-sm shrink-0">
-                      ✓ Verified BCBA
+                      ✓ Verified specialist
                     </Badge>
                   )}
                 </div>

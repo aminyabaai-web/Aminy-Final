@@ -176,7 +176,7 @@ export function EnhancedReferralDashboard({
       </div>
 
       {/* Referral Code Card */}
-      <Card className="p-5 bg-gradient-to-br from-teal-500 to-blue-600 text-white overflow-hidden relative">
+      <Card className="p-5 bg-gradient-to-br from-[#2A7D99] to-[#0D1B2A] text-white overflow-hidden relative">
         {/* Decorative circles */}
         <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/5 rounded-full" />
         <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-white/5 rounded-full" />

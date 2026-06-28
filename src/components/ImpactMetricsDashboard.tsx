@@ -327,15 +327,15 @@ export function ImpactMetricsDashboard({
           {/* Key Impact Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <Card className="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 border-[#C8DDE8] dark:border-slate-700">
+              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
-                  <Users className="w-5 h-5 text-blue-600" />
+                  <Users className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.beneficiaryGrowth)}
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-blue-700 dark:text-blue-400">
+                <div className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">
                   {metrics.beneficiaries.total.toLocaleString()}
                 </div>
-                <div className="text-sm text-blue-600 dark:text-blue-500">Families Served</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Families Served</div>
                 <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   +{metrics.beneficiaries.newThisMonth} this month
                 </div>
@@ -343,15 +343,15 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <Card className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-slate-800 dark:to-slate-800 border-green-200 dark:border-slate-700">
+              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
+                  <TrendingUp className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.outcomeImprovement)}
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-green-700 dark:text-green-400">
+                <div className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">
                   {metrics.outcomes.behaviorImprovements}%
                 </div>
-                <div className="text-sm text-green-600 dark:text-green-500">Behavior Improvement</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Behavior Improvement</div>
                 <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Target: 70%
                 </div>
@@ -359,15 +359,15 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <Card className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 dark:from-slate-800 dark:to-slate-800 border-purple-200 dark:border-slate-700">
+              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
-                  <Heart className="w-5 h-5 text-purple-600" />
+                  <Heart className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.retentionTrend)}
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400">
+                <div className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">
                   {metrics.outcomes.stressReduction}%
                 </div>
-                <div className="text-sm text-purple-600 dark:text-purple-500">Stress Reduction</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Stress Reduction</div>
                 <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Caregiver reported
                 </div>
@@ -375,14 +375,14 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <Card className="p-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-800 border-amber-200 dark:border-slate-700">
+              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
-                  <Sparkles className="w-5 h-5 text-amber-600" />
+                  <Sparkles className="w-5 h-5 text-[#2A7D99]" />
                 </div>
-                <div className="text-xl sm:text-2xl font-bold text-amber-700 dark:text-amber-400">
+                <div className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">
                   {metrics.outcomes.familyQualityOfLife}/10
                 </div>
-                <div className="text-sm text-amber-600 dark:text-amber-500">Quality of Life</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Quality of Life</div>
                 <div className="text-sm text-[#5A6B7A] dark:text-slate-400 mt-1">
                   Family average score
                 </div>

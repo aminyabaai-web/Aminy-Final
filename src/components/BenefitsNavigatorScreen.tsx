@@ -155,7 +155,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
     : [
         // No state selected yet — don't assert coverage. Show services as
         // "Check Eligibility" until the user picks a state and we have real data.
-        { id: 'aba', name: 'ABA Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
+        { id: 'aba', name: 'Behavior Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
         { id: 'speech', name: 'Speech Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
         { id: 'ot', name: 'Occupational Therapy', status: 'pending' as const, coverage: 'Select your state to see coverage details' },
         { id: 'eval', name: 'Diagnostic Evaluation', status: 'pending' as const, coverage: 'Select your state to see coverage details' },

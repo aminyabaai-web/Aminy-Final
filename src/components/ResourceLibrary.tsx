@@ -92,7 +92,7 @@ export function ResourceLibrary({
     <div className="min-h-screen bg-mist pb-20">
       <ScreenHeader
         title="Resource Library"
-        subtitle="BCBA-authored guides · evidence-based · plain language"
+        subtitle="Expert-authored guides · evidence-based · plain language"
         icon={<BookOpen className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -180,7 +180,7 @@ export function ResourceLibrary({
         </div>
         <div className="flex-1">
           <p className="text-sm font-semibold text-[#132F43]">Still have questions?</p>
-          <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, clinician-reviewed within 24h.</p>
+          <p className="text-sm text-[#5A6B7A]">Ask your behavior specialist team — instant AI draft, clinician-reviewed within 24h.</p>
         </div>
         <button
           onClick={() => onNavigate?.('ask-bcba')}
@@ -314,7 +314,7 @@ function ArticleView({
                 <Lock className="w-8 h-8 text-slate-300 mx-auto" />
                 <div>
                   <p className="text-sm font-semibold text-[#132F43]">Pro+ resource</p>
-                  <p className="text-sm text-[#5A6B7A] mt-1">Upgrade to Pro+ Family to unlock all premium guides, printables, and 10 BCBA team questions/month.</p>
+                  <p className="text-sm text-[#5A6B7A] mt-1">Upgrade to Pro+ Family to unlock all premium guides, printables, and 10 behavior specialist questions/month.</p>
                 </div>
                 <button
                   onClick={() => onNavigate?.('paywall')}
@@ -381,7 +381,7 @@ function ArticleView({
               </div>
             ) : (
               <p className="text-sm text-[#3A4A57] mb-3">
-                BCBAs host group training sessions on {r.relatedGroupTopics.join(', ')}. Up to 4 families — $50/family — live Q&A.
+                Behavior specialists host group training sessions on {r.relatedGroupTopics.join(', ')}. Up to 4 families — $50/family — live Q&A.
               </p>
             )}
             <button
@@ -403,7 +403,7 @@ function ArticleView({
               <p className="text-sm font-semibold text-[#132F43]">
                 {childName ? `Questions about ${childName}?` : 'Have follow-up questions?'}
               </p>
-              <p className="text-sm text-[#5A6B7A]">Ask your BCBA team — instant AI draft, reviewed within 24h.</p>
+              <p className="text-sm text-[#5A6B7A]">Ask your behavior specialist team — instant AI draft, reviewed within 24h.</p>
             </div>
             <button
               onClick={() => onNavigate?.('ask-bcba')}
