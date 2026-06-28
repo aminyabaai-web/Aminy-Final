@@ -156,13 +156,15 @@ function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
 // CONCERN OPTIONS
 // ============================================
 
+// Icons share a single teal pointer treatment; the copy (label + description)
+// differentiates each concern, keeping the surface calm (no "accent soup").
 const CONCERN_OPTIONS = [
-  { id: 'autism', label: 'Autism / Development', description: 'Not talking, limited eye contact, repetitive behaviors', icon: Brain, color: '#8B5CF6', keywords: 'autism spectrum' },
-  { id: 'adhd', label: 'ADHD / Attention', description: "Can't sit still, easily distracted, impulsive", icon: Activity, color: '#F59E0B', keywords: 'adhd attention' },
-  { id: 'anxiety', label: 'Anxiety / Fears', description: 'Excessive worry, separation anxiety, avoidance', icon: AlertCircle, color: '#3B82F6', keywords: 'anxiety worried' },
-  { id: 'speech', label: 'Speech / Communication', description: 'Not talking yet, hard to understand, limited words', icon: Volume2, color: '#10B981', keywords: 'speech not talking' },
-  { id: 'behavior', label: 'Behavior / Meltdowns', description: 'Aggression, tantrums, defiance, emotional outbursts', icon: AlertTriangle, color: '#EF4444', keywords: 'behavior meltdown' },
-  { id: 'mood', label: 'Depression / Mood', description: 'Sadness, withdrawal, loss of interest, hopelessness', icon: Heart, color: '#6366F1', keywords: 'depression sad mood' },
+  { id: 'autism', label: 'Autism / Development', description: 'Not talking, limited eye contact, repetitive behaviors', icon: Brain, color: TEAL, keywords: 'autism spectrum' },
+  { id: 'adhd', label: 'ADHD / Attention', description: "Can't sit still, easily distracted, impulsive", icon: Activity, color: TEAL, keywords: 'adhd attention' },
+  { id: 'anxiety', label: 'Anxiety / Fears', description: 'Excessive worry, separation anxiety, avoidance', icon: AlertCircle, color: TEAL, keywords: 'anxiety worried' },
+  { id: 'speech', label: 'Speech / Communication', description: 'Not talking yet, hard to understand, limited words', icon: Volume2, color: TEAL, keywords: 'speech not talking' },
+  { id: 'behavior', label: 'Behavior / Meltdowns', description: 'Aggression, tantrums, defiance, emotional outbursts', icon: AlertTriangle, color: TEAL, keywords: 'behavior meltdown' },
+  { id: 'mood', label: 'Depression / Mood', description: 'Sadness, withdrawal, loss of interest, hopelessness', icon: Heart, color: TEAL, keywords: 'depression sad mood' },
 ];
 
 const AGE_PRESETS = [

@@ -292,7 +292,7 @@ export function StreamingAIChat({
                   { icon: '\u{1F319}', title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childProfile?.name || 'My child'} won't go to sleep. Help.` },
                   { icon: '\u{1F3EB}', title: 'School email', subtitle: 'Write to the teacher', prompt: "Help me write an email to my child's teacher" },
                   { icon: '\u{1F4CA}', title: 'Weekly progress', subtitle: 'See how things are going', prompt: 'How is my child doing this week?' },
-                  { icon: '\u{1F6E1}️', title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my ABA coverage' },
+                  { icon: '\u{1F6E1}️', title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my behavior therapy coverage' },
                 ].map((card) => (
                   <button
                     key={card.title}
@@ -312,7 +312,7 @@ export function StreamingAIChat({
               {[
                 `What should I work on with ${context.childProfile?.name || 'my child'} this week?`,
                 "My child won't follow directions — what do I do?",
-                'Translate this IEP jargon for me',
+                "Help me understand my child's IEP (school plan)",
               ].map((prompt) => (
                 <button
                   key={prompt}

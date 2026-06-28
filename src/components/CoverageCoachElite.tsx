@@ -238,7 +238,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 <Shield className="w-7 h-7 text-[#2A7D99]" />
               </div>
               <h2 className="text-2xl font-bold text-[#132F43] mb-3">
-                Does your insurance cover ABA therapy?
+                Does your insurance cover behavior therapy?
               </h2>
               <p className="text-[#5A6B7A] text-sm leading-relaxed">
                 Most plans do — but navigating it can feel like a maze. Let's figure it out together in 3 minutes.
@@ -331,12 +331,12 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
 
               {/* Benefits breakdown in plain English */}
               <Card className="p-5 bg-white border-[#E8E4DF] mb-4">
-                <h3 className="font-semibold text-[#132F43] mb-3 text-sm">Your estimated ABA coverage</h3>
+                <h3 className="font-semibold text-[#132F43] mb-3 text-sm">Your estimated behavior therapy coverage</h3>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-green-400 rounded-full mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-[#5A6B7A] leading-relaxed">
-                      <strong className="text-[#132F43]">60 ABA sessions per year</strong> — You've used 12 so far. That's <strong>48 sessions remaining</strong> — about 3 months of weekly therapy.
+                      <strong className="text-[#132F43]">60 behavior therapy sessions per year</strong> — You've used 12 so far. That's <strong>48 sessions remaining</strong> — about 3 months of weekly therapy.
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
@@ -348,7 +348,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-amber-400 rounded-full mt-1.5 flex-shrink-0" />
                     <p className="text-sm text-[#5A6B7A] leading-relaxed">
-                      <strong className="text-[#132F43]">Prior authorization required</strong> — Most plans need pre-approval before ABA starts. We'll handle the paperwork.
+                      <strong className="text-[#132F43]">Prior authorization required</strong> — Most plans need pre-approval before behavior therapy starts. We'll handle the paperwork.
                     </p>
                   </div>
                 </div>
@@ -361,7 +361,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   <div>
                     <h4 className="font-semibold text-amber-900 text-sm mb-1">What is prior authorization?</h4>
                     <p className="text-sm text-amber-800 leading-relaxed">
-                      ABA therapy usually needs pre-approval from your insurance company before you can start. Think of it as getting a green light before scheduling. <strong>Aminy helps you get that approval</strong> — we handle the forms and follow up.
+                      Behavior therapy usually needs pre-approval from your insurance company before you can start. Think of it as getting a green light before scheduling. <strong>Aminy helps you get that approval</strong> — we handle the forms and follow up.
                     </p>
                   </div>
                 </div>
@@ -508,7 +508,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     icon: <CreditCard className="w-5 h-5 text-blue-600" />,
                     bg: 'bg-[#EEF4F8]',
                     title: 'HSA/FSA funds',
-                    desc: 'If you have a health savings account, ABA therapy is 100% eligible — use pre-tax money to stretch your budget.',
+                    desc: 'If you have a health savings account, behavior therapy is 100% eligible — use pre-tax money to stretch your budget.',
                   },
                   {
                     icon: <FileText className="w-5 h-5 text-violet-600" />,
@@ -520,7 +520,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                     icon: <Sparkles className="w-5 h-5 text-amber-600" />,
                     bg: 'bg-amber-50',
                     title: 'Open enrollment is coming',
-                    desc: 'If open enrollment is soon, we\'ll help you pick a plan that covers ABA — most ACA plans do under Mental Health Parity.',
+                    desc: 'If open enrollment is soon, we\'ll help you pick a plan that covers behavior therapy — most ACA plans do under Mental Health Parity.',
                   },
                 ].map((option) => (
                   <Card key={option.title} className="p-4 bg-white border-[#E8E4DF]">
@@ -568,7 +568,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 <HelpCircle className="w-6 h-6 text-blue-500" />
                 <h2 className="text-xl font-bold text-[#132F43]">We'll help you find out in 3 minutes.</h2>
               </div>
-              <p className="text-[#5A6B7A] text-sm mb-6">Most families are surprised — ABA is often covered more than you'd think.</p>
+              <p className="text-[#5A6B7A] text-sm mb-6">Most families are surprised — behavior therapy is often covered more than you'd think.</p>
 
               <div className="space-y-3 mb-6">
                 {[

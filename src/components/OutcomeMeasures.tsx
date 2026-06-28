@@ -422,7 +422,7 @@ export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onB
                         width: '100%',
                         fontSize: 15,
                         fontWeight: selected ? 600 : 400,
-                        color: selected ? '#0e7490' : '#374151',
+                        color: selected ? ACCENT : '#374151',
                       }}
                     >
                       <div

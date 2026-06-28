@@ -221,7 +221,7 @@ export function ReferralDashboard({
       </div>
 
       {/* Referral Code Card */}
-      <Card className="p-5 bg-gradient-to-br from-teal-500 to-blue-600 text-white">
+      <Card className="p-5 bg-gradient-to-br from-[#2A7D99] to-[#0D1B2A] text-white">
         <div className="text-center mb-4">
           <p className="text-teal-100 text-sm mb-2">Your Referral Code</p>
           <div className="font-mono text-xl sm:text-2xl font-bold tracking-wide">

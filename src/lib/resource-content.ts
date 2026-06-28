@@ -29,7 +29,7 @@ export const RESOURCE_CATEGORIES = [
   { id: 'all', label: 'All', emoji: '✨' },
   { id: 'meltdowns', label: 'Meltdowns', emoji: '🌊' },
   { id: 'sleep', label: 'Sleep', emoji: '😴' },
-  { id: 'school', label: 'School & IEP', emoji: '🏫' },
+  { id: 'school', label: 'School & IEP plans', emoji: '🏫' },
   { id: 'transitions', label: 'Transitions', emoji: '🔄' },
   { id: 'feeding', label: 'Feeding', emoji: '🍴' },
   { id: 'sensory', label: 'Sensory', emoji: '✨' },

@@ -302,7 +302,7 @@ export function B2BPartnerPortal({
           </p>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-[#2A7D99] hover:bg-[#376E80]"
               onClick={onContactSales}
             >
               Schedule Demo
@@ -332,8 +332,8 @@ export function B2BPartnerPortal({
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow">
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <benefit.icon className="w-6 h-6 text-blue-600" />
+                    <div className="w-12 h-12 bg-[#EDF4F7] rounded-xl flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="w-6 h-6 text-[#2A7D99]" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
@@ -372,7 +372,7 @@ export function B2BPartnerPortal({
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 sm:gap-6 mb-8">
               {fiscalIntermediaryContent.caseStudy.stats.map((stat, index) => (
                 <Card key={index} className="p-4 text-center">
-                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1">
+                  <div className="text-2xl sm:text-3xl font-bold text-[#2A7D99] mb-1">
                     {stat.value}
                   </div>
                   <div className="text-sm font-medium text-[#132F43] mb-1">
@@ -436,7 +436,7 @@ export function B2BPartnerPortal({
             <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-[#132F43]' : 'text-[#5A6B7A]'}`}>Monthly</span>
             <button
               onClick={() => setBillingPeriod(prev => prev === 'monthly' ? 'annual' : 'monthly')}
-              className={`relative w-14 h-7 rounded-full transition-colors ${billingPeriod === 'annual' ? 'bg-blue-600' : 'bg-gray-300'}`}
+              className={`relative w-14 h-7 rounded-full transition-colors ${billingPeriod === 'annual' ? 'bg-[#2A7D99]' : 'bg-gray-300'}`}
             >
               <div className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${billingPeriod === 'annual' ? 'translate-x-7' : ''}`} />
             </button>
@@ -450,10 +450,10 @@ export function B2BPartnerPortal({
             {pricingTiers.map((tier) => (
               <Card
                 key={tier.key}
-                className={`p-5 ${tier.popular ? 'ring-2 ring-blue-500 relative' : ''}`}
+                className={`p-5 ${tier.popular ? 'ring-2 ring-[#2A7D99] relative' : ''}`}
               >
                 {tier.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white">
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#2A7D99] text-white">
                     Most Popular
                   </Badge>
                 )}
@@ -503,11 +503,11 @@ export function B2BPartnerPortal({
                     </li>
                   ))}
                   {tier.features.length > 5 && (
-                    <li className="text-sm text-blue-600">+{tier.features.length - 5} more features</li>
+                    <li className="text-sm text-[#2A7D99]">+{tier.features.length - 5} more features</li>
                   )}
                 </ul>
                 <Button
-                  className={`w-full ${tier.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
+                  className={`w-full ${tier.popular ? 'bg-[#2A7D99] hover:bg-[#376E80]' : ''}`}
                   variant={tier.popular ? 'default' : 'outline'}
                   onClick={() => handleCheckout(tier.key as B2BPlanType)}
                   disabled={checkoutLoading === tier.key}
@@ -528,19 +528,19 @@ export function B2BPartnerPortal({
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-2 text-[#5A6B7A]">
-              <Shield className="w-5 h-5 text-blue-600" />
+              <Shield className="w-5 h-5 text-[#2A7D99]" />
               <span>HIPAA-Conscious</span>
             </div>
             <div className="flex items-center gap-2 text-[#5A6B7A]">
-              <Award className="w-5 h-5 text-blue-600" />
+              <Award className="w-5 h-5 text-[#2A7D99]" />
               <span>SOC 2 Type II</span>
             </div>
             <div className="flex items-center gap-2 text-[#5A6B7A]">
-              <Zap className="w-5 h-5 text-blue-600" />
+              <Zap className="w-5 h-5 text-[#2A7D99]" />
               <span>99.9% Uptime SLA</span>
             </div>
             <div className="flex items-center gap-2 text-[#5A6B7A]">
-              <Users className="w-5 h-5 text-blue-600" />
+              <Users className="w-5 h-5 text-[#2A7D99]" />
               <span>10,000+ Families Served</span>
             </div>
           </div>
@@ -548,18 +548,18 @@ export function B2BPartnerPortal({
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
+      <section className="py-16 px-4 bg-gradient-to-r from-[#2A7D99] to-[#0D1B2A] text-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             Ready to partner?
           </h2>
-          <p className="text-blue-100 mb-8 max-w-xl mx-auto">
+          <p className="text-white/80 mb-8 max-w-xl mx-auto">
             Join leading organizations in supporting autism families.
             Schedule a demo to see how Aminy can work for your organization.
           </p>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
             <Button
-              className="bg-white text-blue-700 hover:bg-[#EEF4F8]"
+              className="bg-white text-[#2A7D99] hover:bg-[#EEF4F8]"
               onClick={onContactSales}
             >
               <Phone className="w-4 h-4 mr-2" />

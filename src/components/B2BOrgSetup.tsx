@@ -121,14 +121,14 @@ export function B2BOrgSetup({
             <h1 className="font-bold text-[#132F43]">Set Up Your Organization</h1>
             <p className="text-sm text-[#5A6B7A]">{plan.name} Plan · {seatCount} seats</p>
           </div>
-          <Crown className="w-6 h-6 text-blue-600" />
+          <Crown className="w-6 h-6 text-[#2A7D99]" />
         </div>
 
         {/* Progress */}
         <div className="max-w-2xl mx-auto mt-4 flex gap-2">
           {(['org-info', 'invite-team', 'review'] as SetupStep[]).map((s, i) => (
             <div key={s} className={`flex-1 h-1.5 rounded-full ${
-              ['org-info', 'invite-team', 'review'].indexOf(step) >= i ? 'bg-blue-600' : 'bg-[#E8E4DF]'
+              ['org-info', 'invite-team', 'review'].indexOf(step) >= i ? 'bg-[#2A7D99]' : 'bg-[#E8E4DF]'
             }`} />
           ))}
         </div>
@@ -147,7 +147,7 @@ export function B2BOrgSetup({
               className="space-y-6"
             >
               <div className="text-center mb-8">
-                <Building2 className="w-12 h-12 text-blue-600 mx-auto mb-3" />
+                <Building2 className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Organization Details</h2>
                 <p className="text-[#5A6B7A] text-sm">Tell us about your organization</p>
               </div>
@@ -159,7 +159,7 @@ export function B2BOrgSetup({
                   value={orgName}
                   onChange={(e) => setOrgName(e.target.value)}
                   placeholder="e.g., Sunshine ABA Clinic"
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99] focus:border-transparent"
                 />
               </div>
 
@@ -170,7 +170,7 @@ export function B2BOrgSetup({
                   value={adminEmail}
                   onChange={(e) => setAdminEmail(e.target.value)}
                   placeholder="admin@yourorg.com"
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99] focus:border-transparent"
                 />
               </div>
 
@@ -181,7 +181,7 @@ export function B2BOrgSetup({
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="(555) 123-4567"
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99] focus:border-transparent"
                 />
               </div>
 
@@ -190,7 +190,7 @@ export function B2BOrgSetup({
                   if (!orgName.trim()) { toast.error('Organization name is required'); return; }
                   setStep('invite-team');
                 }}
-                className="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] transition-colors flex items-center justify-center gap-2"
               >
                 Continue <ArrowRight className="w-4 h-4" />
               </button>
@@ -207,7 +207,7 @@ export function B2BOrgSetup({
               className="space-y-6"
             >
               <div className="text-center mb-8">
-                <Users className="w-12 h-12 text-blue-600 mx-auto mb-3" />
+                <Users className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Invite Your Team</h2>
                 <p className="text-[#5A6B7A] text-sm">{teamMembers.length + 1}/{seatCount} seats used (including you)</p>
               </div>
@@ -220,7 +220,7 @@ export function B2BOrgSetup({
                   onChange={(e) => setNewEmail(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && addTeamMember()}
                   placeholder="team@yourorg.com"
-                  className="flex-1 px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99] focus:border-transparent"
                 />
                 <select
                   value={newRole}
@@ -234,7 +234,7 @@ export function B2BOrgSetup({
                 </select>
                 <button
                   onClick={addTeamMember}
-                  className="px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+                  className="px-4 py-3 bg-[#2A7D99] text-white rounded-xl hover:bg-[#376E80]"
                   aria-label="Add team member"
                 >
                   <Plus className="w-5 h-5" />
@@ -245,14 +245,14 @@ export function B2BOrgSetup({
               <div className="space-y-2">
                 {/* Admin (you) */}
                 <div className="flex items-center gap-3 p-3 bg-[#EEF4F8] rounded-xl border border-[#C8DDE8]">
-                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                  <div className="w-8 h-8 bg-[#2A7D99] text-white rounded-full flex items-center justify-center text-sm font-bold">
                     {(adminEmail || 'A')[0].toUpperCase()}
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-[#132F43]">{adminEmail || 'You (Admin)'}</p>
-                    <p className="text-sm text-blue-600">Organization Admin</p>
+                    <p className="text-sm text-[#2A7D99]">Organization Admin</p>
                   </div>
-                  <Crown className="w-4 h-4 text-blue-600" />
+                  <Crown className="w-4 h-4 text-[#2A7D99]" />
                 </div>
 
                 {teamMembers.map((member) => (
@@ -290,7 +290,7 @@ export function B2BOrgSetup({
                 </button>
                 <button
                   onClick={() => setStep('review')}
-                  className="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -308,7 +308,7 @@ export function B2BOrgSetup({
               className="space-y-6"
             >
               <div className="text-center mb-8">
-                <Sparkles className="w-12 h-12 text-blue-600 mx-auto mb-3" />
+                <Sparkles className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Review & Launch</h2>
                 <p className="text-[#5A6B7A] text-sm">Everything looks good?</p>
               </div>
@@ -347,7 +347,7 @@ export function B2BOrgSetup({
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="flex-1 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

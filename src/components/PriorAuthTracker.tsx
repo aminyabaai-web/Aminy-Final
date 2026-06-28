@@ -148,7 +148,7 @@ function statusColor(status: PAStatus): string {
   switch (status) {
     case 'not-started': return 'text-slate-500';
     case 'assessment-pending': return 'text-amber-600 dark:text-amber-400';
-    case 'assessment-approved': return 'text-blue-600 dark:text-blue-400';
+    case 'assessment-approved': return 'text-teal-600 dark:text-teal-400';
     case 'treatment-pending': return 'text-amber-600 dark:text-amber-400';
     case 'treatment-approved': return 'text-emerald-600 dark:text-emerald-400';
     case 'denied': return 'text-red-600 dark:text-red-400';
