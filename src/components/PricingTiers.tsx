@@ -89,7 +89,7 @@ const TIERS: TierCard[] = [
     featured: true,
     features: [
       { icon: <Spark />, text: 'Aminy AI — unlimited within fair-use cap' },
-      { icon: <Spark />, text: 'Care coordination across ABA, PT, OT, ST, mental health' },
+      { icon: <Spark />, text: 'Care coordination across all your child’s therapies' },
       { icon: <Spark />, text: 'Memory across chats + vault docs' },
       { icon: <Spark />, text: 'Voice input + appointment auto-capture' },
       { icon: <Spark />, text: 'Telehealth booking + SMS reminders' },
@@ -235,12 +235,12 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
           </button>
         )}
         <div className="max-w-2xl mx-auto text-center pt-8 sm:pt-12 pb-4 sm:pb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#132F43] tracking-tight">
-            {isPostOnboarding ? 'Pick the plan that fits your family' : 'Try Aminy free for 7 days'}
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#132F43] tracking-tight text-balance leading-tight">
+            {isPostOnboarding ? 'Pick the plan that fits your family' : <>Try Aminy free for <span className="whitespace-nowrap">7 days</span></>}
           </h1>
           {!isPostOnboarding && (
-            <p className="text-sm text-[#5A6B7A] mt-3 max-w-md mx-auto">
-              Cancel anytime. All paid plans include the full Aminy AI companion + care coordination across ABA, PT, OT, ST, and mental health.
+            <p className="text-sm text-[#5A6B7A] mt-3 max-w-md mx-auto leading-relaxed text-balance">
+              Cancel anytime. Every paid plan includes your full Aminy AI companion and care coordination across behavioral, speech, occupational, and mental-health support.
             </p>
           )}
         </div>

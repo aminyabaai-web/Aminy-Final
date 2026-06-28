@@ -11,9 +11,11 @@ interface AISparkleButtonProps {
   className?: string;
   /** When true, asks the AI to include a visual chart in its response (like Bevel/Monarch). */
   visual?: boolean;
+  /** Render the sparkle only (no text) while keeping `label` as the accessible name — for dense headers. */
+  iconOnly?: boolean;
 }
 
-export function AISparkleButton({ prompt, label, className = '', visual = false }: AISparkleButtonProps) {
+export function AISparkleButton({ prompt, label, className = '', visual = false, iconOnly = false }: AISparkleButtonProps) {
   const openAI = useOpenAI();
 
   // When `visual` is set, append a chart-request hint so Claude embeds a
@@ -26,10 +28,11 @@ export function AISparkleButton({ prompt, label, className = '', visual = false 
     <button
       onClick={(e) => { e.stopPropagation(); openAI(fullPrompt); }}
       title={label || 'Ask Aminy AI'}
-      className={`group inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-medium transition-all bg-gradient-to-r from-teal-500/10 to-violet-500/10 border border-[#6B9080]/20/50 dark:border-teal-700/50 hover:from-teal-500/20 hover:to-violet-500/20 hover:border-[#6B9080]/30 dark:hover:border-[#6B9080] min-h-[32px] ${className}`}
+      aria-label={label || 'Ask Aminy AI'}
+      className={`group inline-flex items-center gap-1 rounded-full ${iconOnly ? 'px-2' : 'px-2.5'} py-1.5 text-xs font-medium transition-all bg-gradient-to-r from-teal-500/10 to-violet-500/10 border border-[#6B9080]/20/50 dark:border-teal-700/50 hover:from-teal-500/20 hover:to-violet-500/20 hover:border-[#6B9080]/30 dark:hover:border-[#6B9080] min-h-[32px] ${className}`}
     >
       <Sparkles className="w-3 h-3 text-primary group-hover:text-violet-500 transition-colors shrink-0" />
-      {label && <span className="text-[#6B9080] dark:text-[#7BA7BC]">{label}</span>}
+      {label && !iconOnly && <span className="text-[#6B9080] dark:text-[#7BA7BC]">{label}</span>}
     </button>
   );
 }
