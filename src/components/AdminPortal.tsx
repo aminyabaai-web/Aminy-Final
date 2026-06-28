@@ -70,6 +70,7 @@ const PARTNER_ORGS: PartnerOrg[] = [
 interface AdminPortalProps {
   onBack?: () => void;
   orgId?: string;
+  onNavigate?: (destination: string) => void;
 }
 
 // Type for pilot data
@@ -207,7 +208,7 @@ const getStatusIcon = (value: number, target: number, isInverse = false) => {
   return <AlertCircle className="w-4 h-4 text-red-600" />;
 };
 
-export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
+export function AdminPortal({ onBack, orgId, onNavigate }: AdminPortalProps) {
   useAuditedAction('user_account');
   const [selectedOrg, setSelectedOrg] = useState<string>(orgId || 'aact');
   const [activeSection, setActiveSection] = useState<'overview' | 'engagement' | 'ai' | 'clinical' | 'marketplace' | 'b2b' | 'users' | 'moderation' | 'revenue' | 'insights' | 'applications' | 'feedback'>('overview');
@@ -682,6 +683,18 @@ export function AdminPortal({ onBack, orgId }: AdminPortalProps) {
               >
                 <RefreshCw className={`w-5 h-5 text-[#5A6B7A] ${isRefreshing ? 'animate-spin' : ''}`} />
               </button>
+
+              {/* Impact Metrics (investor/IRIS+ dashboard) */}
+              {onNavigate && (
+                <button
+                  onClick={() => onNavigate('impact-metrics')}
+                  className="flex items-center gap-2 border border-[#E8E4DF] dark:border-slate-700 text-[#3A4A57] dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-[#EDF4F7] dark:hover:bg-slate-800 transition-colors"
+                  aria-label="Open Impact Metrics dashboard"
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  Impact Metrics
+                </button>
+              )}
 
               {/* Export Button */}
               <button

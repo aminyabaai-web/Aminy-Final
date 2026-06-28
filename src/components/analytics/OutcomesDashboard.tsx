@@ -336,16 +336,21 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
     }
     setLoading(true);
     try {
+      const WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
+      const windowStartIso = new Date(Date.now() - WINDOW_MS).toISOString();
       const [goalsRes, sessionsRes] = await Promise.allSettled([
+        // Columns match the live treatment_goals schema (status, domain, progress,
+        // updated_at as the mastery timestamp proxy). RLS scopes rows to the caller.
         supabase
           .from('treatment_goals')
-          .select('status, mastery_date, program_name, total_trials, mastery_pct')
-          .limit(500),
+          .select('status, domain, current_progress, current, updated_at')
+          .limit(2000),
+        // jr_sessions real columns: started_at, child_id, duration_seconds.
         supabase
           .from('jr_sessions')
-          .select('created_at, provider_id, duration_minutes')
-          .gte('created_at', new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString())
-          .limit(1000),
+          .select('started_at, child_id, duration_seconds')
+          .gte('started_at', windowStartIso)
+          .limit(2000),
       ]);
 
       const goalsData = goalsRes.status === 'fulfilled' && !goalsRes.value.error
@@ -357,44 +362,110 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
 
       if (!mountedRef.current) return;
 
-      // ── KPI tiles — derived only from this account's data (no fabricated fills) ──
-      const masteredGoals = goalsData.filter((g: { status: string }) => g.status === 'mastered');
+      // Treat both "mastered" and "completed" as mastery to be schema-tolerant.
+      const isMastered = (s?: string) => s === 'mastered' || s === 'completed';
+      const progressOf = (g: { current_progress?: number; current?: number }) =>
+        g.current_progress ?? g.current ?? 0;
+
+      // ── KPI tiles — derived only from this account's real data ──
+      const masteredGoals = goalsData.filter((g: { status?: string }) => isMastered(g.status));
       const goalsAtMastery = goalsData.length > 0
         ? Math.round((masteredGoals.length / goalsData.length) * 100)
         : 0;
+      const activeClients = new Set(
+        sessionsData
+          .map((s: { child_id?: string }) => s.child_id)
+          .filter(Boolean) as string[]
+      ).size;
       setKpi({
-        activeClients: 0,            // not derivable from current query — shown as 0 until wired
+        activeClients,
         sessionsThisMonth: sessionsData.length,
         goalsAtMastery,
-        avgWeeksToFirstMastery: 0,   // not derivable from current query
+        avgWeeksToFirstMastery: 0,   // requires a true baseline-start date per goal; not in schema
       });
 
-      // ── Top Programs — grouped from real treatment_goals ──
-      const progMap = new Map<string, { trials: number; masterySum: number; n: number }>();
-      goalsData.forEach((g: { program_name?: string; total_trials?: number; mastery_pct?: number }) => {
-        const name = g.program_name || 'Unnamed program';
-        const e = progMap.get(name) ?? { trials: 0, masterySum: 0, n: 0 };
-        e.trials += g.total_trials || 0;
-        e.masterySum += g.mastery_pct || 0;
+      // ── Top Programs — grouped from real treatment_goals by domain ──
+      const DOMAIN_LABELS: Record<string, string> = {
+        daily_living: 'Daily Living',
+        self_regulation: 'Self-Regulation',
+        social: 'Social Skills',
+        communication: 'Communication',
+        academic: 'Academic',
+        motor: 'Motor Skills',
+      };
+      const progMap = new Map<string, { progressSum: number; n: number }>();
+      goalsData.forEach((g: { domain?: string; current_progress?: number; current?: number }) => {
+        const name = DOMAIN_LABELS[g.domain || ''] || g.domain || 'Unnamed program';
+        const e = progMap.get(name) ?? { progressSum: 0, n: 0 };
+        e.progressSum += progressOf(g);
         e.n += 1;
         progMap.set(name, e);
       });
       const realPrograms: ProgramRow[] = [...progMap.entries()]
         .map(([name, e]) => ({
           name,
-          totalTrials: e.trials,
-          masteryPct: Math.round(e.masterySum / Math.max(e.n, 1)),
+          totalTrials: e.n, // # goals tracked in this domain (no per-trial table yet)
+          masteryPct: Math.round(e.progressSum / Math.max(e.n, 1)),
           trend: 'flat' as const,
         }))
         .sort((a, b) => b.masteryPct - a.masteryPct)
         .slice(0, 10);
       setPrograms(realPrograms);
 
-      // Weekly trend, session-frequency distribution, and per-provider names are
-      // not reliably derivable from the current queries — leave empty so those
-      // sections show honest empty states rather than fabricated curves.
-      setWeekly([]);
-      setFreq([]);
+      // ── Weekly mastery trend — cumulative % of goals mastered over the last 12 weeks ──
+      // Honest derivation: a goal counts toward a week once its updated_at (mastery
+      // timestamp proxy) falls on/before that week's end. Only populate when there is
+      // at least one mastered goal with a usable date; otherwise leave empty.
+      const WEEKS = 12;
+      const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+      const totalGoals = goalsData.length;
+      const masteryTimes = masteredGoals
+        .map((g: { updated_at?: string }) => (g.updated_at ? new Date(g.updated_at).getTime() : NaN))
+        .filter((t: number) => !Number.isNaN(t));
+      if (totalGoals > 0 && masteryTimes.length > 0) {
+        const now = Date.now();
+        const realWeekly: WeeklyPoint[] = [];
+        for (let i = WEEKS - 1; i >= 0; i--) {
+          const weekEnd = now - i * WEEK_MS;
+          const masteredByThen = masteryTimes.filter((t: number) => t <= weekEnd).length;
+          realWeekly.push({
+            week: WEEKS - i,
+            label: `Wk ${WEEKS - i}`,
+            masteryPct: Math.round((masteredByThen / totalGoals) * 100),
+          });
+        }
+        setWeekly(realWeekly);
+      } else {
+        setWeekly([]);
+      }
+
+      // ── Session-frequency distribution — bucket clients by sessions/week (30d window) ──
+      // Real derivation from jr_sessions: count sessions per child over the window,
+      // convert to a weekly cadence, and bucket. Empty when no recent sessions.
+      const weeksInWindow = WINDOW_MS / WEEK_MS; // ~4.29
+      const perChild = new Map<string, number>();
+      sessionsData.forEach((s: { child_id?: string }) => {
+        if (!s.child_id) return;
+        perChild.set(s.child_id, (perChild.get(s.child_id) ?? 0) + 1);
+      });
+      if (perChild.size > 0) {
+        const buckets = { '1x/wk': 0, '2x/wk': 0, '3x/wk': 0, '4x+/wk': 0 };
+        perChild.forEach((count) => {
+          const perWeek = count / weeksInWindow;
+          if (perWeek < 1.5) buckets['1x/wk']++;
+          else if (perWeek < 2.5) buckets['2x/wk']++;
+          else if (perWeek < 3.5) buckets['3x/wk']++;
+          else buckets['4x+/wk']++;
+        });
+        const realFreq: FrequencyBucket[] = Object.entries(buckets)
+          .map(([label, count]) => ({ label, count }))
+          .filter((b) => b.count > 0);
+        setFreq(realFreq);
+      } else {
+        setFreq([]);
+      }
+
+      // Per-provider names/scores need a providers join not present in these queries.
       setProviders([]);
 
       setLastUpdated(new Date());

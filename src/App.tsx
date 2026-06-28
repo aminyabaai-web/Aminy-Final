@@ -231,6 +231,16 @@ const AnalyticsCharts = lazy(() =>
     default: m.AnalyticsCharts,
   })),
 );
+const WinsJournal = lazy(() =>
+  import("./components/WinsJournal").then((m) => ({
+    default: m.WinsJournal,
+  })),
+);
+const ImpactMetricsDashboard = lazy(() =>
+  import("./components/ImpactMetricsDashboard").then((m) => ({
+    default: m.ImpactMetricsDashboard,
+  })),
+);
 const AuthCallback = lazy(() =>
   import("./components/AuthCallback").then((m) => ({
     default: m.AuthCallback,
@@ -488,10 +498,12 @@ const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
   userId,
   onBack,
   onAccessDenied,
+  onNavigate,
 }: {
   userId?: string;
   onBack: () => void;
   onAccessDenied: () => void;
+  onNavigate?: (destination: string) => void;
 }) {
   const [isVerifying, setIsVerifying] = React.useState(true);
   const [isAdmin, setIsAdmin] = React.useState(false);
@@ -547,7 +559,7 @@ const SecureAdminPortalWrapper = React.memo(function SecureAdminPortalWrapper({
     );
   }
 
-  return <AdminPortal onBack={onBack} />;
+  return <AdminPortal onBack={onBack} onNavigate={onNavigate} />;
 });
 const OnDemandTelehealth = lazy(() =>
   import("./components/OnDemandTelehealth").then((m) => ({
@@ -907,6 +919,8 @@ const LOADING_MESSAGES: Record<string, string> = {
   outcomes: 'Calculating your progress...',
   'insight-report': 'Generating your insights...',
   'analytics-charts': 'Crunching your data...',
+  'wins-journal': 'Gathering your wins...',
+  'impact-metrics': 'Compiling impact metrics...',
   onboarding: 'Getting things ready for you...',
 };
 
@@ -1018,6 +1032,8 @@ type AppScreen =
   | "crisis-resources" // Offline-available crisis resources
   | "weekly-insights" // AI weekly summary
   | "analytics-charts" // Visual analytics
+  | "wins-journal" // Parent wins journal — calm moments + weekly wins
+  | "impact-metrics" // Admin/investor impact metrics dashboard
   | "store" // Resource store/marketplace
   | "community-hub" // Parent community hub
   | "provider-analytics" // Provider analytics dashboard
@@ -2692,6 +2708,7 @@ export default function App() {
                     "community", "profile", "benefits", "junior", "my-appointments",
                     "conversational-booking", "messages", "access-requests", "store",
                     "community-hub", "provider-analytics", "weekly-insights", "analytics-charts",
+                    "wins-journal", "impact-metrics",
                     "evv-dashboard", "claims-dashboard", "payer-dashboard", "clinical-reports",
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
@@ -2917,6 +2934,7 @@ export default function App() {
                   toast.error("Admin access denied");
                   navigateToScreen("dashboard");
                 }}
+                onNavigate={(destination) => navigateToScreen(destination as AppScreen)}
               />
             </Suspense>
           );
@@ -3354,6 +3372,56 @@ export default function App() {
                     childName={userData.childName || 'Your child'}
                     childId={userData.activeChildId}
                   />
+                </div>
+              </div>
+            </Suspense>
+          );
+
+        case "wins-journal":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <div className="min-h-screen bg-app dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
+                  <div className="max-w-2xl mx-auto px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => navigateToScreen("dashboard")}
+                        className="p-2 hover:bg-slate-100 rounded-lg"
+                      >
+                        <span className="sr-only">Back</span>
+                        ←
+                      </button>
+                      <h1 className="text-xl font-semibold dark:text-white">Wins Journal</h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                  <WinsJournal userId={userData.id ?? ''} />
+                </div>
+              </div>
+            </Suspense>
+          );
+
+        case "impact-metrics":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <div className="min-h-screen bg-app dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
+                  <div className="max-w-2xl mx-auto px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => navigateToScreen("admin-portal")}
+                        className="p-2 hover:bg-slate-100 rounded-lg"
+                      >
+                        <span className="sr-only">Back</span>
+                        ←
+                      </button>
+                      <h1 className="text-xl font-semibold dark:text-white">Impact Metrics</h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                  <ImpactMetricsDashboard />
                 </div>
               </div>
             </Suspense>

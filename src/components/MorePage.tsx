@@ -18,7 +18,8 @@ import {
   MessageSquare,
   BarChart3,
   Brain,
-  TrendingUp
+  TrendingUp,
+  Heart
 } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 
@@ -115,6 +116,14 @@ export function MorePage({ onNavigate, onAnalytics }: MorePageProps) {
   ];
 
   const additionalItems = [
+    {
+      id: 'wins-journal',
+      icon: Heart,
+      label: 'Wins Journal',
+      sublabel: 'Capture calm moments & celebrate weekly wins',
+      destination: 'wins-journal',
+      analytics: 'wins_journal'
+    },
     {
       id: 'weekly-insights',
       icon: Brain,
