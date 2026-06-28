@@ -18162,3 +18162,18 @@ tr:hover td, .hover-row:hover {
 .dark\:text-teal-200:is(.dark *) { color: #99f6e4; }
 .dark\:text-teal-300:is(.dark *) { color: #5eead4; }
 .dark\:text-teal-500:is(.dark *) { color: #14b8a6; }
+
+/* ============================================================
+   Precompiled BARE dark-surface backgrounds used in components
+   without a dark: prefix (intentional always-dark headers, badges,
+   video rooms). JIT-less build omits these, so `bg-slate-900 text-white`
+   rendered white-on-transparent → invisible on the mist page. Add the
+   literal utilities so those surfaces paint as intended.
+   ============================================================ */
+.bg-slate-700 { background-color: #334155; }
+.bg-slate-800 { background-color: #1e293b; }
+.bg-slate-900 { background-color: #0f172a; }
+.bg-slate-950 { background-color: #020617; }
+.bg-gray-700 { background-color: #374151; }
+.bg-gray-800 { background-color: #1f2937; }
+.bg-gray-900 { background-color: #111827; }
