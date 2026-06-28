@@ -213,9 +213,15 @@ function TemplateCard({ template, tokenValues, hasPatient }: TemplateCardProps) 
   );
 }
 
-export function CommunicationTemplates() {
+interface CommunicationTemplatesProps {
+  patientName?: string;
+  providerName?: string;
+  patientId?: string;
+}
+
+export function CommunicationTemplates({ providerName: providerNameProp, patientName }: CommunicationTemplatesProps = {}) {
   const [selectedPatientId, setSelectedPatientId] = useState<string>("");
-  const providerName = "Dr. Rivera";
+  const providerName = providerNameProp || "Dr. Rivera";
   const sessionTime = "2:00 PM";
   const sessionDate = new Date().toLocaleDateString("en-US", {
     month: "long",
@@ -227,7 +233,7 @@ export function CommunicationTemplates() {
 
   const tokenValues: Record<string, string> = {
     parentFirstName: selectedPatient?.parentFirstName ?? "",
-    childName: selectedPatient?.childName ?? "",
+    childName: selectedPatient?.childName ?? patientName ?? "",
     providerName,
     time: sessionTime,
     date: sessionDate,
