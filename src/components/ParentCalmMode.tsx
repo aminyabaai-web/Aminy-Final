@@ -36,7 +36,7 @@ interface ParentCalmModeProps {
   fullScreen?: boolean;
 }
 
-export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = 'Parent', fullScreen = false }: ParentCalmModeProps) {
+export function ParentCalmMode({ isOpen, onClose, onTalkToAminy, parentName = '', fullScreen = false }: ParentCalmModeProps) {
   const [step, setStep] = useState<'breath' | 'ground' | 'identify' | 'next'>('breath');
   const [overwhelmBefore, setOverwhelmBefore] = useState<number | null>(null);
   const [overwhelmAfter, setOverwhelmAfter] = useState<number | null>(null);
@@ -200,12 +200,17 @@ function BreathStep({
     }, 14000);
   };
 
+  // Use the real first name when we have one; never echo the literal
+  // "Parent" placeholder. Falls back to a clean name-less greeting.
+  const cleanName = parentName?.trim();
+  const safeName = cleanName && cleanName.toLowerCase() !== 'parent' ? cleanName : '';
+
   if (breathPhase === 'prompt') {
     return (
       <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
         <Cloud className="w-16 h-16 text-blue-500 mx-auto mb-4" />
         <h2 className="text-2xl text-[#132F43] mb-4">
-          Let's breathe, {parentName}
+          {safeName ? `Let's breathe, ${safeName}` : "Let's breathe"}
         </h2>
         <p className="text-sm text-[#5A6B7A] mb-6">
           Before we start, how overwhelmed do you feel right now?
@@ -216,12 +221,12 @@ function BreathStep({
             <span>Calm</span>
             <span>Very overwhelmed</span>
           </div>
-          <div className="flex gap-2">
+          <div className="grid grid-cols-5 gap-2">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
               <button
                 key={num}
                 onClick={() => startBreathing(num)}
-                className="flex-1 h-12 rounded bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center justify-center text-[#3A4A57] dark:text-blue-100 font-medium"
+                className="h-12 rounded bg-blue-100 dark:bg-blue-900 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center justify-center text-[#3A4A57] dark:text-blue-100 font-medium"
               >
                 {num}
               </button>
@@ -303,10 +308,13 @@ function GroundStep({
     return () => clearTimeout(timer);
   }, []);
 
+  const cleanName = parentName?.trim();
+  const safeName = cleanName && cleanName.toLowerCase() !== 'parent' ? cleanName : '';
+
   return (
     <motion.div {...ANIMATIONS.fadeIn} className="text-center p-6">
       <h3 className="text-xl text-[#132F43] mb-6">
-        Ground yourself, {parentName}
+        {safeName ? `Ground yourself, ${safeName}` : 'Ground yourself'}
       </h3>
 
       <div className="space-y-4 text-left max-w-sm mx-auto">
@@ -368,7 +376,11 @@ function IdentifyStep({
         What's hardest right now?
       </h3>
       <p className="text-sm text-[#5A6B7A] mb-6 text-center">
-        So I can help, {parentName}
+        {(() => {
+          const cleanName = parentName?.trim();
+          const safeName = cleanName && cleanName.toLowerCase() !== 'parent' ? cleanName : '';
+          return safeName ? `So I can help, ${safeName}` : 'So I can help';
+        })()}
       </p>
 
       <div className="grid grid-cols-2 gap-3">
@@ -424,12 +436,12 @@ function NextStepsStep({
           <span>Much better</span>
           <span>Still overwhelmed</span>
         </div>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-5 gap-2">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
             <button
               key={num}
               onClick={() => setOverwhelm(num)}
-              className={`flex-1 h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
+              className={`h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
                 ? 'bg-green-500 text-white'
                 : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                 }`}

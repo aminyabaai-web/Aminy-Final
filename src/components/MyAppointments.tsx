@@ -546,7 +546,7 @@ export function MyAppointments({
           onBack={onBack}
           actions={
             <>
-              <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" />
+              <AISparkleButton prompt={childName ? `Help me prepare for ${childName}'s upcoming ABA appointment — what questions should I ask the provider?` : "What should I bring to and ask at an ABA appointment?"} label="Prepare" iconOnly />
               <button
                 onClick={onBookNew}
                 className="flex items-center gap-1.5 px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"

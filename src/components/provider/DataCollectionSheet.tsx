@@ -336,7 +336,7 @@ function NETMode({
       </div>
 
       {/* Running tally — always visible */}
-      <div className="bg-slate-900 rounded-2xl p-5 flex items-center justify-around">
+      <div className="bg-[#132F43] rounded-2xl p-5 flex items-center justify-around">
         <div className="text-center">
           <p className="text-4xl font-bold text-white">{trials.length}</p>
           <p className="text-sm text-slate-400 mt-1">Opportunities</p>
@@ -468,7 +468,7 @@ function BehaviorMode({
             onClick={() => onChangeRecordingType(t)}
             className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all capitalize ${
               recordingType === t
-                ? 'bg-slate-900 text-white'
+                ? 'bg-[#132F43] text-white'
                 : 'text-[#5A6B7A]'
             }`}
           >
@@ -621,7 +621,7 @@ function BehaviorMode({
                 disabled={isIntervalRunning}
                 className={`flex-1 py-2 rounded-lg text-sm font-medium border transition-all ${
                   intervalSize === s
-                    ? 'bg-slate-900 text-white border-slate-900'
+                    ? 'bg-[#132F43] text-white border-slate-900'
                     : 'text-[#5A6B7A] border-slate-300'
                 } disabled:opacity-50`}
               >
@@ -999,7 +999,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
   return (
     <div className="min-h-screen bg-mist">
       {/* Header */}
-      <div className="bg-slate-900 sticky top-0 z-20">
+      <div className="bg-[#132F43] sticky top-0 z-20">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
           <button
             onClick={onBack}
@@ -1093,7 +1093,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
                     onClick={() => setMode(m)}
                     className={`flex-1 py-3 rounded-xl font-medium text-sm border-2 transition-all uppercase tracking-wide ${
                       mode === m
-                        ? 'bg-slate-900 text-white border-slate-900'
+                        ? 'bg-[#132F43] text-white border-slate-900'
                         : 'text-[#5A6B7A] border-[#E8E4DF] bg-white'
                     }`}
                   >
@@ -1116,7 +1116,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
             {/* Mode badge */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="bg-slate-900 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                <span className="bg-[#132F43] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
                   {mode}
                 </span>
                 <span className="text-sm text-[#5A6B7A]">
@@ -1193,7 +1193,7 @@ ${data.notes ? `<p style="margin-top:16px"><strong>Notes:</strong> ${data.notes}
 
             {/* Session summary bar */}
             {(mode === 'dtt' || mode === 'net') && trials.length > 0 && (
-              <div className="bg-slate-900 rounded-2xl p-4">
+              <div className="bg-[#132F43] rounded-2xl p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <BarChart2 className="w-4 h-4 text-emerald-500" />
                   <p className="text-white text-sm font-semibold">Session Summary</p>

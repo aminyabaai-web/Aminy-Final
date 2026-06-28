@@ -156,8 +156,11 @@ export function WaitingRoom({
     details: { context: 'waiting_room', patientId: userId },
   });
 
-  // Resolved provider display info
-  const displayName = providerInfo?.name || providerName;
+  // Resolved provider display info.
+  // Normalize the title-case "Your Provider" placeholder to sentence case so it
+  // doesn't read like a fake proper name when a real provider name is unavailable.
+  const resolvedName = providerInfo?.name || providerName;
+  const displayName = resolvedName === 'Your Provider' ? 'Your provider' : resolvedName;
   const displayTitle = providerInfo?.title || providerInfo?.specialty || '';
 
   // -----------------------------------------------------------------------
@@ -536,10 +539,12 @@ export function WaitingRoom({
             <Shield size={12} />
             <span>Encrypted in transit</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <Phone size={12} />
-            <span>Session #{appointmentId.slice(0, 8)}</span>
-          </div>
+          {appointmentId && appointmentId !== 'pending' && (
+            <div className="flex items-center gap-1.5">
+              <Phone size={12} />
+              <span>Session #{appointmentId.slice(0, 8)}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

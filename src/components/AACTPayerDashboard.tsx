@@ -248,7 +248,7 @@ function ScorecardSummaryBar({ categories }: { categories: KPICategory[] }) {
   const total = allMetrics.length;
 
   return (
-    <Card className="p-4 bg-slate-900 text-white">
+    <Card className="p-4 bg-[#132F43] text-white">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <p className="text-sm text-slate-400 uppercase tracking-widest">AACT Payer Scorecard</p>
@@ -455,7 +455,7 @@ export function AACTPayerDashboard({ onBack }: AACTPayerDashboardProps) {
                 onClick={() => setActiveTab(cat.id)}
                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   activeTab === cat.id
-                    ? 'bg-slate-900 text-white shadow'
+                    ? 'bg-[#132F43] text-white shadow'
                     : 'text-[#5A6B7A] hover:bg-[#F6FBFB]'
                 }`}
               >

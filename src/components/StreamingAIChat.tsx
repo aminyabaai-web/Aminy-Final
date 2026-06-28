@@ -273,10 +273,12 @@ export function StreamingAIChat({
               <h3 className="text-xl font-semibold text-[#132F43]">
                 {(() => {
                   const hour = new Date().getHours();
-                  const name = context.childProfile?.name ? `about ${context.childProfile.name}` : '';
-                  if (hour < 12) return `Good morning! What's on your mind ${name}?`;
-                  if (hour < 17) return `Good afternoon! How can I help ${name}?`;
-                  return `Good evening! What's going on ${name}?`;
+                  // Leading space lives INSIDE the fragment so an empty name
+                  // never leaves an orphaned " ?" that wraps to its own line.
+                  const name = context.childProfile?.name ? ` about ${context.childProfile.name}` : '';
+                  if (hour < 12) return `Good morning! What's on your mind${name}?`;
+                  if (hour < 17) return `Good afternoon! How can I help${name}?`;
+                  return `Good evening! What's going on${name}?`;
                 })()}
               </h3>
             </div>

@@ -554,7 +554,11 @@ export function CommunityForYou({
             Your personalized feed
           </h4>
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-            As you use Aminy, we'll curate articles and resources tailored to {childName}'s journey.
+            As you use Aminy, we'll curate articles and resources tailored to{' '}
+            {childName && childName.trim() && childName.trim().toLowerCase() !== 'your child'
+              ? `${childName.trim()}'s`
+              : "your child's"}{' '}
+            journey.
           </p>
         </Card>
       ) : (
