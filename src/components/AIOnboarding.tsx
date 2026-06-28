@@ -99,7 +99,12 @@ const ONBOARDING_QUESTIONS = [
 ];
 
 export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  // Seed the first AI greeting in initial state so the chat body is never
+  // blank on mount (previously a setTimeout delayed the first message ~800ms,
+  // leaving an empty white body between the header and input on load).
+  const [messages, setMessages] = useState<Message[]>(() => [
+    { role: 'ai', text: ONBOARDING_QUESTIONS[0].question(parentName) },
+  ]);
   const [input, setInput] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [profile, setProfile] = useState<Partial<OnboardingProfile>>({});
@@ -116,15 +121,6 @@ export function AIOnboarding({ onComplete, parentName = '' }: AIOnboardingProps)
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping, scrollToBottom]);
-
-  // Send first question on mount
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const firstQ = ONBOARDING_QUESTIONS[0].question(parentName);
-      setMessages([{ role: 'ai', text: firstQ }]);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [parentName]);
 
   const getChildName = () => (profile.childName as string) || 'your child';
 

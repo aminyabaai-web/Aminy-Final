@@ -643,6 +643,7 @@ RICH FORMATTING (write markdown — it renders as real tables, headings, and lis
 CHART CAPABILITY: When showing data trends, you MAY embed a chart inline:
 [CHART:{"type":"bar","title":"Sessions This Month","data":[{"week":"Wk1","sessions":3},{"week":"Wk2","sessions":5}],"xKey":"week","yKey":"sessions"}]
 Types: "bar", "line", or "pie". Use sparingly — only when data genuinely clarifies your point.
+When the user asks about progress, outcomes, trends, or anything quantitative over time, include a [CHART:...] block visualizing it.
 
 ACTION CAPABILITY: When a parent describes a behavior incident or you identify something worth saving, you MAY embed an action token (silently executed, confirmation shown to parent):
 [ACTION:LOG_BEHAVIOR:{"behavior_type":"meltdown","trigger":"transition","intensity":3,"notes":"occurred after lunch","is_positive":false}]

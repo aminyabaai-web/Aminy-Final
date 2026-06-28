@@ -42,6 +42,7 @@ import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
 import { sendMessageToClaude } from '../../lib/ai-engine/claude-client';
 import { getCurrentContext } from '../../lib/ai-engine';
+import { isDemoMode } from '../../lib/demo-seed';
 
 interface PatientData {
   id: string;
@@ -290,7 +291,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             confidence: typeof i.confidence === 'number' ? Math.min(1, Math.max(0, i.confidence)) : 0.8,
             source: i.source || 'AI analysis',
           })));
-        } else {
+        } else if (isDemoMode()) {
           setInsights(generateMockInsights());
         }
 
@@ -302,7 +303,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             triggers: Array.isArray(p.triggers) ? p.triggers : [],
             successfulStrategies: Array.isArray(p.successfulStrategies) ? p.successfulStrategies : [],
           })));
-        } else {
+        } else if (isDemoMode()) {
           setPatterns(generateMockPatterns());
         }
 
@@ -314,7 +315,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             trend: (['positive', 'negative', 'neutral'].includes(p.trend as string) ? p.trend : 'neutral') as ProgressHighlight['trend'],
             details: p.details || '',
           })));
-        } else {
+        } else if (isDemoMode()) {
           setProgress(generateMockProgress());
         }
 
@@ -328,16 +329,18 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             rationale: s.rationale || '',
             status: (['pending', 'approved', 'rejected'].includes(s.status as string) ? s.status : 'pending') as CarePlanSuggestion['status'],
           })));
-        } else {
+        } else if (isDemoMode()) {
           setSuggestions(generateMockSuggestions());
         }
       } catch (error) {
-        console.warn('AI summary generation failed, falling back to mock data:', error);
-        // Fallback to mock data
-        setInsights(generateMockInsights());
-        setPatterns(generateMockPatterns());
-        setProgress(generateMockProgress());
-        setSuggestions(generateMockSuggestions());
+        console.warn('AI summary generation failed:', error);
+        // Only fabricate insights in demo mode — otherwise stay honest (empty state)
+        if (isDemoMode()) {
+          setInsights(generateMockInsights());
+          setPatterns(generateMockPatterns());
+          setProgress(generateMockProgress());
+          setSuggestions(generateMockSuggestions());
+        }
       }
 
       setIsLoading(false);
@@ -396,6 +399,31 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
             Generating AI summary for {patient.childName}...
           </p>
           <p className="text-sm text-[#5A6B7A]">Analyzing conversation history, routines, and incident logs</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Honest empty state — no AI insights came back and we're not in demo mode
+  const hasAnyContent = insights.length > 0 || patterns.length > 0 || progress.length > 0 || suggestions.length > 0;
+  if (!hasAnyContent) {
+    return (
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-neutral-200 dark:border-slate-700 p-8">
+        <div className="flex flex-col items-center justify-center text-center">
+          <div className="p-3 bg-violet-50 dark:bg-violet-900/20 rounded-xl">
+            <Brain className="w-10 h-10 text-violet-400" />
+          </div>
+          <p className="mt-4 text-[#132F43] dark:text-white font-medium">
+            No AI insights yet
+          </p>
+          <p className="mt-1 text-sm text-[#5A6B7A] dark:text-neutral-400 max-w-xs">
+            AI insights for {patient.childName} appear as their data builds up — sessions, routines, and incident logs.
+          </p>
+          {onClose && (
+            <Button variant="outline" size="sm" className="mt-4" onClick={onClose}>
+              Close
+            </Button>
+          )}
         </div>
       </div>
     );
