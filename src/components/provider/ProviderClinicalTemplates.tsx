@@ -45,6 +45,13 @@ const DEMO = isDemoMode();
 export function ProviderClinicalTemplates({ patientId, patientName, onBack }: TemplateProps) {
     const [activeTemplate, setActiveTemplate] = useState<'bip' | 'milestones' | 'slp' | 'mh_treatment' | 'psych_eval' | null>(null);
 
+    // Never display the literal "Patient" placeholder — fall back to a clean
+    // generic ("your client") when no real patient name is supplied.
+    const safePatientName =
+        !patientName || !patientName.trim() || patientName.trim().toLowerCase() === 'patient'
+            ? 'your client'
+            : patientName.trim();
+
     // Focus: Behavior Intervention Plan (BIP)
     const [bipForm, setBipForm] = useState(DEMO ? {
         targetBehaviors: '1. Elopement (leaving assigned area without permission)\n2. Non-compliance (refusal to follow instructions)',
@@ -152,7 +159,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
                     <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em' }}>Clinical Templates</h3>
                 </div>
                 <p style={{ fontSize: '14px', color: 'rgba(17, 24, 39, 0.6)', marginBottom: '24px' }}>
-                    Select a template to generate structured clinical documentation for {patientName}.
+                    Select a template to generate structured clinical documentation for {safePatientName}.
                 </p>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
@@ -283,7 +290,7 @@ export function ProviderClinicalTemplates({ patientId, patientName, onBack }: Te
                                     activeTemplate === 'mh_treatment' ? 'Mental Health Treatment Plan' :
                                         'Diagnostic Psychological Evaluation'}
                     </h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Patient: {patientName}</p>
+                    <p style={{ fontSize: '13px', color: 'rgba(17, 24, 39, 0.5)' }}>Patient: {safePatientName}</p>
                 </div>
             </div>
 

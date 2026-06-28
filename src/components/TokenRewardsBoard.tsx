@@ -102,6 +102,12 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
         return FALLBACK_STARTER_BALANCE;
     });
     const effectiveTokens = hasExternalBalance ? availableTokens : localBalance;
+    // Never show the literal "your child" placeholder as if it were a name.
+    // Use the real kid's name when supplied, else drop the name entirely.
+    const safeChildName =
+        !childName || !childName.trim() || childName.trim().toLowerCase() === 'your child'
+            ? ''
+            : childName.trim();
     const [selectedReward, setSelectedReward] = useState<RewardItem | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [redeemedReward, setRedeemedReward] = useState<RewardItem | null>(null);
@@ -281,7 +287,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                         </span>
                     </div>
                     <p style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px', zIndex: 1, textAlign: 'center' }}>
-                        You're doing great, {childName}! You can spend your stars on fun rewards.
+                        {safeChildName ? `You're doing great, ${safeChildName}!` : "You're doing great!"} You can spend your stars on fun rewards.
                     </p>
                 </motion.div>
 
@@ -355,7 +361,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             {pendingRedemptions.filter(r => !r.approved).map(pending => (
                                 <div key={`${pending.rewardId}-${pending.timestamp}`} style={{ backgroundColor: '#FEF3C7', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <div>
-                                        <p style={{ fontSize: '14px', fontWeight: 600, color: '#92400E' }}>{childName} wants: {pending.rewardName}</p>
+                                        <p style={{ fontSize: '14px', fontWeight: 600, color: '#92400E' }}>{safeChildName || 'Your child'} wants: {pending.rewardName}</p>
                                         <p style={{ fontSize: '12px', color: '#B45309' }}>{new Date(pending.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                     </div>
                                     <button

@@ -355,7 +355,7 @@ function GoalCard({
       {/* Goal header */}
       <div className="bg-[#F6FBFB] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="bg-slate-900 text-white text-xs font-bold px-2 py-0.5 rounded">
+          <span className="bg-[#132F43] text-white text-xs font-bold px-2 py-0.5 rounded">
             {goal.goalId}
           </span>
           <select
@@ -879,7 +879,7 @@ export function TreatmentPlanEditor({
 
       <div className="min-h-screen bg-mist">
         {/* Header */}
-        <div className="bg-slate-900 sticky top-0 z-20 no-print">
+        <div className="bg-[#132F43] sticky top-0 z-20 no-print">
           <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
             <button
               onClick={onBack}
@@ -1260,7 +1260,7 @@ export function TreatmentPlanEditor({
               <button
                 onClick={() => setShowFinalizeConfirm(true)}
                 disabled={!plan.bcbaAttestation || plan.goals.length === 0}
-                className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="w-full bg-[#132F43] text-white py-4 rounded-2xl font-bold text-base flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Lock className="w-5 h-5" />
                 Finalize Plan
@@ -1319,7 +1319,7 @@ export function TreatmentPlanEditor({
               </button>
               <button
                 onClick={handleFinalize}
-                className="flex-1 py-3 bg-slate-900 text-white rounded-xl font-medium"
+                className="flex-1 py-3 bg-[#132F43] text-white rounded-xl font-medium"
               >
                 Finalize
               </button>

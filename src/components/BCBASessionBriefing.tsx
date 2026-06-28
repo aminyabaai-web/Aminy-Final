@@ -72,6 +72,13 @@ export function BCBASessionBriefing({
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['summary', 'working', 'notWorking']));
 
+  // Never surface the literal "Parent"/"Patient" placeholder words — fall back
+  // to a clean generic ("your client") when no real name is supplied.
+  const isPlaceholder = (n?: string) =>
+    !n || !n.trim() || ['parent', 'patient', 'your child'].includes(n.trim().toLowerCase());
+  const clientName = isPlaceholder(parentName) ? 'your client' : parentName.trim();
+  const childLabel = isPlaceholder(childName) ? 'your client' : childName.trim();
+
   useEffect(() => {
     loadBriefing();
   }, [familyId]);
@@ -300,7 +307,7 @@ export function BCBASessionBriefing({
   const PageHeader = (
     <ScreenHeader
       title="Session Briefing"
-      subtitle={`Prep for your session with ${parentName}`}
+      subtitle={`Prep for your session with ${clientName}`}
       icon={<Brain className="w-6 h-6" />}
       onBack={onBack}
       variant="flat"
@@ -317,7 +324,7 @@ export function BCBASessionBriefing({
               <div className="w-12 h-12 border-3 border-[#6B9080] border-t-transparent rounded-full animate-spin mb-4" />
               <h3 className="font-medium text-[#132F43] mb-2">Preparing Your Briefing</h3>
               <p className="text-sm text-[#5A6B7A]">
-                Analyzing {childName}'s data, progress, and recent activity...
+                Analyzing {childLabel}'s data, progress, and recent activity...
               </p>
             </div>
           </Card>
@@ -335,13 +342,13 @@ export function BCBASessionBriefing({
             <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="font-medium text-[#132F43] mb-2">Briefing not available yet</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
-              AI session briefings for {childName} will appear here once enough
+              AI session briefings for {childLabel} will appear here once enough
               session and progress data has been recorded.
             </p>
             {onStartSession && (
               <Button onClick={onStartSession} variant="outline">
                 <Clock className="w-4 h-4 mr-2" />
-                Start Session with {parentName}
+                Start Session with {clientName}
               </Button>
             )}
           </Card>
@@ -363,10 +370,10 @@ export function BCBASessionBriefing({
             </div>
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">
-                Session Briefing: {childName}
+                Session Briefing: {childLabel}
               </h2>
               <p className="text-sm text-[#5A6B7A]">
-                Parent: {parentName}
+                Parent: {clientName}
               </p>
             </div>
           </div>
@@ -608,7 +615,7 @@ export function BCBASessionBriefing({
           size="lg"
         >
           <Clock className="w-5 h-5 mr-2" />
-          Start Session with {parentName}
+          Start Session with {clientName}
         </Button>
       )}
       </div>

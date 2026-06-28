@@ -111,7 +111,12 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
       setContent(result.content!);
       setShareToken(result.shareToken!);
     } else {
-      setError(result.error || 'Failed to load content');
+      // Map internal/dev error strings to friendly, user-facing copy.
+      setError(
+        result.error === 'No token provided'
+          ? 'This share link is invalid or expired.'
+          : result.error || 'This share link is invalid or expired.',
+      );
     }
 
     setLoading(false);
