@@ -155,8 +155,9 @@ export function SwipeNavigation({
         transition: isSwipingRef.current ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
       } : undefined}
     >
-      {/* Left swipe indicator */}
-      {showIndicators && onSwipeLeft && (
+      {/* Left swipe indicator — only while actively swiping left, so it never
+          ghosts at the screen edge at rest. */}
+      {showIndicators && onSwipeLeft && swipeDistance < 0 && (
         <div
           className="absolute right-0 top-0 bottom-0 flex items-center justify-center pointer-events-none z-50"
           style={{
@@ -177,8 +178,8 @@ export function SwipeNavigation({
         </div>
       )}
       
-      {/* Right swipe indicator */}
-      {showIndicators && onSwipeRight && (
+      {/* Right swipe indicator — only while actively swiping right. */}
+      {showIndicators && onSwipeRight && swipeDistance > 0 && (
         <div
           className="absolute left-0 top-0 bottom-0 flex items-center justify-center pointer-events-none z-50"
           style={{

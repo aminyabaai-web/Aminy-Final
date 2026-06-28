@@ -891,8 +891,8 @@ const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
         </div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">{msg.title}</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed">{msg.description}</p>
+        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 text-balance leading-tight">{msg.title}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed text-balance">{msg.description}</p>
         <button
           onClick={onBack}
           className="bg-teal-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-teal-700 transition-colors"
