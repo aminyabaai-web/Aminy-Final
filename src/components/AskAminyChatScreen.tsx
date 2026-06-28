@@ -112,10 +112,10 @@ export function AskAminyChatScreen({
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div>
-                <h1 className="text-base font-semibold text-[#132F43] dark:text-slate-100">Aminy AI</h1>
+              <div className="min-w-0">
+                <h1 className="text-base font-semibold text-[#132F43] dark:text-slate-100 leading-tight truncate">Aminy AI</h1>
                 {messagesLeft !== undefined && userTier === 'free' && (
-                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
+                  <p className="text-sm text-[#5A6B7A] dark:text-slate-400 leading-tight whitespace-nowrap">
                     {messagesLeft} {messagesLeft === 1 ? 'message' : 'messages'} left today
                   </p>
                 )}
