@@ -1306,7 +1306,7 @@ export function StoreMarketplace({
         )}
 
         {/* Featured Section (only on "all" category) */}
-        {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && (
+        {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && featuredProducts.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-[#132F43] dark:text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />

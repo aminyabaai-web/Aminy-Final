@@ -54,7 +54,14 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
   const [showCsvInput, setShowCsvInput] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
 
-  const inviteUrl = `${typeof window !== 'undefined' ? window.location.origin : 'https://aminy.ai'}/provider-apply?org=${partnerOrg}`;
+  const inviteBase = (() => {
+    const envUrl = (import.meta.env.VITE_APP_URL as string | undefined)?.trim();
+    if (envUrl) return envUrl.replace(/\/$/, '');
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    if (origin && !/localhost|127\.0\.0\.1/.test(origin)) return origin;
+    return 'https://aminy.ai';
+  })();
+  const inviteUrl = `${inviteBase}/provider-apply?org=${partnerOrg}`;
 
   useEffect(() => {
     loadProviders();
@@ -143,7 +150,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       {/* Header */}
       <ScreenHeader
         title={`${config.displayName} Onboarding`}
-        subtitle="One-click invites · CSV import · Contract auto-applied"
+        subtitle="Invites · CSV import · Auto contract"
         icon={<Building2 className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -180,13 +187,13 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
 
       {/* Bulk import */}
       <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF] p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="min-w-0">
             <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Bulk Import</p>
             <p className="text-sm text-[#3A4A57] mt-0.5">Paste your provider roster — we'll pre-create their accounts</p>
           </div>
           {!showCsvInput && (
-            <button onClick={() => setShowCsvInput(true)} className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full whitespace-nowrap flex items-center gap-1">
+            <button onClick={() => setShowCsvInput(true)} className="shrink-0 text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full whitespace-nowrap flex items-center gap-1">
               <Upload className="w-3.5 h-3.5" />Import
             </button>
           )}

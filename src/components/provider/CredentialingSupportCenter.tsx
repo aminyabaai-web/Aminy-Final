@@ -2479,7 +2479,7 @@ export default function CredentialingSupportCenter({
       {/* Header */}
       <ScreenHeader
         title="Credentialing Center"
-        subtitle="Manage enrollments, credentials, denials, and claims"
+        subtitle="Enrollments, credentials & claims"
         icon={<Shield className="w-5 h-5" />}
         onBack={onBack}
       />
@@ -2494,7 +2494,7 @@ export default function CredentialingSupportCenter({
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
+                className={`flex shrink-0 items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                   isActive
                     ? 'bg-slate-900 text-white'
                     : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
