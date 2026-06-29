@@ -18191,3 +18191,87 @@ tr:hover td, .hover-row:hover {
 .dark .bg-neutral-100 { background-color: #1e293b !important; }
 .dark .bg-gray-50 { background-color: #0f172a !important; }
 .dark .bg-gray-100 { background-color: #1e293b !important; }
+
+/* ============================================================
+   Dark-mode: dark TEXT utilities on now-darkened surfaces.
+   Every `*-900/800/700` text utility is "near-black text for a
+   light surface". In dark mode the surface utilities above flip
+   to slate, so this text becomes black-on-dark (invisible). These
+   global flips win over the un-applied `dark:` variants (same
+   pattern as the brand-hex `.dark .text-[#132F43]` overrides).
+   Covers the comprehensive dark-mode sweep findings: Settings
+   Appearance/Light/Dark (text-gray-900), Referral "How It Works"
+   (text-blue-900), Benefits, and every other screen using the
+   stock gray/slate/neutral/zinc/blue dark-text scale.
+   ============================================================ */
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-neutral-900,
+.dark .text-neutral-800,
+.dark .text-neutral-700,
+.dark .text-zinc-900,
+.dark .text-zinc-800,
+.dark .text-stone-900,
+.dark .text-stone-800 { color: #e2e8f0 !important; }
+
+/* Navy/blue heading text → keep an airy blue tint, not pure white */
+.dark .text-blue-900,
+.dark .text-blue-800,
+.dark .text-blue-700,
+.dark .text-indigo-900,
+.dark .text-indigo-800,
+.dark .text-sky-900,
+.dark .text-sky-800 { color: #bfdbfe !important; }
+
+/* Light hex card/section backgrounds used as inline-ish brand tints
+   that the precompiled bundle never darkened → flip to slate so the
+   (now-light) heading text on them stays legible. */
+.dark .bg-\[\#EEF4F8\] { background-color: #1e293b !important; }
+.dark .bg-\[\#EFF6FB\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F8F8F6\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F8F9FA\] { background-color: #1e293b !important; }
+.dark .bg-\[\#F5F7FA\] { background-color: #1e293b !important; }
+.dark .bg-\[\#FAFAFA\] { background-color: #0f172a !important; }
+.dark .border-\[\#C8DDE8\] { border-color: #334155 !important; }
+
+/* ============================================================
+   Dark-mode: light-tint STATUS PILLS (emerald/amber/red/blue -50
+   bg + -700 text). Used app-wide as provenance/status chips
+   (DataProvenanceBadge "Internal sample", BHCOE accreditation,
+   etc.). The -50 tint stays bright in dark mode, dropping contrast
+   with the mid-tone -700 text. Darken the tint, lighten the text.
+   ============================================================ */
+.dark .bg-emerald-50 { background-color: rgba(6,78,59,0.35) !important; }
+.dark .text-emerald-700, .dark .text-emerald-800 { color: #6ee7b7 !important; }
+.dark .border-emerald-200 { border-color: #065f46 !important; }
+.dark .bg-amber-50 { background-color: rgba(120,53,15,0.35) !important; }
+.dark .text-amber-700, .dark .text-amber-800 { color: #fcd34d !important; }
+.dark .border-amber-200 { border-color: #92400e !important; }
+.dark .bg-red-50 { background-color: rgba(127,29,29,0.35) !important; }
+.dark .text-red-700, .dark .text-red-800 { color: #fca5a5 !important; }
+.dark .border-red-200 { border-color: #991b1b !important; }
+.dark .bg-blue-50 { background-color: rgba(30,58,138,0.30) !important; }
+.dark .bg-blue-100 { background-color: rgba(30,58,138,0.40) !important; }
+.dark .text-blue-600 { color: #93c5fd !important; }
+.dark .border-blue-200 { border-color: #1e40af !important; }
+
+/* ============================================================
+   Dark-mode: MUTED secondary text (gray/slate/neutral -600/-500).
+   Authored `dark:text-slate-400` variants on these often aren't in
+   the precompiled bundle (no JIT), so they silently fall back to
+   the dim -600/-500 base, e.g. ProviderLanding "Licensed
+   professionals…" / "Free to join" render at ~1.9:1. Lift the
+   base muted scale to slate-400 in dark mode so it reads ~5:1.
+   ============================================================ */
+.dark .text-gray-600,
+.dark .text-gray-500,
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-neutral-600,
+.dark .text-neutral-500,
+.dark .text-zinc-600,
+.dark .text-stone-600 { color: #94a3b8 !important; }

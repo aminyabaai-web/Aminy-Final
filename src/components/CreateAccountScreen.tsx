@@ -415,7 +415,7 @@ export function CreateAccountScreen({
                 backgroundColor: 'rgba(255,255,255,0.92)',
                 backdropFilter: 'blur(12px)',
                 WebkitBackdropFilter: 'blur(12px)',
-                color: 'var(--color-text-primary)',
+                color: '#0C2230',
                 fontFamily: fontStack,
                 fontWeight: 500,
                 fontSize: '14px',
