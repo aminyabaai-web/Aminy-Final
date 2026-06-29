@@ -18177,3 +18177,17 @@ tr:hover td, .hover-row:hover {
 .bg-gray-700 { background-color: #374151; }
 .bg-gray-800 { background-color: #1f2937; }
 .bg-gray-900 { background-color: #111827; }
+
+/* ============================================================
+   Dark-mode: light neutral/gray SECTION + CARD backgrounds.
+   Tailwind's `dark:bg-slate-*` variant loses to the base
+   `bg-neutral-50/100` utility here (source-order), leaving bright
+   sections (and white-on-white headings) in dark mode — e.g.
+   ProviderLanding "Everything You Need to Grow". These global
+   .dark overrides reliably win (same pattern as the brand-hex
+   overrides above). 50 → page/section depth, 100 → card surface.
+   ============================================================ */
+.dark .bg-neutral-50 { background-color: #0f172a !important; }
+.dark .bg-neutral-100 { background-color: #1e293b !important; }
+.dark .bg-gray-50 { background-color: #0f172a !important; }
+.dark .bg-gray-100 { background-color: #1e293b !important; }
