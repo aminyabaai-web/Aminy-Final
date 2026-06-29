@@ -491,7 +491,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               <a href="mailto:providers@aminy.ai" style={{ color: '#475569' }} className="hover:text-white">Contact</a>
             </div>
           </div>
-          <div className="text-center text-sm pt-4" style={{ color: '#334155', borderTop: '1px solid #1e293b' }}>
+          <div className="text-center text-sm pt-4" style={{ color: '#94a3b8', borderTop: '1px solid #1e293b' }}>
             &copy; {new Date().getFullYear()} Aminy, LLC. All rights reserved.
           </div>
         </div>
