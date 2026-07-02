@@ -1143,7 +1143,10 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}`;
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
                   <p className="text-sm text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
-                    <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
+                    {(() => {
+                      const PersonalityIcon = PERSONALITY_ICONS[AI_PERSONALITIES[personality].icon] ?? Heart;
+                      return <PersonalityIcon className="w-3 h-3 text-[#2A7D99] shrink-0" aria-hidden="true" />;
+                    })()}
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
                   </p>
                 </div>
@@ -1352,7 +1355,14 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}`;
                                 borderColor: '#e2e8f0',
                               }}
                             >
-                              <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
+                              {(() => {
+                                const PersonalityIcon = PERSONALITY_ICONS[p.icon] ?? Heart;
+                                return (
+                                  <span className="w-7 h-7 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+                                    <PersonalityIcon className="w-3.5 h-3.5 text-[#2A7D99]" aria-hidden="true" />
+                                  </span>
+                                );
+                              })()}
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
                                   <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">{p.name}</p>

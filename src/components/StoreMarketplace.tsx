@@ -744,6 +744,37 @@ const CURATED_PRODUCTS: Product[] = [
 ];
 
 // ============================================================================
+// Production affiliate fallback — honest version of the curated catalog
+// ============================================================================
+//
+// The full CURATED_PRODUCTS above carries illustrative ratings/review counts
+// and placeholder ASIN links, so real users must never see it verbatim (demo
+// mode only). But an empty store is worse: when store_products has no rows,
+// production falls back to these same behaviorist picks with the illustrative
+// data stripped — no ratings/review counts (the cards hide the rating row when
+// reviewCount is 0), no fake "was" prices, and generic Amazon *search* links
+// instead of placeholder ASINs. Digital items are excluded (their download
+// files don't ship with the app yet).
+//
+// When the Amazon Associates account is approved, append the tag here.
+const AMAZON_AFFILIATE_TAG = ''; // e.g. 'aminy-20'
+
+function amazonSearchUrl(productName: string): string {
+  const base = `https://www.amazon.com/s?k=${encodeURIComponent(productName)}`;
+  return AMAZON_AFFILIATE_TAG ? `${base}&tag=${encodeURIComponent(AMAZON_AFFILIATE_TAG)}` : base;
+}
+
+const CURATED_AFFILIATE_FALLBACK: Product[] = CURATED_PRODUCTS
+  .filter((p) => p.affiliateUrl && !p.isDigital)
+  .map((p) => ({
+    ...p,
+    rating: 0,
+    reviewCount: 0,
+    originalPrice: undefined,
+    affiliateUrl: amazonSearchUrl(p.name),
+  }));
+
+// ============================================================================
 // AI-Recommended Products Logic
 // ============================================================================
 
@@ -864,11 +895,12 @@ export function StoreMarketplace({
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadWishlist());
-  // Curated catalog carries illustrative ratings/review counts/affiliate links,
-  // so real users only ever see it in demo mode. Production users get real
-  // store_products from Supabase, or an honest empty state.
-  const [products, setProducts] = useState<Product[]>(() => (isDemoMode() ? CURATED_PRODUCTS : []));
-  const [usingCuratedFallback, setUsingCuratedFallback] = useState(() => isDemoMode());
+  // Demo mode shows the rich curated catalog (illustrative ratings/prices).
+  // Production users get real store_products from Supabase when rows exist;
+  // otherwise the honest CURATED_AFFILIATE_FALLBACK — the store must never
+  // render empty for a parent.
+  const [products, setProducts] = useState<Product[]>(() => (isDemoMode() ? CURATED_PRODUCTS : CURATED_AFFILIATE_FALLBACK));
+  const [usingCuratedFallback, setUsingCuratedFallback] = useState(true);
   const [showWishlistOnly, setShowWishlistOnly] = useState(false);
   const [filters, setFilters] = useState({
     freeOnly: false,
@@ -896,20 +928,16 @@ export function StoreMarketplace({
           setProducts(CURATED_PRODUCTS);
           setUsingCuratedFallback(true);
         } else {
-          // Real users with no store_products see an honest empty state,
-          // never illustrative ratings or placeholder affiliate links.
-          setProducts([]);
-          setUsingCuratedFallback(false);
+          // Real users with no store_products get the honest curated
+          // affiliate picks (no illustrative ratings, generic Amazon
+          // search links) — never an empty store.
+          setProducts(CURATED_AFFILIATE_FALLBACK);
+          setUsingCuratedFallback(true);
         }
       } catch {
-        // On failure, only demo mode falls back to the curated catalog
-        if (isDemoMode()) {
-          setProducts(CURATED_PRODUCTS);
-          setUsingCuratedFallback(true);
-        } else {
-          setProducts([]);
-          setUsingCuratedFallback(false);
-        }
+        // On fetch failure, fall back to the curated catalog too
+        setProducts(isDemoMode() ? CURATED_PRODUCTS : CURATED_AFFILIATE_FALLBACK);
+        setUsingCuratedFallback(true);
       }
     }
     loadProducts();
@@ -1051,12 +1079,15 @@ export function StoreMarketplace({
         </Badge>
       );
     }
-    const discounted = getDiscountedPrice(product.price);
+    // Affiliate items are bought on Amazon at Amazon's price — member
+    // discounts don't apply there, so show an approximate price instead.
+    const isAffiliate = Boolean(product.affiliateUrl);
+    const discounted = isAffiliate ? null : getDiscountedPrice(product.price);
     return (
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <span className="font-bold text-[#132F43]">
-            ${discounted ?? product.price}
+            {isAffiliate ? '~' : ''}${discounted ?? product.price}
           </span>
           {(discounted || product.originalPrice) && (
             <span className="text-sm text-slate-400 line-through">
@@ -1086,7 +1117,7 @@ export function StoreMarketplace({
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl font-bold text-[#132F43] dark:text-white">Resource Store</h1>
-                  {usingCuratedFallback && (
+                  {usingCuratedFallback && isDemoMode() && (
                     <span
                       className="inline-flex items-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300/70 font-medium px-2 py-0.5 shrink-0"
                       style={{ fontSize: '10px' }}
@@ -1289,10 +1320,12 @@ export function StoreMarketplace({
                     </h3>
                     <p className="text-sm text-[#5A6B7A] line-clamp-2 mt-1">{product.description}</p>
                     <div className="flex items-center gap-2 mt-2">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
-                      </div>
+                      {product.rating > 0 && (
+                        <div className="flex items-center gap-1">
+                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
+                        </div>
+                      )}
                       {product.recommendedAgeRange && (
                         <span className="text-sm text-slate-400">Ages {product.recommendedAgeRange}</span>
                       )}
@@ -1337,11 +1370,13 @@ export function StoreMarketplace({
                     <h3 className="font-medium text-[#132F43] dark:text-white line-clamp-1">
                       {product.name}
                     </h3>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
-                      <span className="text-sm text-slate-400">({product.reviewCount})</span>
-                    </div>
+                    {product.reviewCount > 0 && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
+                        <span className="text-sm text-slate-400">({product.reviewCount})</span>
+                      </div>
+                    )}
                     <div className="mt-2">{renderPrice(product)}</div>
                   </div>
                 </Card>
@@ -1467,11 +1502,13 @@ export function StoreMarketplace({
                         </Badge>
                       )}
                     </div>
-                    <div className="flex items-center gap-1 mb-3">
-                      <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                      <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
-                      <span className="text-sm text-slate-400">({product.reviewCount} reviews)</span>
-                    </div>
+                    {product.reviewCount > 0 && (
+                      <div className="flex items-center gap-1 mb-3">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                        <span className="text-sm text-[#5A6B7A]">{product.rating}</span>
+                        <span className="text-sm text-slate-400">({product.reviewCount} reviews)</span>
+                      </div>
+                    )}
                     <div className="flex items-center justify-between">
                       {renderPrice(product)}
                       <Button

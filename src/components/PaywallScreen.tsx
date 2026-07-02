@@ -555,7 +555,11 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     {/* CTA */}
                     <Button
                       className={`w-full mt-4 ${
-                        tier.popular
+                        isCurrentTier
+                          // Clearly-visible inactive style — the default disabled:opacity-50
+                          // on the light #EDF4F7 bg made "Current Plan" nearly invisible.
+                          ? 'bg-slate-100 text-slate-500 border border-slate-200 disabled:opacity-100'
+                          : tier.popular
                           ? 'bg-[#2A7D99] hover:bg-[#1F6080] text-white'
                           : tier.id === 'free'
                           ? 'bg-[#EDF4F7] hover:bg-[#E8E4DF] text-[#3A4A57]'

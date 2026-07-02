@@ -18316,3 +18316,11 @@ tr:hover td, .hover-row:hover {
    ============================================================ */
 .h-24 { height: 6rem; }
 .border-\[\#C8DDE8\] { border-color: #C8DDE8; }
+
+/* ============================================================
+   Missing precompiled utility (July 2026): disabled:opacity-100
+   lets the PaywallScreen "Current Plan" CTA opt out of the Button
+   base disabled:opacity-50 (nearly invisible on light backgrounds).
+   Appended last so it wins over the earlier disabled:opacity-50 rule.
+   ============================================================ */
+.disabled\:opacity-100:disabled { opacity: 1; }

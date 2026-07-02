@@ -112,6 +112,8 @@ interface Patient {
   id: string;
   childName: string;
   parentName: string;
+  /** Parent's auth user id — required for parent-logged data queries (goals, behavior_logs) */
+  parentUserId?: string;
   age: number;
   conditions: string[];
   profileAccess: 'granted' | 'pending' | 'revoked';
@@ -547,6 +549,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               id: pp.id,
               childName: childData.name || 'Unknown',
               parentName: parentData?.name || 'Unknown',
+              parentUserId: pp.parent_user_id || undefined,
               age,
               conditions: childData.diagnoses || [],
               profileAccess: pp.profile_access as 'granted' | 'pending' | 'revoked',
@@ -1868,7 +1871,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                   <PatientAISummary
                     patientId={selectedPatient.id}
                     childName={selectedPatient.childName}
-                    parentId="parent-123"
+                    parentId={selectedPatient.parentUserId ?? ""}
                     providerId={providerId}
                   />
                 ) : (
@@ -2154,7 +2157,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
             patientId={selectedPatient.id}
             patientName={selectedPatient.childName}
             parentName={selectedPatient.parentName}
-            parentId="parent-123"
+            parentId={selectedPatient.parentUserId ?? ""}
           />
         ) : activeTab === 'coordination' && (
           <div className="space-y-6">
