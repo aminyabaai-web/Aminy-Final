@@ -63,6 +63,8 @@ interface NavItem {
   label: string;
   helper: string;
   icon: React.ElementType;
+  /** Accessible name when the visible label alone is ambiguous */
+  ariaLabel?: string;
 }
 
 const companionItems: NavItem[] = [
@@ -71,7 +73,7 @@ const companionItems: NavItem[] = [
   // and 'vault').
   { id: 'dashboard', label: 'Home', helper: 'Today and next steps', icon: Home },
   { id: 'care-plan', label: 'My Plan', helper: 'Goals & routines', icon: Heart },
-  { id: 'ask-aminy', label: 'Aminy', helper: 'Guidance & memory', icon: Sparkles },
+  { id: 'ask-aminy', label: 'Aminy', helper: 'Guidance & memory', icon: Sparkles, ariaLabel: 'Open Aminy AI chat' },
   { id: 'telehealth', label: 'Care', helper: 'Book expert visits', icon: Video },
   { id: 'junior', label: 'Ease', helper: 'Calm & rewards', icon: Baby },
 ];
@@ -115,6 +117,7 @@ function NavGroup({
               key={item.id}
               type="button"
               onClick={() => onNavigate(item.id)}
+              aria-label={item.ariaLabel}
               aria-current={active ? 'page' : undefined}
               className={[
                 'group flex w-full items-center gap-3 rounded-2xl px-2 py-2 text-left transition-colors duration-200',

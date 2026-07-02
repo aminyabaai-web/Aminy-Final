@@ -18338,3 +18338,6 @@ tr:hover td, .hover-row:hover {
 .pb-5 { padding-bottom: 1.25rem; }
 .min-h-full { min-height: 100%; }
 .gap-2\.5 { gap: 0.625rem; }
+
+/* Feedback FAB sits above the chat FAB (bottom-24 + 56px) — precompiled sheet lacked this offset */
+.bottom-44 { bottom: 11rem; }
