@@ -2700,18 +2700,32 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
 
                     <div className="p-5">
                       <div className="flex items-center justify-between gap-4">
-                        <Label className="text-sm font-medium text-slate-950 dark:text-slate-100">Daily time</Label>
-                        <span className="text-sm font-semibold text-[#2A7D99] dark:text-[#6AA9BC]">{parentControls.dailyMaxTime} min</span>
+                        <div>
+                          <Label className="text-sm font-medium text-slate-950 dark:text-slate-100">Daily time</Label>
+                          <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">A gentle daily limit — the break reminder uses this.</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => updateParentControls({ dailyMaxTime: Math.max(5, parentControls.dailyMaxTime - 5) })}
+                            disabled={parentControls.dailyMaxTime <= 5}
+                            aria-label="Less daily time"
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF4F7] text-lg font-semibold text-[#3A4A57] disabled:opacity-40 dark:bg-slate-700 dark:text-slate-200"
+                          >
+                            −
+                          </button>
+                          <span className="w-16 text-center text-sm font-semibold text-[#2A7D99] dark:text-[#6AA9BC]">{parentControls.dailyMaxTime} min</span>
+                          <button
+                            type="button"
+                            onClick={() => updateParentControls({ dailyMaxTime: Math.min(60, parentControls.dailyMaxTime + 5) })}
+                            disabled={parentControls.dailyMaxTime >= 60}
+                            aria-label="More daily time"
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF4F7] text-lg font-semibold text-[#3A4A57] disabled:opacity-40 dark:bg-slate-700 dark:text-slate-200"
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
-                      <p className="mt-1 mb-4 text-sm text-[#5A6B7A] dark:text-slate-400">A gentle daily limit — the break reminder uses this.</p>
-                      <Slider
-                        value={[parentControls.dailyMaxTime]}
-                        min={5}
-                        max={60}
-                        step={5}
-                        onValueChange={([v]) => updateParentControls({ dailyMaxTime: v })}
-                        aria-label="Daily max time in minutes"
-                      />
                     </div>
                   </div>
                 </Card>
