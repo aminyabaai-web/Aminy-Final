@@ -4063,7 +4063,10 @@ export default function App() {
         case "denial-workbench":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
-              <DenialWorkbench />
+              <DenialWorkbench
+                providerId={userData.id || undefined}
+                onBack={() => navigateToScreen("provider-portal")}
+              />
             </Suspense>
           );
 
