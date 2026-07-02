@@ -11,7 +11,7 @@
  * appeal letter generator, analytics, rework queue, and timeline view.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   AlertCircle,
@@ -50,6 +50,13 @@ import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
 import { isDemoMode } from '../../lib/demo-seed';
+import {
+  getDenialRecords,
+  type DenialRecord,
+  type DenialCategory,
+  type DenialStatus,
+} from '../../lib/denial-management';
+import { supabase } from '../../utils/supabase/client';
 
 // ============================================================================
 // Types
