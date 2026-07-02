@@ -14,6 +14,12 @@
  * Last updated: 2026-03-10
  */
 
+import {
+  getCptRulesForService,
+  registerPayerRateSource,
+  type CptRule,
+} from '../billing/cpt-registry';
+
 // ============================================================================
 // Types
 // ============================================================================
