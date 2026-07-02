@@ -8,7 +8,12 @@
  *
  * All session pricing, provider compensation, and service definitions.
  * Designed for CPT code alignment and future insurance billing.
+ *
+ * CPT codes referenced here are validated (dev-only, at module load) against
+ * the single-source-of-truth registry in src/lib/billing/cpt-registry.ts.
  */
+
+import { getCptRule } from './billing/cpt-registry';
 
 export type ProviderCategory = 'behavioral' | 'therapy' | 'diagnostic';
 export type BillingSessionType =
@@ -435,4 +440,31 @@ export const TIER_DISCOUNTS: Record<string, number> = {
 export function getPriceForTier(basePrice: number, tier: string): number {
   const discount = TIER_DISCOUNTS[tier] || 0;
   return Math.round(basePrice * (1 - discount));
+}
+
+// =============================================================================
+// CPT REGISTRY VALIDATION (dev-only)
+// =============================================================================
+
+/** Split a SESSION_PRICING cptCode string ('97155/97156', '96130, 96131') into codes. */
+export function splitCptCodes(cptCode: string): string[] {
+  return cptCode
+    .split(/[/,]/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
+
+// Validate at module load (dev-only) that every cptCode referenced by
+// SESSION_PRICING exists in the CPT rules registry — the single source of
+// truth in src/lib/billing/cpt-registry.ts.
+if (import.meta.env.DEV) {
+  for (const session of Object.values(SESSION_PRICING)) {
+    for (const code of splitCptCodes(session.cptCode)) {
+      if (!getCptRule(code)) {
+        console.warn(
+          `[pricing] SESSION_PRICING '${session.id}' references CPT ${code}, which is missing from the CPT rules registry (src/lib/billing/cpt-registry.ts)`,
+        );
+      }
+    }
+  }
 }

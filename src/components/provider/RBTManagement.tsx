@@ -112,10 +112,14 @@ function toSupervisionLog(s: SupervisionSession): SupervisionLog {
 // ── Component ────────────────────────────────────────────────────────
 
 export function RBTManagement({ providerId }: RBTManagementProps) {
-  const [data, setData] = useState(loadData);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isLoadingRoster, setIsLoadingRoster] = useState(!isDemoMode());
+  const [bcbaId, setBcbaId] = useState<string>(providerId || '');
+  const [invoices] = useState<ClientInvoice[]>(loadInvoices);
   const [activeView, setActiveView] = useState<'roster' | 'supervision' | 'billing'>('roster');
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [showLogForm, setShowLogForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteName, setInviteName] = useState('');
   const [inviteCert, setInviteCert] = useState('');
@@ -128,73 +132,152 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
     notes: '',
   });
 
-  const persist = (updated: typeof data) => {
-    setData(updated);
-    saveData(updated);
-  };
+  // Load the shared roster from Supabase (same source as SupervisionDashboard).
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      if (isDemoMode()) {
+        setBcbaId(providerId || 'bcba-001');
+        setIsLoadingRoster(false);
+        return;
+      }
+      try {
+        let id = providerId || '';
+        if (!id) {
+          const { data: authData } = await supabase.auth.getUser();
+          id = authData.user?.id || '';
+        }
+        if (cancelled) return;
+        setBcbaId(id);
+        if (id) {
+          await loadRBTDataFromSupabase(id);
+        }
+      } catch (err) {
+        console.error('[RBTManagement] Roster load failed:', err);
+      } finally {
+        if (!cancelled) {
+          setIsLoadingRoster(false);
+          setRefreshKey(k => k + 1);
+        }
+      }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [providerId]);
+
+  // Derive this screen's view models from the shared lib (demo localStorage
+  // store in demo mode; Supabase-backed cache otherwise).
+  const rbts: RBT[] = useMemo(() => {
+    void refreshKey;
+    return getRBTProfiles().map(p => {
+      const supervisionMinutes = getSupervisionSessions(p.id)
+        .filter(s => s.status === 'completed')
+        .reduce((sum, s) => sum + s.durationMinutes, 0);
+      return {
+        id: p.id,
+        name: p.name,
+        email: p.email,
+        certificationNumber: p.rbtNumber,
+        status: p.status,
+        joinedAt: p.hiredDate,
+        assignedFamilies: [],
+        totalDirectHours: getTotalDirectServiceHours(p.id),
+        totalSupervisionHours: supervisionMinutes / 60,
+      };
+    });
+  }, [refreshKey]);
+
+  const logs: SupervisionLog[] = useMemo(() => {
+    void refreshKey;
+    return getSupervisionSessions()
+      .map(toSupervisionLog)
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [refreshKey]);
 
   // ── RBT Roster Actions ──────────────────────────────────────────
 
-  const inviteRBT = () => {
+  const inviteRBT = async () => {
     if (!inviteEmail.includes('@') || !inviteName.trim()) {
       toast.error('Name and valid email required');
       return;
     }
-    const newRBT: RBT = {
-      id: `rbt-${Date.now()}`,
-      name: inviteName,
-      email: inviteEmail,
-      certificationNumber: inviteCert,
-      status: 'pending',
-      joinedAt: new Date().toISOString(),
-      assignedFamilies: [],
-      totalDirectHours: 0,
-      totalSupervisionHours: 0,
-    };
-    persist({ ...data, rbts: [...data.rbts, newRBT] });
-    setInviteEmail('');
-    setInviteName('');
-    setInviteCert('');
-    setShowInviteForm(false);
-    toast.success(`Invitation sent to ${inviteName}`);
+    setIsSaving(true);
+    try {
+      await saveRBTProfile({
+        name: inviteName.trim(),
+        email: inviteEmail.trim(),
+        certificationNumber: inviteCert.trim(),
+        supervisingBCBAId: bcbaId,
+      });
+      setInviteEmail('');
+      setInviteName('');
+      setInviteCert('');
+      setShowInviteForm(false);
+      setRefreshKey(k => k + 1);
+      toast.success(`Invitation sent to ${inviteName}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to add RBT');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const removeRBT = (id: string) => {
-    persist({ ...data, rbts: data.rbts.filter(r => r.id !== id) });
-    toast.success('RBT removed');
+  const removeRBT = async (id: string) => {
+    try {
+      await removeRBTProfile(id);
+      setRefreshKey(k => k + 1);
+      toast.success('RBT removed');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to remove RBT');
+    }
   };
 
   // ── Supervision Log Actions ─────────────────────────────────────
 
-  const addSupervisionLog = () => {
+  const addSupervisionLog = async () => {
     if (!logForm.rbtId) {
       toast.error('Select an RBT');
       return;
     }
-    const log: SupervisionLog = {
-      id: `log-${Date.now()}`,
-      ...logForm,
+    const target = rbts.find(r => r.id === logForm.rbtId);
+    if (!isDemoMode() && target?.status === 'pending') {
+      toast.error(`${target.name} hasn't joined Aminy yet — supervision hours can be logged once they accept the invite.`);
+      return;
+    }
+    setIsSaving(true);
+    const session: SupervisionSession = {
+      id: newSessionId(),
+      rbtId: logForm.rbtId,
+      bcbaId,
+      date: logForm.date,
+      durationMinutes: Math.round(logForm.hours * 60),
+      type: logForm.type === 'group' ? 'group' : 'individual',
+      includesDirectObservation: logForm.type === 'direct',
+      topicsCovered: [],
+      competenciesAssessed: [],
+      bcbaNotes: logForm.notes,
+      rbtSignature: false,
+      bcbaSignature: true,
+      bcbaSignatureDate: new Date().toISOString(),
+      status: 'completed',
     };
-    const updatedRbts = data.rbts.map(r => {
-      if (r.id === logForm.rbtId) {
-        return {
-          ...r,
-          totalSupervisionHours: r.totalSupervisionHours + logForm.hours,
-        };
-      }
-      return r;
-    });
-    persist({ ...data, logs: [...data.logs, log], rbts: updatedRbts });
+    const saved = await addSupervisionSession(session);
+    setIsSaving(false);
+    if (!saved) {
+      toast.error('Failed to save supervision log — please try again');
+      return;
+    }
     setShowLogForm(false);
     setLogForm({ rbtId: '', date: new Date().toISOString().split('T')[0], hours: 1, type: 'direct', notes: '' });
+    setRefreshKey(k => k + 1);
     toast.success('Supervision log added');
   };
 
   // ── Stats ───────────────────────────────────────────────────────
 
-  const totalRBTs = data.rbts.filter(r => r.status === 'active').length;
-  const totalPending = data.rbts.filter(r => r.status === 'pending').length;
-  const nonCompliantCount = data.rbts.filter(r => {
+  const totalRBTs = rbts.filter(r => r.status === 'active').length;
+  const totalPending = rbts.filter(r => r.status === 'pending').length;
+  const nonCompliantCount = rbts.filter(r => {
     if (r.totalDirectHours === 0) return false;
     const { isCompliant } = calcSupervisionCompliance(r.totalDirectHours, r.totalSupervisionHours);
     return !isCompliant;
