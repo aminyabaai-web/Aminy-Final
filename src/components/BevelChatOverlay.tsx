@@ -513,7 +513,7 @@ export function BevelChatOverlay({
       const storedCap = getTierLimits(tier).memoryFacts ?? Number.POSITIVE_INFINITY;
       const depth = Math.max(1, Math.min(injectDepth, storedCap));
       const facts = await fetchMemories(userId, depth);
-      const lines = (facts as Array<Record<string, unknown>>)
+      const lines = (facts as unknown as Array<Record<string, unknown>>)
         .map(f => {
           const text = String(f.value ?? f.content ?? '').trim();
           if (!text) return null;

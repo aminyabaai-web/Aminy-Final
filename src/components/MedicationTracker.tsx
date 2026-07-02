@@ -417,10 +417,20 @@ export function MedicationTracker({ childId, childName, onClose }: MedicationTra
 
   if (isLoading) {
     return (
-      <Card className="p-8 text-center">
-        <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#6B9080]" />
-        <p className="text-[#5A6B7A]">Loading medications...</p>
-      </Card>
+      <div className="space-y-4" aria-label="Loading medications" role="status">
+        {[0, 1, 2].map(i => (
+          <Card key={i} className="p-4 animate-pulse" aria-hidden="true">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-lg bg-slate-200 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-slate-200 rounded w-1/2" />
+                <div className="h-3 bg-slate-100 rounded w-2/3" />
+                <div className="h-3 bg-slate-100 rounded w-1/3" />
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
     );
   }
 

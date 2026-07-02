@@ -465,34 +465,33 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
           </div>
 
           {/* Search & Filters */}
-          <div className="flex gap-3">
-            <div className="flex-1 relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search memories..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <div className="flex gap-2">
-              {(['all', 'child', 'parent', 'family'] as const).map(scope => (
-                <Button
-                  key={scope}
-                  variant={scopeFilter === scope ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setScopeFilter(scope)}
-                  className="capitalize"
-                >
-                  {scope}
-                  {scope !== 'all' && (
-                    <Badge variant="secondary" className="ml-2 text-sm">
-                      {groupedMemories[scope].length}
-                    </Badge>
-                  )}
-                </Button>
-              ))}
-            </div>
+          <div className="relative mb-3">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search memories..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+          <div className="flex gap-2 overflow-x-auto pr-4 pb-1 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {(['all', 'child', 'parent', 'family'] as const).map(scope => (
+              <Button
+                key={scope}
+                variant={scopeFilter === scope ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setScopeFilter(scope)}
+                className="capitalize whitespace-nowrap shrink-0"
+              >
+                {scope}
+                {scope !== 'all' && (
+                  <Badge variant="secondary" className="ml-2 text-sm">
+                    {groupedMemories[scope].length}
+                  </Badge>
+                )}
+              </Button>
+            ))}
+          </div>
           </div>
         </div>
       </div>
@@ -500,9 +499,16 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
       {/* Memory List */}
       <div className="max-w-6xl mx-auto px-4 py-6">
         {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-accent border-t-transparent"></div>
-            <p className="text-sm text-muted-foreground mt-3">Loading memories...</p>
+          <div className="space-y-2" aria-hidden="true">
+            {[0, 1, 2].map(i => (
+              <div key={i} className="border border-[#E8E4DF] rounded-lg bg-white p-4 animate-pulse">
+                <div className="space-y-2">
+                  <div className="h-4 bg-slate-200 rounded w-1/2" />
+                  <div className="h-3 bg-slate-100 rounded w-2/3" />
+                  <div className="h-3 bg-slate-100 rounded w-1/3" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredMemories.length === 0 ? (
           <div className="text-center py-12">

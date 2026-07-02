@@ -287,7 +287,32 @@ class MemoryManager {
   // FACT MANAGEMENT
   // ============================================
 
+  /**
+   * Normalize fact content for dedup comparison (case/whitespace-insensitive).
+   * Mirrors the server-side dedup key in the /memory/store edge route.
+   */
+  static normalizeFactContent(content: string): string {
+    return content.toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+
   addFact(fact: Omit<MemoryFact, 'id' | 'createdAt' | 'updatedAt'>): MemoryFact {
+    const childFacts = this.facts.get(fact.childId) || [];
+
+    // Dedup: same child + category + normalized content updates the existing
+    // fact instead of appending a duplicate forever (mirrors server-side M4 fix)
+    const normalized = MemoryManager.normalizeFactContent(fact.content);
+    const existing = childFacts.find(
+      f => f.category === fact.category &&
+        MemoryManager.normalizeFactContent(f.content) === normalized
+    );
+    if (existing) {
+      existing.updatedAt = new Date().toISOString();
+      existing.confidence = Math.max(existing.confidence, fact.confidence);
+      if (fact.expiresAt) existing.expiresAt = fact.expiresAt;
+      this.saveToStorage();
+      return existing;
+    }
+
     const newFact: MemoryFact = {
       ...fact,
       id: `fact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -295,7 +320,6 @@ class MemoryManager {
       updatedAt: new Date().toISOString(),
     };
 
-    const childFacts = this.facts.get(fact.childId) || [];
     childFacts.push(newFact);
     this.facts.set(fact.childId, childFacts);
     this.saveToStorage();
@@ -572,6 +596,11 @@ class MemoryManager {
 // ============================================
 
 export const memoryManager = new MemoryManager();
+
+/** Normalized form used for fact dedup — exported for tests. */
+export function normalizeFactContent(content: string): string {
+  return MemoryManager.normalizeFactContent(content);
+}
 
 // ============================================
 // HOOKS
