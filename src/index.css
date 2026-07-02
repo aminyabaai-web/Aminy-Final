@@ -18535,19 +18535,27 @@ tr:hover td, .hover-row:hover {
 /* ============================================================
    Dialog re-centering fix (July 2026, growth work): the generic
    perf rule `[role="dialog"] { position:fixed !important;
-   inset:0 !important }` (≈ line 5957) clobbers the shadcn
-   DialogContent's `top-[50%] left-[50%]` while its
-   `translate(-50%,-50%)` still applies — so EVERY modal panel
-   rendered shifted up-left by half its own size (verified live
-   at 390×844: bounding box x:-177 y:-422). Re-pin only the
-   content panels (data-slot scoped — overlays/sheets untouched).
-   transform is !important so `.animate-in { transform:
-   translateZ(0) }` can't clobber the centering translate.
+   inset:0 !important; contain:strict }` (≈ line 5957) clobbers
+   the shadcn DialogContent's `top-[50%] left-[50%]` while its
+   `translate(-50%,-50%)` still applies — every modal panel
+   painted shifted up-left by half its own size (verified live at
+   390×844: bounding box x:-177 y:-422). On these contained fixed
+   panels Chromium also ignores re-pinned top/left (verified:
+   inline `top:50% !important` did not move the box), so this fix
+   avoids top/left entirely: inset:0 + margin:auto + fit-content
+   height is self-sufficient absolute centering, and transform is
+   forced off so the leftover translate can't shift the panel.
+   Scoped to the content panels only — overlays/sheets untouched.
    ============================================================ */
 [data-slot="dialog-content"],
 [data-slot="alert-dialog-content"] {
-  inset: auto !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+  inset: 0 !important;
+  height: fit-content !important;
+  max-height: 100dvh !important;
+  margin: auto !important;
+  /* Tailwind v4 translate utilities set the INDEPENDENT `translate`
+     property (not `transform`) — both must be neutralized. */
+  transform: none !important;
+  translate: none !important;
+  overflow-y: auto;
 }

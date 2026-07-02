@@ -285,10 +285,14 @@ const TRACK_FILTERS = [
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNavigate }: JuniorPageProps) {
   const [activeView, _setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
   // Wrap setActiveView to fire haptic + sound on every navigation
+  const contentScrollRef = useRef<HTMLDivElement>(null);
   const setActiveView: typeof _setActiveView = (view) => {
     playTap();
     haptic(30);
     _setActiveView(view);
+    // Each sub-screen starts at the top — the shared scroll container
+    // otherwise keeps the previous view's scroll position
+    requestAnimationFrame(() => contentScrollRef.current?.scrollTo({ top: 0 }));
   };
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
@@ -1706,7 +1710,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
         )}
 
         {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div ref={contentScrollRef} className="flex-1 overflow-y-auto">
           {activeView === 'home' && (
             <div className="p-4 sm:p-6 md:p-8">
               <div className="mx-auto max-w-5xl space-y-5">
