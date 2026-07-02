@@ -551,13 +551,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         // Continue — cancellation is best-effort
       }
 
-      // 2. Record deletion request in Supabase
-      await supabase.from('account_deletion_requests').insert({
+      // 2. Record deletion request in Supabase — must be confirmed (compliance-critical)
+      const { error: deletionError } = await supabase.from('account_deletion_requests').insert({
         user_id: user.id,
         email: user.email,
         status: 'pending',
         requested_at: new Date().toISOString(),
       });
+      if (deletionError) throw deletionError;
 
       toast.success('Account deletion requested. You will receive a confirmation email.');
       setShowDeleteDialog(false);

@@ -53,10 +53,10 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
 
   const name = childName || 'your child';
 
-  const save = useCallback(async (conf: number) => {
+  const save = useCallback(async (conf: number): Promise<boolean> => {
     setSaving(true);
     try {
-      await supabase.from('outcome_events').insert({
+      const { error } = await supabase.from('outcome_events').insert({
         user_id: userId,
         child_id: childId || null,
         event_type: 'weekly_parent_checkin',
@@ -69,9 +69,13 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
         },
         recorded_at: new Date().toISOString(),
       });
+      if (error) throw error;
+      // Only throttle re-prompts once the write is confirmed
       localStorage.setItem(WEEKLY_CHECKIN_KEY, String(Date.now()));
-    } catch {
-      // Non-fatal — proceed to done state even if save fails
+      return true;
+    } catch (err) {
+      console.error('[WeeklyOutcomeCheckIn] Save failed:', err);
+      return false;
     } finally {
       setSaving(false);
     }
@@ -79,7 +83,13 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
 
   const handleConfidence = async (val: number) => {
     setConfidence(val);
-    await save(val);
+    const saved = await save(val);
+    if (!saved) {
+      // Stay on the confidence step so the parent can retry; no throttle set,
+      // so the check-in will re-prompt.
+      toast.error("Couldn't save your check-in — please try again");
+      return;
+    }
     setStep('done');
     setTimeout(onDismiss, 2500);
     toast.success('Check-in saved — thank you!', { duration: 2000 });

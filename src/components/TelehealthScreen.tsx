@@ -338,10 +338,15 @@ export function TelehealthScreen({
               </ul>
             </div>
 
-            <Button className="w-full mt-4 bg-primary hover:bg-[#216982]">
-              <FileText className="w-4 h-4 mr-2" />
-              Generate Progress Report with Session Notes
-            </Button>
+            {onNavigate && (
+              <Button
+                className="w-full mt-4 bg-primary hover:bg-[#216982]"
+                onClick={() => onNavigate('clinical-reports')}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                Generate Progress Report with Session Notes
+              </Button>
+            )}
           </Card>
         )}
       </div>

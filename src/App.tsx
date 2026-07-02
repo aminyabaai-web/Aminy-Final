@@ -1512,6 +1512,10 @@ export default function App() {
   const [viewingProviderId, setViewingProviderId] = useState<string>('');
   const [viewingProviderName, setViewingProviderName] = useState<string>('Provider');
   const [activeSessionId, setActiveSessionId] = useState<string>('');
+  // Where pre-call-setup should continue to after the device check.
+  // Parent "Join Call" (my-appointments) → "video-call-room"; the default
+  // (bcba-briefing flow) stays "video-call".
+  const pendingCallScreenRef = useRef<AppScreen | null>(null);
   const [dailyRoomUrl, setDailyRoomUrl] = useState<string>('');
   const [activeFamilyId, setActiveFamilyId] = useState<string>('');
   const [activePatientId, setActivePatientId] = useState<string>('');
@@ -3226,7 +3230,9 @@ export default function App() {
                 onNavigateToProvider={() => navigateToScreen("marketplace")}
                 onJoinCall={(appt) => {
                   setActiveSessionId(appt.id);
-                  navigateToScreen("video-call-room");
+                  // Run the device check first — PreCallSetup continues to the call room
+                  pendingCallScreenRef.current = "video-call-room";
+                  navigateToScreen("pre-call-setup");
                 }}
                 onReschedule={() => navigateToScreen("conversational-booking")}
                 onBookAgain={() => navigateToScreen("conversational-booking")}
@@ -3243,7 +3249,7 @@ export default function App() {
                 onBack={() => navigateToScreen("telehealth")}
                 onComplete={() => {
                   navigateToScreen("my-appointments");
-                  toast.success("Session booked! You'll receive a confirmation email.");
+                  toast.success("You're booked! You'll get a text reminder before your session.");
                 }}
                 childName={userData.childName || "your child"}
               />
@@ -3660,8 +3666,15 @@ export default function App() {
           return (
             <Suspense fallback={<LoadingSkeleton screen="telehealth" />}>
               <PreCallSetup
-                onReady={() => navigateToScreen("video-call")}
-                onCancel={() => navigateToScreen("telehealth")}
+                onReady={() => {
+                  const dest = pendingCallScreenRef.current ?? "video-call";
+                  pendingCallScreenRef.current = null;
+                  navigateToScreen(dest);
+                }}
+                onCancel={() => {
+                  pendingCallScreenRef.current = null;
+                  navigateToScreen("telehealth");
+                }}
               />
             </Suspense>
           );

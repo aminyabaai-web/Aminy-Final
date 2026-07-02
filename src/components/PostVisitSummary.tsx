@@ -55,11 +55,12 @@ export function PostVisitSummary({
     setIsApproving(true);
     try {
       if (sessionId && userId) {
-        await supabase.from('session_notes').update({
+        const { error } = await supabase.from('session_notes').update({
           parent_approved: true,
           parent_approved_at: new Date().toISOString(),
           shared_with_parent: true,
         }).eq('session_id', sessionId);
+        if (error) throw error;
       }
       setApproved(true);
       toast.success('Plan updated! Your AI insights and goals now reflect this session.');

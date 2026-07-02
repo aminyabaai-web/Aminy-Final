@@ -111,13 +111,14 @@ export function DeleteAccount({
         // Subscription cancel is best-effort — continue with deletion request
       }
 
-      // 2. Record the deletion request
-      await supabase.from('account_deletion_requests').insert({
+      // 2. Record the deletion request — must be confirmed (compliance-critical)
+      const { error: deletionError } = await supabase.from('account_deletion_requests').insert({
         user_id: userId,
         email: userEmail,
         status: 'pending',
         requested_at: new Date().toISOString(),
       });
+      if (deletionError) throw deletionError;
 
       // 3. Audit log
       const sessionId = sessionStorage.getItem('aminy_session_id') || 'unknown';

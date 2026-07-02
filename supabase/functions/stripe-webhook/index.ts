@@ -89,7 +89,25 @@ Deno.serve(async (req: Request) => {
         const subMeta = (session.subscription_details?.metadata ?? {}) as Record<string, string>;
         const orgId = meta.org_id || subMeta.org_id || null;
 
-        if (orgId) {
+        if (meta.type === "marketplace_booking") {
+          // One-time marketplace session payment (ConversationalBooking) — not a subscription.
+          const bookingId = meta.booking_id || null;
+          if (!bookingId) {
+            console.log("marketplace_booking checkout completed without booking_id — acknowledging");
+            break;
+          }
+          const { data: updated, error } = await sb.from("marketplace_bookings").update({
+            payment_status: "paid",
+            stripe_session_id: session.id ?? null,
+            paid_at: new Date().toISOString(),
+          }).eq("id", bookingId).select("id").maybeSingle();
+          if (error) throw error; // 500 → Stripe retries (transient DB errors)
+          if (!updated) {
+            console.log(`marketplace booking ${bookingId} not found — acknowledging so Stripe doesn't retry`);
+          } else {
+            console.log(`marketplace booking ${bookingId} marked paid`);
+          }
+        } else if (orgId) {
           // B2B org seat subscription activated
           await sb.from("organizations").update({
             stripe_customer_id: customerId,

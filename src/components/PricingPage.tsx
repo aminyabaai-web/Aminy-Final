@@ -285,7 +285,7 @@ export function PricingPage({ onSelectTier, currentTier }: PricingPageProps) {
                   {/* Yearly savings */}
                   {tier.savings && tier.savings > 0 && (
                     <p className="text-sm text-[#5A6B7A] mt-1">
-                      or ${tier.yearlyPrice}/year (save {tier.savings}%)
+                      or ${tier.yearlyPrice}/year (save ${tier.savings})
                     </p>
                   )}
 

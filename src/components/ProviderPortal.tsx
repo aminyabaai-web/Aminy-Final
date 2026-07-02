@@ -882,11 +882,17 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(contentStr)))
     ).map(b => b.toString(16).padStart(2, '0')).join('');
 
-    await supabase.from('session_notes').update({
+    const { error } = await supabase.from('session_notes').update({
       cosigned_by: user.id,
       cosigned_at: now,
       cosign_hash: hash,
     }).eq('id', noteId);
+
+    if (error) {
+      console.error('[ProviderPortal] Co-sign failed:', error);
+      toast.error('Could not co-sign note — please try again');
+      return;
+    }
 
     setClinicalNotes(prev => prev.map(n =>
       n.id === noteId ? { ...n, cosignedAt: now } : n
