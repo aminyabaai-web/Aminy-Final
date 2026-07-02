@@ -30,11 +30,6 @@ export const BREADCRUMB_TRAILS: Record<string, BreadcrumbTrailItem[]> = {
     { label: 'Insights', screen: 'weekly-insights' },
     { label: 'Insight Report' },
   ],
-  'analytics-charts': [
-    { label: 'Home', screen: 'dashboard' },
-    { label: 'Analytics', screen: 'analytics' },
-    { label: 'Charts & Trends' },
-  ],
   'access-requests': [
     { label: 'Home', screen: 'dashboard' },
     { label: 'Settings', screen: 'settings' },

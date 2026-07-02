@@ -3369,7 +3369,7 @@ export default function App() {
                         <span className="sr-only">Back</span>
                         ←
                       </button>
-                      <h1 className="text-xl font-semibold dark:text-white">Analytics</h1>
+                      <h1 className="text-xl font-semibold dark:text-white">Charts & Trends</h1>
                     </div>
                   </div>
                 </div>
