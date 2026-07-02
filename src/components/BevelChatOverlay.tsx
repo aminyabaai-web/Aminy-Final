@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -47,6 +47,9 @@ import { UsageMeter } from './UsageMeter';
 import { useRateLimitStore } from '../lib/rate-limit-store';
 import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
 import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
+
+/** Lucide renderers for PersonalityConfig.icon — brand rule: no emoji in parent chrome. */
+const PERSONALITY_ICONS: Record<string, typeof Heart> = { Heart, Trophy, Microscope, Handshake };
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
