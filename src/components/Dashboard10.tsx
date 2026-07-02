@@ -1820,7 +1820,7 @@ export function Dashboard10({
         <button
           ref={chatButtonRef}
           onClick={() => setShowAIChat(!showAIChat)}
-          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 ${
+          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 md:hidden ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'
