@@ -314,7 +314,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
               // existing Claude prompt path; no new third-party data flow.
               supabase.from('outcome_events').select('context, payload, recorded_at, created_at')
                 .eq('user_id', parentId).eq('event_type', 'weekly_parent_checkin')
-                .order('created_at', { ascending: false }).limit(4),
+                .order('created_at', { ascending: false }).limit(12), // same-week re-dos collapse; prompt caps at 4 weeks
               supabase.from('clinical_outcomes').select('interpretation, raw_score, created_at')
                 .eq('user_id', parentId).eq('assessment_name', 'parent_baseline_assessment')
                 .order('created_at', { ascending: false }).limit(1).maybeSingle(),

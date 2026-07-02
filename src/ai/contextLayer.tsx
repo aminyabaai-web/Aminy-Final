@@ -148,7 +148,9 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         .eq('user_id', userId)
         .eq('event_type', 'weekly_parent_checkin')
         .order('created_at', { ascending: false })
-        .limit(4),
+        // Over-fetch rows: same-week re-dos collapse in mapCheckInRows; the
+        // prompt block itself is capped to the 4 most recent weeks (≤600 chars).
+        .limit(12),
 
       // Latest parent baseline (clinical_outcomes)
       supabase
@@ -182,7 +184,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
     const kvData = kvResult.status === 'fulfilled' ? kvResult.value : null;
     const kvContext = kvData?.context || {};
 
-    const weeklyOutcomes = mapCheckInRows(outcomeRows || []);
+    const weeklyOutcomes = mapCheckInRows(outcomeRows || []).slice(-4);
     const outcomeBaseline = parseBaselineRow(baselineRow);
 
     const sessionsCompleted = sessions?.length ?? 0;
