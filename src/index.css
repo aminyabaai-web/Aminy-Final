@@ -18523,3 +18523,31 @@ tr:hover td, .hover-row:hover {
 .dark\:text-emerald-400:is(.dark *) { color: #34d399; }
 .dark\:text-purple-300:is(.dark *) { color: #d8b4fe; }
 .dark\:text-sky-400:is(.dark *) { color: #38bdf8; }
+.disabled\:opacity-40:disabled { opacity: 0.4; }
+
+/* Ease rewards balance card entrance — transform-only CSS keyframe */
+@keyframes jrSlideDown {
+  from { transform: translateY(-12px); }
+  to { transform: translateY(0); }
+}
+.jr-slide-down { animation: jrSlideDown 0.35s ease-out both; }
+
+/* ============================================================
+   Dialog re-centering fix (July 2026, growth work): the generic
+   perf rule `[role="dialog"] { position:fixed !important;
+   inset:0 !important }` (≈ line 5957) clobbers the shadcn
+   DialogContent's `top-[50%] left-[50%]` while its
+   `translate(-50%,-50%)` still applies — so EVERY modal panel
+   rendered shifted up-left by half its own size (verified live
+   at 390×844: bounding box x:-177 y:-422). Re-pin only the
+   content panels (data-slot scoped — overlays/sheets untouched).
+   transform is !important so `.animate-in { transform:
+   translateZ(0) }` can't clobber the centering translate.
+   ============================================================ */
+[data-slot="dialog-content"],
+[data-slot="alert-dialog-content"] {
+  inset: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

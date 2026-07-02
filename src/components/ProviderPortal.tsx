@@ -1949,8 +1949,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div className="lg:col-span-2">
                 {selectedPatient && selectedPatient.profileAccess === 'granted' ? (
                   <PatientAISummary
-                    patientId={selectedPatient.id}
-                    childName={selectedPatient.childName}
+                    patient={{
+                      id: selectedPatient.id,
+                      childName: selectedPatient.childName,
+                      parentName: selectedPatient.parentName,
+                      age: selectedPatient.age,
+                      conditions: selectedPatient.conditions,
+                    }}
                     parentId={selectedPatient.parentUserId ?? ""}
                     providerId={providerId}
                   />

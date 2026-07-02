@@ -1249,7 +1249,9 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       confidence: accuracy, // use accuracy as confidence proxy for text mode
       needsSupport: accuracy < 0.5,
       latency: 0,
-      phonemes: targetPhonemes,
+      // Only light up the phoneme dots on a real match — lighting them all
+      // green after a wrong answer read as false success
+      phonemes: accuracy >= 0.8 ? targetPhonemes : [],
     };
 
     setSpeechAnalysis(analysis);
@@ -2087,14 +2089,14 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         setActiveView('home');
                       }}
                       aria-label="Back to home"
-                      className="w-11 h-11 bg-white/20 rounded-full flex items-center justify-center"
+                      className="w-11 h-11 bg-white/70 rounded-full flex items-center justify-center shadow-sm"
                     >
-                      <ArrowLeft className="w-5 h-5 text-white" />
+                      <ArrowLeft className="w-5 h-5 text-[#132F43]" />
                     </motion.button>
 
                     <div className="text-center flex-1 mx-3">
-                      <h2 className="text-xl text-white mb-1">{selectedActivity.title}</h2>
-                      <p className="text-white/80 text-sm">{selectedActivity.description}</p>
+                      <h2 className="text-xl font-semibold text-[#132F43] mb-1">{selectedActivity.title}</h2>
+                      <p className="text-[#3A4A57] text-sm">{selectedActivity.description}</p>
                     </div>
 
                     {/* TTS replay / stop button */}
@@ -2108,25 +2110,24 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
                         }
                       }}
-                      className={`w-11 h-11 rounded-full flex items-center justify-center ${
-                        tts.isSpeaking ? 'bg-white/40' : 'bg-white/20'
+                      className={`w-11 h-11 rounded-full flex items-center justify-center shadow-sm ${
+                        tts.isSpeaking ? 'bg-white/90' : 'bg-white/70'
                       }`}
                       aria-label={tts.isSpeaking ? 'Stop narration' : 'Read aloud'}
                     >
                       {tts.isSpeaking ? (
-                        <Square className="w-4 h-4 text-white" />
+                        <Square className="w-4 h-4 text-[#132F43]" />
                       ) : (
-                        <Volume2 className="w-5 h-5 text-white" />
+                        <Volume2 className="w-5 h-5 text-[#132F43]" />
                       )}
                     </motion.button>
                   </div>
                   
                   {/* Progress Bar */}
-                  <div className="bg-white/20 rounded-full h-2">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(100, (practiceAttempts / 5) * 100)}%` }}
-                      className="bg-white h-2 rounded-full"
+                  <div className="bg-white/60 rounded-full h-2">
+                    <div
+                      className="bg-[#2A7D99] h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (practiceAttempts / 5) * 100)}%` }}
                     />
                   </div>
                 </div>
@@ -2443,7 +2444,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     key={filter.id}
                     whileHover={{ scale: 1.05 }}
                     onClick={() => setActiveTrackFilter(filter.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 min-h-[44px] rounded-full whitespace-nowrap transition-colors duration-200 ${
+                    className={`flex shrink-0 items-center space-x-2 px-4 py-2 min-h-[44px] rounded-full whitespace-nowrap transition-colors duration-200 ${
                       activeTrackFilter === filter.id
                         ? 'text-white'
                         : 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
@@ -2608,11 +2609,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <span>Pace:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
-                              <div 
-                                key={i} 
-                                className={`w-2 h-2 rounded-full ${
-                                  i < buddy.voiceSettings.pace ? 'bg-white' : 'bg-white/30'
-                                }`} 
+                              <div
+                                key={i}
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: 'currentColor', opacity: i < buddy.voiceSettings.pace ? 1 : 0.25 }}
                               />
                             ))}
                           </div>
@@ -2621,11 +2621,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <span>Energy:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
-                              <div 
-                                key={i} 
-                                className={`w-2 h-2 rounded-full ${
-                                  i < buddy.voiceSettings.enthusiasm ? 'bg-white' : 'bg-white/30'
-                                }`} 
+                              <div
+                                key={i}
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: 'currentColor', opacity: i < buddy.voiceSettings.enthusiasm ? 1 : 0.25 }}
                               />
                             ))}
                           </div>

@@ -271,10 +271,11 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
 
             <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px 20px' }}>
 
-                {/* Token Balance Card */}
-                <motion.div
-                    initial={{ y: -20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
+                {/* Token Balance Card — CSS entrance (motion initial={{y:-20}} froze
+                    mid-flight under the WAAPI opacity workaround, pinning the card
+                    20px up underneath the sticky header) */}
+                <div
+                    className="jr-slide-down"
                     style={{ backgroundColor: '#111827', borderRadius: '32px', padding: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginBottom: '40px', position: 'relative', overflow: 'hidden' }}
                 >
                     <div style={{ position: 'absolute', top: '-10px', right: '-10px', opacity: 0.1 }}>
@@ -290,7 +291,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                     <p style={{ fontSize: '14px', color: '#6B7280', marginTop: '8px', zIndex: 1, textAlign: 'center' }}>
                         {safeChildName ? `You're doing great, ${safeChildName}!` : "You're doing great!"} You can spend your stars on fun rewards.
                     </p>
-                </motion.div>
+                </div>
 
                 {/* Rewards Grid */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
