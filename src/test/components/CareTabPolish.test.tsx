@@ -3,14 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), info: vi.fn() } }));
 
-vi.mock('lucide-react', () => {
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const icon = (name: string) =>
     function MockIcon(props: Record<string, unknown>) {
       return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
     };
-  return new Proxy({}, {
-    get: (_target, prop: string) => icon(prop),
-  });
+  return Object.fromEntries(Object.keys(actual).map((k) => [k, icon(k)]));
 });
 
 vi.mock('../../components/ui/card', () => ({

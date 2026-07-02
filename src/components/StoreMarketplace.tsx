@@ -1360,7 +1360,9 @@ export function StoreMarketplace({
                       <Badge className="absolute top-2 left-2 bg-blue-500 text-white">New</Badge>
                     )}
                     {product.bcbaRecommended && (
-                      <Badge className="absolute top-2 right-2 bg-violet-500 text-white">
+                      // Teal, not violet: violet is the provider-surface accent AND
+                      // bg-violet-* isn't in the precompiled CSS (rendered invisible).
+                      <Badge className="absolute top-2 right-2 bg-[#2A7D99] text-white">
                         <Check className="w-3 h-3 mr-1" />
                         Behaviorist pick
                       </Badge>
@@ -1475,7 +1477,7 @@ export function StoreMarketplace({
                         {product.name}
                       </h3>
                       {product.bcbaRecommended && (
-                        <Badge className="shrink-0 bg-violet-100 text-violet-700 text-sm">
+                        <Badge className="shrink-0 bg-[#2A7D99]/10 text-[#2A7D99] text-sm">
                           Behaviorist pick
                         </Badge>
                       )}

@@ -18246,6 +18246,7 @@ tr:hover td, .hover-row:hover {
    with the mid-tone -700 text. Darken the tint, lighten the text.
    ============================================================ */
 .dark .bg-emerald-50 { background-color: rgba(6,78,59,0.35) !important; }
+.dark .bg-emerald-100 { background-color: rgba(6,78,59,0.45) !important; }
 .dark .text-emerald-700, .dark .text-emerald-800 { color: #6ee7b7 !important; }
 .dark .border-emerald-200 { border-color: #065f46 !important; }
 .dark .bg-amber-50 { background-color: rgba(120,53,15,0.35) !important; }
