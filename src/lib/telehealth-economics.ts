@@ -4,6 +4,7 @@
 // See LICENSE file for details.
 
 import { getMarketplaceDiscount, type TierType } from './tier-utils';
+import { listCptRules, maxUnitsPerDay } from './billing/cpt-registry';
 
 export type CareRail = 'cash_pay_direct' | 'insured_partner_billed' | 'insured_aminy_billed';
 
@@ -516,18 +517,27 @@ export function calculateAppointmentSettlementBreakdown(options: {
  * Modifier 95 (synchronous telehealth) typically reimburses at 100% of in-person
  * rate for behavioral health in AZ. GT modifier is legacy but some payers still use it.
  *
+ * DERIVED from the CPT rules registry (src/lib/billing/cpt-registry.ts) —
+ * every rule with a defaultReimbursementCents produces an entry here
+ * (currently 97151, 97153, 97155, 97156, 90834, 90837, 92507, 96127).
+ * modifierGT differs only where the rule declares gtReimbursementCents
+ * (90834/90837: GT = 95% of in-person in some plans).
+ *
  * Source: CMS Physician Fee Schedule + AZ AHCCCS rate tables
  */
-export const ESTIMATED_REIMBURSEMENT_CENTS: Record<string, { inPerson: number; modifier95: number; modifierGT: number }> = {
-  '97151': { inPerson: 4800, modifier95: 4800, modifierGT: 4800 },   // ABA Assessment (per 15-min unit)
-  '97153': { inPerson: 3200, modifier95: 3200, modifierGT: 3200 },   // ABA Direct RBT (per 15-min unit)
-  '97155': { inPerson: 5600, modifier95: 5600, modifierGT: 5600 },   // ABA Protocol Mod BCBA (per 15-min unit)
-  '97156': { inPerson: 5200, modifier95: 5200, modifierGT: 5200 },   // ABA Family Guidance (per 15-min unit)
-  '90834': { inPerson: 10800, modifier95: 10800, modifierGT: 10260 }, // Psychotherapy 45 min (GT = 95% in some plans)
-  '90837': { inPerson: 14400, modifier95: 14400, modifierGT: 13680 }, // Psychotherapy 60 min
-  '92507': { inPerson: 7200, modifier95: 7200, modifierGT: 7200 },   // SLP Treatment
-  '96127': { inPerson: 500, modifier95: 500, modifierGT: 500 },      // Brief emotional/behavioral assessment (PHQ-9, GAD-7, etc.) — per instrument, up to 4 units/day
-};
+export const ESTIMATED_REIMBURSEMENT_CENTS: Record<string, { inPerson: number; modifier95: number; modifierGT: number }> =
+  Object.fromEntries(
+    listCptRules()
+      .filter((rule) => rule.defaultReimbursementCents !== undefined)
+      .map((rule) => [
+        rule.code,
+        {
+          inPerson: rule.defaultReimbursementCents as number,
+          modifier95: rule.defaultReimbursementCents as number,
+          modifierGT: rule.gtReimbursementCents ?? (rule.defaultReimbursementCents as number),
+        },
+      ]),
+  );
 
 export interface TelehealthMarginAnalysis {
   cptCode: string;
@@ -679,8 +689,8 @@ export function cashPriceMatchingInsuredNet(options: {
 
 /** CPT code billed for validated screeners (PHQ-9, PHQ-A, GAD-7, SCARED, etc.). */
 export const SCREENER_CPT = '96127';
-/** Payers reimburse up to 4 units of 96127 per patient per day. */
-export const SCREENER_MAX_UNITS_PER_DAY = 4;
+/** Payers reimburse up to 4 units of 96127 per patient per day (from the CPT rules registry). */
+export const SCREENER_MAX_UNITS_PER_DAY = maxUnitsPerDay(SCREENER_CPT) ?? 4;
 
 /**
  * Insurance-billed screener economics. Aminy auto-administers validated

@@ -5,21 +5,26 @@ await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
 await page.waitForTimeout(4000);
 await page.evaluate(() => window.__navigateToScreen('profile'));
 await page.waitForTimeout(2000);
-const client = await page.context().newCDPSession(page);
-await client.send('DOM.enable');
-await client.send('CSS.enable');
-const { root } = await client.send('DOM.getDocument');
-const handle = await page.evaluateHandle(() => {
-  const btns = [...document.querySelectorAll('button')];
-  return btns.find(b => b.querySelector('svg.lucide-camera'));
-});
-const remote = handle.remoteObject ? handle.remoteObject() : handle._remoteObject;
-const { nodeId } = await client.send('DOM.requestNode', { objectId: remote.objectId });
-const { matchedCSSRules } = await client.send('CSS.getMatchedStylesForNode', { nodeId });
-for (const m of matchedCSSRules) {
-  const props = m.rule.style.cssProperties.filter(p => p.name === 'position');
-  if (props.length) {
-    console.log('SELECTOR:', m.rule.selectorList.text, '->', props.map(p=>`${p.name}:${p.value}`).join(','), '| origin:', m.rule.origin, '| styleSheet:', m.rule.styleSheetId);
+const hits = await page.evaluate(() => {
+  const cam = [...document.querySelectorAll('button')].find(b => b.querySelector('svg.lucide-camera'));
+  const out = [];
+  const walk = (list) => {
+    for (const r of list) {
+      if (r.cssRules && r.cssRules.length) { walk(r.cssRules); continue; }
+      if (r.selectorText && r.style && r.style.position) {
+        try {
+          if (cam.matches(r.selectorText)) {
+            out.push({ sel: r.selectorText.slice(0, 160), pos: r.style.position, important: r.style.getPropertyPriority('position') });
+          }
+        } catch { /* invalid selector for matches */ }
+      }
+    }
+  };
+  for (const sheet of document.styleSheets) {
+    let rules; try { rules = sheet.cssRules; } catch { continue; }
+    walk(rules);
   }
-}
+  return out;
+});
+console.log(JSON.stringify(hits, null, 2));
 await browser.close();

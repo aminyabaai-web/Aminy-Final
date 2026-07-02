@@ -37,6 +37,12 @@ export interface SessionPricing {
   price: number;
   providerPay: number;
   margin: number; // percentage
+  /**
+   * CPT code(s) for superbills. Multi-code strings use '/' or ', ' separators
+   * (e.g. '97155/97156', '96130, 96131'). Every referenced code MUST exist in
+   * the CPT rules registry (src/lib/billing/cpt-registry.ts) — validated at
+   * module load in dev below.
+   */
   cptCode: string;
   cptDescription: string;
   category: ProviderCategory;

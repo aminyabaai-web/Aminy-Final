@@ -1272,3 +1272,15 @@ export function getTimelyFilingDeadline(
 
   return new Date(svcDate.getTime() + payer.timelyFilingDays * 24 * 60 * 60 * 1000);
 }
+
+// ============================================================================
+// Registry wiring
+// ============================================================================
+
+// Expose this module's contracted rate schedules to the CPT rules registry so
+// resolveRateCents(code, payerId, modifier) can consult them (in cents) without
+// the registry importing this module (avoids an import cycle).
+registerPayerRateSource((payerId, cptCode, modifier) => {
+  const entry = getPayerRate(payerId, cptCode, modifier);
+  return entry ? Math.round(entry.ratePerUnit * 100) : undefined;
+});

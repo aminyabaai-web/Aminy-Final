@@ -9,13 +9,25 @@
  * BACB requires 5% supervision of RBT direct hours
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Users, Plus, Clock, Target, ChevronDown, ChevronRight,
   Mail, Trash2, CheckCircle2, AlertTriangle, BarChart3,
   FileText, Calendar, UserPlus, Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  getRBTProfiles,
+  getSupervisionSessions,
+  getTotalDirectServiceHours,
+  loadRBTDataFromSupabase,
+  saveRBTProfile,
+  removeRBTProfile,
+  addSupervisionSession,
+  type SupervisionSession,
+} from '../../lib/rbt-supervision';
+import { isDemoMode } from '../../lib/demo-seed';
+import { supabase } from '../../utils/supabase/client';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -65,16 +77,36 @@ function calcSupervisionCompliance(directHours: number, supervisionHours: number
   return { required, ratio, isCompliant, deficit: Math.max(0, required - supervisionHours) };
 }
 
+// RBTs and supervision logs live in Supabase via src/lib/rbt-supervision.ts
+// (same tables SupervisionDashboard reads — rbt_org_assignments,
+// rbt_supervision_sessions, rbt_direct_service_hours). This key now only holds
+// the invoice drafts (no server table yet — feature is "coming soon").
 const STORAGE_KEY = 'aminy-rbt-management';
 
-function loadData(): { rbts: RBT[]; logs: SupervisionLog[]; invoices: ClientInvoice[] } {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) return JSON.parse(stored);
-  return { rbts: [], logs: [], invoices: [] };
+function loadInvoices(): ClientInvoice[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return (JSON.parse(stored).invoices as ClientInvoice[]) ?? [];
+  } catch { /* corrupt cache — start clean */ }
+  return [];
 }
 
-function saveData(data: { rbts: RBT[]; logs: SupervisionLog[]; invoices: ClientInvoice[] }) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function newSessionId(): string {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+/** Map a lib SupervisionSession to this screen's simpler log shape. */
+function toSupervisionLog(s: SupervisionSession): SupervisionLog {
+  return {
+    id: s.id,
+    rbtId: s.rbtId,
+    date: s.date,
+    hours: s.durationMinutes / 60,
+    type: s.type === 'group' ? 'group' : s.includesDirectObservation ? 'direct' : 'indirect',
+    notes: s.bcbaNotes,
+  };
 }
 
 // ── Component ────────────────────────────────────────────────────────

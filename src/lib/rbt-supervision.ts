@@ -864,10 +864,10 @@ export function getCompetencyGaps(rbtId: string): {
 
 // ── Mutation Helpers ────────────────────────────────────────────────
 
-export function addSupervisionSession(session: SupervisionSession): void {
+export async function addSupervisionSession(session: SupervisionSession): Promise<boolean> {
   if (!isDemoMode()) {
     // Write to Supabase and update in-memory cache
-    supabase.from('rbt_supervision_sessions').insert({
+    const { error } = await supabase.from('rbt_supervision_sessions').insert({
       id: session.id,
       rbt_id: session.rbtId,
       bcba_id: session.bcbaId,
@@ -884,18 +884,18 @@ export function addSupervisionSession(session: SupervisionSession): void {
       bcba_signed_at: session.bcbaSignatureDate || null,
       status: session.status,
       client_id: session.clientId || null,
-    }).then(({ error }) => {
-      if (error) {
-        console.error('[rbt-supervision] Failed to save supervision session:', error.message);
-        return;
-      }
-      _sbSessions.push(session);
     });
-    return;
+    if (error) {
+      console.error('[rbt-supervision] Failed to save supervision session:', error.message);
+      return false;
+    }
+    _sbSessions.push(session);
+    return true;
   }
   const sessions = loadFromStorage<SupervisionSession[]>(STORAGE_KEYS.supervisionSessions, []);
   sessions.push(session);
   saveToStorage(STORAGE_KEYS.supervisionSessions, sessions);
+  return true;
 }
 
 export function addCompetencyAssessment(assessment: CompetencyAssessment): void {
