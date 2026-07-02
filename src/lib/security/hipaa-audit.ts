@@ -348,6 +348,16 @@ export async function logPHIAccess(input: PHIAuditInput): Promise<PHIAuditEntry>
   // the error is caught silently — localStorage chain remains the fallback.
   supabase.from('audit_log').insert({
     event_type: entry.eventType,
+    // Live table requires NOT NULL `action` + `details` (schema-gap migration
+    // 20260607 added the event_type/… columns alongside the original
+    // action/details ones). Without these two, EVERY insert 400s and the
+    // HIPAA trail silently drops to localStorage-only.
+    action: entry.eventType,
+    details: {
+      description: entry.actionDescription,
+      screen: entry.screenContext ?? null,
+      sensitivity: entry.sensitivity ?? null,
+    },
     user_id: entry.userId === 'unknown' ? null : entry.userId,
     user_role: entry.userRole,
     user_email: entry.userEmail,

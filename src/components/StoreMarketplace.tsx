@@ -34,6 +34,7 @@ import {
   ChevronDown,
   X,
   Check,
+  RefreshCw,
   Download,
   Crown,
   Sparkles,
@@ -52,6 +53,14 @@ import { toast } from 'sonner';
 import { TierType } from '../lib/tier-utils';
 import { supabase } from '../utils/supabase/client';
 import { isDemoMode } from '../lib/demo-seed';
+import {
+  amazonSearchUrl,
+  buildChildRecContext,
+  getAIRecs,
+  hasChildSignals,
+  REC_CATEGORY_LABELS,
+  type ProductRec,
+} from '../lib/store-recommendations';
 
 // Types
 interface Product {
@@ -756,13 +765,8 @@ const CURATED_PRODUCTS: Product[] = [
 // instead of placeholder ASINs. Digital items are excluded (their download
 // files don't ship with the app yet).
 //
-// When the Amazon Associates account is approved, append the tag here.
-const AMAZON_AFFILIATE_TAG = ''; // e.g. 'aminy-20'
-
-function amazonSearchUrl(productName: string): string {
-  const base = `https://www.amazon.com/s?k=${encodeURIComponent(productName)}`;
-  return AMAZON_AFFILIATE_TAG ? `${base}&tag=${encodeURIComponent(AMAZON_AFFILIATE_TAG)}` : base;
-}
+// The affiliate tag + amazonSearchUrl live in src/lib/store-recommendations.ts
+// (single source of truth, shared with the AI rec engine).
 
 const CURATED_AFFILIATE_FALLBACK: Product[] = CURATED_PRODUCTS
   .filter((p) => p.affiliateUrl && !p.isDigital)
@@ -909,6 +913,30 @@ export function StoreMarketplace({
     newOnly: false,
     hsaFsaOnly: false,
   });
+
+  // ---- "Picked for {child}" — AI-personalized Amazon affiliate recs ----
+  // The AI picks product types for THIS child (profile + screening signals);
+  // each card links to an Amazon affiliate SEARCH so anything bought in the
+  // click session earns commission. Rule-based fallback covers offline/AI
+  // failure, so the section always renders.
+  const recCtx = useMemo(() => buildChildRecContext({ childProfile: childProfile ?? null }), [childProfile]);
+  const personalizedRecs = hasChildSignals(recCtx);
+  const recChildName = recCtx.childName || childProfile?.name;
+  const [recs, setRecs] = useState<ProductRec[]>([]);
+  const [recsLoading, setRecsLoading] = useState(true);
+
+  const loadRecs = useCallback(async () => {
+    setRecsLoading(true);
+    try {
+      setRecs(await getAIRecs(recCtx)); // never rejects — falls back internally
+    } finally {
+      setRecsLoading(false);
+    }
+  }, [recCtx]);
+
+  useEffect(() => {
+    loadRecs();
+  }, [loadRecs]);
 
   // Attempt to fetch real products from Supabase store_products table
   useEffect(() => {
@@ -1265,6 +1293,84 @@ export function StoreMarketplace({
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 py-6">
+        {/* Picked for {child} — AI affiliate recs (always first) */}
+        {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && (
+          <div className="mb-8" data-testid="picked-for-child">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <h2 className="text-lg font-semibold text-[#132F43] dark:text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-primary" />
+                {personalizedRecs && recChildName ? `Picked for ${recChildName}` : 'Picked for your family'}
+              </h2>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadRecs}
+                disabled={recsLoading}
+                className="shrink-0 flex items-center gap-1.5"
+                aria-label="Get more product ideas"
+              >
+                <RefreshCw className={`w-4 h-4 ${recsLoading ? 'animate-spin' : ''}`} />
+                More ideas
+              </Button>
+            </div>
+            <p className="text-sm text-[#5A6B7A] mb-4">
+              {personalizedRecs
+                ? `Aminy's AI matched these to what it knows about ${recChildName || 'your child'} — searched across everything Amazon carries.`
+                : 'Tools families like yours reach for most — searched across everything Amazon carries.'}
+            </p>
+
+            {recsLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" aria-hidden="true">
+                {[0, 1, 2, 3].map((i) => (
+                  <Card key={`rec-skeleton-${i}`} className="p-4">
+                    <div className="animate-pulse">
+                      <div className="h-3 w-24 bg-slate-200 dark:bg-slate-700 rounded mb-2" />
+                      <div className="h-4 w-2/3 bg-slate-200 dark:bg-slate-700 rounded mb-2" />
+                      <div className="h-3 w-full bg-slate-200 dark:bg-slate-700 rounded mb-1" />
+                      <div className="h-3 w-1/2 bg-slate-200 dark:bg-slate-700 rounded mb-3" />
+                      <div className="h-8 w-32 bg-slate-200 dark:bg-slate-700 rounded" />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {recs.map((rec, i) => (
+                  <Card
+                    key={`rec-${i}-${rec.searchQuery}`}
+                    className="p-4 hover:shadow-lg transition-shadow border-[#2A7D99]/20 dark:border-[#2A7D99]/30"
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <Badge className="bg-[#2A7D99]/10 text-[#2A7D99] text-sm">
+                        {REC_CATEGORY_LABELS[rec.category]}
+                      </Badge>
+                      {rec.priceBand && (
+                        <span className="text-sm text-slate-400" aria-label={`Price range ${rec.priceBand}`}>
+                          {rec.priceBand}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-medium text-[#132F43] dark:text-white">{rec.title}</h3>
+                    <p className="text-sm italic text-[#5A6B7A] mt-1 mb-3">{rec.why}</p>
+                    <Button
+                      size="sm"
+                      onClick={() => window.open(amazonSearchUrl(rec.searchQuery), '_blank', 'noopener')}
+                      className="flex items-center gap-1"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View on Amazon
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            <p className="text-xs text-slate-400 mt-3">
+              Aminy may earn a commission from Amazon purchases — at no extra cost to you.
+            </p>
+          </div>
+        )}
+
         {/* AI-Recommended Section (when child profile is available) */}
         {selectedCategory === 'all' && !searchQuery && !showWishlistOnly && aiRecommendedProducts.length > 0 && (
           <div className="mb-8">
