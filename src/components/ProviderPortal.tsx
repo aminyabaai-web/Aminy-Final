@@ -77,7 +77,9 @@ import { supabase } from '../utils/supabase/client';
 import { CredentialBadge, VerifiedBadge } from './provider/CredentialBadge';
 import { getBranding, saveBranding, type ProviderBranding } from '../lib/provider-branding';
 import { CPT_CODES, getCPTByCode, suggestCPTCodes, validateNoteForCPT, type CPTCode } from '../lib/cpt-codes';
+import { getCptRulesForService, type CptRule, type CptServiceType } from '../lib/billing/cpt-registry';
 import { PatientAISummary } from './provider/PatientAISummary';
+import { RBTPortalView } from './provider/RBTPortalView';
 import { CRSyncStatus } from './CRSyncStatus';
 import { summarizePractice, resolvePracticeMode, type ProviderPracticeMode } from '../lib/provider-practice';
 import { getPlatformFeeRate } from '../lib/stripe-connect';
@@ -107,6 +109,32 @@ import { CommunicationTemplates } from './CommunicationTemplates';
 
 // Lazy-load the SuperbillGenerator for the provider-side superbill overlay
 const SuperbillGenerator = React.lazy(() => import('./SuperbillGenerator'));
+
+// ── CPT auto-suggest ────────────────────────────────────────────────────────
+// Maps each clinical note template to its CPT registry service type plus a
+// preferred ordering, so the note editor can preselect the most likely code
+// and offer 2-3 one-tap "Suggested" chips (manual override always available).
+const CPT_SUGGESTIONS_BY_NOTE_TYPE: Record<string, { service: CptServiceType; preferred: string[] }> = {
+  'aba-session': { service: 'aba', preferred: ['97153', '97155', '97152'] },
+  'soap': { service: 'aba', preferred: ['97156', '97155', '97151'] },
+  'slp-session': { service: 'slp', preferred: ['92507', '92523', '92526'] },
+  'mental-health': { service: 'mental-health', preferred: ['90834', '90832', '90837'] },
+  'diagnostic-eval': { service: 'diagnostic', preferred: ['96130', '96112', '96136'] },
+  'dev-ped': { service: 'dev-ped', preferred: ['99213', '99214', '99215'] },
+  'progress': { service: 'caregiver-education', preferred: ['98971', '98970', '98972'] },
+};
+
+/** Top 2-3 suggested CPT rules for a note template (registry-driven). */
+function getSuggestedCptForNoteType(noteType: string): CptRule[] {
+  const cfg = CPT_SUGGESTIONS_BY_NOTE_TYPE[noteType];
+  if (!cfg) return [];
+  const rules = getCptRulesForService(cfg.service).filter((r) => r.noteTemplate);
+  const rank = (code: string) => {
+    const i = cfg.preferred.indexOf(code);
+    return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+  };
+  return [...rules].sort((a, b) => rank(a.code) - rank(b.code)).slice(0, 3);
+}
 
 interface Patient {
   id: string;
@@ -174,8 +202,26 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
   // Defaults to 'independent' (the practice-in-a-box wedge); org-affiliated
   // providers (AACT/Rise) fall back to 'org' framing when no explicit choice is stored.
   const [practiceMode, setPracticeMode] = useState<ProviderPracticeMode>('independent');
+  // Org clinical role (organization_members.clinical_role, migration
+  // 20260619002000). 'rbt' swaps the full tab set for the scoped RBTPortalView.
+  // null (no membership row, query error, or column not deployed) = full
+  // portal, exactly as today — zero regression for existing providers.
+  const [clinicalRole, setClinicalRole] = useState<string | null>(null);
   useEffect(() => {
     (async () => {
+      // DEV/E2E override (same spirit as the __e2e_auth bypass) so the RBT
+      // role-scoped view is testable without seeding organization_members.
+      // Checked before any network await so it's deterministic in tests.
+      let roleOverridden = false;
+      if (import.meta.env.DEV) {
+        try {
+          const override = localStorage.getItem('__dev_clinical_role');
+          if (override) {
+            setClinicalRole(override);
+            roleOverridden = true;
+          }
+        } catch { /* localStorage unavailable */ }
+      }
       // pilot_organization is a known column (Arizona pilot migration). practice_mode
       // may not exist in every deployed schema yet, so query it separately and tolerate
       // its absence — a failed practice_mode read must not drop partner attribution.
@@ -200,6 +246,24 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         // practice_mode column not present — fall back to affiliation-based default.
       }
       setPracticeMode(resolvePracticeMode(storedMode, { affiliatedOrg }));
+
+      // Resolve the signed-in user's clinical role within their org.
+      // .limit(1) (not .maybeSingle) so a user in multiple orgs still resolves.
+      if (roleOverridden) return;
+      try {
+        const { data: memberRows, error: memberError } = await supabase
+          .from('organization_members')
+          .select('clinical_role')
+          .eq('user_id', providerId)
+          .eq('status', 'active')
+          .limit(1);
+        if (!memberError) {
+          const role = (memberRows as Array<{ clinical_role?: string | null }> | null)?.[0]?.clinical_role ?? null;
+          setClinicalRole(role);
+        }
+      } catch {
+        // organization_members table/column not present — keep the full portal.
+      }
     })();
   }, [providerId]);
   // Sub-view within the "My Practice" hub so the BCBA can move coherently
@@ -973,6 +1037,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         </div>
       </div>
     );
+  }
+
+  // RBTs get a role-scoped portal (their day, supervision status, competencies,
+  // and note quick-entry) instead of the full practice-owner tab set.
+  if (clinicalRole === 'rbt') {
+    return <RBTPortalView userId={providerId} userName={provider.needsSetup ? undefined : provider.name} />;
   }
 
   const filteredPatients = patients.filter(p =>
@@ -2257,6 +2327,45 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       <label className="text-sm font-medium text-neutral-700 dark:text-slate-300 mb-1 block">
                         <Sparkles className="w-3.5 h-3.5 inline mr-1 text-amber-500" />CPT Code
                       </label>
+                      {(() => {
+                        const suggested = getSuggestedCptForNoteType(editingNote.noteType);
+                        if (suggested.length === 0) return null;
+                        return (
+                          <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                            <span className="text-sm text-[#5A6B7A] dark:text-slate-400">Suggested:</span>
+                            {suggested.map(rule => {
+                              const isSelected = editingNote.cptCode === rule.code;
+                              return (
+                                <button
+                                  key={rule.code}
+                                  type="button"
+                                  onClick={() => {
+                                    const cpt = getCPTByCode(rule.code);
+                                    setEditingNote(prev => {
+                                      if (!prev) return prev;
+                                      // Same behavior as picking the code in the dropdown:
+                                      // switching templates resets fields; same template keeps them.
+                                      if (cpt && cpt.noteTemplate !== prev.noteType) {
+                                        return { ...prev, cptCode: rule.code, noteType: cpt.noteTemplate as NoteType, content: {} };
+                                      }
+                                      return { ...prev, cptCode: rule.code };
+                                    });
+                                  }}
+                                  className="min-h-[44px] rounded-full border px-3 py-1.5 text-sm font-medium transition-colors bg-white dark:bg-slate-800"
+                                  style={
+                                    isSelected
+                                      ? { borderColor: '#7c3aed', backgroundColor: '#f5f3ff', color: '#6d28d9' }
+                                      : { borderColor: '#E8E4DF', color: '#5A6B7A' }
+                                  }
+                                  aria-pressed={isSelected}
+                                >
+                                  {rule.code} · {rule.shortName}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        );
+                      })()}
                       <select
                         className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#132F43] dark:text-white text-sm"
                         value={editingNote.cptCode || ''}
@@ -2340,7 +2449,16 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                     <select
                       className="w-full px-3 py-2 border border-neutral-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-[#132F43] dark:text-white text-sm"
                       value={editingNote.noteType}
-                      onChange={e => setEditingNote(prev => prev ? { ...prev, noteType: e.target.value as NoteType, content: {} } : prev)}
+                      onChange={e => {
+                        const nextType = e.target.value as NoteType;
+                        // Auto-preselect the most likely CPT for the chosen
+                        // discipline (97153 for ABA, 92507 for SLP, 90834 for
+                        // MH, ...). Manual override stays available above.
+                        const topCpt = getSuggestedCptForNoteType(nextType)[0];
+                        setEditingNote(prev => prev
+                          ? { ...prev, noteType: nextType, content: {}, cptCode: topCpt?.code ?? prev.cptCode }
+                          : prev);
+                      }}
                     >
                       {(Object.entries(NOTE_TEMPLATES) as [NoteType, typeof NOTE_TEMPLATES[NoteType]][]).map(([key, tmpl]) => (
                         <option key={key} value={key}>{tmpl.label}</option>

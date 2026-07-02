@@ -18325,3 +18325,19 @@ tr:hover td, .hover-row:hover {
    Appended last so it wins over the earlier disabled:opacity-50 rule.
    ============================================================ */
 .disabled\:opacity-100:disabled { opacity: 1; }
+
+/* ============================================================
+   Desktop side-nav polish (July 2026): utilities referenced by
+   DesktopSideNav.tsx that were missing from the precompiled sheet.
+   - .w-[296px]: without it the sidebar had NO width and flexed to
+     ~600px, squeezing the dashboard content.
+   - .pb-5 / .min-h-full / .gap-2.5: layout classes the component
+     was already using as no-ops.
+   ============================================================ */
+.w-\[296px\] { width: 296px; }
+.pb-5 { padding-bottom: 1.25rem; }
+.min-h-full { min-height: 100%; }
+.gap-2\.5 { gap: 0.625rem; }
+
+/* Feedback FAB sits above the chat FAB (bottom-24 + 56px) — precompiled sheet lacked this offset */
+.bottom-44 { bottom: 11rem; }

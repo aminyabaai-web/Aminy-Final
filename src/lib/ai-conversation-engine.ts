@@ -433,15 +433,95 @@ export async function generateAIResponse(
 }
 
 /**
- * Handle streaming response with human pacing
+ * Extract the assistant's text from a non-streamed JSON payload.
+ * Several shapes exist in the wild: the deployed /ai/chat returns
+ * `{ message }`, older paths return `{ response }`, and OpenAI-compatible
+ * bodies use `{ choices: [{ message: { content } }] }` (or `delta` for a
+ * buffered stream event). Only non-empty strings count — never objects.
+ */
+function extractTextFromJSONPayload(parsed: unknown): string {
+  if (!parsed || typeof parsed !== 'object') return '';
+  const p = parsed as Record<string, unknown>;
+  const choice = Array.isArray(p.choices)
+    ? (p.choices[0] as Record<string, unknown> | undefined)
+    : undefined;
+  const choiceMessage = choice?.message as Record<string, unknown> | undefined;
+  const choiceDelta = choice?.delta as Record<string, unknown> | undefined;
+  const candidates = [
+    p.message,
+    p.response,
+    choiceMessage?.content,
+    choiceDelta?.content,
+    p.content,
+    p.text,
+    p.token,
+  ];
+  for (const candidate of candidates) {
+    if (typeof candidate === 'string' && candidate.trim()) return candidate;
+  }
+  return '';
+}
+
+/**
+ * Extract text from a full SSE body (all `data:` lines concatenated).
+ * Used when a proxy buffered the stream into a single payload.
+ */
+function extractTextFromSSEBody(body: string): string {
+  let text = '';
+  for (const line of body.split('\n')) {
+    if (!line.startsWith('data: ')) continue;
+    const data = line.slice(6).trim();
+    if (!data || data === '[DONE]') continue;
+    try {
+      text += extractTextFromJSONPayload(JSON.parse(data));
+    } catch {
+      // ignore malformed lines
+    }
+  }
+  return text;
+}
+
+/**
+ * Handle streaming response with human pacing.
+ *
+ * IMPORTANT: the deployed /ai/chat returns a PLAIN JSON body (it ignores
+ * `stream: true`), and any buffering proxy can collapse SSE into one chunk.
+ * The old implementation only understood incremental `data:` lines with
+ * `choices[0].delta.content`, so a JSON body produced an EMPTY fullResponse —
+ * the assistant bubble rendered blank even though the reply arrived (chips
+ * still appeared because onComplete('') fired). Handle every shape:
+ * non-SSE JSON, buffered SSE, and true incremental SSE (with a line buffer
+ * so events split across chunk boundaries aren't dropped).
  */
 async function handleStreamingResponse(
   response: Response,
   options?: StreamingOptions
 ): Promise<string> {
+  const contentType = response.headers.get('content-type') || '';
+
+  // Non-streamed path: server answered with a single JSON document.
+  if (!contentType.includes('text/event-stream')) {
+    const raw = await response.text();
+    let text = '';
+    try {
+      text = extractTextFromJSONPayload(JSON.parse(raw));
+    } catch {
+      // Body wasn't JSON — maybe SSE mislabeled as JSON by a proxy.
+      text = extractTextFromSSEBody(raw);
+    }
+    if (!text) {
+      throw new Error('AI response contained no message text');
+    }
+    options?.onToken?.(text);
+    options?.onComplete?.(text);
+    return text;
+  }
+
   const reader = response.body?.getReader();
   const decoder = new TextDecoder();
   let fullResponse = '';
+  let rawBody = ''; // kept so a buffered/odd stream can be re-parsed whole
+  let lineBuffer = ''; // SSE events can split across network chunks
 
   if (!reader) {
     throw new Error('No response stream available');
@@ -453,17 +533,20 @@ async function handleStreamingResponse(
       if (done) break;
 
       const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split('\n').filter(line => line.trim());
+      rawBody += chunk;
+      lineBuffer += chunk;
+      const lines = lineBuffer.split('\n');
+      lineBuffer = lines.pop() ?? ''; // keep the (possibly partial) last line
 
       for (const line of lines) {
         if (line.startsWith('data: ')) {
           const data = line.slice(6);
-          if (data === '[DONE]') continue;
+          if (data.trim() === '[DONE]') continue;
 
           try {
             const parsed = JSON.parse(data);
-            const token = parsed.choices?.[0]?.delta?.content || '';
-            
+            const token = extractTextFromJSONPayload(parsed);
+
             if (token) {
               fullResponse += token;
               options?.onToken?.(token);
@@ -473,10 +556,45 @@ async function handleStreamingResponse(
                 await sleep(Math.random() * 200 + 500); // 500-700ms pause
               }
             }
-          } catch (e) {
+          } catch {
+            // ignore malformed lines
           }
         }
       }
+    }
+
+    // Flush any final line left in the buffer (stream ended without \n).
+    if (lineBuffer.startsWith('data: ')) {
+      const data = lineBuffer.slice(6);
+      if (data.trim() && data.trim() !== '[DONE]') {
+        try {
+          const token = extractTextFromJSONPayload(JSON.parse(data));
+          if (token) {
+            fullResponse += token;
+            options?.onToken?.(token);
+          }
+        } catch {
+          // ignore malformed trailing line
+        }
+      }
+    }
+
+    // Last resort: SSE content-type but no parseable data lines — the body
+    // may actually be one JSON document (some proxies re-wrap responses).
+    if (!fullResponse && rawBody.trim()) {
+      try {
+        const text = extractTextFromJSONPayload(JSON.parse(rawBody));
+        if (text) {
+          fullResponse = text;
+          options?.onToken?.(text);
+        }
+      } catch {
+        // give up below
+      }
+    }
+
+    if (!fullResponse) {
+      throw new Error('AI response contained no message text');
     }
 
     options?.onComplete?.(fullResponse);
@@ -615,13 +733,16 @@ async function fetchAndReportUsage(
   onUsageUpdate: (usage: DailyUsageInfo) => void
 ): Promise<void> {
   try {
+    // /ai/usage needs the user JWT, not the anon key (anon-only 401s).
+    const { data: sessionData } = await supabase.auth.getSession();
+    const usageToken = sessionData?.session?.access_token || publicAnonKey;
     const response = await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/usage`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${usageToken}`,
         },
       },
       { timeout: 5000, maxRetries: 1 }

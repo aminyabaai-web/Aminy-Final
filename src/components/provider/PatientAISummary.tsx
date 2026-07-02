@@ -37,6 +37,7 @@ import {
   Info,
   ArrowRight
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { Badge } from '../ui/badge';
@@ -132,6 +133,7 @@ export function PatientAISummary({ patient: patientProp, patientId, childName, p
   const [newSuggestion, setNewSuggestion] = useState({ title: '', description: '', rationale: '' });
   const [isAddingSuggestion, setIsAddingSuggestion] = useState(false);
   const [expandedSuggestion, setExpandedSuggestion] = useState<string | null>(null);
+  const [approvingSuggestionId, setApprovingSuggestionId] = useState<string | null>(null);
 
   // Mock data generators for fallback when AI is unavailable
   const generateMockInsights = (): AIInsight[] => [
@@ -431,6 +433,53 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
     setSuggestions([...suggestions, suggestion]);
     setNewSuggestion({ title: '', description: '', rationale: '' });
     setIsAddingSuggestion(false);
+  };
+
+  /**
+   * Provider approval → the family's home feed. Inserts the suggestion into
+   * the same `goals` table the parent app reads (Dashboard10 / care plan /
+   * BCBASessionBriefing all query goals by user_id), so an approved goal shows
+   * up in the parent's app immediately.
+   *
+   * Column shapes match the live goals table (id text default, user_id uuid,
+   * title/name/area text, progress int, completed/is_active bool, status text,
+   * progress_notes text). `area: 'provider_suggested'` marks provenance —
+   * no new source/created_by columns needed.
+   */
+  const handleApproveSuggestion = async (suggestion: CarePlanSuggestion) => {
+    if (approvingSuggestionId) return;
+    setApprovingSuggestionId(suggestion.id);
+    try {
+      if (!isDemoMode() && !isPlaceholderId(parentId)) {
+        const progressNotes = [
+          suggestion.description,
+          suggestion.rationale ? `Provider rationale: ${suggestion.rationale}` : '',
+        ].filter(Boolean).join('\n\n');
+
+        const { error } = await supabase.from('goals').insert({
+          user_id: parentId,
+          title: suggestion.title,
+          name: suggestion.title,
+          area: 'provider_suggested',
+          progress: 0,
+          completed: false,
+          is_active: true,
+          status: 'active',
+          progress_notes: progressNotes,
+        });
+
+        if (error) {
+          console.error('[PatientAISummary] Failed to add goal to family plan:', error.message);
+          toast.error("Couldn't add this to the family's plan — please try again.");
+          return;
+        }
+      }
+      // Demo mode / placeholder parent id: reflect the approval locally only.
+      setSuggestions(prev => prev.map(s => (s.id === suggestion.id ? { ...s, status: 'approved' } : s)));
+      toast.success("Added to the family's plan — they'll see it in their app.");
+    } finally {
+      setApprovingSuggestionId(null);
+    }
   };
 
   const getTrendIcon = (trend: string) => {
@@ -751,6 +800,22 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
                             <strong>Parent response:</strong> {suggestion.parentResponse}
                           </p>
                         </div>
+                      )}
+                      {suggestion.status === 'pending' && (
+                        <Button
+                          size="sm"
+                          disabled={approvingSuggestionId === suggestion.id}
+                          onClick={(e) => { e.stopPropagation(); handleApproveSuggestion(suggestion); }}
+                          className="mt-2 gap-1 text-white"
+                          style={{ backgroundColor: '#7c3aed' }}
+                        >
+                          {approvingSuggestionId === suggestion.id ? (
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <CheckCircle className="w-4 h-4" />
+                          )}
+                          Approve — add to family's plan
+                        </Button>
                       )}
                     </div>
                   )}

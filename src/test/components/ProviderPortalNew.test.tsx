@@ -23,7 +23,11 @@ vi.mock('../../utils/supabase/client', () => ({
         },
         error: null,
       }),
+      // maybeSingle: profiles pilot_organization / practice_mode reads resolve null.
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       order: vi.fn().mockReturnThis(),
+      // limit resolves with no rows — also covers the organization_members
+      // clinical_role query (no membership ⇒ full portal renders, as today).
       limit: vi.fn().mockResolvedValue({ data: [], error: null }),
       gte: vi.fn().mockReturnThis(),
       lte: vi.fn().mockReturnThis(),

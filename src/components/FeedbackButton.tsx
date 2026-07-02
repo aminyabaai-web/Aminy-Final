@@ -60,7 +60,7 @@ export function FeedbackButton() {
       {/* Floating button - fixed position, always visible */}
       <button
         onClick={() => setIsOpen(true)}
-        className="group fixed bottom-20 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-[#3A4A57] shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F6FBFB]"
+        className="group fixed bottom-44 right-4 z-40 flex h-12 items-center justify-center gap-2 rounded-full border border-white/80 bg-white px-4 text-[#3A4A57] shadow-[0_16px_40px_rgba(15,23,42,0.16)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#F6FBFB]"
         aria-label="Send feedback"
         title="Send feedback"
       >

@@ -10,6 +10,7 @@
 
 import { create } from 'zustand';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 
 export interface DailyUsage {
   used: number;
@@ -44,13 +45,17 @@ export const useRateLimitStore = create<RateLimitState>((set, get) => ({
   fetchUsage: async () => {
     set({ isLoading: true });
     try {
+      // /ai/usage identifies the user from the JWT — the anon key alone 401s,
+      // which silently left the counter on the fallback default for everyone.
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token || publicAnonKey;
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/usage`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${publicAnonKey}`,
+            'Authorization': `Bearer ${token}`,
           },
         }
       );
