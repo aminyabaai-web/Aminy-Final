@@ -1,0 +1,14 @@
+import { chromium } from 'playwright';
+const OUT = '/tmp/claude-0/-home-user-Aminy-Final/9f362c82-800d-52d6-9e73-87548098b442/scratchpad/fixed2';
+const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const page = await browser.newPage({ viewport: { width: 375, height: 812 } });
+await page.goto('http://localhost:3000', { waitUntil: 'domcontentloaded' });
+await page.waitForFunction(() => typeof window.__navigateToScreen === 'function', { timeout: 30000 });
+await page.waitForTimeout(2000);
+await page.evaluate(() => window.__navigateToScreen('bcba-portal'));
+await page.getByText('No families assigned yet').waitFor({ timeout: 20000 });
+await page.getByText('Your Families').scrollIntoViewIfNeeded();
+await page.waitForTimeout(500);
+await page.screenshot({ path: `${OUT}/bcba-portal-families.png` });
+await browser.close();
+console.log('done');

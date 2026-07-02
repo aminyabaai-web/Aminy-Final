@@ -109,118 +109,120 @@ export interface ModifierRule {
 // ABA CPT Codes (97151-97158 + related)
 // ============================================================================
 
-export const ABA_CPT_CODES: CPTCodeConfig[] = [
-  {
-    code: '97151',
-    description: 'Behavior identification assessment',
+/**
+ * ABA payer-billing metadata that is payer-workflow-specific (not clinical), so
+ * it lives here rather than in the CPT rules registry. Keyed by CPT code.
+ * The code list, descriptions, units and daily caps come from the registry.
+ */
+const ABA_BILLING_META: Record<
+  string,
+  Pick<CPTCodeConfig, 'category' | 'requiresModifier' | 'requiresPriorAuth' | 'notes'>
+> = {
+  '97151': {
     category: 'assessment',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP', 'HN'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Initial and reassessment. Must be conducted by BCBA/licensed provider.',
   },
-  {
-    code: '97152',
-    description: 'Behavior identification-supporting assessment',
+  '97152': {
     category: 'assessment',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP', 'HN'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Administered by technician under BCBA supervision.',
   },
-  {
-    code: '97153',
-    description: 'Adaptive behavior treatment by protocol',
+  '97153': {
     category: 'treatment',
     requiresModifier: true,
-    allowedModifiers: ['HN', 'HO', 'HP'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Direct 1:1 ABA therapy. Most commonly billed ABA code.',
   },
-  {
-    code: '97154',
-    description: 'Group adaptive behavior treatment by protocol',
+  '97154': {
     category: 'group',
     requiresModifier: true,
-    allowedModifiers: ['HN', 'HO', 'HP', 'HQ'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Group setting (2-8 patients). HQ modifier may be required.',
   },
-  {
-    code: '97155',
-    description: 'Adaptive behavior treatment with protocol modification',
+  '97155': {
     category: 'supervision',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'BCBA direct supervision/protocol modification during session.',
   },
-  {
-    code: '97156',
-    description: 'Family adaptive behavior treatment guidance',
+  '97156': {
     category: 'caregiver-training',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP'],
-    unitType: '15min',
-    maxUnitsPerDay: 16,
     requiresPriorAuth: true,
     notes: 'Caregiver/family training with BCBA. Does not require child present.',
   },
-  {
-    code: '97157',
-    description: 'Multiple-family group adaptive behavior treatment guidance',
+  '97157': {
     category: 'caregiver-training',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP', 'HQ'],
-    unitType: '15min',
-    maxUnitsPerDay: 16,
     requiresPriorAuth: true,
     notes: 'Group caregiver training (2+ families).',
   },
-  {
-    code: '97158',
-    description: 'Group adaptive behavior treatment with protocol modification',
+  '97158': {
     category: 'group',
     requiresModifier: true,
-    allowedModifiers: ['HO', 'HP', 'HQ'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Group supervision by BCBA with protocol modification.',
   },
-  {
-    code: '0373T',
-    description: 'Adaptive behavior treatment with protocol modification (exposure)',
+  '0373T': {
     category: 'treatment',
     requiresModifier: false,
-    allowedModifiers: ['HO', 'HP'],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Category III code. Not all payers accept. Check before billing.',
   },
-  {
-    code: '0362T',
-    description: 'Behavior identification-supporting assessment (exposure)',
+  '0362T': {
     category: 'assessment',
     requiresModifier: false,
-    allowedModifiers: [],
-    unitType: '15min',
-    maxUnitsPerDay: 32,
     requiresPriorAuth: true,
     notes: 'Category III code. Limited payer acceptance.',
   },
-];
+};
+
+/** Credential/setting modifiers that belong on ABA claims (vs telehealth 95/GT). */
+const ABA_CLAIM_MODIFIERS = new Set(['HN', 'HO', 'HP', 'HQ']);
+
+const UNIT_TO_UNIT_TYPE: Record<CptRule['unit'], CPTCodeConfig['unitType']> = {
+  per_15min: '15min',
+  per_hour: 'per-session',
+  per_session: 'per-session',
+  per_instrument: 'per-session',
+};
+
+/** Numeric CPT codes first (ascending), Category III T-codes after, in registry order. */
+function abaClaimOrder(rules: CptRule[]): CptRule[] {
+  const numeric = rules.filter((r) => /^\d+$/.test(r.code)).sort((a, b) => a.code.localeCompare(b.code));
+  const categoryIII = rules.filter((r) => !/^\d+$/.test(r.code));
+  return [...numeric, ...categoryIII];
+}
+
+/**
+ * DERIVED from the CPT rules registry (single source of truth) — includes the
+ * full adaptive-behavior family 97151-97158 plus Category III exposure codes.
+ */
+export const ABA_CPT_CODES: CPTCodeConfig[] = abaClaimOrder(getCptRulesForService('aba')).map(
+  (rule) => {
+    const meta = ABA_BILLING_META[rule.code] ?? {
+      category: 'treatment' as const,
+      requiresModifier: true,
+      requiresPriorAuth: true,
+    };
+    return {
+      code: rule.code,
+      description: rule.description,
+      category: meta.category,
+      requiresModifier: meta.requiresModifier,
+      allowedModifiers: (rule.allowedModifiers ?? [])
+        .map((m) => m.code)
+        .filter((code) => ABA_CLAIM_MODIFIERS.has(code)),
+      unitType: UNIT_TO_UNIT_TYPE[rule.unit],
+      maxUnitsPerDay: rule.maxUnitsPerDay,
+      requiresPriorAuth: meta.requiresPriorAuth,
+      notes: meta.notes,
+    };
+  },
+);
 
 // ============================================================================
 // Modifier Definitions
