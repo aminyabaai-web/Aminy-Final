@@ -591,9 +591,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       const patientsList: Patient[] = [];
       if (patientsData && patientsData.length > 0) {
         for (const pp of patientsData) {
-          // Fetch child profile
+          // Fetch child record. NOTE: `children` (not `child_profiles`) holds
+          // name/date_of_birth/diagnoses — child_profiles is the clinical-detail
+          // table (IEP goals, reinforcers) keyed by child_id and has none of
+          // these columns, so the old query 400'd and every patient was dropped.
           const { data: childData } = await supabase
-            .from('child_profiles')
+            .from('children')
             .select('name, date_of_birth, diagnoses')
             .eq('id', pp.child_id)
             .single();
