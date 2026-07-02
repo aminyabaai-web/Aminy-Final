@@ -64,18 +64,27 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
 
   const name = childName || 'your child';
 
-  const saveBaseline = useCallback(async (goal: string) => {
+  const saveBaseline = useCallback(async (goal: string): Promise<boolean> => {
     setSaving(true);
     try {
-      await supabase.from('clinical_outcomes').insert({
+      // Live clinical_outcomes shape (matches ClinicalOutcomesTracker):
+      // assessment_type CHECK constraint + raw_score/severity_level/interpretation.
+      // Qualitative answers are JSON-encoded in `interpretation` and read back by
+      // parseBaselineRow() in src/lib/outcome-trends.ts — keep the two in sync.
+      const severity =
+        intensity == null ? null
+        : intensity <= 1 ? 'minimal'
+        : intensity === 2 ? 'mild'
+        : intensity === 3 ? 'moderate'
+        : 'severe';
+      const { error } = await supabase.from('clinical_outcomes').insert({
         user_id: userId,
         child_id: childId || null,
-        outcome_type: 'behavior_baseline',
-        category: 'behavior',
-        measurement_type: 'frequency',
-        baseline_value: intensity,
-        target_value: null,
-        notes: JSON.stringify({
+        assessment_type: 'behavioral_checklist',
+        assessment_name: 'parent_baseline_assessment',
+        raw_score: intensity,
+        severity_level: severity,
+        interpretation: JSON.stringify({
           target_behavior: behavior,
           baseline_frequency: frequency,
           baseline_intensity: intensity,
@@ -83,19 +92,27 @@ export function BaselineAssessment({ userId, childId, childName, onComplete, onS
           ninety_day_goal: goal,
           source: 'parent_baseline_assessment',
         }),
-        measured_at: new Date().toISOString(),
-        status: 'active',
+        administered_by: 'parent',
       });
+      if (error) throw error;
+      // Only mark done once the write is confirmed — otherwise re-prompt later.
       localStorage.setItem(`${BASELINE_STORAGE_KEY}_${userId}`, '1');
-    } catch {
-      // Non-fatal
+      return true;
+    } catch (err) {
+      console.error('[BaselineAssessment] Save failed:', err);
+      return false;
     } finally {
       setSaving(false);
     }
   }, [userId, childId, behavior, frequency, intensity, trigger]);
 
   const handleGoalSubmit = async () => {
-    await saveBaseline(goalText);
+    const saved = await saveBaseline(goalText);
+    if (!saved) {
+      // Stay on the goal step so the parent can retry — never pretend it saved.
+      toast.error("Couldn't save the baseline — please try again");
+      return;
+    }
     setStep('done');
     toast.success('Baseline saved! Your AI coach now has a starting point to measure progress.', { duration: 4000 });
     setTimeout(onComplete, 2800);

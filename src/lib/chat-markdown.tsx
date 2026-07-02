@@ -8,6 +8,56 @@
 
 import React from 'react';
 
+// ─── Named render-token splitter ─────────────────────────────────────────────
+// The AI can embed simple NAMED render tokens — e.g. [CHART:weekly_trend] — in
+// a reply. Unlike the JSON [CHART:{...}] blocks (parsed upstream by
+// parseAIResponseParts in AIChart.tsx, which require a `{`), these are bare
+// identifiers that mean "render the user's REAL data here" (queried live
+// client-side, never AI-fabricated numbers). This splitter carves a text
+// segment into text + chart segments, and STRIPS any unrecognized
+// [UPPERCASE_TAG:simple_name] token so a hallucinated token never leaks into
+// the visible message. Markdown links ([label](url)) are untouched: the
+// pattern requires an ALL-CAPS tag + `:` and must not be followed by `(`.
+
+export const KNOWN_INLINE_CHARTS = ['weekly_trend', 'goal_progress'] as const;
+export type InlineChartKind = (typeof KNOWN_INLINE_CHARTS)[number];
+
+export type ChatContentSegment =
+  | { type: 'text'; content: string }
+  | { type: 'chart'; chart: InlineChartKind };
+
+const NAMED_TOKEN_PATTERN = /\[([A-Z][A-Z_]+):([A-Za-z0-9_-]+)\](?!\()/g;
+
+export function splitInlineChartTokens(text: string): ChatContentSegment[] {
+  const segments: ChatContentSegment[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  NAMED_TOKEN_PATTERN.lastIndex = 0;
+
+  const pushText = (chunk: string) => {
+    const trimmed = chunk.trim();
+    if (trimmed) segments.push({ type: 'text', content: trimmed });
+  };
+
+  let sawToken = false;
+  while ((match = NAMED_TOKEN_PATTERN.exec(text)) !== null) {
+    const [, tag, name] = match;
+    sawToken = true;
+    pushText(text.slice(lastIndex, match.index));
+    if (tag === 'CHART' && (KNOWN_INLINE_CHARTS as readonly string[]).includes(name)) {
+      segments.push({ type: 'chart', chart: name as InlineChartKind });
+    }
+    // Unrecognized [TAG:name] tokens are silently dropped (graceful strip).
+    lastIndex = match.index + match[0].length;
+  }
+  pushText(text.slice(lastIndex));
+
+  // No tokens at all → pass the original text through untouched (preserves
+  // leading/trailing whitespace semantics for the markdown renderer).
+  if (!sawToken && segments.length === 0) return [{ type: 'text', content: text }];
+  return segments;
+}
+
 // ─── Lightweight inline markdown renderer ────────────────────────────────────
 // Handles **bold**, `code`, and [label](url) links — the three patterns the AI
 // uses in confirmation messages and short replies. Full markdown libs are

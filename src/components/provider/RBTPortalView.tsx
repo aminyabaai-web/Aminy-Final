@@ -188,8 +188,10 @@ export function RBTPortalView({ userId, userName }: RBTPortalViewProps) {
       const childNameByPatientId = new Map<string, string>();
       const childIds = patientRows.map((p) => p.child_id).filter(Boolean);
       if (childIds.length > 0) {
+        // `children` (not `child_profiles`) holds the child's name —
+        // child_profiles is the clinical-detail table with no name column.
         const { data: childRows } = await supabase
-          .from('child_profiles')
+          .from('children')
           .select('id, name')
           .in('id', childIds);
         const nameByChildId = new Map((childRows || []).map((c) => [c.id, c.name]));

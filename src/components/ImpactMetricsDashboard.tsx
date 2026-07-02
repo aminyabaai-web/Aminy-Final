@@ -167,8 +167,12 @@ export function ImpactMetricsDashboard({
     const fetchImpactMetrics = async () => {
       setLoading(true);
       try {
-        // In production, this would fetch from Supabase
-        // For now, using realistic mock data based on pilot targets
+        // In production, this would fetch from Supabase.
+        // For now, using realistic mock data based on pilot targets — surfaced
+        // honestly via LaunchStateBadge + DataProvenanceBadge('sample') below.
+        // HIPAA: when live aggregation is wired, queries MUST return de-identified
+        // counts/averages only (COUNT/AVG server-side) — never names, emails, or
+        // per-user rows into this admin analytics view.
         const mockMetrics: ImpactMetrics = {
           beneficiaries: {
             total: 847,

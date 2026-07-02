@@ -577,7 +577,8 @@ export function AACBoard({ childName, onBack }: AACBoardProps) {
                       {symbol.emoji}
                     </span>
                   )}
-                  <span className="text-sm font-semibold text-[#132F43] mt-1 leading-tight text-center truncate w-full">
+                  {/* Full word wraps to 2 lines — truncated words defeat an AAC board */}
+                  <span className="text-sm font-semibold text-[#132F43] mt-1 leading-tight text-center line-clamp-2 w-full">
                     {symbol.label}
                   </span>
                 </button>

@@ -95,6 +95,8 @@ export function PartnerOutcomesWidget({ partnerOrgId, showTrendChart = true, cla
     if (familyIds && familyIds.length) q = q.in('user_id', familyIds);
     if (familyIds && familyIds.length === 0) { setSummaries([]); setTrend([]); setIsLoading(false); return; }
 
+    // HIPAA: intentionally selects scores + timestamps only (no user_id/name in the
+    // result set) — this admin view renders de-identified aggregates exclusively.
     const { data: subs } = await q;
     const safe = subs || [];
 

@@ -39,7 +39,8 @@ import { AddToCalendarButtons } from './AddToCalendarButtons';
 import { supabase } from '../utils/supabase/client';
 import { updateUserContext } from '../ai/contextLayer';
 
-import { renderRichMarkdown } from '../lib/chat-markdown';
+import { renderRichMarkdown, splitInlineChartTokens } from '../lib/chat-markdown';
+import { InlineTrendChart } from './chat/InlineTrendChart';
 import { getProactiveNudges, formatNudgesForAI } from '../lib/ai-proactive-nudges';
 import { sendLocalNotification } from '../lib/push-notifications';
 import { Switch } from './ui/switch';
@@ -451,6 +452,10 @@ export function BevelChatOverlay({
   // not state: it's set inside loadContextAndOpenChat and must be readable
   // synchronously by buildSystemPrompt in the same async flow.
   const memoryBlockRef = useRef('');
+  // GOALS & PROGRESS block (proactive goal coaching) — same ref pattern as
+  // memoryBlockRef: filled async in loadContextAndOpenChat, read synchronously
+  // by buildSystemPrompt. Bounded ≤500 chars.
+  const goalsBlockRef = useRef('');
 
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
@@ -545,6 +550,65 @@ export function BevelChatOverlay({
     return sections.length > 0 ? `\n\n${sections.join('\n\n')}` : '';
   };
 
+  // GOALS & PROGRESS — active goals + the 2 most recent weekly check-ins, so
+  // the AI can proactively coach on stalled or declining goals. Best-effort:
+  // any failure returns '' and the chat works exactly as before.
+  const buildGoalsPromptBlock = async (): Promise<string> => {
+    try {
+      const [goalsRes, eventsRes] = await Promise.all([
+        supabase
+          .from('goals')
+          .select('title, name, progress, updated_at')
+          .eq('user_id', userId)
+          .eq('is_active', true)
+          .order('updated_at', { ascending: false })
+          .limit(3),
+        supabase
+          .from('outcome_events')
+          .select('created_at, payload')
+          .eq('user_id', userId)
+          .eq('event_type', 'weekly_parent_checkin')
+          .order('created_at', { ascending: false })
+          .limit(2),
+      ]);
+      const goals = (goalsRes.data || []) as Array<{ title?: string; name?: string; progress?: number; updated_at?: string }>;
+      const events = (eventsRes.data || []) as Array<{ created_at: string; payload?: Record<string, unknown> }>;
+      if (goals.length === 0 && events.length === 0) return '';
+
+      const now = Date.now();
+      const goalLines = goals.map(g => {
+        const label = (g.title || g.name || 'Goal').slice(0, 40);
+        const days = g.updated_at ? Math.floor((now - new Date(g.updated_at).getTime()) / 86400000) : null;
+        return `- ${label}: ${g.progress ?? 0}%${days !== null && isFinite(days) ? ` (updated ${days}d ago)` : ''}`;
+      });
+      const checkinLines = events.map(e => {
+        const p = (e.payload || {}) as Record<string, unknown>;
+        return `- ${String(e.created_at).slice(0, 10)}: freq ${p.target_behavior_frequency ?? '—'}, progress ${p.goal_progress_rating ?? '—'}/5, confidence ${p.parent_confidence_rating ?? '—'}/5`;
+      });
+
+      // Bound the whole section ≤500 chars — trim the DATA lines (the coaching
+      // instruction at the end must never be truncated mid-sentence).
+      const instruction = "If a goal has had no progress in 14+ days or recent check-ins show decline, gently proactively surface ONE concrete suggestion tied to that goal — even if the parent didn't ask. Never shame; frame as an experiment to try.";
+      const header = '\n\nGOALS & PROGRESS:\n';
+      const dataBudget = 500 - header.length - instruction.length - 1; // -1 for the \n before instruction
+      let dataPart = `${goalLines.join('\n')}${checkinLines.length ? `\nRecent check-ins:\n${checkinLines.join('\n')}` : ''}`;
+      if (dataPart.length > dataBudget) {
+        // Drop whole lines from the end until it fits (never cut mid-line).
+        const kept: string[] = [];
+        let used = 0;
+        for (const line of dataPart.split('\n')) {
+          if (used + line.length + 1 > dataBudget) break;
+          kept.push(line);
+          used += line.length + 1;
+        }
+        dataPart = kept.join('\n');
+      }
+      return `${header}${dataPart}\n${instruction}`;
+    } catch {
+      return '';
+    }
+  };
+
   const loadContextAndOpenChat = async () => {
     const aiSettings = loadAISettings();
     setPersonality(aiSettings.personality);
@@ -586,6 +650,13 @@ export function BevelChatOverlay({
       memoryBlockRef.current = await buildMemoryPromptBlock(context);
     } catch {
       memoryBlockRef.current = '';
+    }
+
+    // Proactive goal coaching — GOALS & PROGRESS block (same sync-read ref pattern)
+    try {
+      goalsBlockRef.current = await buildGoalsPromptBlock();
+    } catch {
+      goalsBlockRef.current = '';
     }
 
     if (!hasGeneratedProactive.current) {
@@ -735,6 +806,7 @@ CHART CAPABILITY: When showing data trends, you MAY embed a chart inline:
 [CHART:{"type":"bar","title":"Sessions This Month","data":[{"week":"Wk1","sessions":3},{"week":"Wk2","sessions":5}],"xKey":"week","yKey":"sessions"}]
 Types: "bar", "line", or "pie". Use sparingly — only when data genuinely clarifies your point.
 When the user asks about progress, outcomes, trends, or anything quantitative over time, include a [CHART:...] block visualizing it.
+REAL-DATA CHART: When a parent asks about progress, trends, or how things are going over time, you may include the token [CHART:weekly_trend] on its own line to show their real progress chart (their actual weekly check-in data, rendered by the app — you don't supply the numbers) — use it at most once per reply and only when discussing their data. Prefer it over a JSON chart when the question is about ${childName}'s own progress over time.
 
 ACTION CAPABILITY: When a parent describes a behavior incident or you identify something worth saving, you MAY embed an action token (silently executed, confirmation shown to parent):
 [ACTION:LOG_BEHAVIOR:{"behavior_type":"meltdown","trigger":"transition","intensity":3,"notes":"occurred after lunch","is_positive":false}]
@@ -755,7 +827,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}`;
+${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsBlockRef.current}`;
   };
 
   const sendMessageWithContext = async (
@@ -1680,7 +1752,26 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}`;
                                     </button>
                                   </div>
                                 );
-                                return <div key={pi} className="leading-snug">{renderRichMarkdown(part.content)}</div>;
+                                // Text segment — may still carry NAMED render tokens
+                                // ([CHART:weekly_trend] → the user's REAL check-in data,
+                                // queried client-side; unknown [TAG:name] tokens are
+                                // stripped so they never leak into visible text).
+                                return (
+                                  <React.Fragment key={pi}>
+                                    {splitInlineChartTokens(part.content).map((seg, si) =>
+                                      seg.type === 'chart' ? (
+                                        <InlineTrendChart
+                                          key={`${pi}-${si}`}
+                                          userId={userId}
+                                          kind={seg.chart}
+                                          childName={userContext?.childName || propChildName}
+                                        />
+                                      ) : (
+                                        <div key={`${pi}-${si}`} className="leading-snug">{renderRichMarkdown(seg.content)}</div>
+                                      )
+                                    )}
+                                  </React.Fragment>
+                                );
                               })}
                               {msg.isUpgradePrompt && (
                                 <button

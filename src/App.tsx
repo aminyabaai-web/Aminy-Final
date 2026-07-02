@@ -3234,7 +3234,9 @@ export default function App() {
                   pendingCallScreenRef.current = "video-call-room";
                   navigateToScreen("pre-call-setup");
                 }}
-                onReschedule={() => navigateToScreen("conversational-booking")}
+                // onReschedule intentionally omitted: MyAppointments reschedules
+                // in place (AvailabilityPicker + marketplace_bookings UPDATE) instead
+                // of restarting conversational-booking and losing context.
                 onBookAgain={() => navigateToScreen("conversational-booking")}
                 onLeaveReview={() => navigateToScreen("provider-reviews")}
                 onCompleteQuestionnaire={() => navigateToScreen("parent-intake")}

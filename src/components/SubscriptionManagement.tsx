@@ -27,10 +27,9 @@ import {
   RefreshCw,
   Sparkles,
   AlertCircle,
-  Zap,
   Heart
 } from 'lucide-react';
-import { tierDisplayNames, getTierDisplayName, normalizeTierName, type TierType } from '../lib/tier-utils';
+import { tierDisplayNames, getTierDisplayName, normalizeTierName, tierPricing, type TierType } from '../lib/tier-utils';
 import {
   Dialog,
   DialogContent,
@@ -47,18 +46,32 @@ interface SubscriptionManagementProps {
   accessToken?: string;
 }
 
-// Cancel Flow with win-back offers
+// Cancel Flow with a single warm save-offer intercept.
+// NOTE: A "Pause instead" option was considered, but the pause client helpers in
+// stripe-service.ts (`pauseSubscription`) have NO matching server route in
+// supabase/functions/make-server-8a022548 — offering it would fail live.
+// Until `/payments/pause-subscription` ships server-side, the intercept offers
+// only an honest downgrade-to-Core (Pro/Pro+ users) + always-visible cancel.
 interface CancelFlowButtonProps {
   onCancel: () => Promise<void | boolean>;
   tierName: string;
+  currentTier: TierType;
+  /** Same tier-change path the component uses for plan changes (useSubscription.upgrade). */
+  onDowngradeToCore: () => Promise<void>;
 }
 
-function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
-  const [step, setStep] = React.useState<'initial' | 'reason' | 'offer' | 'confirm'>('initial');
+function CancelFlowButton({ onCancel, tierName, currentTier, onDowngradeToCore }: CancelFlowButtonProps) {
+  const [step, setStep] = React.useState<'initial' | 'reason' | 'save' | 'confirm'>('initial');
   const [isOpen, setIsOpen] = React.useState(false);
   const [reason, setReason] = React.useState('');
   const [feedback, setFeedback] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isDowngrading, setIsDowngrading] = React.useState(false);
+
+  // Downgrade only makes sense from a tier above Core
+  const canDowngradeToCore = currentTier === 'pro' || currentTier === 'proplus';
+  const corePriceMonthly = tierPricing.core.monthly;
+  const coreName = getTierDisplayName('core');
 
   const cancelReasons = [
     { value: 'too_expensive', label: "It's too expensive" },
@@ -75,11 +88,10 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
   };
 
   const handleReasonNext = () => {
-    if (reason === 'too_expensive') {
-      setStep('offer');
-    } else {
-      setStep('confirm');
-    }
+    // ONE warm intercept step for everyone before the final confirm —
+    // reassurance + (when possible) a cheaper way to stay. Never a trap:
+    // "Cancel anyway" is always visible on the intercept.
+    setStep('save');
   };
 
   const handleConfirmCancel = async () => {
@@ -97,17 +109,20 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
     }
   };
 
-  const handleAcceptOffer = () => {
-    // Apply 50% discount offer
-    toast.success('50% discount applied for the next 2 months!');
-    setIsOpen(false);
-    setStep('initial');
-  };
-
-  const handlePause = () => {
-    toast.success('Your subscription is paused for 1 month');
-    setIsOpen(false);
-    setStep('initial');
+  const handleDowngradeToCore = async () => {
+    setIsDowngrading(true);
+    try {
+      // Same tier-change path the rest of this component uses (Stripe checkout
+      // via useSubscription.upgrade) — it redirects the browser on success.
+      await onDowngradeToCore();
+      setIsOpen(false);
+      setStep('initial');
+    } catch (err) {
+      console.error('Downgrade to Core failed:', err);
+      toast.error("We couldn't switch your plan just now. Please try again — or manage billing directly.");
+    } finally {
+      setIsDowngrading(false);
+    }
   };
 
   return (
@@ -170,66 +185,76 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
             </>
           )}
 
-          {step === 'offer' && (
+          {step === 'save' && (
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
-                  <Gift className="w-5 h-5 text-purple-500" />
-                  Wait! We have an offer for you
+                  <Heart className="w-5 h-5 text-accent" />
+                  Before you go
                 </DialogTitle>
                 <DialogDescription>
-                  We'd hate for cost to be the reason you leave. Here are some options:
+                  Your child's memories, logs, and progress stay safe on the free plan
+                  — nothing you've built here disappears.
+                  {canDowngradeToCore && ' Want to keep unlimited chats for less instead?'}
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="py-4 space-y-3 sm:space-y-4">
-                <Card className="p-4 border-2 border-purple-200 bg-purple-50/50">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <Zap className="w-5 h-5 text-purple-600" />
+              <div className="py-4 space-y-3">
+                {canDowngradeToCore && (
+                  <Card className="p-4 border-2 border-accent/30 bg-accent/5">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <Sparkles className="w-5 h-5 text-accent" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-primary">Keep the essentials for less</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Switch from {tierName} to {coreName} — unlimited AI chat, daily
+                          plans, and your full journal for ${corePriceMonthly.toFixed(2)}/mo.
+                        </p>
+                        <Button
+                          onClick={handleDowngradeToCore}
+                          disabled={isDowngrading}
+                          size="sm"
+                          className="mt-2 bg-accent hover:bg-accent/90"
+                        >
+                          {isDowngrading ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Switching...
+                            </>
+                          ) : (
+                            <>Switch to {coreName} — ${corePriceMonthly.toFixed(2)}/mo</>
+                          )}
+                        </Button>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-primary">50% Off for 2 Months</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Stay on {tierName} at half price while you decide
-                      </p>
-                      <Button
-                        onClick={handleAcceptOffer}
-                        size="sm"
-                        className="mt-2 bg-purple-600 hover:bg-purple-700"
-                      >
-                        Apply Discount
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
+                  </Card>
+                )}
 
                 <Card className="p-4 border border-[#E8E4DF]">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-[#EDF4F7] rounded-lg">
-                      <Calendar className="w-5 h-5 text-[#5A6B7A]" />
+                      <Heart className="w-5 h-5 text-[#5A6B7A]" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-primary">Pause for 1 Month</h4>
+                      <h4 className="font-semibold text-primary">Whatever you choose, you've shown up</h4>
                       <p className="text-sm text-muted-foreground">
-                        Take a break without losing your data or progress
+                        Every calm moment you logged is real progress. You can come back anytime
+                        and pick up right where you left off.
                       </p>
-                      <Button
-                        onClick={handlePause}
-                        size="sm"
-                        variant="outline"
-                        className="mt-2"
-                      >
-                        Pause Subscription
-                      </Button>
                     </div>
                   </div>
                 </Card>
               </div>
 
-              <DialogFooter>
-                <Button variant="ghost" onClick={() => setStep('confirm')}>
-                  No thanks, cancel anyway
+              {/* Honest exits — cancel is always one tap away, never buried */}
+              <DialogFooter className="flex gap-2">
+                <Button variant="ghost" onClick={() => setStep('confirm')} className="text-muted-foreground">
+                  Cancel anyway
+                </Button>
+                <Button variant="outline" onClick={() => setIsOpen(false)}>
+                  Keep My Plan
                 </Button>
               </DialogFooter>
             </>
@@ -248,10 +273,12 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
               </DialogHeader>
 
               <div className="py-4">
+                {/* Honest loss framing: free tier keeps data (capped) — see tier-utils
+                    free entitlements. Never claim memories/vault are deleted. */}
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-red-400 rounded-full" />
-                    All your saved memories about your child
+                    Unlimited chat with Aminy (free plan: 3 messages a day)
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-red-400 rounded-full" />
@@ -263,11 +290,7 @@ function CancelFlowButton({ onCancel, tierName }: CancelFlowButtonProps) {
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-red-400 rounded-full" />
-                    Unlimited chat with Aminy
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full" />
-                    Your vault documents and insights
+                    Deep AI memory and full vault storage (the free plan keeps your data, with smaller limits)
                   </li>
                 </ul>
 
@@ -464,6 +487,8 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
             <CancelFlowButton
               onCancel={cancel}
               tierName={getTierDisplayName(currentTier)}
+              currentTier={currentTier}
+              onDowngradeToCore={() => upgrade('core', false)}
             />
           )}
         </div>

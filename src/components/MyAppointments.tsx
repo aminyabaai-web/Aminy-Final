@@ -37,6 +37,8 @@ import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import { EmptyState } from './EmptyState';
 import { ProviderNoShowRecovery } from './ProviderNoShowRecovery';
+import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
+import { combineDateAndTime, downloadICS, googleCalendarUrl, type CalendarEvent } from '../lib/calendar-links';
 
 // Types
 export interface Appointment {
@@ -47,6 +49,7 @@ export interface Appointment {
     title: string;
     specialty: string;
     imageUrl?: string;
+    bio?: string;
   };
   scheduledAt: Date;
   duration: number; // minutes
@@ -143,7 +146,9 @@ export function useAppointments(userId?: string): {
             id,
             full_name,
             credentials,
-            specialties
+            specialties,
+            photo_url,
+            bio
           )
         `)
         .eq('user_id', userId)
@@ -178,6 +183,8 @@ export function useAppointments(userId?: string): {
               specialty: Array.isArray(providerObj?.specialties)
                 ? (providerObj?.specialties as string[]).join(', ')
                 : ((providerObj?.specialties as string) || ''),
+              imageUrl: (providerObj?.photo_url as string) || undefined,
+              bio: (providerObj?.bio as string) || undefined,
             },
             scheduledAt,
             duration: (booking.session_duration_minutes as number) || 60,
@@ -268,6 +275,39 @@ function isWithinJoinWindow(date: Date): boolean {
   return minutes <= 15 && minutes >= -30; // Can join 15 min before to 30 min after
 }
 
+// Provider Avatar — real photo when available, initials fallback (incl. broken URLs)
+function ProviderAvatar({ name, imageUrl }: { name: string; imageUrl?: string }) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (imageUrl && !imageFailed) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        onError={() => setImageFailed(true)}
+        className="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-[#E8E4DF]"
+      />
+    );
+  }
+
+  return (
+    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#2A7D99] flex items-center justify-center text-white font-bold flex-shrink-0">
+      {name.split(' ').map(n => n[0]).join('')}
+    </div>
+  );
+}
+
+/** Calendar event payload for an appointment (shared by .ics + Google links). */
+function appointmentCalendarEvent(appointment: Appointment): CalendarEvent {
+  return {
+    title: `Aminy ${appointment.visitType} session with ${appointment.provider.name}`,
+    start: appointment.scheduledAt,
+    durationMinutes: appointment.duration || 60,
+    description: `${appointment.sessionType}${appointment.concern ? ` — Re: ${appointment.concern}` : ''}. Join from My Appointments in the Aminy app.`,
+    location: appointment.videoCallUrl || 'Aminy Telehealth (video link in your reminder text)',
+  };
+}
+
 // Visit Type Icon
 function VisitTypeIcon({ type }: { type: 'video' | 'phone' | 'in-person' }) {
   switch (type) {
@@ -344,12 +384,13 @@ function AppointmentCard({
         <div className="flex items-start justify-between gap-3">
           {/* Provider Info */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6B9080] to-[#2A7D99] flex items-center justify-center text-white font-bold">
-              {appointment.provider.name.split(' ').map(n => n[0]).join('')}
-            </div>
+            <ProviderAvatar name={appointment.provider.name} imageUrl={appointment.provider.imageUrl} />
             <div>
               <h3 className="font-semibold text-[#132F43]">{appointment.provider.name}</h3>
               <p className="text-sm text-[#5A6B7A]">{appointment.provider.title}</p>
+              {appointment.provider.bio && (
+                <p className="text-sm text-[#8A9BA8] line-clamp-2">{appointment.provider.bio}</p>
+              )}
             </div>
           </div>
           <StatusBadge status={appointment.status} />
@@ -469,6 +510,27 @@ function AppointmentCard({
           </>
         )}
 
+        {/* Add to calendar (upcoming visits) */}
+        {appointment.status === 'upcoming' && (
+          <>
+            <button
+              onClick={() => downloadICS(appointmentCalendarEvent(appointment))}
+              className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#F6FBFB] transition-colors"
+            >
+              <CalendarPlus className="w-4 h-4" />
+              Add to calendar
+            </button>
+            <a
+              href={googleCalendarUrl(appointmentCalendarEvent(appointment))}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 text-[#5A6B7A] border border-[#E8E4DF] rounded-lg hover:bg-[#F6FBFB] transition-colors"
+            >
+              Google Calendar
+            </a>
+          </>
+        )}
+
         {/* Completed Actions */}
         {appointment.status === 'completed' && (
           <button
@@ -504,6 +566,68 @@ export function MyAppointments({
   // Load this user's real bookings unless the caller passed appointments explicitly.
   const { appointments: loadedAppointments, refetch } = useAppointments(userId);
   const appointments_ = appointments ?? loadedAppointments;
+
+  // In-place reschedule: keep the same provider + booking, only move the time.
+  const [rescheduling, setRescheduling] = useState<Appointment | null>(null);
+  const [rescheduleSlot, setRescheduleSlot] = useState<TimeSlot | null>(null);
+  const [isSavingReschedule, setIsSavingReschedule] = useState(false);
+
+  const confirmReschedule = async (appt: Appointment, slot: TimeSlot) => {
+    setIsSavingReschedule(true);
+    const newStart = combineDateAndTime(slot.date, slot.startTime);
+    const newISO = newStart.toISOString();
+    const oldISO = appt.scheduledAt.toISOString();
+
+    const { error } = await supabase
+      .from('marketplace_bookings')
+      .update({ scheduled_at: newISO, updated_at: new Date().toISOString() })
+      .eq('id', appt.id);
+
+    if (error) {
+      console.error('Reschedule failed:', error);
+      toast.error('Could not move the appointment. Please try again.');
+      setIsSavingReschedule(false);
+      return;
+    }
+
+    // Best-effort: move the mirrored `appointments` row (SMS reminder cron reads
+    // it) to the new time. The mirror has no booking-id link, so match on this
+    // user's row at the old start time. A failure here must never block the
+    // reschedule itself.
+    try {
+      let uid = userId;
+      if (!uid) {
+        const { data: { user } } = await supabase.auth.getUser();
+        uid = user?.id;
+      }
+      if (uid) {
+        const endISO = new Date(newStart.getTime() + (appt.duration || 60) * 60_000).toISOString();
+        const { error: mirrorError } = await supabase
+          .from('appointments')
+          .update({ scheduled_time: newISO, start_time: newISO, end_time: endISO })
+          .eq('user_id', uid)
+          .or(`scheduled_time.eq.${oldISO},start_time.eq.${oldISO}`);
+        if (mirrorError) {
+          console.warn('Appointments mirror update failed (booking still moved):', mirrorError);
+        }
+      }
+    } catch (mirrorErr) {
+      console.warn('Appointments mirror update failed (booking still moved):', mirrorErr);
+    }
+
+    const movedTo = formatDateTime(newStart);
+    toast.success(`Moved to ${movedTo} — we'll text you a new reminder.`);
+    setIsSavingReschedule(false);
+    setRescheduling(null);
+    setRescheduleSlot(null);
+    refetch();
+  };
+
+  // Real in-place reschedule unless the caller supplied its own handler.
+  const handleReschedule = onReschedule ?? ((appt: Appointment) => {
+    setRescheduleSlot(null);
+    setRescheduling(appt);
+  });
 
   // Real cancel: confirm, update the booking, then refetch. Falls back to a
   // caller-supplied handler if one was provided.
@@ -600,7 +724,7 @@ export function MyAppointments({
                   key={appointment.id}
                   appointment={appointment}
                   onJoinCall={onJoinCall}
-                  onReschedule={onReschedule}
+                  onReschedule={handleReschedule}
                   onCancel={handleCancel}
                   onLeaveReview={onLeaveReview}
                   onBookAgain={onBookAgain}
@@ -628,6 +752,58 @@ export function MyAppointments({
           )}
         </AnimatePresence>
       </div>
+
+      {/* In-place Reschedule — same provider, same booking, new time */}
+      {rescheduling && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-4 border-b border-[#E8E4DF] flex items-start justify-between gap-3">
+              <div>
+                <h3 className="font-semibold text-[#132F43]">
+                  Reschedule with {rescheduling.provider.name}
+                </h3>
+                <p className="text-sm text-[#5A6B7A] mt-1">
+                  Currently {formatDateTime(rescheduling.scheduledAt)}. Pick a new time — your booking and payment stay exactly as they are.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setRescheduling(null);
+                  setRescheduleSlot(null);
+                }}
+                aria-label="Close reschedule"
+                className="p-2 hover:bg-[#F6FBFB] rounded-lg transition-colors flex-shrink-0"
+              >
+                <X className="w-5 h-5 text-[#5A6B7A]" />
+              </button>
+            </div>
+            <div className="p-4">
+              {isSavingReschedule ? (
+                <div className="flex items-center justify-center gap-3 py-12 text-[#5A6B7A]">
+                  <Loader2 className="w-6 h-6 animate-spin text-[#6B9080]" />
+                  <span>Moving your appointment...</span>
+                </div>
+              ) : (
+                <AvailabilityPicker
+                  providerId={rescheduling.provider.id}
+                  providerName={rescheduling.provider.name}
+                  sessionType={rescheduling.sessionType}
+                  sessionDuration={rescheduling.duration || 60}
+                  selectedSlot={rescheduleSlot}
+                  onSelectSlot={(slot) => {
+                    // First tap selects; Confirm (or re-tapping the same slot) saves.
+                    if (rescheduleSlot && slot.id === rescheduleSlot.id) {
+                      confirmReschedule(rescheduling, slot);
+                    } else {
+                      setRescheduleSlot(slot);
+                    }
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Quick Actions FAB */}
       {upcomingAppointments.length > 0 && upcomingAppointments.some(a => isWithinJoinWindow(a.scheduledAt)) && (

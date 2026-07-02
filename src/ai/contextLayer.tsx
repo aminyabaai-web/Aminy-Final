@@ -10,6 +10,13 @@
 
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import {
+  mapCheckInRows,
+  parseBaselineRow,
+  formatOutcomesForAI,
+  type CheckInPoint,
+  type BaselineSummary,
+} from '../lib/outcome-trends';
 
 export interface UserContext {
   // Child Profile
@@ -25,6 +32,11 @@ export interface UserContext {
 
   // Recent BCBA/provider session observations (content snippets from session_notes)
   recentSessionNotes?: string[];
+
+  // Weekly parent check-ins (outcome_events) + baseline (clinical_outcomes) —
+  // lets the AI answer "how is Kai trending?" with real numbers
+  weeklyOutcomes?: CheckInPoint[];
+  outcomeBaseline?: BaselineSummary | null;
 
   // Recent Activity
   lastJrSession?: {
@@ -101,7 +113,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
   try {
     // Run Supabase queries and KV fetch in parallel
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-    const [childResult, sessionResult, goalsResult, kvResult] = await Promise.allSettled([
+    const [childResult, sessionResult, goalsResult, outcomesResult, baselineResult, kvResult] = await Promise.allSettled([
       // Primary child profile
       supabase
         .from('children')
@@ -128,6 +140,28 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         .eq('is_active', true)
         .limit(5),
 
+      // Last 4 weekly parent check-ins (outcome_events) — existing prompt-building
+      // path only; this PHI stays inside the current Claude BAA posture.
+      supabase
+        .from('outcome_events')
+        .select('context, payload, recorded_at, created_at')
+        .eq('user_id', userId)
+        .eq('event_type', 'weekly_parent_checkin')
+        .order('created_at', { ascending: false })
+        // Over-fetch rows: same-week re-dos collapse in mapCheckInRows; the
+        // prompt block itself is capped to the 4 most recent weeks (≤600 chars).
+        .limit(12),
+
+      // Latest parent baseline (clinical_outcomes)
+      supabase
+        .from('clinical_outcomes')
+        .select('interpretation, raw_score, created_at')
+        .eq('user_id', userId)
+        .eq('assessment_name', 'parent_baseline_assessment')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+
       // KV-stored AI-generated context (calm cues, wins, etc.)
       fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/context/user/${userId}`,
@@ -145,8 +179,13 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
     const child = childResult.status === 'fulfilled' ? childResult.value.data : null;
     const sessions = sessionResult.status === 'fulfilled' ? sessionResult.value.data : null;
     const goals = goalsResult.status === 'fulfilled' ? goalsResult.value.data : null;
+    const outcomeRows = outcomesResult.status === 'fulfilled' ? outcomesResult.value.data : null;
+    const baselineRow = baselineResult.status === 'fulfilled' ? baselineResult.value.data : null;
     const kvData = kvResult.status === 'fulfilled' ? kvResult.value : null;
     const kvContext = kvData?.context || {};
+
+    const weeklyOutcomes = mapCheckInRows(outcomeRows || []).slice(-4);
+    const outcomeBaseline = parseBaselineRow(baselineRow);
 
     const sessionsCompleted = sessions?.length ?? 0;
     const activeGoalNames = goals?.map((g: { title: string }) => g.title).filter(Boolean) ?? [];
@@ -181,6 +220,10 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
         newStrategies: kvContext.progressThisWeek?.newStrategies ?? 0,
       },
       recentSessionNotes: recentSessionNotes.length > 0 ? recentSessionNotes : undefined,
+
+      // Weekly outcomes trend (parent check-ins + baseline)
+      weeklyOutcomes: weeklyOutcomes.length > 0 ? weeklyOutcomes : undefined,
+      outcomeBaseline,
 
       // From KV (AI-generated, persisted)
       lastCalmCue: kvContext.lastCalmCue,
@@ -341,6 +384,13 @@ export function buildAIContextString(context: UserContext): string {
 
   if (context.recentSessionNotes && context.recentSessionNotes.length > 0) {
     parts.push(`Recent provider observations: ${context.recentSessionNotes.join(' | ')}.`);
+  }
+
+  // WEEKLY OUTCOMES — compact (≤600 chars), most-recent-first, real numbers the
+  // AI can cite when asked "how is my child trending?"
+  const outcomesBlock = formatOutcomesForAI(context.weeklyOutcomes || [], context.outcomeBaseline || null);
+  if (outcomesBlock) {
+    parts.push(`WEEKLY OUTCOMES: ${outcomesBlock}`);
   }
 
   return parts.join(' ');

@@ -31,6 +31,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
+import { combineDateAndTime, downloadICS, googleCalendarUrl } from '../lib/calendar-links';
 import { supabase } from '../utils/supabase/client';
 import { isDemoMode } from '../lib/demo-seed';
 import { toast } from 'sonner';
@@ -69,6 +70,7 @@ interface Provider {
   title: string;
   specialty: string;
   imageUrl?: string;
+  bio?: string;
   rating: number;
   reviewCount: number;
   nextAvailable: string;
@@ -142,6 +144,7 @@ const FALLBACK_PROVIDERS: Provider[] = [
     name: 'Dr. Sarah Chen',
     title: 'BCBA-D',
     specialty: 'Behavior Analysis',
+    bio: 'Doctoral-level behavior analyst focused on calm, family-centered support for meltdowns, transitions, and skill building.',
     rating: 4.9,
     reviewCount: 47,
     nextAvailable: 'Licensed in AZ',
@@ -152,7 +155,7 @@ const FALLBACK_PROVIDERS: Provider[] = [
 /**
  * Calculate session price based on provider type and duration
  */
-function getSessionPrice(providerType: string, duration: number = 60): { price: number; providerPay: number } {
+function getSessionPrice(providerType: string, duration: number = 60): { price: number; providerPay: number; durationDisplay: string } {
   // Map provider type to session pricing
   const typeMap: Record<string, string> = {
     'bcba': duration <= 60 ? 'bcba_consult' : 'bcba_assessment',
@@ -167,7 +170,9 @@ function getSessionPrice(providerType: string, duration: number = 60): { price: 
   const sessionType = typeMap[providerType.toLowerCase()] || 'bcba_consult';
   const pricing = SESSION_PRICING[sessionType as keyof typeof SESSION_PRICING];
 
-  return pricing ? { price: pricing.price, providerPay: pricing.providerPay } : { price: 149, providerPay: 60 };
+  return pricing
+    ? { price: pricing.price, providerPay: pricing.providerPay, durationDisplay: pricing.durationDisplay }
+    : { price: 149, providerPay: 60, durationDisplay: 'up to 60 min' };
 }
 
 /**
@@ -312,6 +317,36 @@ function OptionChip({
   );
 }
 
+// Provider Avatar — real photo when available, initials fallback (incl. broken URLs)
+function ProviderAvatar({
+  name,
+  imageUrl,
+  sizeClass = 'w-12 h-12'
+}: {
+  name: string;
+  imageUrl?: string;
+  sizeClass?: string;
+}) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (imageUrl && !imageFailed) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        onError={() => setImageFailed(true)}
+        className={`${sizeClass} rounded-full object-cover flex-shrink-0 border border-[#E8E4DF]`}
+      />
+    );
+  }
+
+  return (
+    <div className={`${sizeClass} rounded-full bg-gradient-to-br from-[#2A7D99] to-[#2A7D99] flex items-center justify-center text-white font-bold text-lg flex-shrink-0`}>
+      {name.split(' ').map(n => n[0]).join('')}
+    </div>
+  );
+}
+
 // Provider Card Mini
 function ProviderCardMini({
   provider,
@@ -322,20 +357,20 @@ function ProviderCardMini({
   selected?: boolean;
   onClick: () => void;
 }) {
+  const pricing = getSessionPrice(provider.title, 60);
+
   return (
     <motion.button
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 p-4 rounded-2xl text-left transition-all shadow-sm ${
+      className={`w-full flex items-start gap-3 p-4 rounded-2xl text-left transition-all shadow-sm ${
         selected
           ? 'border-2 border-[#2A7D99] bg-[#2A7D99]/10'
           : 'border border-[#E8E4DF] bg-white/95 hover:border-[#2A7D99]/20 hover:bg-[#2A7D99]/10/70'
       }`}
     >
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#2A7D99] to-[#2A7D99] flex items-center justify-center text-white font-bold text-lg">
-        {provider.name.split(' ').map(n => n[0]).join('')}
-      </div>
+      <ProviderAvatar name={provider.name} imageUrl={provider.imageUrl} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <p className="font-semibold text-[#132F43] truncate">{provider.name}</p>
@@ -346,11 +381,17 @@ function ProviderCardMini({
           )}
         </div>
         <p className="text-sm text-[#5A6B7A]">{provider.title} · {provider.specialty}</p>
+        {provider.bio && (
+          <p className="text-sm text-[#5A6B7A] mt-1 line-clamp-2">{provider.bio}</p>
+        )}
         <div className="flex items-center gap-2 mt-1">
           <span className="text-sm text-amber-600">★ {provider.rating}</span>
           <span className="text-sm text-[#8A9BA8]">({provider.reviewCount} reviews)</span>
           <span className="text-sm text-[#2A7D99] ml-auto">Next: {provider.nextAvailable}</span>
         </div>
+        <p className="text-sm font-medium text-[#132F43] mt-1">
+          ${pricing.price} · {pricing.durationDisplay} · superbill available
+        </p>
       </div>
       {selected && <Check className="w-5 h-5 text-[#2A7D99] flex-shrink-0" />}
     </motion.button>
@@ -391,6 +432,7 @@ export function ConversationalBooking({
             provider_type,
             specialties,
             bio,
+            photo_url,
             rating,
             review_count,
             verified,
@@ -421,6 +463,8 @@ export function ConversationalBooking({
               credentials?: string | null;
               provider_type?: string | null;
               specialties?: string[] | null;
+              bio?: string | null;
+              photo_url?: string | null;
               rating?: number | string | null;
               review_count?: number | null;
               license_state?: string | null;
@@ -430,6 +474,8 @@ export function ConversationalBooking({
               name: p.full_name || p.name || 'Provider',
               title: p.credentials || 'Provider',
               specialty: p.specialties?.[0] || p.provider_type || 'General',
+              imageUrl: p.photo_url || undefined,
+              bio: p.bio || undefined,
               rating: typeof p.rating === 'number' ? p.rating : parseFloat(String(p.rating || 4.8)) || 4.8,
               reviewCount: p.review_count || 0,
               nextAvailable: p.license_state || p.state ? `Licensed in ${(p.license_state || p.state)?.toUpperCase()}` : 'Telehealth available',
@@ -592,6 +638,10 @@ export function ConversationalBooking({
       // Calculate pricing based on provider type
       const { price, providerPay } = getSessionPrice(state.selectedProvider.title, 60);
 
+      // Combine slot day + "HH:MM" clock time into a real timestamp.
+      // slot.startTime alone ("09:00") is not a valid timestamptz.
+      const scheduledAtISO = combineDateAndTime(state.selectedSlot.date, state.selectedSlot.startTime).toISOString();
+
       // Save to database
       const result = await saveBookingToDatabase({
         userId: currentUserId,
@@ -599,7 +649,7 @@ export function ConversationalBooking({
         providerName: state.selectedProvider.name,
         childId: childId,
         sessionType: state.visitType || 'video',
-        scheduledAt: state.selectedSlot.startTime,
+        scheduledAt: scheduledAtISO,
         concern: state.concern?.label || 'General consultation',
         notes: state.notes,
         visitType: state.visitType || 'video',
@@ -629,7 +679,7 @@ export function ConversationalBooking({
               booking_id: result.bookingId,
               provider_id: state.selectedProvider.id,
               session_type: state.visitType || 'video',
-              scheduled_at: state.selectedSlot.startTime,
+              scheduled_at: scheduledAtISO,
             },
             successUrl: `${origin}/?screen=my-appointments&payment=success`,
             cancelUrl: `${origin}/?screen=conversational-booking&payment=cancelled`,
@@ -979,6 +1029,10 @@ export function ConversationalBooking({
 
               <ChatMessage isAI>
                 <p>Here are the next openings for {state.selectedProvider.name}. Pick the calmest time for your family.</p>
+                <p className="mt-2 text-sm font-medium text-[#132F43]">
+                  ${getSessionPrice(state.selectedProvider.title, 60).price} · {getSessionPrice(state.selectedProvider.title, 60).durationDisplay} · superbill available
+                </p>
+                <p className="mt-1 text-sm text-[#5A6B7A]">No surprise fees — this is the full session price.</p>
               </ChatMessage>
 
               <div className="ml-11">
@@ -986,7 +1040,7 @@ export function ConversationalBooking({
                   providerId={state.selectedProvider.id}
                   providerName={state.selectedProvider.name}
                   sessionType={state.concern?.label || 'Consultation'}
-                  sessionDuration={30}
+                  sessionDuration={60}
                   selectedSlot={state.selectedSlot}
                   onSelectSlot={handleTimeSelect}
                 />
@@ -1052,7 +1106,7 @@ export function ConversationalBooking({
                         day: 'numeric',
                         hour: 'numeric',
                         minute: '2-digit'
-                      }).format(state.selectedSlot.date)}
+                      }).format(combineDateAndTime(state.selectedSlot.date, state.selectedSlot.startTime))}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -1083,6 +1137,41 @@ export function ConversationalBooking({
                   <div className="rounded-xl border border-[#E8E4DF] bg-white/90 px-3 py-2 text-sm text-[#5A6B7A]">
                     Free changes at least 24 hours ahead. Late changes and no-shows can reduce the refund amount.
                   </div>
+                  {state.selectedSlot && (
+                    <div className="flex flex-wrap items-center gap-2 pt-2">
+                      <span className="text-sm text-[#5A6B7A]">Add to calendar:</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const start = combineDateAndTime(state.selectedSlot!.date, state.selectedSlot!.startTime);
+                          downloadICS({
+                            title: `Aminy ${state.visitType === 'phone' ? 'phone' : 'video'} session with ${state.selectedProvider?.name || 'your provider'}`,
+                            start,
+                            durationMinutes: 60,
+                            description: `Re: ${state.concern?.label || 'Consultation'}. Your join link will arrive by text and in My Appointments.`,
+                            location: 'Aminy Telehealth (video link to follow)',
+                          });
+                        }}
+                        className="text-sm font-medium text-[#2A7D99] underline"
+                      >
+                        Apple / Outlook (.ics)
+                      </button>
+                      <a
+                        href={googleCalendarUrl({
+                          title: `Aminy ${state.visitType === 'phone' ? 'phone' : 'video'} session with ${state.selectedProvider?.name || 'your provider'}`,
+                          start: combineDateAndTime(state.selectedSlot.date, state.selectedSlot.startTime),
+                          durationMinutes: 60,
+                          description: `Re: ${state.concern?.label || 'Consultation'}. Your join link will arrive by text and in My Appointments.`,
+                          location: 'Aminy Telehealth (video link to follow)',
+                        })}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium text-[#2A7D99] underline"
+                      >
+                        Google Calendar
+                      </a>
+                    </div>
+                  )}
                 </div>
               </ChatMessage>
 

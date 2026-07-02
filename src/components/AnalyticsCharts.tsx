@@ -42,6 +42,17 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { isDemoMode } from '../lib/demo-seed';
+import { supabase } from '../utils/supabase/client';
+import {
+  fetchOutcomeTrend,
+  trendDirection,
+  trendHeadline,
+  shortBehaviorName,
+  baselineFrequencyLabel,
+  type CheckInPoint,
+  type BaselineSummary,
+  type TrendDirection,
+} from '../lib/outcome-trends';
 
 // Types
 interface DataPoint {
@@ -65,6 +76,262 @@ interface AnalyticsChartsProps {
   dateRange?: 'week' | 'month' | 'quarter' | 'year';
   onDateRangeChange?: (range: string) => void;
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Weekly check-in trend (REAL data — outcome_events + clinical_outcomes)
+// ────────────────────────────────────────────────────────────────────────────
+
+/** Fixed 1–5 rating trend: dots + line, honest about gaps. */
+const RatingTrendChart: React.FC<{
+  points: CheckInPoint[];
+  metric: 'frequency' | 'progress' | 'confidence';
+  color: string;
+}> = ({ points, metric, color }) => {
+  const width = 320;
+  const height = 96;
+  const pad = { top: 10, right: 12, bottom: 20, left: 20 };
+  const chartW = width - pad.left - pad.right;
+  const chartH = height - pad.top - pad.bottom;
+
+  const values = points.map(p => p[metric]);
+  const xAt = (i: number) =>
+    pad.left + (points.length === 1 ? chartW / 2 : (i / (points.length - 1)) * chartW);
+  const yAt = (v: number) => pad.top + chartH - ((v - 1) / 4) * chartH;
+
+  const drawn = points
+    .map((p, i) => (values[i] !== null ? { x: xAt(i), y: yAt(values[i] as number), i } : null))
+    .filter((d): d is { x: number; y: number; i: number } => d !== null);
+
+  const linePath = drawn.length > 1
+    ? drawn.map((d, j) => `${j === 0 ? 'M' : 'L'} ${d.x} ${d.y}`).join(' ')
+    : '';
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto" role="img"
+      aria-label={`${metric} ratings over the last ${points.length} check-ins`}>
+      {/* 1–5 gridlines */}
+      {[1, 3, 5].map(v => (
+        <g key={v}>
+          <line x1={pad.left} y1={yAt(v)} x2={width - pad.right} y2={yAt(v)}
+            stroke="#EDF4F7" strokeWidth="1" />
+          <text x={pad.left - 6} y={yAt(v) + 3} textAnchor="end" fontSize="9" fill="#94a3b8">{v}</text>
+        </g>
+      ))}
+      {linePath && (
+        <path d={linePath} fill="none" stroke={color} strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" />
+      )}
+      {drawn.map(d => (
+        <circle key={d.i} cx={d.x} cy={d.y} r="4.5" fill="white" stroke={color} strokeWidth="2" />
+      ))}
+      {/* Date labels: first + last only — a tired parent needs anchors, not clutter */}
+      {points.length > 0 && [0, points.length - 1].filter((v, i, a) => a.indexOf(v) === i).map(i => (
+        <text key={i} x={xAt(i)} y={height - 6}
+          textAnchor={i === 0 ? 'start' : points.length === 1 ? 'middle' : 'end'}
+          fontSize="9" fill="#94a3b8">
+          {points[i].date
+            ? new Date(points[i].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            : ''}
+        </text>
+      ))}
+    </svg>
+  );
+};
+
+const DIRECTION_CHIP: Record<TrendDirection, { label: string; className: string }> = {
+  improving: { label: 'Improving', className: 'bg-green-50 text-green-700' },
+  steady: { label: 'Steady', className: 'bg-slate-100 text-slate-500' },
+  // Never "declining" — a rough patch is information for the care team, not a grade
+  watch: { label: 'Worth discussing', className: 'bg-amber-50 text-amber-700' },
+};
+
+interface TrendMetricConfig {
+  metric: 'frequency' | 'progress' | 'confidence';
+  title: string;
+  caption: string;
+  color: string;
+  lowerIsBetter: boolean;
+}
+
+const TREND_METRICS: TrendMetricConfig[] = [
+  {
+    metric: 'frequency',
+    title: 'How often the tough moments happened',
+    caption: 'Lower is calmer — 5 means many times a day, 1 means barely at all.',
+    color: '#2A7D99',
+    lowerIsBetter: true,
+  },
+  {
+    metric: 'progress',
+    title: 'Progress toward goals',
+    caption: 'Your weekly 1–5 rating. Higher means more progress.',
+    color: '#577590',
+    lowerIsBetter: false,
+  },
+  {
+    metric: 'confidence',
+    title: 'Your confidence',
+    caption: 'How supported you felt, 1–5. This matters as much as any number.',
+    color: '#6B9080',
+    lowerIsBetter: false,
+  },
+];
+
+/** Demo-mode sample so investor walk-throughs never show an empty trend. */
+function demoTrendData(): { points: CheckInPoint[]; baseline: BaselineSummary } {
+  const week = 7 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const mk = (weeksAgo: number, f: number, p: number, c: number): CheckInPoint => ({
+    date: new Date(now - weeksAgo * week).toISOString(),
+    frequency: f,
+    progress: p,
+    confidence: c,
+  });
+  return {
+    points: [mk(5, 4, 2, 2), mk(4, 4, 3, 3), mk(3, 3, 3, 3), mk(2, 3, 4, 3), mk(1, 2, 4, 4), mk(0, 2, 4, 4)],
+    baseline: {
+      targetBehavior: 'Meltdowns during transitions',
+      frequency: 'few_daily',
+      intensity: 4,
+      trigger: 'Transitions / changes in routine',
+      ninetyDayGoal: 'Transitions with just a 5-minute warning',
+      date: new Date(now - 6 * week).toISOString(),
+    },
+  };
+}
+
+/**
+ * The parent-facing outcomes trend: last 8 weekly check-ins per metric, warm
+ * plain-language framing, honest empty/sparse states. Real Supabase data for
+ * signed-in users; sample data only in demo mode.
+ */
+const WeeklyOutcomeTrend: React.FC<{ childName: string }> = ({ childName }) => {
+  const [points, setPoints] = useState<CheckInPoint[]>([]);
+  const [baseline, setBaseline] = useState<BaselineSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isSample, setIsSample] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        if (isDemoMode()) {
+          const demo = demoTrendData();
+          if (!cancelled) {
+            setPoints(demo.points);
+            setBaseline(demo.baseline);
+            setIsSample(true);
+          }
+          return;
+        }
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const trend = await fetchOutcomeTrend(user.id, 8);
+        if (!cancelled) {
+          setPoints(trend.points);
+          setBaseline(trend.baseline);
+        }
+      } catch {
+        // Leave the honest empty state
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  if (loading && !isSample) {
+    return (
+      <Card className="p-6 animate-pulse">
+        <div className="h-4 bg-[#E8E4DF] rounded w-1/3 mb-4" />
+        <div className="h-24 bg-[#EDF4F7] rounded" />
+      </Card>
+    );
+  }
+
+  const headline = trendHeadline(points, baseline);
+  const behaviorName = shortBehaviorName(baseline?.targetBehavior);
+
+  // No check-ins yet — invite, never nag
+  if (points.length === 0) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-8 h-8 rounded-full bg-[#2A7D99]/10 flex items-center justify-center">
+            <TrendingUp className="w-4 h-4 text-[#2A7D99]" aria-hidden="true" />
+          </div>
+          <h3 className="font-semibold text-[#132F43] dark:text-white">Weekly check-in trend</h3>
+        </div>
+        <p className="text-sm text-[#5A6B7A]">
+          Each week, three quick questions build {childName}&rsquo;s trend — how often the target
+          behavior happened, goal progress, and how you&rsquo;re feeling. Your first check-in starts the line.
+        </p>
+        {baseline && (
+          <p className="text-sm text-[#5A6B7A] mt-2">
+            Starting point is already set{behaviorName ? ` for “${behaviorName}”` : ''} — the next
+            check-in shows movement against it.
+          </p>
+        )}
+      </Card>
+    );
+  }
+
+  const sparse = points.length < 3;
+
+  return (
+    <Card className="p-6">
+      <div className="flex items-start justify-between gap-3 mb-1">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-8 h-8 rounded-full bg-[#2A7D99]/10 flex items-center justify-center shrink-0">
+            <TrendingUp className="w-4 h-4 text-[#2A7D99]" aria-hidden="true" />
+          </div>
+          <h3 className="font-semibold text-[#132F43] dark:text-white">Weekly check-in trend</h3>
+        </div>
+        {isSample && (
+          <Badge variant="outline" className="bg-amber-50 text-amber-700 shrink-0">Sample</Badge>
+        )}
+      </div>
+      {/* Warm, plain-language read of the trend — the one line to take away */}
+      <p className="text-sm text-[#3A4A57] mb-4 pl-10">{headline}</p>
+
+      <div className="space-y-5">
+        {TREND_METRICS.map(cfg => {
+          const dir = sparse ? null : trendDirection(points.map(p => p[cfg.metric]), cfg.lowerIsBetter);
+          const chip = dir ? DIRECTION_CHIP[dir] : null;
+          return (
+            <div key={cfg.metric}>
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <span className="text-sm font-medium text-[#132F43] dark:text-white">{cfg.title}</span>
+                {chip && (
+                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${chip.className}`}>
+                    {chip.label}
+                  </span>
+                )}
+              </div>
+              <RatingTrendChart points={points} metric={cfg.metric} color={cfg.color} />
+              <p className="text-sm text-[#5A6B7A] mt-0.5">{cfg.caption}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Baseline — the honest "before" every trend is measured against */}
+      {baseline && (behaviorName || baseline.intensity != null) && (
+        <div className="mt-4 pt-3 border-t border-[#E8E4DF]">
+          <p className="text-sm text-[#5A6B7A]">
+            <span className="font-medium text-[#3A4A57]">Starting point</span>
+            {baseline.date
+              ? ` (${new Date(baseline.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`
+              : ''}
+            {behaviorName ? `: “${behaviorName}”` : ''}
+            {baselineFrequencyLabel(baseline.frequency) ? ` — ${baselineFrequencyLabel(baseline.frequency)}` : ''}
+            {baseline.intensity != null ? `, intensity ${baseline.intensity}/5` : ''}.
+          </p>
+        </div>
+      )}
+    </Card>
+  );
+};
 
 // Simple SVG-based charts (no external dependencies)
 const SimpleLineChart: React.FC<{
@@ -405,21 +672,28 @@ export function AnalyticsCharts({
   }
 
   if (!chartData) {
+    // Real users: the weekly check-in trend is live data and renders on its own;
+    // the aggregate activity charts below it stay honest about being unbuilt.
     return (
-      <Card className="p-8 flex flex-col items-center justify-center text-center">
-        <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
-          <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
-        </div>
-        <h3 className="text-base font-semibold text-[#132F43] dark:text-white">No analytics yet</h3>
-        <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
-          As you track {childName}&rsquo;s activities, moods, and routines, trends and insights will appear here.
-        </p>
-      </Card>
+      <div className="space-y-6">
+        <WeeklyOutcomeTrend childName={childName} />
+        <Card className="p-8 flex flex-col items-center justify-center text-center">
+          <div className="w-12 h-12 rounded-2xl bg-[#6B9080]/10 flex items-center justify-center mb-3">
+            <TrendingUp className="w-6 h-6 text-[#6B9080]" aria-hidden="true" />
+          </div>
+          <h3 className="text-base font-semibold text-[#132F43] dark:text-white">No activity analytics yet</h3>
+          <p className="mt-1.5 text-sm text-[#5A6B7A] max-w-xs">
+            As you track {childName}&rsquo;s activities, moods, and routines, more trends and insights will appear here.
+          </p>
+        </Card>
+      </div>
     );
   }
 
   return (
     <div className="space-y-6">
+      {/* Weekly check-in trend — real outcome data, always first */}
+      <WeeklyOutcomeTrend childName={childName} />
       {/* Demo Data Banner — only in demo mode (real users see real data or the empty state) */}
       {demoMode && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center gap-2">
@@ -464,6 +738,9 @@ export function AnalyticsCharts({
           )}
         </div>
         <SimpleLineChart data={chartData.progressOverTime} height={180} />
+        <p className="text-sm text-[#5A6B7A] mt-1">
+          Overall progress score (0–100) from logged routines, goals, and activities. Up and to the right is growth — dips are normal weeks, not setbacks.
+        </p>
       </Card>
 
       {/* Activities and Mood */}
@@ -475,6 +752,9 @@ export function AnalyticsCharts({
             Activities by Category
           </h3>
           <SimpleBarChart data={chartData.activitiesByCategory} height={180} />
+          <p className="text-sm text-[#5A6B7A] mt-2">
+            How many activities you logged in each area — it shows where the energy is going.
+          </p>
         </Card>
 
         {/* Mood Distribution */}
@@ -484,6 +764,9 @@ export function AnalyticsCharts({
             Mood Distribution
           </h3>
           <SimplePieChart data={chartData.moodDistribution} size={140} />
+          <p className="text-sm text-[#5A6B7A] mt-2">
+            Share of logged moods. Every feeling counts — this is a picture, not a report card.
+          </p>
         </Card>
       </div>
 
@@ -506,6 +789,9 @@ export function AnalyticsCharts({
             <span key={i}>{d.hour}</span>
           ))}
         </div>
+        <p className="text-sm text-[#5A6B7A] mt-2">
+          Taller bars = busier times of day. Handy for planning demands around {childName}&rsquo;s natural rhythm.
+        </p>
       </Card>
 
       {/* Behavior Patterns */}
@@ -540,6 +826,9 @@ export function AnalyticsCharts({
             </motion.div>
           ))}
         </div>
+        <p className="text-sm text-[#5A6B7A] mt-3">
+          Percentages show how consistently each routine went smoothly. Arrows mark the direction things are moving.
+        </p>
       </Card>
 
       {/* Insights — illustrative narrative tied to the sample dataset; demo-only so real

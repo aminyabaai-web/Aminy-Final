@@ -315,7 +315,8 @@ function BreathingGuide() {
 
           <button
             onClick={() => { setRunning(false); setPhaseIdx(0); setCountdown(4); }}
-            className="text-slate-400 text-sm underline"
+            className="min-h-[44px] px-6 py-2 rounded-2xl text-slate-300 text-sm font-medium"
+            style={{ background: '#ffffff14' }}
           >
             Stop
           </button>
@@ -567,6 +568,9 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
   const [activeTab, setActiveTab] = useState<Tab>('tap');
 
   return (
+    // Full-bleed dark backdrop — without it the 430px column floated on the
+    // light app background on tablets
+    <div className="min-h-screen" style={{ backgroundColor: '#0D1B2A' }}>
     <div
       className="min-h-screen flex flex-col"
       style={{ backgroundColor: '#0D1B2A', color: '#fff', maxWidth: 430, margin: '0 auto' }}
@@ -575,7 +579,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
       <div className="flex items-center gap-3 px-4 pt-safe pt-5 pb-4" style={{ paddingTop: 'max(env(safe-area-inset-top), 20px)' }}>
         <button
           onClick={onBack}
-          className="p-2 rounded-xl transition-colors"
+          className="w-11 h-11 flex items-center justify-center rounded-xl transition-colors"
           style={{ background: '#ffffff18' }}
           aria-label="Back"
         >
@@ -585,7 +589,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
           <h1 className="text-xl font-bold text-white">Calm Corner ✨</h1>
           {childName && <p className="text-sm text-slate-400">{childName}'s space</p>}
         </div>
-        <div style={{ width: 36 }} />
+        <div style={{ width: 44 }} />
       </div>
 
       {/* Tab bar */}
@@ -634,6 +638,7 @@ export function SensoryFidget({ onBack, childName }: SensoryFidgetProps) {
 
       {/* Bottom safe-area spacer */}
       <div style={{ height: 'env(safe-area-inset-bottom, 16px)', minHeight: 16 }} />
+    </div>
     </div>
   );
 }

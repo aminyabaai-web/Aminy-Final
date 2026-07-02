@@ -285,10 +285,14 @@ const TRACK_FILTERS = [
 export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNavigate }: JuniorPageProps) {
   const [activeView, _setActiveView] = useState<'kid-login' | 'home' | 'buddy-select' | 'activity-select' | 'activity' | 'celebration' | 'calm-corner' | 'rewards' | 'parent-education' | 'visual-coaching' | 'offline-manager' | 'parent-controls' | 'aac-board' | 'visual-schedule'>('home');
   // Wrap setActiveView to fire haptic + sound on every navigation
+  const contentScrollRef = useRef<HTMLDivElement>(null);
   const setActiveView: typeof _setActiveView = (view) => {
     playTap();
     haptic(30);
     _setActiveView(view);
+    // Each sub-screen starts at the top — the shared scroll container
+    // otherwise keeps the previous view's scroll position
+    requestAnimationFrame(() => contentScrollRef.current?.scrollTo({ top: 0 }));
   };
   const [selectedBuddy, setSelectedBuddy] = useState<string>('sunny');
   const [currentSpeechLevel, setCurrentSpeechLevel] = useState<number>(2);
@@ -466,19 +470,35 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
     homeLanguageSupport: true
   });
 
-  const [parentControls, setParentControls] = useState<ParentControls>({
-    dailyMaxTime: 20,
-    activityFilters: [],
-    bedtimeBlackout: {
-      enabled: true,
-      startTime: '20:00',
-      endTime: '07:00'
-    },
-    voiceDownloadApprovals: true,
-    kidSafeMode: true,
-    openWorldChatDisabled: true,
-    profileSwitching: false
+  const [parentControls, setParentControls] = useState<ParentControls>(() => {
+    const defaults: ParentControls = {
+      dailyMaxTime: 20,
+      activityFilters: [],
+      bedtimeBlackout: {
+        enabled: true,
+        startTime: '20:00',
+        endTime: '07:00'
+      },
+      voiceDownloadApprovals: true,
+      kidSafeMode: true,
+      openWorldChatDisabled: true,
+      profileSwitching: false
+    };
+    try {
+      const stored = localStorage.getItem('junior_parent_controls');
+      if (stored) return { ...defaults, ...JSON.parse(stored) };
+    } catch { /* corrupt storage — fall back to defaults */ }
+    return defaults;
   });
+
+  // Persist parent controls so settings survive reloads
+  const updateParentControls = (patch: Partial<ParentControls>) => {
+    setParentControls(prev => {
+      const next = { ...prev, ...patch };
+      try { localStorage.setItem('junior_parent_controls', JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
+  };
 
   const [offlinePacks, setOfflinePacks] = useState<OfflinePack[]>([
     {
@@ -1233,7 +1253,9 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
       confidence: accuracy, // use accuracy as confidence proxy for text mode
       needsSupport: accuracy < 0.5,
       latency: 0,
-      phonemes: targetPhonemes,
+      // Only light up the phoneme dots on a real match — lighting them all
+      // green after a wrong answer read as false success
+      phonemes: accuracy >= 0.8 ? targetPhonemes : [],
     };
 
     setSpeechAnalysis(analysis);
@@ -1688,7 +1710,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
         )}
 
         {/* Main Content Area */}
-        <div className="flex-1 overflow-y-auto">
+        <div ref={contentScrollRef} className="flex-1 overflow-y-auto">
           {activeView === 'home' && (
             <div className="p-4 sm:p-6 md:p-8">
               <div className="mx-auto max-w-5xl space-y-5">
@@ -1919,7 +1941,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   </Card>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-3">
                   <button
                     type="button"
                     onClick={() => setActiveView('rewards')}
@@ -1942,6 +1964,18 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     </div>
                     <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Transitions</div>
                     <p className="mt-2 text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">Use first/then boards, routines, and countdowns to lower friction.</p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveView('aac-board')}
+                    className="rounded-[28px] border border-white/80 bg-white p-5 text-left shadow-[0_16px_50px_rgba(15,23,42,0.06)] transition-transform duration-200 hover:-translate-y-0.5 dark:bg-slate-800 dark:border-slate-700/70"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-400">
+                      <MessageSquare className="h-6 w-6" />
+                    </div>
+                    <div className="mt-4 text-lg font-semibold tracking-[-0.02em] text-slate-950 dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Talk board</div>
+                    <p className="mt-2 text-sm leading-6 text-[#5A6B7A] dark:text-slate-400">Tap pictures to say what you need — no words needed.</p>
                   </button>
                 </div>
 
@@ -2059,14 +2093,14 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                         setActiveView('home');
                       }}
                       aria-label="Back to home"
-                      className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
+                      className="w-11 h-11 bg-white/70 rounded-full flex items-center justify-center shadow-sm"
                     >
-                      <ArrowLeft className="w-5 h-5 text-white" />
+                      <ArrowLeft className="w-5 h-5 text-[#132F43]" />
                     </motion.button>
 
                     <div className="text-center flex-1 mx-3">
-                      <h2 className="text-xl text-white mb-1">{selectedActivity.title}</h2>
-                      <p className="text-white/80 text-sm">{selectedActivity.description}</p>
+                      <h2 className="text-xl font-semibold text-[#132F43] mb-1">{selectedActivity.title}</h2>
+                      <p className="text-[#3A4A57] text-sm">{selectedActivity.description}</p>
                     </div>
 
                     {/* TTS replay / stop button */}
@@ -2080,25 +2114,24 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           tts.speak(`${selectedActivity.title}. ${selectedActivity.description}`);
                         }
                       }}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        tts.isSpeaking ? 'bg-white/40' : 'bg-white/20'
+                      className={`w-11 h-11 rounded-full flex items-center justify-center shadow-sm ${
+                        tts.isSpeaking ? 'bg-white/90' : 'bg-white/70'
                       }`}
                       aria-label={tts.isSpeaking ? 'Stop narration' : 'Read aloud'}
                     >
                       {tts.isSpeaking ? (
-                        <Square className="w-4 h-4 text-white" />
+                        <Square className="w-4 h-4 text-[#132F43]" />
                       ) : (
-                        <Volume2 className="w-5 h-5 text-white" />
+                        <Volume2 className="w-5 h-5 text-[#132F43]" />
                       )}
                     </motion.button>
                   </div>
                   
                   {/* Progress Bar */}
-                  <div className="bg-white/20 rounded-full h-2">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(100, (practiceAttempts / 5) * 100)}%` }}
-                      className="bg-white h-2 rounded-full"
+                  <div className="bg-white/60 rounded-full h-2">
+                    <div
+                      className="bg-[#2A7D99] h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${Math.min(100, (practiceAttempts / 5) * 100)}%` }}
                     />
                   </div>
                 </div>
@@ -2378,13 +2411,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                 });
                 setActiveView('home');
               }}
-              buddyName={
-                selectedBuddy === 'sunny' ? 'Sunny' :
-                selectedBuddy === 'luna' ? 'Luna' :
-                selectedBuddy === 'breezy' ? 'Breezy' :
-                selectedBuddy === 'sparky' ? 'Sparky' :
-                'Coco'
-              }
+              buddyName={buddyVoices.find(b => b.id === selectedBuddy)?.name || 'Sunny'}
               accessMode="always"
               autoTriggered={needsBreak}
             />
@@ -2397,7 +2424,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('home')}
                   aria-label="Back to home"
-                  className="w-10 h-10 bg-[#EDF4F7] rounded-full flex items-center justify-center dark:bg-slate-700 dark:text-slate-200"
+                  className="w-11 h-11 bg-[#EDF4F7] rounded-full flex items-center justify-center dark:bg-slate-700 dark:text-slate-200"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
@@ -2408,7 +2435,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('buddy-select')}
                   aria-label="Change buddy voice"
-                  className={`w-10 h-10 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
+                  className={`w-11 h-11 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
                 >
                   {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
                 </motion.button>
@@ -2421,7 +2448,7 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     key={filter.id}
                     whileHover={{ scale: 1.05 }}
                     onClick={() => setActiveTrackFilter(filter.id)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-full whitespace-nowrap transition-colors duration-200 ${
+                    className={`flex shrink-0 items-center space-x-2 px-4 py-2 min-h-[44px] rounded-full whitespace-nowrap transition-colors duration-200 ${
                       activeTrackFilter === filter.id
                         ? 'text-white'
                         : 'bg-[#EDF4F7] text-[#5A6B7A] dark:bg-slate-700 dark:text-slate-300'
@@ -2535,14 +2562,14 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                   whileHover={{ scale: 1.1 }}
                   onClick={() => setActiveView('activity-select')}
                   aria-label="Back to activities"
-                  className="w-10 h-10 bg-[#EDF4F7] rounded-full flex items-center justify-center"
+                  className="w-11 h-11 bg-[#EDF4F7] rounded-full flex items-center justify-center"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
 
                 <h2 className="text-xl">🎭 Choose Your Buddy</h2>
                 
-                <div className="w-10 h-10" />
+                <div className="w-11 h-11" />
               </div>
 
               <div className="space-y-3 sm:space-y-4">
@@ -2586,11 +2613,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <span>Pace:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
-                              <div 
-                                key={i} 
-                                className={`w-2 h-2 rounded-full ${
-                                  i < buddy.voiceSettings.pace ? 'bg-white' : 'bg-white/30'
-                                }`} 
+                              <div
+                                key={i}
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: 'currentColor', opacity: i < buddy.voiceSettings.pace ? 1 : 0.25 }}
                               />
                             ))}
                           </div>
@@ -2599,11 +2625,10 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                           <span>Energy:</span>
                           <div className="flex space-x-1">
                             {[...Array(5)].map((_, i) => (
-                              <div 
-                                key={i} 
-                                className={`w-2 h-2 rounded-full ${
-                                  i < buddy.voiceSettings.enthusiasm ? 'bg-white' : 'bg-white/30'
-                                }`} 
+                              <div
+                                key={i}
+                                className="w-2 h-2 rounded-full"
+                                style={{ backgroundColor: 'currentColor', opacity: i < buddy.voiceSettings.enthusiasm ? 1 : 0.25 }}
                               />
                             ))}
                           </div>
@@ -2612,6 +2637,105 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
                     )}
                   </motion.div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeView === 'parent-controls' && (
+            <div className="p-4 sm:p-5 md:p-6">
+              <div className="mx-auto max-w-lg">
+                <div className="flex items-center gap-3 mb-5">
+                  <button
+                    type="button"
+                    onClick={() => setActiveView('home')}
+                    aria-label="Back to home"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-sm dark:bg-slate-700 dark:text-slate-200"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <div>
+                    <h2 className="text-xl font-semibold text-slate-950 dark:text-slate-50">Grown-up settings</h2>
+                    <p className="text-sm text-[#5A6B7A] dark:text-slate-400">For parents and caregivers</p>
+                  </div>
+                </div>
+
+                <Card className="rounded-[28px] border-white/80 bg-white/95 shadow-sm dark:bg-slate-800/95 dark:border-slate-700/70">
+                  <div className="divide-y divide-[#EDF4F7] dark:divide-slate-700">
+                    <div className="flex items-center justify-between gap-4 p-5">
+                      <div>
+                        <Label htmlFor="jr-kid-safe" className="text-sm font-medium text-slate-950 dark:text-slate-100">Kid-safe mode</Label>
+                        <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">Only kid-friendly activities and voices.</p>
+                      </div>
+                      <Switch
+                        id="jr-kid-safe"
+                        checked={parentControls.kidSafeMode}
+                        onCheckedChange={(checked) => updateParentControls({ kidSafeMode: checked })}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-4 p-5">
+                      <div>
+                        <Label htmlFor="jr-chat-off" className="text-sm font-medium text-slate-950 dark:text-slate-100">Open chat off</Label>
+                        <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">No free-form AI chat inside Ease.</p>
+                      </div>
+                      <Switch
+                        id="jr-chat-off"
+                        checked={parentControls.openWorldChatDisabled}
+                        onCheckedChange={(checked) => updateParentControls({ openWorldChatDisabled: checked })}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between gap-4 p-5">
+                      <div>
+                        <Label htmlFor="jr-bedtime" className="text-sm font-medium text-slate-950 dark:text-slate-100">Bedtime pause</Label>
+                        <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">
+                          Ease rests from {parentControls.bedtimeBlackout.startTime} to {parentControls.bedtimeBlackout.endTime}.
+                        </p>
+                      </div>
+                      <Switch
+                        id="jr-bedtime"
+                        checked={parentControls.bedtimeBlackout.enabled}
+                        onCheckedChange={(checked) =>
+                          updateParentControls({ bedtimeBlackout: { ...parentControls.bedtimeBlackout, enabled: checked } })
+                        }
+                      />
+                    </div>
+
+                    <div className="p-5">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <Label className="text-sm font-medium text-slate-950 dark:text-slate-100">Daily time</Label>
+                          <p className="mt-1 text-sm text-[#5A6B7A] dark:text-slate-400">A gentle daily limit — the break reminder uses this.</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => updateParentControls({ dailyMaxTime: Math.max(5, parentControls.dailyMaxTime - 5) })}
+                            disabled={parentControls.dailyMaxTime <= 5}
+                            aria-label="Less daily time"
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF4F7] text-lg font-semibold text-[#3A4A57] disabled:opacity-40 dark:bg-slate-700 dark:text-slate-200"
+                          >
+                            −
+                          </button>
+                          <span className="w-16 text-center text-sm font-semibold text-[#2A7D99] dark:text-[#6AA9BC]">{parentControls.dailyMaxTime} min</span>
+                          <button
+                            type="button"
+                            onClick={() => updateParentControls({ dailyMaxTime: Math.min(60, parentControls.dailyMaxTime + 5) })}
+                            disabled={parentControls.dailyMaxTime >= 60}
+                            aria-label="More daily time"
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF4F7] text-lg font-semibold text-[#3A4A57] disabled:opacity-40 dark:bg-slate-700 dark:text-slate-200"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                <p className="mt-4 text-center text-sm text-[#8A9BA8] dark:text-slate-500">
+                  Focus areas and rewards live in the parent app under Ease.
+                </p>
               </div>
             </div>
           )}

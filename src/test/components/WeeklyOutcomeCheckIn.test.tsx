@@ -183,7 +183,19 @@ describe('WeeklyOutcomeCheckIn', () => {
       user_id: 'user-123',
       child_id: 'child-456',
       event_type: 'weekly_parent_checkin',
+      // Live-schema NOT NULL columns
+      metric_name: 'weekly_checkin_goal_progress',
+      metric_value: 4,
     });
+    // Ratings live in canonical `context`, mirrored to `payload` for Dashboard10's reader
+    const expectedRatings = {
+      target_behavior_frequency: 3, // 'A few times this week'
+      goal_progress_rating: 4,
+      parent_confidence_rating: 5,
+      source: 'parent_checkin',
+    };
+    expect(insertArg.context).toMatchObject(expectedRatings);
+    expect(insertArg.payload).toMatchObject(expectedRatings);
   });
 
   it('updates localStorage with current timestamp after submitting', async () => {

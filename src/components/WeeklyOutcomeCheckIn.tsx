@@ -56,17 +56,26 @@ export function WeeklyOutcomeCheckIn({ userId, childId, childName, onDismiss }: 
   const save = useCallback(async (conf: number): Promise<boolean> => {
     setSaving(true);
     try {
+      const ratings = {
+        target_behavior_frequency: frequency,
+        goal_progress_rating: progress,
+        parent_confidence_rating: conf,
+        source: 'parent_checkin',
+        week_of: new Date().toISOString().split('T')[0],
+      };
       const { error } = await supabase.from('outcome_events').insert({
         user_id: userId,
         child_id: childId || null,
         event_type: 'weekly_parent_checkin',
-        payload: {
-          target_behavior_frequency: frequency,
-          goal_progress_rating: progress,
-          parent_confidence_rating: conf,
-          source: 'parent_checkin',
-          week_of: new Date().toISOString().split('T')[0],
-        },
+        // Live-schema NOT NULL columns — the canonical analytics readers
+        // (useAnalyticsData, outcomes-tracking) aggregate on metric_name/metric_value.
+        metric_name: 'weekly_checkin_goal_progress',
+        metric_value: progress ?? 0,
+        // Canonical jsonb home for the three ratings…
+        context: ratings,
+        // …mirrored to `payload` for the Dashboard10 mini-trend reader
+        // (column added by migration 20260702140000_outcome_checkin_schema_gap).
+        payload: ratings,
         recorded_at: new Date().toISOString(),
       });
       if (error) throw error;

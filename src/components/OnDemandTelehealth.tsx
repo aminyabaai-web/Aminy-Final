@@ -65,6 +65,7 @@ interface OnDemandProvider {
   name: string;
   title: string;
   photo?: string;
+  bio?: string;
   specialties: string[];
   rating: number;
   reviewCount: number;
@@ -97,9 +98,10 @@ function toOnDemandProvider(p: TelehealthProvider): OnDemandProvider {
 
   return {
     id: p.id,
-    name: `${p.firstName} ${p.lastName}${p.credentials ? ', ' + p.credentials : ''}`,
+    name: `${[p.firstName, p.lastName].filter(Boolean).join(' ')}${p.credentials ? ', ' + p.credentials : ''}`,
     title: p.roleDisplayName || PROVIDER_ROLE_DISPLAY[p.role] || p.role,
     photo: p.avatarUrl,
+    bio: p.bio || undefined,
     specialties: p.referralTags || [p.role],
     rating: p.rating || 4.5,
     reviewCount: p.reviewCount || 0,
@@ -123,20 +125,26 @@ async function fetchProviders(): Promise<OnDemandProvider[]> {
     if (data && data.length > 0) {
       return data.map((row: Record<string, unknown>) => toOnDemandProvider({
         id: row.id as string,
-        firstName: (row.first_name as string) || '',
-        lastName: (row.last_name as string) || '',
+        // Live provider_profiles stores a single name (full_name/name), not
+        // first/last. Keep first_name/last_name as fallbacks for older rows.
+        firstName: (row.full_name as string)
+          || (row.name as string)
+          || [row.first_name, row.last_name].filter(Boolean).join(' ')
+          || 'Provider',
+        lastName: '',
         credentials: (row.credentials as string) || '',
         role: (row.provider_type as TelehealthProvider['role']) || 'parent-coach',
         roleDisplayName: PROVIDER_ROLE_DISPLAY[row.provider_type as keyof typeof PROVIDER_ROLE_DISPLAY] || '',
         bio: (row.bio as string) || '',
-        avatarUrl: row.avatar_url as string | undefined,
+        // Live column is photo_url; avatar_url kept as a fallback for older rows.
+        avatarUrl: (row.photo_url as string | undefined) ?? (row.avatar_url as string | undefined),
         licensedStates: (row.states_licensed as string[]) || [],
         offersConsult: (row.offers_consult as boolean) ?? true,
         offersDeepReview: (row.offers_deep_review as boolean) ?? true,
         consultPrice: (row.consult_price as number) || 85,
         deepReviewPrice: (row.deep_review_price as number) || 165,
         organization: (row.organization as TelehealthProvider['organization']) || 'independent',
-        referralTags: row.referral_tags as string[] | undefined,
+        referralTags: (row.referral_tags as string[] | undefined) ?? (row.specialties as string[] | undefined),
         rating: row.rating as number | undefined,
         reviewCount: row.review_count as number | undefined,
         isActive: (row.is_active as boolean) ?? true,
@@ -166,6 +174,38 @@ function readStoredTelehealthConsent(): boolean {
 
 // Same-day availability fee
 const URGENT_FEE = 50;
+
+// Provider avatar — real photo when available, initials fallback (incl. broken URLs)
+function OnDemandProviderAvatar({
+  name,
+  photo,
+  sizeClass = 'w-14 h-14',
+  textClass = 'text-lg sm:text-xl'
+}: {
+  name: string;
+  photo?: string;
+  sizeClass?: string;
+  textClass?: string;
+}) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (photo && !imageFailed) {
+    return (
+      <img
+        src={photo}
+        alt={name}
+        onError={() => setImageFailed(true)}
+        className={`${sizeClass} rounded-full object-cover flex-shrink-0 border border-[#E8E4DF]`}
+      />
+    );
+  }
+
+  return (
+    <div className={`${sizeClass} bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center ${textClass} font-semibold text-accent flex-shrink-0`}>
+      {name.split(' ').map(n => n[0]).join('').slice(0, 3)}
+    </div>
+  );
+}
 
 export function OnDemandTelehealth({
   onBack,
@@ -503,7 +543,7 @@ export function OnDemandTelehealth({
             // Provider list
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-medium text-[#132F43]">Available Now</h2>
+                <h2 className="font-medium text-[#132F43]">Online now</h2>
                 <Button variant="ghost" size="sm" onClick={() => loadProviders()}>
                   <RefreshCw className="w-4 h-4 mr-1" />
                   Refresh
@@ -522,9 +562,7 @@ export function OnDemandTelehealth({
                 >
                   <div className="flex items-start gap-3 sm:gap-4">
                     {/* Provider avatar */}
-                    <div className="w-14 h-14 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center text-lg sm:text-xl font-semibold text-accent">
-                      {provider.name.split(' ').map(n => n[0]).join('')}
-                    </div>
+                    <OnDemandProviderAvatar name={provider.name} photo={provider.photo} />
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between">
@@ -533,15 +571,16 @@ export function OnDemandTelehealth({
                           <p className="text-sm text-[#5A6B7A]">{provider.title}</p>
                         </div>
 
-                        {/* Availability badge */}
+                        {/* Availability badge — honest copy: we know they're online,
+                            not that they'll pick up instantly. */}
                         {provider.availabilityStatus === 'available' ? (
                           <Badge className="bg-green-100 text-green-700">
                             <span className="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse" />
-                            Available Now
+                            Online
                           </Badge>
                         ) : (
                           <Badge variant="secondary">
-                            ~{provider.estimatedWait} min wait
+                            Currently offline
                           </Badge>
                         )}
                       </div>
@@ -554,6 +593,19 @@ export function OnDemandTelehealth({
                         </div>
                         <span className="text-sm text-[#5A6B7A]">({provider.reviewCount} reviews)</span>
                       </div>
+
+                      {/* Honest wait expectation */}
+                      {provider.availabilityStatus === 'available' && (
+                        <p className="text-sm text-[#5A6B7A] mt-1 flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 text-[#8A9BA8]" />
+                          Usually connects within a few minutes
+                        </p>
+                      )}
+
+                      {/* Bio excerpt */}
+                      {provider.bio && (
+                        <p className="text-sm text-[#5A6B7A] mt-2 line-clamp-2">{provider.bio}</p>
+                      )}
 
                       {/* Specialties */}
                       <div className="flex flex-wrap gap-1 mt-2">
@@ -625,9 +677,12 @@ export function OnDemandTelehealth({
           {/* Provider summary */}
           <Card className="p-3 sm:p-4">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-accent/20 to-purple-500/20 rounded-full flex items-center justify-center text-2xl font-semibold text-accent">
-                {selectedProvider.name.split(' ').map(n => n[0]).join('')}
-              </div>
+              <OnDemandProviderAvatar
+                name={selectedProvider.name}
+                photo={selectedProvider.photo}
+                sizeClass="w-16 h-16"
+                textClass="text-2xl"
+              />
               <div>
                 <h3 className="font-semibold text-[#132F43]">{selectedProvider.name}</h3>
                 <p className="text-sm text-[#5A6B7A]">{selectedProvider.title}</p>
@@ -635,6 +690,9 @@ export function OnDemandTelehealth({
                   <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                   <span className="text-sm font-medium">{selectedProvider.rating}</span>
                 </div>
+                {selectedProvider.bio && (
+                  <p className="text-sm text-[#5A6B7A] mt-1 line-clamp-2">{selectedProvider.bio}</p>
+                )}
               </div>
             </div>
           </Card>

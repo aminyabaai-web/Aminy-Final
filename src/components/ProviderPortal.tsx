@@ -453,20 +453,27 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
   const loadProviderNotifications = useCallback(async () => {
     // Pending BCBA threads waiting for clinician review
+    // NOTE: ask_bcba_threads keys the parent by parent_id (there is no user_id
+    // column — selecting it 400'd and the queue never loaded).
     const { data: threads } = await supabase
       .from('ask_bcba_threads')
-      .select('id, question, parent_name, child_name, created_at, status, ai_draft, user_id')
+      .select('id, question, parent_name, child_name, created_at, status, ai_draft, parent_id')
       .in('status', ['ai_drafted', 'awaiting_bcba'])
       .order('created_at', { ascending: true })
       .limit(20);
-    if (threads) setPendingBCBAThreads(threads);
+    if (threads) {
+      setPendingBCBAThreads(threads.map((t) => ({ ...t, user_id: (t as { parent_id?: string | null }).parent_id ?? null })));
+    }
 
-    // Unsigned notes for this provider
+    // Notes awaiting this provider's co-signature. session_notes has no
+    // boolean `signed` column — signing is cosign_required + cosigned_at
+    // (same shape ai-proactive-nudges getCosignNudges queries).
     const { count } = await supabase
       .from('session_notes')
       .select('id', { count: 'exact', head: true })
       .eq('provider_id', providerId)
-      .eq('signed', false);
+      .eq('cosign_required', true)
+      .is('cosigned_at', null);
     setUnsignedNoteCount(count || 0);
   }, [providerId]);
 
@@ -591,9 +598,12 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
       const patientsList: Patient[] = [];
       if (patientsData && patientsData.length > 0) {
         for (const pp of patientsData) {
-          // Fetch child profile
+          // Fetch child record. NOTE: `children` (not `child_profiles`) holds
+          // name/date_of_birth/diagnoses — child_profiles is the clinical-detail
+          // table (IEP goals, reinforcers) keyed by child_id and has none of
+          // these columns, so the old query 400'd and every patient was dropped.
           const { data: childData } = await supabase
-            .from('child_profiles')
+            .from('children')
             .select('name, date_of_birth, diagnoses')
             .eq('id', pp.child_id)
             .single();
@@ -1939,8 +1949,13 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <div className="lg:col-span-2">
                 {selectedPatient && selectedPatient.profileAccess === 'granted' ? (
                   <PatientAISummary
-                    patientId={selectedPatient.id}
-                    childName={selectedPatient.childName}
+                    patient={{
+                      id: selectedPatient.id,
+                      childName: selectedPatient.childName,
+                      parentName: selectedPatient.parentName,
+                      age: selectedPatient.age,
+                      conditions: selectedPatient.conditions,
+                    }}
                     parentId={selectedPatient.parentUserId ?? ""}
                     providerId={providerId}
                   />
@@ -3147,8 +3162,10 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
         </div>
       )}
 
-      {/* Patient Detail Modal */}
-      {selectedPatient && (
+      {/* Patient Detail Modal — Clients tab only. The ai-summaries and
+          coordination tabs reuse selectedPatient to drive their side panels,
+          and rendering this modal there covered those panels completely. */}
+      {selectedPatient && activeTab === 'clients' && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-neutral-100 sticky top-0 bg-white">
