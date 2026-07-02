@@ -434,6 +434,12 @@ export function Dashboard10({
     })),
   };
 
+  // Natural-language fallbacks: a real child name renders as "Mia's"; the
+  // 'Your Child' placeholder renders as "your child's" (never the literal placeholder).
+  const hasRealChildName = Boolean(child.name?.trim()) && child.name !== 'Your Child';
+  const childPossessive = hasRealChildName ? `${child.name}'s` : "your child's";
+  const parentFirstName = userData.parentName?.trim();
+
   // SAFETY: Ensure upcomingEvents is always an array
   const safeUpcomingEvents = Array.isArray(dashboardData.upcomingEvents) ? dashboardData.upcomingEvents : [];
   const upcomingEvents: UpcomingEvent[] = safeUpcomingEvents.length > 0
@@ -831,7 +837,7 @@ export function Dashboard10({
   // Show skeleton while data loads instead of a blocking spinner
   if (dashboardData.isLoading && userId) {
     return (
-      <div className="min-h-screen dark:bg-slate-900 pb-24" style={{ background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)' }}>
+      <div className="min-h-screen dark:bg-slate-900 pb-32" style={{ background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)' }}>
         <div className="p-4">
           <SkeletonDashboard />
         </div>
@@ -841,7 +847,7 @@ export function Dashboard10({
 
   return (
     <div
-      className="min-h-screen dark:bg-slate-900 pb-24"
+      className="min-h-screen dark:bg-slate-900 pb-32"
       style={{ background: 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)' }}
     >
       {/* ========================================
@@ -940,7 +946,7 @@ export function Dashboard10({
           {/* Greeting */}
           <div className="mb-4">
             <h1 className="text-[1.05rem] font-semibold tracking-[-0.02em] text-slate-950" style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, -apple-system, sans-serif" }}>
-              {getTimeBasedGreeting()}, {userData.parentName || 'there'} — here's {child.name}'s calm start today.
+              {getTimeBasedGreeting()}{parentFirstName ? `, ${parentFirstName}` : ''} — here's {childPossessive} calm start today.
             </h1>
             <h2 className="sr-only">Daily overview</h2>
             <h3 className="sr-only">Primary actions and support</h3>
@@ -992,7 +998,8 @@ export function Dashboard10({
               <button
                 type="button"
                 onClick={() => onNavigate?.('profile')}
-                aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
+                aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name} — opens profile`}
+                title={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
                 style={{ background: 'linear-gradient(135deg, #2A7D99, #4795AE)', border: 'none', cursor: 'pointer' }}
               >
@@ -1003,15 +1010,18 @@ export function Dashboard10({
                 )}
               </button>
               {!child.photoUrl && (
+                // Decorative "+" (add-photo affordance). The 48px avatar button above
+                // is the actual tap target and carries the accessible name/title.
                 <span
                   aria-hidden
                   style={{
-                    position: 'absolute', bottom: -2, right: -2,
-                    width: 16, height: 16, borderRadius: 9999,
+                    position: 'absolute', bottom: -3, right: -3,
+                    width: 18, height: 18, borderRadius: 9999,
                     background: '#fff', color: '#2A7D99',
-                    fontSize: 12, lineHeight: '14px', fontWeight: 700,
+                    fontSize: 13, lineHeight: '16px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
+                    pointerEvents: 'none',
                   }}
                 >+</span>
               )}
@@ -1296,7 +1306,8 @@ export function Dashboard10({
             <div className="mt-4 flex flex-wrap gap-2">
               <Button
                 size="sm"
-                className="rounded-full bg-[#2A7D99] text-white hover:bg-[#1F6080]"
+                variant="outline"
+                className="rounded-full border-[#2A7D99]/30 bg-[#2A7D99]/10 text-[#2A7D99] hover:bg-[#2A7D99]/20 dark:border-teal-700 dark:bg-teal-900/30 dark:text-teal-300"
                 onClick={() => onNavigate?.('care-plan')}
               >
                 My treatment plan
@@ -1352,7 +1363,7 @@ export function Dashboard10({
         {/* Empty State CTAs */}
         {(!dashboardData.activeGoals || dashboardData.activeGoals.length === 0) && (
           <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-dashed border-[#E8E4DF] dark:border-slate-700 text-center">
-            <p className="text-sm text-muted-foreground mb-2">Set goals to track {child.name}'s progress</p>
+            <p className="text-sm text-muted-foreground mb-2">Set goals to track {childPossessive} progress</p>
             <Button size="sm" variant="outline" onClick={() => onNavigate?.('care-plan')}>
               Set First Goal
             </Button>

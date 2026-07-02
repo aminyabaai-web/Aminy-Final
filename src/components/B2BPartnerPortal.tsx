@@ -267,7 +267,7 @@ export function B2BPartnerPortal({
     return {
       key,
       name: plan.name,
-      description: key === 'clinic' ? `Min ${plan.minSeats} seats` : key === 'enterprise' ? '100+ seats' : `Min ${plan.minSeats} seats`,
+      description: key === 'enterprise' ? '100+ seats' : 'From 1 seat — volume pricing',
       price: key === 'enterprise' ? 'Custom' : `$${pricing.perSeat.toFixed(2)}/seat/mo`,
       total: key === 'enterprise' ? 'Contact us' : `$${pricing.total.toFixed(0)}${billingPeriod === 'annual' ? '/yr' : '/mo'}`,
       savings: pricing.savings,
@@ -442,7 +442,7 @@ export function B2BPartnerPortal({
             </button>
             <span className={`text-sm font-medium ${billingPeriod === 'annual' ? 'text-[#132F43]' : 'text-[#5A6B7A]'}`}>Annual</span>
             {billingPeriod === 'annual' && (
-              <Badge className="bg-green-100 text-green-800 text-sm">Save up to 30%</Badge>
+              <Badge className="bg-green-100 text-green-800 text-sm">Save 15%</Badge>
             )}
           </div>
 

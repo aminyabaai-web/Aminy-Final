@@ -30,7 +30,8 @@ describe('product truth pilot access', () => {
 
     expect(decision.allowed).toBe(false);
     expect(decision.gateReason).toBe('limited_launch');
-    expect(decision.message).toContain('supported provider states');
+    expect(decision.message).toContain('real providers');
+    expect(decision.message).toContain('AZ, MT, TX, FL & NV');
   });
 
   it('allows Montana families into supported-state marketplace access', () => {

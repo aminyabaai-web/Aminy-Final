@@ -98,9 +98,9 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
                 <span className="text-[#6B9080]">Empower Families</span>
               </h1>
               <p className="text-base sm:text-xl text-neutral-600 dark:text-slate-400 mt-4 sm:mt-6 leading-relaxed">
-                Join Aminy's marketplace and connect with families who need your expertise.
-                Get AI-powered tools, streamlined scheduling, and a platform built for
-                neurodivergent care.
+                Join Aminy's marketplace and connect with families who need your expertise —
+                and run your entire practice in one place: scheduling, telehealth, notes,
+                supervision, billing, and payouts, on a platform built for neurodivergent care.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mt-6 sm:mt-8">
                 <Button
@@ -221,7 +221,7 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
               Everything You Need to Grow
             </h2>
             <p className="text-sm sm:text-base text-neutral-600 dark:text-slate-400 mt-2 sm:mt-3 max-w-2xl mx-auto">
-              Aminy provides the tools and technology to help you focus on what matters most - your clients
+              Everything to run your practice — from first client to full caseload.
             </p>
           </div>
 

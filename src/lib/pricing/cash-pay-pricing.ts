@@ -26,7 +26,8 @@
 // ---------------------------------------------------------------------------
 
 export type ServiceCategory = 'aba' | 'mental-health' | 'speech';
-export type MembershipTier = 'starter' | 'core' | 'pro';
+// NOTE: 'starter' was a removed legacy alias (maps to Core in tier-utils) — do not re-add.
+export type MembershipTier = 'core' | 'pro';
 
 export interface CashPayService {
   id: string;
@@ -336,14 +337,9 @@ export const PACKAGE_DISCOUNTS: PackageDiscount[] = [
   { sessions: 12, label: '12-Session Pack (Best Value)', discountPct: 15 },
 ];
 
+// Must stay in sync with tier-utils tierPricing (prices) + getMarketplaceDiscount
+// (discount %). Guarded by tier-config-consistency.test.ts.
 export const MEMBERSHIP_DISCOUNTS: MembershipDiscount[] = [
-  {
-    tier: 'starter',
-    discountPct: 5,
-    monthlyPrice: 6.99,
-    label: 'Starter',
-    tagline: 'Basic Ease access + 5% off sessions',
-  },
   {
     tier: 'core',
     discountPct: 10,
@@ -361,22 +357,11 @@ export const MEMBERSHIP_DISCOUNTS: MembershipDiscount[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Data — Provider Economics (SaaS tier for own clients)
+// Data — Provider Economics
 // ---------------------------------------------------------------------------
-
-export const PROVIDER_SAAS_TIERS = {
-  basic: { monthlyPrice: 49, label: 'Basic', features: ['Scheduling', 'Telehealth', 'Notes'] },
-  professional: {
-    monthlyPrice: 79,
-    label: 'Professional',
-    features: ['Everything in Basic', 'Ease for clients', 'AI session notes', 'Superbills'],
-  },
-  enterprise: {
-    monthlyPrice: 99,
-    label: 'Enterprise',
-    features: ['Everything in Professional', 'Multi-provider', 'Analytics', 'Custom branding'],
-  },
-} as const;
+// NOTE: Provider seat pricing lives in src/lib/org-licensing.ts SEAT_PRICE_LADDER
+// ($89/seat at 1 seat → $49/seat at 5+). The old PROVIDER_SAAS_TIERS table here
+// contradicted it and was unused — deleted.
 
 export const INSURED_REFERRAL_FEE_PCT = 10; // 10% of collected revenue per session
 

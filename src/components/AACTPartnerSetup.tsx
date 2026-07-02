@@ -69,14 +69,25 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
 
   async function loadProviders() {
     setIsLoading(true);
-    const { data } = await supabase
-      .from('provider_applications')
-      .select('email, full_name, provider_type, status, created_at')
-      .eq('partner_org', partnerOrg)
-      .order('created_at', { ascending: false })
-      .limit(200);
-    setProviders((data || []) as ProviderRow[]);
-    setIsLoading(false);
+    try {
+      // Guard with a timeout so a hung request can never leave the roster
+      // stuck on a perpetual spinner — fall through to the real empty state.
+      const query = supabase
+        .from('provider_applications')
+        .select('email, full_name, provider_type, status, created_at')
+        .eq('partner_org', partnerOrg)
+        .order('created_at', { ascending: false })
+        .limit(200);
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Roster request timed out')), 8000)
+      );
+      const { data } = await Promise.race([query, timeout]);
+      setProviders((data || []) as ProviderRow[]);
+    } catch {
+      setProviders([]);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function copyInvite() {
@@ -252,7 +263,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
         ) : providers.length === 0 ? (
           <div className="px-4 py-8 text-center">
             <AlertCircle className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-[#5A6B7A]">No providers yet. Share your invite link or bulk-import above.</p>
+            <p className="text-sm text-[#5A6B7A]">No providers invited yet — share your invite link above.</p>
           </div>
         ) : (
           <div className="divide-y divide-slate-100">

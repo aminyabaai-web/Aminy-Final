@@ -655,16 +655,20 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 <div className="relative">
                   <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
                     {profile.photoUrl ? (
-                      <AvatarImage src={profile.photoUrl} alt={profile.name} />
+                      <AvatarImage src={profile.photoUrl} alt={profile.name} className="w-full h-full object-cover" />
                     ) : (
-                      <AvatarFallback className="text-white text-2xl font-semibold" style={{ background: 'linear-gradient(135deg, #2A7D99, #6AA9BC)' }}>
+                      <AvatarFallback className="w-full h-full text-white text-2xl font-semibold" style={{ background: 'linear-gradient(135deg, #2A7D99, #6AA9BC)' }}>
                         {profile.name?.charAt(0)?.toUpperCase() || 'U'}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-[#6B9080] transition-colors"
+                    aria-label="Change profile photo"
+                    /* bg-[#2A7D99] instead of bg-primary: a global rule
+                       (button[class*="bg-primary"]) forces position:relative,
+                       which un-pinned this from the avatar corner. */
+                    className="absolute bottom-0 right-0 p-2 bg-[#2A7D99] text-white rounded-full shadow-lg hover:bg-[#376E80] transition-colors"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
@@ -740,7 +744,9 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       className="mt-1"
                     />
                   ) : (
-                    <p className="font-medium dark:text-white">{profile.name || 'Not set'}</p>
+                    <p className={profile.name ? 'font-medium dark:text-white' : 'text-muted-foreground'}>
+                      {profile.name || 'Add your name'}
+                    </p>
                   )}
                 </div>
 
@@ -767,7 +773,9 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       className="mt-1"
                     />
                   ) : (
-                    <p className="font-medium dark:text-white">{profile.phone || 'Not set'}</p>
+                    <p className={profile.phone ? 'font-medium dark:text-white' : 'text-muted-foreground'}>
+                      {profile.phone || 'Add phone'}
+                    </p>
                   )}
                 </div>
 
@@ -784,7 +792,9 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                       className="mt-1"
                     />
                   ) : (
-                    <p className="font-medium dark:text-white">{profile.location || 'Not set'}</p>
+                    <p className={profile.location ? 'font-medium dark:text-white' : 'text-muted-foreground'}>
+                      {profile.location || 'Add location'}
+                    </p>
                   )}
                 </div>
               </div>
@@ -894,9 +904,9 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 <div className="flex items-start gap-4">
                   <Avatar className="w-16 h-16 border-2 border-[#E8E4DF]">
                     {child.photoUrl ? (
-                      <AvatarImage src={child.photoUrl} alt={child.name} />
+                      <AvatarImage src={child.photoUrl} alt={child.name} className="w-full h-full object-cover" />
                     ) : (
-                      <AvatarFallback className="text-white text-xl font-semibold" style={{ background: 'linear-gradient(135deg, #6AA9BC, #2A7D99)' }}>
+                      <AvatarFallback className="w-full h-full text-white text-xl font-semibold" style={{ background: 'linear-gradient(135deg, #6AA9BC, #2A7D99)' }}>
                         {child.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}
@@ -1090,16 +1100,17 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                 <div className="relative">
                   <Avatar className="w-20 h-20 border-2 border-[#E8E4DF]">
                     {editingChild.photoUrl ? (
-                      <AvatarImage src={editingChild.photoUrl} alt={editingChild.name} />
+                      <AvatarImage src={editingChild.photoUrl} alt={editingChild.name} className="w-full h-full object-cover" />
                     ) : (
-                      <AvatarFallback className="text-white text-2xl" style={{ background: 'linear-gradient(135deg, #6AA9BC, #2A7D99)' }}>
+                      <AvatarFallback className="w-full h-full text-white text-2xl" style={{ background: 'linear-gradient(135deg, #6AA9BC, #2A7D99)' }}>
                         {editingChild.name?.charAt(0)?.toUpperCase()}
                       </AvatarFallback>
                     )}
                   </Avatar>
                   <button
                     onClick={() => childFileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full shadow"
+                    aria-label="Change child photo"
+                    className="absolute bottom-0 right-0 p-1.5 bg-[#2A7D99] text-white rounded-full shadow"
                   >
                     <Camera className="w-3 h-3" />
                   </button>

@@ -11,7 +11,7 @@
  * Batch submit with confirmation modal. Running tally header.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   AlertCircle,
@@ -36,7 +36,76 @@ import {
   type ClaimReadyItem,
   type ClaimReadyStatus,
 } from '../../lib/claim-queue';
+import {
+  listClaimReadyCases,
+  saveClaimReadyCase,
+  type ClaimReadyCase,
+  type ClaimQueueStatus,
+} from '../../lib/claim-ready-queue';
 import { isDemoMode } from '../../lib/demo-seed';
+
+// ── Map real claim_ready_cases rows → this screen's ClaimReadyItem shape ────
+
+function mapQueueStatus(status: ClaimQueueStatus): ClaimReadyStatus {
+  switch (status) {
+    case 'ready_for_biller':
+    case 'approved_for_submission':
+      return 'ready';
+    case 'submitted':
+    case 'accepted':
+      return 'submitted';
+    case 'paid':
+      return 'paid';
+    // 'denied' has no tab of its own — surface it as blocked so it stays workable.
+    default:
+      return 'blocked';
+  }
+}
+
+function mapCaseToClaimItem(c: ClaimReadyCase): ClaimReadyItem {
+  const status = mapQueueStatus(c.queueStatus);
+  const blockReasons =
+    status === 'blocked'
+      ? (c.issues.length > 0
+          ? c.issues
+          : c.queueStatus === 'denied'
+            ? ['Denied by payer — work it in the Denial Workbench']
+            : [c.queueStatus.replace(/_/g, ' ')])
+      : [];
+  return {
+    id: c.id,
+    sessionNoteId: '',
+    providerNPI: '',
+    providerName: c.providerName,
+    clientMemberId: c.primaryPolicyId ?? '',
+    clientName: c.patientName,
+    cptCode: c.visitType,
+    cptDescription: c.visitType,
+    diagnosisICD10: '',
+    diagnosisDescription: '',
+    dateOfService: c.serviceDate,
+    placeOfService: '11',
+    units: 1,
+    billedAmount: c.amountCents / 100,
+    authorizationNumber: null,
+    authorizationPeriod: null,
+    payerName: c.payerName,
+    payerId: c.payerId,
+    status,
+    blockReasons,
+    validationResults: blockReasons.map((reason, i) => ({
+      checkId: `issue-${i}`,
+      label: reason,
+      passed: false,
+      message: reason,
+      severity: 'error' as const,
+    })),
+    submittedAt: status === 'submitted' || status === 'paid' ? c.updatedAt : null,
+    batchId: null,
+    createdAt: c.createdAt,
+    updatedAt: c.updatedAt,
+  };
+}
 
 interface ClaimReadyQueueProps {
   providerId?: string;
@@ -194,8 +263,33 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   // Sample claims are shown only in demo mode (investor/AACT walkthroughs).
-  // Real providers start empty until their submitted claims sync from the billing pipeline.
+  // Real providers load their claim_ready_cases rows from Supabase.
   const [claims, setClaims] = useState<ClaimReadyItem[]>(() => (isDemoMode() ? DEMO_CLAIM_QUEUE : []));
+  const [isLoading, setIsLoading] = useState(!isDemoMode());
+  const [loadError, setLoadError] = useState<string | null>(null);
+  // Raw rows kept so batch-submit can write status changes back to Supabase.
+  const rawCasesRef = useRef<Map<string, ClaimReadyCase>>(new Map());
+
+  const loadRealClaims = useCallback(async () => {
+    setIsLoading(true);
+    setLoadError(null);
+    try {
+      const cases = await listClaimReadyCases();
+      rawCasesRef.current = new Map(cases.map(c => [c.id, c]));
+      setClaims(cases.map(mapCaseToClaimItem));
+    } catch (err) {
+      console.error('[ClaimReadyQueue] Failed to load claim-ready cases:', err);
+      setLoadError('Could not load your claim queue. Check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isDemoMode()) {
+      loadRealClaims();
+    }
+  }, [loadRealClaims]);
 
   const summary = useMemo(() => getQueueSummary(claims), [claims]);
 
@@ -227,6 +321,20 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
     batchMap.forEach((items, payerId) => {
       submitBatch(items, payerId);
     });
+    if (!isDemoMode()) {
+      // Persist the status change so the queue survives reload.
+      const now = new Date().toISOString();
+      selectedClaims.forEach(item => {
+        const raw = rawCasesRef.current.get(item.id);
+        if (raw) {
+          const updated: ClaimReadyCase = { ...raw, queueStatus: 'submitted', updatedAt: now };
+          rawCasesRef.current.set(item.id, updated);
+          saveClaimReadyCase(updated).catch(err =>
+            console.error('[ClaimReadyQueue] Failed to persist submission:', err)
+          );
+        }
+      });
+    }
     setClaims(prev =>
       prev.map(c =>
         selectedIds.has(c.id)
@@ -343,14 +451,34 @@ export default function ClaimReadyQueue({ providerId, onBack, onNavigateTo }: Cl
         )}
 
         {/* Claims list */}
-        {claims.length === 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <RefreshCw size={26} className="text-[#8A9BA8] animate-spin mb-4" />
+            <p className="text-sm text-[#5A6B7A]">Loading your claim queue…</p>
+          </div>
+        ) : loadError ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mb-4">
+              <AlertCircle size={26} className="text-red-500" />
+            </div>
+            <p className="text-sm font-semibold text-[#3A4A57]">Couldn't load claims</p>
+            <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">{loadError}</p>
+            <button
+              onClick={loadRealClaims}
+              className="mt-4 flex items-center gap-1.5 text-sm font-medium text-white bg-primary px-4 py-2 rounded-lg"
+            >
+              <RefreshCw size={13} />
+              Retry
+            </button>
+          </div>
+        ) : claims.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-14 h-14 rounded-full bg-[#EDF4F7] flex items-center justify-center mb-4">
               <FileText size={26} className="text-[#8A9BA8]" />
             </div>
-            <p className="text-sm font-semibold text-[#3A4A57]">No claims yet</p>
+            <p className="text-sm font-semibold text-[#3A4A57]">No claim-ready sessions yet</p>
             <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">
-              Submitted claims will appear here once your sessions are billed. Finish and sign a session note to start the queue.
+              Completed session notes appear here when they're ready to bill.
             </p>
           </div>
         ) : filteredClaims.length === 0 ? (

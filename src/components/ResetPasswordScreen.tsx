@@ -145,7 +145,8 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
         <div className="w-16"></div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-6 py-8">
+      {/* Top-anchored like the other auth screens (no full vertical centering) */}
+      <div className="flex-1 flex justify-center px-6 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h1
@@ -261,7 +262,7 @@ export function ResetPasswordScreen({ onSuccess, onBack }: ResetPasswordScreenPr
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
               style={{
                 fontSize: '16px',
                 height: '48px',

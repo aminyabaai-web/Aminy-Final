@@ -162,12 +162,12 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
         <p className="text-xs font-medium text-red-600 dark:text-red-400 uppercase tracking-wide mb-3">
           Immediate Help
         </p>
-        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4">
+        <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 pr-6">
           {emergencyResources.map((resource) => (
             <a
               key={resource.id}
               href={`tel:${resource.phoneNumber}`}
-              className="flex-shrink-0 flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-3 rounded-xl shadow-sm border border-red-200 dark:border-red-800"
+              className="flex-shrink-0 inline-flex items-center gap-2 whitespace-nowrap bg-white dark:bg-slate-800 px-4 py-3 rounded-xl shadow-sm border border-red-200 dark:border-red-800"
             >
               <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
                 <Phone className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -185,12 +185,12 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
         </div>
       </div>
 
-      {/* Category Tabs */}
-      <div className="overflow-x-auto border-b border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800">
-        <div className="flex gap-1 p-2 min-w-max">
+      {/* Category Tabs — single-row horizontal scroll (no wrapping) */}
+      <div className="overflow-x-auto scrollbar-hide border-b border-[#E8E4DF] dark:border-slate-700 bg-white dark:bg-slate-800">
+        <div className="flex flex-nowrap gap-1 p-2 pr-4 min-w-max">
           <button
             onClick={() => setActiveCategory('all')}
-            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`shrink-0 whitespace-nowrap px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeCategory === 'all'
                 ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
                 : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
@@ -204,7 +204,7 @@ export function CrisisResources({ onBack }: CrisisResourcesProps) {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`shrink-0 inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeCategory === category
                     ? 'bg-[#6B9080]/10 text-[#6B9080] dark:bg-[#6B9080]/15 dark:text-primary'
                     : 'text-[#5A6B7A] dark:text-slate-400 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'

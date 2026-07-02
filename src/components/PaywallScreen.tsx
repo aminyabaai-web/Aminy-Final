@@ -242,7 +242,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                   onClose?.();
                 }}
               >
-                Continue with limited access
+                Keep exploring the free plan
               </Button>
             </div>
           </div>
@@ -413,9 +413,9 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             <Gift className="w-5 h-5 text-[#2A7D99]" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-semibold text-[#132F43]">Give a month, get a month</p>
+            <p className="text-sm font-semibold text-[#132F43]">Share Aminy, get a free month</p>
             <p className="text-sm text-[#5A6B7A]">
-              Refer a friend — you both get Core free for 30 days when they join.
+              Refer a friend — you get a free month, and they get $25 toward their first expert session.
             </p>
           </div>
         </div>
@@ -555,7 +555,11 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                     {/* CTA */}
                     <Button
                       className={`w-full mt-4 ${
-                        tier.popular
+                        isCurrentTier
+                          // Clearly-visible inactive style — the default disabled:opacity-50
+                          // on the light #EDF4F7 bg made "Current Plan" nearly invisible.
+                          ? 'bg-slate-100 text-slate-500 border border-slate-200 disabled:opacity-100'
+                          : tier.popular
                           ? 'bg-[#2A7D99] hover:bg-[#1F6080] text-white'
                           : tier.id === 'free'
                           ? 'bg-[#EDF4F7] hover:bg-[#E8E4DF] text-[#3A4A57]'
@@ -680,7 +684,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 </div>
                 <div>
                   <p className="font-medium text-violet-900 dark:text-violet-300">Know another family?</p>
-                  <p className="text-sm text-violet-700 dark:text-violet-400">You get 1 free month. Your friend gets $25 off.</p>
+                  <p className="text-sm text-violet-700 dark:text-violet-400">You get a free month. Your friend gets $25 toward their first expert session.</p>
                 </div>
               </div>
               <Button

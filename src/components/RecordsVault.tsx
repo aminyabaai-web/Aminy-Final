@@ -635,7 +635,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
         <div className="p-4 sm:p-5 md:p-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
                 <Button
                   variant="ghost"
                   size="sm"

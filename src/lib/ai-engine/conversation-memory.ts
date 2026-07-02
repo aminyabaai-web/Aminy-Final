@@ -75,6 +75,18 @@ export type MemorySource =
 const getBackendUrl = () => `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
 /**
+ * KV thread key for a user's saved conversations.
+ *
+ * CONTRACT (M5): the edge routes in new-routes.tsx are thin KV wrappers —
+ * POST /conversation/save expects { userId, threadKey, message } and APPENDS
+ * `message` to the array stored at `threadKey` (capped at 100 entries);
+ * POST /conversation/load expects { userId, threadKey } and returns
+ * { messages: [...] }. We store one Conversation SNAPSHOT per save, then
+ * dedupe by conversation id (keeping the newest snapshot) on load.
+ */
+const conversationThreadKey = (userId: string) => `conversations:${userId}`;
+
+/**
  * Save a conversation to the database
  */
 export async function saveConversation(
@@ -83,6 +95,13 @@ export async function saveConversation(
   conversation: Partial<Conversation>
 ): Promise<string | null> {
   try {
+    const snapshot = {
+      ...conversation,
+      userId,
+      childId,
+      updatedAt: new Date().toISOString(),
+    };
+
     const response = await fetch(`${getBackendUrl()}/conversation/save`, {
       method: 'POST',
       headers: {
@@ -90,11 +109,11 @@ export async function saveConversation(
         'Authorization': `Bearer ${publicAnonKey}`,
         'X-User-Id': userId,
       },
+      // Shape matches the /conversation/save route: { userId, threadKey, message }
       body: JSON.stringify({
         userId,
-        childId,
-        ...conversation,
-        updatedAt: new Date().toISOString(),
+        threadKey: conversationThreadKey(userId),
+        message: snapshot,
       }),
     });
 
@@ -103,8 +122,8 @@ export async function saveConversation(
       return null;
     }
 
-    const data = await response.json();
-    return data.id || conversation.id || null;
+    // Route returns { success: true } — the id is client-generated
+    return conversation.id || null;
   } catch (error) {
     console.error('Error saving conversation:', error);
     return null;
@@ -112,7 +131,7 @@ export async function saveConversation(
 }
 
 /**
- * Load recent conversations for a user
+ * Load recent conversations for a user (most recent first)
  */
 export async function loadRecentConversations(
   userId: string,
@@ -128,7 +147,8 @@ export async function loadRecentConversations(
           'Authorization': `Bearer ${publicAnonKey}`,
           'X-User-Id': userId,
         },
-        body: JSON.stringify({ userId, limit }),
+        // Shape matches the /conversation/load route: { userId, threadKey }
+        body: JSON.stringify({ userId, threadKey: conversationThreadKey(userId) }),
       }
     );
 
@@ -136,8 +156,10 @@ export async function loadRecentConversations(
       return [];
     }
 
+    // Route returns { messages } — an append-only array of Conversation
+    // snapshots. Dedupe by conversation id keeping the newest snapshot.
     const data = await response.json();
-    return data.conversations || [];
+    return dedupeConversationSnapshots(data.messages || []).slice(0, limit);
   } catch (error) {
     console.error('Error loading conversations:', error);
     return [];
@@ -145,33 +167,47 @@ export async function loadRecentConversations(
 }
 
 /**
- * Load a specific conversation by ID
+ * Dedupe an append-only list of conversation snapshots: keep the LAST (newest)
+ * snapshot per conversation id, ordered most-recently-updated first.
+ * Exported for contract tests.
+ */
+export function dedupeConversationSnapshots(snapshots: Array<Partial<Conversation>>): Conversation[] {
+  const byId = new Map<string, Partial<Conversation>>();
+  for (const snap of snapshots) {
+    if (snap && snap.id) byId.set(snap.id, snap); // later snapshots overwrite earlier
+  }
+  return Array.from(byId.values())
+    .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
+    .map(snap => ({
+      id: snap.id!,
+      userId: snap.userId || '',
+      childId: snap.childId || '',
+      title: snap.title || 'Conversation',
+      messages: snap.messages || [],
+      summary: snap.summary,
+      topics: snap.topics || [],
+      createdAt: snap.createdAt || snap.updatedAt || new Date().toISOString(),
+      updatedAt: snap.updatedAt || new Date().toISOString(),
+    }));
+}
+
+/**
+ * Load a specific conversation by ID.
+ * There is no GET /conversation/:id route on the edge fn — resolve from the
+ * user's conversation thread, falling back to the local (offline) copy.
  */
 export async function loadConversation(
   conversationId: string,
   userId: string
 ): Promise<Conversation | null> {
   try {
-    const response = await fetch(
-      `${getBackendUrl()}/conversation/${conversationId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
-          'X-User-Id': userId,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    return await response.json();
+    const recent = await loadRecentConversations(userId, 100);
+    const match = recent.find(conv => conv.id === conversationId);
+    if (match) return match;
+    return loadConversationLocally(conversationId);
   } catch (error) {
     console.error('Error loading conversation:', error);
-    return null;
+    return loadConversationLocally(conversationId);
   }
 }
 
@@ -247,8 +283,23 @@ export async function getRelevantMemories(
       return [];
     }
 
+    // /memory/recent returns raw memory_facts rows (snake_case, fact text in
+    // `value`) — map to the client MemoryFact shape and drop expired rows.
     const data = await response.json();
-    return data.memories || [];
+    const now = Date.now();
+    return ((data.memories || []) as Array<Record<string, unknown>>)
+      .map(row => ({
+        id: String(row.id ?? ''),
+        userId: String(row.user_id ?? userId),
+        childId: String(row.child_id ?? childId ?? ''),
+        category: normalizeCategory(String(row.category ?? 'challenge')),
+        content: String(row.value ?? row.content ?? ''),
+        source: (row.source as MemorySource) || 'conversation',
+        confidence: typeof row.confidence === 'number' ? row.confidence : 0.8,
+        createdAt: String(row.created_at ?? row.extracted_at ?? new Date().toISOString()),
+        expiresAt: (row.expires_at as string | null) ?? null,
+      }))
+      .filter(f => f.content && (!f.expiresAt || new Date(f.expiresAt).getTime() > now));
   } catch (error) {
     console.error('Error getting memories:', error);
     return [];
@@ -256,35 +307,17 @@ export async function getRelevantMemories(
 }
 
 /**
- * Search memories using semantic similarity (if vector search is enabled)
+ * Search memories by query.
+ * NOTE (M5): there is no /memory/search route on the edge function — the old
+ * implementation POSTed to it, always 404ed, and fell back anyway. Go straight
+ * to recency-based retrieval via /memory/recent.
  */
 export async function searchMemoriesSemantic(
   userId: string,
   query: string,
   limit: number = 10
 ): Promise<MemoryFact[]> {
-  try {
-    const response = await fetch(`${getBackendUrl()}/memory/search`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${publicAnonKey}`,
-        'X-User-Id': userId,
-      },
-      body: JSON.stringify({ query, limit }),
-    });
-
-    if (!response.ok) {
-      // Fall back to basic search if semantic search fails
-      return getRelevantMemories(userId, '', query, undefined, limit);
-    }
-
-    const data = await response.json();
-    return data.memories || [];
-  } catch (error) {
-    console.error('Error searching memories:', error);
-    return [];
-  }
+  return getRelevantMemories(userId, '', query, undefined, limit);
 }
 
 /**

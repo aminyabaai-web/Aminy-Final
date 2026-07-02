@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -14,9 +14,12 @@ import {
   buildAIContextString,
   getCurrentContext,
   storeMemory,
+  fetchMemories,
   type UserContext,
   type CurrentContext
 } from '../ai/contextLayer';
+import { buildParentAIContext } from '../lib/parent-junior-bridge';
+import { getTierLimits, getTierEntitlements, type TierType } from '../lib/tier-utils';
 import { generateConversationSummary } from '../lib/ai-engine/conversation-memory';
 import { buildScreenStateBlock } from '../ai/screenStateRegistry';
 import { HAPTICS } from '../lib/mobile-experience-enhancer';
@@ -24,9 +27,12 @@ import { getStateAIContext } from '../lib/state-configs';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import {
   loadAISettings,
+  saveAISettings,
+  hasStoredAISettings,
   getPersonalitySystemPrompt,
   AI_PERSONALITIES,
-  type AIPersonality
+  type AIPersonality,
+  type AminyAISettings
 } from '../lib/ai-personality';
 import { AIChart, parseAIResponseParts } from './AIChart';
 import { AddToCalendarButtons } from './AddToCalendarButtons';
@@ -41,6 +47,9 @@ import { UsageMeter } from './UsageMeter';
 import { useRateLimitStore } from '../lib/rate-limit-store';
 import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
 import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
+
+/** Lucide renderers for PersonalityConfig.icon — brand rule: no emoji in parent chrome. */
+const PERSONALITY_ICONS: Record<string, typeof Heart> = { Heart, Trophy, Microscope, Handshake };
 
 // ─── Smart Action execution ──────────────────────────────────────────────────
 
@@ -434,6 +443,14 @@ export function BevelChatOverlay({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasGeneratedProactive = useRef(false);
+  // Always-fresh mirror of `messages` — avoids stale-closure history when a
+  // memoized sendMessage instance fires (e.g. follow-up chips, queued sends).
+  const messagesRef = useRef<Message[]>([]);
+  useEffect(() => { messagesRef.current = messages; }, [messages]);
+  // Stored-memory + Junior-activity block for the system prompt (S1). A ref,
+  // not state: it's set inside loadContextAndOpenChat and must be readable
+  // synchronously by buildSystemPrompt in the same async flow.
+  const memoryBlockRef = useRef('');
 
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
@@ -487,6 +504,47 @@ export function BevelChatOverlay({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isProactiveLoading]);
 
+  // S1 — build the "WHAT YOU REMEMBER" block: stored memory facts (bounded by
+  // the tier's memory-inject depth) + child Ease/Junior activity from the
+  // parent-junior bridge. Kept size-bounded so the system prompt stays lean.
+  const buildMemoryPromptBlock = async (ctx: UserContext | null): Promise<string> => {
+    const tier = (userTier as TierType) || 'free';
+    const sections: string[] = [];
+
+    if (loadAISettings().memoryEnabled !== false) {
+      const injectDepth = getTierEntitlements(tier).memoryInjectDepth;
+      const storedCap = getTierLimits(tier).memoryFacts ?? Number.POSITIVE_INFINITY;
+      const depth = Math.max(1, Math.min(injectDepth, storedCap));
+      const facts = await fetchMemories(userId, depth);
+      const lines = (facts as unknown as Array<Record<string, unknown>>)
+        .map(f => {
+          const text = String(f.value ?? f.content ?? '').trim();
+          if (!text) return null;
+          return `- [${String(f.category || 'insight')}] ${text.slice(0, 200)}`;
+        })
+        .filter((l): l is string => !!l);
+      if (lines.length > 0) {
+        sections.push(
+          `WHAT YOU REMEMBER ABOUT THIS FAMILY (from past conversations — weave in naturally, never recite):\n${lines.join('\n').slice(0, 2000)}`
+        );
+      }
+    }
+
+    // Child's Ease/Junior activity → parent chat context
+    try {
+      if (ctx?.childId) {
+        const juniorBlock = buildParentAIContext(ctx.childId, tier);
+        // buildParentAIContext always appends a usage-instruction line; only
+        // inject when it actually contains data sections (marked with **).
+        if (juniorBlock && juniorBlock.includes('**')) {
+          sections.push(juniorBlock.slice(0, 1500));
+        }
+      }
+    } catch { /* no Junior data yet — fine */ }
+
+    return sections.length > 0 ? `\n\n${sections.join('\n\n')}` : '';
+  };
+
   const loadContextAndOpenChat = async () => {
     const aiSettings = loadAISettings();
     setPersonality(aiSettings.personality);
@@ -498,6 +556,37 @@ export function BevelChatOverlay({
     setUserContext(context);
     const current = getCurrentContext(currentPath, context);
     setCurrentContext(current);
+
+    // M1 — roaming preferences: profiles.ai_context is the source of truth
+    // across devices; localStorage is the offline cache. Hydrate local from
+    // server only when local is empty (fresh device / cleared storage).
+    try {
+      const remoteCi = context?.customInstructions;
+      if (remoteCi && (remoteCi.aboutMe || remoteCi.responseStyle)) {
+        const local = loadCustomInstructions();
+        if (!local.aboutMe && !local.responseStyle) {
+          const roamed = { aboutMe: remoteCi.aboutMe || '', responseStyle: remoteCi.responseStyle || '' };
+          saveCustomInstructions(roamed);
+          setCustomInstructions(roamed);
+        }
+      }
+      const remoteSettings = context?.aiSettings;
+      if (remoteSettings && !hasStoredAISettings()) {
+        const merged = { ...aiSettings, ...remoteSettings } as AminyAISettings;
+        saveAISettings(merged);
+        if (merged.personality && AI_PERSONALITIES[merged.personality]) {
+          setPersonality(merged.personality);
+        }
+      }
+    } catch { /* roaming is best-effort */ }
+
+    // S1 — stored memories + Junior activity into the system prompt (ref so the
+    // sends below see it synchronously)
+    try {
+      memoryBlockRef.current = await buildMemoryPromptBlock(context);
+    } catch {
+      memoryBlockRef.current = '';
+    }
 
     if (!hasGeneratedProactive.current) {
       hasGeneratedProactive.current = true;
@@ -606,6 +695,8 @@ CURRENT APP SECTION: ${moduleCtx || 'Dashboard'}
 
 ${personalityBlock}
 
+TONE (always, regardless of personality style): Lead with empathy — acknowledge the parent's feeling before advice. Warm, plain language. "Gentle guidance. Meaningful progress."
+
 YOUR CLINICAL KNOWLEDGE BASE:
 • Behavioral assessment: VB-MAPP, ABLLS-R, AFLS, Vineland, ADOS-2, ABC behavior chains
 • Function of behavior: escape/avoidance, attention-seeking, tangible access, automatic/sensory reinforcement
@@ -664,7 +755,7 @@ Examples that REQUIRE the token:
 Resolve relative times against today's date. service_type values: ABA, PT, OT, ST, MentalHealth, Pediatrician, Other. If duration unclear, omit. After the action token, write a 1-sentence confirmation (the system already adds the calendar buttons below your text).
 
 Only use action tokens when the parent has clearly described something worth persisting. Never invent data.
-${stateBlock}${customBlock}${liveScreenContext}`;
+${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}`;
   };
 
   const sendMessageWithContext = async (
@@ -681,7 +772,8 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
       content: text,
       timestamp: new Date()
     };
-    setMessages([userMsg]);
+    // Append — replacing the array here used to wipe any prior history (S3)
+    setMessages(prev => [...prev, userMsg]);
     setIsLoading(true);
 
     try {
@@ -822,7 +914,11 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${publicAnonKey}` },
           body: JSON.stringify({
             userMessage: messagePayload,
-            conversationHistory: messages.map(m => ({ role: m.role, content: m.content })),
+            // messagesRef (not the `messages` closure) — a stale memoized
+            // callback would otherwise send truncated history (S3)
+            conversationHistory: messagesRef.current
+              .filter(m => m.id !== userMsg.id)
+              .map(m => ({ role: m.role, content: m.content })),
             systemPrompt,
             stream: !img, // vision payloads fall back to synchronous path on the edge fn
           })
@@ -864,7 +960,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
       setIsLoading(false);
       setActiveThinkingSteps([]);
     }
-  }, [input, isLoading, messages, userContext, currentContext, currentPath, userId, personality, attachedImage, showThinkingSteps]);
+  }, [input, isLoading, userContext, currentContext, currentPath, userId, personality, attachedImage, showThinkingSteps]);
 
   // ─── Voice input ──────────────────────────────────────────────────────────
   // Tap mic → records audio → on stop, sends to /ai/transcribe → fills input.
@@ -983,6 +1079,24 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
     loadContextAndOpenChat();
   };
 
+  // M1 — save custom instructions locally AND roam them via profiles.ai_context
+  const persistInstructions = (ci: CustomInstructions) => {
+    saveCustomInstructions(ci);
+    setInstructionsDirty(false);
+    toast.success('Instructions saved');
+    if (userId && userId !== 'dev-preview-user') {
+      updateUserContext(userId, { customInstructions: ci }).catch(() => {});
+    }
+  };
+
+  // M1 — persist an AI-settings change locally + roam via profiles.ai_context
+  const persistAISettings = (next: AminyAISettings) => {
+    try { saveAISettings(next); } catch { /* ignore */ }
+    if (userId && userId !== 'dev-preview-user') {
+      updateUserContext(userId, { aiSettings: next as unknown as Record<string, unknown> }).catch(() => {});
+    }
+  };
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (
@@ -1029,7 +1143,10 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100 leading-tight truncate">Aminy AI</p>
                   <p className="text-sm text-[#5A6B7A] leading-tight flex items-center gap-1 truncate">
-                    <span className="shrink-0">{AI_PERSONALITIES[personality].emoji}</span>
+                    {(() => {
+                      const PersonalityIcon = PERSONALITY_ICONS[AI_PERSONALITIES[personality].icon] ?? Heart;
+                      return <PersonalityIcon className="w-3 h-3 text-[#2A7D99] shrink-0" aria-hidden="true" />;
+                    })()}
                     <span className="truncate">{isProactiveLoading ? 'Thinking…' : (currentContext?.moduleName || AI_PERSONALITIES[personality].name)}</span>
                   </p>
                 </div>
@@ -1222,7 +1339,12 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               key={p.id}
                               onClick={() => {
                                 setPersonality(p.id);
-                                try { localStorage.setItem('aminy-ai-personality', p.id); } catch {}
+                                // Persist to 'aminy-ai-settings' (the key loadAISettings
+                                // actually reads) + roam via profiles.ai_context (M1).
+                                // The old 'aminy-ai-personality' key was never read back.
+                                try {
+                                  persistAISettings({ ...loadAISettings(), personality: p.id });
+                                } catch { /* ignore */ }
                               }}
                               className="flex items-start gap-2 p-3 rounded-xl border transition-all text-left"
                               style={personality === p.id ? {
@@ -1233,7 +1355,14 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                                 borderColor: '#e2e8f0',
                               }}
                             >
-                              <span className="text-lg shrink-0 mt-0.5">{p.emoji}</span>
+                              {(() => {
+                                const PersonalityIcon = PERSONALITY_ICONS[p.icon] ?? Heart;
+                                return (
+                                  <span className="w-7 h-7 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center shrink-0 mt-0.5">
+                                    <PersonalityIcon className="w-3.5 h-3.5 text-[#2A7D99]" aria-hidden="true" />
+                                  </span>
+                                );
+                              })()}
                               <div className="min-w-0">
                                 <div className="flex items-center gap-1.5">
                                   <p className="text-sm font-semibold text-[#132F43] dark:text-slate-100">{p.name}</p>
@@ -1298,11 +1427,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                           <p className="text-xs font-semibold text-[#5A6B7A] uppercase tracking-wide">Custom Instructions</p>
                           {instructionsDirty && (
                             <button
-                              onClick={() => {
-                                saveCustomInstructions(customInstructions);
-                                setInstructionsDirty(false);
-                                toast.success('Instructions saved');
-                              }}
+                              onClick={() => persistInstructions(customInstructions)}
                               className="text-xs text-[#6B9080] font-semibold px-2.5 py-1 bg-[#6B9080]/10 rounded-full hover:bg-[#6B9080]/10 transition-colors"
                             >
                               Save
@@ -1321,9 +1446,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               }}
                               onBlur={() => {
                                 if (instructionsDirty) {
-                                  saveCustomInstructions(customInstructions);
-                                  setInstructionsDirty(false);
-                                  toast.success('Instructions saved');
+                                  persistInstructions(customInstructions);
                                 }
                               }}
                               placeholder="e.g. My son Liam is 7, has ASD level 2, and struggles most with transitions and unexpected changes. He loves dinosaurs and is highly motivated by screen time..."
@@ -1342,9 +1465,7 @@ ${stateBlock}${customBlock}${liveScreenContext}`;
                               }}
                               onBlur={() => {
                                 if (instructionsDirty) {
-                                  saveCustomInstructions(customInstructions);
-                                  setInstructionsDirty(false);
-                                  toast.success('Instructions saved');
+                                  persistInstructions(customInstructions);
                                 }
                               }}
                               placeholder="e.g. Keep responses brief and direct — I'm usually reading this in the middle of a meltdown. Give me 1 thing to try, not a list..."

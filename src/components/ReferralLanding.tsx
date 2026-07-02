@@ -10,7 +10,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Gift, ArrowRight, Sparkles, Heart, Bot, BarChart3, UserCircle, ClipboardList } from 'lucide-react';
+import { Gift, ArrowRight, Sparkles, Heart, BarChart3, UserCircle, ClipboardList } from 'lucide-react';
 import { trackReferral, REFERRAL_PROGRAM_CONFIG } from '../lib/referral-program';
 
 interface ReferralLandingProps {
@@ -176,33 +176,32 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
         <div className="space-y-3">
           {[
             {
-              Icon: Bot,
+              Icon: Sparkles,
               title: 'AI Companion',
               desc: '24/7 support that remembers your child',
-              color: 'text-primary',
             },
             {
               Icon: BarChart3,
               title: 'Progress Tracking',
               desc: 'See real improvement over time',
-              color: 'text-blue-500',
             },
             {
               Icon: UserCircle,
               title: 'Expert Access',
               desc: 'Connect with BCBAs and therapists where available',
-              color: 'text-purple-500',
             },
             {
               Icon: ClipboardList,
               title: 'Progress Reports',
               desc: 'Summaries you can share with schools and providers',
-              color: 'text-amber-500',
             },
           ].map((item, i) => (
             <div key={i} className="flex items-start gap-3 bg-white rounded-xl p-4 shadow-sm border border-[#E8E4DF]">
-              <div className={`w-10 h-10 rounded-full bg-[#EDF4F7] flex items-center justify-center`}>
-                <item.Icon className={`w-5 h-5 ${item.color}`} />
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: 'rgba(42, 125, 153, 0.10)' }}
+              >
+                <item.Icon className="w-5 h-5 text-[#2A7D99]" />
               </div>
               <div>
                 <p className="font-medium text-[#132F43]">{item.title}</p>

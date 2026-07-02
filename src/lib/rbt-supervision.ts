@@ -160,6 +160,8 @@ const STORAGE_KEYS = {
   competencyAssessments: 'aminy_competency_assessments',
   directServiceHours: 'aminy_rbt_direct_hours',
   rbtSessionLogs: 'aminy_rbt_session_logs',
+  /** Offline cache of the Supabase-backed roster (non-demo mode only). */
+  sbProfileCache: 'aminy_rbt_profiles_offline_cache',
 };
 
 // ── Storage Helpers ─────────────────────────────────────────────────
@@ -219,20 +221,41 @@ export async function loadRBTDataFromSupabase(currentBcbaId: string): Promise<vo
   ]);
 
   if (assignmentsRes.status === 'fulfilled' && assignmentsRes.value.data) {
-    _sbProfiles = assignmentsRes.value.data.map((row) => ({
-      id: row.rbt_user_id,
-      name: (row.rbt as { full_name?: string } | null)?.full_name || row.rbt_user_id,
-      email: (row.rbt as { email?: string } | null)?.email || '',
-      avatarUrl: (row.rbt as { avatar_url?: string } | null)?.avatar_url,
-      rbtNumber: row.rbt_certification_number || '',
-      certificationDate: row.certification_date || '',
-      renewalDate: row.renewal_date || '',
-      supervisingBCBAId: row.supervising_bcba_id,
-      supervisingBCBAName: '',
-      state: row.state || '',
-      hiredDate: row.hired_date || '',
-      status: row.status as RBTProfile['status'],
-    }));
+    const cached = loadFromStorage<RBTProfile[]>(STORAGE_KEYS.sbProfileCache, []);
+    _sbProfiles = assignmentsRes.value.data.map((row) => {
+      // Pending invites may not have an auth user yet (rbt_user_id is null) —
+      // fall back to the assignment row id so the roster entry is still addressable.
+      const profileId = row.rbt_user_id || row.id;
+      const cachedProfile = cached.find((c) => c.id === profileId);
+      return {
+        id: profileId,
+        name:
+          (row.rbt as { full_name?: string } | null)?.full_name ||
+          (row as { invite_name?: string }).invite_name ||
+          cachedProfile?.name ||
+          row.rbt_user_id ||
+          'Invited RBT',
+        email:
+          (row.rbt as { email?: string } | null)?.email ||
+          (row as { invite_email?: string }).invite_email ||
+          cachedProfile?.email ||
+          '',
+        avatarUrl: (row.rbt as { avatar_url?: string } | null)?.avatar_url,
+        rbtNumber: row.rbt_certification_number || '',
+        certificationDate: row.certification_date || '',
+        renewalDate: row.renewal_date || '',
+        supervisingBCBAId: row.supervising_bcba_id,
+        supervisingBCBAName: '',
+        state: row.state || '',
+        hiredDate: row.hired_date || '',
+        status: row.status as RBTProfile['status'],
+      };
+    });
+    // Offline cache: last-known roster so a flaky reload doesn't blank the screen.
+    saveToStorage(STORAGE_KEYS.sbProfileCache, _sbProfiles);
+  } else if (_sbProfiles.length === 0) {
+    // Query failed (network / RLS) — fall back to the offline cache.
+    _sbProfiles = loadFromStorage<RBTProfile[]>(STORAGE_KEYS.sbProfileCache, []);
   }
 
   if (sessionsRes.status === 'fulfilled' && sessionsRes.value.data) {
@@ -501,6 +524,122 @@ export function getDirectServiceHours(rbtId: string, month: string): number {
   return data.directHours[rbtId]?.[month] ?? 0;
 }
 
+/** Sum of all recorded direct-service hours for an RBT across every month. */
+export function getTotalDirectServiceHours(rbtId: string): number {
+  const data = getOrInitDemoData();
+  const months = data.directHours[rbtId] ?? {};
+  return Object.values(months).reduce((sum, h) => sum + h, 0);
+}
+
+// ── Roster Mutations (shared by RBTManagement + SupervisionDashboard) ───────
+
+export interface NewRBTInput {
+  name: string;
+  email: string;
+  certificationNumber?: string;
+  supervisingBCBAId: string;
+}
+
+/**
+ * Adds an RBT to the current BCBA's roster.
+ * Non-demo: persists to `rbt_org_assignments` (rbt_user_id stays null until the
+ * invitee signs up; invite_name/invite_email keep the roster entry readable).
+ * Demo: writes to the demo localStorage store.
+ */
+export async function saveRBTProfile(input: NewRBTInput): Promise<RBTProfile> {
+  const today = new Date().toISOString().split('T')[0];
+
+  if (isDemoMode()) {
+    const profile: RBTProfile = {
+      id: `rbt-${Date.now()}`,
+      name: input.name,
+      email: input.email,
+      rbtNumber: input.certificationNumber || '',
+      certificationDate: '',
+      renewalDate: '',
+      supervisingBCBAId: input.supervisingBCBAId,
+      supervisingBCBAName: '',
+      state: '',
+      hiredDate: today,
+      status: 'pending',
+    };
+    const profiles = loadFromStorage<RBTProfile[]>(STORAGE_KEYS.rbtProfiles, []);
+    profiles.push(profile);
+    saveToStorage(STORAGE_KEYS.rbtProfiles, profiles);
+    return profile;
+  }
+
+  const basePayload: Record<string, unknown> = {
+    supervising_bcba_id: input.supervisingBCBAId,
+    rbt_certification_number: input.certificationNumber || null,
+    hired_date: today,
+    status: 'pending',
+  };
+
+  // Prefer storing the invitee's name/email on the row (migration
+  // 20260702110000_rbt_invite_columns). Retry without those columns if the
+  // migration hasn't been applied yet.
+  let insertRes = await supabase
+    .from('rbt_org_assignments')
+    .insert({ ...basePayload, invite_name: input.name, invite_email: input.email.toLowerCase().trim() })
+    .select()
+    .single();
+
+  if (insertRes.error && /invite_(name|email)/.test(insertRes.error.message)) {
+    insertRes = await supabase
+      .from('rbt_org_assignments')
+      .insert(basePayload)
+      .select()
+      .single();
+  }
+
+  if (insertRes.error || !insertRes.data) {
+    throw new Error(insertRes.error?.message || 'Failed to save RBT');
+  }
+
+  const row = insertRes.data as Record<string, unknown>;
+  const profile: RBTProfile = {
+    id: (row.rbt_user_id as string | null) || (row.id as string),
+    name: input.name,
+    email: input.email,
+    rbtNumber: input.certificationNumber || '',
+    certificationDate: '',
+    renewalDate: '',
+    supervisingBCBAId: input.supervisingBCBAId,
+    supervisingBCBAName: '',
+    state: (row.state as string) || '',
+    hiredDate: today,
+    status: 'pending',
+  };
+
+  _sbProfiles = [..._sbProfiles.filter((p) => p.id !== profile.id), profile];
+  saveToStorage(STORAGE_KEYS.sbProfileCache, _sbProfiles);
+  return profile;
+}
+
+/** Removes an RBT from the roster (Supabase in non-demo mode). */
+export async function removeRBTProfile(rbtId: string): Promise<void> {
+  if (isDemoMode()) {
+    const profiles = loadFromStorage<RBTProfile[]>(STORAGE_KEYS.rbtProfiles, []);
+    saveToStorage(STORAGE_KEYS.rbtProfiles, profiles.filter((p) => p.id !== rbtId));
+    return;
+  }
+
+  // The roster id is either the RBT's auth user id or (for pending invites)
+  // the assignment row id — match on both.
+  const { error } = await supabase
+    .from('rbt_org_assignments')
+    .delete()
+    .or(`rbt_user_id.eq.${rbtId},id.eq.${rbtId}`);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  _sbProfiles = _sbProfiles.filter((p) => p.id !== rbtId);
+  saveToStorage(STORAGE_KEYS.sbProfileCache, _sbProfiles);
+}
+
 export function calculateSupervisionCompliance(
   rbtId: string,
   month: string
@@ -725,10 +864,10 @@ export function getCompetencyGaps(rbtId: string): {
 
 // ── Mutation Helpers ────────────────────────────────────────────────
 
-export function addSupervisionSession(session: SupervisionSession): void {
+export async function addSupervisionSession(session: SupervisionSession): Promise<boolean> {
   if (!isDemoMode()) {
     // Write to Supabase and update in-memory cache
-    supabase.from('rbt_supervision_sessions').insert({
+    const { error } = await supabase.from('rbt_supervision_sessions').insert({
       id: session.id,
       rbt_id: session.rbtId,
       bcba_id: session.bcbaId,
@@ -745,14 +884,18 @@ export function addSupervisionSession(session: SupervisionSession): void {
       bcba_signed_at: session.bcbaSignatureDate || null,
       status: session.status,
       client_id: session.clientId || null,
-    }).then(() => {
-      _sbSessions.push(session);
     });
-    return;
+    if (error) {
+      console.error('[rbt-supervision] Failed to save supervision session:', error.message);
+      return false;
+    }
+    _sbSessions.push(session);
+    return true;
   }
   const sessions = loadFromStorage<SupervisionSession[]>(STORAGE_KEYS.supervisionSessions, []);
   sessions.push(session);
   saveToStorage(STORAGE_KEYS.supervisionSessions, sessions);
+  return true;
 }
 
 export function addCompetencyAssessment(assessment: CompetencyAssessment): void {
@@ -765,7 +908,11 @@ export function addCompetencyAssessment(assessment: CompetencyAssessment): void 
       ratings: assessment.ratings,
       overall_notes: assessment.overallNotes,
       development_plan: assessment.developmentPlan,
-    }).then(() => {
+    }).then(({ error }) => {
+      if (error) {
+        console.error('[rbt-supervision] Failed to save assessment:', error.message);
+        return;
+      }
       _sbAssessments.push(assessment);
     });
     return;

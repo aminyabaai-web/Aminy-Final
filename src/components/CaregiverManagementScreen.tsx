@@ -81,7 +81,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'owner':
-        return 'bg-purple-100 text-purple-700 border-purple-200';
+        return 'bg-slate-100 text-slate-600 border-slate-200';
       case 'caregiver':
         return 'bg-blue-100 text-blue-700 border-[#C8DDE8]';
       case 'read-only':
@@ -129,7 +129,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
           <h2 className="font-semibold mb-4">Access Roles</h2>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <Shield className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+              <Shield className="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-sm">Owner</p>
                 <p className="text-sm text-muted-foreground">
@@ -160,7 +160,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
 
         {/* Add Caregiver Button */}
         {!showAddCaregiver && (
-          <Button onClick={() => setShowAddCaregiver(true)} className="w-full">
+          <Button onClick={() => setShowAddCaregiver(true)} className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white">
             <UserPlus className="w-4 h-4 mr-2" />
             Add Caregiver
           </Button>

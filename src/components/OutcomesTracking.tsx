@@ -275,7 +275,9 @@ export function OutcomesTracking({
   if (view === 'caregiver' && !caregiverMetrics) {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-        <Target className="w-12 h-12 text-slate-300 mb-4" />
+        <div className="w-16 h-16 rounded-2xl bg-[#EDF4F7] flex items-center justify-center mb-4">
+          <Target className="w-8 h-8 text-[#2A7D99]" />
+        </div>
         <h3 className="text-lg font-semibold text-[#3A4A57] mb-2">No progress data yet</h3>
         <p className="text-sm text-[#5A6B7A] max-w-xs">
           Complete your first session and set therapy goals to start seeing outcomes here.

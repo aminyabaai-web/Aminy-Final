@@ -15,6 +15,10 @@
  */
 
 import { supabase } from '../utils/supabase/client';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
+
+// Edge function base URL — '/api/*' paths do not exist in this app (S5)
+const getBackendUrl = () => `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
 // ============================================================================
 // Types
@@ -114,10 +118,14 @@ export async function extractFacts(params: ExtractFactsParams): Promise<MemoryFa
   const { userId, childId, text, source, sourceId } = params;
 
   try {
-    // Call AI to extract facts
-    const response = await fetch('/api/ai/extract-facts', {
+    // Call AI to extract facts via the real edge function route
+    // (the old '/api/ai/extract-facts' path never existed — S5)
+    const response = await fetch(`${getBackendUrl()}/ai/extract-facts`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
       body: JSON.stringify({ text }),
     });
 
@@ -437,9 +445,12 @@ export async function processDocument(
   // Call AI to analyze document
   let analysis;
   try {
-    const response = await fetch('/api/ai/analyze-document', {
+    const response = await fetch(`${getBackendUrl()}/ai/analyze-document`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${publicAnonKey}`,
+      },
       body: JSON.stringify({ content, documentType }),
     });
 

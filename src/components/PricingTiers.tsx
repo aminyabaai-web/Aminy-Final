@@ -21,6 +21,7 @@ import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner';
 import type { TierType } from '../lib/tier-utils';
 import { tierPricing } from '../lib/tier-utils';
+import { SEAT_PRICE_LADDER, ANNUAL_DISCOUNT, getSeatPriceCents } from '../lib/org-licensing';
 import type { MonetizationMode } from '../lib/monetization-mode';
 
 interface PricingTiersProps {
@@ -56,6 +57,10 @@ interface TierCard {
   promoFooter?: string;
   /** Optional volume pricing table rendered between CTA and feature list */
   pricingTable?: PricingTableRow[];
+  /** Optional word rendered before the price (e.g. "from" for ladder pricing) */
+  pricePrefix?: string;
+  /** True when the price is per seat, not a flat plan price */
+  perSeat?: boolean;
 }
 
 function Dot() { return <span className="w-1.5 h-1.5 rounded-full bg-slate-400 inline-block shrink-0" />; }
@@ -132,14 +137,17 @@ const TIERS: TierCard[] = [
   },
 ];
 
-// Provider / B2B tiers — shown when audience === 'provider'
+// Provider / B2B tiers — shown when audience === 'provider'.
+// Seat prices derive from org-licensing SEAT_PRICE_LADDER ($89 solo → $49/seat at 5+, 15% off annual).
+const SOLO_SEAT_MONTHLY = getSeatPriceCents(1) / 100;  // $89
+const VOLUME_SEAT_MONTHLY = getSeatPriceCents(5) / 100; // $49
 const PROVIDER_TIERS: TierCard[] = [
   {
     id: 'solo',
     name: 'Solo Practice',
     tagline: 'Practice-in-a-box for independent BCBAs',
-    priceMonthly: 89,
-    priceAnnual: Math.round(89 * 12 * 0.85),
+    priceMonthly: SOLO_SEAT_MONTHLY,
+    priceAnnual: Math.round(SOLO_SEAT_MONTHLY * 12 * (1 - ANNUAL_DISCOUNT)),
     cta: 'Start Solo Practice',
     features_heading: 'Everything you need to run your practice:',
     features: [
@@ -155,18 +163,24 @@ const PROVIDER_TIERS: TierCard[] = [
     id: 'org',
     name: 'Clinic',
     tagline: 'Full team coordination for ABA clinics',
-    priceMonthly: 49,
-    priceAnnual: Math.round(49 * 12 * 0.85),
+    priceMonthly: VOLUME_SEAT_MONTHLY,
+    priceAnnual: Math.round(VOLUME_SEAT_MONTHLY * 12 * (1 - ANNUAL_DISCOUNT)),
+    pricePrefix: 'from',
+    perSeat: true,
     featured: true,
     cta: 'Start Clinic Plan',
     features_heading: 'Everything in Solo, plus:',
-    pricingTable: [
-      { seats: '1 clinician',   price: '$89/mo' },
-      { seats: '2 clinicians',  price: '$79/seat' },
-      { seats: '3 clinicians',  price: '$69/seat' },
-      { seats: '4 clinicians',  price: '$59/seat' },
-      { seats: '5+ clinicians', price: '$49/seat' },
-    ],
+    // Rendered low-to-high from the canonical ladder so the table can't drift.
+    pricingTable: [...SEAT_PRICE_LADDER]
+      .sort((a, b) => a.minSeats - b.minSeats)
+      .map((rung, i, arr) => ({
+        seats: rung.minSeats === 1
+          ? '1 clinician'
+          : `${rung.minSeats}${i === arr.length - 1 ? '+' : ''} clinicians`,
+        price: rung.minSeats === 1
+          ? `$${rung.pricePerSeatCents / 100}/mo`
+          : `$${rung.pricePerSeatCents / 100}/seat`,
+      })),
     features: [
       { icon: <Spark />, text: 'Multi-clinician team coordination' },
       { icon: <Spark />, text: 'EMR integration (Rethink, CentralReach)' },
@@ -174,7 +188,7 @@ const PROVIDER_TIERS: TierCard[] = [
       { icon: <Spark />, text: 'Org-wide analytics + outcome reports' },
       { icon: <Spark />, text: 'Dedicated onboarding support' },
     ],
-    promoFooter: 'Minimum 5 seats. Volume discounts available for 20+ seats. Contact us for enterprise pricing.',
+    promoFooter: `Start with 1 seat — per-seat price drops as your team grows: $${VOLUME_SEAT_MONTHLY}/seat at 5+ seats. Save ${Math.round(ANNUAL_DISCOUNT * 100)}% with annual billing. Contact us for enterprise pricing (20+ seats).`,
   },
 ];
 
@@ -417,6 +431,9 @@ function TierCardView({
           </div>
         ) : (
           <div className="flex items-baseline gap-1">
+            {tier.pricePrefix && (
+              <span className="text-base font-medium text-[#5A6B7A] mr-0.5">{tier.pricePrefix}</span>
+            )}
             <span className="text-2xl text-[#132F43] font-medium">$</span>
             <span className="text-4xl sm:text-5xl font-bold text-[#132F43]">
               {displayPrice === 0 ? '0' : displayPrice.toFixed(displayPrice % 1 === 0 ? 0 : 2)}
@@ -430,13 +447,9 @@ function TierCardView({
               : 'free to start, then per month'
             : displayPrice === 0
               ? 'USD / month'
-              : (tier.id === 'org' || tier.id === 'solo')
-                ? billing === 'annual'
-                  ? 'USD / month, billed annually'
-                  : 'USD / month'
-                : billing === 'annual'
-                  ? 'USD / month, billed annually'
-                  : 'USD / month'}
+              : billing === 'annual'
+                ? `USD / ${tier.perSeat ? 'seat / ' : ''}month, billed annually`
+                : `USD / ${tier.perSeat ? 'seat / ' : ''}month`}
         </p>
       </div>
 
@@ -446,7 +459,10 @@ function TierCardView({
         disabled={loading || tier.ctaDisabled || tier.ctaCurrent}
         className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all mb-5 flex items-center justify-center gap-1.5 ${
           tier.ctaCurrent
-            ? 'bg-white border-2 border-[#E8E4DF] text-slate-400 cursor-default'
+            // Clearly-visible inactive style — white bg + slate-400 text was
+            // nearly invisible against the card (global button:disabled adds
+            // opacity .5 on top; disabled:opacity-100 opts out of it).
+            ? 'bg-slate-100 border border-slate-200 text-slate-500 cursor-default disabled:opacity-100'
             : tier.featured
               ? 'text-white shadow-md hover:shadow-lg'
               : 'bg-slate-900 text-white hover:bg-slate-800'

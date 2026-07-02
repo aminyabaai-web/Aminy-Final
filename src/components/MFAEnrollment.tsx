@@ -112,7 +112,7 @@ export function MFAEnrollment({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen flex items-center justify-center p-6"
-      style={{ backgroundColor: '#F5F5F5' }}
+      style={{ backgroundColor: '#F6FBFB' }}
     >
       <div
         className="w-full max-w-md rounded-2xl p-8"
@@ -162,7 +162,7 @@ export function MFAEnrollment({
             </div>
 
             <div className="space-y-4 mb-8">
-              <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
+              <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F6FBFB' }}>
                 <Smartphone className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#2A7D99' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
@@ -174,7 +174,7 @@ export function MFAEnrollment({
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
+              <div className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#F6FBFB' }}>
                 <QrCode className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: '#2A7D99' }} />
                 <div>
                   <p className="font-medium text-sm" style={{ color: '#0D1B2A' }}>
@@ -270,7 +270,7 @@ export function MFAEnrollment({
               </p>
               <div
                 className="flex items-center justify-between p-3 rounded-lg"
-                style={{ backgroundColor: '#F5F5F5' }}
+                style={{ backgroundColor: '#F6FBFB' }}
               >
                 <code className="text-sm font-mono" style={{ color: '#0D1B2A' }}>
                   {enrollment.secret}
@@ -326,7 +326,7 @@ export function MFAEnrollment({
                 maxLength={6}
                 className="w-full h-14 text-center text-2xl font-mono tracking-widest rounded-xl"
                 style={{
-                  backgroundColor: '#F5F5F5',
+                  backgroundColor: '#F6FBFB',
                   border: error ? '2px solid #F44336' : '2px solid transparent',
                 }}
                 autoFocus

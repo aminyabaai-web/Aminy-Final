@@ -233,8 +233,14 @@ function PrimaryButton({
       disabled={disabled}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`text-white font-semibold transition-colors disabled:bg-[#E8E4DF] disabled:text-slate-400 ${className}`}
-      style={disabled ? undefined : { backgroundColor: hover ? EMERALD_HOVER : EMERALD }}
+      className={`text-white font-semibold transition-colors disabled:cursor-not-allowed ${className}`}
+      style={
+        disabled
+          // Clearly visible-but-inactive: solid slate-200 fill + slate-500 text
+          // (inline so it renders regardless of the precompiled CSS build).
+          ? { backgroundColor: '#e2e8f0', color: '#64748b' }
+          : { backgroundColor: hover ? EMERALD_HOVER : EMERALD }
+      }
     >
       {children}
     </button>
@@ -403,13 +409,19 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
     <div className="min-h-screen bg-[#F8F8F6] flex flex-col">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4 flex items-center justify-between">
-        <button
-          onClick={() => step > 1 ? setStep(s => s - 1) : onSkip?.()}
-          className="flex items-center gap-1 text-[#5A6B7A] hover:text-[#3A4A57] text-sm font-medium transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          {step > 1 ? 'Back' : 'Skip'}
-        </button>
+        {step > 1 ? (
+          <button
+            onClick={() => setStep(s => s - 1)}
+            className="flex items-center gap-1 text-[#5A6B7A] hover:text-[#3A4A57] text-sm font-medium transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
+        ) : (
+          // Step 1 has nothing to go back to — the single skip affordance
+          // lives at top-right ("Skip setup"). Spacer keeps the layout balanced.
+          <span className="w-12" aria-hidden="true" />
+        )}
         <span className="text-sm text-slate-400 font-medium">Step {step} of {TOTAL_STEPS}</span>
         <button onClick={onSkip} className="text-sm text-slate-400 hover:text-[#5A6B7A] transition-colors">
           Skip setup
@@ -462,14 +474,21 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             </div>
 
-            <PrimaryButton
-              onClick={() => setStep(2)}
-              disabled={!canAdvanceStep1}
-              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
-            >
-              Continue
-              <ArrowRight className="w-4 h-4" />
-            </PrimaryButton>
+            <div>
+              <PrimaryButton
+                onClick={() => setStep(2)}
+                disabled={!canAdvanceStep1}
+                className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
+              >
+                Continue
+                <ArrowRight className="w-4 h-4" />
+              </PrimaryButton>
+              {!canAdvanceStep1 && (
+                <p className="text-center text-sm text-[#5A6B7A] mt-2">
+                  Fill in the fields above to continue
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -575,14 +594,21 @@ export function ParentIntakeFlow({ onComplete, onSkip }: ParentIntakeFlowProps) 
               </div>
             </div>
 
-            <PrimaryButton
-              onClick={() => setStep(4)}
-              disabled={!canAdvanceStep3}
-              className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
-            >
-              Find Providers
-              <ArrowRight className="w-4 h-4" />
-            </PrimaryButton>
+            <div>
+              <PrimaryButton
+                onClick={() => setStep(4)}
+                disabled={!canAdvanceStep3}
+                className="w-full rounded-xl py-3.5 flex items-center justify-center gap-2"
+              >
+                Find Providers
+                <ArrowRight className="w-4 h-4" />
+              </PrimaryButton>
+              {!canAdvanceStep3 && (
+                <p className="text-center text-sm text-[#5A6B7A] mt-2">
+                  Pick a setting and frequency above to continue
+                </p>
+              )}
+            </div>
           </div>
         )}
 

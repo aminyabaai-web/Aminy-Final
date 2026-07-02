@@ -18246,6 +18246,7 @@ tr:hover td, .hover-row:hover {
    with the mid-tone -700 text. Darken the tint, lighten the text.
    ============================================================ */
 .dark .bg-emerald-50 { background-color: rgba(6,78,59,0.35) !important; }
+.dark .bg-emerald-100 { background-color: rgba(6,78,59,0.45) !important; }
 .dark .text-emerald-700, .dark .text-emerald-800 { color: #6ee7b7 !important; }
 .dark .border-emerald-200 { border-color: #065f46 !important; }
 .dark .bg-amber-50 { background-color: rgba(120,53,15,0.35) !important; }
@@ -18275,3 +18276,52 @@ tr:hover td, .hover-row:hover {
 .dark .text-neutral-500,
 .dark .text-zinc-600,
 .dark .text-stone-600 { color: #94a3b8 !important; }
+
+/* ============================================================
+   Skeleton-loading width utilities (precompiled Tailwind — added
+   for GroupSessionDiscovery / MemorySettingsPage / MedicationTracker
+   pulsing skeleton bars).
+   ============================================================ */
+.w-1\/2 { width: 50%; }
+.w-1\/3 { width: 33.333333%; }
+.w-2\/3 { width: 66.666667%; }
+
+/* ============================================================
+   Precompiled utilities appended 2026-07-02 (visual sweep fixes)
+   Tailwind v4 here has no JIT — these classes were referenced in
+   components but missing from the compiled sheet.
+   ============================================================ */
+.min-w-max { min-width: max-content; }
+.flex-nowrap { flex-wrap: nowrap; }
+.pr-6 { padding-right: 1.5rem; }
+
+/* ============================================================
+ * Missing precompiled utilities — provider-screen fixes (July 2026)
+ * whitespace-normal: lets service-type option Buttons wrap to 2 lines at 375px
+ *   (Button base has whitespace-nowrap; this is appended last so it wins).
+ * sm:grid-cols-2: TreatmentPlanEditor Client Information grid collapses to
+ *   1 column below 640px so placeholders/selects no longer clip mid-word.
+ * ============================================================ */
+.whitespace-normal { white-space: normal; }
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ============================================================
+   Parent-screen sweep fixes (July 2026): utilities that were
+   referenced in TSX but missing from the precompiled build.
+   - .h-24: ProfileScreen avatar (w-24 existed, h-24 didn't —
+     the avatar collapsed into a stray 96x40 pill).
+   - .border-[#C8DDE8]: only had a .dark override; light-mode
+     definition was missing (ParentApprovalCard chips).
+   ============================================================ */
+.h-24 { height: 6rem; }
+.border-\[\#C8DDE8\] { border-color: #C8DDE8; }
+
+/* ============================================================
+   Missing precompiled utility (July 2026): disabled:opacity-100
+   lets the PaywallScreen "Current Plan" CTA opt out of the Button
+   base disabled:opacity-50 (nearly invisible on light backgrounds).
+   Appended last so it wins over the earlier disabled:opacity-50 rule.
+   ============================================================ */
+.disabled\:opacity-100:disabled { opacity: 1; }

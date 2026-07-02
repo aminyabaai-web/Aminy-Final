@@ -176,6 +176,7 @@ vi.mock('lucide-react', () => {
     'MessageSquare', 'Settings', 'ChevronDown', 'Brain', 'Sparkles', 'RotateCcw',
     'Check', 'User', 'Loader2', 'FileText', 'Calendar', 'Pill', 'Bell', 'Monitor',
     'TrendingUp', 'BarChart2', 'BookOpen', 'Folder', 'Copy', 'ThumbsUp', 'ThumbsDown',
+    'Heart', 'Trophy', 'Microscope', 'Handshake',
   ];
   return Object.fromEntries(iconNames.map(n => [n, icon(n)]));
 });

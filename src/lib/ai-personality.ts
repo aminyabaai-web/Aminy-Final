@@ -20,6 +20,9 @@ export interface PersonalityConfig {
   sampleMessage: string;
   systemPromptModifier: string;
   color: string;
+  /** Lucide icon name — parent/provider chrome renders this (brand rule: no emoji). */
+  icon: 'Heart' | 'Trophy' | 'Microscope' | 'Handshake';
+  /** Legacy emoji — kept for Ease (kids' surface) usage and back-compat only. */
   emoji: string;
 }
 
@@ -40,6 +43,7 @@ export const AI_PERSONALITIES: Record<AIPersonality, PersonalityConfig> = {
 - Keep clinical knowledge in the background; lead always with human connection
 - Short paragraphs, conversational tone, never clinical or distant`,
     color: '#2A7D99',
+    icon: 'Heart',
     emoji: '💙',
   },
 
@@ -59,6 +63,7 @@ export const AI_PERSONALITIES: Record<AIPersonality, PersonalityConfig> = {
 - Bullet points are welcome; be direct and efficient
 - End every response with a specific challenge or concrete next action to take today`,
     color: '#E07A5F',
+    icon: 'Trophy',
     emoji: '🏆',
   },
 
@@ -78,6 +83,7 @@ export const AI_PERSONALITIES: Record<AIPersonality, PersonalityConfig> = {
 - Responses can be more detailed when explaining science — this parent values depth
 - Explicitly name the function of behavior before recommending any intervention`,
     color: '#577590',
+    icon: 'Microscope',
     emoji: '🔬',
   },
 
@@ -97,6 +103,7 @@ export const AI_PERSONALITIES: Record<AIPersonality, PersonalityConfig> = {
 - Build on what they already know; they're a co-therapist, not a student
 - Celebrate small wins like a genuine teammate — authentic, not performative`,
     color: '#9B5DE5',
+    icon: 'Handshake',
     emoji: '🤝',
   },
 };
@@ -170,6 +177,19 @@ export function loadAISettings(): AminyAISettings {
     if (stored) return { ...DEFAULT_AI_SETTINGS, ...JSON.parse(stored) };
   } catch { /* ignore */ }
   return DEFAULT_AI_SETTINGS;
+}
+
+/**
+ * Whether AI settings exist locally. Used to decide when to hydrate from the
+ * roaming copy in profiles.ai_context (fresh device / cleared storage) —
+ * localStorage is only the offline cache; the server copy roams across devices.
+ */
+export function hasStoredAISettings(): boolean {
+  try {
+    return localStorage.getItem('aminy-ai-settings') !== null;
+  } catch {
+    return false;
+  }
 }
 
 export function saveAISettings(settings: AminyAISettings): void {

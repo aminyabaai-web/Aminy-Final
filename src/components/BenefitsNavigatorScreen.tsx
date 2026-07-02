@@ -417,16 +417,18 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                         </p>
                       </div>
                     </div>
-                    <Badge
-                      variant={service.status === 'covered' ? 'default' : 'outline'}
-                      className={
-                        service.status === 'covered'
-                          ? 'bg-green-100 text-green-700 border-green-200'
-                          : 'bg-amber-100 text-amber-700 border-amber-200'
-                      }
-                    >
-                      {service.status === 'covered' ? 'Covered' : 'Check Eligibility'}
-                    </Badge>
+                    {/* "Covered" is a real status → badge. Unverified coverage is plain
+                        status text (not button-like — it has no action of its own; the
+                        real action is the state selector / Check Eligibility button above). */}
+                    {service.status === 'covered' ? (
+                      <Badge className="bg-green-100 text-green-700 border-green-200 flex-shrink-0">
+                        Covered
+                      </Badge>
+                    ) : (
+                      <span className="text-sm text-[#5A6B7A] whitespace-nowrap flex-shrink-0">
+                        Not verified
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>

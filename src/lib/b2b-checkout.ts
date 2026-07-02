@@ -6,20 +6,25 @@
 /**
  * B2B Checkout Service
  * Handles seat-based Stripe checkout for clinic, school, and agency plans
+ *
+ * PRICING SOURCE OF TRUTH: src/lib/org-licensing.ts SEAT_PRICE_LADDER.
+ * All plan types share the same volume ladder ($89/seat at 1 seat stepping
+ * down to $49/seat at 5+), MIN_SEATS = 1, and the 15% annual discount.
+ * B2B_PLANS below carries only the marketing labels + feature lists.
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { supabase } from '../utils/supabase/client';
+import { MIN_SEATS, ANNUAL_DISCOUNT, getSeatPriceCents } from './org-licensing';
 
 const EDGE_FUNCTION_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-8a022548`;
 
-// B2B Plan Configuration
+// B2B Plan Configuration — marketing labels + features only.
+// Per-seat pricing comes from the org-licensing SEAT_PRICE_LADDER (see calculateB2BPrice).
 export const B2B_PLANS = {
   clinic: {
     name: 'Clinic',
-    monthlyPerSeat: 59.99,
-    annualDiscount: 0.20, // 20% off annual
-    minSeats: 3,
+    minSeats: MIN_SEATS,
     features: [
       'AI-powered behavioral insights per family',
       'Telehealth marketplace access',
@@ -32,9 +37,7 @@ export const B2B_PLANS = {
   },
   school: {
     name: 'School District',
-    monthlyPerSeat: 29.99,
-    annualDiscount: 0.25, // 25% off annual
-    minSeats: 5,
+    minSeats: MIN_SEATS,
     features: [
       'AI-powered IEP support per student',
       'Behavioral tracking & reporting',
@@ -47,9 +50,7 @@ export const B2B_PLANS = {
   },
   agency: {
     name: 'Agency',
-    monthlyPerSeat: 24.99,
-    annualDiscount: 0.30, // 30% off annual
-    minSeats: 10,
+    minSeats: MIN_SEATS,
     features: [
       'AI caregiver support per family',
       'EVV & timesheet automation',
@@ -63,9 +64,7 @@ export const B2B_PLANS = {
   },
   enterprise: {
     name: 'Enterprise',
-    monthlyPerSeat: 0, // Custom pricing
-    annualDiscount: 0,
-    minSeats: 100,
+    minSeats: 100, // Custom pricing — contact sales
     features: [
       'Everything in Agency',
       'Custom pricing per seat',
@@ -82,7 +81,9 @@ export const B2B_PLANS = {
 export type B2BPlanType = keyof typeof B2B_PLANS;
 
 /**
- * Calculate total price for a B2B plan
+ * Calculate total price for a B2B plan.
+ * Per-seat price is the org-licensing volume ladder rate for the seat count
+ * ($89 at 1 seat → $49 at 5+); annual billing applies the 15% ANNUAL_DISCOUNT.
  */
 export function calculateB2BPrice(
   planType: B2BPlanType,
@@ -95,10 +96,10 @@ export function calculateB2BPrice(
   }
 
   const seats = Math.max(seatCount, plan.minSeats);
-  const monthlyPerSeat = plan.monthlyPerSeat;
+  const monthlyPerSeat = getSeatPriceCents(seats) / 100;
 
   if (billingPeriod === 'annual') {
-    const discountedPerSeat = monthlyPerSeat * (1 - plan.annualDiscount);
+    const discountedPerSeat = monthlyPerSeat * (1 - ANNUAL_DISCOUNT);
     const annualTotal = discountedPerSeat * seats * 12;
     const monthlySavings = (monthlyPerSeat - discountedPerSeat) * seats;
     return {
@@ -133,7 +134,7 @@ export async function createB2BCheckoutSession(params: {
   }
 
   if (seatCount < plan.minSeats) {
-    return { url: null, error: `${plan.name} plan requires at least ${plan.minSeats} seats.` };
+    return { url: null, error: `${plan.name} plan requires at least ${plan.minSeats} seat${plan.minSeats === 1 ? '' : 's'}.` };
   }
 
   try {

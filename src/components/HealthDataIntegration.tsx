@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
+import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 
 interface SleepData {
@@ -189,13 +190,14 @@ export function HealthDataIntegration({
       }
 
       // Save connection status
-      await supabase.from('health_integrations').upsert({
+      const { error } = await supabase.from('health_integrations').upsert({
         user_id: userId,
         platform,
         is_connected: true,
         last_sync: new Date().toISOString(),
         permissions: ['sleep'],
       });
+      if (error) throw error;
 
       setIsConnected(true);
       setLastSync(new Date());
@@ -204,6 +206,7 @@ export function HealthDataIntegration({
       await loadRecentSleepData();
     } catch (error) {
       console.error('Connection error:', error);
+      toast.error("Couldn't save your connection — please try again");
     } finally {
       setIsConnecting(false);
     }
@@ -253,7 +256,7 @@ export function HealthDataIntegration({
       interruptions: quality === 'poor' ? 2 : quality === 'fair' ? 1 : 0,
     };
 
-    await supabase.from('sleep_records').insert({
+    const { error } = await supabase.from('sleep_records').insert({
       child_id: childId,
       user_id: userId,
       date: sleepData.date,
@@ -264,6 +267,11 @@ export function HealthDataIntegration({
       interruptions: sleepData.interruptions,
       source: 'manual',
     });
+    if (error) {
+      console.error('[HealthDataIntegration] Sleep entry save failed:', error);
+      toast.error("Couldn't save sleep entry — please try again");
+      return;
+    }
 
     setRecentSleep(sleepData);
     onSleepDataUpdate?.(sleepData);

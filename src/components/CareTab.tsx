@@ -986,10 +986,12 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
             to where their live plan lives (home dashboard), never invented stats. */}
         {userTier !== 'pro' ? (
           <div className="space-y-4 sm:space-y-6">
-            {/* Care Plan summary */}
-            <div className="p-5 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-200">
+            {/* Care Plan summary — standard parent style: white card + teal accents */}
+            <div className="p-5 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF] dark:border-slate-700">
               <div className="flex items-center gap-2 mb-1">
-                <Target className="w-5 h-5 text-purple-600" />
+                <span className="w-8 h-8 rounded-full bg-[#EDF4F7] flex items-center justify-center shrink-0">
+                  <Target className="w-4 h-4 text-[#2A7D99]" />
+                </span>
                 <h2 className="text-lg font-semibold text-[#132F43]">Your Care Plan</h2>
                 {demo && (
                   <Badge variant="outline" className="text-sm bg-white/60 text-[#5A6B7A] border-[#E8E4DF]">
@@ -1003,15 +1005,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
 
               {demo ? (
                 <div className="grid grid-cols-3 gap-2 mt-4">
-                  <div className="text-center bg-white/70 rounded-lg py-3">
-                    <div className="text-xl font-bold text-purple-600">3</div>
+                  <div className="text-center bg-[#EDF4F7] rounded-lg py-3">
+                    <div className="text-xl font-bold text-[#2A7D99]">3</div>
                     <div className="text-sm text-[#5A6B7A]">Active goals</div>
                   </div>
-                  <div className="text-center bg-white/70 rounded-lg py-3">
-                    <div className="text-xl font-bold text-blue-600">5</div>
+                  <div className="text-center bg-[#EDF4F7] rounded-lg py-3">
+                    <div className="text-xl font-bold text-[#2A7D99]">5</div>
                     <div className="text-sm text-[#5A6B7A]">Daily routines</div>
                   </div>
-                  <div className="text-center bg-white/70 rounded-lg py-3">
+                  <div className="text-center bg-[#EDF4F7] rounded-lg py-3">
                     <div className="text-xl font-bold text-green-600">68%</div>
                     <div className="text-sm text-[#5A6B7A]">On track</div>
                   </div>
@@ -1019,15 +1021,15 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               ) : (
                 <ul className="text-sm text-[#3A4A57] space-y-2 mt-4">
                   <li className="flex items-start gap-2">
-                    <Target className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                    <Target className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
                     Goals tailored to {childName || 'your child'} from your screening and check-ins
                   </li>
                   <li className="flex items-start gap-2">
-                    <Calendar className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <Calendar className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
                     Daily routines and activities you can do at home
                   </li>
                   <li className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <TrendingUp className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
                     Progress you log over time, summarized for you
                   </li>
                 </ul>
@@ -1045,21 +1047,23 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
               )}
             </div>
 
-            {/* Coaching add-on (Pro) */}
-            <div className="p-4 bg-purple-50 dark:bg-purple-900/30 rounded-lg border border-purple-200 dark:border-purple-700 text-center">
-              <Stethoscope className="w-10 h-10 text-purple-400 mx-auto mb-3" />
+            {/* Coaching add-on (Pro) — standard parent style: white card + teal accents */}
+            <div className="p-4 bg-white dark:bg-slate-800 rounded-lg border border-[#E8E4DF] dark:border-slate-700 text-center">
+              <span className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
+                <Stethoscope className="w-6 h-6 text-[#2A7D99]" />
+              </span>
               <h3 className="font-semibold text-[#132F43] mb-1">Add 1-on-1 coaching</h3>
               <p className="text-sm text-[#5A6B7A] mb-4 max-w-xs mx-auto">
                 Work directly with certified developmental specialists on {childName || 'your child'}'s plan
               </p>
-              <ul className="text-sm text-purple-700 space-y-1 text-left mb-4">
-                <li>• Direct messaging with BCBA-certified coaches</li>
+              <ul className="text-sm text-[#3A4A57] space-y-1 text-left mb-4">
+                <li>• Direct messaging with certified behavior coaches</li>
                 <li>• 25 &amp; 50-minute video coaching sessions</li>
                 <li>• Personalized strategy development</li>
                 <li>• Session summaries with actionable next steps</li>
               </ul>
               {onPaywallTrigger ? (
-                <Button onClick={onPaywallTrigger} className="w-full">
+                <Button onClick={onPaywallTrigger} className="w-full bg-[#2A7D99] hover:bg-[#1F6080] text-white">
                   Upgrade to Pro
                 </Button>
               ) : (

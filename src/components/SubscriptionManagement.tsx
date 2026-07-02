@@ -560,7 +560,7 @@ export function SubscriptionManagement({ accessToken }: SubscriptionManagementPr
                     <Check className="w-3 h-3 text-green-600" />
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Monthly BCBA consultation included
+                    Deeper AI memory (15,000 facts) + 25 GB document vault
                   </p>
                 </div>
                 <div className="flex items-start gap-3">

@@ -463,7 +463,7 @@ export function GrantNavigator({
     return (
       <div
         className="min-h-screen flex flex-col"
-        style={{ backgroundColor: '#0D1B2A', color: '#fff', maxWidth: 430, margin: '0 auto' }}
+        style={{ backgroundColor: '#F6FBFB', color: '#132F43', maxWidth: 430, margin: '0 auto' }}
       >
         {/* Header */}
         <div
@@ -473,45 +473,54 @@ export function GrantNavigator({
           <button
             onClick={onBack}
             className="p-2 rounded-xl"
-            style={{ background: '#ffffff18' }}
+            style={{ background: '#FFFFFF', border: '1px solid #E8E4DF' }}
             aria-label="Back"
           >
-            <ArrowLeft className="w-5 h-5 text-white" />
+            <ArrowLeft className="w-5 h-5" style={{ color: '#132F43' }} />
           </button>
           <div className="flex-1 text-center">
-            <h1 className="text-xl font-bold text-white">Grant Navigator</h1>
+            <h1 className="text-xl font-bold" style={{ color: '#132F43' }}>Grant Navigator</h1>
           </div>
           <div style={{ width: 36 }} />
         </div>
 
         {/* Upgrade prompt */}
-        <div className="flex flex-col items-center justify-center flex-1 gap-6 px-8 text-center">
+        <div className="flex flex-col items-center justify-center flex-1 px-5">
           <div
-            className="w-20 h-20 rounded-3xl flex items-center justify-center"
-            style={{ background: '#2A7D9922' }}
+            className="w-full rounded-2xl p-6 flex flex-col items-center gap-6 text-center"
+            style={{
+              background: '#FFFFFF',
+              border: '1px solid #E8E4DF',
+              boxShadow: '0 4px 24px rgba(19, 47, 67, 0.06)',
+            }}
           >
-            <Lock className="w-10 h-10" style={{ color: '#2A7D99' }} />
+            <div
+              className="w-20 h-20 rounded-3xl flex items-center justify-center"
+              style={{ background: 'rgba(42, 125, 153, 0.10)' }}
+            >
+              <Lock className="w-10 h-10" style={{ color: '#2A7D99' }} />
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-semibold uppercase" style={{ color: '#2A7D99', letterSpacing: '0.1em' }}>
+                Pro Feature
+              </p>
+              <h2 className="text-2xl font-bold" style={{ color: '#132F43' }}>Find Funding for Care</h2>
+              <p className="text-sm leading-relaxed" style={{ color: '#5A6B7A' }}>
+                Grant Navigator helps you find Medicaid waivers, nonprofit grants, IDEA funding,
+                and appeal insurance denials — personalized to your state and situation.
+              </p>
+            </div>
+            <button
+              onClick={onUpgrade}
+              className="w-full py-4 rounded-2xl text-white font-bold text-lg"
+              style={{ background: '#2A7D99' }}
+            >
+              Upgrade to Pro
+            </button>
+            <button onClick={onBack} className="text-sm underline" style={{ color: '#5A6B7A' }}>
+              Not now
+            </button>
           </div>
-          <div className="space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#2A7D99' }}>
-              Pro Feature
-            </p>
-            <h2 className="text-2xl font-bold text-white">Find Funding for Care</h2>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Grant Navigator helps you find Medicaid waivers, nonprofit grants, IDEA funding,
-              and appeal insurance denials — personalized to your state and situation.
-            </p>
-          </div>
-          <button
-            onClick={onUpgrade}
-            className="w-full py-4 rounded-2xl text-white font-bold text-lg"
-            style={{ background: 'linear-gradient(135deg, #2A7D99, #77B5D9)' }}
-          >
-            Upgrade to Pro
-          </button>
-          <button onClick={onBack} className="text-sm text-[#5A6B7A] underline">
-            Not now
-          </button>
         </div>
         <div style={{ height: 'env(safe-area-inset-bottom, 16px)', minHeight: 16 }} />
       </div>

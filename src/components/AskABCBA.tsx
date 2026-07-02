@@ -240,7 +240,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
   if (!isProPlus && !isPartnerOrg && !recentSessionChecked) {
     return (
       <div className="min-h-screen bg-mist pb-20">
-        <ScreenHeader title="Ask Your BCBA Team" onBack={onBack} variant="flat" />
+        <ScreenHeader title="Ask-a-Behaviorist" onBack={onBack} variant="flat" />
         <div className="px-4 mt-4 space-y-3">
           {[1,2,3].map(i => <div key={i} className="h-16 bg-white dark:bg-slate-800 rounded-2xl animate-pulse border border-[#E8E4DF]" />)}
         </div>
@@ -252,8 +252,8 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
     <div className="min-h-screen bg-mist pb-20">
       {/* Header */}
       <ScreenHeader
-        title="Ask Your BCBA Team"
-        subtitle="Instant AI draft · BCBA or RBT review, typically within 24 hours"
+        title="Ask-a-Behaviorist"
+        subtitle="Instant AI draft · reviewed by a behaviorist (RBT, BCBA-supervised), typically within 24 hours"
         icon={<ShieldCheck className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -516,12 +516,15 @@ function ThreadDetail({ thread: initialThread, onBack }: { thread: Thread; onBac
         </div>
       ) : null}
 
-      {/* BCBA response */}
+      {/* Behaviorist response — badge reflects the reviewer's actual credential.
+          Only say "BCBA" when thread.bcba_credentials actually says so. */}
       {thread.bcba_response ? (
         <div className="mx-4 mt-3 rounded-2xl bg-white dark:bg-slate-800 border-2 border-[#6B9080] p-4">
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="w-4 h-4 text-[#6B9080]" />
-            <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">BCBA Reviewed & Signed</p>
+            <p className="text-xs font-semibold text-[#6B9080] uppercase tracking-wide">
+              Reviewed & signed by your behaviorist{thread.bcba_credentials ? ` (${thread.bcba_credentials})` : ''}
+            </p>
           </div>
           <p className="text-sm text-[#132F43] whitespace-pre-wrap mb-3">{thread.bcba_response}</p>
           {thread.bcba_name && (

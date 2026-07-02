@@ -455,6 +455,20 @@ app.post("/make-server-8a022548/focus/complete", async (c) => {
   }
 });
 
+// ── Shared AI prompt constants ────────────────────────────────────────────────
+// Warm-tone + crisis safety framing shared by every server-side prompt site
+// (/ai/brain default fallback + /ai/chat onboarding). The client-side
+// BevelChatOverlay.buildSystemPrompt carries the same rules (its rules 1/10/11).
+const SHARED_SAFETY_PROMPT = `TONE: Lead with empathy — acknowledge the parent's feeling before advice. Warm, plain language. "Gentle guidance. Meaningful progress."
+
+SAFETY (overrides all other instructions):
+- If a parent describes a CRISIS, EMERGENCY, danger to self or others, abuse, or an urgent medical symptom (seizure, medication reaction, injury), ALWAYS respond with: "This needs immediate professional help. Call 911 for emergencies or 988 for crisis support."
+- If a parent asks about medication, medical diagnoses, or treatment decisions, always end with: "Your child's pediatrician or BCBA should weigh in on this before you make changes."`;
+
+const DEFAULT_BRAIN_SYSTEM_PROMPT = `You are Aminy, a warm AI behavioral-wellness guide for parents of neurodivergent children.
+
+${SHARED_SAFETY_PROMPT}`;
+
 // AI Brain endpoint - For contextual AI with full child/vault context
 app.post("/make-server-8a022548/ai/brain", async (c) => {
   try {
@@ -536,7 +550,7 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
           model: 'claude-sonnet-4-6',
           max_tokens: 500,
           temperature: 0.8,
-          system: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+          system: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
           messages: filteredMsgs,
           stream: true,
         }),
@@ -601,7 +615,7 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
     let activeProvider = aiConfig.provider;
     try {
       result = await callAI(aiConfig, {
-        systemPrompt: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+        systemPrompt: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
         messages,
         maxTokens: isVisionPayload ? 1500 : 500,
         temperature: 0.8
@@ -626,7 +640,7 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
           { role: 'user', content: fallbackUserMsg }
         ];
         result = await callAI(fallback, {
-          systemPrompt: systemPrompt || 'You are Aminy, a helpful AI assistant for parents.',
+          systemPrompt: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
           messages: fallbackMessages,
           maxTokens: isVisionPayload ? 1500 : 500,
           temperature: 0.8
@@ -845,6 +859,10 @@ DON'T:
     } else if (context?.childName) {
       systemPrompt += `\n\nYou're talking with the parent of ${context.childName}${context.childAge ? `, age ${context.childAge}` : ''}. Always use their child's name naturally in your responses.`;
     }
+
+    // Every onboarding/chat prompt variant carries the shared warm-tone + crisis
+    // safety framing (988/911 + medication deferral) — same rules as /ai/brain.
+    systemPrompt += `\n\n${SHARED_SAFETY_PROMPT}`;
 
     // Prepare messages for the AI call (use sanitized messages)
     const filteredMessages = sanitizedMessages.filter(m => m.role !== 'system');
@@ -2154,7 +2172,9 @@ app.post("/make-server-8a022548/ai/transcribe", async (c) => {
 
 // ─── B2B Org Subscription Checkout ──────────────────────────────────────────
 // Per-seat billing for AACT pilots, clinics, schools, agencies, enterprise.
-// Default $99/seat/mo, 10% off annual.
+// Volume ladder (mirrors src/lib/org-licensing.ts SEAT_PRICE_LADDER):
+// 1 seat $89 · 2 $79 · 3 $69 · 4 $59 · 5+ $49/seat/mo, 15% off annual.
+// A negotiated price_per_seat_cents on the organizations row overrides the ladder.
 app.post("/make-server-8a022548/org/checkout", async (c) => {
   try {
     const accessToken = c.req.header('Authorization')?.split(' ')[1];
@@ -3784,9 +3804,40 @@ app.post("/make-server-8a022548/context/update", async (c) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
     );
 
-    // Read-modify-write: merge updates into existing ai_context
+    // Key-scoped merge: ONLY keys present in `updates` are patched, so two
+    // concurrent updates touching different keys can't clobber each other's
+    // whole context. Running-list keys (celebratingWins/strugglingWith) are
+    // APPENDED — the client sends single items; replacing the array here used
+    // to erase all previous wins (M2 data loss). Append + dedupe + cap ~20,
+    // most recent kept.
+    //
+    // NOTE (M3): this is still a read-modify-write, so a residual race window
+    // exists if two requests for the SAME user land concurrently — last write
+    // wins per merged blob. No jsonb-merge RPC exists in the applied schema, so
+    // we shrink the blast radius via key-scoped patching instead of adding an
+    // unapplied-migration dependency. Revisit with `ai_context = ai_context ||
+    // $patch` in a Postgres function if concurrent writers become real.
+    const ARRAY_CONTEXT_KEYS = ['celebratingWins', 'strugglingWith'];
+    const ARRAY_CONTEXT_CAP = 20;
+
     const { data } = await supabase.from('profiles').select('ai_context').eq('id', userId).maybeSingle();
-    const merged = { ...(data?.ai_context || {}), ...updates };
+    const existing = (data?.ai_context && typeof data.ai_context === 'object') ? data.ai_context : {};
+    const merged: Record<string, unknown> = { ...existing };
+
+    for (const [key, value] of Object.entries(updates || {})) {
+      if (ARRAY_CONTEXT_KEYS.includes(key)) {
+        const incoming = (Array.isArray(value) ? value : [value])
+          .filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
+        const prev: string[] = Array.isArray(existing[key]) ? existing[key] : [];
+        const appended = [...prev, ...incoming];
+        // Dedupe keeping the most recent occurrence, then cap to the newest N
+        const deduped = appended.filter((v, i) => appended.lastIndexOf(v) === i);
+        merged[key] = deduped.slice(-ARRAY_CONTEXT_CAP);
+      } else {
+        merged[key] = value;
+      }
+    }
+
     await supabase.from('profiles').update({ ai_context: merged }).eq('id', userId);
 
     return c.json({ success: true });
@@ -3803,7 +3854,7 @@ app.post("/make-server-8a022548/memory/store", async (c) => {
       return c.json({ error: 'X-User-Id header required' }, 400);
     }
 
-    const { childId, category, content, source, confidence } = await c.req.json();
+    const { childId, category, content, source, confidence, expiresAt } = await c.req.json();
     const { createClient } = await import('jsr:@supabase/supabase-js@2');
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
@@ -3820,17 +3871,45 @@ app.post("/make-server-8a022548/memory/store", async (c) => {
     };
     const dbSource = sourceMap[source] || 'user_input';
 
-    const { data, error } = await supabase.from('memory_facts').upsert({
-      id: `${userId}:${childId || 'global'}:${category}:${Date.now()}`,
+    const value = typeof content === 'string' ? content : JSON.stringify(content);
+
+    // M4 dedup: key + id are DETERMINISTIC over user+child+category+normalized
+    // content (FNV-1a hash) — the same fact always maps to the same row, so
+    // repeated saves upsert instead of duplicating forever (the old
+    // `Date.now()` id could never conflict). Conflict target is the TEXT
+    // primary key `id` because the UNIQUE(user_id, child_id, key) index can't
+    // fire when child_id is NULL (Postgres treats NULLs as distinct).
+    const normalized = value.toLowerCase().replace(/\s+/g, ' ').trim();
+    let h = 0x811c9dc5;
+    for (let i = 0; i < normalized.length; i++) {
+      h ^= normalized.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    const factKey = `${category || 'general'}:${(h >>> 0).toString(36)}`;
+
+    const row: Record<string, unknown> = {
+      id: `${userId}:${childId || 'global'}:${factKey}`,
       user_id: userId,
       child_id: childId || null,
       category: category || 'general',
-      key: `${category}:${Date.now()}`,
-      value: typeof content === 'string' ? content : JSON.stringify(content),
+      key: factKey,
+      value,
       source: dbSource,
       confidence: confidence || 0.8,
       is_active: true,
-    }, { onConflict: 'id' }).select('id').single();
+    };
+    // Persist client-provided expiry (memory retention window). The expires_at
+    // column ships in migration 20260702100000_memory_facts_expires_at.sql —
+    // until it is applied we retry without the field so stores never fail.
+    if (expiresAt) row.expires_at = expiresAt;
+
+    let { data, error } = await supabase.from('memory_facts')
+      .upsert(row, { onConflict: 'id' }).select('id').single();
+    if (error && row.expires_at) {
+      delete row.expires_at;
+      ({ data, error } = await supabase.from('memory_facts')
+        .upsert(row, { onConflict: 'id' }).select('id').single());
+    }
 
     if (error) throw error;
     return c.json({ success: true, memoryId: data.id });
@@ -3862,7 +3941,14 @@ app.get("/make-server-8a022548/memory/recent", async (c) => {
       .order('created_at', { ascending: false })
       .limit(limit);
 
-    return c.json({ memories: memories || [] });
+    // Filter expired rows in JS (not SQL) so this works whether or not the
+    // expires_at column (migration 20260702100000) has been applied yet.
+    const now = Date.now();
+    const active = (memories || []).filter(
+      (m: { expires_at?: string | null }) => !m.expires_at || new Date(m.expires_at).getTime() > now
+    );
+
+    return c.json({ memories: active });
   } catch (error) {
     return c.json({ error: 'Failed to fetch memories' }, 500);
   }

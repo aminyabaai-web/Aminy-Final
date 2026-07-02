@@ -35,14 +35,13 @@ vi.mock('../../utils/supabase/client', () => ({
 
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), info: vi.fn() } }));
 
-vi.mock('lucide-react', () => {
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
   const icon = (name: string) =>
     function MockIcon(props: Record<string, unknown>) {
       return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
     };
-  return new Proxy({}, {
-    get: (_target, prop: string) => icon(prop),
-  });
+  return Object.fromEntries(Object.keys(actual).map((k) => [k, icon(k)]));
 });
 
 vi.mock('../../components/ui/card', () => ({
@@ -84,6 +83,11 @@ vi.mock('../../components/provider/CredentialBadge', () => ({
   CredentialBadge: () => React.createElement('span', null, 'Credential'),
   VerifiedBadge: ({ status }: { status: string }) =>
     React.createElement('span', { 'data-testid': 'verified-badge' }, 'Verified'),
+}));
+
+vi.mock('../../components/ProviderCredentialingWidget', () => ({
+  ProviderCredentialingWidget: () => React.createElement('div', { 'data-testid': 'credentialing-widget' }),
+  default: () => React.createElement('div', { 'data-testid': 'credentialing-widget' }),
 }));
 
 vi.mock('../../lib/provider-branding', () => ({
@@ -153,7 +157,7 @@ describe('ProviderPortal', () => {
   it('shows provider credentials badge', async () => {
     render(<ProviderPortal {...defaultProps} />);
     await waitFor(() => {
-      expect(screen.getByText('BCBA-D')).toBeInTheDocument();
+      expect(screen.getAllByText('BCBA-D').length).toBeGreaterThan(0);
     });
   });
 
@@ -161,7 +165,7 @@ describe('ProviderPortal', () => {
     render(<ProviderPortal {...defaultProps} />);
     await waitFor(() => {
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Patients')).toBeInTheDocument();
+      expect(screen.getByText('Clients')).toBeInTheDocument();
       expect(screen.getByText('Insights')).toBeInTheDocument();
     });
   });

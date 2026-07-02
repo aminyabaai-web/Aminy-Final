@@ -9,13 +9,25 @@
  * BACB requires 5% supervision of RBT direct hours
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Users, Plus, Clock, Target, ChevronDown, ChevronRight,
   Mail, Trash2, CheckCircle2, AlertTriangle, BarChart3,
   FileText, Calendar, UserPlus, Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import {
+  getRBTProfiles,
+  getSupervisionSessions,
+  getTotalDirectServiceHours,
+  loadRBTDataFromSupabase,
+  saveRBTProfile,
+  removeRBTProfile,
+  addSupervisionSession,
+  type SupervisionSession,
+} from '../../lib/rbt-supervision';
+import { isDemoMode } from '../../lib/demo-seed';
+import { supabase } from '../../utils/supabase/client';
 
 // ── Types ────────────────────────────────────────────────────────────
 
@@ -65,25 +77,49 @@ function calcSupervisionCompliance(directHours: number, supervisionHours: number
   return { required, ratio, isCompliant, deficit: Math.max(0, required - supervisionHours) };
 }
 
+// RBTs and supervision logs live in Supabase via src/lib/rbt-supervision.ts
+// (same tables SupervisionDashboard reads — rbt_org_assignments,
+// rbt_supervision_sessions, rbt_direct_service_hours). This key now only holds
+// the invoice drafts (no server table yet — feature is "coming soon").
 const STORAGE_KEY = 'aminy-rbt-management';
 
-function loadData(): { rbts: RBT[]; logs: SupervisionLog[]; invoices: ClientInvoice[] } {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) return JSON.parse(stored);
-  return { rbts: [], logs: [], invoices: [] };
+function loadInvoices(): ClientInvoice[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return (JSON.parse(stored).invoices as ClientInvoice[]) ?? [];
+  } catch { /* corrupt cache — start clean */ }
+  return [];
 }
 
-function saveData(data: { rbts: RBT[]; logs: SupervisionLog[]; invoices: ClientInvoice[] }) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+function newSessionId(): string {
+  return typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `log-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+/** Map a lib SupervisionSession to this screen's simpler log shape. */
+function toSupervisionLog(s: SupervisionSession): SupervisionLog {
+  return {
+    id: s.id,
+    rbtId: s.rbtId,
+    date: s.date,
+    hours: s.durationMinutes / 60,
+    type: s.type === 'group' ? 'group' : s.includesDirectObservation ? 'direct' : 'indirect',
+    notes: s.bcbaNotes,
+  };
 }
 
 // ── Component ────────────────────────────────────────────────────────
 
 export function RBTManagement({ providerId }: RBTManagementProps) {
-  const [data, setData] = useState(loadData);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isLoadingRoster, setIsLoadingRoster] = useState(!isDemoMode());
+  const [bcbaId, setBcbaId] = useState<string>(providerId || '');
+  const [invoices] = useState<ClientInvoice[]>(loadInvoices);
   const [activeView, setActiveView] = useState<'roster' | 'supervision' | 'billing'>('roster');
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [showLogForm, setShowLogForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteName, setInviteName] = useState('');
   const [inviteCert, setInviteCert] = useState('');
@@ -96,73 +132,152 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
     notes: '',
   });
 
-  const persist = (updated: typeof data) => {
-    setData(updated);
-    saveData(updated);
-  };
+  // Load the shared roster from Supabase (same source as SupervisionDashboard).
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      if (isDemoMode()) {
+        setBcbaId(providerId || 'bcba-001');
+        setIsLoadingRoster(false);
+        return;
+      }
+      try {
+        let id = providerId || '';
+        if (!id) {
+          const { data: authData } = await supabase.auth.getUser();
+          id = authData.user?.id || '';
+        }
+        if (cancelled) return;
+        setBcbaId(id);
+        if (id) {
+          await loadRBTDataFromSupabase(id);
+        }
+      } catch (err) {
+        console.error('[RBTManagement] Roster load failed:', err);
+      } finally {
+        if (!cancelled) {
+          setIsLoadingRoster(false);
+          setRefreshKey(k => k + 1);
+        }
+      }
+    };
+    load();
+    return () => { cancelled = true; };
+  }, [providerId]);
+
+  // Derive this screen's view models from the shared lib (demo localStorage
+  // store in demo mode; Supabase-backed cache otherwise).
+  const rbts: RBT[] = useMemo(() => {
+    void refreshKey;
+    return getRBTProfiles().map(p => {
+      const supervisionMinutes = getSupervisionSessions(p.id)
+        .filter(s => s.status === 'completed')
+        .reduce((sum, s) => sum + s.durationMinutes, 0);
+      return {
+        id: p.id,
+        name: p.name,
+        email: p.email,
+        certificationNumber: p.rbtNumber,
+        status: p.status,
+        joinedAt: p.hiredDate,
+        assignedFamilies: [],
+        totalDirectHours: getTotalDirectServiceHours(p.id),
+        totalSupervisionHours: supervisionMinutes / 60,
+      };
+    });
+  }, [refreshKey]);
+
+  const logs: SupervisionLog[] = useMemo(() => {
+    void refreshKey;
+    return getSupervisionSessions()
+      .map(toSupervisionLog)
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [refreshKey]);
 
   // ── RBT Roster Actions ──────────────────────────────────────────
 
-  const inviteRBT = () => {
+  const inviteRBT = async () => {
     if (!inviteEmail.includes('@') || !inviteName.trim()) {
       toast.error('Name and valid email required');
       return;
     }
-    const newRBT: RBT = {
-      id: `rbt-${Date.now()}`,
-      name: inviteName,
-      email: inviteEmail,
-      certificationNumber: inviteCert,
-      status: 'pending',
-      joinedAt: new Date().toISOString(),
-      assignedFamilies: [],
-      totalDirectHours: 0,
-      totalSupervisionHours: 0,
-    };
-    persist({ ...data, rbts: [...data.rbts, newRBT] });
-    setInviteEmail('');
-    setInviteName('');
-    setInviteCert('');
-    setShowInviteForm(false);
-    toast.success(`Invitation sent to ${inviteName}`);
+    setIsSaving(true);
+    try {
+      await saveRBTProfile({
+        name: inviteName.trim(),
+        email: inviteEmail.trim(),
+        certificationNumber: inviteCert.trim(),
+        supervisingBCBAId: bcbaId,
+      });
+      setInviteEmail('');
+      setInviteName('');
+      setInviteCert('');
+      setShowInviteForm(false);
+      setRefreshKey(k => k + 1);
+      toast.success(`Invitation sent to ${inviteName}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to add RBT');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const removeRBT = (id: string) => {
-    persist({ ...data, rbts: data.rbts.filter(r => r.id !== id) });
-    toast.success('RBT removed');
+  const removeRBT = async (id: string) => {
+    try {
+      await removeRBTProfile(id);
+      setRefreshKey(k => k + 1);
+      toast.success('RBT removed');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to remove RBT');
+    }
   };
 
   // ── Supervision Log Actions ─────────────────────────────────────
 
-  const addSupervisionLog = () => {
+  const addSupervisionLog = async () => {
     if (!logForm.rbtId) {
       toast.error('Select an RBT');
       return;
     }
-    const log: SupervisionLog = {
-      id: `log-${Date.now()}`,
-      ...logForm,
+    const target = rbts.find(r => r.id === logForm.rbtId);
+    if (!isDemoMode() && target?.status === 'pending') {
+      toast.error(`${target.name} hasn't joined Aminy yet — supervision hours can be logged once they accept the invite.`);
+      return;
+    }
+    setIsSaving(true);
+    const session: SupervisionSession = {
+      id: newSessionId(),
+      rbtId: logForm.rbtId,
+      bcbaId,
+      date: logForm.date,
+      durationMinutes: Math.round(logForm.hours * 60),
+      type: logForm.type === 'group' ? 'group' : 'individual',
+      includesDirectObservation: logForm.type === 'direct',
+      topicsCovered: [],
+      competenciesAssessed: [],
+      bcbaNotes: logForm.notes,
+      rbtSignature: false,
+      bcbaSignature: true,
+      bcbaSignatureDate: new Date().toISOString(),
+      status: 'completed',
     };
-    const updatedRbts = data.rbts.map(r => {
-      if (r.id === logForm.rbtId) {
-        return {
-          ...r,
-          totalSupervisionHours: r.totalSupervisionHours + logForm.hours,
-        };
-      }
-      return r;
-    });
-    persist({ ...data, logs: [...data.logs, log], rbts: updatedRbts });
+    const saved = await addSupervisionSession(session);
+    setIsSaving(false);
+    if (!saved) {
+      toast.error('Failed to save supervision log — please try again');
+      return;
+    }
     setShowLogForm(false);
     setLogForm({ rbtId: '', date: new Date().toISOString().split('T')[0], hours: 1, type: 'direct', notes: '' });
+    setRefreshKey(k => k + 1);
     toast.success('Supervision log added');
   };
 
   // ── Stats ───────────────────────────────────────────────────────
 
-  const totalRBTs = data.rbts.filter(r => r.status === 'active').length;
-  const totalPending = data.rbts.filter(r => r.status === 'pending').length;
-  const nonCompliantCount = data.rbts.filter(r => {
+  const totalRBTs = rbts.filter(r => r.status === 'active').length;
+  const totalPending = rbts.filter(r => r.status === 'pending').length;
+  const nonCompliantCount = rbts.filter(r => {
     if (r.totalDirectHours === 0) return false;
     const { isCompliant } = calcSupervisionCompliance(r.totalDirectHours, r.totalSupervisionHours);
     return !isCompliant;
@@ -252,7 +367,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={inviteRBT} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
+                <button
+                  onClick={inviteRBT}
+                  disabled={isSaving}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-60"
+                >
+                  {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Send Invite
                 </button>
                 <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
@@ -263,7 +383,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* RBT List */}
-          {data.rbts.length === 0 ? (
+          {isLoadingRoster ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
+              <Loader2 className="w-8 h-8 text-[#8A9BA8] mx-auto mb-3 animate-spin" />
+              <p className="text-sm text-[#8A9BA8]">Loading your roster…</p>
+            </div>
+          ) : rbts.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
               <Users className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
               <p className="font-medium text-[#5A6B7A]">No RBTs yet</p>
@@ -271,7 +396,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </div>
           ) : (
             <div className="space-y-3">
-              {data.rbts.map(rbt => {
+              {rbts.map(rbt => {
                 const compliance = calcSupervisionCompliance(rbt.totalDirectHours, rbt.totalSupervisionHours);
                 const isExpanded = expandedRbt === rbt.id;
 
@@ -401,7 +526,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                 >
                   <option value="">Select RBT...</option>
-                  {data.rbts.map(r => (
+                  {rbts.map(r => (
                     <option key={r.id} value={r.id}>{r.name}</option>
                   ))}
                 </select>
@@ -440,7 +565,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={addSupervisionLog} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
+                <button
+                  onClick={addSupervisionLog}
+                  disabled={isSaving}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-60"
+                >
+                  {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Save Log
                 </button>
                 <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
@@ -451,14 +581,14 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* RBT Compliance Cards */}
-          {data.rbts.length === 0 ? (
+          {rbts.length === 0 ? (
             <div className="text-center py-8 text-[#8A9BA8]">
               <Clock className="w-10 h-10 mx-auto mb-2 text-[#8A9BA8]" />
               <p className="text-sm">Add RBTs to track supervision</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {data.rbts.map(rbt => {
+              {rbts.map(rbt => {
                 const c = calcSupervisionCompliance(rbt.totalDirectHours, rbt.totalSupervisionHours);
                 const pct = rbt.totalDirectHours > 0 ? Math.min(100, (c.ratio / BACB_SUPERVISION_RATIO) * 100) : 0;
 
@@ -503,12 +633,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* Recent Logs */}
-          {data.logs.length > 0 && (
+          {logs.length > 0 && (
             <div>
               <h4 className="font-medium text-[#3A4A57] text-sm mb-2">Recent Logs</h4>
               <div className="space-y-2">
-                {data.logs.slice(-5).reverse().map(log => {
-                  const rbt = data.rbts.find(r => r.id === log.rbtId);
+                {logs.slice(-5).reverse().map(log => {
+                  const rbt = rbts.find(r => r.id === log.rbtId);
                   return (
                     <div key={log.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg text-sm">
                       <Calendar className="w-4 h-4 text-[#8A9BA8]" />
@@ -535,7 +665,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </button>
           </div>
 
-          {data.invoices.length === 0 ? (
+          {invoices.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
               <FileText className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
               <p className="font-medium text-[#5A6B7A]">No invoices yet</p>
@@ -553,7 +683,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </div>
           ) : (
             <div className="space-y-2">
-              {data.invoices.map(inv => (
+              {invoices.map(inv => (
                 <div key={inv.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#E8E4DF]">
                   <div className="flex-1">
                     <p className="font-medium text-[#132F43]">{inv.familyName}</p>

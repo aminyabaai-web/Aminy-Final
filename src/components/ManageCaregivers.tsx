@@ -71,7 +71,8 @@ const roleLabels: Record<CaregiverRole, string> = {
 };
 
 const roleColors: Record<CaregiverRole, string> = {
-  owner: 'bg-purple-100 text-purple-700 border-purple-200',
+  // Owner is a neutral slate chip — accents must not compete with the one teal primary CTA
+  owner: 'bg-slate-100 text-slate-600 border-slate-200',
   caregiver: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
   'read-only': 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]'
 };
@@ -203,7 +204,7 @@ export function ManageCaregivers({
             </Badge>
           )}
           {isUnlimited && (
-            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
+            <Badge variant="outline" className="bg-slate-100 text-slate-600 border-slate-200">
               Unlimited members
             </Badge>
           )}
@@ -228,7 +229,7 @@ export function ManageCaregivers({
       {/* Invite Actions */}
       {canAddMore ? (
         <div className="flex flex-wrap gap-2">
-          <Button onClick={() => setShowInviteModal(true)}>
+          <Button onClick={() => setShowInviteModal(true)} className="bg-[#2A7D99] hover:bg-[#376E80] text-white">
             <UserPlus className="w-4 h-4 mr-2" />
             Invite by Email
           </Button>
@@ -288,7 +289,7 @@ export function ManageCaregivers({
                   <div className="flex items-center gap-2">
                     <p className="font-medium text-[#132F43]">{caregiver.name}</p>
                     {caregiver.role === 'owner' && (
-                      <Crown className="w-4 h-4 text-purple-600" />
+                      <Crown className="w-4 h-4 text-slate-500" />
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground">{caregiver.email}</p>
@@ -397,7 +398,7 @@ export function ManageCaregivers({
                 <Button variant="outline" onClick={() => setShowInviteModal(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleInvite} disabled={!inviteEmail}>
+                <Button onClick={handleInvite} disabled={!inviteEmail} className="bg-[#2A7D99] hover:bg-[#376E80] text-white">
                   <Mail className="w-4 h-4 mr-2" />
                   Send Invitation
                 </Button>

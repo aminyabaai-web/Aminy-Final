@@ -11,7 +11,7 @@
  * appeal letter generator, analytics, rework queue, and timeline view.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   AlertCircle,
@@ -50,6 +50,13 @@ import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { Input } from '../ui/input';
 import { isDemoMode } from '../../lib/demo-seed';
+import {
+  getDenialRecords,
+  type DenialRecord,
+  type DenialCategory,
+  type DenialStatus,
+} from '../../lib/denial-management';
+import { supabase } from '../../utils/supabase/client';
 
 // ============================================================================
 // Types
@@ -179,6 +186,64 @@ const MOCK_DENIALS: Denial[] = [
     receivedDate: '2026-02-28',
   },
 ];
+
+// ============================================================================
+// Real-data mapping (denial_records rows via src/lib/denial-management.ts)
+// ============================================================================
+
+const CATEGORY_MAP: Record<DenialCategory, Denial['category']> = {
+  'eligibility': 'eligibility',
+  'authorization': 'auth',
+  'coding': 'coding',
+  'timely-filing': 'timely-filing',
+  'duplicate': 'duplicate',
+  'medical-necessity': 'medical-necessity',
+  'bundling': 'coding',
+  'coordination-of-benefits': 'eligibility',
+  'missing-info': 'missing-info',
+  'contractual': 'coding',
+  'patient-responsibility': 'eligibility',
+  'other': 'missing-info',
+};
+
+const STATUS_MAP: Record<DenialStatus, Denial['status']> = {
+  'new': 'new',
+  'under-review': 'in-review',
+  'corrective-action': 'in-review',
+  'resubmitted': 'corrected',
+  'appealed': 'appealed',
+  'resolved': 'recovered',
+  'written-off': 'written-off',
+};
+
+function daysUntil(dateStr?: string): number {
+  if (!dateStr) return 999;
+  const deadline = new Date(dateStr).getTime();
+  if (Number.isNaN(deadline)) return 999;
+  return Math.ceil((deadline - Date.now()) / (1000 * 60 * 60 * 24));
+}
+
+function mapRecordToDenial(r: DenialRecord): Denial {
+  const primaryReason = r.adjustmentReasons[0];
+  return {
+    id: r.id,
+    claimId: r.claimControlNumber || r.id,
+    patientName: r.patientName || 'Unknown patient',
+    dateOfService: r.dateOfService || '',
+    cptCode: r.deniedServiceLines[0]?.procedureCode || '—',
+    payer: r.payerName || 'Unknown payer',
+    billedAmount: r.totalChargedAmount ?? 0,
+    deniedAmount: r.deniedAmount ?? 0,
+    carcCode: primaryReason ? `${primaryReason.groupCode}-${primaryReason.reasonCode}` : '—',
+    reason: primaryReason?.description || 'Claim denied — see payer remittance',
+    category: CATEGORY_MAP[r.category] ?? 'missing-info',
+    appealDeadline: r.appealDeadline || '—',
+    daysUntilDeadline: daysUntil(r.appealDeadline),
+    status: STATUS_MAP[r.status] ?? 'new',
+    suggestedAction: r.suggestedActions[0]?.description || 'Review the denial and choose a corrective action',
+    receivedDate: r.dateReceived || '',
+  };
+}
 
 // ============================================================================
 // Helpers
@@ -835,14 +900,48 @@ function ReworkQueue({ denials }: { denials: Denial[] }) {
 // ============================================================================
 
 export default function DenialWorkbench({
-  providerId = 'demo-provider',
+  providerId,
   onBack,
 }: DenialWorkbenchProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('inbox');
   const [selectedDenial, setSelectedDenial] = useState<Denial | null>(null);
   // Sample denials are shown only in demo mode (investor/AACT walkthroughs).
-  // Real providers see their own payer denials once the claims pipeline syncs them.
-  const denials = isDemoMode() ? MOCK_DENIALS : [];
+  // Real providers see their own denial_records rows loaded below.
+  const [denials, setDenials] = useState<Denial[]>(() => (isDemoMode() ? MOCK_DENIALS : []));
+  const [isLoading, setIsLoading] = useState(!isDemoMode());
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const isPlaceholderProviderId = (id?: string) => !id || /^demo(-|_)/i.test(id);
+
+  const loadDenials = useCallback(async () => {
+    setIsLoading(true);
+    setLoadError(null);
+    try {
+      // Resolve the real provider id: prop from App.tsx, else the signed-in user.
+      let effectiveId = isPlaceholderProviderId(providerId) ? '' : (providerId as string);
+      if (!effectiveId) {
+        const { data } = await supabase.auth.getUser();
+        effectiveId = data.user?.id || '';
+      }
+      if (!effectiveId) {
+        setDenials([]);
+        return;
+      }
+      const records = await getDenialRecords(effectiveId);
+      setDenials(records.map(mapRecordToDenial));
+    } catch (err) {
+      console.error('[DenialWorkbench] Failed to load denials:', err);
+      setLoadError('Could not load your denials. Check your connection and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [providerId]);
+
+  useEffect(() => {
+    if (!isDemoMode()) {
+      loadDenials();
+    }
+  }, [loadDenials]);
 
   const newCount = denials.filter((d) => d.status === 'new').length;
   const urgentCount = denials.filter((d) => d.daysUntilDeadline <= 7 && !['recovered', 'written-off', 'corrected'].includes(d.status)).length;
@@ -909,6 +1008,23 @@ export default function DenialWorkbench({
 
       {/* Content */}
       <div className="p-4">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <Loader2 className="w-7 h-7 text-slate-400 animate-spin mb-3" />
+            <p className="text-sm text-[#5A6B7A]">Loading your denials…</p>
+          </div>
+        ) : loadError ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-3">
+              <AlertCircle className="w-6 h-6 text-red-500" />
+            </div>
+            <p className="text-sm font-semibold text-[#3A4A57]">Couldn't load denials</p>
+            <p className="text-sm text-[#5A6B7A] mt-1 max-w-xs">{loadError}</p>
+            <Button size="sm" className="mt-4" onClick={loadDenials}>
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Retry
+            </Button>
+          </div>
+        ) : (
         <AnimatePresence mode="wait">
           {selectedDenial ? (
             <motion.div
@@ -936,6 +1052,7 @@ export default function DenialWorkbench({
             </motion.div>
           )}
         </AnimatePresence>
+        )}
       </div>
     </div>
   );

@@ -224,9 +224,19 @@ export function ReferralDashboard({
       <Card className="p-5 bg-gradient-to-br from-[#2A7D99] to-[#0D1B2A] text-white">
         <div className="text-center mb-4">
           <p className="text-teal-100 text-sm mb-2">Your Referral Code</p>
-          <div className="font-mono text-xl sm:text-2xl font-bold tracking-wide">
-            {referralCode}
-          </div>
+          {referralCode ? (
+            <div className="font-mono text-xl sm:text-2xl font-bold tracking-wide">
+              {referralCode}
+            </div>
+          ) : (
+            // Code is still being generated — pulsing placeholder instead of a
+            // bare label above an empty gap.
+            <div
+              className="h-8 w-48 mx-auto rounded bg-white/20 animate-pulse"
+              role="status"
+              aria-label="Generating your referral code"
+            />
+          )}
         </div>
 
         <div className="flex gap-2">

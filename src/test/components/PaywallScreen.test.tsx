@@ -13,8 +13,8 @@ vi.mock('../../utils/supabase/client', () => ({
 vi.mock('../../lib/tier-utils', () => ({
   tierPricing: {
     free: { monthly: 0, yearly: 0 },
-    core: { monthly: 14.99, yearly: 119.99 },
-    pro: { monthly: 29.99, yearly: 239.99 },
+    core: { monthly: 14.99, yearly: 129 },
+    pro: { monthly: 29.99, yearly: 279 },
   },
   getTierFeatureDescriptions: vi.fn((tier: string) => {
     if (tier === 'free') return ['Basic features', 'Limited access'];
@@ -105,9 +105,10 @@ describe('PaywallScreen', () => {
     expect(screen.getByText('Yearly')).toBeInTheDocument();
   });
 
-  it('renders Save 30% badge on yearly toggle', () => {
+  it('renders the computed yearly-savings badge on the yearly toggle', () => {
     render(<PaywallScreen {...defaultProps} />);
-    expect(screen.getByText('Save 30%')).toBeInTheDocument();
+    // Component computes: 1 − yearly/(monthly×12) — with $14.99/mo · $129/yr ≈ 28%
+    expect(screen.getByText(/Save up to 28%/)).toBeInTheDocument();
   });
 
   it('renders Recommended badge on Core tier', () => {
@@ -170,7 +171,7 @@ describe('PaywallScreen', () => {
   it('shows close confirmation modal when Skip is clicked in post-onboarding', () => {
     render(<PaywallScreen {...defaultProps} isPostOnboarding />);
     fireEvent.click(screen.getByText('Skip'));
-    expect(screen.getByText('Skip the free trial?')).toBeInTheDocument();
+    expect(screen.getByText('Your personalized plan is ready')).toBeInTheDocument();
   });
 
   it('renders the disclaimer footer', () => {

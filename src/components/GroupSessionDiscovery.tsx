@@ -173,7 +173,7 @@ export function GroupSessionDiscovery({
           </div>
 
           {/* Category chips */}
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-1 pr-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
             {TOPIC_CATEGORIES.map(cat => (
               <button
                 key={cat.id}
@@ -192,14 +192,14 @@ export function GroupSessionDiscovery({
 
       <div className="max-w-3xl mx-auto px-4 py-4">
         {/* Why group sessions callout */}
-        <Card className="p-4 mb-4 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">
+        <Card className="p-4 mb-4 bg-white border-[#E8E4DF]">
           <div className="flex items-start gap-3">
-            <div className="p-2 bg-violet-100 rounded-lg shrink-0">
-              <Sparkles className="w-4 h-4 text-violet-600" />
+            <div className="p-2 rounded-lg shrink-0" style={{ background: 'rgba(42, 125, 153, 0.10)' }}>
+              <Sparkles className="w-4 h-4 text-[#2A7D99]" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-violet-900">Why families love group sessions</p>
-              <p className="text-sm text-violet-800 mt-0.5">
+              <p className="text-sm font-semibold text-[#132F43]">Why families love group sessions</p>
+              <p className="text-sm text-[#5A6B7A] mt-0.5">
                 Same BCBA expertise as 1:1 at 60% less cost. Small groups (max 4 families) mean your questions get answered, and hearing from other parents going through similar challenges is genuinely helpful.
               </p>
             </div>
@@ -208,8 +208,19 @@ export function GroupSessionDiscovery({
 
         {/* Sessions grid */}
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-6 h-6 text-[#6B9080] animate-spin" />
+          <div className="space-y-3" aria-hidden="true">
+            {[0, 1, 2].map(i => (
+              <div key={i} className="rounded-2xl bg-white border border-[#E8E4DF] p-4 animate-pulse">
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 rounded-full bg-slate-200 shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-200 rounded w-2/3" />
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
+                    <div className="h-3 bg-slate-100 rounded w-1/3" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : sessions.length === 0 ? (
           <Card className="p-10 text-center border-dashed border-[#E8E4DF]">

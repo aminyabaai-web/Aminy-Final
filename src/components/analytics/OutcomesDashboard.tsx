@@ -476,6 +476,14 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
     }
   }
 
+  // All-zero KPIs read as a dead platform — soften with a gentle zero state.
+  // Demo mode seeds MOCK_KPI (non-zero), so this only applies to real empty accounts.
+  const kpiIsEmpty =
+    kpi.activeClients === 0 &&
+    kpi.sessionsThisMonth === 0 &&
+    kpi.goalsAtMastery === 0 &&
+    kpi.avgWeeksToFirstMastery === 0;
+
   return (
     <div className="min-h-screen bg-[#F8F8F6]">
       {/* Header */}
@@ -506,32 +514,37 @@ export function OutcomesDashboard({ providerId, onBack }: OutcomesDashboardProps
         {/* ── Section 1: KPI Tiles ─────────────────────────── */}
         <section>
           <h2 className="text-xs font-bold text-[#5A6B7A] uppercase tracking-widest mb-3">Platform Summary</h2>
+          {kpiIsEmpty && (
+            <p className="text-sm text-slate-400 mb-3">
+              Your outcomes view fills in as you hold sessions and set goals.
+            </p>
+          )}
           <div className="grid grid-cols-2 gap-3">
             <KPITile
               label="Active Clients"
-              value={kpi.activeClients}
+              value={kpiIsEmpty ? '–' : kpi.activeClients}
               sub="enrolled families"
-              color="text-[#132F43]"
+              color={kpiIsEmpty ? 'text-slate-300' : 'text-[#132F43]'}
             />
             <KPITile
               label="Sessions This Month"
-              value={kpi.sessionsThisMonth}
+              value={kpiIsEmpty ? '–' : kpi.sessionsThisMonth}
               sub="completed sessions"
-              color="text-[#132F43]"
+              color={kpiIsEmpty ? 'text-slate-300' : 'text-[#132F43]'}
             />
             <KPITile
               label="Goals at Mastery"
-              value={kpi.goalsAtMastery}
-              unit="%"
+              value={kpiIsEmpty ? '–' : kpi.goalsAtMastery}
+              unit={kpiIsEmpty ? undefined : '%'}
               sub="> 80% criterion met"
-              color="text-emerald-500"
+              color={kpiIsEmpty ? 'text-slate-300' : 'text-emerald-500'}
             />
             <KPITile
               label="Avg to First Mastery"
-              value={kpi.avgWeeksToFirstMastery}
-              unit="wks"
+              value={kpiIsEmpty ? '–' : kpi.avgWeeksToFirstMastery}
+              unit={kpiIsEmpty ? undefined : 'wks'}
               sub="from program start"
-              color="text-[#132F43]"
+              color={kpiIsEmpty ? 'text-slate-300' : 'text-[#132F43]'}
             />
           </div>
         </section>

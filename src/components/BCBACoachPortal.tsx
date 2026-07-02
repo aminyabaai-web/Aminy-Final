@@ -68,7 +68,8 @@ interface BCBACoachPortalProps {
   onNavigate?: (screen: string) => void;
 }
 
-export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }: BCBACoachPortalProps) {
+// No fake default name — when no coach name is provided the greeting stays neutral.
+export function BCBACoachPortal({ onBack, coachName, onNavigate }: BCBACoachPortalProps) {
   const [activeView, setActiveView] = useState<'dashboard' | 'family'>('dashboard');
   const [selectedFamily, setSelectedFamily] = useState<Family | null>(null);
   const [families, setFamilies] = useState<Family[]>([]);
@@ -97,7 +98,10 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
           headers: {
             'Authorization': `Bearer ${publicAnonKey}`,
             'Content-Type': 'application/json'
-          }
+          },
+          // A hung request must never leave "Your Families" on a perpetual
+          // spinner — time out and fall through to the real empty state.
+          signal: AbortSignal.timeout(8000)
         }
       );
 
@@ -524,7 +528,7 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
             Back
           </button>
           <h1 className="text-[#132F43] mb-1">BCBA Coach Portal</h1>
-          <p className="text-[#5A6B7A]">Welcome back, {coachName}</p>
+          <p className="text-[#5A6B7A]">{coachName ? `Welcome back, ${coachName}` : 'Welcome back'}</p>
         </div>
       </div>
 
@@ -605,8 +609,18 @@ export function BCBACoachPortal({ onBack, coachName = "Dr. Coach", onNavigate }:
               <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
             </Card>
           ) : filteredFamilies.length === 0 ? (
-            <Card className="p-6 text-center">
-              <p className="text-[#5A6B7A]">No families found</p>
+            <Card className="p-8 text-center">
+              <div className="w-12 h-12 rounded-full bg-[#EDF4F7] flex items-center justify-center mx-auto mb-3">
+                <Users className="w-6 h-6 text-slate-400" aria-hidden="true" />
+              </div>
+              <p className="text-sm font-medium text-[#3A4A57] mb-1">
+                {searchQuery ? 'No families match your search' : 'No families assigned yet.'}
+              </p>
+              <p className="text-sm text-[#5A6B7A]">
+                {searchQuery
+                  ? 'Try a different name.'
+                  : 'Families will appear here once they are linked to your caseload.'}
+              </p>
             </Card>
           ) : (
             filteredFamilies.map(family => {

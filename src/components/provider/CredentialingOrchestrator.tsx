@@ -11,8 +11,9 @@
  * AI enrollment playbooks, risk alerts, CAQH status, and Gantt timeline.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { toast } from 'sonner';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -42,6 +43,25 @@ import {
   type PanelApplicationStatus,
   type EnrollmentPlaybook,
 } from '../../lib/credentialing-orchestrator';
+import { supabase } from '../../utils/supabase/client';
+
+// Checklist persistence: Supabase `provider_payer_enrollments` (migration
+// 20260702120000) when signed in; localStorage fallback when not.
+const STEPS_STORAGE_KEY = 'aminy-credentialing-steps';
+
+function loadLocalSteps(): Set<string> {
+  try {
+    const raw = localStorage.getItem(STEPS_STORAGE_KEY);
+    if (raw) return new Set(JSON.parse(raw) as string[]);
+  } catch { /* corrupt cache — start clean */ }
+  return new Set();
+}
+
+function saveLocalSteps(steps: Set<string>): void {
+  try {
+    localStorage.setItem(STEPS_STORAGE_KEY, JSON.stringify(Array.from(steps)));
+  } catch { /* storage unavailable */ }
+}
 
 // ============================================================================
 // Types
@@ -157,6 +177,76 @@ export default function CredentialingOrchestrator({
   const [selectedPayer, setSelectedPayer] = useState<string | null>(null);
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
   const [checkedSteps, setCheckedSteps] = useState<Set<string>>(new Set());
+  const [authUserId, setAuthUserId] = useState<string | null>(null);
+
+  // Load persisted checklist progress: Supabase when signed in, localStorage otherwise.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const local = loadLocalSteps();
+      try {
+        const { data } = await supabase.auth.getUser();
+        const uid = data.user?.id || null;
+        if (cancelled) return;
+        setAuthUserId(uid);
+        if (!uid) {
+          setCheckedSteps(local);
+          return;
+        }
+        const { data: rows, error } = await supabase
+          .from('provider_payer_enrollments')
+          .select('payer_id, step_key')
+          .eq('provider_id', uid);
+        if (cancelled) return;
+        if (error || !rows) {
+          // Table missing / offline — fall back to the local cache.
+          setCheckedSteps(local);
+          return;
+        }
+        setCheckedSteps(new Set(rows.map(r => `${r.payer_id}-${r.step_key}`)));
+      } catch {
+        if (!cancelled) setCheckedSteps(local);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Optimistic toggle with Supabase upsert/delete and rollback on failure.
+  const toggleStep = async (payerId: string, stepNumber: number) => {
+    const stepKey = `${payerId}-${stepNumber}`;
+    const wasChecked = checkedSteps.has(stepKey);
+
+    const apply = (checked: boolean) => {
+      setCheckedSteps(prev => {
+        const next = new Set(prev);
+        checked ? next.add(stepKey) : next.delete(stepKey);
+        saveLocalSteps(next);
+        return next;
+      });
+    };
+
+    apply(!wasChecked);
+    if (!authUserId) return; // unauthenticated — localStorage only
+
+    const { error } = wasChecked
+      ? await supabase
+          .from('provider_payer_enrollments')
+          .delete()
+          .eq('provider_id', authUserId)
+          .eq('payer_id', payerId)
+          .eq('step_key', String(stepNumber))
+      : await supabase
+          .from('provider_payer_enrollments')
+          .upsert(
+            { provider_id: authUserId, payer_id: payerId, step_key: String(stepNumber) },
+            { onConflict: 'provider_id,payer_id,step_key' }
+          );
+
+    if (error) {
+      apply(wasChecked); // rollback
+      toast.error("Couldn't save your checklist progress — change reverted");
+    }
+  };
 
   const provider = DEMO_PROVIDERS.find(p => p.application.providerId === providerId) ?? DEMO_PROVIDERS[0];
   const readiness = useMemo(() => assessCredentialingReadiness(providerId), [providerId]);
@@ -431,9 +521,7 @@ export default function CredentialingOrchestrator({
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const next = new Set(checkedSteps);
-                                isChecked ? next.delete(stepKey) : next.add(stepKey);
-                                setCheckedSteps(next);
+                                if (selectedPayer) toggleStep(selectedPayer, step.stepNumber);
                               }}
                               className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                                 isChecked ? 'bg-green-500 border-green-500' : 'border-[#E8E4DF] bg-white'

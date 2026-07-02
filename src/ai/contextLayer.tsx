@@ -13,6 +13,7 @@ import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 export interface UserContext {
   // Child Profile
+  childId?: string;
   childName?: string;
   childAge?: string;
   childGender?: string;
@@ -59,6 +60,11 @@ export interface UserContext {
   bestTimeOfDay?: 'morning' | 'afternoon' | 'evening';
   strugglingWith?: string[];
   celebratingWins?: string[];
+
+  // Roaming AI preferences (persisted in profiles.ai_context so they follow the
+  // user across devices; localStorage remains the offline cache/fallback)
+  customInstructions?: { aboutMe?: string; responseStyle?: string };
+  aiSettings?: Record<string, unknown>;
 }
 
 export interface MemorySummary {
@@ -99,7 +105,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
       // Primary child profile
       supabase
         .from('children')
-        .select('name, age_years, age, gender, diagnosis, is_primary')
+        .select('id, name, age_years, age, gender, diagnosis, is_primary')
         .eq('parent_id', userId)
         .order('is_primary', { ascending: false })
         .limit(1)
@@ -155,6 +161,7 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
 
     return {
       // From Supabase children table
+      childId: child?.id != null ? String(child.id) : undefined,
       childName: child?.name || kvContext.childName,
       childAge: child?.age_years != null
         ? String(child.age_years)
@@ -185,6 +192,11 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
       lastShopPurchase: kvContext.lastShopPurchase,
       lastHubPost: kvContext.lastHubPost,
       lastCoverageQuestion: kvContext.lastCoverageQuestion,
+
+      // Roaming AI preferences (M1 — hydrated by BevelChatOverlay on mount;
+      // localStorage stays the offline cache/fallback)
+      customInstructions: kvContext.customInstructions,
+      aiSettings: kvContext.aiSettings,
     };
   } catch {
     return getDefaultContext();
@@ -269,7 +281,16 @@ export async function fetchMemories(
     if (!response.ok) return [];
 
     const data = await response.json();
-    return data.memories || [];
+    // Defensive expiry filter: the server excludes expired rows, but until the
+    // expires_at column migration (20260702100000) is applied everywhere we
+    // also filter client-side. Rows are raw memory_facts (snake_case fields).
+    const now = Date.now();
+    return (data.memories || []).filter(
+      (m: { expires_at?: string | null; expiresAt?: string | null }) => {
+        const exp = m.expires_at ?? m.expiresAt;
+        return !exp || new Date(exp).getTime() > now;
+      }
+    );
   } catch {
     return [];
   }

@@ -176,6 +176,7 @@ function getSessionPrice(providerType: string, duration: number = 60): { price: 
 async function saveBookingToDatabase(booking: {
   userId: string;
   providerId: string;
+  providerName: string;
   childId?: string;
   sessionType: string;
   scheduledAt: string;
@@ -211,6 +212,33 @@ async function saveBookingToDatabase(booking: {
     if (error) {
       console.error('Error saving booking:', error);
       return { success: false, error: error.message };
+    }
+
+    // Mirror into the appointments table so the SMS reminder cron
+    // (supabase/functions/appointment-reminders) picks this visit up — it scans
+    // `appointments` where is_aminy_telehealth = true, not marketplace_bookings.
+    // Same mirror pattern as session-scheduler.ts. Best-effort: a failure here
+    // must never block the booking itself.
+    try {
+      const endIso = new Date(new Date(booking.scheduledAt).getTime() + 60 * 60_000).toISOString();
+      const { error: aptError } = await supabase.from('appointments').insert({
+        user_id: booking.userId,
+        child_id: booking.childId || null,
+        title: `${booking.visitType === 'phone' ? 'Phone' : 'Video'} session with ${booking.providerName}`,
+        provider_name: booking.providerName,
+        service_type: 'telehealth',
+        start_at: booking.scheduledAt,
+        end_at: endIso,
+        location: 'Telehealth',
+        status: 'scheduled',
+        source: 'marketplace_booking',
+        is_aminy_telehealth: true,
+      });
+      if (aptError) {
+        console.error('Appointments mirror insert failed (booking still saved):', aptError);
+      }
+    } catch (mirrorErr) {
+      console.error('Appointments mirror insert failed (booking still saved):', mirrorErr);
     }
 
     return { success: true, bookingId: data.id };
@@ -568,6 +596,7 @@ export function ConversationalBooking({
       const result = await saveBookingToDatabase({
         userId: currentUserId,
         providerId: state.selectedProvider.id,
+        providerName: state.selectedProvider.name,
         childId: childId,
         sessionType: state.visitType || 'video',
         scheduledAt: state.selectedSlot.startTime,
@@ -1069,7 +1098,8 @@ export function ConversationalBooking({
                 </motion.button>
 
                 <p className="mt-3 text-center text-sm text-[#5A6B7A]">
-                  You will receive a confirmation email, reminder, and secure video-room link.
+                  Your confirmation will appear in My Appointments, and you'll get a text
+                  reminder before your session.
                 </p>
               </div>
             </>

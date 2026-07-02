@@ -49,6 +49,11 @@ export function WinsJournal({ userId }: { userId: string }) {
 
   async function loadWins() {
     setLoading(true);
+    // Safety: abort after 6s so a stalled network request can never leave the
+    // celebration screen hanging on the loading skeleton — we fall through to
+    // the (empty) journal instead. `finally` guarantees loading always resolves.
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
     try {
       const response = await fetch(
         `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/wins/load?userId=${userId}`,
@@ -56,6 +61,7 @@ export function WinsJournal({ userId }: { userId: string }) {
           headers: {
             'Authorization': `Bearer ${publicAnonKey}`,
           },
+          signal: controller.signal,
         }
       );
 
@@ -66,8 +72,10 @@ export function WinsJournal({ userId }: { userId: string }) {
       }
     } catch (error) {
       console.error('Error loading wins:', error);
+    } finally {
+      clearTimeout(timeoutId);
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   async function saveCalmMoment() {
@@ -234,12 +242,20 @@ export function WinsJournal({ userId }: { userId: string }) {
   }
 
   if (loading) {
+    // Visible skeleton: two pulsing win-card placeholders instead of an
+    // invisible spinner inside a blank white card.
     return (
-      <Card>
-        <CardContent className="py-12 text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent mx-auto" />
-        </CardContent>
-      </Card>
+      <div className="space-y-3 sm:space-y-4" aria-busy="true" aria-label="Loading your wins">
+        {[0, 1].map((i) => (
+          <Card key={i}>
+            <CardContent className="pt-6 pb-6 animate-pulse space-y-3">
+              <div className="h-4 w-1/3 rounded bg-slate-200" />
+              <div className="h-3 w-2/3 rounded bg-slate-100" />
+              <div className="h-3 w-1/2 rounded bg-slate-100" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     );
   }
 

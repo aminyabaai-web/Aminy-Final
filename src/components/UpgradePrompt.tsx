@@ -26,7 +26,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import type { UpgradeTrigger as UpgradePromptType } from '../lib/upgrade-triggers';
 import { recordTriggerShown as trackPromptShown, recordTriggerDismissed as trackPromptDismissed } from '../lib/upgrade-triggers';
-import { tierPricing } from '../lib/tier-utils';
+import { tierPricing, getTierDisplayName } from '../lib/tier-utils';
 
 interface UpgradePromptProps {
   prompt: UpgradePromptType;
@@ -35,17 +35,18 @@ interface UpgradePromptProps {
   onUpgrade?: () => void;
 }
 
-// Prices derived from tier-utils.ts (single source of truth)
+// Prices derived from tier-utils.ts (single source of truth).
+// No 'starter' entry — it's a retired legacy alias for Core and must never render.
 const TIER_PRICES: Record<string, string> = {
-  starter: `$${tierPricing.starter.monthly}`,
   core: `$${tierPricing.core.monthly}`,
   pro: `$${tierPricing.pro.monthly}`,
+  proplus: `$${tierPricing.proplus.monthly}`,
 };
 
 const TIER_COLORS: Record<string, string> = {
-  starter: 'from-blue-500 to-indigo-600',
   core: 'from-purple-500 to-violet-600',
   pro: 'from-amber-500 to-orange-600',
+  proplus: 'from-rose-500 to-pink-600',
 };
 
 export function UpgradePrompt({
@@ -72,7 +73,9 @@ export function UpgradePrompt({
     onUpgrade?.();
   };
 
-  const recTier = prompt.recommendedTier ?? 'core';
+  // 'starter' is a legacy alias for Core — normalize so it can never render.
+  const rawRecTier = prompt.recommendedTier ?? 'core';
+  const recTier = rawRecTier === 'starter' ? 'core' : rawRecTier;
 
   if (!isVisible) return null;
 
@@ -207,7 +210,7 @@ export function UpgradePrompt({
                 </div>
                 <h3 className="text-xl font-bold mb-1">{prompt.title}</h3>
                 <p className="text-white/80">
-                  Upgrade to {recTier.charAt(0).toUpperCase() + recTier.slice(1)}
+                  Upgrade to {getTierDisplayName(recTier)}
                 </p>
               </div>
 

@@ -73,8 +73,15 @@ export function ResourceLibrary({
 
   const filteredResources = useMemo(() => {
     if (searchQuery.trim()) return searchResources(searchQuery);
-    return getResourcesByCategory(selectedCategory);
-  }, [selectedCategory, searchQuery]);
+    const list = getResourcesByCategory(selectedCategory);
+    // The "Recommended for you" strip is visible in this exact state — exclude
+    // its items from the main list so the first cards aren't duplicated.
+    if (selectedCategory === 'all' && recommended.length > 0) {
+      const recommendedIds = new Set(recommended.map(r => r.id));
+      return list.filter(r => !recommendedIds.has(r.id));
+    }
+    return list;
+  }, [selectedCategory, searchQuery, recommended]);
 
   if (openResource) {
     return (
@@ -92,7 +99,7 @@ export function ResourceLibrary({
     <div className="min-h-screen bg-mist pb-20">
       <ScreenHeader
         title="Resource Library"
-        subtitle="Expert-authored guides · evidence-based · plain language"
+        subtitle="Expert guides, evidence-based"
         icon={<BookOpen className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"
@@ -132,6 +139,9 @@ export function ResourceLibrary({
               <span>{cat.emoji}</span>{cat.label}
             </button>
           ))}
+          {/* Trailing spacer: px-4 right padding collapses inside a scroll
+              container, which clipped the last pill flush to the edge. */}
+          <div className="shrink-0 w-2" aria-hidden="true" />
         </div>
       )}
 

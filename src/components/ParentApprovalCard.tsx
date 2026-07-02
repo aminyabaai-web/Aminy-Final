@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
-import { Check, X, Info, Undo, Sparkles, ArrowLeft } from 'lucide-react';
+import { Check, X, Info, Undo, Sparkles, ArrowLeft, ClipboardList, Target, MessageCircle, Star, Home, FileText } from 'lucide-react';
 import {
   ProviderSuggestion,
   type RoutineChangePayload,
@@ -79,23 +79,17 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
     return null; // Don't show rejected suggestions
   }
 
-  const typeLabels = {
-    routine_change: '📋 Routine Adjustment',
-    goal_adjustment: '🎯 Goal Update',
-    prompt_script: '💬 New Strategy',
-    reinforcement: '⭐ Reinforcement Plan',
-    environment_change: '🏠 Environment Suggestion',
-    coverage_note: '📄 Coverage Note'
+  const typeMeta: Record<ProviderSuggestion['type'], { icon: React.ElementType; label: string }> = {
+    routine_change: { icon: ClipboardList, label: 'Routine Adjustment' },
+    goal_adjustment: { icon: Target, label: 'Goal Update' },
+    prompt_script: { icon: MessageCircle, label: 'New Strategy' },
+    reinforcement: { icon: Star, label: 'Reinforcement Plan' },
+    environment_change: { icon: Home, label: 'Environment Suggestion' },
+    coverage_note: { icon: FileText, label: 'Coverage Note' }
   };
-
-  const typeColors = {
-    routine_change: 'bg-blue-100 text-blue-700 border-[#C8DDE8]',
-    goal_adjustment: 'bg-purple-100 text-purple-700 border-purple-200',
-    prompt_script: 'bg-green-100 text-green-700 border-green-200',
-    reinforcement: 'bg-yellow-100 text-yellow-700 border-[#EDF4F7]',
-    environment_change: 'bg-orange-100 text-orange-700 border-orange-200',
-    coverage_note: 'bg-[#EDF4F7] text-[#3A4A57] border-[#E8E4DF]'
-  };
+  const TypeIcon = typeMeta[suggestion.type].icon;
+  // One unified soft teal chip for every suggestion type (brand accent).
+  const typeChipCls = 'bg-[#EDF4F7] text-[#2A7D99] border-[#C8DDE8]';
 
   // When rendered as a standalone screen, wrap content in a full-screen page
   // container (background + padding + centered column + optional back button)
@@ -114,6 +108,10 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
               Back
             </button>
           )}
+          <h1 className="text-xl font-bold text-[#132F43]">Suggested for you</h1>
+          <p className="text-sm text-[#5A6B7A] mt-0.5 mb-4">
+            Ideas from your care team — you decide what to apply.
+          </p>
           {children}
         </div>
       </div>
@@ -148,8 +146,9 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <Badge className={typeColors[suggestion.type]}>
-                  {typeLabels[suggestion.type]}
+                <Badge className={typeChipCls}>
+                  <TypeIcon className="w-3 h-3 mr-1" />
+                  {typeMeta[suggestion.type].label}
                 </Badge>
                 {suggestion.status === 'accepted' && (
                   <Badge className="bg-green-600 text-white">
@@ -160,7 +159,10 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
               </div>
               <p className="text-sm text-[#132F43]">
                 Suggested by <strong>{suggestion.providerName}</strong>
-                <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
+                {suggestion.providerRole &&
+                  !suggestion.providerName?.toLowerCase().includes(suggestion.providerRole.toLowerCase()) && (
+                    <span className="text-[#5A6B7A] ml-1">({suggestion.providerRole})</span>
+                  )}
               </p>
               <p className="text-sm text-[#5A6B7A] mt-1">
                 {new Date(suggestion.createdAt).toLocaleDateString()}
@@ -170,7 +172,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
             <button
               onClick={() => setShowDetails(true)}
               aria-label="View suggestion details"
-              className="text-blue-600 hover:text-blue-700"
+              className="text-[#2A7D99] hover:text-[#1F6080]"
             >
               <Info className="w-5 h-5" />
             </button>

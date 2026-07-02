@@ -183,7 +183,7 @@ export function AskAminyChatScreen({
         <div className="max-w-3xl w-full mx-auto flex-1 flex flex-col min-h-0">
           <StreamingAIChat
             context={context}
-            placeholder={`Message Aminy about ${childName}...`}
+            placeholder="Ask Aminy anything…"
             onConversionPrompt={onPaywallTrigger}
           />
         </div>

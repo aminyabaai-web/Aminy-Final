@@ -9,12 +9,12 @@
  * Comprehensive AI memory management with tier-based limits.
  * Enables the AI to "remember" across conversations and learn from documents.
  *
- * Memory Tiers (MUST match tier-utils.ts):
- * - FREE: 5 messages/day, 0-day memory, no vault learning
- * - STARTER: 20 messages/day, 30-day memory, basic vault (5 docs)
- * - CORE: Unlimited messages, 90-day memory, full vault (25 docs)
- * - PRO: Unlimited messages, unlimited memory, unlimited vault
- * - PROPLUS: Unlimited everything + advanced analytics context
+ * Memory Tiers (MUST match tier-utils.ts — getEnforcedAIMessageLimit + getTierLimits):
+ * - FREE: 3 messages/day, 14-day memory, 50 facts, no vault learning
+ * - STARTER (legacy alias of Core): 100/day fair-use cap, 200 facts
+ * - CORE: 100/day fair-use cap (displayed "Unlimited"), 5,000 facts
+ * - PRO: 100/day fair-use cap (displayed "Unlimited"), 15,000 facts
+ * - PROPLUS: 100/day fair-use cap (displayed "Unlimited"), unlimited facts
  */
 
 import type { TierType } from './tier-utils';
@@ -81,53 +81,50 @@ export const TIER_LIMITS: Record<TierType, {
   contextTokens: number;
 }> = {
   // Free: Discovery tier - risk-free intro, builds habit/trust
-  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // MUST MATCH tier-utils.ts getEnforcedAIMessageLimit() + getTierLimits().memoryFacts
   // NOTE: Free tier MUST have memory to feel personal - otherwise users churn immediately
   free: {
-    messagesPerDay: 5,            // 5 messages/day (matches tier-utils.ts)
+    messagesPerDay: 3,            // 3 messages/day hard limit (tier-utils getEnforcedAIMessageLimit)
     memoryDays: 14,               // 14-day memory for personalization (critical for activation)
     maxDocuments: 0,              // No vault access (upgrade incentive)
-    maxFacts: 50,                 // More facts for personalization (upgrade hook: "You have 50 memories...")
+    maxFacts: 50,                 // Matches tier-utils getTierLimits('free').memoryFacts
     canLearnFromVault: false,
     contextTokens: 3000,          // Enough context for helpful responses
   },
   // Starter: Legacy tier (maps to Core) - $14.99/mo
-  // MUST MATCH tier-utils.ts getAIMessageLimit()
+  // MUST MATCH tier-utils.ts getEnforcedAIMessageLimit() + getTierLimits().memoryFacts
   starter: {
-    messagesPerDay: 50,           // Soft cap protects margin (~$0.05/day worst case at avg cost)
+    messagesPerDay: 100,          // FAIR_USE_AI_DAILY_CAP — displayed "Unlimited", enforced 100/day
     memoryDays: 30,
     maxDocuments: 5,
-    maxFacts: 100,
+    maxFacts: 200,                // Matches tier-utils getTierLimits('starter').memoryFacts (historical cap)
     canLearnFromVault: true,
     contextTokens: 4000,
   },
   // Core: Full Companion - $14.99/mo
-  // Bevel-style margin protection: 50/day = ~$0.05 worst case → 33% margin floor at $14.99/mo
   core: {
-    messagesPerDay: 50,           // 50/day = 1500/mo, covers heavy use, protects margin
+    messagesPerDay: 100,          // FAIR_USE_AI_DAILY_CAP — displayed "Unlimited", enforced 100/day
     memoryDays: 90,
     maxDocuments: 25,
-    maxFacts: 500,
+    maxFacts: 5000,               // Matches tier-utils getTierLimits('core').memoryFacts
     canLearnFromVault: true,
     contextTokens: 8000,
   },
   // Pro: Premium Ecosystem - $29.99/mo
-  // Heavier users + provider features. 200/day still protects margin.
   pro: {
-    messagesPerDay: 200,          // ~$0.20/day worst case → 33%+ margin floor at $29.99/mo
+    messagesPerDay: 100,          // FAIR_USE_AI_DAILY_CAP — displayed "Unlimited", enforced 100/day
     memoryDays: Infinity,
     maxDocuments: Infinity,
-    maxFacts: Infinity,
+    maxFacts: 15000,              // Matches tier-utils getTierLimits('pro').memoryFacts
     canLearnFromVault: true,
     contextTokens: 16000,
   },
   // Pro Plus / Family: Enterprise tier - $49.99/mo
-  // Highest cap. Power users + multi-child families.
   proplus: {
-    messagesPerDay: 500,          // ~$0.50/day worst case → 33%+ margin floor at $49.99/mo
+    messagesPerDay: 100,          // FAIR_USE_AI_DAILY_CAP — displayed "Unlimited", enforced 100/day
     memoryDays: Infinity,
     maxDocuments: Infinity,
-    maxFacts: Infinity,
+    maxFacts: Infinity,           // Unlimited — matches tier-utils getTierLimits('proplus').memoryFacts (null)
     canLearnFromVault: true,
     contextTokens: 32000,
   },
@@ -290,7 +287,32 @@ class MemoryManager {
   // FACT MANAGEMENT
   // ============================================
 
+  /**
+   * Normalize fact content for dedup comparison (case/whitespace-insensitive).
+   * Mirrors the server-side dedup key in the /memory/store edge route.
+   */
+  static normalizeFactContent(content: string): string {
+    return content.toLowerCase().replace(/\s+/g, ' ').trim();
+  }
+
   addFact(fact: Omit<MemoryFact, 'id' | 'createdAt' | 'updatedAt'>): MemoryFact {
+    const childFacts = this.facts.get(fact.childId) || [];
+
+    // Dedup: same child + category + normalized content updates the existing
+    // fact instead of appending a duplicate forever (mirrors server-side M4 fix)
+    const normalized = MemoryManager.normalizeFactContent(fact.content);
+    const existing = childFacts.find(
+      f => f.category === fact.category &&
+        MemoryManager.normalizeFactContent(f.content) === normalized
+    );
+    if (existing) {
+      existing.updatedAt = new Date().toISOString();
+      existing.confidence = Math.max(existing.confidence, fact.confidence);
+      if (fact.expiresAt) existing.expiresAt = fact.expiresAt;
+      this.saveToStorage();
+      return existing;
+    }
+
     const newFact: MemoryFact = {
       ...fact,
       id: `fact-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -298,7 +320,6 @@ class MemoryManager {
       updatedAt: new Date().toISOString(),
     };
 
-    const childFacts = this.facts.get(fact.childId) || [];
     childFacts.push(newFact);
     this.facts.set(fact.childId, childFacts);
     this.saveToStorage();
@@ -310,13 +331,17 @@ class MemoryManager {
     const limits = TIER_LIMITS[tier];
     const allFacts = this.facts.get(childId) || [];
 
-    // Filter by memory days limit
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+    // Filter by memory days limit. Guard Infinity: `setDate(now - Infinity)`
+    // yields an Invalid Date that filters out EVERY fact (memory became
+    // write-only for unlimited-retention tiers).
+    let recent = allFacts;
+    if (Number.isFinite(limits.memoryDays)) {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+      recent = allFacts.filter(f => new Date(f.createdAt) >= cutoffDate);
+    }
 
-    return allFacts
-      .filter(f => new Date(f.createdAt) >= cutoffDate)
-      .slice(-limits.maxFacts);
+    return Number.isFinite(limits.maxFacts) ? recent.slice(-limits.maxFacts) : recent;
   }
 
   getFactsByCategory(childId: string, category: MemoryFact['category'], tier: TierType): MemoryFact[] {
@@ -404,12 +429,15 @@ class MemoryManager {
     const limits = TIER_LIMITS[tier];
     const allSummaries = this.conversationSummaries.get(childId) || [];
 
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+    // Guard Infinity memoryDays (same Invalid-Date pitfall as getFacts)
+    let recent = allSummaries;
+    if (Number.isFinite(limits.memoryDays)) {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+      recent = allSummaries.filter(s => new Date(s.timestamp) >= cutoffDate);
+    }
 
-    return allSummaries
-      .filter(s => new Date(s.timestamp) >= cutoffDate)
-      .slice(-limit);
+    return recent.slice(-limit);
   }
 
   // ============================================
@@ -553,13 +581,25 @@ class MemoryManager {
    */
   cleanupExpiredMemories(childId: string, tier: TierType) {
     const limits = TIER_LIMITS[tier];
+
+    // Unlimited-retention tiers keep everything (guard the Invalid-Date
+    // pitfall: setDate(now - Infinity) would wipe ALL memories)
+    if (!Number.isFinite(limits.memoryDays)) {
+      if (Number.isFinite(limits.maxFacts)) {
+        const facts = this.facts.get(childId) || [];
+        this.facts.set(childId, facts.slice(-limits.maxFacts));
+        this.saveToStorage();
+      }
+      return;
+    }
+
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
 
     // Clean facts
     const facts = this.facts.get(childId) || [];
     const validFacts = facts.filter(f => new Date(f.createdAt) >= cutoffDate);
-    this.facts.set(childId, validFacts.slice(-limits.maxFacts));
+    this.facts.set(childId, Number.isFinite(limits.maxFacts) ? validFacts.slice(-limits.maxFacts) : validFacts);
 
     // Clean summaries
     const summaries = this.conversationSummaries.get(childId) || [];
@@ -575,6 +615,11 @@ class MemoryManager {
 // ============================================
 
 export const memoryManager = new MemoryManager();
+
+/** Normalized form used for fact dedup — exported for tests. */
+export function normalizeFactContent(content: string): string {
+  return MemoryManager.normalizeFactContent(content);
+}
 
 // ============================================
 // HOOKS
