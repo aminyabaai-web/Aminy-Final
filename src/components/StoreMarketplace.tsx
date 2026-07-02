@@ -1366,7 +1366,7 @@ export function StoreMarketplace({
             )}
 
             <p className="text-xs text-slate-400 mt-3">
-              Aminy may earn a commission from Amazon purchases — at no extra cost to you.
+              You pay exactly the same price as on Amazon. Aminy earns a small commission, which helps us cover free trials for new families.
             </p>
           </div>
         )}
