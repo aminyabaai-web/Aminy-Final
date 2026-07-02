@@ -169,7 +169,8 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
 
     const handleRedeem = (reward: RewardItem) => {
         if (effectiveTokens < reward.cost) {
-            toast.error("Not enough stars yet! Keep practicing.");
+            // Gentle nudge, never a shame-y error — kids see this
+            toast(`Almost there! ${reward.cost - effectiveTokens} more ⭐ for ${reward.name}.`);
             if (window.navigator && window.navigator.vibrate) {
                 window.navigator.vibrate([50, 50, 50]);
             }
@@ -255,7 +256,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             onClick={onBack}
                             aria-label="Go back"
                             style={{
-                                width: '36px', height: '36px', borderRadius: '18px', border: 'none', backgroundColor: '#FFFFFF',
+                                width: '44px', height: '44px', borderRadius: '22px', border: 'none', backgroundColor: '#FFFFFF',
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
                             }}
                         >
@@ -338,8 +339,8 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                                 <div style={{ textAlign: 'center' }}>
                                     <p className="text-[#111827] dark:text-slate-100" style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{reward.name}</p>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                                        <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#059669' : '#DC2626' }}>{reward.cost}</span>
-                                        <Star size={12} fill={canAfford ? '#10B981' : '#EF4444'} color={canAfford ? '#10B981' : '#EF4444'} />
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#059669' : '#8A9BA8' }}>{reward.cost}</span>
+                                        <Star size={12} fill={canAfford ? '#10B981' : '#C0CBD4'} color={canAfford ? '#10B981' : '#C0CBD4'} />
                                     </div>
                                     {reward.needsApproval && (
                                         <p style={{ fontSize: '10px', color: '#92400E', marginTop: '2px' }}>Parent approves</p>

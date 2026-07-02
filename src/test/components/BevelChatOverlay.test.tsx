@@ -163,6 +163,15 @@ vi.mock('../../lib/chat-markdown', () => ({
   renderRichMarkdown: vi.fn().mockImplementation((text: string) =>
     React.createElement('span', null, text)
   ),
+  // Named [CHART:...] token splitter — pass-through in component tests (the
+  // real splitter has its own suite in src/test/chat-inline-chart.test.tsx)
+  splitInlineChartTokens: vi.fn().mockImplementation((text: string) => [{ type: 'text', content: text }]),
+  KNOWN_INLINE_CHARTS: ['weekly_trend', 'goal_progress'],
+}));
+
+// ── Mock InlineTrendChart (real-data inline chat chart) ──
+vi.mock('../../components/chat/InlineTrendChart', () => ({
+  InlineTrendChart: () => React.createElement('div', { 'data-testid': 'inline-trend-chart' }),
 }));
 
 // ── Mock lucide-react icons ──

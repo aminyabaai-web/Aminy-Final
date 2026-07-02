@@ -330,20 +330,36 @@ export async function sendMessageToClaude(
     systemPrompt = buildAminySystemPrompt(context),
   } = options;
 
+  // The deployed /ai/brain hard-caps output at 500 tokens (it ignores the
+  // client's max_tokens), which truncates long structured responses (e.g.
+  // PatientAISummary's 2500-token JSON) mid-string. /ai/care-plan is the
+  // deployed long-form alias that honors max_tokens, so route larger requests
+  // through it. (index.ts now honors max_tokens on /ai/brain too — this split
+  // can be removed once the edge function is redeployed.)
+  const useLongForm = maxTokens > 500;
+
   try {
-    const response = await fetch(`${getBackendUrl()}/ai/brain`, {
+    const response = await fetch(`${getBackendUrl()}${useLongForm ? '/ai/care-plan' : '/ai/brain'}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${publicAnonKey}`,
       },
-      body: JSON.stringify({
-        userMessage: sanitizedMessages[sanitizedMessages.length - 1]?.content || '',
-        conversationHistory: sanitizedMessages.slice(0, -1),
-        systemPrompt,
-        max_tokens: maxTokens,
-        temperature,
-      }),
+      body: JSON.stringify(useLongForm
+        ? {
+            messages: [
+              { role: 'system', content: systemPrompt },
+              ...sanitizedMessages,
+            ],
+            max_tokens: maxTokens,
+          }
+        : {
+            userMessage: sanitizedMessages[sanitizedMessages.length - 1]?.content || '',
+            conversationHistory: sanitizedMessages.slice(0, -1),
+            systemPrompt,
+            max_tokens: maxTokens,
+            temperature,
+          }),
     });
 
     if (!response.ok) {

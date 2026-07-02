@@ -17,7 +17,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from './ui/badge';
 import { toast } from 'sonner';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
-import { trackSpecificEvents } from '../lib/analytics-tracker';
+import { trackEvent, trackSpecificEvents } from '../lib/analytics-tracker';
+import { shareWinCard } from '../lib/share-win-card';
 
 interface WinMoment {
   id: string;
@@ -227,6 +228,58 @@ export function WinsJournal({ userId }: { userId: string }) {
     }
   }
 
+  /**
+   * Consecutive calendar days (ending at the most recent saved win) with at
+   * least one win. Used for the share card's "N days of calmer moments"
+   * header — celebration only, never shown as a broken/missed streak.
+   */
+  function computeStreakDays(allMoments: WinMoment[]): number {
+    if (allMoments.length === 0) return 0;
+    const dayKeys = new Set(
+      allMoments.map((m) => new Date(m.timestamp).toDateString())
+    );
+    const latest = allMoments.reduce((max, m) =>
+      new Date(m.timestamp).getTime() > new Date(max.timestamp).getTime() ? m : max
+    );
+    let streak = 0;
+    const cursor = new Date(latest.timestamp);
+    while (dayKeys.has(cursor.toDateString())) {
+      streak += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return streak;
+  }
+
+  const [sharingMomentId, setSharingMomentId] = useState<string | null>(null);
+
+  async function shareMomentCard(moment: WinMoment) {
+    setSharingMomentId(moment.id);
+    try {
+      // PRIVACY: the card contains only the win text as the parent wrote it
+      // (first names only) + the streak count. No last names, no photos,
+      // no clinical data — see src/lib/share-win-card.ts.
+      const result = await shareWinCard({
+        winText: moment.content,
+        streakDays: computeStreakDays(moments),
+      });
+      if (result === 'downloaded') {
+        toast.success('Win card saved — caption copied, ready to post 💙');
+      } else {
+        toast.success('Win shared ✨');
+      }
+      trackEvent('win_shared', {
+        shareTarget: 'social-card',
+        method: result,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('Error sharing win card:', error);
+      toast.error("We couldn't create the share card. Please try again.");
+    } finally {
+      setSharingMomentId(null);
+    }
+  }
+
   function getRelativeTime(timestamp: string): string {
     const now = Date.now();
     const momentTime = new Date(timestamp).getTime();
@@ -403,15 +456,28 @@ export function WinsJournal({ userId }: { userId: string }) {
                     <span className="text-sm text-[#5A6B7A]">
                       {getRelativeTime(moment.timestamp)}
                     </span>
-                    {moment.tags && moment.tags.length > 0 && (
-                      <div className="flex gap-1">
-                        {moment.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-sm">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1">
+                      {moment.tags && moment.tags.length > 0 && (
+                        <div className="flex gap-1">
+                          {moment.tags.map((tag, index) => (
+                            <Badge key={index} variant="secondary" className="text-sm">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-[#2A7D99] hover:text-[#1F6080] px-2"
+                        onClick={() => shareMomentCard(moment)}
+                        disabled={sharingMomentId === moment.id}
+                        aria-label="Share this win as an image"
+                      >
+                        <Share2 className="w-4 h-4 mr-1" />
+                        {sharingMomentId === moment.id ? 'Sharing…' : 'Share'}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}

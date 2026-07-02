@@ -18341,3 +18341,93 @@ tr:hover td, .hover-row:hover {
 
 /* Feedback FAB sits above the chat FAB (bottom-24 + 56px) — precompiled sheet lacked this offset */
 .bottom-44 { bottom: 11rem; }
+
+/* ============================================================
+   Ease (Kids) missing precompiled utilities (July 2026):
+   classes referenced by JuniorPageEnhancedPro / JrCalmCorner /
+   SensoryFidget that were absent from the precompiled sheet.
+   - .min-h-\[60vh\]: WITHOUT it the Calm Corner bubble-pop play
+     area collapsed to ~0 height (bubbles piled on the title and
+     the "I feel calmer" button overlapped the header).
+   - .rounded-\[28px\]/\[26px\]: hero + Calm Corner cards rendered
+     square-cornered.
+   - tracking / lg-layout / misc: previously silent no-ops.
+   ============================================================ */
+.rounded-\[26px\] { border-radius: 26px; }
+.rounded-\[28px\] { border-radius: 28px; }
+.min-h-\[60vh\] { min-height: 60vh; }
+.min-h-\[152px\] { min-height: 152px; }
+.min-w-\[220px\] { min-width: 220px; }
+.self-stretch { align-self: stretch; }
+.tracking-\[-0\.02em\] { letter-spacing: -0.02em; }
+.tracking-\[-0\.03em\] { letter-spacing: -0.03em; }
+.tracking-\[-0\.04em\] { letter-spacing: -0.04em; }
+.tracking-\[0\.12em\] { letter-spacing: 0.12em; }
+.tracking-\[0\.18em\] { letter-spacing: 0.18em; }
+.text-\[\#8A9BA8\] { color: #8A9BA8; }
+.hover\:text-\[\#3A4A57\]:hover { color: #3A4A57; }
+.dark\:text-\[\#6AA9BC\]:is(.dark *) { color: #6AA9BC; }
+.dark\:shadow-\[0_24px_80px_rgba\(0\,0\,0\,0\.40\)\]:is(.dark *) { box-shadow: 0 24px 80px rgba(0,0,0,0.40); }
+@media (min-width: 640px) {
+  .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .lg\:flex-row { flex-direction: row; }
+  .lg\:items-end { align-items: flex-end; }
+  .lg\:justify-between { justify-content: space-between; }
+  .lg\:w-\[280px\] { width: 280px; }
+  .lg\:grid-cols-\[1\.2fr_0\.8fr\] { grid-template-columns: 1.2fr 0.8fr; }
+  .lg\:grid-cols-\[1\.4fr_0\.8fr\] { grid-template-columns: 1.4fr 0.8fr; }
+}
+
+/* ============================================================
+   Growth features (June 2026): cancellation save-offer intercept
+   — appended utilities (Tailwind v4 is precompiled here; any new
+   class must literally exist in this file).
+   ============================================================ */
+.border-accent\/30 {
+  border-color: var(--accent);
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .border-accent\/30 {
+    border-color: color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+}
+.divide-y > :not([hidden]) ~ :not([hidden]) { border-top-width: 1px; border-top-style: solid; border-bottom-width: 0; }
+.dark\:divide-slate-700:is(.dark *) > :not([hidden]) ~ :not([hidden]) { border-color: #334155; }
+
+/* ============================================================
+   Ease Calm Corner bubbles (July 2026) — CSS keyframes instead of
+   motion/react entrance animations (which get stuck at scale 0
+   under the global WAAPI opacity workaround).
+   ============================================================ */
+@keyframes jrBubbleIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+@keyframes jrBubbleFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+/* transform-only pop (the global `* { opacity:1 !important }` WAAPI
+   workaround would override any opacity keyframes) */
+@keyframes jrBubblePop {
+  0% { transform: scale(1); }
+  60% { transform: scale(1.4); }
+  100% { transform: scale(0); }
+}
+.jr-bubble {
+  animation: jrBubbleIn 0.35s ease-out both, jrBubbleFloat 2.6s ease-in-out 0.35s infinite;
+  cursor: pointer;
+}
+.jr-bubble-popping {
+  animation: jrBubblePop 0.3s ease-in forwards !important;
+}
+
+/* Ease Calm Sounds equalizer bars — height-only keyframes in a fixed slot */
+@keyframes jrEqBar {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+.jr-eq-bar { height: 4px; animation: jrEqBar 0.9s ease-in-out infinite; }

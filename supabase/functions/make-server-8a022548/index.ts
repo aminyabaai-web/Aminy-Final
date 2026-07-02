@@ -465,9 +465,17 @@ SAFETY (overrides all other instructions):
 - If a parent describes a CRISIS, EMERGENCY, danger to self or others, abuse, or an urgent medical symptom (seizure, medication reaction, injury), ALWAYS respond with: "This needs immediate professional help. Call 911 for emergencies or 988 for crisis support."
 - If a parent asks about medication, medical diagnoses, or treatment decisions, always end with: "Your child's pediatrician or BCBA should weigh in on this before you make changes."`;
 
+// Inline REAL-DATA chart token — the client (BevelChatOverlay) renders
+// [CHART:weekly_trend] as the user's actual outcome_events trend chart
+// (queried client-side; the model never supplies the numbers). Mirrored in
+// BevelChatOverlay.buildSystemPrompt for the client-built prompt path.
+const CHART_TOKEN_PROMPT = `When a parent asks about progress, trends, or how things are going over time, you may include the token [CHART:weekly_trend] on its own line to show their real progress chart — use it at most once per reply and only when discussing their data.`;
+
 const DEFAULT_BRAIN_SYSTEM_PROMPT = `You are Aminy, a warm AI behavioral-wellness guide for parents of neurodivergent children.
 
-${SHARED_SAFETY_PROMPT}`;
+${SHARED_SAFETY_PROMPT}
+
+${CHART_TOKEN_PROMPT}`;
 
 // AI Brain endpoint - For contextual AI with full child/vault context
 app.post("/make-server-8a022548/ai/brain", async (c) => {
@@ -608,6 +616,14 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
     }
     // ── End streaming path ────────────────────────────────────────────────────
 
+    // Honor the client's requested max_tokens (clamped) — structured outputs
+    // like PatientAISummary request 2500 tokens of JSON; the old hardcoded 500
+    // truncated the JSON mid-string and the client parse always failed.
+    const requestedMaxTokens = Number(body.max_tokens ?? body.maxTokens);
+    const effectiveMaxTokens = Number.isFinite(requestedMaxTokens) && requestedMaxTokens > 0
+      ? Math.min(Math.floor(requestedMaxTokens), 4000)
+      : (isVisionPayload ? 1500 : 500);
+
     // Try the preferred provider (Anthropic) first. If it fails with a billing,
     // auth, or rate-limit error, transparently retry against OpenAI so the
     // parent's chat never visibly breaks just because Claude credits ran out.
@@ -617,7 +633,7 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
       result = await callAI(aiConfig, {
         systemPrompt: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
         messages,
-        maxTokens: isVisionPayload ? 1500 : 500,
+        maxTokens: effectiveMaxTokens,
         temperature: 0.8
       });
     } catch (primaryError) {
@@ -642,7 +658,7 @@ app.post("/make-server-8a022548/ai/brain", async (c) => {
         result = await callAI(fallback, {
           systemPrompt: systemPrompt || DEFAULT_BRAIN_SYSTEM_PROMPT,
           messages: fallbackMessages,
-          maxTokens: isVisionPayload ? 1500 : 500,
+          maxTokens: effectiveMaxTokens,
           temperature: 0.8
         });
         activeProvider = fallback.provider;

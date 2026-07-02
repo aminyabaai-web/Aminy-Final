@@ -37,6 +37,7 @@ import {
   Circle
 } from 'lucide-react';
 import { playBreath, playTap, playComplete, haptic } from './junior/activities/sounds';
+import { SOUNDS, createSoundGenerator, type SoundGenerator } from './junior/sounds';
 
 // ============================================
 // TYPES
@@ -89,6 +90,14 @@ const AMBIENT_SOUNDS: { id: AmbientSound; emoji: string; label: string; Icon: Re
   { id: 'forest', emoji: '🌲', label: 'Forest', Icon: TreePine },
 ];
 
+// Map calm-corner sound ids → procedural Feelscape generators (real audio, no files)
+const AMBIENT_SOUND_SOURCE: Record<AmbientSound, string> = {
+  rain: 'rain',
+  ocean: 'ocean-waves',
+  campfire: 'campfire',
+  forest: 'birds-chirping',
+};
+
 const BODY_SCAN_STEPS = [
   { part: 'feet', instruction: 'Wiggle your toes... now let them rest', emoji: '🦶' },
   { part: 'legs', instruction: 'Squeeze your legs tight... now relax', emoji: '🦵' },
@@ -135,6 +144,36 @@ export function JrCalmCorner({
 
   // Ambient sound state
   const [activeSound, setActiveSound] = useState<AmbientSound | null>(null);
+  const soundGenRef = useRef<SoundGenerator | null>(null);
+
+  // Start/stop the real procedural ambient sound when selection changes
+  useEffect(() => {
+    soundGenRef.current?.stop();
+    soundGenRef.current = null;
+    if (!activeSound) return;
+    const def = SOUNDS.find(s => s.id === AMBIENT_SOUND_SOURCE[activeSound]);
+    if (!def) return;
+    try {
+      const gen = createSoundGenerator(def.generatorType, def.generatorConfig);
+      gen.setVolume(0.5);
+      gen.start();
+      soundGenRef.current = gen;
+    } catch { /* Web Audio unavailable — keep the visual-only experience */ }
+    return () => {
+      soundGenRef.current?.stop();
+      soundGenRef.current = null;
+    };
+  }, [activeSound]);
+
+  // Safety: stop audio when leaving the sounds activity or unmounting
+  useEffect(() => {
+    if (phase !== 'activity' || selectedActivity !== 'sounds') {
+      soundGenRef.current?.stop();
+      soundGenRef.current = null;
+      if (activeSound) setActiveSound(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, selectedActivity]);
 
   // Bubble state
   const [bubbles, setBubbles] = useState<{ id: number; x: number; y: number; size: number; popped: boolean }[]>([]);
@@ -216,13 +255,15 @@ export function JrCalmCorner({
       id: bubbleIdRef.current++,
       x: Math.random() * 80 + 10, // 10-90%
       y: Math.random() * 60 + 20, // 20-80%
-      size: Math.random() * 40 + 30, // 30-70px
+      size: Math.random() * 36 + 48, // 48-84px — kid-sized tap targets (44px min)
       popped: false,
     }));
     setBubbles(newBubbles);
   }, []);
 
   const popBubble = (id: number) => {
+    playTap();
+    haptic(20);
     setBubbles(prev => prev.map(b => b.id === id ? { ...b, popped: true } : b));
     // Respawn after all popped
     setTimeout(() => {
@@ -232,7 +273,7 @@ export function JrCalmCorner({
             id: bubbleIdRef.current++,
             x: Math.random() * 80 + 10,
             y: Math.random() * 60 + 20,
-            size: Math.random() * 40 + 30,
+            size: Math.random() * 36 + 48,
             popped: false,
           }));
         }
@@ -306,7 +347,8 @@ export function JrCalmCorner({
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={onBack}
-          className="w-10 h-10 bg-white/60 backdrop-blur rounded-full flex items-center justify-center"
+          aria-label="Back"
+          className="w-11 h-11 bg-white/60 backdrop-blur rounded-full flex items-center justify-center"
         >
           <ArrowLeft className="w-5 h-5 text-[#6B9080]" />
         </motion.button>
@@ -529,22 +571,16 @@ export function JrCalmCorner({
                     >
                       <span className="text-3xl">{sound.emoji}</span>
                       <span className="text-sm font-medium text-[#3A4A57]">{sound.label}</span>
-                      {isActive && (
-                        <motion.div
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                          className="flex gap-0.5"
-                        >
-                          {[1, 2, 3, 4].map(i => (
-                            <motion.div
-                              key={i}
-                              animate={{ height: [4, 12 + Math.random() * 8, 4] }}
-                              transition={{ duration: 0.6 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.1 }}
-                              className="w-1 bg-primary rounded-full"
-                            />
-                          ))}
-                        </motion.div>
-                      )}
+                      {/* Fixed-height slot so toggling a sound never shifts the grid */}
+                      <div className="flex h-5 items-end justify-center gap-0.5">
+                        {isActive && [1, 2, 3, 4].map(i => (
+                          <div
+                            key={i}
+                            className="w-1 bg-primary rounded-full jr-eq-bar"
+                            style={{ animationDelay: `${i * 0.12}s` }}
+                          />
+                        ))}
+                      </div>
                     </motion.button>
                   );
                 })}
@@ -594,7 +630,7 @@ export function JrCalmCorner({
                 {groundingStep > 0 && (
                   <button
                     onClick={() => setGroundingStep(prev => prev - 1)}
-                    className="px-6 py-2 bg-white/50 text-emerald-700 rounded-xl font-medium"
+                    className="px-6 py-3 min-h-[44px] bg-white/50 text-emerald-700 rounded-xl font-medium"
                   >
                     Back
                   </button>
@@ -602,7 +638,7 @@ export function JrCalmCorner({
                 {groundingStep < GROUNDING_STEPS.length - 1 ? (
                   <button
                     onClick={() => setGroundingStep(prev => prev + 1)}
-                    className="px-6 py-2 bg-emerald-500 text-white rounded-xl font-medium shadow-md"
+                    className="px-6 py-3 min-h-[44px] bg-emerald-500 text-white rounded-xl font-medium shadow-md"
                   >
                     Next →
                   </button>
@@ -631,28 +667,23 @@ export function JrCalmCorner({
             >
               <p className="text-center text-sky-700 font-medium mb-4">Pop the bubbles! 🫧</p>
 
-              {bubbles.map(bubble => !bubble.popped && (
-                <motion.button
+              {/* CSS keyframe animations (motion/react entrance animations get
+                  stuck at scale 0 under the global WAAPI opacity workaround) */}
+              {bubbles.map(bubble => (
+                <button
                   key={bubble.id}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    scale: 1,
-                    opacity: 0.8,
-                    y: [0, -10, 0],
-                  }}
-                  exit={{ scale: 1.5, opacity: 0 }}
-                  transition={{
-                    y: { duration: 2 + Math.random(), repeat: Infinity, ease: 'easeInOut' },
-                    scale: { duration: 0.3 },
-                  }}
-                  whileTap={{ scale: 0 }}
-                  onClick={() => popBubble(bubble.id)}
-                  className="absolute rounded-full bg-gradient-to-br from-sky-200/80 to-indigo-200/80 border-2 border-white/50 shadow-lg"
+                  type="button"
+                  onPointerDown={() => { if (!bubble.popped) popBubble(bubble.id); }}
+                  aria-label="Pop bubble"
+                  className={`absolute rounded-full border-2 border-white/50 shadow-lg ${bubble.popped ? 'jr-bubble-popping' : 'jr-bubble'}`}
                   style={{
                     left: `${bubble.x}%`,
                     top: `${bubble.y}%`,
                     width: bubble.size,
                     height: bubble.size,
+                    background: 'radial-gradient(circle at 32% 30%, rgba(224,242,254,0.95), rgba(165,180,252,0.65))',
+                    pointerEvents: bubble.popped ? 'none' : 'auto',
+                    animationDelay: bubble.popped ? '0s' : `${(bubble.id % 5) * 0.12}s`,
                   }}
                 />
               ))}

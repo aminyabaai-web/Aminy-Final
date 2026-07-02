@@ -320,7 +320,10 @@ export function OrgAdminDashboard({ onBack }: OrgAdminDashboardProps) {
         </div>
       </div>
 
-      {/* Aggregate outcomes — live PHQ-9/GAD-7/ABC trends for enrolled families */}
+      {/* Aggregate outcomes — live PHQ-9/GAD-7/ABC trends for enrolled families.
+          HIPAA: this analytics block must stay de-identified — averages, deltas,
+          and counts only. Never wire a query here that returns family names or
+          per-family scores into the org-admin analytics view. */}
       <div className="mx-4 mt-3">
         <PartnerOutcomesWidget partnerOrgId={org.id} />
       </div>

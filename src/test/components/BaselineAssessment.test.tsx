@@ -226,12 +226,25 @@ describe('BaselineAssessment', () => {
     await waitFor(() => {
       expect(mockInsert).toHaveBeenCalledTimes(1);
       const insertedData = mockInsert.mock.calls[0][0];
+      // Live clinical_outcomes shape (assessment_type CHECK constraint)
       expect(insertedData).toMatchObject({
         user_id: 'user-123',
         child_id: 'child-456',
-        outcome_type: 'behavior_baseline',
-        category: 'behavior',
-        status: 'active',
+        assessment_type: 'behavioral_checklist',
+        assessment_name: 'parent_baseline_assessment',
+        raw_score: 2,
+        severity_level: 'mild',
+        administered_by: 'parent',
+      });
+      // Qualitative answers JSON-encoded in interpretation (read by parseBaselineRow)
+      const details = JSON.parse(insertedData.interpretation);
+      expect(details).toMatchObject({
+        target_behavior: 'Hitting',
+        baseline_frequency: 'multiple_daily',
+        baseline_intensity: 2,
+        primary_trigger: 'Sensory overload',
+        ninety_day_goal: 'Meltdowns once a week',
+        source: 'parent_baseline_assessment',
       });
     });
 

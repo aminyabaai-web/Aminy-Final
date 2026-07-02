@@ -45,6 +45,7 @@ import { sendMessageToClaude } from '../../lib/ai-engine/claude-client';
 import { getCurrentContext } from '../../lib/ai-engine';
 import { isDemoMode } from '../../lib/demo-seed';
 import { supabase } from '../../utils/supabase/client';
+import { mapCheckInRows, parseBaselineRow, formatOutcomesForAI } from '../../lib/outcome-trends';
 
 /**
  * Returns true for ids that are obviously not real auth user ids
@@ -300,18 +301,32 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
         let loggedDataContext = '';
         if (!isDemoMode() && !isPlaceholderId(parentId)) {
           try {
-            const [goalsRes, logsRes, notesRes] = await Promise.all([
-              supabase.from('goals').select('title, status, target_behavior, progress_notes, updated_at')
+            const [goalsRes, logsRes, notesRes, outcomesRes, baselineRes] = await Promise.all([
+              // NOTE: goals has no target_behavior column — selecting it 400s and drops the whole result
+              supabase.from('goals').select('title, status, progress_notes, updated_at')
                 .eq('user_id', parentId).eq('status', 'active').limit(8),
               supabase.from('behavior_logs').select('behavior_type, intensity, notes, is_positive, created_at')
                 .eq('user_id', parentId).order('created_at', { ascending: false }).limit(10),
               supabase.from('session_notes').select('content, session_type, created_at')
                 .eq('user_id', parentId).order('created_at', { ascending: false }).limit(3),
+              // Weekly parent check-ins + baseline — the same collection pipeline the
+              // parent app charts (src/lib/outcome-trends.ts). Flows only into the
+              // existing Claude prompt path; no new third-party data flow.
+              supabase.from('outcome_events').select('context, payload, recorded_at, created_at')
+                .eq('user_id', parentId).eq('event_type', 'weekly_parent_checkin')
+                .order('created_at', { ascending: false }).limit(4),
+              supabase.from('clinical_outcomes').select('interpretation, raw_score, created_at')
+                .eq('user_id', parentId).eq('assessment_name', 'parent_baseline_assessment')
+                .order('created_at', { ascending: false }).limit(1).maybeSingle(),
             ]);
 
             const goals = goalsRes.data || [];
             const logs = logsRes.data || [];
             const notes = notesRes.data || [];
+            const outcomesBlock = formatOutcomesForAI(
+              mapCheckInRows(outcomesRes.data || []),
+              parseBaselineRow(baselineRes.data),
+            );
 
             const recentWins = logs
               .filter(l => l.is_positive)
@@ -329,6 +344,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
               recentWins.length > 0 ? `Recent wins (parent-logged): ${recentWins.join('; ')}` : '',
               recentChallenges.length > 0 ? `Recent challenges (parent-logged): ${recentChallenges.join('; ')}` : '',
               notes.length > 0 ? `Latest session note excerpt: ${notes[0].content?.substring(0, 300)}` : '',
+              outcomesBlock ? `WEEKLY OUTCOMES: ${outcomesBlock}` : '',
             ].filter(Boolean).join('\n');
           } catch (dataErr) {
             console.warn('[PatientAISummary] Could not load parent-logged data:', dataErr);

@@ -13,8 +13,8 @@ vi.mock('../../utils/supabase/client', () => ({
 vi.mock('../../lib/tier-utils', () => ({
   tierPricing: {
     free: { monthly: 0, yearly: 0 },
-    core: { monthly: 14.99, yearly: 129 },
-    pro: { monthly: 29.99, yearly: 279 },
+    core: { monthly: 14.99, yearly: 129, savings: 51 },
+    pro: { monthly: 29.99, yearly: 279, savings: 81 },
   },
   getTierFeatureDescriptions: vi.fn((tier: string) => {
     if (tier === 'free') return ['Basic features', 'Limited access'];
@@ -109,6 +109,29 @@ describe('PaywallScreen', () => {
     render(<PaywallScreen {...defaultProps} />);
     // Component computes: 1 − yearly/(monthly×12) — with $14.99/mo · $129/yr ≈ 28%
     expect(screen.getByText(/Save up to 28%/)).toBeInTheDocument();
+  });
+
+  it('defaults to annual billing and shows honest dollar savings (no months framing)', () => {
+    render(<PaywallScreen {...defaultProps} />);
+    // Annual is preselected → advertised totals + real tierPricing savings
+    expect(screen.getByText('$129.00')).toBeInTheDocument();
+    expect(screen.getByText('$279.00')).toBeInTheDocument();
+    expect(screen.getByText('Save $51/yr vs monthly')).toBeInTheDocument();
+    expect(screen.getByText('Save $81/yr vs monthly')).toBeInTheDocument();
+    // 51/14.99 ≈ 3.4 months isn't a clean number — months framing must not appear
+    expect(screen.queryByText(/months free/)).not.toBeInTheDocument();
+  });
+
+  it('shows the annual-savings nudge under monthly prices and switches back to annual', () => {
+    render(<PaywallScreen {...defaultProps} />);
+    fireEvent.click(screen.getByText('Monthly'));
+    expect(screen.getByText('$14.99')).toBeInTheDocument();
+    const coreNudge = screen.getByText('or save $51/yr with annual');
+    expect(coreNudge).toBeInTheDocument();
+    expect(screen.getByText('or save $81/yr with annual')).toBeInTheDocument();
+    // Tapping the nudge flips billing back to annual
+    fireEvent.click(coreNudge);
+    expect(screen.getByText('$129.00')).toBeInTheDocument();
   });
 
   it('renders Recommended badge on Core tier', () => {

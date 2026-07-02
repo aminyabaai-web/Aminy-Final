@@ -500,11 +500,14 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                           <span className="text-xl sm:text-2xl font-bold text-[#132F43]">Free</span>
                         ) : (
                           <>
-                            {/* Annual pricing anchor — show strikethrough monthly equivalent when yearly */}
+                            {/* Annual pricing anchor — show strikethrough monthly equivalent when yearly.
+                                Savings use the canonical tierPricing numbers ($51/$81/$121 per year).
+                                No "N months free" framing: 51/14.99 ≈ 3.4 months isn't a clean number,
+                                so dollar savings is the honest claim. Advertised totals stay exact. */}
                             {billingPeriod === 'yearly' && (() => {
                               const monthlyPrice = tierPricing[tier.id].monthly;
                               const monthlyEquivalent = (monthlyPrice * 12).toFixed(2);
-                              const savings = (monthlyPrice * 12 - price).toFixed(0);
+                              const savings = tierPricing[tier.id].savings ?? Math.round(monthlyPrice * 12 - price);
                               return (
                                 <div className="flex flex-col items-end">
                                   <span className="text-sm text-[#8A9BA8] line-through leading-none">
@@ -517,19 +520,38 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                                     <span className="text-sm text-[#5A6B7A]">/yr</span>
                                   </div>
                                   <span className="text-sm font-semibold text-[#2A7D99] leading-none mt-0.5">
-                                    Save ${savings} ({Math.floor(Number(savings) / monthlyPrice)} months free)
+                                    Save ${savings}/yr vs monthly
                                   </span>
                                 </div>
                               );
                             })()}
-                            {billingPeriod === 'monthly' && (
-                              <>
-                                <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
-                                  ${price.toFixed(2)}
-                                </span>
-                                <span className="text-sm text-[#5A6B7A]">/mo</span>
-                              </>
-                            )}
+                            {billingPeriod === 'monthly' && (() => {
+                              const savings = tierPricing[tier.id].savings
+                                ?? Math.round(tierPricing[tier.id].monthly * 12 - tierPricing[tier.id].yearly);
+                              return (
+                                <div className="flex flex-col items-end">
+                                  <div className="flex items-baseline gap-1">
+                                    <span className="text-xl sm:text-2xl font-bold text-[#132F43]">
+                                      ${price.toFixed(2)}
+                                    </span>
+                                    <span className="text-sm text-[#5A6B7A]">/mo</span>
+                                  </div>
+                                  {/* Annual nudge — real tierPricing savings, never hardcoded */}
+                                  {savings > 0 && (
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setBillingPeriod('yearly');
+                                      }}
+                                      className="text-sm font-medium text-[#2A7D99] leading-none mt-0.5 underline-offset-2 hover:underline"
+                                    >
+                                      or save ${savings}/yr with annual
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            })()}
                           </>
                         )}
                       </div>
