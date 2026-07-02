@@ -664,7 +664,11 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                   </Avatar>
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-[#6B9080] transition-colors"
+                    aria-label="Change profile photo"
+                    /* bg-[#2A7D99] instead of bg-primary: a global rule
+                       (button[class*="bg-primary"]) forces position:relative,
+                       which un-pinned this from the avatar corner. */
+                    className="absolute bottom-0 right-0 p-2 bg-[#2A7D99] text-white rounded-full shadow-lg hover:bg-[#376E80] transition-colors"
                   >
                     <Camera className="w-4 h-4" />
                   </button>
@@ -1105,7 +1109,8 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
                   </Avatar>
                   <button
                     onClick={() => childFileInputRef.current?.click()}
-                    className="absolute bottom-0 right-0 p-1.5 bg-primary text-white rounded-full shadow"
+                    aria-label="Change child photo"
+                    className="absolute bottom-0 right-0 p-1.5 bg-[#2A7D99] text-white rounded-full shadow"
                   >
                     <Camera className="w-3 h-3" />
                   </button>

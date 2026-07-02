@@ -367,7 +367,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={inviteRBT} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
+                <button
+                  onClick={inviteRBT}
+                  disabled={isSaving}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-60"
+                >
+                  {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Send Invite
                 </button>
                 <button onClick={() => setShowInviteForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
@@ -378,7 +383,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* RBT List */}
-          {data.rbts.length === 0 ? (
+          {isLoadingRoster ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
+              <Loader2 className="w-8 h-8 text-[#8A9BA8] mx-auto mb-3 animate-spin" />
+              <p className="text-sm text-[#8A9BA8]">Loading your roster…</p>
+            </div>
+          ) : rbts.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
               <Users className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
               <p className="font-medium text-[#5A6B7A]">No RBTs yet</p>
@@ -386,7 +396,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </div>
           ) : (
             <div className="space-y-3">
-              {data.rbts.map(rbt => {
+              {rbts.map(rbt => {
                 const compliance = calcSupervisionCompliance(rbt.totalDirectHours, rbt.totalSupervisionHours);
                 const isExpanded = expandedRbt === rbt.id;
 
@@ -516,7 +526,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                   className="px-3 py-2.5 border border-[#E8E4DF] rounded-lg text-sm"
                 >
                   <option value="">Select RBT...</option>
-                  {data.rbts.map(r => (
+                  {rbts.map(r => (
                     <option key={r.id} value={r.id}>{r.name}</option>
                   ))}
                 </select>
@@ -555,7 +565,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
                 />
               </div>
               <div className="flex gap-2">
-                <button onClick={addSupervisionLog} className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982]">
+                <button
+                  onClick={addSupervisionLog}
+                  disabled={isSaving}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#216982] disabled:opacity-60"
+                >
+                  {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Save Log
                 </button>
                 <button onClick={() => setShowLogForm(false)} className="px-4 py-2 text-[#5A6B7A] text-sm hover:bg-[#EDF4F7] rounded-lg">
@@ -566,14 +581,14 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* RBT Compliance Cards */}
-          {data.rbts.length === 0 ? (
+          {rbts.length === 0 ? (
             <div className="text-center py-8 text-[#8A9BA8]">
               <Clock className="w-10 h-10 mx-auto mb-2 text-[#8A9BA8]" />
               <p className="text-sm">Add RBTs to track supervision</p>
             </div>
           ) : (
             <div className="space-y-3">
-              {data.rbts.map(rbt => {
+              {rbts.map(rbt => {
                 const c = calcSupervisionCompliance(rbt.totalDirectHours, rbt.totalSupervisionHours);
                 const pct = rbt.totalDirectHours > 0 ? Math.min(100, (c.ratio / BACB_SUPERVISION_RATIO) * 100) : 0;
 
@@ -618,12 +633,12 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
           )}
 
           {/* Recent Logs */}
-          {data.logs.length > 0 && (
+          {logs.length > 0 && (
             <div>
               <h4 className="font-medium text-[#3A4A57] text-sm mb-2">Recent Logs</h4>
               <div className="space-y-2">
-                {data.logs.slice(-5).reverse().map(log => {
-                  const rbt = data.rbts.find(r => r.id === log.rbtId);
+                {logs.slice(-5).reverse().map(log => {
+                  const rbt = rbts.find(r => r.id === log.rbtId);
                   return (
                     <div key={log.id} className="flex items-center gap-3 p-3 bg-[#F6FBFB] rounded-lg text-sm">
                       <Calendar className="w-4 h-4 text-[#8A9BA8]" />
@@ -650,7 +665,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </button>
           </div>
 
-          {data.invoices.length === 0 ? (
+          {invoices.length === 0 ? (
             <div className="text-center py-12 bg-white rounded-xl border border-[#E8E4DF]">
               <FileText className="w-12 h-12 text-[#8A9BA8] mx-auto mb-3" />
               <p className="font-medium text-[#5A6B7A]">No invoices yet</p>
@@ -668,7 +683,7 @@ export function RBTManagement({ providerId }: RBTManagementProps) {
             </div>
           ) : (
             <div className="space-y-2">
-              {data.invoices.map(inv => (
+              {invoices.map(inv => (
                 <div key={inv.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#E8E4DF]">
                   <div className="flex-1">
                     <p className="font-medium text-[#132F43]">{inv.familyName}</p>
