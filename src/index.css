@@ -18559,3 +18559,26 @@ tr:hover td, .hover-row:hover {
   translate: none !important;
   overflow-y: auto;
 }
+
+/* ============================================================
+   Radix focus-guard fix (July 2026, growth work): the generic
+   backdrop rule `[role="dialog"] + * { pointer-events: auto
+   !important; z-index: 1000 !important; position: fixed
+   !important; inset: 0 !important }` (≈ line 15048) also matches
+   the invisible Radix focus-guard <span> rendered right after
+   dialog content — force-promoting it into a full-screen
+   click-eater ABOVE the dialog (its inline pointer-events:none
+   is overridden by the !important). Every tap inside an open
+   dialog hit that span (verified live via elementsFromPoint at
+   390×844). Restore the guards' inert nature.
+   ============================================================ */
+[data-radix-focus-guard] {
+  pointer-events: none !important;
+  position: fixed !important;
+  inset: auto !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 1px !important;
+  height: 0 !important;
+  z-index: 0 !important;
+}

@@ -30,10 +30,25 @@ Owner checklist. Updated: 2026-07-02. (Claude maintains this; tell it to update 
 - [ ] **One killer retention metric** — weekly check-in completion rate / AI chats per parent per week. Instrument and watch it.
 - [ ] **1–2 independent BCBAs running their practice on Aminy** — living proof of Practice-in-a-Box ("no clinic, no employer").
 
-## 5. Product blockers still open (Claude's side, tracked)
-- [ ] Provider-type live E2E results (solo BCBA / RBT / parent-link / telehealth bookability) — in flight
-- [ ] Best-in-class outcomes data presentation (parent trend view, AI-chat data answers, admin analytics) — in flight
+## 5. Product status (Claude's side)
+- [x] Provider-type live E2E — ALL PASS (solo BCBA portal, parent link + grounded AI summary, telehealth bookable to payment, RBT cockpit). Demo accounts: Dr. Demo Provider (+aminyprov1) / Riley RBT (+aminyrbt1).
+- [x] Outcomes pipeline — was silently broken in prod (check-ins 400'd, baseline faked success); fixed, migrated, seeded, trend view + AI-chat outcome data live
+- [x] Charts render inside AI chat replies ([CHART:weekly_trend] token, real data, hallucination-proof) + proactive goal coaching in prompts
+- [x] Kids/Ease: 4/10 → 6.5/10 (Bubble Pop rebuilt, sounds wired, 15 fixes); 10/10 needs content/design investment (animated mascot, real game variety, pro illustration/sound)
+- [x] Growth: share-a-win PNG cards in Wins Journal; annual-default paywall with honest savings; 2 app-wide dialog bugs fixed (off-screen modals, swallowed taps)
 - [ ] Amazon Associates tag (owner signs up at affiliate-program.amazon.com; paste tag → 1-line wire-in)
 - [ ] Network allowlist: add `aminy.ai` + `*.netlify.app` in claude.ai/code environment settings so Claude can test literal prod URLs
 - [ ] Rethink sandbox creds (vendor-blocked)
 - [ ] Clinical advisor cold-eye review before any clinical claims in the deck
+
+## 6. Next-session build list (deferred, prioritized)
+- [ ] **Cancel-flow retention offer**: paying users cancel via the Stripe Customer Portal — configure cancellation-reason collection + a retention coupon in Stripe Dashboard → Billing Portal settings (no code, 10 min, industry-standard 10-20% churn cut). The richer in-app flow exists in SubscriptionManagement.tsx but is unrouted — wire it later if portal offers underperform.
+- [ ] **"Kai's Week" digest email** — the best retention email in the category; outcome data pipeline now exists to power it
+- [ ] **D1/D7/D30 retention instrumentation** — the metric Thiel asks about; owner-facing dashboard
+- [ ] **Provider→family invite loop** — each Practice-in-a-Box BCBA brings 10-30 families; make it frictionless + measure k-factor
+- [ ] **Post-AI-answer upsell moment** ("unlock memory so Aminy never forgets this")
+- [ ] **Parent-name visibility for linked providers** — profiles RLS is owner-only so providers see "Parent: Unknown"; needs a product/RLS decision
+- [ ] **pilot_organization schema drift** — profiles column missing live; AACT/Rise partner auto-detection can't work until the pilot migration is applied or the code path is retired
+- [ ] Chat cosmetics: markdown ** renders literally in one reply path; chat history persistence logs fetch retries
+- [ ] Delete dead components (AminyJrEnhanced, JrKidMode, JrMode, JrModeActive, SubscriptionManagement-or-route-it, UpdatedPricingCards already gone)
+- [ ] Kids 10/10 content: animated buddy mascot w/ TTS, real game variety, kid-recorded celebrations, pro illustration + sound design
