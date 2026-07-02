@@ -5,6 +5,14 @@
 
 /**
  * DesktopSideNav - premium desktop shell for Aminy
+ *
+ * Brand notes (see .claude/skills/aminy-design):
+ * - Teal #2A7D99 is the single accent; navy #0D1B2A/#132F43 is ink.
+ * - Icon chips carry a soft teal tint so Lucide icons stay visible on
+ *   white cards (icons are 20px, strokeWidth 2 — set via the `size`
+ *   prop because precompiled h-5/w-5 can be overridden elsewhere).
+ * - The wordmark is lowercase "aminy" in Fredoka with the two-tone
+ *   compass (mirrors ProviderLanding's inline CompassIcon).
  */
 
 import React from 'react';
@@ -20,10 +28,29 @@ import {
   ClipboardList,
   FolderOpen,
   ChevronRight,
-  Activity,
   Video,
-  Compass,
 } from 'lucide-react';
+
+/* Inline two-tone compass — navy ring, navy + teal needle (same art as ProviderLanding) */
+function CompassIcon({ size = 32, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="32" cy="32" r="28" fill="none" stroke="#0D1B2A" strokeWidth="5" />
+      <g transform="rotate(-45 32 32)">
+        <path d="M32 32 L28 34 L32 10 L36 34 Z" fill="#0D1B2A" />
+        <path d="M32 32 L28 30 L32 54 L36 30 Z" fill="#2A7D99" />
+      </g>
+      <circle cx="32" cy="32" r="2.2" fill="#ffffff" />
+    </svg>
+  );
+}
 
 interface DesktopSideNavProps {
   currentScreen: string;
@@ -58,6 +85,10 @@ const adminItems: NavItem[] = [
   { id: 'profile', label: 'Profile', helper: 'Account and household', icon: User },
 ];
 
+/* Soft card treatment shared by the three sidebar panels */
+const cardShadow = '0 8px 24px rgba(15, 23, 42, 0.05)';
+const cardBorder = '1px solid rgba(19, 47, 67, 0.06)';
+
 function NavGroup({
   title,
   items,
@@ -70,11 +101,9 @@ function NavGroup({
   onNavigate: (screen: string) => void;
 }) {
   return (
-    <div className="space-y-2.5">
-      <div className="px-1 text-[12px] font-medium tracking-[0.01em] text-[#5A6B7A]">
-        {title}
-      </div>
-      <div className="space-y-2">
+    <div className="space-y-2">
+      <div className="px-1 text-[12px] font-medium text-[#5A6B7A]">{title}</div>
+      <div className="space-y-1">
         {items.map((item) => {
           const Icon = item.icon;
           const active = currentScreen === item.id;
@@ -85,33 +114,37 @@ function NavGroup({
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               className={[
-                'group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200',
-                active
-                  ? 'bg-[#6B9080]/10 text-[#132F43] shadow-[0_14px_32px_rgba(20,184,166,0.12)] ring-1 ring-inset ring-[#6B9080]/20/80'
-                  : 'bg-transparent text-[#3A4A57] hover:bg-white/85 hover:text-slate-950',
+                'group flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left transition-colors duration-200',
+                active ? 'text-[#132F43]' : 'text-[#3A4A57] hover:bg-[#EDF4F7]',
               ].join(' ')}
+              style={
+                active
+                  ? {
+                      background: 'rgba(42, 125, 153, 0.08)',
+                      boxShadow: 'inset 0 0 0 1px rgba(42, 125, 153, 0.2)',
+                    }
+                  : undefined
+              }
             >
               <div
                 className={[
-                  'flex h-10 w-10 items-center justify-center rounded-2xl transition-colors',
-                  active
-                    ? 'bg-primary text-white'
-                    : 'bg-white text-[#5A6B7A] shadow-sm group-hover:bg-[#6B9080]/10 group-hover:text-[#6B9080]',
+                  'flex h-10 w-10 items-center justify-center rounded-xl transition-colors',
+                  active ? 'bg-[#2A7D99] text-white' : 'bg-[#EDF4F7] text-[#2A7D99]',
                 ].join(' ')}
               >
-                <Icon className="h-5 w-5" strokeWidth={active ? 2.1 : 1.9} />
+                <Icon size={20} strokeWidth={2} style={{ width: 20, height: 20 }} />
               </div>
 
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[14px] font-semibold tracking-[-0.01em]">{item.label}</div>
-                <div className="truncate text-[12px] text-[#5A6B7A] group-hover:text-[#5A6B7A]">{item.helper}</div>
+                <div className="truncate text-[14px] font-semibold text-[#132F43]">{item.label}</div>
+                <div className="truncate text-[12px] text-[#5A6B7A]">{item.helper}</div>
               </div>
 
               <ChevronRight
-                className={[
-                  'h-4 w-4 transition-all',
-                  active ? 'translate-x-0 text-primary' : 'text-slate-400 group-hover:translate-x-0.5 group-hover:text-[#5A6B7A]',
-                ].join(' ')}
+                size={16}
+                strokeWidth={2}
+                style={{ width: 16, height: 16 }}
+                className={['transition-colors', active ? 'text-[#2A7D99]' : 'text-slate-400'].join(' ')}
               />
             </button>
           );
@@ -122,77 +155,104 @@ function NavGroup({
 }
 
 export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopSideNavProps) {
+  const displayName = userName || 'Your household';
+  const initial = displayName.trim().charAt(0).toUpperCase() || 'A';
+
   return (
     <nav
-      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto border-r border-[#E8E4DF]/50 px-5 pb-5 pt-6 text-[#132F43] md:flex"
+      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto px-5 pb-5 pt-6 text-[#132F43] md:flex"
       style={{
-        background:
-          'radial-gradient(circle at top left, rgba(45, 212, 191, 0.16), transparent 24%), linear-gradient(180deg, #f8fbfb 0%, #f1f7f8 46%, #eef4f8 100%)',
+        background: 'linear-gradient(180deg, #F6FBFB 0%, #EDF4F7 100%)',
+        borderRight: '1px solid rgba(19, 47, 67, 0.06)',
       }}
       aria-label="Desktop navigation"
     >
-      <div className="flex min-h-full w-full flex-col gap-5">
-        <div
-          className="rounded-[28px] border border-white/90 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl"
-          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.86))' }}
-        >
-          <div className="min-w-0">
-            <div className="inline-flex rounded-full bg-[#6B9080]/10 px-3 py-1.5 text-xs font-medium tracking-[0.02em] text-[#6B9080]">
-              Caregiver companion
+      <div className="flex min-h-full w-full flex-col gap-3">
+        {/* Brand lockup */}
+        <div className="rounded-[24px] bg-white p-5" style={{ border: cardBorder, boxShadow: cardShadow }}>
+          <div className="inline-flex rounded-full bg-[#2A7D99]/10 px-3 py-1 text-xs font-medium text-[#2A7D99]">
+            Caregiver companion
+          </div>
+
+          <div className="mt-4 flex items-center gap-3">
+            <div
+              className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-[20px] bg-white"
+              style={{ border: '1px solid rgba(19, 47, 67, 0.08)', boxShadow: '0 4px 12px rgba(15, 23, 42, 0.06)' }}
+            >
+              <CompassIcon size={34} />
             </div>
-            <div className="mt-4 flex items-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] shadow-[0_12px_28px_rgba(45,212,191,0.2)]">
-                <Compass className="h-7 w-7 text-white" strokeWidth={2} aria-label="Aminy" />
+            <div className="min-w-0">
+              <div
+                className="text-[28px] text-[#0D1B2A]"
+                style={{ fontFamily: "'Fredoka', 'Schibsted Grotesk', sans-serif", fontWeight: 600, lineHeight: 1.1 }}
+              >
+                aminy
               </div>
-              <div className="min-w-0">
-                <div className="text-[1.75rem] font-semibold tracking-[-0.05em] text-slate-950">Aminy</div>
-                <div className="text-xs uppercase tracking-[0.16em] text-[#5A6B7A]">
-                  Gentle guidance. Meaningful progress.
-                </div>
-                <div className="mt-1 text-[13px] leading-5 text-[#5A6B7A]">
-                  Calm guidance, care access, and progress your family can actually use.
-                </div>
+              <div className="mt-1 text-[12px] italic text-[#5A6B7A]">
+                Gentle guidance. Meaningful progress.
               </div>
             </div>
           </div>
 
           <div className="mt-4 grid grid-cols-2 gap-2.5">
-            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-sm font-medium text-[#5A6B7A]">Access</div>
-              <div className="mt-1 text-[14px] font-semibold text-[#132F43]">AZ · MT · TX</div>
-              <div className="text-[12px] text-[#5A6B7A]">Supported telehealth states</div>
-            </div>
-            <div className="rounded-2xl bg-white/85 p-3 ring-1 ring-inset ring-slate-200/70">
-              <div className="text-sm font-medium text-[#5A6B7A]">Focus</div>
-              <div className="mt-1 flex items-center gap-1.5 text-[14px] font-semibold text-[#132F43]">
-                <Activity className="h-3.5 w-3.5 text-[#6B9080]" />
-                Live workflow
+            <div
+              className="rounded-2xl bg-white p-3"
+              style={{ boxShadow: 'inset 0 0 0 1px rgba(19, 47, 67, 0.08)' }}
+            >
+              <div className="text-[12px] font-medium text-[#5A6B7A]">Access</div>
+              <div
+                className="mt-1 whitespace-nowrap text-[13px] font-semibold text-[#132F43]"
+                style={{ letterSpacing: '0.05em' }}
+              >
+                AZ&thinsp;·&thinsp;MT&thinsp;·&thinsp;TX
               </div>
-              <div className="text-[12px] text-[#5A6B7A]">Guidance, care access, records</div>
+              <div className="mt-0.5 text-[12px] text-[#5A6B7A]">Telehealth states</div>
+            </div>
+            <div
+              className="rounded-2xl bg-white p-3"
+              style={{ boxShadow: 'inset 0 0 0 1px rgba(19, 47, 67, 0.08)' }}
+            >
+              <div className="text-[12px] font-medium text-[#5A6B7A]">Companion</div>
+              <div className="mt-1 flex items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold text-[#132F43]">
+                <Sparkles size={14} strokeWidth={2} style={{ width: 14, height: 14 }} className="text-[#2A7D99]" />
+                Aminy AI
+              </div>
+              <div className="mt-0.5 text-[12px] text-[#5A6B7A]">Always-on support</div>
             </div>
           </div>
         </div>
 
-        <div
-          className="flex-1 rounded-[28px] border border-white/90 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.08)] backdrop-blur-xl"
-          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.82), rgba(247,251,251,0.74))' }}
-        >
-          <div className="space-y-6">
+        {/* Navigation */}
+        <div className="flex-1 rounded-[24px] bg-white p-3" style={{ border: cardBorder, boxShadow: cardShadow }}>
+          <div className="space-y-4">
             <NavGroup title="Companion" items={companionItems} currentScreen={currentScreen} onNavigate={onNavigate} />
             <NavGroup title="Support" items={supportItems} currentScreen={currentScreen} onNavigate={onNavigate} />
             <NavGroup title="Account" items={adminItems} currentScreen={currentScreen} onNavigate={onNavigate} />
           </div>
         </div>
 
-        <div
-          className="rounded-[24px] border border-white/90 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.08)]"
-          style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,252,252,0.84))' }}
-        >
-          <div className="text-sm font-medium text-[#5A6B7A]">Signed in</div>
-          <div className="mt-2 text-[15px] font-semibold text-slate-950">{userName || 'Your household'}</div>
-          <div className="mt-1 text-[12px] leading-5 text-[#5A6B7A]">
-            Guidance, telehealth, and records stay in one calmer place.
+        {/* Signed-in footer */}
+        <div className="rounded-[24px] bg-white p-4" style={{ border: cardBorder, boxShadow: cardShadow }}>
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#EDF4F7] text-[14px] font-semibold text-[#2A7D99]"
+              aria-hidden="true"
+            >
+              {initial}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[11px] font-medium text-[#5A6B7A]">Signed in</div>
+              <div className="truncate text-[15px] font-semibold text-[#0D1B2A]">{displayName}</div>
+            </div>
           </div>
+          <button
+            type="button"
+            onClick={() => onNavigate('settings')}
+            className="mt-3 inline-flex items-center gap-1 text-[13px] font-medium text-[#2A7D99] hover:text-[#2A7D99]"
+          >
+            Manage account
+            <ChevronRight size={14} strokeWidth={2} style={{ width: 14, height: 14 }} />
+          </button>
         </div>
       </div>
     </nav>

@@ -615,13 +615,16 @@ async function fetchAndReportUsage(
   onUsageUpdate: (usage: DailyUsageInfo) => void
 ): Promise<void> {
   try {
+    // /ai/usage needs the user JWT, not the anon key (anon-only 401s).
+    const { data: sessionData } = await supabase.auth.getSession();
+    const usageToken = sessionData?.session?.access_token || publicAnonKey;
     const response = await fetchWithTimeoutAndRetry(
       `https://${projectId}.supabase.co/functions/v1/make-server-8a022548/ai/usage`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${publicAnonKey}`,
+          'Authorization': `Bearer ${usageToken}`,
         },
       },
       { timeout: 5000, maxRetries: 1 }
