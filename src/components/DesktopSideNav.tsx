@@ -66,23 +66,26 @@ interface NavItem {
 }
 
 const companionItems: NavItem[] = [
-  { id: 'home', label: 'Home', helper: 'Today and next steps', icon: Home },
-  { id: 'care-plan', label: 'My Plan', helper: 'Goals, routines & progress', icon: Heart },
-  { id: 'ask-aminy', label: 'Aminy', helper: 'AI guidance and memory', icon: Sparkles },
-  { id: 'telehealth', label: 'Care', helper: 'Book visits with experts', icon: Video },
-  { id: 'junior', label: 'Ease', helper: 'Calm, rewards, transitions', icon: Baby },
+  // NOTE: ids must be valid AppScreen values in App.tsx — 'home' and
+  // 'document-vault' were dead links (the real screens are 'dashboard'
+  // and 'vault').
+  { id: 'dashboard', label: 'Home', helper: 'Today and next steps', icon: Home },
+  { id: 'care-plan', label: 'My Plan', helper: 'Goals & routines', icon: Heart },
+  { id: 'ask-aminy', label: 'Aminy', helper: 'Guidance & memory', icon: Sparkles },
+  { id: 'telehealth', label: 'Care', helper: 'Book expert visits', icon: Video },
+  { id: 'junior', label: 'Ease', helper: 'Calm & rewards', icon: Baby },
 ];
 
 const supportItems: NavItem[] = [
   { id: 'messages', label: 'Messages', helper: 'Care team and family', icon: MessageCircle },
-  { id: 'incident-log', label: 'Incident Log', helper: 'Capture what happened', icon: ClipboardList },
-  { id: 'document-vault', label: 'Document Vault', helper: 'Records and uploads', icon: FolderOpen },
+  { id: 'incident-log', label: 'Incident Log', helper: 'Log what happened', icon: ClipboardList },
+  { id: 'vault', label: 'Document Vault', helper: 'Records and uploads', icon: FolderOpen },
   { id: 'crisis-resources', label: 'Crisis Help', helper: 'Immediate support', icon: Shield },
 ];
 
 const adminItems: NavItem[] = [
-  { id: 'settings', label: 'Settings', helper: 'Preferences and controls', icon: Settings },
-  { id: 'profile', label: 'Profile', helper: 'Account and household', icon: User },
+  { id: 'settings', label: 'Settings', helper: 'App preferences', icon: Settings },
+  { id: 'profile', label: 'Profile', helper: 'Account & household', icon: User },
 ];
 
 /* Soft card treatment shared by the three sidebar panels */
@@ -114,7 +117,7 @@ function NavGroup({
               onClick={() => onNavigate(item.id)}
               aria-current={active ? 'page' : undefined}
               className={[
-                'group flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left transition-colors duration-200',
+                'group flex w-full items-center gap-3 rounded-2xl px-2 py-2 text-left transition-colors duration-200',
                 active ? 'text-[#132F43]' : 'text-[#3A4A57] hover:bg-[#EDF4F7]',
               ].join(' ')}
               style={
@@ -160,7 +163,7 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
 
   return (
     <nav
-      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto px-5 pb-5 pt-6 text-[#132F43] md:flex"
+      className="sticky top-0 hidden h-screen min-h-screen w-[296px] flex-shrink-0 overflow-y-auto px-4 pb-5 pt-6 text-[#132F43] md:flex"
       style={{
         background: 'linear-gradient(180deg, #F6FBFB 0%, #EDF4F7 100%)',
         borderRight: '1px solid rgba(19, 47, 67, 0.06)',
@@ -169,7 +172,7 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
     >
       <div className="flex min-h-full w-full flex-col gap-3">
         {/* Brand lockup */}
-        <div className="rounded-[24px] bg-white p-5" style={{ border: cardBorder, boxShadow: cardShadow }}>
+        <div className="rounded-[24px] bg-white p-4" style={{ border: cardBorder, boxShadow: cardShadow }}>
           <div className="inline-flex rounded-full bg-[#2A7D99]/10 px-3 py-1 text-xs font-medium text-[#2A7D99]">
             Caregiver companion
           </div>
@@ -194,30 +197,28 @@ export function DesktopSideNav({ currentScreen, onNavigate, userName }: DesktopS
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2.5">
-            <div
-              className="rounded-2xl bg-white p-3"
-              style={{ boxShadow: 'inset 0 0 0 1px rgba(19, 47, 67, 0.08)' }}
-            >
-              <div className="text-[12px] font-medium text-[#5A6B7A]">Access</div>
-              <div
-                className="mt-1 whitespace-nowrap text-[13px] font-semibold text-[#132F43]"
-                style={{ letterSpacing: '0.05em' }}
+          <div
+            className="mt-4 rounded-2xl bg-white p-3"
+            style={{ boxShadow: 'inset 0 0 0 1px rgba(19, 47, 67, 0.08)' }}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="whitespace-nowrap text-[12px] text-[#5A6B7A]">Telehealth states</span>
+              <span
+                className="whitespace-nowrap text-[12px] font-semibold text-[#132F43]"
+                style={{ letterSpacing: '0.04em' }}
               >
-                AZ&thinsp;·&thinsp;MT&thinsp;·&thinsp;TX
-              </div>
-              <div className="mt-0.5 text-[12px] text-[#5A6B7A]">Telehealth states</div>
+                AZ · MT · TX
+              </span>
             </div>
             <div
-              className="rounded-2xl bg-white p-3"
-              style={{ boxShadow: 'inset 0 0 0 1px rgba(19, 47, 67, 0.08)' }}
+              className="mt-2 flex items-center justify-between gap-2 pt-2"
+              style={{ borderTop: '1px solid rgba(19, 47, 67, 0.06)' }}
             >
-              <div className="text-[12px] font-medium text-[#5A6B7A]">Companion</div>
-              <div className="mt-1 flex items-center gap-1.5 whitespace-nowrap text-[13px] font-semibold text-[#132F43]">
-                <Sparkles size={14} strokeWidth={2} style={{ width: 14, height: 14 }} className="text-[#2A7D99]" />
-                Aminy AI
-              </div>
-              <div className="mt-0.5 text-[12px] text-[#5A6B7A]">Always-on support</div>
+              <span className="whitespace-nowrap text-[12px] text-[#5A6B7A]">Companion</span>
+              <span className="flex items-center gap-1.5 whitespace-nowrap text-[12px] font-semibold text-[#132F43]">
+                <Sparkles size={13} strokeWidth={2} style={{ width: 13, height: 13 }} className="text-[#2A7D99]" />
+                Always-on AI
+              </span>
             </div>
           </div>
         </div>
