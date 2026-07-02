@@ -459,7 +459,9 @@ function TierCardView({
         disabled={loading || tier.ctaDisabled || tier.ctaCurrent}
         className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all mb-5 flex items-center justify-center gap-1.5 ${
           tier.ctaCurrent
-            ? 'bg-white border-2 border-[#E8E4DF] text-slate-400 cursor-default'
+            // Clearly-visible inactive style — white bg + slate-400 text was
+            // nearly invisible against the card.
+            ? 'bg-slate-100 border border-slate-200 text-slate-500 cursor-default'
             : tier.featured
               ? 'text-white shadow-md hover:shadow-lg'
               : 'bg-slate-900 text-white hover:bg-slate-800'
