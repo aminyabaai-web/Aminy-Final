@@ -949,7 +949,7 @@ export function TreatmentPlanEditor({
 
           {/* 1. Client Header */}
           <Section title="Client Information" icon={<User className="w-5 h-5" />}>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Field label="Client Name" required>
                 <input type="text" value={plan.clientName} onChange={e => updatePlan({ clientName: e.target.value })} disabled={plan.isFinalized} placeholder="Full name" className={inputCls} />
               </Field>
@@ -957,7 +957,7 @@ export function TreatmentPlanEditor({
                 <input type="date" value={plan.clientDOB} onChange={e => updatePlan({ clientDOB: e.target.value })} disabled={plan.isFinalized} className={inputCls} />
               </Field>
               <Field label="Diagnosis (ICD-10)" required>
-                <input type="text" value={plan.diagnosis} onChange={e => updatePlan({ diagnosis: e.target.value })} disabled={plan.isFinalized} placeholder="e.g., F84.0 — Autistic Disorder" className={inputCls} />
+                <input type="text" value={plan.diagnosis} onChange={e => updatePlan({ diagnosis: e.target.value })} disabled={plan.isFinalized} placeholder="e.g., F84.0" className={inputCls} />
               </Field>
               <Field label="Funding Source">
                 <select value={plan.fundingSource} onChange={e => updatePlan({ fundingSource: e.target.value as TreatmentPlanData['fundingSource'] })} disabled={plan.isFinalized} className={selectCls}>

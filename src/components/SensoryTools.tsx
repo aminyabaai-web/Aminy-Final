@@ -566,36 +566,36 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
       id: 'fluid-swirl' as ToolType,
       name: 'Fluid Swirl',
       description: 'Touch and swirl colorful, flowing particles',
-      icon: <Waves className="w-8 h-8" />,
-      color: 'from-cyan-400 to-blue-500'
+      icon: <Waves className="w-6 h-6" />,
+      chip: 'bg-cyan-50 text-cyan-600'
     },
     {
       id: 'bubble-pop' as ToolType,
       name: 'Bubble Pop',
       description: 'Pop floating bubbles for tactile feedback',
-      icon: <Circle className="w-8 h-8" />,
-      color: 'from-purple-400 to-pink-500'
+      icon: <Circle className="w-6 h-6" />,
+      chip: 'bg-purple-50 text-purple-600'
     },
     {
       id: 'fidget-spinner' as ToolType,
       name: 'Fidget Spinner',
       description: 'Spin and watch it gradually slow down',
-      icon: <RotateCw className="w-8 h-8" />,
-      color: 'from-orange-400 to-red-500'
+      icon: <RotateCw className="w-6 h-6" />,
+      chip: 'bg-orange-50 text-orange-600'
     },
     {
       id: 'breathe-glow' as ToolType,
       name: 'Breathe Glow',
       description: 'Follow the glowing circle to calm breathing',
-      icon: <Wind className="w-8 h-8" />,
-      color: 'from-green-400 to-teal-500'
+      icon: <Wind className="w-6 h-6" />,
+      chip: 'bg-teal-50 text-teal-600'
     }
   ];
 
   // Tool selection view
   if (!selectedTool) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 via-white to-blue-50">
+      <div className="min-h-screen bg-[#F6FBFB]">
         {/* Header */}
         <div className="bg-white/80 backdrop-blur-sm border-b border-[#E8E4DF] px-4 py-4 sticky top-0 z-10">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
@@ -627,7 +627,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
             >
-              <Card className="p-4 bg-white/80 border-purple-200">
+              <Card className="p-4 bg-white border-[#E8E4DF]">
                 <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
                   <Settings className="w-4 h-4" />
                   Accessibility Settings
@@ -667,15 +667,15 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
           )}
 
           {/* Info Banner */}
-          <Card className="p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+          <Card className="p-4 bg-white border-[#E8E4DF]">
             <div className="flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+              <Sparkles className="w-5 h-5 text-[#2A7D99] mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-sm text-[#3A4A57] mb-1">
                   These tools help with sensory regulation and calming
                 </p>
                 <p className="text-sm text-[#5A6B7A]">
-                  Each session is 90 seconds. Complete a full session to earn a star! ⭐
+                  Each session is 90 seconds. Complete a full session to earn a star.
                 </p>
               </div>
             </div>
@@ -687,12 +687,11 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
               <button
                 key={tool.id}
                 onClick={() => handleStartTool(tool.id)}
-                className="group relative overflow-hidden rounded-2xl border-2 border-[#E8E4DF] bg-white hover:border-purple-400 transition-all hover:shadow-lg"
+                className="group relative overflow-hidden rounded-2xl border border-[#E8E4DF] bg-white hover:border-[#2A7D99] transition-all hover:shadow-lg"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${tool.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
                 <div className="relative p-6">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3">
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center text-white`}>
+                    <div className={`w-12 h-12 rounded-xl ${tool.chip} flex items-center justify-center flex-shrink-0`}>
                       {tool.icon}
                     </div>
                     <div className="flex-1 text-left">
@@ -700,7 +699,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                       <p className="text-sm text-[#5A6B7A]">{tool.description}</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="border-purple-300 text-purple-700">
+                  <Badge variant="outline" className="border-[#E8E4DF] text-[#5A6B7A]">
                     <Star className="w-3 h-3 mr-1" />
                     90 seconds
                   </Badge>

@@ -2486,7 +2486,8 @@ export default function CredentialingSupportCenter({
 
       {/* Tab Bar */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 pb-3">
-        <div className="flex overflow-x-auto gap-1 -mx-1 px-1 pb-1 scrollbar-hide">
+        {/* Single-row horizontal scroll; bleed to the viewport edge so a cut pill peeks (scroll affordance) */}
+        <div className="flex flex-nowrap overflow-x-auto gap-1 -mx-4 px-4 pr-6 pb-1 scrollbar-hide">
           {TABS.map((tab) => {
             const badge = tabBadges[tab.id];
             const isActive = activeTab === tab.id;

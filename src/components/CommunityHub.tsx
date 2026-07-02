@@ -298,7 +298,7 @@ const POST_CATEGORIES: { id: PostCategory; name: string; icon: React.ReactNode; 
   { id: 'tips', name: 'Tips', icon: <Sparkles className="w-4 h-4" />, color: 'bg-green-100 text-green-700' },
   { id: 'support', name: 'Support', icon: <Heart className="w-4 h-4" />, color: 'bg-pink-100 text-pink-700' },
   { id: 'resources', name: 'Resources', icon: <Bookmark className="w-4 h-4" />, color: 'bg-violet-100 text-violet-700' },
-  { id: 'bcba-qa', name: 'Ask a specialist', icon: <Award className="w-4 h-4" />, color: 'bg-[#6B9080]/10 text-[#6B9080]' },
+  { id: 'bcba-qa', name: 'Ask-a-Behaviorist', icon: <Award className="w-4 h-4" />, color: 'bg-[#6B9080]/10 text-[#6B9080]' },
 ];
 
 export function CommunityHub({
@@ -1001,20 +1001,25 @@ export function CommunityHub({
             </Button>
           </div>
 
-          {/* View Tabs */}
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          {/* View Tabs — single-row horizontal scroll; edge bleed so a cut tab peeks (scroll affordance).
+              Active tab is the soft/tinted style so the solid-teal "New Post" CTA stays the only solid teal. */}
+          <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 pr-6">
             {[
               { id: 'feed', name: 'Feed', icon: <MessageCircle className="w-4 h-4" /> },
               { id: 'groups', name: 'Groups', icon: <Users className="w-4 h-4" /> },
               { id: 'events', name: 'Events', icon: <Calendar className="w-4 h-4" /> },
-              { id: 'bcba-qa', name: 'Ask a specialist', icon: <Award className="w-4 h-4" /> },
+              { id: 'bcba-qa', name: 'Ask-a-Behaviorist', icon: <Award className="w-4 h-4" /> },
             ].map((tab) => (
               <Button
                 key={tab.id}
-                variant={view === tab.id ? 'default' : 'outline'}
+                variant="outline"
                 size="sm"
                 onClick={() => setView(tab.id as CommunityView)}
-                className="flex items-center gap-1.5 shrink-0"
+                className={`inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap ${
+                  view === tab.id
+                    ? 'border-[#2A7D99]/30 bg-[#2A7D99]/10 text-[#2A7D99] hover:bg-[#2A7D99]/20 dark:border-teal-700 dark:bg-teal-900/30 dark:text-teal-300'
+                    : ''
+                }`}
               >
                 {tab.icon}
                 {tab.name}
@@ -1041,10 +1046,11 @@ export function CommunityHub({
                   className="pl-10"
                 />
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-2">
+              <div className="flex flex-nowrap gap-2 overflow-x-auto scrollbar-hide pb-2 -mx-4 px-4 pr-6">
                 <Button
                   variant={selectedCategory === 'all' ? 'default' : 'outline'}
                   size="sm"
+                  className="shrink-0 whitespace-nowrap"
                   onClick={() => setSelectedCategory('all')}
                 >
                   All
@@ -1055,7 +1061,7 @@ export function CommunityHub({
                     variant={selectedCategory === cat.id ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => setSelectedCategory(cat.id)}
-                    className="flex items-center gap-1.5 shrink-0"
+                    className="inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                   >
                     {cat.icon}
                     {cat.name}

@@ -337,7 +337,7 @@ interface CashPayPricingProps {
 
 export default function CashPayPricing({
   initialCategory = 'aba',
-  initialTier = 'starter',
+  initialTier = 'core',
   onBook,
 }: CashPayPricingProps) {
   const [category, setCategory] = useState<ServiceCategory>(initialCategory);

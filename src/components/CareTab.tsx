@@ -1053,7 +1053,7 @@ export function CareTab({ userTier, childName = 'your child', onNavigate, onPayw
                 Work directly with certified developmental specialists on {childName || 'your child'}'s plan
               </p>
               <ul className="text-sm text-purple-700 space-y-1 text-left mb-4">
-                <li>• Direct messaging with BCBA-certified coaches</li>
+                <li>• Direct messaging with certified behavior coaches</li>
                 <li>• 25 &amp; 50-minute video coaching sessions</li>
                 <li>• Personalized strategy development</li>
                 <li>• Session summaries with actionable next steps</li>

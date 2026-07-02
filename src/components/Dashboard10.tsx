@@ -998,7 +998,8 @@ export function Dashboard10({
               <button
                 type="button"
                 onClick={() => onNavigate?.('profile')}
-                aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
+                aria-label={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name} — opens profile`}
+                title={child.photoUrl ? `${child.name}'s photo — edit profile` : `Add a photo for ${child.name}`}
                 className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-sm overflow-hidden"
                 style={{ background: 'linear-gradient(135deg, #2A7D99, #4795AE)', border: 'none', cursor: 'pointer' }}
               >
@@ -1009,15 +1010,18 @@ export function Dashboard10({
                 )}
               </button>
               {!child.photoUrl && (
+                // Decorative "+" (add-photo affordance). The 48px avatar button above
+                // is the actual tap target and carries the accessible name/title.
                 <span
                   aria-hidden
                   style={{
-                    position: 'absolute', bottom: -2, right: -2,
-                    width: 16, height: 16, borderRadius: 9999,
+                    position: 'absolute', bottom: -3, right: -3,
+                    width: 18, height: 18, borderRadius: 9999,
                     background: '#fff', color: '#2A7D99',
-                    fontSize: 12, lineHeight: '14px', fontWeight: 700,
+                    fontSize: 13, lineHeight: '16px', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     boxShadow: '0 1px 2px rgba(15,23,42,0.2)',
+                    pointerEvents: 'none',
                   }}
                 >+</span>
               )}

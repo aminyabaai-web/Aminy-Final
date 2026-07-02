@@ -14,7 +14,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Shield, AlertCircle, Lock } from 'lucide-react';
+import { Shield, AlertCircle, Smartphone } from 'lucide-react';
 import { verifyMFALogin } from '../lib/mfa';
 
 interface MFAVerificationProps {
@@ -86,7 +86,7 @@ export function MFAVerification({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen flex items-center justify-center p-6"
-      style={{ backgroundColor: '#F5F5F5' }}
+      style={{ backgroundColor: '#F6FBFB' }}
     >
       <div
         className="w-full max-w-md rounded-2xl p-8"
@@ -135,7 +135,7 @@ export function MFAVerification({
               maxLength={6}
               className="w-full h-14 text-center text-2xl font-mono tracking-widest rounded-xl"
               style={{
-                backgroundColor: '#F5F5F5',
+                backgroundColor: '#F6FBFB',
                 border: error ? '2px solid #F44336' : '2px solid transparent',
               }}
               autoFocus
@@ -180,8 +180,8 @@ export function MFAVerification({
 
           {/* Help Text */}
           <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(13, 27, 42, 0.1)' }}>
-            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F5F5F5' }}>
-              <Lock className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#2A7D99' }} />
+            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F6FBFB' }}>
+              <Smartphone className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: '#2A7D99' }} />
               <div>
                 <p className="text-sm" style={{ color: '#0D1B2A', opacity: 0.7 }}>
                   Open your authenticator app (Google Authenticator, Authy, or 1Password)

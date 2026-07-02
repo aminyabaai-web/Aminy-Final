@@ -115,7 +115,7 @@ const DEMO_STEPS: DemoStep[] = [
   {
     id: 'paywall',
     title: '7. Revenue Model',
-    description: '$14.99-$49.99/mo families + $99/mo providers + $50-125/visit telehealth + payer contracts.',
+    description: '$14.99-$49.99/mo families + $89/mo providers + $50-125/visit telehealth + payer contracts.',
     targetScreen: 'paywall',
     highlight: 'Freemium converts at 14%. B2B provider SaaS is 90% margin.',
     talkingPoints: [

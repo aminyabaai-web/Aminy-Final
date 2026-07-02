@@ -44,6 +44,15 @@ import {
   type TierType,
 } from './tier-utils';
 import { PRICING_TIERS, type SubscriptionTier } from './billing-engine';
+import { B2B_PLANS, calculateB2BPrice, type B2BPlanType } from './b2b-checkout';
+import {
+  SEAT_PRICE_LADDER,
+  MIN_SEATS,
+  ANNUAL_DISCOUNT as ORG_ANNUAL_DISCOUNT,
+  getSeatPriceCents,
+} from './org-licensing';
+import { MEMBERSHIP_DISCOUNTS } from './pricing/cash-pay-pricing';
+import { TIER_LIMITS as MEMORY_TIER_LIMITS } from './memory-system';
 
 // billing-engine's PricingTier.id uses 'pro_plus'; tier-utils uses 'proplus'.
 function toTierType(id: SubscriptionTier): TierType {
@@ -171,5 +180,92 @@ describe('tier-config consistency: pinned CANONICAL FACTS', () => {
     expect(getMaxChildren('starter')).toBe(getMaxChildren('core'));
     expect(getMarketplaceDiscount('starter')).toBe(getMarketplaceDiscount('core'));
     expect(getEnforcedAIMessageLimit('starter')).toBe(getEnforcedAIMessageLimit('core'));
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// B2B seat pricing: b2b-checkout MUST derive from org-licensing SEAT_PRICE_LADDER
+// (it used to carry its own contradictory $59.99/$29.99/$24.99 table).
+// ─────────────────────────────────────────────────────────────────────────────
+describe('tier-config consistency: b2b-checkout ⟷ org-licensing seat ladder', () => {
+  const NON_ENTERPRISE: B2BPlanType[] = ['clinic', 'school', 'agency'];
+
+  it('SEAT_PRICE_LADDER is the pinned canonical ladder ($89/79/69/59/49, MIN_SEATS=1, 15% annual)', () => {
+    expect(MIN_SEATS).toBe(1);
+    expect(ORG_ANNUAL_DISCOUNT).toBe(0.15);
+    expect(getSeatPriceCents(1)).toBe(8900);
+    expect(getSeatPriceCents(2)).toBe(7900);
+    expect(getSeatPriceCents(3)).toBe(6900);
+    expect(getSeatPriceCents(4)).toBe(5900);
+    expect(getSeatPriceCents(5)).toBe(4900);
+    expect(getSeatPriceCents(50)).toBe(4900); // 5+ rung applies to all larger counts
+    expect(SEAT_PRICE_LADDER.length).toBe(5);
+  });
+
+  it.each(NON_ENTERPRISE)('%s plan: minSeats is MIN_SEATS (1)', (plan) => {
+    expect(B2B_PLANS[plan].minSeats).toBe(MIN_SEATS);
+  });
+
+  it.each(NON_ENTERPRISE)('%s plan: monthly per-seat price follows the ladder for 1–6 seats', (plan) => {
+    for (let seats = 1; seats <= 6; seats++) {
+      const pricing = calculateB2BPrice(plan, seats, 'monthly');
+      const expectedPerSeat = getSeatPriceCents(seats) / 100;
+      expect(pricing.perSeat).toBeCloseTo(expectedPerSeat, 6);
+      expect(pricing.total).toBeCloseTo(expectedPerSeat * seats, 6);
+      expect(pricing.savings).toBe(0);
+    }
+  });
+
+  it.each(NON_ENTERPRISE)('%s plan: annual applies the 15% ORG_ANNUAL_DISCOUNT to the ladder rate', (plan) => {
+    for (let seats = 1; seats <= 6; seats++) {
+      const monthlyPerSeat = getSeatPriceCents(seats) / 100;
+      const pricing = calculateB2BPrice(plan, seats, 'annual');
+      const expectedPerSeat = monthlyPerSeat * (1 - ORG_ANNUAL_DISCOUNT);
+      expect(pricing.perSeat).toBeCloseTo(expectedPerSeat, 6);
+      expect(pricing.total).toBeCloseTo(expectedPerSeat * seats * 12, 6);
+      expect(pricing.savings).toBeCloseTo((monthlyPerSeat - expectedPerSeat) * seats * 12, 6);
+    }
+  });
+
+  it('enterprise plan is custom-priced (zeros)', () => {
+    expect(calculateB2BPrice('enterprise', 500, 'monthly')).toEqual({ perSeat: 0, total: 0, savings: 0 });
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Cash-pay membership cards: MEMBERSHIP_DISCOUNTS MUST match tier-utils.
+// The stale 'starter' $6.99/5% row was removed (Starter is a dead legacy alias).
+// ─────────────────────────────────────────────────────────────────────────────
+describe('tier-config consistency: cash-pay MEMBERSHIP_DISCOUNTS ⟷ tier-utils', () => {
+  it('has no "starter" row (removed legacy alias)', () => {
+    expect(MEMBERSHIP_DISCOUNTS.find((m) => (m.tier as string) === 'starter')).toBeUndefined();
+    expect(MEMBERSHIP_DISCOUNTS.map((m) => m.tier)).toEqual(['core', 'pro']);
+  });
+
+  it.each(['core', 'pro'] as const)('%s row matches tierPricing monthly + getMarketplaceDiscount', (tier) => {
+    const row = MEMBERSHIP_DISCOUNTS.find((m) => m.tier === tier);
+    expect(row).toBeDefined();
+    // Read the SOURCE OF TRUTH live so this can't drift.
+    expect(row!.monthlyPrice).toBe(tierPricing[tier].monthly);
+    expect(row!.discountPct).toBe(getMarketplaceDiscount(tier));
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// memory-system TIER_LIMITS: messagesPerDay MUST equal the ENFORCED send-path
+// limit (free 3, paid FAIR_USE_AI_DAILY_CAP=100) and maxFacts MUST mirror
+// getTierLimits().memoryFacts (null = unlimited → Infinity).
+// ─────────────────────────────────────────────────────────────────────────────
+describe('tier-config consistency: memory-system TIER_LIMITS ⟷ tier-utils', () => {
+  const ALL_TIERS: TierType[] = ['free', 'starter', 'core', 'pro', 'proplus'];
+
+  it.each(ALL_TIERS)('%s messagesPerDay equals getEnforcedAIMessageLimit', (tier) => {
+    expect(MEMORY_TIER_LIMITS[tier].messagesPerDay).toBe(getEnforcedAIMessageLimit(tier));
+  });
+
+  it.each(ALL_TIERS)('%s maxFacts mirrors getTierLimits().memoryFacts (null → Infinity)', (tier) => {
+    const canonical = getTierLimits(tier).memoryFacts;
+    const expected = canonical === null ? Infinity : canonical;
+    expect(MEMORY_TIER_LIMITS[tier].maxFacts).toBe(expected);
   });
 });

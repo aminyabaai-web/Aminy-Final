@@ -341,7 +341,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
     state: 'limited_launch',
     badgeLabel: `Live in ${SUPPORTED_PROVIDER_STATE_LABEL}`,
     message:
-      'Provider discovery is live only in supported provider states with verified licensed supply. Aminy does not show mock provider density or fake in-network reach.',
+      "We only show you real providers with real availability — we're live in AZ, MT, TX, FL & NV and adding states fast.",
     audienceScope: {
       states: SUPPORTED_MARKET_STATES,
     },
@@ -353,7 +353,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
     state: 'limited_launch',
     badgeLabel: `Live in ${SUPPORTED_PROVIDER_STATE_LABEL}`,
     message:
-      'Urgent telehealth is available only in supported provider states when a verified licensed clinician is actually available. Unsupported states should fall back to Aminy guidance until supply expands.',
+      "On-demand visits connect you with a licensed clinician in AZ, MT, TX, FL & NV. If they aren't in your state quite yet, Aminy can still guide you right now — and we'll let you know the moment visits open near you.",
     audienceScope: {
       states: SUPPORTED_MARKET_STATES,
     },

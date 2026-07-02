@@ -233,7 +233,7 @@ export function ImpactMetricsDashboard({
       case 'down':
         return <ArrowDownRight className="w-4 h-4 text-red-500" />;
       default:
-        return <Minus className="w-4 h-4 text-[#8A9BA8]" />;
+        return <Minus className="w-4 h-4 text-[#8A9BA8]" role="img" aria-label="no change" />;
     }
   };
 
@@ -302,7 +302,7 @@ export function ImpactMetricsDashboard({
       </div>
 
       {/* View Toggle */}
-      <div className="flex gap-2 border-b border-[#E8E4DF] dark:border-slate-700">
+      <div className="flex gap-2 border-b border-[#E8E4DF] dark:border-slate-700 overflow-x-auto scrollbar-hide">
         {[
           { id: 'dashboard', label: 'Overview' },
           { id: 'toc', label: 'Theory of Change' },
@@ -311,7 +311,7 @@ export function ImpactMetricsDashboard({
           <button
             key={view.id}
             onClick={() => setActiveView(view.id as typeof activeView)}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap shrink-0 ${
               activeView === view.id
                 ? 'border-[#6B9080] text-[#6B9080] dark:text-primary'
                 : 'border-transparent text-[#5A6B7A] dark:text-[#8A9BA8] hover:text-[#132F43] dark:hover:text-white'
@@ -327,7 +327,7 @@ export function ImpactMetricsDashboard({
           {/* Key Impact Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
+              <Card className="p-4 bg-white shadow-sm border-[#E8E4DF] dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <Users className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.beneficiaryGrowth)}
@@ -343,7 +343,7 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
+              <Card className="p-4 bg-white shadow-sm border-[#E8E4DF] dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <TrendingUp className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.outcomeImprovement)}
@@ -359,7 +359,7 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
+              <Card className="p-4 bg-white shadow-sm border-[#E8E4DF] dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <Heart className="w-5 h-5 text-[#2A7D99]" />
                   {getTrendIcon(metrics.trends.retentionTrend)}
@@ -375,7 +375,7 @@ export function ImpactMetricsDashboard({
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <Card className="p-4 bg-gradient-to-br from-[#F6FBFB] to-[#EDF4F7] dark:from-slate-800 dark:to-slate-800 border-[#E8E4DF] dark:border-slate-700">
+              <Card className="p-4 bg-white shadow-sm border-[#E8E4DF] dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex items-center justify-between mb-2">
                   <Sparkles className="w-5 h-5 text-[#2A7D99]" />
                 </div>

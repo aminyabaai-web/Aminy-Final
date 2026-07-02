@@ -185,7 +185,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
               <div
                 key={s}
                 className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  s <= step ? 'bg-blue-600' : 'bg-[#E8E4DF]'
+                  s <= step ? 'bg-[#2A7D99]' : 'bg-[#E8E4DF]'
                 }`}
               />
             ))}
@@ -208,7 +208,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                     key={svc}
                     variant={serviceType === svc ? 'default' : 'outline'}
                     size="sm"
-                    className="h-auto py-3 text-left justify-start"
+                    className="h-auto py-3 text-left justify-start whitespace-normal text-sm leading-tight"
                     onClick={() => setServiceType(svc)}
                   >
                     {svc}
@@ -265,7 +265,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                   key={code}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                     selectedCodes.includes(code)
-                      ? 'border-blue-500 bg-[#EEF4F8]'
+                      ? 'border-[#2A7D99] bg-[#EEF4F8]'
                       : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                   }`}
                 >
@@ -363,7 +363,7 @@ export default function PriorAuthFlow({ onBack, onComplete, childName: initialCh
                     key={doc.id}
                     className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
                       attachedDocs.includes(doc.name)
-                        ? 'border-blue-500 bg-[#EEF4F8]'
+                        ? 'border-[#2A7D99] bg-[#EEF4F8]'
                         : 'border-[#E8E4DF] hover:border-[#E8E4DF]'
                     }`}
                   >

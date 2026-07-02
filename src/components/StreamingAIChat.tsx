@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Loader2, Sparkles, Inbox } from 'lucide-react';
+import { Loader2, Sparkles, Inbox, ClipboardList, PenLine, Moon, School, BarChart3, Shield } from 'lucide-react';
 import { ThinkingStepsDisplay, useThinkingSteps, generateFollowUpSuggestions } from './ThinkingSteps';
 import { Button } from './ui/button';
 import { EnhancedChatInput, type Attachment } from './EnhancedChatInput';
@@ -39,7 +39,7 @@ interface StreamingAIChatProps {
 
 export function StreamingAIChat({
   context,
-  placeholder = "Message Aminy AI...",
+  placeholder = "Ask Aminy anything…",
   className = "",
   onConversionPrompt,
   childId,
@@ -284,22 +284,22 @@ export function StreamingAIChat({
             </div>
 
             {/* Bevel-style horizontal scrolling action cards */}
-            <div className="overflow-x-auto -mx-4 px-4 pb-4" style={{ scrollbarWidth: 'none' }}>
-              <div className="flex gap-3" style={{ minWidth: 'max-content' }}>
+            <div className="overflow-x-auto -mx-4 px-4 pb-4" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+              <div className="flex gap-3 pr-8" style={{ minWidth: 'max-content', flexWrap: 'nowrap' }}>
                 {[
-                  { icon: '\u{1F4CB}', title: 'Create a care plan', subtitle: 'Personalized for your child', prompt: `Create a weekly care plan for ${context.childProfile?.name || 'my child'}` },
-                  { icon: '\u{1F4DD}', title: 'Log an incident', subtitle: 'Track what happened', prompt: 'I need to log a behavioral incident' },
-                  { icon: '\u{1F319}', title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childProfile?.name || 'My child'} won't go to sleep. Help.` },
-                  { icon: '\u{1F3EB}', title: 'School email', subtitle: 'Write to the teacher', prompt: "Help me write an email to my child's teacher" },
-                  { icon: '\u{1F4CA}', title: 'Weekly progress', subtitle: 'See how things are going', prompt: 'How is my child doing this week?' },
-                  { icon: '\u{1F6E1}️', title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my behavior therapy coverage' },
+                  { icon: ClipboardList, title: 'Create a care plan', subtitle: 'Personalized for your child', prompt: `Create a weekly care plan for ${context.childProfile?.name || 'my child'}` },
+                  { icon: PenLine, title: 'Log an incident', subtitle: 'Track what happened', prompt: 'I need to log a behavioral incident' },
+                  { icon: Moon, title: 'Bedtime help', subtitle: 'Calmer nights start here', prompt: `${context.childProfile?.name || 'My child'} won't go to sleep. Help.` },
+                  { icon: School, title: 'School email', subtitle: 'Write to the teacher', prompt: "Help me write an email to my child's teacher" },
+                  { icon: BarChart3, title: 'Weekly progress', subtitle: 'See how things are going', prompt: 'How is my child doing this week?' },
+                  { icon: Shield, title: 'Insurance help', subtitle: 'Coverage questions', prompt: 'Help me understand my behavior therapy coverage' },
                 ].map((card) => (
                   <button
                     key={card.title}
                     onClick={() => handleSend(card.prompt, [])}
                     className="flex-shrink-0 w-[160px] text-left bg-white hover:bg-[#EDF4F7] active:scale-[0.97] border border-[#EDF4F7] rounded-2xl p-4 transition-all shadow-sm"
                   >
-                    <span className="text-2xl block mb-2">{card.icon}</span>
+                    <card.icon className="w-6 h-6 text-[#2A7D99] mb-2" aria-hidden="true" />
                     <p className="text-sm font-semibold text-[#132F43] leading-tight">{card.title}</p>
                     <p className="text-sm text-[#8E9BAA] mt-1 leading-tight">{card.subtitle}</p>
                   </button>

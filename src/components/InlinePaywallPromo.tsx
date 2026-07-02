@@ -17,12 +17,13 @@ import {
 } from 'lucide-react';
 // Prices SOURCE OF TRUTH: src/lib/tier-utils.ts (tierPricing). Never hardcode
 // per-tier prices here — they drift (this file previously showed $19/$69/$229).
-import { tierPricing } from '../lib/tier-utils';
+// Names SOURCE OF TRUTH: getTierDisplayName() — never hardcode tier names.
+import { tierPricing, getTierDisplayName } from '../lib/tier-utils';
 
 interface InlinePaywallPromoProps {
   childName: string;
   reason?: string; // Why Aminy is suggesting upgrade (e.g., "to unlock full Jr suite")
-  highlightTier?: 'starter' | 'core' | 'pro';
+  highlightTier?: 'core' | 'pro' | 'proplus';
   onViewPlans: () => void;
   compact?: boolean;
 }
@@ -35,29 +36,30 @@ export function InlinePaywallPromo({
   compact = false 
 }: InlinePaywallPromoProps) {
   
-  // Prices derived from tier-utils (single source of truth). 'starter' is a
-  // legacy alias that maps to Core, so it carries Core's price.
+  // Real tier ladder: Core / Pro / Family. Names + prices derived from
+  // tier-utils (single source of truth); benefits mirror tierEntitlements
+  // (behaviorist Q&A + care coordinator are Family/proplus ONLY).
   const tiers = {
-    starter: {
-      name: 'Starter',
-      price: tierPricing.starter.monthly,
-      icon: Heart,
-      color: 'gray',
-      benefits: ['3 daily activities', 'Basic tracking', '1 Jr calming exercise']
-    },
     core: {
-      name: 'Core',
+      name: getTierDisplayName('core'),
       price: tierPricing.core.monthly,
       icon: Target,
       color: 'teal',
       benefits: ['Unlimited AI chat', 'Full Jr suite', 'Adaptive plans']
     },
     pro: {
-      name: 'Pro Plus',
-      price: tierPricing.proplus.monthly,
+      name: getTierDisplayName('pro'),
+      price: tierPricing.pro.monthly,
       icon: Sparkles,
       color: 'gray',
-      benefits: ['Live video AI', 'Monthly BCBA consult', 'Priority support']
+      benefits: ['Clinical-grade progress reports', 'Provider sharing portal', '20% off marketplace sessions']
+    },
+    proplus: {
+      name: getTierDisplayName('proplus'),
+      price: tierPricing.proplus.monthly,
+      icon: Heart,
+      color: 'gray',
+      benefits: ['Ask-a-Behaviorist included', 'Care coordinator support', '30% off marketplace sessions']
     }
   };
 

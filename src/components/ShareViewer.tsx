@@ -140,7 +140,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
             <h2 className="text-xl text-[#132F43] mb-2">Unable to Load Share</h2>
             <p className="text-sm text-[#5A6B7A] mb-6">{error}</p>
-            <Button onClick={onStartTrial} className="w-full bg-accent text-white">
+            <Button onClick={onStartTrial} className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white">
               Start Your Free Trial
             </Button>
           </Card>
@@ -219,9 +219,9 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
                 <p className="text-sm text-[#5A6B7A] mb-3">
                   Get personalized daily plans, AI coaching, and beautiful progress reports for your family.
                 </p>
-                <Button 
+                <Button
                   onClick={onStartTrial}
-                  className="w-full bg-accent hover:bg-accent/90 text-white"
+                  className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white"
                 >
                   Start Free 7-Day Trial
                   <ArrowRight className="w-4 h-4 ml-2" />

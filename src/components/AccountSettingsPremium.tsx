@@ -422,7 +422,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     </div>
                     <button
                         onClick={() => onNavigate?.('paywall')}
-                        className="px-4 py-2 rounded-[12px] border border-gray-900/10 bg-white text-[13px] font-medium text-[#132F43]/80 cursor-pointer"
+                        className="flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-[12px] border border-gray-900/10 bg-white text-[13px] font-medium text-[#132F43]/80 cursor-pointer"
                     >
                         Manage
                     </button>

@@ -170,7 +170,7 @@ export function LoginScreen({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="px-6 py-5"
+        className="px-6 py-4"
       >
         <button
           onClick={onBack}
@@ -194,7 +194,7 @@ export function LoginScreen({
       <main
         className="flex-1 flex flex-col items-center px-6"
         style={{
-          paddingTop: 'clamp(24px, 6vh, 48px)',
+          paddingTop: 'clamp(12px, 3vh, 28px)',
           paddingBottom: 'max(32px, calc(env(safe-area-inset-bottom, 0px) + 16px))',
           overflowY: 'auto',
         }}
@@ -208,14 +208,14 @@ export function LoginScreen({
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginBottom: '40px',
+              marginBottom: '28px',
             }}
           >
             <img
               src={aminyLogoCropped}
               alt="Aminy"
               style={{
-                width: 'min(55vw, 220px)',
+                width: 'min(48vw, 200px)',
                 height: 'auto',
                 objectFit: 'contain',
                 display: 'block',
@@ -228,7 +228,7 @@ export function LoginScreen({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ textAlign: 'center', marginBottom: '36px' }}
+            style={{ textAlign: 'center', marginBottom: '24px' }}
           >
             <h1
               style={{
@@ -293,7 +293,7 @@ export function LoginScreen({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '28px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}
           >
             <button
               onClick={handleAppleSignIn}
@@ -380,7 +380,7 @@ export function LoginScreen({
               display: 'flex',
               alignItems: 'center',
               gap: '16px',
-              marginBottom: '28px',
+              marginBottom: '20px',
             }}
           >
             <div style={{ flex: 1, height: '1px', backgroundColor: 'var(--color-border-soft)' }} />
@@ -403,7 +403,7 @@ export function LoginScreen({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
             onSubmit={handleSubmit}
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
             {/* Email Field */}
             <div>

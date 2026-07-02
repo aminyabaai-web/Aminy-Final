@@ -110,7 +110,7 @@ function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
     {
       icon: Users,
       title: "You don't have to figure this out alone",
-      body: "Aminy connects you with BCBAs, speech therapists, OTs, and psychologists who specialize in exactly what you're concerned about — and we check if your insurance covers it.",
+      body: "Aminy connects you with specialists in behavior, speech, occupational, and mental-health support — matched to exactly what you're concerned about — and we check if your insurance covers it.",
       afterQuestion: 9,
     },
     {

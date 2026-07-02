@@ -1097,7 +1097,7 @@ export function StoreMarketplace({
                   )}
                 </div>
                 <p className="text-sm text-[#5A6B7A]">
-                  {usingCuratedFallback ? 'Curated affiliate recommendations' : 'BCBA-curated tools and resources'}
+                  {usingCuratedFallback ? 'Curated affiliate recommendations' : 'Behaviorist-curated tools and resources'}
                 </p>
               </div>
             </div>
@@ -1196,7 +1196,7 @@ export function StoreMarketplace({
                       onChange={(e) => setFilters(prev => ({ ...prev, bcbaRecommended: e.target.checked }))}
                       className="rounded border-slate-300"
                     />
-                    <span className="text-sm">BCBA Recommended</span>
+                    <span className="text-sm">Behaviorist recommended</span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -1329,7 +1329,7 @@ export function StoreMarketplace({
                     {product.bcbaRecommended && (
                       <Badge className="absolute top-2 right-2 bg-violet-500 text-white">
                         <Check className="w-3 h-3 mr-1" />
-                        BCBA Pick
+                        Behaviorist pick
                       </Badge>
                     )}
                   </div>
@@ -1369,7 +1369,7 @@ export function StoreMarketplace({
                   No resources yet
                 </h3>
                 <p className="text-[#5A6B7A]">
-                  Our team is curating BCBA-reviewed tools and resources. Check back soon.
+                  Our team is curating behaviorist-reviewed tools and resources. Check back soon.
                 </p>
               </Card>
             ) : (
@@ -1441,7 +1441,7 @@ export function StoreMarketplace({
                       </h3>
                       {product.bcbaRecommended && (
                         <Badge className="shrink-0 bg-violet-100 text-violet-700 text-sm">
-                          BCBA
+                          Behaviorist pick
                         </Badge>
                       )}
                     </div>

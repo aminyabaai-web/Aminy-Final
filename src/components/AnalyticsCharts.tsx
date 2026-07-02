@@ -427,9 +427,10 @@ export function AnalyticsCharts({
           <span className="text-amber-700/70 text-sm">Showing demo analytics. Real data will appear as you track activities.</span>
         </div>
       )}
-      {/* Date Range Selector */}
+      {/* Date Range Selector — the screen header ("Charts & Trends") is rendered by the
+          App-level wrapper; no duplicate in-component title bar here. */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold dark:text-white">Analytics for {childName}</h2>
+        <p className="text-sm text-[#5A6B7A] dark:text-slate-400 min-w-0 truncate">Tracking {childName}</p>
         <div className="flex items-center gap-2">
           <Select value={selectedRange} onValueChange={handleRangeChange}>
             <SelectTrigger className="w-32">

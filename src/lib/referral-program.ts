@@ -67,7 +67,7 @@ export const REFERRAL_PROGRAM_CONFIG: ReferralProgramConfig = {
   referrerReward: {
     type: 'free-month',
     value: 1, // 1 free month
-    description: 'Get 1 month free for each friend who joins',
+    description: '1 month free for each friend who joins',
   },
   referredReward: {
     type: 'session-credit',

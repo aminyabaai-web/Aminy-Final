@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { ScreenHeader } from './ui/ScreenHeader';
 
 interface Memory {
   id: string;
@@ -425,25 +426,15 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
     <div className="min-h-screen bg-mist">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
-                <Brain className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold">Memory & Privacy</h1>
-                <p className="text-sm text-muted-foreground">
-                  {memories.length} {memories.length === 1 ? 'memory' : 'memories'} saved
-                </p>
-              </div>
-            </div>
-            {onClose && (
-              <Button variant="ghost" onClick={onClose}>
-                Close
-              </Button>
-            )}
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <ScreenHeader
+            variant="overlay"
+            onBack={onClose}
+            title="Memory & Privacy"
+            subtitle={`${memories.length} ${memories.length === 1 ? 'memory' : 'memories'} saved`}
+            icon={<Brain className="w-6 h-6" />}
+          />
+          <div className="px-4 pb-4">
 
           {/* Memory Toggle */}
           <div className="bg-accent/5 border border-accent/20 rounded-lg p-4 mb-4">

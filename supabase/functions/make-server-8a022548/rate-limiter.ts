@@ -35,7 +35,7 @@ export const DAILY_MESSAGE_LIMITS: Record<string, number> = {
   starter: 20,    // 20 messages/day (matches tier-utils.ts)
   core: 999999,   // Unlimited (null in tier-utils means no limit)
   pro: 999999,    // Unlimited (null in tier-utils means no limit)
-  default: 5,     // Default for unknown tiers (same as free)
+  default: 3,     // Default for unknown tiers (same as free — canonical free limit is 3/day)
 };
 
 interface RateLimitEntry {

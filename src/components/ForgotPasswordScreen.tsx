@@ -68,7 +68,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
             <ArrowLeft className="w-5 h-5" />
             <span className="font-medium">Back</span>
           </button>
-          <Logo size="sm" showText={false} showTagline={false} />
+          <span aria-hidden="true"><Logo size="sm" showText={false} showTagline={false} /></span>
           <div className="w-16"></div>
         </nav>
 
@@ -81,7 +81,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
             </div>
 
             {/* Success Message */}
-            <h1 className="text-primary mb-3" style={{
+            <h1 className="text-[#132F43] mb-3" style={{
               fontSize: 'clamp(28px, 5vw, 32px)',
               fontWeight: 700,
               lineHeight: 1.2,
@@ -157,7 +157,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Back</span>
         </button>
-        <Logo size="sm" showText={false} showTagline={false} />
+        <span aria-hidden="true"><Logo size="sm" showText={false} showTagline={false} /></span>
         <div className="w-16"></div>
       </nav>
 
@@ -166,7 +166,7 @@ export function ForgotPasswordScreen({ onBack, onBackToLogin }: ForgotPasswordSc
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-primary mb-2" style={{
+            <h1 className="text-[#132F43] mb-2" style={{
               fontSize: 'clamp(28px, 5vw, 32px)',
               fontWeight: 700,
               lineHeight: 1.2,

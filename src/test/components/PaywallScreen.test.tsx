@@ -13,8 +13,8 @@ vi.mock('../../utils/supabase/client', () => ({
 vi.mock('../../lib/tier-utils', () => ({
   tierPricing: {
     free: { monthly: 0, yearly: 0 },
-    core: { monthly: 14.99, yearly: 119.99 },
-    pro: { monthly: 29.99, yearly: 239.99 },
+    core: { monthly: 14.99, yearly: 129 },
+    pro: { monthly: 29.99, yearly: 279 },
   },
   getTierFeatureDescriptions: vi.fn((tier: string) => {
     if (tier === 'free') return ['Basic features', 'Limited access'];

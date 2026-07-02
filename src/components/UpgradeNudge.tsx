@@ -30,7 +30,7 @@ import {
   Heart,
   Shield
 } from 'lucide-react';
-import { tierPricing, type TierType } from '../lib/tier-utils';
+import { tierPricing, getTierDisplayName, type TierType } from '../lib/tier-utils';
 
 interface UpgradeNudgeProps {
   currentTier: TierType;
@@ -182,7 +182,7 @@ export function UpgradeNudge({
                 <Badge className="bg-[#6B9080]/10 text-[#6B9080] text-sm">Core+</Badge>
               </div>
               <p className="text-sm text-[#5A6B7A]">
-                Upgrade and Aminy stores up to 5,000 facts about your family — triggers, what strategies work, milestones, and more. Pro stores 15,000; Pro+ Family stores everything, forever.
+                Upgrade and Aminy stores up to 5,000 facts about your family — triggers, what strategies work, milestones, and more. {getTierDisplayName('pro')} stores 15,000; {getTierDisplayName('proplus')} stores everything, forever.
               </p>
               <div className="mt-3 p-3 bg-white/60 rounded-lg border border-[#E8E4DF]">
                 <p className="text-sm text-[#6B9080] italic">
@@ -218,7 +218,7 @@ export function UpgradeNudge({
           <div className="flex-1">
             <p className="text-sm text-[#3A4A57]">
               <span className="font-medium">You're doing amazing!</span> Upgrade for unlimited support,
-              AI memory that never forgets, and direct access to BCBAs.
+              AI memory that never forgets, and direct access to your behaviorist team.
             </p>
           </div>
           <Button size="sm" variant="outline" onClick={onUpgrade} className="shrink-0">
@@ -245,24 +245,24 @@ export function TierComparisonNudge({ currentTier, onSelectTier }: TierCompariso
   const tiers = [
     {
       id: 'core' as TierType,
-      name: 'Core',
+      name: getTierDisplayName('core'),
       price: `$${tierPricing.core.monthly}/mo`,
-      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP & document scanning', 'Full calm toolkit', 'Unlimited children'],
+      features: ['Unlimited AI chat', 'AI memory: 5,000 facts', 'IEP (school plan) & document scanning', 'Full calm toolkit', 'Unlimited children'],
       highlight: currentTier === 'free',
       popular: true
     },
     {
       id: 'pro' as TierType,
-      name: 'Pro',
+      name: getTierDisplayName('pro'),
       price: `$${tierPricing.pro.monthly}/mo`,
-      features: ['AI memory: 15,000 facts', 'IEP-ready progress reports', 'Provider sharing portal', 'Unlimited children', '20% off sessions'],
+      features: ['AI memory: 15,000 facts', 'IEP (school plan)-ready progress reports', 'Provider sharing portal', 'Unlimited children', '20% off sessions'],
       highlight: currentTier === 'core' || currentTier === 'starter'
     },
     {
       id: 'proplus' as TierType,
-      name: 'Pro+ Family',
+      name: getTierDisplayName('proplus'),
       price: `$${tierPricing.proplus.monthly}/mo`,
-      features: ['AI memory: unlimited', 'Ask Your BCBA Team included', 'Unlimited children', 'Care coordinator', 'Priority support'],
+      features: ['AI memory: unlimited', 'Ask-a-Behaviorist included', 'Unlimited children', 'Care coordinator', 'Priority support'],
       highlight: currentTier === 'pro'
     }
   ];

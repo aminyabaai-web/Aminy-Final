@@ -172,6 +172,19 @@ export function loadAISettings(): AminyAISettings {
   return DEFAULT_AI_SETTINGS;
 }
 
+/**
+ * Whether AI settings exist locally. Used to decide when to hydrate from the
+ * roaming copy in profiles.ai_context (fresh device / cleared storage) —
+ * localStorage is only the offline cache; the server copy roams across devices.
+ */
+export function hasStoredAISettings(): boolean {
+  try {
+    return localStorage.getItem('aminy-ai-settings') !== null;
+  } catch {
+    return false;
+  }
+}
+
 export function saveAISettings(settings: AminyAISettings): void {
   try {
     localStorage.setItem('aminy-ai-settings', JSON.stringify(settings));

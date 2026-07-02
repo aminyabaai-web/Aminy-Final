@@ -537,6 +537,9 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
       <div className="max-w-2xl mx-auto px-4 py-6">
         {currentStep === 'basics' && (
           <div className="space-y-6">
+            <p className="text-sm text-[#5A6B7A]">
+              You're setting up your practice OS — everything you need to run your practice lives here.
+            </p>
             {/* Practice mode — own independent practice vs. join under an organization */}
             <div className="bg-white rounded-xl border border-[#E8E4DF] p-6">
               <h2 className="text-lg font-semibold text-[#132F43] mb-1">How do you want to practice?</h2>

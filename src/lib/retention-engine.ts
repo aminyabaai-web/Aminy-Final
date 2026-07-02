@@ -116,12 +116,12 @@ export const EMAIL_SEQUENCES = {
   streakReminders: [
     {
       trigger: 'streak_at_risk', // User hasn't engaged today but has streak > 3
-      subject: "Don't break your {{streak}} day streak!",
+      subject: "A calm two minutes with {{childName}} today?",
       template: 'streak_reminder',
     },
     {
       trigger: 'streak_broken',
-      subject: "Your streak reset - but you can start fresh today",
+      subject: "A fresh start, whenever you're ready",
       template: 'streak_broken',
     },
     {
@@ -145,8 +145,8 @@ export const PUSH_TEMPLATES = {
     "Time for your daily check-in with Aminy.",
   ],
   streakReminder: [
-    "Don't forget - your {streak} day streak is at risk!",
-    "Quick check-in to keep your streak alive?",
+    "You've shown up {streak} days — a gentle moment together today?",
+    "A quick check-in, whenever you're ready?",
     "Just 2 minutes to maintain your progress.",
   ],
   goalNudge: [
@@ -302,8 +302,8 @@ export function getPersonalizedNudge(
 
   if (profile.streakDays > 3 && daysSinceActive === 1) {
     return {
-      title: "Don't break your streak!",
-      body: `Your ${profile.streakDays} day streak is at risk. Quick check-in?`,
+      title: 'A gentle moment today?',
+      body: `You've shown up ${profile.streakDays} days in a row. A quick check-in?`,
       type: 'streak_reminder',
     };
   }
@@ -508,7 +508,7 @@ export function showEngagementPrompt(
 ): void {
   const prompts = {
     streak: {
-      title: 'Keep your streak going!',
+      title: 'Another gentle step today?',
       body: `You're on a ${data.streak} day streak. Quick check-in?`,
     },
     goal: {

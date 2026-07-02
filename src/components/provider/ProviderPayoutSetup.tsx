@@ -11,7 +11,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
 import {
-  ArrowLeft,
   CheckCircle,
   Clock,
   AlertCircle,
@@ -30,6 +29,7 @@ import {
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
+import { ScreenHeader } from '../ui/ScreenHeader';
 import { supabase } from '../../utils/supabase/client';
 import {
   createConnectOnboardingLink,
@@ -37,10 +37,21 @@ import {
   getProviderPayoutHistory,
   getProviderBalance,
   formatCents,
+  PLATFORM_FEE_RATES,
   type ConnectAccountStatus,
   type PayoutRecord,
   type ProviderBalance,
 } from '../../lib/stripe-connect';
+
+// Take rates come from PLATFORM_FEE_RATES (single source of truth in
+// src/lib/stripe-connect.ts) — never hardcode a percentage in copy here.
+const pct = (rate: number) => `${Math.round(rate * 100)}%`;
+const FEE_INSURED = pct(PLATFORM_FEE_RATES.insured);
+const FEE_CASH_PAY = pct(PLATFORM_FEE_RATES.cash_pay);
+const FEE_PARTNER = pct(PLATFORM_FEE_RATES.aact_pilot);
+const KEEP_INSURED = pct(1 - PLATFORM_FEE_RATES.insured);
+const KEEP_CASH_PAY = pct(1 - PLATFORM_FEE_RATES.cash_pay);
+const KEEP_PARTNER = pct(1 - PLATFORM_FEE_RATES.aact_pilot);
 
 // ============================================================================
 // Practice Information — NPI / Taxonomy / Practice Name
@@ -165,9 +176,9 @@ function PracticeInfoSection({ providerId }: { providerId: string | null }) {
         // Read-only view
         <div className="space-y-2">
           {[
-            { label: 'NPI Number', value: info.npi || '—' },
-            { label: 'Taxonomy Code', value: info.taxonomyCode ? `${info.taxonomyCode} — ${taxLabel}` : '—' },
-            { label: 'Practice Name', value: info.practiceName || '—' },
+            { label: 'NPI Number', value: info.npi || 'Not set yet' },
+            { label: 'Taxonomy Code', value: info.taxonomyCode ? `${info.taxonomyCode} — ${taxLabel}` : 'Not set yet' },
+            { label: 'Practice Name', value: info.practiceName || 'Not set yet' },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between items-center text-sm py-1 border-b border-gray-50 last:border-0">
               <span className="text-[#5A6B7A] text-sm">{label}</span>
@@ -404,27 +415,24 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-bg, #f9fafb)' }}>
-      {/* Header */}
-      <header className="sticky top-0 z-20 px-4 py-3 flex items-center gap-3" style={{ backgroundColor: '#0D1B2A' }}>
-        <button
-          onClick={onBack}
-          className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-          aria-label="Back"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-white font-semibold text-base">Payout Setup</h1>
-          <p className="text-white/50 text-sm">Receive payments for your sessions</p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          className="p-2 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-          aria-label="Refresh"
-        >
-          <RefreshCw className="w-4 h-4" />
-        </button>
-      </header>
+      {/* Header — light ScreenHeader pattern (white bg, navy title) used app-wide */}
+      <ScreenHeader
+        title="Payout Setup"
+        subtitle="Receive payments for your sessions"
+        onBack={onBack}
+        variant="flat"
+        sticky
+        actions={
+          <button
+            onClick={handleRefresh}
+            className="flex items-center gap-1 text-slate-400 hover:text-[#5A6B7A] text-sm transition-colors"
+            aria-label="Refresh"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Refresh
+          </button>
+        }
+      />
 
       <main className="flex-1 px-4 py-5 max-w-lg mx-auto w-full">
 
@@ -472,7 +480,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                 Connect your bank account to receive payouts for completed sessions.
               </p>
               <p className="text-sm text-[#8A9BA8]">
-                Aminy retains a 10% platform fee. You receive 90% of each session.
+                Platform fee: {FEE_INSURED} on insured sessions · {FEE_CASH_PAY} on cash-pay sessions ({FEE_PARTNER} for partner-org pilots). You keep the rest.
               </p>
             </div>
           )}
@@ -533,8 +541,9 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
           </div>
           <div className="space-y-2">
             {[
-              { label: 'Platform fee', value: '10%' },
-              { label: 'Your share', value: '90%' },
+              { label: 'Insured sessions', value: `${FEE_INSURED} fee · you keep ${KEEP_INSURED}` },
+              { label: 'Cash-pay sessions', value: `${FEE_CASH_PAY} fee · you keep ${KEEP_CASH_PAY}` },
+              { label: 'Partner-org pilots', value: `${FEE_PARTNER} fee · you keep ${KEEP_PARTNER}` },
               { label: 'Payout timing', value: '2 business days' },
               { label: 'Minimum payout', value: '$0 (auto)' },
             ].map(({ label, value }) => (

@@ -443,14 +443,14 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
       {/* Header */}
       <header className="bg-white dark:bg-slate-900 border-b border-neutral-200 dark:border-slate-700 sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Logo size="sm" showText={false} />
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" onClick={onBack}>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back
+            </Button>
             <span className="text-lg font-semibold text-[#132F43] dark:text-white">Provider Application</span>
           </div>
-          <Button variant="ghost" onClick={onBack}>
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
+          <Logo size="sm" showText={false} />
         </div>
       </header>
 
@@ -463,7 +463,7 @@ export function ProviderApplication({ onBack, onSuccess, userEmail, userName }: 
                 className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
                   step >= s
                     ? 'bg-primary text-white'
-                    : 'bg-neutral-200 dark:bg-slate-700 text-[#5A6B7A] dark:text-slate-400'
+                    : 'bg-white border-2 border-slate-300 dark:bg-slate-700 dark:border-slate-600 text-slate-500 dark:text-slate-400'
                 }`}
               >
                 {step > s ? <Check className="w-5 h-5" /> : s}
