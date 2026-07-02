@@ -171,7 +171,7 @@ describe('PaywallScreen', () => {
   it('shows close confirmation modal when Skip is clicked in post-onboarding', () => {
     render(<PaywallScreen {...defaultProps} isPostOnboarding />);
     fireEvent.click(screen.getByText('Skip'));
-    expect(screen.getByText('Skip the free trial?')).toBeInTheDocument();
+    expect(screen.getByText('Your personalized plan is ready')).toBeInTheDocument();
   });
 
   it('renders the disclaimer footer', () => {

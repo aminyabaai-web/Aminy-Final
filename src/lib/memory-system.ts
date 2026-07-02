@@ -331,13 +331,17 @@ class MemoryManager {
     const limits = TIER_LIMITS[tier];
     const allFacts = this.facts.get(childId) || [];
 
-    // Filter by memory days limit
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+    // Filter by memory days limit. Guard Infinity: `setDate(now - Infinity)`
+    // yields an Invalid Date that filters out EVERY fact (memory became
+    // write-only for unlimited-retention tiers).
+    let recent = allFacts;
+    if (Number.isFinite(limits.memoryDays)) {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+      recent = allFacts.filter(f => new Date(f.createdAt) >= cutoffDate);
+    }
 
-    return allFacts
-      .filter(f => new Date(f.createdAt) >= cutoffDate)
-      .slice(-limits.maxFacts);
+    return Number.isFinite(limits.maxFacts) ? recent.slice(-limits.maxFacts) : recent;
   }
 
   getFactsByCategory(childId: string, category: MemoryFact['category'], tier: TierType): MemoryFact[] {
@@ -425,12 +429,15 @@ class MemoryManager {
     const limits = TIER_LIMITS[tier];
     const allSummaries = this.conversationSummaries.get(childId) || [];
 
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+    // Guard Infinity memoryDays (same Invalid-Date pitfall as getFacts)
+    let recent = allSummaries;
+    if (Number.isFinite(limits.memoryDays)) {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
+      recent = allSummaries.filter(s => new Date(s.timestamp) >= cutoffDate);
+    }
 
-    return allSummaries
-      .filter(s => new Date(s.timestamp) >= cutoffDate)
-      .slice(-limit);
+    return recent.slice(-limit);
   }
 
   // ============================================
@@ -574,13 +581,25 @@ class MemoryManager {
    */
   cleanupExpiredMemories(childId: string, tier: TierType) {
     const limits = TIER_LIMITS[tier];
+
+    // Unlimited-retention tiers keep everything (guard the Invalid-Date
+    // pitfall: setDate(now - Infinity) would wipe ALL memories)
+    if (!Number.isFinite(limits.memoryDays)) {
+      if (Number.isFinite(limits.maxFacts)) {
+        const facts = this.facts.get(childId) || [];
+        this.facts.set(childId, facts.slice(-limits.maxFacts));
+        this.saveToStorage();
+      }
+      return;
+    }
+
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - limits.memoryDays);
 
     // Clean facts
     const facts = this.facts.get(childId) || [];
     const validFacts = facts.filter(f => new Date(f.createdAt) >= cutoffDate);
-    this.facts.set(childId, validFacts.slice(-limits.maxFacts));
+    this.facts.set(childId, Number.isFinite(limits.maxFacts) ? validFacts.slice(-limits.maxFacts) : validFacts);
 
     // Clean summaries
     const summaries = this.conversationSummaries.get(childId) || [];
