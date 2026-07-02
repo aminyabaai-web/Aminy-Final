@@ -105,9 +105,10 @@ describe('PaywallScreen', () => {
     expect(screen.getByText('Yearly')).toBeInTheDocument();
   });
 
-  it('renders Save 30% badge on yearly toggle', () => {
+  it('renders the computed yearly-savings badge on the yearly toggle', () => {
     render(<PaywallScreen {...defaultProps} />);
-    expect(screen.getByText('Save 30%')).toBeInTheDocument();
+    // Component computes: 1 − yearly/(monthly×12) — with $14.99/mo · $129/yr ≈ 28%
+    expect(screen.getByText(/Save up to 28%/)).toBeInTheDocument();
   });
 
   it('renders Recommended badge on Core tier', () => {
