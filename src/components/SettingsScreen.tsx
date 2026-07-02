@@ -57,7 +57,11 @@ import {
   Unplug,
   Users,
   Gift,
-  DollarSign
+  DollarSign,
+  Heart,
+  Trophy,
+  Microscope,
+  Handshake
 } from 'lucide-react';
 import { ThemeSelector } from '../lib/theme-provider';
 import { CalendarConnectionCard } from './CalendarConnectionCard';
@@ -96,6 +100,9 @@ import {
   type AIPersonality,
 } from '../lib/ai-personality';
 import { fetchUserContext, updateUserContext, type UserContext } from '../ai/contextLayer';
+
+/** Lucide renderers for PersonalityConfig.icon — brand rule: no emoji in parent chrome. */
+const PERSONALITY_ICONS = { Heart, Trophy, Microscope, Handshake } as const;
 
 interface SettingsScreenProps {
   onBack?: () => void;
@@ -199,7 +206,7 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     setSelectedPersonality(p);
     const current = loadAISettings();
     saveAISettings({ ...current, personality: p });
-    toast.success(`${AI_PERSONALITIES[p].emoji} ${AI_PERSONALITIES[p].name} mode activated`);
+    toast.success(`${AI_PERSONALITIES[p].name} mode activated`);
   };
 
   const loadAIMemory = async () => {
@@ -704,7 +711,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                       <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
                     </span>
                   )}
-                  <span className="text-xl">{p.emoji}</span>
+                  {(() => {
+                    const PersonalityIcon = PERSONALITY_ICONS[p.icon] ?? Heart;
+                    return (
+                      <span className="w-8 h-8 rounded-full bg-[#EDF4F7] dark:bg-slate-700 flex items-center justify-center">
+                        <PersonalityIcon className="w-4 h-4 text-[#2A7D99]" />
+                      </span>
+                    );
+                  })()}
                   <span className="text-sm font-semibold dark:text-white">{p.name}</span>
                   <span className="text-sm text-muted-foreground leading-snug">{p.tagline}</span>
                 </button>

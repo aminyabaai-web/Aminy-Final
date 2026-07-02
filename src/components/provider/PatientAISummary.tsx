@@ -14,7 +14,7 @@
  * - Provider feedback that updates care plan (with parent approval)
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Brain,
   Sparkles,
@@ -43,6 +43,16 @@ import { Badge } from '../ui/badge';
 import { sendMessageToClaude } from '../../lib/ai-engine/claude-client';
 import { getCurrentContext } from '../../lib/ai-engine';
 import { isDemoMode } from '../../lib/demo-seed';
+import { supabase } from '../../utils/supabase/client';
+
+/**
+ * Returns true for ids that are obviously not real auth user ids
+ * (e.g. the 'parent-123' placeholder ProviderPortal used to hardcode).
+ * Real ids are Supabase auth UUIDs.
+ */
+function isPlaceholderId(id?: string): boolean {
+  return !id || !id.trim() || id === 'unknown' || /^(parent|patient|demo|client|family)[-_]/i.test(id);
+}
 
 interface PatientData {
   id: string;
@@ -84,6 +94,15 @@ interface CarePlanSuggestion {
   parentResponse?: string;
 }
 
+/**
+ * Prop contract (for ProviderPortal wiring):
+ * - `parentId` MUST be the parent/caregiver's real Supabase auth user id (uuid).
+ *   goals / behavior_logs / session_notes are keyed by `user_id` = that id, and
+ *   they are what grounds the AI summary in real parent-logged data.
+ *   Placeholder values ('parent-123', 'unknown', empty) are detected and safely
+ *   ignored — the summary then falls back to demographics-only generation.
+ * - `patientId` is the child id (used for display identity only).
+ */
 interface PatientAISummaryProps {
   patient?: PatientData;
   patientId?: string;
@@ -94,17 +113,16 @@ interface PatientAISummaryProps {
 }
 
 export function PatientAISummary({ patient: patientProp, patientId, childName, parentId, providerId, onClose }: PatientAISummaryProps) {
-  // Build patient from either the patient prop or individual props
-  const patient = (patientProp ?? {
+  // Build patient from either the patient prop or individual props.
+  // Memoized: the load effect depends on it, and a fresh object literal every
+  // render would re-trigger AI generation in a loop.
+  const patient = useMemo(() => (patientProp ?? {
     id: patientId || 'unknown',
     childName: childName || 'Client',
     parentName: 'Parent',
     age: 0,
-    diagnoses: [],
-    currentGoals: [],
-    recentSessions: [],
-    behaviorTrends: [],
-  }) as PatientData;
+    conditions: [],
+  }) as PatientData, [patientProp, patientId, childName]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<'summary' | 'patterns' | 'progress' | 'feedback'>('summary');
   const [insights, setInsights] = useState<AIInsight[]>([]);
@@ -273,8 +291,57 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
         const conditions = patient.conditions?.length > 0 ? patient.conditions.join(', ') : 'neurodevelopmental concerns';
         const parentName = patient.parentName || 'the parent';
 
+        // Ground the summary in real parent-logged data when we have a real
+        // parent user id (same query shapes as BCBASessionBriefing). If the id
+        // is a placeholder or nothing comes back, fall through to
+        // demographics-only generation (previous behavior).
+        let loggedDataContext = '';
+        if (!isDemoMode() && !isPlaceholderId(parentId)) {
+          try {
+            const [goalsRes, logsRes, notesRes] = await Promise.all([
+              supabase.from('goals').select('title, status, target_behavior, progress_notes, updated_at')
+                .eq('user_id', parentId).eq('status', 'active').limit(8),
+              supabase.from('behavior_logs').select('behavior_type, intensity, notes, is_positive, created_at')
+                .eq('user_id', parentId).order('created_at', { ascending: false }).limit(10),
+              supabase.from('session_notes').select('content, session_type, created_at')
+                .eq('user_id', parentId).order('created_at', { ascending: false }).limit(3),
+            ]);
+
+            const goals = goalsRes.data || [];
+            const logs = logsRes.data || [];
+            const notes = notesRes.data || [];
+
+            const recentWins = logs
+              .filter(l => l.is_positive)
+              .map(l => l.behavior_type || l.notes || '')
+              .filter(Boolean)
+              .slice(0, 5);
+            const recentChallenges = logs
+              .filter(l => !l.is_positive)
+              .map(l => `${l.behavior_type}${l.intensity != null ? ` (intensity ${l.intensity})` : ''}`)
+              .filter(Boolean)
+              .slice(0, 5);
+
+            loggedDataContext = [
+              goals.length > 0 ? `Active goals: ${goals.map(g => g.title).join('; ')}` : '',
+              recentWins.length > 0 ? `Recent wins (parent-logged): ${recentWins.join('; ')}` : '',
+              recentChallenges.length > 0 ? `Recent challenges (parent-logged): ${recentChallenges.join('; ')}` : '',
+              notes.length > 0 ? `Latest session note excerpt: ${notes[0].content?.substring(0, 300)}` : '',
+            ].filter(Boolean).join('\n');
+          } catch (dataErr) {
+            console.warn('[PatientAISummary] Could not load parent-logged data:', dataErr);
+          }
+        }
+
+        const userMessage = [
+          `Generate a comprehensive clinical AI summary for patient ${childName}, age ${age}, with ${conditions}. Parent/caregiver: ${parentName}. Include communication patterns, sensory triggers, transition strategies, social engagement patterns, behavior trends, and care plan suggestions based on available data.`,
+          loggedDataContext
+            ? `\nReal logged data for this patient (ground every insight, pattern, and suggestion in it — do not invent data that contradicts it):\n${loggedDataContext}`
+            : '',
+        ].filter(Boolean).join('\n');
+
         const response = await sendMessageToClaude(
-          [{ role: 'user', content: `Generate a comprehensive clinical AI summary for patient ${childName}, age ${age}, with ${conditions}. Parent/caregiver: ${parentName}. Include communication patterns, sensory triggers, transition strategies, social engagement patterns, behavior trends, and care plan suggestions based on available data.` }],
+          [{ role: 'user', content: userMessage }],
           context,
           { systemPrompt, maxTokens: 2500, temperature: 0.7 }
         );
@@ -347,7 +414,7 @@ Provide 3-4 insights, 2-3 behavior patterns, 3-4 progress highlights, and 2-3 ca
     };
 
     loadAISummary();
-  }, [patient]);
+  }, [patient, parentId]);
 
   const handleAddSuggestion = () => {
     if (!newSuggestion.title || !newSuggestion.description) return;
