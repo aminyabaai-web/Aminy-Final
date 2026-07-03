@@ -4,7 +4,7 @@
 // See LICENSE file for details.
 
 /**
- * Two-rate insured rail + pilot expiry — resolvePayoutRail matrix and the
+ * Sourcing-based insured rates — resolvePayoutRail matrix and the
  * PLATFORM_FEE_RATES ↔ PLATFORM_TAKE_RATE drift guard for the new rail.
  */
 
@@ -18,116 +18,77 @@ import { resolvePayoutRail } from './payout-rail';
 import { PLATFORM_FEE_RATES, getPlatformFeeRate, calculateProviderAmount, type PayoutRail } from './stripe-connect';
 import { PLATFORM_TAKE_RATE } from './telehealth-economics';
 
-const NOW = new Date('2026-07-03T12:00:00Z');
-const PAST = '2026-06-01T00:00:00Z';
-const FUTURE = '2026-12-31T00:00:00Z';
-
-describe('resolvePayoutRail — two-rate insured rail + pilot expiry', () => {
-  describe('sourcing split (insured rail only)', () => {
-    it('insured + aminy_marketplace → insured_aminy_sourced (20%)', () => {
+describe('resolvePayoutRail — insured take is purely sourcing-based, permanently', () => {
+  describe("clientSource === 'aminy_marketplace' → insured_aminy_sourced (20%)", () => {
+    it('bumps a standard insured base rail', () => {
       expect(
-        resolvePayoutRail({ baseRail: 'insured', clientSource: 'aminy_marketplace', now: NOW }),
+        resolvePayoutRail({ baseRail: 'insured', clientSource: 'aminy_marketplace' }),
       ).toBe('insured_aminy_sourced');
     });
 
-    it('insured + provider_sourced stays insured (10%)', () => {
+    it('OVERRIDES an aact_pilot base rail — an AACT-affiliated provider serving an Aminy-sourced client pays 20%', () => {
       expect(
-        resolvePayoutRail({ baseRail: 'insured', clientSource: 'provider_sourced', now: NOW }),
-      ).toBe('insured');
+        resolvePayoutRail({ baseRail: 'aact_pilot', clientSource: 'aminy_marketplace' }),
+      ).toBe('insured_aminy_sourced');
     });
 
-    it('insured with unknown source (null/undefined) stays insured — legacy rows default to provider-sourced', () => {
-      expect(resolvePayoutRail({ baseRail: 'insured', clientSource: null, now: NOW })).toBe('insured');
-      expect(resolvePayoutRail({ baseRail: 'insured', now: NOW })).toBe('insured');
-    });
-
-    it('cash_pay is NEVER affected by sourcing', () => {
+    it('passes an already-sourced base rail through', () => {
       expect(
-        resolvePayoutRail({ baseRail: 'cash_pay', clientSource: 'aminy_marketplace', now: NOW }),
-      ).toBe('cash_pay');
-      expect(
-        resolvePayoutRail({ baseRail: 'cash_pay', clientSource: 'provider_sourced', now: NOW }),
-      ).toBe('cash_pay');
-    });
-
-    it('an already-sourced base rail passes through unchanged', () => {
-      expect(
-        resolvePayoutRail({ baseRail: 'insured_aminy_sourced', clientSource: 'provider_sourced', now: NOW }),
+        resolvePayoutRail({ baseRail: 'insured_aminy_sourced', clientSource: 'aminy_marketplace' }),
       ).toBe('insured_aminy_sourced');
     });
   });
 
-  describe('pilot expiry (aact_pilot → insured after organizations.pilot_ends_at)', () => {
-    it('aact_pilot with NO expiry (null/undefined) stays 5% — no default date', () => {
-      expect(resolvePayoutRail({ baseRail: 'aact_pilot', pilotEndsAt: null, now: NOW })).toBe('aact_pilot');
-      expect(resolvePayoutRail({ baseRail: 'aact_pilot', now: NOW })).toBe('aact_pilot');
-    });
-
-    it('aact_pilot with a FUTURE expiry stays 5%', () => {
+  describe("clientSource === 'partner_org' → aact_pilot (5%), forever — no expiry step-up", () => {
+    it('routes an insured base rail to the 5% partner rail', () => {
       expect(
-        resolvePayoutRail({ baseRail: 'aact_pilot', pilotEndsAt: FUTURE, now: NOW }),
+        resolvePayoutRail({ baseRail: 'insured', clientSource: 'partner_org' }),
       ).toBe('aact_pilot');
     });
 
-    it('aact_pilot with a PAST expiry resolves to standard insured', () => {
+    it('keeps an aact_pilot base rail at 5%', () => {
       expect(
-        resolvePayoutRail({ baseRail: 'aact_pilot', pilotEndsAt: PAST, now: NOW }),
-      ).toBe('insured');
-    });
-
-    it('expiry at exactly `now` counts as expired', () => {
-      expect(
-        resolvePayoutRail({ baseRail: 'aact_pilot', pilotEndsAt: NOW.toISOString(), now: NOW }),
-      ).toBe('insured');
-    });
-
-    it('an unparseable expiry is treated as no expiry (fails toward the contracted discount)', () => {
-      expect(
-        resolvePayoutRail({ baseRail: 'aact_pilot', pilotEndsAt: 'not-a-date', now: NOW }),
+        resolvePayoutRail({ baseRail: 'aact_pilot', clientSource: 'partner_org' }),
       ).toBe('aact_pilot');
     });
+  });
 
-    it('ACTIVE pilot ignores sourcing — marketplace-sourced client pre-expiry stays 5%', () => {
+  describe("provider's own insured client (provider_sourced / null) → base rail unchanged", () => {
+    it('insured stays insured (10%) when the provider brought the client', () => {
       expect(
-        resolvePayoutRail({
-          baseRail: 'aact_pilot',
-          clientSource: 'aminy_marketplace',
-          pilotEndsAt: FUTURE,
-          now: NOW,
-        }),
-      ).toBe('aact_pilot');
-    });
-
-    it('EXPIRED pilot then applies the sourcing rule — marketplace-sourced → insured_aminy_sourced', () => {
-      expect(
-        resolvePayoutRail({
-          baseRail: 'aact_pilot',
-          clientSource: 'aminy_marketplace',
-          pilotEndsAt: PAST,
-          now: NOW,
-        }),
-      ).toBe('insured_aminy_sourced');
-    });
-
-    it('EXPIRED pilot with a provider-sourced client → standard insured', () => {
-      expect(
-        resolvePayoutRail({
-          baseRail: 'aact_pilot',
-          clientSource: 'provider_sourced',
-          pilotEndsAt: PAST,
-          now: NOW,
-        }),
+        resolvePayoutRail({ baseRail: 'insured', clientSource: 'provider_sourced' }),
       ).toBe('insured');
     });
 
-    it('pilotEndsAt on a non-pilot base rail is ignored', () => {
-      expect(resolvePayoutRail({ baseRail: 'insured', pilotEndsAt: PAST, now: NOW })).toBe('insured');
-      expect(resolvePayoutRail({ baseRail: 'cash_pay', pilotEndsAt: PAST, now: NOW })).toBe('cash_pay');
+    it('null/undefined source (legacy rows) leaves the base rail unchanged', () => {
+      expect(resolvePayoutRail({ baseRail: 'insured', clientSource: null })).toBe('insured');
+      expect(resolvePayoutRail({ baseRail: 'insured' })).toBe('insured');
+      expect(resolvePayoutRail({ baseRail: 'aact_pilot', clientSource: null })).toBe('aact_pilot');
+      expect(resolvePayoutRail({ baseRail: 'aact_pilot' })).toBe('aact_pilot');
+    });
+
+    it('provider_sourced on an aact_pilot base rail leaves it at the partner rail', () => {
+      expect(
+        resolvePayoutRail({ baseRail: 'aact_pilot', clientSource: 'provider_sourced' }),
+      ).toBe('aact_pilot');
+    });
+  });
+
+  describe('cash_pay (25%) is a payment-method rail — NEVER re-routed by sourcing', () => {
+    it.each(['aminy_marketplace', 'partner_org', 'provider_sourced'] as const)(
+      'cash_pay + %s stays cash_pay',
+      (source) => {
+        expect(resolvePayoutRail({ baseRail: 'cash_pay', clientSource: source })).toBe('cash_pay');
+      },
+    );
+
+    it('cash_pay with no source stays cash_pay', () => {
+      expect(resolvePayoutRail({ baseRail: 'cash_pay' })).toBe('cash_pay');
     });
   });
 
   it('is pure — same input, same output, input object not mutated', () => {
-    const input = { baseRail: 'insured' as PayoutRail, clientSource: 'aminy_marketplace' as const, now: NOW };
+    const input = { baseRail: 'insured' as PayoutRail, clientSource: 'aminy_marketplace' as const };
     const a = resolvePayoutRail(input);
     const b = resolvePayoutRail(input);
     expect(a).toBe(b);
@@ -147,12 +108,14 @@ describe('drift guard: PLATFORM_FEE_RATES ↔ PLATFORM_TAKE_RATE', () => {
     );
   });
 
-  it('fee-disclosure copy derivation: the new rail renders as 20% fee / keep 80%', () => {
+  it('fee-disclosure copy derivation: partner 5% / own insured 10% (keep 90%) / Aminy-sourced 20% (keep 80%)', () => {
     // ProviderPayoutSetup derives its rows via pct(rate) = round(rate*100)+'%'.
     const pct = (rate: number) => `${Math.round(rate * 100)}%`;
+    expect(pct(PLATFORM_FEE_RATES.aact_pilot)).toBe('5%');
+    expect(pct(PLATFORM_FEE_RATES.insured)).toBe('10%');
+    expect(pct(1 - PLATFORM_FEE_RATES.insured)).toBe('90%');
     expect(pct(PLATFORM_FEE_RATES.insured_aminy_sourced)).toBe('20%');
     expect(pct(1 - PLATFORM_FEE_RATES.insured_aminy_sourced)).toBe('80%');
-    expect(pct(PLATFORM_FEE_RATES.insured)).toBe('10%');
   });
 
   it('payout math on the new rail: $200 insured Aminy-sourced session → provider $160 / platform $40', () => {

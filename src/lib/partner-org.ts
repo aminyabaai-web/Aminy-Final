@@ -148,7 +148,7 @@ export async function applyPartnerToProfile(userId: string, partnerId: PartnerOr
  * pilot_organization and returns the rail the partner contract specifies.
  * Defaults to cash_pay. Callers computing fees for a specific session should
  * pass this through resolvePayoutRail (src/lib/payout-rail.ts) together with
- * the booking's client_source and the org's pilot_ends_at.
+ * the booking's client_source.
  */
 export async function getPayoutRailForUser(userId: string): Promise<PayoutRail> {
   const { data } = await supabase
