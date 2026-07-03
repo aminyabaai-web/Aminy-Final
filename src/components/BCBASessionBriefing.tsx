@@ -23,12 +23,24 @@ import {
   ChevronDown,
   ChevronUp,
   Calendar,
-  Brain
+  Brain,
+  ClipboardCheck
 } from 'lucide-react';
 import { ScreenHeader } from './ui/ScreenHeader';
 import { isDemoMode } from '../lib/demo-seed';
 import { supabase } from '../utils/supabase/client';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { getDueScreenings, SCREENING_CPT_BY_INSTRUMENT } from '../lib/screening-schedule';
+import { SCREENING_INSTRUMENTS, type ScreeningType } from '../lib/screening-instruments';
+
+/** Provider-facing CPT tag for a screening instrument ("96127 · billable on review"). */
+function cptTagFor(instrumentId: string): string | undefined {
+  const cpt = SCREENING_CPT_BY_INSTRUMENT[instrumentId as ScreeningType];
+  if (!cpt) return undefined;
+  return cpt === '96127'
+    ? '96127 · billable on review (max 4 units/day)'
+    : '96110 · billable on review';
+}
 
 interface BCBASessionBriefingProps {
   familyId: string;
@@ -57,6 +69,13 @@ interface BriefingData {
   lastSessionHighlights: string[];
   vaultInsights: string[];
   suggestedTopics: string[];
+  /** Validated screeners: recently completed (review + document → CPT 96110/96127) and due-but-incomplete. */
+  screenersToReview: {
+    instrumentName: string;
+    status: 'completed' | 'due';
+    detail: string;
+    cptTag?: string;
+  }[];
 }
 
 export function BCBASessionBriefing({
@@ -70,7 +89,7 @@ export function BCBASessionBriefing({
 }: BCBASessionBriefingProps) {
   const [briefing, setBriefing] = useState<BriefingData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['summary', 'working', 'notWorking']));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['summary', 'working', 'notWorking', 'screeners']));
 
   // Never surface the literal "Parent"/"Patient" placeholder words — fall back
   // to a clean generic ("your client") when no real name is supplied.
@@ -89,20 +108,75 @@ export function BCBASessionBriefing({
     if (!isDemoMode()) {
       // Real mode: query Supabase for live family data + AI narrative
       try {
-        const [goalsRes, logsRes, notesRes] = await Promise.all([
+        const [goalsRes, logsRes, notesRes, screeningsRes, childRes] = await Promise.all([
           supabase.from('goals').select('title, status, target_behavior, progress_notes, updated_at')
             .eq('user_id', familyId).eq('status', 'active').limit(8),
           supabase.from('behavior_logs').select('behavior_type, intensity, notes, is_positive, created_at')
             .eq('user_id', familyId).order('created_at', { ascending: false }).limit(10),
           supabase.from('session_notes').select('content, session_type, created_at')
             .eq('user_id', familyId).order('created_at', { ascending: false }).limit(3),
+          // Validated screener results migrate from localStorage into the
+          // `screening_results` table at signup (App.tsx handleOnboardingComplete),
+          // so post-signup families are queryable here. Pre-signup results live
+          // only in the parent's device localStorage and are NOT visible provider-side.
+          supabase.from('screening_results')
+            .select('instrument_id, instrument_name, total_score, risk_level, completed_at')
+            .eq('user_id', familyId).order('completed_at', { ascending: false }).limit(10),
+          supabase.from('children').select('age_years, age, is_primary')
+            .eq('parent_id', familyId).order('is_primary', { ascending: false }).limit(1).maybeSingle(),
         ]);
 
         const goals = goalsRes.data || [];
         const logs = logsRes.data || [];
         const notes = notesRes.data || [];
+        const screenings = (screeningsRes.data || []) as Array<{
+          instrument_id?: string; instrument_name?: string; total_score?: number;
+          risk_level?: string; completed_at?: string;
+        }>;
 
-        const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0;
+        // Screeners to review: completed instruments (review + document → billable)
+        // plus due-but-incomplete ones from the screening-schedule engine.
+        const screenersToReview: BriefingData['screenersToReview'] = [];
+        for (const s of screenings.slice(0, 4)) {
+          if (!s.instrument_id) continue;
+          const when = s.completed_at
+            ? new Date(s.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            : 'recently';
+          screenersToReview.push({
+            instrumentName: s.instrument_name
+              || SCREENING_INSTRUMENTS[s.instrument_id as ScreeningType]?.name
+              || s.instrument_id,
+            status: 'completed',
+            detail: `Completed ${when}${s.risk_level ? ` · ${s.risk_level} risk` : ''}${typeof s.total_score === 'number' ? ` (score ${s.total_score})` : ''}`,
+            cptTag: cptTagFor(s.instrument_id),
+          });
+        }
+        const childRow = childRes.data as { age_years?: number | null; age?: number | null } | null;
+        const ageYears = childRow?.age_years ?? childRow?.age;
+        const dueScreenings = getDueScreenings({
+          childAgeMonths: typeof ageYears === 'number' && ageYears > 0 ? Math.round(ageYears * 12) : null,
+          concerns: [],
+          completed: screenings
+            .filter((s) => s.instrument_id && s.completed_at)
+            .map((s) => ({ instrumentId: s.instrument_id!, completedAt: s.completed_at! })),
+          // Provider surface: billing metadata is informational for the clinician,
+          // so compute it regardless of the family's coverage status.
+          hasInsuranceOnFile: true,
+        });
+        for (const d of dueScreenings) {
+          screenersToReview.push({
+            instrumentName: SCREENING_INSTRUMENTS[d.instrumentId as ScreeningType]?.name || d.name,
+            status: 'due',
+            detail: d.reason === 'rescreen'
+              ? `Due for re-screen (last completed >180 days ago)`
+              : d.reason === 'age'
+                ? `Due by age window (${d.ageWindow})`
+                : `Due — concern-flagged${d.concernTag ? `: ${d.concernTag}` : ''}`,
+            cptTag: cptTagFor(d.instrumentId),
+          });
+        }
+
+        const hasData = goals.length > 0 || logs.length > 0 || notes.length > 0 || screenersToReview.length > 0;
 
         // No history at all — show a helpful empty state instead of fabricated text
         if (!hasData) {
@@ -118,6 +192,7 @@ export function BCBASessionBriefing({
             lastSessionHighlights: [],
             vaultInsights: [],
             suggestedTopics: [],
+            screenersToReview: [],
           });
           setIsLoading(false);
           return;
@@ -169,6 +244,7 @@ export function BCBASessionBriefing({
           lastSessionHighlights: notes.slice(0, 2).map(n => n.content?.substring(0, 100) || '').filter(Boolean),
           vaultInsights: [],
           suggestedTopics: goals.slice(0, 3).map(g => `Review: ${g.title}`),
+          screenersToReview,
         });
       } catch (err) {
         console.error('[BCBABriefing] Real data load failed:', err);
@@ -247,6 +323,21 @@ export function BCBASessionBriefing({
         'Prepare for IEP meeting - parent advocacy training',
         'Sibling support strategies',
         'Parent self-care check-in'
+      ],
+
+      screenersToReview: [
+        {
+          instrumentName: 'PSC-35',
+          status: 'completed',
+          detail: 'Completed 2 weeks ago · moderate risk (score 22)',
+          cptTag: cptTagFor('psc'),
+        },
+        {
+          instrumentName: 'Vanderbilt Assessment',
+          status: 'due',
+          detail: 'Due — concern-flagged: ADHD / Attention',
+          cptTag: cptTagFor('vanderbilt'),
+        },
       ]
     });
 
@@ -588,6 +679,53 @@ export function BCBASessionBriefing({
           </div>
         )}
       </Card>
+
+      {/* Screeners to Review — validated instruments completed by the family
+          (review + document during the encounter → CPT 96110 developmental /
+          96127 brief emotional-behavioral, up to 4 units/day) plus due-but-
+          incomplete ones worth ordering. */}
+      {briefing.screenersToReview.length > 0 && (
+        <Card className="overflow-hidden">
+          <SectionHeader
+            id="screeners"
+            icon={ClipboardCheck}
+            title="Screeners to Review"
+            count={briefing.screenersToReview.length}
+            color="bg-teal-100 text-teal-700"
+          />
+          {expandedSections.has('screeners') && (
+            <div className="px-4 pb-4 space-y-2">
+              {briefing.screenersToReview.map((s) => (
+                <div
+                  key={`${s.instrumentName}-${s.status}-${s.detail}`}
+                  className="flex items-start justify-between gap-3 p-3 rounded-lg border border-[#E8E4DF] bg-[#F6FBFB]"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm text-[#132F43]">{s.instrumentName}</span>
+                      <Badge
+                        variant="outline"
+                        className={`text-sm ${s.status === 'completed' ? 'border-green-200 text-green-700' : 'border-amber-200 text-amber-700'}`}
+                      >
+                        {s.status === 'completed' ? 'Completed — review' : 'Due'}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-[#5A6B7A] mt-0.5">{s.detail}</p>
+                  </div>
+                  {s.cptTag && (
+                    <span className="text-xs font-mono text-[#2A7D99] whitespace-nowrap flex-shrink-0 mt-0.5">
+                      {s.cptTag}
+                    </span>
+                  )}
+                </div>
+              ))}
+              <p className="text-xs text-[#8A9BA8]">
+                Screener CPT codes are billable only when reviewed/documented by the rendering provider as part of the encounter.
+              </p>
+            </div>
+          )}
+        </Card>
+      )}
 
       {/* Suggested Session Topics */}
       <Card className="p-4 bg-gradient-to-r from-violet-50 to-purple-50 border-violet-200">

@@ -684,6 +684,7 @@ export const CPT_RULES: CptRule[] = [
     description:
       'Developmental screening (eg, developmental milestone survey, speech and language delay screen), with scoring and documentation, per standardized instrument',
     unit: 'per_instrument',
+    defaultReimbursementCents: 1200, // ~$12 typical Medicaid/commercial per instrument (M-CHAT, CSBS, ASQ)
     typicalDuration: 'Per instrument',
     billingTip: 'Screening-only code — a positive screen should route to 96112 developmental testing.',
   },

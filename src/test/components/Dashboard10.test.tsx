@@ -62,42 +62,26 @@ vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn(), info: vi.f
 // ============================================================
 // Mock lucide-react icons — every icon used by Dashboard10
 // ============================================================
+// Dashboard10's child-component tree pulls in dozens of icons and grows often —
+// serve ANY requested icon via a Proxy so the mock can't bit-rot again.
 vi.mock('lucide-react', () => {
   const icon = (name: string) =>
     function MockIcon(props: Record<string, unknown>) {
       return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
     };
-  return {
-    Home: icon('Home'),
-    BookOpen: icon('BookOpen'),
-    Users: icon('Users'),
-    User: icon('User'),
-    Calendar: icon('Calendar'),
-    CheckCircle2: icon('CheckCircle2'),
-    MessageSquare: icon('MessageSquare'),
-    Sparkles: icon('Sparkles'),
-    TrendingUp: icon('TrendingUp'),
-    Heart: icon('Heart'),
-    FileText: icon('FileText'),
-    Video: icon('Video'),
-    AlertCircle: icon('AlertCircle'),
-    ChevronRight: icon('ChevronRight'),
-    Clock: icon('Clock'),
-    Award: icon('Award'),
-    Zap: icon('Zap'),
-    Wind: icon('Wind'),
-    Sun: icon('Sun'),
-    Moon: icon('Moon'),
-    Sunset: icon('Sunset'),
-    Star: icon('Star'),
-    Maximize2: icon('Maximize2'),
-    Minimize2: icon('Minimize2'),
-    X: icon('X'),
-    Loader2: icon('Loader2'),
-    Send: icon('Send'),
-    Stethoscope: icon('Stethoscope'),
-    Camera: icon('Camera'),
-  };
+  const cache = new Map<string, ReturnType<typeof icon>>();
+  return new Proxy(
+    {},
+    {
+      has: () => true, // vitest verifies exports with `in`
+      get: (_target, prop) => {
+        if (prop === '__esModule') return true;
+        if (typeof prop !== 'string' || prop === 'default' || prop === 'then') return undefined;
+        if (!cache.has(prop)) cache.set(prop, icon(prop));
+        return cache.get(prop);
+      },
+    },
+  );
 });
 
 // ============================================================

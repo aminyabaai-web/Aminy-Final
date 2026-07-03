@@ -53,6 +53,7 @@ import {
   Stethoscope,
   Camera,
   Download,
+  ClipboardCheck,
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -94,6 +95,23 @@ import { fireConfetti } from '../lib/confetti';
 import { WeeklyOutcomeCheckIn, shouldShowWeeklyCheckIn } from './WeeklyOutcomeCheckIn';
 import { BaselineAssessment, needsBaseline } from './BaselineAssessment';
 import PostSessionReview from './PostSessionReview';
+import { loadDueScreenings, screeningScreenFor, type ScreeningDue } from '../lib/screening-schedule';
+import { SCREENING_INSTRUMENTS, type ScreeningType } from '../lib/screening-instruments';
+import { updateUserContext } from '../ai/contextLayer';
+
+// Screening nudge throttle — once dismissed, stay quiet for 7 days
+const SCREENING_NUDGE_DISMISS_KEY = 'aminy-screening-nudge-dismissed-at';
+const SCREENING_NUDGE_DISMISS_DAYS = 7;
+
+function isScreeningNudgeDismissed(): boolean {
+  try {
+    const at = localStorage.getItem(SCREENING_NUDGE_DISMISS_KEY);
+    if (!at) return false;
+    return Date.now() - Number(at) < SCREENING_NUDGE_DISMISS_DAYS * 24 * 60 * 60 * 1000;
+  } catch {
+    return false;
+  }
+}
 
 // Types
 interface ChildProfile {
@@ -226,6 +244,10 @@ export function Dashboard10({
   const [showWeeklyCheckIn, setShowWeeklyCheckIn] = useState(false);
   const [showBaselineAssessment, setShowBaselineAssessment] = useState(false);
   const [postSessionReview, setPostSessionReview] = useState<{ providerId: string; providerName: string; sessionDate: string } | null>(null);
+
+  // Billable screening-due nudge (screening-schedule engine)
+  const [dueScreenings, setDueScreenings] = useState<ScreeningDue[]>([]);
+  const [screeningNudgeDismissed, setScreeningNudgeDismissed] = useState(() => isScreeningNudgeDismissed());
 
   // 4-week outcome trend data
   interface TrendPoint {
@@ -411,6 +433,43 @@ export function Dashboard10({
 
   // Load real dashboard data from database (with child filtering)
   const dashboardData = useDashboardData(userId || undefined, activeChildId);
+
+  // Compute due screenings once real data has settled, and publish a compact
+  // summary into the AI context (profiles.ai_context via context/update) once
+  // per session so chat can nudge organically.
+  useEffect(() => {
+    if (!userId || dashboardData.isLoading) return;
+    let cancelled = false;
+
+    const realAgeYears = dashboardData.childProfile?.age;
+    const options = typeof realAgeYears === 'number' && realAgeYears > 0
+      ? { childAgeMonths: Math.round(realAgeYears * 12) }
+      : undefined; // engine falls back to its own children-table lookup
+
+    loadDueScreenings(options)
+      .then((due) => {
+        if (cancelled) return;
+        setDueScreenings(due);
+        if (due.length === 0) return;
+        try {
+          const sessionKey = 'aminy-screenings-due-published';
+          if (!sessionStorage.getItem(sessionKey)) {
+            sessionStorage.setItem(sessionKey, '1');
+            updateUserContext(userId, {
+              screeningsDue: due.map((d) => ({
+                name: d.name,
+                reason: d.reason,
+                billable: !!d.billable,
+              })),
+            });
+          }
+        } catch { /* sessionStorage unavailable — skip publish */ }
+      })
+      .catch(() => { /* non-blocking */ });
+
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, dashboardData.isLoading]);
 
   // Auto-set routine based on time of day
   useEffect(() => {
@@ -1792,6 +1851,58 @@ export function Dashboard10({
             />
           </section>
         )}
+
+        {/* ========================================
+            SCREENING NUDGE — one quiet card when a validated
+            check-in is due (screening-schedule engine).
+            COMPLIANCE: never promises coverage — "often covered
+            when reviewed with your provider".
+            ======================================== */}
+        {dueScreenings.length > 0 && !screeningNudgeDismissed && (() => {
+          const first = dueScreenings[0];
+          const minutes = SCREENING_INSTRUMENTS[first.instrumentId as ScreeningType]?.estimatedMinutes ?? 5;
+          const forChild = first.instrumentId !== 'phq-9' && hasRealChildName;
+          return (
+            <section>
+              <Card className="p-4 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15 flex items-center justify-center flex-shrink-0">
+                    <ClipboardCheck className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-[#132F43] dark:text-slate-100">
+                      {first.name} is ready{forChild ? ` for ${child.name}` : ''} · {minutes} minutes
+                    </h3>
+                    {first.billable && (
+                      <p className="text-xs text-[#8A9BA8] dark:text-slate-400 mt-0.5">
+                        Often covered when reviewed with your provider.
+                      </p>
+                    )}
+                    <button
+                      onClick={() => {
+                        triggerHaptic('light');
+                        onNavigate?.(screeningScreenFor(first.instrumentId));
+                      }}
+                      className="mt-2 px-4 py-1.5 rounded-lg bg-[#2A7D99] text-white text-sm font-medium hover:bg-[#1F6080] transition-colors"
+                    >
+                      Start
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => {
+                      try { localStorage.setItem(SCREENING_NUDGE_DISMISS_KEY, String(Date.now())); } catch { /* ignore */ }
+                      setScreeningNudgeDismissed(true);
+                    }}
+                    aria-label="Dismiss screening reminder"
+                    className="p-1.5 rounded-lg text-[#8A9BA8] hover:bg-[#F6FBFB] dark:hover:bg-slate-700 transition-colors flex-shrink-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </Card>
+            </section>
+          );
+        })()}
 
         {/* ========================================
             7. REFERRAL - Viral growth mechanism

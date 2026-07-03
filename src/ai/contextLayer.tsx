@@ -73,6 +73,11 @@ export interface UserContext {
   strugglingWith?: string[];
   celebratingWins?: string[];
 
+  // Validated screenings currently due (published by Dashboard10 via the
+  // screening-schedule engine). `billable` means "potentially billable when a
+  // provider reviews it" — the AI must NEVER promise insurance coverage.
+  screeningsDue?: Array<{ name: string; reason: string; billable: boolean }>;
+
   // Roaming AI preferences (persisted in profiles.ai_context so they follow the
   // user across devices; localStorage remains the offline cache/fallback)
   customInstructions?: { aboutMe?: string; responseStyle?: string };
@@ -236,6 +241,9 @@ export async function fetchUserContext(userId: string): Promise<UserContext> {
       lastHubPost: kvContext.lastHubPost,
       lastCoverageQuestion: kvContext.lastCoverageQuestion,
 
+      // Due screenings (published from the dashboard via updateUserContext)
+      screeningsDue: Array.isArray(kvContext.screeningsDue) ? kvContext.screeningsDue : undefined,
+
       // Roaming AI preferences (M1 — hydrated by BevelChatOverlay on mount;
       // localStorage stays the offline cache/fallback)
       customInstructions: kvContext.customInstructions,
@@ -384,6 +392,18 @@ export function buildAIContextString(context: UserContext): string {
 
   if (context.recentSessionNotes && context.recentSessionNotes.length > 0) {
     parts.push(`Recent provider observations: ${context.recentSessionNotes.join(' | ')}.`);
+  }
+
+  // DUE SCREENINGS — lets the AI gently nudge toward validated check-ins.
+  // COMPLIANCE: "often covered … when reviewed with your provider" — never a
+  // coverage promise; billing decisions always flow through the provider.
+  if (context.screeningsDue && context.screeningsDue.length > 0) {
+    const items = context.screeningsDue
+      .slice(0, 4)
+      .map((s) => `${s.name} (${s.reason}${s.billable ? '; often covered by insurance when reviewed with their provider' : ''})`);
+    parts.push(
+      `SCREENINGS DUE: ${items.join(' | ')}. If it fits the conversation, gently suggest completing one in the app (a few minutes each). Never promise insurance coverage.`
+    );
   }
 
   // WEEKLY OUTCOMES — compact (≤600 chars), most-recent-first, real numbers the
