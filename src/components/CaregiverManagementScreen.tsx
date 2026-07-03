@@ -3,15 +3,16 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, UserPlus, QrCode, Link as LinkIcon, Mail, MoreVertical, Shield, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { ManageCaregivers, COPARENT_REASSURANCE } from './ManageCaregivers';
+import { ManageCaregivers, COPARENT_REASSURANCE, type ChildOption } from './ManageCaregivers';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { isDemoMode } from '../lib/demo-seed';
+import { supabase } from '../utils/supabase/client';
 
 interface CaregiverManagementScreenProps {
   onBack?: () => void;

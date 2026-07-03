@@ -9,7 +9,7 @@ const singleMock = vi.fn();
 const insertMock = vi.fn(() => ({ select: vi.fn(() => ({ single: singleMock })) }));
 const updateEqMock = vi.fn().mockResolvedValue({ data: null, error: null });
 const updateMock = vi.fn(() => ({ eq: updateEqMock }));
-const fromMock = vi.fn(() => ({ insert: insertMock, update: updateMock }));
+const fromMock = vi.fn((_table: string) => ({ insert: insertMock, update: updateMock }));
 
 vi.mock('../../utils/supabase/client', () => ({
   supabase: {

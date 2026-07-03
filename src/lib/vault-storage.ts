@@ -80,6 +80,8 @@ export type VaultDocumentSource =
 export interface VaultDocumentMetadata {
   childId?: string;
   childName?: string;
+  /** Parent-facing display title (defaults to fileName in the UI) */
+  title?: string;
   extractedText?: string;
   ocrStatus?: 'pending' | 'processing' | 'complete' | 'failed';
   extractedFields?: {

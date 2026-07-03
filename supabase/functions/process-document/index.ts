@@ -40,12 +40,18 @@ serve(async (req) => {
             throw new Error(`Failed to fetch document: ${fetchError?.message || 'Not found'}`)
         }
 
-        console.log(`Found document: ${document.name} (type: ${document.file_type})`)
+        // Schema (migrations 016 + 20260304000000): file_name, file_path,
+        // mime_type (e.g. "application/pdf"), file_type (extension, e.g. "pdf").
+        const mimeType: string = document.mime_type || ''
+        const isPdf = mimeType === 'application/pdf' || document.file_type === 'pdf'
+        const isText = mimeType.includes('text') || ['txt', 'md', 'csv'].includes(document.file_type)
+
+        console.log(`Found document: ${document.file_name} (mime: ${mimeType})`)
 
         // We only process PDFs and text for now
-        if (document.file_type !== 'application/pdf' && !document.file_type.includes('text')) {
+        if (!isPdf && !isText) {
             return new Response(
-                JSON.stringify({ message: "Unsupported file type for text extraction.", type: document.file_type }),
+                JSON.stringify({ message: "Unsupported file type for text extraction.", type: mimeType || document.file_type }),
                 { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
             )
         }
@@ -53,7 +59,7 @@ serve(async (req) => {
         // 3. Download the actual file from Supabase Storage
         const { data: fileData, error: downloadError } = await supabase.storage
             .from('vault-documents')
-            .download(document.storage_path)
+            .download(document.file_path)
 
         if (downloadError || !fileData) {
             throw new Error(`Failed to download file: ${downloadError?.message}`)
@@ -62,7 +68,7 @@ serve(async (req) => {
         let extractedText = ""
 
         // 4. Extract text based on file type
-        if (document.file_type === 'application/pdf') {
+        if (isPdf) {
             const arrayBuffer = await fileData.arrayBuffer()
             const buffer = Buffer.from(arrayBuffer)
             try {
@@ -129,7 +135,7 @@ serve(async (req) => {
             embedding: extractedEmbeddings[index].embedding,
             metadata: {
                 document_id: document.id,
-                document_name: document.name,
+                document_name: document.file_name,
                 chunk_index: index,
                 source: 'vault'
             }
@@ -143,10 +149,20 @@ serve(async (req) => {
             throw new Error(`Failed to insert embeddings: ${insertError.message}`)
         }
 
-        // 8. Update the document to indicate it's been processed
+        // 8. Update the document to indicate it's been processed.
+        // vault_documents has no usable_by_assistant column — the processed
+        // flag + extracted text live in the metadata JSONB (the client maps
+        // metadata.ocrStatus → "Aminy read it" chip and metadata.extractedText
+        // → in-vault full-text search).
         await supabase
             .from('vault_documents')
-            .update({ usable_by_assistant: true })
+            .update({
+                metadata: {
+                    ...(document.metadata || {}),
+                    ocrStatus: 'complete',
+                    extractedText: extractedText.slice(0, 8000),
+                },
+            })
             .eq('id', document.id)
 
         return new Response(

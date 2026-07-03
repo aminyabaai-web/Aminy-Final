@@ -415,7 +415,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           <div className="flex-1">
             <p className="text-sm font-semibold text-[#132F43]">Share Aminy, get a free month</p>
             <p className="text-sm text-[#5A6B7A]">
-              Refer a friend — you get a free month, and they get $25 toward their first expert session.
+              Refer a friend — you both get a month of Aminy Core, free.
             </p>
           </div>
         </div>
@@ -706,7 +706,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
                 </div>
                 <div>
                   <p className="font-medium text-violet-900 dark:text-violet-300">Know another family?</p>
-                  <p className="text-sm text-violet-700 dark:text-violet-400">You get a free month. Your friend gets $25 toward their first expert session.</p>
+                  <p className="text-sm text-violet-700 dark:text-violet-400">Give a month, get a month — you both get Aminy Core free when they join.</p>
                 </div>
               </div>
               <Button

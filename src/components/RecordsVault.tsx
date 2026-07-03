@@ -294,7 +294,7 @@ const RecordRow: React.FC<RecordRowProps> = ({
                   {record.ocrStatus === 'Complete' && (
                     <Badge variant="outline" className="text-sm">
                       <CheckCircle2 className="w-3 h-3 mr-1 text-green-500" />
-                      Searchable
+                      Aminy read it
                     </Badge>
                   )}
                   {userTier === 'pro' && record.extractedFields && (
@@ -497,13 +497,23 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   // ─── Real data from Supabase ───────────
   const [records, setRecords] = useState<EnhancedVaultRecord[]>([]);
   // Use storage hook for unified storage information.
-  // Pass the real records so usedBytes is computed from actual files —
-  // an empty vault reads "0.0 GB used" instead of a fabricated mock value.
-  const { usedBytes, quotaBytes, planTier, capabilities } = useStorage(records);
+  // Pass the real records so usedBytes is computed from actual files, and the
+  // authoritative tier so the quota (100MB/5GB/25GB/unlimited from tier-utils)
+  // is truthful for this user.
+  const { usedBytes, quotaBytes, capabilities } = useStorage(records, userTier);
   const [isLoadingDocs, setIsLoadingDocs] = useState(true);
-  const [uploadingFile, setUploadingFile] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // ─── Upload queue (multi-file, per-file progress + retry) ───────────────
+  const [uploadQueue, setUploadQueue] = useState<UploadQueueItem[]>([]);
+  const isUploading = uploadQueue.some(i => i.status === 'queued' || i.status === 'uploading' || i.status === 'processing');
+
+  const reloadDocuments = async (uid: string) => {
+    const { documents } = await listVaultDocuments(uid, { limit: 100 });
+    if (documents) {
+      setRecords(documents.map(mapDocToRecord));
+    }
+  };
 
   useEffect(() => {
     async function loadDocuments() {
@@ -521,23 +531,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
           // No documents yet — show empty state
           setRecords([]);
         } else {
-          // Map Supabase vault documents to EnhancedVaultRecord format
-          const mapped = documents.map(doc => ({
-            id: doc.id,
-            title: doc.fileName,
-            date: doc.uploadedAt || new Date().toISOString(),
-            createdAt: doc.uploadedAt || new Date().toISOString(),
-            type: doc.recordType || 'Other',
-            source: doc.source || 'Parent Upload',
-            visibility: doc.visibility || 'Private',
-            relatedTo: [],
-            vaultText: doc.metadata?.extractedText || '',
-            files: [{ id: doc.id, name: doc.fileName, url: '', size: doc.fileSize || 0, type: doc.mimeType || 'application/pdf', uploadedAt: doc.uploadedAt || new Date().toISOString() }],
-            status: 'Active',
-            ocrStatus: 'None',
-            filePath: doc.filePath,
-          })) as unknown as EnhancedVaultRecord[];
-          setRecords(mapped);
+          setRecords(documents.map(mapDocToRecord));
         }
       } catch {
         setRecords([]);
@@ -548,57 +542,99 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
     loadDocuments();
   }, [vaultRecords]);
 
-  // ─── Real file upload handler ───────────────
-  const handleFileUpload = async (file: File, title: string, recordType: string) => {
-    setUploadingFile(true);
-    setUploadProgress(0);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('Please sign in to upload documents');
-        return;
-      }
+  const updateQueueItem = (id: string, patch: Partial<UploadQueueItem>) => {
+    setUploadQueue(prev => prev.map(i => (i.id === id ? { ...i, ...patch } : i)));
+  };
 
-      const result = await uploadVaultFile(file, user.id, {
-        recordType: (recordType.toLowerCase().replace(/[^a-z-]/g, '-') as VaultRecordType) || 'other',
-        source: 'parent-upload',
-        onProgress: (p) => setUploadProgress(p),
+  // ─── Upload one file: upload → save → AI processing → status chip ─────────
+  // A failed upload keeps the file in the queue with a Retry button; a failed
+  // AI-processing step NEVER undoes the upload (status becomes "saved").
+  const uploadOne = async (item: UploadQueueItem) => {
+    updateQueueItem(item.id, { status: 'uploading', progress: 5, error: undefined });
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      updateQueueItem(item.id, { status: 'error', error: 'Please sign in to upload documents' });
+      toast.error('Please sign in to upload documents');
+      return;
+    }
+
+    try {
+      const result = await uploadVaultFile(item.file, user.id, {
+        recordType: item.recordType,
+        source: item.source,
+        metadata: { title: item.title },
+        onProgress: (p) => updateQueueItem(item.id, { progress: p }),
         tier: userTier,
       });
 
-      if (result.success) {
-        toast.success('Document uploaded successfully!');
-        // Empowerment badges: first upload + Records Master at 10 docs
-        checkAndAwardBadges(user.id, 'vault_upload').catch(() => {});
-        // Reload documents
-        const { documents } = await listVaultDocuments(user.id, { limit: 100 });
-        if (documents) {
-          const mapped = documents.map(doc => ({
-            id: doc.id,
-            title: doc.fileName,
-            date: doc.uploadedAt || new Date().toISOString(),
-            createdAt: doc.uploadedAt || new Date().toISOString(),
-            type: doc.recordType || 'Other',
-            source: doc.source || 'Parent Upload',
-            visibility: doc.visibility || 'Private',
-            relatedTo: [],
-            vaultText: doc.metadata?.extractedText || '',
-            files: [{ id: doc.id, name: doc.fileName, url: '', size: doc.fileSize || 0, type: doc.mimeType || 'application/pdf', uploadedAt: doc.uploadedAt || new Date().toISOString() }],
-            status: 'Active',
-            ocrStatus: 'None',
-            filePath: doc.filePath,
-          })) as unknown as EnhancedVaultRecord[];
-          setRecords(mapped);
-        }
-        setShowAddRecord(false);
-      } else {
-        toast.error(result.error || 'Upload failed');
+      if (!result.success) {
+        updateQueueItem(item.id, { status: 'error', error: result.error || 'Upload failed' });
+        if (result.quotaExceeded) toast.error(result.error);
+        return;
       }
+
+      // Empowerment badges: first upload + Records Master at 10 docs
+      checkAndAwardBadges(user.id, 'vault_upload').catch(() => {});
+      updateQueueItem(item.id, { status: 'processing', progress: 100, fileId: result.fileId });
+      toast.success('Saved. Aminy is reading it now — ask about it anytime in chat.');
+
+      // Vault → AI link 1: store a memory fact. Memory facts are injected into
+      // the chat system prompt ("WHAT YOU REMEMBER..." block), so Aminy knows
+      // this document exists even before/without embeddings.
+      storeMemory(user.id, {
+        timestamp: new Date(),
+        category: 'insight',
+        content: `Parent uploaded a ${item.recordType} document "${item.title}" to their records vault on ${new Date().toLocaleDateString()}. It's stored in the vault — reference it when relevant.`,
+        context: { source: 'vault-upload', documentId: result.fileId || null },
+      }).catch(() => {});
+
+      // Vault → AI link 2: the deployed process-document edge fn extracts text
+      // and stores embeddings. Graceful: doc stays saved if this fails.
+      if (result.fileId) {
+        const processed = await processVaultDocument(result.fileId);
+        if (processed.success) {
+          markVaultDocumentProcessed(result.fileId).catch(() => {});
+          updateQueueItem(item.id, { status: 'ready' });
+        } else {
+          updateQueueItem(item.id, { status: 'saved' });
+        }
+      } else {
+        updateQueueItem(item.id, { status: 'saved' });
+      }
+
+      await reloadDocuments(user.id);
     } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Upload failed');
-    } finally {
-      setUploadingFile(false);
-      setUploadProgress(0);
+      updateQueueItem(item.id, {
+        status: 'error',
+        error: err instanceof Error ? err.message : 'Upload failed',
+      });
+    }
+  };
+
+  // ─── Multi-file entry point (camera, picker, and drag-drop all land here) ──
+  const handleFilesSelected = async (fileList: FileList | File[]) => {
+    const files = Array.from(fileList);
+    if (files.length === 0) return;
+
+    const titleInput = document.getElementById('title') as HTMLInputElement | null;
+    const customTitle = titleInput?.value?.trim() || '';
+
+    const items: UploadQueueItem[] = files.map((file, idx) => ({
+      id: `${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 8)}`,
+      file,
+      // A typed title applies to a single file; batches keep their file names
+      title: files.length === 1 && customTitle ? customTitle : file.name,
+      recordType: RECORD_TYPE_SLUGS[recordTypeChoice] || 'other',
+      source: SOURCE_SLUGS[sourceChoice] || 'parent-upload',
+      progress: 0,
+      status: 'queued',
+    }));
+
+    setUploadQueue(prev => [...prev, ...items]);
+    // Sequential so the per-tier quota check sees each prior upload
+    for (const item of items) {
+      await uploadOne(item);
     }
   };
 
@@ -611,8 +647,44 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [shareModalRecord, setShareModalRecord] = useState<EnhancedVaultRecord | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const cameraInputRef = React.useRef<HTMLInputElement>(null);
   const [viewRecord, setViewRecord] = useState<EnhancedVaultRecord | null>(null);
   const [downloadingFileId, setDownloadingFileId] = useState<string | null>(null);
+
+  // Add Record form choices (labels; mapped to DB slugs on upload)
+  const [recordTypeChoice, setRecordTypeChoice] = useState<string>('Other');
+  const [sourceChoice, setSourceChoice] = useState<string>('Parent Upload');
+
+  // ─── Drag & drop ───────────────
+  // Page-level: dropping anywhere on the vault opens the Add sheet and uploads.
+  // Sheet-level: the dropzone card itself highlights while a file hovers it.
+  const [isPageDragActive, setIsPageDragActive] = useState(false);
+  const [isZoneDragActive, setIsZoneDragActive] = useState(false);
+  const dragDepth = React.useRef(0);
+
+  const hasFiles = (e: React.DragEvent) => Array.from(e.dataTransfer?.types || []).includes('Files');
+
+  const onPageDragEnter = (e: React.DragEvent) => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    dragDepth.current += 1;
+    setIsPageDragActive(true);
+  };
+  const onPageDragOver = (e: React.DragEvent) => {
+    if (hasFiles(e)) e.preventDefault();
+  };
+  const onPageDragLeave = () => {
+    dragDepth.current = Math.max(0, dragDepth.current - 1);
+    if (dragDepth.current === 0) setIsPageDragActive(false);
+  };
+  const onPageDrop = (e: React.DragEvent) => {
+    if (!e.dataTransfer?.files?.length) return;
+    e.preventDefault();
+    dragDepth.current = 0;
+    setIsPageDragActive(false);
+    setShowAddRecord(true);
+    handleFilesSelected(e.dataTransfer.files);
+  };
 
   // ─── Real file download handler ───────────────
   // Resolves a short-lived signed URL from the record's storage path and opens it.
@@ -708,12 +780,27 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
     }
   });
 
-  // Calculate storage usage
-  const usedGB = usedBytes / (1024 * 1024 * 1024);
-  const totalGB = quotaBytes / (1024 * 1024 * 1024);
+  // Storage meter — quotaBytes null = unlimited (Family plan)
+  const quotaPct = quotaBytes ? Math.min(100, (usedBytes / quotaBytes) * 100) : 0;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div
+      className="min-h-screen bg-background flex flex-col relative"
+      onDragEnter={onPageDragEnter}
+      onDragOver={onPageDragOver}
+      onDragLeave={onPageDragLeave}
+      onDrop={onPageDrop}
+    >
+      {/* Whole-page drop overlay (desktop drag & drop) */}
+      {isPageDragActive && (
+        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center bg-background/90" data-testid="vault-drop-overlay">
+          <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center">
+            <Upload className="w-8 h-8 mx-auto mb-2 text-primary" />
+            <p className="font-medium">Drop files to add them to your vault</p>
+            <p className="text-sm text-muted-foreground">Aminy will read them for you</p>
+          </div>
+        </div>
+      )}
       {/* Header */}
       <div className="sticky top-0 z-10 bg-background border-b">
         <div className="p-4 sm:p-5 md:p-6">
@@ -784,8 +871,8 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                     
                     <div>
                       <Label htmlFor="type">Type</Label>
-                      <Select defaultValue="Other">
-                        <SelectTrigger className="mt-1">
+                      <Select value={recordTypeChoice} onValueChange={setRecordTypeChoice}>
+                        <SelectTrigger id="type" className="mt-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -795,11 +882,11 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div>
                       <Label htmlFor="source">Source</Label>
-                      <Select defaultValue="Parent Upload">
-                        <SelectTrigger className="mt-1">
+                      <Select value={sourceChoice} onValueChange={setSourceChoice}>
+                        <SelectTrigger id="source" className="mt-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -809,77 +896,138 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                         </SelectContent>
                       </Select>
                     </div>
-                    
-                    <div>
-                      <Label htmlFor="visibility">Visibility</Label>
-                      <Select defaultValue="Private">
-                        <SelectTrigger className="mt-1">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Private">Private</SelectItem>
-                          <SelectItem value="Shared">Shared</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    {/* File Upload Area */}
+
+                    {/* Hidden inputs: camera capture (mobile) + multi-file picker */}
+                    <input
+                      ref={cameraInputRef}
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="hidden"
+                      data-testid="vault-camera-input"
+                      onChange={(e) => {
+                        if (e.target.files?.length) handleFilesSelected(e.target.files);
+                        e.target.value = '';
+                      }}
+                    />
                     <input
                       ref={fileInputRef}
                       type="file"
+                      multiple
                       accept=".pdf,.jpg,.jpeg,.png,.heic,.docx,.doc"
                       className="hidden"
+                      data-testid="vault-file-input"
                       onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          const titleInput = document.getElementById('title') as HTMLInputElement;
-                          const title = titleInput?.value || file.name;
-                          handleFileUpload(file, title, 'other');
-                        }
+                        if (e.target.files?.length) handleFilesSelected(e.target.files);
+                        e.target.value = '';
                       }}
                     />
+
+                    {/* Upload zone: two big obvious actions + drag & drop */}
                     <div
-                      className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center cursor-pointer hover:border-primary/50 transition-colors"
-                      onClick={() => fileInputRef.current?.click()}
+                      data-testid="vault-dropzone"
+                      onDragEnter={(e) => { if (hasFiles(e)) { e.preventDefault(); setIsZoneDragActive(true); } }}
+                      onDragOver={(e) => { if (hasFiles(e)) { e.preventDefault(); setIsZoneDragActive(true); } }}
+                      onDragLeave={() => setIsZoneDragActive(false)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        setIsZoneDragActive(false);
+                        if (e.dataTransfer?.files?.length) handleFilesSelected(e.dataTransfer.files);
+                      }}
+                      className={`border-2 border-dashed rounded-xl p-5 text-center transition-colors ${
+                        isZoneDragActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/25'
+                      }`}
                     >
-                      <Upload className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Drop files here or click to browse
+                      <Camera className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                      <p className="font-medium mb-1">Snap the IEP, we'll do the rest.</p>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Photos, PDFs, and docs up to 50MB. Drag &amp; drop works too.
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        Supports PDF, images, and documents up to 50MB
-                      </p>
-                      {uploadingFile && (
-                        <div className="mt-3">
-                          <Progress value={uploadProgress} className="w-full h-2" />
-                          <p className="text-sm text-primary mt-1">Uploading... {uploadProgress}%</p>
-                        </div>
-                      )}
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          className="w-full h-12"
+                          onClick={() => cameraInputRef.current?.click()}
+                          data-testid="vault-take-photo"
+                        >
+                          <Camera className="w-4 h-4 mr-2" />
+                          Take a photo
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="w-full h-12"
+                          onClick={() => fileInputRef.current?.click()}
+                          data-testid="vault-choose-file"
+                        >
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose files
+                        </Button>
+                      </div>
                     </div>
-                    
-                    {/* Advanced Options */}
-                    {userTier === 'pro' && (
-                      <div className="space-y-3 p-3 bg-muted/30 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <Label htmlFor="ocr">Enable OCR</Label>
-                          <Switch id="ocr" defaultChecked />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <Label htmlFor="ai-summary">Generate AI summary</Label>
-                          <Switch id="ai-summary" />
-                        </div>
+
+                    {/* Upload lifecycle: per-file progress, AI-reading status, retry */}
+                    {uploadQueue.length > 0 && (
+                      <div className="space-y-2" data-testid="vault-upload-queue">
+                        {uploadQueue.map(item => (
+                          <div key={item.id} className="flex items-center gap-3 p-3 border rounded-lg">
+                            <FileText className="w-4 h-4 shrink-0 text-muted-foreground" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">{item.title}</p>
+                              {(item.status === 'queued' || item.status === 'uploading') && (
+                                <>
+                                  <Progress value={item.progress} className="h-1.5 mt-1" />
+                                  <p className="text-xs text-muted-foreground mt-1">Uploading… {item.progress}%</p>
+                                </>
+                              )}
+                              {item.status === 'processing' && (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  Saved. Aminy is reading it now — ask about it anytime in chat.
+                                </p>
+                              )}
+                              {item.status === 'ready' && (
+                                <p className="text-xs text-emerald-700 mt-1">
+                                  Aminy read it — ask about it anytime in chat.
+                                </p>
+                              )}
+                              {item.status === 'saved' && (
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  Saved to your vault. Ask Aminy about it anytime.
+                                </p>
+                              )}
+                              {item.status === 'error' && (
+                                <p className="text-xs text-red-600 mt-1" data-testid="vault-upload-error">{item.error || 'Upload failed'}</p>
+                              )}
+                            </div>
+                            {item.status === 'processing' && (
+                              <Badge variant="outline" className="text-xs shrink-0 animate-pulse">Processing</Badge>
+                            )}
+                            {item.status === 'ready' && (
+                              <Badge variant="outline" className="text-xs shrink-0">
+                                <CheckCircle2 className="w-3 h-3 mr-1 text-green-500" />
+                                Ready
+                              </Badge>
+                            )}
+                            {item.status === 'saved' && (
+                              <Badge variant="outline" className="text-xs shrink-0">Saved</Badge>
+                            )}
+                            {item.status === 'error' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="shrink-0"
+                                onClick={() => uploadOne(item)}
+                                data-testid="vault-retry-upload"
+                              >
+                                Retry
+                              </Button>
+                            )}
+                          </div>
+                        ))}
                       </div>
                     )}
-                    
+
                     <div className="flex justify-end gap-2 pt-4">
                       <Button variant="outline" onClick={() => setShowAddRecord(false)}>
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={uploadingFile}
-                      >
-                        {uploadingFile ? 'Uploading...' : 'Select File & Upload'}
+                        {isUploading ? 'Continue in background' : 'Done'}
                       </Button>
                     </div>
                   </div>
@@ -894,11 +1042,24 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
       <div className="px-4 sm:px-6 py-3 bg-muted/30">
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-            <div className="flex items-center gap-2">
-              <Progress value={(usedGB / totalGB) * 100} className="w-32 h-2" />
-              <span className="text-sm text-muted-foreground">
-                {usedGB.toFixed(1)} GB of {totalGB} GB used
-              </span>
+            <div className="flex items-center gap-2" data-testid="vault-quota-meter">
+              {quotaBytes !== null ? (
+                <>
+                  <Progress value={quotaPct} className="w-32 h-2" />
+                  <span className="text-sm text-muted-foreground">
+                    {formatStorage(usedBytes)} of {formatStorage(quotaBytes)} used
+                  </span>
+                  {quotaPct >= 85 && (
+                    <Badge variant="outline" className="text-sm text-amber-700">
+                      Running low — upgrade for more space
+                    </Badge>
+                  )}
+                </>
+              ) : (
+                <span className="text-sm text-muted-foreground">
+                  {formatStorage(usedBytes)} used • Unlimited storage
+                </span>
+              )}
             </div>
             
             <div className="flex items-center gap-2">
@@ -1016,9 +1177,11 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-lg font-medium mb-2">No records found</h3>
               <p className="text-muted-foreground mb-4">
-                {searchQuery ? 'Try adjusting your search or filters' : 'Start by adding your first document'}
+                {searchQuery
+                  ? 'Try adjusting your search or filters'
+                  : 'Snap a photo or drop in a file — Aminy reads it and keeps it safe.'}
               </p>
-              <Button onClick={() => setShowAddRecord(true)}>
+              <Button className="h-12" onClick={() => setShowAddRecord(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Add your first record
               </Button>
@@ -1061,7 +1224,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 {viewRecord.ocrStatus === 'Complete' && (
                   <Badge variant="outline" className="text-green-600">
                     <CheckCircle2 className="w-3 h-3 mr-1" />
-                    Searchable
+                    Aminy read it
                   </Badge>
                 )}
               </div>
