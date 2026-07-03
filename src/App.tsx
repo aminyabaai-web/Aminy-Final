@@ -2717,6 +2717,7 @@ export default function App() {
                     "prior-auth", "vision-ai", "caregiver-enrollment", "b2b-partner", "b2b-setup",
                     "outcome-measures", "cr-sync", "revenue-dashboard", "waiting-room",
                     "referral-dashboard", "medications", "parent-calm-mode", "mchat-screening",
+                    "developmental-screener",
                     "account-settings", "token-rewards", "caregiver-timesheet",
                     "provider-payout-setup", "denial-workbench", "credentialing-support",
                     "clinical-templates", "bcba-briefing", "fiscal-agent-submission",
@@ -3240,6 +3241,9 @@ export default function App() {
                 onBookAgain={() => navigateToScreen("conversational-booking")}
                 onLeaveReview={() => navigateToScreen("provider-reviews")}
                 onCompleteQuestionnaire={() => navigateToScreen("parent-intake")}
+                onStartScreening={(instrumentId) =>
+                  navigateToScreen(instrumentId === "mchat" ? "mchat-screening" : "developmental-screener")
+                }
               />
             </Suspense>
           );

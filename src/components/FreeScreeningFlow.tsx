@@ -205,10 +205,12 @@ const AGE_PRESETS = [
 const S = {
   // Layout
   // Use min-height + relative positioning — position:fixed breaks when parents have transform
-  fullScreen: { minHeight: '100dvh', background: MIST_BG, display: 'flex', flexDirection: 'column' as const },
+  // height (not just min-height) so the content area scrolls internally and the
+  // sticky Continue footer stays in the viewport (footer is a flex sibling, never position:fixed)
+  fullScreen: { height: '100dvh', minHeight: '100dvh', background: MIST_BG, display: 'flex', flexDirection: 'column' as const },
   topBar: { display: 'grid', gridTemplateColumns: '44px 1fr 44px', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid #E2EFF3' },
   topBarBtn: { width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 22, border: 'none', background: 'none', cursor: 'pointer' },
-  contentArea: { flex: 1, overflowY: 'auto' as const, overflowX: 'hidden' as const },
+  contentArea: { flex: 1, minHeight: 0, overflowY: 'auto' as const, overflowX: 'hidden' as const },
   padded: { padding: '28px 20px' },
 
   // Typography — hardcoded because screen always renders on light mist background
@@ -822,7 +824,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
       </div>
 
       {/* Phase content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {phase === 'concern' && renderConcern()}
         {phase === 'primary-pick' && renderPrimaryPick()}
         {phase === 'child-info' && renderChildInfo()}

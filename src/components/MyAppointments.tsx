@@ -39,6 +39,8 @@ import { EmptyState } from './EmptyState';
 import { ProviderNoShowRecovery } from './ProviderNoShowRecovery';
 import { AvailabilityPicker, TimeSlot } from './AvailabilityPicker';
 import { combineDateAndTime, downloadICS, googleCalendarUrl, type CalendarEvent } from '../lib/calendar-links';
+import { loadDueScreenings, screeningScreenFor, type ScreeningDue } from '../lib/screening-schedule';
+import { SCREENING_INSTRUMENTS, type ScreeningType } from '../lib/screening-instruments';
 
 // Types
 export interface Appointment {
@@ -86,6 +88,8 @@ interface MyAppointmentsProps {
   childName?: string;
   onBack?: () => void;
   onNavigateToProvider?: () => void;
+  /** Navigate to the screening flow (pre-visit checklist strip). Receives the due instrument id. */
+  onStartScreening?: (instrumentId: string) => void;
 }
 
 // Fallback data (only used if database is empty or unavailable)
@@ -559,13 +563,25 @@ export function MyAppointments({
   onCompleteQuestionnaire,
   childName,
   onBack,
-  onNavigateToProvider
+  onNavigateToProvider,
+  onStartScreening
 }: MyAppointmentsProps & { onBack?: () => void; onNavigateToProvider?: () => void }) {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'past'>('upcoming');
 
   // Load this user's real bookings unless the caller passed appointments explicitly.
   const { appointments: loadedAppointments, refetch } = useAppointments(userId);
   const appointments_ = appointments ?? loadedAppointments;
+
+  // Pre-visit checklist: validated screenings due before the next visit
+  // (screening-schedule engine — best-effort, never blocks the screen).
+  const [dueScreenings, setDueScreenings] = useState<ScreeningDue[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    loadDueScreenings()
+      .then((due) => { if (!cancelled) setDueScreenings(due); })
+      .catch(() => { /* non-blocking */ });
+    return () => { cancelled = true; };
+  }, [userId]);
 
   // In-place reschedule: keep the same provider + booking, only move the time.
   const [rescheduling, setRescheduling] = useState<Appointment | null>(null);
@@ -719,6 +735,26 @@ export function MyAppointments({
               exit={{ opacity: 0, x: activeTab === 'upcoming' ? 20 : -20 }}
               className="space-y-3 sm:space-y-4"
             >
+              {/* Pre-visit checklist strip — one line above the next upcoming visit.
+                  COMPLIANCE: results are reviewed WITH the provider; no coverage promises. */}
+              {activeTab === 'upcoming' && dueScreenings.length > 0 && onStartScreening && (
+                <div className="flex items-center gap-2 px-3 py-2.5 bg-[#F6FBFB] dark:bg-slate-800 border border-[#2A7D99]/20 rounded-lg text-sm">
+                  <FileText className="w-4 h-4 text-[#2A7D99] flex-shrink-0" />
+                  <span className="text-[#3A4A57] dark:text-slate-200 truncate">
+                    Before your visit: {dueScreenings.length} quick check-in{dueScreenings.length !== 1 ? 's' : ''} —{' '}
+                    {dueScreenings
+                      .map((d) => SCREENING_INSTRUMENTS[d.instrumentId as ScreeningType]?.name ?? d.name)
+                      .join(', ')}
+                  </span>
+                  <button
+                    onClick={() => onStartScreening(dueScreenings[0].instrumentId)}
+                    className="ml-auto flex items-center gap-1 text-[#2A7D99] font-medium whitespace-nowrap hover:underline flex-shrink-0"
+                  >
+                    Do it now
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
               {displayedAppointments.map((appointment) => (
                 <AppointmentCard
                   key={appointment.id}

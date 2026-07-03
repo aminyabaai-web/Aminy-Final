@@ -106,6 +106,7 @@ describe('cpt-registry — single source of truth', () => {
   });
 
   // (e) regression guard — ESTIMATED_REIMBURSEMENT_CENTS unchanged for the original 8
+  // (+96110, added July 2026 for the billable screening-due engine)
   it('preserves the original 8 ESTIMATED_REIMBURSEMENT_CENTS values exactly', () => {
     expect(ESTIMATED_REIMBURSEMENT_CENTS['97151']).toEqual({ inPerson: 4800, modifier95: 4800, modifierGT: 4800 });
     expect(ESTIMATED_REIMBURSEMENT_CENTS['97153']).toEqual({ inPerson: 3200, modifier95: 3200, modifierGT: 3200 });
@@ -115,9 +116,12 @@ describe('cpt-registry — single source of truth', () => {
     expect(ESTIMATED_REIMBURSEMENT_CENTS['90837']).toEqual({ inPerson: 14400, modifier95: 14400, modifierGT: 13680 });
     expect(ESTIMATED_REIMBURSEMENT_CENTS['92507']).toEqual({ inPerson: 7200, modifier95: 7200, modifierGT: 7200 });
     expect(ESTIMATED_REIMBURSEMENT_CENTS['96127']).toEqual({ inPerson: 500, modifier95: 500, modifierGT: 500 });
+    // 96110 (developmental screening) gained a default rate for the
+    // screening-due engine (screening-schedule.ts) — intentional addition.
+    expect(ESTIMATED_REIMBURSEMENT_CENTS['96110']).toEqual({ inPerson: 1200, modifier95: 1200, modifierGT: 1200 });
     // and no other codes crept in (calculateTelehealthMargin behavior guard)
     expect(Object.keys(ESTIMATED_REIMBURSEMENT_CENTS).sort()).toEqual(
-      ['90834', '90837', '92507', '96127', '97151', '97153', '97155', '97156'].sort(),
+      ['90834', '90837', '92507', '96110', '96127', '97151', '97153', '97155', '97156'].sort(),
     );
   });
 
