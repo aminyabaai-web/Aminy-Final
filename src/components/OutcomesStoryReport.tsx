@@ -712,10 +712,10 @@ function CheckInLineChart({ points, dark }: { points: CheckInPoint[]; dark: bool
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Weekly check-in ratings over time on a 1 to 5 scale">
-      {/* Grid — currentColor adapts to light/dark via the wrapping text-* classes */}
-      <g className="text-slate-200 dark:text-slate-700">
+      {/* Grid — stroke resolved in JS (precompiled Tailwind can't ship dark: SVG utils) */}
+      <g>
         {yTicks.map((t) => (
-          <line key={t} x1={PAD.left} y1={yPos(t)} x2={PAD.left + chartW} y2={yPos(t)} stroke="currentColor" strokeWidth="1" />
+          <line key={t} x1={PAD.left} y1={yPos(t)} x2={PAD.left + chartW} y2={yPos(t)} stroke={gridStroke(dark)} strokeWidth="1" />
         ))}
       </g>
       <g className="fill-slate-400">
@@ -747,7 +747,7 @@ function CheckInLineChart({ points, dark }: { points: CheckInPoint[]; dark: bool
 }
 
 /** Behavior-per-week bar chart. Teal bars, slate baseline. */
-function WeekBarChart({ bars }: { bars: WeekBar[] }) {
+function WeekBarChart({ bars, dark }: { bars: WeekBar[]; dark: boolean }) {
   const W = 320, H = 130;
   const PAD = { top: 12, right: 10, bottom: 24, left: 22 };
   const chartW = W - PAD.left - PAD.right;
@@ -758,8 +758,8 @@ function WeekBarChart({ bars }: { bars: WeekBar[] }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Behavior logs per week">
-      <g className="text-slate-200 dark:text-slate-700">
-        <line x1={PAD.left} y1={PAD.top + chartH} x2={PAD.left + chartW} y2={PAD.top + chartH} stroke="currentColor" strokeWidth="1" />
+      <g>
+        <line x1={PAD.left} y1={PAD.top + chartH} x2={PAD.left + chartW} y2={PAD.top + chartH} stroke={gridStroke(dark)} strokeWidth="1" />
       </g>
       {bars.map((b, i) => {
         const bH = (b.count / maxCount) * chartH;
