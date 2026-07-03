@@ -49,6 +49,17 @@ export interface ScreeningResult {
   nextSteps: string[];
   /** Provider types that can evaluate */
   recommendedProviders: string[];
+  /**
+   * All concern ids the parent selected in the funnel (multi-select),
+   * e.g. ['autism', 'adhd']. Optional — results saved before multi-select
+   * launched won't have it, and old saved shapes must still load.
+   */
+  concerns?: string[];
+  /**
+   * The concern id the parent chose to screen first ("Which worries you
+   * most right now?"). Optional for backward compatibility.
+   */
+  primaryConcern?: string;
 }
 
 export interface ScreeningInstrument {

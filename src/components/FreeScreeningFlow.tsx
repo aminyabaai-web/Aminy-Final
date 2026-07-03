@@ -64,7 +64,8 @@ const MIST_BG = 'linear-gradient(180deg, #F6FBFB 0%, #EAF3F7 55%, #E4EFF5 100%)'
 // ============================================
 
 type FlowPhase =
-  | 'concern'      // What are you worried about?
+  | 'concern'      // What are you worried about? (multi-select)
+  | 'primary-pick' // ≥2 concerns selected — which worries you most right now?
   | 'child-info'   // Child's name + age
   | 'screening'    // Questions one at a time
   | 'results';     // Scored results + next steps + CTA
@@ -93,7 +94,7 @@ interface AminyInsight {
   afterQuestion: number;
 }
 
-function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
+function getInsightsForScreener(screenerId: ScreeningType, multiConcern: boolean = false): AminyInsight[] {
   const common: AminyInsight[] = [
     {
       icon: Brain,
@@ -149,6 +150,14 @@ function getInsightsForScreener(screenerId: ScreeningType): AminyInsight[] {
     });
   }
 
+  if (multiConcern) {
+    // Parent selected more than one concern — validate that up front.
+    common[0] = {
+      ...common[0],
+      body: common[0].body + " Most families here are navigating more than one concern — you're in the right place.",
+    };
+  }
+
   return common;
 }
 
@@ -166,6 +175,18 @@ const CONCERN_OPTIONS = [
   { id: 'behavior', label: 'Behavior / Meltdowns', description: 'Aggression, tantrums, defiance, emotional outbursts', icon: AlertTriangle, color: TEAL, keywords: 'behavior meltdown' },
   { id: 'mood', label: 'Depression / Mood', description: 'Sadness, withdrawal, loss of interest, hopelessness', icon: Heart, color: TEAL, keywords: 'depression sad mood' },
 ];
+
+/** Short, friendly form of a concern label — "ADHD / Attention" → "ADHD" */
+function concernShortLabel(id: string): string {
+  const label = CONCERN_OPTIONS.find(c => c.id === id)?.label || id;
+  return label.split(' / ')[0];
+}
+
+/** Warm list join: ["ADHD"] → "ADHD"; ["ADHD","Anxiety"] → "ADHD and Anxiety"; 3+ → "A, B and C" */
+function joinWarm(items: string[]): string {
+  if (items.length <= 1) return items[0] || '';
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
 
 const AGE_PRESETS = [
   { label: '12-18 months', months: 15 },
@@ -199,12 +220,33 @@ const S = {
   label: { fontSize: 14, fontWeight: 500, color: '#132F43', marginBottom: 8, display: 'block' as const },
 
   // Cards / Buttons
-  concernCard: {
+  concernCard: (selected: boolean = false) => ({
     display: 'flex', alignItems: 'center', gap: 16, padding: '16px',
-    borderRadius: 18, border: '1px solid #E2E8F0',
-    backgroundColor: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)',
+    borderRadius: 18,
+    border: selected ? `1px solid ${TEAL}` : '1px solid #E2E8F0',
+    backgroundColor: selected ? TEAL_BG_LIGHT : 'rgba(255,255,255,0.92)',
+    backdropFilter: 'blur(12px)',
     cursor: 'pointer', width: '100%', textAlign: 'left' as const,
-    transition: 'border-color 0.15s, box-shadow 0.15s', marginBottom: 10,
+    transition: 'border-color 0.15s, background-color 0.15s, box-shadow 0.15s', marginBottom: 10,
+    boxShadow: selected ? '0 1px 3px rgba(42,125,153,0.10)' : '0 1px 3px rgba(27,39,51,0.04)',
+  }),
+  // Sticky Continue footer — flex sibling of the scroll area, never position:fixed
+  // (fixed breaks under transformed ancestors; see CLAUDE.md containing-block rule)
+  stickyFooter: {
+    padding: '12px 20px calc(12px + env(safe-area-inset-bottom, 0px))',
+    borderTop: '1px solid #E2EFF3',
+    background: 'rgba(246,251,251,0.96)',
+    backdropFilter: 'blur(8px)',
+    flexShrink: 0,
+  },
+  // Primary-pick chips ("Which worries you most right now?")
+  concernChip: {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    padding: '12px 18px', borderRadius: 999,
+    border: `1px solid ${TEAL_BORDER}`,
+    backgroundColor: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)',
+    color: '#132F43', fontSize: 14, fontWeight: 600,
+    cursor: 'pointer', transition: 'border-color 0.15s, background-color 0.15s',
     boxShadow: '0 1px 3px rgba(27,39,51,0.04)',
   },
   iconBox: (color: string) => ({ width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backgroundColor: `${color}18` }),
@@ -268,7 +310,10 @@ const S = {
 
 export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDiagnosed, initialConcern }: FreeScreeningFlowProps) {
   const [phase, setPhase] = useState<FlowPhase>(initialConcern ? 'child-info' : 'concern');
-  const [selectedConcern, setSelectedConcern] = useState<string | null>(initialConcern || null);
+  /** ALL concerns the parent toggled on (multi-select) */
+  const [selectedConcerns, setSelectedConcerns] = useState<string[]>(initialConcern ? [initialConcern] : []);
+  /** The one concern we screen first — drives instrument selection */
+  const [primaryConcern, setPrimaryConcern] = useState<string | null>(initialConcern || null);
   const [childInfo, setChildInfo] = useState<ChildInfo>({ name: '', ageMonths: 0 });
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
@@ -276,8 +321,8 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
   const [showInsight, setShowInsight] = useState<AminyInsight | null>(null);
 
   const selectedInstrument = useMemo((): ScreeningInstrument | null => {
-    if (!selectedConcern) return null;
-    const concern = CONCERN_OPTIONS.find(c => c.id === selectedConcern);
+    if (!primaryConcern) return null;
+    const concern = CONCERN_OPTIONS.find(c => c.id === primaryConcern);
     if (!concern) return null;
     const route = routeConcernToScreener(concern.keywords);
     if (!route || route.recommendedScreeners.length === 0) return null;
@@ -286,12 +331,12 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
       if (instrument && instrument.questions.length > 0) return instrument;
     }
     return SCREENING_INSTRUMENTS.psc;
-  }, [selectedConcern]);
+  }, [primaryConcern]);
 
   const insights = useMemo(() => {
     if (!selectedInstrument) return [];
-    return getInsightsForScreener(selectedInstrument.id);
-  }, [selectedInstrument]);
+    return getInsightsForScreener(selectedInstrument.id, selectedConcerns.length > 1);
+  }, [selectedInstrument, selectedConcerns]);
 
   const totalQuestions = selectedInstrument?.questions.length || 0;
   const currentQuestion = selectedInstrument?.questions[currentQuestionIndex];
@@ -299,8 +344,24 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
 
   // ---- HANDLERS ----
 
-  const handleConcernSelect = useCallback((id: string) => {
-    setSelectedConcern(id);
+  const handleConcernToggle = useCallback((id: string) => {
+    setSelectedConcerns(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
+  }, []);
+
+  const handleConcernsContinue = useCallback(() => {
+    if (selectedConcerns.length === 0) return;
+    if (selectedConcerns.length === 1) {
+      // Exactly one concern — go straight into that screening (today's behavior)
+      setPrimaryConcern(selectedConcerns[0]);
+      setPhase('child-info');
+    } else {
+      // Multiple concerns — ask which one worries them most first
+      setPhase('primary-pick');
+    }
+  }, [selectedConcerns]);
+
+  const handlePrimaryPick = useCallback((id: string) => {
+    setPrimaryConcern(id);
     setPhase('child-info');
   }, []);
 
@@ -323,11 +384,15 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
       summary: interpretation.summary,
       nextSteps: interpretation.nextSteps,
       recommendedProviders: interpretation.providers,
+      // Persist ALL selected concerns so the queued (non-primary) check-ins
+      // survive to post-signup — migration carries whole result objects.
+      concerns: selectedConcerns.length > 0 ? selectedConcerns : (primaryConcern ? [primaryConcern] : []),
+      primaryConcern: primaryConcern ?? undefined,
     };
     saveScreeningResult(sr);
     setResult(sr);
     setPhase('results');
-  }, [selectedInstrument, childInfo]);
+  }, [selectedInstrument, childInfo, selectedConcerns, primaryConcern]);
 
   const handleAnswer = useCallback((questionId: string, answer: boolean) => {
     const newAnswers = { ...answers, [questionId]: answer };
@@ -346,56 +411,106 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
 
   const handleBack = useCallback(() => {
     if (phase === 'concern') onBack();
-    else if (phase === 'child-info') setPhase('concern');
+    else if (phase === 'primary-pick') setPhase('concern');
+    else if (phase === 'child-info') setPhase(selectedConcerns.length > 1 ? 'primary-pick' : 'concern');
     else if (phase === 'screening') {
       if (showInsight) setShowInsight(null);
       else if (currentQuestionIndex > 0) setCurrentQuestionIndex(p => p - 1);
       else setPhase('child-info');
     }
-  }, [phase, currentQuestionIndex, showInsight, onBack]);
+  }, [phase, currentQuestionIndex, showInsight, selectedConcerns, onBack]);
 
   // ---- PHASE: Concern Selection ----
 
   const renderConcern = () => (
-    <div style={S.contentArea}>
-      <div style={S.padded}>
-        {/* Empathy-first hero headline from brand-guide */}
-        <h1 style={{ ...S.h1, color: '#0C2230' }}>What&apos;s on your mind?</h1>
-        <p style={{ ...S.body, color: '#5A6B7A' }}>No judgment, no rush. Let&apos;s figure this out together. Select what best describes your concern.</p>
-      </div>
-      <div style={{ padding: '0 20px 24px' }}>
-        {CONCERN_OPTIONS.map((c) => {
-          const Icon = c.icon;
-          return (
-            <button key={c.id} onClick={() => handleConcernSelect(c.id)} style={S.concernCard}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = TEAL_BORDER)}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#E2E8F0')}
-            >
-              <div style={S.iconBox(c.color)}>
-                <Icon style={{ width: 24, height: 24, color: c.color }} strokeWidth={1.5} />
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>{c.label}</div>
-                <div style={{ fontSize: 12, color: '#5A6B7A', marginTop: 2 }}>{c.description}</div>
-              </div>
-              <ChevronRight style={{ width: 16, height: 16, color: '#d1d5db', flexShrink: 0 }} />
-            </button>
-          );
-        })}
-        <div style={S.reassurance}>
-          <Shield style={{ width: 16, height: 16, color: TEAL, flexShrink: 0, marginTop: 2 }} />
-          <p style={{ fontSize: 12, color: '#5A6B7A', lineHeight: 1.6, margin: 0 }}>
-            This screening is <strong>free</strong>, <strong>private</strong>, and based on the same validated tools your pediatrician uses. No account required.
-          </p>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
+      <div style={S.contentArea}>
+        <div style={S.padded}>
+          {/* Empathy-first hero headline from brand-guide */}
+          <h1 style={{ ...S.h1, color: '#0C2230' }}>What&apos;s on your mind?</h1>
+          <p style={{ ...S.body, color: '#5A6B7A' }}>No judgment, no rush. Let&apos;s figure this out together. Select all that apply.</p>
+        </div>
+        <div style={{ padding: '0 20px 24px' }}>
+          {CONCERN_OPTIONS.map((c) => {
+            const Icon = c.icon;
+            const selected = selectedConcerns.includes(c.id);
+            return (
+              <button key={c.id} onClick={() => handleConcernToggle(c.id)} style={S.concernCard(selected)}
+                aria-pressed={selected}
+                onMouseEnter={e => { if (!selected) e.currentTarget.style.borderColor = TEAL_BORDER; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = selected ? TEAL : '#E2E8F0'; }}
+              >
+                <div style={S.iconBox(c.color)}>
+                  <Icon style={{ width: 24, height: 24, color: c.color }} strokeWidth={1.5} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#132F43' }}>{c.label}</div>
+                  <div style={{ fontSize: 12, color: '#5A6B7A', marginTop: 2 }}>{c.description}</div>
+                </div>
+                {selected
+                  ? <CheckCircle style={{ width: 20, height: 20, color: TEAL, flexShrink: 0 }} aria-hidden="true" />
+                  : <ChevronRight style={{ width: 16, height: 16, color: '#d1d5db', flexShrink: 0 }} aria-hidden="true" />}
+              </button>
+            );
+          })}
+          <div style={S.reassurance}>
+            <Shield style={{ width: 16, height: 16, color: TEAL, flexShrink: 0, marginTop: 2 }} />
+            <p style={{ fontSize: 12, color: '#5A6B7A', lineHeight: 1.6, margin: 0 }}>
+              This screening is <strong>free</strong>, <strong>private</strong>, and based on the same validated tools your pediatrician uses. No account required.
+            </p>
+          </div>
         </div>
       </div>
+      {selectedConcerns.length > 0 && (
+        <div style={S.stickyFooter}>
+          <button
+            onClick={handleConcernsContinue}
+            style={S.primaryBtn(true)}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = TEAL_HOVER; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = TEAL; }}
+          >
+            Continue <ArrowRight style={{ width: 16, height: 16 }} />
+          </button>
+        </div>
+      )}
     </div>
   );
+
+  // ---- PHASE: Primary Pick (≥2 concerns selected) ----
+
+  const renderPrimaryPick = () => {
+    const chosen = CONCERN_OPTIONS.filter(c => selectedConcerns.includes(c.id));
+    return (
+      <div style={S.contentArea}>
+        <div style={S.padded}>
+          <h1 style={{ ...S.h1, color: '#0C2230' }}>Which worries you most right now?</h1>
+          <p style={{ ...S.body, color: '#5A6B7A' }}>
+            You&apos;re not alone — most parents here select more than one. We&apos;ll start with the
+            biggest one; the others will be ready for you after.
+          </p>
+        </div>
+        <div style={{ padding: '0 20px 24px', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          {chosen.map((c) => {
+            const Icon = c.icon;
+            return (
+              <button key={c.id} onClick={() => handlePrimaryPick(c.id)} style={S.concernChip}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = TEAL; e.currentTarget.style.backgroundColor = TEAL_BG_LIGHT; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = TEAL_BORDER; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.92)'; }}
+              >
+                <Icon style={{ width: 16, height: 16, color: TEAL, flexShrink: 0 }} strokeWidth={1.5} aria-hidden="true" />
+                {c.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   // ---- PHASE: Child Info ----
 
   const renderChildInfo = () => {
-    const cl = CONCERN_OPTIONS.find(c => c.id === selectedConcern)?.label || 'your concern';
+    const cl = CONCERN_OPTIONS.find(c => c.id === primaryConcern)?.label || 'your concern';
     return (
       <div style={S.contentArea}>
         <div style={S.padded}>
@@ -526,6 +641,11 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
     const rColors = { low: '#15803d', moderate: '#b45309', high: '#dc2626' };
     const rc = rColors[result.riskLevel];
 
+    // Concerns selected but not screened yet — their check-ins are queued for later
+    const otherConcernLabels = (result.concerns ?? [])
+      .filter(id => id !== result.primaryConcern)
+      .map(concernShortLabel);
+
     return (
       <div style={S.contentArea}>
         <div style={S.padded}>
@@ -543,6 +663,17 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
             <div style={{ fontSize: 14, fontWeight: 600, textTransform: 'capitalize' as const, marginBottom: 4 }}>{result.riskLevel} Risk</div>
             <p style={{ fontSize: 14, color: 'var(--color-text-body)', lineHeight: 1.6, margin: 0 }}>{result.summary}</p>
           </div>
+
+          {/* Other concerns saved for later — gentle, no extra CTA weight */}
+          {otherConcernLabels.length > 0 && (
+            <div style={{ ...S.stepItem, marginBottom: 16 }}>
+              <Heart style={{ width: 16, height: 16, color: TEAL, flexShrink: 0, marginTop: 2 }} aria-hidden="true" />
+              <p style={{ fontSize: 13, color: '#5A6B7A', lineHeight: 1.6, margin: 0 }}>
+                Your {joinWarm(otherConcernLabels)} check-in{otherConcernLabels.length > 1 ? 's are' : ' is'} saved
+                for you — {otherConcernLabels.length > 1 ? "they'll" : "it'll"} be waiting on your dashboard.
+              </p>
+            </div>
+          )}
 
           {/* Next steps */}
           <h3 style={S.h3}>Recommended Next Steps</h3>
@@ -693,6 +824,7 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
       {/* Phase content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {phase === 'concern' && renderConcern()}
+        {phase === 'primary-pick' && renderPrimaryPick()}
         {phase === 'child-info' && renderChildInfo()}
         {phase === 'screening' && renderScreening()}
         {phase === 'results' && renderResults()}
