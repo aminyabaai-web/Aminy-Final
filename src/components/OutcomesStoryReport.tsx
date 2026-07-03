@@ -154,11 +154,36 @@ function fmtDate(iso?: string): string {
 function first<T>(arr: T[]): T | undefined { return arr[0]; }
 function last<T>(arr: T[]): T | undefined { return arr[arr.length - 1]; }
 
+/**
+ * Tracks the `.dark` class on <html>. Tailwind v4 is precompiled here, so SVG
+ * grid strokes can't rely on `dark:` utilities that may not be in the bundle —
+ * we resolve the color in JS instead (same approach as Dashboard10).
+ */
+function useIsDark(): boolean {
+  const [dark, setDark] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.classList.contains('dark'),
+  );
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const el = document.documentElement;
+    const update = () => setDark(el.classList.contains('dark'));
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(el, { attributes: true, attributeFilter: ['class'] });
+    return () => obs.disconnect();
+  }, []);
+  return dark;
+}
+
+// Grid stroke that reads clearly on white and on slate.
+const gridStroke = (dark: boolean) => (dark ? '#334155' : '#e2e8f0');
+
 // ── Main component ──────────────────────────────────────────────────────────────
 
 export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesStoryReportProps) {
   void _childId;
   const child = (childName && childName.trim()) || 'your child';
+  const isDark = useIsDark();
 
   const [loading, setLoading] = useState(true);
   const [points, setPoints] = useState<CheckInPoint[]>([]);
@@ -361,7 +386,7 @@ export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesSt
         <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
           Each week you rate goal progress and your own confidence from 1 to 5 (higher is better).
         </p>
-        <CheckInLineChart points={points} />
+        <CheckInLineChart points={points} dark={isDark} />
         <div className="flex items-center gap-4 justify-center mt-3">
           <LegendDot color="#2A7D99" label="Goal progress" />
           <LegendDot color="#6B9080" label="Your confidence" />
@@ -378,7 +403,7 @@ export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesSt
           <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
             How many times you logged this behavior each week. Fewer bars over time means calmer weeks.
           </p>
-          <WeekBarChart bars={behaviorWeeks} />
+          <WeekBarChart bars={behaviorWeeks} dark={isDark} />
         </section>
       )}
 
@@ -659,7 +684,7 @@ function LegendDot({ color, label }: { color: string; label: string }) {
 }
 
 /** Weekly check-in line chart on a 1–5 scale. Two series: progress + confidence. */
-function CheckInLineChart({ points }: { points: CheckInPoint[] }) {
+function CheckInLineChart({ points, dark }: { points: CheckInPoint[]; dark: boolean }) {
   const W = 320, H = 150;
   const PAD = { top: 14, right: 14, bottom: 26, left: 26 };
   const chartW = W - PAD.left - PAD.right;

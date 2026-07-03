@@ -11,6 +11,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
+import { haptic } from './activities/sounds';
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -87,8 +88,8 @@ function TapFidget({ childName }: { childName?: string }) {
   }, []);
 
   const handleTap = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    // Haptic (works on mobile)
-    if (navigator.vibrate) navigator.vibrate(30);
+    // Haptic (works on mobile) — gated by reduced-motion / sensory prefs
+    haptic(30);
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -493,7 +494,7 @@ function ColorTap() {
   const patternKey = useRef(0);
 
   const handleTap = (idx: number) => {
-    if (navigator.vibrate) navigator.vibrate(20);
+    haptic(20);
     setGlowing(prev => ({ ...prev, [idx]: true }));
     setPattern(prev => [...prev.slice(-5), { key: ++patternKey.current, idx }]);
     setTimeout(() => setGlowing(prev => ({ ...prev, [idx]: false })), 500);
