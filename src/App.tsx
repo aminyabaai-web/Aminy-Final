@@ -1115,7 +1115,11 @@ const PUBLIC_NO_REDIRECT_SCREENS: AppScreen[] = [
   "just-diagnosed",
 ];
 
-function getAuthenticatedLandingScreen(): AppScreen {
+function getAuthenticatedLandingScreen(role?: string): AppScreen {
+  // Providers run their practice from the portal — the parent dashboard is
+  // meaningless for them (no child, no goals) and parent onboarding would ask
+  // a BCBA "What's your child's name?".
+  if (role === 'provider') return "provider-portal";
   return "dashboard";
 }
 
@@ -1380,7 +1384,7 @@ const getInitialScreen = (): AppScreen => {
         if (typeof window !== 'undefined') {
           import(/* webpackPrefetch: true */ "./components/Dashboard10").catch((err) => logger.dev('Prefetch failed', err));
         }
-        return getAuthenticatedLandingScreen();
+        return getAuthenticatedLandingScreen(user.role);
       } else if (user.email) {
         // Returning user whose cached profile says onboarding is incomplete.
         // This flag can lag the DB (it has been known to fail to persist), so a
@@ -1978,10 +1982,13 @@ export default function App() {
               // Use ref to get the *current* screen (avoids stale closure).
               const screen = currentScreenRef.current;
               if (!PUBLIC_NO_REDIRECT_SCREENS.includes(screen) && shouldRedirectAfterAuth(screen)) {
-                if (profile.has_completed_onboarding) {
+                const userRole = profile.role || 'parent';
+                // Providers never do PARENT onboarding ("What's your child's
+                // name?") — their setup lives inside the provider portal. Route
+                // by role first; has_completed_onboarding only gates parents.
+                if (profile.has_completed_onboarding || userRole === 'provider' || userRole === 'admin') {
                   // ─── MFA CHECK (HIPAA) ─────────────────────────
                   // For providers/admins, check MFA status before allowing access.
-                  const userRole = profile.role || 'parent';
                   if (userRole === 'provider' || userRole === 'admin') {
                     try {
                       const mfaState = await getMFAState();
@@ -2024,7 +2031,7 @@ export default function App() {
                   }
                   // ─── END MFA CHECK ─────────────────────────────
 
-                  navigateToScreen(getAuthenticatedLandingScreen());
+                  navigateToScreen(getAuthenticatedLandingScreen(userRole));
                 } else {
                   navigateToScreen('onboarding');
                 }
@@ -2367,22 +2374,27 @@ export default function App() {
             const { getScreeningResults, clearLocalScreeningResults } = await import('./lib/screening-instruments');
             const screeningResults = getScreeningResults();
             if (screeningResults.length > 0) {
-              for (const sr of screeningResults) {
-                supabase.from('screening_results').insert({
-                  user_id: userId,
-                  instrument_id: sr.instrumentId,
-                  instrument_name: sr.instrumentName,
-                  total_score: sr.totalScore,
-                  risk_level: sr.riskLevel,
-                  answers: sr.answers,
-                  summary: sr.summary,
-                  completed_at: sr.completedAt,
-                }).then(
-                  ({ error }) => { if (error) logger.dev('Screening migration error', error); },
-                  (err: unknown) => logger.dev('Screening migration error', err)
-                );
+              // Batch insert, await, and only clear the local copy once the
+              // write is confirmed — otherwise a failed insert would erase the
+              // only copy of the family's pre-signup screening results.
+              const rows = screeningResults.map((sr) => ({
+                user_id: userId,
+                instrument_id: sr.instrumentId,
+                instrument_name: sr.instrumentName,
+                total_score: sr.totalScore,
+                risk_level: sr.riskLevel,
+                answers: sr.answers,
+                summary: sr.summary,
+                completed_at: sr.completedAt,
+                concerns: sr.concerns ?? null,
+                primary_concern: sr.primaryConcern ?? null,
+              }));
+              const { error: migrationError } = await supabase.from('screening_results').insert(rows);
+              if (migrationError) {
+                logger.error('Screening migration failed — keeping local copy', migrationError);
+              } else {
+                clearLocalScreeningResults();
               }
-              clearLocalScreeningResults();
             }
           } catch (err) {
             logger.dev('Screening migration skipped', err);
