@@ -604,19 +604,28 @@ export function calculateTelehealthMargin(options: {
  * Platform take rate by rail. SINGLE SOURCE OF TRUTH — src/lib/stripe-connect.ts
  * imports these so the payout math and the pricing math can never drift.
  *
- * Owner decision (June 2026):
+ * Owner decision (June 2026, sourced-rail split July 2026):
  *  - cashPay 25%  — Aminy generates the demand + runs the whole funnel, and on
  *                   cash there's no insurance spread to earn from, so the take
  *                   IS our revenue. Competitive vs. talk-therapy marketplaces
  *                   (Headway ~0%, Grow 5%) is a non-issue because we price cash
  *                   sessions so the provider nets the SAME OR BETTER than they'd
  *                   net on an insured session (see cashPayPriceForProviderNet).
- *  - insured 10%  — payer does the heavy lifting; lighter touch.
+ *  - insured 10%  — the PROVIDER brought the client; payer does the heavy
+ *                   lifting and Aminy did no demand-gen — lightest touch.
+ *  - insuredAminySourced 20% — the client came to the provider through Aminy's
+ *                   parent app / marketplace funnel. Aminy did the demand-gen
+ *                   work on top of settlement, so the insured take doubles.
+ *                   Resolved per-booking by resolvePayoutRail (payout-rail.ts)
+ *                   from marketplace_bookings.client_source.
  *  - aactPilot 5% — partner discount for AACT/Rise-affiliated providers.
+ *                   Optionally expires (organizations.pilot_ends_at); after
+ *                   expiry the pilot resolves to the standard insured rail.
  */
 export const PLATFORM_TAKE_RATE = {
   cashPay: 0.25,
   insured: 0.1,
+  insuredAminySourced: 0.2,
   aactPilot: 0.05,
 } as const;
 

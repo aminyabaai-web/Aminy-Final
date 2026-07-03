@@ -28,10 +28,17 @@ export interface ConnectAccountStatus {
 /**
  * Care rail determines platform take rate.
  * - cash_pay: 25% to Aminy (covers marketplace, AI, compliance, support, processing)
- * - insured/partner: 10% (lighter touch — payer does the heavy lifting)
- * - aact_pilot: 5% (partner discount for AACT-affiliated providers)
+ * - insured: 10% — provider brought their own client (lighter touch — payer does
+ *   the heavy lifting, Aminy did no demand-gen)
+ * - insured_aminy_sourced: 20% — the client found the provider through Aminy's
+ *   parent app / marketplace funnel (Aminy did the demand-gen on top of settlement)
+ * - aact_pilot: 5% (partner discount for AACT-affiliated providers; may carry an
+ *   org-level pilot_ends_at expiry, after which it resolves to insured)
+ *
+ * Use resolvePayoutRail (src/lib/payout-rail.ts) to turn a relationship/org base
+ * rail + booking client_source + pilot expiry into the effective rail.
  */
-export type PayoutRail = 'cash_pay' | 'insured' | 'aact_pilot';
+export type PayoutRail = 'cash_pay' | 'insured' | 'insured_aminy_sourced' | 'aact_pilot';
 
 export interface SessionPayoutParams {
   sessionId: string;
@@ -79,6 +86,7 @@ export interface OnboardingLinkResult {
 export const PLATFORM_FEE_RATES: Record<PayoutRail, number> = {
   cash_pay: PLATFORM_TAKE_RATE.cashPay,
   insured: PLATFORM_TAKE_RATE.insured,
+  insured_aminy_sourced: PLATFORM_TAKE_RATE.insuredAminySourced,
   aact_pilot: PLATFORM_TAKE_RATE.aactPilot,
 };
 
@@ -332,7 +340,7 @@ export function formatCents(cents: number, currency = 'USD'): string {
   }).format(cents / 100);
 }
 
-/** Returns provider net amount given total + rail (cash 25%, insured 10%, aact 5%) */
+/** Returns provider net amount given total + rail (cash 25%, insured 10%, Aminy-sourced insured 20%, aact 5%) */
 export function calculateProviderAmount(totalCents: number, rail: PayoutRail = 'cash_pay'): {
   providerCents: number;
   platformFeeCents: number;
