@@ -56,7 +56,7 @@ function stubNavigatorShare(): ReturnType<typeof vi.fn> {
 
 function removeNavigatorShare() {
   // jsdom has no navigator.share by default, but clean up stubs between tests
-  delete (navigator as Navigator & { share?: unknown }).share;
+  delete (navigator as unknown as Record<string, unknown>).share;
 }
 
 /** Install a navigator.clipboard.writeText stub; returns the mock. */

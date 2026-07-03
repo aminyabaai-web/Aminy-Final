@@ -242,6 +242,29 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
   // Load settings
   useEffect(() => {
     loadSettings();
+    // Email-footer unsubscribe deep link (?unsubscribe=lifecycle) — one-click
+    // opt-out from every lifecycle email. Flips profiles.lifecycle_emails_enabled
+    // and confirms; transactional email (password reset, provider messages) is
+    // unaffected. Param is stripped so a refresh doesn't re-trigger.
+    (async () => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('unsubscribe') !== 'lifecycle') return;
+        params.delete('unsubscribe');
+        const qs = params.toString();
+        window.history.replaceState({}, '', `${window.location.pathname}${qs ? `?${qs}` : ''}`);
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { error } = await supabase
+          .from('profiles')
+          .update({ lifecycle_emails_enabled: false })
+          .eq('id', user.id);
+        if (error) throw error;
+        toast.success("You're unsubscribed from update emails. Account and security emails still arrive.");
+      } catch {
+        toast.error("Couldn't update your email preference — please try again.");
+      }
+    })();
   }, []);
 
   const loadSettings = async () => {
