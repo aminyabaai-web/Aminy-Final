@@ -113,6 +113,23 @@ function isScreeningNudgeDismissed(): boolean {
   }
 }
 
+// Second-parent invite card (Viral Loop 2) — same 7-day quiet period as the
+// screening nudge. TRUTH NOTE: co-parent seats are included on every PAID plan
+// (ManageCaregivers MAX_CAREGIVERS: free=owner only, all paid tiers >= owner+1)
+// — the copy must say "paid plan", never "every plan".
+export const PARTNER_INVITE_DISMISS_KEY = 'aminy-partner-invite-dismissed-at';
+const PARTNER_INVITE_DISMISS_DAYS = 7;
+
+function isPartnerInviteDismissed(): boolean {
+  try {
+    const at = localStorage.getItem(PARTNER_INVITE_DISMISS_KEY);
+    if (!at) return false;
+    return Date.now() - Number(at) < PARTNER_INVITE_DISMISS_DAYS * 24 * 60 * 60 * 1000;
+  } catch {
+    return false;
+  }
+}
+
 // Types
 interface ChildProfile {
   id: string;
@@ -248,6 +265,9 @@ export function Dashboard10({
   // Billable screening-due nudge (screening-schedule engine)
   const [dueScreenings, setDueScreenings] = useState<ScreeningDue[]>([]);
   const [screeningNudgeDismissed, setScreeningNudgeDismissed] = useState(() => isScreeningNudgeDismissed());
+
+  // Second-parent "Family account" invite card (7-day dismiss throttle)
+  const [partnerInviteDismissed, setPartnerInviteDismissed] = useState(() => isPartnerInviteDismissed());
 
   // 4-week outcome trend data
   interface TrendPoint {
@@ -1903,6 +1923,51 @@ export function Dashboard10({
             </section>
           );
         })()}
+
+        {/* ========================================
+            SECOND-PARENT INVITE — Viral Loop 2. One quiet
+            dismissible card (7-day throttle). Copy truth:
+            co-parent seats exist on every PAID plan (free tier
+            is owner-only) — never claim "free on every plan".
+            ======================================== */}
+        {!partnerInviteDismissed && (
+          <section>
+            <Card className="p-4 bg-white dark:bg-slate-800 border border-[#E8E4DF] dark:border-slate-700 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-lg bg-[#2A7D99]/10 dark:bg-[#2A7D99]/15 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-[#2A7D99] dark:text-[#4795AE]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-semibold text-[#132F43] dark:text-slate-100">
+                    Parenting together?
+                  </h3>
+                  <p className="text-xs text-[#8A9BA8] dark:text-slate-400 mt-0.5">
+                    Add your partner — included with every paid plan, no extra cost. You&apos;ll both see {childPossessive} progress.
+                  </p>
+                  <button
+                    onClick={() => {
+                      triggerHaptic('light');
+                      onNavigate?.('caregivers');
+                    }}
+                    className="mt-2 px-4 py-1.5 rounded-lg bg-[#2A7D99] text-white text-sm font-medium hover:bg-[#1F6080] transition-colors"
+                  >
+                    Add your partner
+                  </button>
+                </div>
+                <button
+                  onClick={() => {
+                    try { localStorage.setItem(PARTNER_INVITE_DISMISS_KEY, String(Date.now())); } catch { /* ignore */ }
+                    setPartnerInviteDismissed(true);
+                  }}
+                  aria-label="Dismiss partner invite"
+                  className="p-1.5 rounded-lg text-[#8A9BA8] hover:bg-[#F6FBFB] dark:hover:bg-slate-700 transition-colors flex-shrink-0"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </Card>
+          </section>
+        )}
 
         {/* ========================================
             7. REFERRAL - Viral growth mechanism

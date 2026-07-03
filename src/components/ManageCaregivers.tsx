@@ -66,9 +66,16 @@ interface ManageCaregiversProps {
 
 const roleLabels: Record<CaregiverRole, string> = {
   owner: 'Owner',
-  caregiver: 'Caregiver',
+  caregiver: 'Co-parent / Caregiver',
   'read-only': 'Read-only'
 };
+
+// TRUTH SOURCE for co-parent copy (drift-guarded in
+// src/test/components/CaregiverCopyTruth.test.tsx): free tier is owner-only,
+// every PAID tier includes at least one additional caregiver seat at no extra
+// cost. UI copy must therefore say "every paid plan" — never "every plan".
+export const COPARENT_REASSURANCE =
+  "Co-parents are included with every paid plan at no extra cost — they see your child's plans, progress, and reports.";
 
 const roleColors: Record<CaregiverRole, string> = {
   // Owner is a neutral slate chip — accents must not compete with the one teal primary CTA
@@ -89,8 +96,8 @@ const roleDescriptions: Record<CaregiverRole, string> = {
   'read-only': 'Can view progress and reports only'
 };
 
-// Caregiver limits per tier
-const MAX_CAREGIVERS: Record<TierType, number> = {
+// Caregiver limits per tier (exported for the copy-truth drift test)
+export const MAX_CAREGIVERS: Record<TierType, number> = {
   free: 1, // Owner only
   starter: 2, // Owner + 1
   core: 3, // Owner + 2
@@ -132,7 +139,8 @@ export function ManageCaregivers({
 
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState<CaregiverRole>('read-only');
+  // Default to co-parent — the most common (and highest-value) second member.
+  const [inviteRole, setInviteRole] = useState<CaregiverRole>('caregiver');
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Calculate limits
@@ -191,11 +199,12 @@ export function ManageCaregivers({
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Users className="w-5 h-5" />
-            Manage Caregivers
+            Family &amp; Care Team
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Invite family members or care providers to help manage your child's plan
+            Invite your partner, family members, or care providers to help manage your child's plan
           </p>
+          <p className="text-sm text-[#2A7D99] mt-1">{COPARENT_REASSURANCE}</p>
         </div>
         <div className="flex items-center gap-2">
           {!isUnlimited && (
@@ -351,7 +360,8 @@ export function ManageCaregivers({
       {showInviteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <Card className="w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Invite Caregiver</h3>
+            <h3 className="text-lg font-semibold mb-1">Invite to your Family &amp; Care Team</h3>
+            <p className="text-sm text-muted-foreground mb-4">{COPARENT_REASSURANCE}</p>
 
             <div className="space-y-3 sm:space-y-4">
               <div>

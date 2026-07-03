@@ -96,6 +96,7 @@ import { TelehealthSessionEngine } from './provider/TelehealthSessionEngine';
 import CredentialingOrchestrator from './provider/CredentialingOrchestrator';
 import ClaimReadyQueue from './provider/ClaimReadyQueue';
 import { GroupSessionCreator } from './provider/GroupSessionCreator';
+import { InviteFamiliesPanel } from './provider/InviteFamiliesPanel';
 import {
   generateSuperbillFromSession,
   saveSuperbillToSupabase,
@@ -1575,6 +1576,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
 
         {activeTab === 'clients' && (
           <div className="space-y-3 sm:space-y-4 sm:space-y-6">
+            {/* Invite your families — Viral Loop 1: expanded card while the
+                roster is small (<5), collapsed one-liner once it's full. */}
+            <InviteFamiliesPanel
+              providerId={providerId}
+              providerName={provider?.name || 'Your provider'}
+              patientCount={patients.length}
+            />
+
             {/* Search & Filters */}
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex-1 relative">

@@ -3,13 +3,21 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-// Single source of truth for storage usage across the vault
+// Single source of truth for storage usage across the vault.
+// Quotas come from tier-utils entitlements (100MB free / 5GB Core / 25GB Pro /
+// unlimited Family) — NEVER hardcode a second copy here; it drifts.
 import { useMemo, useState, useEffect } from 'react';
+import {
+  getStorageLimitBytes,
+  getCanonicalTierName,
+  type TierType,
+} from './tier-utils';
 
 export interface StorageInfo {
   usedBytes: number;
-  quotaBytes: number;
-  planTier: 'starter' | 'core' | 'pro';
+  /** null = unlimited (Family plan, fair-use) */
+  quotaBytes: number | null;
+  planTier: TierType;
   capabilities: {
     search?: {
       fullText: boolean;
@@ -27,75 +35,73 @@ export interface StorageInfo {
   };
 }
 
-export function useStorage(records?: Array<{ files?: Array<{ size: number }> }>): StorageInfo {
-  const [userTier, setUserTier] = useState<'starter' | 'core' | 'pro'>('core');
-  
-  // Get tier from global tier manager
+export function useStorage(
+  records?: Array<{ files?: Array<{ size: number }> }>,
+  /** Pass the authoritative tier (e.g. from App's effectiveUserTier prop). Falls back to window.aminyTier, then 'core'. */
+  tierOverride?: TierType | string | null,
+): StorageInfo {
+  const [subscribedTier, setSubscribedTier] = useState<string | null>(null);
+
+  // Get tier from global tier manager when no explicit tier was provided
   useEffect(() => {
-    const getCurrentTier = () => {
-      if (typeof window !== 'undefined' && window.aminyTier?.get) {
-        return window.aminyTier.get() as 'starter' | 'core' | 'pro';
-      }
-      return 'core';
-    };
-    
-    setUserTier(getCurrentTier());
-    
-    // Subscribe to tier changes
+    if (tierOverride) return;
+    if (typeof window !== 'undefined' && window.aminyTier?.get) {
+      setSubscribedTier(window.aminyTier.get());
+    }
     if (typeof window !== 'undefined' && window.aminyTier?.subscribe) {
       const unsubscribe = window.aminyTier.subscribe((newTier: string) => {
-        setUserTier(newTier as 'starter' | 'core' | 'pro');
+        setSubscribedTier(newTier);
       });
       return unsubscribe;
     }
-  }, []);
+  }, [tierOverride]);
 
   return useMemo(() => {
-    // Calculate total used bytes - mock some usage for demo
-    const usedBytes = records ? 
-      records.reduce((sum, record) => 
-        sum + (record.files?.reduce((fileSum, file) => fileSum + file.size, 0) || 0), 0
-      ) : 1200000000; // 1.2 GB mock usage
+    const rawTier = tierOverride || subscribedTier || 'core';
+    const canonical = getCanonicalTierName(rawTier);
+    const quotaBytes = getStorageLimitBytes(rawTier);
 
-    // Define tier limits and capabilities
-    const tierConfig = {
-      starter: { 
-        quotaGB: 1, 
-        capabilities: {
-          search: { fullText: false },
-          sharing: { links: false },
-          ai: { summary: false, search: false },
-          reports: { dropIn: false }
-        }
+    // Real usage from the actual records — an empty vault reads 0, never a mock
+    const usedBytes = records
+      ? records.reduce(
+          (sum, record) =>
+            sum + (record.files?.reduce((fileSum, file) => fileSum + file.size, 0) || 0),
+          0,
+        )
+      : 0;
+
+    const capabilitiesByTier: Record<string, StorageInfo['capabilities']> = {
+      free: {
+        search: { fullText: false },
+        sharing: { links: false },
+        ai: { summary: false, search: false },
+        reports: { dropIn: false },
       },
-      core: { 
-        quotaGB: 5,
-        capabilities: {
-          search: { fullText: true },
-          sharing: { links: true },
-          ai: { summary: false, search: false },
-          reports: { dropIn: false }
-        }
+      core: {
+        search: { fullText: true },
+        sharing: { links: true },
+        ai: { summary: false, search: false },
+        reports: { dropIn: false },
       },
-      pro: { 
-        quotaGB: 20,
-        capabilities: {
-          search: { fullText: true },
-          sharing: { links: true },
-          ai: { summary: true, search: true },
-          reports: { dropIn: true }
-        }
-      }
+      pro: {
+        search: { fullText: true },
+        sharing: { links: true },
+        ai: { summary: true, search: true },
+        reports: { dropIn: true },
+      },
+      family: {
+        search: { fullText: true },
+        sharing: { links: true },
+        ai: { summary: true, search: true },
+        reports: { dropIn: true },
+      },
     };
-
-    const config = tierConfig[userTier];
-    const quotaBytes = config.quotaGB * 1024 * 1024 * 1024;
 
     return {
       usedBytes,
       quotaBytes,
-      planTier: userTier,
-      capabilities: config.capabilities
+      planTier: (rawTier as TierType) || 'core',
+      capabilities: capabilitiesByTier[canonical] || capabilitiesByTier.core,
     };
-  }, [userTier, records]);
+  }, [tierOverride, subscribedTier, records]);
 }

@@ -52,9 +52,17 @@ import {
 } from 'lucide-react';
 import type { VaultRecord } from '../types/vault';
 import { useStorage } from '../lib/useStorage';
-import { uploadVaultFile, listVaultDocuments, deleteVaultDocument, getVaultDocumentUrl } from '../lib/vault-storage';
-import type { VaultRecordType } from '../lib/vault-storage';
+import {
+  uploadVaultFile,
+  listVaultDocuments,
+  deleteVaultDocument,
+  getVaultDocumentUrl,
+  processVaultDocument,
+  markVaultDocumentProcessed,
+} from '../lib/vault-storage';
+import type { VaultRecordType, VaultDocument, VaultDocumentSource } from '../lib/vault-storage';
 import { checkAndAwardBadges } from '../lib/badge-service';
+import { storeMemory } from '../ai/contextLayer';
 import { supabase } from '../utils/supabase/client';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 
@@ -114,7 +122,8 @@ export interface RecordsVaultProps {
   publishEvent?: (eventName: string, payload: Record<string, unknown>) => void;
   connectorData?: Record<string, unknown>;
   setConnectorData?: (data: Record<string, unknown>) => void;
-  userTier?: 'starter' | 'core' | 'pro';
+  /** Authoritative subscription tier (pass App's effectiveUserTier) — drives the honest storage quota */
+  userTier?: string;
   childId?: string;
   records?: VaultRecord[];
   onRecordAdded?: (record: VaultRecord) => void;
@@ -147,6 +156,81 @@ const SOURCE_TYPES = [
 
 function getSourceLabel(source: EnhancedVaultRecord['source']): string {
   return source === 'Junior' ? 'Ease' : source;
+}
+
+// UI label → DB slug maps. The vault_documents CHECK constraints only accept
+// these exact slugs — a naive lowercase/replace produced invalid values like
+// "prescription-order" and broke inserts.
+const RECORD_TYPE_SLUGS: Record<string, VaultRecordType> = {
+  'IEP': 'iep',
+  'Evaluation': 'evaluation',
+  'Report': 'report',
+  'Prescription/Order': 'prescription',
+  'Care Plan': 'care-plan',
+  'Uploaded (Parent)': 'uploaded',
+  'Coach Note (PDF)': 'coach-note',
+  'Session Artifact': 'session-artifact',
+  'School Letter': 'school-letter',
+  'Other': 'other',
+};
+
+const SOURCE_SLUGS: Record<string, VaultDocumentSource> = {
+  'Parent Upload': 'parent-upload',
+  'Ease': 'junior',
+  'Junior': 'junior',
+  'Coach': 'coach',
+  'School': 'school',
+  'Clinic': 'clinic',
+  'Other': 'other',
+};
+
+/** Human storage size — MB below 1GB so the free tier's 100MB quota reads honestly */
+function formatStorage(bytes: number): string {
+  if (bytes >= 1024 * 1024 * 1024) {
+    return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+  }
+  return `${Math.max(0, Math.round(bytes / (1024 * 1024)))} MB`;
+}
+
+// Per-file upload lifecycle: uploading → processing (Aminy reading) → ready,
+// or saved (upload ok, AI reading unavailable), or error (kept, retryable).
+interface UploadQueueItem {
+  id: string;
+  file: File;
+  title: string;
+  recordType: VaultRecordType;
+  source: VaultDocumentSource;
+  progress: number;
+  status: 'queued' | 'uploading' | 'processing' | 'ready' | 'saved' | 'error';
+  error?: string;
+  fileId?: string;
+}
+
+/** Map a Supabase vault document to the UI record shape (single source for load + reload) */
+function mapDocToRecord(doc: VaultDocument): EnhancedVaultRecord {
+  const meta = (doc.metadata || {}) as Record<string, unknown>;
+  return {
+    id: doc.id,
+    title: (meta.title as string) || doc.fileName,
+    date: doc.uploadedAt || new Date().toISOString(),
+    createdAt: doc.uploadedAt || new Date().toISOString(),
+    type: doc.recordType || 'Other',
+    source: doc.source || 'Parent Upload',
+    visibility: doc.visibility || 'Private',
+    relatedTo: [],
+    vaultText: (meta.extractedText as string) || '',
+    files: [{
+      id: doc.id,
+      name: doc.fileName,
+      url: '',
+      size: doc.fileSize || 0,
+      type: doc.mimeType || 'application/pdf',
+      uploadedAt: doc.uploadedAt || new Date().toISOString(),
+    }],
+    status: 'Active',
+    ocrStatus: meta.ocrStatus === 'complete' ? 'Complete' : 'None',
+    filePath: doc.filePath,
+  } as unknown as EnhancedVaultRecord;
 }
 
 // Record Row Component

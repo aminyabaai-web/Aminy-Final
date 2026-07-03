@@ -41,7 +41,7 @@ describe('CaregiverManagementScreen', () => {
 
   it('renders without crashing', () => {
     render(<CaregiverManagementScreen {...defaultProps} />);
-    expect(screen.getByText('Manage Caregivers')).toBeInTheDocument();
+    expect(screen.getByText('Family & Care Team')).toBeInTheDocument();
   });
 
   it('renders the subtitle', () => {
@@ -106,6 +106,6 @@ describe('CaregiverManagementScreen', () => {
 
   it('renders without back button when onBack is not provided', () => {
     render(<CaregiverManagementScreen />);
-    expect(screen.getByText('Manage Caregivers')).toBeInTheDocument();
+    expect(screen.getByText('Family & Care Team')).toBeInTheDocument();
   });
 });

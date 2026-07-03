@@ -294,7 +294,7 @@ vi.mock('../../lib/push-notifications', () => ({
 // ============================================================
 // NOW import the component under test (after all mocks)
 // ============================================================
-import { Dashboard10 } from '../../components/Dashboard10';
+import { Dashboard10, PARTNER_INVITE_DISMISS_KEY } from '../../components/Dashboard10';
 
 // ============================================================
 // Test suite

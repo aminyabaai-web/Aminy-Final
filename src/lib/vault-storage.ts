@@ -97,6 +97,30 @@ export interface UploadProgressCallback {
 }
 
 // ============================================================================
+// Row mapping — the vault_documents table is snake_case (see migrations
+// 016_vault_storage.sql / 20260304000000_schema_alignment.sql). All reads and
+// writes below MUST use snake_case column names; this mapper converts rows to
+// the camelCase VaultDocument shape the app consumes.
+// ============================================================================
+
+function mapVaultRow(row: Record<string, unknown>): VaultDocument {
+  return {
+    id: (row.id as string) || '',
+    userId: (row.user_id as string) || '',
+    fileName: (row.file_name as string) || '',
+    fileType: (row.file_type as string) || '',
+    filePath: (row.file_path as string) || '',
+    fileSize: (row.file_size as number) || 0,
+    mimeType: (row.mime_type as string) || '',
+    recordType: ((row.record_type as VaultRecordType) || 'other'),
+    source: ((row.source as VaultDocumentSource) || 'parent-upload'),
+    visibility: ((row.visibility as 'private' | 'shared') || 'private'),
+    uploadedAt: (row.uploaded_at as string) || new Date().toISOString(),
+    metadata: (row.metadata as VaultDocumentMetadata) || {},
+  };
+}
+
+// ============================================================================
 // Bucket Initialization
 // ============================================================================
 
@@ -260,18 +284,18 @@ export async function uploadVaultFile(
 
     onProgress?.(80, file.name);
 
-    // Create database record
-    const documentRecord: Partial<VaultDocument> = {
-      userId,
-      fileName: file.name,
-      fileType: fileExt,
-      filePath: uploadData.path,
-      fileSize: file.size,
-      mimeType: file.type,
-      recordType,
+    // Create database record (snake_case — matches the applied schema)
+    const documentRecord = {
+      user_id: userId,
+      file_name: file.name,
+      file_type: fileExt,
+      file_path: uploadData.path,
+      file_size: file.size,
+      mime_type: file.type,
+      record_type: recordType,
       source,
       visibility: 'private',
-      uploadedAt: new Date().toISOString(),
+      uploaded_at: new Date().toISOString(),
       metadata: {
         childId,
         ocrStatus: 'pending',
@@ -465,15 +489,15 @@ export async function listVaultDocuments(
     let query = supabase
       .from('vault_documents')
       .select('*')
-      .eq('userId', userId)
-      .order('uploadedAt', { ascending: false });
+      .eq('user_id', userId)
+      .order('uploaded_at', { ascending: false });
 
     if (options.childId) {
       query = query.eq('metadata->>childId', options.childId);
     }
 
     if (options.recordType) {
-      query = query.eq('recordType', options.recordType);
+      query = query.eq('record_type', options.recordType);
     }
 
     if (options.limit) {
@@ -490,7 +514,7 @@ export async function listVaultDocuments(
       return { documents: [], error: error.message };
     }
 
-    return { documents: data || [] };
+    return { documents: (data || []).map(mapVaultRow) };
   } catch (error) {
     return {
       documents: [],
@@ -523,21 +547,19 @@ export async function createShareLink(
   } = options;
 
   try {
-    const shareId = Math.random().toString(36).substring(2, 15);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + expiresInDays);
 
+    // snake_case columns + DB-generated UUID id (see schema_alignment migration)
     const { data, error } = await supabase
       .from('vault_share_links')
       .insert({
-        id: shareId,
-        documentId: fileId,
-        expiresAt: expiresAt.toISOString(),
+        document_id: fileId,
+        expires_at: expiresAt.toISOString(),
         passcode: passcode || null,
-        maxViews: maxViews || null,
-        viewCount: 0,
-        recipientEmail: recipientEmail || null,
-        createdAt: new Date().toISOString(),
+        max_views: maxViews || null,
+        view_count: 0,
+        recipient_email: recipientEmail || null,
       })
       .select('id')
       .single();
@@ -550,7 +572,7 @@ export async function createShareLink(
     const baseUrl = typeof window !== 'undefined'
       ? window.location.origin
       : 'https://app.aminy.ai';
-    const shareUrl = `${baseUrl}/vault/shared/${shareId}`;
+    const shareUrl = `${baseUrl}/vault/shared/${data.id}`;
 
     return { shareId: data.id, shareUrl };
   } catch (error) {
@@ -586,6 +608,84 @@ export async function revokeShareLink(
 }
 
 // ============================================================================
+// AI Document Processing
+// ============================================================================
+
+export interface ProcessDocumentResult {
+  success: boolean;
+  chunks?: number;
+  error?: string;
+}
+
+/**
+ * Ask the deployed `process-document` edge function to read a vault document
+ * (extract text → chunk → embed → store in the `embeddings` table) so the AI
+ * can reference it. Payload: `{ documentId }` (see
+ * supabase/functions/process-document/index.ts).
+ *
+ * Carries the session JWT when available. NEVER throws — a processing failure
+ * must not undo a successful upload; callers surface a softer "saved" state.
+ */
+export async function processVaultDocument(documentId: string): Promise<ProcessDocumentResult> {
+  try {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+    if (!supabaseUrl) {
+      return { success: false, error: 'Supabase is not configured' };
+    }
+
+    let token: string | undefined;
+    try {
+      const { data } = await supabase.auth.getSession();
+      token = data?.session?.access_token;
+    } catch { /* fall back to anon key */ }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/process-document`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token || anonKey || ''}`,
+        ...(anonKey ? { apikey: anonKey } : {}),
+      },
+      body: JSON.stringify({ documentId }),
+    });
+
+    const body = await response.json().catch(() => null);
+    if (!response.ok || body?.error) {
+      return { success: false, error: body?.error || `Processing failed (HTTP ${response.status})` };
+    }
+    // The function returns { success: true, chunks } when text was embedded, or
+    // a 200 { message: "Unsupported file type..." } for images — treat the
+    // latter as a soft failure so the UI shows "saved" rather than "ready".
+    if (body?.success === true) {
+      return { success: true, chunks: body.chunks };
+    }
+    return { success: false, error: body?.message || 'Document type not yet readable' };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Processing failed',
+    };
+  }
+}
+
+/**
+ * Mark a vault document's metadata as AI-processed (ocrStatus complete) so the
+ * "Aminy read it" chip survives reloads. Best-effort; never throws.
+ */
+export async function markVaultDocumentProcessed(documentId: string): Promise<void> {
+  try {
+    const { data } = await supabase
+      .from('vault_documents')
+      .select('metadata')
+      .eq('id', documentId)
+      .single();
+    const metadata = { ...((data?.metadata as Record<string, unknown>) || {}), ocrStatus: 'complete' };
+    await supabase.from('vault_documents').update({ metadata }).eq('id', documentId);
+  } catch { /* cosmetic only */ }
+}
+
+// ============================================================================
 // Storage Quota
 // ============================================================================
 
@@ -598,14 +698,14 @@ export async function getStorageUsage(
   try {
     const { data, error } = await supabase
       .from('vault_documents')
-      .select('fileSize')
-      .eq('userId', userId);
+      .select('file_size')
+      .eq('user_id', userId);
 
     if (error) {
       return { usedBytes: 0, fileCount: 0, error: error.message };
     }
 
-    const usedBytes = data?.reduce((sum, doc) => sum + (doc.fileSize || 0), 0) || 0;
+    const usedBytes = data?.reduce((sum, doc) => sum + (doc.file_size || 0), 0) || 0;
     const fileCount = data?.length || 0;
 
     return { usedBytes, fileCount };
@@ -622,6 +722,8 @@ export async function getStorageUsage(
 export default {
   uploadVaultFile,
   uploadMultipleFiles,
+  processVaultDocument,
+  markVaultDocumentProcessed,
   getVaultDocumentUrl,
   downloadVaultDocument,
   deleteVaultDocument,

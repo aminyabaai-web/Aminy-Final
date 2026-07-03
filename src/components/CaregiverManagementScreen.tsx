@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { ManageCaregivers } from './ManageCaregivers';
+import { ManageCaregivers, COPARENT_REASSURANCE } from './ManageCaregivers';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { isDemoMode } from '../lib/demo-seed';
 
@@ -114,10 +114,11 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               </Button>
             )}
             <div>
-              <h1 className="text-2xl font-semibold">Manage Caregivers</h1>
+              <h1 className="text-2xl font-semibold">Family &amp; Care Team</h1>
               <p className="text-sm text-muted-foreground">
                 Control who has access to your child's care plan
               </p>
+              <p className="text-sm text-[#2A7D99] mt-0.5">{COPARENT_REASSURANCE}</p>
             </div>
           </div>
         </div>

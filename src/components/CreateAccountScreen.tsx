@@ -79,6 +79,18 @@ export function CreateAccountScreen({
     return () => clearTimeout(timer);
   }, []);
 
+  // Provider-invite attribution (Viral Loop 1) — mirrors partner-org.ts's
+  // URL-param capture: persist ?provider_invite={provider_invites.id} so the
+  // post-signup step can mark the invite accepted and record the family as
+  // provider-sourced (client_source 'provider_sourced'), even though signup
+  // navigates away from the original URL.
+  useEffect(() => {
+    try {
+      const inviteId = new URLSearchParams(window.location.search).get('provider_invite');
+      if (inviteId) localStorage.setItem('aminy_provider_invite', inviteId);
+    } catch { /* best-effort attribution — never block signup */ }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
