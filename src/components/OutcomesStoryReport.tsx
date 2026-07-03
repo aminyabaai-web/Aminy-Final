@@ -314,7 +314,7 @@ export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesSt
       )}
 
       {/* ── Hero: warm headline + honest trend subline + AI one-liner ── */}
-      <div className="rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-[#EDF4F7] to-[#F6FBFB] dark:from-slate-800 dark:to-slate-800/60 border border-[#D6E6EC] dark:border-slate-700">
+      <div className="rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-[#EDF4F7] to-[#F6FBFB] dark:from-slate-800 dark:to-slate-700 border border-[#D6E6EC] dark:border-slate-700">
         <div className="flex items-center gap-2 text-[#2A7D99] dark:text-[#7BA7BC] mb-2">
           <Heart className="w-4 h-4" aria-hidden="true" />
           <span className="text-xs font-semibold uppercase tracking-wide">Your 90-day story</span>

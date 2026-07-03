@@ -326,7 +326,7 @@ export function OutcomesTracking({
         {onViewStory && (
           <button
             onClick={onViewStory}
-            className="w-full text-left rounded-2xl p-4 bg-gradient-to-br from-[#EDF4F7] to-[#F6FBFB] dark:from-slate-800 dark:to-slate-800/60 border border-[#D6E6EC] dark:border-slate-700 hover:border-[#2A7D99]/40 transition-colors"
+            className="w-full text-left rounded-2xl p-4 bg-gradient-to-br from-[#EDF4F7] to-[#F6FBFB] dark:from-slate-800 dark:to-slate-700 border border-[#D6E6EC] dark:border-slate-700 hover:border-[#2A7D99]/40 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-xl bg-white/70 dark:bg-slate-900/40 flex items-center justify-center flex-shrink-0">
