@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { logPHIView } from '../lib/security/hipaa-audit';
-import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake } from 'lucide-react';
+import { X, Mic, ArrowUp, ChevronRight, Menu, Plus, ImageIcon, Trash2, MessageSquare, Settings, ChevronDown, Brain, Sparkles, RotateCcw, Check, User, Loader2, FileText, Calendar, Pill, Bell, Monitor, TrendingUp, BarChart2, BookOpen, Folder, Copy, ThumbsUp, ThumbsDown, Heart, Trophy, Microscope, Handshake, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import {
@@ -48,6 +48,21 @@ import { UsageMeter } from './UsageMeter';
 import { useRateLimitStore } from '../lib/rate-limit-store';
 import { ThinkingStepsDisplay, generateThinkingSteps, type ThinkingStep } from './ThinkingSteps';
 import { getUserMemoryFacts, deleteFact, type MemoryFact } from '../lib/ai-memory-engine';
+import { uploadVaultFile, processVaultDocument, markVaultDocumentProcessed } from '../lib/vault-storage';
+import { saveConversation, loadConversation, loadConversationSummaries } from '../lib/conversation-persistence';
+
+// Max size for any chat attachment (image or document) — ~10 MB.
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+
+/** Generate a UUID for a roamable conversation id (falls back for old envs). */
+function newConversationId(): string {
+  try {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+  } catch { /* fall through */ }
+  return `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
 
 /** Lucide renderers for PersonalityConfig.icon — brand rule: no emoji in parent chrome. */
 const PERSONALITY_ICONS: Record<string, typeof Heart> = { Heart, Trophy, Microscope, Handshake };
@@ -418,7 +433,10 @@ export function BevelChatOverlay({
   const [showSettings, setShowSettings] = useState(false);
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [attachedImage, setAttachedImage] = useState<{ name: string; dataUrl: string } | null>(null);
-  const [sessionId] = useState(() => `session-${Date.now()}`);
+  const [docUploading, setDocUploading] = useState<{ name: string } | null>(null);
+  // UUID so the conversation can roam to the Supabase `conversations` table
+  // (its `id` column is uuid — a "session-…" string would be rejected).
+  const [sessionId] = useState(() => newConversationId());
   const [customInstructions, setCustomInstructions] = useState<CustomInstructions>(loadCustomInstructions);
   const [instructionsDirty, setInstructionsDirty] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
@@ -442,8 +460,17 @@ export function BevelChatOverlay({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);       // photo library
+  const cameraInputRef = useRef<HTMLInputElement>(null);     // camera capture
+  const docInputRef = useRef<HTMLInputElement>(null);        // PDF documents
   const hasGeneratedProactive = useRef(false);
+  // Id of the conversation currently being edited — starts as this overlay's
+  // sessionId, switches to a loaded history session's id (so continuing it
+  // upserts the same row), and resets on New Chat. Used for both localStorage
+  // and Supabase roaming persistence.
+  const activeConvIdRef = useRef<string>(sessionId);
+  // Debounce timer for cross-device history roaming (Supabase upsert).
+  const roamSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Always-fresh mirror of `messages` — avoids stale-closure history when a
   // memoized sendMessage instance fires (e.g. follow-up chips, queued sends).
   const messagesRef = useRef<Message[]>([]);

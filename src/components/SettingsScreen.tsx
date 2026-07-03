@@ -84,6 +84,7 @@ import {
   subscribeToPush,
   unsubscribeFromPush,
 } from '../lib/push-notifications';
+import { setNotificationPrefsCache } from '../lib/notification-prefs';
 import {
   isCalendarConnected,
   connectGoogleCalendar,
@@ -122,6 +123,14 @@ interface NotificationSettings {
   marketingEmails: boolean;
   checkInFrequency: 'off' | 'daily' | 'twice-weekly' | 'weekly';
   checkInTime: 'morning' | 'afternoon' | 'evening';
+  // App-scheduling toggles (persisted to user_preferences, mirrored to the
+  // notification-prefs cache so the nudge/push engines pick them up live).
+  weeklyBriefing: boolean;
+  dailyTips: boolean;
+  proactiveNudges: boolean;
+  // profiles.lifecycle_emails_enabled — same column the email-footer unsubscribe
+  // deep link flips, so the two must always agree.
+  updateEmails: boolean;
 }
 
 interface SubscriptionInfo {
@@ -158,7 +167,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
     marketingEmails: false,
     checkInFrequency: 'daily',
     checkInTime: 'morning',
+    weeklyBriefing: true,
+    dailyTips: true,
+    proactiveNudges: true,
+    updateEmails: true,
   });
+
+  // First child's name for notification microcopy — falls back to "your child".
+  const [childName, setChildName] = useState('your child');
 
   // Password change
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
@@ -260,6 +276,8 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           .update({ lifecycle_emails_enabled: false })
           .eq('id', user.id);
         if (error) throw error;
+        // Keep the "Update emails" toggle in agreement with the column just flipped.
+        setNotifications(prev => ({ ...prev, updateEmails: false }));
         toast.success("You're unsubscribed from update emails. Account and security emails still arrive.");
       } catch {
         toast.error("Couldn't update your email preference — please try again.");
@@ -279,6 +297,14 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
         .eq('user_id', user.id)
         .single();
 
+      // Update-emails toggle reads profiles.lifecycle_emails_enabled — the SAME
+      // column the email-footer unsubscribe deep link flips, so they agree.
+      const { data: profileRow } = await supabase
+        .from('profiles')
+        .select('lifecycle_emails_enabled')
+        .eq('id', user.id)
+        .maybeSingle();
+
       if (prefs) {
         setNotifications({
           pushEnabled: prefs.push_enabled ?? true,
@@ -291,8 +317,29 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           marketingEmails: prefs.marketing_emails ?? false,
           checkInFrequency: prefs.check_in_frequency || 'daily',
           checkInTime: prefs.check_in_time || 'morning',
+          weeklyBriefing: prefs.weekly_briefing ?? true,
+          dailyTips: prefs.daily_tips ?? true,
+          proactiveNudges: prefs.proactive_nudges ?? true,
+          updateEmails: profileRow?.lifecycle_emails_enabled ?? true,
         });
+        // Prime the engine cache so nudge/push scheduling reflects saved prefs.
+        setNotificationPrefsCache({
+          weekly_briefing: prefs.weekly_briefing ?? true,
+          daily_tips: prefs.daily_tips ?? true,
+          proactive_nudges: prefs.proactive_nudges ?? true,
+        });
+      } else if (profileRow) {
+        setNotifications(prev => ({ ...prev, updateEmails: profileRow.lifecycle_emails_enabled ?? true }));
       }
+
+      // First child's name for the weekly-briefing microcopy.
+      const { data: kids } = await supabase
+        .from('children')
+        .select('name')
+        .eq('parent_id', user.id)
+        .limit(1);
+      const firstName = kids?.[0]?.name?.trim();
+      if (firstName) setChildName(firstName);
 
       // Check MFA status
       const { data: factors } = await supabase.auth.mfa.listFactors();
@@ -343,16 +390,48 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           marketing_emails: newSettings.marketingEmails,
           check_in_frequency: newSettings.checkInFrequency,
           check_in_time: newSettings.checkInTime,
+          weekly_briefing: newSettings.weeklyBriefing,
+          daily_tips: newSettings.dailyTips,
+          proactive_nudges: newSettings.proactiveNudges,
           updated_at: new Date().toISOString()
         });
 
       setNotifications(newSettings);
+      // Mirror to the engine cache so nudge/push scheduling reacts immediately.
+      setNotificationPrefsCache({
+        weekly_briefing: newSettings.weeklyBriefing,
+        daily_tips: newSettings.dailyTips,
+        proactive_nudges: newSettings.proactiveNudges,
+      });
       toast.success('Settings saved');
     } catch (error) {
       console.error('Error saving settings:', error);
       toast.error('Failed to save settings');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  /**
+   * "Update emails" toggle → profiles.lifecycle_emails_enabled (same column the
+   * unsubscribe deep link flips). Optimistic with revert on failure.
+   */
+  const saveUpdateEmails = async (enabled: boolean) => {
+    const previous = notifications.updateEmails;
+    setNotifications(prev => ({ ...prev, updateEmails: enabled }));
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No authenticated user');
+      const { error } = await supabase
+        .from('profiles')
+        .update({ lifecycle_emails_enabled: enabled })
+        .eq('id', user.id);
+      if (error) throw error;
+      toast.success(enabled ? 'Update emails on' : 'Update emails off');
+    } catch (error) {
+      console.error('Error saving update-email preference:', error);
+      setNotifications(prev => ({ ...prev, updateEmails: previous }));
+      toast.error('Could not update your email preference');
     }
   };
 
@@ -1048,6 +1127,89 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
                         const newSettings = { ...notifications, emailDigest: checked };
                         saveNotificationSettings(newSettings);
                       }}
+                    />
+                  </div>
+
+                  {/* Weekly progress briefing (email) → user_preferences.weekly_briefing */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium dark:text-white">Weekly progress briefing</p>
+                        <p className="text-sm text-muted-foreground">A short Sunday note about {childName}'s week</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifications.weeklyBriefing}
+                      onCheckedChange={(checked) => {
+                        saveNotificationSettings({ ...notifications, weeklyBriefing: checked });
+                      }}
+                    />
+                  </div>
+
+                  {/* Daily gentle tips (push) → user_preferences.daily_tips */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Smartphone aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium dark:text-white">Daily gentle tips</p>
+                        <p className="text-sm text-muted-foreground">One small idea to try, sent to your device</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifications.dailyTips}
+                      onCheckedChange={(checked) => {
+                        saveNotificationSettings({ ...notifications, dailyTips: checked });
+                      }}
+                    />
+                  </div>
+
+                  {/* Proactive check-ins (in-app) → user_preferences.proactive_nudges */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Bell aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium dark:text-white">Proactive check-ins from Aminy</p>
+                        <p className="text-sm text-muted-foreground">Gentle nudges inside the app when the moment fits</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifications.proactiveNudges}
+                      onCheckedChange={(checked) => {
+                        saveNotificationSettings({ ...notifications, proactiveNudges: checked });
+                      }}
+                    />
+                  </div>
+
+                  {/* Text reminders for appointments → existing user_preferences.sms_reminders */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <MessageSquare aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium dark:text-white">Text reminders for appointments</p>
+                        <p className="text-sm text-muted-foreground">SMS before telehealth and in-person visits</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifications.smsReminders}
+                      onCheckedChange={(checked) => {
+                        saveNotificationSettings({ ...notifications, smsReminders: checked });
+                      }}
+                    />
+                  </div>
+
+                  {/* Update emails → profiles.lifecycle_emails_enabled (agrees with unsubscribe deep link) */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Mail aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+                      <div>
+                        <p className="font-medium dark:text-white">Update emails</p>
+                        <p className="text-sm text-muted-foreground">Product news and occasional account updates</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={notifications.updateEmails}
+                      onCheckedChange={(checked) => saveUpdateEmails(checked)}
                     />
                   </div>
 

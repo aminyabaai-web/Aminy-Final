@@ -31,6 +31,113 @@ import {
 } from 'lucide-react';
 import { connectorActions } from '../lib/connector-hub';
 
+// ---------------------------------------------------------------------------
+// Tiny, self-contained WebAudio synth for optional calm sounds.
+// No external assets (CSP blocks remote), no per-tool <audio> tags. Gentle,
+// low-volume, and only ever invoked when the user opts in via the toggle.
+// ---------------------------------------------------------------------------
+let _calmAudioCtx: AudioContext | null = null;
+function getCalmAudioCtx(): AudioContext | null {
+  try {
+    if (!_calmAudioCtx) {
+      _calmAudioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    }
+    if (_calmAudioCtx.state === 'suspended') { void _calmAudioCtx.resume().catch(() => {}); }
+    return _calmAudioCtx;
+  } catch {
+    return null;
+  }
+}
+
+/** Soft bubble pop — a quick, rounded downward blip tuned by hue for variety. */
+function playBubblePop(hue: number): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  // Map hue → a small pitch range so consecutive pops feel playful, never harsh.
+  const base = 360 + (hue / 360) * 260;
+  osc.frequency.setValueAtTime(base, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(base * 0.45, ctx.currentTime + 0.09);
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.13);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.15);
+}
+
+/** Barely-there friction tick as the spinner arm passes 12 o'clock. */
+function playSpinTick(): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = 320;
+  gain.gain.setValueAtTime(0.05, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.05);
+}
+
+/** Gentle sine swell for a breathing-phase change (rise on inhale, fall on exhale). */
+function playBreathTone(phase: 'inhale' | 'hold' | 'exhale'): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  const dur = phase === 'inhale' ? 1.2 : phase === 'exhale' ? 1.4 : 0.6;
+  const start = phase === 'exhale' ? 300 : 240;
+  const end = phase === 'inhale' ? 320 : phase === 'exhale' ? 220 : 300;
+  osc.frequency.setValueAtTime(start, ctx.currentTime);
+  osc.frequency.linearRampToValueAtTime(end, ctx.currentTime + dur);
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + dur * 0.4);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + dur + 0.1);
+}
+
+/** Soft ascending chime on session completion. */
+function playCalmChime(): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  [523.25, 659.25, 783.99].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const t = ctx.currentTime + i * 0.14;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.13, t + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.55);
+  });
+}
+
+/** Detect a reduced-motion / sensory-calm preference (html class, media query). */
+function prefersReducedMotion(): boolean {
+  try {
+    if (typeof document !== 'undefined' && document.documentElement.classList.contains('reduced-motion')) return true;
+    return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch {
+    return false;
+  }
+}
+
+const CALM_SOUND_KEY = 'aminy-calmtools-sound';
+
 interface SensoryToolsProps {
   childName: string;
   onBack: () => void;

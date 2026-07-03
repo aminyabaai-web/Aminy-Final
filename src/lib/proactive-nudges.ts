@@ -11,6 +11,23 @@
 import { CONTENT } from './content';
 import { useAminyStore } from './store';
 import { supabase } from '../utils/supabase/client';
+import { getNotificationPrefs } from './notification-prefs';
+import { getLatestCaregiverSummary } from './caregiver-workflow';
+
+/**
+ * ISO-week key (e.g. "2026-W27") — used to throttle the weekly-briefing nudge to
+ * once per calendar week.
+ */
+function getIsoWeekKey(d: Date): string {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dayNum = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+const WEEKLY_BRIEFING_THROTTLE_KEY = 'aminy-weekly-briefing-nudge-week';
 
 export interface Nudge {
   id: string;
@@ -94,6 +111,17 @@ class ProactiveNudgeManager {
     const now = new Date();
     const hour = now.getHours();
     const dayOfWeek = now.getDay();
+
+    // Respect the user's notification preferences (client-side gating only —
+    // fail-open to enabled). If proactive check-ins are OFF, clear any queued
+    // nudges and stop before generating new ones. NOTE: deployed edge crons must
+    // ALSO check these columns server-side; this only stops app-initiated nudges.
+    const prefs = await getNotificationPrefs();
+    if (!prefs.proactive_nudges) {
+      this.activeNudges = [];
+      this.lastCheckTime = now;
+      return;
+    }
 
     // Clear expired nudges
     this.activeNudges = this.activeNudges.filter(
@@ -368,6 +396,55 @@ class ProactiveNudgeManager {
       // Non-critical: ABC query failure should not break nudge system
       if (typeof window !== 'undefined' && import.meta.env?.DEV) {
         console.warn('[ProactiveNudges] ABC incident query failed:', error);
+      }
+    }
+
+    // 8. Weekly briefing nudge — on Sun/Mon, if the weekly briefing is enabled
+    // and a fresh caregiver summary exists, surface ONE nudge to the reports tab.
+    // Throttled to once per ISO week via localStorage.
+    if (
+      (dayOfWeek === 0 || dayOfWeek === 1) &&
+      prefs.weekly_briefing &&
+      !this.hasActiveNudge('weekly-briefing') &&
+      !this.dismissedNudges.has('weekly-briefing')
+    ) {
+      const weekKey = getIsoWeekKey(now);
+      let alreadyShownThisWeek = false;
+      try {
+        alreadyShownThisWeek = localStorage.getItem(WEEKLY_BRIEFING_THROTTLE_KEY) === weekKey;
+      } catch { /* localStorage unavailable — treat as not shown */ }
+
+      if (!alreadyShownThisWeek) {
+        try {
+          const summary = await getLatestCaregiverSummary({});
+          const isFresh = !!summary
+            && typeof summary.summaryText === 'string'
+            && summary.summaryText.trim().length > 0
+            && (now.getTime() - new Date(summary.createdAt).getTime()) <= 8 * 24 * 60 * 60 * 1000;
+
+          if (isFresh) {
+            const kidName = summary!.snapshot?.child?.name?.trim() || 'your child';
+            newNudges.push({
+              id: 'weekly-briefing',
+              type: 'suggestion',
+              priority: 'high',
+              message: `${kidName}'s weekly briefing is ready — see how the week went.`,
+              actionLabel: 'View briefing',
+              onAction: () => {
+                useAminyStore.getState().setActiveTab('reports');
+              },
+              dismissible: true,
+              expiresAt: new Date(now.getTime() + 36 * 60 * 60 * 1000),
+            });
+            try {
+              localStorage.setItem(WEEKLY_BRIEFING_THROTTLE_KEY, weekKey);
+            } catch { /* non-critical */ }
+          }
+        } catch (error) {
+          if (typeof window !== 'undefined' && import.meta.env?.DEV) {
+            console.warn('[ProactiveNudges] weekly briefing check failed:', error);
+          }
+        }
       }
     }
 
