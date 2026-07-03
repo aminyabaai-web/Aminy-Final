@@ -25,10 +25,10 @@ export interface PartnerConfig {
   /**
    * BASE care rail used for provider payouts under this partner contract.
    * The EFFECTIVE per-session rail is resolved by resolvePayoutRail
-   * (src/lib/payout-rail.ts): an expired org pilot (organizations.pilot_ends_at)
-   * falls back to insured, and an Aminy-sourced insured client
-   * (marketplace_bookings.client_source === 'aminy_marketplace') settles at
-   * insured_aminy_sourced (20%) instead of insured (10%).
+   * (src/lib/payout-rail.ts) from the booking's client_source — the insured
+   * take is purely sourcing-based, permanently: partner-brought client 5%
+   * (aact_pilot), provider's own insured client 10% (insured), Aminy-sourced
+   * client 20% (insured_aminy_sourced — even for partner-affiliated providers).
    */
   payoutRail: PayoutRail;
   /** Payers covered by this partner (used to skip cash-pay setup if all-insured) */

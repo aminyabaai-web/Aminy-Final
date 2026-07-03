@@ -26,17 +26,17 @@ export interface ConnectAccountStatus {
 }
 
 /**
- * Care rail determines platform take rate.
+ * Care rail determines platform take rate. On insured care the rate is PURELY
+ * sourcing-based (who brought the client), permanently — no pilot step-up:
  * - cash_pay: 25% to Aminy (covers marketplace, AI, compliance, support, processing)
- * - insured: 10% — provider brought their own client (lighter touch — payer does
- *   the heavy lifting, Aminy did no demand-gen)
+ * - insured: 10% — provider brought their own insured client (payer does the
+ *   heavy lifting, Aminy did no demand-gen)
  * - insured_aminy_sourced: 20% — the client found the provider through Aminy's
- *   parent app / marketplace funnel (Aminy did the demand-gen on top of settlement)
- * - aact_pilot: 5% (partner discount for AACT-affiliated providers; may carry an
- *   org-level pilot_ends_at expiry, after which it resolves to insured)
+ *   parent app / marketplace funnel (applies even to partner-affiliated providers)
+ * - aact_pilot: 5% — the partner org (AACT/Rise) brought the client; permanent
  *
  * Use resolvePayoutRail (src/lib/payout-rail.ts) to turn a relationship/org base
- * rail + booking client_source + pilot expiry into the effective rail.
+ * rail + the booking's client_source into the effective rail.
  */
 export type PayoutRail = 'cash_pay' | 'insured' | 'insured_aminy_sourced' | 'aact_pilot';
 

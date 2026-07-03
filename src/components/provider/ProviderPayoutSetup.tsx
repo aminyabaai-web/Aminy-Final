@@ -482,7 +482,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
                 Connect your bank account to receive payouts for completed sessions.
               </p>
               <p className="text-sm text-[#8A9BA8]">
-                Platform fee: {FEE_INSURED} on insured clients you bring · {FEE_INSURED_AMINY} on insured clients Aminy brings you · {FEE_CASH_PAY} on cash-pay sessions ({FEE_PARTNER} for partner-org pilots). You keep the rest.
+                Platform fee: {FEE_PARTNER} on clients your partner org brings · {FEE_INSURED} on your own insured clients · {FEE_INSURED_AMINY} on insured clients Aminy brings you · {FEE_CASH_PAY} on cash-pay sessions. You keep the rest.
               </p>
             </div>
           )}
@@ -543,10 +543,10 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
           </div>
           <div className="space-y-2">
             {[
+              { label: 'Clients your organization brings you (partner orgs)', value: `${FEE_PARTNER} fee · you keep ${KEEP_PARTNER}` },
               { label: 'Your own insured clients', value: `${FEE_INSURED} fee · you keep ${KEEP_INSURED}` },
               { label: 'Clients Aminy brings you', value: `${FEE_INSURED_AMINY} fee · you keep ${KEEP_INSURED_AMINY}` },
               { label: 'Cash-pay sessions', value: `${FEE_CASH_PAY} fee · you keep ${KEEP_CASH_PAY}` },
-              { label: 'Partner-org pilots', value: `${FEE_PARTNER} fee · you keep ${KEEP_PARTNER}` },
               { label: 'Payout timing', value: '2 business days' },
               { label: 'Minimum payout', value: '$0 (auto)' },
             ].map(({ label, value }) => (

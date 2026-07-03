@@ -261,7 +261,7 @@ async function saveBookingToDatabase(booking: {
       console.error('Appointments mirror insert failed (booking still saved):', mirrorErr);
     }
 
-    return { success: true, bookingId: data.id };
+    return { success: true, bookingId: data?.id };
   } catch (e: unknown) {
     console.error('Booking save failed:', e);
     return { success: false, error: e instanceof Error ? e.message : 'Unknown error' };
