@@ -68,6 +68,7 @@ const ALL_APP_SCREENS: string[] = [
   'medications',
   'crisis-resources',
   'weekly-insights',
+  'outcomes-story',
   'analytics-charts',
   'store',
   'community-hub',
@@ -235,9 +236,9 @@ describe('Navigation Integrity', () => {
       expect(seen.size).toBe(ALL_APP_SCREENS.length);
     });
 
-    it('ALL_APP_SCREENS has expected count of screens (currently 80)', () => {
+    it('ALL_APP_SCREENS has expected count of screens (currently 81)', () => {
       // If this fails, a screen was added or removed - update the list above
-      expect(ALL_APP_SCREENS.length).toBe(80);
+      expect(ALL_APP_SCREENS.length).toBe(81);
     });
   });
 

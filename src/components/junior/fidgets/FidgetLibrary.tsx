@@ -9,8 +9,8 @@
  */
 import { useState, useCallback, useRef } from 'react';
 import { motion } from 'motion/react';
-import { ArrowLeft } from 'lucide-react';
-import { playTap, haptic } from '../activities/sounds';
+import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
+import { playTap, haptic, isSoundEnabled, setSoundEnabled } from '../activities/sounds';
 
 import PopIt from './PopIt';
 import FidgetSpinner from './FidgetSpinner';
@@ -122,8 +122,17 @@ const FIDGETS: FidgetDef[] = [
 
 export default function FidgetLibrary({ onBack, onComplete }: FidgetLibraryProps) {
   const [activeFidget, setActiveFidget] = useState<string | null>(null);
+  const [soundOn, setSoundOn] = useState(isSoundEnabled);
   const startTime = useRef(Date.now());
   const totalInteractions = useRef(0);
+
+  const toggleSound = useCallback(() => {
+    const next = !isSoundEnabled();
+    setSoundEnabled(next);
+    setSoundOn(next);
+    haptic(20);
+    if (next) playTap(); // audible confirmation only when turning sound ON
+  }, []);
 
   const openFidget = useCallback((id: string) => {
     playTap();
@@ -164,10 +173,19 @@ export default function FidgetLibrary({ onBack, onComplete }: FidgetLibraryProps
         <button onClick={handleBack} className="p-2 rounded-full" style={{ background: 'rgba(255,255,255,0.7)' }}>
           <ArrowLeft size={24} color="#333" />
         </button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-2xl font-bold" style={{ color: '#1e293b' }}>Fidgets</h1>
           <p className="text-sm" style={{ color: '#64748b' }}>Pick one to play with!</p>
         </div>
+        <button
+          onClick={toggleSound}
+          className="rounded-full flex items-center justify-center"
+          style={{ background: 'rgba(255,255,255,0.7)', width: 44, height: 44 }}
+          aria-label={soundOn ? 'Turn sound off' : 'Turn sound on'}
+          aria-pressed={soundOn}
+        >
+          {soundOn ? <Volume2 size={22} color="#333" /> : <VolumeX size={22} color="#94a3b8" />}
+        </button>
       </div>
 
       {/* Grid */}

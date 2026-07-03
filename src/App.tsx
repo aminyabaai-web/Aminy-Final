@@ -226,6 +226,11 @@ const WeeklyAISummary = lazy(() =>
     default: m.WeeklyAISummary,
   })),
 );
+const OutcomesStoryReport = lazy(() =>
+  import("./components/OutcomesStoryReport").then((m) => ({
+    default: m.OutcomesStoryReport,
+  })),
+);
 const AnalyticsCharts = lazy(() =>
   import("./components/AnalyticsCharts").then((m) => ({
     default: m.AnalyticsCharts,
@@ -919,6 +924,7 @@ const LOADING_MESSAGES: Record<string, string> = {
   outcomes: 'Calculating your progress...',
   'insight-report': 'Generating your insights...',
   'analytics-charts': 'Crunching your data...',
+  'outcomes-story': 'Writing your story...',
   'wins-journal': 'Gathering your wins...',
   'impact-metrics': 'Compiling impact metrics...',
   onboarding: 'Getting things ready for you...',
@@ -1031,6 +1037,7 @@ type AppScreen =
   | "medications" // Medication tracking for children
   | "crisis-resources" // Offline-available crisis resources
   | "weekly-insights" // AI weekly summary
+  | "outcomes-story" // 90-day outcomes story a parent shows their provider
   | "analytics-charts" // Visual analytics
   | "wins-journal" // Parent wins journal — calm moments + weekly wins
   | "impact-metrics" // Admin/investor impact metrics dashboard
@@ -2935,7 +2942,9 @@ export default function App() {
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
               <OutcomesTracking
                 childId={userData.childId || "child-1"}
+                childName={userData.childName || undefined}
                 view="caregiver"
+                onViewStory={() => navigateToScreen("outcomes-story")}
               />
             </Suspense>
           );
@@ -3368,6 +3377,34 @@ export default function App() {
                     childName={userData.childName || 'Your child'}
                     childId={userData.activeChildId}
                     onViewDetails={() => navigateToScreen("analytics-charts")}
+                  />
+                </div>
+              </div>
+            </Suspense>
+          );
+
+        case "outcomes-story":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <div className="min-h-screen bg-app dark:bg-slate-900 pb-24">
+                <div className="sticky top-0 z-10 bg-white/90 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 backdrop-blur-sm">
+                  <div className="max-w-2xl mx-auto px-4 py-4">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => navigateToScreen("outcomes")}
+                        className="p-2 hover:bg-slate-100 rounded-lg"
+                      >
+                        <span className="sr-only">Back</span>
+                        ←
+                      </button>
+                      <h1 className="text-xl font-semibold dark:text-white">Your Story</h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                  <OutcomesStoryReport
+                    childName={userData.childName || 'Your child'}
+                    childId={userData.activeChildId || userData.childId}
                   />
                 </div>
               </div>

@@ -185,10 +185,29 @@ vi.mock('lucide-react', () => {
     'MessageSquare', 'Settings', 'ChevronDown', 'Brain', 'Sparkles', 'RotateCcw',
     'Check', 'User', 'Loader2', 'FileText', 'Calendar', 'Pill', 'Bell', 'Monitor',
     'TrendingUp', 'BarChart2', 'BookOpen', 'Folder', 'Copy', 'ThumbsUp', 'ThumbsDown',
-    'Heart', 'Trophy', 'Microscope', 'Handshake',
+    'Heart', 'Trophy', 'Microscope', 'Handshake', 'Camera',
   ];
   return Object.fromEntries(iconNames.map(n => [n, icon(n)]));
 });
+
+// ── Mock vault-storage (chat document attachments) ──
+const mockUploadVaultFile = vi.fn().mockResolvedValue({ success: true, fileId: 'doc-1' });
+const mockProcessVaultDocument = vi.fn().mockResolvedValue({ success: true, chunks: 3 });
+vi.mock('../../lib/vault-storage', () => ({
+  uploadVaultFile: (...args: unknown[]) => mockUploadVaultFile(...args),
+  processVaultDocument: (...args: unknown[]) => mockProcessVaultDocument(...args),
+  markVaultDocumentProcessed: vi.fn().mockResolvedValue(undefined),
+}));
+
+// ── Mock conversation-persistence (cross-device history roaming) ──
+const mockSaveConversation = vi.fn().mockResolvedValue(true);
+const mockLoadConversation = vi.fn().mockResolvedValue(null);
+const mockLoadConversationSummaries = vi.fn().mockResolvedValue([]);
+vi.mock('../../lib/conversation-persistence', () => ({
+  saveConversation: (...args: unknown[]) => mockSaveConversation(...args),
+  loadConversation: (...args: unknown[]) => mockLoadConversation(...args),
+  loadConversationSummaries: (...args: unknown[]) => mockLoadConversationSummaries(...args),
+}));
 
 import { BevelChatOverlay } from '../../components/BevelChatOverlay';
 
@@ -481,6 +500,109 @@ describe('BevelChatOverlay', () => {
     await waitFor(() => {
       expect(screen.getByText(/You've used your 3 free messages/i)).toBeInTheDocument();
     });
+  });
+
+  // ─── Attach menu (camera / photo / document) ──────────────────────────────
+
+  it('attach menu exposes Take photo, Photo library, and Upload document', () => {
+    renderOpen();
+    fireEvent.click(screen.getByRole('button', { name: 'More actions' }));
+    expect(screen.getByText('Take photo')).toBeInTheDocument();
+    expect(screen.getByText('Photo library')).toBeInTheDocument();
+    expect(screen.getByText('Upload document')).toBeInTheDocument();
+  });
+
+  it('renders camera, photo, and PDF file inputs with the right accept attributes', () => {
+    renderOpen();
+    const inputs = Array.from(document.body.querySelectorAll('input[type="file"]')) as HTMLInputElement[];
+    // photo library (image/*, no capture), camera (image/* + capture), pdf
+    expect(inputs.some(i => i.accept.includes('image') && !i.hasAttribute('capture'))).toBe(true);
+    expect(inputs.some(i => i.getAttribute('capture') === 'environment')).toBe(true);
+    expect(inputs.some(i => i.accept.includes('pdf'))).toBe(true);
+  });
+
+  it('uploads a selected PDF to the vault and shows an acknowledgment', async () => {
+    renderOpen();
+    // Let the async proactive opening message settle first (it replaces the
+    // message list); attaching before that would race with the ack append.
+    await screen.findByText('AI response');
+
+    const pdfInput = Array.from(document.body.querySelectorAll('input[type="file"]'))
+      .find(i => (i as HTMLInputElement).accept.includes('pdf')) as HTMLInputElement;
+    expect(pdfInput).toBeTruthy();
+
+    const file = new File(['%PDF-1.4 test'], 'iep-report.pdf', { type: 'application/pdf' });
+    fireEvent.change(pdfInput, { target: { files: [file] } });
+
+    await waitFor(() => {
+      expect(mockUploadVaultFile).toHaveBeenCalled();
+    });
+    await waitFor(() => {
+      expect(screen.getByText(/saved it to your vault/i)).toBeInTheDocument();
+    });
+  });
+
+  // ─── History roaming (Supabase hydration + lazy body load) ────────────────
+
+  it('hydrates the history list from Supabase conversation summaries', async () => {
+    mockLoadConversationSummaries.mockResolvedValueOnce([
+      {
+        id: '11111111-1111-4111-8111-111111111111',
+        userId: 'user-123',
+        title: 'Roamed conversation from another device',
+        messageCount: 4,
+        lastMessageAt: new Date().toISOString(),
+      },
+    ]);
+
+    renderOpen();
+
+    await waitFor(() => {
+      expect(mockLoadConversationSummaries).toHaveBeenCalledWith('user-123', 25);
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Chat history' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Roamed conversation from another device')).toBeInTheDocument();
+    });
+  });
+
+  it('lazy-loads message bodies when a roamed session is opened', async () => {
+    mockLoadConversationSummaries.mockResolvedValueOnce([
+      {
+        id: '22222222-2222-4222-8222-222222222222',
+        userId: 'user-123',
+        title: 'Remote session to expand',
+        messageCount: 2,
+        lastMessageAt: new Date().toISOString(),
+      },
+    ]);
+    mockLoadConversation.mockResolvedValueOnce({
+      id: '22222222-2222-4222-8222-222222222222',
+      userId: 'user-123',
+      title: 'Remote session to expand',
+      messages: [
+        { id: 'm1', role: 'user', content: 'Hi there', timestamp: new Date().toISOString() },
+        { id: 'm2', role: 'assistant', content: 'Hello from history', timestamp: new Date().toISOString() },
+      ],
+      messageCount: 2,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    renderOpen();
+    await waitFor(() => expect(mockLoadConversationSummaries).toHaveBeenCalled());
+
+    fireEvent.click(screen.getByRole('button', { name: 'Chat history' }));
+    await waitFor(() => expect(screen.getByText('Remote session to expand')).toBeInTheDocument());
+
+    fireEvent.click(screen.getByText('Remote session to expand'));
+
+    await waitFor(() => expect(mockLoadConversation).toHaveBeenCalledWith(
+      '22222222-2222-4222-8222-222222222222', 'user-123'
+    ));
+    await waitFor(() => expect(screen.getByText('Hello from history')).toBeInTheDocument());
   });
 });
 

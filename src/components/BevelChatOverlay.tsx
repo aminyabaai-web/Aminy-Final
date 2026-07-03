@@ -484,13 +484,45 @@ export function BevelChatOverlay({
   // by buildSystemPrompt. Bounded ≤500 chars.
   const goalsBlockRef = useRef('');
 
+  // Cross-device history roaming — upsert the current conversation (message
+  // bodies as a JSONB blob) to the Supabase `conversations` table. Gated on the
+  // memory/consent flag; silent on every failure so chat never breaks.
+  const roamPersist = useCallback((msgs: Message[]) => {
+    if (!userId || userId === 'dev-preview-user') return;
+    if (loadAISettings().memoryEnabled === false) return;
+    const userMsgs = msgs.filter(m => m.role === 'user');
+    if (userMsgs.length === 0) return;
+    const convId = activeConvIdRef.current;
+    // Only roam UUID-shaped ids (the `conversations.id` column is uuid; legacy
+    // "session-…" ids stay local-only via SESSIONS_KEY).
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(convId)) return;
+    const nowIso = new Date().toISOString();
+    saveConversation({
+      id: convId,
+      userId,
+      childId: userContext?.childId,
+      title: userMsgs[0].content.slice(0, 90),
+      messages: msgs.map(m => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        timestamp: (m.timestamp instanceof Date ? m.timestamp : new Date(m.timestamp)).toISOString(),
+        metadata: m.imageUrl ? { hasImage: true } : undefined,
+      })),
+      messageCount: msgs.length,
+      lastMessageAt: nowIso,
+    }).catch(() => { /* silent — offline cache still holds it */ });
+  }, [userId, userContext]);
+
   // Save session on close — auto-summarize if >= 4 messages for memory persistence
   const handleClose = useCallback(() => {
+    if (roamSaveTimer.current) { clearTimeout(roamSaveTimer.current); roamSaveTimer.current = null; }
     const userMsgs = messages.filter(m => m.role === 'user');
     if (userMsgs.length > 0) {
       const preview = userMsgs[0].content.slice(0, 90);
-      persistChatSession({ id: sessionId, timestamp: new Date().toISOString(), preview, messages });
+      persistChatSession({ id: activeConvIdRef.current, timestamp: new Date().toISOString(), preview, messages });
       setChatSessions(loadChatSessions());
+      roamPersist(messages); // flush the roam upsert immediately on close
     }
     if (messages.length >= 4) {
       const summaryMessages = messages.map(m => ({
@@ -502,7 +534,7 @@ export function BevelChatOverlay({
       }).catch(() => {});
     }
     onClose();
-  }, [messages, sessionId, onClose]);
+  }, [messages, sessionId, onClose, roamPersist]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -510,14 +542,40 @@ export function BevelChatOverlay({
     } else {
       setMessages([]);
       setAttachedImage(null);
+      setDocUploading(null);
       setShowHistory(false);
       setShowSettings(false);
       setCustomInstructions(loadCustomInstructions());
       setInstructionsDirty(false);
       setChatSessions(loadChatSessions());
+      // Fresh conversation id per open so each new chat is its own history entry.
+      activeConvIdRef.current = newConversationId();
       setHasInteracted(false);
+      // Hydrate the history list from Supabase (cross-device roaming), merged
+      // with the local cache. Best-effort; local list already shown above.
+      if (userId && userId !== 'dev-preview-user' && loadAISettings().memoryEnabled !== false) {
+        loadConversationSummaries(userId, 25)
+          .then(remote => {
+            if (remote.length === 0) return;
+            setChatSessions(prev => {
+              const localIds = new Set(prev.map(s => s.id));
+              const remoteOnly: ChatSession[] = remote
+                .filter(r => !localIds.has(r.id))
+                .map(r => ({
+                  id: r.id,
+                  timestamp: r.lastMessageAt,
+                  preview: r.title,
+                  messages: [], // lazy — bodies loaded when the session is opened
+                }));
+              return [...prev, ...remoteOnly].sort(
+                (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+              );
+            });
+          })
+          .catch(() => { /* silent */ });
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, userId]);
 
   useEffect(() => {
     if (isOpen && userId) {
@@ -535,6 +593,17 @@ export function BevelChatOverlay({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isProactiveLoading]);
+
+  // Debounced cross-device roaming — after each settled exchange, upsert the
+  // conversation to Supabase so history survives a device switch. Waits for
+  // the response to finish (isLoading=false) and debounces rapid edits.
+  useEffect(() => {
+    if (!isOpen || isLoading) return;
+    if (messages.filter(m => m.role === 'user').length === 0) return;
+    if (roamSaveTimer.current) clearTimeout(roamSaveTimer.current);
+    roamSaveTimer.current = setTimeout(() => roamPersist(messages), 1500);
+    return () => { if (roamSaveTimer.current) clearTimeout(roamSaveTimer.current); };
+  }, [messages, isLoading, isOpen, roamPersist]);
 
   // S1 — build the "WHAT YOU REMEMBER" block: stored memory facts (bounded by
   // the tier's memory-inject depth) + child Ease/Junior activity from the
@@ -1149,20 +1218,114 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     }
   };
 
+  // Images (camera + photo library) → held as an attachment, sent to Claude
+  // vision on the next message. PDFs use handleDocumentSelect instead.
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast.error('Image must be under 5 MB'); return; }
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      toast.error('That file is a bit big — please keep images under 10 MB.');
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => setAttachedImage({ name: file.name, dataUrl: reader.result as string });
     reader.readAsDataURL(file);
     e.target.value = '';
   };
 
-  const loadHistorySession = (session: ChatSession) => {
-    setMessages(session.messages);
+  // PDFs do NOT go to vision. Mirror the Records Vault flow: upload → store a
+  // memory fact (so Aminy knows it exists) → process-document (text → embeddings
+  // for RAG). Then acknowledge in-chat and refresh the injected memory block so
+  // the doc is referenceable immediately in this same conversation.
+  const handleDocumentSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      toast.error('That document is a bit big — please keep files under 10 MB.');
+      return;
+    }
+    if (!userId || userId === 'dev-preview-user') {
+      toast.error('Please sign in to attach documents.');
+      return;
+    }
+
+    setDocUploading({ name: file.name });
+    try {
+      const result = await uploadVaultFile(file, userId, {
+        recordType: 'uploaded',
+        source: 'parent-upload',
+        childId: userContext?.childId,
+        metadata: { title: file.name },
+        tier: userTier,
+      });
+
+      if (!result.success) {
+        toast.error(result.error || 'Could not save that document — try again?');
+        return;
+      }
+
+      // Vault → AI link 1: a memory fact (injected into the system prompt's
+      // "WHAT YOU REMEMBER" block), so Aminy knows the doc exists.
+      storeMemory(userId, {
+        timestamp: new Date(),
+        category: 'insight',
+        content: `Parent shared a document "${file.name}" in chat on ${new Date().toLocaleDateString()}. It's saved in their records vault — reference it when relevant.`,
+        context: { source: 'chat-upload', documentId: result.fileId || null },
+      }).catch(() => {});
+
+      // Vault → AI link 2: extract text → embeddings (RAG). Best-effort.
+      if (result.fileId) {
+        processVaultDocument(result.fileId)
+          .then(p => { if (p.success) markVaultDocumentProcessed(result.fileId!).catch(() => {}); })
+          .catch(() => {});
+      }
+
+      // Refresh the injected memory block so the new doc is in context for the
+      // very next message in THIS conversation (not just future sessions).
+      try { memoryBlockRef.current = await buildMemoryPromptBlock(userContext); } catch { /* keep prior block */ }
+
+      // In-chat acknowledgment.
+      setMessages(prev => [...prev, {
+        id: `${Date.now()}-doc`,
+        role: 'assistant' as const,
+        content: `Got it — I've read **${file.name}** and saved it to your vault. Ask me anything about it.`,
+        timestamp: new Date(),
+      }]);
+      setHasInteracted(true);
+    } catch {
+      toast.error('Could not save that document — try again?');
+    } finally {
+      setDocUploading(null);
+    }
+  };
+
+  const loadHistorySession = async (session: ChatSession) => {
+    activeConvIdRef.current = session.id;
     setShowHistory(false);
     hasGeneratedProactive.current = true;
+
+    // Bodies already present (local cache) — show immediately.
+    if (session.messages && session.messages.length > 0) {
+      setMessages(session.messages);
+      return;
+    }
+
+    // Lazy-load message bodies for a roamed (remote-only) session.
+    setMessages([]);
+    try {
+      const conv = await loadConversation(session.id, userId);
+      const loaded: Message[] = (conv?.messages || []).map(m => ({
+        id: m.id,
+        role: (m.role === 'assistant' ? 'assistant' : 'user') as 'user' | 'assistant',
+        content: m.content,
+        timestamp: m.timestamp ? new Date(m.timestamp) : new Date(),
+      }));
+      setMessages(loaded);
+    } catch {
+      toast.error('Could not load that conversation.');
+    }
   };
 
   const handleDeleteSession = (id: string, e: React.MouseEvent) => {
@@ -1175,6 +1338,8 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
     setMessages([]);
     setShowHistory(false);
     hasGeneratedProactive.current = false;
+    // Fresh conversation id so the new chat is its own history entry.
+    activeConvIdRef.current = newConversationId();
     loadContextAndOpenChat();
   };
 
@@ -1951,6 +2116,15 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                 </div>
               )}
 
+              {/* Document upload chip — shows while a PDF is being read into the vault */}
+              {docUploading && (
+                <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-[#6B9080]/10 border border-[#6B9080]/20 rounded-xl">
+                  <Loader2 className="w-3.5 h-3.5 text-[#6B9080] animate-spin shrink-0" />
+                  <FileText className="w-3.5 h-3.5 text-[#6B9080] shrink-0" />
+                  <span className="text-sm text-[#3A4A57] dark:text-slate-200 truncate flex-1">Reading {docUploading.name}…</span>
+                </div>
+              )}
+
               {/* Empty-state suggestion chips — scrollable action starters */}
               {!hasInteracted && messages.length === 0 && (
                 <div className="mb-2 flex gap-2 overflow-x-auto pb-1 scrollbar-hide -mx-1 px-1">
@@ -2038,12 +2212,30 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                 >
                   <Plus className="w-5 h-5" />
                 </button>
+                {/* Photo library */}
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
                   className="hidden"
                   onChange={handleFileSelect}
+                />
+                {/* Camera capture (rear camera on mobile) */}
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
+                {/* Document (PDF) */}
+                <input
+                  ref={docInputRef}
+                  type="file"
+                  accept="application/pdf,.pdf"
+                  className="hidden"
+                  onChange={handleDocumentSelect}
                 />
 
                 {/* Text input */}
@@ -2122,10 +2314,22 @@ ${stateBlock}${customBlock}${liveScreenContext}${memoryBlockRef.current}${goalsB
                   <div className="px-2 pb-6">
                     {[
                       {
+                        icon: Camera,
+                        label: 'Take photo',
+                        desc: 'Snap a photo with your camera',
+                        action: () => { cameraInputRef.current?.click(); setShowActionSheet(false); },
+                      },
+                      {
                         icon: ImageIcon,
-                        label: 'Add files or photo',
-                        desc: 'Share an image or document',
+                        label: 'Photo library',
+                        desc: 'Choose an existing image',
                         action: () => { fileInputRef.current?.click(); setShowActionSheet(false); },
+                      },
+                      {
+                        icon: FileText,
+                        label: 'Upload document',
+                        desc: 'Share a PDF — I\'ll read and save it',
+                        action: () => { docInputRef.current?.click(); setShowActionSheet(false); },
                       },
                       {
                         icon: Monitor,
