@@ -11,6 +11,33 @@ interface EmailOptions {
   text?: string;
   from?: string;
   replyTo?: string;
+  /** Extra SMTP headers passed to Resend (e.g. List-Unsubscribe for lifecycle email). */
+  headers?: Record<string, string>;
+}
+
+// ─── Lifecycle/marketing unsubscribe support ─────────────────────────────────
+// CAN-SPAM/best-practice: every lifecycle (non-transactional) email must carry a
+// visible unsubscribe link + List-Unsubscribe header. The settings deep link is
+// the v1 unsubscribe surface (SettingsScreen exists; ?unsubscribe=lifecycle flips
+// profiles.lifecycle_emails_enabled — see migration 20260703150000).
+const APP_URL = Deno.env.get('APP_URL') || 'https://aminy.ai';
+export const LIFECYCLE_UNSUBSCRIBE_URL = `${APP_URL}/settings?unsubscribe=lifecycle`;
+
+/** List-Unsubscribe header set for all lifecycle email sends. */
+export const LIFECYCLE_EMAIL_HEADERS: Record<string, string> = {
+  'List-Unsubscribe': `<${LIFECYCLE_UNSUBSCRIBE_URL}>, <mailto:support@aminy.ai?subject=unsubscribe%20lifecycle>`,
+};
+
+/** Append the required unsubscribe footer to a lifecycle email HTML body. */
+export function withLifecycleUnsubscribeFooter(html: string): string {
+  const footer = `
+  <p style="text-align:center;font-size:12px;color:#94a3b8;padding:16px 20px 0;margin:0;">
+    You're receiving this because you have an Aminy account.
+    <a href="${LIFECYCLE_UNSUBSCRIBE_URL}" style="color:#43AA8B;text-decoration:underline;">Unsubscribe</a> from these emails.
+  </p>`;
+  return html.includes('</body>')
+    ? html.replace('</body>', `${footer}\n</body>`)
+    : `${html}${footer}`;
 }
 
 /**
@@ -30,7 +57,8 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
     html,
     text,
     from = 'Aminy <noreply@aminy.ai>',
-    replyTo = 'support@aminy.ai'
+    replyTo = 'support@aminy.ai',
+    headers,
   } = options;
 
   // Get Resend API key from environment
@@ -63,6 +91,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
         subject,
         html: html || text,
         reply_to: replyTo,
+        ...(headers ? { headers } : {}),
       }),
     });
 
@@ -240,9 +269,10 @@ export async function sendWelcomeEmail(
   return sendEmail({
     to: userEmail,
     subject,
-    html,
+    html: withLifecycleUnsubscribeFooter(html),
     from: 'Aminy <noreply@aminy.ai>',
     replyTo: 'support@aminy.ai',
+    headers: LIFECYCLE_EMAIL_HEADERS,
   });
 }
 
@@ -314,9 +344,10 @@ export async function sendReEngagementEmail(
   return sendEmail({
     to: userEmail,
     subject,
-    html,
+    html: withLifecycleUnsubscribeFooter(html),
     from: 'Aminy <noreply@aminy.ai>',
     replyTo: 'support@aminy.ai',
+    headers: LIFECYCLE_EMAIL_HEADERS,
   });
 }
 
@@ -413,9 +444,10 @@ export async function sendWeeklyDigestEmail(
   return sendEmail({
     to: userEmail,
     subject,
-    html,
+    html: withLifecycleUnsubscribeFooter(html),
     from: 'Aminy <noreply@aminy.ai>',
     replyTo: 'support@aminy.ai',
+    headers: LIFECYCLE_EMAIL_HEADERS,
   });
 }
 
@@ -601,9 +633,10 @@ export async function sendChurnPreventionEmail(
   return sendEmail({
     to: userEmail,
     subject: subjects[emailType],
-    html: getHtml(),
+    html: withLifecycleUnsubscribeFooter(getHtml()),
     from: 'Aminy <noreply@aminy.ai>',
     replyTo: 'support@aminy.ai',
+    headers: LIFECYCLE_EMAIL_HEADERS,
   });
 }
 
@@ -803,8 +836,9 @@ export async function sendTrialExpirationEmail(
   return sendEmail({
     to: userEmail,
     subject,
-    html,
+    html: withLifecycleUnsubscribeFooter(html),
     from: 'Aminy <noreply@aminy.ai>',
     replyTo: 'support@aminy.ai',
+    headers: LIFECYCLE_EMAIL_HEADERS,
   });
 }

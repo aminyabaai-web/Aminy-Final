@@ -32,6 +32,7 @@ import {
   type SessionPayoutParams,
   type PayoutRecord,
 } from '../../lib/stripe-connect';
+import { resolvePayoutRail, type ClientSource } from '../../lib/payout-rail';
 
 // ============================================================================
 // Props
@@ -47,8 +48,19 @@ export interface SessionPayoutTriggerProps {
   stripeConnectAccountId: string;
   /** Total collected from the family in cents */
   sessionAmountCents: number;
-  /** Care rail — determines platform take rate (cash 25%, insured 10%, aact 5%) */
+  /**
+   * BASE care rail from the relationship/org config (cash 25%, insured 10%,
+   * Aminy-sourced insured 20%, partner-sourced 5%). Resolved to the EFFECTIVE
+   * rail via resolvePayoutRail using clientSource below.
+   */
   rail?: import('../../lib/stripe-connect').PayoutRail;
+  /**
+   * Who sourced the client for this booking (marketplace_bookings.client_source).
+   * On insured care the take is purely sourcing-based: 'aminy_marketplace' → 20%,
+   * 'partner_org' → 5% (permanent). Omit/null = legacy behavior (provider-sourced,
+   * base rail unchanged).
+   */
+  clientSource?: ClientSource | null;
   /** Human-readable session description */
   sessionDescription?: string;
   /** ISO timestamp when the session occurred */
@@ -82,6 +94,7 @@ export function SessionPayoutTrigger({
   stripeConnectAccountId,
   sessionAmountCents,
   rail = 'cash_pay',
+  clientSource = null,
   sessionDescription,
   sessionDate,
   durationMinutes,
@@ -94,8 +107,12 @@ export function SessionPayoutTrigger({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [payoutRecord, setPayoutRecord] = useState<PayoutRecord | null>(null);
 
-  const { providerCents, platformFeeCents } = calculateProviderAmount(sessionAmountCents, rail);
-  const feePct = Math.round(getPlatformFeeRate(rail) * 100);
+  // Resolve the EFFECTIVE rail (who sourced the client) before any fee math.
+  // With no clientSource this is the base rail — the legacy behavior — so
+  // existing call sites are unchanged.
+  const effectiveRail = resolvePayoutRail({ baseRail: rail, clientSource });
+  const { providerCents, platformFeeCents } = calculateProviderAmount(sessionAmountCents, effectiveRail);
+  const feePct = Math.round(getPlatformFeeRate(effectiveRail) * 100);
 
   const handleRelease = async () => {
     setViewState('loading');
@@ -107,7 +124,7 @@ export function SessionPayoutTrigger({
         providerId,
         stripeConnectAccountId,
         sessionAmountCents,
-        rail,
+        rail: effectiveRail,
         sessionDescription: sessionDescription ?? `Session on ${sessionDate ?? sessionId}`,
       };
 

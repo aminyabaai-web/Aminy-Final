@@ -9,7 +9,7 @@
  * never double-fire.
  *
  * Schedule: every 15 minutes via Supabase pg_cron OR external scheduler.
- *   SELECT cron.schedule('appointment-reminders', '*/15 * * * *',
+ *   SELECT cron.schedule('appointment-reminders', 'every-15-min (star-slash-15 star star star star)',
  *     'SELECT net.http_post(url:=''https://qpzsvafwcwyrkdolrjbu.supabase.co/functions/v1/appointment-reminders'',
  *       headers:=''{"Authorization":"Bearer <service-role-key>"}''::jsonb)');
  *

@@ -3,15 +3,16 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, UserPlus, QrCode, Link as LinkIcon, Mail, MoreVertical, Shield, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { ManageCaregivers } from './ManageCaregivers';
+import { ManageCaregivers, COPARENT_REASSURANCE, type ChildOption } from './ManageCaregivers';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { isDemoMode } from '../lib/demo-seed';
+import { supabase } from '../utils/supabase/client';
 
 interface CaregiverManagementScreenProps {
   onBack?: () => void;
@@ -32,6 +33,8 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
     role: CaregiverRole;
     status: CaregiverStatus;
     addedDate: string;
+    /** Which child care circle(s) this member was invited to (per-child scoping). */
+    childNames?: string[];
   };
   // Real users start with an empty team and invite their own people. Sample
   // members appear only in demo mode for investor/partner walk-throughs.
@@ -45,17 +48,119 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
       : []
   );
 
-  const handleInvite = (email: string, role: CaregiverRole) => {
-    const newCaregiver = {
+  // Per-child scoping (iCloud-Family-style): invites go to a specific child's
+  // care circle. Children + previously sent invites load from Supabase; the
+  // invite records persist in caregiver_invites (see the 20260703170000
+  // migration — invite record only; shared-access RLS is a follow-up).
+  const [userId, setUserId] = useState<string | null>(null);
+  const [childProfiles, setChildProfiles] = useState<ChildOption[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user?.id || cancelled) return;
+        setUserId(user.id);
+
+        const [{ data: kids }, { data: invites }] = await Promise.all([
+          supabase.from('children').select('id, name').eq('parent_id', user.id),
+          supabase
+            .from('caregiver_invites')
+            .select('id, invitee_name, invitee_email, role, status, invited_at, child_name')
+            .eq('owner_id', user.id)
+            .neq('status', 'revoked'),
+        ]);
+        if (cancelled) return;
+
+        if (kids) setChildProfiles(kids.map((k) => ({ id: k.id, name: k.name })));
+        if (invites && invites.length > 0) {
+          // Collapse per-child rows into one member entry per invitee email.
+          const byEmail = new Map<string, Caregiver>();
+          for (const inv of invites) {
+            const existing = byEmail.get(inv.invitee_email);
+            const childNames = [
+              ...(existing?.childNames ?? []),
+              ...(inv.child_name ? [inv.child_name] : []),
+            ];
+            byEmail.set(inv.invitee_email, {
+              id: existing?.id ?? inv.id,
+              name: inv.invitee_name || inv.invitee_email.split('@')[0],
+              email: inv.invitee_email,
+              role: (inv.role as CaregiverRole) || 'caregiver',
+              status: inv.status === 'accepted' ? 'active' : 'pending',
+              addedDate: (inv.invited_at || new Date().toISOString()).split('T')[0],
+              childNames: childNames.length > 0 ? childNames : undefined,
+            });
+          }
+          setCaregivers((prev) => {
+            const known = new Set(prev.map((c) => c.email));
+            return [...prev, ...[...byEmail.values()].filter((c) => !known.has(c.email))];
+          });
+        }
+      } catch {
+        // Non-blocking — the screen still works with local state only.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  const handleInvite = (email: string, role: CaregiverRole, childIds: string[] = []) => {
+    const scopedChildren = childProfiles.filter((c) => childIds.includes(c.id));
+    const newCaregiver: Caregiver = {
       id: Date.now().toString(),
       name: email.split('@')[0],
       email,
       role,
       status: 'pending' as CaregiverStatus,
-      addedDate: new Date().toISOString().split('T')[0]
+      addedDate: new Date().toISOString().split('T')[0],
+      childNames: scopedChildren.length > 0 ? scopedChildren.map((c) => c.name) : undefined,
     };
     setCaregivers([...caregivers, newCaregiver]);
     setShowAddCaregiver(false);
+
+    // Persist child-scoped invite records (one row per child care circle).
+    if (userId) {
+      type CaregiverInviteRow = {
+        owner_id: string;
+        child_id: string | null;
+        child_name: string | null;
+        invitee_name: string;
+        invitee_email: string;
+        role: CaregiverRole;
+      };
+      const rows: CaregiverInviteRow[] = scopedChildren.length > 0
+        ? scopedChildren.map((c) => ({
+            owner_id: userId,
+            child_id: c.id,
+            child_name: c.name,
+            invitee_name: email.split('@')[0],
+            invitee_email: email.toLowerCase(),
+            role,
+          }))
+        : [{
+            owner_id: userId,
+            child_id: null,
+            child_name: null,
+            invitee_name: email.split('@')[0],
+            invitee_email: email.toLowerCase(),
+            role,
+          }];
+      supabase
+        .from('caregiver_invites')
+        .insert(rows)
+        .then(({ error }) => {
+          if (error) {
+            toast.error('Invite saved on this device only — it could not be stored to your account');
+          } else {
+            toast.success(
+              scopedChildren.length > 0
+                ? `Invite recorded for ${scopedChildren.map((c) => c.name).join(' and ')}'s care circle`
+                : 'Invite recorded'
+            );
+          }
+        });
+    }
   };
 
   const handleRevoke = (id: string) => {
@@ -114,10 +219,11 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
               </Button>
             )}
             <div>
-              <h1 className="text-2xl font-semibold">Manage Caregivers</h1>
+              <h1 className="text-2xl font-semibold">Family &amp; Care Team</h1>
               <p className="text-sm text-muted-foreground">
                 Control who has access to your child's care plan
               </p>
+              <p className="text-sm text-[#2A7D99] mt-0.5">{COPARENT_REASSURANCE}</p>
             </div>
           </div>
         </div>

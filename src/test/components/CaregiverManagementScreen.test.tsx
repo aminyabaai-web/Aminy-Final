@@ -24,6 +24,8 @@ vi.mock('../../components/ManageCaregivers', () => ({
     React.createElement('div', { 'data-testid': 'manage-caregivers' },
       React.createElement('button', { onClick: onCancel }, 'Cancel'),
     ),
+  COPARENT_REASSURANCE:
+    "Co-parents are included with every paid plan at no extra cost — they see your child's plans, progress, and reports.",
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -41,7 +43,7 @@ describe('CaregiverManagementScreen', () => {
 
   it('renders without crashing', () => {
     render(<CaregiverManagementScreen {...defaultProps} />);
-    expect(screen.getByText('Manage Caregivers')).toBeInTheDocument();
+    expect(screen.getByText('Family & Care Team')).toBeInTheDocument();
   });
 
   it('renders the subtitle', () => {
@@ -106,6 +108,6 @@ describe('CaregiverManagementScreen', () => {
 
   it('renders without back button when onBack is not provided', () => {
     render(<CaregiverManagementScreen />);
-    expect(screen.getByText('Manage Caregivers')).toBeInTheDocument();
+    expect(screen.getByText('Family & Care Team')).toBeInTheDocument();
   });
 });

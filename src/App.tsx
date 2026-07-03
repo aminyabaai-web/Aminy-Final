@@ -2780,6 +2780,7 @@ export default function App() {
               <RecordsVault
                 onBack={() => navigateToScreen("dashboard")}
                 onClose={() => navigateToScreen("dashboard")}
+                userTier={effectiveUserTier}
               />
             </Suspense>
           );

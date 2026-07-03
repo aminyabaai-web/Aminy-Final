@@ -226,7 +226,7 @@ export function EnhancedReferralDashboard({
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Heart className="w-4 h-4 text-red-300 flex-shrink-0" />
-              <span>Both get <strong>$25 session credit</strong> after first booking</span>
+              <span>Both get <strong>a free month of Core</strong> when they join</span>
             </div>
           </div>
         </div>
@@ -627,7 +627,7 @@ export function EnhancedReferralDashboard({
           {[
             { step: '1', title: 'Share your code', desc: 'Send your unique link via text, email, or WhatsApp' },
             { step: '2', title: 'Friend gets Pro trial', desc: 'They get 14 days of Pro features free' },
-            { step: '3', title: 'First session booked', desc: 'You both earn a $25 session credit' },
+            { step: '3', title: 'They join Aminy', desc: 'You both get a free month of Core' },
             { step: '4', title: 'You earn a free month', desc: 'Applied to your current subscription tier' },
           ].map((item) => (
             <div key={item.step} className="flex items-start gap-3">

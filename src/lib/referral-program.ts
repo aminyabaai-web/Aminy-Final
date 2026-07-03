@@ -70,9 +70,9 @@ export const REFERRAL_PROGRAM_CONFIG: ReferralProgramConfig = {
     description: '1 month free for each friend who joins',
   },
   referredReward: {
-    type: 'session-credit',
-    value: 25, // $25 credit
-    description: '$25 credit toward your first expert session',
+    type: 'free-month',
+    value: 1, // 1 free month of Core (symmetric: give a month, get a month)
+    description: '1 month of Aminy Core free when you join',
   },
   qualificationPeriodDays: 7, // Friend must stay on paid plan for 7 days (reduced from 14 for better viral coefficient)
   requiredTier: 'core', // Minimum tier for qualification
@@ -93,7 +93,7 @@ export const REFERRAL_TIERS: ReferralTier[] = [
   {
     name: 'Supporter',
     minReferrals: 1,
-    perks: ['1 free month per referral', '$25 credit for friend'],
+    perks: ['1 free month per referral', 'Your friend gets a free month too'],
     badgeColor: '#0891b2',
     badgeIcon: '🌟',
   },
@@ -160,7 +160,7 @@ export function getReferralShareMessage(referralCode: string, userName: string):
 } {
   return {
     title: 'Join me on Aminy!',
-    body: `${userName} invited you to Aminy - the AI-powered companion for families navigating autism and neurodivergence. Use code ${referralCode} to get $25 toward your first expert session!`,
+    body: `${userName} invited you to Aminy - the AI-powered companion for families navigating autism and neurodivergence. Use code ${referralCode} and your first month of Aminy Core is free!`,
     url: `https://aminy.ai/join?ref=${referralCode}`,
   };
 }

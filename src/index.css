@@ -18582,3 +18582,12 @@ tr:hover td, .hover-row:hover {
   height: 0 !important;
   z-index: 0 !important;
 }
+
+/* ============================================================
+   Records Vault upload UX (July 2026) — Tailwind v4 is
+   precompiled here, so this arbitrary opacity utility must be
+   defined manually (used by the whole-page drag-drop overlay).
+   ============================================================ */
+.bg-background\/90 {
+  background-color: color-mix(in oklab, var(--background) 90%, transparent);
+}

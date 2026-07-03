@@ -3,7 +3,7 @@
 // Unauthorized use, reproduction, or distribution is strictly prohibited.
 // See LICENSE file for details.
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   UserPlus,
   Trash2,
@@ -41,6 +41,14 @@ interface Caregiver {
   invitedAt: Date;
   acceptedAt?: Date;
   permissions?: CaregiverPermissions;
+  /** Which child care circle(s) this member was invited to (display only). */
+  childNames?: string[];
+}
+
+/** Child option for the per-child care-circle picker (iCloud-Family-style scoping). */
+export interface ChildOption {
+  id: string;
+  name: string;
 }
 
 interface CaregiverPermissions {
@@ -54,7 +62,10 @@ interface CaregiverPermissions {
 interface ManageCaregiversProps {
   caregivers?: Caregiver[];
   tier?: TierType;
-  onInvite?: (email: string, role: CaregiverRole) => void;
+  /** The family's children — when provided, invites are scoped per child
+   *  (the invitee joins specific care circles, not the whole account). */
+  childProfiles?: ChildOption[];
+  onInvite?: (email: string, role: CaregiverRole, childIds: string[]) => void;
   onRemove?: (id: string) => void;
   onUpgrade?: () => void;
   onCancel?: () => void;
@@ -66,9 +77,16 @@ interface ManageCaregiversProps {
 
 const roleLabels: Record<CaregiverRole, string> = {
   owner: 'Owner',
-  caregiver: 'Caregiver',
+  caregiver: 'Co-parent / Caregiver',
   'read-only': 'Read-only'
 };
+
+// TRUTH SOURCE for co-parent copy (drift-guarded in
+// src/test/components/CaregiverCopyTruth.test.tsx): free tier is owner-only,
+// every PAID tier includes at least one additional caregiver seat at no extra
+// cost. UI copy must therefore say "every paid plan" — never "every plan".
+export const COPARENT_REASSURANCE =
+  "Co-parents are included with every paid plan at no extra cost — they see your child's plans, progress, and reports.";
 
 const roleColors: Record<CaregiverRole, string> = {
   // Owner is a neutral slate chip — accents must not compete with the one teal primary CTA
@@ -89,8 +107,8 @@ const roleDescriptions: Record<CaregiverRole, string> = {
   'read-only': 'Can view progress and reports only'
 };
 
-// Caregiver limits per tier
-const MAX_CAREGIVERS: Record<TierType, number> = {
+// Caregiver limits per tier (exported for the copy-truth drift test)
+export const MAX_CAREGIVERS: Record<TierType, number> = {
   free: 1, // Owner only
   starter: 2, // Owner + 1
   core: 3, // Owner + 2
@@ -105,6 +123,7 @@ const MAX_CAREGIVERS: Record<TierType, number> = {
 export function ManageCaregivers({
   caregivers: initialCaregivers,
   tier = 'free',
+  childProfiles = [],
   onInvite,
   onRemove,
   onUpgrade
@@ -132,7 +151,17 @@ export function ManageCaregivers({
 
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState<CaregiverRole>('read-only');
+  // Default to co-parent — the most common (and highest-value) second member.
+  const [inviteRole, setInviteRole] = useState<CaregiverRole>('caregiver');
+  // Per-child care-circle scoping — default: all children selected.
+  const [selectedChildIds, setSelectedChildIds] = useState<string[]>(
+    () => childProfiles.map((c) => c.id)
+  );
+  // childProfiles usually arrives async (Supabase fetch) — re-default selection.
+  useEffect(() => {
+    setSelectedChildIds(childProfiles.map((c) => c.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [childProfiles.map((c) => c.id).join(',')]);
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Calculate limits
@@ -154,8 +183,14 @@ export function ManageCaregivers({
   const upgradeTier = getUpgradeTier();
 
   // Handlers
+  const hasChildren = childProfiles.length > 0;
+  const selectedChildNames = childProfiles
+    .filter((c) => selectedChildIds.includes(c.id))
+    .map((c) => c.name);
+
   const handleInvite = () => {
     if (!inviteEmail || !canAddMore) return;
+    if (hasChildren && selectedChildIds.length === 0) return;
 
     const newCaregiver: Caregiver = {
       id: `caregiver_${Date.now()}`,
@@ -163,11 +198,12 @@ export function ManageCaregivers({
       email: inviteEmail,
       role: inviteRole,
       status: 'pending',
-      invitedAt: new Date()
+      invitedAt: new Date(),
+      childNames: selectedChildNames.length > 0 ? selectedChildNames : undefined
     };
 
     setCaregivers([...caregivers, newCaregiver]);
-    onInvite?.(inviteEmail, inviteRole);
+    onInvite?.(inviteEmail, inviteRole, hasChildren ? selectedChildIds : []);
     setInviteEmail('');
     setShowInviteModal(false);
   };
@@ -191,11 +227,12 @@ export function ManageCaregivers({
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Users className="w-5 h-5" />
-            Manage Caregivers
+            Family &amp; Care Team
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Invite family members or care providers to help manage your child's plan
+            Invite your partner, family members, or care providers to help manage your child's plan
           </p>
+          <p className="text-sm text-[#2A7D99] mt-1">{COPARENT_REASSURANCE}</p>
         </div>
         <div className="flex items-center gap-2">
           {!isUnlimited && (
@@ -293,6 +330,11 @@ export function ManageCaregivers({
                     )}
                   </div>
                   <p className="text-sm text-muted-foreground">{caregiver.email}</p>
+                  {caregiver.childNames && caregiver.childNames.length > 0 && (
+                    <p className="text-sm text-[#2A7D99]">
+                      {caregiver.childNames.join(' and ')}&apos;s care circle
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -351,7 +393,8 @@ export function ManageCaregivers({
       {showInviteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <Card className="w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Invite Caregiver</h3>
+            <h3 className="text-lg font-semibold mb-1">Invite to your Family &amp; Care Team</h3>
+            <p className="text-sm text-muted-foreground mb-4">{COPARENT_REASSURANCE}</p>
 
             <div className="space-y-3 sm:space-y-4">
               <div>
@@ -364,6 +407,48 @@ export function ManageCaregivers({
                   className="w-full px-3 py-2 border border-[#E8E4DF] rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
                 />
               </div>
+
+              {/* Per-child care-circle scoping — invites are to a child's care
+                  circle (like iCloud Family sharing), not blanket account access. */}
+              {hasChildren && (
+                <div>
+                  <label className="text-sm font-medium block mb-2">
+                    Which child&apos;s care circle?
+                  </label>
+                  <div className="space-y-2">
+                    {childProfiles.map((child) => (
+                      <label
+                        key={child.id}
+                        className="flex items-center gap-3 p-2.5 border border-[#E8E4DF] rounded-lg cursor-pointer hover:border-accent/50 transition-colors"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedChildIds.includes(child.id)}
+                          onChange={() =>
+                            setSelectedChildIds((prev) =>
+                              prev.includes(child.id)
+                                ? prev.filter((id) => id !== child.id)
+                                : [...prev, child.id]
+                            )
+                          }
+                        />
+                        <span className="text-sm font-medium">{child.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {selectedChildNames.length > 0 ? (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      You&apos;re inviting {inviteEmail || 'them'} to{' '}
+                      {selectedChildNames.join(' and ')}&apos;s care circle
+                      {selectedChildNames.length > 1 ? 's' : ''}.
+                    </p>
+                  ) : (
+                    <p className="text-sm text-amber-600 mt-2">
+                      Pick at least one child to share.
+                    </p>
+                  )}
+                </div>
+              )}
 
               <div>
                 <label className="text-sm font-medium block mb-2">Access Role</label>
@@ -398,7 +483,11 @@ export function ManageCaregivers({
                 <Button variant="outline" onClick={() => setShowInviteModal(false)}>
                   Cancel
                 </Button>
-                <Button onClick={handleInvite} disabled={!inviteEmail} className="bg-[#2A7D99] hover:bg-[#376E80] text-white">
+                <Button
+                  onClick={handleInvite}
+                  disabled={!inviteEmail || (hasChildren && selectedChildIds.length === 0)}
+                  className="bg-[#2A7D99] hover:bg-[#376E80] text-white"
+                >
                   <Mail className="w-4 h-4 mr-2" />
                   Send Invitation
                 </Button>

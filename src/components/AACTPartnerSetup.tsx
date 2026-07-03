@@ -288,8 +288,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
 
 function getRatePercent(rail: string): number {
   // Single source of truth: PLATFORM_FEE_RATES in stripe-connect.ts
-  if (rail === 'aact_pilot') return PLATFORM_FEE_RATES.aact_pilot;
-  if (rail === 'insured') return PLATFORM_FEE_RATES.insured;
+  if (rail in PLATFORM_FEE_RATES) return PLATFORM_FEE_RATES[rail as keyof typeof PLATFORM_FEE_RATES];
   return PLATFORM_FEE_RATES.cash_pay;
 }
 

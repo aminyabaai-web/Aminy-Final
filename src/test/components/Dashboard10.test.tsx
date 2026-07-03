@@ -294,7 +294,7 @@ vi.mock('../../lib/push-notifications', () => ({
 // ============================================================
 // NOW import the component under test (after all mocks)
 // ============================================================
-import { Dashboard10 } from '../../components/Dashboard10';
+import { Dashboard10, PARTNER_INVITE_DISMISS_KEY } from '../../components/Dashboard10';
 
 // ============================================================
 // Test suite
@@ -484,5 +484,56 @@ describe('Dashboard10', () => {
     // The chat toggle button has an aria-label
     const chatButton = screen.getByLabelText(/Minimize chat|Open chat with Aminy/);
     expect(chatButton).toBeInTheDocument();
+  });
+
+  // -----------------------------------------------------------
+  // Second-parent invite card (Viral Loop 2)
+  // -----------------------------------------------------------
+  describe('second-parent invite card', () => {
+    beforeEach(() => {
+      localStorage.removeItem(PARTNER_INVITE_DISMISS_KEY);
+    });
+
+    it('renders with truthful paid-plan copy and the child name', () => {
+      render(<Dashboard10 {...defaultProps} />);
+
+      expect(screen.getByText('Parenting together?')).toBeInTheDocument();
+      // TRUTH GUARD: free tier is owner-only (ManageCaregivers MAX_CAREGIVERS),
+      // so the card must claim "paid plan", never "free on every plan".
+      const copy = screen.getByText(/included with every paid plan/);
+      expect(copy).toBeInTheDocument();
+      expect(copy.textContent).toContain("Riley's progress");
+      expect(copy.textContent).not.toMatch(/free on every plan/i);
+    });
+
+    it('navigates to the caregivers screen from the CTA', () => {
+      const mockNavigate = vi.fn();
+      render(<Dashboard10 {...defaultProps} onNavigate={mockNavigate} />);
+
+      fireEvent.click(screen.getByText('Add your partner'));
+      expect(mockNavigate).toHaveBeenCalledWith('caregivers');
+    });
+
+    it('dismiss hides the card and persists via the 7-day localStorage throttle', () => {
+      const { unmount } = render(<Dashboard10 {...defaultProps} />);
+
+      fireEvent.click(screen.getByLabelText('Dismiss partner invite'));
+      expect(screen.queryByText('Parenting together?')).not.toBeInTheDocument();
+      expect(localStorage.getItem(PARTNER_INVITE_DISMISS_KEY)).toBeTruthy();
+      unmount();
+
+      // Re-mount within the 7-day window — stays quiet.
+      const second = render(<Dashboard10 {...defaultProps} />);
+      expect(screen.queryByText('Parenting together?')).not.toBeInTheDocument();
+      second.unmount();
+
+      // A dismissal older than 7 days no longer suppresses the card.
+      localStorage.setItem(
+        PARTNER_INVITE_DISMISS_KEY,
+        String(Date.now() - 8 * 24 * 60 * 60 * 1000),
+      );
+      render(<Dashboard10 {...defaultProps} />);
+      expect(screen.getByText('Parenting together?')).toBeInTheDocument();
+    });
   });
 });

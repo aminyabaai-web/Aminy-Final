@@ -20,7 +20,7 @@
  * Zero friction to start. Signup wall only appears AFTER they have results worth saving.
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -48,6 +48,7 @@ import {
   type RiskLevel,
   type ScreeningInstrument,
 } from '../lib/screening-instruments';
+import { ShareScreeningCard, captureAcquisitionRef } from './ShareScreeningCard';
 
 // ============================================
 // DESIGN TOKENS — matches brand-system spec
@@ -321,6 +322,12 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
   const [answers, setAnswers] = useState<Record<string, boolean>>({});
   const [result, setResult] = useState<ScreeningResult | null>(null);
   const [showInsight, setShowInsight] = useState<AminyInsight | null>(null);
+
+  // Attribution: if this visit arrived via a shared link (?ref=parent-share),
+  // stamp it to localStorage so the eventual signup can be attributed.
+  useEffect(() => {
+    captureAcquisitionRef();
+  }, []);
 
   const selectedInstrument = useMemo((): ScreeningInstrument | null => {
     if (!primaryConcern) return null;
@@ -785,6 +792,13 @@ export function FreeScreeningFlow({ onBack, onSignUp, onBookEvaluation, onJustDi
               7-day free trial · No credit card required · Results saved automatically
             </p>
           </div>
+
+          {/* Viral loop — share card. Sits BELOW the primary CTA so it never
+              steals conversion weight. Generic share carries zero results data. */}
+          <ShareScreeningCard
+            childName={childInfo.name.trim() || undefined}
+            riskLevel={result.riskLevel}
+          />
 
           {/* Disclaimer */}
           <div style={S.disclaimer}>

@@ -22,7 +22,14 @@ export type PartnerOrgId = 'aact' | 'rise' | 'unknown';
 export interface PartnerConfig {
   id: PartnerOrgId;
   displayName: string;
-  /** Care rail used for provider payouts under this partner contract */
+  /**
+   * BASE care rail used for provider payouts under this partner contract.
+   * The EFFECTIVE per-session rail is resolved by resolvePayoutRail
+   * (src/lib/payout-rail.ts) from the booking's client_source — the insured
+   * take is purely sourcing-based, permanently: partner-brought client 5%
+   * (aact_pilot), provider's own insured client 10% (insured), Aminy-sourced
+   * client 20% (insured_aminy_sourced — even for partner-affiliated providers).
+   */
   payoutRail: PayoutRail;
   /** Payers covered by this partner (used to skip cash-pay setup if all-insured) */
   payers: string[];
@@ -137,8 +144,11 @@ export async function applyPartnerToProfile(userId: string, partnerId: PartnerOr
 }
 
 /**
- * Get the payout rail for a given user — checks their profile's pilot_organization
- * and returns the rail the partner contract specifies. Defaults to cash_pay.
+ * Get the BASE payout rail for a given user — checks their profile's
+ * pilot_organization and returns the rail the partner contract specifies.
+ * Defaults to cash_pay. Callers computing fees for a specific session should
+ * pass this through resolvePayoutRail (src/lib/payout-rail.ts) together with
+ * the booking's client_source.
  */
 export async function getPayoutRailForUser(userId: string): Promise<PayoutRail> {
   const { data } = await supabase

@@ -53,6 +53,7 @@ import {
 } from './org-licensing';
 import { MEMBERSHIP_DISCOUNTS } from './pricing/cash-pay-pricing';
 import { TIER_LIMITS as MEMORY_TIER_LIMITS } from './memory-system';
+import { PLATFORM_TAKE_RATE } from './telehealth-economics';
 
 // billing-engine's PricingTier.id uses 'pro_plus'; tier-utils uses 'proplus'.
 function toTierType(id: SubscriptionTier): TierType {
@@ -180,6 +181,29 @@ describe('tier-config consistency: pinned CANONICAL FACTS', () => {
     expect(getMaxChildren('starter')).toBe(getMaxChildren('core'));
     expect(getMarketplaceDiscount('starter')).toBe(getMarketplaceDiscount('core'));
     expect(getEnforcedAIMessageLimit('starter')).toBe(getEnforcedAIMessageLimit('core'));
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Platform take rates: PLATFORM_TAKE_RATE (telehealth-economics.ts) is the
+// single source of truth for the per-rail platform fee. PLATFORM_FEE_RATES in
+// stripe-connect.ts maps rail names onto it (that mapping is drift-guarded in
+// payout-rail.test.ts, which can mock the Supabase client stripe-connect pulls
+// in — this suite stays import-pure). Pinned as CANONICAL FACTS like the prices
+// above: changing a take rate must be a deliberate, reviewed edit here.
+// ─────────────────────────────────────────────────────────────────────────────
+describe('tier-config consistency: pinned platform take rates (owner decision, July 2026)', () => {
+  it('cash-pay 25% / provider-brought insured 10% / Aminy-sourced insured 20% / AACT pilot 5%', () => {
+    expect(PLATFORM_TAKE_RATE.cashPay).toBe(0.25);
+    expect(PLATFORM_TAKE_RATE.insured).toBe(0.1);
+    expect(PLATFORM_TAKE_RATE.insuredAminySourced).toBe(0.2);
+    expect(PLATFORM_TAKE_RATE.aactPilot).toBe(0.05);
+  });
+
+  it('exactly these four rates exist — a new rail is a deliberate edit here too', () => {
+    expect(Object.keys(PLATFORM_TAKE_RATE).sort()).toEqual(
+      ['aactPilot', 'cashPay', 'insured', 'insuredAminySourced'],
+    );
   });
 });
 

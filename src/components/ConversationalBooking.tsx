@@ -194,25 +194,40 @@ async function saveBookingToDatabase(booking: {
   try {
     const platformFee = booking.price - booking.providerPay;
 
-    const { data, error } = await supabase
+    const basePayload = {
+      user_id: booking.userId,
+      provider_id: booking.providerId,
+      child_id: booking.childId || null,
+      session_type: booking.sessionType,
+      session_duration_minutes: 60,
+      scheduled_at: booking.scheduledAt,
+      concern: booking.concern,
+      notes: booking.notes,
+      status: 'confirmed',
+      price: booking.price,
+      provider_payout: booking.providerPay,
+      platform_fee: platformFee,
+      payment_status: 'pending',
+    };
+
+    // The parent found this provider in-app, so the client is definitionally
+    // Aminy-sourced — drives the 20% insured take via resolvePayoutRail
+    // (src/lib/payout-rail.ts). Retry without the column if migration
+    // 20260703140000_client_source_and_pilot_expiry hasn't been applied yet
+    // (same optional-column pattern as rbt-supervision.ts).
+    let { data, error } = await supabase
       .from('marketplace_bookings')
-      .insert({
-        user_id: booking.userId,
-        provider_id: booking.providerId,
-        child_id: booking.childId || null,
-        session_type: booking.sessionType,
-        session_duration_minutes: 60,
-        scheduled_at: booking.scheduledAt,
-        concern: booking.concern,
-        notes: booking.notes,
-        status: 'confirmed',
-        price: booking.price,
-        provider_payout: booking.providerPay,
-        platform_fee: platformFee,
-        payment_status: 'pending',
-      })
+      .insert({ ...basePayload, client_source: 'aminy_marketplace' })
       .select('id')
       .single();
+
+    if (error && /client_source/.test(error.message)) {
+      ({ data, error } = await supabase
+        .from('marketplace_bookings')
+        .insert(basePayload)
+        .select('id')
+        .single());
+    }
 
     if (error) {
       console.error('Error saving booking:', error);
@@ -246,7 +261,7 @@ async function saveBookingToDatabase(booking: {
       console.error('Appointments mirror insert failed (booking still saved):', mirrorErr);
     }
 
-    return { success: true, bookingId: data.id };
+    return { success: true, bookingId: data?.id };
   } catch (e: unknown) {
     console.error('Booking save failed:', e);
     return { success: false, error: e instanceof Error ? e.message : 'Unknown error' };

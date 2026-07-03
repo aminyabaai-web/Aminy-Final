@@ -185,10 +185,19 @@ describe('telehealth economics', () => {
   });
 
   describe('canonical platform take rates', () => {
-    it('pins cash 25% / insured 10% / aact 5%', () => {
+    it('pins cash 25% / insured 10% / Aminy-sourced insured 20% / aact 5%', () => {
       expect(PLATFORM_TAKE_RATE.cashPay).toBe(0.25);
       expect(PLATFORM_TAKE_RATE.insured).toBe(0.1);
+      expect(PLATFORM_TAKE_RATE.insuredAminySourced).toBe(0.2);
       expect(PLATFORM_TAKE_RATE.aactPilot).toBe(0.05);
+    });
+
+    it('keeps the sourced-insured take strictly between provider-brought insured and cash-pay', () => {
+      // Ordering invariant behind the two-rate insured rail: Aminy demand-gen is
+      // worth more than settlement-only (>10%) but on insured rails there is
+      // still a payer spread, so it stays under the cash-pay take (<25%).
+      expect(PLATFORM_TAKE_RATE.insuredAminySourced).toBeGreaterThan(PLATFORM_TAKE_RATE.insured);
+      expect(PLATFORM_TAKE_RATE.insuredAminySourced).toBeLessThan(PLATFORM_TAKE_RATE.cashPay);
     });
   });
 
