@@ -30,6 +30,114 @@ import {
   X
 } from 'lucide-react';
 import { connectorActions } from '../lib/connector-hub';
+import { fireConfetti } from '../lib/confetti';
+
+// ---------------------------------------------------------------------------
+// Tiny, self-contained WebAudio synth for optional calm sounds.
+// No external assets (CSP blocks remote), no per-tool <audio> tags. Gentle,
+// low-volume, and only ever invoked when the user opts in via the toggle.
+// ---------------------------------------------------------------------------
+let _calmAudioCtx: AudioContext | null = null;
+function getCalmAudioCtx(): AudioContext | null {
+  try {
+    if (!_calmAudioCtx) {
+      _calmAudioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    }
+    if (_calmAudioCtx.state === 'suspended') { void _calmAudioCtx.resume().catch(() => {}); }
+    return _calmAudioCtx;
+  } catch {
+    return null;
+  }
+}
+
+/** Soft bubble pop — a quick, rounded downward blip tuned by hue for variety. */
+function playBubblePop(hue: number): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  // Map hue → a small pitch range so consecutive pops feel playful, never harsh.
+  const base = 360 + (hue / 360) * 260;
+  osc.frequency.setValueAtTime(base, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(base * 0.45, ctx.currentTime + 0.09);
+  gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime + 0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.13);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.15);
+}
+
+/** Barely-there friction tick as the spinner arm passes 12 o'clock. */
+function playSpinTick(): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.value = 320;
+  gain.gain.setValueAtTime(0.05, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.04);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.05);
+}
+
+/** Gentle sine swell for a breathing-phase change (rise on inhale, fall on exhale). */
+function playBreathTone(phase: 'inhale' | 'hold' | 'exhale'): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  const dur = phase === 'inhale' ? 1.2 : phase === 'exhale' ? 1.4 : 0.6;
+  const start = phase === 'exhale' ? 300 : 240;
+  const end = phase === 'inhale' ? 320 : phase === 'exhale' ? 220 : 300;
+  osc.frequency.setValueAtTime(start, ctx.currentTime);
+  osc.frequency.linearRampToValueAtTime(end, ctx.currentTime + dur);
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + dur * 0.4);
+  gain.gain.linearRampToValueAtTime(0, ctx.currentTime + dur);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + dur + 0.1);
+}
+
+/** Soft ascending chime on session completion. */
+function playCalmChime(): void {
+  const ctx = getCalmAudioCtx();
+  if (!ctx) return;
+  [523.25, 659.25, 783.99].forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const t = ctx.currentTime + i * 0.14;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.13, t + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.55);
+  });
+}
+
+/** Detect a reduced-motion / sensory-calm preference (html class, media query). */
+function prefersReducedMotion(): boolean {
+  try {
+    if (typeof document !== 'undefined' && document.documentElement.classList.contains('reduced-motion')) return true;
+    return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch {
+    return false;
+  }
+}
+
+const CALM_SOUND_KEY = 'aminy-calmtools-sound';
 
 interface SensoryToolsProps {
   childName: string;
@@ -82,8 +190,24 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   const [showSettings, setShowSettings] = useState(false);
   
   // Settings
-  const [visualIntensity, setVisualIntensity] = useState(50);
+  const [reducedMotion] = useState(prefersReducedMotion);
+  const [visualIntensity, setVisualIntensity] = useState(() => (prefersReducedMotion() ? 25 : 50));
   const [hapticEnabled, setHapticEnabled] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    try { return localStorage.getItem(CALM_SOUND_KEY) === 'on'; } catch { return false; }
+  });
+
+  // Persist the sound preference so it survives sessions.
+  const toggleSound = useCallback((on: boolean) => {
+    setSoundEnabled(on);
+    try { localStorage.setItem(CALM_SOUND_KEY, on ? 'on' : 'off'); } catch { /* no storage */ }
+    if (on) getCalmAudioCtx(); // warm up the context inside the user gesture
+  }, []);
+
+  // Sound is only ever heard when the user opted in AND reduced-motion is off.
+  const playSound = useCallback((fn: () => void) => {
+    if (soundEnabled && !reducedMotion) fn();
+  }, [soundEnabled, reducedMotion]);
   
   // Tool-specific state
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
@@ -98,6 +222,16 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number>(undefined);
+
+  // Live refs so the 60fps particle loop can read breathing state without
+  // re-subscribing or triggering React re-renders every frame.
+  const breathePhaseRef = useRef(breathePhase);
+  const breatheProgressRef = useRef(breatheProgress);
+  const breatheParticleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const breatheParticleData = useRef<AmbientParticle[]>([]);
+  const lastSpinnerArm = useRef(0);
+  useEffect(() => { breathePhaseRef.current = breathePhase; }, [breathePhase]);
+  useEffect(() => { breatheProgressRef.current = breatheProgress; }, [breatheProgress]);
 
   // Timer for session duration
   useEffect(() => {
@@ -117,19 +251,21 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionStartTime, selectedTool]);
 
-  // Haptic feedback
-  const triggerHaptic = useCallback((intensity: 'light' | 'medium' | 'heavy' = 'medium') => {
-    if (!hapticEnabled) return;
-    
+  // Haptic feedback — honors the toggle AND the reduced-motion / sensory pref
+  // (a buzz is stimulation a sensory-sensitive child may not want).
+  const triggerHaptic = useCallback((intensity: 'light' | 'medium' | 'heavy' | 'selection' = 'medium') => {
+    if (!hapticEnabled || reducedMotion) return;
+
     if ('vibrate' in navigator) {
       const patterns = {
+        selection: 5,
         light: 10,
         medium: 20,
         heavy: 30
       };
       navigator.vibrate(patterns[intensity]);
     }
-  }, [hapticEnabled]);
+  }, [hapticEnabled, reducedMotion]);
 
   // ========== FLUID SWIRL ==========
   useEffect(() => {
@@ -360,6 +496,7 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
     setBubbles(prev => prev.filter(b => b.id !== bubble.id));
     triggerHaptic('medium');
+    playSound(() => playBubblePop(bubble.hue));
   };
 
   // ========== FIDGET SPINNER ==========
@@ -367,7 +504,20 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
     if (selectedTool !== 'fidget-spinner') return;
 
     const animate = () => {
-      setSpinnerRotation(prev => (prev + spinnerVelocity) % 360);
+      setSpinnerRotation(prev => {
+        const next = (prev + spinnerVelocity) % 360;
+        // Friction "tick" each time an arm crosses 12 o'clock (every 120°),
+        // but only while spinning meaningfully — reads as tactile bearing feel.
+        if (spinnerVelocity > 1) {
+          const arm = Math.floor(((next % 360) + 360) % 360 / 120);
+          if (arm !== lastSpinnerArm.current) {
+            lastSpinnerArm.current = arm;
+            triggerHaptic('selection');
+            playSound(playSpinTick);
+          }
+        }
+        return next;
+      });
       // Much lower friction for longer, satisfying spins
       setSpinnerVelocity(prev => prev * 0.995);
 
@@ -397,7 +547,9 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
   useEffect(() => {
     if (selectedTool !== 'breathe-glow') return;
 
-    // Create floating ambient particles
+    // Create floating ambient particles (fixed set — rendered once, then
+    // animated by mutating DOM refs directly so there is NO per-frame React
+    // re-render of 20 nodes).
     const particles: AmbientParticle[] = [];
     for (let i = 0; i < 20; i++) {
       particles.push({
@@ -409,39 +561,42 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
         opacity: 0.3 + Math.random() * 0.4
       });
     }
+    breatheParticleData.current = particles;
+    breatheParticleRefs.current = new Array(particles.length).fill(null);
     setBreatheParticles(particles);
 
     return () => setBreatheParticles([]);
   }, [selectedTool]);
 
-  // Animate ambient particles
+  // Animate ambient particles by mutating transforms on refs (no setState).
   useEffect(() => {
-    if (selectedTool !== 'breathe-glow' || breatheParticles.length === 0) return;
+    if (selectedTool !== 'breathe-glow') return;
 
+    let raf = 0;
     const animate = () => {
-      setBreatheParticles(prev =>
-        prev.map(p => ({
-          ...p,
-          angle: p.angle + p.speed,
-          // Pulse distance with breathing
-          distance: breathePhase === 'inhale'
-            ? 150 + (breatheProgress / 100) * 50
-            : breathePhase === 'hold'
-              ? 200
-              : 200 - (breatheProgress / 100) * 50
-        }))
-      );
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
+      const phase = breathePhaseRef.current;
+      const progress = breatheProgressRef.current;
+      const data = breatheParticleData.current;
+      for (let i = 0; i < data.length; i++) {
+        const p = data[i];
+        p.angle += p.speed;
+        // Pulse distance with the breath
+        p.distance = phase === 'inhale'
+          ? 150 + (progress / 100) * 50
+          : phase === 'hold'
+            ? 200
+            : 200 - (progress / 100) * 50;
+        const el = breatheParticleRefs.current[i];
+        if (el) {
+          el.style.transform = `translate(-50%, -50%) translate(${Math.cos(p.angle) * p.distance}px, ${Math.sin(p.angle) * p.distance}px)`;
+        }
       }
+      raf = requestAnimationFrame(animate);
     };
-  }, [selectedTool, breatheParticles.length, breathePhase, breatheProgress]);
+    raf = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(raf);
+  }, [selectedTool]);
 
   useEffect(() => {
     if (selectedTool !== 'breathe-glow') return;
@@ -459,13 +614,11 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
         if (prev >= 100) {
           // Move to next phase
-          if (breathePhase === 'inhale') {
-            setBreathePhase('hold');
-          } else if (breathePhase === 'hold') {
-            setBreathePhase('exhale');
-          } else {
-            setBreathePhase('inhale');
-          }
+          const nextPhase = breathePhase === 'inhale' ? 'hold' : breathePhase === 'hold' ? 'exhale' : 'inhale';
+          setBreathePhase(nextPhase);
+          // Gentle cue on each phase change so eyes-closed breathing still guides.
+          triggerHaptic('selection');
+          playSound(() => playBreathTone(nextPhase));
           return 0;
         }
 
@@ -529,9 +682,12 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
       }
     });
 
-    // Award star if completed
+    // Award star if completed — soft, reduced-motion-aware celebration
     if (completed) {
       toast.success(`Great job! ${childName} earned a star! ⭐`);
+      triggerHaptic('heavy');
+      playSound(playCalmChime);
+      fireConfetti('task');
     }
 
     // Callback
@@ -655,12 +811,23 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
                     />
                   </div>
 
-                  {/* Ambient sounds - coming in future update
-                  <div>
-                    <Label className="text-sm text-[#3A4A57] mb-2">Ambient Sound</Label>
-                    <p className="text-sm text-[#8A9BA8]">Coming soon</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm text-[#3A4A57]">Gentle Sounds</Label>
+                      <p className="text-xs text-[#8A9BA8] mt-0.5">Soft pops &amp; chimes (off by default)</p>
+                    </div>
+                    <Switch
+                      checked={soundEnabled}
+                      onCheckedChange={toggleSound}
+                      aria-label="Toggle gentle sounds"
+                    />
                   </div>
-                  */}
+
+                  {reducedMotion && (
+                    <p className="text-xs text-[#8A9BA8]">
+                      Reduced-motion is on, so motion, haptics, and sounds stay minimal.
+                    </p>
+                  )}
                 </div>
               </Card>
             </motion.div>
@@ -970,16 +1137,18 @@ export function SensoryTools({ childName, onBack, onSessionComplete }: SensoryTo
 
         {selectedTool === 'breathe-glow' && (
           <div className="flex flex-col items-center gap-8 relative">
-            {/* Ambient floating particles */}
-            {breatheParticles.map(particle => (
-              <motion.div
+            {/* Ambient floating particles — rendered once, animated via refs */}
+            {breatheParticles.map((particle, i) => (
+              <div
                 key={particle.id}
+                ref={el => { breatheParticleRefs.current[i] = el; }}
                 className="absolute rounded-full"
                 style={{
                   width: particle.size,
                   height: particle.size,
                   left: '50%',
                   top: '50%',
+                  willChange: 'transform',
                   transform: `translate(-50%, -50%) translate(${Math.cos(particle.angle) * particle.distance}px, ${Math.sin(particle.angle) * particle.distance}px)`,
                   background: `radial-gradient(circle, rgba(52, 211, 153, ${particle.opacity}) 0%, transparent 70%)`,
                   boxShadow: `0 0 ${particle.size * 2}px rgba(52, 211, 153, ${particle.opacity * 0.5})`

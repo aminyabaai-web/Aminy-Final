@@ -34,47 +34,18 @@ vi.mock('motion/react', () => ({
 // Icon factory + explicit named exports (vi.mock is hoisted, so we can only
 // reference top-level imports like React inside the factory).
 // ---------------------------------------------------------------------------
-vi.mock('lucide-react', () => {
-  const icon = (name: string) =>
-    function MockIcon(props: Record<string, unknown>) {
+// Enumerate every real lucide export and replace it with a mock span. Using
+// importOriginal keeps the mock in lock-step with the component's imports, so
+// adding a new icon to SettingsScreen never breaks this test with `undefined`.
+vi.mock('lucide-react', async (importOriginal) => {
+  const actual = await importOriginal<Record<string, unknown>>();
+  const mocked: Record<string, unknown> = {};
+  for (const name of Object.keys(actual)) {
+    mocked[name] = function MockIcon(props: Record<string, unknown>) {
       return React.createElement('span', { 'data-testid': `icon-${name}`, ...props });
     };
-  return {
-    ArrowLeft: icon('ArrowLeft'),
-    Shield: icon('Shield'),
-    CreditCard: icon('CreditCard'),
-    Trash2: icon('Trash2'),
-    AlertCircle: icon('AlertCircle'),
-    Lock: icon('Lock'),
-    Eye: icon('Eye'),
-    EyeOff: icon('EyeOff'),
-    LogOut: icon('LogOut'),
-    Palette: icon('Palette'),
-    Bell: icon('Bell'),
-    BellOff: icon('BellOff'),
-    Mail: icon('Mail'),
-    MessageSquare: icon('MessageSquare'),
-    Smartphone: icon('Smartphone'),
-    Key: icon('Key'),
-    Download: icon('Download'),
-    FileText: icon('FileText'),
-    ChevronRight: icon('ChevronRight'),
-    Check: icon('Check'),
-    X: icon('X'),
-    Loader2: icon('Loader2'),
-    Crown: icon('Crown'),
-    Clock: icon('Clock'),
-    ExternalLink: icon('ExternalLink'),
-    HelpCircle: icon('HelpCircle'),
-    Globe: icon('Globe'),
-    Fingerprint: icon('Fingerprint'),
-    ShieldCheck: icon('ShieldCheck'),
-    AlertTriangle: icon('AlertTriangle'),
-    Info: icon('Info'),
-    CalendarDays: icon('CalendarDays'),
-    RefreshCw: icon('RefreshCw'),
-    Unplug: icon('Unplug'),
-  };
+  }
+  return mocked;
 });
 
 // ---------------------------------------------------------------------------
@@ -110,8 +81,15 @@ vi.mock('../../components/ui/label', () => ({
 }));
 
 vi.mock('../../components/ui/switch', () => ({
-  Switch: (props: Record<string, unknown>) =>
-    React.createElement('input', { type: 'checkbox', role: 'switch', ...props }),
+  Switch: ({ onCheckedChange, checked, ...props }: Record<string, unknown>) =>
+    React.createElement('input', {
+      type: 'checkbox',
+      role: 'switch',
+      checked: !!checked,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+        (onCheckedChange as ((v: boolean) => void) | undefined)?.(e.target.checked),
+      ...props,
+    }),
 }));
 
 vi.mock('../../components/ui/dialog', () => ({
@@ -163,6 +141,7 @@ vi.mock('../../utils/supabase/client', () => ({
         eq: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({ data: null, error: null }),
           maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+          limit: vi.fn().mockResolvedValue({ data: [], error: null }),
         }),
         single: vi.fn().mockResolvedValue({ data: null, error: null }),
       }),
@@ -236,9 +215,10 @@ vi.mock('../../lib/theme-provider', () => ({
 // ---------------------------------------------------------------------------
 // NOW import the component and test utilities (after all vi.mock calls)
 // ---------------------------------------------------------------------------
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { SettingsScreen } from '../../components/SettingsScreen';
+import { supabase } from '../../utils/supabase/client';
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -269,12 +249,13 @@ describe('SettingsScreen', () => {
   // -------------------------------------------------------------------------
   it('displays the Notifications section', () => {
     render(<SettingsScreen {...defaultProps} />);
-    expect(screen.getByText('Notifications')).toBeInTheDocument();
+    // Rendered in both the desktop sidebar and the section card header.
+    expect(screen.getAllByText('Notifications').length).toBeGreaterThan(0);
   });
 
   it('displays the Security section', () => {
     render(<SettingsScreen {...defaultProps} />);
-    expect(screen.getByText('Security')).toBeInTheDocument();
+    expect(screen.getAllByText('Security').length).toBeGreaterThan(0);
   });
 
   it('displays the Connected Calendars section', () => {
@@ -289,7 +270,7 @@ describe('SettingsScreen', () => {
 
   it('displays the Appearance section', () => {
     render(<SettingsScreen {...defaultProps} />);
-    expect(screen.getByText('Appearance')).toBeInTheDocument();
+    expect(screen.getAllByText('Appearance').length).toBeGreaterThan(0);
   });
 
   it('displays the Help & Support section', () => {
@@ -367,6 +348,97 @@ describe('SettingsScreen', () => {
   // -------------------------------------------------------------------------
   it('renders the app version footer', () => {
     render(<SettingsScreen {...defaultProps} />);
-    expect(screen.getByText(/Aminy v1\.0\.0/)).toBeInTheDocument();
+    // Version is interpolated ("Aminy v{version} • Made with care"), so the text
+    // spans multiple nodes — match on the element's full textContent.
+    expect(
+      screen.getByText(
+        (_content, element) =>
+          element?.tagName.toLowerCase() === 'p' &&
+          /Aminy v\d+\.\d+\.\d+ • Made with care/.test(element?.textContent ?? ''),
+      ),
+    ).toBeInTheDocument();
+  });
+
+  // -------------------------------------------------------------------------
+  // Notification preference toggles (new)
+  // -------------------------------------------------------------------------
+  describe('Notification preference toggles', () => {
+    const expandNotifications = () => {
+      // The desktop sidebar also renders "Notifications", so target the section
+      // card header via its unique subtext to avoid an ambiguous match.
+      const header = screen.getByText('Push, email, and SMS preferences');
+      fireEvent.click(header.closest('button')!);
+    };
+
+    const rowSwitch = (labelText: string) => {
+      const label = screen.getByText(labelText);
+      const row = label.closest('div.flex.items-center.justify-between')!;
+      return within(row as HTMLElement).getByRole('switch');
+    };
+
+    it('renders all five notification preference toggles', () => {
+      render(<SettingsScreen {...defaultProps} />);
+      expandNotifications();
+      expect(screen.getByText('Weekly progress briefing')).toBeInTheDocument();
+      expect(screen.getByText('Daily gentle tips')).toBeInTheDocument();
+      expect(screen.getByText('Proactive check-ins from Aminy')).toBeInTheDocument();
+      expect(screen.getByText('Text reminders for appointments')).toBeInTheDocument();
+      expect(screen.getByText('Update emails')).toBeInTheDocument();
+    });
+
+    it('weekly briefing microcopy falls back to "your child"', () => {
+      render(<SettingsScreen {...defaultProps} />);
+      expandNotifications();
+      expect(screen.getByText(/A short Sunday note about your child's week/)).toBeInTheDocument();
+    });
+
+    it('persists daily_tips=false to user_preferences on toggle off', async () => {
+      render(<SettingsScreen {...defaultProps} />);
+      expandNotifications();
+
+      // Same object ref is returned by every from() call in the mock.
+      const upsertSpy = (supabase.from as unknown as (t: string) => { upsert: ReturnType<typeof vi.fn> })('user_preferences').upsert;
+
+      fireEvent.click(rowSwitch('Daily gentle tips'));
+
+      await waitFor(() => {
+        expect(upsertSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ daily_tips: false }),
+        );
+      });
+    });
+
+    it('persists proactive_nudges + weekly_briefing columns on toggle', async () => {
+      render(<SettingsScreen {...defaultProps} />);
+      expandNotifications();
+
+      const upsertSpy = (supabase.from as unknown as (t: string) => { upsert: ReturnType<typeof vi.fn> })('user_preferences').upsert;
+
+      fireEvent.click(rowSwitch('Proactive check-ins from Aminy'));
+
+      await waitFor(() => {
+        expect(upsertSpy).toHaveBeenCalledWith(
+          expect.objectContaining({
+            proactive_nudges: false,
+            weekly_briefing: expect.any(Boolean),
+          }),
+        );
+      });
+    });
+
+    it('"Update emails" toggle writes profiles.lifecycle_emails_enabled (agrees with unsubscribe link)', async () => {
+      render(<SettingsScreen {...defaultProps} />);
+      expandNotifications();
+
+      const updateSpy = (supabase.from as unknown as (t: string) => { update: ReturnType<typeof vi.fn> })('profiles').update;
+
+      fireEvent.click(rowSwitch('Update emails'));
+
+      await waitFor(() => {
+        expect(updateSpy).toHaveBeenCalledWith(
+          expect.objectContaining({ lifecycle_emails_enabled: false }),
+        );
+      });
+    });
   });
 });

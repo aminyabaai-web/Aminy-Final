@@ -15,6 +15,7 @@
  */
 
 import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { getNotificationPrefs } from './notification-prefs';
 
 // VAPID public key - generate your own at https://vapidkeys.com/
 // Store private key in Supabase Edge Function secrets
@@ -264,6 +265,11 @@ export async function setupDailyCheckIns(
   childName: string,
   preferredTime: string = '09:00' // Default 9 AM
 ): Promise<void> {
+  // Respect the user's "Daily gentle tips" preference (client-side gating only,
+  // fail-open to enabled). Deployed edge crons must ALSO re-check this column.
+  const prefs = await getNotificationPrefs();
+  if (!prefs.daily_tips) return;
+
   const [hours, minutes] = preferredTime.split(':').map(Number);
 
   // Schedule for next 7 days

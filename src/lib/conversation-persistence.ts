@@ -121,6 +121,55 @@ export async function loadConversations(
 }
 
 /**
+ * Lightweight conversation summary — no message bodies. Used to hydrate the
+ * chat history list quickly and cheaply (bodies are lazy-loaded per session
+ * via loadConversation only when the parent taps into a conversation).
+ */
+export interface ConversationSummary {
+  id: string;
+  userId: string;
+  title: string;
+  messageCount: number;
+  lastMessageAt: string;
+}
+
+/**
+ * Load conversation summaries for a user WITHOUT the (potentially large)
+ * messages JSONB blob. Cross-device history roaming reads this on chat open.
+ * Never throws — returns [] on any failure so chat never breaks.
+ */
+export async function loadConversationSummaries(
+  userId: string,
+  limit: number = 25
+): Promise<ConversationSummary[]> {
+  try {
+    const { data, error } = await supabase
+      .from('conversations')
+      .select('id, user_id, title, message_count, last_message_at, updated_at')
+      .eq('user_id', userId)
+      .order('last_message_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    return (data || [])
+      .filter((r: Record<string, unknown>) => ((r.message_count as number) || 0) > 0)
+      .map((r: Record<string, unknown>) => ({
+        id: r.id as string,
+        userId: r.user_id as string,
+        title: (r.title as string) || 'Conversation',
+        messageCount: (r.message_count as number) || 0,
+        lastMessageAt:
+          (r.last_message_at as string) ||
+          (r.updated_at as string) ||
+          new Date().toISOString(),
+      }));
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Load a single conversation by ID.
  */
 export async function loadConversation(
@@ -266,6 +315,7 @@ export default {
   save: saveConversation,
   load: loadConversation,
   loadAll: loadConversations,
+  loadSummaries: loadConversationSummaries,
   delete: deleteConversation,
   syncLocal: syncLocalToSupabase,
 };

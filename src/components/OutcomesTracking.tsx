@@ -144,17 +144,22 @@ interface InvestorMetrics {
 interface OutcomesTrackingProps {
   view: 'caregiver' | 'payer' | 'investor';
   childId?: string;
+  childName?: string;
   organizationId?: string;
   dateRange?: { start: Date; end: Date };
   onExport?: () => void;
+  /** Opens the 90-day outcomes story report (caregiver view header link). */
+  onViewStory?: () => void;
 }
 
 export function OutcomesTracking({
   view,
   childId,
+  childName,
   organizationId,
   dateRange,
-  onExport
+  onExport,
+  onViewStory
 }: OutcomesTrackingProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [caregiverMetrics, setCaregiverMetrics] = useState<CaregiverMetrics | null>(null);
@@ -301,7 +306,7 @@ export function OutcomesTracking({
                 visual
               />
             </div>
-            <p className="text-[#5A6B7A]">See how far you've come together</p>
+            <p className="text-[#5A6B7A] dark:text-slate-400">See how far you've come together</p>
           </div>
           <div className="flex gap-2">
             {['week', 'month', 'quarter'].map((period) => (
@@ -317,21 +322,47 @@ export function OutcomesTracking({
           </div>
         </div>
 
-        {/* Wins Banner */}
-        <Card className="p-4 bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
-          <div className="flex items-center gap-2 mb-3">
-            <Star className="w-5 h-5 text-amber-500" />
-            <h3 className="font-medium text-[#132F43]">Recent Wins</h3>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {caregiverMetrics.recentWins.map((win, idx) => (
-              <div key={idx} className="flex items-start gap-2 p-2 bg-white/60 rounded-lg text-sm">
-                <CheckCircle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                <span className="text-[#3A4A57]">{win}</span>
+        {/* 90-day story CTA — the report a parent proudly shows their provider */}
+        {onViewStory && (
+          <button
+            onClick={onViewStory}
+            className="w-full text-left rounded-2xl p-4 bg-gradient-to-br from-[#EDF4F7] to-[#F6FBFB] dark:from-slate-800 dark:to-slate-700 border border-[#D6E6EC] dark:border-slate-700 hover:border-[#2A7D99]/40 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-xl bg-white/70 dark:bg-slate-900/40 flex items-center justify-center flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-[#2A7D99] dark:text-[#7BA7BC]" />
               </div>
-            ))}
-          </div>
-        </Card>
+              <div className="min-w-0">
+                <p className="font-semibold text-[#132F43] dark:text-white">
+                  View {childName?.trim() || 'your child'}&apos;s story
+                </p>
+                <p className="text-sm text-[#5A6B7A] dark:text-slate-400">
+                  A warm 90-day summary of your progress, ready to share with your provider.
+                </p>
+              </div>
+              <ArrowUpRight className="w-5 h-5 text-[#2A7D99] dark:text-[#7BA7BC] ml-auto flex-shrink-0" />
+            </div>
+          </button>
+        )}
+
+        {/* Wins Banner — teal, no rainbow */}
+        {caregiverMetrics.recentWins.length > 0 && (
+          <Card className="p-4 bg-[#F6FBFB] dark:bg-slate-800 border-[#D6E6EC] dark:border-slate-700">
+            <div className="flex items-center gap-2 mb-1">
+              <Star className="w-5 h-5 text-[#2A7D99]" />
+              <h3 className="font-medium text-[#132F43] dark:text-white">Recent Wins</h3>
+            </div>
+            <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-3">Moments worth remembering from the last few weeks.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {caregiverMetrics.recentWins.map((win, idx) => (
+                <div key={idx} className="flex items-start gap-2 p-2 bg-white/70 dark:bg-slate-900/40 rounded-lg text-sm">
+                  <CheckCircle className="w-4 h-4 text-[#2A7D99] mt-0.5 flex-shrink-0" />
+                  <span className="text-[#3A4A57] dark:text-slate-200">{win}</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        )}
 
         {/* Progress Overview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
@@ -339,6 +370,7 @@ export function OutcomesTracking({
             icon={Target}
             label="Goals Achieved"
             value={`${caregiverMetrics.childProgress.goalsAchieved}/${caregiverMetrics.childProgress.totalGoals}`}
+            caption="Therapy goals reached so far"
             color="teal"
           />
           <MetricCard
@@ -346,7 +378,8 @@ export function OutcomesTracking({
             label="Day Streak"
             value={caregiverMetrics.childProgress.currentStreakDays}
             suffix="days"
-            color="violet"
+            caption="Days in a row you've shown up"
+            color="teal"
           />
           {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
             <MetricCard
@@ -354,7 +387,8 @@ export function OutcomesTracking({
               label="Confidence"
               value={caregiverMetrics.parentWellbeing.confidenceScore}
               suffix="%"
-              color="pink"
+              caption="How confident you feel right now"
+              color="teal"
             />
           )}
           <MetricCard
@@ -362,32 +396,36 @@ export function OutcomesTracking({
             label="AI Chats"
             value={caregiverMetrics.engagement.aiConversations}
             suffix="this week"
-            color="blue"
+            caption="Times you talked things through with Aminy"
+            color="teal"
           />
         </div>
 
         {/* Improvement Areas */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-green-500" />
+          <h3 className="font-medium text-[#132F43] dark:text-white mb-1 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 text-[#2A7D99]" />
             Skill Progress
           </h3>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
+            Each bar shows where a skill started, where it is now, and the goal (the marker). Higher is better.
+          </p>
           <div className="space-y-3 sm:space-y-4">
             {caregiverMetrics.childProgress.improvementAreas.map((area, idx) => (
               <div key={idx}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-[#132F43]">{area.name}</span>
+                  <span className="text-sm font-medium text-[#132F43] dark:text-white">{area.name}</span>
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="text-[#8A9BA8]">{area.baseline}%</span>
-                    <ArrowUpRight className="w-3 h-3 text-green-500" />
-                    <span className="text-green-600 font-medium">{area.current}%</span>
-                    <span className="text-[#8A9BA8]">/ {area.target}%</span>
+                    <span className="text-[#8A9BA8] dark:text-slate-500">{area.baseline}%</span>
+                    <ArrowUpRight className="w-3 h-3 text-[#2A7D99]" />
+                    <span className="text-[#2A7D99] dark:text-[#7BA7BC] font-medium">{area.current}%</span>
+                    <span className="text-[#8A9BA8] dark:text-slate-500">/ {area.target}% goal</span>
                   </div>
                 </div>
                 <div className="relative">
                   <Progress value={area.current} className="h-2" />
                   <div
-                    className="absolute top-0 h-2 w-0.5 bg-gray-400"
+                    className="absolute top-0 h-2 w-0.5 bg-slate-400 dark:bg-slate-500"
                     style={{ left: `${area.target}%` }}
                   />
                 </div>
@@ -398,10 +436,13 @@ export function OutcomesTracking({
 
         {/* Parent Wellbeing */}
         <Card className="p-3 sm:p-4">
-          <h3 className="font-medium text-[#132F43] mb-4 flex items-center gap-2">
-            <Heart className="w-4 h-4 text-pink-500" />
+          <h3 className="font-medium text-[#132F43] dark:text-white mb-1 flex items-center gap-2">
+            <Heart className="w-4 h-4 text-[#2A7D99]" />
             Your Wellbeing
           </h3>
+          <p className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-4">
+            Your own wellbeing matters as much as any goal — here&apos;s how you&apos;re doing.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {caregiverMetrics.parentWellbeing.stressLevel !== null && (
               <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
@@ -423,18 +464,20 @@ export function OutcomesTracking({
               </div>
             )}
             {caregiverMetrics.parentWellbeing.confidenceScore !== null && (
-              <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
-                <div className="text-xl sm:text-2xl font-bold text-[#6B9080]">
+              <div className="text-center p-4 bg-[#F6FBFB] dark:bg-slate-900/40 rounded-lg">
+                <div className="text-xl sm:text-2xl font-bold text-[#2A7D99] dark:text-[#7BA7BC]">
                   {caregiverMetrics.parentWellbeing.confidenceScore}%
                 </div>
-                <div className="text-sm text-[#5A6B7A]">Confidence Score</div>
+                <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Confidence Score</div>
+                <div className="text-sm text-[#8A9BA8] dark:text-slate-500 mt-0.5">How sure you feel supporting your child</div>
               </div>
             )}
-            <div className="text-center p-4 bg-[#F6FBFB] rounded-lg">
-              <div className="text-xl sm:text-2xl font-bold text-violet-600">
+            <div className="text-center p-4 bg-[#F6FBFB] dark:bg-slate-900/40 rounded-lg">
+              <div className="text-xl sm:text-2xl font-bold text-[#2A7D99] dark:text-[#7BA7BC]">
                 {caregiverMetrics.parentWellbeing.supportSessions}
               </div>
-              <div className="text-sm text-[#5A6B7A]">Support Sessions</div>
+              <div className="text-sm text-[#5A6B7A] dark:text-slate-400">Support Sessions</div>
+              <div className="text-sm text-[#8A9BA8] dark:text-slate-500 mt-0.5">Visits with your care team this period</div>
             </div>
           </div>
         </Card>
@@ -764,6 +807,7 @@ function MetricCard({
   label,
   value,
   suffix,
+  caption,
   trend,
   isNegativeGood = false,
   color
@@ -772,12 +816,13 @@ function MetricCard({
   label: string;
   value: string | number;
   suffix?: string;
+  caption?: string;
   trend?: number;
   isNegativeGood?: boolean;
   color: 'teal' | 'violet' | 'pink' | 'blue' | 'green' | 'red' | 'amber';
 }) {
   const colorClasses = {
-    teal: 'bg-[#6B9080]/10 text-[#6B9080]',
+    teal: 'bg-[#2A7D99]/10 text-[#2A7D99]',
     violet: 'bg-violet-100 text-violet-600',
     pink: 'bg-pink-100 text-pink-600',
     blue: 'bg-blue-100 text-blue-600',
@@ -794,12 +839,13 @@ function MetricCard({
         <div className={`p-1.5 rounded-lg ${colorClasses[color]}`}>
           <Icon className="w-4 h-4" />
         </div>
-        <span className="text-sm text-[#5A6B7A]">{label}</span>
+        <span className="text-sm text-[#5A6B7A] dark:text-slate-400">{label}</span>
       </div>
       <div className="flex items-end gap-2">
-        <span className="text-xl sm:text-2xl font-bold text-[#132F43]">{value}</span>
-        {suffix && <span className="text-sm text-[#5A6B7A] mb-1">{suffix}</span>}
+        <span className="text-xl sm:text-2xl font-bold text-[#132F43] dark:text-white">{value}</span>
+        {suffix && <span className="text-sm text-[#5A6B7A] dark:text-slate-400 mb-1">{suffix}</span>}
       </div>
+      {caption && <p className="text-sm text-[#8A9BA8] dark:text-slate-500 mt-1 leading-snug">{caption}</p>}
       {trend !== undefined && (
         <div className={`flex items-center gap-1 mt-1 text-sm ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
           {isPositive ? (
