@@ -72,6 +72,25 @@ interface ManageCaregiversProps {
 }
 
 // ============================================================================
+// Invite link
+// ============================================================================
+
+/**
+ * Build the shareable caregiver-invite link. The accept flow matches the
+ * signed-in user's VERIFIED email to pending caregiver_invites rows (server
+ * RPC `accept_caregiver_invites()`), so the link only needs a flag — no invite
+ * id. `?screen=create-account` deep-links straight into signup;
+ * `caregiver_invite=1` is captured to localStorage there so the post-auth hook
+ * knows to run the accept RPC. `inviter` (optional) is used only for a warm
+ * signup header ("Join {inviter}'s care circle").
+ */
+export function buildCaregiverInviteLink(origin: string, inviter?: string): string {
+  const base = `${origin}/?screen=create-account&caregiver_invite=1`;
+  const name = (inviter ?? '').trim();
+  return name ? `${base}&inviter=${encodeURIComponent(name)}` : base;
+}
+
+// ============================================================================
 // Constants
 // ============================================================================
 
@@ -209,7 +228,7 @@ export function ManageCaregivers({
   };
 
   const handleCopyLink = async () => {
-    const inviteLink = `${window.location.origin}/invite?code=DEMO_CODE`;
+    const inviteLink = buildCaregiverInviteLink(window.location.origin);
     await navigator.clipboard.writeText(inviteLink);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);

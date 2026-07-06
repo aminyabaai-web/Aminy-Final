@@ -26,6 +26,10 @@ vi.mock('../../components/ManageCaregivers', () => ({
     ),
   COPARENT_REASSURANCE:
     "Co-parents are included with every paid plan at no extra cost — they see your child's plans, progress, and reports.",
+  buildCaregiverInviteLink: (origin: string, inviter?: string) =>
+    inviter
+      ? `${origin}/?screen=create-account&caregiver_invite=1&inviter=${encodeURIComponent(inviter)}`
+      : `${origin}/?screen=create-account&caregiver_invite=1`,
 }));
 
 import { render, screen, fireEvent } from '@testing-library/react';

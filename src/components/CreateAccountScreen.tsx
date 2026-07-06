@@ -86,8 +86,14 @@ export function CreateAccountScreen({
   // navigates away from the original URL.
   useEffect(() => {
     try {
-      const inviteId = new URLSearchParams(window.location.search).get('provider_invite');
+      const params = new URLSearchParams(window.location.search);
+      const inviteId = params.get('provider_invite');
       if (inviteId) localStorage.setItem('aminy_provider_invite', inviteId);
+      // Co-parent caregiver-invite capture (shared family access). Accept
+      // matches by verified email, not id, so the URL only carries a flag; the
+      // post-auth hook in App.tsx calls `accept_caregiver_invites()` once the
+      // new caregiver's email is confirmed.
+      if (params.get('caregiver_invite')) localStorage.setItem('aminy_caregiver_invite', '1');
     } catch { /* best-effort attribution — never block signup */ }
   }, []);
 
