@@ -1134,6 +1134,34 @@ function shouldRedirectAfterAuth(screen: AppScreen): boolean {
   return AUTH_REDIRECT_SCREENS.includes(screen);
 }
 
+/**
+ * Best-effort caregiver-invite acceptance (co-parent shared family access).
+ *
+ * The SECURITY DEFINER RPC `accept_caregiver_invites()` matches the caller's
+ * VERIFIED email to pending caregiver_invites rows, flips them to
+ * status='accepted', and stamps accepted_user_id — granting the co-parent RLS
+ * access to the owner's child care circle. Runs at most once per browser
+ * session (sessionStorage guard) so it doesn't fire on every auth event, and is
+ * fully silent on failure or a zero result. Only toasts/clears the pending
+ * localStorage flag when at least one invite was actually accepted.
+ */
+async function acceptCaregiverInvitesOnce(userId: string): Promise<void> {
+  const guardKey = `aminy_caregiver_accept_done_${userId}`;
+  try {
+    if (sessionStorage.getItem(guardKey)) return;
+    sessionStorage.setItem(guardKey, '1');
+    const { data, error } = await supabase.rpc('accept_caregiver_invites');
+    if (error) return; // silent — never block auth
+    const count = typeof data === 'number' ? data : 0;
+    if (count > 0) {
+      try { localStorage.removeItem('aminy_caregiver_invite'); } catch { /* ignore */ }
+      toast.success("You now have access to your family's care circle.");
+    }
+  } catch {
+    // best-effort — auth must never fail because of this
+  }
+}
+
 // Screens allowed to render WITHOUT an authenticated Supabase session.
 // Everything NOT in this set requires a live session. If the app boots onto a
 // non-public screen (e.g. getInitialScreen() optimistically routes a returning
@@ -1896,6 +1924,10 @@ export default function App() {
             logPHILogin(session.user.id, 'parent', session.user.email || '', 'supabase_auth').catch(() => {});
           }
           void syncEncryptedStorage.refreshCache();
+          // Co-parent shared access: accept any pending caregiver invites that
+          // match this now-verified session email. Best-effort, once per
+          // session, silent on failure — must not gate profile load or nav.
+          void acceptCaregiverInvitesOnce(session.user.id);
           // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase

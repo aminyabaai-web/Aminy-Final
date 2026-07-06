@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { ManageCaregivers, COPARENT_REASSURANCE, type ChildOption } from './ManageCaregivers';
+import { ManageCaregivers, COPARENT_REASSURANCE, buildCaregiverInviteLink, type ChildOption } from './ManageCaregivers';
 import { useAuditedAction } from '../hooks/useAuditedAction';
 import { isDemoMode } from '../lib/demo-seed';
 import { supabase } from '../utils/supabase/client';
@@ -171,10 +171,15 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
     toast.success(`Invitation re-sent to ${caregiver.email}`);
   };
 
-  // Copy a shareable invite link to the clipboard. Mirrors the Copy-Invite-Link
-  // action in ManageCaregivers.
+  // Copy a shareable caregiver-invite link to the clipboard. Mirrors the
+  // Copy-Invite-Link action in ManageCaregivers. The link deep-links into
+  // signup; after the co-parent verifies their email, the post-auth accept hook
+  // in App.tsx runs `accept_caregiver_invites()` which matches by email (no id
+  // in the URL). `inviter` seeds a warm signup header — use the first child's
+  // care-circle name when available.
   const handleCopyInviteLink = async () => {
-    const inviteLink = `${window.location.origin}/invite`;
+    const inviter = childProfiles[0]?.name;
+    const inviteLink = buildCaregiverInviteLink(window.location.origin, inviter);
     try {
       await navigator.clipboard.writeText(inviteLink);
       toast.success('Invite link copied to clipboard');
@@ -264,12 +269,18 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
           </div>
         </Card>
 
-        {/* Add Caregiver Button */}
+        {/* Add Caregiver Button + shareable invite link */}
         {!showAddCaregiver && (
-          <Button onClick={() => setShowAddCaregiver(true)} className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white">
-            <UserPlus className="w-4 h-4 mr-2" />
-            Add Caregiver
-          </Button>
+          <div className="space-y-2">
+            <Button onClick={() => setShowAddCaregiver(true)} className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white">
+              <UserPlus className="w-4 h-4 mr-2" />
+              Add Caregiver
+            </Button>
+            <Button variant="outline" onClick={handleCopyInviteLink} className="w-full">
+              <LinkIcon className="w-4 h-4 mr-2" />
+              Copy invite link
+            </Button>
+          </div>
         )}
 
         {/* Add Caregiver Form */}
