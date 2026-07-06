@@ -14,6 +14,7 @@
 import React from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
+import aminyLogoCropped from "../assets/aminy-logo-cropped.png";
 import { Badge } from './ui/badge';
 import { isDemoMode } from '../lib/demo-seed';
 import {
@@ -69,17 +70,19 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       {/* Header — compact on mobile */}
       <header className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50" style={{ borderBottom: '1px solid #e5e5e5' }}>
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
-          <button onClick={onBack} className="flex items-center gap-2 flex-shrink-0" aria-label="Aminy home">
-            {/* Compact header mark: the compass + wordmark in the splash typeface
-                (Schibsted Grotesk) — NOT the full hero lockup image (that carries
-                the tagline and is oversized here), and NOT Fredoka. */}
-            <CompassIcon size={30} />
-            <span
-              className="text-xl font-bold text-[#0D1B2A] dark:text-white tracking-tight"
-              style={{ fontFamily: "'Schibsted Grotesk', 'Manrope', ui-sans-serif, system-ui, sans-serif" }}
-            >
-              aminy
-            </span>
+          <button onClick={onBack} className="flex items-center flex-shrink-0" aria-label="Aminy home">
+            {/* Same logo lockup as the splash page, same proportions — just sized
+                smaller for the header. Intrinsic 827x338. The width/height ATTRS
+                are required: index.css has `img:not([width]):not([height])
+                { min-height:100px }`, which is what previously blew it up. Sized
+                by width; `height:auto` keeps the aspect ratio. */}
+            <img
+              src={aminyLogoCropped}
+              alt="Aminy"
+              width={120}
+              height={49}
+              style={{ width: '120px', height: 'auto', display: 'block' }}
+            />
           </button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-sm sm:text-sm px-2 sm:px-3" onClick={onLogin}>
