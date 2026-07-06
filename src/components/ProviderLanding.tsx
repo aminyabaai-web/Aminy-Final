@@ -71,8 +71,18 @@ export function ProviderLanding({ onApply, onLogin, onBack }: ProviderLandingPro
       <header className="bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50" style={{ borderBottom: '1px solid #e5e5e5' }}>
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex items-center justify-between gap-2">
           <button onClick={onBack} className="flex items-center flex-shrink-0" aria-label="Aminy home">
-            {/* Same brand mark as the splash page — the logo image, not a hand-lettered wordmark. */}
-            <img src={aminyLogoCropped} alt="Aminy" style={{ height: '32px', width: 'auto', display: 'block' }} />
+            {/* Same logo lockup as the splash page, same proportions — just sized
+                smaller for the header. Intrinsic 827x338. The width/height ATTRS
+                are required: index.css has `img:not([width]):not([height])
+                { min-height:100px }`, which is what previously blew it up. Sized
+                by width; `height:auto` keeps the aspect ratio. */}
+            <img
+              src={aminyLogoCropped}
+              alt="Aminy"
+              width={120}
+              height={49}
+              style={{ width: '120px', height: 'auto', display: 'block' }}
+            />
           </button>
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" className="text-sm sm:text-sm px-2 sm:px-3" onClick={onLogin}>
