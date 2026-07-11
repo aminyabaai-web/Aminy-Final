@@ -211,6 +211,11 @@ const FreeScreeningFlow = lazy(() =>
     default: m.FreeScreeningFlow,
   })),
 );
+const RedeemGiftScreen = lazy(() =>
+  import("./components/RedeemGiftScreen").then((m) => ({
+    default: m.RedeemGiftScreen,
+  })),
+);
 const SettingsScreen = lazy(() =>
   import("./components/SettingsScreen").then((m) => ({
     default: m.SettingsScreen,
@@ -1049,6 +1054,7 @@ type AppScreen =
   | "payer-dashboard" // Payer Outcomes Dashboard for insurance/MCO stakeholders
   | "clinical-reports" // Clinical PDF export for pediatricians/BCBAs
   | "free-screening" // Pre-signup screening acquisition funnel
+  | "redeem-gift" // Claim a gifted Aminy subscription (deep-linkable, pre-login OK)
   | "prior-auth" // Prior authorization flow
   | "b2b-partner" // B2B partner portal
   | "b2b-setup" // B2B org setup wizard
@@ -1162,6 +1168,39 @@ async function acceptCaregiverInvitesOnce(userId: string): Promise<void> {
   }
 }
 
+/**
+ * Best-effort gift-code redemption after signup/login.
+ *
+ * When a gift recipient without an account clicks "Redeem", RedeemGiftScreen
+ * stashes the code in localStorage 'aminy_gift_code' and routes them to
+ * create-account. Once their session is live, this claims the pending code via
+ * the redeem_gift_code RPC — mirroring acceptCaregiverInvitesOnce: at most once
+ * per session, silent on failure, only toasts + clears on ok:true.
+ */
+async function redeemGiftCodeOnce(userId: string): Promise<void> {
+  const guardKey = `aminy_gift_redeem_done_${userId}`;
+  try {
+    const code = localStorage.getItem('aminy_gift_code');
+    if (!code) return;
+    if (sessionStorage.getItem(guardKey)) return;
+    sessionStorage.setItem(guardKey, '1');
+    const { data, error } = await supabase.rpc('redeem_gift_code', { p_code: code });
+    if (error) return; // silent — never block auth
+    const result = data as { ok?: boolean; tier?: string } | null;
+    if (result?.ok) {
+      try { localStorage.removeItem('aminy_gift_code'); } catch { /* ignore */ }
+      const tier = (result.tier ?? '').toLowerCase();
+      const label = tier === 'pro' || tier === 'proplus' || tier === 'family' ? 'Pro' : 'Core';
+      toast.success(`You've got 3 months of Aminy ${label}! Enjoy 💛`);
+    } else {
+      // already_redeemed / invalid_code — clear so we don't retry a dead code.
+      try { localStorage.removeItem('aminy_gift_code'); } catch { /* ignore */ }
+    }
+  } catch {
+    // best-effort — auth must never fail because of this
+  }
+}
+
 // Screens allowed to render WITHOUT an authenticated Supabase session.
 // Everything NOT in this set requires a live session. If the app boots onto a
 // non-public screen (e.g. getInitialScreen() optimistically routes a returning
@@ -1188,6 +1227,7 @@ const SESSIONLESS_OK_SCREENS = new Set<AppScreen>([
   "mchat-screening",
   "pre-diagnosis",
   "developmental-screener",
+  "redeem-gift",
 ]);
 
 const LOCAL_LAUNCH_BADGE_SCREENS = new Set<AppScreen>([
@@ -1304,6 +1344,8 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "aact-ops-dashboard",
   // Pricing must be linkable from marketing emails/ads (and E2E deep-links it)
   "paywall",
+  // Gift-redemption link emailed to gift purchasers (?screen=redeem-gift&code=)
+  "redeem-gift",
 ];
 
 const CHROMELESS_SCREENS = new Set<AppScreen>([
@@ -1323,6 +1365,7 @@ const CHROMELESS_SCREENS = new Set<AppScreen>([
   "mchat-screening",
   "pre-diagnosis",
   "developmental-screener",
+  "redeem-gift",
 ]);
 
 // Initialize screen state synchronously to prevent LCP delays
@@ -1928,6 +1971,8 @@ export default function App() {
           // match this now-verified session email. Best-effort, once per
           // session, silent on failure — must not gate profile load or nav.
           void acceptCaregiverInvitesOnce(session.user.id);
+          // Claim any gift code stashed pre-signup by RedeemGiftScreen.
+          void redeemGiftCodeOnce(session.user.id);
           // Load user profile and children data from Supabase
           try {
             const { data: profile } = await supabase
@@ -2680,6 +2725,17 @@ export default function App() {
                   navigateToScreen("marketplace");
                 }}
                 onJustDiagnosed={() => navigateToScreen("just-diagnosed")}
+              />
+            </Suspense>
+          );
+
+        case "redeem-gift":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <RedeemGiftScreen
+                onBack={() => navigateToScreen("splash")}
+                onCreateAccount={() => navigateToScreen("create-account")}
+                onSuccess={() => navigateToScreen("dashboard")}
               />
             </Suspense>
           );

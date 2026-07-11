@@ -51,6 +51,60 @@ function normalizeTier(raw: string | undefined | null): string {
   return "core"; // paid-but-unknown → safest paid default
 }
 
+// Human-readable gift code: AMINY-XXXX-XXXX. Uppercase A–Z / 2–9 with the
+// ambiguous glyphs (0/O, 1/I) removed so codes are easy to read aloud / retype.
+// The redeem_gift_code RPC fuzzy-matches ignoring case/hyphens/spaces, so the
+// display format here is purely for legibility.
+function generateGiftCode(): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no 0 O 1 I
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  const chars = Array.from(bytes, (b) => alphabet[b % alphabet.length]);
+  return `AMINY-${chars.slice(0, 4).join("")}-${chars.slice(4, 8).join("")}`;
+}
+
+// Email the gift code to the purchaser via Resend (same transport the rest of
+// the app uses). Best-effort: returns false on any failure so the webhook can
+// log-and-continue instead of failing the whole event over email delivery.
+async function sendGiftEmail(to: string | null, code: string, tier: string): Promise<boolean> {
+  const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+  if (!RESEND_API_KEY || !to) return false;
+  const verifiedDomain = Deno.env.get("RESEND_VERIFIED_DOMAIN") === "true";
+  const from = verifiedDomain ? "Aminy <noreply@aminy.ai>" : "Aminy <onboarding@resend.dev>";
+  const tierLabel = normalizeTier(tier) === "pro" ? "Pro" : "Core";
+  const redeemLink = `https://aminy.ai/?screen=redeem-gift&code=${encodeURIComponent(code)}`;
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;color:#0D1B2A;line-height:1.6;">
+      <p style="font-size:20px;font-weight:600;margin:0 0 12px;">Your Aminy gift is ready 🎁</p>
+      <p style="margin:0 0 16px;">Thank you for gifting Aminy ${tierLabel}. Share this code with the family you're gifting — it unlocks 3 months of Aminy ${tierLabel}, on you.</p>
+      <div style="background:#F8F8F6;border:1px solid #E4EFF5;border-radius:14px;padding:18px;text-align:center;margin:0 0 20px;">
+        <div style="font-size:13px;color:#577590;margin-bottom:6px;">Gift code</div>
+        <div style="font-size:24px;font-weight:700;letter-spacing:2px;color:#0D1B2A;">${code}</div>
+      </div>
+      <p style="margin:0 0 20px;text-align:center;">
+        <a href="${redeemLink}" style="display:inline-block;background:#43AA8B;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:600;">Redeem this gift</a>
+      </p>
+      <p style="font-size:13px;color:#577590;margin:0;">Or redeem it manually at aminy.ai with the code above.</p>
+      <p style="font-size:13px;color:#577590;margin:16px 0 0;">Gentle guidance. Meaningful progress.<br/>— The Aminy team</p>
+    </div>`;
+  const text =
+    `Your Aminy gift is ready.\n\nGift code: ${code}\n\nRedeem it at: ${redeemLink}\n\nThis unlocks 3 months of Aminy ${tierLabel}.\n\nGentle guidance. Meaningful progress.\n— The Aminy team`;
+  try {
+    const resp = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from, to, subject: "Your Aminy gift code 🎁", html, text, reply_to: "support@aminy.ai" }),
+    });
+    return resp.ok;
+  } catch (err) {
+    console.error("gift email send failed:", err);
+    return false;
+  }
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "POST only" }), { status: 405, headers: { "Content-Type": "application/json" } });
@@ -89,7 +143,38 @@ Deno.serve(async (req: Request) => {
         const subMeta = (session.subscription_details?.metadata ?? {}) as Record<string, string>;
         const orgId = meta.org_id || subMeta.org_id || null;
 
-        if (meta.type === "marketplace_booking") {
+        if (meta.kind === "gift") {
+          // Gift purchase (Stripe Payment Link, metadata kind=gift). Issue a
+          // redeemable code and email it to the purchaser so they can pass it on.
+          const code = generateGiftCode();
+          const purchaserEmail: string | null = session.customer_details?.email ?? null;
+          const { error: insErr } = await sb.from("gift_codes").insert({
+            code,
+            tier: (meta.tier ?? "core").toLowerCase(),
+            duration_months: parseInt(meta.duration_months) || 3,
+            purchaser_email: purchaserEmail,
+            stripe_session_id: session.id ?? null,
+            status: "unredeemed",
+          });
+          if (insErr) {
+            // stripe_session_id is UNIQUE — 23505 means we already issued a code
+            // for this session (webhook retry / duplicate delivery). Idempotent:
+            // acknowledge without double-issuing or re-emailing.
+            if ((insErr as { code?: string }).code === "23505") {
+              console.log(`gift code already issued for session ${session.id} — skipping`);
+              break;
+            }
+            throw insErr; // transient DB error → 500 so Stripe retries
+          }
+          console.log(`gift code ${code} issued for session ${session.id} (tier=${meta.tier})`);
+          const emailed = await sendGiftEmail(purchaserEmail, code, meta.tier ?? "core");
+          if (!emailed) {
+            // Non-fatal: the code is persisted and logged above. Email delivery
+            // needs wiring (RESEND_API_KEY unset, no purchaser email, or a send
+            // failure) — recover the code from the log / gift_codes table.
+            console.warn(`gift code ${code} issued but email NOT delivered (purchaser=${purchaserEmail ?? "unknown"})`);
+          }
+        } else if (meta.type === "marketplace_booking") {
           // One-time marketplace session payment (ConversationalBooking) — not a subscription.
           const bookingId = meta.booking_id || null;
           if (!bookingId) {
@@ -120,7 +205,6 @@ Deno.serve(async (req: Request) => {
           await sb.from("profiles").update({
             tier,
             stripe_customer_id: customerId,
-            is_trial: false,
           }).eq("id", userId);
           // Mark trial converted (non-fatal if table/row absent)
           await sb.from("trial_tracking").update({ is_converted: true }).eq("user_id", userId);
@@ -161,7 +245,7 @@ Deno.serve(async (req: Request) => {
         if (orgId) {
           await sb.from("organizations").update({ billing_status: "canceled" }).eq("id", orgId);
         } else if (userId) {
-          await sb.from("profiles").update({ tier: "free", is_trial: false }).eq("id", userId);
+          await sb.from("profiles").update({ tier: "free" }).eq("id", userId);
           console.log(`user ${userId} downgraded to free (subscription deleted)`);
         }
         break;
