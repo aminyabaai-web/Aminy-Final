@@ -1765,6 +1765,23 @@ export function SettingsScreen({ onBack, onLogout, onNavigate, userTier = 'core'
           </button>
         </Card>
 
+        {/* Gift & Sponsor */}
+        <Card className="divide-y divide-gray-200 dark:divide-slate-700">
+          <button
+            onClick={() => onNavigate?.('gift-sponsor')}
+            className="w-full p-4 flex items-center justify-between hover:bg-[#F6FBFB] dark:hover:bg-slate-800 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <Gift aria-hidden="true" className="w-5 h-5 text-primary" />
+              <div className="text-left">
+                <p className="font-medium dark:text-white">Gift Aminy / Sponsor a family</p>
+                <p className="text-sm text-muted-foreground">Give 3 months to a family, or fund one who can&apos;t afford it</p>
+              </div>
+            </div>
+            <ChevronRight aria-hidden="true" className="w-4 h-4 text-muted-foreground" />
+          </button>
+        </Card>
+
         {/* Help Section */}
         <Card className="divide-y divide-gray-200 dark:divide-slate-700">
           <button

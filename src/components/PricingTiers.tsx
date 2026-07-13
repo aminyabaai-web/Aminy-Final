@@ -33,6 +33,8 @@ interface PricingTiersProps {
   monetizationMode?: MonetizationMode;
   /** Routes an insured user to the existing coverage/eligibility tools. */
   onCheckCoverage?: () => void;
+  /** Routes to the Gift Aminy / Sponsor a family screen ('gift-sponsor'). */
+  onGift?: () => void;
 }
 
 type Audience = 'individual' | 'provider';
@@ -192,7 +194,7 @@ const PROVIDER_TIERS: TierCard[] = [
   },
 ];
 
-export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, monetizationMode = 'cash', onCheckCoverage }: PricingTiersProps) {
+export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, monetizationMode = 'cash', onCheckCoverage, onGift }: PricingTiersProps) {
   const isInsured = monetizationMode === 'insured';
   const handleCheckCoverage = () => {
     if (onCheckCoverage) onCheckCoverage();
@@ -371,6 +373,18 @@ export function PricingTiers({ onClose, onSubscribe, isPostOnboarding = false, m
                 See Individual plans →
               </button>
             </p>
+          </div>
+        )}
+
+        {/* Quiet gifting link — for someone buying Aminy on another family's behalf */}
+        {onGift && (
+          <div className="text-center mt-6 px-4">
+            <button
+              onClick={onGift}
+              className="text-sm text-[#8A9BA8] hover:text-[#2A7D99] underline underline-offset-2 transition-colors"
+            >
+              Or gift Aminy to another family →
+            </button>
           </div>
         )}
       </div>

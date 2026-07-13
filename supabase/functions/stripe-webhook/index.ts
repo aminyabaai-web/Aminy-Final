@@ -193,19 +193,23 @@ Deno.serve(async (req: Request) => {
             console.log(`marketplace booking ${bookingId} marked paid`);
           }
         } else if (orgId) {
-          // B2B org seat subscription activated
+          // B2B org seat subscription activated. Column is subscription_status
+          // (NOT billing_status, which does not exist on organizations).
           await sb.from("organizations").update({
             stripe_customer_id: customerId,
             stripe_subscription_id: session.subscription ?? null,
-            billing_status: "active",
+            subscription_status: "active",
           }).eq("id", orgId);
-          console.log(`org ${orgId} billing active`);
+          console.log(`org ${orgId} subscription active`);
         } else if (userId) {
           const tier = normalizeTier(meta.tier || subMeta.tier);
-          await sb.from("profiles").update({
-            tier,
-            stripe_customer_id: customerId,
-          }).eq("id", userId);
+          // NOTE: profiles has NO stripe_customer_id column — including it here
+          // made supabase-js reject the WHOLE update, so paid tiers were never
+          // granted. Grant the tier alone. (customer→user mapping lives in the
+          // stripe_customers table; not needed here since subscription events
+          // resolve the user from metadata.)
+          const { error: tierErr } = await sb.from("profiles").update({ tier }).eq("id", userId);
+          if (tierErr) throw tierErr; // 500 → Stripe retries rather than silently dropping the grant
           // Mark trial converted (non-fatal if table/row absent)
           await sb.from("trial_tracking").update({ is_converted: true }).eq("user_id", userId);
           console.log(`user ${userId} upgraded to ${tier}`);
@@ -222,7 +226,7 @@ Deno.serve(async (req: Request) => {
 
         if (orgId) {
           await sb.from("organizations").update({
-            billing_status: active ? "active" : "past_due",
+            subscription_status: active ? "active" : "past_due",
           }).eq("id", orgId);
         } else if (userId) {
           if (active) {
@@ -243,7 +247,7 @@ Deno.serve(async (req: Request) => {
         const orgId = meta.org_id || null;
 
         if (orgId) {
-          await sb.from("organizations").update({ billing_status: "canceled" }).eq("id", orgId);
+          await sb.from("organizations").update({ subscription_status: "canceled" }).eq("id", orgId);
         } else if (userId) {
           await sb.from("profiles").update({ tier: "free" }).eq("id", userId);
           console.log(`user ${userId} downgraded to free (subscription deleted)`);
