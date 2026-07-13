@@ -718,11 +718,18 @@ export async function startTrial(userId: string): Promise<boolean> {
       hard_paywall_shown: false,
     }, { onConflict: 'user_id' });
 
-    // Update user tier to core (trial)
-    await supabase
+    // Update user tier to core (trial). NOTE: profiles has NO is_trial column
+    // — including it made supabase-js reject the whole update, so the tier was
+    // never set. Trial access is derived from trial_tracking.trial_ends_at via
+    // getEffectiveTier(); we still set tier='core' so tier-gated UI unlocks.
+    const { error: tierErr } = await supabase
       .from('profiles')
-      .update({ tier: 'core', is_trial: true })
+      .update({ tier: 'core' })
       .eq('id', userId);
+    if (tierErr) {
+      console.error('startTrial: failed to set tier', tierErr);
+      return false;
+    }
 
     return true;
   } catch (error) {

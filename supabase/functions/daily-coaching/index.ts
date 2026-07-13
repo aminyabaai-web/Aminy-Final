@@ -336,7 +336,23 @@ async function runDirectQuery(stats: { sent: number; skipped: number; errors: nu
     .gte('created_at', new Date(Date.now() - 20 * 60 * 60 * 1000).toISOString());
 
   const recentSet = new Set((recentlySent ?? []).map((r: { user_id: string }) => r.user_id));
-  const eligible = profiles.filter((p: { id: string }) => !recentSet.has(p.id));
+  let eligible = profiles.filter((p: { id: string }) => !recentSet.has(p.id));
+
+  // Respect the "Daily gentle tips" opt-out (user_preferences.daily_tips=false).
+  // Client-side gating alone doesn't stop this cron, so honor it here too.
+  if (eligible.length) {
+    const { data: optedOut } = await supabase
+      .from('user_preferences')
+      .select('user_id')
+      .in('user_id', eligible.map((p: { id: string }) => p.id))
+      .eq('daily_tips', false);
+    if (optedOut?.length) {
+      const optedOutSet = new Set(optedOut.map((r: { user_id: string }) => r.user_id));
+      const before = eligible.length;
+      eligible = eligible.filter((p: { id: string }) => !optedOutSet.has(p.id));
+      stats.skipped += before - eligible.length;
+    }
+  }
 
   if (!eligible.length) return stats;
 

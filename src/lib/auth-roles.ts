@@ -318,14 +318,18 @@ async function createProviderFromApplication(
       return;
     }
 
-    // Update user profile with provider role
-    await supabase
+    // Update user profile with provider role. NOTE: profiles has NO provider_id
+    // column — including it made supabase-js reject the whole update, so role was
+    // never set to 'provider' (the provider→user link lives on
+    // provider_profiles.user_id, not here). Set the role only.
+    const { error: roleErr } = await supabase
       .from('profiles')
-      .update({
-        role: 'provider',
-        provider_id: provider.id,
-      })
+      .update({ role: 'provider' })
       .eq('id', userId);
+    if (roleErr) {
+      console.error('[AuthRoles] Failed to set provider role:', roleErr);
+      return;
+    }
 
     if (import.meta.env.DEV) console.log('[AuthRoles] Provider profile created:', provider.id);
   } catch (error) {

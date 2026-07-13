@@ -216,6 +216,11 @@ const RedeemGiftScreen = lazy(() =>
     default: m.RedeemGiftScreen,
   })),
 );
+const GiftAndSponsorScreen = lazy(() =>
+  import("./components/GiftAndSponsorScreen").then((m) => ({
+    default: m.GiftAndSponsorScreen,
+  })),
+);
 const SettingsScreen = lazy(() =>
   import("./components/SettingsScreen").then((m) => ({
     default: m.SettingsScreen,
@@ -1055,6 +1060,7 @@ type AppScreen =
   | "clinical-reports" // Clinical PDF export for pediatricians/BCBAs
   | "free-screening" // Pre-signup screening acquisition funnel
   | "redeem-gift" // Claim a gifted Aminy subscription (deep-linkable, pre-login OK)
+  | "gift-sponsor" // Gift Aminy / Sponsor a family entry point (deep-linkable, pre-login OK)
   | "prior-auth" // Prior authorization flow
   | "b2b-partner" // B2B partner portal
   | "b2b-setup" // B2B org setup wizard
@@ -1169,6 +1175,25 @@ async function acceptCaregiverInvitesOnce(userId: string): Promise<void> {
 }
 
 /**
+ * Best-effort provider-invite acceptance after signup/login. A family invited
+ * by a provider (InviteFamiliesPanel) links back once their session is live —
+ * matches by verified email (server-side), so no localStorage needed. Once per
+ * session, silent on failure. Mirrors acceptCaregiverInvitesOnce.
+ */
+async function acceptProviderInvitesOnce(userId: string): Promise<void> {
+  const guardKey = `aminy_provider_accept_done_${userId}`;
+  try {
+    if (sessionStorage.getItem(guardKey)) return;
+    sessionStorage.setItem(guardKey, '1');
+    const { error } = await supabase.rpc('accept_provider_invites');
+    if (error) return; // silent — never block auth
+    try { localStorage.removeItem('aminy_provider_invite'); } catch { /* ignore */ }
+  } catch {
+    // best-effort — auth must never fail because of this
+  }
+}
+
+/**
  * Best-effort gift-code redemption after signup/login.
  *
  * When a gift recipient without an account clicks "Redeem", RedeemGiftScreen
@@ -1228,6 +1253,7 @@ const SESSIONLESS_OK_SCREENS = new Set<AppScreen>([
   "pre-diagnosis",
   "developmental-screener",
   "redeem-gift",
+  "gift-sponsor",
 ]);
 
 const LOCAL_LAUNCH_BADGE_SCREENS = new Set<AppScreen>([
@@ -1346,6 +1372,8 @@ const DEEP_LINKABLE_SCREENS: AppScreen[] = [
   "paywall",
   // Gift-redemption link emailed to gift purchasers (?screen=redeem-gift&code=)
   "redeem-gift",
+  // Gift/sponsor entry point shareable from marketing + in-app links
+  "gift-sponsor",
 ];
 
 const CHROMELESS_SCREENS = new Set<AppScreen>([
@@ -1366,6 +1394,7 @@ const CHROMELESS_SCREENS = new Set<AppScreen>([
   "pre-diagnosis",
   "developmental-screener",
   "redeem-gift",
+  "gift-sponsor",
 ]);
 
 // Initialize screen state synchronously to prevent LCP delays
@@ -1971,6 +2000,8 @@ export default function App() {
           // match this now-verified session email. Best-effort, once per
           // session, silent on failure — must not gate profile load or nav.
           void acceptCaregiverInvitesOnce(session.user.id);
+          // Link any pending provider invite for this family (by email).
+          void acceptProviderInvitesOnce(session.user.id);
           // Claim any gift code stashed pre-signup by RedeemGiftScreen.
           void redeemGiftCodeOnce(session.user.id);
           // Load user profile and children data from Supabase
@@ -2740,6 +2771,16 @@ export default function App() {
             </Suspense>
           );
 
+        case "gift-sponsor":
+          return (
+            <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
+              <GiftAndSponsorScreen
+                onBack={() => navigateToScreen("dashboard")}
+                onRedeem={() => navigateToScreen("redeem-gift")}
+              />
+            </Suspense>
+          );
+
         case "just-diagnosed":
           return (
             <Suspense fallback={<LoadingSkeleton screen={currentScreen} />}>
@@ -2903,6 +2944,7 @@ export default function App() {
                 onClose={() => navigateToScreen("dashboard")}
                 monetizationMode={getMonetizationMode(userData)}
                 onCheckCoverage={() => navigateToScreen("benefits")}
+                onGift={() => navigateToScreen("gift-sponsor")}
               />
             </Suspense>
           );

@@ -443,10 +443,27 @@ Deno.serve(async (req) => {
       console.error('[lifecycle-emails] weekly-digest query error:', weeklyErr.message);
     }
 
-    const weeklyCandidates = (weeklyUsers ?? []).filter((u) => {
+    let weeklyCandidates = (weeklyUsers ?? []).filter((u) => {
       if (optedOut(u)) { skippedOptOut++; return false; }
       return true;
     });
+    // Respect the granular "Weekly progress briefing" opt-out
+    // (user_preferences.weekly_briefing=false) — distinct from the master
+    // lifecycle opt-out handled by optedOut() above. Client gating alone
+    // doesn't stop this cron, so honor it here too.
+    if (weeklyCandidates.length) {
+      const { data: briefOff } = await supabase
+        .from('user_preferences')
+        .select('user_id')
+        .in('user_id', weeklyCandidates.map((u) => u.id))
+        .eq('weekly_briefing', false);
+      if (briefOff?.length) {
+        const offSet = new Set(briefOff.map((r: { user_id: string }) => r.user_id));
+        const before = weeklyCandidates.length;
+        weeklyCandidates = weeklyCandidates.filter((u) => !offSet.has(u.id));
+        skippedOptOut += before - weeklyCandidates.length;
+      }
+    }
     const weeklySentSet = await getAlreadySent(weeklyCandidates.map((u) => u.id), digestType);
     const weeklyChildNames = await getChildNames(weeklyCandidates.map((u) => u.id));
     const weeklyEmails = await getEmails(weeklyCandidates.map((u) => u.id));
