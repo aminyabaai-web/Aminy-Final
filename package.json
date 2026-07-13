@@ -55,7 +55,7 @@
     "cmdk": "^1.1.1",
     "dompurify": "^3.4.10",
     "embla-carousel-react": "^8.6.0",
-    "hono": "^4.12.27",
+    "hono": "^4.12.30",
     "html2canvas": "^1.4.1",
     "i18next": "^26.3.1",
     "i18next-browser-languagedetector": "^8.2.0",
