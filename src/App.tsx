@@ -1175,6 +1175,25 @@ async function acceptCaregiverInvitesOnce(userId: string): Promise<void> {
 }
 
 /**
+ * Best-effort provider-invite acceptance after signup/login. A family invited
+ * by a provider (InviteFamiliesPanel) links back once their session is live —
+ * matches by verified email (server-side), so no localStorage needed. Once per
+ * session, silent on failure. Mirrors acceptCaregiverInvitesOnce.
+ */
+async function acceptProviderInvitesOnce(userId: string): Promise<void> {
+  const guardKey = `aminy_provider_accept_done_${userId}`;
+  try {
+    if (sessionStorage.getItem(guardKey)) return;
+    sessionStorage.setItem(guardKey, '1');
+    const { error } = await supabase.rpc('accept_provider_invites');
+    if (error) return; // silent — never block auth
+    try { localStorage.removeItem('aminy_provider_invite'); } catch { /* ignore */ }
+  } catch {
+    // best-effort — auth must never fail because of this
+  }
+}
+
+/**
  * Best-effort gift-code redemption after signup/login.
  *
  * When a gift recipient without an account clicks "Redeem", RedeemGiftScreen
@@ -1981,6 +2000,8 @@ export default function App() {
           // match this now-verified session email. Best-effort, once per
           // session, silent on failure — must not gate profile load or nav.
           void acceptCaregiverInvitesOnce(session.user.id);
+          // Link any pending provider invite for this family (by email).
+          void acceptProviderInvitesOnce(session.user.id);
           // Claim any gift code stashed pre-signup by RedeemGiftScreen.
           void redeemGiftCodeOnce(session.user.id);
           // Load user profile and children data from Supabase
