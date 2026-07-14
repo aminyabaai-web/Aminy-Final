@@ -118,13 +118,22 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       // Only 1:1 telehealth sessions (session_notes) open the window; group
       // sessions live in group_session_enrollments and intentionally do NOT.
       const windowStart = new Date(Date.now() - POST_SESSION_WINDOW_DAYS * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
-      const { data, error } = await supabase
-        .from('session_notes')
-        .select('id, provider_id, session_date')
-        .eq('user_id', userId)
-        .gte('session_date', windowStart)
-        .order('session_date', { ascending: false })
-        .limit(1);
+      // This check gates the ENTIRE screen behind a skeleton — if the network
+      // hangs (flaky mobile wifi), an unbounded await would freeze the screen
+      // on pulsing placeholders forever. Cap it: on timeout we fall through to
+      // the same conservative no-session default as any other failure.
+      const { data, error } = await Promise.race([
+        supabase
+          .from('session_notes')
+          .select('id, provider_id, session_date')
+          .eq('user_id', userId)
+          .gte('session_date', windowStart)
+          .order('session_date', { ascending: false })
+          .limit(1),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('eligibility check timed out')), 6000)
+        ),
+      ]);
       if (error) throw error;
       const found = !!(data && data.length > 0);
       setHasRecentSession(found);
