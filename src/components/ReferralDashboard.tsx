@@ -303,6 +303,7 @@ export function ReferralDashboard({
           <Button
             onClick={() => setShowShareOptions(!showShareOptions)}
             variant="secondary"
+            aria-label="Share your referral link"
             className="bg-white/20 hover:bg-white/30 text-white border-0"
           >
             <Share2 className="w-4 h-4" />
