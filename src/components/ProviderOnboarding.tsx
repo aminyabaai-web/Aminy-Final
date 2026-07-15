@@ -23,8 +23,9 @@ import {
   ArrowLeft,
   ArrowRight,
   CheckCircle,
+  ClipboardCheck,
   User,
-  FileText,
+  FileSignature,
   DollarSign,
   Calendar,
   Shield,
@@ -54,8 +55,8 @@ const STEPS: { id: OnboardingStep; label: string; icon: React.ElementType }[] = 
   { id: 'licensing', label: 'Licensing', icon: Shield },
   { id: 'services', label: 'Services', icon: DollarSign },
   { id: 'availability', label: 'Schedule', icon: Calendar },
-  { id: 'review', label: 'Review', icon: FileText },
-  { id: 'agreement', label: 'Agreement', icon: FileText },
+  { id: 'review', label: 'Review', icon: ClipboardCheck },
+  { id: 'agreement', label: 'Agreement', icon: FileSignature },
   { id: 'baa', label: 'BAA', icon: Shield },
 ];
 
@@ -479,7 +480,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
           )}
           <div>
             <h1 className="text-lg font-semibold text-[#132F43]">Join Aminy as a Provider</h1>
-            <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or layered insurance rails.</p>
+            <p className="text-sm text-[#5A6B7A]">Join the supported-state provider network in {SUPPORTED_STATES_OR} and start with cash-pay or insurance billing.</p>
           </div>
           {currentStep !== 'agreement' && currentStep !== 'baa' && (
             <button
