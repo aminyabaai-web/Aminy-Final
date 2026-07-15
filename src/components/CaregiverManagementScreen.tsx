@@ -219,7 +219,7 @@ export function CaregiverManagementScreen({ onBack }: CaregiverManagementScreenP
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant="ghost" size="sm" onClick={onBack} aria-label="Back">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}

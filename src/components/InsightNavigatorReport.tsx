@@ -141,7 +141,7 @@ export function InsightNavigatorReport({
   if (!hasContent) {
     return (
       <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
-        <Card className="p-6 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white border-0">
+        <Card className="p-6 bg-gradient-to-br from-[#2A7D99] to-[#7BA7BC] text-white border-0">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
               <Brain className="w-8 h-8" />
@@ -151,7 +151,7 @@ export function InsightNavigatorReport({
                 <h1 className="text-xl sm:text-2xl font-bold">Insight Navigator</h1>
                 <Badge className="bg-white/20 text-white border-0">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  Living Intake Document
+                  Always up to date
                 </Badge>
               </div>
               <p className="text-teal-100">
@@ -206,7 +206,7 @@ export function InsightNavigatorReport({
   return (
     <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 sm:space-y-6">
       {/* Header */}
-      <Card className="p-6 bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white border-0">
+      <Card className="p-6 bg-gradient-to-br from-[#2A7D99] to-[#7BA7BC] text-white border-0">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
@@ -217,7 +217,7 @@ export function InsightNavigatorReport({
                 <h1 className="text-xl sm:text-2xl font-bold">Insight Navigator</h1>
                 <Badge className="bg-white/20 text-white border-0">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  Living Intake Document
+                  Always up to date
                 </Badge>
               </div>
               <p className="text-teal-100">

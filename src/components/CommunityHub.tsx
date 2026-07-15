@@ -986,7 +986,7 @@ export function CommunityHub({
           <div className="flex items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-3 min-w-0">
               {onBack && (
-                <Button variant="ghost" size="sm" onClick={onBack} className="shrink-0">
+                <Button variant="ghost" size="sm" onClick={onBack} className="shrink-0" aria-label="Back">
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
               )}

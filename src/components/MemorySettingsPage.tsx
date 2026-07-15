@@ -460,6 +460,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
               <Switch
                 checked={memoryEnabled}
                 onCheckedChange={toggleMemoryEnabled}
+                aria-label="Memory saving"
               />
             </div>
           </div>
@@ -578,7 +579,7 @@ export const MemorySettingsPage: React.FC<MemorySettingsPageProps> = ({ userId, 
         {/* Privacy Notice */}
         <div className="mt-8 bg-white border border-[#E8E4DF] rounded-lg p-6">
           <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+            <Shield className="w-5 h-5 text-[#2A7D99] mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <h4 className="font-semibold mb-2">Your privacy is protected</h4>
               <ul className="text-sm text-muted-foreground space-y-2">

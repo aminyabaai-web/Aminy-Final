@@ -90,7 +90,7 @@ function formatDate(iso: string): string {
 // Component
 // ---------------------------------------------------------------------------
 
-export function OutcomeMeasures({ userId, childId, childName = 'Your Child', onBack }: OutcomeMeasuresProps) {
+export function OutcomeMeasures({ userId, childId, childName = 'your child', onBack }: OutcomeMeasuresProps) {
   // In demo mode, use placeholder ids so the screen is fully explorable.
   // For real users, never fabricate ids — fall back to empty and guard persistence
   // so a fake child_id can't be written to the database.

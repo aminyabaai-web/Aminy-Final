@@ -1156,7 +1156,7 @@ export function StoreMarketplace({
                   )}
                 </div>
                 <p className="text-sm text-[#5A6B7A]">
-                  {usingCuratedFallback ? 'Curated affiliate recommendations' : 'Behaviorist-curated tools and resources'}
+                  {usingCuratedFallback ? 'Tools other Aminy families love' : 'Behaviorist-curated tools and resources'}
                 </p>
               </div>
             </div>

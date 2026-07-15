@@ -318,8 +318,8 @@ export function OutcomesStoryReport({ childName, childId: _childId }: OutcomesSt
           {child}&apos;s story is just beginning
         </h3>
         <p className="text-sm text-[#5A6B7A] dark:text-slate-400 max-w-xs">
-          Your story is just beginning — check in weekly and this fills itself in.
-          After two check-ins you&apos;ll see how far you&apos;ve come, ready to share with your provider.
+          Every routine and win you log becomes part of {child}&apos;s progress story.
+          After two weekly check-ins you&apos;ll see how far you&apos;ve come, ready to share with your provider.
         </p>
       </div>
     );
