@@ -34,6 +34,8 @@ vi.mock('lucide-react', () => {
     'X', 'Plus', 'Trash2', 'Users', 'ChevronRight', 'Shield', 'Calendar', 'Clock',
     'Smartphone', 'Globe', 'Crown', 'Baby', 'Cake', 'Heart', 'AlertCircle',
     'Upload', 'Loader2', 'Lock', 'LogOut', 'Link',
+    // Used by UsageMeter, rendered inside ProfileScreen
+    'Brain', 'Sparkles', 'Zap', 'ArrowRight', 'MessageCircle', 'FileText',
   ];
   const mock: Record<string, unknown> = {};
   for (const name of iconNames) {
@@ -187,6 +189,15 @@ vi.mock('../../lib/tier-utils', () => ({
     };
     return names[tier || 'free'] || 'Free';
   }),
+  // UsageMeter (rendered inside ProfileScreen) needs these too — without
+  // them the whole tree throws and every assertion fails at "Loading".
+  normalizeTierName: vi.fn((tier?: string) => (tier === 'starter' ? 'core' : tier || 'free')),
+  getTierLimits: vi.fn(() => ({
+    messagesPerDay: 100,
+    documents: 100,
+    memoryFacts: 1000,
+    children: 3,
+  })),
 }));
 
 // =============================================================================
@@ -282,7 +293,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // The back button contains the ArrowLeft icon
@@ -299,7 +310,8 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="core" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Core')).toBeInTheDocument();
+      // Appears in the header tier badge and the UsageMeter pill
+      expect(screen.getAllByText('Core').length).toBeGreaterThan(0);
     });
 
     // Crown icon should be present in the tier badge
@@ -310,7 +322,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="pro" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Pro')).toBeInTheDocument();
+      expect(screen.getAllByText('Pro').length).toBeGreaterThan(0);
     });
   });
 
@@ -318,7 +330,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="proplus" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Family Plan')).toBeInTheDocument();
+      expect(screen.getAllByText('Family Plan').length).toBeGreaterThan(0);
     });
   });
 
@@ -326,7 +338,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen {...defaultProps} userTier="free" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // Crown icon should NOT be present when tier is free
@@ -343,7 +355,7 @@ describe('ProfileScreen', () => {
     expect(screen.getByText('Loading profile...')).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
   });
 
@@ -351,7 +363,7 @@ describe('ProfileScreen', () => {
     render(<ProfileScreen />);
 
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(0);
     });
 
     // ArrowLeft icon should not appear (since no back button rendered)
