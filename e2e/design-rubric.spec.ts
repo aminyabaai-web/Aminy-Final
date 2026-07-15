@@ -163,18 +163,7 @@ const CLIP_ALLOWLIST: string[] = [
  * Do NOT add new entries without a design-review sign-off.
  */
 const A11Y_NAME_ALLOWLIST: string[] = [
-  // Header back-arrow buttons (icon-only, no aria-label):
-  'on-demand-telehealth::action-button inline-flex',
-  'profile::action-button inline-flex',
-  'account-settings::w-9 h-9 rounded-full',
-  'denial-workbench::text-[#5A6B7A]',
-  'just-diagnosed::<button class="">',
-  // Back + close icon buttons in OutcomeMeasures.tsx header:
-  'outcome-measures::<button class="">',
-  // ChevronRight-only "Ask your behavior specialist" button, ResourceLibrary.tsx:195 + :418
-  // (rendered on both the resources and resource-library screens):
-  'resources::text-[#2A7D99] shrink-0',
-  'resource-library::text-[#2A7D99] shrink-0',
+  // (empty — all previously-allowlisted unlabeled buttons now have aria-labels)
 ];
 
 /**
@@ -183,10 +172,7 @@ const A11Y_NAME_ALLOWLIST: string[] = [
  */
 const JARGON_EXEMPT_SCREENS = new Set(['privacy-policy', 'terms-of-service']);
 const JARGON_ALLOWLIST: string[] = [
-  // PRE-EXISTING (2026-07-15): "Supported payer matrix · AZ · MT · TX …" badge
-  // from src/lib/product-truth.ts badgeLabel — same string is baselined in
-  // scripts/lint-copy.mjs. Phase 3 copy pass rewords it; remove both entries then.
-  'claims-dashboard::payer matrix',
+  // (empty — the claims-dashboard payer-matrix badge was reworded in product-truth.ts)
 ];
 
 // Same auth seeding as screen-smoke.spec.ts

@@ -480,7 +480,7 @@ export function OnDemandTelehealth({
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               {onBack && (
-                <Button variant="ghost" size="sm" onClick={onBack}>
+                <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
               )}
@@ -665,7 +665,7 @@ export function OnDemandTelehealth({
         <div className="sticky top-0 z-10 bg-white dark:bg-slate-800 border-b border-[#E8E4DF]">
           <div className="max-w-2xl mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="sm" onClick={() => setStep('browse')}>
+              <Button variant="ghost" size="sm" onClick={() => setStep('browse')} aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <h1 className="text-lg font-semibold text-[#132F43]">You're almost connected</h1>

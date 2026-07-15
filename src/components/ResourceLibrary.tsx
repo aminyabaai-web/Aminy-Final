@@ -194,6 +194,7 @@ export function ResourceLibrary({
         </div>
         <button
           onClick={() => onNavigate?.('ask-bcba')}
+          aria-label="Ask your behavior specialist"
           className="text-[#2A7D99] shrink-0"
         >
           <ChevronRight className="w-5 h-5" />
@@ -417,6 +418,7 @@ function ArticleView({
             </div>
             <button
               onClick={() => onNavigate?.('ask-bcba')}
+              aria-label="Ask your behavior specialist"
               className="text-[#2A7D99] shrink-0"
             >
               <ChevronRight className="w-5 h-5" />

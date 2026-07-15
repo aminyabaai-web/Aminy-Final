@@ -381,6 +381,7 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
                     {onBack && (
                         <button
                             onClick={onBack}
+                            aria-label="Go back"
                             className="w-9 h-9 rounded-full border-none bg-white shadow-back-btn flex items-center justify-center cursor-pointer"
                         >
                             <ArrowLeft size={18} color="rgba(17, 24, 39, 0.7)" />

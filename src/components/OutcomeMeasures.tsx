@@ -234,6 +234,7 @@ export function OutcomeMeasures({ userId, childId, childName = 'your child', onB
         }}
       >
         <button
+          aria-label="Go back"
           onClick={view === 'selection' ? onBack : handleBackToSelection}
           style={{
             display: 'flex',
@@ -263,6 +264,7 @@ export function OutcomeMeasures({ userId, childId, childName = 'your child', onB
         {view === 'selection' && (
           <button
             onClick={handleShowHistory}
+            aria-label="View assessment history"
             style={{
               display: 'flex',
               alignItems: 'center',

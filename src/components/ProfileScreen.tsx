@@ -598,7 +598,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         <div className="max-w-2xl md:max-w-2xl md:mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             {onBack && (
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant="ghost" size="sm" onClick={onBack} aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </Button>
             )}

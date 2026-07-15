@@ -472,7 +472,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
   },
   'claims-dashboard': {
     state: 'limited_launch',
-    badgeLabel: `Supported payer matrix · ${SUPPORTED_PROVIDER_STATE_LABEL}`,
+    badgeLabel: `Insurance billing · ${SUPPORTED_PROVIDER_STATE_LABEL}`,
     message: getSupportedClaimsMessage(),
     audienceScope: {
       roles: ['parent', 'provider', 'admin'],
@@ -480,7 +480,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
     },
     programLabel: 'Supported-state payer launch',
     pathwayLabel: 'Top commercial + Medicaid products across AZ / MT / TX',
-    payerLabel: 'Supported-state payer matrix',
+    payerLabel: 'Supported-state insurance coverage',
   },
   'payer-dashboard': {
     state: 'pilot',

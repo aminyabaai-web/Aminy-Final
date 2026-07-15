@@ -961,7 +961,7 @@ export default function DenialWorkbench({
       <div className="bg-white border-b border-[#E8E4DF] px-4 pt-12 pb-4">
         <div className="flex items-center gap-3 mb-3">
           {onBack && (
-            <button onClick={onBack} className="text-[#5A6B7A]">
+            <button onClick={onBack} aria-label="Go back" className="text-[#5A6B7A]">
               <ArrowLeft className="w-5 h-5" />
             </button>
           )}
