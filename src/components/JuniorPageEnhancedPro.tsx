@@ -1618,12 +1618,12 @@ export function JuniorPageEnhancedPro({ userData, userTier = 'starter', onNaviga
             <motion.div
               animate={reducedSensory ? {} : { scale: [1, 1.02, 1] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-              className={`w-12 h-12 shrink-0 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
+              className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center ${buddyVoices.find(b => b.id === selectedBuddy)?.color}`}
             >
               {buddyVoices.find(b => b.id === selectedBuddy)?.icon}
             </motion.div>
             <div className="min-w-0">
-              <p className="text-xl font-semibold text-slate-950 truncate dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Hi {childName}!</p>
+              <p className="text-lg font-semibold text-slate-950 truncate dark:text-slate-50" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>Hi {childName}!</p>
               <p className="text-sm text-[#5A6B7A] truncate dark:text-slate-400" style={{ fontFamily: "'Schibsted Grotesk', Manrope, ui-sans-serif, system-ui, sans-serif" }}>
                 With {buddyVoices.find(b => b.id === selectedBuddy)?.name}
               </p>
