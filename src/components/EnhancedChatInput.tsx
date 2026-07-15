@@ -591,6 +591,7 @@ export function EnhancedChatInput({
         {/* Send button */}
         <Button
           onClick={handleSend}
+          aria-label="Send message"
           disabled={!canSend || hasUploading}
           className={`h-10 w-10 rounded-full transition-all ${
             canSend && !hasUploading
