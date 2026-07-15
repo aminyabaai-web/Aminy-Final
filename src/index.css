@@ -18746,3 +18746,47 @@ button[data-slot="switch"]::after {
   .sm\:gap-x-8 { column-gap: calc(var(--spacing) * 8); }
   .sm\:gap-y-3 { row-gap: calc(var(--spacing) * 3); }
 }
+
+/* ============================================================
+   Phase 5 — Interaction feel (July 2026)
+   ============================================================ */
+
+/* 1) Brand press feedback for every `.action-button` surface
+   (ui/button.tsx base class + the styled-inline CTAs on splash /
+   login / create-account / forgot-password, which set transition
+   via inline style so a class-based :active transform still
+   applies — inline styles there never set transform). */
+.action-button:active {
+  transform: scale(0.98);
+}
+
+/* 2) Skeleton shimmer — `animate-pulse` animates opacity, which the
+   WAAPI opacity workarounds neutralize, freezing every skeleton into
+   a static block. Re-animate via background-position instead of
+   opacity: a translucent sheen sweeps across the element. Uses
+   background-image (NOT the `background` shorthand) so each
+   skeleton keeps its own bg-* color underneath, and small non-empty
+   uses of animate-pulse (recording dots, live badges) keep their
+   color and just get the subtle sheen. No !important on `animation`
+   so reduced-motion.css (`animation: none !important`) still wins. */
+@keyframes aminy-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+.animate-pulse {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  background-size: 200% 100%;
+  animation: aminy-shimmer 1.6s ease-in-out infinite;
+}
+/* Empty skeleton blocks that set no bg color would otherwise show
+   only the faint sheen — give them the brand mist base as a canvas.
+   Scoped to elements without any bg- utility so colored status dots
+   (also :empty, but always carrying a bg-* class) are untouched. */
+.animate-pulse:empty:not([class*="bg-"]) {
+  background-color: #EDF4F7;
+}

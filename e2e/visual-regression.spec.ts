@@ -370,6 +370,64 @@ test.describe('Visual Regression - Protected Pages', () => {
 });
 
 // ============================================
+// SCREEN BASELINES (375px) — Phase 6 expansion
+// ============================================
+// Extends baseline coverage beyond the classic set toward the full screen list
+// (DESIGN-EXCELLENCE-PLAN.md Phase 6.1), pragmatically capped at the
+// highest-traffic screens: parent golden path + provider core. Full-page
+// screenshots of all 112 screens would make CI slow and flaky — screen-smoke +
+// design-rubric cover the long tail functionally.
+//
+// NOTE: these screens are NOT in DEEP_LINKABLE_SCREENS, so `/?screen=X` would
+// silently fall through to the dashboard. Navigate via the state-nav debug
+// hook (same as screen-smoke.spec.ts) instead.
+test.describe('Visual Regression - Screen Baselines (375px)', () => {
+  const BASELINE_SCREENS = [
+    // Parent golden path
+    'care-plan',
+    'resources',
+    'benefits',
+    'my-appointments',
+    'messages',
+    'medications',
+    'weekly-insights',
+    'analytics-charts',
+    'outcomes',
+    'insight-report',
+    'community-hub',
+    'crisis-resources',
+    'calm-tools',
+    'free-screening',
+    // Provider core
+    'provider-portal',
+    'provider-onboarding',
+    'data-collection',
+    'treatment-plan-editor',
+  ];
+
+  for (const screen of BASELINE_SCREENS) {
+    test(`${screen} mobile baseline`, async ({ page }) => {
+      await setupMockAuth(page);
+      await page.setViewportSize({ width: 375, height: 812 });
+      await page.goto('/');
+      await waitForPageReady(page);
+
+      await page.evaluate((name) => {
+        (window as { __navigateToScreen?: (n: string) => void }).__navigateToScreen?.(name);
+      }, screen);
+      // Same settle as waitForPageReady's tail: fonts already loaded, so just
+      // let the new screen's lazy chunk render and motion/react land.
+      await page.waitForTimeout(900);
+
+      await expect(page).toHaveScreenshot(`screen-${screen}-mobile.png`, {
+        maxDiffPixelRatio: 0.03,
+        fullPage: true,
+      });
+    });
+  }
+});
+
+// ============================================
 // DARK MODE VISUAL REGRESSION
 // ============================================
 test.describe('Visual Regression - Dark Mode', () => {

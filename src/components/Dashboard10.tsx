@@ -1480,7 +1480,7 @@ export function Dashboard10({
               <button
                 key={routine.timeOfDay}
                 onClick={() => setActiveRoutine(routine.timeOfDay)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all active:scale-[0.97] ${
                   activeRoutine === routine.timeOfDay
                     ? 'bg-[#2A7D99] text-white shadow-md'
                     : 'bg-white dark:bg-slate-800 text-[#5A6B7A] dark:text-gray-300 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
@@ -1524,7 +1524,7 @@ export function Dashboard10({
                   onClick={() => handleTaskToggle(task.id)}
                   data-testid={`routine-task-${task.id}`}
                   data-plan-item-id={task.id}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
+                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all active:scale-[0.98] ${
                     task.completed
                       ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
                       : 'bg-[#F6FBFB] dark:bg-slate-700/50 hover:bg-[#EDF4F7] dark:hover:bg-slate-700'
@@ -1996,7 +1996,7 @@ export function Dashboard10({
         <button
           ref={chatButtonRef}
           onClick={() => setShowAIChat(!showAIChat)}
-          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 ${
+          className={`fixed bottom-24 right-4 z-40 w-14 h-14 rounded-full transition-all duration-300 active:scale-95 ${
             showAIChat
               ? 'bg-gray-700 text-white rotate-0 shadow-lg'
               : 'bg-[#2A7D99] text-white hover:bg-[#1F6080]'

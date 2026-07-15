@@ -424,7 +424,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
         <div className="flex items-center justify-center gap-3 mb-8">
           <button
             onClick={() => setBillingPeriod('monthly')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all active:scale-[0.97] ${
               billingPeriod === 'monthly'
                 ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
                 : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
@@ -434,7 +434,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
           </button>
           <button
             onClick={() => setBillingPeriod('yearly')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all active:scale-[0.97] flex items-center gap-2 ${
               billingPeriod === 'yearly'
                 ? 'bg-gray-900 text-white dark:bg-white dark:text-[#132F43]'
                 : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF] dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
@@ -460,7 +460,7 @@ export function PaywallScreen({ onSubscribe, onClose, currentTier = 'free', chil
             return (
               <Card
                 key={tier.id}
-                className={`relative p-5 transition-all duration-200 cursor-pointer hover:shadow-lg ${
+                className={`relative p-5 transition-all duration-200 cursor-pointer hover:shadow-lg active:scale-[0.98] ${
                   tier.popular
                     ? 'ring-2 ring-[#2A7D99] shadow-md'
                     : 'border border-[#E8E4DF] hover:border-[#E8E4DF]'

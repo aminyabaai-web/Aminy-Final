@@ -29,6 +29,7 @@ import {
   AlertCircle,
   Loader2,
   X,
+  ArrowLeft,
 } from 'lucide-react';
 import {
   type Referral,
@@ -48,12 +49,14 @@ interface ReferralDashboardProps {
   userId: string;
   userName: string;
   onShare?: (method: 'copy' | 'email' | 'sms' | 'qr') => void;
+  onBack?: () => void;
 }
 
 export function ReferralDashboard({
   userId,
   userName,
   onShare,
+  onBack,
 }: ReferralDashboardProps) {
   // Use the Supabase-first referral hook
   const {
@@ -221,6 +224,15 @@ export function ReferralDashboard({
   return (
     <div className="min-h-screen px-4 pt-6 pb-8 max-w-2xl mx-auto space-y-3 sm:space-y-6">
       {/* Header */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          aria-label="Go back"
+          className="-ml-2 flex h-11 w-11 items-center justify-center rounded-full text-[#5A6B7A] transition-all hover:bg-[#EDF4F7] hover:text-[#3A4A57] active:scale-[0.97]"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold text-[#132F43] flex items-center gap-2">

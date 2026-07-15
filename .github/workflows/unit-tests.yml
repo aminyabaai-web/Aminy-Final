@@ -20,6 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Fast fail before the test suite: banned internal-jargon/placeholder
+      # copy on user surfaces (DESIGN-EXCELLENCE-PLAN.md Phase 6.3).
+      - name: Copy linter
+        run: npm run lint:copy
+
       - name: Run unit tests
         run: npm run test:run
         env:

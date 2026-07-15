@@ -1257,7 +1257,7 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-sm font-medium transition-colors ${
+                className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-sm font-medium transition-all active:scale-[0.97] ${
                   activeTab === tab.id
                     ? 'border-[#6B9080] bg-white text-[#6B9080] shadow-sm'
                     : 'border-[#E8E4DF] bg-transparent text-neutral-600 hover:border-[#6B9080]/20 hover:bg-white hover:text-neutral-800'

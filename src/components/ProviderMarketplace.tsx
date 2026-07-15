@@ -30,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Logo } from './Logo';
 import { supabase } from '../utils/supabase/client';
 import {
+  ArrowLeft,
   Search,
   Filter,
   Star,
@@ -197,6 +198,7 @@ export function ProviderMarketplace({
   userTier = 'core',
   onBookSession,
   onViewProvider,
+  onBack,
   onNavigateToGroupSessions,
 }: ProviderMarketplaceProps) {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'behavioral' | 'therapy' | 'medical'>('all');
@@ -698,6 +700,15 @@ export function ProviderMarketplace({
       {/* Header */}
       <div className="bg-gradient-to-br from-[#6B9080] to-[#7BA7BC] text-white">
         <div className="max-w-4xl mx-auto px-4 py-8">
+          {onBack && (
+            <button
+              onClick={onBack}
+              aria-label="Go back"
+              className="mb-3 -ml-2 flex h-11 w-11 items-center justify-center rounded-full text-white transition-all hover:bg-white/15 active:scale-[0.97]"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+          )}
           <div className="flex items-center gap-3 mb-4">
             <div className="p-2 bg-white/20 rounded-xl">
               <Users className="w-6 h-6" />

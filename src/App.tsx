@@ -3755,6 +3755,7 @@ export default function App() {
               <PayerOutcomesDashboard
                 organizationName="Aminy Health Plan"
                 organizationType="mco"
+                onBack={() => navigateToScreen("dashboard")}
                 onExportReport={() => {
                   try {
                     const compliance = getComplianceStatus();
@@ -3949,6 +3950,7 @@ export default function App() {
               <ReferralDashboard
                 userId={userData.id || ''}
                 userName={userData.name || 'User'}
+                onBack={() => navigateToScreen("dashboard")}
               />
             </Suspense>
           );

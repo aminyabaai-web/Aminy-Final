@@ -302,7 +302,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                   }
                 }}
                 className={`
-                  flex flex-col items-center justify-center space-y-1 py-2 px-2 rounded-xl relative group transition-all duration-200
+                  flex flex-col items-center justify-center space-y-1 py-2 px-2 rounded-xl relative group transition-all duration-200 active:scale-[0.97]
                   ${isDisabled
                     ? 'text-gray-300 dark:text-[#5A6B7A] cursor-not-allowed'
                     : isActive
@@ -410,7 +410,7 @@ export function BottomNavigation({ activeTab, onNavigate, userTier, userRole = '
                         onNavigate(item.id);
                       }}
                       className={`
-                        w-full flex items-center justify-between p-3 rounded-xl transition-colors group min-h-[56px]
+                        w-full flex items-center justify-between p-3 rounded-xl transition-all group min-h-[56px] active:scale-[0.98]
                         ${item.id === 'junior'
                           ? 'bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800/30'
                           : isItemActive
