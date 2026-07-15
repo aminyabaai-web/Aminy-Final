@@ -15086,9 +15086,23 @@ body:has([role="dialog"]) #global-support-footer, body:has([role="alertdialog"])
   }
 }
 
-.badge, .inline-flex.items-center.rounded-full, [class*="h-5 w-"], [class*="h-6 w-"] {
+/* Badge polish. The original selector list also included the substring hacks
+   [class*="h-5 w-"] and [class*="h-6 w-"] ("anything badge-sized"). Those
+   accidentally matched EVERY element whose class list reads h-before-w — most
+   fatally Lucide icons written `h-5 w-5`/`h-6 w-6` (~100 across the app): with
+   box-sizing:border-box, the !important 3px/7px padding left a 1×1px SVG
+   viewport, so the 24-unit viewBox painted at 1/24 scale — the "blank icon
+   circle" bug (dashboard "Start gently today", conversational-booking back
+   button, etc.). Verified via getCTM() === 1/24 + minimal repro. Icons written
+   `w-5 h-5` escaped, which is why only some icons vanished. Do NOT reintroduce
+   size-class substring selectors. */
+.badge, .inline-flex.items-center.rounded-full {
   font-size: calc(var(--font-size)  - 1px) !important;
   padding: calc(.25rem - 1px) calc(.5rem - 1px) !important;
+}
+/* Belt-and-braces: an icon must never carry blockquote-style padding. */
+svg[class*="lucide"] {
+  padding: 0 !important;
 }
 
 .space-y-6 > * + * {

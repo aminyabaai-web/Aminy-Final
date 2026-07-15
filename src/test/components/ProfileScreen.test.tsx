@@ -33,7 +33,7 @@ vi.mock('lucide-react', () => {
     'ArrowLeft', 'Camera', 'User', 'Mail', 'Phone', 'MapPin', 'Edit2', 'Check',
     'X', 'Plus', 'Trash2', 'Users', 'ChevronRight', 'Shield', 'Calendar', 'Clock',
     'Smartphone', 'Globe', 'Crown', 'Baby', 'Cake', 'Heart', 'AlertCircle',
-    'Upload', 'Loader2', 'LogOut', 'Link',
+    'Upload', 'Loader2', 'Lock', 'LogOut', 'Link',
   ];
   const mock: Record<string, unknown> = {};
   for (const name of iconNames) {
