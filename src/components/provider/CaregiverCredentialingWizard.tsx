@@ -365,8 +365,8 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
         }
     };
 
+    // Top-anchored (no justify-center) — vertical centering left ~40% dead space above the intro at 390x844
     return (
-        {/* Top-anchored (no justify-center) — vertical centering left ~40% dead space above the intro at 390x844 */}
         <div className="min-h-screen bg-mist pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl w-full mx-auto">
                 {onBack && (

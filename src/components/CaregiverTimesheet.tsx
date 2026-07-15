@@ -208,12 +208,14 @@ export function CaregiverTimesheet({ onBack, caregiverName }: CaregiverTimesheet
 
             <div style={{ maxWidth: '600px', margin: '0 auto', padding: '24px 20px' }}>
 
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px', marginBottom: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', border: '1px solid rgba(139, 92, 246, 0.18)' }}>
+                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '20px', marginBottom: '24px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', border: '1px solid #E8E4DF' }}>
+                    {/* One accent (teal program badge) + neutral chips — the old 4-color
+                        purple/orange/blue/green stack competed with brand teal */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#F5F3FF', color: '#6D28D9', fontSize: '12px', fontWeight: 600 }}>Arizona DDD Pilot</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#FFFBEB', color: '#B45309', fontSize: '12px', fontWeight: 600 }}>SpokChoice Current</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EFF6FF', color: '#1D4ED8', fontSize: '12px', fontWeight: 600 }}>DCI Transition Path</span>
-                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#ECFDF5', color: '#047857', fontSize: '12px', fontWeight: 600 }}>Aminy Records + Export</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: 'rgba(42, 125, 153, 0.10)', color: '#2A7D99', fontSize: '12px', fontWeight: 600 }}>Arizona DDD Pilot</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>SpokChoice Current</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>DCI Transition Path</span>
+                        <span style={{ padding: '6px 12px', borderRadius: '999px', backgroundColor: '#EDF4F7', color: '#3A4A57', fontSize: '12px', fontWeight: 600 }}>Aminy Records + Export</span>
                     </div>
                     <p style={{ fontSize: '14px', lineHeight: 1.6, color: '#374151', margin: 0 }}>
                         Use Aminy to document shifts, capture visit evidence, and export your records for the Arizona pilot. Keep submitting payroll through your current system — it stays primary until the DCI transition is confirmed.
