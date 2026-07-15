@@ -543,7 +543,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                 <Button className="w-full bg-primary hover:bg-primary text-white" onClick={() => onNavigate?.('marketplace')}>
                   See Cash-Pay Options
                 </Button>
-                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => toast.info('Checking your state waiver eligibility...')}>
+                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => setStep('waiver')}>
                   Check Waiver Eligibility
                 </Button>
                 {/* No coverage-expert line exists yet — a "connecting…" toast would
@@ -628,9 +628,10 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
                   <Shield className="w-4 h-4 mr-2" />
                   Verify My Benefits
                 </Button>
-                <Button variant="outline" className="w-full border-[#E8E4DF]" onClick={() => toast.info('Connecting you with a coverage expert...')}>
+                {/* No coverage-expert line exists yet — honest disabled state. */}
+                <Button variant="outline" className="w-full border-[#E8E4DF]" disabled>
                   <Phone className="w-4 h-4 mr-2" />
-                  Talk to a Coverage Expert
+                  Talk to a Coverage Expert — coming soon
                 </Button>
               </div>
             </motion.div>

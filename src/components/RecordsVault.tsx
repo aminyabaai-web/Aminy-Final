@@ -820,9 +820,9 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
                 <h2 className="sr-only">Records overview</h2>
                 <h3 className="sr-only">Documents, uploads, and sharing controls</h3>
                 <AISparkleButton prompt="What documents should every ABA family keep organized, and how should I use the records vault effectively?" label="Ask Aminy" />
-                <Badge variant="outline" className="text-sm">
+                <Badge variant="outline" className="text-sm" title="HIPAA-conscious — health records encrypted">
                   <Shield className="w-3 h-3 mr-1" />
-                  PHI encrypted
+                  Private &amp; encrypted
                 </Badge>
                 <Badge variant="outline" className="text-sm">
                   Secure sharing

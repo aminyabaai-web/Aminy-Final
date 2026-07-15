@@ -327,7 +327,7 @@ export function WaitingRoom({
       <div className="w-full flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 text-sm text-white/60 min-w-0 flex-1">
           <Shield size={14} className="shrink-0" />
-          <span>HIPAA-conscious, encrypted in transit</span>
+          <span title="HIPAA-conscious — encrypted in transit">Private &amp; encrypted</span>
         </div>
         <button
           onClick={onCancel}

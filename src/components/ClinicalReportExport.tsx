@@ -38,6 +38,7 @@ import {
   mapCaregiverSummaryToClinicalReportData,
 } from '../lib/caregiver-workflow';
 import { useAuditedAction } from '../hooks/useAuditedAction';
+import { ScreenHeader } from './ui/ScreenHeader';
 
 // ============================================================================
 // Types
@@ -139,16 +140,20 @@ export function ClinicalReportExport({
 
   if (!reportData) {
     return (
-      <div className="min-h-screen bg-mist flex flex-col items-center justify-center px-6 text-center">
-        <FileText className="w-10 h-10 text-[#6B9080] mb-3" />
-        <h1 className="text-lg font-semibold text-[#132F43] mb-2">No caregiver summary available yet</h1>
-        <p className="text-sm text-[#5A6B7A] mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
-        <button
-          onClick={onBack}
-          className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-[#6B9080] transition-colors"
-        >
-          Back
-        </button>
+      <div className="min-h-screen bg-mist flex flex-col">
+        {/* Standard header — this branch previously rendered with no title bar at all */}
+        <ScreenHeader title="Clinical Reports" onBack={onBack} />
+        <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+          <FileText className="w-10 h-10 text-[#6B9080] mb-3" />
+          <h2 className="text-lg font-semibold text-[#132F43] mb-2">No caregiver summary available yet</h2>
+          <p className="text-sm text-[#5A6B7A] mb-4">Complete onboarding, ask Aminy a question, or finish a daily-plan item before generating a provider report.</p>
+          <button
+            onClick={onBack}
+            className="px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-[#6B9080] transition-colors"
+          >
+            Back
+          </button>
+        </div>
       </div>
     );
   }
