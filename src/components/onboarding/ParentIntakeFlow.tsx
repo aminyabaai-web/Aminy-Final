@@ -159,7 +159,7 @@ function clearDraft() {
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
-    <div className="flex items-center justify-center gap-0 mb-8" role="progressbar" aria-valuenow={current} aria-valuemax={total}>
+    <div className="intake-step-indicator flex items-center justify-center gap-0 mb-8" role="progressbar" aria-valuenow={current} aria-valuemax={total}>
       {STEP_META.map((step, idx) => {
         const stepNum = idx + 1;
         const done = stepNum < current;
@@ -198,7 +198,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
             </div>
             {idx < total - 1 && (
               <div
-                className={`h-0.5 w-8 sm:w-12 mx-1 mt-[-14px] transition-all duration-300 ${done ? '' : 'bg-[#E8E4DF]'}`}
+                className={`h-0.5 w-8 sm:w-12 mx-1 sm:mt-[-14px] transition-all duration-300 ${done ? '' : 'bg-[#E8E4DF]'}`}
                 style={done ? { backgroundColor: EMERALD } : undefined}
               />
             )}

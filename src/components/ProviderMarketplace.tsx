@@ -727,7 +727,7 @@ export function ProviderMarketplace({
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by name, specialty, or condition..."
+              placeholder="Search by name or specialty"
               className="pl-12 h-12 bg-white text-[#132F43] border-0 shadow-lg"
             />
           </div>
@@ -737,7 +737,7 @@ export function ProviderMarketplace({
       {/* Category Tabs */}
       <div className="bg-white border-b border-[#E8E4DF] sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="flex gap-1 py-2 overflow-x-auto">
+          <div className="flex gap-2 py-2 overflow-x-auto">
             {[
               { id: 'all', label: 'All Guides', icon: Users },
               { id: 'behavioral', label: 'Behavioral', icon: Brain, desc: 'BCBA, RBT' },
@@ -747,7 +747,7 @@ export function ProviderMarketplace({
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id as typeof selectedCategory)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex shrink-0 items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
                   selectedCategory === cat.id
                     ? 'bg-[#6B9080]/10 text-[#6B9080]'
                     : 'text-[#5A6B7A] hover:bg-[#EDF4F7]'

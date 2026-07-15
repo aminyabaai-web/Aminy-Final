@@ -412,7 +412,7 @@ export function BenefitsNavigatorScreen({ onBack, onNavigate, userTier = 'core' 
                       />
                       <div className="min-w-0">
                         <p className="font-medium">{service.name}</p>
-                        <p className="text-sm text-muted-foreground truncate">
+                        <p className="text-sm text-muted-foreground line-clamp-2">
                           {service.coverage}
                         </p>
                       </div>

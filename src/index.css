@@ -6113,7 +6113,13 @@ textarea {
   display: inline-flex;
 }
 
-[data-sonner-toast], [data-toast], .toast-container {
+/* NOTE: [data-sonner-toast] / [data-toast] were removed from this perf rule
+   (July 2026 visual audit). Sonner toasts are position:absolute INSIDE the
+   fixed [data-sonner-toaster] list — forcing them fixed re-pinned every toast
+   to the viewport edge (stacked/clipped), `contain: strict` size-collapsed
+   them into empty white pills, and pointer-events:none made them untappable.
+   See the guard block at the end of this file. */
+.toast-container {
   contain: strict;
   pointer-events: none;
   position: fixed !important;
@@ -18590,4 +18596,68 @@ tr:hover td, .hover-row:hover {
    ============================================================ */
 .bg-background\/90 {
   background-color: color-mix(in oklab, var(--background) 90%, transparent);
+}
+
+/* ============================================================
+   Layout-audit fixes (July 2026) — Tailwind v4 is precompiled
+   here, so these previously-missing utilities must be defined
+   manually. CaregiverEnrollmentWizard CTAs used bg-emerald-600 /
+   hover:bg-emerald-700, which did not exist in this file → the
+   buttons rendered with NO background (white "Continue" text on
+   a near-white page). disabled:bg-slate-400 gives the disabled
+   state a visible muted-gray container + white text (the global
+   `* { opacity: 1 !important }` WAAPI hack neutralizes
+   disabled:opacity-*, so an opacity-based disabled look is not
+   viable). Keep the disabled rule LAST so it wins over :hover.
+   ============================================================ */
+.bg-emerald-600 { background-color: #059669; }
+.hover\:bg-emerald-700:hover { background-color: #047857; }
+.disabled\:bg-slate-400:disabled { background-color: #94a3b8; }
+
+/* ============================================================
+   Visual-audit fixes (July 2026)
+   ============================================================ */
+
+/* 1) Programmatic-focus outline on page H1s.
+   useAccessibilityEnhancements/useScreenFocus set tabindex="-1" on the
+   main heading and .focus() it after every screen change (screen-reader
+   announce pattern). Chromium treats script focus as :focus-visible, so
+   the UA focus ring (tinted teal by `* { outline-color: var(--ring) }`)
+   drew a debug-style box around the H1 on every screen. Elements with
+   tabindex="-1" are programmatic-focus-only — they can never be reached
+   by Tab — so hiding their ring loses nothing for keyboard users;
+   interactive elements keep their :focus-visible styling. */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 2) Sonner toast guard (companion to the .toast-container perf rule
+   edit near line 6116). Restore sonner's own layout model in case any
+   other generic rule re-pins toasts: toasts are absolutely positioned
+   INSIDE the fixed [data-sonner-toaster] viewport, must keep their
+   intrinsic size (no size containment), and must be tappable. */
+[data-sonner-toast] {
+  position: absolute !important;
+  contain: none !important;
+  pointer-events: auto !important;
+}
+
+/* ParentIntakeFlow step indicator: the generic perf rule
+   `[role="progressbar"] { contain: strict; height: 8px }` (≈ line 6091)
+   clamps this icon-based stepper to 8px, vertically clipping its 36px
+   step icons at the top of the intake content area. Restore natural
+   sizing for this discrete stepper only. Also define sm:mt-[-14px]
+   (Tailwind is precompiled — the arbitrary class was silently inert),
+   which re-centers the connector lines on the icon row at ≥sm where
+   step labels are visible; on mobile the labels are hidden and the
+   connectors are already centered, so no base-width rule. */
+.intake-step-indicator[role="progressbar"] {
+  contain: none;
+  will-change: auto;
+  height: auto;
+}
+@media (min-width: 640px) {
+  .sm\:mt-\[-14px\] { margin-top: -14px; }
 }

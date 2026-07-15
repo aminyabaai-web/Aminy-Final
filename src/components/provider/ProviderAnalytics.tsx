@@ -59,6 +59,12 @@ interface MetricCard {
   changeLabel: string;
   icon: React.ReactNode;
   color: string;
+  /**
+   * Whether last-period data exists to compare against. When false the trend
+   * arrow + "vs last month" caption are hidden (a green "↑ 0%" over all-zero
+   * values reads as fabricated data). Undefined = true (demo/live seeds).
+   */
+  hasPrior?: boolean;
 }
 
 interface PatientMetric {
@@ -166,10 +172,10 @@ const FALLBACK_DOC_COMPLIANCE: DocComplianceData = {
 // numbers above are DEMO MODE ONLY — a real provider must never see invented
 // caseload, revenue, or patient figures.
 const EMPTY_METRICS: MetricCard[] = [
-  { id: 'caseload', title: 'Active Caseload', value: 0, change: 0, changeLabel: 'from last month', icon: <Users className="w-5 h-5" />, color: 'bg-blue-500' },
-  { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-primary' },
-  { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-green-500' },
-  { id: 'completion', title: 'Session Completion', value: '0%', change: 0, changeLabel: 'improvement', icon: <CheckCircle className="w-5 h-5" />, color: 'bg-violet-500' },
+  { id: 'caseload', title: 'Active Caseload', value: 0, change: 0, changeLabel: 'from last month', icon: <Users className="w-5 h-5" />, color: 'bg-blue-500', hasPrior: false },
+  { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-primary', hasPrior: false },
+  { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-green-500', hasPrior: false },
+  { id: 'completion', title: 'Session Completion', value: '0%', change: 0, changeLabel: 'improvement', icon: <CheckCircle className="w-5 h-5" />, color: 'bg-violet-500', hasPrior: false },
 ];
 
 const EMPTY_DOC_COMPLIANCE: DocComplianceData = {
@@ -621,6 +627,7 @@ export function ProviderAnalytics({
           changeLabel: 'from last month',
           icon: <Users className="w-5 h-5" />,
           color: 'bg-blue-500',
+          hasPrior: caseload.previous > 0,
         },
         {
           id: 'sessions',
@@ -630,6 +637,7 @@ export function ProviderAnalytics({
           changeLabel: 'vs last month',
           icon: <Calendar className="w-5 h-5" />,
           color: 'bg-primary',
+          hasPrior: sessions.previous > 0,
         },
         {
           id: 'revenue',
@@ -639,6 +647,7 @@ export function ProviderAnalytics({
           changeLabel: 'vs last month',
           icon: <DollarSign className="w-5 h-5" />,
           color: 'bg-green-500',
+          hasPrior: prevRevenueInDollars > 0,
         },
         {
           id: 'completion',
@@ -648,6 +657,7 @@ export function ProviderAnalytics({
           changeLabel: completionChange >= 0 ? 'improvement' : 'decline',
           icon: <CheckCircle className="w-5 h-5" />,
           color: 'bg-violet-500',
+          hasPrior: completion.previous > 0,
         },
       ]);
 
@@ -764,14 +774,21 @@ export function ProviderAnalytics({
         <div className={`p-2 rounded-lg ${metric.color} text-white`}>
           {metric.icon}
         </div>
-        <div className={`flex items-center gap-1 text-sm ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-          {metric.change >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-          {Math.abs(metric.change)}%
-        </div>
+        {metric.hasPrior === false ? (
+          // No prior-period data — a neutral dash instead of a fake "↑ 0%"
+          <span className="text-sm text-slate-400">—</span>
+        ) : (
+          <div className={`flex items-center gap-1 text-sm ${metric.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            {metric.change >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+            {Math.abs(metric.change)}%
+          </div>
+        )}
       </div>
       <h3 className="text-2xl font-bold text-[#132F43] dark:text-white">{metric.value}</h3>
       <p className="text-sm text-[#5A6B7A] mt-1">{metric.title}</p>
-      <p className="text-sm text-slate-400 mt-0.5">{metric.changeLabel}</p>
+      {metric.hasPrior !== false && (
+        <p className="text-sm text-slate-400 mt-0.5">{metric.changeLabel}</p>
+      )}
     </Card>
   );
 
@@ -869,9 +886,10 @@ export function ProviderAnalytics({
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
+      {/* Header — flex-wrap so the range/Export buttons drop to their own row
+          at narrow widths instead of clipping off-screen */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           {onBack && (
             <button
               onClick={onBack}
@@ -886,7 +904,7 @@ export function ProviderAnalytics({
             <p className="text-[#5A6B7A]">Performance overview for {resolvedProviderName}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <div className="relative">
             <Button
               variant="outline"

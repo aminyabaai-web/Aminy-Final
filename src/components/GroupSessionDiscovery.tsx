@@ -167,7 +167,7 @@ export function GroupSessionDiscovery({
             <Input
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search by topic, strategy, or BCBA name…"
+              placeholder="Search topics or BCBAs"
               className="pl-9 bg-[#F6FBFB] border-[#E8E4DF]"
             />
           </div>
@@ -231,6 +231,16 @@ export function GroupSessionDiscovery({
                 ? 'Try a different topic or search term.'
                 : 'New group sessions are added regularly. Check back soon.'}
             </p>
+            {onNavigate && (
+              <Button
+                variant="outline"
+                className="mt-4"
+                onClick={() => onNavigate('resource-library')}
+              >
+                <BookOpen className="w-4 h-4 mr-2" />
+                Browse resources
+              </Button>
+            )}
           </Card>
         ) : (
           <div className="space-y-3">

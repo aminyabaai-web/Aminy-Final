@@ -128,11 +128,6 @@ const FeedbackCollector = lazy(() =>
     default: m.FeedbackCollector,
   })),
 );
-const FeedbackButton = lazy(() =>
-  import("./components/FeedbackButton").then((m) => ({
-    default: m.FeedbackButton,
-  })),
-);
 const AppBreadcrumbs = lazy(() =>
   import("./components/AppBreadcrumbs").then((m) => ({
     default: m.AppBreadcrumbs,
@@ -839,7 +834,10 @@ const GrantNavigator = lazy(() =>
 );
 
 // GATED SCREEN PLACEHOLDER - Shown when a screen is behind a disabled feature flag
-const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
+const GATE_MESSAGES: Record<
+  string,
+  { title: string; description: string; ctaLabel?: string; ctaScreen?: string }
+> = {
   'b2b': {
     title: 'Coming Soon for Organizations',
     description: 'This feature is designed for clinics, schools, and organizations. It will be available in a future update.',
@@ -853,8 +851,8 @@ const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
     description: 'EVV and caregiver management features are coming in a future update.',
   },
   'dev-mode': {
-    title: 'Developer Tools',
-    description: 'This screen is only available in developer mode.',
+    title: "This area isn't available yet",
+    description: "We're still building this part of Aminy. It will open up in a future update.",
   },
   'payments-not-ready': {
     title: 'Payment Processing Coming Soon',
@@ -865,8 +863,10 @@ const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
     description: 'This feature requires additional setup and will be available shortly.',
   },
   'use-video-call': {
-    title: 'Use Telehealth',
-    description: 'Video sessions are available through the main Telehealth screen.',
+    title: 'Video visits live in Care Visits now',
+    description: 'Your video sessions have a new home. Open Care Visits to join or schedule a visit.',
+    ctaLabel: 'Open Care Visits',
+    ctaScreen: 'telehealth',
   },
   'cr-sync': {
     title: 'CentralReach Sync',
@@ -885,11 +885,14 @@ const GATE_MESSAGES: Record<string, { title: string; description: string }> = {
 const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
   gateReason,
   onBack,
+  onNavigate,
   customTitle,
   customDescription,
 }: {
   gateReason: string;
   onBack: () => void;
+  /** Optional screen navigation — lets a gate deep-link (e.g. "Open Care Visits") instead of only going home. */
+  onNavigate?: (screen: string) => void;
   customTitle?: string;
   customDescription?: string;
 }) {
@@ -898,21 +901,30 @@ const GatedScreenPlaceholder = React.memo(function GatedScreenPlaceholder({
     title: customTitle || baseMsg.title,
     description: customDescription || baseMsg.description,
   };
+  const hasCta = Boolean(baseMsg.ctaLabel && baseMsg.ctaScreen && onNavigate);
   return (
     <div className="min-h-screen bg-app dark:bg-slate-900 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 max-w-md text-center">
-        <div className="w-16 h-16 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-teal-600 dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-[#2A7D99]/15 dark:border-slate-700 p-8 max-w-md text-center">
+        <div className="w-16 h-16 bg-[#2A7D99]/10 dark:bg-teal-900 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-[#2A7D99] dark:text-teal-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
         </div>
-        <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 text-balance leading-tight">{msg.title}</h1>
+        {/* Inline outline:none — the focus manager auto-focuses this heading on screen change,
+            and the global :focus-visible rule would otherwise draw a box around the title. */}
+        <h1 style={{ outline: 'none' }} className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2 text-balance leading-tight">{msg.title}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed text-balance">{msg.description}</p>
         <button
-          onClick={onBack}
-          className="bg-teal-600 text-white px-6 py-2.5 rounded-xl font-medium hover:bg-teal-700 transition-colors"
+          onClick={() => {
+            if (hasCta && onNavigate && baseMsg.ctaScreen) {
+              onNavigate(baseMsg.ctaScreen);
+            } else {
+              onBack();
+            }
+          }}
+          className="bg-[#2A7D99] hover:bg-[#376E80] text-white px-6 py-2.5 rounded-xl font-medium transition-colors"
         >
-          Back to Home
+          {hasCta ? baseMsg.ctaLabel : 'Back to Home'}
         </button>
       </div>
     </div>
@@ -1270,8 +1282,8 @@ const EVV_SYSTEM_LABELS: Record<EVVSystem, string> = {
 };
 
 const SYSTEM_OF_RECORD_LABELS: Record<SystemOfRecord, string> = {
-  external: 'External system of record',
-  aminy_shadow: 'Aminy shadow mode',
+  external: 'Your current system stays primary',
+  aminy_shadow: 'Aminy records alongside your current system',
   aminy_primary: 'Aminy primary workflow',
 };
 
@@ -2671,6 +2683,7 @@ export default function App() {
           customTitle={shouldUsePilotCopy ? surfaceAccess.title : undefined}
           customDescription={shouldUsePilotCopy ? surfaceAccess.message : undefined}
           onBack={() => navigateToScreen("dashboard")}
+          onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
         />
       );
     }
@@ -2682,6 +2695,7 @@ export default function App() {
           customTitle={surfaceAccess.title}
           customDescription={surfaceAccess.message}
           onBack={() => navigateToScreen("dashboard")}
+          onNavigate={(screen) => navigateToScreen(screen as AppScreen)}
         />
       );
     }
@@ -4593,12 +4607,12 @@ export default function App() {
                     </Suspense>
                   )}
 
-                  {/* Floating Feedback Button — shown on dashboard for authenticated users */}
-                  {userData.id && currentScreen === 'dashboard' && (
-                    <Suspense fallback={null}>
-                      <FeedbackButton />
-                    </Suspense>
-                  )}
+                  {/* Floating Feedback Button — REMOVED from the dashboard (July 2026
+                      visual audit): at mobile width its label is hidden, so it rendered
+                      as a second circular chat-bubble FAB stacked right above the
+                      dashboard's own chat FAB (two overlapping chat launchers covering
+                      the routine chips). Feedback stays reachable via the More menu →
+                      FeedbackCollector (onNavigate("feedback") in Dashboard10). */}
 
                   {/* App Review Prompt — self-contained, triggered after positive sessions */}
                   <Suspense fallback={null}>

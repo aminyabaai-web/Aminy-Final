@@ -3,7 +3,7 @@
  * Shows referral code, tracking, rewards, and tier progress
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
@@ -27,6 +27,7 @@ import {
   QrCode,
   CheckCircle,
   AlertCircle,
+  Loader2,
   X,
 } from 'lucide-react';
 import {
@@ -69,13 +70,23 @@ export function ReferralDashboard({
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [showAllReferrals, setShowAllReferrals] = useState(false);
   const [showInviteFlow, setShowInviteFlow] = useState(false);
+  // Tracks the auto-create attempt so the code box can show a real loading
+  // spinner and a friendly retry state instead of an empty box forever.
+  const [codeStatus, setCodeStatus] = useState<'idle' | 'generating' | 'failed'>('idle');
+
+  const requestCode = useCallback(async () => {
+    setCodeStatus('generating');
+    const created = await getOrCreateCode();
+    setCodeStatus(created ? 'idle' : 'failed');
+  }, [getOrCreateCode]);
 
   // Auto-create referral code on mount if not present
   useEffect(() => {
-    if (!loading && !referralCodeData && userId) {
-      getOrCreateCode();
+    if (!loading && !referralCodeData && userId && codeStatus === 'idle') {
+      requestCode();
     }
-  }, [loading, referralCodeData, userId, getOrCreateCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, referralCodeData, userId]);
 
   // Show error toast if load fails
   useEffect(() => {
@@ -185,11 +196,13 @@ export function ReferralDashboard({
 
   if (loading) {
     return (
-      <Card className="p-6 animate-pulse">
-        <div className="h-8 bg-[#E8E4DF] rounded w-1/2 mb-4" />
-        <div className="h-4 bg-[#E8E4DF] rounded w-3/4 mb-2" />
-        <div className="h-4 bg-[#E8E4DF] rounded w-1/2" />
-      </Card>
+      <div className="min-h-screen px-4 pt-6 pb-8 max-w-2xl mx-auto">
+        <Card className="p-6 animate-pulse">
+          <div className="h-8 bg-[#E8E4DF] rounded w-1/2 mb-4" />
+          <div className="h-4 bg-[#E8E4DF] rounded w-3/4 mb-2" />
+          <div className="h-4 bg-[#E8E4DF] rounded w-1/2" />
+        </Card>
+      </div>
     );
   }
 
@@ -206,7 +219,7 @@ export function ReferralDashboard({
   };
 
   return (
-    <div className="space-y-3 sm:space-y-6">
+    <div className="min-h-screen px-4 pt-6 pb-8 max-w-2xl mx-auto space-y-3 sm:space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -228,14 +241,32 @@ export function ReferralDashboard({
             <div className="font-mono text-xl sm:text-2xl font-bold tracking-wide">
               {referralCode}
             </div>
-          ) : (
-            // Code is still being generated — pulsing placeholder instead of a
-            // bare label above an empty gap.
+          ) : codeStatus === 'generating' || (codeStatus === 'idle' && userId) ? (
+            // Code is being generated — real spinner, not a blank box (the
+            // app-wide opacity workaround disables pulse animations).
             <div
-              className="h-8 w-48 mx-auto rounded bg-white/20 animate-pulse"
+              className="h-8 flex items-center justify-center gap-2 text-white/80 text-sm"
               role="status"
               aria-label="Generating your referral code"
-            />
+            >
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Generating your code…
+            </div>
+          ) : (
+            // Creation failed (or no signed-in user) — honest retry state
+            // instead of an empty box.
+            <div className="h-8 flex items-center justify-center gap-2 text-sm">
+              <AlertCircle className="w-4 h-4 text-white/70" />
+              <span className="text-white/80">Code unavailable</span>
+              {userId && (
+                <button
+                  onClick={requestCode}
+                  className="underline font-medium text-white hover:text-white/80"
+                >
+                  Retry
+                </button>
+              )}
+            </div>
           )}
         </div>
 

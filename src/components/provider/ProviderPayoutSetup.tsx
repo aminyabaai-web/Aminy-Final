@@ -327,6 +327,7 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
   const [loading, setLoading] = useState(true);
   const [onboarding, setOnboarding] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notAuthenticated, setNotAuthenticated] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
 
   // ---- Load current user/provider ----
@@ -334,7 +335,8 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
     async function loadProvider() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        setError('Not authenticated. Please sign in.');
+        // Signed out — show the sign-in gate instead of a broken form + error.
+        setNotAuthenticated(true);
         setLoading(false);
         return;
       }
@@ -408,6 +410,42 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg, #f9fafb)' }}>
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // Signed-out gate — a clean centered card instead of the form + error banner.
+  if (notAuthenticated) {
+    return (
+      <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--color-bg, #f9fafb)' }}>
+        <ScreenHeader
+          title="Payout Setup"
+          subtitle="Receive payments for your sessions"
+          onBack={onBack}
+          variant="flat"
+          sticky
+        />
+        <main className="flex-1 flex items-center justify-center px-4 py-10">
+          <Card className="p-8 rounded-2xl border-0 shadow-sm bg-white text-center max-w-sm w-full">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
+              style={{ backgroundColor: 'rgba(42, 125, 153, 0.1)' }}
+            >
+              <CreditCard className="w-6 h-6" style={{ color: '#2A7D99' }} />
+            </div>
+            <h2 className="font-semibold text-[#132F43] mb-1">Sign in to set up payouts</h2>
+            <p className="text-sm text-[#5A6B7A] mb-5">
+              Your payout settings are tied to your provider account.
+            </p>
+            <Button
+              onClick={() => { window.location.href = '/'; }}
+              className="w-full h-10 rounded-xl font-semibold text-sm text-white"
+              style={{ backgroundColor: '#2A7D99' }}
+            >
+              Sign in
+            </Button>
+          </Card>
+        </main>
       </div>
     );
   }
@@ -550,9 +588,9 @@ export function ProviderPayoutSetup({ onBack }: ProviderPayoutSetupProps) {
               { label: 'Payout timing', value: '2 business days' },
               { label: 'Minimum payout', value: '$0 (auto)' },
             ].map(({ label, value }) => (
-              <div key={label} className="flex justify-between items-center text-sm">
-                <span className="text-[#5A6B7A]">{label}</span>
-                <span className="font-medium text-[#3A4A57]">{value}</span>
+              <div key={label} className="flex justify-between items-start gap-3 text-sm">
+                <span className="text-[#5A6B7A] flex-1 min-w-0">{label}</span>
+                <span className="font-medium text-[#3A4A57] text-right shrink-0">{value}</span>
               </div>
             ))}
           </div>

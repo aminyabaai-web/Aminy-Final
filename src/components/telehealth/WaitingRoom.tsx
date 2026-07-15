@@ -323,20 +323,20 @@ export function WaitingRoom({
   // -----------------------------------------------------------------------
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-teal-900 flex flex-col items-center overflow-y-auto z-50 p-4">
-      {/* HIPAA indicator */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 text-sm text-white/60">
-        <Shield size={14} />
-        <span>HIPAA-conscious, encrypted in transit</span>
+      {/* Header row: HIPAA indicator + leave button (in flow so they can't overlap at 390px) */}
+      <div className="w-full flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2 text-sm text-white/60 min-w-0 flex-1">
+          <Shield size={14} className="shrink-0" />
+          <span>HIPAA-conscious, encrypted in transit</span>
+        </div>
+        <button
+          onClick={onCancel}
+          className="flex items-center gap-1.5 text-white/60 hover:text-white text-sm transition-colors shrink-0 whitespace-nowrap"
+        >
+          <X size={14} />
+          Leave Waiting Room
+        </button>
       </div>
-
-      {/* Cancel button */}
-      <button
-        onClick={onCancel}
-        className="absolute top-4 right-4 flex items-center gap-1.5 text-white/60 hover:text-white text-sm transition-colors"
-      >
-        <X size={14} />
-        Leave Waiting Room
-      </button>
 
       <div className="max-w-lg w-full space-y-5" style={{ margin: 'auto', paddingTop: '2.5rem', paddingBottom: '1rem' }}>
         {/* Provider card -- photo + name + appointment time */}

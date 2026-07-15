@@ -91,12 +91,15 @@ export function BCBASessionBriefing({
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['summary', 'working', 'notWorking', 'screeners']));
 
-  // Never surface the literal "Parent"/"Patient" placeholder words — fall back
-  // to a clean generic ("your client") when no real name is supplied.
+  // Never surface the literal "Parent"/"Patient" placeholder words — when no
+  // real name is supplied, drop the name entirely (a literal "your client"
+  // label reads as broken copy) instead of substituting filler text.
   const isPlaceholder = (n?: string) =>
-    !n || !n.trim() || ['parent', 'patient', 'your child'].includes(n.trim().toLowerCase());
-  const clientName = isPlaceholder(parentName) ? 'your client' : parentName.trim();
-  const childLabel = isPlaceholder(childName) ? 'your client' : childName.trim();
+    !n || !n.trim() || ['parent', 'patient', 'your child', 'your client'].includes(n.trim().toLowerCase());
+  const parentKnown = !isPlaceholder(parentName);
+  const childKnown = !isPlaceholder(childName);
+  const clientName = parentKnown ? parentName.trim() : '';
+  const childLabel = childKnown ? childName.trim() : '';
 
   useEffect(() => {
     loadBriefing();
@@ -203,7 +206,7 @@ export function BCBASessionBriefing({
         if (hasData) {
           try {
             const contextPrompt = [
-              `You are preparing a BCBA for a therapy session with ${childName}.`,
+              `You are preparing a BCBA for a therapy session with ${childKnown ? childLabel : 'a client family'}.`,
               goals.length > 0 ? `Active goals: ${goals.map(g => g.title).join(', ')}` : '',
               logs.length > 0 ? `Recent behaviors: ${logs.slice(0, 5).map(l => `${l.behavior_type} (intensity ${l.intensity ?? 'n/a'}, ${l.is_positive ? 'positive' : 'challenging'})`).join('; ')}` : '',
               notes.length > 0 ? `Last session note: ${notes[0].content?.substring(0, 300)}` : '',
@@ -229,7 +232,7 @@ export function BCBASessionBriefing({
         const recentWins = logs.filter(l => l.is_positive).map(l => l.behavior_type || l.notes || '').filter(Boolean).slice(0, 4);
 
         setBriefing({
-          summary: aiNarrative || `${childName} has ${goals.length} active goal${goals.length !== 1 ? 's' : ''} on file. ${logs.length > 0 ? `${logs.length} behavior event${logs.length !== 1 ? 's' : ''} logged recently.` : 'No recent behavior logs.'}`,
+          summary: aiNarrative || `${childKnown ? childLabel : 'This family'} has ${goals.length} active goal${goals.length !== 1 ? 's' : ''} on file. ${logs.length > 0 ? `${logs.length} behavior event${logs.length !== 1 ? 's' : ''} logged recently.` : 'No recent behavior logs.'}`,
           whatsWorking: recentWins.length > 0 ? recentWins : goals.slice(0, 3).map(g => g.title),
           whatsNotWorking: recentChallenges.length > 0 ? recentChallenges : ['No recent challenges logged'],
           opportunities: goals.slice(0, 3).map(g => `Continue working on: ${g.title}`),
@@ -260,7 +263,7 @@ export function BCBASessionBriefing({
     // Sample briefing data — DEMO MODE ONLY. In production this comes from the
     // AI analyzing real family data.
     setBriefing({
-      summary: `${childName} is a ${getAge()} year-old working on communication and daily living skills. Recent focus has been on morning routines and emotional regulation. ${parentName} has been consistently implementing visual schedules with good results, but reports increased anxiety around transitions. The family is motivated and engaged.`,
+      summary: `${childKnown ? childLabel : 'Your client'} is a ${getAge()} year-old working on communication and daily living skills. Recent focus has been on morning routines and emotional regulation. ${parentKnown ? clientName : 'The parent'} has been consistently implementing visual schedules with good results, but reports increased anxiety around transitions. The family is motivated and engaged.`,
 
       whatsWorking: [
         'Visual schedule for morning routine - 80% independence achieved',
@@ -277,7 +280,7 @@ export function BCBASessionBriefing({
       ],
 
       opportunities: [
-        `${childName} showing readiness for peer play - consider social skills group`,
+        `${childKnown ? childLabel : 'Your client'} showing readiness for peer play - consider social skills group`,
         'Parent interest in sensory diet implementation',
         'School willing to collaborate on IEP modifications',
         'Extended family requesting guidance on how to help'
@@ -398,7 +401,7 @@ export function BCBASessionBriefing({
   const PageHeader = (
     <ScreenHeader
       title="Session Briefing"
-      subtitle={`Prep for your session with ${clientName}`}
+      subtitle={childKnown ? `Prep for your session with ${childLabel}` : 'Prep for your upcoming session'}
       icon={<Brain className="w-6 h-6" />}
       onBack={onBack}
       variant="flat"
@@ -415,7 +418,7 @@ export function BCBASessionBriefing({
               <div className="w-12 h-12 border-3 border-[#6B9080] border-t-transparent rounded-full animate-spin mb-4" />
               <h3 className="font-medium text-[#132F43] mb-2">Preparing Your Briefing</h3>
               <p className="text-sm text-[#5A6B7A]">
-                Analyzing {childLabel}'s data, progress, and recent activity...
+                Analyzing {childKnown ? `${childLabel}'s` : 'recent'} data, progress, and activity...
               </p>
             </div>
           </Card>
@@ -433,13 +436,13 @@ export function BCBASessionBriefing({
             <Brain className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h3 className="font-medium text-[#132F43] mb-2">Briefing not available yet</h3>
             <p className="text-sm text-[#5A6B7A] mb-4">
-              AI session briefings for {childLabel} will appear here once enough
+              AI session briefings{childKnown ? ` for ${childLabel}` : ''} will appear here once enough
               session and progress data has been recorded.
             </p>
             {onStartSession && (
               <Button onClick={onStartSession} variant="outline">
                 <Clock className="w-4 h-4 mr-2" />
-                Start Session with {clientName}
+                Start Session{parentKnown ? ` with ${clientName}` : ''}
               </Button>
             )}
           </Card>
@@ -461,11 +464,13 @@ export function BCBASessionBriefing({
             </div>
             <div>
               <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">
-                Session Briefing: {childLabel}
+                Session Briefing{childKnown ? `: ${childLabel}` : ''}
               </h2>
-              <p className="text-sm text-[#5A6B7A]">
-                Parent: {clientName}
-              </p>
+              {parentKnown && (
+                <p className="text-sm text-[#5A6B7A]">
+                  Parent: {clientName}
+                </p>
+              )}
             </div>
           </div>
           <Badge className="bg-[#6B9080]/10 text-[#6B9080]">
@@ -520,6 +525,15 @@ export function BCBASessionBriefing({
           <TrendingUp className="w-4 h-4 text-[#6B9080]" />
           Recent Progress
         </h3>
+        {briefing.recentProgress.length === 0 ? (
+          // Empty state — no bare header over dead space
+          <div className="flex flex-col items-center justify-center py-6 text-center">
+            <TrendingUp className="w-6 h-6 text-slate-300 mb-2" />
+            <p className="text-sm text-[#5A6B7A] max-w-xs">
+              Progress trends will appear here once goals and session data are logged.
+            </p>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {briefing.recentProgress.map((item) => (
             <div
@@ -540,6 +554,7 @@ export function BCBASessionBriefing({
             </div>
           ))}
         </div>
+        )}
       </Card>
 
       {/* What's Working */}
@@ -753,7 +768,7 @@ export function BCBASessionBriefing({
           size="lg"
         >
           <Clock className="w-5 h-5 mr-2" />
-          Start Session with {clientName}
+          Start Session{parentKnown ? ` with ${clientName}` : ''}
         </Button>
       )}
       </div>

@@ -833,7 +833,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               </p>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="relative flex-1 sm:w-96">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -1062,7 +1062,7 @@ export const RecordsVault: React.FC<RecordsVaultProps> = ({
               )}
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {capabilities.search?.fullText && (
                 <Badge variant="outline" className="text-sm">Full-text search, sharing links</Badge>
               )}

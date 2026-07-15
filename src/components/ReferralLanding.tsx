@@ -86,7 +86,7 @@ export async function applyReferralAfterSignup(newUserId: string): Promise<boole
 
 export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: ReferralLandingProps) {
   const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [referrerName, setReferrerName] = useState<string>('A friend');
+  const [referrerName, setReferrerName] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(true);
   const referredCredit = `$${REFERRAL_PROGRAM_CONFIG.referredReward.value} Credit`;
 
@@ -131,7 +131,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             You've Been Invited!
           </h1>
           <p className="text-[#5A6B7A]">
-            {referrerName} thinks Aminy can help your family
+            {referrerName ?? 'A friend'} thinks Aminy can help your family
           </p>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function ReferralLanding({ onNavigateToSignup, onNavigateToLogin }: Refer
             <div className="flex items-center gap-3 text-[#5A6B7A] mb-4">
               <Heart className="w-5 h-5 text-[#E07A5F]" />
               <span className="text-sm">
-                Plus, {referrerName} gets a free month when you join!
+                Plus, {referrerName ?? 'your friend'} gets a free month when you join!
               </span>
             </div>
 

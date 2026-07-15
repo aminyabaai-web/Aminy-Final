@@ -67,7 +67,7 @@ export function ScreenHeader({
         <div className="flex-1 min-w-0">
           <h1 className="text-lg font-bold text-[#132F43] leading-tight text-balance">{title}</h1>
           {subtitle && (
-            <p className="text-sm text-[#5A6B7A] mt-0.5 truncate">{subtitle}</p>
+            <p className="text-sm text-[#5A6B7A] mt-0.5 line-clamp-2">{subtitle}</p>
           )}
         </div>
         {actions && (

@@ -261,28 +261,47 @@ export function buildPilotAccessContext(input: PilotAccessInput = {}): PilotAcce
   };
 }
 
+/** Join a list into natural English: "a", "a and b", "a, b, and c". */
+function joinNaturally(items: string[]): string {
+  if (items.length <= 1) return items[0] || '';
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
 function describeAudience(scope?: AudienceScope): string {
   if (!scope) return 'eligible launch participants';
 
-  const parts: string[] = [];
-  if (scope.states?.length) {
-    parts.push(scope.states.length === 1 && scope.states[0] === 'AZ' ? 'Arizona participants' : `${scope.states.join(', ')} participants`);
-  }
-  if (scope.organizations?.length) {
-    const labels = scope.organizations.map((org) => {
-      switch (org) {
-        case 'aact': return 'AACT';
-        case 'rise': return 'Rise';
-        case 'invite_network': return 'invite-only network';
-        case 'general_az': return 'Arizona pilot families';
-        default: return org;
-      }
-    });
-    parts.push(labels.join(' and '));
-  }
-  if (scope.roles?.length) {
-    const roleLabels = scope.roles.map((role) => role === 'admin' ? 'admins' : role === 'provider' ? 'providers' : 'families');
-    parts.push(roleLabels.join(' and '));
+  const statePart = scope.states?.length
+    ? (scope.states.length === 1 && scope.states[0] === 'AZ'
+        ? 'Arizona pilot participants'
+        : `${scope.states.join(', ')} pilot participants`)
+    : '';
+
+  const orgLabel = scope.organizations?.length
+    ? scope.organizations.map((org) => {
+        switch (org) {
+          case 'aact': return 'AACT';
+          case 'rise': return 'Rise';
+          case 'invite_network': return 'invite-only network';
+          case 'general_az': return 'Arizona pilot families';
+          default: return org;
+        }
+      }).join(' and ')
+    : '';
+
+  const roleLabels = scope.roles?.length
+    ? scope.roles.map((role) => role === 'admin' ? 'admins' : role === 'provider' ? 'providers' : 'families')
+    : [];
+
+  // Read organizations + roles as one phrase ("AACT and Rise providers, admins")
+  // instead of disconnected fragments.
+  const detailParts: string[] = [];
+  if (orgLabel && roleLabels.length) {
+    detailParts.push(`${orgLabel} ${roleLabels[0]}`, ...roleLabels.slice(1));
+  } else if (orgLabel) {
+    detailParts.push(orgLabel);
+  } else if (roleLabels.length) {
+    detailParts.push(...roleLabels);
   }
   if (scope.payers?.length) {
     const payerLabels = scope.payers.map((payer) => {
@@ -294,13 +313,15 @@ function describeAudience(scope?: AudienceScope): string {
         default: return 'other pilot payers';
       }
     });
-    parts.push(payerLabels.join(' / '));
+    detailParts.push(`${payerLabels.join(' / ')} members`);
   }
   if (scope.requiresPilotUser) {
-    parts.push('invited pilot users');
+    detailParts.push('invited users');
   }
 
-  return parts.filter(Boolean).join(' · ') || 'eligible launch participants';
+  const detail = joinNaturally(detailParts);
+  if (statePart && detail) return `${statePart} — ${detail}`;
+  return statePart || detail || 'eligible launch participants';
 }
 
 function matchesScope(scope: AudienceScope | undefined, context: PilotAccessContext): boolean {
@@ -464,7 +485,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
   'payer-dashboard': {
     state: 'pilot',
     badgeLabel: 'Arizona payer pilot',
-    message: 'Payer outcomes stay Arizona-first while the broader supported-state payer matrix is validated through live operator workflows.',
+    message: 'Payer outcomes stay Arizona-first while we validate results with live pilots.',
     audienceScope: {
       roles: ['provider', 'admin'],
       states: ['AZ'],
@@ -478,7 +499,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
   'evv-dashboard': {
     state: 'pilot',
     badgeLabel: 'Arizona DDD pilot',
-    message: 'Aminy records EVV and timesheets in shadow mode for the Arizona pilot. SpokChoice remains the current system of record while DCI transition workflows are validated.',
+    message: 'For the Arizona pilot, Aminy records visits and timesheets alongside your current system so the two can be compared. SpokChoice remains your current payroll system while the DCI transition is confirmed.',
     audienceScope: {
       roles: ['parent', 'provider', 'admin'],
       states: ['AZ'],
@@ -520,7 +541,7 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
   'caregiver-timesheet': {
     state: 'pilot',
     badgeLabel: 'Arizona DDD pilot',
-    message: 'Timesheets are captured in shadow mode for Arizona pilot families. Aminy supports reconciliation and export while SpokChoice remains primary and DCI transition workflows are validated.',
+    message: 'For Arizona pilot families, Aminy records timesheets alongside your current system. You can compare and export them anytime, while SpokChoice remains primary and the DCI transition is confirmed.',
     audienceScope: {
       roles: ['parent', 'provider', 'admin'],
       states: ['AZ'],
