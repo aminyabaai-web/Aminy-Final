@@ -201,7 +201,7 @@ export function ParentApprovalCard({ suggestion, onAccept, onReject, onUndo, asF
               <Button
                 onClick={handleAccept}
                 disabled={isAccepting}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                className="flex-1 bg-[#2A7D99] hover:bg-[#376E80] text-white"
               >
                 {isAccepting ? (
                   <>

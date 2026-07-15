@@ -374,9 +374,9 @@ export function AccountSettingsPremium({ onBack, onLogout, onNavigate, userTier 
     );
 
     return (
-        <div className="min-h-screen bg-[#F8F8F6] pb-[100px] font-sans antialiased">
+        <div className="min-h-screen bg-app pb-[100px] font-sans antialiased">
             {/* Header */}
-            <div className="sticky top-0 z-10 bg-[#F8F8F6]/85 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-900/4 dark:border-slate-700">
+            <div className="sticky top-0 z-10 bg-white/85 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-900/4 dark:border-slate-700">
                 <div className="max-w-[640px] mx-auto px-5 py-4 flex items-center gap-3">
                     {onBack && (
                         <button

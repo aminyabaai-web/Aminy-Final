@@ -366,7 +366,8 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
     };
 
     return (
-        <div className="min-h-screen bg-mist py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+        {/* Top-anchored (no justify-center) — vertical centering left ~40% dead space above the intro at 390x844 */}
+        <div className="min-h-screen bg-mist pt-8 pb-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl w-full mx-auto">
                 {onBack && (
                     <button
@@ -384,8 +385,10 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                     </div>
                 )}
 
+                {/* Step indicator dots — hidden on the intro screen, where a single
+                    active dot floated above the hero like a stray artifact. */}
+                {currentStep !== 'intro' && (
                 <div className="mb-8 flex justify-center">
-                    {/* Step indicator dots (intro → waiver) */}
                     {(['intro', 'identity', 'npi', 'background', 'waiver'] as Step[]).map((step, idx) => {
                         const stepArray: Step[] = ['intro', 'identity', 'npi', 'background', 'waiver'];
                         // 'submitted' sits past the final dot — treat it as fully complete.
@@ -400,6 +403,7 @@ export function CaregiverCredentialingWizard({ onBack }: CaregiverCredentialingW
                         );
                     })}
                 </div>
+                )}
 
                 {renderCurrentStep()}
             </div>

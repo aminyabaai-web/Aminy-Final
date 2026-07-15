@@ -402,7 +402,7 @@ export function DevelopmentalScreener({
       <div
         style={{
           minHeight: '100vh',
-          backgroundColor: '#F8F8F6',
+          background: 'linear-gradient(180deg,#F6FBFB,#EDF4F7)',
           fontFamily: fontStack,
           display: 'flex',
           flexDirection: 'column',
@@ -636,7 +636,7 @@ export function DevelopmentalScreener({
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#F8F8F6',
+        background: 'linear-gradient(180deg,#F6FBFB,#EDF4F7)',
         fontFamily: fontStack,
         display: 'flex',
         flexDirection: 'column',

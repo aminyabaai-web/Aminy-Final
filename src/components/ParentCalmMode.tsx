@@ -388,7 +388,7 @@ function IdentifyStep({
           <button
             key={challenge.id}
             onClick={() => onComplete(challenge.label)}
-            className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-blue-500 hover:bg-[#EEF4F8] transition-all text-left"
+            className="p-4 bg-white border-2 border-[#E8E4DF] rounded-lg hover:border-[#2A7D99] hover:bg-[#EEF4F8] transition-all text-left"
           >
             <div className="text-2xl mb-2">{challenge.emoji}</div>
             <div className="text-sm text-[#132F43]">{challenge.label}</div>
@@ -442,7 +442,7 @@ function NextStepsStep({
               key={num}
               onClick={() => setOverwhelm(num)}
               className={`h-12 rounded transition-all flex items-center justify-center text-[#3A4A57] font-medium ${overwhelm === num
-                ? 'bg-green-500 text-white'
+                ? 'bg-[#2A7D99] text-white'
                 : 'bg-[#EDF4F7] hover:bg-[#E8E4DF]'
                 }`}
             >
@@ -459,7 +459,7 @@ function NextStepsStep({
               handleFinish();
               onTalkToAminy();
             }}
-            className="w-full bg-blue-600 text-white"
+            className="w-full bg-[#2A7D99] hover:bg-[#376E80] text-white"
           >
             <MessageCircle className="w-4 h-4 mr-2" />
             Talk to Aminy about "{hardestThing}"
@@ -512,7 +512,7 @@ export function CalmModeButton({
             HAPTICS.medium();
             setIsOpen(true);
           }}
-          className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-2"
+          className="text-sm text-[#2A7D99] hover:text-[#376E80] flex items-center gap-2"
         >
           <Cloud className="w-4 h-4" />
           Need calm?
