@@ -221,18 +221,20 @@ describe('ProfileScreen', () => {
 
     // Wait for the profile to load
     await waitFor(() => {
-      expect(screen.getByText('Profile')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: 'Profile' })).toBeInTheDocument();
     });
   });
 
   // ---------------------------------------------------------------------------
   // 2. Displays profile sections (My Profile tab content, tab navigation)
   // ---------------------------------------------------------------------------
-  it('displays profile tab navigation with My Profile, Children, and Security tabs', async () => {
+  it('displays profile tab navigation with Profile, Children, and Security tabs', async () => {
     render(<ProfileScreen {...defaultProps} />);
 
     await waitFor(() => {
-      expect(screen.getByText('My Profile')).toBeInTheDocument();
+      // Tab label is "Profile" (shortened from "My Profile" so it stays on
+      // one line at 390px); the page h1 is also "Profile", so expect both.
+      expect(screen.getAllByText('Profile').length).toBeGreaterThan(1);
     });
 
     expect(screen.getByText('Children')).toBeInTheDocument();
