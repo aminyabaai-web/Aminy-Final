@@ -545,10 +545,13 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                         <p style={{ fontSize: '12px', color: '#10b981', marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}><CheckCircle2 size={12} /> Domain is available and active.</p>
                                     </div>
 
-                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px', marginTop: '8px' }}>
+                                        {/* No backend for agency branding yet — a success toast here would
+                                            fake a save. Honest preview state until provisioning is wired. */}
+                                        <span style={{ fontSize: '12px', color: 'rgba(17, 24, 39, 0.5)' }}>Preview — activates with white-label onboarding</span>
                                         <button
-                                            onClick={() => toast.success('Agency settings saved safely.')}
-                                            style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: '#111827', color: '#FFF', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'pointer' }}>
+                                            disabled
+                                            style={{ padding: '10px 24px', borderRadius: '12px', backgroundColor: 'rgba(17, 24, 39, 0.35)', color: '#FFF', fontSize: '14px', fontWeight: 600, border: 'none', cursor: 'not-allowed' }}>
                                             Save Agency Settings
                                         </button>
                                     </div>

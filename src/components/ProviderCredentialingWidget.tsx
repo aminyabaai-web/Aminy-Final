@@ -185,31 +185,36 @@ export function ProviderCredentialingWidget({ providerId, hideWhenComplete = tru
           return (
             <div
               key={row.key}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/50 transition-colors"
+              className="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-white/50 transition-colors"
             >
               <div className="w-9 h-9 rounded-lg bg-white border border-[#E8E4DF] flex items-center justify-center shrink-0">
                 <Icon className="w-4 h-4 text-[#5A6B7A]" />
               </div>
+              {/* Label owns the row width; the status pill sits beside it and
+                  the action drops below — three nowrap columns previously
+                  crushed the label to one letter per line at 390px. */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#132F43]">{meta.label}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm font-medium text-[#132F43] truncate">{meta.label}</p>
+                  <span className={`text-xs ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
+                    {statusStyle.label}
+                  </span>
+                </div>
                 <p className="text-sm text-[#5A6B7A] truncate">{meta.description}</p>
                 {row.check.failureReason && (
                   <p className="text-sm text-red-600 mt-0.5">{row.check.failureReason}</p>
                 )}
+                {needsAction && (
+                  <button
+                    onClick={row.onAction}
+                    disabled={working === row.key}
+                    className="mt-1 -ml-1 text-sm font-semibold px-2 py-1 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 inline-flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
+                  >
+                    {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
+                  </button>
+                )}
               </div>
-              <span className={`text-xs ${statusStyle.bg} ${statusStyle.text} px-2 py-1 rounded-full font-medium shrink-0 flex items-center gap-1.5 whitespace-nowrap`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${statusStyle.dot}`} />
-                {statusStyle.label}
-              </span>
-              {needsAction && (
-                <button
-                  onClick={row.onAction}
-                  disabled={working === row.key}
-                  className="shrink-0 text-sm font-semibold px-2.5 py-1.5 rounded-lg text-[#6B9080] hover:bg-[#6B9080]/10 flex items-center gap-0.5 disabled:opacity-50 whitespace-nowrap"
-                >
-                  {working === row.key ? <Loader2 className="w-3 h-3 animate-spin" /> : <>{row.actionLabel}<ChevronRight className="w-3 h-3" /></>}
-                </button>
-              )}
             </div>
           );
         })}
