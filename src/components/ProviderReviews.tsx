@@ -528,7 +528,9 @@ export function ProviderReviews({
             <p className="text-sm text-[#5A6B7A] mt-1">
               {providerName} hasn't received any reviews yet. Be the first to share your experience.
             </p>
-            {onWriteReview && !showForm && (
+            {/* The review form is self-contained (writes to provider_reviews), so the CTA
+                shows even when no onWriteReview callback is passed by the caller. */}
+            {!showForm && (
               <button
                 onClick={handleOpenReviewForm}
                 className="mt-4 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"
@@ -588,7 +590,7 @@ export function ProviderReviews({
               <p className="text-sm text-[#5A6B7A]">would recommend</p>
             </div>
 
-            {onWriteReview && !showForm && (
+            {!showForm && (
               <button
                 onClick={handleOpenReviewForm}
                 className="px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-[#6B9080] transition-colors"

@@ -415,7 +415,12 @@ function getSuggestionTitle(suggestion: ProviderSuggestion): string {
   switch (suggestion.type) {
     case 'routine_change': {
       const routinePayload = suggestion.payload as unknown as RoutineChangePayload;
-      return routinePayload?.routineName ? `Adjust "${routinePayload.routineName}" routine` : 'Routine adjustment';
+      const routineName = routinePayload?.routineName?.trim();
+      if (!routineName) return 'Routine adjustment';
+      // Avoid 'Adjust "Morning Routine" routine' when the name already ends with "routine"
+      return /routine$/i.test(routineName)
+        ? `Adjust "${routineName}"`
+        : `Adjust "${routineName}" routine`;
     }
     case 'goal_adjustment': {
       const goalPayload = suggestion.payload as unknown as GoalAdjustmentPayload;

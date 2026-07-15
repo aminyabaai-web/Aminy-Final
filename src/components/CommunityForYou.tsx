@@ -560,6 +560,12 @@ export function CommunityForYou({
               : "your child's"}{' '}
             journey.
           </p>
+          <button
+            onClick={() => setActiveTab('groups')}
+            className="mt-4 px-4 py-2 bg-[#2A7D99] hover:bg-[#376E80] text-white text-sm font-medium rounded-full transition-colors"
+          >
+            Browse groups
+          </button>
         </Card>
       ) : (
         resolvedPosts.map((post) => (

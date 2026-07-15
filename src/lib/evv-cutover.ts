@@ -193,19 +193,19 @@ export function summarizeEVVCutover(
 
   const cutoverBlockedReasons: string[] = [];
   if (cyclesCompleted < 3) {
-    cutoverBlockedReasons.push('Three payroll cycles have not been reconciled yet.');
+    cutoverBlockedReasons.push('Three payroll cycles have not been compared against your current system yet.');
   }
   if (recentCycles.length >= 3 && consecutiveCleanCycles < 3) {
-    cutoverBlockedReasons.push('The three most recent payroll cycles are not all clean at 99.5% accuracy.');
+    cutoverBlockedReasons.push('The three most recent payroll cycles do not all match your current system at 99.5% accuracy.');
   }
   if (recentCycles.length > 0 && trailingWindowAccuracy < 99.5) {
-    cutoverBlockedReasons.push('The current cutover window is averaging below the 99.5% reconciliation threshold.');
+    cutoverBlockedReasons.push('Recent payroll cycles are averaging below the 99.5% match rate needed to switch.');
   }
   if (unresolvedCriticalExceptions > 0) {
-    cutoverBlockedReasons.push('Critical EVV exceptions must be resolved before Aminy can become system of record.');
+    cutoverBlockedReasons.push('Critical visit-record issues must be resolved before Aminy can replace your current system.');
   }
   if (recentCycles.length >= 3 && !systemsValidated.includes('dci')) {
-    cutoverBlockedReasons.push('At least one recent clean cycle must be reconciled through the DCI transition lane before cutover.');
+    cutoverBlockedReasons.push('At least one recent clean payroll cycle must be checked through DCI before switching.');
   }
 
   const state: EVVCutoverState = cutoverBlockedReasons.length === 0
