@@ -1016,8 +1016,12 @@ function CAQHTab() {
       <Card className="p-6 text-center">
         <Shield className="w-8 h-8 text-slate-300 mx-auto mb-2" />
         <p className="text-sm font-medium text-[#3A4A57]">No CAQH documents yet</p>
+        {/* No CAQH-connect flow exists yet — say so honestly rather than
+            describing a connection this screen can't start (design audit). */}
         <p className="text-sm text-[#5A6B7A] mt-1">
-          Connect your CAQH ProView profile to track documents, expirations, and re-attestation here.
+          CAQH connection opens with credentialing onboarding. Once your ProView
+          profile is linked, your documents, expirations, and re-attestation
+          dates will appear here.
         </p>
       </Card>
     );

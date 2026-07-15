@@ -340,8 +340,8 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                                 <div style={{ textAlign: 'center' }}>
                                     <p className="text-[#111827] dark:text-slate-100" style={{ fontSize: '14px', fontWeight: 600, marginBottom: '4px' }}>{reward.name}</p>
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                                        <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#059669' : '#8A9BA8' }}>{reward.cost}</span>
-                                        <Star size={12} fill={canAfford ? '#10B981' : '#C0CBD4'} color={canAfford ? '#10B981' : '#C0CBD4'} />
+                                        <span style={{ fontSize: '13px', fontWeight: 600, color: canAfford ? '#B45309' : '#8A9BA8' }}>{reward.cost}</span>
+                                        <Star size={12} fill={canAfford ? '#FCD34D' : '#C0CBD4'} color={canAfford ? '#FCD34D' : '#C0CBD4'} />
                                     </div>
                                     {reward.needsApproval && (
                                         <p style={{ fontSize: '10px', color: '#92400E', marginTop: '2px' }}>Parent approves</p>
@@ -488,7 +488,7 @@ export function TokenRewardsBoard({ onBack, availableTokens, onSpendTokens, chil
                             )}
                             <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#111827', marginBottom: '8px' }}>Get {selectedReward.name}?</h2>
                             <p style={{ fontSize: '15px', color: '#6B7280', marginBottom: '24px' }}>
-                                This will cost <strong style={{ color: '#111827' }}>{selectedReward.cost}</strong> stars. You have <strong style={{ color: '#059669' }}>{effectiveTokens}</strong> stars right now.
+                                This will cost <strong style={{ color: '#111827' }}>{selectedReward.cost}</strong> stars. You have <strong style={{ color: '#B45309' }}>{effectiveTokens}</strong> stars right now.
                             </p>
 
                             <div style={{ width: '100%', display: 'flex', gap: '12px' }}>

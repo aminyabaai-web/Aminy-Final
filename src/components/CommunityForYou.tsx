@@ -548,6 +548,9 @@ export function CommunityForYou({
   const renderForYou = () => (
     <div className="space-y-4">
       {resolvedPosts.length === 0 ? (
+        /* Inline min-height centers the empty state in the viewport instead of
+           leaving ~60% dead space below (Tailwind is precompiled — no min-h-[Nvh]). */
+        <div style={{ minHeight: '55vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         <Card className="p-6 sm:p-8 text-center">
           <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
           <h4 className="font-medium text-[#132F43] dark:text-white mb-2">
@@ -567,6 +570,7 @@ export function CommunityForYou({
             Browse groups
           </button>
         </Card>
+        </div>
       ) : (
         resolvedPosts.map((post) => (
           <Card key={post.id} className="p-4 hover:shadow-md transition-shadow">
