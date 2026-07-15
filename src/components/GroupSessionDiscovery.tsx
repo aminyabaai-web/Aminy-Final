@@ -10,7 +10,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Users, Calendar, Clock, DollarSign, Star, Sparkles,
-  BookOpen, ChevronRight, Search, Filter, Loader2, CheckCircle
+  BookOpen, ChevronRight, Search, Filter, Loader2, CheckCircle,
+  ArrowLeft, Waves, Moon, School, RefreshCw, Utensils, Hand, MessageCircle,
+  type LucideIcon,
 } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -19,16 +21,17 @@ import { Input } from './ui/input';
 import { toast } from 'sonner';
 import { supabase } from '../utils/supabase/client';
 
-const TOPIC_CATEGORIES = [
-  { id: 'all', label: 'All topics', emoji: '✨' },
-  { id: 'meltdowns', label: 'Meltdowns', emoji: '🌊' },
-  { id: 'sleep', label: 'Sleep', emoji: '😴' },
-  { id: 'school', label: 'School & IEP', emoji: '🏫' },
-  { id: 'transitions', label: 'Transitions', emoji: '🔄' },
-  { id: 'feeding', label: 'Feeding', emoji: '🍴' },
-  { id: 'sensory', label: 'Sensory', emoji: '✨' },
-  { id: 'social', label: 'Social', emoji: '👥' },
-  { id: 'communication', label: 'AAC & Communication', emoji: '💬' },
+// Lucide icons (not emoji) per design system — emoji are reserved for the Ease kids' surface.
+const TOPIC_CATEGORIES: { id: string; label: string; icon: LucideIcon }[] = [
+  { id: 'all', label: 'All topics', icon: Sparkles },
+  { id: 'meltdowns', label: 'Meltdowns', icon: Waves },
+  { id: 'sleep', label: 'Sleep', icon: Moon },
+  { id: 'school', label: 'School & IEP', icon: School },
+  { id: 'transitions', label: 'Transitions', icon: RefreshCw },
+  { id: 'feeding', label: 'Feeding', icon: Utensils },
+  { id: 'sensory', label: 'Sensory', icon: Hand },
+  { id: 'social', label: 'Social', icon: Users },
+  { id: 'communication', label: 'AAC & Communication', icon: MessageCircle },
 ];
 
 interface GroupSession {
@@ -154,11 +157,22 @@ export function GroupSessionDiscovery({
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b border-[#E8E4DF]">
         <div className="max-w-3xl mx-auto px-4 py-4">
-          <div className="mb-3">
-            <h1 className="text-xl font-bold text-[#132F43]">Group BCBA Sessions</h1>
-            <p className="text-sm text-[#5A6B7A]">
-              Expert-led parent training with up to 4 families · $50/family · cash pay
-            </p>
+          <div className="mb-3 flex items-start gap-3">
+            {onBack && (
+              <button
+                onClick={onBack}
+                aria-label="Back"
+                className="shrink-0 rounded-xl border border-[#E8E4DF] bg-white p-2.5 text-[#5A6B7A] transition-colors hover:bg-[#F6FBFB]"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+            )}
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold text-[#132F43]">Group BCBA Sessions</h1>
+              <p className="text-sm text-[#5A6B7A]">
+                Expert-led parent training with up to 4 families · $50/family · cash pay
+              </p>
+            </div>
           </div>
 
           {/* Search */}
@@ -183,7 +197,7 @@ export function GroupSessionDiscovery({
                   ? { background: '#2A7D99', borderColor: '#2A7D99', color: 'white', fontWeight: 600 }
                   : { background: 'white', borderColor: '#E8E4DF', color: '#5A6B7A' }}
               >
-                <span>{cat.emoji}</span>{cat.label}
+                <cat.icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />{cat.label}
               </button>
             ))}
           </div>
@@ -335,7 +349,9 @@ function GroupSessionListCard({
           <div className="flex items-start justify-between gap-2">
             <div>
               <p className="font-semibold text-[#132F43] leading-tight">
-                {categoryInfo && <span className="mr-1">{categoryInfo.emoji}</span>}
+                {categoryInfo && (
+                  <categoryInfo.icon className="mr-1 inline-block h-4 w-4 text-[#2A7D99]" aria-hidden="true" />
+                )}
                 {session.topic}
               </p>
               {session.format === 'cohort' && (

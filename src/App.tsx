@@ -842,6 +842,14 @@ const GATE_MESSAGES: Record<
     title: 'Coming Soon for Organizations',
     description: 'This feature is designed for clinics, schools, and organizations. It will be available in a future update.',
   },
+  // Clinician-voiced gate for bcba-portal — the generic 'b2b' org copy was the
+  // wrong audience for BCBAs/RBTs landing here (design audit 2026-07-15).
+  'bcba-clinician': {
+    title: 'Your clinical portal is almost ready',
+    description: 'Session notes, briefings, and caseload tools are moving here. Until then, everything you need lives in the Provider Portal.',
+    ctaLabel: 'Open Provider Portal',
+    ctaScreen: 'provider-portal',
+  },
   'b2g': {
     title: 'Payer Portal Coming Soon',
     description: 'This dashboard is designed for insurance companies and managed care organizations.',
@@ -2677,9 +2685,13 @@ export default function App() {
       )
     ) {
       const shouldUsePilotCopy = launchConfig.state === 'pilot' || launchConfig.state === 'limited_launch';
+      // bcba-portal serves clinicians, not org admins — swap the generic org gate
+      // for clinician-voiced copy that points at the Provider Portal.
+      const audienceGateReason =
+        currentScreen === 'bcba-portal' && gateReason === 'b2b' ? 'bcba-clinician' : gateReason;
       return (
         <GatedScreenPlaceholder
-          gateReason={shouldUsePilotCopy ? "pilot" : gateReason}
+          gateReason={shouldUsePilotCopy ? "pilot" : audienceGateReason}
           customTitle={shouldUsePilotCopy ? surfaceAccess.title : undefined}
           customDescription={shouldUsePilotCopy ? surfaceAccess.message : undefined}
           onBack={() => navigateToScreen("dashboard")}
@@ -3110,6 +3122,7 @@ export default function App() {
                 childName={userData.childName || undefined}
                 view="caregiver"
                 onViewStory={() => navigateToScreen("outcomes-story")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>
           );
@@ -3467,6 +3480,7 @@ export default function App() {
               <ProviderAccessRequests
                 userId={userData.id || "parent-1"}
                 onBack={() => navigateToScreen("dashboard")}
+                onNavigate={(s) => navigateToScreen(s as AppScreen)}
               />
             </Suspense>
           );
@@ -3598,6 +3612,7 @@ export default function App() {
                   <AnalyticsCharts
                     childName={userData.childName || 'Your child'}
                     childId={userData.activeChildId}
+                    onNavigate={(s) => navigateToScreen(s as AppScreen)}
                   />
                 </div>
               </div>

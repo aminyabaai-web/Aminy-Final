@@ -1098,8 +1098,8 @@ export function ProviderMarketplace({
             />
           ) : (
             <EmptyProviders
-              headline="Verified providers are not available yet"
-              description="Aminy only shows real provider availability during limited launch. Use AI guidance today and check back when live openings are verified."
+              headline="Providers are onboarding in your state now"
+              description="Check back soon — we only list real, verified openings. In the meantime, Aminy can guide you today."
             />
           )
         ) : (

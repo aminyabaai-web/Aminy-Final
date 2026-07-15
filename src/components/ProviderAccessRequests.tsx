@@ -152,9 +152,11 @@ interface ProviderAccessRequestsProps {
   userId: string;
   onClose?: () => void;
   onBack?: () => void;
+  /** Navigate to another screen (e.g. 'marketplace' from the empty state). */
+  onNavigate?: (screen: string) => void;
 }
 
-export function ProviderAccessRequests({ userId, onClose }: ProviderAccessRequestsProps) {
+export function ProviderAccessRequests({ userId, onClose, onNavigate }: ProviderAccessRequestsProps) {
   // The MOCK_* records below describe invented clinicians requesting access to a
   // child's PHI. They seed the screen ONLY in demo mode (investor / AACT
   // walkthroughs). Real parents start empty and see live Supabase data — or a
@@ -466,7 +468,16 @@ export function ProviderAccessRequests({ userId, onClose }: ProviderAccessReques
                 </h3>
                 <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
                   When a provider requests access to your child's data, it will appear here.
+                  Providers you work with send a request the first time they need to see records.
                 </p>
+                {onNavigate && (
+                  <button
+                    onClick={() => onNavigate('marketplace')}
+                    className="mt-5 inline-flex items-center gap-2 px-5 py-3 min-h-[44px] rounded-xl bg-[#2A7D99] hover:bg-[#376E80] active:scale-[0.98] text-white text-sm font-semibold transition-colors"
+                  >
+                    Find a provider
+                  </button>
+                )}
               </div>
             ) : (
               <div className="space-y-3 sm:space-y-4">

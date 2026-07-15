@@ -17638,6 +17638,13 @@ button, a, [role="button"] {
   transform: translateY(-1px);
 }
 
+/* Brand press states — Tailwind is precompiled here, so arbitrary
+   active:scale-[…] classes used in components need literal rules */
+.active\:scale-\[0\.98\]:active { transform: scale(0.98); }
+.active\:scale-\[0\.99\]:active { transform: scale(0.99); }
+.active\:scale-\[0\.97\]:active { transform: scale(0.97); }
+.active\:scale-95:active { transform: scale(0.95); }
+
 /* Button press feedback already in button.tsx (active:scale-[0.97]);
    add consistent focus ring glow for brand */
 [data-slot="button"]:focus-visible {
@@ -17769,8 +17776,13 @@ tr:hover td, .hover-row:hover {
 .border-\[\#6B9080\]\/30 { border-color: rgba(78,147,168,0.30); }
 .bg-\[\#6B9080\]\/5 { background-color: rgba(78,147,168,0.05); }
 .bg-\[\#FAF7F2\]\/80 { background-color: rgba(250,247,242,0.80); }
-.from-\[\#6B9080\] { --tw-gradient-from: #6B9080; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(78,147,168,0)); }
-.to-\[\#7BA7BC\] { --tw-gradient-to: #7BA7BC; }
+/* Design-excellence round 1 (July 2026): these two late declarations used the
+   raw sage/steel hexes, silently overriding the earlier brand-teal redirects
+   (≈ lines 16041/16779) because they come last in the cascade — the marketplace
+   header (and every from-[#6B9080]→to-[#7BA7BC] hero) rendered SAGE instead of
+   brand teal. Keep the values on the Aminy teal family. */
+.from-\[\#6B9080\] { --tw-gradient-from: #2A7D99; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(42,125,153,0)); }
+.to-\[\#7BA7BC\] { --tw-gradient-to: #4795AE; }
 .from-\[\#FAF7F2\] { --tw-gradient-from: #FAF7F2; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(250,247,242,0)); }
 .to-\[\#F5F2EC\] { --tw-gradient-to: #F5F2EC; }
 
@@ -18660,4 +18672,22 @@ tr:hover td, .hover-row:hover {
 }
 @media (min-width: 640px) {
   .sm\:mt-\[-14px\] { margin-top: -14px; }
+}
+
+/* ============================================================
+   Design-excellence round 1 (July 2026) — missing precompiled
+   gap-x-* / gap-y-* utilities. Tailwind v4 is frozen here, so
+   these were silently inert wherever used; most visibly the
+   ProviderLanding benefit checklist rendered its items with NO
+   horizontal gap ("Free to join✓Competitive rates").
+   ============================================================ */
+.gap-x-4 { column-gap: calc(var(--spacing) * 4); }
+.gap-x-6 { column-gap: calc(var(--spacing) * 6); }
+.gap-x-8 { column-gap: calc(var(--spacing) * 8); }
+.gap-y-1\.5 { row-gap: calc(var(--spacing) * 1.5); }
+.gap-y-2 { row-gap: calc(var(--spacing) * 2); }
+.gap-y-3 { row-gap: calc(var(--spacing) * 3); }
+@media (min-width: 640px) {
+  .sm\:gap-x-8 { column-gap: calc(var(--spacing) * 8); }
+  .sm\:gap-y-3 { row-gap: calc(var(--spacing) * 3); }
 }

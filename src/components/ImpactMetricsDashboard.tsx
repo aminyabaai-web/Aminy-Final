@@ -149,14 +149,20 @@ interface ImpactMetricsDashboardProps {
   reportingPeriod?: string;
 }
 
+/** Current quarter label (e.g. "Q3 2026") so the sample period always matches today. */
+function getCurrentQuarterLabel(): string {
+  const now = new Date();
+  return `Q${Math.floor(now.getMonth() / 3) + 1} ${now.getFullYear()}`;
+}
+
 export function ImpactMetricsDashboard({
   organizationName = 'Aminy',
-  reportingPeriod = 'Q1 2025',
+  reportingPeriod = `Sample period · ${getCurrentQuarterLabel()}`,
 }: ImpactMetricsDashboardProps) {
   const [metrics, setMetrics] = useState<ImpactMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<'dashboard' | 'toc' | 'iris'>('dashboard');
-  const sampleMetricsProvenance = createDataProvenance('sample', 'Internal sample impact metrics', {
+  const sampleMetricsProvenance = createDataProvenance('sample', 'Sample data — not live results', {
     isVerified: false,
     lastUpdatedAt: new Date().toISOString(),
   });
@@ -257,7 +263,7 @@ export function ImpactMetricsDashboard({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${organizationName.toLowerCase()}-impact-report-${reportingPeriod.replace(' ', '-').toLowerCase()}.json`;
+    a.download = `${organizationName.toLowerCase()}-impact-report-${reportingPeriod.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -285,13 +291,13 @@ export function ImpactMetricsDashboard({
             Impact Dashboard
           </h1>
           <p className="text-sm text-[#5A6B7A] dark:text-[#8A9BA8]">
-            IRIS+ aligned metrics for {reportingPeriod}
+            IRIS+ aligned metrics · {reportingPeriod}
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
+            <LaunchStateBadge state={launchConfig.state} label="Preview" />
             <DataProvenanceBadge provenance={sampleMetricsProvenance} />
           </div>
-          <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">These impact metrics are internal sample values until Aminy has live reporting and verified benchmarks.</p>
+          <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">Every number below is sample data. This preview shows how the dashboard will look once live reporting and verified benchmarks are connected.</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={exportImpactReport}>

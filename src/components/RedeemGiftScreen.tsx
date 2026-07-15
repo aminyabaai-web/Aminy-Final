@@ -147,7 +147,7 @@ export function RedeemGiftScreen({ onBack, onCreateAccount, onSuccess }: RedeemG
           <button
             onClick={onSuccess}
             style={{
-              background: '#43AA8B', color: '#ffffff', border: 'none',
+              background: '#2A7D99', color: '#ffffff', border: 'none',
               borderRadius: '14px', padding: '14px 32px', fontSize: '16px',
               fontWeight: 600, fontFamily: fontStack, cursor: 'pointer',
             }}
@@ -223,7 +223,7 @@ export function RedeemGiftScreen({ onBack, onCreateAccount, onSuccess }: RedeemG
             onClick={handleRedeem}
             disabled={isRedeeming || isAuthed === null}
             style={{
-              width: '100%', marginTop: '20px', height: '54px', background: '#43AA8B',
+              width: '100%', marginTop: '20px', height: '54px', background: '#2A7D99',
               color: '#ffffff', border: 'none', borderRadius: '14px', fontSize: '16px',
               fontWeight: 600, fontFamily: fontStack,
               cursor: isRedeeming || isAuthed === null ? 'default' : 'pointer',

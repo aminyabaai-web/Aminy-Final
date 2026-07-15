@@ -493,7 +493,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#F6FBFB] to-white">
       {/* Header */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-4">
         <div className="max-w-2xl mx-auto flex items-center gap-3">
@@ -504,7 +504,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
             <h1 className="font-bold text-[#132F43]">Become a Paid Caregiver</h1>
             <p className="text-sm text-[#5A6B7A]">Get paid through Medicaid waiver programs</p>
           </div>
-          <DollarSign className="w-6 h-6 text-emerald-600" />
+          <DollarSign className="w-6 h-6 text-[#2A7D99]" />
         </div>
 
         {/* Progress */}
@@ -512,7 +512,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           <div className="max-w-2xl mx-auto mt-3 flex gap-1">
             {STEPS.map((s, i) => (
               <div key={s.id} className={`flex-1 h-1.5 rounded-full transition-colors ${
-                i <= stepIndex ? 'bg-emerald-600' : 'bg-[#E8E4DF]'
+                i <= stepIndex ? 'bg-[#2A7D99]' : 'bg-[#E8E4DF]'
               }`} />
             ))}
           </div>
@@ -525,7 +525,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'state-select' && (
             <motion.div key="state" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <MapPin className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <MapPin className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">What state do you live in?</h2>
                 <p className="text-[#5A6B7A] text-sm">We'll find programs available in your state</p>
               </div>
@@ -534,7 +534,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 value={data.state}
                 onChange={(e) => update({ state: e.target.value, selectedProgram: '', fiscalAgent: '' })}
                 aria-label="Select your state"
-                className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl text-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl text-lg focus:ring-2 focus:ring-[#2A7D99] focus:border-transparent"
               >
                 <option value="">Select your state...</option>
                 {availableStates.map(s => (
@@ -543,11 +543,11 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               </select>
 
               {data.state && stateData && (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
-                  <p className="font-medium text-emerald-800">
+                <div className="bg-[#2A7D99]/10 border border-[#2A7D99]/25 rounded-xl p-4">
+                  <p className="font-medium text-[#132F43]">
                     {stateData.programs.length} program{stateData.programs.length > 1 ? 's' : ''} available in {stateData.name}
                   </p>
-                  <p className="text-sm text-emerald-600 mt-1">
+                  <p className="text-sm text-[#2A7D99] mt-1">
                     Estimated processing: ~{stateData.estimatedProcessingDays} days
                   </p>
                 </div>
@@ -556,7 +556,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               <button
                 onClick={() => setStep('eligibility')}
                 disabled={!data.state}
-                className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                className="w-full py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
               >
                 Continue <ArrowRight className="w-4 h-4" />
               </button>
@@ -567,7 +567,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'eligibility' && (
             <motion.div key="eligibility" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <ClipboardCheck className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <ClipboardCheck className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Eligibility Check</h2>
                 <p className="text-[#5A6B7A] text-sm">Let's verify your child qualifies</p>
               </div>
@@ -581,7 +581,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   onChange={(e) => update({ childAge: parseInt(e.target.value) || 0 })}
                   placeholder="e.g., 5"
                   min={0} max={21}
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99]"
                 />
               </div>
 
@@ -591,7 +591,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   id="enroll-diagnosis"
                   value={data.childDiagnosis}
                   onChange={(e) => update({ childDiagnosis: e.target.value })}
-                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99]"
                 >
                   <option value="">Select diagnosis...</option>
                   <option value="asd">Autism Spectrum Disorder (ASD)</option>
@@ -608,7 +608,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                     type="checkbox"
                     checked={data.hasMedicaid}
                     onChange={(e) => update({ hasMedicaid: e.target.checked })}
-                    className="w-5 h-5 text-emerald-600 rounded border-[#E8E4DF] focus:ring-emerald-500"
+                    className="w-5 h-5 text-[#2A7D99] rounded border-[#E8E4DF] focus:ring-[#2A7D99]"
                   />
                   <div>
                     <p className="font-medium text-[#132F43]">Child has active Medicaid</p>
@@ -625,7 +625,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                     value={data.medicaidId}
                     onChange={(e) => update({ medicaidId: e.target.value })}
                     placeholder="e.g., 12345678"
-                    className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-emerald-500"
+                    className="w-full px-4 py-3 border border-[#E8E4DF] rounded-xl focus:ring-2 focus:ring-[#2A7D99]"
                   />
                 </div>
               )}
@@ -650,7 +650,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={() => setStep('program-select')}
                   disabled={!data.childDiagnosis || data.childAge === 0}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -662,7 +662,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'program-select' && stateData && (
             <motion.div key="program" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <Heart className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <Heart className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Choose Your Program</h2>
                 <p className="text-[#5A6B7A] text-sm">Select how you'd like to provide care</p>
               </div>
@@ -672,7 +672,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   onClick={() => update({ programType: 'self-directed', selectedProgram: '' })}
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'self-directed'
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-[#2A7D99] text-white'
                       : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
@@ -682,7 +682,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   onClick={() => update({ programType: 'agency-directed', selectedProgram: '' })}
                   className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${
                     data.programType === 'agency-directed'
-                      ? 'bg-emerald-600 text-white'
+                      ? 'bg-[#2A7D99] text-white'
                       : 'bg-[#EDF4F7] text-[#5A6B7A] hover:bg-[#E8E4DF]'
                   }`}
                 >
@@ -709,8 +709,8 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                     onClick={() => update({ selectedProgram: program.id })}
                     className={`w-full text-left p-4 rounded-xl border transition-colors ${
                       data.selectedProgram === program.id
-                        ? 'border-emerald-500 bg-emerald-50'
-                        : 'border-[#E8E4DF] bg-white hover:border-emerald-300'
+                        ? 'border-[#2A7D99] bg-[#2A7D99]/10'
+                        : 'border-[#E8E4DF] bg-white hover:border-[#2A7D99]'
                     }`}
                   >
                     <div className="flex justify-between items-start">
@@ -718,7 +718,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                         <p className="font-medium text-[#132F43]">{program.name}</p>
                         <p className="text-sm text-[#5A6B7A] mt-1">{program.description}</p>
                       </div>
-                      <span className="text-sm font-semibold text-emerald-600 whitespace-nowrap ml-3">
+                      <span className="text-sm font-semibold text-[#2A7D99] whitespace-nowrap ml-3">
                         {program.payRange}
                       </span>
                     </div>
@@ -733,7 +733,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={() => setStep('fiscal-agent')}
                   disabled={!data.selectedProgram}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -745,7 +745,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'fiscal-agent' && stateData && (
             <motion.div key="fiscal" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <Building2 className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <Building2 className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Select Fiscal Agent</h2>
                 <p className="text-[#5A6B7A] text-sm">They handle your payroll and taxes</p>
               </div>
@@ -757,8 +757,8 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                     onClick={() => update({ fiscalAgent: agent.id })}
                     className={`w-full text-left p-4 rounded-xl border transition-colors ${
                       data.fiscalAgent === agent.id
-                        ? 'border-emerald-500 bg-emerald-50'
-                        : 'border-[#E8E4DF] bg-white hover:border-emerald-300'
+                        ? 'border-[#2A7D99] bg-[#2A7D99]/10'
+                        : 'border-[#E8E4DF] bg-white hover:border-[#2A7D99]'
                     }`}
                   >
                     <p className="font-medium text-[#132F43]">{agent.name}</p>
@@ -783,7 +783,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={() => setStep('documents')}
                   disabled={!data.fiscalAgent}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -795,7 +795,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'documents' && (
             <motion.div key="docs" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <FileText className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <FileText className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Required Documents</h2>
                 <p className="text-[#5A6B7A] text-sm">{requiredUploaded}/{requiredDocs.length} required docs uploaded</p>
               </div>
@@ -827,12 +827,12 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                       {!doc.uploaded ? (
                         <button
                           onClick={() => handleDocCapture(id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#2A7D99] text-white text-sm font-medium rounded-lg hover:bg-[#376E80]"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" /> Mark ready
                         </button>
                       ) : (
-                        <span className="text-sm font-medium text-emerald-600">Ready</span>
+                        <span className="text-sm font-medium text-[#2A7D99]">Ready</span>
                       )}
                     </div>
                   </div>
@@ -846,7 +846,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={() => setStep('training')}
                   disabled={requiredUploaded < requiredDocs.length}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -858,7 +858,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'training' && stateData && (
             <motion.div key="training" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <GraduationCap className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <GraduationCap className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Training Requirements</h2>
                 <p className="text-[#5A6B7A] text-sm">Complete these before you can start providing services</p>
               </div>
@@ -866,7 +866,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
               <div className="bg-white rounded-xl border border-[#E8E4DF] divide-y divide-gray-100">
                 {stateData.trainingRequirements.map((req, i) => (
                   <div key={i} className="p-4 flex items-start gap-3">
-                    <div className="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xs font-bold shrink-0">
+                    <div className="w-6 h-6 bg-[#2A7D99]/15 text-[#376E80] rounded-full flex items-center justify-center text-xs font-bold shrink-0">
                       {i + 1}
                     </div>
                     <p className="text-sm text-[#3A4A57]">{req}</p>
@@ -874,12 +874,12 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 ))}
               </div>
 
-              <label className="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-200 cursor-pointer">
+              <label className="flex items-start gap-3 p-4 bg-[#2A7D99]/10 rounded-xl border border-[#2A7D99]/25 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={data.trainingComplete}
                   onChange={(e) => update({ trainingComplete: e.target.checked })}
-                  className="mt-0.5 w-5 h-5 text-emerald-600 rounded border-[#E8E4DF] focus:ring-emerald-500"
+                  className="mt-0.5 w-5 h-5 text-[#2A7D99] rounded border-[#E8E4DF] focus:ring-[#2A7D99]"
                 />
                 <div>
                   <p className="font-medium text-[#132F43]">I acknowledge these training requirements</p>
@@ -894,7 +894,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={() => setStep('review-submit')}
                   disabled={!data.trainingComplete}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   Continue <ArrowRight className="w-4 h-4" />
                 </button>
@@ -906,7 +906,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {step === 'review-submit' && stateData && (
             <motion.div key="review" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
               <div className="text-center mb-6">
-                <Send className="w-12 h-12 text-emerald-600 mx-auto mb-3" />
+                <Send className="w-12 h-12 text-[#2A7D99] mx-auto mb-3" />
                 <h2 className="text-xl font-bold text-[#132F43]">Review & Submit</h2>
                 <p className="text-[#5A6B7A] text-sm">Double-check your information</p>
               </div>
@@ -926,7 +926,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   <p className="font-semibold text-[#132F43]">
                     {stateData.programs.find(p => p.id === data.selectedProgram)?.name || data.selectedProgram}
                   </p>
-                  <p className="text-sm text-emerald-600">
+                  <p className="text-sm text-[#2A7D99]">
                     {stateData.programs.find(p => p.id === data.selectedProgram)?.payRange}
                   </p>
                 </div>
@@ -947,7 +947,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                   type="checkbox"
                   checked={data.agreedToTerms}
                   onChange={(e) => update({ agreedToTerms: e.target.checked })}
-                  className="mt-0.5 w-5 h-5 text-emerald-600 rounded border-[#E8E4DF] focus:ring-emerald-500"
+                  className="mt-0.5 w-5 h-5 text-[#2A7D99] rounded border-[#E8E4DF] focus:ring-[#2A7D99]"
                 />
                 <p className="text-sm text-[#5A6B7A]">
                   I certify that all information is accurate and I authorize Aminy to process
@@ -962,7 +962,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 <button
                   onClick={handleSubmit}
                   disabled={!data.agreedToTerms || isSubmitting}
-                  className="flex-1 py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 disabled:bg-slate-400 flex items-center justify-center gap-2"
+                  className="flex-1 py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80] disabled:bg-slate-400 flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -978,8 +978,8 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
           {/* Submitted */}
           {step === 'submitted' && stateData && (
             <motion.div key="submitted" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6 text-center py-8">
-              <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+              <div className="w-20 h-20 bg-[#2A7D99]/15 rounded-full flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-10 h-10 text-[#2A7D99]" />
               </div>
               <h2 className="text-2xl font-bold text-[#132F43]">Application Submitted!</h2>
               <p className="text-[#5A6B7A] max-w-md mx-auto">
@@ -987,9 +987,9 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
                 takes {stateData.estimatedProcessingDays} days in {stateData.name}.
               </p>
 
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-left">
-                <p className="font-medium text-emerald-800 mb-2">What happens next:</p>
-                <ol className="text-sm text-emerald-700 space-y-1.5">
+              <div className="bg-[#2A7D99]/10 border border-[#2A7D99]/25 rounded-xl p-4 text-left">
+                <p className="font-medium text-[#132F43] mb-2">What happens next:</p>
+                <ol className="text-sm text-[#376E80] space-y-1.5">
                   <li>1. Your fiscal agent will contact you to complete enrollment</li>
                   <li>2. Complete any remaining training requirements</li>
                   <li>3. Once approved, you can start tracking time in Aminy</li>
@@ -999,7 +999,7 @@ export function CaregiverEnrollmentWizard({ onComplete, onBack }: CaregiverEnrol
 
               <button
                 onClick={onComplete}
-                className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700"
+                className="w-full py-3 bg-[#2A7D99] text-white font-semibold rounded-xl hover:bg-[#376E80]"
               >
                 Go to Dashboard
               </button>

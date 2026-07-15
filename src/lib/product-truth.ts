@@ -467,8 +467,8 @@ export const SURFACE_LAUNCH_STATES: Record<string, LaunchStateConfig> = {
   },
   analytics: {
     state: 'internal',
-    badgeLabel: 'Internal',
-    message: 'Business analytics remain internal until every visible metric is live-data backed.',
+    badgeLabel: 'Analytics are coming soon',
+    message: 'We only show real numbers, never estimates — this space opens up as soon as your live data is ready.',
   },
   'claims-dashboard': {
     state: 'limited_launch',

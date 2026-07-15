@@ -22,7 +22,18 @@ import {
   Heart,
   Sparkles,
   AlertCircle,
+  HandCoins,
 } from 'lucide-react';
+
+// ─────────────────────────────────────────────
+// BRAND TOKENS (mist chrome + teal accent)
+// ─────────────────────────────────────────────
+
+const MIST_BG = '#F6FBFB';
+const INK = '#132F43';
+const SUBTLE = '#5A6B7A';
+const CARD_BORDER = '#E8E4DF';
+const TEAL = '#2A7D99';
 
 // ─────────────────────────────────────────────
 // TYPES
@@ -135,7 +146,7 @@ function buildResults(
         `Federal mental health parity laws (MHPAEA) require insurers to cover behavioral health ` +
         `comparably to medical/surgical benefits. Most appeals succeed with proper documentation.`,
       icon: <FileText className="w-5 h-5" />,
-      accentColor: '#77B5D9',
+      accentColor: '#2A7D99',
     });
   }
 
@@ -149,7 +160,7 @@ function buildResults(
       `must provide a Free Appropriate Public Education (FAPE). Request an IEP evaluation ` +
       `in writing — the district has 60 days to respond.`,
     icon: <BookOpen className="w-5 h-5" />,
-    accentColor: '#9B8EC4',
+    accentColor: '#2A7D99',
   });
 
   // 4. Nonprofit grants
@@ -161,7 +172,7 @@ function buildResults(
       `Several nonprofits offer direct financial assistance, resource guides, and grant programs ` +
       `for families navigating ABA and behavioral health costs.`,
     icon: <Heart className="w-5 h-5" />,
-    accentColor: '#E8A598',
+    accentColor: '#2A7D99',
     learnMoreUrl: undefined,
   });
 
@@ -175,7 +186,7 @@ function buildResults(
       `between coverage, ask your Aminy provider about sliding-scale options. ` +
       `Flexible payment plans available at checkout.`,
     icon: <DollarSign className="w-5 h-5" />,
-    accentColor: '#F7D9A0',
+    accentColor: '#2A7D99',
   });
 
   // 6. Uninsured-specific
@@ -188,7 +199,7 @@ function buildResults(
         `FQHCs serve patients regardless of ability to pay, using a sliding-fee scale. ` +
         `HRSA's Find a Health Center tool can locate the nearest FQHC with behavioral health services.`,
       icon: <Heart className="w-5 h-5" />,
-      accentColor: '#7CBB9B',
+      accentColor: '#2A7D99',
     });
   }
 
@@ -214,13 +225,13 @@ function SelectField({
 }) {
   return (
     <div className="space-y-1">
-      <label className="text-sm font-medium text-slate-300">{label}</label>
+      <label className="text-sm font-medium" style={{ color: SUBTLE }}>{label}</label>
       <div className="relative">
         <select
           value={value}
           onChange={e => onChange(e.target.value)}
-          className="w-full appearance-none rounded-xl px-4 py-3 pr-10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
-          style={{ background: '#1a3a5c', border: '1px solid #2A7D9944' }}
+          className="w-full appearance-none rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-teal-400"
+          style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, color: INK }}
         >
           <option value="">{placeholder}</option>
           {options.map(o => (
@@ -231,7 +242,7 @@ function SelectField({
         </select>
         <ChevronDown
           className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-          style={{ color: '#2A7D99' }}
+          style={{ color: TEAL }}
         />
       </div>
     </div>
@@ -246,7 +257,7 @@ function ResultCard({ result }: { result: FundingResult }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl overflow-hidden"
-      style={{ background: '#1a3a5c', border: `1px solid ${result.accentColor}44` }}
+      style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, boxShadow: '0 2px 12px rgba(19, 47, 67, 0.04)' }}
     >
       <button
         onClick={() => setOpen(o => !o)}
@@ -259,14 +270,14 @@ function ResultCard({ result }: { result: FundingResult }) {
           {result.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-white text-sm leading-tight">{result.title}</p>
+          <p className="font-semibold text-sm leading-tight" style={{ color: INK }}>{result.title}</p>
           <p className="text-sm mt-0.5" style={{ color: result.accentColor }}>{result.subtitle}</p>
         </div>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.2 }}
         >
-          <ChevronDown className="w-4 h-4 text-slate-400" />
+          <ChevronDown className="w-4 h-4" style={{ color: SUBTLE }} />
         </motion.div>
       </button>
 
@@ -280,7 +291,7 @@ function ResultCard({ result }: { result: FundingResult }) {
             style={{ overflow: 'hidden' }}
           >
             <div className="px-4 pb-4 space-y-3">
-              <p className="text-sm text-slate-300 leading-relaxed">{result.description}</p>
+              <p className="text-sm leading-relaxed" style={{ color: SUBTLE }}>{result.description}</p>
 
               {/* Nonprofit sub-list */}
               {result.id === 'nonprofits' && (
@@ -289,18 +300,18 @@ function ResultCard({ result }: { result: FundingResult }) {
                     <div
                       key={np.name}
                       className="flex items-start gap-3 p-3 rounded-xl"
-                      style={{ background: '#ffffff08' }}
+                      style={{ background: MIST_BG, border: `1px solid ${CARD_BORDER}` }}
                     >
-                      <Heart className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#E8A598' }} />
+                      <Heart className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: TEAL }} />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-white">{np.name}</p>
-                        <p className="text-sm text-slate-400 mt-0.5">{np.desc}</p>
+                        <p className="text-sm font-medium" style={{ color: INK }}>{np.name}</p>
+                        <p className="text-sm mt-0.5" style={{ color: SUBTLE }}>{np.desc}</p>
                         <a
                           href={np.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm flex items-center gap-1 mt-1"
-                          style={{ color: '#2A7D99' }}
+                          className="text-sm flex items-center gap-1 mt-1 underline"
+                          style={{ color: TEAL }}
                           onClick={e => e.stopPropagation()}
                         >
                           Visit site <ExternalLink className="w-3 h-3" />
@@ -332,20 +343,20 @@ function AppealLetterSection() {
   return (
     <div
       className="rounded-2xl p-4 space-y-4"
-      style={{ background: '#1a3a5c', border: '1px solid #9B8EC444' }}
+      style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, boxShadow: '0 2px 12px rgba(19, 47, 67, 0.04)' }}
     >
       <div className="flex items-center gap-2">
-        <Sparkles className="w-5 h-5" style={{ color: '#9B8EC4' }} />
-        <h3 className="font-semibold text-white">Appeal Letter Help</h3>
+        <Sparkles className="w-5 h-5" style={{ color: TEAL }} />
+        <h3 className="font-semibold" style={{ color: INK }}>Appeal Letter Help</h3>
         <span
           className="ml-auto text-xs font-medium px-2 py-0.5 rounded-full"
-          style={{ background: '#9B8EC433', color: '#9B8EC4' }}
+          style={{ background: 'rgba(42, 125, 153, 0.12)', color: TEAL }}
         >
           Beta
         </span>
       </div>
 
-      <p className="text-sm text-slate-400 leading-relaxed">
+      <p className="text-sm leading-relaxed" style={{ color: SUBTLE }}>
         Tell us about your denial and we'll connect you with our care team to help draft a
         customized insurance appeal letter. AI-generated drafts are coming soon.
       </p>
@@ -353,40 +364,40 @@ function AppealLetterSection() {
       {!submitted ? (
         <div className="space-y-3">
           <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-400">Insurance company name</label>
+            <label className="text-sm font-medium" style={{ color: SUBTLE }}>Insurance company name</label>
             <input
               value={insurerName}
               onChange={e => setInsurerName(e.target.value)}
               placeholder="e.g. Blue Cross Blue Shield"
-              className="w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              style={{ background: '#0D1B2A', border: '1px solid #9B8EC444' }}
+              className="w-full rounded-xl px-4 py-3 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, color: INK }}
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-400">Service that was denied</label>
+            <label className="text-sm font-medium" style={{ color: SUBTLE }}>Service that was denied</label>
             <input
               value={deniedService}
               onChange={e => setDeniedService(e.target.value)}
               placeholder="e.g. ABA Therapy, 30 hours/week"
-              className="w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              style={{ background: '#0D1B2A', border: '1px solid #9B8EC444' }}
+              className="w-full rounded-xl px-4 py-3 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, color: INK }}
             />
           </div>
           <div className="space-y-1">
-            <label className="text-sm font-medium text-slate-400">Child's diagnosis or concern (optional)</label>
+            <label className="text-sm font-medium" style={{ color: SUBTLE }}>Child's diagnosis or concern (optional)</label>
             <input
               value={diagnosis}
               onChange={e => setDiagnosis(e.target.value)}
               placeholder="e.g. Autism Spectrum Disorder, Level 2"
-              className="w-full rounded-xl px-4 py-3 text-white text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
-              style={{ background: '#0D1B2A', border: '1px solid #9B8EC444' }}
+              className="w-full rounded-xl px-4 py-3 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400"
+              style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, color: INK }}
             />
           </div>
           <button
             onClick={handleGenerate}
             disabled={!insurerName || !deniedService}
             className="w-full py-3 rounded-2xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-opacity disabled:opacity-40"
-            style={{ background: 'linear-gradient(135deg, #9B8EC4, #77B5D9)' }}
+            style={{ background: TEAL }}
           >
             <Sparkles className="w-4 h-4" />
             Request Appeal-Letter Help
@@ -397,13 +408,13 @@ function AppealLetterSection() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="rounded-xl p-4 space-y-3"
-          style={{ background: '#9B8EC422', border: '1px solid #9B8EC444' }}
+          style={{ background: 'rgba(42, 125, 153, 0.08)', border: '1px solid rgba(42, 125, 153, 0.25)' }}
         >
           <div className="flex items-start gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#9B8EC4' }} />
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: TEAL }} />
             <div>
-              <p className="font-semibold text-white text-sm">Let's get your appeal started</p>
-              <p className="text-sm text-slate-400 mt-1 leading-relaxed">
+              <p className="font-semibold text-sm" style={{ color: INK }}>Let's get your appeal started</p>
+              <p className="text-sm mt-1 leading-relaxed" style={{ color: SUBTLE }}>
                 Fully automated AI drafts are still in beta review. For now, Aminy's care team
                 will help you draft your appeal — email{' '}
                 <a
@@ -411,7 +422,7 @@ function AppealLetterSection() {
                     `Insurance company: ${insurerName}\nService denied: ${deniedService}\nDiagnosis/concern: ${diagnosis || '(not provided)'}`,
                   )}`}
                   className="underline"
-                  style={{ color: '#9B8EC4' }}
+                  style={{ color: TEAL }}
                 >
                   support@aminy.ai
                 </a>{' '}
@@ -422,7 +433,7 @@ function AppealLetterSection() {
           <button
             onClick={() => setSubmitted(false)}
             className="text-sm underline"
-            style={{ color: '#9B8EC4' }}
+            style={{ color: TEAL }}
           >
             Try again
           </button>
@@ -530,7 +541,7 @@ export function GrantNavigator({
   return (
     <div
       className="min-h-screen flex flex-col"
-      style={{ backgroundColor: '#0D1B2A', color: '#fff', maxWidth: 430, margin: '0 auto' }}
+      style={{ backgroundColor: MIST_BG, color: INK, maxWidth: 430, margin: '0 auto' }}
     >
       {/* Header */}
       <div
@@ -540,14 +551,14 @@ export function GrantNavigator({
         <button
           onClick={results ? handleReset : onBack}
           className="p-2 rounded-xl"
-          style={{ background: '#ffffff18' }}
+          style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}` }}
           aria-label="Back"
         >
-          <ArrowLeft className="w-5 h-5 text-white" />
+          <ArrowLeft className="w-5 h-5" style={{ color: INK }} />
         </button>
         <div className="flex-1 text-center">
-          <h1 className="text-xl font-bold text-white">Grant Navigator</h1>
-          <p className="text-sm" style={{ color: '#2A7D99' }}>Pro</p>
+          <h1 className="text-xl font-bold" style={{ color: INK }}>Grant Navigator</h1>
+          <p className="text-sm font-medium" style={{ color: TEAL }}>Pro</p>
         </div>
         <div style={{ width: 36 }} />
       </div>
@@ -565,12 +576,17 @@ export function GrantNavigator({
             >
               {/* Hero */}
               <div
-                className="rounded-2xl p-4 text-center"
-                style={{ background: 'linear-gradient(135deg, #2A7D9922, #77B5D922)', border: '1px solid #2A7D9933' }}
+                className="rounded-2xl p-5 text-center"
+                style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, boxShadow: '0 2px 12px rgba(19, 47, 67, 0.04)' }}
               >
-                <div className="text-3xl mb-2">💰</div>
-                <h2 className="font-bold text-white">Find Funding Options</h2>
-                <p className="text-sm text-slate-400 mt-1">
+                <div
+                  className="w-12 h-12 mx-auto mb-3 rounded-2xl flex items-center justify-center"
+                  style={{ background: 'rgba(42, 125, 153, 0.10)' }}
+                >
+                  <HandCoins className="w-6 h-6" style={{ color: TEAL }} />
+                </div>
+                <h2 className="font-bold" style={{ color: INK }}>Find Funding Options</h2>
+                <p className="text-sm mt-1" style={{ color: SUBTLE }}>
                   Personalized to your state, therapy needs, and insurance status
                 </p>
               </div>
@@ -578,7 +594,7 @@ export function GrantNavigator({
               {/* Form */}
               <div
                 className="rounded-2xl p-4 space-y-4"
-                style={{ background: '#1a3a5c', border: '1px solid #2A7D9922' }}
+                style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, boxShadow: '0 2px 12px rgba(19, 47, 67, 0.04)' }}
               >
                 <SelectField
                   label="Your state"
@@ -618,7 +634,7 @@ export function GrantNavigator({
                   onClick={handleFind}
                   disabled={!state || !need || !insurance}
                   className="w-full py-4 rounded-2xl text-white font-bold flex items-center justify-center gap-2 transition-opacity disabled:opacity-40"
-                  style={{ background: 'linear-gradient(135deg, #2A7D99, #77B5D9)' }}
+                  style={{ background: TEAL }}
                 >
                   <Search className="w-5 h-5" />
                   Find Funding Options
@@ -643,19 +659,19 @@ export function GrantNavigator({
               {/* Summary bar */}
               <div
                 className="rounded-xl px-4 py-3 flex items-center gap-3"
-                style={{ background: '#2A7D9922', border: '1px solid #2A7D9944' }}
+                style={{ background: 'rgba(42, 125, 153, 0.08)', border: '1px solid rgba(42, 125, 153, 0.25)' }}
               >
-                <div className="text-2xl">🔍</div>
+                <Search className="w-5 h-5 flex-shrink-0" style={{ color: TEAL }} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-white font-semibold text-sm">{state}</p>
-                  <p className="text-sm text-slate-400 truncate">
+                  <p className="font-semibold text-sm" style={{ color: INK }}>{state}</p>
+                  <p className="text-sm truncate" style={{ color: SUBTLE }}>
                     {results.length} funding options found
                   </p>
                 </div>
                 <button
                   onClick={handleReset}
                   className="text-sm px-3 py-1 rounded-lg"
-                  style={{ background: '#ffffff18', color: '#94a3b8' }}
+                  style={{ background: '#FFFFFF', border: `1px solid ${CARD_BORDER}`, color: TEAL }}
                 >
                   Edit
                 </button>

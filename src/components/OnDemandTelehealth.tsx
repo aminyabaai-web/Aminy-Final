@@ -497,8 +497,8 @@ export function OnDemandTelehealth({
           <div className="max-w-2xl mx-auto flex items-center gap-3">
             <Shield className="w-5 h-5 text-green-600" />
             <div>
-              <p className="text-sm font-medium text-green-900">HIPAA-Conscious Video Sessions</p>
-              <p className="text-sm text-green-700/70">Secure, encrypted video calls with licensed professionals. Your session is private and protected.</p>
+              <p className="text-sm font-medium text-green-900">Private, encrypted video sessions</p>
+              <p className="text-sm text-green-700/70">Secure video calls with licensed professionals. Your session stays private.</p>
             </div>
           </div>
         </div>
@@ -506,8 +506,8 @@ export function OnDemandTelehealth({
         <div className="border-b border-sky-200 bg-sky-50 px-4 py-3">
           <div className="max-w-2xl mx-auto flex flex-wrap items-center gap-2">
             <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
-            {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} /> : null}
-            <p className="text-sm text-sky-700">{launchConfig.message}</p>
+            {providerProvenance ? <DataProvenanceBadge provenance={providerProvenance} className="min-w-0 h-auto whitespace-normal text-left leading-tight" /> : null}
+            <p className="text-sm text-[#3A4A57]">{launchConfig.message}</p>
           </div>
         </div>
 
