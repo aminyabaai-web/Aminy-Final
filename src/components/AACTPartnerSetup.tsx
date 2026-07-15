@@ -238,7 +238,7 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
       </div>
 
       {/* Provider roster + status */}
-      <div className="mx-4 mt-3 rounded-2xl bg-white border border-[#E8E4DF]">
+      <div className="mx-4 mt-3 mb-6 rounded-2xl bg-white border border-[#E8E4DF]">
         <div className="px-4 pt-3 pb-2 border-b border-[#E8E4DF] flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-slate-400" />
@@ -261,9 +261,9 @@ export function AACTPartnerSetup({ onBack, partnerOrg = 'aact' }: AACTPartnerSet
         {isLoading ? (
           <div className="px-4 py-6 text-center"><Loader2 className="w-5 h-5 text-slate-400 animate-spin mx-auto" /></div>
         ) : providers.length === 0 ? (
-          <div className="px-4 py-8 text-center">
+          <div className="px-6 pt-8 pb-10 text-center">
             <AlertCircle className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm text-[#5A6B7A]">No providers invited yet — share your invite link above.</p>
+            <p className="text-sm text-[#5A6B7A] leading-relaxed">No providers invited yet — share your invite link above.</p>
           </div>
         ) : (
           <div className="divide-y divide-slate-100">
