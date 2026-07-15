@@ -497,7 +497,11 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
 
       {/* Progress Steps */}
       <div className="bg-white border-b border-[#E8E4DF] px-4 py-3">
-        <div className="max-w-2xl mx-auto flex items-center gap-1">
+        {/* 7 fixed-width steps overflow a 390px viewport and overlapped each
+            other. On small screens show icon-only steps (label only on the
+            current one); labels return at sm+. shrink-0 + overflow-x-auto keep
+            the row usable even at very narrow widths. */}
+        <div className="max-w-2xl mx-auto flex items-center gap-1 overflow-x-auto">
           {STEPS.map((step, idx) => {
             const isCompleted = idx < stepIndex;
             const isCurrent = step.id === currentStep;
@@ -509,7 +513,7 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   type="button"
                   onClick={() => idx <= stepIndex && setCurrentStep(step.id)}
                   aria-label={`Open ${step.label} step`}
-                  className={`flex h-11 min-w-[6.5rem] items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium transition-colors ${
                     isCurrent
                       ? 'bg-[#2A7D99]/10 text-[#2A7D99]'
                       : isCompleted
@@ -522,10 +526,10 @@ export function ProviderOnboarding({ onBack, onComplete }: ProviderOnboardingPro
                   ) : (
                     <Icon className="w-4 h-4" />
                   )}
-                  <span>{step.label}</span>
+                  <span className={isCurrent ? '' : 'hidden sm:inline'}>{step.label}</span>
                 </button>
                 {idx < STEPS.length - 1 && (
-                  <div className={`flex-1 h-0.5 ${isCompleted ? 'bg-green-300' : 'bg-[#E8E4DF]'}`} />
+                  <div className={`h-0.5 w-2 shrink-0 sm:w-auto sm:flex-1 ${isCompleted ? 'bg-green-300' : 'bg-[#E8E4DF]'}`} />
                 )}
               </React.Fragment>
             );

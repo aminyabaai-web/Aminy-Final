@@ -1280,44 +1280,65 @@ const SurfaceLaunchNotice = React.memo(function SurfaceLaunchNotice({
 }: {
   screen: AppScreen;
 }) {
+  // Collapsed by default: the full scope chips + ops message read as internal
+  // scaffolding at the top of every provider screen. All detail stays one tap
+  // away for providers/admins who need it.
+  const [expanded, setExpanded] = React.useState(false);
   const launchConfig = getSurfaceLaunchConfig(screen);
   if (launchConfig.state === 'live' || launchConfig.state === 'hidden' || LOCAL_LAUNCH_BADGE_SCREENS.has(screen)) {
     return null;
   }
 
   return (
-    <div className="border-b border-violet-200 dark:border-violet-900 bg-violet-50/80 dark:bg-slate-900 px-4 py-3">
+    <div className="border-b border-violet-100 dark:border-violet-900 bg-violet-50/60 dark:bg-slate-900 px-4 py-1.5">
       <div className="mx-auto max-w-7xl space-y-2">
-        <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="flex w-full items-center justify-between gap-2 text-left"
+        >
           <LaunchStateBadge state={launchConfig.state} label={launchConfig.badgeLabel} />
-          {launchConfig.programLabel ? (
-            <span className="rounded-full border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-violet-700 dark:text-violet-300">
-              {launchConfig.programLabel}
-            </span>
-          ) : null}
-          {launchConfig.pathwayLabel ? (
-            <span className="rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-700 dark:text-slate-300">
-              {launchConfig.pathwayLabel}
-            </span>
-          ) : null}
-          {launchConfig.payerLabel ? (
-            <span className="rounded-full border border-sky-200 dark:border-sky-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-sky-700 dark:text-sky-300">
-              {launchConfig.payerLabel}
-            </span>
-          ) : null}
-          {launchConfig.evvSystem ? (
-            <span className="rounded-full border border-amber-200 dark:border-amber-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
-              {EVV_SYSTEM_LABELS[launchConfig.evvSystem]}
-            </span>
-          ) : null}
-          {launchConfig.systemOfRecord ? (
-            <span className="rounded-full border border-emerald-200 dark:border-emerald-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
-              {SYSTEM_OF_RECORD_LABELS[launchConfig.systemOfRecord]}
-            </span>
-          ) : null}
-        </div>
-        {launchConfig.message ? (
-          <p className="max-w-4xl text-sm text-violet-900/90 dark:text-violet-200">{launchConfig.message}</p>
+          <span className="flex items-center gap-1 text-xs font-medium text-violet-600 dark:text-violet-300">
+            {expanded ? 'Hide details' : 'Details'}
+            <svg viewBox="0 0 16 16" className={`h-3.5 w-3.5 transition-transform ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 6l4 4 4-4" />
+            </svg>
+          </span>
+        </button>
+        {expanded ? (
+          <div className="space-y-2 pb-1.5">
+            <div className="flex flex-wrap items-center gap-2">
+              {launchConfig.programLabel ? (
+                <span className="rounded-full border border-violet-200 dark:border-violet-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-violet-700 dark:text-violet-300">
+                  {launchConfig.programLabel}
+                </span>
+              ) : null}
+              {launchConfig.pathwayLabel ? (
+                <span className="rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-700 dark:text-slate-300">
+                  {launchConfig.pathwayLabel}
+                </span>
+              ) : null}
+              {launchConfig.payerLabel ? (
+                <span className="rounded-full border border-sky-200 dark:border-sky-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-sky-700 dark:text-sky-300">
+                  {launchConfig.payerLabel}
+                </span>
+              ) : null}
+              {launchConfig.evvSystem ? (
+                <span className="rounded-full border border-amber-200 dark:border-amber-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+                  {EVV_SYSTEM_LABELS[launchConfig.evvSystem]}
+                </span>
+              ) : null}
+              {launchConfig.systemOfRecord ? (
+                <span className="rounded-full border border-emerald-200 dark:border-emerald-700 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                  {SYSTEM_OF_RECORD_LABELS[launchConfig.systemOfRecord]}
+                </span>
+              ) : null}
+            </div>
+            {launchConfig.message ? (
+              <p className="max-w-4xl text-sm text-violet-900/90 dark:text-violet-200">{launchConfig.message}</p>
+            ) : null}
+          </div>
         ) : null}
       </div>
     </div>

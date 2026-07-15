@@ -176,5 +176,7 @@ export function getSupportedClaimsMessage(): string {
 }
 
 export function getSupportedTelehealthMessage(): string {
-  return `Cash-pay telehealth is live in ${SUPPORTED_PROVIDER_STATE_LABEL} where Aminy has licensed providers. Insurance routing and partner-billed claims follow the supported-state payer matrix; unsupported states stay on the national AI companion until supply expands.`;
+  // Parent-facing copy — keep it warm and short. Payer-matrix mechanics live
+  // in provider/admin surfaces, not here.
+  return `Book a video visit with a licensed expert — live in ${SUPPORTED_PROVIDER_STATE_LABEL}, with more states coming. Not in a supported state yet? Aminy is still with you every day, everywhere.`;
 }
