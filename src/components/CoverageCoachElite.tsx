@@ -210,7 +210,7 @@ export function CoverageCoachElite({ onBack, onNavigate }: CoverageCoachElitePro
       <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-[#E8E4DF]">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center gap-3">
           {onBack && (
-            <button onClick={onBack} className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
+            <button onClick={onBack} aria-label="Back" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-[#EDF4F7] transition-colors">
               <ArrowLeft className="w-5 h-5 text-[#5A6B7A]" />
             </button>
           )}
