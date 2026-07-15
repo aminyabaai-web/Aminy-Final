@@ -13,6 +13,7 @@ import React, {
   useCallback,
 } from "react";
 import { MotionConfig } from "motion/react";
+import { Banknote } from "lucide-react";
 // CRITICAL PATH - Regular imports for instant FCP (MINIMIZED)
 import { NotificationPrompt, useShouldShowNotificationPrompt } from "./components/NotificationPrompt";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -4207,6 +4208,9 @@ export default function App() {
             </Suspense>
           ) : (
             <div className="min-h-screen bg-app flex flex-col items-center justify-center px-6 text-center">
+              <div className="w-16 h-16 bg-[#2A7D99]/10 rounded-full flex items-center justify-center mb-4">
+                <Banknote className="w-8 h-8 text-[#2A7D99]" />
+              </div>
               <p className="text-base font-semibold text-slate-800">No session selected for payout</p>
               <p className="mt-2 text-sm text-slate-500 max-w-sm">
                 Open a completed session from the provider portal to release its payment.

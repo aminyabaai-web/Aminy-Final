@@ -277,14 +277,17 @@ export function ProviderCaseloadView({ onBack, providerName = "Dr. Sarah", role 
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                                     <h3 style={{ fontSize: '18px', fontWeight: 600, color: 'rgba(17, 24, 39, 0.9)', letterSpacing: '-0.01em' }}>Session Documentation</h3>
                                     <div style={{ display: 'flex', gap: '8px' }}>
+                                        {/* No 97156 logging backend yet — a success toast here would fake
+                                            a clinical record. Honest disabled state until session logging is wired. */}
                                         <button
-                                            onClick={() => toast.success('Parent Training Session (CPT 97156) logged.')}
+                                            disabled
+                                            title="Parent-training (97156) logging is coming soon"
                                             style={{
-                                                padding: '8px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', backgroundColor: '#FFF', color: '#4B5563',
-                                                fontSize: '13px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'
+                                                padding: '8px 16px', borderRadius: '12px', border: '1px solid #E5E7EB', backgroundColor: '#FFF', color: 'rgba(75, 85, 99, 0.45)',
+                                                fontSize: '13px', fontWeight: 500, cursor: 'not-allowed', display: 'flex', alignItems: 'center', gap: '8px'
                                             }}
                                         >
-                                            <Users size={14} /> Log 97156
+                                            <Users size={14} /> Log 97156 — soon
                                         </button>
                                         <button
                                             onClick={handleGenerateSoapNote}

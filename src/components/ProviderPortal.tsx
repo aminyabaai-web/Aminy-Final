@@ -2948,12 +2948,14 @@ export function ProviderPortal({ providerId, onNavigate, onStartTelehealthSessio
                       Lease an established payer network so insured families can book you without your own contracts.
                       We're onboarding our first cohort of providers — join the list to get early access.
                     </p>
+                    {/* No early-access list backend exists — a success toast would fake
+                        a signup. Honest disabled state until interest capture is wired. */}
                     <Button
                       variant="outline"
-                      className="mt-3 border-[#6B9080]/30 text-[#6B9080] hover:bg-[#6B9080]/10"
-                      onClick={() => { toast.success('You\'re on the early access list! We\'ll reach out when payer-network billing opens in your area.'); }}
+                      className="mt-3 border-[#6B9080]/30 text-[#6B9080]"
+                      disabled
                     >
-                      Get early access
+                      Signups open soon
                     </Button>
                   </div>
                 </div>

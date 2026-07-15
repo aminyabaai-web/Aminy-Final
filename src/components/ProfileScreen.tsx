@@ -608,7 +608,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
               </p>
             </div>
             {userTier !== 'free' && (
-              <Badge className="bg-gradient-to-r from-[#6B9080] to-[#7BA7BC] text-white border-0">
+              <Badge variant="outline" className="bg-white/80 border-[#2A7D99] text-[#2A7D99]">
                 <Crown className="w-3 h-3 mr-1" />
                 {getTierDisplayName(userTier)}
               </Badge>
@@ -620,7 +620,7 @@ export function ProfileScreen({ onBack, onNavigate, userTier = 'core' }: Profile
         <div className="max-w-2xl mx-auto px-4">
           <div className="flex gap-1 border-b border-[#E8E4DF] dark:border-slate-700">
             {[
-              { id: 'profile', label: 'My Profile', icon: User },
+              { id: 'profile', label: 'Profile', icon: User },
               { id: 'children', label: 'Children', icon: Baby },
               { id: 'security', label: 'Security', icon: Shield }
             ].map(tab => (

@@ -137,7 +137,7 @@ export function ShareViewer({ token, onStartTrial }: ShareViewerProps) {
       <div className="min-h-screen flex items-center justify-center bg-[#F6FBFB] p-4">
         <motion.div {...ANIMATIONS.pageEnter}>
           <Card className="max-w-md p-8 text-center">
-            <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
+            <AlertCircle className="w-16 h-16 text-[#E07A5F] mx-auto mb-4" />
             <h2 className="text-xl text-[#132F43] mb-2">Unable to Load Share</h2>
             <p className="text-sm text-[#5A6B7A] mb-6">{error}</p>
             <a

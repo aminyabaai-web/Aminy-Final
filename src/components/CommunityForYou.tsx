@@ -720,12 +720,16 @@ export function CommunityForYou({
       {liveEvents.length === 0 && !dataLoading && (
         <div className="text-center py-8 text-[#8A9BA8]">
           <p className="text-sm font-medium">No events scheduled yet</p>
-          <p className="text-sm mt-1">BCBA-hosted webinars and parent workshops are launching this summer.</p>
+          {/* No waitlist backend exists — a "you're on the list!" toast would fake
+              a signup. Honest copy + a real action (the community feed) instead. */}
+          <p className="text-sm mt-1">
+            BCBA-hosted webinars and parent workshops are launching this summer — they'll appear right here.
+          </p>
           <button
             className="mt-3 text-sm text-[#6B9080] font-semibold underline"
-            onClick={() => toast.success('You\'re on the list! We\'ll notify you when events open up.')}
+            onClick={() => setActiveTab('for-you')}
           >
-            Notify me when events launch →
+            Meet other parents in the meantime →
           </button>
         </div>
       )}

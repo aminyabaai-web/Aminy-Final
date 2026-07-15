@@ -146,8 +146,8 @@ export function UsageMeter({
         </div>
         <span className={cn(
           "text-xs font-medium px-2 py-1 rounded-full",
-          normalizedTier === 'pro' ? "bg-purple-100 text-purple-700" :
-          normalizedTier === 'core' ? "bg-accent/10 text-accent" :
+          normalizedTier === 'pro' ? "bg-white border border-[#2A7D99] text-[#2A7D99]" :
+          normalizedTier === 'core' ? "bg-white border border-[#2A7D99] text-[#2A7D99]" :
           "bg-[#EDF4F7] text-[#5A6B7A]"
         )}>
           {tierName}
