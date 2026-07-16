@@ -346,7 +346,9 @@ function DenialInbox({
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Category filters — hidden when there are no real categories (an inbox with
+          no denials would otherwise show a lone orphan "All" chip above the status row) */}
+      {categories.length > 1 && (
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
         {categories.map((cat) => (
           <button
@@ -362,6 +364,7 @@ function DenialInbox({
           </button>
         ))}
       </div>
+      )}
 
       {/* Status filter */}
       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">

@@ -14383,7 +14383,16 @@ html body [data-radix-select-content][data-field-type="age"] {
   z-index: 1000;
 }
 
-.toast, .notification, .sonner-toast, [data-sonner-toast], [data-toast] {
+/* NOTE: [data-sonner-toast] / .sonner-toast / [data-toast] were removed from
+   this z-index rule (July 2026 loop-back fix). Sonner assigns each toast its
+   own stacked z-index via `z-index: var(--z-index)` (front toast highest).
+   Flattening them all to 1100 made DOM order decide paint order — and sonner
+   renders the NEWEST toast as the FIRST <li>, so an older collapsed toast
+   (whose content sonner hides) painted OVER the front toast as an empty
+   white pill, occluding its text. Layering vs overlays is handled by the
+   [data-sonner-toaster] viewport itself, not the <li>s. See the sonner
+   guard block near the end of this file. */
+.toast, .notification {
   z-index: 1100;
 }
 
@@ -18663,11 +18672,17 @@ tr:hover td, .hover-row:hover {
    edit near line 6116). Restore sonner's own layout model in case any
    other generic rule re-pins toasts: toasts are absolutely positioned
    INSIDE the fixed [data-sonner-toaster] viewport, must keep their
-   intrinsic size (no size containment), and must be tappable. */
+   intrinsic size (no size containment), and must be tappable.
+   z-index MUST stay sonner's per-toast var(--z-index) (front toast
+   highest): a blanket z-index flattens the stack so DOM order paints,
+   and sonner puts the NEWEST toast FIRST in the list — an older
+   collapsed toast (content hidden by sonner) then paints over the
+   front toast as an empty white pill occluding its text. */
 [data-sonner-toast] {
   position: absolute !important;
   contain: none !important;
   pointer-events: auto !important;
+  z-index: var(--z-index) !important;
 }
 
 /* ParentIntakeFlow step indicator: the generic perf rule
@@ -18790,3 +18805,9 @@ button[data-slot="switch"]::after {
 .animate-pulse:empty:not([class*="bg-"]) {
   background-color: #EDF4F7;
 }
+
+/* Loop-back fix: ProviderAnalytics 4th stat card (Session Completion) uses
+   bg-violet-500, which was never emitted by the precompiled Tailwind build —
+   the white icon rendered invisibly on the white card. Violet is an approved
+   provider accent. */
+.bg-violet-500 { background-color: #8b5cf6; }

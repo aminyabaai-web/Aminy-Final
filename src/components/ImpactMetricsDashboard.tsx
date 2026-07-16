@@ -162,9 +162,10 @@ export function ImpactMetricsDashboard({
   const [metrics, setMetrics] = useState<ImpactMetrics | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState<'dashboard' | 'toc' | 'iris'>('dashboard');
+  // No lastUpdatedAt: the badge would append "• <timestamp>" and clip off the right
+  // edge at 390px, and an "Updated <date>" chip already sits directly below it.
   const sampleMetricsProvenance = createDataProvenance('sample', 'Sample data — not live results', {
     isVerified: false,
-    lastUpdatedAt: new Date().toISOString(),
   });
   const launchConfig = getSurfaceLaunchConfig('analytics');
 

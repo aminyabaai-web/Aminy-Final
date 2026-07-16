@@ -741,7 +741,11 @@ export default function ClaimsDashboard({
             <h2 className="sr-only">Coverage overview</h2>
             <h3 className="sr-only">Claims, benefits, and next steps</h3>
             <p className="text-sm text-white/70">
-              {childName}&apos;s insurance &amp; expenses
+              {/* "Your Child" is the caller's placeholder fallback, not a real name —
+                  sentence-case it so the subtitle reads "Your child's…" not "Your Child's…" */}
+              {childName && childName !== 'Your Child'
+                ? <>{childName}&apos;s insurance &amp; expenses</>
+                : <>Your child&apos;s insurance &amp; expenses</>}
             </p>
           </div>
           <button

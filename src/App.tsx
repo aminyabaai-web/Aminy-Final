@@ -4219,7 +4219,7 @@ export default function App() {
               </p>
               <button
                 onClick={() => navigateToScreen("bcba-portal")}
-                className="mt-5 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition-colors"
+                className="mt-5 px-4 py-2 bg-[#2A7D99] text-white text-sm font-medium rounded-lg hover:bg-[#376E80] transition-colors"
               >
                 Back to portal
               </button>

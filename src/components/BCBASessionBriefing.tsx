@@ -463,8 +463,10 @@ export function BCBASessionBriefing({
               <Brain className="w-6 h-6 text-[#6B9080]" />
             </div>
             <div>
+              {/* The page header already says "Session Briefing" — the card carries
+                  who the briefing is about instead of repeating the page title. */}
               <h2 className="text-lg sm:text-xl font-semibold text-[#132F43]">
-                Session Briefing{childKnown ? `: ${childLabel}` : ''}
+                {childKnown ? childLabel : 'At a glance'}
               </h2>
               {parentKnown && (
                 <p className="text-sm text-[#5A6B7A]">
@@ -568,6 +570,9 @@ export function BCBASessionBriefing({
         />
         {expandedSections.has('working') && (
           <div className="px-4 pb-4">
+            {briefing.whatsWorking.length === 0 ? (
+              <p className="text-sm text-[#8A9BA8]">Notes appear here after your first session.</p>
+            ) : (
             <ul className="space-y-2">
               {briefing.whatsWorking.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
@@ -576,6 +581,7 @@ export function BCBASessionBriefing({
                 </li>
               ))}
             </ul>
+            )}
           </div>
         )}
       </Card>
@@ -591,6 +597,9 @@ export function BCBASessionBriefing({
         />
         {expandedSections.has('notWorking') && (
           <div className="px-4 pb-4">
+            {briefing.whatsNotWorking.length === 0 ? (
+              <p className="text-sm text-[#8A9BA8]">Notes appear here after your first session.</p>
+            ) : (
             <ul className="space-y-2">
               {briefing.whatsNotWorking.map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm text-[#3A4A57]">
@@ -599,6 +608,7 @@ export function BCBASessionBriefing({
                 </li>
               ))}
             </ul>
+            )}
           </div>
         )}
       </Card>

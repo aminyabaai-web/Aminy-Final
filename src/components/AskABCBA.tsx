@@ -262,7 +262,7 @@ export function AskABCBA({ onBack, userId, childName, parentName, hasEstablished
       {/* Header */}
       <ScreenHeader
         title="Ask-a-Behaviorist"
-        subtitle="Instant AI draft · reviewed by a behaviorist (RBT, BCBA-supervised), typically within 24 hours"
+        subtitle="Instant AI draft · clinician-reviewed within 24h"
         icon={<ShieldCheck className="w-6 h-6" />}
         onBack={onBack}
         variant="flat"

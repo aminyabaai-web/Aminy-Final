@@ -533,7 +533,8 @@ export function ProviderReviews({
             </div>
             <p className="font-medium text-[#132F43]">No reviews yet</p>
             <p className="text-sm text-[#5A6B7A] mt-1">
-              {providerName} hasn't received any reviews yet. Be the first to share your experience.
+              {/* "Provider" is the caller's generic fallback, not a real display name */}
+              {providerName && providerName !== 'Provider' ? providerName : 'This provider'} hasn't received any reviews yet. Be the first to share your experience.
             </p>
             {/* The review form is self-contained (writes to provider_reviews), so the CTA
                 shows even when no onWriteReview callback is passed by the caller. */}

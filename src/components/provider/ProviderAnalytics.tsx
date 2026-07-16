@@ -130,7 +130,7 @@ const FALLBACK_METRICS: MetricCard[] = [
     change: 8.5,
     changeLabel: 'vs last month',
     icon: <DollarSign className="w-5 h-5" />,
-    color: 'bg-green-500',
+    color: 'bg-[#2A7D99]',
   },
   {
     id: 'completion',
@@ -174,7 +174,7 @@ const FALLBACK_DOC_COMPLIANCE: DocComplianceData = {
 const EMPTY_METRICS: MetricCard[] = [
   { id: 'caseload', title: 'Active Caseload', value: 0, change: 0, changeLabel: 'from last month', icon: <Users className="w-5 h-5" />, color: 'bg-blue-500', hasPrior: false },
   { id: 'sessions', title: 'Sessions This Month', value: 0, change: 0, changeLabel: 'vs last month', icon: <Calendar className="w-5 h-5" />, color: 'bg-primary', hasPrior: false },
-  { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-green-500', hasPrior: false },
+  { id: 'revenue', title: 'Monthly Revenue', value: '$0', change: 0, changeLabel: 'vs last month', icon: <DollarSign className="w-5 h-5" />, color: 'bg-[#2A7D99]', hasPrior: false },
   { id: 'completion', title: 'Session Completion', value: '0%', change: 0, changeLabel: 'improvement', icon: <CheckCircle className="w-5 h-5" />, color: 'bg-violet-500', hasPrior: false },
 ];
 
@@ -646,7 +646,7 @@ export function ProviderAnalytics({
           change: revenueChange,
           changeLabel: 'vs last month',
           icon: <DollarSign className="w-5 h-5" />,
-          color: 'bg-green-500',
+          color: 'bg-[#2A7D99]',
           hasPrior: prevRevenueInDollars > 0,
         },
         {

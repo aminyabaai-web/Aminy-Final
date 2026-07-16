@@ -280,7 +280,7 @@ function Section({
         className="w-full flex items-center justify-between px-5 py-4 text-left no-print"
       >
         <div className="flex items-center gap-3">
-          {icon && <span className="text-emerald-500">{icon}</span>}
+          {icon && <span className="text-[#2A7D99]">{icon}</span>}
           <span className="font-bold text-[#132F43] text-base">{title}</span>
         </div>
         {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}

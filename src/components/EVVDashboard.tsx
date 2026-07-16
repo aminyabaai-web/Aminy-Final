@@ -423,43 +423,45 @@ export default function EVVDashboard({
       {/* Header */}
       <div className="sticky top-0 z-10 border-b border-[#E8E4DF]/80 bg-white/88 backdrop-blur supports-[backdrop-filter]:bg-white/78">
         <div className="max-w-2xl mx-auto px-4 py-4">
-          <nav aria-label="EVV navigation" className="flex items-center gap-3">
-            {onBack && (
+          <nav aria-label="EVV navigation" className="flex flex-col gap-1">
+            {/* Row 1: back + icon + title on one line, live-clock action pinned right.
+                Title gets flex-1 min-w-0 + truncate so it never wraps into the button. */}
+            <div className="flex items-center gap-2">
+              {onBack && (
+                <button
+                  type="button"
+                  onClick={onBack}
+                  aria-label="Go back"
+                  className="shrink-0 min-h-11 min-w-11 rounded-xl p-2 text-[#5A6B7A] transition-colors hover:bg-[#6B9080]/10"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+              <h1 className="flex flex-1 min-w-0 items-center gap-2 text-lg font-semibold text-[#132F43]">
+                <Shield className="w-5 h-5 shrink-0 text-primary" />
+                <span className="truncate">Visit Verification</span>
+              </h1>
               <button
                 type="button"
-                onClick={onBack}
-                aria-label="Go back"
-                className="min-h-11 min-w-11 rounded-xl p-2 text-[#5A6B7A] transition-colors hover:bg-[#6B9080]/10"
+                onClick={() => setActiveTab('clock')}
+                className="action-button shrink-0 min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
               >
-                <ArrowLeft className="w-5 h-5" />
+                Live clock
               </button>
-            )}
-            <div className="flex-1">
-              <h1 className="flex items-center gap-2 text-lg font-semibold text-[#132F43]">
-                <Shield className="w-5 h-5 text-primary" />
-                Visit Verification
-              </h1>
-              <p className="text-sm text-[#5A6B7A]">
-                Arizona DDD Pilot &bull; Visit records &amp; export
-                {/* Only show a child name when it's a real name, not the placeholder default */}
-                {childName && childName !== 'Your Child' ? <> &bull; {childName}</> : null}
-              </p>
+              {activeSession && (
+                <div className="flex shrink-0 items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5">
+                  <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-mono font-medium text-rose-700">
+                    {formatElapsed(elapsedSeconds)}
+                  </span>
+                </div>
+              )}
             </div>
-            <button
-              type="button"
-              onClick={() => setActiveTab('clock')}
-              className="action-button min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#6B9080]"
-            >
-              Open live clock
-            </button>
-            {activeSession && (
-              <div className="flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5">
-                <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
-                <span className="text-sm font-mono font-medium text-rose-700">
-                  {formatElapsed(elapsedSeconds)}
-                </span>
-              </div>
-            )}
+            <p className="text-sm text-[#5A6B7A] line-clamp-2">
+              Arizona DDD Pilot &bull; Visit records &amp; export
+              {/* Only show a child name when it's a real name, not the placeholder default */}
+              {childName && childName !== 'Your Child' ? <> &bull; {childName}</> : null}
+            </p>
           </nav>
         </div>
       </div>
@@ -497,7 +499,7 @@ export default function EVVDashboard({
               </div>
               <div>
                 <p className="text-sm text-[#5A6B7A]">Recent accuracy</p>
-                <p className="text-2xl font-semibold text-blue-600">{cutoverSummary.trailingWindowAccuracy}%</p>
+                <p className="text-2xl font-semibold text-[#2A7D99]">{cutoverSummary.trailingWindowAccuracy}%</p>
               </div>
               <div>
                 <p className="text-sm text-[#5A6B7A]">Critical exceptions</p>
