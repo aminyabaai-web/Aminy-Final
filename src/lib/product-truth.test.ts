@@ -31,7 +31,10 @@ describe('product truth pilot access', () => {
     expect(decision.allowed).toBe(false);
     expect(decision.gateReason).toBe('limited_launch');
     expect(decision.message).toContain('real providers');
-    expect(decision.message).toContain('AZ, MT, TX, FL & NV');
+    // Surface copy says "five states" (the badge lists them); the gate
+    // decision still appends the concrete state list for blocked users.
+    expect(decision.message).toContain('five states');
+    expect(decision.message).toContain('AZ, MT, TX, FL, NV');
   });
 
   it('allows Montana families into supported-state marketplace access', () => {
